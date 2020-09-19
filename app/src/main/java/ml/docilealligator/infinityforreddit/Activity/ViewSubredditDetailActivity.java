@@ -10,7 +10,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -19,13 +18,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -37,6 +38,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrInterface;
 
@@ -66,20 +68,20 @@ import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.Event.GoBackToMainPageEvent;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.Subreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.Fragment.SidebarFragment;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.Message.ReadMessage;
 import ml.docilealligator.infinityforreddit.Post.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.Message.ReadMessage;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
+import ml.docilealligator.infinityforreddit.Subreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.Subreddit.SubredditData;
-import ml.docilealligator.infinityforreddit.Subreddit.SubredditViewModel;
 import ml.docilealligator.infinityforreddit.Subreddit.SubredditSubscription;
+import ml.docilealligator.infinityforreddit.Subreddit.SubredditViewModel;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 import pl.droidsonroids.gif.GifImageView;
@@ -106,7 +108,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     @BindView(R.id.coordinator_layout_view_subreddit_detail_activity)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.view_pager_view_subreddit_detail_activity)
-    ViewPager viewPager;
+    ViewPager2 viewPager2;
     @BindView(R.id.appbar_layout_view_subreddit_detail_activity)
     AppBarLayout appBarLayout;
     @BindView(R.id.collapsing_toolbar_layout_view_subreddit_detail_activity)
@@ -169,6 +171,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     public SubredditViewModel mSubredditViewModel;
+    private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
@@ -299,6 +302,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         lockBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_BOTTOM_APP_BAR, false);
 
         subredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME_KEY);
+
+        fragmentManager = getSupportFragmentManager();
 
         if (savedInstanceState == null) {
             mMessageFullname = getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME);
@@ -639,8 +644,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     }
                 }).execute();
 
-        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), getLifecycle());
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 if (position == 0) {
@@ -648,38 +653,33 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 } else {
                     lockSwipeRightToGoBack();
                 }
-            }
-        });
-        viewPager.setAdapter(sectionsPagerAdapter);
-        viewPager.setOffscreenPageLimit(2);
-        tabLayout.setupWithViewPager(viewPager);
 
-
-        boolean viewSidebar = getIntent().getBooleanExtra(EXTRA_VIEW_SIDEBAR, false);
-        if (viewSidebar) {
-            viewPager.setCurrentItem(1, false);
-        }
-
-        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
                 if (mAccessToken != null) {
                     if (showBottomAppBar) {
                         bottomNavigationView.performShow();
                     }
                     fab.show();
                 }
-                if (isInLazyMode) {
-                    if (viewPager.getCurrentItem() == 0) {
-                        sectionsPagerAdapter.resumeLazyMode();
-                    } else {
-                        sectionsPagerAdapter.pauseLazyMode();
-                    }
-                }
 
                 sectionsPagerAdapter.displaySortTypeInToolbar();
             }
         });
+        viewPager2.setAdapter(sectionsPagerAdapter);
+        viewPager2.setOffscreenPageLimit(2);
+        viewPager2.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
+        new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
+            switch (position) {
+                case 0:
+                    tab.setText("Posts");
+                case 1:
+                    tab.setText("Sidebar");
+            }
+        }).attach();
+
+        boolean viewSidebar = getIntent().getBooleanExtra(EXTRA_VIEW_SIDEBAR, false);
+        if (viewSidebar) {
+            viewPager2.setCurrentItem(1, false);
+        }
     }
 
     @Override
@@ -904,17 +904,17 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         }
     }
 
-    private class SectionsPagerAdapter extends FragmentPagerAdapter {
-        private PostFragment postFragment;
-        private SidebarFragment sidebarFragment;
+    private class SectionsPagerAdapter extends FragmentStateAdapter {
+        /*private PostFragment postFragment;
+        private SidebarFragment sidebarFragment;*/
 
-        SectionsPagerAdapter(FragmentManager fm) {
-            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        SectionsPagerAdapter(FragmentManager fm, Lifecycle lifecycle) {
+            super(fm, lifecycle);
         }
 
         @NonNull
         @Override
-        public Fragment getItem(int position) {
+        public Fragment createFragment(int position) {
             if (position == 0) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
@@ -933,117 +933,92 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             return fragment;
         }
 
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "Posts";
-                case 1:
-                    return "Sidebar";
+        @Nullable
+        private Fragment getCurrentFragment() {
+            if (fragmentManager == null) {
+                return null;
             }
-            return null;
-        }
-
-        @NonNull
-        @Override
-        public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            Fragment fragment = (Fragment) super.instantiateItem(container, position);
-            switch (position) {
-                case 0:
-                    postFragment = (PostFragment) fragment;
-                    displaySortTypeInToolbar();
-                    break;
-                case 1:
-                    sidebarFragment = (SidebarFragment) fragment;
-            }
-            return fragment;
+            return fragmentManager.findFragmentByTag("f" + viewPager2.getCurrentItem());
         }
 
         public boolean handleKeyDown(int keyCode) {
-            return viewPager.getCurrentItem() == 0 && postFragment.handleKeyDown(keyCode);
+            if (viewPager2.getCurrentItem() == 0) {
+                Fragment fragment = getCurrentFragment();
+                if (fragment instanceof PostFragment) {
+                    return ((PostFragment) fragment).handleKeyDown(keyCode);
+                }
+            }
+            return false;
         }
 
         public void refresh() {
-            if (viewPager.getCurrentItem() == 0) {
-                if (postFragment != null) {
-                    postFragment.refresh();
-                }
-            } else {
-                if (sidebarFragment != null) {
-                    sidebarFragment.fetchSubredditData();
-                }
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).refresh();
+            } else if (fragment instanceof SidebarFragment) {
+                ((SidebarFragment) fragment).fetchSubredditData();
             }
         }
 
         boolean startLazyMode() {
-            if (postFragment != null) {
-                return ((FragmentCommunicator) postFragment).startLazyMode();
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof FragmentCommunicator) {
+                return ((FragmentCommunicator) fragment).startLazyMode();
             }
             return false;
         }
 
         void stopLazyMode() {
-            if (postFragment != null) {
-                ((FragmentCommunicator) postFragment).stopLazyMode();
-            }
-        }
-
-        void resumeLazyMode() {
-            if (postFragment != null) {
-                ((FragmentCommunicator) postFragment).resumeLazyMode(false);
-            }
-        }
-
-        void pauseLazyMode() {
-            if (postFragment != null) {
-                ((FragmentCommunicator) postFragment).pauseLazyMode(false);
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof FragmentCommunicator) {
+                ((FragmentCommunicator) fragment).stopLazyMode();
             }
         }
 
         public void changeSortType(SortType sortType) {
-            if (postFragment != null) {
-                postFragment.changeSortType(sortType);
-                displaySortTypeInToolbar();
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).changeSortType(sortType);
+                Utils.displaySortTypeInToolbar(sortType, toolbar);
             }
         }
 
         public void changeNSFW(boolean nsfw) {
-            if (postFragment != null) {
-                postFragment.changeNSFW(nsfw);
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).changeNSFW(nsfw);
             }
         }
 
         void changePostLayout(int postLayout) {
-            if (postFragment != null) {
-                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, postLayout).apply();
-                ((FragmentCommunicator) postFragment).changePostLayout(postLayout);
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).changePostLayout(postLayout);
             }
         }
 
         void goBackToTop() {
-            if (viewPager.getCurrentItem() == 0) {
-                if (postFragment != null) {
-                    postFragment.goBackToTop();
-                }
-            } else {
-                if (sidebarFragment != null) {
-                    sidebarFragment.goBackToTop();
-                }
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).goBackToTop();
+            } else if (fragment instanceof SidebarFragment) {
+                ((SidebarFragment) fragment).goBackToTop();
             }
         }
 
         void displaySortTypeInToolbar() {
-            if (viewPager.getCurrentItem() == 0) {
-                if (postFragment != null) {
-                    SortType sortType = postFragment.getSortType();
+            if (fragmentManager != null) {
+                Fragment fragment = fragmentManager.findFragmentByTag("f" + viewPager2.getCurrentItem());
+                if (fragment instanceof PostFragment) {
+                    SortType sortType = ((PostFragment) fragment).getSortType();
                     Utils.displaySortTypeInToolbar(sortType, toolbar);
                 }
             }
+        }
+
+        @Override
+        public int getItemCount() {
+            return 2;
         }
     }
 

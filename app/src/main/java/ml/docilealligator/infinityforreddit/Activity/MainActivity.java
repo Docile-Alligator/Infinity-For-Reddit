@@ -270,6 +270,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         mLockBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_BOTTOM_APP_BAR, false);
         mDisableSwipingBetweenTabs = mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false);
 
+        fragmentManager = getSupportFragmentManager();
+
         if (savedInstanceState != null) {
             mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
             mFetchSubscriptionsSuccess = savedInstanceState.getBoolean(FETCH_SUBSCRIPTIONS_STATE);
@@ -585,7 +587,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         navDrawerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         navDrawerRecyclerView.setAdapter(adapter);
 
-        fragmentManager = getSupportFragmentManager();
         sectionsPagerAdapter = new SectionsPagerAdapter(fragmentManager, getLifecycle());
         viewPager2.setAdapter(sectionsPagerAdapter);
         viewPager2.setOffscreenPageLimit(3);
@@ -614,7 +615,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 }
             }
         }).attach();
-        //tabLayout.setupWithViewPager(viewPager2);
 
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -992,7 +992,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         }
     }
 
-    private class SectionsPagerAdapter extends FragmentStateAdapter{
+    private class SectionsPagerAdapter extends FragmentStateAdapter {
         /*private PostFragment tab1;
         private PostFragment tab2;
         private PostFragment tab3;*/

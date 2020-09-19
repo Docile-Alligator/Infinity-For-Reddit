@@ -7,7 +7,7 @@
     android:id="@+id/coordinator_layout_view_user_detail_activity"
     tools:application=".ViewUserDetailActivity">
 
-    <androidx.viewpager.widget.ViewPager
+    <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager_view_user_detail_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

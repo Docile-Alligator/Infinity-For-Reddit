@@ -12,7 +12,6 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -20,13 +19,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -37,6 +38,7 @@ import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrInterface;
 
@@ -104,7 +106,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @BindView(R.id.coordinator_layout_view_user_detail_activity)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.view_pager_view_user_detail_activity)
-    ViewPager viewPager;
+    ViewPager2 viewPager2;
     @BindView(R.id.appbar_layout_view_user_detail)
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_view_user_detail_activity)
@@ -149,6 +151,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     public UserViewModel userViewModel;
+    private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private SubscribedUserDao subscribedUserDao;
     private RequestManager glide;
@@ -197,6 +200,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         }
 
         username = getIntent().getStringExtra(EXTRA_USER_NAME_KEY);
+
+        fragmentManager = getSupportFragmentManager();
 
         if (savedInstanceState == null) {
             mMessageFullname = getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME);
@@ -509,21 +514,22 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     }
 
     private void initializeViewPager() {
-        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(sectionsPagerAdapter);
-        viewPager.setOffscreenPageLimit(2);
-        tabLayout.setupWithViewPager(viewPager);
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), getLifecycle());
+        viewPager2.setAdapter(sectionsPagerAdapter);
+        viewPager2.setOffscreenPageLimit(2);
+        viewPager2.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
+        new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
+            switch (position) {
+                case 0:
+                    tab.setText("Posts");
+                case 1:
+                    tab.setText("Comments");
+            }
+        }).attach();
 
-        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                if (isInLazyMode) {
-                    if (viewPager.getCurrentItem() == 0) {
-                        sectionsPagerAdapter.resumeLazyMode();
-                    } else {
-                        sectionsPagerAdapter.pauseLazyMode();
-                    }
-                }
                 if (position == 0) {
                     unlockSwipeRightToGoBack();
                 } else {
@@ -809,17 +815,15 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         }
     }
 
-    private class SectionsPagerAdapter extends FragmentPagerAdapter {
-        private PostFragment postFragment;
-        private CommentsListingFragment commentsListingFragment;
+    private class SectionsPagerAdapter extends FragmentStateAdapter {
 
-        SectionsPagerAdapter(FragmentManager fm) {
-            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        SectionsPagerAdapter(FragmentManager fm, Lifecycle lifecycle) {
+            super(fm, lifecycle);
         }
 
         @NonNull
         @Override
-        public Fragment getItem(int position) {
+        public Fragment createFragment(int position) {
             if (position == 0) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
@@ -843,134 +847,100 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         }
 
         @Override
-        public int getCount() {
+        public int getItemCount() {
             return 2;
         }
 
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "Posts";
-                case 1:
-                    return "Comments";
+        @Nullable
+        private Fragment getCurrentFragment() {
+            if (viewPager2 == null || fragmentManager == null) {
+                return null;
             }
-            return null;
-        }
-
-        @NonNull
-        @Override
-        public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            Fragment fragment = (Fragment) super.instantiateItem(container, position);
-            switch (position) {
-                case 0:
-                    postFragment = (PostFragment) fragment;
-                    break;
-                case 1:
-                    commentsListingFragment = (CommentsListingFragment) fragment;
-            }
-            displaySortTypeInToolbar();
-            return fragment;
+            return fragmentManager.findFragmentByTag("f" + viewPager2.getCurrentItem());
         }
 
         public boolean handleKeyDown(int keyCode) {
-            return viewPager.getCurrentItem() == 0 && postFragment.handleKeyDown(keyCode);
+            if (viewPager2.getCurrentItem() == 0) {
+                Fragment fragment = getCurrentFragment();
+                if (fragment instanceof PostFragment) {
+                    return ((PostFragment) fragment).handleKeyDown(keyCode);
+                }
+            }
+            return false;
         }
 
         public void refresh() {
-            if (viewPager.getCurrentItem() == 0) {
-                if (postFragment != null) {
-                    postFragment.refresh();
-                }
-            } else {
-                if (commentsListingFragment != null) {
-                    commentsListingFragment.refresh();
-                }
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).refresh();
+            } else if (fragment instanceof CommentsListingFragment) {
+                ((CommentsListingFragment) fragment).refresh();
             }
         }
 
         boolean startLazyMode() {
-            if (postFragment != null) {
-                return ((FragmentCommunicator) postFragment).startLazyMode();
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof FragmentCommunicator) {
+                return ((FragmentCommunicator) fragment).startLazyMode();
             }
             return false;
         }
 
         void stopLazyMode() {
-            if (postFragment != null) {
-                ((FragmentCommunicator) postFragment).stopLazyMode();
-            }
-        }
-
-        void resumeLazyMode() {
-            if (postFragment != null) {
-                ((FragmentCommunicator) postFragment).resumeLazyMode(false);
-            }
-        }
-
-        void pauseLazyMode() {
-            if (postFragment != null) {
-                ((FragmentCommunicator) postFragment).pauseLazyMode(false);
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof FragmentCommunicator) {
+                ((FragmentCommunicator) fragment).stopLazyMode();
             }
         }
 
         public void changeSortType(SortType sortType) {
-            if (viewPager.getCurrentItem() == 0) {
-                if (postFragment != null) {
-                    postFragment.changeSortType(sortType);
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).changeSortType(sortType);
+                Utils.displaySortTypeInToolbar(sortType, toolbar);
+            } else if (fragment instanceof CommentsListingFragment) {
+                mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_USER_COMMENT, sortType.getType().name()).apply();
+                if(sortType.getTime() != null) {
+                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_USER_COMMENT, sortType.getTime().name()).apply();
                 }
-            } else {
-                if (commentsListingFragment != null) {
-                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_USER_COMMENT, sortType.getType().name()).apply();
-                    if(sortType.getTime() != null) {
-                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_USER_COMMENT, sortType.getTime().name()).apply();
-                    }
-
-                    commentsListingFragment.changeSortType(sortType);
-                }
+                ((CommentsListingFragment) fragment).changeSortType(sortType);
+                Utils.displaySortTypeInToolbar(sortType, toolbar);
             }
-            displaySortTypeInToolbar();
         }
 
         public void changeNSFW(boolean nsfw) {
-            if (postFragment != null) {
-                postFragment.changeNSFW(nsfw);
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).changeNSFW(nsfw);
             }
         }
 
         void changePostLayout(int postLayout) {
-            if (postFragment != null) {
-                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, postLayout).apply();
-                ((FragmentCommunicator) postFragment).changePostLayout(postLayout);
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).changePostLayout(postLayout);
             }
         }
 
         void goBackToTop() {
-            if (viewPager.getCurrentItem() == 0) {
-                if (postFragment != null) {
-                    postFragment.goBackToTop();
-                }
-            } else {
-                if (commentsListingFragment != null) {
-                    commentsListingFragment.goBackToTop();
-                }
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).goBackToTop();
+            } else if (fragment instanceof CommentsListingFragment) {
+                ((CommentsListingFragment) fragment).goBackToTop();
             }
         }
 
         void displaySortTypeInToolbar() {
-            switch (viewPager.getCurrentItem()) {
-                case 0:
-                    if (postFragment != null) {
-                        SortType sortType = postFragment.getSortType();
-                        Utils.displaySortTypeInToolbar(sortType, toolbar);
-                    }
-                    break;
-                case 1:
-                    if (commentsListingFragment != null) {
-                        SortType sortType = commentsListingFragment.getSortType();
-                        Utils.displaySortTypeInToolbar(sortType, toolbar);
-                    }
-                    break;
+            if (fragmentManager != null) {
+                Fragment fragment = fragmentManager.findFragmentByTag("f" + viewPager2.getCurrentItem());
+                if (fragment instanceof PostFragment) {
+                    SortType sortType = ((PostFragment) fragment).getSortType();
+                    Utils.displaySortTypeInToolbar(sortType, toolbar);
+                } else if (fragment instanceof CommentsListingFragment) {
+                    SortType sortType = ((CommentsListingFragment) fragment).getSortType();
+                    Utils.displaySortTypeInToolbar(sortType, toolbar);
+                }
             }
         }
     }
