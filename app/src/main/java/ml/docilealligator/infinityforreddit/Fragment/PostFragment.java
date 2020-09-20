@@ -208,7 +208,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if (mPostRecyclerView.getAdapter() != null) {
             ((PostRecyclerViewAdapter) mPostRecyclerView.getAdapter()).setCanStartActivity(true);
         }
-        if (isInLazyMode && isLazyModePaused) {
+        if (isInLazyMode) {
             resumeLazyMode(false);
         }
         if (mAdapter != null && mPostRecyclerView != null) {
@@ -356,9 +356,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
 
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
-            if (isInLazyMode) {
-                resumeLazyMode(false);
-            }
         }
 
         mPostRecyclerView.setOnTouchListener((view, motionEvent) -> {
