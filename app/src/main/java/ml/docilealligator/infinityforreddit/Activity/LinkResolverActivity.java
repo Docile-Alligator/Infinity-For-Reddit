@@ -271,40 +271,14 @@ public class LinkResolverActivity extends AppCompatActivity {
                 Toast.makeText(this, R.string.no_browser_found, Toast.LENGTH_SHORT).show();
             }
         }
-
-        /*List<ResolveInfo> activities = pm.queryIntentActivities(intent, 0);
-        ArrayList<String> packageNames = new ArrayList<>();
-
-        String currentPackageName = getApplicationContext().getPackageName();
-
-        for (ResolveInfo info : activities) {
-            if (!info.activityInfo.packageName.equals(currentPackageName)) {
-                packageNames.add(info.activityInfo.packageName);
-            }
-        }
-
-        if (!packageNames.isEmpty()) {
-            try {
-                startActivity(intent);
-            } catch (ActivityNotFoundException e) {
-                if (handleError) {
-                    openInCustomTabs(uri, pm, false);
-                } else {
-                    Toast.makeText(this, R.string.no_browser_found, Toast.LENGTH_SHORT).show();
-                }
-            }
-        } else {
-            if (handleError) {
-                openInCustomTabs(uri, pm, false);
-            } else {
-                Toast.makeText(this, R.string.no_browser_found, Toast.LENGTH_SHORT).show();
-            }
-        }*/
     }
 
     private ArrayList<ResolveInfo> getCustomTabsPackages(PackageManager pm) {
         // Get default VIEW intent handler.
-        Intent activityIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.example.com"));
+        Intent activityIntent = new Intent()
+                .setAction(Intent.ACTION_VIEW)
+                .addCategory(Intent.CATEGORY_BROWSABLE)
+                .setData(Uri.fromParts("http", "", null));
 
         // Get all apps that can handle VIEW intents.
         List<ResolveInfo> resolvedActivityList = pm.queryIntentActivities(activityIntent, 0);
