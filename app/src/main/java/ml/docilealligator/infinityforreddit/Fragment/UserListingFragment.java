@@ -185,6 +185,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
     }
 
     public void changeSortType(SortType sortType) {
+        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SEARCH_USER, sortType.getType().name()).apply();
         mUserListingViewModel.changeSortType(sortType);
         this.sortType = sortType;
     }

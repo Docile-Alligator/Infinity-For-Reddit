@@ -8,20 +8,22 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.lifecycle.Lifecycle;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrInterface;
 
@@ -72,7 +74,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     @BindView(R.id.tab_layout_search_result_activity)
     TabLayout tabLayout;
     @BindView(R.id.view_pager_search_result_activity)
-    ViewPager viewPager;
+    ViewPager2 viewPager2;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -91,6 +93,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     private String mAccountName;
     private String mQuery;
     private String mSubredditName;
+    private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment;
     private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
@@ -138,6 +141,8 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setToolbarGoToTop(toolbar);
+
+        fragmentManager = getSupportFragmentManager();
 
         if (savedInstanceState == null) {
             getCurrentAccountAndInitializeViewPager();
@@ -212,10 +217,11 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     }
 
     private void initializeViewPager() {
-        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(sectionsPagerAdapter);
-        viewPager.setOffscreenPageLimit(2);
-        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), getLifecycle());
+        viewPager2.setAdapter(sectionsPagerAdapter);
+        viewPager2.setOffscreenPageLimit(3);
+        viewPager2.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 sectionsPagerAdapter.displaySortTypeInToolbar();
@@ -226,7 +232,19 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 }
             }
         });
-        tabLayout.setupWithViewPager(viewPager);
+        new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
+            switch (position) {
+                case 0:
+                    tab.setText("Posts");
+                    break;
+                case 1:
+                    tab.setText("Comments");
+                    break;
+                case 2:
+                    tab.setText("Users");
+                    break;
+            }
+        }).attach();
     }
 
     @Override
@@ -243,7 +261,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 onBackPressed();
                 return true;
             case R.id.action_sort_search_result_activity:
-                switch (viewPager.getCurrentItem()) {
+                switch (viewPager2.getCurrentItem()) {
                     case 0: {
                         searchPostSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchPostSortTypeBottomSheetFragment.getTag());
                         break;
@@ -251,7 +269,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                     case 1:
                     case 2:
                         Bundle bundle = new Bundle();
-                        bundle.putInt(SearchUserAndSubredditSortTypeBottomSheetFragment.EXTRA_FRAGMENT_POSITION, viewPager.getCurrentItem());
+                        bundle.putInt(SearchUserAndSubredditSortTypeBottomSheetFragment.EXTRA_FRAGMENT_POSITION, viewPager2.getCurrentItem());
                         searchUserAndSubredditSortTypeBottomSheetFragment.setArguments(bundle);
                         searchUserAndSubredditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchUserAndSubredditSortTypeBottomSheetFragment.getTag());
                         break;
@@ -337,19 +355,15 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         }
     }
 
-    private class SectionsPagerAdapter extends FragmentPagerAdapter {
+    private class SectionsPagerAdapter extends FragmentStateAdapter {
 
-        private PostFragment postFragment;
-        private SubredditListingFragment subredditListingFragment;
-        private UserListingFragment userListingFragment;
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        public SectionsPagerAdapter(FragmentManager fm, Lifecycle lifecycle) {
+            super(fm, lifecycle);
         }
 
         @NonNull
         @Override
-        public Fragment getItem(int position) {
+        public Fragment createFragment(int position) {
             switch (position) {
                 case 0: {
                     PostFragment mFragment = new PostFragment();
@@ -384,123 +398,92 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             }
         }
 
-        @Override
-        public int getCount() {
-            return 3;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "Posts";
-                case 1:
-                    return "Subreddits";
-                case 2:
-                    return "Users";
+        @Nullable
+        private Fragment getCurrentFragment() {
+            if (viewPager2 == null || fragmentManager == null) {
+                return null;
             }
-            return null;
-        }
-
-        @NonNull
-        @Override
-        public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            Fragment fragment = (Fragment) super.instantiateItem(container, position);
-            switch (position) {
-                case 0:
-                    postFragment = (PostFragment) fragment;
-                    break;
-                case 1:
-                    subredditListingFragment = (SubredditListingFragment) fragment;
-                    break;
-                case 2:
-                    userListingFragment = (UserListingFragment) fragment;
-                    break;
-            }
-            displaySortTypeInToolbar();
-            return fragment;
+            return fragmentManager.findFragmentByTag("f" + viewPager2.getCurrentItem());
         }
 
         public boolean handleKeyDown(int keyCode) {
-            return viewPager.getCurrentItem() == 0 && postFragment.handleKeyDown(keyCode);
+            if (viewPager2.getCurrentItem() == 0) {
+                Fragment fragment = getCurrentFragment();
+                if (fragment instanceof PostFragment) {
+                    return ((PostFragment) fragment).handleKeyDown(keyCode);
+                }
+            }
+
+            return false;
         }
 
         void changeSortType(SortType sortType) {
-            postFragment.changeSortType(sortType);
-            displaySortTypeInToolbar();
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).changeSortType(sortType);
+                displaySortTypeInToolbar();
+            }
         }
 
         void changeSortType(SortType sortType, int fragmentPosition) {
-            switch (fragmentPosition) {
-                case 1:
-                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SEARCH_SUBREDDIT, sortType.getType().name()).apply();
-                    subredditListingFragment.changeSortType(sortType);
-                    break;
-                case 2:
-                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SEARCH_USER, sortType.getType().name()).apply();
-                    userListingFragment.changeSortType(sortType);
+            Fragment fragment = fragmentManager.findFragmentByTag("f" + fragmentPosition);
+            if (fragment instanceof SubredditListingFragment) {
+                ((SubredditListingFragment) fragment).changeSortType(sortType);
+            } else if (fragment instanceof UserListingFragment) {
+                ((UserListingFragment) fragment).changeSortType(sortType);
             }
             displaySortTypeInToolbar();
         }
 
         public void refresh() {
-            switch (viewPager.getCurrentItem()) {
-                case 0:
-                    ((FragmentCommunicator) postFragment).refresh();
-                    break;
-                case 1:
-                    ((FragmentCommunicator) subredditListingFragment).refresh();
-                    break;
-                case 2:
-                    ((FragmentCommunicator) userListingFragment).refresh();
-                    break;
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof FragmentCommunicator) {
+                ((FragmentCommunicator) fragment).refresh();
             }
         }
 
         void changeNSFW(boolean nsfw) {
-            if (postFragment != null) {
-                postFragment.changeNSFW(nsfw);
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).changeNSFW(nsfw);
             }
         }
 
         void changePostLayout(int postLayout) {
-            if (postFragment != null) {
-                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, postLayout).apply();
-                ((FragmentCommunicator) postFragment).changePostLayout(postLayout);
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).changePostLayout(postLayout);
             }
         }
 
         void goBackToTop() {
-            if (viewPager.getCurrentItem() == 0) {
-                postFragment.goBackToTop();
-            } else if (viewPager.getCurrentItem() == 1) {
-                subredditListingFragment.goBackToTop();
-            } else {
-                userListingFragment.goBackToTop();
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).goBackToTop();
+            } else if (fragment instanceof SubredditListingFragment) {
+                ((SubredditListingFragment) fragment).goBackToTop();
+            } else if (fragment instanceof UserListingFragment) {
+                ((UserListingFragment) fragment).goBackToTop();
             }
         }
 
         void displaySortTypeInToolbar() {
-            switch (viewPager.getCurrentItem()) {
-                case 0:
-                    if (postFragment != null) {
-                        SortType sortType = postFragment.getSortType();
-                        Utils.displaySortTypeInToolbar(sortType, toolbar);
-                    }
-                    break;
-                case 1:
-                    if (subredditListingFragment != null) {
-                        SortType sortType = subredditListingFragment.getSortType();
-                        Utils.displaySortTypeInToolbar(sortType, toolbar);
-                    }
-                    break;
-                case 2:
-                    if (userListingFragment != null) {
-                        SortType sortType = userListingFragment.getSortType();
-                        Utils.displaySortTypeInToolbar(sortType, toolbar);
-                    }
-                    break;
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                SortType sortType = ((PostFragment) fragment).getSortType();
+                Utils.displaySortTypeInToolbar(sortType, toolbar);
+            } else if (fragment instanceof SubredditListingFragment) {
+                SortType sortType = ((SubredditListingFragment) fragment).getSortType();
+                Utils.displaySortTypeInToolbar(sortType, toolbar);
+            } else if (fragment instanceof UserListingFragment) {
+                SortType sortType = ((UserListingFragment) fragment).getSortType();
+                Utils.displaySortTypeInToolbar(sortType, toolbar);
             }
+        }
+
+        @Override
+        public int getItemCount() {
+            return 3;
         }
     }
 
