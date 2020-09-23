@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -221,18 +222,8 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                         openAccountSection(((NavHeaderViewHolder) holder).dropIconImageView);
                     }
                 } else {
-                    ((NavHeaderViewHolder) holder).dropIconImageView.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_arrow_drop_down_24px));
-                    notifyItemRangeRemoved(1, getItemCount() - 1);
-                    if (isLoggedIn) {
-                        if (subscribedSubreddits != null) {
-                            notifyItemRangeInserted(1, subscribedSubreddits.size() + CURRENT_MENU_ITEMS - 1);
-                        } else {
-                            notifyItemRangeInserted(1, CURRENT_MENU_ITEMS - 1);
-                        }
-                    } else {
-                        notifyItemRangeInserted(1, 2);
-                    }
-                    isInMainPage = true;
+                    ((NavHeaderViewHolder) holder).dropIconImageView.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_arrow_drop_down_24px, null));
+                    closeAccountSectionWithoutChangeIconResource();
                 }
             });
         } else if (holder instanceof MenuGroupTitleViewHolder) {
@@ -422,8 +413,22 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         }
     }
 
+    public void closeAccountSectionWithoutChangeIconResource() {
+        notifyItemRangeRemoved(1, getItemCount() - 1);
+        if (isLoggedIn) {
+            if (subscribedSubreddits != null) {
+                notifyItemRangeInserted(1, subscribedSubreddits.size() + CURRENT_MENU_ITEMS - 1);
+            } else {
+                notifyItemRangeInserted(1, CURRENT_MENU_ITEMS - 1);
+            }
+        } else {
+            notifyItemRangeInserted(1, 2);
+        }
+        isInMainPage = true;
+    }
+
     private void openAccountSection(ImageView dropIconImageView) {
-        dropIconImageView.setImageDrawable(resources.getDrawable(R.drawable.ic_baseline_arrow_drop_up_24px));
+        dropIconImageView.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_arrow_drop_up_24px, null));
         notifyItemRangeRemoved(1, getItemCount() - 1);
         if (accounts != null) {
             notifyItemRangeInserted(1, accounts.size() + 3);

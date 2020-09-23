@@ -256,11 +256,19 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         setSupportActionBar(toolbar);
         setToolbarGoToTop(toolbar);
 
-        drawer = findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.getDrawerArrowDrawable().setColor(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
         drawer.addDrawerListener(toggle);
+        drawer.addDrawerListener(new DrawerLayout.SimpleDrawerListener() {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                if (adapter != null) {
+                    adapter.closeAccountSectionWithoutChangeIconResource();
+                    adapter.notifyItemChanged(0);
+                }
+            }
+        });
         toggle.syncState();
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
@@ -799,8 +807,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     }
 
     @Override
-    public void onBackPressed() {
-        DrawerLayout drawer = findViewById(R.id.drawer_layout);
+    public void onBackPressed() {;
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
