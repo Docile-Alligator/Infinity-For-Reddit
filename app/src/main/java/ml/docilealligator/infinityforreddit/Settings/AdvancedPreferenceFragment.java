@@ -58,6 +58,12 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
     @Inject
     @Named("amoled_theme")
     SharedPreferences amoledThemeSharedPreferences;
+    @Inject
+    @Named("main_activity_tabs")
+    SharedPreferences mainActivityTabsSharedPreferences;
+    @Inject
+    @Named("nsfw_and_spoiler")
+    SharedPreferences nsfwAndBlurringSharedPreferences;
     private Activity activity;
 
     @Override
@@ -178,6 +184,9 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
                             editor.remove(SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME_LEGACY);
                             editor.remove(SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME_LEGACY);
                             editor.remove(SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME_LEGACY);
+                            editor.remove(SharedPreferencesUtils.NSFW_KEY_LEGACY);
+                            editor.remove(SharedPreferencesUtils.BLUR_NSFW_KEY_LEGACY);
+                            editor.remove(SharedPreferencesUtils.BLUR_SPOILER_KEY_LEGACY);
 
                             SharedPreferences.Editor sortTypeEditor = mSortTypeSharedPreferences.edit();
                             sortTypeEditor.remove(SharedPreferencesUtils.SORT_TYPE_ALL_POST_LEGACY);
@@ -207,6 +216,9 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
                         .setPositiveButton(R.string.yes, (dialogInterface, i)
                                 -> {
                             mSharedPreferences.edit().clear().apply();
+                            mainActivityTabsSharedPreferences.edit().clear().apply();
+                            nsfwAndBlurringSharedPreferences.edit().clear().apply();
+
                             Toast.makeText(activity, R.string.reset_all_settings_success, Toast.LENGTH_SHORT).show();
                             EventBus.getDefault().post(new RecreateActivityEvent());
                         })

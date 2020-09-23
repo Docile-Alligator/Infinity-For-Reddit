@@ -66,6 +66,7 @@ import ml.docilealligator.infinityforreddit.Settings.DownloadLocationPreferenceF
 import ml.docilealligator.infinityforreddit.Settings.GesturesAndButtonsPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.MainPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.NotificationPreferenceFragment;
+import ml.docilealligator.infinityforreddit.Settings.NsfwAndBlurringFragment;
 import ml.docilealligator.infinityforreddit.Settings.SecurityPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.ThemePreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.VideoPreferenceFragment;
@@ -206,4 +207,6 @@ public interface AppComponent {
     void inject(SelectUserFlairActivity selectUserFlairActivity);
 
     void inject(SecurityPreferenceFragment securityPreferenceFragment);
+
+    void inject(NsfwAndBlurringFragment nsfwAndBlurringFragment);
 }

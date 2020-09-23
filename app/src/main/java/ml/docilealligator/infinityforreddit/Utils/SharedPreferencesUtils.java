@@ -8,9 +8,6 @@ public class SharedPreferencesUtils {
     public static final String ENABLE_NOTIFICATION_KEY = "enable_notification";
     public static final String NOTIFICATION_INTERVAL_KEY = "notificaiton_interval";
     public static final String LAZY_MODE_INTERVAL_KEY = "lazy_mode_interval";
-    public static final String NSFW_KEY = "nsfw";
-    public static final String BLUR_NSFW_KEY = "blur_nsfw";
-    public static final String BLUR_SPOILER_KEY = "blur_spoiler";
     public static final String THEME_KEY = "theme";
     public static final String ICON_FOREGROUND_KEY = "icon_foreground";
     public static final String ICON_BACKGROUND_KEY = "icon_background";
@@ -127,6 +124,11 @@ public class SharedPreferencesUtils {
     public static final String LONG_PRESS_TO_HIDE_TOOLBAR_IN_COMPACT_LAYOUT = "long_press_to_hide_toolbar_in_compact_layout";
     public static final String POST_COMPACT_LAYOUT_TOOLBAR_HIDDEN_BY_DEFAULT = "post_compact_layout_toolbar_hidden_by_default";
     public static final String SECURITY = "security";
+    public static final String START_AUTOPLAY_VISIBLE_AREA_OFFSET_PORTRAIT = "start_autoplay_visible_area_offset_portrait";
+    public static final String START_AUTOPLAY_VISIBLE_AREA_OFFSET_LANDSCAPE = "start_autoplay_visible_area_offset_landscape";
+    public static final String MUTE_NSFW_VIDEO = "mute_nsfw_video";
+    public static final String VIDEO_PLAYER_IGNORE_NAV_BAR = "video_player_ignore_nav_bar";
+    public static final String SAVE_FRONT_PAGE_SCROLLED_POSITION = "save_front_page_scrolled_position";
 
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";
     public static final String MAIN_PAGE_TAB_1_TITLE = "_main_page_tab_1_title";
@@ -145,11 +147,10 @@ public class SharedPreferencesUtils {
     public static final int MAIN_PAGE_TAB_POST_TYPE_MULTIREDDIT = 4;
     public static final int MAIN_PAGE_TAB_POST_TYPE_USER = 5;
 
-    public static final String START_AUTOPLAY_VISIBLE_AREA_OFFSET_PORTRAIT = "start_autoplay_visible_area_offset_portrait";
-    public static final String START_AUTOPLAY_VISIBLE_AREA_OFFSET_LANDSCAPE = "start_autoplay_visible_area_offset_landscape";
-    public static final String MUTE_NSFW_VIDEO = "mute_nsfw_video";
-    public static final String VIDEO_PLAYER_IGNORE_NAV_BAR = "video_player_ignore_nav_bar";
-    public static final String SAVE_FRONT_PAGE_SCROLLED_POSITION = "save_front_page_scrolled_position";
+    public static final String NSFW_AND_SPOILER_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.nsfw_and_spoiler";
+    public static final String NSFW_BASE = "_nsfw";
+    public static final String BLUR_NSFW_BASE = "_blur_nsfw";
+    public static final String BLUR_SPOILER_BASE = "_blur_spoiler";
 
     //Legacy Settings
     public static final String MAIN_PAGE_TAB_1_TITLE_LEGACY = "main_page_tab_1_title";
@@ -169,4 +170,8 @@ public class SharedPreferencesUtils {
 
     public static final String POST_LAYOUT_POPULAR_POST_LEGACY = "post_layout_popular_post";
     public static final String POST_LAYOUT_ALL_POST_LEGACY = "post_layout_all_post";
+
+    public static final String NSFW_KEY_LEGACY = "nsfw";
+    public static final String BLUR_NSFW_KEY_LEGACY = "blur_nsfw";
+    public static final String BLUR_SPOILER_KEY_LEGACY = "blur_spoiler";
 }

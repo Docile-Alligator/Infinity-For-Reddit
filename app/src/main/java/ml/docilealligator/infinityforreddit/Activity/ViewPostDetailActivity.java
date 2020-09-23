@@ -195,6 +195,9 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     @Named("sort_type")
     SharedPreferences mSortTypeSharedPreferences;
     @Inject
+    @Named("nsfw_and_spoiler")
+    SharedPreferences mNsfwAndSpoilerSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     ExoCreator mExoCreator;
@@ -623,7 +626,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                     mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mRedditDataRoomDatabase, mGlide,
                     mWindowWidth, mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId,
-                    isSingleCommentThreadMode, mSharedPreferences, mExoCreator,
+                    isSingleCommentThreadMode, mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mExoCreator,
                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                         @Override
                         public void updatePost(Post post) {
@@ -786,7 +789,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                     mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mGfycatRetrofit,
                                     mRedgifsRetrofit, mRedditDataRoomDatabase, mGlide,
                                     mWindowWidth, mAccessToken, mAccountName, mPost, mLocale,
-                                    mSingleCommentId, isSingleCommentThreadMode, mSharedPreferences, mExoCreator,
+                                    mSingleCommentId, isSingleCommentThreadMode, mSharedPreferences,
+                                    mNsfwAndSpoilerSharedPreferences, mExoCreator,
                                     new CommentAndPostRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                                         @Override
                                         public void updatePost(Post post) {

@@ -65,22 +65,10 @@
         app:icon="@drawable/ic_exit_24dp"
         app:title="@string/settings_confirm_to_exit" />
 
-    <SwitchPreference
-        app:defaultValue="false"
-        app:key="nsfw"
+    <Preference
         app:icon="@drawable/ic_nsfw_on_24dp"
-        app:title="@string/settings_enable_nsfw_title" />
-
-    <SwitchPreference
-        app:defaultValue="true"
-        app:key="blur_nsfw"
-        app:title="@string/settings_blur_nsfw_title"
-        app:isPreferenceVisible="false" />
-
-    <SwitchPreference
-        app:defaultValue="false"
-        app:key="blur_spoiler"
-        app:title="@string/settings_blur_spoiler_title" />
+        app:title="@string/settings_nsfw_and_spoiler_title"
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.NsfwAndBlurringFragment"/>
 
     <Preference
         app:title="@string/settings_advanced_master_title"

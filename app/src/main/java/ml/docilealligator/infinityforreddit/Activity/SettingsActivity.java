@@ -33,6 +33,7 @@ import ml.docilealligator.infinityforreddit.Settings.FontPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.GesturesAndButtonsPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.InterfacePreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.MainPreferenceFragment;
+import ml.docilealligator.infinityforreddit.Settings.NsfwAndBlurringFragment;
 
 public class SettingsActivity extends BaseActivity implements
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
@@ -159,6 +160,8 @@ public class SettingsActivity extends BaseActivity implements
                 pref.getFragment());
         if (fragment instanceof CustomizeMainPageTabsFragment) {
             args.putString(CustomizeMainPageTabsFragment.EXTRA_ACCOUNT_NAME, mAccountName);
+        } else if (fragment instanceof NsfwAndBlurringFragment) {
+            args.putString(NsfwAndBlurringFragment.EXTRA_ACCOUNT_NAME, mAccountName);
         }
         fragment.setArguments(args);
         fragment.setTargetFragment(caller, 0);

@@ -176,6 +176,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Named("main_activity_tabs")
     SharedPreferences mMainActivityTabsSharedPreferences;
     @Inject
+    @Named("nsfw_and_spoiler")
+    SharedPreferences mNsfwAndSpoilerSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
@@ -264,8 +267,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             @Override
             public void onDrawerClosed(View drawerView) {
                 if (adapter != null) {
-                    adapter.closeAccountSectionWithoutChangeIconResource();
-                    adapter.notifyItemChanged(0);
+                    if (adapter.closeAccountSectionWithoutChangeIconResource(true)) {
+                        adapter.notifyItemChanged(0);
+                    }
                 }
             }
         });
@@ -480,7 +484,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         }
 
         adapter = new NavigationDrawerRecyclerViewAdapter(this, mSharedPreferences,
-                mCustomThemeWrapper, mAccountName,
+                mNsfwAndSpoilerSharedPreferences, mCustomThemeWrapper, mAccountName,
                 mProfileImageUrl, mBannerImageUrl, mKarma,
                 new NavigationDrawerRecyclerViewAdapter.ItemClickListener() {
             @Override
@@ -536,13 +540,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         break;
                     case R.string.enable_nsfw:
                         if (sectionsPagerAdapter != null) {
-                            mSharedPreferences.edit().putBoolean(SharedPreferencesUtils.NSFW_KEY, true).apply();
+                            mNsfwAndSpoilerSharedPreferences.edit().putBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, true).apply();
                             sectionsPagerAdapter.changeNSFW(true);
                         }
                         break;
                     case R.string.disable_nsfw:
                         if (sectionsPagerAdapter != null) {
-                            mSharedPreferences.edit().putBoolean(SharedPreferencesUtils.NSFW_KEY, false).apply();
+                            mNsfwAndSpoilerSharedPreferences.edit().putBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false).apply();
                             sectionsPagerAdapter.changeNSFW(false);
                         }
                         break;

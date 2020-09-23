@@ -194,8 +194,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                    Retrofit gfycatRetrofit, Retrofit redgifsRetrofit,
                                    RedditDataRoomDatabase redditDataRoomDatabase,
                                    CustomThemeWrapper customThemeWrapper, Locale locale, int imageViewWidth,
-                                   String accessToken, int postType, int postLayout, boolean displaySubredditName,
-                                   SharedPreferences sharedPreferences, ExoCreator exoCreator, Callback callback) {
+                                   String accessToken, String accountName, int postType, int postLayout, boolean displaySubredditName,
+                                   SharedPreferences sharedPreferences, SharedPreferences nsfwAndSpoilerSharedPreferences,
+                                   ExoCreator exoCreator, Callback callback) {
         super(DIFF_CALLBACK);
         if (activity != null) {
             mActivity = activity;
@@ -207,8 +208,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mAccessToken = accessToken;
             mPostType = postType;
             mDisplaySubredditName = displaySubredditName;
-            mNeedBlurNSFW = sharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_NSFW_KEY, true);
-            mNeedBlurSpoiler = sharedPreferences.getBoolean(SharedPreferencesUtils.BLUR_SPOILER_KEY, false);
+            mNeedBlurNSFW = nsfwAndSpoilerSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.BLUR_NSFW_BASE, true);
+            mNeedBlurSpoiler = nsfwAndSpoilerSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.BLUR_SPOILER_BASE, false);
             mVoteButtonsOnTheRight = sharedPreferences.getBoolean(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY, false);
             mShowElapsedTime = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
             mTimeFormatPattern = sharedPreferences.getString(SharedPreferencesUtils.TIME_FORMAT_KEY, SharedPreferencesUtils.TIME_FORMAT_DEFAULT_VALUE);

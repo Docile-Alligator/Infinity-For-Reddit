@@ -238,7 +238,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                     tab.setText(R.string.posts);
                     break;
                 case 1:
-                    tab.setText(R.string.comments);
+                    tab.setText(R.string.subreddits);
                     break;
                 case 2:
                     tab.setText(R.string.users);

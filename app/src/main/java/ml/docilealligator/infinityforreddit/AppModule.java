@@ -149,7 +149,6 @@ class AppModule {
                 .readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .connectionPool(new ConnectionPool(0, 1, TimeUnit.NANOSECONDS));
-                //.addInterceptor(new Okhttp3DebugInterceptor(mApplication));
         return okHttpClientBuilder.build();
     }
 
@@ -209,6 +208,12 @@ class AppModule {
     @Named("main_activity_tabs")
     SharedPreferences provideMainActivityTabsSharedPreferences() {
         return mApplication.getSharedPreferences(SharedPreferencesUtils.MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+    }
+
+    @Provides
+    @Named("nsfw_and_spoiler")
+    SharedPreferences provideNsfwAndSpoilerSharedPreferences() {
+        return mApplication.getSharedPreferences(SharedPreferencesUtils.NSFW_AND_SPOILER_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
     }
 
     @Provides

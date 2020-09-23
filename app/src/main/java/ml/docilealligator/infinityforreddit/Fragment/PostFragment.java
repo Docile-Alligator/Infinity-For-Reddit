@@ -159,6 +159,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Named("post_layout")
     SharedPreferences mPostLayoutSharedPreferences;
     @Inject
+    @Named("nsfw_and_spoiler")
+    SharedPreferences mNsfwAndSpoilerSharedPreferences;
+    @Inject
     CustomThemeWrapper customThemeWrapper;
     @Inject
     ExoCreator exoCreator;
@@ -396,7 +399,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         int filter = getArguments().getInt(EXTRA_FILTER);
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
-        boolean nsfw = mSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_KEY, false);
+        boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
         int defaultPostLayout = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY, "0"));
         savePostFeedScrolledPosition = mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_FRONT_PAGE_SCROLLED_POSITION, false);
         vibrateWhenActionTriggered = mSharedPreferences.getBoolean(SharedPreferencesUtils.VIBRATE_WHEN_ACTION_TRIGGERED, true);
@@ -414,8 +417,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mRedditDataRoomDatabase, customThemeWrapper, locale,
-                    windowWidth, accessToken, postType, postLayout, true,
-                    mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
+                    windowWidth, accessToken, accountName, postType, postLayout, true,
+                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -462,8 +465,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mRedditDataRoomDatabase, customThemeWrapper, locale,
-                    windowWidth, accessToken, postType, postLayout, displaySubredditName,
-                    mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
+                    windowWidth, accessToken, accountName, postType, postLayout, displaySubredditName,
+                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -511,8 +514,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mRedditDataRoomDatabase, customThemeWrapper, locale,
-                    windowWidth, accessToken, postType, postLayout, true,
-                    mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
+                    windowWidth, accessToken, accountName, postType, postLayout, true,
+                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -558,8 +561,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mRedditDataRoomDatabase, customThemeWrapper, locale,
-                    windowWidth, accessToken, postType, postLayout, true,
-                    mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
+                    windowWidth, accessToken, accountName, postType, postLayout, true,
+                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -598,8 +601,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mRedditDataRoomDatabase, customThemeWrapper, locale,
-                    windowWidth, accessToken, postType, postLayout, true,
-                    mSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
+                    windowWidth, accessToken, accountName, postType, postLayout, true,
+                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();

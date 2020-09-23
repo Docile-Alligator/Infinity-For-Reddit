@@ -74,6 +74,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private int primaryIconColor;
 
     public NavigationDrawerRecyclerViewAdapter(AppCompatActivity appCompatActivity, SharedPreferences sharedPreferences,
+                                               SharedPreferences nsfwAndSpoilerSharedPreferences,
                                                CustomThemeWrapper customThemeWrapper,
                                                String accountName, String userIconUrl,
                                                String userBannerUrl, int karma,
@@ -85,7 +86,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         this.userIconUrl = userIconUrl;
         this.userBannerUrl = userBannerUrl;
         this.karma = karma;
-        isNSFWEnabled = sharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_KEY, false);
+        isNSFWEnabled = nsfwAndSpoilerSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
         requireAuthToAccountSection = sharedPreferences.getBoolean(SharedPreferencesUtils.REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER, false);
         isLoggedIn = accountName != null;
         this.itemClickListener = itemClickListener;
@@ -223,7 +224,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                     }
                 } else {
                     ((NavHeaderViewHolder) holder).dropIconImageView.setImageDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_arrow_drop_down_24px, null));
-                    closeAccountSectionWithoutChangeIconResource();
+                    closeAccountSectionWithoutChangeIconResource(false);
                 }
             });
         } else if (holder instanceof MenuGroupTitleViewHolder) {
@@ -413,18 +414,24 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         }
     }
 
-    public void closeAccountSectionWithoutChangeIconResource() {
-        notifyItemRangeRemoved(1, getItemCount() - 1);
-        if (isLoggedIn) {
-            if (subscribedSubreddits != null) {
-                notifyItemRangeInserted(1, subscribedSubreddits.size() + CURRENT_MENU_ITEMS - 1);
+    public boolean closeAccountSectionWithoutChangeIconResource(boolean checkIsInMainPage) {
+        if (!(checkIsInMainPage && isInMainPage)) {
+            notifyItemRangeRemoved(1, getItemCount() - 1);
+            if (isLoggedIn) {
+                if (subscribedSubreddits != null) {
+                    notifyItemRangeInserted(1, subscribedSubreddits.size() + CURRENT_MENU_ITEMS - 1);
+                } else {
+                    notifyItemRangeInserted(1, CURRENT_MENU_ITEMS - 1);
+                }
             } else {
-                notifyItemRangeInserted(1, CURRENT_MENU_ITEMS - 1);
+                notifyItemRangeInserted(1, 2);
             }
-        } else {
-            notifyItemRangeInserted(1, 2);
+            isInMainPage = true;
+
+            return true;
         }
-        isInMainPage = true;
+
+        return false;
     }
 
     private void openAccountSection(ImageView dropIconImageView) {
