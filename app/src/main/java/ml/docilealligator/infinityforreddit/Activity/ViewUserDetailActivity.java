@@ -514,16 +514,18 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     }
 
     private void initializeViewPager() {
-        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), getLifecycle());
+        sectionsPagerAdapter = new SectionsPagerAdapter(fragmentManager, getLifecycle());
         viewPager2.setAdapter(sectionsPagerAdapter);
         viewPager2.setOffscreenPageLimit(2);
         viewPager2.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
             switch (position) {
                 case 0:
-                    tab.setText("Posts");
+                    tab.setText(R.string.posts);
+                    break;
                 case 1:
-                    tab.setText("Comments");
+                    tab.setText(R.string.comments);
+                    break;
             }
         }).attach();
 

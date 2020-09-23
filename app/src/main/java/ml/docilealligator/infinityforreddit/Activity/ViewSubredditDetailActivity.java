@@ -644,7 +644,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     }
                 }).execute();
 
-        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), getLifecycle());
+        sectionsPagerAdapter = new SectionsPagerAdapter(fragmentManager, getLifecycle());
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -670,9 +670,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
             switch (position) {
                 case 0:
-                    tab.setText("Posts");
+                    tab.setText(R.string.posts);
                 case 1:
-                    tab.setText("Sidebar");
+                    tab.setText(R.string.sidebar);
             }
         }).attach();
 

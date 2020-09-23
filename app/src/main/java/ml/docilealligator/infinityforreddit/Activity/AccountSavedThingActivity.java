@@ -7,21 +7,23 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.lifecycle.Lifecycle;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrInterface;
 
@@ -68,7 +70,7 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
     @BindView(R.id.tab_layout_tab_layout_account_saved_thing_activity_activity)
     TabLayout tabLayout;
     @BindView(R.id.view_pager_account_saved_thing_activity)
-    ViewPager viewPager;
+    ViewPager2 viewPager2;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -82,6 +84,7 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
     SharedPreferences mPostLayoutSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private SlidrInterface mSlidrInterface;
     private Menu mMenu;
@@ -137,6 +140,8 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
 
         postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
 
+        fragmentManager = getSupportFragmentManager();
+
         if (savedInstanceState != null) {
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
@@ -191,22 +196,24 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
     }
 
     private void initializeViewPager() {
-        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        viewPager.setAdapter(sectionsPagerAdapter);
-        viewPager.setOffscreenPageLimit(2);
-        tabLayout.setupWithViewPager(viewPager);
+        sectionsPagerAdapter = new SectionsPagerAdapter(fragmentManager, getLifecycle());
+        viewPager2.setAdapter(sectionsPagerAdapter);
+        viewPager2.setOffscreenPageLimit(2);
+        viewPager2.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
+        new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
+            switch (position) {
+                case 0:
+                    tab.setText(R.string.posts);
+                    break;
+                case 1:
+                    tab.setText(R.string.comments);
+                    break;
+            }
+        }).attach();
 
-        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                if (isInLazyMode) {
-                    if (viewPager.getCurrentItem() == 0) {
-                        sectionsPagerAdapter.resumeLazyMode();
-                    } else {
-                        sectionsPagerAdapter.pauseLazyMode();
-                    }
-                }
-
                 if (position == 0) {
                     unlockSwipeRightToGoBack();
                 } else {
@@ -326,17 +333,15 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
         }
     }
 
-    private class SectionsPagerAdapter extends FragmentPagerAdapter {
-        private PostFragment postFragment;
-        private CommentsListingFragment commentsListingFragment;
+    private class SectionsPagerAdapter extends FragmentStateAdapter {
 
-        SectionsPagerAdapter(FragmentManager fm) {
-            super(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        SectionsPagerAdapter(FragmentManager fm, Lifecycle lifecycle) {
+            super(fm, lifecycle);
         }
 
         @NonNull
         @Override
-        public Fragment getItem(int position) {
+        public Fragment createFragment(int position) {
             if (position == 0) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
@@ -359,96 +364,75 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
             return fragment;
         }
 
-        @Override
-        public int getCount() {
-            return 2;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            switch (position) {
-                case 0:
-                    return "Posts";
-                case 1:
-                    return "Comments";
+        @Nullable
+        private Fragment getCurrentFragment() {
+            if (viewPager2 == null || fragmentManager == null) {
+                return null;
             }
-            return null;
-        }
-
-        @NonNull
-        @Override
-        public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            Fragment fragment = (Fragment) super.instantiateItem(container, position);
-            switch (position) {
-                case 0:
-                    postFragment = (PostFragment) fragment;
-                    break;
-                case 1:
-                    commentsListingFragment = (CommentsListingFragment) fragment;
-            }
-            return fragment;
+            return fragmentManager.findFragmentByTag("f" + viewPager2.getCurrentItem());
         }
 
         public boolean handleKeyDown(int keyCode) {
-            return viewPager.getCurrentItem() == 0 && postFragment.handleKeyDown(keyCode);
+            if (viewPager2.getCurrentItem() == 0) {
+                Fragment fragment = getCurrentFragment();
+                if (fragment instanceof PostFragment) {
+                    return ((PostFragment) fragment).handleKeyDown(keyCode);
+                }
+            }
+            return false;
         }
 
         public void refresh() {
-            if (viewPager.getCurrentItem() == 0) {
-                if (postFragment != null) {
-                    postFragment.refresh();
-                }
-            } else {
-                if (commentsListingFragment != null) {
-                    commentsListingFragment.refresh();
-                }
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).refresh();
+            } else if (fragment instanceof CommentsListingFragment) {
+                ((CommentsListingFragment) fragment).refresh();
             }
         }
 
         boolean startLazyMode() {
-            if (postFragment != null) {
-                return ((FragmentCommunicator) postFragment).startLazyMode();
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof FragmentCommunicator) {
+                return ((FragmentCommunicator) fragment).startLazyMode();
             }
             return false;
         }
 
         void stopLazyMode() {
-            if (postFragment != null) {
-                ((FragmentCommunicator) postFragment).stopLazyMode();
-            }
-        }
-
-        void resumeLazyMode() {
-            if (postFragment != null) {
-                ((FragmentCommunicator) postFragment).resumeLazyMode(false);
-            }
-        }
-
-        void pauseLazyMode() {
-            if (postFragment != null) {
-                ((FragmentCommunicator) postFragment).pauseLazyMode(false);
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof FragmentCommunicator) {
+                ((FragmentCommunicator) fragment).stopLazyMode();
             }
         }
 
         public void changeNSFW(boolean nsfw) {
-            if (postFragment != null) {
-                postFragment.changeNSFW(nsfw);
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).changeNSFW(nsfw);
             }
         }
 
         public void changePostLayout(int postLayout) {
-            if (postFragment != null) {
-                ((FragmentCommunicator) postFragment).changePostLayout(postLayout);
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).changePostLayout(postLayout);
             }
         }
 
 
         public void goBackToTop() {
-            if (viewPager.getCurrentItem() == 0) {
-                postFragment.goBackToTop();
-            } else {
-                commentsListingFragment.goBackToTop();
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).goBackToTop();
+            } else if (fragment instanceof CommentsListingFragment) {
+                ((CommentsListingFragment) fragment).goBackToTop();
             }
+        }
+
+        @Override
+        public int getItemCount() {
+            return 2;
         }
     }
 }

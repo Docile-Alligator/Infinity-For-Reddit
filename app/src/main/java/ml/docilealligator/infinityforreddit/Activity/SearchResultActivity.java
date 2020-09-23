@@ -217,7 +217,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     }
 
     private void initializeViewPager() {
-        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager(), getLifecycle());
+        sectionsPagerAdapter = new SectionsPagerAdapter(fragmentManager, getLifecycle());
         viewPager2.setAdapter(sectionsPagerAdapter);
         viewPager2.setOffscreenPageLimit(3);
         viewPager2.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
@@ -235,13 +235,13 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
             switch (position) {
                 case 0:
-                    tab.setText("Posts");
+                    tab.setText(R.string.posts);
                     break;
                 case 1:
-                    tab.setText("Comments");
+                    tab.setText(R.string.comments);
                     break;
                 case 2:
-                    tab.setText("Users");
+                    tab.setText(R.string.users);
                     break;
             }
         }).attach();
