@@ -56,21 +56,7 @@ public class SecurityPreferenceFragment extends PreferenceFragmentCompat {
         BiometricPrompt biometricPrompt = new BiometricPrompt(SecurityPreferenceFragment.this,
                 executor, new BiometricPrompt.AuthenticationCallback() {
             @Override
-            public void onAuthenticationError(int errorCode,
-                                              @NonNull CharSequence errString) {
-                super.onAuthenticationError(errorCode, errString);
-                activity.onBackPressed();
-            }
-
-            @Override
-            public void onAuthenticationSucceeded(
-                    @NonNull BiometricPrompt.AuthenticationResult result) {
-                super.onAuthenticationSucceeded(result);
-            }
-
-            @Override
-            public void onAuthenticationFailed() {
-                super.onAuthenticationFailed();
+            public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 activity.onBackPressed();
             }
         });

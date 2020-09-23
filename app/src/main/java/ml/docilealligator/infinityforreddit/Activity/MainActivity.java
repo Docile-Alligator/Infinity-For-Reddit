@@ -625,35 +625,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     }
                     fab.show();
                 }
-                /*if (isInLazyMode) {
-                    if (position == sectionsPagerAdapter.getCurrentLazyModeFragmentPosition()) {
-                        sectionsPagerAdapter.resumeLazyMode();
-                    } else {
-                        sectionsPagerAdapter.pauseLazyMode();
-                    }
-                }*/
                 sectionsPagerAdapter.displaySortTypeInToolbar();
             }
         });
-        /*viewPager2.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                if (mAccessToken != null) {
-                    if (showBottomAppBar) {
-                        bottomNavigationView.performShow();
-                    }
-                    fab.show();
-                }
-                if (isInLazyMode) {
-                    if (position == sectionsPagerAdapter.getCurrentLazyModeFragmentPosition()) {
-                        sectionsPagerAdapter.resumeLazyMode();
-                    } else {
-                        sectionsPagerAdapter.pauseLazyMode();
-                    }
-                }
-                sectionsPagerAdapter.displaySortTypeInToolbar();
-            }
-        });*/
 
         loadSubscriptions();
 
@@ -993,10 +967,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {
-        /*private PostFragment tab1;
-        private PostFragment tab2;
-        private PostFragment tab3;*/
-
         SectionsPagerAdapter(FragmentManager fm, Lifecycle lifecycle) {
             super(fm, lifecycle);
         }
@@ -1116,56 +1086,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             return 3;
         }
 
-        /*@Override
-        public CharSequence getPageTitle(int position) {
-            if (mAccessToken == null) {
-                switch (position) {
-                    case 0:
-                        return getString(R.string.popular);
-                    case 1:
-                        return getString(R.string.all);
-                }
-            } else {
-                switch (position) {
-                    case 0:
-                        return mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_TITLE, getString(R.string.home));
-                    case 1:
-                        return mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_TITLE, getString(R.string.popular));
-                    case 2:
-                        return mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_TITLE, getString(R.string.all));
-                }
-            }
-            return null;
-        }*/
-
-        /*@NonNull
-        @Override
-        public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            Fragment fragment = (Fragment) super.instantiateItem(container, position);
-            if (mAccessToken == null) {
-                switch (position) {
-                    case 0:
-                        tab2 = (PostFragment) fragment;
-                        break;
-                    case 1:
-                        tab3 = (PostFragment) fragment;
-                }
-            } else {
-                switch (position) {
-                    case 0:
-                        tab1 = (PostFragment) fragment;
-                        break;
-                    case 1:
-                        tab2 = (PostFragment) fragment;
-                        break;
-                    case 2:
-                        tab3 = (PostFragment) fragment;
-                }
-            }
-            displaySortTypeInToolbar();
-            return fragment;
-        }*/
-
         @Nullable
         private PostFragment getCurrentFragment() {
             if (viewPager2 == null || fragmentManager == null) {
@@ -1183,23 +1103,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (currentFragment != null) {
                 return currentFragment.handleKeyDown(keyCode);
             }
-            /*if (mAccessToken == null) {
-                switch (viewPager2.getCurrentItem()) {
-                    case 0:
-                        return tab2.handleKeyDown(keyCode);
-                    case 1:
-                        return tab3.handleKeyDown(keyCode);
-                }
-            } else {
-                switch (viewPager2.getCurrentItem()) {
-                    case 0:
-                        return tab1.handleKeyDown(keyCode);
-                    case 1:
-                        return tab2.handleKeyDown(keyCode);
-                    case 2:
-                        return tab3.handleKeyDown(keyCode);
-                }
-            }*/
             return false;
         }
 
@@ -1208,23 +1111,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (currentFragment != null) {
                 return currentFragment.startLazyMode();
             }
-            /*if (mAccessToken == null) {
-                switch (viewPager2.getCurrentItem()) {
-                    case 0:
-                        return tab2.startLazyMode();
-                    case 1:
-                        return tab3.startLazyMode();
-                }
-            } else {
-                switch (viewPager2.getCurrentItem()) {
-                    case 0:
-                        return tab1.startLazyMode();
-                    case 1:
-                        return tab2.startLazyMode();
-                    case 2:
-                        return tab3.startLazyMode();
-                }
-            }*/
 
             return false;
         }
@@ -1236,133 +1122,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     ((PostFragment) fragment).stopLazyMode();
                 }
             }
-            /*if (mAccessToken == null) {
-                switch (getCurrentLazyModeFragmentPosition()) {
-                    case 0:
-                        tab2.stopLazyMode();
-                        break;
-                    case 1:
-                        tab3.stopLazyMode();
-                        break;
-                }
-            } else {
-                switch (getCurrentLazyModeFragmentPosition()) {
-                    case 0:
-                        tab1.stopLazyMode();
-                        break;
-                    case 1:
-                        tab2.stopLazyMode();
-                        break;
-                    case 2:
-                        tab3.stopLazyMode();
-                        break;
-                }
-            }*/
         }
-
-        void resumeLazyMode() {
-            PostFragment currentFragment = getCurrentFragment();
-            if (currentFragment != null) {
-                currentFragment.resumeLazyMode(false);
-            }
-            /*if (mAccessToken == null) {
-                switch (getCurrentLazyModeFragmentPosition()) {
-                    case 0:
-                        tab2.resumeLazyMode(false);
-                        break;
-                    case 1:
-                        tab3.resumeLazyMode(false);
-                        break;
-                }
-            } else {
-                switch (getCurrentLazyModeFragmentPosition()) {
-                    case 0:
-                        tab1.resumeLazyMode(false);
-                        break;
-                    case 1:
-                        tab2.resumeLazyMode(false);
-                        break;
-                    case 2:
-                        tab3.resumeLazyMode(false);
-                        break;
-                }
-            }*/
-        }
-
-        void pauseLazyMode() {
-            PostFragment currentFragment = getCurrentFragment();
-            if (currentFragment != null) {
-                currentFragment.pauseLazyMode(false);
-            }
-            /*if (mAccessToken == null) {
-                switch (getCurrentLazyModeFragmentPosition()) {
-                    case 0:
-                        tab2.pauseLazyMode(false);
-                        break;
-                    case 1:
-                        tab3.pauseLazyMode(false);
-                }
-            } else {
-                switch (getCurrentLazyModeFragmentPosition()) {
-                    case 0:
-                        tab1.pauseLazyMode(false);
-                        break;
-                    case 1:
-                        tab2.pauseLazyMode(false);
-                        break;
-                    case 2:
-                        tab3.pauseLazyMode(false);
-                }
-            }*/
-        }
-
-        /*int getCurrentLazyModeFragmentPosition() {
-            if (mAccessToken == null) {
-                if (!isInLazyMode) {
-                    return -1;
-                } else if (tab2 != null && tab2.isInLazyMode()) {
-                    return 0;
-                } else if (tab3 != null && tab3.isInLazyMode()) {
-                    return 1;
-                } else {
-                    return -1;
-                }
-            } else {
-                if (!isInLazyMode) {
-                    return -1;
-                } else if (tab1 != null && tab1.isInLazyMode()) {
-                    return 0;
-                } else if (tab2 != null && tab2.isInLazyMode()) {
-                    return 1;
-                } else if (tab3 != null && tab3.isInLazyMode()) {
-                    return 2;
-                } else {
-                    return -1;
-                }
-            }
-        }*/
 
         int getCurrentPostType() {
             PostFragment currentFragment = getCurrentFragment();
             if (currentFragment != null) {
                 return currentFragment.getPostType();
             }
-            /*if (mAccessToken == null) {
-                if (viewPager2.getCurrentItem() == 0) {
-                    return tab2.getPostType();
-                } else {
-                    return tab3.getPostType();
-                }
-            } else {
-                switch (viewPager2.getCurrentItem()) {
-                    case 1:
-                        return tab2.getPostType();
-                    case 2:
-                        return tab3.getPostType();
-                    default:
-                        return tab1.getPostType();
-                }
-            }*/
             return PostDataSource.TYPE_SUBREDDIT;
         }
 
@@ -1371,24 +1137,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (currentFragment != null) {
                 currentFragment.changeSortType(sortType);
             }
-            /*if (mAccessToken == null) {
-                if (viewPager2.getCurrentItem() == 0) {
-                    tab2.changeSortType(sortType);
-                } else {
-                    tab3.changeSortType(sortType);
-                }
-            } else {
-                switch (viewPager2.getCurrentItem()) {
-                    case 0:
-                        tab1.changeSortType(sortType);
-                        break;
-                    case 1:
-                        tab2.changeSortType(sortType);
-                        break;
-                    case 2:
-                        tab3.changeSortType(sortType);
-                }
-            }*/
             displaySortTypeInToolbar();
         }
 
@@ -1397,34 +1145,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (currentFragment != null) {
                 currentFragment.refresh();
             }
-            /*if (mAccessToken == null) {
-                if (viewPager2.getCurrentItem() == 0) {
-                    if (tab2 != null) {
-                        tab2.refresh();
-                    }
-                } else {
-                    if (tab3 != null) {
-                        tab3.refresh();
-                    }
-                }
-            } else {
-                switch (viewPager2.getCurrentItem()) {
-                    case 0:
-                        if (tab1 != null) {
-                            tab1.refresh();
-                        }
-                        break;
-                    case 1:
-                        if (tab2 != null) {
-                            tab2.refresh();
-                        }
-                        break;
-                    case 2:
-                        if (tab3 != null) {
-                            tab3.refresh();
-                        }
-                }
-            }*/
         }
 
         void changeNSFW(boolean nsfw) {
@@ -1434,15 +1154,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     ((PostFragment) fragment).changeNSFW(nsfw);
                 }
             }
-            /*if (tab1 != null) {
-                tab1.changeNSFW(nsfw);
-            }
-            if (tab2 != null) {
-                tab2.changeNSFW(nsfw);
-            }
-            if (tab3 != null) {
-                tab3.changeNSFW(nsfw);
-            }*/
         }
 
         void changePostLayout(int postLayout) {
@@ -1450,39 +1161,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (currentFragment != null) {
                 currentFragment.changePostLayout(postLayout);
             }
-            /*if (mAccessToken == null) {
-                if (viewPager2.getCurrentItem() == 0) {
-                    if (tab2 != null) {
-                        mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_POPULAR_POST, postLayout).apply();
-                        tab2.changePostLayout(postLayout);
-                    }
-                } else {
-                    if (tab3 != null) {
-                        mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_ALL_POST, postLayout).apply();
-                        tab3.changePostLayout(postLayout);
-                    }
-                }
-            } else {
-                switch (viewPager2.getCurrentItem()) {
-                    case 0:
-                        if (tab1 != null) {
-                            mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, postLayout).apply();
-                            tab1.changePostLayout(postLayout);
-                        }
-                        break;
-                    case 1:
-                        if (tab2 != null) {
-                            mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_POPULAR_POST, postLayout).apply();
-                            tab2.changePostLayout(postLayout);
-                        }
-                        break;
-                    case 2:
-                        if (tab3 != null) {
-                            mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_ALL_POST, postLayout).apply();
-                            tab3.changePostLayout(postLayout);
-                        }
-                }
-            }*/
         }
 
         void goBackToTop() {
@@ -1490,21 +1168,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (currentFragment != null) {
                 currentFragment.goBackToTop();
             }
-            /*if (viewPager2.getCurrentItem() == 0) {
-                if (mAccessToken != null && tab1 != null) {
-                    tab1.goBackToTop();
-                } else if (tab2 != null) {
-                    tab2.goBackToTop();
-                }
-            } else if (viewPager2.getCurrentItem() == 1) {
-                if (mAccessToken != null && tab2 != null) {
-                    tab2.goBackToTop();
-                } else if (tab3 != null) {
-                    tab3.goBackToTop();
-                }
-            } else {
-                tab3.goBackToTop();
-            }*/
         }
 
         void displaySortTypeInToolbar() {
@@ -1513,40 +1176,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 SortType sortType = currentFragment.getSortType();
                 Utils.displaySortTypeInToolbar(sortType, toolbar);
             }
-            /*switch (viewPager2.getCurrentItem()) {
-                case 0:
-                    if (mAccessToken != null) {
-                        if (tab1 != null) {
-                            SortType sortType = tab1.getSortType();
-                            Utils.displaySortTypeInToolbar(sortType, toolbar);
-                        }
-                    } else {
-                        if (tab2 != null) {
-                            SortType sortType = tab2.getSortType();
-                            Utils.displaySortTypeInToolbar(sortType, toolbar);
-                        }
-                    }
-                    break;
-                case 1:
-                    if (mAccessToken != null) {
-                        if (tab2 != null) {
-                            SortType sortType = tab2.getSortType();
-                            Utils.displaySortTypeInToolbar(sortType, toolbar);
-                        }
-                    } else {
-                        if (tab3 != null) {
-                            SortType sortType = tab3.getSortType();
-                            Utils.displaySortTypeInToolbar(sortType, toolbar);
-                        }
-                    }
-                    break;
-                case 2:
-                    if (tab3 != null) {
-                        SortType sortType = tab3.getSortType();
-                        Utils.displaySortTypeInToolbar(sortType, toolbar);
-                    }
-                    break;
-            }*/
         }
     }
 }

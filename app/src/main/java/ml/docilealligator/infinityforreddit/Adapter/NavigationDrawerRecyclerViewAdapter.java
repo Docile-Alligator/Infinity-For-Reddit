@@ -201,21 +201,10 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                             BiometricPrompt biometricPrompt = new BiometricPrompt(appCompatActivity,
                                     executor, new BiometricPrompt.AuthenticationCallback() {
                                 @Override
-                                public void onAuthenticationError(int errorCode,
-                                                                  @NonNull CharSequence errString) {
-                                    super.onAuthenticationError(errorCode, errString);
-                                }
-
-                                @Override
                                 public void onAuthenticationSucceeded(
                                         @NonNull BiometricPrompt.AuthenticationResult result) {
                                     super.onAuthenticationSucceeded(result);
                                     openAccountSection(((NavHeaderViewHolder) holder).dropIconImageView);
-                                }
-
-                                @Override
-                                public void onAuthenticationFailed() {
-                                    super.onAuthenticationFailed();
                                 }
                             });
 
