@@ -601,46 +601,51 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         navDrawerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         navDrawerRecyclerView.setAdapter(adapter);
 
+        int tabCount = mMainActivityTabsSharedPreferences.getInt((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_COUNT, 3);
         mShowSubscribedSubreddits = mMainActivityTabsSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS, false);
-        sectionsPagerAdapter = new SectionsPagerAdapter(fragmentManager, getLifecycle(), mShowSubscribedSubreddits);
+        sectionsPagerAdapter = new SectionsPagerAdapter(fragmentManager, getLifecycle(), tabCount, mShowSubscribedSubreddits);
         viewPager2.setAdapter(sectionsPagerAdapter);
         viewPager2.setOffscreenPageLimit(1);
         viewPager2.setUserInputEnabled(!mDisableSwipingBetweenTabs);
-        if (mShowSubscribedSubreddits) {
-            tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-        } else {
-            tabLayout.setTabMode(TabLayout.MODE_FIXED);
-        }
-        new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
-            if (mAccessToken == null) {
-                switch (position) {
-                    case 0:
-                        tab.setText(R.string.popular);
-                        break;
-                    case 1:
-                        tab.setText(R.string.all);
-                        break;
-                }
+        if (mMainActivityTabsSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_TAB_NAMES, true)) {
+            if (mShowSubscribedSubreddits) {
+                tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
             } else {
-                switch (position) {
-                    case 0:
-                        tab.setText(mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_TITLE, getString(R.string.home)));
-                        break;
-                    case 1:
-                        tab.setText(mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_TITLE, getString(R.string.popular)));
-                        break;
-                    case 2:
-                        tab.setText(mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_TITLE, getString(R.string.all)));
-                        break;
-                }
-                if (position >= 3 && mShowSubscribedSubreddits && sectionsPagerAdapter != null) {
-                    List<SubscribedSubredditData> subscribedSubreddits = sectionsPagerAdapter.subscribedSubreddits;
-                    if (position - 3 < subscribedSubreddits.size()) {
-                        tab.setText(subscribedSubreddits.get(position - 3).getName());
+                tabLayout.setTabMode(TabLayout.MODE_FIXED);
+            }
+            new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
+                if (mAccessToken == null) {
+                    switch (position) {
+                        case 0:
+                            tab.setText(R.string.popular);
+                            break;
+                        case 1:
+                            tab.setText(R.string.all);
+                            break;
+                    }
+                } else {
+                    switch (position) {
+                        case 0:
+                            tab.setText(mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_TITLE, getString(R.string.home)));
+                            break;
+                        case 1:
+                            tab.setText(mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_TITLE, getString(R.string.popular)));
+                            break;
+                        case 2:
+                            tab.setText(mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_TITLE, getString(R.string.all)));
+                            break;
+                    }
+                    if (position >= tabCount && mShowSubscribedSubreddits && sectionsPagerAdapter != null) {
+                        List<SubscribedSubredditData> subscribedSubreddits = sectionsPagerAdapter.subscribedSubreddits;
+                        if (position - tabCount < subscribedSubreddits.size()) {
+                            tab.setText(subscribedSubreddits.get(position - tabCount).getName());
+                        }
                     }
                 }
-            }
-        }).attach();
+            }).attach();
+        } else {
+            tabLayout.setVisibility(View.GONE);
+        }
 
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -997,11 +1002,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {
+        int tabCount;
         boolean showSubscribedSubreddits;
         List<SubscribedSubredditData> subscribedSubreddits;
 
-        SectionsPagerAdapter(FragmentManager fm, Lifecycle lifecycle, boolean showSubscribedSubreddits) {
+        SectionsPagerAdapter(FragmentManager fm, Lifecycle lifecycle, int tabCount, boolean showSubscribedSubreddits) {
             super(fm, lifecycle);
+            this.tabCount = tabCount;
             subscribedSubreddits = new ArrayList<>();
             this.showSubscribedSubreddits = showSubscribedSubreddits;
         }
@@ -1043,9 +1050,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 return generatePostFragment(postType, name);
             } else {
                 if (showSubscribedSubreddits) {
-                    if (position > 2 && position - 3 < subscribedSubreddits.size()) {
+                    if (position >= tabCount && position - tabCount < subscribedSubreddits.size()) {
                         int postType = SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_SUBREDDIT;
-                        String name = subscribedSubreddits.get(position - 3).getName();
+                        String name = subscribedSubreddits.get(position - tabCount).getName();
                         return generatePostFragment(postType, name);
                     }
                 }
@@ -1130,9 +1137,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 return 2;
             }
             if (showSubscribedSubreddits) {
-                return 3 + subscribedSubreddits.size();
+                return tabCount + subscribedSubreddits.size();
             }
-            return 3;
+            return tabCount;
         }
 
         @Nullable

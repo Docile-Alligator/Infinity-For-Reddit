@@ -131,6 +131,8 @@ public class SharedPreferencesUtils {
     public static final String SAVE_FRONT_PAGE_SCROLLED_POSITION = "save_front_page_scrolled_position";
 
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";
+    public static final String MAIN_PAGE_TAB_COUNT = "_main_page_tab_count";
+    public static final String MAIN_PAGE_SHOW_TAB_NAMES = "_main_page_show_tab_names";
     public static final String MAIN_PAGE_TAB_1_TITLE = "_main_page_tab_1_title";
     public static final String MAIN_PAGE_TAB_2_TITLE = "_main_page_tab_2_title";
     public static final String MAIN_PAGE_TAB_3_TITLE = "_main_page_tab_3_title";

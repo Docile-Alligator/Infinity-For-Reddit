@@ -33,6 +33,14 @@ public class CustomizeMainPageTabsFragment extends Fragment {
 
     @BindView(R.id.info_text_view_customize_main_page_tabs_fragment)
     TextView infoTextView;
+    @BindView(R.id.tab_count_linear_layout_customize_main_page_tabs_fragment)
+    LinearLayout tabCountLinearLayout;
+    @BindView(R.id.tab_count_text_view_customize_main_page_tabs_fragment)
+    TextView tabCountTextView;
+    @BindView(R.id.show_tab_names_linear_layout_customize_main_page_tabs_fragment)
+    LinearLayout showTabNamesLinearLayout;
+    @BindView(R.id.show_tab_names_switch_material_customize_main_page_tabs_fragment)
+    SwitchMaterial showTabNamesSwitch;
     @BindView(R.id.divider_1_customize_main_page_tabs_fragment)
     View divider1;
     @BindView(R.id.tab_1_group_summary_customize_main_page_tabs_fragment)
@@ -99,6 +107,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
     @Named("main_activity_tabs")
     SharedPreferences sharedPreferences;
     private Activity activity;
+    private int tabCount;
     private String tab1CurrentTitle;
     private int tab1CurrentPostType;
     private String tab1CurrentName;
@@ -128,6 +137,8 @@ public class CustomizeMainPageTabsFragment extends Fragment {
         if (accountName == null) {
             infoTextView.setText(R.string.settings_customize_tabs_in_main_page_summary);
             divider1.setVisibility(View.GONE);
+            tabCountLinearLayout.setVisibility(View.GONE);
+            showTabNamesLinearLayout.setVisibility(View.GONE);
             tab1GroupSummaryTextView.setVisibility(View.GONE);
             tab1TitleLinearLayout.setVisibility(View.GONE);
             tab1TypeLinearLayout.setVisibility(View.GONE);
@@ -146,6 +157,25 @@ public class CustomizeMainPageTabsFragment extends Fragment {
 
             return rootView;
         }
+
+        tabCount = sharedPreferences.getInt((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_COUNT, 3);
+        tabCountTextView.setText(Integer.toString(tabCount));
+        tabCountLinearLayout.setOnClickListener(view -> {
+            new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
+                    .setTitle(R.string.settings_tab_count)
+                    .setSingleChoiceItems(R.array.settings_main_page_tab_count, tabCount - 1, (dialogInterface, i) -> {
+                        tabCount = i + 1;
+                        sharedPreferences.edit().putInt((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_COUNT, tabCount).apply();
+                        tabCountTextView.setText(Integer.toString(tabCount));
+                        dialogInterface.dismiss();
+                    })
+                    .show();
+        });
+
+        boolean showTabNames = sharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_TAB_NAMES, true);
+        showTabNamesSwitch.setChecked(showTabNames);
+        showTabNamesSwitch.setOnCheckedChangeListener((compoundButton, b) -> sharedPreferences.edit().putBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_TAB_NAMES, b).apply());
+        showTabNamesLinearLayout.setOnClickListener(view -> showTabNamesSwitch.performClick());
 
         String[] typeValues = activity.getResources().getStringArray(R.array.settings_tab_post_type);
 
@@ -447,11 +477,10 @@ public class CustomizeMainPageTabsFragment extends Fragment {
         });
 
         showSubscribedSubredditsSwitchMaterial.setChecked(sharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS, false));
+        showSubscribedSubredditsSwitchMaterial.setOnCheckedChangeListener((compoundButton, b) -> sharedPreferences.edit().putBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS, b).apply());
         showSubscribedSubredditsLinearLayout.setOnClickListener(view -> {
             showSubscribedSubredditsSwitchMaterial.performClick();
         });
-
-        showSubscribedSubredditsSwitchMaterial.setOnCheckedChangeListener((compoundButton, b) -> sharedPreferences.edit().putBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS, b).apply());
 
         return rootView;
     }

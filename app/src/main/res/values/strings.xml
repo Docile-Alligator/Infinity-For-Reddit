@@ -447,6 +447,8 @@
     <string name="settings_reset_all_settings_title">Reset All Settings</string>
     <string name="settings_advanced_settings_summary">Clean the database and shared preferences</string>
     <string name="settings_tab_info">Restart the app to see the changes</string>
+    <string name="settings_tab_count">Tab Count</string>
+    <string name="settings_show_tab_names">Show Tab Names</string>
     <string name="settings_tab_1_summary">Tab 1</string>
     <string name="settings_tab_2_summary">Tab 2</string>
     <string name="settings_tab_3_summary">Tab 3</string>
