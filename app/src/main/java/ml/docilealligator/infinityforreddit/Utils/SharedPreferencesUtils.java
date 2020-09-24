@@ -146,6 +146,7 @@ public class SharedPreferencesUtils {
     public static final int MAIN_PAGE_TAB_POST_TYPE_SUBREDDIT = 3;
     public static final int MAIN_PAGE_TAB_POST_TYPE_MULTIREDDIT = 4;
     public static final int MAIN_PAGE_TAB_POST_TYPE_USER = 5;
+    public static final String MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS = "_main_page_show_subscribed_subreddits";
 
     public static final String NSFW_AND_SPOILER_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.nsfw_and_spoiler";
     public static final String NSFW_BASE = "_nsfw";

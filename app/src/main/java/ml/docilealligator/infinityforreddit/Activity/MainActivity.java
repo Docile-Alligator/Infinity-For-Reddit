@@ -52,6 +52,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -205,6 +206,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private boolean mConfirmToExit;
     private boolean mLockBottomAppBar;
     private boolean mDisableSwipingBetweenTabs;
+    private boolean mShowSubscribedSubreddits;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -599,10 +601,16 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         navDrawerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         navDrawerRecyclerView.setAdapter(adapter);
 
-        sectionsPagerAdapter = new SectionsPagerAdapter(fragmentManager, getLifecycle());
+        mShowSubscribedSubreddits = mMainActivityTabsSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS, false);
+        sectionsPagerAdapter = new SectionsPagerAdapter(fragmentManager, getLifecycle(), mShowSubscribedSubreddits);
         viewPager2.setAdapter(sectionsPagerAdapter);
-        viewPager2.setOffscreenPageLimit(3);
+        viewPager2.setOffscreenPageLimit(1);
         viewPager2.setUserInputEnabled(!mDisableSwipingBetweenTabs);
+        if (mShowSubscribedSubreddits) {
+            tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
+        } else {
+            tabLayout.setTabMode(TabLayout.MODE_FIXED);
+        }
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
             if (mAccessToken == null) {
                 switch (position) {
@@ -624,6 +632,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     case 2:
                         tab.setText(mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_TITLE, getString(R.string.all)));
                         break;
+                }
+                if (position >= 3 && mShowSubscribedSubreddits && sectionsPagerAdapter != null) {
+                    List<SubscribedSubredditData> subscribedSubreddits = sectionsPagerAdapter.subscribedSubreddits;
+                    if (position - 3 < subscribedSubreddits.size()) {
+                        tab.setText(subscribedSubreddits.get(position - 3).getName());
+                    }
                 }
             }
         }).attach();
@@ -647,7 +661,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 new SubscribedSubredditViewModel.Factory(getApplication(), mRedditDataRoomDatabase, mAccountName))
                 .get(SubscribedSubredditViewModel.class);
         subscribedSubredditViewModel.getAllSubscribedSubreddits().observe(this,
-                subscribedSubredditData -> adapter.setSubscribedSubreddits(subscribedSubredditData));
+                subscribedSubredditData -> {
+                    adapter.setSubscribedSubreddits(subscribedSubredditData);
+                    if (mShowSubscribedSubreddits && sectionsPagerAdapter != null) {
+                        sectionsPagerAdapter.setSubscribedSubreddits(subscribedSubredditData);
+                    }
+                });
 
         accountViewModel = new ViewModelProvider(this,
                 new AccountViewModel.Factory(getApplication(), mRedditDataRoomDatabase, mAccountName)).get(AccountViewModel.class);
@@ -978,8 +997,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {
-        SectionsPagerAdapter(FragmentManager fm, Lifecycle lifecycle) {
+        boolean showSubscribedSubreddits;
+        List<SubscribedSubredditData> subscribedSubreddits;
+
+        SectionsPagerAdapter(FragmentManager fm, Lifecycle lifecycle, boolean showSubscribedSubreddits) {
             super(fm, lifecycle);
+            subscribedSubreddits = new ArrayList<>();
+            this.showSubscribedSubreddits = showSubscribedSubreddits;
         }
 
         @NonNull
@@ -1018,14 +1042,25 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 String name = mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, "");
                 return generatePostFragment(postType, name);
             } else {
+                if (showSubscribedSubreddits) {
+                    if (position > 2 && position - 3 < subscribedSubreddits.size()) {
+                        int postType = SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_SUBREDDIT;
+                        String name = subscribedSubreddits.get(position - 3).getName();
+                        return generatePostFragment(postType, name);
+                    }
+                }
                 int postType = mMainActivityTabsSharedPreferences.getInt((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_ALL);
                 String name = mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, "");
                 return generatePostFragment(postType, name);
             }
         }
 
-        private Fragment generatePostFragment(int postType, String name) {
+        public void setSubscribedSubreddits(List<SubscribedSubredditData> subscribedSubreddits) {
+            this.subscribedSubreddits = subscribedSubreddits;
+            notifyDataSetChanged();
+        }
 
+        private Fragment generatePostFragment(int postType, String name) {
             if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HOME) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
@@ -1093,6 +1128,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         public int getItemCount() {
             if (mAccessToken == null) {
                 return 2;
+            }
+            if (showSubscribedSubreddits) {
+                return 3 + subscribedSubreddits.size();
             }
             return 3;
         }

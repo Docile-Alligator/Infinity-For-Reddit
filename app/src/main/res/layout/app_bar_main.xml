@@ -40,7 +40,6 @@
             app:layout_scrollFlags="scroll|enterAlways"
             app:tabGravity="fill"
             app:tabIndicatorHeight="3dp"
-            app:tabMode="fixed"
             app:tabRippleColor="?attr/colorControlHighlight"
             app:tabUnboundedRipple="false" />
 

@@ -34,7 +34,7 @@
                 android:drawablePadding="32dp"
                 android:text="@string/settings_enable_nsfw_title"
                 android:textColor="?attr/primaryTextColor"
-                android:textSize="?attr/font_default"
+                android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -66,7 +66,7 @@
                 android:layout_gravity="center_vertical"
                 android:text="@string/settings_blur_nsfw_title"
                 android:textColor="?attr/primaryTextColor"
-                android:textSize="?attr/font_default"
+                android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
@@ -97,7 +97,7 @@
                 android:layout_gravity="center_vertical"
                 android:text="@string/settings_blur_spoiler_title"
                 android:textColor="?attr/primaryTextColor"
-                android:textSize="?attr/font_default"
+                android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
             <com.google.android.material.switchmaterial.SwitchMaterial
