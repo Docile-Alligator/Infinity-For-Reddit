@@ -453,6 +453,7 @@
     <string name="settings_tab_2_summary">Tab 2</string>
     <string name="settings_tab_3_summary">Tab 3</string>
     <string name="settings_more_tabs_summary">More Tabs</string>
+    <string name="settings_more_tabs_show_favorite_subscribed_subreddits_title">Show Favorite Subscribed Subreddits</string>
     <string name="settings_more_tabs_show_subscribed_subreddits_title">Show Subscribed Subreddits</string>
     <string name="settings_tab_title">Title</string>
     <string name="settings_tab_post_type">Type</string>

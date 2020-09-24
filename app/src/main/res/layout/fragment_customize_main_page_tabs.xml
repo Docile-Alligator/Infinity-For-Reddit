@@ -448,6 +448,37 @@
             android:fontFamily="?attr/font_family" />
 
         <LinearLayout
+            android:id="@+id/show_favorite_subscribed_subreddits_linear_layout_customize_main_page_tabs_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="16dp"
+                android:layout_gravity="center_vertical"
+                android:text="@string/settings_more_tabs_show_favorite_subscribed_subreddits_title"
+                android:textColor="?attr/primaryTextColor"
+                android:textSize="?attr/font_16"
+                android:fontFamily="?attr/font_family" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/show_favorite_subscribed_subreddits_switch_material_customize_main_page_tabs_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" />
+
+        </LinearLayout>
+
+        <LinearLayout
             android:id="@+id/show_subscribed_subreddits_linear_layout_customize_main_page_tabs_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
