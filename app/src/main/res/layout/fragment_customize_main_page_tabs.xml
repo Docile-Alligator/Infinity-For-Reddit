@@ -447,6 +447,19 @@
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family" />
 
+        <TextView
+            android:id="@+id/more_tabs_info_text_view_customize_main_page_tabs_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:drawablePadding="32dp"
+            android:text="@string/settings_more_tabs_info_summary"
+            android:textColor="@color/settingsSubtitleColor"
+            android:gravity="center_vertical"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family"
+            app:drawableStartCompat="@drawable/ic_info_preference_24dp" />
+
         <LinearLayout
             android:id="@+id/show_favorite_subscribed_subreddits_linear_layout_customize_main_page_tabs_fragment"
             android:layout_width="match_parent"

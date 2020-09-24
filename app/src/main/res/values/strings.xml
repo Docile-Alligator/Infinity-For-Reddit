@@ -341,7 +341,7 @@
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">Autoplay Videos Visible Area Offset (Landscape)</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">Start autoplaying videos when %1$d%% of them are visible</string>
     <string name="settings_immersive_interface_title">Immersive Interface</string>
-    <string name="settings_immersive_interface_summary">Does Not Apply to All Pages\nMay Not Work On Android 11</string>
+    <string name="settings_immersive_interface_summary">Does Not Apply to All Pages</string>
     <string name="settings_immersive_interface_ignore_nav_bar_title">Ignore Navigation Bar in Immersive Interface</string>
     <string name="settings_immersive_interface_ignore_nav_bar_summary">Prevent the Bottom Navigation Bar Having Extra Padding</string>
     <string name="settings_customize_tabs_in_main_page_title">Customize Tabs in Main Page</string>
@@ -453,6 +453,7 @@
     <string name="settings_tab_2_summary">Tab 2</string>
     <string name="settings_tab_3_summary">Tab 3</string>
     <string name="settings_more_tabs_summary">More Tabs</string>
+    <string name="settings_more_tabs_info_summary">Enabling the following options will cause an unintended behaviour:\nTabs may lose all the content after switching to others. This is the same as refreshing the page.</string>
     <string name="settings_more_tabs_show_favorite_subscribed_subreddits_title">Show Favorite Subscribed Subreddits</string>
     <string name="settings_more_tabs_show_subscribed_subreddits_title">Show Subscribed Subreddits</string>
     <string name="settings_tab_title">Title</string>

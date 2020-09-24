@@ -99,6 +99,8 @@ public class CustomizeMainPageTabsFragment extends Fragment {
     View divider4;
     @BindView(R.id.more_tabs_group_summary_customize_main_page_tabs_fragment)
     TextView moreTabsGroupSummaryTextView;
+    @BindView(R.id.more_tabs_info_text_view_customize_main_page_tabs_fragment)
+    TextView moreTabsInfoTextView;
     @BindView(R.id.show_subscribed_subreddits_linear_layout_customize_main_page_tabs_fragment)
     LinearLayout showSubscribedSubredditsLinearLayout;
     @BindView(R.id.show_subscribed_subreddits_switch_material_customize_main_page_tabs_fragment)
@@ -156,6 +158,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             tab3TypeLinearLayout.setVisibility(View.GONE);
             divider4.setVisibility(View.GONE);
             moreTabsGroupSummaryTextView.setVisibility(View.GONE);
+            moreTabsInfoTextView.setVisibility(View.GONE);
             showSubscribedSubredditsLinearLayout.setVisibility(View.GONE);
             showFavoriteSubscribedSubredditsLinearLayout.setVisibility(View.GONE);
 

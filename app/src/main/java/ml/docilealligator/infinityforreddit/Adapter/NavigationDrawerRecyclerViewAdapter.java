@@ -50,8 +50,9 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private static final int VIEW_TYPE_MENU_GROUP_TITLE = 1;
     private static final int VIEW_TYPE_MENU_ITEM = 2;
     private static final int VIEW_TYPE_DIVIDER = 3;
-    private static final int VIEW_TYPE_SUBSCRIBED_SUBREDDIT = 4;
-    private static final int VIEW_TYPE_ACCOUNT = 5;
+    private static final int VIEW_TYPE_FAVORITE_SUBSCRIBED_SUBREDDIT = 4;
+    private static final int VIEW_TYPE_SUBSCRIBED_SUBREDDIT = 5;
+    private static final int VIEW_TYPE_ACCOUNT = 6;
     private static final int CURRENT_MENU_ITEMS = 17;
 
     private AppCompatActivity appCompatActivity;
@@ -66,6 +67,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private ItemClickListener itemClickListener;
     private boolean isLoggedIn;
     private boolean isInMainPage = true;
+    private ArrayList<SubscribedSubredditData> favoriteSubscribedSubreddits;
     private ArrayList<SubscribedSubredditData> subscribedSubreddits;
     private ArrayList<Account> accounts;
     private int primaryTextColor;
@@ -94,14 +96,24 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         secondaryTextColor = customThemeWrapper.getSecondaryTextColor();
         dividerColor = customThemeWrapper.getDividerColor();
         primaryIconColor = customThemeWrapper.getPrimaryIconColor();
+        favoriteSubscribedSubreddits = new ArrayList<>();
+        subscribedSubreddits = new ArrayList<>();
     }
 
     @Override
     public int getItemViewType(int position) {
         if (isInMainPage) {
             if (isLoggedIn) {
-                if (position >= CURRENT_MENU_ITEMS) {
-                    return VIEW_TYPE_SUBSCRIBED_SUBREDDIT;
+                if (position == CURRENT_MENU_ITEMS) {
+                    return VIEW_TYPE_MENU_GROUP_TITLE;
+                } else if (!favoriteSubscribedSubreddits.isEmpty() && position == CURRENT_MENU_ITEMS + favoriteSubscribedSubreddits.size() + 1) {
+                    return VIEW_TYPE_MENU_GROUP_TITLE;
+                } else if (position > CURRENT_MENU_ITEMS) {
+                    if (!favoriteSubscribedSubreddits.isEmpty() && position <= CURRENT_MENU_ITEMS + favoriteSubscribedSubreddits.size()) {
+                        return VIEW_TYPE_FAVORITE_SUBSCRIBED_SUBREDDIT;
+                    } else {
+                        return VIEW_TYPE_SUBSCRIBED_SUBREDDIT;
+                    }
                 } else if (position == 0) {
                     return VIEW_TYPE_NAV_HEADER;
                 } else if (position == 1 || position == 6 || position == 12) {
@@ -153,6 +165,9 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
             case VIEW_TYPE_ACCOUNT:
                 return new AccountViewHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_nav_drawer_account, parent, false));
+            case VIEW_TYPE_FAVORITE_SUBSCRIBED_SUBREDDIT:
+                return new FavoriteSubscribedThingViewHolder(LayoutInflater.from(parent.getContext())
+                        .inflate(R.layout.item_nav_drawer_subscribed_thing, parent, false));
             default:
                 return new SubscribedThingViewHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_nav_drawer_subscribed_thing, parent, false));
@@ -234,6 +249,12 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                 ((MenuGroupTitleViewHolder) holder).titleTextView.setText(R.string.label_post);
             } else if (position == 12) {
                 ((MenuGroupTitleViewHolder) holder).titleTextView.setText(R.string.label_preferences);
+            } else {
+                if (!favoriteSubscribedSubreddits.isEmpty() && position == CURRENT_MENU_ITEMS) {
+                    ((MenuGroupTitleViewHolder) holder).titleTextView.setText(R.string.favorites);
+                } else {
+                    ((MenuGroupTitleViewHolder) holder).titleTextView.setText(R.string.subscriptions);
+                }
             }
         } else if (holder instanceof MenuItemViewHolder) {
             int stringId = 0;
@@ -383,8 +404,29 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                     ((MenuItemViewHolder) holder).itemView.setOnClickListener(view -> itemClickListener.onMenuClick(finalStringId));
                 }
             }
+        } else if (holder instanceof FavoriteSubscribedThingViewHolder) {
+            SubscribedSubredditData subreddit = favoriteSubscribedSubreddits.get(position - CURRENT_MENU_ITEMS - 1);
+            String subredditName = subreddit.getName();
+            String iconUrl = subreddit.getIconUrl();
+            ((FavoriteSubscribedThingViewHolder) holder).subredditNameTextView.setText(subredditName);
+            if (iconUrl != null && !iconUrl.equals("")) {
+                glide.load(iconUrl)
+                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                        .error(glide.load(R.drawable.subreddit_default_icon)
+                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                        .into(((FavoriteSubscribedThingViewHolder) holder).iconGifImageView);
+            } else {
+                glide.load(R.drawable.subreddit_default_icon)
+                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                        .into(((FavoriteSubscribedThingViewHolder) holder).iconGifImageView);
+            }
+
+            ((FavoriteSubscribedThingViewHolder) holder).itemView.setOnClickListener(view -> {
+                itemClickListener.onSubscribedSubredditClick(subredditName);
+            });
         } else if (holder instanceof SubscribedThingViewHolder) {
-            SubscribedSubredditData subreddit = subscribedSubreddits.get(position - CURRENT_MENU_ITEMS);
+            SubscribedSubredditData subreddit = favoriteSubscribedSubreddits.isEmpty() ? subscribedSubreddits.get(position - CURRENT_MENU_ITEMS - 1)
+                    : subscribedSubreddits.get(position - CURRENT_MENU_ITEMS - favoriteSubscribedSubreddits.size() - 2);
             String subredditName = subreddit.getName();
             String iconUrl = subreddit.getIconUrl();
             ((SubscribedThingViewHolder) holder).subredditNameTextView.setText(subredditName);
@@ -418,11 +460,8 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         if (!(checkIsInMainPage && isInMainPage)) {
             notifyItemRangeRemoved(1, getItemCount() - 1);
             if (isLoggedIn) {
-                if (subscribedSubreddits != null) {
-                    notifyItemRangeInserted(1, subscribedSubreddits.size() + CURRENT_MENU_ITEMS - 1);
-                } else {
-                    notifyItemRangeInserted(1, CURRENT_MENU_ITEMS - 1);
-                }
+                notifyItemRangeInserted(1, (favoriteSubscribedSubreddits.isEmpty() ? 0 : favoriteSubscribedSubreddits.size() + 1)
+                        + (subscribedSubreddits.isEmpty() ? 0 : subscribedSubreddits.size() + 1) + CURRENT_MENU_ITEMS - 1);
             } else {
                 notifyItemRangeInserted(1, 2);
             }
@@ -453,8 +492,9 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     public int getItemCount() {
         if (isInMainPage) {
             if (isLoggedIn) {
-                if (subscribedSubreddits != null) {
-                    return CURRENT_MENU_ITEMS + subscribedSubreddits.size();
+                if (!(favoriteSubscribedSubreddits.isEmpty() && subscribedSubreddits.isEmpty())) {
+                    return CURRENT_MENU_ITEMS + (favoriteSubscribedSubreddits.isEmpty() ? 0 : favoriteSubscribedSubreddits.size() + 1)
+                            + (subscribedSubreddits.isEmpty() ? 0 : subscribedSubreddits.size() + 1);
                 }
                 return CURRENT_MENU_ITEMS - 1;
             } else {
@@ -482,6 +522,13 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         super.onViewRecycled(holder);
         if (holder instanceof SubscribedThingViewHolder) {
             glide.clear(((SubscribedThingViewHolder) holder).iconGifImageView);
+        }
+    }
+
+    public void setFavoriteSubscribedSubreddits(List<SubscribedSubredditData> favoriteSubscribedSubreddits) {
+        this.favoriteSubscribedSubreddits = (ArrayList<SubscribedSubredditData>) favoriteSubscribedSubreddits;
+        if (isInMainPage) {
+            notifyDataSetChanged();
         }
     }
 
@@ -561,6 +608,19 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         DividerViewHolder(@NonNull View itemView) {
             super(itemView);
             itemView.setBackgroundColor(dividerColor);
+        }
+    }
+
+    class FavoriteSubscribedThingViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.thing_icon_gif_image_view_item_nav_drawer_subscribed_thing)
+        GifImageView iconGifImageView;
+        @BindView(R.id.thing_name_text_view_item_nav_drawer_subscribed_thing)
+        TextView subredditNameTextView;
+
+        FavoriteSubscribedThingViewHolder(@NonNull View itemView) {
+            super(itemView);
+            ButterKnife.bind(this, itemView);
+            subredditNameTextView.setTextColor(primaryTextColor);
         }
     }
 
