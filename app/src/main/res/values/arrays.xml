@@ -248,6 +248,7 @@
         <item>Subscriptions</item>
         <item>Inbox</item>
         <item>Profile</item>
+        <item>Multireddits</item>
     </string-array>
 
     <string-array name="settings_bottom_app_bar_fab_options">

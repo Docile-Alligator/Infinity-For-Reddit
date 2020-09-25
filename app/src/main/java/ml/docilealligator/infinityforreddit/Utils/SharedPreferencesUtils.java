@@ -164,6 +164,7 @@ public class SharedPreferencesUtils {
     public static final String OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_3 = "other_activities_bottom_app_bar_option_3";
     public static final String OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_4 = "other_activities_bottom_app_bar_option_4";
     public static final String OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB = "other_activities_bottom_app_bar_fab";
+
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS = 0;
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_MULTIREDDITS = 1;
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_INBOX = 2;
@@ -173,6 +174,17 @@ public class SharedPreferencesUtils {
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE = 2;
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT = 3;
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_SEARCH = 4;
+
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HOME = 0;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS = 1;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX = 2;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_PROFILE = 3;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_MULTIREDDITS = 4;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS = 0;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH = 1;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE = 2;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT = 3;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH = 4;
 
     public static final String NSFW_AND_SPOILER_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.nsfw_and_spoiler";
     public static final String NSFW_BASE = "_nsfw";

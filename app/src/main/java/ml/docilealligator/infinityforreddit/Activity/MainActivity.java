@@ -250,8 +250,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
                 int navBarHeight = getNavBarHeight();
                 if (navBarHeight > 0) {
+                    CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+                    params.bottomMargin += navBarHeight;
+                    fab.setLayoutParams(params);
                     linearLayoutBottomAppBar.setPadding(0,
-                            (int) (6 * getResources().getDisplayMetrics().density), 0, navBarHeight);
+                            linearLayoutBottomAppBar.getPaddingTop(), 0, navBarHeight);
                     navDrawerRecyclerView.setPadding(0, 0, 0, navBarHeight);
                 }
             }
@@ -449,12 +452,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private void bottomAppBarOptionAction(int option) {
         switch (option) {
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS: {
-                Intent intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
+                Intent intent = new Intent(this, SubscribedThingListingActivity.class);
                 startActivity(intent);
                 break;
             }
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_MULTIREDDITS: {
-                Intent intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
+                Intent intent = new Intent(this, SubscribedThingListingActivity.class);
                 intent.putExtra(SubscribedThingListingActivity.EXTRA_SHOW_MULTIREDDITS, true);
                 startActivity(intent);
                 break;

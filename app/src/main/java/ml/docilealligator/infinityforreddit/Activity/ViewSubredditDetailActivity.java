@@ -141,14 +141,14 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     BottomAppBar bottomNavigationView;
     @BindView(R.id.linear_layout_bottom_app_bar_view_subreddit_detail_activity)
     LinearLayout linearLayoutBottomAppBar;
-    @BindView(R.id.subscriptions_bottom_app_bar_view_subreddit_detail_activity)
-    ImageView subscriptionsBottomAppBar;
-    @BindView(R.id.go_back_to_main_page_bottom_app_bar_view_subreddit_detail_activity)
-    ImageView goBackToMainPageBottomAppBar;
-    @BindView(R.id.message_bottom_app_bar_view_subreddit_detail_activity)
-    ImageView messageBottomAppBar;
-    @BindView(R.id.profile_bottom_app_bar_view_subreddit_detail_activity)
-    ImageView profileBottomAppBar;
+    @BindView(R.id.option_1_bottom_app_bar_view_subreddit_detail_activity)
+    ImageView option1BottomAppBar;
+    @BindView(R.id.option_2_bottom_app_bar_view_subreddit_detail_activity)
+    ImageView option2BottomAppBar;
+    @BindView(R.id.option_3_bottom_app_bar_view_subreddit_detail_activity)
+    ImageView option3BottomAppBar;
+    @BindView(R.id.option_4_bottom_app_bar_view_subreddit_detail_activity)
+    ImageView option4BottomAppBar;
     @BindView(R.id.fab_view_subreddit_detail_activity)
     FloatingActionButton fab;
     @Inject
@@ -168,6 +168,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     @Inject
     @Named("post_layout")
     SharedPreferences mPostLayoutSharedPreferences;
+    @Inject
+    @Named("bottom_app_bar")
+    SharedPreferences bottomAppBarSharedPreference;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     public SubredditViewModel mSubredditViewModel;
@@ -238,10 +241,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 int navBarHeight = getNavBarHeight();
                 if (navBarHeight > 0) {
                     CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
-                    params.bottomMargin = navBarHeight;
+                    params.bottomMargin += navBarHeight;
                     fab.setLayoutParams(params);
-                    linearLayoutBottomAppBar.setPadding(0,
-                            (int) (6 * getResources().getDisplayMetrics().density), 0, navBarHeight);
 
                     showToast = true;
                 }
@@ -458,10 +459,10 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         descriptionTextView.setTextColor(primaryTextColor);
         bottomNavigationView.setBackgroundTint(ColorStateList.valueOf(mCustomThemeWrapper.getBottomAppBarBackgroundColor()));
         int bottomAppBarIconColor = mCustomThemeWrapper.getBottomAppBarIconColor();
-        subscriptionsBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        goBackToMainPageBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        messageBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        profileBottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        option2BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        option1BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        option3BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        option4BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         applyTabLayoutTheme(tabLayout);
         applyFABTheme(fab);
         unsubscribedColor = mCustomThemeWrapper.getUnsubscribed();
@@ -523,6 +524,52 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         }
     }
 
+    private void bottomAppBarOptionAction(int option) {
+        switch (option) {
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HOME: {
+                EventBus.getDefault().post(new GoBackToMainPageEvent());
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS: {
+                Intent intent = new Intent(this, SubscribedThingListingActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX: {
+                Intent intent = new Intent(this, InboxActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_PROFILE: {
+                Intent intent = new Intent(this, ViewUserDetailActivity.class);
+                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mAccountName);
+                startActivity(intent);
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_MULTIREDDITS: {
+                Intent intent = new Intent(this, SubscribedThingListingActivity.class);
+                intent.putExtra(SubscribedThingListingActivity.EXTRA_SHOW_MULTIREDDITS, true);
+                startActivity(intent);
+                break;
+            }
+        }
+    }
+
+    private int getBottomAppBarOptionDrawableResource(int option) {
+        switch (option) {
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HOME:
+                return R.drawable.ic_home_black_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS:
+                return R.drawable.ic_subscritptions_bottom_app_bar_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX:
+                return R.drawable.ic_inbox_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_MULTIREDDITS:
+                return R.drawable.ic_multi_reddit_24dp;
+            default:
+                return R.drawable.ic_account_circle_24dp;
+        }
+    }
+
     private void bindView() {
         if (mAccessToken != null) {
             if (mMessageFullname != null) {
@@ -540,31 +587,52 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             }
 
             if (showBottomAppBar) {
+                int optionCount = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_COUNT, 4);
+                int option1 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_1, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HOME);
+                int option2 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_2, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS);
+
                 bottomNavigationView.setVisibility(View.VISIBLE);
-                subscriptionsBottomAppBar.setOnClickListener(view -> {
-                    Intent intent = new Intent(ViewSubredditDetailActivity.this, SubscribedThingListingActivity.class);
-                    startActivity(intent);
-                });
 
-                subscriptionsBottomAppBar.setOnLongClickListener(view -> {
-                    Intent intent = new Intent(ViewSubredditDetailActivity.this, SubscribedThingListingActivity.class);
-                    intent.putExtra(SubscribedThingListingActivity.EXTRA_SHOW_MULTIREDDITS, true);
-                    startActivity(intent);
-                    return true;
-                });
+                if (optionCount == 2) {
+                    linearLayoutBottomAppBar.setWeightSum(3);
+                    option1BottomAppBar.setVisibility(View.GONE);
+                    option3BottomAppBar.setVisibility(View.GONE);
 
-                goBackToMainPageBottomAppBar.setOnClickListener(view -> EventBus.getDefault().post(new GoBackToMainPageEvent()));
+                    option2BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option1));
+                    option4BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option2));
 
-                messageBottomAppBar.setOnClickListener(view -> {
-                    Intent intent = new Intent(this, InboxActivity.class);
-                    startActivity(intent);
-                });
+                    option2BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option1);
+                    });
 
-                profileBottomAppBar.setOnClickListener(view -> {
-                    Intent intent = new Intent(this, ViewUserDetailActivity.class);
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mAccountName);
-                    startActivity(intent);
-                });
+                    option4BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option2);
+                    });
+                } else {
+                    int option3 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_3, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX);
+                    int option4 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_4, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_PROFILE);
+
+                    option1BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option1));
+                    option2BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option2));
+                    option3BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option3));
+                    option4BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option4));
+
+                    option1BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option1);
+                    });
+
+                    option2BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option2);
+                    });
+
+                    option3BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option3);
+                    });
+
+                    option4BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option4);
+                    });
+                }
             } else {
                 CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
                 lp.setAnchorId(View.NO_ID);
@@ -572,7 +640,52 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 fab.setLayoutParams(lp);
             }
 
-            fab.setOnClickListener(view -> postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag()));
+            int fabOption = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS);
+            switch (fabOption) {
+                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH:
+                    fab.setImageResource(R.drawable.ic_refresh_black_24dp);
+                    break;
+                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE:
+                    fab.setImageResource(R.drawable.ic_sort_toolbar_24dp);
+                    break;
+                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT:
+                    fab.setImageResource(R.drawable.ic_post_layout_black_24dp);
+                    break;
+                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH:
+                    fab.setImageResource(R.drawable.ic_search_black_24dp);
+                    break;
+                default:
+                    fab.setImageResource(R.drawable.ic_add_day_night_24dp);
+                    break;
+            }
+            fab.setOnClickListener(view -> {
+                switch (fabOption) {
+                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH: {
+                        if (sectionsPagerAdapter != null) {
+                            sectionsPagerAdapter.refresh();
+                        }
+                        break;
+                    }
+                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE: {
+                        sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
+                        break;
+                    }
+                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT: {
+                        postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+                        break;
+                    }
+                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH: {
+                        Intent intent = new Intent(this, SearchActivity.class);
+                        intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                        startActivity(intent);
+                        break;
+                    }
+                    default:
+                        postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
+                        break;
+                }
+            });
+
             fab.setVisibility(View.VISIBLE);
         } else {
             bottomNavigationView.setVisibility(View.GONE);

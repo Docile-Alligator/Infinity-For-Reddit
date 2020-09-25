@@ -45,18 +45,6 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <!--<com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout_main_activity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:layout_scrollFlags="scroll|enterAlways"
-        app:tabGravity="fill"
-        app:tabIndicatorHeight="3dp"
-        app:tabMode="fixed"
-        app:tabRippleColor="?attr/colorControlHighlight"
-        app:tabUnboundedRipple="false" />-->
-
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager_main_activity"
         android:layout_width="match_parent"
@@ -75,6 +63,7 @@
             android:id="@+id/linear_layout_bottom_app_bar_main_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:paddingTop="6dp"
             android:weightSum="5">
 
             <ImageView
