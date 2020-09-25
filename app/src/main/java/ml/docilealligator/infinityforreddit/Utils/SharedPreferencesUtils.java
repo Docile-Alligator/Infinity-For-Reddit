@@ -151,6 +151,18 @@ public class SharedPreferencesUtils {
     public static final String MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS = "_main_page_show_subscribed_subreddits";
     public static final String MAIN_PAGE_SHOW_FAVORITE_SUBSCRIBED_SUBREDDITS = "_main_page_show_favorite_subscribed_subreddits";
 
+    public static final String BOTTOM_APP_BAR_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.bottom_app_bar";
+    public static final String MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_COUNT = "main_activity_bottom_app_bar_option_count";
+    public static final String MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_1 = "main_activity_bottom_app_bar_option_1";
+    public static final String MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_2 = "main_activity_bottom_app_bar_option_2";
+    public static final String MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_3 = "main_activity_bottom_app_bar_option_3";
+    public static final String MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_4 = "main_activity_bottom_app_bar_option_4";
+    public static final String OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_COUNT = "other_activities_bottom_app_bar_option_count";
+    public static final String OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_1 = "other_activities_bottom_app_bar_option_1";
+    public static final String OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_2 = "other_activities_bottom_app_bar_option_2";
+    public static final String OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_3 = "other_activities_bottom_app_bar_option_3";
+    public static final String OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_4 = "other_activities_bottom_app_bar_option_4";
+
     public static final String NSFW_AND_SPOILER_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.nsfw_and_spoiler";
     public static final String NSFW_BASE = "_nsfw";
     public static final String BLUR_NSFW_BASE = "_blur_nsfw";

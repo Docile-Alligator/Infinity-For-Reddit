@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Settings.CustomizeMainPageTabsFragment">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".Settings.CustomizeBottomAppBarFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/info_text_view_customize_main_page_tabs_fragment"
+            android:id="@+id/info_text_view_customize_bottom_app_bar_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="16dp"
@@ -24,92 +24,26 @@
             android:fontFamily="?attr/font_family"
             app:drawableStartCompat="@drawable/ic_info_preference_24dp" />
 
-        <LinearLayout
-            android:id="@+id/tab_count_linear_layout_customize_main_page_tabs_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:paddingStart="72dp"
-            android:paddingEnd="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_gravity="center_vertical"
-                android:text="@string/settings_tab_count"
-                android:textColor="?attr/primaryTextColor"
-                android:textSize="?attr/font_16"
-                android:fontFamily="?attr/font_family" />
-
-            <TextView
-                android:id="@+id/tab_count_text_view_customize_main_page_tabs_fragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:layout_gravity="center_vertical"
-                android:textColor="?attr/secondaryTextColor"
-                android:textSize="?attr/font_default"
-                android:fontFamily="?attr/font_family" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/show_tab_names_linear_layout_customize_main_page_tabs_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:paddingStart="72dp"
-            android:paddingEnd="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="16dp"
-                android:layout_gravity="center_vertical"
-                android:text="@string/settings_show_tab_names"
-                android:textColor="?attr/primaryTextColor"
-                android:textSize="?attr/font_16"
-                android:fontFamily="?attr/font_family" />
-
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/show_tab_names_switch_material_customize_main_page_tabs_fragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical" />
-
-        </LinearLayout>
-
         <View
-            android:id="@+id/divider_1_customize_main_page_tabs_fragment"
+            android:id="@+id/divider_1_customize_bottom_app_bar_fragment"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/dividerColor" />
 
         <TextView
-            android:id="@+id/tab_1_group_summary_customize_main_page_tabs_fragment"
+            android:id="@+id/main_activity_group_summary_customize_bottom_app_bar_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="16dp"
             android:paddingStart="72dp"
             android:paddingEnd="16dp"
-            android:text="@string/settings_tab_1_summary"
+            android:text="@string/settings_main_activity_bottom_app_bar_group_summary"
             android:textColor="@color/colorAccent"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family" />
 
         <LinearLayout
-            android:id="@+id/tab_1_title_linear_layout_customize_main_page_tabs_fragment"
+            android:id="@+id/main_activity_option_count_linear_layout_customize_bottom_app_bar_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -124,15 +58,19 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_tab_title"
-                android:textColor="@color/primaryTextColor"
+                android:layout_marginEnd="16dp"
+                android:layout_gravity="center_vertical"
+                android:text="@string/settings_bottom_app_bar_option_count"
+                android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
             <TextView
-                android:id="@+id/tab_1_title_summary_text_view_customize_main_page_tabs_fragment"
+                android:id="@+id/main_activity_option_count_text_view_customize_bottom_app_bar_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_gravity="center_vertical"
                 android:textColor="?attr/secondaryTextColor"
                 android:textSize="?attr/font_default"
                 android:fontFamily="?attr/font_family" />
@@ -140,7 +78,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/tab_1_type_linear_layout_customize_main_page_tabs_fragment"
+            android:id="@+id/main_activity_option_1_linear_layout_customize_bottom_app_bar_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -155,15 +93,17 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_tab_post_type"
-                android:textColor="@color/primaryTextColor"
+                android:layout_marginEnd="16dp"
+                android:text="@string/settings_bottom_app_bar_option_1"
+                android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
             <TextView
-                android:id="@+id/tab_1_type_summary_text_view_customize_main_page_tabs_fragment"
+                android:id="@+id/main_activity_option_1_text_view_customize_bottom_app_bar_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
                 android:textColor="?attr/secondaryTextColor"
                 android:textSize="?attr/font_default"
                 android:fontFamily="?attr/font_family" />
@@ -171,57 +111,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/tab_1_name_linear_layout_customize_main_page_tabs_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:paddingStart="72dp"
-            android:paddingEnd="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/tab_1_name_title_text_view_customize_main_page_tabs_fragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="?attr/font_16"
-                android:fontFamily="?attr/font_family" />
-
-            <TextView
-                android:id="@+id/tab_1_name_summary_text_view_customize_main_page_tabs_fragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/secondaryTextColor"
-                android:textSize="?attr/font_default"
-                android:fontFamily="?attr/font_family" />
-
-        </LinearLayout>
-
-        <View
-            android:id="@+id/divider_2_customize_main_page_tabs_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/dividerColor" />
-
-        <TextView
-            android:id="@+id/tab_2_group_summary_customize_main_page_tabs_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="16dp"
-            android:paddingStart="72dp"
-            android:paddingEnd="16dp"
-            android:text="@string/settings_tab_2_summary"
-            android:textColor="@color/colorAccent"
-            android:textSize="?attr/font_default"
-            android:fontFamily="?attr/font_family" />
-
-        <LinearLayout
-            android:id="@+id/tab_2_title_linear_layout_customize_main_page_tabs_fragment"
+            android:id="@+id/main_activity_option_2_linear_layout_customize_bottom_app_bar_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -236,15 +126,17 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_tab_title"
-                android:textColor="@color/primaryTextColor"
+                android:layout_marginEnd="16dp"
+                android:text="@string/settings_bottom_app_bar_option_2"
+                android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
             <TextView
-                android:id="@+id/tab_2_title_summary_text_view_customize_main_page_tabs_fragment"
+                android:id="@+id/main_activity_option_2_text_view_customize_bottom_app_bar_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
                 android:textColor="?attr/secondaryTextColor"
                 android:textSize="?attr/font_default"
                 android:fontFamily="?attr/font_family" />
@@ -252,7 +144,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/tab_2_type_linear_layout_customize_main_page_tabs_fragment"
+            android:id="@+id/main_activity_option_3_linear_layout_customize_bottom_app_bar_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -267,15 +159,17 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_tab_post_type"
-                android:textColor="@color/primaryTextColor"
+                android:layout_marginEnd="16dp"
+                android:text="@string/settings_bottom_app_bar_option_3"
+                android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
             <TextView
-                android:id="@+id/tab_2_type_summary_text_view_customize_main_page_tabs_fragment"
+                android:id="@+id/main_activity_option_3_text_view_customize_bottom_app_bar_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
                 android:textColor="?attr/secondaryTextColor"
                 android:textSize="?attr/font_default"
                 android:fontFamily="?attr/font_family" />
@@ -283,7 +177,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/tab_2_name_linear_layout_customize_main_page_tabs_fragment"
+            android:id="@+id/main_activity_option_4_linear_layout_customize_bottom_app_bar_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -293,21 +187,22 @@
             android:paddingEnd="16dp"
             android:clickable="true"
             android:focusable="true"
-            android:background="?attr/selectableItemBackground"
-            android:visibility="gone">
+            android:background="?attr/selectableItemBackground">
 
             <TextView
-                android:id="@+id/tab_2_name_title_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/primaryTextColor"
+                android:layout_marginEnd="16dp"
+                android:text="@string/settings_bottom_app_bar_option_4"
+                android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
             <TextView
-                android:id="@+id/tab_2_name_summary_text_view_customize_main_page_tabs_fragment"
+                android:id="@+id/main_activity_option_4_text_view_customize_bottom_app_bar_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
                 android:textColor="?attr/secondaryTextColor"
                 android:textSize="?attr/font_default"
                 android:fontFamily="?attr/font_family" />
@@ -315,25 +210,25 @@
         </LinearLayout>
 
         <View
-            android:id="@+id/divider_3_customize_main_page_tabs_fragment"
+            android:id="@+id/divider_2_customize_bottom_app_bar_fragment"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/dividerColor" />
 
         <TextView
-            android:id="@+id/tab_3_group_summary_customize_main_page_tabs_fragment"
+            android:id="@+id/other_activities_group_summary_customize_bottom_app_bar_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="16dp"
             android:paddingStart="72dp"
             android:paddingEnd="16dp"
-            android:text="@string/settings_tab_3_summary"
+            android:text="@string/settings_other_activities_bottom_app_bar_group_summary"
             android:textColor="@color/colorAccent"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family" />
 
         <LinearLayout
-            android:id="@+id/tab_3_title_linear_layout_customize_main_page_tabs_fragment"
+            android:id="@+id/other_activities_option_count_linear_layout_customize_bottom_app_bar_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -348,152 +243,32 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/settings_tab_title"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="?attr/font_16"
-                android:fontFamily="?attr/font_family" />
-
-            <TextView
-                android:id="@+id/tab_3_title_summary_text_view_customize_main_page_tabs_fragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/secondaryTextColor"
-                android:textSize="?attr/font_default"
-                android:fontFamily="?attr/font_family" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/tab_3_type_linear_layout_customize_main_page_tabs_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:paddingStart="72dp"
-            android:paddingEnd="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/settings_tab_post_type"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="?attr/font_16"
-                android:fontFamily="?attr/font_family" />
-
-            <TextView
-                android:id="@+id/tab_3_type_summary_text_view_customize_main_page_tabs_fragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/secondaryTextColor"
-                android:textSize="?attr/font_default"
-                android:fontFamily="?attr/font_family" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/tab_3_name_linear_layout_customize_main_page_tabs_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:paddingStart="72dp"
-            android:paddingEnd="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/tab_3_name_title_text_view_customize_main_page_tabs_fragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/primaryTextColor"
-                android:textSize="?attr/font_16"
-                android:fontFamily="?attr/font_family" />
-
-            <TextView
-                android:id="@+id/tab_3_name_summary_text_view_customize_main_page_tabs_fragment"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="?attr/secondaryTextColor"
-                android:textSize="?attr/font_default"
-                android:fontFamily="?attr/font_family" />
-
-        </LinearLayout>
-
-        <View
-            android:id="@+id/divider_4_customize_main_page_tabs_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/dividerColor" />
-
-        <TextView
-            android:id="@+id/more_tabs_group_summary_customize_main_page_tabs_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="16dp"
-            android:paddingStart="72dp"
-            android:paddingEnd="16dp"
-            android:text="@string/settings_more_tabs_summary"
-            android:textColor="@color/colorAccent"
-            android:textSize="?attr/font_default"
-            android:fontFamily="?attr/font_family" />
-
-        <TextView
-            android:id="@+id/more_tabs_info_text_view_customize_main_page_tabs_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:drawablePadding="32dp"
-            android:text="@string/settings_more_tabs_info_summary"
-            android:textColor="@color/settingsSubtitleColor"
-            android:gravity="center_vertical"
-            android:textSize="?attr/font_default"
-            android:fontFamily="?attr/font_family"
-            app:drawableStartCompat="@drawable/ic_info_preference_24dp" />
-
-        <LinearLayout
-            android:id="@+id/show_favorite_subscribed_subreddits_linear_layout_customize_main_page_tabs_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:paddingStart="72dp"
-            android:paddingEnd="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginEnd="16dp"
                 android:layout_gravity="center_vertical"
-                android:text="@string/settings_more_tabs_show_favorite_subscribed_subreddits_title"
+                android:text="@string/settings_bottom_app_bar_option_count"
                 android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/show_favorite_subscribed_subreddits_switch_material_customize_main_page_tabs_fragment"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/other_activities_option_count_text_view_customize_bottom_app_bar_fragment"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical" />
+                android:layout_marginEnd="16dp"
+                android:layout_gravity="center_vertical"
+                android:textColor="?attr/secondaryTextColor"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/show_subscribed_subreddits_linear_layout_customize_main_page_tabs_fragment"
+            android:id="@+id/other_activities_option_1_linear_layout_customize_bottom_app_bar_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
             android:paddingStart="72dp"
             android:paddingEnd="16dp"
             android:clickable="true"
@@ -501,21 +276,121 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:layout_marginEnd="16dp"
-                android:layout_gravity="center_vertical"
-                android:text="@string/settings_more_tabs_show_subscribed_subreddits_title"
+                android:text="@string/settings_bottom_app_bar_option_1"
                 android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/show_subscribed_subreddits_switch_material_customize_main_page_tabs_fragment"
-                android:layout_width="wrap_content"
+            <TextView
+                android:id="@+id/other_activities_option_1_text_view_customize_bottom_app_bar_fragment"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical" />
+                android:layout_marginEnd="16dp"
+                android:textColor="?attr/secondaryTextColor"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/other_activities_option_2_linear_layout_customize_bottom_app_bar_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="@string/settings_bottom_app_bar_option_2"
+                android:textColor="?attr/primaryTextColor"
+                android:textSize="?attr/font_16"
+                android:fontFamily="?attr/font_family" />
+
+            <TextView
+                android:id="@+id/other_activities_option_2_text_view_customize_bottom_app_bar_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:textColor="?attr/secondaryTextColor"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/other_activities_option_3_linear_layout_customize_bottom_app_bar_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="@string/settings_bottom_app_bar_option_3"
+                android:textColor="?attr/primaryTextColor"
+                android:textSize="?attr/font_16"
+                android:fontFamily="?attr/font_family" />
+
+            <TextView
+                android:id="@+id/other_activities_option_3_text_view_customize_bottom_app_bar_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:textColor="?attr/secondaryTextColor"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/other_activities_option_4_linear_layout_customize_bottom_app_bar_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="@string/settings_bottom_app_bar_option_4"
+                android:textColor="?attr/primaryTextColor"
+                android:textSize="?attr/font_16"
+                android:fontFamily="?attr/font_family" />
+
+            <TextView
+                android:id="@+id/other_activities_option_4_text_view_customize_bottom_app_bar_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:textColor="?attr/secondaryTextColor"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
 
         </LinearLayout>
 

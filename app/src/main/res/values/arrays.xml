@@ -230,4 +230,23 @@
         <item>2</item>
         <item>3</item>
     </string-array>
+
+    <string-array name="settings_bottom_app_bar_option_count_options">
+        <item>2</item>
+        <item>4</item>
+    </string-array>
+
+    <string-array name="settings_main_activity_bottom_app_bar_options">
+        <item>Subscriptions</item>
+        <item>Multireddits</item>
+        <item>Inbox</item>
+        <item>Profile</item>
+    </string-array>
+
+    <string-array name="settings_other_activities_bottom_app_bar_options">
+        <item>Home</item>
+        <item>Subscriptions</item>
+        <item>Inbox</item>
+        <item>Profile</item>
+    </string-array>
 </resources>

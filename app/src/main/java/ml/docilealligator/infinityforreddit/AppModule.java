@@ -217,6 +217,12 @@ class AppModule {
     }
 
     @Provides
+    @Named("bottom_app_bar")
+    SharedPreferences provideBottomAppBarSharedPreferences() {
+        return mApplication.getSharedPreferences(SharedPreferencesUtils.BOTTOM_APP_BAR_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+    }
+
+    @Provides
     @Singleton
     CustomThemeWrapper provideCustomThemeWrapper(@Named("light_theme") SharedPreferences lightThemeSharedPreferences,
                                                  @Named("dark_theme") SharedPreferences darkThemeSharedPreferences,

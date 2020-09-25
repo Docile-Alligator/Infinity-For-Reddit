@@ -345,7 +345,7 @@
     <string name="settings_immersive_interface_ignore_nav_bar_title">Ignore Navigation Bar in Immersive Interface</string>
     <string name="settings_immersive_interface_ignore_nav_bar_summary">Prevent the Bottom Navigation Bar Having Extra Padding</string>
     <string name="settings_customize_tabs_in_main_page_title">Customize Tabs in Main Page</string>
-    <string name="settings_customize_tabs_in_main_page_summary">Only for Logged-in User</string>
+    <string name="only_for_logged_in_user">Only for Logged-in User</string>
     <string name="settings_enable_bottom_app_bar_title">Enable Bottom Navigation</string>
     <string name="settings_enable_bottom_app_bar_summary">Has No Effect in Anonymous Mode</string>
     <string name="settings_category_post_and_comment_title">Post and Comment</string>
@@ -446,7 +446,7 @@
     <string name="settings_delete_all_legacy_settings_title">Delete All Legacy Settings</string>
     <string name="settings_reset_all_settings_title">Reset All Settings</string>
     <string name="settings_advanced_settings_summary">Clean the database and shared preferences</string>
-    <string name="settings_tab_info">Restart the app to see the changes</string>
+    <string name="restart_app_see_changes">Restart the app to see the changes</string>
     <string name="settings_tab_count">Tab Count</string>
     <string name="settings_show_tab_names">Show Tab Names</string>
     <string name="settings_tab_1_summary">Tab 1</string>
@@ -476,6 +476,14 @@
     <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">Require Authentication to Go to Account Section in Navigation Drawer</string>
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">Long Press to Hide Toolbar in Compact Layout</string>
     <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">Toolbar in Compact Layout Hidden by Default</string>
+    <string name="settings_customize_bottom_app_bar_title">Customize Bottom Navigation Bar</string>
+    <string name="settings_main_activity_bottom_app_bar_group_summary">Main Page</string>
+    <string name="settings_other_activities_bottom_app_bar_group_summary">Other Pages</string>
+    <string name="settings_bottom_app_bar_option_count">Option Count</string>
+    <string name="settings_bottom_app_bar_option_1">Option 1</string>
+    <string name="settings_bottom_app_bar_option_2">Option 2</string>
+    <string name="settings_bottom_app_bar_option_3">Option 3</string>
+    <string name="settings_bottom_app_bar_option_4">Option 4</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -882,5 +890,7 @@
 
     <string name="unlock_account_section">Unlock Account Section</string>
     <string name="unlock">Unlock</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

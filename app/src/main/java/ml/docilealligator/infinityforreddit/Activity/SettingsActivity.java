@@ -28,6 +28,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Settings.AboutPreferenceFragment;
+import ml.docilealligator.infinityforreddit.Settings.CustomizeBottomAppBarFragment;
 import ml.docilealligator.infinityforreddit.Settings.CustomizeMainPageTabsFragment;
 import ml.docilealligator.infinityforreddit.Settings.FontPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.GesturesAndButtonsPreferenceFragment;
@@ -162,6 +163,8 @@ public class SettingsActivity extends BaseActivity implements
             args.putString(CustomizeMainPageTabsFragment.EXTRA_ACCOUNT_NAME, mAccountName);
         } else if (fragment instanceof NsfwAndBlurringFragment) {
             args.putString(NsfwAndBlurringFragment.EXTRA_ACCOUNT_NAME, mAccountName);
+        } else if (fragment instanceof CustomizeBottomAppBarFragment) {
+            args.putString(CustomizeBottomAppBarFragment.EXTRA_ACCOUNT_NAME, mAccountName);
         }
         fragment.setArguments(args);
         fragment.setTargetFragment(caller, 0);

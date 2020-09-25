@@ -61,6 +61,7 @@ import ml.docilealligator.infinityforreddit.Service.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.Service.DownloadRedditVideoService;
 import ml.docilealligator.infinityforreddit.Service.SubmitPostService;
 import ml.docilealligator.infinityforreddit.Settings.AdvancedPreferenceFragment;
+import ml.docilealligator.infinityforreddit.Settings.CustomizeBottomAppBarFragment;
 import ml.docilealligator.infinityforreddit.Settings.CustomizeMainPageTabsFragment;
 import ml.docilealligator.infinityforreddit.Settings.DownloadLocationPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.GesturesAndButtonsPreferenceFragment;
@@ -209,4 +210,6 @@ public interface AppComponent {
     void inject(SecurityPreferenceFragment securityPreferenceFragment);
 
     void inject(NsfwAndBlurringFragment nsfwAndBlurringFragment);
+
+    void inject(CustomizeBottomAppBarFragment customizeBottomAppBarFragment);
 }

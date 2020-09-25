@@ -141,7 +141,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
 
         if (accountName == null) {
-            infoTextView.setText(R.string.settings_customize_tabs_in_main_page_summary);
+            infoTextView.setText(R.string.only_for_logged_in_user);
             divider1.setVisibility(View.GONE);
             tabCountLinearLayout.setVisibility(View.GONE);
             showTabNamesLinearLayout.setVisibility(View.GONE);
