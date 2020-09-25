@@ -64,7 +64,7 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottom_navigation_main_activity"
+        android:id="@+id/bottom_app_bar_main_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
@@ -78,25 +78,23 @@
             android:weightSum="5">
 
             <ImageView
-                android:id="@+id/subscriptions_bottom_app_bar_main_activity"
+                android:id="@+id/option_1_bottom_app_bar_main_activity"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:src="@drawable/ic_subscritptions_bottom_app_bar_24dp"
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
             <ImageView
-                android:id="@+id/multi_reddit_bottom_app_bar_main_activity"
+                android:id="@+id/option_2_bottom_app_bar_main_activity"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:src="@drawable/ic_multi_reddit_24dp"
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
             <TextView
@@ -106,18 +104,17 @@
                 android:background="@android:color/transparent"/>
 
             <ImageView
-                android:id="@+id/message_bottom_app_bar_main_activity"
+                android:id="@+id/option_3_bottom_app_bar_main_activity"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
-                android:src="@drawable/ic_inbox_24dp"
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
             <ImageView
-                android:id="@+id/profile_bottom_app_bar_main_activity"
+                android:id="@+id/option_4_bottom_app_bar_main_activity"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -125,7 +122,6 @@
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:gravity="center"
-                android:src="@drawable/ic_account_circle_24dp"
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
         </LinearLayout>
@@ -137,8 +133,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
         android:visibility="gone"
-        app:srcCompat="@drawable/ic_add_day_night_24dp"
         app:tint="@android:color/white"
-        app:layout_anchor="@id/bottom_navigation_main_activity" />
+        app:layout_anchor="@id/bottom_app_bar_main_activity" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
