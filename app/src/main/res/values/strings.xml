@@ -484,6 +484,7 @@
     <string name="settings_bottom_app_bar_option_2">Option 2</string>
     <string name="settings_bottom_app_bar_option_3">Option 3</string>
     <string name="settings_bottom_app_bar_option_4">Option 4</string>
+    <string name="settings_bottom_app_bar_fab">Floating Action Button</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

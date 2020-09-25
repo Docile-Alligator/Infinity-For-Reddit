@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.Settings;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +55,10 @@ public class CustomizeBottomAppBarFragment extends Fragment {
     LinearLayout mainActivityOption4LinearLayout;
     @BindView(R.id.main_activity_option_4_text_view_customize_bottom_app_bar_fragment)
     TextView mainActivityOption4TextView;
+    @BindView(R.id.main_activity_fab_linear_layout_customize_bottom_app_bar_fragment)
+    LinearLayout mainActivityFABLinearLayout;
+    @BindView(R.id.main_activity_fab_text_view_customize_bottom_app_bar_fragment)
+    TextView mainActivityFABTextView;
 
     @BindView(R.id.divider_2_customize_bottom_app_bar_fragment)
     View divider2;
@@ -79,6 +84,10 @@ public class CustomizeBottomAppBarFragment extends Fragment {
     LinearLayout otherActivitiesOption4LinearLayout;
     @BindView(R.id.other_activities_option_4_text_view_customize_bottom_app_bar_fragment)
     TextView otherActivitiesOption4TextView;
+    @BindView(R.id.other_activities_fab_linear_layout_customize_bottom_app_bar_fragment)
+    LinearLayout otherActivitiesFABLinearLayout;
+    @BindView(R.id.other_activities_fab_text_view_customize_bottom_app_bar_fragment)
+    TextView otherActivitiesFABTextView;
     @Inject
     @Named("bottom_app_bar")
     SharedPreferences sharedPreferences;
@@ -88,11 +97,13 @@ public class CustomizeBottomAppBarFragment extends Fragment {
     private int mainActivityOption2;
     private int mainActivityOption3;
     private int mainActivityOption4;
+    private int mainActivityFAB;
     private int otherActivitiesOptionCount;
     private int otherActivitiesOption1;
     private int otherActivitiesOption2;
     private int otherActivitiesOption3;
     private int otherActivitiesOption4;
+    private int otherActivitiesFAB;
 
     public CustomizeBottomAppBarFragment() {
         // Required empty public constructor
@@ -119,6 +130,7 @@ public class CustomizeBottomAppBarFragment extends Fragment {
             mainActivityOption2LinearLayout.setVisibility(View.GONE);
             mainActivityOption3LinearLayout.setVisibility(View.GONE);
             mainActivityOption4LinearLayout.setVisibility(View.GONE);
+            mainActivityFABLinearLayout.setVisibility(View.GONE);
             divider2.setVisibility(View.GONE);
             otherActivitiesGroupSummaryTextView.setVisibility(View.GONE);
             otherActivitiesOptionCountLinearLayout.setVisibility(View.GONE);
@@ -126,22 +138,27 @@ public class CustomizeBottomAppBarFragment extends Fragment {
             otherActivitiesOption2LinearLayout.setVisibility(View.GONE);
             otherActivitiesOption3LinearLayout.setVisibility(View.GONE);
             otherActivitiesOption4LinearLayout.setVisibility(View.GONE);
+            otherActivitiesFABLinearLayout.setVisibility(View.GONE);
 
             return rootView;
         }
 
-        String[] mainActivityOptions = activity.getResources().getStringArray(R.array.settings_main_activity_bottom_app_bar_options);
+        Resources resources = activity.getResources();
+        String[] mainActivityOptions = resources.getStringArray(R.array.settings_main_activity_bottom_app_bar_options);
+        String[] fabOptions = resources.getStringArray(R.array.settings_bottom_app_bar_fab_options);
         mainActivityOptionCount = sharedPreferences.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_COUNT, 4);
         mainActivityOption1 = sharedPreferences.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_1, 0);
         mainActivityOption2 = sharedPreferences.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_2, 1);
         mainActivityOption3 = sharedPreferences.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_3, 2);
         mainActivityOption4 = sharedPreferences.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_4, 3);
+        mainActivityFAB = sharedPreferences.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB, 0);
 
         mainActivityOptionCountTextView.setText(Integer.toString(mainActivityOptionCount));
         mainActivityOption1TextView.setText(mainActivityOptions[mainActivityOption1]);
         mainActivityOption2TextView.setText(mainActivityOptions[mainActivityOption2]);
         mainActivityOption3TextView.setText(mainActivityOptions[mainActivityOption3]);
         mainActivityOption4TextView.setText(mainActivityOptions[mainActivityOption4]);
+        mainActivityFABTextView.setText(fabOptions[mainActivityFAB]);
 
         mainActivityOptionCountLinearLayout.setOnClickListener(view -> {
             new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
@@ -203,18 +220,32 @@ public class CustomizeBottomAppBarFragment extends Fragment {
                     .show();
         });
 
-        String[] otherActivitiesOptions = activity.getResources().getStringArray(R.array.settings_other_activities_bottom_app_bar_options);
+        mainActivityFABLinearLayout.setOnClickListener(view -> {
+            new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
+                    .setTitle(R.string.settings_bottom_app_bar_fab)
+                    .setSingleChoiceItems(fabOptions, mainActivityFAB, (dialogInterface, i) -> {
+                        mainActivityFAB = i;
+                        sharedPreferences.edit().putInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB, mainActivityFAB).apply();
+                        mainActivityFABTextView.setText(fabOptions[mainActivityFAB]);
+                        dialogInterface.dismiss();
+                    })
+                    .show();
+        });
+
+        String[] otherActivitiesOptions = resources.getStringArray(R.array.settings_other_activities_bottom_app_bar_options);
         otherActivitiesOptionCount = sharedPreferences.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_COUNT, 4);
         otherActivitiesOption1 = sharedPreferences.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_1, 0);
         otherActivitiesOption2 = sharedPreferences.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_2, 1);
         otherActivitiesOption3 = sharedPreferences.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_3, 2);
         otherActivitiesOption4 = sharedPreferences.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_4, 3);
+        otherActivitiesFAB = sharedPreferences.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, 0);
 
         otherActivitiesOptionCountTextView.setText(Integer.toString(otherActivitiesOptionCount));
         otherActivitiesOption1TextView.setText(otherActivitiesOptions[otherActivitiesOption1]);
         otherActivitiesOption2TextView.setText(otherActivitiesOptions[otherActivitiesOption2]);
         otherActivitiesOption3TextView.setText(otherActivitiesOptions[otherActivitiesOption3]);
         otherActivitiesOption4TextView.setText(otherActivitiesOptions[otherActivitiesOption4]);
+        otherActivitiesFABTextView.setText(fabOptions[otherActivitiesFAB]);
 
         otherActivitiesOptionCountLinearLayout.setOnClickListener(view -> {
             new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
@@ -271,6 +302,18 @@ public class CustomizeBottomAppBarFragment extends Fragment {
                         otherActivitiesOption4 = i;
                         sharedPreferences.edit().putInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_4, otherActivitiesOption4).apply();
                         otherActivitiesOption4TextView.setText(otherActivitiesOptions[otherActivitiesOption4]);
+                        dialogInterface.dismiss();
+                    })
+                    .show();
+        });
+
+        otherActivitiesFABLinearLayout.setOnClickListener(view -> {
+            new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
+                    .setTitle(R.string.settings_bottom_app_bar_fab)
+                    .setSingleChoiceItems(fabOptions, otherActivitiesFAB, (dialogInterface, i) -> {
+                        otherActivitiesFAB = i;
+                        sharedPreferences.edit().putInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, otherActivitiesFAB).apply();
+                        otherActivitiesFABTextView.setText(fabOptions[otherActivitiesFAB]);
                         dialogInterface.dismiss();
                     })
                     .show();

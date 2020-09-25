@@ -209,6 +209,39 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:id="@+id/main_activity_fab_linear_layout_customize_bottom_app_bar_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="@string/settings_bottom_app_bar_fab"
+                android:textColor="?attr/primaryTextColor"
+                android:textSize="?attr/font_16"
+                android:fontFamily="?attr/font_family" />
+
+            <TextView
+                android:id="@+id/main_activity_fab_text_view_customize_bottom_app_bar_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:textColor="?attr/secondaryTextColor"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
+
+        </LinearLayout>
+
         <View
             android:id="@+id/divider_2_customize_bottom_app_bar_fragment"
             android:layout_width="match_parent"
@@ -385,6 +418,39 @@
 
             <TextView
                 android:id="@+id/other_activities_option_4_text_view_customize_bottom_app_bar_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:textColor="?attr/secondaryTextColor"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/other_activities_fab_linear_layout_customize_bottom_app_bar_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:text="@string/settings_bottom_app_bar_fab"
+                android:textColor="?attr/primaryTextColor"
+                android:textSize="?attr/font_16"
+                android:fontFamily="?attr/font_family" />
+
+            <TextView
+                android:id="@+id/other_activities_fab_text_view_customize_bottom_app_bar_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"

@@ -249,4 +249,13 @@
         <item>Inbox</item>
         <item>Profile</item>
     </string-array>
+
+    <string-array name="settings_bottom_app_bar_fab_options">
+        <item>Submit posts</item>
+        <item>Refresh</item>
+        <item>Change sort type</item>
+        <item>Change post layout</item>
+        <item>Search</item>
+    </string-array>
+
 </resources>
