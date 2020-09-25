@@ -259,4 +259,15 @@
         <item>Search</item>
     </string-array>
 
+    <string-array name="settings_swipe_action_threshold">
+        <item>0.1</item>
+        <item>0.2</item>
+        <item>0.3</item>
+        <item>0.4</item>
+        <item>0.5</item>
+        <item>0.6</item>
+        <item>0.7</item>
+        <item>0.8</item>
+    </string-array>
+
 </resources>

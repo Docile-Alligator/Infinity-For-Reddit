@@ -81,6 +81,7 @@ import ml.docilealligator.infinityforreddit.Event.ChangeShowAbsoluteNumberOfVote
 import ml.docilealligator.infinityforreddit.Event.ChangeShowElapsedTimeEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeStartAutoplayVisibleAreaOffsetEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeSwipeActionThresholdEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeTimeFormatEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVibrateWhenActionTriggeredEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVideoAutoplayEvent;
@@ -1226,6 +1227,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter.setCompactLayoutToolbarHiddenByDefault(changeCompactLayoutToolbarHiddenByDefaultEvent.compactLayoutToolbarHiddenByDefault);
             refreshAdapter();
         }
+    }
+
+    @Subscribe
+    public void onChangeSwipeActionThresholdEvent(ChangeSwipeActionThresholdEvent changeSwipeActionThresholdEvent) {
+        swipeActionThreshold = changeSwipeActionThresholdEvent.swipeActionThreshold;
     }
 
     private void refreshAdapter() {

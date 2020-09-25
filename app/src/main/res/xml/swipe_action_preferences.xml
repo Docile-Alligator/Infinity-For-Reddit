@@ -16,4 +16,12 @@
         app:key="disable_swiping_between_tabs"
         app:title="@string/settings_disable_swiping_between_tabs_title" />
 
+    <ListPreference
+        app:defaultValue="0.3"
+        app:entries="@array/settings_swipe_action_threshold"
+        app:entryValues="@array/settings_swipe_action_threshold"
+        app:key="swipe_action_threshold"
+        app:title="@string/settings_swipe_action_threshold"
+        app:useSimpleSummaryProvider="true" />
+
 </PreferenceScreen>

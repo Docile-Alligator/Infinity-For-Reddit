@@ -119,6 +119,7 @@ public class SharedPreferencesUtils {
     public static final String VIBRATE_WHEN_ACTION_TRIGGERED = "vibrate_when_action_triggered";
     public static final String DISABLE_SWIPING_BETWEEN_TABS = "disable_swiping_between_tabs";
     public static final String ENABLE_SWIPE_ACTION = "enable_swipe_action";
+    public static final String SWIPE_ACTION_THRESHOLD = "swipe_action_threshold";
     public static final String PULL_TO_REFRESH = "pull_to_refresh";
     public static final String REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER = "require_auth_to_account_section";
     public static final String LONG_PRESS_TO_HIDE_TOOLBAR_IN_COMPACT_LAYOUT = "long_press_to_hide_toolbar_in_compact_layout";
@@ -164,7 +165,6 @@ public class SharedPreferencesUtils {
     public static final String OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_3 = "other_activities_bottom_app_bar_option_3";
     public static final String OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_4 = "other_activities_bottom_app_bar_option_4";
     public static final String OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB = "other_activities_bottom_app_bar_fab";
-
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS = 0;
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_MULTIREDDITS = 1;
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_INBOX = 2;
@@ -174,7 +174,6 @@ public class SharedPreferencesUtils {
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE = 2;
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT = 3;
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_SEARCH = 4;
-
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HOME = 0;
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS = 1;
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX = 2;
