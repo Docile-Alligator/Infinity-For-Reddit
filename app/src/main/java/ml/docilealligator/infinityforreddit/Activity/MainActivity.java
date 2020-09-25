@@ -499,31 +499,49 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 int optionCount = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_COUNT, 4);
                 int option1 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_1, SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS);
                 int option2 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_2, SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_MULTIREDDITS);
-                int option3 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_3, SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_INBOX);
-                int option4 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_4, SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_PROFILE);
 
                 bottomAppBar.setVisibility(View.VISIBLE);
 
-                option1BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option1));
-                option2BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option2));
-                option3BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option3));
-                option4BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option4));
+                if (optionCount == 2) {
+                    linearLayoutBottomAppBar.setWeightSum(3);
+                    option1BottomAppBar.setVisibility(View.GONE);
+                    option3BottomAppBar.setVisibility(View.GONE);
 
-                option1BottomAppBar.setOnClickListener(view -> {
-                    bottomAppBarOptionAction(option1);
-                });
+                    option2BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option1));
+                    option4BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option2));
 
-                option2BottomAppBar.setOnClickListener(view -> {
-                    bottomAppBarOptionAction(option2);
-                });
+                    option2BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option1);
+                    });
 
-                option3BottomAppBar.setOnClickListener(view -> {
-                    bottomAppBarOptionAction(option3);
-                });
+                    option4BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option2);
+                    });
+                } else {
+                    int option3 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_3, SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_INBOX);
+                    int option4 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_4, SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_PROFILE);
 
-                option4BottomAppBar.setOnClickListener(view -> {
-                    bottomAppBarOptionAction(option4);
-                });
+                    option1BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option1));
+                    option2BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option2));
+                    option3BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option3));
+                    option4BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option4));
+
+                    option1BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option1);
+                    });
+
+                    option2BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option2);
+                    });
+
+                    option3BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option3);
+                    });
+
+                    option4BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option4);
+                    });
+                }
             } else {
                 CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
                 lp.setAnchorId(View.NO_ID);
