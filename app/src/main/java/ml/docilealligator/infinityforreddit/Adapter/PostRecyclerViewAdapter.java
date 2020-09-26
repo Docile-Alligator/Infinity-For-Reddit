@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -782,9 +783,15 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
 
                 if (mCompactLayoutToolbarHiddenByDefault) {
-                    ((PostCompactBaseViewHolder) holder).bottomConstraintLayout.setVisibility(View.GONE);
+                    mCallback.delayTransition();
+                    ViewGroup.LayoutParams params = (LinearLayout.LayoutParams) ((PostCompactBaseViewHolder) holder).bottomConstraintLayout.getLayoutParams();
+                    params.height = 0;
+                    ((PostCompactBaseViewHolder) holder).bottomConstraintLayout.setLayoutParams(params);
                 } else {
-                    ((PostCompactBaseViewHolder) holder).bottomConstraintLayout.setVisibility(View.VISIBLE);
+                    ViewGroup.LayoutParams params = (LinearLayout.LayoutParams) ((PostCompactBaseViewHolder) holder).bottomConstraintLayout.getLayoutParams();
+                    params.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                    ((PostCompactBaseViewHolder) holder).bottomConstraintLayout.setLayoutParams(params);
+                    mCallback.delayTransition();
                 }
 
                 if (mShowDividerInCompactLayout) {
@@ -1319,6 +1326,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         void typeChipClicked(int filter);
 
         void currentlyBindItem(int position);
+
+        void delayTransition();
     }
 
     public class PostBaseViewHolder extends RecyclerView.ViewHolder {
@@ -2819,10 +2828,16 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             itemView.setOnLongClickListener(view -> {
                 if (mLongPressToHideToolbarInCompactLayout) {
-                    if (bottomConstraintLayout.getVisibility() == View.VISIBLE) {
-                        bottomConstraintLayout.setVisibility(View.GONE);
+                    if (bottomConstraintLayout.getLayoutParams().height == 0) {
+                        ViewGroup.LayoutParams params = (LinearLayout.LayoutParams) bottomConstraintLayout.getLayoutParams();
+                        params.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                        bottomConstraintLayout.setLayoutParams(params);
+                        mCallback.delayTransition();
                     } else {
-                        bottomConstraintLayout.setVisibility(View.VISIBLE);
+                        mCallback.delayTransition();
+                        ViewGroup.LayoutParams params = (LinearLayout.LayoutParams) bottomConstraintLayout.getLayoutParams();
+                        params.height = 0;
+                        bottomConstraintLayout.setLayoutParams(params);
                     }
                 }
                 return true;

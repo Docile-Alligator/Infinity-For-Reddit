@@ -42,6 +42,8 @@ import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.transition.AutoTransition;
+import androidx.transition.TransitionManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -441,6 +443,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                         maxPosition = position;
                     }
                 }
+
+                @Override
+                public void delayTransition() {
+                    TransitionManager.beginDelayedTransition(mPostRecyclerView, new AutoTransition());
+                }
             });
 
             mPostViewModel = new ViewModelProvider(this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
@@ -487,6 +494,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     if (maxPosition < position) {
                         maxPosition = position;
                     }
+                }
+
+                @Override
+                public void delayTransition() {
+                    TransitionManager.beginDelayedTransition(mPostRecyclerView, new AutoTransition());
                 }
             });
 
@@ -537,6 +549,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                         maxPosition = position;
                     }
                 }
+
+                @Override
+                public void delayTransition() {
+                    TransitionManager.beginDelayedTransition(mPostRecyclerView, new AutoTransition());
+                }
             });
 
             mPostViewModel = new ViewModelProvider(this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
@@ -585,6 +602,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                         maxPosition = position;
                     }
                 }
+
+                @Override
+                public void delayTransition() {
+                    TransitionManager.beginDelayedTransition(mPostRecyclerView, new AutoTransition());
+                }
             });
 
             mPostViewModel = new ViewModelProvider(this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
@@ -623,6 +645,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     if (maxPosition < position) {
                         maxPosition = position;
                     }
+                }
+
+                @Override
+                public void delayTransition() {
+                    TransitionManager.beginDelayedTransition(mPostRecyclerView, new AutoTransition());
                 }
             });
 
