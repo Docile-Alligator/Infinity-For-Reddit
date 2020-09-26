@@ -783,7 +783,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
 
                 if (mCompactLayoutToolbarHiddenByDefault) {
-                    mCallback.delayTransition();
                     ViewGroup.LayoutParams params = (LinearLayout.LayoutParams) ((PostCompactBaseViewHolder) holder).bottomConstraintLayout.getLayoutParams();
                     params.height = 0;
                     ((PostCompactBaseViewHolder) holder).bottomConstraintLayout.setLayoutParams(params);
@@ -791,7 +790,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     ViewGroup.LayoutParams params = (LinearLayout.LayoutParams) ((PostCompactBaseViewHolder) holder).bottomConstraintLayout.getLayoutParams();
                     params.height = LinearLayout.LayoutParams.WRAP_CONTENT;
                     ((PostCompactBaseViewHolder) holder).bottomConstraintLayout.setLayoutParams(params);
-                    mCallback.delayTransition();
                 }
 
                 if (mShowDividerInCompactLayout) {
