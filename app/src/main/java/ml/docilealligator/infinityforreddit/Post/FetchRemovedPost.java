@@ -9,8 +9,9 @@ import androidx.annotation.NonNull;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 import ml.docilealligator.infinityforreddit.API.PushshiftAPI;
-import ml.docilealligator.infinityforreddit.Post.Post;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Call;
@@ -85,7 +86,24 @@ public class FetchRemovedPost {
             }
 
             if (!result.isNull("thumbnail")) {
-                post.setThumbnailPreviewUrl(result.getString("thumbnail"));
+                ArrayList<Post.Preview> previews = post.getPreviews();
+                if (previews != null && !previews.isEmpty()) {
+                    if (previews.size() >= 2) {
+                        Post.Preview preview = previews.get(1);
+                        preview.setPreviewUrl(result.getString("thumbnail"));
+                        previews.set(1, preview);
+                    } else {
+                        Post.Preview preview = previews.get(0);
+                        preview.setPreviewUrl(result.getString("thumbnail"));
+                        previews.set(0, preview);
+                    }
+                } else {
+                    Post.Preview preview = new Post.Preview(result.getString("thumbnail"), 1, 1);
+                    preview.setPreviewUrl(result.getString("thumbnail"));
+                    ArrayList<Post.Preview> newPreviews = new ArrayList<>();
+                    newPreviews.add(preview);
+                    post.setPreviews(newPreviews);
+                }
             }
 
             return post;

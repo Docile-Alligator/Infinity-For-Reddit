@@ -37,6 +37,8 @@ import com.libRG.CustomTextView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -257,32 +259,38 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
             contentTextView.setVisibility(View.VISIBLE);
             contentTextView.setText(post.getUrl());
         } else if (post.getPostType() == Post.GIF_TYPE || post.getPostType() == Post.GALLERY_TYPE || post.getPostType() == Post.IMAGE_TYPE) {
-            frameLayout.setVisibility(View.VISIBLE);
-            mGlide.asBitmap().load(post.getPreviewUrl()).into(new CustomTarget<Bitmap>() {
-                @Override
-                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                    imageView.setImage(ImageSource.bitmap(resource));
-                }
+            Post.Preview preview = getPreview(post);
+            if (preview != null) {
+                frameLayout.setVisibility(View.VISIBLE);
+                mGlide.asBitmap().load(preview.getPreviewUrl()).into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        imageView.setImage(ImageSource.bitmap(resource));
+                    }
 
-                @Override
-                public void onLoadCleared(@Nullable Drawable placeholder) {
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
 
-                }
-            });
+                    }
+                });
+            }
         } else if (post.getPostType() == Post.VIDEO_TYPE) {
-            frameLayout.setVisibility(View.VISIBLE);
-            mGlide.asBitmap().load(post.getPreviewUrl()).into(new CustomTarget<Bitmap>() {
-                @Override
-                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                    imageView.setImage(ImageSource.bitmap(resource));
-                }
+            Post.Preview preview = getPreview(post);
+            if (preview != null) {
+                frameLayout.setVisibility(View.VISIBLE);
+                mGlide.asBitmap().load(preview.getPreviewUrl()).into(new CustomTarget<Bitmap>() {
+                    @Override
+                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                        imageView.setImage(ImageSource.bitmap(resource));
+                    }
 
-                @Override
-                public void onLoadCleared(@Nullable Drawable placeholder) {
+                    @Override
+                    public void onLoadCleared(@Nullable Drawable placeholder) {
 
-                }
-            });
-            playButton.setVisibility(View.VISIBLE);
+                    }
+                });
+                playButton.setVisibility(View.VISIBLE);
+            }
         }
 
         iconGifImageView.setOnClickListener(view -> {
@@ -354,6 +362,16 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
                 isNSFW = false;
             }
         });
+    }
+
+    @Nullable
+    private Post.Preview getPreview(Post post) {
+        ArrayList<Post.Preview> previews = post.getPreviews();
+        if (previews != null && !previews.isEmpty()) {
+            return previews.get(0);
+        }
+
+        return null;
     }
 
     @Override

@@ -47,8 +47,6 @@ public class Post implements Parcelable {
     private String selfText;
     private String selfTextPlain;
     private String selfTextPlainTrimmed;
-    private String previewUrl;
-    private String thumbnailPreviewUrl;
     private String url;
     private String videoUrl;
     private String videoDownloadUrl;
@@ -64,8 +62,6 @@ public class Post implements Parcelable {
     private int score;
     private int postType;
     private int voteType;
-    private int previewWidth;
-    private int previewHeight;
     private int nComments;
     private boolean hidden;
     private boolean spoiler;
@@ -76,11 +72,12 @@ public class Post implements Parcelable {
     private boolean saved;
     private boolean isCrosspost;
     private String crosspostParentId;
+    private ArrayList<Preview> previews = new ArrayList<>();
     private ArrayList<Gallery> gallery = new ArrayList<>();
 
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed,
                 String author, String authorFlair, String authorFlairHTML,
-                long postTimeMillis, String title, String previewUrl, String thumbnailPreviewUrl,
+                long postTimeMillis, String title,
                 String permalink, int score, int postType, int voteType, int nComments, String flair,
                 String awards, int nAwards, boolean hidden, boolean spoiler, boolean nsfw, boolean stickied,
                 boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
@@ -94,8 +91,6 @@ public class Post implements Parcelable {
         this.authorFlairHTML = authorFlairHTML;
         this.postTimeMillis = postTimeMillis;
         this.title = title;
-        this.previewUrl = previewUrl;
-        this.thumbnailPreviewUrl = thumbnailPreviewUrl;
         this.permalink = APIUtils.API_BASE_URI + permalink;
         this.score = score;
         this.postType = postType;
@@ -116,7 +111,7 @@ public class Post implements Parcelable {
 
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed,
                 String author, String authorFlair, String authorFlairHTML,
-                long postTimeMillis, String title, String previewUrl, String thumbnailPreviewUrl,
+                long postTimeMillis, String title,
                 String url, String permalink, int score, int postType, int voteType, int nComments,
                 String flair, String awards, int nAwards, boolean hidden, boolean spoiler, boolean nsfw,
                 boolean stickied, boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
@@ -130,43 +125,7 @@ public class Post implements Parcelable {
         this.authorFlairHTML = authorFlairHTML;
         this.postTimeMillis = postTimeMillis;
         this.title = title;
-        this.previewUrl = previewUrl;
-        this.thumbnailPreviewUrl = thumbnailPreviewUrl;
         this.url = url;
-        this.permalink = APIUtils.API_BASE_URI + permalink;
-        this.score = score;
-        this.postType = postType;
-        this.voteType = voteType;
-        this.nComments = nComments;
-        this.flair = flair;
-        this.awards = awards;
-        this.nAwards = nAwards;
-        this.hidden = hidden;
-        this.spoiler = spoiler;
-        this.nsfw = nsfw;
-        this.stickied = stickied;
-        this.archived = archived;
-        this.locked = locked;
-        this.saved = saved;
-        this.isCrosspost = isCrosspost;
-    }
-
-    public Post(String id, String fullName, String subredditName, String subredditNamePrefixed,
-                String author, String authorFlair, String authorFlairHTML,
-                long postTimeMillis, String title, String permalink, int score, int postType,
-                int voteType, int nComments, String flair, String awards, int nAwards, boolean hidden,
-                boolean spoiler, boolean nsfw, boolean stickied, boolean archived, boolean locked,
-                boolean saved, boolean isCrosspost) {
-        this.id = id;
-        this.fullName = fullName;
-        this.subredditName = subredditName;
-        this.subredditNamePrefixed = subredditNamePrefixed;
-        this.author = author;
-        this.authorNamePrefixed = "u/" + author;
-        this.authorFlair = authorFlair;
-        this.authorFlairHTML = authorFlairHTML;
-        this.postTimeMillis = postTimeMillis;
-        this.title = title;
         this.permalink = APIUtils.API_BASE_URI + permalink;
         this.score = score;
         this.postType = postType;
@@ -201,8 +160,6 @@ public class Post implements Parcelable {
         selfText = in.readString();
         selfTextPlain = in.readString();
         selfTextPlainTrimmed = in.readString();
-        previewUrl = in.readString();
-        thumbnailPreviewUrl = in.readString();
         url = in.readString();
         videoUrl = in.readString();
         videoDownloadUrl = in.readString();
@@ -217,8 +174,6 @@ public class Post implements Parcelable {
         score = in.readInt();
         postType = in.readInt();
         voteType = in.readInt();
-        previewWidth = in.readInt();
-        previewHeight = in.readInt();
         nComments = in.readInt();
         hidden = in.readByte() != 0;
         spoiler = in.readByte() != 0;
@@ -229,6 +184,7 @@ public class Post implements Parcelable {
         saved = in.readByte() != 0;
         isCrosspost = in.readByte() != 0;
         crosspostParentId = in.readString();
+        in.readTypedList(previews, Preview.CREATOR);
         in.readTypedList(gallery, Gallery.CREATOR);
     }
 
@@ -319,22 +275,6 @@ public class Post implements Parcelable {
 
     public void setSelfTextPlainTrimmed(String selfTextPlainTrimmed) {
         this.selfTextPlainTrimmed = selfTextPlainTrimmed;
-    }
-
-    public String getPreviewUrl() {
-        return previewUrl;
-    }
-
-    public void setPreviewUrl(String previewUrl) {
-        this.previewUrl = previewUrl;
-    }
-
-    public String getThumbnailPreviewUrl() {
-        return thumbnailPreviewUrl;
-    }
-
-    public void setThumbnailPreviewUrl(String thumbnailPreviewUrl) {
-        this.thumbnailPreviewUrl = thumbnailPreviewUrl;
     }
 
     public String getUrl() {
@@ -437,22 +377,6 @@ public class Post implements Parcelable {
         this.voteType = voteType;
     }
 
-    public int getPreviewWidth() {
-        return previewWidth;
-    }
-
-    public void setPreviewWidth(int previewWidth) {
-        this.previewWidth = previewWidth;
-    }
-
-    public int getPreviewHeight() {
-        return previewHeight;
-    }
-
-    public void setPreviewHeight(int previewHeight) {
-        this.previewHeight = previewHeight;
-    }
-
     public int getNComments() {
         return nComments;
     }
@@ -522,6 +446,14 @@ public class Post implements Parcelable {
         this.crosspostParentId = crosspostParentId;
     }
 
+    public ArrayList<Preview> getPreviews() {
+        return previews;
+    }
+
+    public void setPreviews(ArrayList<Preview> previews) {
+        this.previews = previews;
+    }
+
     public ArrayList<Gallery> getGallery() {
         return gallery;
     }
@@ -547,8 +479,6 @@ public class Post implements Parcelable {
         parcel.writeString(selfText);
         parcel.writeString(selfTextPlain);
         parcel.writeString(selfTextPlainTrimmed);
-        parcel.writeString(previewUrl);
-        parcel.writeString(thumbnailPreviewUrl);
         parcel.writeString(url);
         parcel.writeString(videoUrl);
         parcel.writeString(videoDownloadUrl);
@@ -563,8 +493,6 @@ public class Post implements Parcelable {
         parcel.writeInt(score);
         parcel.writeInt(postType);
         parcel.writeInt(voteType);
-        parcel.writeInt(previewWidth);
-        parcel.writeInt(previewHeight);
         parcel.writeInt(nComments);
         parcel.writeByte((byte) (hidden ? 1 : 0));
         parcel.writeByte((byte) (spoiler ? 1 : 0));
@@ -575,6 +503,7 @@ public class Post implements Parcelable {
         parcel.writeByte((byte) (saved ? 1 : 0));
         parcel.writeByte((byte) (isCrosspost ? 1 : 0));
         parcel.writeString(crosspostParentId);
+        parcel.writeTypedList(previews);
         parcel.writeTypedList(gallery);
     }
 
@@ -591,7 +520,7 @@ public class Post implements Parcelable {
         return id.hashCode();
     }
 
-    public static class Gallery implements Parcelable{
+    public static class Gallery implements Parcelable {
         public static final int TYPE_IMAGE = 0;
         public static final int TYPE_GIF = 1;
         public static final int TYPE_VIDEO = 2;
@@ -644,6 +573,72 @@ public class Post implements Parcelable {
             parcel.writeString(url);
             parcel.writeString(fileName);
             parcel.writeInt(mediaType);
+        }
+    }
+
+    public static class Preview implements Parcelable {
+        private String previewUrl;
+        private int previewWidth;
+        private int previewHeight;
+
+        public Preview(String previewUrl, int previewWidth, int previewHeight) {
+            this.previewUrl = previewUrl;
+            this.previewWidth = previewWidth;
+            this.previewHeight = previewHeight;
+        }
+
+        protected Preview(Parcel in) {
+            previewUrl = in.readString();
+            previewWidth = in.readInt();
+            previewHeight = in.readInt();
+        }
+
+        public static final Creator<Preview> CREATOR = new Creator<Preview>() {
+            @Override
+            public Preview createFromParcel(Parcel in) {
+                return new Preview(in);
+            }
+
+            @Override
+            public Preview[] newArray(int size) {
+                return new Preview[size];
+            }
+        };
+
+        public String getPreviewUrl() {
+            return previewUrl;
+        }
+
+        public void setPreviewUrl(String previewUrl) {
+            this.previewUrl = previewUrl;
+        }
+
+        public int getPreviewWidth() {
+            return previewWidth;
+        }
+
+        public void setPreviewWidth(int previewWidth) {
+            this.previewWidth = previewWidth;
+        }
+
+        public int getPreviewHeight() {
+            return previewHeight;
+        }
+
+        public void setPreviewHeight(int previewHeight) {
+            this.previewHeight = previewHeight;
+        }
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel parcel, int i) {
+            parcel.writeString(previewUrl);
+            parcel.writeInt(previewWidth);
+            parcel.writeInt(previewHeight);
         }
     }
 }
