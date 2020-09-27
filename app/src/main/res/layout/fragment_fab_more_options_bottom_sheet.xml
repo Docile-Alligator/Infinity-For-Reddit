@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="8dp"
-    android:overScrollMode="never">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".BottomSheetFragment.FABMoreOptionsBottomSheetFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -11,7 +12,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/text_type_linear_layout_post_type_bottom_sheet_fragment"
+            android:id="@+id/submit_post_text_view_fab_more_options_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -19,18 +20,18 @@
             android:paddingBottom="16dp"
             android:paddingStart="32dp"
             android:paddingEnd="32dp"
-            android:text="@string/bottom_sheet_post_text"
+            android:text="@string/submit_post"
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family"
-            android:drawableStart="@drawable/ic_text_24dp"
+            app:drawableStartCompat="@drawable/ic_submit_post_24dp"
             android:drawablePadding="48dp"
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackground" />
 
         <TextView
-            android:id="@+id/link_type_linear_layout_post_type_bottom_sheet_fragment"
+            android:id="@+id/refresh_text_view_fab_more_options_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -38,18 +39,18 @@
             android:paddingBottom="16dp"
             android:paddingStart="32dp"
             android:paddingEnd="32dp"
-            android:text="@string/bottom_sheet_post_link"
+            android:text="@string/refresh"
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family"
-            android:drawableStart="@drawable/ic_link"
+            app:drawableStartCompat="@drawable/ic_refresh_24dp"
             android:drawablePadding="48dp"
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackground" />
 
         <TextView
-            android:id="@+id/video_type_linear_layout_post_type_bottom_sheet_fragment"
+            android:id="@+id/change_sort_type_text_view_fab_more_options_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -57,18 +58,18 @@
             android:paddingBottom="16dp"
             android:paddingStart="32dp"
             android:paddingEnd="32dp"
-            android:text="@string/bottom_sheet_post_video"
+            android:text="@string/change_sort_type"
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family"
-            android:drawableStart="@drawable/ic_outline_video_24dp"
+            app:drawableStartCompat="@drawable/ic_sort_24dp"
             android:drawablePadding="48dp"
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackground" />
 
         <TextView
-            android:id="@+id/image_type_linear_layout_post_type_bottom_sheet_fragment"
+            android:id="@+id/change_post_layout_text_view_fab_more_options_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
@@ -76,11 +77,30 @@
             android:paddingBottom="16dp"
             android:paddingStart="32dp"
             android:paddingEnd="32dp"
-            android:text="@string/bottom_sheet_post_image"
+            android:text="@string/change_post_layout"
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family"
-            android:drawableStart="@drawable/ic_image_24dp"
+            app:drawableStartCompat="@drawable/ic_post_layout_24dp"
+            android:drawablePadding="48dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
+            android:id="@+id/search_text_view_fab_more_options_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:text="@string/search"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family"
+            app:drawableStartCompat="@drawable/ic_search_24dp"
             android:drawablePadding="48dp"
             android:clickable="true"
             android:focusable="true"

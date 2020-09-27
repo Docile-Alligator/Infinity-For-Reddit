@@ -10,4 +10,9 @@
         app:entryValues="@array/settings_data_saving_mode_values"
         app:useSimpleSummaryProvider="true" />
 
+    <Preference
+        app:icon="@drawable/ic_info_preference_24dp"
+        app:summary="@string/settings_data_saving_mode_info_summary"
+        app:enabled="false" />
+
 </PreferenceScreen>

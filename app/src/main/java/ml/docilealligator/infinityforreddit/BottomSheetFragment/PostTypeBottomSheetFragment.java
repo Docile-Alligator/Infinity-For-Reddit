@@ -39,6 +39,7 @@ public class PostTypeBottomSheetFragment extends RoundedBottomSheetDialogFragmen
     @BindView(R.id.video_type_linear_layout_post_type_bottom_sheet_fragment)
     TextView videoTypeTextView;
     private Activity activity;
+
     public PostTypeBottomSheetFragment() {
         // Required empty public constructor
     }

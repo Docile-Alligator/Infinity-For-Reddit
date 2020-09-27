@@ -46,9 +46,7 @@ public class Infinity extends Application {
         EventBus.builder().addIndex(new EventBusIndex()).installDefaultEventBus();
 
         mNetworkWifiStatusReceiver =
-                new NetworkWifiStatusReceiver(() -> {
-                    EventBus.getDefault().post(new ChangeNetworkStatusEvent(Utils.getConnectedNetwork(getApplicationContext())));
-                });
+                new NetworkWifiStatusReceiver(() -> EventBus.getDefault().post(new ChangeNetworkStatusEvent(Utils.getConnectedNetwork(getApplicationContext()))));
         registerReceiver(mNetworkWifiStatusReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 

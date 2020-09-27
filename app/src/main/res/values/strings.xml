@@ -468,7 +468,7 @@
     <string name="settings_video_download_location_title">Video Download Location</string>
     <string name="settings_separate_folder_for_each_subreddit">Separate Folder for Each Subreddit</string>
     <string name="settings_swipe_action_title">Swipe Action</string>
-    <string name="settings_vibrate_when_action_triggered_title">Vibrate the phone when the action is triggered</string>
+    <string name="settings_vibrate_when_action_triggered_title">Vibrate the phone when an action is triggered</string>
     <string name="settings_disable_swiping_between_tabs_title">Disable Swiping Between Tabs</string>
     <string name="settings_enable_swipe_action_title">Enable Swipe Action</string>
     <string name="settings_swipe_action_threshold">Threshold</string>
@@ -487,6 +487,7 @@
     <string name="settings_bottom_app_bar_option_4">Option 4</string>
     <string name="settings_bottom_app_bar_fab">Floating Action Button</string>
     <string name="settings_data_saving_mode">Data Saving Mode</string>
+    <string name="settings_data_saving_mode_info_summary">In data saving mode, preview images are in lower resolution.</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -893,7 +894,10 @@
 
     <string name="unlock_account_section">Unlock Account Section</string>
     <string name="unlock">Unlock</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="submit_post">Submit Post</string>
+    <string name="refresh">Refresh</string>
+    <string name="change_sort_type">Change Sort Type</string>
+    <string name="change_post_layout">Change Post Layout</string>
 
 </resources>

@@ -67,6 +67,7 @@ import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubscribedThingsAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchToAnonymousAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.FABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.SortTimeBottomSheetFragment;
@@ -104,7 +105,7 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public class MainActivity extends BaseActivity implements SortTypeSelectionCallback,
         PostTypeBottomSheetFragment.PostTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback,
-        ActivityToolbarInterface {
+        ActivityToolbarInterface, FABMoreOptionsBottomSheetFragment.FABOptionSelectionCallback {
 
     static final String EXTRA_POST_TYPE = "EPT";
     static final String EXTRA_MESSSAGE_FULLNAME = "ENF";
@@ -191,6 +192,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private SortTypeBottomSheetFragment sortTypeBottomSheetFragment;
     private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
     private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
+    private FABMoreOptionsBottomSheetFragment fabMoreOptionsBottomSheetFragment;
     private NavigationDrawerRecyclerViewAdapter adapter;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
@@ -264,6 +266,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         sortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
         sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
         postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
+        fabMoreOptionsBottomSheetFragment = new FABMoreOptionsBottomSheetFragment();
 
         setSupportActionBar(toolbar);
         setToolbarGoToTop(toolbar);
@@ -555,13 +558,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             int fabOption = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB, SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS);
             switch (fabOption) {
                 case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_REFRESH:
-                    fab.setImageResource(R.drawable.ic_refresh_black_24dp);
+                    fab.setImageResource(R.drawable.ic_refresh_24dp);
                     break;
                 case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE:
-                    fab.setImageResource(R.drawable.ic_sort_toolbar_24dp);
+                    fab.setImageResource(R.drawable.ic_sort_24dp);
                     break;
                 case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT:
-                    fab.setImageResource(R.drawable.ic_post_layout_black_24dp);
+                    fab.setImageResource(R.drawable.ic_post_layout_24dp);
                     break;
                 case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_SEARCH:
                     fab.setImageResource(R.drawable.ic_search_black_24dp);
@@ -595,6 +598,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
                         break;
                 }
+            });
+            fab.setOnLongClickListener(view -> {
+                fabMoreOptionsBottomSheetFragment.show(getSupportFragmentManager(), fabMoreOptionsBottomSheetFragment.getTag());
+                return true;
             });
             fab.setVisibility(View.VISIBLE);
         }
@@ -1127,6 +1134,30 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     public void displaySortType() {
         if (sectionsPagerAdapter != null) {
             sectionsPagerAdapter.displaySortTypeInToolbar();
+        }
+    }
+
+    @Override
+    public void fabOptionSelected(int option) {
+        switch (option) {
+            case FABMoreOptionsBottomSheetFragment.FAB_OPTION_SUBMIT_POST:
+                postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
+                break;
+            case FABMoreOptionsBottomSheetFragment.FAB_OPTION_REFRESH:
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.refresh();
+                }
+                break;
+            case FABMoreOptionsBottomSheetFragment.FAB_OPTION_CHANGE_SORT_TYPE:
+                changeSortType();
+                break;
+            case FABMoreOptionsBottomSheetFragment.FAB_OPTION_CHANGE_POST_LAYOUT:
+                postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+                break;
+            case FABMoreOptionsBottomSheetFragment.FAB_OPTION_SEARCH:
+                Intent intent = new Intent(this, SearchActivity.class);
+                startActivity(intent);
+                break;
         }
     }
 

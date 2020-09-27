@@ -60,6 +60,7 @@ import ml.docilealligator.infinityforreddit.AsyncTask.CheckIsSubscribedToSubredd
 import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.InsertSubredditDataAsyncTask;
 import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.FABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.SortTimeBottomSheetFragment;
@@ -89,7 +90,7 @@ import retrofit2.Retrofit;
 
 public class ViewSubredditDetailActivity extends BaseActivity implements SortTypeSelectionCallback,
         PostTypeBottomSheetFragment.PostTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback,
-        ActivityToolbarInterface {
+        ActivityToolbarInterface, FABMoreOptionsBottomSheetFragment.FABOptionSelectionCallback {
 
     public static final String EXTRA_SUBREDDIT_NAME_KEY = "ESN";
     public static final String EXTRA_MESSAGE_FULLNAME = "ENF";
@@ -196,6 +197,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private SortTypeBottomSheetFragment sortTypeBottomSheetFragment;
     private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
     private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
+    private FABMoreOptionsBottomSheetFragment fabMoreOptionsBottomSheetFragment;
     private int expandedTabTextColor;
     private int expandedTabBackgroundColor;
     private int expandedTabIndicatorColor;
@@ -341,8 +343,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         sortTypeBottomSheetFragment.setArguments(bottomSheetBundle);
 
         sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
-
         postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
+        fabMoreOptionsBottomSheetFragment = new FABMoreOptionsBottomSheetFragment();
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
@@ -643,13 +645,13 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             int fabOption = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS);
             switch (fabOption) {
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH:
-                    fab.setImageResource(R.drawable.ic_refresh_black_24dp);
+                    fab.setImageResource(R.drawable.ic_refresh_24dp);
                     break;
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE:
-                    fab.setImageResource(R.drawable.ic_sort_toolbar_24dp);
+                    fab.setImageResource(R.drawable.ic_sort_24dp);
                     break;
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT:
-                    fab.setImageResource(R.drawable.ic_post_layout_black_24dp);
+                    fab.setImageResource(R.drawable.ic_post_layout_24dp);
                     break;
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH:
                     fab.setImageResource(R.drawable.ic_search_black_24dp);
@@ -684,6 +686,10 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                         postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
                         break;
                 }
+            });
+            fab.setOnLongClickListener(view -> {
+                fabMoreOptionsBottomSheetFragment.show(getSupportFragmentManager(), fabMoreOptionsBottomSheetFragment.getTag());
+                return true;
             });
 
             fab.setVisibility(View.VISIBLE);
@@ -1017,9 +1023,32 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         }
     }
 
+    @Override
+    public void fabOptionSelected(int option) {
+        switch (option) {
+            case FABMoreOptionsBottomSheetFragment.FAB_OPTION_SUBMIT_POST:
+                postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
+                break;
+            case FABMoreOptionsBottomSheetFragment.FAB_OPTION_REFRESH:
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.refresh();
+                }
+                break;
+            case FABMoreOptionsBottomSheetFragment.FAB_OPTION_CHANGE_SORT_TYPE:
+                sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
+                break;
+            case FABMoreOptionsBottomSheetFragment.FAB_OPTION_CHANGE_POST_LAYOUT:
+                postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+                break;
+            case FABMoreOptionsBottomSheetFragment.FAB_OPTION_SEARCH:
+                Intent intent = new Intent(this, SearchActivity.class);
+                intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                startActivity(intent);
+                break;
+        }
+    }
+
     private class SectionsPagerAdapter extends FragmentStateAdapter {
-        /*private PostFragment postFragment;
-        private SidebarFragment sidebarFragment;*/
 
         SectionsPagerAdapter(FragmentManager fm, Lifecycle lifecycle) {
             super(fm, lifecycle);
