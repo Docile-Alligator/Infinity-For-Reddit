@@ -82,7 +82,7 @@ import ml.docilealligator.infinityforreddit.CustomView.CustomToroContainer;
 import ml.docilealligator.infinityforreddit.DeleteThing;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
-import ml.docilealligator.infinityforreddit.Event.ChangeWifiStatusEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToDetailActivity;
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
@@ -1373,11 +1373,21 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     }
 
     @Subscribe
-    public void onChangeWifiStatusEvent(ChangeWifiStatusEvent changeWifiStatusEvent) {
+    public void onChangeNetworkStatusEvent(ChangeNetworkStatusEvent changeNetworkStatusEvent) {
         if (mAdapter != null) {
             String autoplay = mSharedPreferences.getString(SharedPreferencesUtils.VIDEO_AUTOPLAY, SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_NEVER);
+            String dataSavingMode = mSharedPreferences.getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
+            boolean stateChanged = false;
             if (autoplay.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI)) {
-                mAdapter.setAutoplay(changeWifiStatusEvent.isConnectedToWifi);
+                mAdapter.setAutoplay(changeNetworkStatusEvent.connectedNetwork == Utils.NETWORK_TYPE_WIFI);
+                stateChanged = true;
+            }
+            if (dataSavingMode.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
+                mAdapter.setDataSavingMode(changeNetworkStatusEvent.connectedNetwork == Utils.NETWORK_TYPE_CELLULAR);
+                stateChanged = true;
+            }
+
+            if (stateChanged) {
                 refreshAdapter();
             }
         }

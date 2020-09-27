@@ -186,7 +186,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean mAutomaticallyTryRedgifs;
     private boolean mLongPressToHideToolbarInCompactLayout;
     private boolean mCompactLayoutToolbarHiddenByDefault;
-    private boolean mDataSavingMode;
+    private boolean mDataSavingMode = false;
     private Drawable mCommentIcon;
     private NetworkState networkState;
     private ExoCreator mExoCreator;
@@ -219,10 +219,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mShowDividerInCompactLayout = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_DIVIDER_IN_COMPACT_LAYOUT, true);
             mShowAbsoluteNumberOfVotes = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
             String autoplayString = sharedPreferences.getString(SharedPreferencesUtils.VIDEO_AUTOPLAY, SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_NEVER);
+            int networkType = Utils.getConnectedNetwork(activity);
             if (autoplayString.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ALWAYS_ON)) {
                 mAutoplay = true;
             } else if (autoplayString.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI)) {
-                mAutoplay = Utils.isConnectedToWifi(activity);
+                mAutoplay = networkType == Utils.NETWORK_TYPE_WIFI;
             }
             mAutoplayNsfwVideos = sharedPreferences.getBoolean(SharedPreferencesUtils.AUTOPLAY_NSFW_VIDEOS, true);
             mMuteAutoplayingVideos = sharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_AUTOPLAYING_VIDEOS, true);
@@ -239,6 +240,13 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             mLongPressToHideToolbarInCompactLayout = sharedPreferences.getBoolean(SharedPreferencesUtils.LONG_PRESS_TO_HIDE_TOOLBAR_IN_COMPACT_LAYOUT, false);
             mCompactLayoutToolbarHiddenByDefault = sharedPreferences.getBoolean(SharedPreferencesUtils.POST_COMPACT_LAYOUT_TOOLBAR_HIDDEN_BY_DEFAULT, false);
+
+            String dataSavingModeString = sharedPreferences.getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
+            if (dataSavingModeString.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ALWAYS)) {
+                mDataSavingMode = true;
+            } else if (dataSavingModeString.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
+                mDataSavingMode = networkType == Utils.NETWORK_TYPE_CELLULAR;
+            }
 
             mPostLayout = postLayout;
 
@@ -945,17 +953,23 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private Post.Preview getSuitablePreview(ArrayList<Post.Preview> previews) {
         Post.Preview preview;
         if (!previews.isEmpty()) {
-            preview = previews.get(0);
-            if (preview.getPreviewWidth() * preview.getPreviewHeight() >= 65 * 1000 * 1000) {
+            int previewIndex;
+            if (mDataSavingMode && previews.size() > 2) {
+                previewIndex = previews.size() / 2;
+            } else {
+                previewIndex = 0;
+            }
+            preview = previews.get(previewIndex);
+            if (preview.getPreviewWidth() * preview.getPreviewHeight() >= 75_000_000) {
                 for (int i = previews.size() - 1; i >= 1; i--) {
                     preview = previews.get(i);
                     if (mImageViewWidth >= preview.getPreviewWidth()) {
-                        if (preview.getPreviewWidth() * preview.getPreviewHeight() <= 75 * 1000 * 1000) {
+                        if (preview.getPreviewWidth() * preview.getPreviewHeight() <= 75_000_000) {
                             return preview;
                         }
                     } else {
                         int height = mImageViewWidth / preview.getPreviewWidth() * preview.getPreviewHeight();
-                        if (mImageViewWidth * height <= 75 * 1000 * 1000) {
+                        if (mImageViewWidth * height <= 75_000_000) {
                             return preview;
                         }
                     }
@@ -963,7 +977,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             }
 
             int divisor = 2;
-            while (preview.getPreviewWidth() * preview.getPreviewHeight() / divisor / divisor > 75 * 1000 * 1000) {
+            while (preview.getPreviewWidth() * preview.getPreviewHeight() / divisor / divisor > 75_000_000) {
                 preview.setPreviewWidth(preview.getPreviewWidth() / divisor);
                 preview.setPreviewHeight(preview.getPreviewHeight() / divisor);
                 divisor *= 2;
@@ -1273,6 +1287,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
     public void setCompactLayoutToolbarHiddenByDefault(boolean compactLayoutToolbarHiddenByDefault) {
         mCompactLayoutToolbarHiddenByDefault = compactLayoutToolbarHiddenByDefault;
+    }
+
+    public void setDataSavingMode(boolean dataSavingMode) {
+        mDataSavingMode = dataSavingMode;
     }
 
     @Override

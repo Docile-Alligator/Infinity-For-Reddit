@@ -71,12 +71,14 @@ import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.CustomView.CustomToroContainer;
 import ml.docilealligator.infinityforreddit.Event.ChangeAutoplayNsfwVideosEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeCompactLayoutToolbarHiddenByDefaultEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeDataSavingModeEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeDefaultPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeEnableSwipeActionSwitchEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeLongPressToHideToolbarInCompactLayoutEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeMuteAutoplayingVideosEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeMuteNSFWVideoEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangePostLayoutEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeSavePostFeedScrolledPositionEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeShowAbsoluteNumberOfVotesEvent;
@@ -88,7 +90,6 @@ import ml.docilealligator.infinityforreddit.Event.ChangeTimeFormatEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVibrateWhenActionTriggeredEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVideoAutoplayEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVoteButtonsPositionEvent;
-import ml.docilealligator.infinityforreddit.Event.ChangeWifiStatusEvent;
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.Event.ShowDividerInCompactLayoutPreferenceEvent;
 import ml.docilealligator.infinityforreddit.Event.ShowThumbnailOnTheRightInCompactLayoutEvent;
@@ -1180,11 +1181,21 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     }
 
     @Subscribe
-    public void onChangeWifiStatusEvent(ChangeWifiStatusEvent changeWifiStatusEvent) {
+    public void onChangeNetworkStatusEvent(ChangeNetworkStatusEvent changeNetworkStatusEvent) {
         if (mAdapter != null) {
             String autoplay = mSharedPreferences.getString(SharedPreferencesUtils.VIDEO_AUTOPLAY, SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_NEVER);
+            String dataSavingMode = mSharedPreferences.getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
+            boolean stateChanged = false;
             if (autoplay.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI)) {
-                mAdapter.setAutoplay(changeWifiStatusEvent.isConnectedToWifi);
+                mAdapter.setAutoplay(changeNetworkStatusEvent.connectedNetwork == Utils.NETWORK_TYPE_WIFI);
+                stateChanged = true;
+            }
+            if (dataSavingMode.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
+                mAdapter.setDataSavingMode(changeNetworkStatusEvent.connectedNetwork == Utils.NETWORK_TYPE_CELLULAR);
+                stateChanged = true;
+            }
+
+            if (stateChanged) {
                 refreshAdapter();
             }
         }
@@ -1259,6 +1270,20 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Subscribe
     public void onChangeSwipeActionThresholdEvent(ChangeSwipeActionThresholdEvent changeSwipeActionThresholdEvent) {
         swipeActionThreshold = changeSwipeActionThresholdEvent.swipeActionThreshold;
+    }
+
+    @Subscribe
+    public void onChangeDataSavingModeEvent(ChangeDataSavingModeEvent changeDataSavingModeEvent) {
+        if (mAdapter != null) {
+            boolean dataSavingMode = false;
+            if (changeDataSavingModeEvent.dataSavingMode.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
+                dataSavingMode = Utils.isConnectedToCellularData(activity);
+            } else if (changeDataSavingModeEvent.dataSavingMode.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ALWAYS)) {
+                dataSavingMode = true;
+            }
+            mAdapter.setDataSavingMode(dataSavingMode);
+            refreshAdapter();
+        }
     }
 
     private void refreshAdapter() {

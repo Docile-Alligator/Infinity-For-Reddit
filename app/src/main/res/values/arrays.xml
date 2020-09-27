@@ -270,4 +270,16 @@
         <item>0.8</item>
     </string-array>
 
+    <string-array name="settings_data_saving_mode">
+        <item>Off</item>
+        <item>Only on Cellular Data</item>
+        <item>Always on</item>
+    </string-array>
+
+    <string-array name="settings_data_saving_mode_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
 </resources>

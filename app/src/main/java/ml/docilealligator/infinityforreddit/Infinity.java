@@ -15,7 +15,7 @@ import com.livefront.bridge.SavedStateHandler;
 import org.greenrobot.eventbus.EventBus;
 
 import ml.docilealligator.infinityforreddit.BroadcastReceiver.NetworkWifiStatusReceiver;
-import ml.docilealligator.infinityforreddit.Event.ChangeWifiStatusEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 import ml.docilealligator.inifinityforreddit.EventBusIndex;
 
@@ -46,7 +46,9 @@ public class Infinity extends Application {
         EventBus.builder().addIndex(new EventBusIndex()).installDefaultEventBus();
 
         mNetworkWifiStatusReceiver =
-                new NetworkWifiStatusReceiver(() -> EventBus.getDefault().post(new ChangeWifiStatusEvent(Utils.isConnectedToWifi(getApplicationContext()))));
+                new NetworkWifiStatusReceiver(() -> {
+                    EventBus.getDefault().post(new ChangeNetworkStatusEvent(Utils.getConnectedNetwork(getApplicationContext())));
+                });
         registerReceiver(mNetworkWifiStatusReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
     }
 

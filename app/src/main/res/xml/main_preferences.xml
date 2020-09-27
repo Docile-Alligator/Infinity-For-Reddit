@@ -47,6 +47,12 @@
         android:icon="@drawable/ic_security_24dp"
         app:fragment="ml.docilealligator.infinityforreddit.Settings.SecurityPreferenceFragment" />
 
+    <Preference
+        app:key="security"
+        app:title="@string/settings_data_saving_mode"
+        app:icon="@drawable/ic_data_saving_mode_black_24dp"
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.DataSavingModePreferenceFragment" />
+
     <SwitchPreference
         app:defaultValue="false"
         app:key="save_front_page_scrolled_position"

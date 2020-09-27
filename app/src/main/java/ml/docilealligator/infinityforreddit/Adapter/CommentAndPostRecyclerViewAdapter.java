@@ -177,6 +177,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private double mStartAutoplayVisibleAreaOffset;
     private boolean mMuteNSFWVideo;
     private boolean mAutomaticallyTryRedgifs;
+    private boolean mDataSavingMode;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private boolean isInitiallyLoading;
     private boolean isInitiallyLoadingFailed;
@@ -463,10 +464,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mShowAbsoluteNumberOfVotes = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
 
         String autoplayString = sharedPreferences.getString(SharedPreferencesUtils.VIDEO_AUTOPLAY, SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_NEVER);
+        int networkType = Utils.getConnectedNetwork(activity);
         if (autoplayString.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ALWAYS_ON)) {
             mAutoplay = true;
         } else if (autoplayString.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI)) {
-            mAutoplay = Utils.isConnectedToWifi(activity);
+            mAutoplay = networkType == Utils.NETWORK_TYPE_WIFI;
         }
         mAutoplayNsfwVideos = sharedPreferences.getBoolean(SharedPreferencesUtils.AUTOPLAY_NSFW_VIDEOS, true);
         mMuteAutoplayingVideos = sharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_AUTOPLAYING_VIDEOS, true);
@@ -479,6 +481,13 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
         mMuteNSFWVideo = sharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_NSFW_VIDEO, false);
         mAutomaticallyTryRedgifs = sharedPreferences.getBoolean(SharedPreferencesUtils.AUTOMATICALLY_TRY_REDGIFS, true);
+
+        String dataSavingModeString = sharedPreferences.getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
+        if (dataSavingModeString.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ALWAYS)) {
+            mDataSavingMode = true;
+        } else if (dataSavingModeString.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
+            mDataSavingMode = networkType == Utils.NETWORK_TYPE_CELLULAR;
+        }
 
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
         isInitiallyLoading = true;
@@ -1401,7 +1410,13 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private Post.Preview getSuitablePreview(ArrayList<Post.Preview> previews) {
         Post.Preview preview;
         if (!previews.isEmpty()) {
-            preview = previews.get(0);
+            int previewIndex;
+            if (mDataSavingMode && previews.size() > 2) {
+                previewIndex = previews.size() / 2;
+            } else {
+                previewIndex = 0;
+            }
+            preview = previews.get(previewIndex);
             if (preview.getPreviewWidth() * preview.getPreviewHeight() >= 65 * 1000 * 1000) {
                 for (int i = previews.size() - 1; i >= 1; i--) {
                     preview = previews.get(i);
@@ -1833,6 +1848,10 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
     public void setAutoplay(boolean autoplay) {
         mAutoplay = autoplay;
+    }
+
+    public void setDataSavingMode(boolean dataSavingMode) {
+        mDataSavingMode = dataSavingMode;
     }
 
     public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int direction) {
