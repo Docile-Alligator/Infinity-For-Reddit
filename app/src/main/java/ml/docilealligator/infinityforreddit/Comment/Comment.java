@@ -219,6 +219,10 @@ public class Comment implements Parcelable {
         return awards;
     }
 
+    public void addAwards(String newAwardsHTML) {
+        awards += newAwardsHTML;
+    }
+
     public int getDepth() {
         return depth;
     }

@@ -5,8 +5,7 @@
 
     <queries>
         <intent>
-            <action android:name=
-                "android.support.customtabs.action.CustomTabsService" />
+            <action android:name="android.support.customtabs.action.CustomTabsService" />
         </intent>
     </queries>
 
@@ -33,7 +32,12 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
-        <activity android:name=".Activity.SelectUserFlairActivity"
+        <activity android:name=".Activity.GiveAwardActivity"
+            android:label="@string/give_award_activity_label"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/AppTheme.Slidable"/>
+        <activity
+            android:name=".Activity.SelectUserFlairActivity"
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity

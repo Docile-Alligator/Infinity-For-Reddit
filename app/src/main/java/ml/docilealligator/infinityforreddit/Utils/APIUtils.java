@@ -99,6 +99,9 @@ public class APIUtils {
 
     public static final String NAME_KEY = "name";
 
+    public static final String GILD_TYPE = "gild_type";
+    public static final String IS_ANONYMOUS = "is_anonymous";
+
     public static Map<String, String> getHttpBasicAuthHeader() {
         Map<String, String> params = new HashMap<>();
         String credentials = String.format("%s:%s", APIUtils.CLIENT_ID, "");

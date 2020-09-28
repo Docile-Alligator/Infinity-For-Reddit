@@ -14,6 +14,7 @@ import ml.docilealligator.infinityforreddit.Activity.EditCommentActivity;
 import ml.docilealligator.infinityforreddit.Activity.EditMultiRedditActivity;
 import ml.docilealligator.infinityforreddit.Activity.EditPostActivity;
 import ml.docilealligator.infinityforreddit.Activity.FilteredThingActivity;
+import ml.docilealligator.infinityforreddit.Activity.GiveAwardActivity;
 import ml.docilealligator.infinityforreddit.Activity.InboxActivity;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.Activity.LoginActivity;
@@ -212,4 +213,6 @@ public interface AppComponent {
     void inject(NsfwAndBlurringFragment nsfwAndBlurringFragment);
 
     void inject(CustomizeBottomAppBarFragment customizeBottomAppBarFragment);
+
+    void inject(GiveAwardActivity giveAwardActivity);
 }

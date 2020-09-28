@@ -81,8 +81,8 @@ import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.CustomView.CustomToroContainer;
 import ml.docilealligator.infinityforreddit.DeleteThing;
 import ml.docilealligator.infinityforreddit.Event.ChangeNSFWBlurEvent;
-import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeNetworkStatusEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToDetailActivity;
 import ml.docilealligator.infinityforreddit.Event.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
@@ -123,6 +123,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
     public static final int EDIT_COMMENT_REQUEST_CODE = 3;
     private static final int EDIT_POST_REQUEST_CODE = 2;
+    private static final int GIVE_AWARD_REQUEST_CODE = 100;
     @State
     boolean mNullAccessToken = false;
     @State
@@ -1606,6 +1607,17 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 flairBottomSheetFragment.setArguments(bundle);
                 flairBottomSheetFragment.show(getSupportFragmentManager(), flairBottomSheetFragment.getTag());
                 return true;
+            case R.id.action_give_award_view_post_detail_activity:
+                if (mAccessToken == null) {
+                    Toast.makeText(this, R.string.login_first, Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+
+                Intent giveAwardIntent = new Intent(this, GiveAwardActivity.class);
+                giveAwardIntent.putExtra(GiveAwardActivity.EXTRA_THING_FULLNAME, mPost.getFullName());
+                giveAwardIntent.putExtra(GiveAwardActivity.EXTRA_ITEM_POSITION, 0);
+                startActivityForResult(giveAwardIntent, GIVE_AWARD_REQUEST_CODE);
+                return true;
             case R.id.action_report_view_post_detail_activity:
                 if (mAccessToken == null) {
                     Toast.makeText(this, R.string.login_first, Toast.LENGTH_SHORT).show();
@@ -1660,6 +1672,16 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 mAdapter.editComment(null,
                         data.getStringExtra(EditCommentActivity.EXTRA_EDITED_COMMENT_CONTENT),
                         data.getExtras().getInt(EditCommentActivity.EXTRA_EDITED_COMMENT_POSITION));
+            }
+        } else if (requestCode == GIVE_AWARD_REQUEST_CODE) {
+            if (data != null && resultCode == RESULT_OK) {
+                Toast.makeText(this, R.string.give_award_success, Toast.LENGTH_SHORT).show();
+                int position = data.getIntExtra(GiveAwardActivity.EXTRA_RETURN_ITEM_POSITION, 0);
+                String newAwardsHTML = data.getStringExtra(GiveAwardActivity.EXTRA_RETURN_NEW_AWARDS);
+                int newAwardsCount = data.getIntExtra(GiveAwardActivity.EXTRA_RETURN_NEW_AWARDS_COUNT, 0);
+                if (mAdapter != null) {
+                    mAdapter.giveAward(newAwardsHTML, newAwardsCount, position);
+                }
             }
         }
     }

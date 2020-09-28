@@ -326,4 +326,8 @@ public interface RedditAPI {
     @POST("/r/{subredditName}/api/selectflair?raw_json=1")
     Call<String> selectUserFlair(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params,
                                  @Path("subredditName") String subredditName);
+
+    @FormUrlEncoded
+    @POST("api/v2/gold/gild")
+    Call<String> awardThing(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 }

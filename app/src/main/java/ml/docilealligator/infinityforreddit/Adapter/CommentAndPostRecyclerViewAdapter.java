@@ -1870,6 +1870,22 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         }
     }
 
+    public void giveAward(String awardsHTML, int awardCount, int position) {
+        if (position == 0) {
+            if (mPost != null) {
+                mPost.addAwards(awardsHTML);
+                mPost.addAwards(awardCount);
+                notifyItemChanged(0);
+            }
+        } else {
+            Comment comment = getCurrentComment(position);
+            if (comment != null) {
+                comment.addAwards(awardsHTML);
+                notifyItemChanged(position);
+            }
+        }
+    }
+
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof CommentViewHolder) {
@@ -3281,21 +3297,23 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             moreButton.setOnClickListener(view -> {
                 Comment comment = getCurrentComment(this);
-                Bundle bundle = new Bundle();
-                if (!mPost.isArchived() && !mPost.isLocked() && comment.getAuthor().equals(mAccountName)) {
-                    bundle.putString(CommentMoreBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                if (comment != null) {
+                    Bundle bundle = new Bundle();
+                    if (!mPost.isArchived() && !mPost.isLocked() && comment.getAuthor().equals(mAccountName)) {
+                        bundle.putString(CommentMoreBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                    }
+                    bundle.putParcelable(CommentMoreBottomSheetFragment.EXTRA_COMMENT, comment);
+                    if (mIsSingleCommentThreadMode) {
+                        bundle.putInt(CommentMoreBottomSheetFragment.EXTRA_POSITION, getAdapterPosition() - 2);
+                    } else {
+                        bundle.putInt(CommentMoreBottomSheetFragment.EXTRA_POSITION, getAdapterPosition() - 1);
+                    }
+                    bundle.putString(CommentMoreBottomSheetFragment.EXTRA_COMMENT_MARKDOWN, comment.getCommentMarkdown());
+                    bundle.putBoolean(CommentMoreBottomSheetFragment.EXTRA_IS_NSFW, mPost.isNSFW());
+                    CommentMoreBottomSheetFragment commentMoreBottomSheetFragment = new CommentMoreBottomSheetFragment();
+                    commentMoreBottomSheetFragment.setArguments(bundle);
+                    commentMoreBottomSheetFragment.show(mActivity.getSupportFragmentManager(), commentMoreBottomSheetFragment.getTag());
                 }
-                bundle.putParcelable(CommentMoreBottomSheetFragment.EXTRA_COMMENT, comment);
-                if (mIsSingleCommentThreadMode) {
-                    bundle.putInt(CommentMoreBottomSheetFragment.EXTRA_POSITION, getAdapterPosition() - 2);
-                } else {
-                    bundle.putInt(CommentMoreBottomSheetFragment.EXTRA_POSITION, getAdapterPosition() - 1);
-                }
-                bundle.putString(CommentMoreBottomSheetFragment.EXTRA_COMMENT_MARKDOWN, comment.getCommentMarkdown());
-                bundle.putBoolean(CommentMoreBottomSheetFragment.EXTRA_IS_NSFW, mPost.isNSFW());
-                CommentMoreBottomSheetFragment commentMoreBottomSheetFragment = new CommentMoreBottomSheetFragment();
-                commentMoreBottomSheetFragment.setArguments(bundle);
-                commentMoreBottomSheetFragment.show(mActivity.getSupportFragmentManager(), commentMoreBottomSheetFragment.getTag());
             });
 
             replyButton.setOnClickListener(view -> {
@@ -3315,17 +3333,18 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 }
 
                 Comment comment = getCurrentComment(this);
+                if (comment != null) {
+                    Intent intent = new Intent(mActivity, CommentActivity.class);
+                    intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, comment.getDepth() + 1);
+                    intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_MARKDOWN_KEY, comment.getCommentMarkdown());
+                    intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, comment.getCommentRawText());
+                    intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, comment.getFullName());
+                    intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, true);
 
-                Intent intent = new Intent(mActivity, CommentActivity.class);
-                intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, comment.getDepth() + 1);
-                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_MARKDOWN_KEY, comment.getCommentMarkdown());
-                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, comment.getCommentRawText());
-                intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, comment.getFullName());
-                intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, true);
-
-                int parentPosition = mIsSingleCommentThreadMode ? getAdapterPosition() - 2 : getAdapterPosition() - 1;
-                intent.putExtra(CommentActivity.EXTRA_PARENT_POSITION_KEY, parentPosition);
-                mActivity.startActivityForResult(intent, CommentActivity.WRITE_COMMENT_REQUEST_CODE);
+                    int parentPosition = mIsSingleCommentThreadMode ? getAdapterPosition() - 2 : getAdapterPosition() - 1;
+                    intent.putExtra(CommentActivity.EXTRA_PARENT_POSITION_KEY, parentPosition);
+                    mActivity.startActivityForResult(intent, CommentActivity.WRITE_COMMENT_REQUEST_CODE);
+                }
             });
 
             upvoteButton.setOnClickListener(view -> {
@@ -3340,56 +3359,58 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 }
 
                 Comment comment = getCurrentComment(this);
-                int previousVoteType = comment.getVoteType();
-                String newVoteType;
+                if (comment != null) {
+                    int previousVoteType = comment.getVoteType();
+                    String newVoteType;
 
-                downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                    downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
-                if (previousVoteType != Comment.VOTE_TYPE_UPVOTE) {
-                    //Not upvoted before
-                    comment.setVoteType(Comment.VOTE_TYPE_UPVOTE);
-                    newVoteType = APIUtils.DIR_UPVOTE;
-                    upvoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                    scoreTextView.setTextColor(mUpvotedColor);
-                } else {
-                    //Upvoted before
-                    comment.setVoteType(Comment.VOTE_TYPE_NO_VOTE);
-                    newVoteType = APIUtils.DIR_UNVOTE;
-                    upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                    scoreTextView.setTextColor(mCommentIconAndInfoColor);
-                }
+                    if (previousVoteType != Comment.VOTE_TYPE_UPVOTE) {
+                        //Not upvoted before
+                        comment.setVoteType(Comment.VOTE_TYPE_UPVOTE);
+                        newVoteType = APIUtils.DIR_UPVOTE;
+                        upvoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                        scoreTextView.setTextColor(mUpvotedColor);
+                    } else {
+                        //Upvoted before
+                        comment.setVoteType(Comment.VOTE_TYPE_NO_VOTE);
+                        newVoteType = APIUtils.DIR_UNVOTE;
+                        upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                        scoreTextView.setTextColor(mCommentIconAndInfoColor);
+                    }
 
-                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                        comment.getScore() + comment.getVoteType()));
-                topScoreTextView.setText(mActivity.getString(R.string.top_score,
-                        Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                        comment.getScore() + comment.getVoteType())));
+                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                            comment.getScore() + comment.getVoteType()));
+                    topScoreTextView.setText(mActivity.getString(R.string.top_score,
+                            Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                    comment.getScore() + comment.getVoteType())));
 
-                VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
-                    @Override
-                    public void onVoteThingSuccess(int position) {
-                        if (newVoteType.equals(APIUtils.DIR_UPVOTE)) {
-                            comment.setVoteType(Comment.VOTE_TYPE_UPVOTE);
-                            upvoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                            scoreTextView.setTextColor(mUpvotedColor);
-                        } else {
-                            comment.setVoteType(Comment.VOTE_TYPE_NO_VOTE);
-                            upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                            scoreTextView.setTextColor(mCommentIconAndInfoColor);
+                    VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
+                        @Override
+                        public void onVoteThingSuccess(int position) {
+                            if (newVoteType.equals(APIUtils.DIR_UPVOTE)) {
+                                comment.setVoteType(Comment.VOTE_TYPE_UPVOTE);
+                                upvoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                scoreTextView.setTextColor(mUpvotedColor);
+                            } else {
+                                comment.setVoteType(Comment.VOTE_TYPE_NO_VOTE);
+                                upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                scoreTextView.setTextColor(mCommentIconAndInfoColor);
+                            }
+
+                            downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                            scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                    comment.getScore() + comment.getVoteType()));
+                            topScoreTextView.setText(mActivity.getString(R.string.top_score,
+                                    Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                            comment.getScore() + comment.getVoteType())));
                         }
 
-                        downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                comment.getScore() + comment.getVoteType()));
-                        topScoreTextView.setText(mActivity.getString(R.string.top_score,
-                                Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                comment.getScore() + comment.getVoteType())));
-                    }
-
-                    @Override
-                    public void onVoteThingFail(int position) {
-                    }
-                }, comment.getFullName(), newVoteType, getAdapterPosition());
+                        @Override
+                        public void onVoteThingFail(int position) {
+                        }
+                    }, comment.getFullName(), newVoteType, getAdapterPosition());
+                }
             });
 
             downvoteButton.setOnClickListener(view -> {
@@ -3404,101 +3425,108 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 }
 
                 Comment comment = getCurrentComment(this);
-                int previousVoteType = comment.getVoteType();
-                String newVoteType;
+                if (comment != null) {
+                    int previousVoteType = comment.getVoteType();
+                    String newVoteType;
 
-                upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                    upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
-                if (previousVoteType != Comment.VOTE_TYPE_DOWNVOTE) {
-                    //Not downvoted before
-                    comment.setVoteType(Comment.VOTE_TYPE_DOWNVOTE);
-                    newVoteType = APIUtils.DIR_DOWNVOTE;
-                    downvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                    scoreTextView.setTextColor(mDownvotedColor);
-                } else {
-                    //Downvoted before
-                    comment.setVoteType(Comment.VOTE_TYPE_NO_VOTE);
-                    newVoteType = APIUtils.DIR_UNVOTE;
-                    downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                    scoreTextView.setTextColor(mCommentIconAndInfoColor);
-                }
+                    if (previousVoteType != Comment.VOTE_TYPE_DOWNVOTE) {
+                        //Not downvoted before
+                        comment.setVoteType(Comment.VOTE_TYPE_DOWNVOTE);
+                        newVoteType = APIUtils.DIR_DOWNVOTE;
+                        downvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                        scoreTextView.setTextColor(mDownvotedColor);
+                    } else {
+                        //Downvoted before
+                        comment.setVoteType(Comment.VOTE_TYPE_NO_VOTE);
+                        newVoteType = APIUtils.DIR_UNVOTE;
+                        downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                        scoreTextView.setTextColor(mCommentIconAndInfoColor);
+                    }
 
-                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                        comment.getScore() + comment.getVoteType()));
-                topScoreTextView.setText(mActivity.getString(R.string.top_score,
-                        Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                        comment.getScore() + comment.getVoteType())));
+                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                            comment.getScore() + comment.getVoteType()));
+                    topScoreTextView.setText(mActivity.getString(R.string.top_score,
+                            Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                    comment.getScore() + comment.getVoteType())));
 
-                VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
-                    @Override
-                    public void onVoteThingSuccess(int position1) {
-                        if (newVoteType.equals(APIUtils.DIR_DOWNVOTE)) {
-                            comment.setVoteType(Comment.VOTE_TYPE_DOWNVOTE);
-                            downvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                            scoreTextView.setTextColor(mDownvotedColor);
-                        } else {
-                            comment.setVoteType(Comment.VOTE_TYPE_NO_VOTE);
-                            downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                            scoreTextView.setTextColor(mCommentIconAndInfoColor);
+                    VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
+                        @Override
+                        public void onVoteThingSuccess(int position1) {
+                            if (newVoteType.equals(APIUtils.DIR_DOWNVOTE)) {
+                                comment.setVoteType(Comment.VOTE_TYPE_DOWNVOTE);
+                                downvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                scoreTextView.setTextColor(mDownvotedColor);
+                            } else {
+                                comment.setVoteType(Comment.VOTE_TYPE_NO_VOTE);
+                                downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                scoreTextView.setTextColor(mCommentIconAndInfoColor);
+                            }
+
+                            upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                            scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                    comment.getScore() + comment.getVoteType()));
+                            topScoreTextView.setText(mActivity.getString(R.string.top_score,
+                                    Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                            comment.getScore() + comment.getVoteType())));
                         }
 
-                        upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                comment.getScore() + comment.getVoteType()));
-                        topScoreTextView.setText(mActivity.getString(R.string.top_score,
-                                Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                comment.getScore() + comment.getVoteType())));
-                    }
-
-                    @Override
-                    public void onVoteThingFail(int position1) {
-                    }
-                }, comment.getFullName(), newVoteType, getAdapterPosition());
+                        @Override
+                        public void onVoteThingFail(int position1) {
+                        }
+                    }, comment.getFullName(), newVoteType, getAdapterPosition());
+                }
             });
 
             saveButton.setOnClickListener(view -> {
                 Comment comment = getCurrentComment(this);
-                if (comment.isSaved()) {
-                    comment.setSaved(false);
-                    SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
-                        @Override
-                        public void success() {
-                            comment.setSaved(false);
-                            saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
-                            Toast.makeText(mActivity, R.string.comment_unsaved_success, Toast.LENGTH_SHORT).show();
-                        }
+                if (comment != null) {
+                    if (comment.isSaved()) {
+                        comment.setSaved(false);
+                        SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
+                            @Override
+                            public void success() {
+                                comment.setSaved(false);
+                                saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                Toast.makeText(mActivity, R.string.comment_unsaved_success, Toast.LENGTH_SHORT).show();
+                            }
 
-                        @Override
-                        public void failed() {
-                            comment.setSaved(true);
-                            saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
-                            Toast.makeText(mActivity, R.string.comment_unsaved_failed, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-                } else {
-                    comment.setSaved(true);
-                    SaveThing.saveThing(mOauthRetrofit, mAccessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
-                        @Override
-                        public void success() {
-                            comment.setSaved(true);
-                            saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
-                            Toast.makeText(mActivity, R.string.comment_saved_success, Toast.LENGTH_SHORT).show();
-                        }
+                            @Override
+                            public void failed() {
+                                comment.setSaved(true);
+                                saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                Toast.makeText(mActivity, R.string.comment_unsaved_failed, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    } else {
+                        comment.setSaved(true);
+                        SaveThing.saveThing(mOauthRetrofit, mAccessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
+                            @Override
+                            public void success() {
+                                comment.setSaved(true);
+                                saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                Toast.makeText(mActivity, R.string.comment_saved_success, Toast.LENGTH_SHORT).show();
+                            }
 
-                        @Override
-                        public void failed() {
-                            comment.setSaved(false);
-                            saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
-                            Toast.makeText(mActivity, R.string.comment_saved_failed, Toast.LENGTH_SHORT).show();
-                        }
-                    });
+                            @Override
+                            public void failed() {
+                                comment.setSaved(false);
+                                saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                Toast.makeText(mActivity, R.string.comment_saved_failed, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
                 }
             });
 
             authorTextView.setOnClickListener(view -> {
-                Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
-                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, getCurrentComment(this).getAuthor());
-                mActivity.startActivity(intent);
+                Comment comment = getCurrentComment(this);
+                if (comment != null) {
+                    Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
+                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, comment.getAuthor());
+                    mActivity.startActivity(intent);
+                }
             });
 
             expandButton.setOnClickListener(view -> {
@@ -3506,22 +3534,24 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     int commentPosition = mIsSingleCommentThreadMode ? getAdapterPosition() - 2 : getAdapterPosition() - 1;
                     if (commentPosition >= 0 && commentPosition < mVisibleComments.size()) {
                         Comment comment = getCurrentComment(this);
-                        if (mVisibleComments.get(commentPosition).isExpanded()) {
-                            collapseChildren(commentPosition);
-                            expandButton.setImageResource(R.drawable.ic_expand_more_grey_24dp);
-                        } else {
-                            comment.setExpanded(true);
-                            ArrayList<Comment> newList = new ArrayList<>();
-                            expandChildren(mVisibleComments.get(commentPosition).getChildren(), newList, 0);
-                            mVisibleComments.get(commentPosition).setExpanded(true);
-                            mVisibleComments.addAll(commentPosition + 1, newList);
-
-                            if (mIsSingleCommentThreadMode) {
-                                notifyItemRangeInserted(commentPosition + 3, newList.size());
+                        if (comment != null) {
+                            if (mVisibleComments.get(commentPosition).isExpanded()) {
+                                collapseChildren(commentPosition);
+                                expandButton.setImageResource(R.drawable.ic_expand_more_grey_24dp);
                             } else {
-                                notifyItemRangeInserted(commentPosition + 2, newList.size());
+                                comment.setExpanded(true);
+                                ArrayList<Comment> newList = new ArrayList<>();
+                                expandChildren(mVisibleComments.get(commentPosition).getChildren(), newList, 0);
+                                mVisibleComments.get(commentPosition).setExpanded(true);
+                                mVisibleComments.addAll(commentPosition + 1, newList);
+
+                                if (mIsSingleCommentThreadMode) {
+                                    notifyItemRangeInserted(commentPosition + 3, newList.size());
+                                } else {
+                                    notifyItemRangeInserted(commentPosition + 2, newList.size());
+                                }
+                                expandButton.setImageResource(R.drawable.ic_expand_less_grey_24dp);
                             }
-                            expandButton.setImageResource(R.drawable.ic_expand_less_grey_24dp);
                         }
                     }
                 } else if (mFullyCollapseComment) {
@@ -3585,15 +3615,24 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         }
     }
 
+    @Nullable
     private Comment getCurrentComment(RecyclerView.ViewHolder holder) {
-        Comment comment;
+        return getCurrentComment(holder.getAdapterPosition());
+    }
+
+    @Nullable
+    private Comment getCurrentComment(int position) {
         if (mIsSingleCommentThreadMode) {
-            comment = mVisibleComments.get(holder.getAdapterPosition() - 2);
+            if (position - 2 >= 0 && position - 2 < mVisibleComments.size()) {
+                return mVisibleComments.get(position - 2);
+            }
         } else {
-            comment = mVisibleComments.get(holder.getAdapterPosition() - 1);
+            if (position - 1 >= 0 && position - 1 < mVisibleComments.size()) {
+                return mVisibleComments.get(position - 1);
+            }
         }
 
-        return comment;
+        return null;
     }
 
     class CommentFullyCollapsedViewHolder extends RecyclerView.ViewHolder {
@@ -3626,18 +3665,20 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 int commentPosition = mIsSingleCommentThreadMode ? getAdapterPosition() - 2 : getAdapterPosition() - 1;
                 if (commentPosition >= 0 && commentPosition < mVisibleComments.size()) {
                     Comment comment = getCurrentComment(this);
-                    comment.setExpanded(true);
-                    ArrayList<Comment> newList = new ArrayList<>();
-                    expandChildren(mVisibleComments.get(commentPosition).getChildren(), newList, 0);
-                    mVisibleComments.get(commentPosition).setExpanded(true);
-                    mVisibleComments.addAll(commentPosition + 1, newList);
+                    if (comment != null) {
+                        comment.setExpanded(true);
+                        ArrayList<Comment> newList = new ArrayList<>();
+                        expandChildren(mVisibleComments.get(commentPosition).getChildren(), newList, 0);
+                        mVisibleComments.get(commentPosition).setExpanded(true);
+                        mVisibleComments.addAll(commentPosition + 1, newList);
 
-                    if (mIsSingleCommentThreadMode) {
-                        notifyItemChanged(commentPosition + 2);
-                        notifyItemRangeInserted(commentPosition + 3, newList.size());
-                    } else {
-                        notifyItemChanged(commentPosition + 1);
-                        notifyItemRangeInserted(commentPosition + 2, newList.size());
+                        if (mIsSingleCommentThreadMode) {
+                            notifyItemChanged(commentPosition + 2);
+                            notifyItemRangeInserted(commentPosition + 3, newList.size());
+                        } else {
+                            notifyItemChanged(commentPosition + 1);
+                            notifyItemRangeInserted(commentPosition + 2, newList.size());
+                        }
                     }
                 }
             });

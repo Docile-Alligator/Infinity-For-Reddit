@@ -349,8 +349,16 @@ public class Post implements Parcelable {
         return awards;
     }
 
+    public void addAwards(String newAwardsHTML) {
+        awards += newAwardsHTML;
+    }
+
     public int getnAwards() {
         return nAwards;
+    }
+
+    public void addAwards(int newNAwards) {
+        nAwards += newNAwards;
     }
 
     public int getScore() {
