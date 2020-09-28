@@ -422,6 +422,7 @@ public class ParsePost {
                 if (!gallery.isEmpty()) {
                     post.setPostType(Post.GALLERY_TYPE);
                     post.setGallery(gallery);
+                    post.setPreviews(previews);
                 }
             } else if (post.getPostType() == Post.LINK_TYPE) {
                 Uri uri = Uri.parse(url);
