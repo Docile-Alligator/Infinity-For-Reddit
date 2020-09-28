@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.Settings;
+package ml.docilealligator.infinityforreddit.Adapter;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,12 +16,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Activity.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.Settings.Acknowledgement;
 
-class AcknowledgementRecyclerViewAdapter extends RecyclerView.Adapter<AcknowledgementRecyclerViewAdapter.AcknowledgementViewHolder> {
+public class AcknowledgementRecyclerViewAdapter extends RecyclerView.Adapter<AcknowledgementRecyclerViewAdapter.AcknowledgementViewHolder> {
     private ArrayList<Acknowledgement> acknowledgements;
     private Context context;
 
-    AcknowledgementRecyclerViewAdapter(Context context, ArrayList<Acknowledgement> acknowledgements) {
+    public AcknowledgementRecyclerViewAdapter(Context context, ArrayList<Acknowledgement> acknowledgements) {
         this.context = context;
         this.acknowledgements = acknowledgements;
     }

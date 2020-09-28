@@ -11,6 +11,11 @@
         app:fragment="ml.docilealligator.infinityforreddit.Settings.CreditsPreferenceFragment" />
 
     <Preference
+        android:key="translation"
+        app:title="@string/settings_translation"
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.TranslationFragment"/>
+
+    <Preference
         android:key="open_source"
         app:title="@string/settings_open_source_title"
         app:summary="@string/settings_open_source_summary" />

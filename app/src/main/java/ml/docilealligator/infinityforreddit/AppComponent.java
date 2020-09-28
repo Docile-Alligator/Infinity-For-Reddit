@@ -71,6 +71,7 @@ import ml.docilealligator.infinityforreddit.Settings.NotificationPreferenceFragm
 import ml.docilealligator.infinityforreddit.Settings.NsfwAndBlurringFragment;
 import ml.docilealligator.infinityforreddit.Settings.SecurityPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.ThemePreferenceFragment;
+import ml.docilealligator.infinityforreddit.Settings.TranslationFragment;
 import ml.docilealligator.infinityforreddit.Settings.VideoPreferenceFragment;
 
 @Singleton
@@ -215,4 +216,6 @@ public interface AppComponent {
     void inject(CustomizeBottomAppBarFragment customizeBottomAppBarFragment);
 
     void inject(GiveAwardActivity giveAwardActivity);
+
+    void inject(TranslationFragment translationFragment);
 }

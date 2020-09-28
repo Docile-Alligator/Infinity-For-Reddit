@@ -2,7 +2,7 @@ package ml.docilealligator.infinityforreddit.Settings;
 
 import android.net.Uri;
 
-class Acknowledgement {
+public class Acknowledgement {
     private String name;
     private String introduction;
     private Uri link;

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.Adapter.AcknowledgementRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.R;
 
 /**
