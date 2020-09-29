@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?attr/selectableItemBackground">
+
+    <TextView
+        android:id="@+id/recent_search_query_text_view_item_recent_search_query"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="?attr/font_family"
+        android:textSize="?attr/font_default"
+        android:drawablePadding="16dp" />
+
+</LinearLayout>

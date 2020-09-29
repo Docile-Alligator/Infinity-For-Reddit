@@ -48,38 +48,64 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <RelativeLayout
-            android:id="@+id/subreddit_name_relative_layout_search_activity"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="16dp">
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/subreddit_name_relative_layout_search_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:padding="16dp">
+
+                <TextView
+                    android:id="@+id/search_in_text_view_search_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/search_in"
+                    android:textColor="?attr/colorAccent"
+                    android:textSize="?attr/font_default"
+                    android:fontFamily="?attr/font_family" />
+
+                <TextView
+                    android:id="@+id/subreddit_name_text_view_search_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_toEndOf="@id/search_in_text_view_search_activity"
+                    android:text="@string/all_subreddits"
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="?attr/font_default"
+                    android:fontFamily="?attr/font_family" />
+
+            </RelativeLayout>
+
+            <View
+                android:id="@+id/divider_search_activity"
+                android:layout_width="match_parent"
+                android:layout_height="1dp" />
 
             <TextView
-                android:id="@+id/search_in_text_view_search_activity"
+                android:id="@+id/recent_summary_text_view_search_activity"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/search_in"
-                android:textColor="?attr/colorAccent"
-                android:textSize="?attr/font_default"
-                android:fontFamily="?attr/font_family" />
+                android:padding="16dp"
+                android:text="@string/recent_searches"
+                android:fontFamily="?attr/font_family"
+                android:visibility="gone" />
 
-            <TextView
-                android:id="@+id/subreddit_name_text_view_search_activity"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="16dp"
-                android:layout_toEndOf="@id/search_in_text_view_search_activity"
-                android:text="@string/all_subreddits"
-                android:textColor="?attr/primaryTextColor"
-                android:textSize="?attr/font_default"
-                android:fontFamily="?attr/font_family" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view_search_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 

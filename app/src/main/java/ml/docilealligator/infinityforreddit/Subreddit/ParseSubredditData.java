@@ -8,7 +8,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import ml.docilealligator.infinityforreddit.Subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 
@@ -27,6 +26,8 @@ class ParseSubredditData {
         String description = subredditDataJsonObject.getString(JSONUtils.PUBLIC_DESCRIPTION_KEY).trim();
         String sidebarDescription = Utils.modifyMarkdown(subredditDataJsonObject.getString(JSONUtils.DESCRIPTION_KEY).trim());
         long createdUTC = subredditDataJsonObject.getLong(JSONUtils.CREATED_UTC_KEY) * 1000;
+        String suggestedCommentSort = subredditDataJsonObject.getString(JSONUtils.SUGGESTED_COMMENT_SORT_KEY);
+        boolean isNSFW = subredditDataJsonObject.getBoolean(JSONUtils.OVER18_KEY);
 
         String bannerImageUrl;
         if (subredditDataJsonObject.isNull(JSONUtils.BANNER_BACKGROUND_IMAGE_KEY)) {
@@ -54,7 +55,7 @@ class ParseSubredditData {
         }
 
         return new SubredditData(id, subredditFullName, iconUrl, bannerImageUrl, description,
-                sidebarDescription, nSubscribers, createdUTC);
+                sidebarDescription, nSubscribers, createdUTC, suggestedCommentSort, isNSFW);
     }
 
     interface ParseSubredditDataListener {

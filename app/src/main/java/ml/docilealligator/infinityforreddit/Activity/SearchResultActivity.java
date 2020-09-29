@@ -51,6 +51,7 @@ import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.Post.PostDataSource;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RecentSearchQuery.InsertRecentSearchQuery;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
@@ -65,6 +66,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";
+    private static final String INSERT_SEARCH_QUERY_SUCCESS_STATE = "ISQSS";
     @BindView(R.id.coordinator_layout_search_result_activity)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_search_result_activity)
@@ -93,6 +95,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     private String mAccountName;
     private String mQuery;
     private String mSubredditName;
+    private boolean mInsertSearchQuerySuccess;
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment;
@@ -142,6 +145,17 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setToolbarGoToTop(toolbar);
 
+        // Get the intent, verify the action and get the query
+        Intent intent = getIntent();
+        String query = intent.getStringExtra(EXTRA_QUERY);
+
+        mSubredditName = intent.getStringExtra(EXTRA_SUBREDDIT_NAME);
+
+        if (query != null) {
+            mQuery = query;
+            setTitle(query);
+        }
+
         fragmentManager = getSupportFragmentManager();
 
         if (savedInstanceState == null) {
@@ -150,6 +164,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
+            mInsertSearchQuerySuccess = savedInstanceState.getBoolean(INSERT_SEARCH_QUERY_SUCCESS_STATE);
             if (!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndInitializeViewPager();
             } else {
@@ -166,17 +181,6 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         searchUserAndSubredditSortTypeBottomSheetFragment = new SearchUserAndSubredditSortTypeBottomSheetFragment();
 
         postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
-
-        // Get the intent, verify the action and get the query
-        Intent intent = getIntent();
-        String query = intent.getStringExtra(EXTRA_QUERY);
-
-        mSubredditName = intent.getStringExtra(EXTRA_SUBREDDIT_NAME);
-
-        if (query != null) {
-            mQuery = query;
-            setTitle(query);
-        }
     }
 
     @Override
@@ -245,6 +249,10 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                     break;
             }
         }).attach();
+        if (mAccountName != null && !mInsertSearchQuerySuccess && mQuery != null) {
+            InsertRecentSearchQuery.insertRecentSearchQueryListener(mRedditDataRoomDatabase, mAccountName,
+                    mQuery, () -> mInsertSearchQuerySuccess = true);
+        }
     }
 
     @Override
@@ -300,6 +308,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
         outState.putString(ACCOUNT_NAME_STATE, mAccountName);
+        outState.putBoolean(INSERT_SEARCH_QUERY_SUCCESS_STATE, mInsertSearchQuerySuccess);
     }
 
     @Override

@@ -912,4 +912,6 @@
     <string name="give_award_success">Award given</string>
     <string name="give_award_failed">Failed</string>
 
+    <string name="recent_searches">Recent searches</string>
+
 </resources>

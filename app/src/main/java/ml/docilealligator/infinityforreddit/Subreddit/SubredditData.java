@@ -25,9 +25,14 @@ public class SubredditData {
     private int nSubscribers;
     @ColumnInfo(name = "created_utc")
     private long createdUTC;
+    @ColumnInfo(name = "suggested_comment_sort")
+    private String suggestedCommentSort;
+    @ColumnInfo(name = "over18")
+    private boolean isNSFW;
 
     public SubredditData(@NonNull String id, String name, String iconUrl, String bannerUrl,
-                         String description, String sidebarDescription, int nSubscribers, long createdUTC) {
+                         String description, String sidebarDescription, int nSubscribers, long createdUTC,
+                         String suggestedCommentSort, boolean isNSFW) {
         this.id = id;
         this.name = name;
         this.iconUrl = iconUrl;
@@ -36,6 +41,8 @@ public class SubredditData {
         this.sidebarDescription = sidebarDescription;
         this.nSubscribers = nSubscribers;
         this.createdUTC = createdUTC;
+        this.suggestedCommentSort = suggestedCommentSort;
+        this.isNSFW = isNSFW;
     }
 
     @NonNull
@@ -69,5 +76,13 @@ public class SubredditData {
 
     public long getCreatedUTC() {
         return createdUTC;
+    }
+
+    public String getSuggestedCommentSort() {
+        return suggestedCommentSort;
+    }
+
+    public boolean isNSFW() {
+        return isNSFW;
     }
 }

@@ -17,6 +17,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.ferfalk.simplesearchview.SimpleSearchView;
 import com.google.android.material.appbar.AppBarLayout;
@@ -30,10 +33,14 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.Adapter.SearchActivityRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.AsyncTask.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RecentSearchQuery.RecentSearchQueryViewModel;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
 public class SearchActivity extends BaseActivity {
@@ -45,6 +52,8 @@ public class SearchActivity extends BaseActivity {
     static final String EXTRA_RETURN_SUBREDDIT_NAME = "ERSN";
     static final String EXTRA_RETURN_SUBREDDIT_ICON_URL = "ERSIURL";
 
+    private static final String NULL_ACCOUNT_NAME_STATE = "NANS";
+    private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String SUBREDDIT_NAME_STATE = "SNS";
     private static final String SUBREDDIT_IS_USER_STATE = "SIUS";
 
@@ -65,14 +74,27 @@ public class SearchActivity extends BaseActivity {
     TextView searchInTextView;
     @BindView(R.id.subreddit_name_text_view_search_activity)
     TextView subredditNameTextView;
+    @BindView(R.id.divider_search_activity)
+    View divider;
+    @BindView(R.id.recent_summary_text_view_search_activity)
+    TextView recentSummaryTextView;
+    @BindView(R.id.recycler_view_search_activity)
+    RecyclerView recyclerView;
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    private boolean mNullAccountName = false;
+    private String mAccountName;
     private String query;
     private String subredditName;
     private boolean subredditIsUser;
+    private boolean searchOnlySubreddits;
+    private SearchActivityRecyclerViewAdapter adapter;
+    RecentSearchQueryViewModel mRecentSearchQueryViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,7 +118,7 @@ public class SearchActivity extends BaseActivity {
 
         setSupportActionBar(toolbar);
 
-        boolean searchOnlySubreddits = getIntent().getBooleanExtra(EXTRA_SEARCH_ONLY_SUBREDDITS, false);
+        searchOnlySubreddits = getIntent().getBooleanExtra(EXTRA_SEARCH_ONLY_SUBREDDITS, false);
 
         simpleSearchView.setOnSearchViewListener(new SimpleSearchView.SearchViewListener() {
             @Override
@@ -123,23 +145,7 @@ public class SearchActivity extends BaseActivity {
         simpleSearchView.setOnQueryTextListener(new SimpleSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                if (searchOnlySubreddits) {
-                    Intent intent = new Intent(SearchActivity.this, SearchSubredditsResultActivity.class);
-                    intent.putExtra(SearchSubredditsResultActivity.EXTRA_QUERY, query);
-                    startActivityForResult(intent, SUBREDDIT_SEARCH_REQUEST_CODE);
-                } else {
-                    Intent intent = new Intent(SearchActivity.this, SearchResultActivity.class);
-                    intent.putExtra(SearchResultActivity.EXTRA_QUERY, query);
-                    if (subredditName != null) {
-                        if (subredditIsUser) {
-                            intent.putExtra(SearchResultActivity.EXTRA_SUBREDDIT_NAME, "u_" + subredditName);
-                        } else {
-                            intent.putExtra(SearchResultActivity.EXTRA_SUBREDDIT_NAME, subredditName);
-                        }
-                    }
-                    startActivity(intent);
-                    finish();
-                }
+                search(query);
                 return true;
             }
 
@@ -155,6 +161,8 @@ public class SearchActivity extends BaseActivity {
         });
 
         if (savedInstanceState != null) {
+            mNullAccountName = savedInstanceState.getBoolean(NULL_ACCOUNT_NAME_STATE);
+            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
             subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
             subredditIsUser = savedInstanceState.getBoolean(SUBREDDIT_IS_USER_STATE);
 
@@ -163,8 +171,15 @@ public class SearchActivity extends BaseActivity {
             } else {
                 subredditNameTextView.setText(subredditName);
             }
+
+            if (!mNullAccountName && mAccountName == null) {
+                getCurrentAccountAndInitializeViewPager();
+            } else {
+                bindView();
+            }
         } else {
             query = getIntent().getStringExtra(EXTRA_QUERY);
+            getCurrentAccountAndInitializeViewPager();
         }
 
         if (searchOnlySubreddits) {
@@ -182,6 +197,60 @@ public class SearchActivity extends BaseActivity {
             subredditName = intent.getStringExtra(EXTRA_SUBREDDIT_NAME);
             subredditNameTextView.setText(subredditName);
             subredditIsUser = intent.getBooleanExtra(EXTRA_SUBREDDIT_IS_USER, false);
+        }
+    }
+
+    private void getCurrentAccountAndInitializeViewPager() {
+        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if (account == null) {
+                mNullAccountName = true;
+            } else {
+                mAccountName = account.getUsername();
+            }
+            bindView();
+        }).execute();
+    }
+
+    private void bindView() {
+        if (mAccountName != null) {
+            adapter = new SearchActivityRecyclerViewAdapter(this, mCustomThemeWrapper, this::search);
+            recyclerView.setNestedScrollingEnabled(false);
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(adapter);
+            mRecentSearchQueryViewModel = new ViewModelProvider(this,
+                    new RecentSearchQueryViewModel.Factory(mRedditDataRoomDatabase, mAccountName))
+                    .get(RecentSearchQueryViewModel.class);
+
+            mRecentSearchQueryViewModel.getAllRecentSearchQueries().observe(this, recentSearchQueries -> {
+                if (recentSearchQueries != null && !recentSearchQueries.isEmpty()) {
+                    divider.setVisibility(View.VISIBLE);
+                    recentSummaryTextView.setVisibility(View.VISIBLE);
+                } else {
+                    divider.setVisibility(View.GONE);
+                    recentSummaryTextView.setVisibility(View.GONE);
+                }
+                adapter.setRecentSearchQueries(recentSearchQueries);
+            });
+        }
+    }
+
+    private void search(String query) {
+        if (searchOnlySubreddits) {
+            Intent intent = new Intent(SearchActivity.this, SearchSubredditsResultActivity.class);
+            intent.putExtra(SearchSubredditsResultActivity.EXTRA_QUERY, query);
+            startActivityForResult(intent, SUBREDDIT_SEARCH_REQUEST_CODE);
+        } else {
+            Intent intent = new Intent(SearchActivity.this, SearchResultActivity.class);
+            intent.putExtra(SearchResultActivity.EXTRA_QUERY, query);
+            if (subredditName != null) {
+                if (subredditIsUser) {
+                    intent.putExtra(SearchResultActivity.EXTRA_SUBREDDIT_NAME, "u_" + subredditName);
+                } else {
+                    intent.putExtra(SearchResultActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                }
+            }
+            startActivity(intent);
+            finish();
         }
     }
 
@@ -205,8 +274,11 @@ public class SearchActivity extends BaseActivity {
         simpleSearchView.setTextColor(toolbarPrimaryTextAndIconColorColor);
         simpleSearchView.setBackIconColor(toolbarPrimaryTextAndIconColorColor);
         simpleSearchView.setHintTextColor(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
-        searchInTextView.setTextColor(mCustomThemeWrapper.getColorAccent());
+        int colorAccent = mCustomThemeWrapper.getColorAccent();
+        searchInTextView.setTextColor(colorAccent);
         subredditNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+        divider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
+        recentSummaryTextView.setTextColor(colorAccent);
     }
 
     @Override
@@ -288,6 +360,8 @@ public class SearchActivity extends BaseActivity {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putBoolean(NULL_ACCOUNT_NAME_STATE, mNullAccountName);
+        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
         outState.putString(SUBREDDIT_NAME_STATE, subredditName);
         outState.putBoolean(SUBREDDIT_IS_USER_STATE, subredditIsUser);
     }

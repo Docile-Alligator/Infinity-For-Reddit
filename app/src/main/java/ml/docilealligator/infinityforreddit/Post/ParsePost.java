@@ -118,7 +118,7 @@ public class ParsePost {
 
             JSONArray thumbnailPreviews = images.getJSONArray(JSONUtils.RESOLUTIONS_KEY);
             for (int i = 0; i < thumbnailPreviews.length(); i++) {
-                JSONObject thumbnailPreview = images.getJSONArray(JSONUtils.RESOLUTIONS_KEY).getJSONObject(2);
+                JSONObject thumbnailPreview = thumbnailPreviews.getJSONObject(i);
                 String thumbnailPreviewUrl = thumbnailPreview.getString(JSONUtils.URL_KEY);
                 int thumbnailPreviewWidth = thumbnailPreview.getInt(JSONUtils.WIDTH_KEY);
                 int thumbnailPreviewHeight = thumbnailPreview.getInt(JSONUtils.HEIGHT_KEY);

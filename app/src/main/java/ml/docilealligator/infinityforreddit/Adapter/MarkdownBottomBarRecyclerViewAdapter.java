@@ -65,7 +65,7 @@ public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<R
                     ((MarkdownBottomBarItemViewHolder) holder).imageView.setImageResource(R.drawable.ic_strikethrough_black_24dp);
                     break;
                 case HEADER:
-                    ((MarkdownBottomBarItemViewHolder) holder).imageView.setImageResource(R.drawable.ic_header_hashtag_black_24dp);
+                    ((MarkdownBottomBarItemViewHolder) holder).imageView.setImageResource(R.drawable.ic_title_24dp);
                     break;
                 case ORDERED_LIST:
                     ((MarkdownBottomBarItemViewHolder) holder).imageView.setImageResource(R.drawable.ic_ordered_list_black_24dp);

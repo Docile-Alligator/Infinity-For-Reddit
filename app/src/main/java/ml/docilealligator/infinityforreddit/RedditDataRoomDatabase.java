@@ -16,6 +16,8 @@ import ml.docilealligator.infinityforreddit.CustomTheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeDao;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.MultiReddit.MultiRedditDao;
+import ml.docilealligator.infinityforreddit.RecentSearchQuery.RecentSearchQuery;
+import ml.docilealligator.infinityforreddit.RecentSearchQuery.RecentSearchQueryDao;
 import ml.docilealligator.infinityforreddit.Subreddit.SubredditDao;
 import ml.docilealligator.infinityforreddit.Subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.SubscribedSubreddit.SubscribedSubredditDao;
@@ -26,7 +28,7 @@ import ml.docilealligator.infinityforreddit.User.UserDao;
 import ml.docilealligator.infinityforreddit.User.UserData;
 
 @Database(entities = {Account.class, SubredditData.class, SubscribedSubredditData.class, UserData.class,
-        SubscribedUserData.class, MultiReddit.class, CustomTheme.class}, version = 9)
+        SubscribedUserData.class, MultiReddit.class, CustomTheme.class, RecentSearchQuery.class}, version = 10)
 public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static RedditDataRoomDatabase INSTANCE;
 
@@ -37,7 +39,8 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                             RedditDataRoomDatabase.class, "reddit_data")
                             .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
-                                    MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9)
+                                    MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9,
+                                    MIGRATION_9_10)
                             .build();
                 }
             }
@@ -58,6 +61,8 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
     public abstract MultiRedditDao multiRedditDao();
 
     public abstract CustomThemeDao customThemeDao();
+
+    public abstract RecentSearchQueryDao recentSearchQueryDao();
 
     private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
@@ -207,6 +212,21 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
             database.execSQL("ALTER TABLE custom_themes"
                     + " ADD COLUMN awarded_comment_background_color INTEGER DEFAULT " + Color.parseColor("#FFF162") + " NOT NULL");
 
+        }
+    };
+
+    private static final Migration MIGRATION_9_10 = new Migration(9, 10) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE recent_search_queries" +
+                    "(username TEXT NOT NULL, search_query TEXT NOT NULL, PRIMARY KEY(username, search_query), " +
+                    "FOREIGN KEY(username) REFERENCES accounts(username) ON DELETE CASCADE)");
+
+            database.execSQL("ALTER TABLE subreddits"
+                    + " ADD COLUMN suggested_comment_sort TEXT");
+
+            database.execSQL("ALTER TABLE subreddits"
+                    + " ADD COLUMN over18 INTEGER DEFAULT 0 NOT NULL");
         }
     };
 }

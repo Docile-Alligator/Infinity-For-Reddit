@@ -100,9 +100,12 @@ class ParseSubscribedThing {
                         String sidebarDescription = data.getString(JSONUtils.DESCRIPTION_KEY);
                         int nSubscribers = data.getInt(JSONUtils.SUBSCRIBERS_KEY);
                         long createdUTC = data.getLong(JSONUtils.CREATED_UTC_KEY);
+                        String suggestedCommentSort = data.getString(JSONUtils.SUGGESTED_COMMENT_SORT_KEY);
+                        boolean isNSFW = data.getBoolean(JSONUtils.OVER18_KEY);
                         newSubscribedSubredditData.add(new SubscribedSubredditData(id, name, iconUrl, accountName, isFavorite));
                         newSubredditData.add(new SubredditData(id, subredditFullName, iconUrl,
-                                bannerImageUrl, description, sidebarDescription, nSubscribers, createdUTC));
+                                bannerImageUrl, description, sidebarDescription, nSubscribers, createdUTC,
+                                suggestedCommentSort, isNSFW));
                     }
                 }
                 lastItem = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
