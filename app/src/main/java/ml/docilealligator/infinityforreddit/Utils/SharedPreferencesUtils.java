@@ -134,6 +134,7 @@ public class SharedPreferencesUtils {
     public static final String DATA_SAVING_MODE_OFF = "0";
     public static final String DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA = "1";
     public static final String DATA_SAVING_MODE_ALWAYS = "2";
+    public static final String NATIONAL_FLAGS = "national_flags";
 
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";
     public static final String MAIN_PAGE_TAB_COUNT = "_main_page_tab_count";

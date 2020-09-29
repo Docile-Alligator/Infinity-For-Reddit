@@ -41,4 +41,9 @@
         android:key="material_icons"
         app:title="@string/settings_credits_material_icons_title"/>
 
+    <Preference
+        app:key="national_flags"
+        app:title="@string/settings_credits_national_flags"
+        android:summary="@string/settings_credits_national_flags_summary" />
+
 </PreferenceScreen>

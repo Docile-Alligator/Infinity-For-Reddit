@@ -12,7 +12,8 @@
 
     <Preference
         android:key="translation"
-        app:title="@string/settings_translation"
+        app:title="@string/settings_translation_title"
+        app:summary="@string/settings_translation_summary"
         app:fragment="ml.docilealligator.infinityforreddit.Settings.TranslationFragment"/>
 
     <Preference

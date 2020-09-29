@@ -490,7 +490,10 @@
     <string name="settings_bottom_app_bar_fab">Floating Action Button</string>
     <string name="settings_data_saving_mode">Data Saving Mode</string>
     <string name="settings_data_saving_mode_info_summary">In data saving mode, preview images are in lower resolution.</string>
-    <string name="settings_translation">Translation</string>
+    <string name="settings_translation_title">Translation</string>
+    <string name="settings_translation_summary">Translate this app on POEditor. Thanks to all contributors.</string>
+    <string name="settings_credits_national_flags">National Flags</string>
+    <string name="settings_credits_national_flags_summary">Icon made by Freepik from www.flaticon.com</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -908,7 +911,5 @@
     <string name="give_award_error_message">Code: %1$d/\n Message: %2$s</string>
     <string name="give_award_success">Award given</string>
     <string name="give_award_failed">Failed</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

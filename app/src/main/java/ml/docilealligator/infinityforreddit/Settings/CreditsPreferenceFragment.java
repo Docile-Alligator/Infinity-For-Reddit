@@ -34,6 +34,7 @@ public class CreditsPreferenceFragment extends PreferenceFragmentCompat {
         Preference thumbtackIconPreference = findPreference(SharedPreferencesUtils.THUMBTACK_ICON_KEY);
         Preference bestRocketIconPreference = findPreference(SharedPreferencesUtils.BEST_ROCKET_ICON_KEY);
         Preference materialIconsPreference = findPreference(SharedPreferencesUtils.MATERIAL_ICONS_KEY);
+        Preference nationalFlagsPreference = findPreference(SharedPreferencesUtils.NATIONAL_FLAGS);
 
         if (iconForegroundPreference != null) {
             iconForegroundPreference.setOnPreferenceClickListener(preference -> {
@@ -102,6 +103,15 @@ public class CreditsPreferenceFragment extends PreferenceFragmentCompat {
             materialIconsPreference.setOnPreferenceClickListener(preference -> {
                 Intent intent = new Intent(activity, LinkResolverActivity.class);
                 intent.setData(Uri.parse("https://material.io/resources/icons/"));
+                startActivity(intent);
+                return true;
+            });
+        }
+
+        if (nationalFlagsPreference != null) {
+            nationalFlagsPreference.setOnPreferenceClickListener(preference -> {
+                Intent intent = new Intent(activity, LinkResolverActivity.class);
+                intent.setData(Uri.parse("https://www.flaticon.com/packs/countrys-flags"));
                 startActivity(intent);
                 return true;
             });
