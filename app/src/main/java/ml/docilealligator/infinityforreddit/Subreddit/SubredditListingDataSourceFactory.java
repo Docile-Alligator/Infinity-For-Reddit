@@ -12,22 +12,24 @@ public class SubredditListingDataSourceFactory extends DataSource.Factory {
     private String query;
     private SortType sortType;
     private String accessToken;
+    private boolean nsfw;
 
     private SubredditListingDataSource subredditListingDataSource;
     private MutableLiveData<SubredditListingDataSource> subredditListingDataSourceMutableLiveData;
 
-    SubredditListingDataSourceFactory(Retrofit retrofit, String query, SortType sortType, String accessToken) {
+    SubredditListingDataSourceFactory(Retrofit retrofit, String query, SortType sortType, String accessToken, boolean nsfw) {
         this.retrofit = retrofit;
         this.query = query;
         this.sortType = sortType;
         this.accessToken = accessToken;
+        this.nsfw = nsfw;
         subredditListingDataSourceMutableLiveData = new MutableLiveData<>();
     }
 
     @NonNull
     @Override
     public DataSource create() {
-        subredditListingDataSource = new SubredditListingDataSource(retrofit, query, sortType, accessToken);
+        subredditListingDataSource = new SubredditListingDataSource(retrofit, query, sortType, accessToken, nsfw);
         subredditListingDataSourceMutableLiveData.postValue(subredditListingDataSource);
         return subredditListingDataSource;
     }

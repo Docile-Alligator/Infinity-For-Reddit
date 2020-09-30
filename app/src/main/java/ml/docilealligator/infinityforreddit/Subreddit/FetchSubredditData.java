@@ -47,11 +47,11 @@ public class FetchSubredditData {
     }
 
     static void fetchSubredditListingData(Retrofit retrofit, String query, String after, String sortType, String accessToken,
-                                          final FetchSubredditListingDataListener fetchSubredditListingDataListener) {
+                                          boolean nsfw, final FetchSubredditListingDataListener fetchSubredditListingDataListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
         Map<String, String> headers = accessToken != null ?  APIUtils.getOAuthHeader(accessToken) : ImmutableMap.of();
-        Call<String> subredditDataCall = api.searchSubreddits(query, after, sortType, headers);
+        Call<String> subredditDataCall = api.searchSubreddits(query, after, sortType, nsfw ? 1 : 0, headers);
         subredditDataCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

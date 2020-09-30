@@ -84,6 +84,9 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
     @Named("sort_type")
     SharedPreferences mSortTypeSharedPreferences;
     @Inject
+    @Named("nsfw_and_spoiler")
+    SharedPreferences mNsfwAndSpoilerSharedPreferences;
+    @Inject
     CustomThemeWrapper customThemeWrapper;
     private LinearLayoutManager mLinearLayoutManager;
     private SubredditListingRecyclerViewAdapter mAdapter;
@@ -129,6 +132,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
         String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SEARCH_SUBREDDIT, SortType.Type.RELEVANCE.value);
         sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
+        boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
 
         mAdapter = new SubredditListingRecyclerViewAdapter(mActivity, mOauthRetrofit, mRetrofit,
                 customThemeWrapper, accessToken, accountName, mRedditDataRoomDatabase,
@@ -152,11 +156,12 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
         mSubredditListingRecyclerView.setAdapter(mAdapter);
 
-        SubredditListingViewModel.Factory factory = new SubredditListingViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, query, sortType, accessToken);
+        SubredditListingViewModel.Factory factory = new SubredditListingViewModel.Factory(
+                accessToken == null ? mRetrofit : mOauthRetrofit, query, sortType, accessToken, nsfw);
         mSubredditListingViewModel = new ViewModelProvider(this, factory).get(SubredditListingViewModel.class);
-        mSubredditListingViewModel.getSubreddits().observe(this, subredditData -> mAdapter.submitList(subredditData));
+        mSubredditListingViewModel.getSubreddits().observe(getViewLifecycleOwner(), subredditData -> mAdapter.submitList(subredditData));
 
-        mSubredditListingViewModel.hasSubredditLiveData().observe(this, hasSubreddit -> {
+        mSubredditListingViewModel.hasSubredditLiveData().observe(getViewLifecycleOwner(), hasSubreddit -> {
             mSwipeRefreshLayout.setRefreshing(false);
             if (hasSubreddit) {
                 mFetchSubredditListingInfoLinearLayout.setVisibility(View.GONE);
@@ -168,7 +173,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
             }
         });
 
-        mSubredditListingViewModel.getInitialLoadingState().observe(this, networkState -> {
+        mSubredditListingViewModel.getInitialLoadingState().observe(getViewLifecycleOwner(), networkState -> {
             if (networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
                 mSwipeRefreshLayout.setRefreshing(false);
             } else if (networkState.getStatus().equals(NetworkState.Status.FAILED)) {
@@ -180,7 +185,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
             }
         });
 
-        mSubredditListingViewModel.getPaginationNetworkState().observe(this, networkState -> {
+        mSubredditListingViewModel.getPaginationNetworkState().observe(getViewLifecycleOwner(), networkState -> {
             mAdapter.setNetworkState(networkState);
         });
 
