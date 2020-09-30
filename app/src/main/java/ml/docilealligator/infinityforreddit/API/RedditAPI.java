@@ -128,9 +128,9 @@ public interface RedditAPI {
                                   @Query("sort") String sort, @Query("include_over_18") int nsfw,
                                   @HeaderMap Map<String, String> headers);
 
-    @GET("search.json?include_over_18=1&raw_json=1&type=user")
+    @GET("search.json?raw_json=1&type=user")
     Call<String> searchUsers(@Query("q") String profileName, @Query("after") String after,
-                             @Query("sort") String sort);
+                             @Query("sort") String sort, @Query("include_over_18") int nsfw);
 
     @GET("search.json?include_over_18=1&raw_json=1&type=link")
     Call<String> searchPostsOauth(@Query("q") String query, @Query("after") String after,

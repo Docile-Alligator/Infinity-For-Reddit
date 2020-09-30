@@ -80,6 +80,9 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
     @Named("sort_type")
     SharedPreferences mSortTypeSharedPreferences;
     @Inject
+    @Named("nsfw_and_spoiler")
+    SharedPreferences mNsfwAndSpoilerSharedPreferences;
+    @Inject
     CustomThemeWrapper customThemeWrapper;
     private LinearLayoutManager mLinearLayoutManager;
     private String mQuery;
@@ -124,6 +127,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
         String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SEARCH_USER, SortType.Type.RELEVANCE.value);
         sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
+        boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
 
         mAdapter = new UserListingRecyclerViewAdapter(getActivity(), mOauthRetrofit, mRetrofit,
                 customThemeWrapper, accessToken, accountName, mRedditDataRoomDatabase.subscribedUserDao(),
@@ -132,11 +136,11 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         mUserListingRecyclerView.setAdapter(mAdapter);
 
         UserListingViewModel.Factory factory = new UserListingViewModel.Factory(mRetrofit, mQuery,
-                sortType);
+                sortType, nsfw);
         mUserListingViewModel = new ViewModelProvider(this, factory).get(UserListingViewModel.class);
-        mUserListingViewModel.getUsers().observe(this, UserData -> mAdapter.submitList(UserData));
+        mUserListingViewModel.getUsers().observe(getViewLifecycleOwner(), UserData -> mAdapter.submitList(UserData));
 
-        mUserListingViewModel.hasUser().observe(this, hasUser -> {
+        mUserListingViewModel.hasUser().observe(getViewLifecycleOwner(), hasUser -> {
             mSwipeRefreshLayout.setRefreshing(false);
             if (hasUser) {
                 mFetchUserListingInfoLinearLayout.setVisibility(View.GONE);
@@ -148,7 +152,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
             }
         });
 
-        mUserListingViewModel.getInitialLoadingState().observe(this, networkState -> {
+        mUserListingViewModel.getInitialLoadingState().observe(getViewLifecycleOwner(), networkState -> {
             if (networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
                 mSwipeRefreshLayout.setRefreshing(false);
             } else if (networkState.getStatus().equals(NetworkState.Status.FAILED)) {
@@ -160,7 +164,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
             }
         });
 
-        mUserListingViewModel.getPaginationNetworkState().observe(this, networkState -> {
+        mUserListingViewModel.getPaginationNetworkState().observe(getViewLifecycleOwner(), networkState -> {
             mAdapter.setNetworkState(networkState);
         });
 
