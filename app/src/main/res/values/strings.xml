@@ -914,4 +914,10 @@
 
     <string name="recent_searches">Recent searches</string>
 
+    <string name="warning">Warning</string>
+    <string name="this_is_a_nsfw_subreddit">This is a NSFW subreddit.</string>
+    <string name="this_user_has_nsfw_content">This user has NSFW content</string>
+    <string name="dismiss">Dismiss</string>
+    <string name="leave">Leave</string>
+
 </resources>

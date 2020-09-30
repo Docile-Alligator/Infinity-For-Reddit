@@ -35,6 +35,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.chip.Chip;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
@@ -167,6 +168,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     @Named("sort_type")
     SharedPreferences mSortTypeSharedPreferences;
     @Inject
+    @Named("nsfw_and_spoiler")
+    SharedPreferences mNsfwAndSpoilerSharedPreferences;
+    @Inject
     @Named("post_layout")
     SharedPreferences mPostLayoutSharedPreferences;
     @Inject
@@ -207,6 +211,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private int unsubscribedColor;
     private int subscribedColor;
     private SlidrInterface mSlidrInterface;
+    private MaterialAlertDialogBuilder nsfwWarningBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -415,6 +420,21 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 } else {
                     descriptionTextView.setVisibility(View.VISIBLE);
                     descriptionTextView.setText(subredditData.getDescription());
+                }
+
+                if (subredditData.isNSFW()) {
+                    if (nsfwWarningBuilder == null
+                            && mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false)) {
+                        nsfwWarningBuilder = new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                                .setTitle(R.string.warning)
+                                .setMessage(R.string.this_is_a_nsfw_subreddit)
+                                .setPositiveButton(R.string.leave, (dialogInterface, i)
+                                        -> {
+                                    finish();
+                                })
+                                .setNegativeButton(R.string.dismiss, null);
+                        nsfwWarningBuilder.show();
+                    }
                 }
             }
         });
