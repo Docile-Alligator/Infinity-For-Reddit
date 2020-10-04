@@ -920,4 +920,13 @@
     <string name="dismiss">Dismiss</string>
     <string name="leave">Leave</string>
 
+    <string name="go_to_subreddit">Go to subreddit</string>
+    <string name="go_to_user">Go to user</string>
+    <string name="go_to_thing_hint">Name</string>
+    <string name="random">Random</string>
+    <string name="random_subreddit">Random Subreddit</string>
+    <string name="random_nsfw_subreddit">Random NSFW Subreddit</string>
+    <string name="random_post">Random Post</string>
+    <string name="random_nsfw_post">Random NSFW post</string>
+
 </resources>

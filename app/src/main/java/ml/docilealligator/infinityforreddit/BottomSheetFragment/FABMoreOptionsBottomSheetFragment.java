@@ -22,6 +22,9 @@ public class FABMoreOptionsBottomSheetFragment extends RoundedBottomSheetDialogF
     public static final int FAB_OPTION_CHANGE_SORT_TYPE = 2;
     public static final int FAB_OPTION_CHANGE_POST_LAYOUT = 3;
     public static final int FAB_OPTION_SEARCH = 4;
+    public static final int FAB_OPTION_GO_TO_SUBREDDIT = 5;
+    public static final int FAB_OPTION_GO_TO_USER = 6;
+    public static final int FAB_RANDOM = 7;
 
     @BindView(R.id.submit_post_text_view_fab_more_options_bottom_sheet_fragment)
     TextView submitPostTextView;
@@ -33,6 +36,12 @@ public class FABMoreOptionsBottomSheetFragment extends RoundedBottomSheetDialogF
     TextView changePostLayoutTextView;
     @BindView(R.id.search_text_view_fab_more_options_bottom_sheet_fragment)
     TextView searchTextView;
+    @BindView(R.id.go_to_subreddit_text_view_fab_more_options_bottom_sheet_fragment)
+    TextView goToSubredditTextView;
+    @BindView(R.id.go_to_user_text_view_fab_more_options_bottom_sheet_fragment)
+    TextView goToUserTextView;
+    @BindView(R.id.random_text_view_fab_more_options_bottom_sheet_fragment)
+    TextView randomTextView;
     private FABOptionSelectionCallback activity;
 
     public FABMoreOptionsBottomSheetFragment() {
@@ -69,6 +78,21 @@ public class FABMoreOptionsBottomSheetFragment extends RoundedBottomSheetDialogF
 
         searchTextView.setOnClickListener(view -> {
             activity.fabOptionSelected(FAB_OPTION_SEARCH);
+            dismiss();
+        });
+
+        goToSubredditTextView.setOnClickListener(view -> {
+            activity.fabOptionSelected(FAB_OPTION_GO_TO_SUBREDDIT);
+            dismiss();
+        });
+
+        goToUserTextView.setOnClickListener(view -> {
+            activity.fabOptionSelected(FAB_OPTION_GO_TO_USER);
+            dismiss();
+        });
+
+        randomTextView.setOnClickListener(view -> {
+            activity.fabOptionSelected(FAB_RANDOM);
             dismiss();
         });
 

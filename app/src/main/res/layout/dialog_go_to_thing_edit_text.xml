@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<EditText xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="24dp"
+    android:background="#00000000"
+    android:hint="@string/go_to_thing_hint"
+    android:textColor="?attr/primaryTextColor"
+    android:textSize="?attr/font_default"
+    android:fontFamily="?attr/font_family" />

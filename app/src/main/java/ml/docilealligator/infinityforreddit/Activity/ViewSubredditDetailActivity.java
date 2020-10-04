@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.Activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -12,6 +13,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -1065,6 +1068,62 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, subredditName);
                 startActivity(intent);
                 break;
+            case FABMoreOptionsBottomSheetFragment.FAB_OPTION_GO_TO_SUBREDDIT: {
+                EditText thingEditText = (EditText) getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, null);
+                thingEditText.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                }
+                new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                        .setTitle(R.string.go_to_user)
+                        .setView(thingEditText)
+                        .setPositiveButton(R.string.ok, (dialogInterface, i)
+                                -> {
+                            if (imm != null) {
+                                imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
+                            }
+                            Intent subredditIntent = new Intent(this, ViewSubredditDetailActivity.class);
+                            subredditIntent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, thingEditText.getText().toString());
+                            startActivity(subredditIntent);
+                        })
+                        .setNegativeButton(R.string.cancel, null)
+                        .setOnDismissListener(dialogInterface -> {
+                            if (imm != null) {
+                                imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
+                            }
+                        })
+                        .show();
+                break;
+            }
+            case FABMoreOptionsBottomSheetFragment.FAB_OPTION_GO_TO_USER: {
+                EditText thingEditText = (EditText) getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, null);
+                thingEditText.requestFocus();
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                }
+                new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                        .setTitle(R.string.go_to_user)
+                        .setView(thingEditText)
+                        .setPositiveButton(R.string.ok, (dialogInterface, i)
+                                -> {
+                            if (imm != null) {
+                                imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
+                            }
+                            Intent userIntent = new Intent(this, ViewUserDetailActivity.class);
+                            userIntent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, thingEditText.getText().toString());
+                            startActivity(userIntent);
+                        })
+                        .setNegativeButton(R.string.cancel, null)
+                        .setOnDismissListener(dialogInterface -> {
+                            if (imm != null) {
+                                imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
+                            }
+                        })
+                        .show();
+                break;
+            }
         }
     }
 

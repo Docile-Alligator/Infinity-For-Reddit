@@ -587,7 +587,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     ((PostVideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (post.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
 
                     if (post.isGfycat() || post.isRedgifs() && !post.isLoadGfyOrRedgifsVideoSuccess()) {
-                        ((PostVideoAutoplayViewHolder) holder).typeTextView.setText("GFYCAT");
                         ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks = new FetchGfycatOrRedgifsVideoLinks(new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
                             @Override
                             public void success(String webm, String mp4) {
@@ -606,7 +605,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                 .fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mGfycatRetrofit, mRedgifsRetrofit,
                                         post.getGfycatId(), post.isGfycat(), mAutomaticallyTryRedgifs);
                     } else {
-                        ((PostVideoAutoplayViewHolder) holder).typeTextView.setText("VIDEO");
                         ((PostVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
                     }
                 } else if (holder instanceof PostVideoAndGifPreviewViewHolder) {

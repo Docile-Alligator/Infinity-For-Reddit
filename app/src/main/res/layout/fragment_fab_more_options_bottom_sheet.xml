@@ -106,6 +106,63 @@
             android:focusable="true"
             android:background="?attr/selectableItemBackground" />
 
+        <TextView
+            android:id="@+id/go_to_subreddit_text_view_fab_more_options_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:text="@string/go_to_subreddit"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family"
+            app:drawableStartCompat="@drawable/ic_subreddit_24dp"
+            android:drawablePadding="48dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
+            android:id="@+id/go_to_user_text_view_fab_more_options_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:text="@string/go_to_user"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family"
+            app:drawableStartCompat="@drawable/ic_user_24dp"
+            android:drawablePadding="48dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
+            android:id="@+id/random_text_view_fab_more_options_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:text="@string/random"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family"
+            app:drawableStartCompat="@drawable/ic_random_24dp"
+            android:drawablePadding="48dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
+
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>
