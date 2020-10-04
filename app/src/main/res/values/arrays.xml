@@ -257,6 +257,9 @@
         <item>Change sort type</item>
         <item>Change post layout</item>
         <item>Search</item>
+        <item>Go to Subreddit</item>
+        <item>Go to User</item>
+        <item>Random</item>
     </string-array>
 
     <string-array name="settings_swipe_action_threshold">

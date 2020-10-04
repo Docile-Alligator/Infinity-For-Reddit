@@ -179,6 +179,9 @@ public class SharedPreferencesUtils {
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE = 2;
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT = 3;
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_SEARCH = 4;
+    public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_GO_TO_SUBREDDIT = 5;
+    public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_GO_TO_USER = 6;
+    public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_RANDOM = 7;
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HOME = 0;
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS = 1;
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX = 2;
@@ -189,6 +192,9 @@ public class SharedPreferencesUtils {
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE = 2;
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT = 3;
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH = 4;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_SUBREDDIT = 5;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_USER = 6;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_RANDOM = 7;
 
     public static final String NSFW_AND_SPOILER_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.nsfw_and_spoiler";
     public static final String NSFW_BASE = "_nsfw";

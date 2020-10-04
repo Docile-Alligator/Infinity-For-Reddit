@@ -576,6 +576,15 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_SEARCH:
                     fab.setImageResource(R.drawable.ic_search_black_24dp);
                     break;
+                case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_GO_TO_SUBREDDIT:
+                    fab.setImageResource(R.drawable.ic_subreddit_24dp);
+                    break;
+                case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_GO_TO_USER:
+                    fab.setImageResource(R.drawable.ic_user_24dp);
+                    break;
+                case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_RANDOM:
+                    fab.setImageResource(R.drawable.ic_random_24dp);
+                    break;
                 default:
                     fab.setImageResource(R.drawable.ic_add_day_night_24dp);
                     break;
@@ -601,6 +610,15 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         startActivity(intent);
                         break;
                     }
+                    case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_GO_TO_SUBREDDIT:
+                        goToSubreddit();
+                        break;
+                    case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_GO_TO_USER:
+                        goToUser();
+                        break;
+                    case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_RANDOM:
+                        randomThing();
+                        break;
                     default:
                         postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
                         break;
@@ -1166,70 +1184,82 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 startActivity(intent);
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_GO_TO_SUBREDDIT: {
-                EditText thingEditText = (EditText) getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, null);
-                thingEditText.requestFocus();
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                }
-                new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
-                        .setTitle(R.string.go_to_user)
-                        .setView(thingEditText)
-                        .setPositiveButton(R.string.ok, (dialogInterface, i)
-                                -> {
-                            if (imm != null) {
-                                imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                            }
-                            Intent subredditIntent = new Intent(this, ViewSubredditDetailActivity.class);
-                            subredditIntent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, thingEditText.getText().toString());
-                            startActivity(subredditIntent);
-                        })
-                        .setNegativeButton(R.string.cancel, null)
-                        .setOnDismissListener(dialogInterface -> {
-                            if (imm != null) {
-                                imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                            }
-                        })
-                        .show();
+                goToSubreddit();
                 break;
             }
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_GO_TO_USER: {
-                EditText thingEditText = (EditText) getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, null);
-                thingEditText.requestFocus();
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                }
-                new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
-                        .setTitle(R.string.go_to_user)
-                        .setView(thingEditText)
-                        .setPositiveButton(R.string.ok, (dialogInterface, i)
-                                -> {
-                            if (imm != null) {
-                                imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                            }
-                            Intent userIntent = new Intent(this, ViewUserDetailActivity.class);
-                            userIntent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, thingEditText.getText().toString());
-                            startActivity(userIntent);
-                        })
-                        .setNegativeButton(R.string.cancel, null)
-                        .setOnDismissListener(dialogInterface -> {
-                            if (imm != null) {
-                                imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                            }
-                        })
-                        .show();
+                goToUser();
                 break;
             }
             case FABMoreOptionsBottomSheetFragment.FAB_RANDOM: {
-                RandomBottomSheetFragment randomBottomSheetFragment = new RandomBottomSheetFragment();
-                Bundle bundle = new Bundle();
-                bundle.putBoolean(RandomBottomSheetFragment.EXTRA_IS_NSFW, mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false));
-                randomBottomSheetFragment.setArguments(bundle);
-                randomBottomSheetFragment.show(getSupportFragmentManager(), randomBottomSheetFragment.getTag());
+                randomThing();
                 break;
             }
         }
+    }
+
+    private void goToSubreddit() {
+        EditText thingEditText = (EditText) getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, null);
+        thingEditText.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
+        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                .setTitle(R.string.go_to_user)
+                .setView(thingEditText)
+                .setPositiveButton(R.string.ok, (dialogInterface, i)
+                        -> {
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
+                    }
+                    Intent subredditIntent = new Intent(this, ViewSubredditDetailActivity.class);
+                    subredditIntent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, thingEditText.getText().toString());
+                    startActivity(subredditIntent);
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .setOnDismissListener(dialogInterface -> {
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
+                    }
+                })
+                .show();
+    }
+
+    private void goToUser() {
+        EditText thingEditText = (EditText) getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, null);
+        thingEditText.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
+        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                .setTitle(R.string.go_to_user)
+                .setView(thingEditText)
+                .setPositiveButton(R.string.ok, (dialogInterface, i)
+                        -> {
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
+                    }
+                    Intent userIntent = new Intent(this, ViewUserDetailActivity.class);
+                    userIntent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, thingEditText.getText().toString());
+                    startActivity(userIntent);
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .setOnDismissListener(dialogInterface -> {
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
+                    }
+                })
+                .show();
+    }
+
+    private void randomThing() {
+        RandomBottomSheetFragment randomBottomSheetFragment = new RandomBottomSheetFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(RandomBottomSheetFragment.EXTRA_IS_NSFW, mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false));
+        randomBottomSheetFragment.setArguments(bundle);
+        randomBottomSheetFragment.show(getSupportFragmentManager(), randomBottomSheetFragment.getTag());
     }
 
     @Override
