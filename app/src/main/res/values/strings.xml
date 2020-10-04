@@ -928,5 +928,6 @@
     <string name="random_nsfw_subreddit">Random NSFW Subreddit</string>
     <string name="random_post">Random Post</string>
     <string name="random_nsfw_post">Random NSFW post</string>
+    <string name="fetch_random_thing_failed">Try again later</string>
 
 </resources>

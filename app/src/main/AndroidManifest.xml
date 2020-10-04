@@ -32,10 +32,14 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
-        <activity android:name=".Activity.GiveAwardActivity"
+        <activity android:name=".Activity.FetchRandomSubredditOrPostActivity"
+            android:parentActivityName=".Activity.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".Activity.GiveAwardActivity"
             android:label="@string/give_award_activity_label"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.Slidable"/>
+            android:theme="@style/AppTheme.Slidable" />
         <activity
             android:name=".Activity.SelectUserFlairActivity"
             android:parentActivityName=".Activity.MainActivity"

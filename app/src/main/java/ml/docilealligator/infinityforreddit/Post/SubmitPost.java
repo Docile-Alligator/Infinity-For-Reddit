@@ -332,7 +332,7 @@ public class SubmitPost {
                 @Override
                 public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                     if (response.isSuccessful()) {
-                        ParsePost.parsePost(response.body(), locale, new ParsePost.ParsePostListener() {
+                        ParsePost.parsePost(response.body(), new ParsePost.ParsePostListener() {
                             @Override
                             public void onParsePostSuccess(Post post) {
                                 submitPostListener.submitSuccessful(post);

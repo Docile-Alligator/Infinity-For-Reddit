@@ -779,7 +779,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 mSwipeRefreshLayout.setRefreshing(false);
 
                 if (response.isSuccessful()) {
-                    ParsePost.parsePost(response.body(), mLocale, new ParsePost.ParsePostListener() {
+                    ParsePost.parsePost(response.body(), new ParsePost.ParsePostListener() {
                         @Override
                         public void onParsePostSuccess(Post post) {
                             mPost = post;

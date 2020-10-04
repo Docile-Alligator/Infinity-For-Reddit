@@ -334,6 +334,6 @@ public interface RedditAPI {
     @GET("/r/random/comments.json?limit=1&raw_json=1")
     Call<String> getRandomPost();
 
-    @GET("/r/randnsfw/new?sort=new&t=all&limit=1&raw_json=1")
+    @GET("/r/randnsfw/new.json?sort=new&t=all&limit=1&raw_json=1")
     Call<String> getRandomNSFWPost();
 }

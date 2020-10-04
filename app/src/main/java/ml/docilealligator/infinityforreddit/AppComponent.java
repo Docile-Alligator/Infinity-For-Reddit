@@ -13,6 +13,7 @@ import ml.docilealligator.infinityforreddit.Activity.CustomizeThemeActivity;
 import ml.docilealligator.infinityforreddit.Activity.EditCommentActivity;
 import ml.docilealligator.infinityforreddit.Activity.EditMultiRedditActivity;
 import ml.docilealligator.infinityforreddit.Activity.EditPostActivity;
+import ml.docilealligator.infinityforreddit.Activity.FetchRandomSubredditOrPostActivity;
 import ml.docilealligator.infinityforreddit.Activity.FilteredThingActivity;
 import ml.docilealligator.infinityforreddit.Activity.GiveAwardActivity;
 import ml.docilealligator.infinityforreddit.Activity.InboxActivity;
@@ -218,4 +219,6 @@ public interface AppComponent {
     void inject(GiveAwardActivity giveAwardActivity);
 
     void inject(TranslationFragment translationFragment);
+
+    void inject(FetchRandomSubredditOrPostActivity fetchRandomSubredditOrPostActivity);
 }

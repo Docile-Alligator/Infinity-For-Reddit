@@ -73,6 +73,7 @@ import ml.docilealligator.infinityforreddit.AsyncTask.SwitchToAnonymousAccountAs
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.FABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.RandomBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
@@ -108,7 +109,7 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public class MainActivity extends BaseActivity implements SortTypeSelectionCallback,
         PostTypeBottomSheetFragment.PostTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback,
-        ActivityToolbarInterface, FABMoreOptionsBottomSheetFragment.FABOptionSelectionCallback {
+        ActivityToolbarInterface, FABMoreOptionsBottomSheetFragment.FABOptionSelectionCallback, RandomBottomSheetFragment.RandomOptionSelectionCallback {
 
     static final String EXTRA_POST_TYPE = "EPT";
     static final String EXTRA_MESSSAGE_FULLNAME = "ENF";
@@ -163,6 +164,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     FloatingActionButton fab;
     SubscribedSubredditViewModel subscribedSubredditViewModel;
     AccountViewModel accountViewModel;
+    @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -1218,10 +1222,21 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 break;
             }
             case FABMoreOptionsBottomSheetFragment.FAB_RANDOM: {
-
+                RandomBottomSheetFragment randomBottomSheetFragment = new RandomBottomSheetFragment();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(RandomBottomSheetFragment.EXTRA_IS_NSFW, mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false));
+                randomBottomSheetFragment.setArguments(bundle);
+                randomBottomSheetFragment.show(getSupportFragmentManager(), randomBottomSheetFragment.getTag());
                 break;
             }
         }
+    }
+
+    @Override
+    public void randomOptionSelected(int option) {
+        Intent intent = new Intent(this, FetchRandomSubredditOrPostActivity.class);
+        intent.putExtra(FetchRandomSubredditOrPostActivity.EXTRA_RANDOM_OPTION, option);
+        startActivity(intent);
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {

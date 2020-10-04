@@ -10,7 +10,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
-import java.util.Locale;
 
 import ml.docilealligator.infinityforreddit.Fragment.PostFragment;
 import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
@@ -21,13 +20,13 @@ import ml.docilealligator.infinityforreddit.Utils.Utils;
  */
 
 public class ParsePost {
-    public static void parsePosts(String response, Locale locale, int nPosts, int filter, boolean nsfw,
+    public static void parsePosts(String response, int nPosts, int filter, boolean nsfw,
                                   ParsePostsListingListener parsePostsListingListener) {
-        new ParsePostDataAsyncTask(response, locale, nPosts, filter, nsfw, parsePostsListingListener).execute();
+        new ParsePostDataAsyncTask(response, nPosts, filter, nsfw, parsePostsListingListener).execute();
     }
 
-    public static void parsePost(String response, Locale locale, ParsePostListener parsePostListener) {
-        new ParsePostDataAsyncTask(response, locale, true, parsePostListener).execute();
+    public static void parsePost(String response, ParsePostListener parsePostListener) {
+        new ParsePostDataAsyncTask(response, true, parsePostListener).execute();
     }
 
     private static Post parseBasicData(JSONObject data) throws JSONException {
@@ -456,9 +455,13 @@ public class ParsePost {
         void onParsePostFail();
     }
 
+    public interface ParseRandomPostListener {
+        void onParseRandomPostSuccess(String postId, String subredditName);
+        void onParseRandomPostFailed();
+    }
+
     private static class ParsePostDataAsyncTask extends AsyncTask<Void, Void, Void> {
         private JSONArray allData;
-        private Locale locale;
         private int nPosts;
         private int filter;
         private boolean nsfw;
@@ -469,14 +472,13 @@ public class ParsePost {
         private String lastItem;
         private boolean parseFailed;
 
-        ParsePostDataAsyncTask(String response, Locale locale, int nPosts, int filter, boolean nsfw,
+        ParsePostDataAsyncTask(String response, int nPosts, int filter, boolean nsfw,
                                ParsePostsListingListener parsePostsListingListener) {
             this.parsePostsListingListener = parsePostsListingListener;
             try {
                 JSONObject jsonResponse = new JSONObject(response);
                 allData = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
                 lastItem = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
-                this.locale = locale;
                 this.nPosts = nPosts;
                 this.filter = filter;
                 this.nsfw = nsfw;
@@ -488,12 +490,11 @@ public class ParsePost {
             }
         }
 
-        ParsePostDataAsyncTask(String response, Locale locale, boolean nsfw,
+        ParsePostDataAsyncTask(String response, boolean nsfw,
                                ParsePostListener parsePostListener) {
             this.parsePostListener = parsePostListener;
             try {
                 allData = new JSONArray(response).getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
-                this.locale = locale;
                 this.nsfw = nsfw;
                 parseFailed = false;
             } catch (JSONException e) {
@@ -570,6 +571,54 @@ public class ParsePost {
                 } else {
                     parsePostListener.onParsePostFail();
                 }
+            }
+        }
+    }
+
+    public static class ParseRandomPostAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private String response;
+        private boolean isNSFW;
+        private ParseRandomPostListener parseRandomPostListener;
+        private String subredditName;
+        private String postId;
+        private boolean parseFailed = false;
+
+        ParseRandomPostAsyncTask(String response, boolean isNSFW, ParseRandomPostListener parseRandomPostListener) {
+            this.response = response;
+            this.isNSFW = isNSFW;
+            this.parseRandomPostListener = parseRandomPostListener;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                JSONArray postsArray = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
+                if (postsArray.length() == 0) {
+                    parseFailed = true;
+                } else {
+                    JSONObject post = postsArray.getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY);
+                    subredditName = post.getString(JSONUtils.SUBREDDIT_KEY);
+                    if (isNSFW) {
+                        postId = post.getString(JSONUtils.ID_KEY);
+                    } else {
+                        postId = post.getString(JSONUtils.LINK_ID_KEY).substring("t3_".length());
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                parseFailed = true;
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (parseFailed) {
+                parseRandomPostListener.onParseRandomPostFailed();
+            } else {
+                parseRandomPostListener.onParseRandomPostSuccess(postId, subredditName);
             }
         }
     }

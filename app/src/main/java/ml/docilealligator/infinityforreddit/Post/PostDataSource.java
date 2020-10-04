@@ -247,7 +247,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
+                    ParsePost.parsePosts(response.body(), -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -310,7 +310,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
+                    ParsePost.parsePosts(response.body(), -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -370,7 +370,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
+                    ParsePost.parsePosts(response.body(), -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -444,7 +444,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
+                    ParsePost.parsePosts(response.body(), -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -505,7 +505,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
+                    ParsePost.parsePosts(response.body(), -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -576,7 +576,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
+                    ParsePost.parsePosts(response.body(), -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -659,7 +659,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
+                    ParsePost.parsePosts(response.body(), -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -750,7 +750,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
+                    ParsePost.parsePosts(response.body(), -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -810,7 +810,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
+                    ParsePost.parsePosts(response.body(), -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -881,7 +881,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), locale, -1, filter, nsfw,
+                    ParsePost.parsePosts(response.body(), -1, filter, nsfw,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {

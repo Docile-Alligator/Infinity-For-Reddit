@@ -166,9 +166,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
             if (hasSubreddit) {
                 mFetchSubredditListingInfoLinearLayout.setVisibility(View.GONE);
             } else {
-                mFetchSubredditListingInfoLinearLayout.setOnClickListener(view -> {
-                    //Do nothing
-                });
+                mFetchSubredditListingInfoLinearLayout.setOnClickListener(null);
                 showErrorView(R.string.no_subreddits);
             }
         });

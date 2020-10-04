@@ -67,6 +67,7 @@ import ml.docilealligator.infinityforreddit.AsyncTask.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.FABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.PostTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.BottomSheetFragment.RandomBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BottomSheetFragment.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
@@ -94,7 +95,8 @@ import retrofit2.Retrofit;
 
 public class ViewSubredditDetailActivity extends BaseActivity implements SortTypeSelectionCallback,
         PostTypeBottomSheetFragment.PostTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback,
-        ActivityToolbarInterface, FABMoreOptionsBottomSheetFragment.FABOptionSelectionCallback {
+        ActivityToolbarInterface, FABMoreOptionsBottomSheetFragment.FABOptionSelectionCallback,
+        RandomBottomSheetFragment.RandomOptionSelectionCallback {
 
     public static final String EXTRA_SUBREDDIT_NAME_KEY = "ESN";
     public static final String EXTRA_MESSAGE_FULLNAME = "ENF";
@@ -427,7 +429,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
                 if (subredditData.isNSFW()) {
                     if (nsfwWarningBuilder == null
-                            && mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false)) {
+                            && !mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false)) {
                         nsfwWarningBuilder = new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                                 .setTitle(R.string.warning)
                                 .setMessage(R.string.this_is_a_nsfw_subreddit)
@@ -1124,7 +1126,22 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                         .show();
                 break;
             }
+            case FABMoreOptionsBottomSheetFragment.FAB_RANDOM: {
+                RandomBottomSheetFragment randomBottomSheetFragment = new RandomBottomSheetFragment();
+                Bundle bundle = new Bundle();
+                bundle.putBoolean(RandomBottomSheetFragment.EXTRA_IS_NSFW, mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false));
+                randomBottomSheetFragment.setArguments(bundle);
+                randomBottomSheetFragment.show(getSupportFragmentManager(), randomBottomSheetFragment.getTag());
+                break;
+            }
         }
+    }
+
+    @Override
+    public void randomOptionSelected(int option) {
+        Intent intent = new Intent(this, FetchRandomSubredditOrPostActivity.class);
+        intent.putExtra(FetchRandomSubredditOrPostActivity.EXTRA_RANDOM_OPTION, option);
+        startActivity(intent);
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {
