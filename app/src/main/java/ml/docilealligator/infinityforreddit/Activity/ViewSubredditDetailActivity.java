@@ -833,6 +833,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             switch (position) {
                 case 0:
                     tab.setText(R.string.posts);
+                    break;
                 case 1:
                     tab.setText(R.string.sidebar);
             }

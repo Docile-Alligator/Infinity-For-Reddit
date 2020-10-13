@@ -524,7 +524,6 @@ public class DownloadRedditVideoService extends Service {
                         audioBufferInfo.flags = audioExtractor.getSampleFlags();
                         muxer.writeSampleData(audioTrack, audioBuf, audioBufferInfo);
                         audioExtractor.advance();
-
                     }
                 }
 

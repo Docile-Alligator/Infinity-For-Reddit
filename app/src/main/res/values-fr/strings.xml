@@ -1,0 +1,843 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_activity_label">"Se Connecter"</string>
+    <string name="search_activity_label">"Rechercher"</string>
+    <string name="comment_activity_label">"Envoyer le Commentaire"</string>
+    <string name="comment_activity_label_is_replying">"Répondre"</string>
+    <string name="post_text_activity_label">"Poster du Texte"</string>
+    <string name="subreddit_selection_activity_label">"Selectionner un Subreddit"</string>
+    <string name="post_link_activity_label">"Poster un Lien"</string>
+    <string name="post_image_activity_label">"Poster une Image"</string>
+    <string name="post_video_activity_label">"Poster une Vidéo"</string>
+    <string name="rules_activity_label">"Règles"</string>
+
+    <!-- Everyone in france uses the english word for subreddits -->
+    <string name="search_subreddits_activity_label">"Subreddits"</string>
+    <string name="edit_post_activity_label">"Éditer le Poste"</string>
+    <string name="edit_comment_activity_label">"Éditer le Commentaire"</string>
+    <string name="view_message_activity_label">"Boîte de Réception"</string>
+    <string name="settings_activity_label">"Paramètres"</string>
+    <string name="account_saved_thing_activity_label">"Sauvgardé"</string>
+    <string name="create_multi_reddit_activity_label">"Créer un Multireddit"</string>
+    <string name="subreddit_multiselection_activity_label">"Sélectionner des Sous-reddits"</string>
+    <string name="custom_theme_listing_activity_label">"Thèmes Personnalisés"</string>
+    <string name="customize_theme_activity_label">"Personnaliser le Thème"</string>
+    <string name="customize_theme_activity_create_theme_label">"Créer un Thème"</string>
+    <string name="theme_preview_activity_label">"Prévisualiser le Thème"</string>
+    <string name="edit_multi_reddit_activity_label">"Éditer le Multireddit"</string>
+    <string name="selected_subeddits_activity_label">"Subreddits Sélectionnés"</string>
+    <string name="report_activity_label">"Reporter"</string>
+    <string name="view_imgur_media_activity_image_label">"Image %1$d/%2$d"</string>
+    <string name="view_imgur_media_activity_video_label">"Vidéo %1$d/%2$d"</string>
+    <string name="send_private_message_activity_label">"Envoyer un Message Privé"</string>
+    <string name="view_reddit_gallery_activity_image_label">"Image %1$d/%2$d"</string>
+    <string name="view_reddit_gallery_activity_gif_label">"Gif %1$d/%2$d"</string>
+    <string name="view_reddit_gallery_activity_video_label">"Vidéo %1$d/%2$d"</string>
+    <string name="navigation_drawer_open">"Ouvrir le tiroir de navigation"</string>
+    <string name="navigation_drawer_close">"Fermer le tiroir de navigation"</string>
+    <string name="action_download">"Télécharger"</string>
+    <string name="action_refresh">"Actualiser"</string>
+    <string name="action_add_comment">"Ajouter un commentaire"</string>
+    <string name="action_save_post">"Sauvegarder la publication"</string>
+
+    <!-- "Poste" isn't an equivalent to post. I'd use "publication" here but it's kind of long. The english word "Post" should be understood by everyone -->
+    <!-- Fuzzy -->
+    <string name="action_view_crosspost_parent">"Publication multiple du parent"</string>
+    <string name="action_search">"Rechercher"</string>
+
+    <!-- Fuzzy -->
+    <string name="action_start_lazy_mode">"Commencer le Mode Paresseux"</string>
+
+    <!-- Fuzzy -->
+    <string name="action_stop_lazy_mode">"Arrêter le Mode Paresseux"</string>
+    <string name="action_send">"Envoyer"</string>
+    <string name="action_sort">"Trier"</string>
+    <string name="action_hide_post">"Masquer la Publication"</string>
+    <string name="action_unhide_post">"Afficher la Publication"</string>
+    <string name="action_edit_post">"Éditer la Publication"</string>
+    <string name="action_delete_post">"Supprimer la Publication"</string>
+    <string name="action_mark_nsfw">"Marquer comme NSFW"</string>
+
+    <!-- Fuzzy -->
+    <string name="action_unmark_nsfw">"Annuler la Marque NSFW"</string>
+    <string name="action_mark_spoiler">"Marquer comme Spoiler"</string>
+
+    <!-- Fuzzy -->
+    <string name="action_unmark_spoiler">"Annuler la Marque Spoiler"</string>
+    <string name="action_edit_flair">"Éditer le Flair"</string>
+    <string name="action_change_post_layout">"Modifier la Mise en Page des Publications"</string>
+    <string name="action_save">"Sauvgarder"</string>
+    <string name="action_edit_multi_reddit">"Éditer le Multireddit"</string>
+    <string name="action_delete_multi_reddit">"Supprimer le Multireddit"</string>
+    <string name="action_share">"Partager"</string>
+    <string name="action_preview">"Prévisualiser"</string>
+    <string name="action_report">"Reporter"</string>
+    <string name="action_see_removed">"Afficher les Publications Supprimées"</string>
+    <string name="action_set_wallpaper">"Définir comme Fond d'Écran"</string>
+    <string name="action_send_private_message">"Envoyer le Message Privé"</string>
+    <string name="action_block_user">"Bloquer l'Utilisateur"</string>
+    <string name="parse_json_response_error">"Une erreur s'est produite lors de l'analyse de la réponse JSON"</string>
+    <string name="retrieve_token_error">"Erreur dans la récupération du jeton"</string>
+    <string name="something_went_wrong">"Une erreur s'est produite. Veuillez réessayer plus tard."</string>
+    <string name="access_denied">"Accès refusé"</string>
+    <string name="parse_user_info_error">"Une erreur s'est produite lors de l'analyse des informations utilisateur"</string>
+    <string name="no_system_webview_error">"Erreur lors de l'ouverture du WebView Système"</string>
+    <string name="error_loading_image_tap_to_retry">"Erreur de chargement de l'image. Appuyez pour réessayer."</string>
+    <string name="load_posts_error">"Erreur de chargement des publications. Appuyez pour réessayer."</string>
+    <string name="load_more_posts_error">"Erreur de chargement des publications."</string>
+    <string name="load_post_error">"Erreur de chargement cette publication. Appuyez pour réessayer."</string>
+    <string name="search_subreddits_error">"Erreur de recherche des subreddits. Appuyez pour réessayer."</string>
+    <string name="search_users_error">"Erreur de recherche des utilisateurs. Appuyez pour réessayer."</string>
+    <string name="no_posts">"Aucune publication trouvée"</string>
+    <string name="no_comments">"Aucun commentaire trouvé"</string>
+    <string name="no_subreddits">"Aucun subreddit trouvé"</string>
+    <string name="no_users">"Aucun utilisateur trouvé"</string>
+    <string name="no_multi_reddits">"Aucun Multireddit trouvé"</string>
+    <string name="no_storage_permission">"Pas d'autorisation de stockage pour enregistrer ce fichier"</string>
+    <string name="load_comments_failed">"Erreur de chargement des commentaires. Appuyez pour réessayer."</string>
+    <string name="retry">"Réessayer"</string>
+    <string name="comments">"Commentaires"</string>
+    <string name="no_comments_yet">"Aucun commentaire pour l'instant. Écrire un commentaire ?"</string>
+    <string name="vote_failed">"Le vote a échoué"</string>
+    <string name="refresh_post_failed">"Erreur d'actualisation de la publication"</string>
+    <string name="load_messages_failed">"Erreur de chargement des messages. Appuyez pour réessayer."</string>
+    <string name="no_messages">"Vide"</string>
+    <string name="nsfw">"NSFW"</string>
+    <string name="karma_info">"Karma: %1$d"</string>
+    <string name="karma_info_user_detail">"Karma:
+%1$d (%2$d + %3$d)"</string>
+    <string name="cakeday_info">"Jour du gâteau: %1$s"</string>
+    <string name="since">"Depuis"</string>
+    <string name="profile">"Profil"</string>
+    <string name="subscriptions">"Abonnements"</string>
+    <string name="multi_reddit">"Multireddit"</string>
+    <string name="inbox">"Boîte de Réception"</string>
+    <string name="upvoted">"Votée pour"</string>
+    <string name="downvoted">"Votée contre"</string>
+    <string name="hidden">"Masquée"</string>
+    <string name="saved">"Enregistrée"</string>
+    <string name="gilded">"Dorée"</string>
+    <string name="settings">"Paramètres"</string>
+    <string name="subscribers_number_detail">"Abonnés: %1$d"</string>
+    <string name="online_subscribers_number_detail">"En Ligne: %1$d"</string>
+    <string name="cannot_fetch_subreddit_info">"Impossible d'obtenir des informations sur le subreddit"</string>
+    <string name="cannot_fetch_user_info">"Impossible d'obtenir des informations sur l'utilisateur"</string>
+    <string name="cannot_fetch_sidebar">"Impossible d'obtenir la barre latérale"</string>
+    <string name="cannot_fetch_multireddit">"Impossible d'obtenir des informations sur le Multireddit"</string>
+    <string name="subscribe">"S'abonner"</string>
+    <string name="unsubscribe">"Se Désabonner"</string>
+    <string name="subscribed">"Abonné"</string>
+    <string name="subscribe_failed">"Echec de l'abonnement"</string>
+    <string name="unsubscribed">"Désabonné"</string>
+    <string name="unsubscribe_failed">"Échec du désabonnement"</string>
+    <string name="follow">"Suivre"</string>
+    <string name="unfollow">"Annuler le suivi"</string>
+    <string name="followed">"Suivi"</string>
+    <string name="follow_failed">"Echec du suivi"</string>
+    <string name="unfollowed">"Suivi annulé"</string>
+    <string name="unfollow_failed">"Echec de l'annulation du suivi"</string>
+    <string name="content_description_banner_imageview">"Image de la Bannière du Subreddit"</string>
+    <string name="app_label">"Infinity"</string>
+    <string name="search_hint">"Rechercher n'importe quoi"</string>
+    <string name="no_posts_no_lazy_mode">"Aucune publication disponible"</string>
+    <string name="lazy_mode_start">"Le Mode Parasseux commence dans %1$.1fs"</string>
+    <string name="lazy_mode_stop">"Le Mode Parasseux arrêté"</string>
+    <string name="write_comment_hint">"Vos réflexions intéressantes ici"</string>
+    <string name="comment_content_required">"Où se trouve votre réflexion intéressante ?"</string>
+    <string name="sending_comment">"Envoi"</string>
+    <string name="send_comment_success">"Commentaire envoyé"</string>
+    <string name="send_comment_failed">"Echec de l'envoi de ce commentaire"</string>
+    <string name="send_message_username_hint">"Utilisateur"</string>
+    <string name="send_message_subject_hint">"Sujet (100 caractères maximum)"</string>
+    <string name="send_message_content_hint">"Message"</string>
+    <string name="reply_message_failed">"Echec de réponse à ce message"</string>
+    <string name="error_getting_message">"Erreur dans la réception de ce message"</string>
+    <string name="message_username_required">"Hé, à qui voulez-vous envoyer ce message ?"</string>
+    <string name="message_subject_required">"Votre message doit avoir un sujet"</string>
+    <string name="message_content_required">"Vous devez dire quelque chose au destinataire"</string>
+    <string name="sending_message">"Envoi"</string>
+    <string name="send_message_success">"Message envoyé"</string>
+    <string name="send_message_failed">"Echec de l'envoi de ce message"</string>
+    <string name="select_a_subreddit">"Veuillez d'abord sélectionner un subreddit"</string>
+    <string name="title_required">"Cette publication a besoin d'un bon titre"</string>
+    <string name="link_required">"Hé, où est le lien ?"</string>
+    <string name="select_an_image">"Veuillez d'abord sélectionner une image"</string>
+    <string name="posting">"Publication en cours"</string>
+    <string name="post_failed">"Impossible de le publier"</string>
+    <string name="error_processing_image">"Erreur de traitement d'image"</string>
+    <string name="error_processing_video">"Erreur de traitement de la vidéo"</string>
+    <string name="download_started">"Le téléchargement a commencé. Vérifiez l'état de progression sur la notification."</string>
+    <string name="comment_load_more_comments">"Charger plus de commentaires"</string>
+    <string name="comment_load_more_comments_failed">"Le chargement a échoué. Appuyez pour réessayer."</string>
+    <string name="loading">"Chargement"</string>
+    <string name="post_title_hint">"Titre"</string>
+    <string name="post_text_content_hint">"Contenu"</string>
+    <string name="choose_a_subreddit">"Choisir une subreddit"</string>
+    <string name="rules">"Règles"</string>
+    <string name="post_link_hint">"URL"</string>
+    <string name="subreddits">"Subreddits"</string>
+    <string name="users">"Utilisateurs"</string>
+    <string name="multi_reddits">"Multireddits"</string>
+    <string name="bottom_sheet_post_text">"Texte"</string>
+    <string name="bottom_sheet_post_link">"Lien"</string>
+    <string name="bottom_sheet_post_image">"Image"</string>
+    <string name="bottom_sheet_post_video">"Vidéo"</string>
+    <string name="select_from_gallery">"Sélectionner une image"</string>
+    <string name="select_again">"Sélectionner à nouveau"</string>
+    <string name="error_getting_image">"Erreur dans l'obtention de l'image"</string>
+    <string name="error_getting_video">"Erreur dans l'obtention de la vidéo"</string>
+    <string name="no_camera_available">"Aucune application de caméra disponible."</string>
+    <string name="error_creating_temp_file">"Erreur de création d'un fichier temporaire"</string>
+    <string name="video_is_processing">"La vidéo est en cours de traitement. Veuillez patienter."</string>
+    <string name="image_is_processing">"L'image est en cours de traitement. Veuillez patienter."</string>
+    <string name="gif_is_processing">"Le Gif est en cours de traitement. Veuillez patienter."</string>
+    <string name="flair">"Flair"</string>
+    <string name="spoiler">"Spoiler"</string>
+    <string name="no_flair">"Pas de flair"</string>
+    <string name="error_loading_flairs">"Erreur de chargement des flairs.
+Appuyez pour réessayer."</string>
+    <string name="no_rule">"Aucun règle"</string>
+    <string name="error_loading_rules">"Erreur de chargement des règles.
+Appuyez pour réessayer."</string>
+    <string name="error_loading_rules_without_retry">"Erreur de chargement des règles."</string>
+    <string name="search_in">"Rechercher dans"</string>
+    <string name="all_subreddits">"Tous les subreddits."</string>
+    <string name="sort_best">"Meilleur"</string>
+    <string name="sort_hot">"À la une"</string>
+    <string name="sort_new">"Nouveau"</string>
+    <string name="sort_random">"Aléatoire"</string>
+
+    <!-- Fuzzy -->
+    <string name="sort_rising">"En hausse"</string>
+    <string name="sort_top">"Le meilleur"</string>
+    <string name="sort_controversial">"Controversé"</string>
+    <string name="sort_relevance">"Pertinence"</string>
+    <string name="sort_comments">"Commentaires"</string>
+    <string name="sort_activity">"Activité"</string>
+    <string name="sort_confidence">"Confiance"</string>
+
+    <!-- Fuzzy -->
+    <string name="sort_old">"Ancien"</string>
+    <string name="sort_qa">"Q&amp;R"</string>
+    <string name="sort_live">"En direct"</string>
+    <string name="sort_time_hour">"Heure"</string>
+    <string name="sort_time_day">"Jour"</string>
+    <string name="sort_time_week">"Semaine"</string>
+    <string name="sort_time_month">"Mois"</string>
+    <string name="sort_time_year">"Année"</string>
+    <string name="sort_time_all_time">"Tout le temps"</string>
+    <string name="no_browser_found">"Aucun navigatuer trouvé"</string>
+
+    <!-- Fuzzy -->
+    <string name="no_activity_found_for_share">"Il n'y a pas d'application qui peut gérer l'action de partage"</string>
+    <string name="archived_post_vote_unavailable">"Publication archivée. Impossible de voter."</string>
+    <string name="archived_post_comment_unavailable">"Publication archivée. Impossible de commenter."</string>
+    <string name="archived_post_reply_unavailable">"Publication archivée. Impossible de répondre"</string>
+    <string name="locked_post_comment_unavailable">"Publication verrouillée. Impossible de commenter."</string>
+    <string name="locked_post_reply_unavailable">"Publication verrouillée. Impossible de répondre."</string>
+    <string name="text">"TEXTE"</string>
+    <string name="link">"LIEN"</string>
+    <string name="image">"IMAGE"</string>
+    <string name="video">"VIDÉO"</string>
+    <string name="gif">"GIF"</string>
+    <string name="gallery">"GALERIE"</string>
+    <string name="best">"Meilleur"</string>
+    <string name="search">"Rechercher"</string>
+    <string name="posting_video">"Publication de la vidéo"</string>
+    <string name="posting_image">"Publication de l'image"</string>
+    <string name="please_wait">"Veuillez patienter."</string>
+    <string name="add_account">"Ajouter un compte"</string>
+    <string name="anonymous_account">"Anonyme"</string>
+    <string name="log_out">"Se déconnecter"</string>
+    <string name="press_here_to_login">"Appuyez ici pour se connecter"</string>
+
+    <!-- What's the context here ? -->
+    <string name="login_first">"Veuillez d'abord vous connecter"</string>
+    <string name="post_saved_success">"Publication sauvegardée"</string>
+    <string name="post_saved_failed">"Impossible de sauvegarder la publication"</string>
+    <string name="post_unsaved_success">"Publication oubliée"</string>
+    <string name="post_unsaved_failed">"Impossible d'oublier la publication"</string>
+    <string name="post_hide_success">"Publication masquée"</string>
+    <string name="post_hide_failed">"Impossible de masquer la publication"</string>
+    <string name="post_unhide_success">"Publication démasquée"</string>
+
+    <!-- Fuzzy -->
+    <string name="thing_favorite_failed">"Échec de l'ajout en favoris"</string>
+    <string name="thing_unfavorite_failed">"Échec de la suppression des favoris"</string>
+    <string name="post_unhide_failed">"Impossible de démasquer la publication"</string>
+    <string name="delete_this_post">"Supprimer Cette Publication"</string>
+    <string name="delete_this_comment">"Supprimer Ce Commentaire"</string>
+    <string name="are_you_sure">"Êtes-vous sûr ?"</string>
+    <string name="edit">"Éditer"</string>
+    <string name="delete">"Supprimer"</string>
+    <string name="see_removed_comment">"Voir le Commentaire Supprimé"</string>
+
+    <!-- Fuzzy -->
+    <string name="fetching_removed_comment">"Chargement du commentaire supprimé"</string>
+    <string name="show_removed_comment_failed">"Impossible de trouver le commentaire supprimé"</string>
+    <string name="fetching_removed_post">"Chargement de la publication supprimée"</string>
+    <string name="show_removed_post_failed">"Impossible de trouver la publication supprimée"</string>
+    <string name="cancel">"Annuler"</string>
+    <string name="ok">"OK"</string>
+
+    <!-- Fuzzy -->
+    <string name="edit_success">"Modification réussie"</string>
+    <string name="delete_post_success">"Suppression réussie"</string>
+    <string name="delete_post_failed">"Suppression échouée"</string>
+
+    <!-- Fuzzy -->
+    <string name="mark_nsfw_success">"Marquage NSFW réussi"</string>
+    <string name="mark_nsfw_failed">"Marquage NSFW échoué"</string>
+
+    <!-- Fuzzy -->
+    <string name="unmark_nsfw_success">"Annulation de la marque NSFW réussie"</string>
+    <string name="unmark_nsfw_failed">"Annulation de la marque NSFW échouée"</string>
+
+    <!-- Fuzzy -->
+    <string name="mark_spoiler_success">"Marquage comme spoiler réussi"</string>
+    <string name="mark_spoiler_failed">"Marquage comme spoiler échoué"</string>
+
+    <!-- Fuzzy -->
+    <string name="unmark_spoiler_success">"Annulation de la marque Spoiler a réussi"</string>
+    <string name="unmark_spoiler_failed">"Annulation de la marque Spoiler a échoué"</string>
+
+    <!-- Fuzzy -->
+    <string name="update_flair_success">"Mise à jour du flair réussie"</string>
+    <string name="update_flair_failed">"Mise à jour du flair échouée"</string>
+    <string name="edit_flair">"Modifier le Flair"</string>
+    <string name="only_allow_64_chars">"N'autoriser que moins de 64 caractères"</string>
+    <string name="view_all_comments">"Appuyez ici pour parcourir tous les commentaires"</string>
+    <string name="notification_summary_account">"Compte"</string>
+    <string name="notification_summary_message">"Nouveau Message"</string>
+    <string name="notification_summary_subreddit">"Subreddit"</string>
+    <string name="notification_summary_award">"Prix"</string>
+    <string name="notification_new_messages">"%1$d Nouveaux Messages"</string>
+    <string name="label_account">"Compte"</string>
+    <string name="label_post">"Publication"</string>
+    <string name="label_preferences">"Préférence"</string>
+    <string name="account_switched">"Le compte a été changé, toutes les autres pages ont disparu."</string>
+    <string name="settings_notification_master_title">"Notification"</string>
+    <string name="settings_notification_enable_notification_title">"Activer les Notifications"</string>
+    <string name="settings_notification_interval_title">"Intervalle pour vérifier les notifications"</string>
+    <string name="settings_theme_title">"Thème"</string>
+    <string name="settings_amoled_dark_title">"Thème sombre Amoled"</string>
+    <string name="settings_interface_title">"Interface"</string>
+    <string name="settings_gestures_and_buttons_title">"Gestes &amp; Boutons"</string>
+    <string name="settings_save_front_page_scrolled_position_title">"Sauvegarder la position défilée dans l'accueil"</string>
+    <string name="settings_save_front_page_scrolled_position_summary">"Parcourir les nouveaux messages après actualisation dans l'accueil (Front Page, type de tri : Meilleur)"</string>
+    <string name="settings_open_link_in_app_title">"Ouvrir les lien dans l'application"</string>
+    <string name="settigns_video_title">"Vidéo"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_video_autoplay_title">"Lire les Vidéos Automatiquement"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_mute_autoplaying_videos_title">"Couper le Son des Vidéos se lisant automatiquement"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_autoplay_nsfw_videos_title">"Lire Automatiquement les Vidéos NSFW"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Décalage de la Zone Visible des Vidéos se Lisant Automatiquement (Portrait)"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"Commencer à lire automatiquement les vidéos lorsque %1$d%% d'entre elles sont visibles"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_start_autoplay_visible_area_offset_landscape_title">"Décalage de la Zone Visible des Vidéos se Lisant Automatiquement (Paysage)"</string>
+    <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Commencer à lire automatiquement les vidéos lorsque %1$d%% d'entre elles sont visibles"</string>
+    <string name="settings_immersive_interface_title">"Interface Immersive"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_immersive_interface_summary">"Ne pas s'appliquer à toutes les pages
+peut ne pas fonctionner sur Android 11"</string>
+    <string name="settings_immersive_interface_ignore_nav_bar_title">"Ignorer la barre de navigation dans l'interface immersive"</string>
+    <string name="settings_immersive_interface_ignore_nav_bar_summary">"Empêcher la barre de navigation inférieure d'avoir un espace supplémentaire"</string>
+    <string name="settings_customize_tabs_in_main_page_title">"Personnaliser les onglets de la page principale"</string>
+    <string name="settings_enable_bottom_app_bar_title">"Activer la navigation en bas"</string>
+    <string name="settings_enable_bottom_app_bar_summary">"Aucun effet en mode anonyme"</string>
+    <string name="settings_category_post_and_comment_title">"Publications et Commentaires"</string>
+    <string name="settings_vote_buttons_on_the_right_title">"Boutons de Vote sur la Droite"</string>
+    <string name="settings_volume_keys_navigate_comments_title">"Utiliser les Boutons de Volume pour Naviguer dans les Commentaires des Publications"</string>
+    <string name="settings_volume_keys_navigate_posts_title">"Utiliser les Boutons de Volume pour Naviguer dans les Publications"</string>
+    <string name="settings_mute_video_title">"Couper le Son des Vidéos"</string>
+    <string name="settings_mute_nsfw_video_title">"Couper le Son des Vidéos NSFW"</string>
+    <string name="settings_automatically_try_redgifs_title">"Essayez d'Accéder Automatiquement aux Redgifs si les Vidéos sur Gfycat sont Supprimées."</string>
+    <string name="settings_video_player_ignore_nav_bar_title">"Ignorer la Barre de Navigation dans le Lecteur Vidéo"</string>
+    <string name="settings_video_player_ignore_nav_bar_summary">"Empêcher le Contrôleur Vidéo de créer une Marge Supplémentaire"</string>
+    <string name="settings_confirm_to_exit">"Confirmer pour Quitter"</string>
+    <string name="settings_category_comment_title">"Commentaires"</string>
+    <string name="settings_show_top_level_comments_first_title">"Afficher d'abord les Commentaires de Haut Niveau"</string>
+    <string name="settings_show_comment_divider_title">"Afficher le Diviseur de Commentaires"</string>
+    <string name="settings_comment_toolbar_hide_on_click">"Appuyez pour Afficher/Masquer la Barre d'Outils des Commentaires"</string>
+    <string name="settings_fully_collapse_comment_title">"Réduire Complètement le Commentaire"</string>
+    <string name="settings_comment_toolbar_hidden">"Barre d'Outils de Commentaires Cachée par Défaut"</string>
+    <string name="settings_show_absolute_number_of_votes_title">"Afficher le Nombre Absolu de Votes"</string>
+    <string name="settings_show_elapsed_time">"Afficher le Temps Écoulé dans les Publications et les Commentaires"</string>
+    <string name="settings_time_format_title">"Format de l'heure"</string>
+    <string name="settings_category_post_title">"Publication"</string>
+    <string name="settings_default_post_layout">"Mise en Page par Défaut des Publications"</string>
+    <string name="settings_show_divider_in_compact_layout">"Afficher le Diviseur de Commentaires dans la Mise en Page Compacte"</string>
+    <string name="settings_show_thumbnail_on_the_left_in_compact_layout">"Afficher la Miniature à Gauche en Format Compact"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_swap_tap_and_long_title">"Échangez l'Appui et l'Appui Long dans les Commentaires"</string>
+    <string name="settings_swipe_to_go_back_title">"Balayer à Droite Pour Revenir en Arrière"</string>
+    <string name="settings_swipe_to_go_back_summary">"Ne s'applique pas à Toutes les Pages"</string>
+    <string name="settings_lock_jump_to_next_top_level_comment_button_title">"Verrouiller le Bouton «Passer au Commentaire de Niveau Supérieur Suivant»"</string>
+    <string name="settings_lock_bottom_app_bar_title">"Verrouiller la Barre de Navigation Inférieure"</string>
+    <string name="settings_swipe_up_to_hide_jump_to_next_top_level_comment_button_title">"Balayer pour Masquer le Bouton «Passer au Commentaire de Niveau Supérieur Suivant»"</string>
+    <string name="settings_lazy_mode_interval_title">"Intervalle du Mode Parasseux"</string>
+    <string name="settings_font_title">"Police"</string>
+    <string name="settings_preview_font_title">"Prévisualisation de la Police"</string>
+    <string name="settings_font_summary">"Police"</string>
+    <string name="settings_title_font_summary">"Titre"</string>
+    <string name="settings_content_font_summary">"Contenu"</string>
+    <string name="settings_font_family_title">"Famille de Police"</string>
+    <string name="settings_title_font_family_title">"Famille de Police du Titre"</string>
+    <string name="settings_content_font_family_title">"Famille de Police du Contenu"</string>
+    <string name="settings_font_size_title">"Taille de Police"</string>
+    <string name="settings_title_font_size_title">"Taille de Police du Titre"</string>
+    <string name="settings_content_font_size_title">"Taille de Police du Contenu"</string>
+    <string name="settings_enable_nsfw_title">"Afficher le Contenu NSFW"</string>
+    <string name="settings_blur_nsfw_title">"Flouter les images NSFW"</string>
+    <string name="settings_blur_spoiler_title">"Flouter les images Spoiler"</string>
+    <string name="settings_about_master_title">"À propos de "</string>
+    <string name="settings_acknowledgement_master_title">"Reconnaissance"</string>
+    <string name="settings_credits_master_title">"Crédits"</string>
+    <string name="settings_credits_icon_foreground_title">"Premier plan de l'Icône"</string>
+
+    <!-- Not sure what technology vector is supposed to mean -->
+    <string name="settings_credits_icon_foreground_summary">"Vecteur technologique créé par freepik - www.freepik.com"</string>
+    <string name="settings_credits_icon_background_title">"Arrière plan de l'Icône"</string>
+    <string name="settings_credits_icon_background_summary">"Vecteur d'arrière plan créé par freepik - www.freepik.com"</string>
+    <string name="settings_credits_error_image_title">"Image d'erreur"</string>
+    <string name="settings_credits_error_image_summary">"Vecteur technologique créé par freepik - www.freepik.com"</string>
+    <string name="settings_credits_gilded_icon_title">"Icône dorée"</string>
+    <string name="settings_credits_gilded_icon_summary">"Icône créée par freepik depuis www.flaticon.com"</string>
+    <string name="settings_credits_crosspost_icon_title">"Icône de publication multiple"</string>
+    <string name="settings_credits_crosspost_icon_summary">"Icône créée par freepik depuis www.flaticon.com"</string>
+    <string name="settings_credits_thumbtack_icon_title">"Icône Épingle"</string>
+    <string name="settings_credits_thumbtack_icon_summary">"Icône créée par freepik depuis www.flaticon.com"</string>
+    <string name="settings_credits_best_rocket_icon_title">"Icône Roquette"</string>
+    <string name="settings_credits_best_rocket_icon_summary">"Icône créée par freepik depuis www.flaticon.com"</string>
+    <string name="settings_credits_material_icons_title">"Icônes Material"</string>
+    <string name="settings_open_source_title">"Open Source"</string>
+    <string name="settings_open_source_summary">"Si vous aimez cette application, étoilez là sur GitHub"</string>
+    <string name="settings_rate_title">"Laissez une note sur Google Play"</string>
+    <string name="settings_rate_summary">"Donnez-moi 5 étoiles et je serai ravi"</string>
+    <string name="settings_f_droid_title">"F-Droid"</string>
+    <string name="settings_f_droid_summary">"Infinity est disponible sur IzzyOnDroid, un dépôt F-Droid"</string>
+    <string name="settings_email_title">"E-mail"</string>
+    <string name="settings_email_summary">"docilealligator.app@gmail.com"</string>
+    <string name="settings_reddit_account_title">"Compte Reddit"</string>
+    <string name="settings_reddit_account_summary">"u/Hostilenemy"</string>
+    <string name="settings_subreddit_title">"Subreddit"</string>
+    <string name="settings_subreddit_summary">"r/Infinity_For_Reddit"</string>
+    <string name="settings_share_title">"Partager"</string>
+    <string name="settings_share_summary">"Partagez cette application avec d'autres si vous l'appréciez"</string>
+    <string name="settings_version_title">"Infinity Pour Reddit"</string>
+    <string name="settings_version_summary">"Version %s"</string>
+    <string name="settings_category_customization_title">"Personnalisations"</string>
+    <string name="settings_customize_light_theme_title">"Thème Clair"</string>
+    <string name="settings_customize_dark_theme_title">"Thème Sombre"</string>
+    <string name="settings_customize_amoled_theme_title">"Thème Amoled"</string>
+    <string name="settings_manage_themes_title">"Gérer les Thèmes"</string>
+    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Les thèmes personnalisés ne peuvent pas être appliqués a la page des paramètres ( sauf la barre d'outils, la barre d'état et ma barre de navigation. )"</string>
+    <string name="settings_advanced_master_title">"Avancés"</string>
+    <string name="settings_delete_all_subreddits_data_in_database_title">"Supprimer Tous les Subreddits de la Base de Donnée"</string>
+    <string name="settings_delete_all_users_data_in_database_title">"Supprimer Tous les Utilisateurs de la Base de Donnée"</string>
+    <string name="settings_delete_all_sort_type_data_in_database_title">"Supprimer Tous les Types de Tri de la Base de Donnée"</string>
+    <string name="settings_delete_all_post_layout_data_in_database_title">"Supprimer Toutes les dispositions de Publications de la Base de Donnée"</string>
+    <string name="settings_delete_all_themes_in_database_title">"Supprimer Tous les Thèmes de la Base de Donnée"</string>
+    <string name="settings_delete_front_page_scrolled_positions_in_database_title">"Supprimer Toutes les Positions de Défilement de la Page d'Accueil de la Base de Donnée"</string>
+    <string name="settings_reset_all_settings_title">"Remettre à zéro tous les paramètres"</string>
+    <string name="settings_advanced_settings_summary">"Vider la base de donnée et les préférences partagées"</string>
+    <string name="settings_tab_1_summary">"Onglet 1"</string>
+    <string name="settings_tab_2_summary">"Onglet 2"</string>
+    <string name="settings_tab_3_summary">"Onglet 2"</string>
+    <string name="settings_tab_title">"Titre"</string>
+    <string name="settings_tab_post_type">"Type"</string>
+    <string name="settings_tab_subreddit_name">"Nom du Subreddit ( Sans le préfixe r/ )"</string>
+    <string name="settings_tab_multi_reddit_name">"Nom du Multireddit ( /user/votreutilisateur/m/votremultireddit )"</string>
+    <string name="settings_tab_username">"Nom d'utilisateur ( Sans le préfixe u/ )"</string>
+    <string name="no_developer_easter_egg">"Il n'y a pas d'options pour développeur ici"</string>
+
+    <!-- When is this shown ? -->
+    <string name="no_link_available">"Lien indisponible"</string>
+    <string name="exit_when_submit">"Quitter ?"</string>
+
+    <!-- What exactly is "here" ? -->
+    <string name="exit_when_submit_post_detail">"Cette publication sera envoyée même si vous quittez cette page."</string>
+    <string name="exit_when_edit_post_detail">"Cette publication pourra être envoyée même si vous quittez cette page."</string>
+    <string name="exit_when_edit_comment_detail">"Ce commentaire pourra être envoyée même si vous quittez cette page."</string>
+    <string name="discard">"Abandonner ?"</string>
+    <string name="discard_detail">"Votre brouillon ne sera PAS sauvegardé"</string>
+    <string name="yes">"Oui"</string>
+    <string name="no">"Non"</string>
+    <string name="no_data_received">"Aucune donnée reçue"</string>
+    <string name="no_image_path_received">"Aucun chemin d'image reçu"</string>
+    <string name="no_video_path_received">"Aucun chemin vidéo reçu"</string>
+    <string name="cannot_handle_intent">"Échec du traitement de la requête de partage"</string>
+    <string name="share">"Partager"</string>
+    <string name="no_email_client">"Aucun client mail trouvé"</string>
+    <string name="no_app">"Aucune application disponible"</string>
+    <string name="comment_saved_success">"Commentaire sauvegardé"</string>
+    <string name="comment_saved_failed">"Impossible de sauvegarder le commentaire"</string>
+    <string name="comment_unsaved_success">"Commentaire oublié"</string>
+    <string name="comment_unsaved_failed">"Impossible d'oublier le commentaire"</string>
+    <string name="favorites">"Favoris"</string>
+    <string name="all">"Tout"</string>
+    <string name="post_layout_card">"Agencement Type Carte"</string>
+    <string name="post_layout_compact">"Agencement Compact"</string>
+    <string name="elapsed_time_just_now">"Maintenant"</string>
+    <string name="elapsed_time_a_minute_ago">"1 Minute"</string>
+    <string name="elapsed_time_minutes_ago">"%1$d Minutes"</string>
+    <string name="elapsed_time_an_hour_ago">"1 Heure"</string>
+    <string name="elapsed_time_hours_ago">"%1$d Heures"</string>
+    <string name="elapsed_time_yesterday">"Hier"</string>
+    <string name="elapsed_time_days_ago">"%1$d Jours"</string>
+    <string name="elapsed_time_a_month_ago">"1 Mois"</string>
+    <string name="elapsed_time_months_ago">"%1$d Mois"</string>
+    <string name="elapsed_time_a_year_ago">"1 An"</string>
+    <string name="elapsed_time_years_ago">"%1$d Ans"</string>
+    <string name="error_getting_multi_reddit_data">"Erreur de récupération des données du multireddit"</string>
+    <string name="error_loading_multi_reddit_list">"Impossible de synchroniser les multireddits"</string>
+    <string name="error_loading_subscriptions">"Impossible de synchroniser les abonnements"</string>
+    <string name="share_this_app">"Essaie Infinity Pour Reddit, un super client Reddit !
+https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit"</string>
+    <string name="error_getting_subreddit_name">"Impossible de récupérer le nom du subreddit"</string>
+    <string name="share_post_link">"Partager le Lien de la Publication"</string>
+    <string name="share_image_link">"Partager le Lien de l'Image"</string>
+    <string name="share_gif_link">"Partager le Lien du Gif"</string>
+    <string name="share_video_link">"Partager le Lien Vidéo"</string>
+    <string name="share_link">"Partager le Lien"</string>
+    <string name="copy_post_link">"Copier le Lien de la Publication"</string>
+    <string name="copy_image_link">"Copier le Lien de l'Image"</string>
+    <string name="copy_gif_link">"Copier le lien du Gif"</string>
+    <string name="copy_video_link">"Copier le Lien Vidéo"</string>
+    <string name="copy_link">"Copier le lien"</string>
+    <string name="copy_success">"Copié"</string>
+    <string name="copy_link_failed">"Impossible de copier le lien"</string>
+    <string name="copy_text">"Copier"</string>
+    <string name="copy_all">"Tout copier"</string>
+    <string name="copy_markdown">"Copier le Markdown"</string>
+    <string name="copy_raw_text">"Copier le Texte Brut"</string>
+    <string name="copy_all_markdown">"Copier Tout le Markdown"</string>
+    <string name="copy_all_raw_text">"Copier Tout le Texte Brut"</string>
+    <string name="exit_app">"Quitter ?"</string>
+    <string name="light_theme">"Thème Clair"</string>
+    <string name="dark_theme">"Thème Sombre"</string>
+    <string name="multi_reddit_name_hint">"Nom ( Max. 50 caractères )"</string>
+    <string name="multi_reddit_description_hint">"Description"</string>
+    <string name="private_multi_reddit">"Privé"</string>
+    <string name="select_subreddits">"Sélectionnez des Subreddits"</string>
+    <string name="no_multi_reddit_name">"Où est le nom ?"</string>
+    <string name="create_multi_reddit_failed">"Impossible de créer ce multireddit"</string>
+    <string name="duplicate_multi_reddit">"Ce multireddit existe déjà"</string>
+    <string name="edit_multi_reddit_failed">"Impossible d'éditer ce multireddit"</string>
+    <string name="logged_out">"Vous êtes déconnectés"</string>
+    <string name="delete_multi_reddit_success">"Supprimé avec succès"</string>
+    <string name="delete_multi_reddit_failed">"Supression échouée"</string>
+    <string name="delete_multi_reddit_dialog_message">"Êtes vous sûr ?"</string>
+    <string name="enable_nsfw">"Activer NSFW /!\ ?"</string>
+    <string name="disable_nsfw">"Désactiver NSFW ?"</string>
+    <string name="cannot_save_image">"Ne peut pas enregistrer l'image"</string>
+    <string name="cannot_save_gif">"Ne peut pas enregistrer le gif"</string>
+    <string name="cannot_get_storage">"Ne peut pas accéder au stockage"</string>
+    <string name="save_image_first">"Enregistrement de l'image. Patientez"</string>
+    <string name="save_gif_first">"Enregistrement du gif. Patientez"</string>
+    <string name="theme_name_description">"Appuyer pour changer le nom de ce thème"</string>
+    <string name="theme_item_is_light_theme">"Défini en thème clair"</string>
+    <string name="theme_item_is_dark_theme">"Défini en thème sombre"</string>
+    <string name="theme_item_is_amoled_theme">"Défini en thème Amoled"</string>
+    <string name="theme_item_color_primary">"Couleur primaire"</string>
+    <string name="theme_item_color_primary_detail">"Appliqué à : Bar d'outils"</string>
+    <string name="theme_item_color_primary_dark">"Couleur principale sombre"</string>
+    <string name="theme_item_color_primary_dark_detail">"Appliqué à : Bar de Status"</string>
+    <string name="theme_item_color_accent">"Couleur accentuée"</string>
+    <string name="theme_item_color_accent_detail">"Appliqué à : Bar de Progression, etc"</string>
+    <string name="theme_item_color_primary_light_theme">"Couleur principale thème clair"</string>
+    <string name="theme_item_color_primary_light_theme_detail">"Appliqué à : Fond du bouton d'action flottant et du bouton"</string>
+    <string name="theme_item_primary_text_color">"Couleur du texte principal"</string>
+    <string name="theme_item_primary_text_color_detail">"Appliqué à : Texte principal"</string>
+    <string name="theme_item_secondary_text_color">"Couleur du texte secondaire"</string>
+    <string name="theme_item_secondary_text_color_detail">"Appliqué à : texte secondaire"</string>
+    <string name="theme_item_post_title_color">"Couleur du titre de publication"</string>
+    <string name="theme_item_post_title_color_detail">"Appliqué à : Titre de publication"</string>
+    <string name="theme_item_post_content_color">"Couleur du contenu de publication"</string>
+    <string name="theme_item_post_content_color_detail">"Appliqué à : Contenu de publication"</string>
+    <string name="theme_item_comment_color">"Couleur de commentaires"</string>
+    <string name="theme_item_comment_color_detail">"Appliqué à : commentaires"</string>
+    <string name="theme_item_button_text_color">"Couleur du texte des boutons"</string>
+    <string name="theme_item_button_text_color_detail">"Appliqué à : Texte sur les boutons"</string>
+    <string name="theme_item_chip_text_color">"Couleur du texte des puces"</string>
+    <string name="theme_item_chip_text_color_detail">"S'applique à: Bouton S'abonner"</string>
+    <string name="theme_item_link_color">"Couleur des liens"</string>
+    <string name="theme_item_link_color_detail">"Appliqué à : URL"</string>
+    <string name="theme_item_received_message_text_color">"Couleur du texte des messages reçus"</string>
+    <string name="theme_item_received_message_text_color_detail">"Appliqué à : messages privés reçus"</string>
+    <string name="theme_item_sent_message_text_color">"Couleur du texte du message envoyé"</string>
+    <string name="theme_item_sent_message_text_color_detail">"S'applique à: Messages privés envoyés"</string>
+    <string name="theme_item_background_color">"Couleur de fond"</string>
+    <string name="theme_item_background_color_detail">"S'applique à: Arrière-plan de chaque page et du tiroir de navigation"</string>
+
+    <!-- Same problem as "chip": these terms are used by Material Design Android so I'm not sure there is a correct translation... Maybe we shouldn't translate? and keep something like that: "Couleur d'arrière-plan de Card View" ? -->
+    <string name="theme_item_card_view_background_color">"Couleur d'arrière-plan de la vue cartes"</string>
+    <string name="theme_item_card_view_background_color_detail">"S'applique à: Arrière-plan des publications et des commentaires"</string>
+    <string name="theme_item_comment_background_color">"Couleur de fond des commanditaires"</string>
+    <string name="theme_item_comment_background_color_detail">"Appliqué à : Fond des commentaires"</string>
+
+    <!-- Not sure how to translate correctly "Fully-Collapsed Comment". -->
+    <string name="theme_item_fully_collapsed_comment_background_color">"Couleur d'arrière-plan des commentaires déroulés"</string>
+    <string name="theme_item_fully_collapsed_comment_background_color_detail">"S'applique à: Arrière-plan des commentaires déroulés"</string>
+    <string name="theme_item_awarded_comment_background_color">"Couleur de fond des commentaires récompensés"</string>
+    <string name="theme_item_awarded_comment_background_color_detail">"Appliqué à : fond des commentaires récompensés"</string>
+    <string name="theme_item_received_message_background_color">"Couleur de fond des messages reçus"</string>
+    <string name="theme_item_received_message_background_color_detail">"Appliqué à : Fond des messages privés reçu"</string>
+    <string name="theme_item_sent_message_background_color">"Couleur de fond des messages envoyés"</string>
+    <string name="theme_item_sent_message_background_color_detail">"Appliqué à : fond des messages privés envoyés"</string>
+    <string name="theme_item_bottom_app_bar_background_color">"Couleur de la barre de navigation inférieure"</string>
+    <string name="theme_item_bottom_app_bar_background_color_detail">"S'applique à: Barre de navigation inférieure"</string>
+    <string name="theme_item_primary_icon_color">"Couleur principale de l'icône"</string>
+    <string name="theme_item_primary_icon_color_detail">"S'applique à: Icônes dans le tiroir de navigation"</string>
+    <string name="theme_item_bottom_app_bar_icon_color">"Couleur des icônes de la barre de navigation inférieure"</string>
+    <string name="theme_item_bottom_app_bar_icon_color_detail">"S'applique à: Icônes dans la barre de navigation inférieure"</string>
+    <string name="theme_item_post_icon_and_info_color">"Couleur des icônes et infos des publications"</string>
+    <string name="theme_item_post_icon_and_info_color_detail">"S'applique à: Icônes, score et nombre de commentaires dans les publications"</string>
+    <string name="theme_item_comment_icon_and_info_color">"Couleur des icônes et infos des commentaires"</string>
+    <string name="theme_item_comment_icon_and_info_color_detail">"S'applique à: Icônes et score dans les commentaires"</string>
+    <string name="theme_item_fab_icon_color">"Couleur de l'icône du bouton d'action flottant"</string>
+    <string name="theme_item_fab_icon_color_detail">"S'applique à: Icône du bouton d'action flottant"</string>
+    <string name="theme_item_send_message_icon_color">"Couleur de l'icône d'envoi de messages"</string>
+    <string name="theme_item_send_message_icon_color_detail">"S'applique à: Icône d'envoi de messages privés"</string>
+    <string name="theme_item_toolbar_primary_text_and_icon_color">"Couleur du texte primaire et des icônes de la barre d'outils"</string>
+    <string name="theme_item_toolbar_primary_text_and_icon_color_detail">"S'applique à: Texte primaire et icônes dans la barre d'outils"</string>
+    <string name="theme_item_toolbar_secondary_text_color">"Couleur du texte secondaire de la barre d'outils"</string>
+    <string name="theme_item_toolbar_secondary_text_color_detail">"S'applique à: Texte secondaire dans la barre d'outils"</string>
+    <string name="theme_item_circular_progress_bar_background_color">"Couleur d'arrière-plan de la barre de progression circulaire"</string>
+    <string name="theme_item_circular_progress_bar_background_color_detail">"S'applique à: Arrière-plan de la barre de progression circulaire"</string>
+    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_background">"Couleur d'arrière-plan de la disposition des onglets dans la barre d'outils étendue"</string>
+    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_background_detail">"S'applique à: Arrière-plan de la disposition des onglets (barre d'outils étendue)"</string>
+    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_text_color">"Couleur du texte de la disposition des onglets dans la barre d'outils étendue"</string>
+    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_text_color_detail">"S'applique à: Couleur du texte de la disposition des onglets (barre d'outils étendue)"</string>
+    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_indicator">"Couleur de l'indicateur d'onglet de la disposition des onglets dans la barre d'outils étendue"</string>
+    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_indicator_detail">"S'applique à: Couleur de l'indicateur d'onglet dans la disposition d'onglet (barre d'outils étendue)"</string>
+    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_background">"Couleur d'arrière-plan de la disposition des onglets dans la barre d'outils réduite"</string>
+    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_background_detail">"S'applique à: Arrière-plan de la disposition des onglets (barre d'outils réduite)"</string>
+    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_text_color">"Couleur du texte de la disposition des onglets dans la barre d'outils réduite"</string>
+    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_text_color_detail">"S'applique à: Couleur du texte de la disposition des onglets (barre d'outils réduite)"</string>
+    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_indicator">"Couleur de l'indicateur d'onglet de la disposition des onglets dans la barre d'outils réduite"</string>
+    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_indicator_detail">"S'applique à: Couleur de l'indicateur d'onglet dans la disposition des onglets (barre d'outils réduite)"</string>
+    <string name="theme_item_upvoted_color">"Couleur du vote positif"</string>
+    <string name="theme_item_upvoted_color_detail">"Appliqué à : Boutons de vote et scores (vote positif)"</string>
+    <string name="theme_item_downvoted_color">"Couleur du vote négatif"</string>
+    <string name="theme_item_downvoted_color_detail">"Appliqué à : boutons de votes et scores (votes négatif)"</string>
+    <string name="theme_item_post_type_background_color">"Couleur d'arrière-plan du type de publication"</string>
+    <string name="theme_item_post_type_background_color_detail">"S'applique à: Arrière-plan du type de publication (IMAGE, TEXTE, VIDÉO, GIF, LIEN)"</string>
+    <string name="theme_item_post_type_text_color">"Couleur du texte du type de publication"</string>
+    <string name="theme_item_post_type_text_color_detail">"S'applique à: Couleur du texte du type de publication (IMAGE, TEXTE, VIDÉO, GIF, LIEN)"</string>
+    <string name="theme_item_spoiler_background_color">"Couleur de fond des \"spoilers\""</string>
+    <string name="theme_item_spoiler_background_color_detail">"Appliqué à : couleur de fond de l'étiquette spoiler"</string>
+    <string name="theme_item_spoiler_text_color">"Couleur du texte spoiler"</string>
+    <string name="theme_item_spoiler_text_color_detail">"Appliqué à : couleur du texte dans l'étiquette spoiler"</string>
+    <string name="theme_item_nsfw_background_color">"Couleur du fond NSFW"</string>
+    <string name="theme_item_nsfw_background_color_detail">"Appliqué à : fond de l'étiquette NSFW"</string>
+    <string name="theme_item_nsfw_text_color">"Couleur du texte NSFW"</string>
+    <string name="theme_item_nsfw_text_color_detail">"Appliqué à : Couleur du texte de l'étiquette NSFW"</string>
+    <string name="theme_item_flair_background_color">"Couleur d'arrière-plan du flair"</string>
+
+    <!-- I don't think we need to translate "flair" and "tag"? -->
+    <string name="theme_item_flair_background_color_detail">"S'applique à: Arrière-plan du tag flair"</string>
+    <string name="theme_item_flair_text_color">"Couleur de texte du flair"</string>
+    <string name="theme_item_flair_text_color_detail">"S'applique à: Couleur de texte du tag flair"</string>
+    <string name="theme_item_awards_background_color">"Couleur de fonds des récompenses"</string>
+    <string name="theme_item_awards_background_color_detail">"Appliqué à : Fond des étiquettes de récompenses"</string>
+    <string name="theme_item_awards_text_color">"Couleur du texte des récompenses"</string>
+    <string name="theme_item_awards_text_color_detail">"Appliqué à : couleur du texte de l'étiquette des récompenses"</string>
+    <string name="theme_item_archived_tint">"Couleur de l'icône archivé"</string>
+    <string name="theme_item_archived_tint_detail">"Appliqué à : icône archivé"</string>
+    <string name="theme_item_locked_icon_tint">"Couleur d'icône bloqué"</string>
+    <string name="theme_item_locked_icon_tint_detail">"Appliqué à : icône bloqué"</string>
+    <string name="theme_item_crosspost_icon_tint">"Couleur de l'icône de crosspostage"</string>
+    <string name="theme_item_crosspost_icon_tint_detail">"S'applique à: Icône de crosspostage"</string>
+    <string name="theme_item_stickied_post_icon_tint">"Couleur de l'icône de publication épinglée"</string>
+    <string name="theme_item_stickied_post_icon_tint_detail">"S'applique à: Icône de publication épinglée"</string>
+    <string name="theme_item_subscribed_color">"Abonné"</string>
+    <string name="theme_item_subscribed_color_detail">"Appliqué à : bouton de désabonnement"</string>
+    <string name="theme_item_unsubscribed_color">"Désabonné"</string>
+    <string name="theme_item_unsubscribed_color_detail">"Appliqué à : bouton d'abonnement"</string>
+    <string name="theme_item_username_color">"Couleur de nom d'utilisateur"</string>
+    <string name="theme_item_username_color_detail">"Appliqué à : nom d'utilisateur"</string>
+    <string name="theme_item_subreddit_color">"Couleur de subreddit"</string>
+    <string name="theme_item_subreddit_color_detail">"Appliqué à : Nom de Subreddit"</string>
+    <string name="theme_item_author_flair_text_color">"Couleur du flair de l'auteur"</string>
+    <string name="theme_item_author_flair_text_color_detail">"S'applique à: Flair de l'auteur dans les commentaires"</string>
+    <string name="theme_item_submitter_color">"Auteur"</string>
+    <string name="theme_item_submitter_color_detail">"S'applique à: Auteur dans les commentaires"</string>
+    <string name="theme_item_moderator_color">"Modérateur"</string>
+    <string name="theme_item_moderator_color_detail">"Appliqué à : Modérateur dans les commentaires"</string>
+    <string name="theme_item_single_comment_thread_background_color">"Couleur d'arrière-plan du fil de commentaire unique"</string>
+    <string name="theme_item_single_comment_thread_background_color_detail">"Appliqué à : commentaire seul"</string>
+    <string name="theme_item_unread_message_background_color">"Couleur de fond de Message non lu"</string>
+    <string name="theme_item_unread_message_background_color_detail">"S'applique à: Couleur d'arrière-plan des messages non lus"</string>
+    <string name="theme_item_divider_color">"Couleur du séparateur"</string>
+    <string name="theme_item_divider_color_detail">"S'applique à: Séparateur de commentaires, séparateurs dans les pages pour la soumission de publications, etc."</string>
+    <string name="theme_item_no_preview_link_background_color">"Couleur d'arrière-plan du lien sans aperçu"</string>
+    <string name="theme_item_no_preview_link_background_color_detail">"S'applique à: espace réservé du lien sans aperçu"</string>
+    <string name="theme_item_vote_and_reply_unavailable_button_color">"Couleur des boutons Voter et Répondre indisponibles"</string>
+    <string name="theme_item_vote_and_reply_unavailable_button_color_detail">"S'applique à: Boutons Voter et Répondre (indisponibles)"</string>
+    <string name="theme_item_comment_vertical_bar_color_1">"Couleur 1 de la barre verticale de commentaire"</string>
+    <string name="theme_item_comment_vertical_bar_color_1_detail">"S'applique à: Barre verticale de commentaire (niveau 1)"</string>
+    <string name="theme_item_comment_vertical_bar_color_2">"Couleur 2 de la barre verticale de commentaire"</string>
+    <string name="theme_item_comment_vertical_bar_color_2_detail">"S'applique à: Barre verticale de commentaire (niveau 2)"</string>
+    <string name="theme_item_comment_vertical_bar_color_3">"Couleur 3 de la barre verticale de commentaire"</string>
+    <string name="theme_item_comment_vertical_bar_color_3_detail">"S'applique à: Barre  verticale de commentaire (niveau 3)"</string>
+    <string name="theme_item_comment_vertical_bar_color_4">"Couleur 4 de la barre verticale de commentaire"</string>
+    <string name="theme_item_comment_vertical_bar_color_4_detail">"S'applique à: Barre verticale de commentaire (niveau 4)"</string>
+    <string name="theme_item_comment_vertical_bar_color_5">"Couleur 5 de la barre verticale de commentaire"</string>
+    <string name="theme_item_comment_vertical_bar_color_5_detail">"S'applique à: Barre verticale de commentaire (niveau 5)"</string>
+    <string name="theme_item_comment_vertical_bar_color_6">"Couleur 6 de la barre verticale de commentaire"</string>
+    <string name="theme_item_comment_vertical_bar_color_6_detail">"S'applique à: Barre verticale de commentaire (niveau 6)"</string>
+    <string name="theme_item_comment_vertical_bar_color_7">"Couleur 7 de la barre verticale de commentaire"</string>
+    <string name="theme_item_comment_vertical_bar_color_7_detail">"S'applique à: Barre verticale de commentaire (niveau 7)"</string>
+    <string name="theme_item_nav_bar_color">"Couleur de la barre de navigation"</string>
+    <string name="theme_item_nav_bar_color_detail">"Appliqué à : barre de navigation"</string>
+
+    <!-- Probably not a mistake but just to be sure... It's about dark theme, right? Because the description says "light_status_bar" -->
+    <string name="theme_item_light_status_bar">"Couleur de l'icône de la barre d'état sombre"</string>
+    <string name="theme_item_light_nav_bar">"Couleur de l'icône de la barre de navigation sombre"</string>
+    <string name="theme_item_change_status_bar_icon_color_after_toolbar_collapsed_in_immersive_interface">"Modifier la couleur de l'icône de la barre d'état après la réduction de la barre d'outils dans l'interface immersive"</string>
+    <string name="theme_item_available_on_android_8">"Seulement disponible pour Android 8.0 ou supérieur"</string>
+    <string name="theme_item_available_on_android_6">"Seulement disponible pour Android 6.0 ou supérieur"</string>
+    <string name="predefined_themes">"Thèmes prédéfinis"</string>
+    <string name="user_themes">"Vos thèmes"</string>
+    <string name="no_theme_name">"Quels est le noms de ce thème ?"</string>
+    <string name="theme_name_hint">"Nom du thème"</string>
+    <string name="theme_name_indigo">"Indigo"</string>
+    <string name="theme_name_indigo_dark">"Indigo sombre"</string>
+    <string name="theme_name_indigo_amoled">"Indigo Amoled"</string>
+    <string name="theme_name_white">"Blanc"</string>
+    <string name="theme_name_white_dark">"Blanc sombre"</string>
+    <string name="theme_name_white_amoled">"Amoled blanc"</string>
+    <string name="theme_name_red">"Rouge"</string>
+    <string name="theme_name_red_dark">"Rouge sombre"</string>
+    <string name="theme_name_red_amoled">"Amoled rouge"</string>
+    <string name="theme_name_dracula">"Dracula"</string>
+    <string name="theme_name_calm_pastel">"Pastelle calme"</string>
+    <string name="create_light_theme">"Créer un thème clair
+Basé sur le thème Indigo"</string>
+    <string name="create_dark_theme">"Créer un thème sombre
+Basé sur le thème sombre Indigo"</string>
+    <string name="create_amoled_theme">"Créer un thème amoled basé sur le thème amoled indigo"</string>
+    <string name="create_theme_info">"Si vous voulez créer un thème basé sur un autre thème, cliquez sur le bouton \"+\" sur un thème"</string>
+    <string name="edit_theme_name">"Modifier le nom du thème"</string>
+    <string name="edit_theme">"Modifier le thème"</string>
+    <string name="delete_theme">"Supprimer le thème"</string>
+    <string name="delete_theme_dialog_message">"Êtes-vous sûr de vouloir supprimer %1$s?"</string>
+    <string name="share_theme">"Partager le thème"</string>
+    <string name="change_theme_name">"Changer le nom"</string>
+    <string name="theme_copied">"Copié ! Collé et partagez le à d'autres personnes"</string>
+    <string name="copy_theme_faied">"Ne peut pas copier la configuration du thème"</string>
+    <string name="cannot_find_theme">"Ne peut pas trouver ce thème"</string>
+    <string name="import_theme">"Importer un thème"</string>
+    <string name="no_data_in_clipboard">"Ne peut pas trouver les données dans le presse-papiers"</string>
+
+    <!-- Fuzzy -->
+    <string name="import_theme_success">"Thème importé réussi"</string>
+    <string name="parse_theme_failed">"Erreur de syntaxe du thème"</string>
+    <string name="duplicate_theme_name_dialog_title">"Thème dupliqué trouvé"</string>
+    <string name="duplicate_theme_name_dialog_message">"Un thème dans la base de données est également appelé %1$s. Voulez-vous changer le nom du thème importé?"</string>
+    <string name="rename">"Renommer"</string>
+    <string name="override">"Remplacer"</string>
+    <string name="color_picker">"Sélecteur de couleurs"</string>
+    <string name="invalid_color">"Couleur invalide"</string>
+
+    <!-- Fuzzy -->
+    <string name="delete_all_subreddits_success">"Suppression de tous les subreddits réussie"</string>
+
+    <!-- Fuzzy -->
+    <string name="delete_all_users_success">"Suppression de tous les utilisateurs réussie"</string>
+
+    <!-- Fuzzy -->
+    <string name="delete_all_sort_types_success">"Suppression de tous les types de tri réussie"</string>
+
+    <!-- Fuzzy -->
+    <string name="delete_all_post_layouts_success">"Suppression de toutes les mises en page de publication réussie"</string>
+
+    <!-- Fuzzy -->
+    <string name="delete_all_themes_success">"Suppression de tous les thèmes réussie"</string>
+
+    <!-- Fuzzy -->
+    <string name="delete_all_front_page_scrolled_positions_success">"Suppression de toutes les positions de défilement dans la première page réussie"</string>
+
+    <!-- Fuzzy -->
+    <string name="reset_all_settings_success">"Réinitialisation des paramètres réussie"</string>
+    <string name="username_preview">"u/Hostilenemy"</string>
+    <string name="subreddit_preview">"r/Infinity_For_Reddit"</string>
+    <string name="primary_text_preview">"Texte principal"</string>
+    <string name="secondary_text_preview">"Texte secondaire"</string>
+    <string name="post_title_preview">"C'est une publication"</string>
+    <string name="post_content_preview">"C'est blague sur la gravité devient vieille, mais je craque à chaque fois"</string>
+
+    <!-- "Publication" is probably the most accurate translation but it seems it's too long... -->
+    <string name="post_type_preview">"POST"</string>
+    <string name="flair_preview">"Flair"</string>
+    <string name="awards_preview">"4 récompenses"</string>
+    <string name="author_flair_preview">"Flair de l'auteur"</string>
+
+    <!-- A completely different joke -->
+    <string name="comment_content_preview">"C’est l’histoire de deux pommes de terre. Une d’elles se fait écraser et l’autre s’écrie “Oh purée !”"</string>
+    <string name="edit_multi_reddit">"Éditer multireddit"</string>
+    <string name="delete_multi_reddit">"Supprimer multireddit"</string>
+    <string name="n_awards">"%1$d Awards"</string>
+    <string name="one_award">"Une récompense"</string>
+    <string name="report">"Signaler"</string>
+
+    <!-- Not sure about the tense.. -->
+    <string name="reporting">"Signalé"</string>
+    <string name="report_successful">"Signalé"</string>
+    <string name="report_failed">"Signalement échoué"</string>
+    <string name="report_reason_not_selected">"Vous n'avez pas sélectionné de raison"</string>
+    <string name="report_reason_general_spam">"C'est du spam"</string>
+    <string name="report_reason_general_copyright_issue">"Ça contient des problèmes de droits d'auteur"</string>
+    <string name="report_reason_general_child_pornography">"Ça contient de la pedopornographie"</string>
+    <string name="report_reason_general_abusive_content">"Ça contient du contenu abusif"</string>
+    <string name="home">"Accueil"</string>
+    <string name="popular">"Populaire"</string>
+    <string name="notifications">"Notifications"</string>
+    <string name="messages">"Messages"</string>
+    <string name="message">"Message"</string>
+    <string name="fetch_gfycat_video_failed">"Échec de la récupération de la vidéo Gfycat"</string>
+    <string name="fetch_redgifs_video_failed">"Échec de la récupération de la vidéo Redgifs"</string>
+    <string name="fetching_video_info_please_wait">"Récupération des informations vidéo. Patientez."</string>
+    <string name="error_fetching_imgur_media">"Ne peut pas charger les images"</string>
+    <string name="downloading_reddit_video">"Téléchargement de la piste vidéo"</string>
+    <string name="downloading_reddit_video_audio_track">"Téléchargement de la piste audio"</string>
+    <string name="downloading_reddit_video_save_video">"Enregistrement de la piste vidéo"</string>
+    <string name="downloading_reddit_video_save_audio">"Enregistrement de la piste audio"</string>
+    <string name="downloading_reddit_video_muxing">"Muxage vidéo et audio"</string>
+    <string name="downloading_reddit_video_save_file_to_public_dir">"Téléchargement de la vidéo"</string>
+    <string name="downloading_reddit_video_finished">"Téléchargé"</string>
+
+    <!-- Fuzzy -->
+    <string name="downloading_reddit_video_failed_cannot_get_cache_directory">"Échec du téléchargement: impossible d'accéder au répertoire de cache"</string>
+    <string name="downloading_reddit_video_failed_cannot_download_video">"Échec du téléchargement: impossible de télécharger la vidéo"</string>
+    <string name="downloading_reddit_video_failed_cannot_save_video">"Échec du téléchargement: impossible d'enregistrer la vidéo dans le répertoire de cache"</string>
+    <string name="downloading_reddit_video_failed_cannot_save_audio">"Échec du téléchargement: impossible d'enregistrer l'audio dans le répertoire de cache"</string>
+    <string name="downloading_reddit_video_failed_cannot_mux">"Échec du téléchargement: impossible de muxer la vidéo et l'audio"</string>
+    <string name="downloading_reddit_video_failed_cannot_save_mux_video">"Échec du téléchargement: impossible d'enregistrer la vidéo dans le répertoire public"</string>
+    <string name="wallpaper_set">"Fond d'écran défini"</string>
+    <string name="error_set_wallpaper">"Ne peut pas définir le fond d'écran"</string>
+    <string name="set_to_home_screen">"Définir en écran d'accueil"</string>
+    <string name="set_to_lock_screen">"Définir en écran de verrouillage"</string>
+    <string name="set_to_both">"Définir pour les deux"</string>
+    <string name="default_font_font_preview">"Par défaut"</string>
+    <string name="load_video_in_redgifs">"Essayez de charger la vidéo sur Redgifs"</string>
+    <string name="top_score">"%1$s pts"</string>
+    <string name="login_activity_2fa_prompt">"Si vous avez activé l'authentification à 2 facteurs, veuillez saisir votre mot de passe comme suit: &lt;mot de passe&gt;: &lt;code A2F&gt;.
+Exemple: motdepasse: 123456"</string>
+    <string name="block_user">"Bloquer l'utilisateur"</string>
+    <string name="block_user_success">"Bloqué"</string>
+    <string name="block_user_failed">"Échoué à bloquer l'utilisateur"</string>
+</resources>

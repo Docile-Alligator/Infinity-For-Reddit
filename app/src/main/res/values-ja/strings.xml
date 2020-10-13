@@ -1,0 +1,705 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_activity_label">"ログイン"</string>
+    <string name="search_activity_label">"検索"</string>
+    <string name="comment_activity_label">"コメントを投稿"</string>
+    <string name="comment_activity_label_is_replying">"返信"</string>
+    <string name="post_text_activity_label">"テキスト"</string>
+    <string name="subreddit_selection_activity_label">"サブレディットを選択"</string>
+    <string name="post_link_activity_label">"リンク"</string>
+    <string name="post_image_activity_label">"画像"</string>
+    <string name="post_video_activity_label">"動画"</string>
+    <string name="rules_activity_label">"ルール"</string>
+    <string name="search_subreddits_activity_label">"サブレディット"</string>
+    <string name="edit_post_activity_label">"投稿を編集"</string>
+    <string name="edit_comment_activity_label">"コメントを編集"</string>
+    <string name="view_message_activity_label">"受信トレイ"</string>
+    <string name="settings_activity_label">"設定"</string>
+    <string name="account_saved_thing_activity_label">"保存"</string>
+    <string name="create_multi_reddit_activity_label">"マルチレディットを作成"</string>
+    <string name="subreddit_multiselection_activity_label">"サブレディットを選択"</string>
+    <string name="custom_theme_listing_activity_label">"カスタムテーマ"</string>
+    <string name="customize_theme_activity_label">"テーマの編集"</string>
+    <string name="customize_theme_activity_create_theme_label">"テーマの作成"</string>
+    <string name="theme_preview_activity_label">"テーマのプレビュー"</string>
+    <string name="edit_multi_reddit_activity_label">"マルチレディットを編集"</string>
+    <string name="selected_subeddits_activity_label">"選択したサブレディット"</string>
+    <string name="report_activity_label">"報告"</string>
+    <string name="view_imgur_media_activity_image_label">"画像 %1$d/%2$d"</string>
+    <string name="view_imgur_media_activity_video_label">"動画 %1$d/%2$d"</string>
+    <string name="send_private_message_activity_label">"PMを送信"</string>
+    <string name="view_reddit_gallery_activity_image_label">"画像 %1$d/%2$d"</string>
+    <string name="view_reddit_gallery_activity_gif_label">"GIF %1$d/%2$d"</string>
+    <string name="view_reddit_gallery_activity_video_label">"動画 %1$d/%2$d"</string>
+    <string name="navigation_drawer_open">"ナビゲーションを開ける"</string>
+    <string name="navigation_drawer_close">"ナビゲーションを閉じる"</string>
+    <string name="action_download">"ダウンロード"</string>
+    <string name="action_refresh">"リフレッシュする"</string>
+    <string name="action_add_comment">"コメントを追加"</string>
+    <string name="action_save_post">"投稿を保存"</string>
+    <string name="action_search">"検索"</string>
+
+    <!-- Fuzzy -->
+    <string name="action_start_lazy_mode">"自動モードスタート"</string>
+
+    <!-- Fuzzy -->
+    <string name="action_stop_lazy_mode">"自動モードストップ"</string>
+    <string name="action_send">"送信"</string>
+    <string name="action_sort">"分類"</string>
+    <string name="action_hide_post">"投稿を非表示"</string>
+    <string name="action_unhide_post">"投稿を表示"</string>
+    <string name="action_edit_post">"投稿を編集"</string>
+    <string name="action_delete_post">"投稿を削除"</string>
+    <string name="action_mark_nsfw">"R18とマークする"</string>
+    <string name="action_unmark_nsfw">"R18マークを解除"</string>
+    <string name="action_mark_spoiler">"ネタバレとマークする"</string>
+    <string name="action_unmark_spoiler">"ネタバレマークを解除"</string>
+    <string name="action_edit_flair">"タグを編集"</string>
+    <string name="action_change_post_layout">"投稿レイアウトを変更"</string>
+    <string name="action_save">"保存する"</string>
+    <string name="action_edit_multi_reddit">"マルチレディットを編集"</string>
+    <string name="action_delete_multi_reddit">"マルチレディットを削除"</string>
+    <string name="action_share">"共有する"</string>
+    <string name="action_preview">"プレビューを見る"</string>
+    <string name="action_report">"報告する"</string>
+    <string name="action_see_removed">"削除済を見る"</string>
+    <string name="action_set_wallpaper">"背景に設定する"</string>
+    <string name="action_send_private_message">"個人メッセージを送信する"</string>
+    <string name="action_block_user">"ユーザーをブロックする"</string>
+    <string name="parse_json_response_error">"JSONパース中にエラー発生"</string>
+    <string name="retrieve_token_error">"トーケン獲得にエラー発生"</string>
+    <string name="something_went_wrong">"エラー発生"</string>
+    <string name="access_denied">"アクセス不許可"</string>
+    <string name="parse_user_info_error">"ユーザー情報パース中にエラー発生"</string>
+    <string name="no_system_webview_error">"システムのWebView起動中にエラー発生"</string>
+    <string name="error_loading_image_tap_to_retry">"画像ロード中にエラー発生。タップでリトライ。"</string>
+    <string name="load_posts_error">"投稿ロード中にエラー発生。タップでリトライ。"</string>
+    <string name="load_more_posts_error">"投稿ロード中にエラー発生。"</string>
+    <string name="load_post_error">"投稿ロード中にエラー発生。タップでリトライ。"</string>
+    <string name="search_subreddits_error">"サブレディット検索中にエラー発生。タップでリトライ。"</string>
+    <string name="search_users_error">"ユーザー検索中にエラー発生。タップでリトライ。"</string>
+    <string name="no_posts">"投稿が見つかりませんでした"</string>
+    <string name="no_comments">"コメントが見つかりませんでした"</string>
+    <string name="no_subreddits">"サブレディットが見つかりませんでした"</string>
+    <string name="no_users">"ユーザーが見つかりませんでした"</string>
+    <string name="no_multi_reddits">"マルチレディットが見つかりませんでした"</string>
+    <string name="no_storage_permission">"ファイル保存のストレージ許可がありません"</string>
+    <string name="load_comments_failed">"コメントロード中にエラー発生。タップでリトライ。"</string>
+    <string name="retry">"リトライ"</string>
+    <string name="comments">"コメント"</string>
+    <string name="no_comments_yet">"まだコメントがありません。コメントを書きますか?"</string>
+    <string name="vote_failed">"投票に失敗"</string>
+    <string name="refresh_post_failed">"投稿リフレッシュ中にエラー発生"</string>
+    <string name="load_messages_failed">"メッセージロード中にエラー発生。タップでリトライ。"</string>
+    <string name="no_messages">"なし"</string>
+    <string name="nsfw">"R18"</string>
+    <string name="karma_info">"カルマ: %1$d"</string>
+    <string name="karma_info_user_detail">"カルマ: %1$d (%2$d + %3$d)"</string>
+    <string name="cakeday_info">"誕生日: %1$s"</string>
+
+    <!-- Fuzzy -->
+    <string name="since">"いつから："</string>
+    <string name="profile">"プロフィール"</string>
+    <string name="subscriptions">"登録済"</string>
+    <string name="multi_reddit">"マルチレディット"</string>
+    <string name="inbox">"受信トレイ"</string>
+
+    <!-- Fuzzy -->
+    <string name="upvoted">"上評価"</string>
+
+    <!-- Fuzzy -->
+    <string name="downvoted">"下評価"</string>
+    <string name="hidden">"非表示済"</string>
+    <string name="saved">"保存済"</string>
+    <string name="gilded">"金メッキ"</string>
+    <string name="settings">"設定"</string>
+    <string name="subscribers_number_detail">"登録者数: %1$d"</string>
+    <string name="online_subscribers_number_detail">"オンライン: %1$d"</string>
+    <string name="cannot_fetch_subreddit_info">"サブレディット情報が取得できません"</string>
+    <string name="cannot_fetch_user_info">"ユーザー情報が取得できません"</string>
+    <string name="cannot_fetch_sidebar">"サイドバーが取得できません"</string>
+    <string name="cannot_fetch_multireddit">"マルチレディット情報が取得できません"</string>
+    <string name="subscribe">"登録する"</string>
+    <string name="unsubscribe">"登録を解除する"</string>
+    <string name="subscribed">"登録済"</string>
+    <string name="subscribe_failed">"登録失敗"</string>
+    <string name="unsubscribed">"登録解除しました"</string>
+    <string name="unsubscribe_failed">"登録解除失敗"</string>
+    <string name="follow">"フォローする"</string>
+    <string name="unfollow">"フォロー解除"</string>
+    <string name="followed">"フォローしました"</string>
+    <string name="follow_failed">"フォロー失敗"</string>
+    <string name="unfollowed">"フォロー解除しました"</string>
+    <string name="unfollow_failed">"フォロー解除失敗"</string>
+    <string name="content_description_banner_imageview">"サブレディットのバナー画像"</string>
+    <string name="app_label">"Infinity"</string>
+    <string name="search_hint">"なんでも検索してください"</string>
+    <string name="no_posts_no_lazy_mode">"投稿がありません"</string>
+    <string name="lazy_mode_start">"自動モードが %1$.1fs で始まります"</string>
+    <string name="lazy_mode_stop">"自動モード中止"</string>
+    <string name="write_comment_hint">"面白いコメントをここに"</string>
+    <string name="comment_content_required">"コメント内容が必要です"</string>
+    <string name="sending_comment">"送信中"</string>
+    <string name="send_comment_success">"送信しました"</string>
+    <string name="send_comment_failed">"コメントが送信できませんでした"</string>
+    <string name="send_message_username_hint">"ユーザー"</string>
+    <string name="send_message_subject_hint">"内容 (最大100文字)"</string>
+    <string name="send_message_content_hint">"メッセージ"</string>
+    <string name="reply_message_failed">"返信できませんでした"</string>
+    <string name="error_getting_message">"メッセージ取得に失敗"</string>
+    <string name="message_username_required">"宛先が必要です"</string>
+    <string name="message_subject_required">"タイトルが必要です"</string>
+    <string name="message_content_required">"メッセージ内容が必要です"</string>
+    <string name="sending_message">"送信中"</string>
+    <string name="send_message_success">"送信しました"</string>
+    <string name="send_message_failed">"送信できませんでした"</string>
+    <string name="select_a_subreddit">"サブレディットを選択してください"</string>
+    <string name="title_required">"タイトルが必要です"</string>
+    <string name="link_required">"リンクが必要です"</string>
+    <string name="select_an_image">"画像を選択してください"</string>
+    <string name="posting">"投稿中"</string>
+    <string name="post_failed">"投稿できませんでした"</string>
+    <string name="error_processing_image">"画像の処理中にエラー発生"</string>
+    <string name="error_processing_video">"動画の処理中にエラー発生"</string>
+    <string name="download_started">"ダウンロード開始。通知でチェック。"</string>
+    <string name="comment_load_more_comments">"コメントをさらにロードする"</string>
+    <string name="comment_load_more_comments_failed">"ロード失敗。タップでリトライ。"</string>
+    <string name="loading">"ロード中"</string>
+    <string name="post_title_hint">"タイトル"</string>
+    <string name="post_text_content_hint">"内容"</string>
+    <string name="choose_a_subreddit">"サブレディットを選択"</string>
+    <string name="rules">"ルール"</string>
+    <string name="post_link_hint">"URL"</string>
+    <string name="subreddits">"サブレディット"</string>
+    <string name="users">"ユーザー"</string>
+    <string name="multi_reddits">"マルチレディット"</string>
+    <string name="bottom_sheet_post_text">"テキスト"</string>
+    <string name="bottom_sheet_post_link">"リンク"</string>
+    <string name="bottom_sheet_post_image">"画像"</string>
+    <string name="bottom_sheet_post_video">"動画"</string>
+    <string name="select_from_gallery">"画像を選択"</string>
+    <string name="select_again">"また選択"</string>
+    <string name="error_getting_image">"画像取得中にエラー発生"</string>
+    <string name="error_getting_video">"動画取得中にエラー発生"</string>
+    <string name="no_camera_available">"カメラアプリがありません"</string>
+    <string name="error_creating_temp_file">"tempファイル作成中にエラー発生"</string>
+    <string name="video_is_processing">"動画の処理中です。少しお待ちください。"</string>
+    <string name="image_is_processing">"画像の処理中です。少しお待ちください。"</string>
+    <string name="gif_is_processing">"GIFの処理中です。少しお待ちください。"</string>
+    <string name="flair">"タグ"</string>
+    <string name="spoiler">"ネタバレ"</string>
+    <string name="no_flair">"タグなし"</string>
+    <string name="error_loading_flairs">"タグをロード中にエラー発生。タップでリトライ。"</string>
+    <string name="no_rule">"ルールなし"</string>
+    <string name="error_loading_rules">"ルールをロード中にエラー発生。タップでリトライ。"</string>
+    <string name="error_loading_rules_without_retry">"ルールをロード中にエラー発生。"</string>
+    <string name="search_in">"検索範囲"</string>
+    <string name="all_subreddits">"全てのサブレディット"</string>
+    <string name="sort_best">"最適"</string>
+    <string name="sort_hot">"上昇中"</string>
+    <string name="sort_new">"新しい順"</string>
+    <string name="sort_random">"ランダム"</string>
+    <string name="sort_rising">"上昇中"</string>
+    <string name="sort_top">"トップ"</string>
+
+    <!-- There's no proper word for "controversial" in Japanese, so I've made it the phonetic translation. -->
+    <!-- Fuzzy -->
+    <string name="sort_controversial">"コントラバーシャル"</string>
+    <string name="sort_relevance">"関連性"</string>
+    <string name="sort_comments">"コメント"</string>
+    <string name="sort_activity">"アクティビィティ"</string>
+
+    <!-- Fuzzy -->
+    <string name="sort_confidence">"信頼"</string>
+    <string name="sort_old">"古い順"</string>
+
+    <!-- Fuzzy -->
+    <string name="sort_qa">"QA"</string>
+
+    <!-- Fuzzy -->
+    <string name="sort_live">"ライブ"</string>
+    <string name="sort_time_hour">"1時間"</string>
+    <string name="sort_time_day">"1日"</string>
+    <string name="sort_time_week">"1週間"</string>
+    <string name="sort_time_month">"1ヶ月"</string>
+    <string name="sort_time_year">"1年"</string>
+    <string name="sort_time_all_time">"全て"</string>
+    <string name="no_browser_found">"ブラウザが見つかりませんでした"</string>
+    <string name="no_activity_found_for_share">"共有できるアプリがありません"</string>
+    <string name="archived_post_vote_unavailable">"アーカイブされた投稿。投票不可能。"</string>
+    <string name="archived_post_comment_unavailable">"アーカイブされた投稿。コメント不可能。"</string>
+    <string name="archived_post_reply_unavailable">"アーカイブされた投稿。返信不可能。"</string>
+    <string name="locked_post_comment_unavailable">"ロックされた投稿。コメント不可能。"</string>
+    <string name="locked_post_reply_unavailable">"ロックされた投稿。返信不可能。"</string>
+    <string name="text">"テキスト"</string>
+    <string name="link">"リンク"</string>
+    <string name="image">"画像"</string>
+    <string name="video">"動画"</string>
+    <string name="gif">"GIF"</string>
+    <string name="gallery">"ギャラリー"</string>
+    <string name="best">"最適"</string>
+    <string name="search">"検索"</string>
+    <string name="posting_video">"動画投稿中"</string>
+    <string name="posting_image">"画像投稿中"</string>
+    <string name="please_wait">"少しお待ちください。"</string>
+    <string name="add_account">"アカウントを追加"</string>
+    <string name="anonymous_account">"匿名"</string>
+    <string name="log_out">"ログアウト"</string>
+    <string name="press_here_to_login">"ここを押してログインしてください"</string>
+    <string name="login_first">"ログインが必要です"</string>
+    <string name="post_saved_success">"投稿を保存しました"</string>
+    <string name="post_saved_failed">"投稿を保存できませんでした"</string>
+    <string name="post_unsaved_success">"投稿を保存解除しました"</string>
+    <string name="post_unsaved_failed">"投稿を保存解除できませんでした"</string>
+    <string name="post_hide_success">"投稿を非表示しました"</string>
+    <string name="post_hide_failed">"投稿を非表示できませんでした"</string>
+    <string name="post_unhide_success">"投稿を表示"</string>
+    <string name="thing_favorite_failed">"投稿をお気に入りできませんでした"</string>
+    <string name="thing_unfavorite_failed">"投稿をお気に入り解除できませんでした"</string>
+    <string name="post_unhide_failed">"投稿を表示できませんでした"</string>
+    <string name="delete_this_post">"投稿を削除"</string>
+    <string name="delete_this_comment">"コメントを削除"</string>
+    <string name="are_you_sure">"本当に大丈夫ですか?"</string>
+    <string name="edit">"編集"</string>
+    <string name="delete">"削除"</string>
+    <string name="see_removed_comment">"削除済のコメントを見る"</string>
+    <string name="fetching_removed_comment">"削除済のコメントを取得中"</string>
+    <string name="show_removed_comment_failed">"削除済のコメントを取得できませんでした"</string>
+    <string name="fetching_removed_post">"削除済の投稿を取得中"</string>
+    <string name="show_removed_post_failed">"削除済の投稿を取得できませんでした"</string>
+    <string name="cancel">"キャンセル"</string>
+    <string name="ok">"OK"</string>
+
+    <!-- Fuzzy -->
+    <string name="edit_success">"編集できました"</string>
+    <string name="delete_post_success">"削除できました"</string>
+    <string name="delete_post_failed">"削除失敗"</string>
+
+    <!-- Fuzzy -->
+    <string name="mark_nsfw_success">"R18マークをしました"</string>
+    <string name="mark_nsfw_failed">"R18マークできませんでした"</string>
+
+    <!-- Fuzzy -->
+    <string name="unmark_nsfw_success">"R18マークを解除しました"</string>
+    <string name="unmark_nsfw_failed">"R18マークを解除できませんでした"</string>
+
+    <!-- Fuzzy -->
+    <string name="mark_spoiler_success">"ネタバレマークをしました"</string>
+    <string name="mark_spoiler_failed">"ネタバレマークできませんでした"</string>
+
+    <!-- Fuzzy -->
+    <string name="unmark_spoiler_success">"ネタバレマーク解除できました"</string>
+    <string name="unmark_spoiler_failed">"ネタバレマーク解除できませんでした"</string>
+
+    <!-- Fuzzy -->
+    <string name="update_flair_success">"タグ更新できました"</string>
+    <string name="update_flair_failed">"タグ更新できませんでした"</string>
+    <string name="edit_flair">"タグを編集"</string>
+    <string name="only_allow_64_chars">"64文字以下のみ"</string>
+    <string name="view_all_comments">"全てのコメントを見る"</string>
+    <string name="notification_summary_account">"アカウント"</string>
+    <string name="notification_summary_message">"新しいメッセージ"</string>
+    <string name="notification_summary_subreddit">"サブレディット"</string>
+    <string name="notification_summary_award">"アワード"</string>
+    <string name="notification_new_messages">"%1$d 個の新しいメッセージ"</string>
+    <string name="label_account">"アカウント"</string>
+    <string name="label_post">"投稿"</string>
+    <string name="label_preferences">"環境設定"</string>
+    <string name="account_switched">"アカウントを変更しました。"</string>
+    <string name="settings_notification_master_title">"通知"</string>
+    <string name="settings_notification_enable_notification_title">"通知をオンにする"</string>
+    <string name="settings_notification_interval_title">"通知期間を確認"</string>
+    <string name="settings_theme_title">"テーマ"</string>
+    <string name="settings_amoled_dark_title">"AMOLEDダークテーマ"</string>
+    <string name="settings_interface_title">"インターフェース"</string>
+    <string name="settings_gestures_and_buttons_title">"ジェスチャーとボタン"</string>
+    <string name="settings_save_front_page_scrolled_position_title">"ホームでスクロール位置を保存する"</string>
+    <string name="settings_save_front_page_scrolled_position_summary">"ホームをリフレッシュ後、新しい投稿を見る (フロントページ, 分類の種類: 最適)"</string>
+    <string name="settings_open_link_in_app_title">"リンクをアプリで開く"</string>
+    <string name="settigns_video_title">"動画"</string>
+    <string name="settings_video_autoplay_title">"動画を自動再生"</string>
+    <string name="settings_mute_autoplaying_videos_title">"自動再生の動画をミュート"</string>
+    <string name="settings_autoplay_nsfw_videos_title">"R18動画を自動再生"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_immersive_interface_title">"没入型インターフェース"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_immersive_interface_summary">"全てのページには影響しません
+Android11では使えないかもしれません"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_immersive_interface_ignore_nav_bar_title">"没入型インターフェースでナビゲーションバーを無視"</string>
+    <string name="settings_customize_tabs_in_main_page_title">"メインページでのタブをカスタマイズする"</string>
+    <string name="settings_enable_bottom_app_bar_title">"下ナビゲーションをオンにする"</string>
+    <string name="settings_enable_bottom_app_bar_summary">"匿名モードでは効果がないです"</string>
+    <string name="settings_category_post_and_comment_title">"投稿とコメント"</string>
+    <string name="settings_vote_buttons_on_the_right_title">"投票ボタンを右側にする"</string>
+    <string name="settings_volume_keys_navigate_comments_title">"音量ボタンを使ってコメントを見る"</string>
+    <string name="settings_volume_keys_navigate_posts_title">"音量ボタンを使って投稿を見る"</string>
+    <string name="settings_mute_video_title">"動画をミュートする"</string>
+    <string name="settings_mute_nsfw_video_title">"R18の動画をミュートする"</string>
+    <string name="settings_automatically_try_redgifs_title">"Gfycatで動画が削除されたら自動的にRedgifsを試す"</string>
+    <string name="settings_video_player_ignore_nav_bar_title">"動画プレーヤーでナビゲーションバーを無視"</string>
+    <string name="settings_confirm_to_exit">"終了を確認"</string>
+    <string name="settings_category_comment_title">"コメント"</string>
+    <string name="settings_show_top_level_comments_first_title">"トップレベルのコメントを先に見せる"</string>
+    <string name="settings_show_comment_divider_title">"コメントを分ける"</string>
+    <string name="settings_comment_toolbar_hide_on_click">"クリックでコメントツールバーを表示/非表示"</string>
+    <string name="settings_fully_collapse_comment_title">"コメントを完全に閉じる"</string>
+    <string name="settings_comment_toolbar_hidden">"デフォルトでコメントツールバーを非表示"</string>
+    <string name="settings_show_absolute_number_of_votes_title">"投票の絶対数を表示"</string>
+    <string name="settings_time_format_title">"時間表示"</string>
+    <string name="settings_category_post_title">"投稿"</string>
+    <string name="settings_default_post_layout">"投稿レイアウトを変更"</string>
+    <string name="settings_show_divider_in_compact_layout">"コンパクトレイアウトで投稿を分ける"</string>
+    <string name="settings_show_thumbnail_on_the_left_in_compact_layout">"コンパクトレイアウトでサムネイルを左に表示"</string>
+    <string name="settings_swap_tap_and_long_title">"コメントでタップとロングプレスを交換"</string>
+    <string name="settings_swipe_to_go_back_title">"右スワイプで戻る"</string>
+    <string name="settings_swipe_to_go_back_summary">"全てのページには影響しません"</string>
+    <string name="settings_lock_jump_to_next_top_level_comment_button_title">"次のトップレベルのコメントへ移動を固定"</string>
+    <string name="settings_lock_bottom_app_bar_title">"下ナビゲーションを固定"</string>
+    <string name="settings_swipe_up_to_hide_jump_to_next_top_level_comment_button_title">"上スワイプで次のトップレベルのコメントへ移動のボタンを非表示"</string>
+    <string name="settings_lazy_mode_interval_title">"自動モード期間"</string>
+    <string name="settings_font_title">"フォント"</string>
+    <string name="settings_preview_font_title">"フォントのプレビュー"</string>
+    <string name="settings_font_summary">"フォント"</string>
+    <string name="settings_title_font_summary">"タイトル"</string>
+    <string name="settings_content_font_summary">"内容"</string>
+    <string name="settings_font_size_title">"フォントの大きさ"</string>
+    <string name="settings_title_font_size_title">"タイトルのフォントの大きさ"</string>
+    <string name="settings_content_font_size_title">"内容のフォントの大きさ"</string>
+    <string name="settings_enable_nsfw_title">"R18をオンにする"</string>
+    <string name="settings_blur_nsfw_title">"R18画像にモザイクをかける"</string>
+    <string name="settings_blur_spoiler_title">"ネタバレ画像にモザイクをかける"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_about_master_title">"情報"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_acknowledgement_master_title">"了承"</string>
+    <string name="settings_credits_master_title">"クレジット"</string>
+    <string name="settings_credits_icon_foreground_title">"アイコンフォアグラウンド"</string>
+    <string name="settings_credits_icon_foreground_summary">"テクノロジーベクターはfreepikによって作成 - www.freepik.com"</string>
+    <string name="settings_credits_icon_background_title">"アイコンバックグラウンド"</string>
+    <string name="settings_credits_icon_background_summary">"バックグラウンドベクターはfreepikによって作成 - www.freepik.com"</string>
+    <string name="settings_credits_error_image_title">"エラー画像"</string>
+    <string name="settings_credits_error_image_summary">"テクノロジーベクターはfreepikによって作成 - www.freepik.com"</string>
+    <string name="settings_credits_gilded_icon_summary">"アイコンはfreepikによって作成 - www.flaticon.com より"</string>
+    <string name="settings_credits_crosspost_icon_summary">"アイコンはfreepikによって作成 - www.flaticon.com より"</string>
+    <string name="settings_credits_thumbtack_icon_title">"画鋲アイコン"</string>
+    <string name="settings_credits_thumbtack_icon_summary">"アイコンはfreepikによって作成 - www.flaticon.com より"</string>
+    <string name="settings_credits_best_rocket_icon_title">"ロケットアイコン"</string>
+    <string name="settings_credits_best_rocket_icon_summary">"アイコンはfreepikによって作成 - www.flaticon.com より"</string>
+    <string name="settings_credits_material_icons_title">"マテリアルアイコン"</string>
+    <string name="settings_open_source_title">"Open Source"</string>
+    <string name="settings_open_source_summary">"もしアプリを気に入ったらGitHubで星をつけてください"</string>
+    <string name="settings_rate_title">"Google Play で評価する"</string>
+    <string name="settings_rate_summary">"星5をくれたらありがたいです"</string>
+    <string name="settings_f_droid_title">"F-Droid"</string>
+    <string name="settings_f_droid_summary">"IzzyOnDroidでダウンロード可能です"</string>
+    <string name="settings_email_title">"Email"</string>
+    <string name="settings_email_summary">"docilealligator.app@gmail.com"</string>
+    <string name="settings_reddit_account_title">"レディットアカウント"</string>
+    <string name="settings_reddit_account_summary">"u/Hostilenemy"</string>
+    <string name="settings_subreddit_title">"サブレディット"</string>
+    <string name="settings_subreddit_summary">"r/Infinity_For_Reddit"</string>
+    <string name="settings_share_title">"共有"</string>
+    <string name="settings_share_summary">"このアプリを気に入ったら他の人に紹介してください"</string>
+    <string name="settings_version_title">"インフィニティ For Reddit"</string>
+    <string name="settings_version_summary">"バージョン %s"</string>
+    <string name="settings_category_customization_title">"カスタマイズ"</string>
+    <string name="settings_customize_light_theme_title">"ライトテーマ"</string>
+    <string name="settings_customize_dark_theme_title">"ダークテーマ"</string>
+    <string name="settings_customize_amoled_theme_title">"AMOLEDテーマ"</string>
+    <string name="settings_manage_themes_title">"テーマの管理"</string>
+    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"カスタムテーマは設定画面には適用できません (ツールバー、ステータスバー、ナビゲーションバーを除く)"</string>
+    <string name="settings_advanced_master_title">"詳しい設定"</string>
+    <string name="settings_delete_all_subreddits_data_in_database_title">"データベース中の全てのサブレディットを削除"</string>
+    <string name="settings_delete_all_users_data_in_database_title">"データベース中の全てのユーザーを削除"</string>
+    <string name="settings_delete_all_sort_type_data_in_database_title">"データベース中の全ての検索分類を削除"</string>
+    <string name="settings_delete_all_post_layout_data_in_database_title">"データベース中の全ての投稿レイアウトを削除"</string>
+    <string name="settings_delete_all_themes_in_database_title">"データベース中の全てのテーマを削除"</string>
+    <string name="settings_delete_front_page_scrolled_positions_in_database_title">"データベース中の全てのフロントページのスクロール位置を削除"</string>
+    <string name="settings_reset_all_settings_title">"全ての設定をリセット"</string>
+    <string name="settings_advanced_settings_summary">"データベースと共有環境設定を初期化"</string>
+    <string name="settings_tab_1_summary">"タブ1"</string>
+    <string name="settings_tab_2_summary">"タブ2"</string>
+    <string name="settings_tab_3_summary">"タブ3"</string>
+    <string name="settings_tab_title">"タイトル"</string>
+    <string name="settings_tab_post_type">"種類"</string>
+    <string name="settings_tab_subreddit_name">"サブレディット名 (「r/」なし)"</string>
+    <string name="settings_tab_multi_reddit_name">"マルチレディット名 (/ユーザー名/あなたのユーザー名/m/あなたのマルチレディット名)"</string>
+    <string name="settings_tab_username">"ユーザー名 (「u/」なし)"</string>
+    <string name="no_developer_easter_egg">"開発者オプションはありません"</string>
+    <string name="no_link_available">"リンクを取得できません"</string>
+    <string name="exit_when_submit">"終了しますか?"</string>
+    <string name="exit_when_submit_post_detail">"ここを離れてもこの投稿はアップされます。"</string>
+    <string name="exit_when_edit_post_detail">"ここを離れてもこの投稿はアップされる可能性があります。"</string>
+    <string name="exit_when_edit_comment_detail">"ここを離れてもこのコメントはアップされる可能性があります。"</string>
+    <string name="discard">"削除しますか?"</string>
+    <string name="discard_detail">"ドラフトは保存されません。"</string>
+    <string name="yes">"はい"</string>
+    <string name="no">"いいえ"</string>
+    <string name="no_data_received">"データを受信できませんでした"</string>
+    <string name="no_image_path_received">"画像Pathが見つかりませんでした"</string>
+    <string name="no_video_path_received">"動画Pathが見つかりませんでした"</string>
+
+    <!-- Fuzzy -->
+    <string name="cannot_handle_intent">"シェアできませんでした"</string>
+    <string name="share">"共有"</string>
+    <string name="no_email_client">"Eメールクライエントが見つかりませんでした"</string>
+    <string name="no_app">"対応するアプリがありません"</string>
+    <string name="comment_saved_success">"コメントを保存しました"</string>
+    <string name="comment_saved_failed">"コメントを保存できませんでした"</string>
+    <string name="comment_unsaved_success">"コメントを保存解除しました"</string>
+    <string name="comment_unsaved_failed">"コメントを保存解除できませんでした"</string>
+    <string name="favorites">"お気に入り"</string>
+    <string name="all">"全て"</string>
+    <string name="post_layout_card">"カードレイアウト"</string>
+    <string name="post_layout_compact">"コンパクトレイアウト"</string>
+    <string name="elapsed_time_just_now">"たった今"</string>
+    <string name="elapsed_time_a_minute_ago">"1分"</string>
+    <string name="elapsed_time_minutes_ago">"%1$d 分"</string>
+    <string name="elapsed_time_an_hour_ago">"1時間"</string>
+    <string name="elapsed_time_hours_ago">"%1$d 時間"</string>
+    <string name="elapsed_time_yesterday">"昨日"</string>
+    <string name="elapsed_time_days_ago">"%1$d 日"</string>
+    <string name="elapsed_time_a_month_ago">"1ヶ月"</string>
+    <string name="elapsed_time_months_ago">"%1$d ヶ月"</string>
+    <string name="elapsed_time_a_year_ago">"1年"</string>
+    <string name="elapsed_time_years_ago">"%1$d 年"</string>
+    <string name="error_getting_multi_reddit_data">"マルチレディットデータを取得中にエラー発生"</string>
+    <string name="share_this_app">"インフィニティ For Reddit を試してください！
+https://play.google.com/store
+/apps/details?id=ml.docilealligator.infinityforreddit"</string>
+    <string name="error_getting_subreddit_name">"サブレディット名を取得中にエラー発生"</string>
+    <string name="share_post_link">"投稿リンクを共有"</string>
+    <string name="share_image_link">"画像リンクを共有"</string>
+    <string name="share_gif_link">"GIFリンクを共有"</string>
+    <string name="share_video_link">"動画リンクを共有"</string>
+    <string name="share_link">"リンクを共有"</string>
+    <string name="copy_post_link">"投稿リンクをコピー"</string>
+    <string name="copy_image_link">"画像リンクをコピー"</string>
+    <string name="copy_gif_link">"GIFリンクをコピー"</string>
+    <string name="copy_video_link">"動画リンクをコピー"</string>
+    <string name="copy_link">"リンクをコピー"</string>
+    <string name="copy_success">"コピーしました"</string>
+    <string name="copy_link_failed">"コピーできませんでした"</string>
+    <string name="copy_text">"コピー"</string>
+    <string name="copy_all">"全てをコピー"</string>
+    <string name="copy_markdown">"マークダウンをコピー"</string>
+    <string name="copy_raw_text">"テキストをコピー"</string>
+    <string name="copy_all_markdown">"マークダウンを全てコピー"</string>
+    <string name="copy_all_raw_text">"テキストを全てコピー"</string>
+    <string name="exit_app">"終了しますか?"</string>
+    <string name="light_theme">"ライトテーマ"</string>
+    <string name="dark_theme">"ダークテーマ"</string>
+    <string name="multi_reddit_name_hint">"名前 (最大50文字)"</string>
+    <string name="multi_reddit_description_hint">"詳細"</string>
+    <string name="private_multi_reddit">"プライベート"</string>
+    <string name="select_subreddits">"サブレディットを選択"</string>
+    <string name="no_multi_reddit_name">"名前がありません。"</string>
+    <string name="create_multi_reddit_failed">"このマルチレディットは作成できません"</string>
+    <string name="duplicate_multi_reddit">"このマルチレディットはすでに存在します"</string>
+    <string name="edit_multi_reddit_failed">"このマルチレディットは編集できません"</string>
+    <string name="logged_out">"ログアウト状態です"</string>
+    <string name="delete_multi_reddit_success">"削除できました"</string>
+    <string name="delete_multi_reddit_failed">"削除できませんでした"</string>
+    <string name="delete_multi_reddit_dialog_message">"本当に大丈夫ですか?"</string>
+    <string name="enable_nsfw">"R18をオンにする"</string>
+    <string name="disable_nsfw">"R18をオフにする"</string>
+    <string name="cannot_save_image">"画像を保存できません"</string>
+    <string name="cannot_save_gif">"GIFを保存できません"</string>
+    <string name="cannot_get_storage">"アプリストレージをアクセスできません"</string>
+    <string name="save_image_first">"画像を保存中。少しお待ちください。"</string>
+    <string name="save_gif_first">"GIFを保存中。少しお待ちください。"</string>
+    <string name="theme_name_description">"テーマ名を変えるにはタップしてください。"</string>
+    <string name="theme_item_is_light_theme">"ライトテーマと設定する"</string>
+    <string name="theme_item_is_dark_theme">"ダークテーマと設定する"</string>
+    <string name="theme_item_is_amoled_theme">"AMOLEDテーマと設定する"</string>
+    <string name="theme_item_color_primary">"メイン色"</string>
+    <string name="theme_item_color_primary_detail">"ツールバーに適用"</string>
+    <string name="theme_item_color_primary_dark">"メイン色(ダーク)"</string>
+    <string name="theme_item_color_primary_dark_detail">"ステータスバーに適用"</string>
+    <string name="theme_item_color_accent">"アクセント色"</string>
+    <string name="theme_item_color_primary_light_theme">"ライトテーマメイン色"</string>
+    <string name="theme_item_primary_text_color">"テキストメイン色"</string>
+    <string name="theme_item_secondary_text_color">"サブテキスト色"</string>
+    <string name="theme_item_post_title_color">"投稿タイトル色"</string>
+    <string name="theme_item_post_content_color">"投稿内容色"</string>
+    <string name="theme_item_comment_color">"コメント色"</string>
+    <string name="theme_item_button_text_color">"ボタンテキスト色"</string>
+    <string name="theme_item_chip_text_color">"チップテキスト色"</string>
+    <string name="theme_item_link_color">"リンク色"</string>
+    <string name="theme_item_received_message_text_color">"受信メッセージテキスト色"</string>
+    <string name="theme_item_sent_message_text_color">"送信メッセージテキスト色"</string>
+    <string name="theme_item_background_color">"バックグラウンド色"</string>
+    <string name="theme_item_card_view_background_color">"カードビューバックグラウンド色"</string>
+    <string name="theme_item_comment_background_color">"コメントバックグラウンド色"</string>
+    <string name="theme_item_fully_collapsed_comment_background_color">"完全に閉じたコメントバックグラウンド色"</string>
+    <string name="theme_item_awarded_comment_background_color">"アワード付きコメントバックグラウンド色"</string>
+    <string name="theme_item_received_message_background_color">"受信メッセージバックグラウンド色"</string>
+    <string name="theme_item_sent_message_background_color">"送信メッセージバックグラウンド色"</string>
+    <string name="theme_item_bottom_app_bar_background_color">"下ナビゲーションバーバックグラウンド色"</string>
+    <string name="theme_item_primary_icon_color">"アイコンメイン色"</string>
+    <string name="theme_item_bottom_app_bar_icon_color">"下ナビゲーションバー色"</string>
+    <string name="theme_item_post_icon_and_info_color">"投稿アイコンと情報色"</string>
+    <string name="theme_item_comment_icon_and_info_color">"コメントアイコンと情報色"</string>
+    <string name="theme_item_fab_icon_color">"アクションボタンアイコン色"</string>
+    <string name="theme_item_send_message_icon_color">"送信メッセージアイコン色"</string>
+    <string name="theme_item_toolbar_primary_text_and_icon_color">"ツールバーテキストとアイコンメイン色"</string>
+    <string name="theme_item_toolbar_secondary_text_color">"ツールバーサブテキスト色"</string>
+
+    <!-- Fuzzy -->
+    <string name="theme_item_circular_progress_bar_background_color">"プログレスバーバックグラウンド色"</string>
+    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_background">"拡大ツールバーバックグラウンド色"</string>
+    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_text_color">"拡大ツールバーテキスト色"</string>
+    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_indicator">"拡大ツールバータブレイアウトのタブ色"</string>
+    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_background">"閉じたツールバータブレイアウトのバックグラウンド色"</string>
+    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_text_color">"閉じたツールバータブレイアウトのテキスト色"</string>
+    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_indicator">"閉じたツールバータブレイアウトのタブ色"</string>
+    <string name="theme_item_upvoted_color">"上評価色"</string>
+    <string name="theme_item_downvoted_color">"下評価色"</string>
+    <string name="theme_item_post_type_background_color">"投稿種類バックグラウンド色"</string>
+    <string name="theme_item_post_type_text_color">"投稿種類テキスト色"</string>
+    <string name="theme_item_spoiler_background_color">"ネタバレバックグラウンド色"</string>
+    <string name="theme_item_spoiler_text_color">"ネタバレテキスト色"</string>
+    <string name="theme_item_nsfw_background_color">"R18バックグラウンド色"</string>
+    <string name="theme_item_nsfw_text_color">"R18テキスト色"</string>
+    <string name="theme_item_flair_background_color">"タグバックグラウンド色"</string>
+    <string name="theme_item_flair_text_color">"タグテキスト色"</string>
+    <string name="theme_item_awards_background_color">"アワードバックグラウンド色"</string>
+    <string name="theme_item_awards_text_color">"アワードテキスト色"</string>
+    <string name="theme_item_archived_tint">"アーカイブアイコン色"</string>
+    <string name="theme_item_locked_icon_tint">"ロックアイコン色"</string>
+
+    <!-- Fuzzy -->
+    <string name="theme_item_stickied_post_icon_tint">"ピン留めされた投稿色"</string>
+    <string name="theme_item_subscribed_color">"登録しました色"</string>
+    <string name="theme_item_unsubscribed_color">"登録解除しました色"</string>
+    <string name="theme_item_username_color">"ユーザー名色"</string>
+    <string name="theme_item_subreddit_color">"サブレディット色"</string>
+    <string name="theme_item_author_flair_text_color">"OPタグ色"</string>
+    <string name="theme_item_submitter_color">"投稿者色"</string>
+    <string name="theme_item_moderator_color">"管理者色"</string>
+    <string name="theme_item_divider_color">"分け目色"</string>
+    <string name="theme_item_light_status_bar">"ステータスバーのアイコン色 (ダーク)"</string>
+    <string name="theme_item_light_nav_bar">"ナビゲーションバーのアイコン色 (ダーク)"</string>
+    <string name="theme_item_available_on_android_8">"Android 8.0 以上のみ"</string>
+    <string name="theme_item_available_on_android_6">"Android 6.0 以上のみ"</string>
+    <string name="predefined_themes">"初期テーマ"</string>
+    <string name="user_themes">"あなたのテーマ"</string>
+    <string name="no_theme_name">"テーマの名前がありません"</string>
+    <string name="theme_name_hint">"テーマ名"</string>
+    <string name="theme_name_indigo">"紺"</string>
+    <string name="theme_name_indigo_dark">"紺ダーク"</string>
+    <string name="theme_name_indigo_amoled">"紺AMOLED"</string>
+    <string name="theme_name_white">"白"</string>
+    <string name="theme_name_white_dark">"白ダーク"</string>
+    <string name="theme_name_white_amoled">"白AMOLED"</string>
+    <string name="theme_name_red">"赤"</string>
+    <string name="theme_name_red_dark">"赤ダーク"</string>
+    <string name="theme_name_red_amoled">"赤AMOLED"</string>
+    <string name="theme_name_dracula">"ドラキュラ"</string>
+    <string name="theme_name_calm_pastel">"パステル"</string>
+    <string name="create_light_theme">"ライトテーマを作成する
+紺ライトテーマをもとにする"</string>
+    <string name="create_dark_theme">"ダークテーマを作成する
+紺ダークテーマをもとにする"</string>
+    <string name="create_amoled_theme">"AMOLEDテーマを作成する
+紺AMOLEDテーマをもとにする"</string>
+    <string name="create_theme_info">"テーマをもとに別のテーマを作成したいなら、テーマの「+」を押してください。"</string>
+    <string name="edit_theme_name">"テーマ名を編集"</string>
+    <string name="edit_theme">"テーマを編集"</string>
+    <string name="delete_theme">"テーマを削除"</string>
+    <string name="delete_theme_dialog_message">"本当に %1$s を削除しますか?"</string>
+    <string name="share_theme">"テーマを共有"</string>
+    <string name="change_theme_name">"名前を変更"</string>
+    <string name="theme_copied">"コピーしました"</string>
+    <string name="copy_theme_faied">"コピーできませんでした"</string>
+    <string name="cannot_find_theme">"テーマが見つかりません"</string>
+
+    <!-- Fuzzy -->
+    <string name="import_theme">"テーマを輸入"</string>
+    <string name="no_data_in_clipboard">"クリップボードにデータがありません"</string>
+
+    <!-- Fuzzy -->
+    <string name="import_theme_success">"テーマを輸入できました"</string>
+    <string name="parse_theme_failed">"テーマをパースできませんでした"</string>
+
+    <!-- Fuzzy -->
+    <string name="duplicate_theme_name_dialog_title">"同じテーマが複数あります"</string>
+    <string name="duplicate_theme_name_dialog_message">"すでに %1$s と名付けられているテーマがあります。輸入されたテーマの名前を変えますか？"</string>
+    <string name="rename">"名前を変更する"</string>
+    <string name="override">"無視する"</string>
+    <string name="color_picker">"カラーピッカー"</string>
+
+    <!-- Fuzzy -->
+    <string name="invalid_color">"無効な色"</string>
+
+    <!-- Fuzzy -->
+    <string name="delete_all_subreddits_success">"全てのサブレディットを削除しました"</string>
+
+    <!-- Fuzzy -->
+    <string name="delete_all_users_success">"全てのユーザーを削除しました"</string>
+
+    <!-- Fuzzy -->
+    <string name="delete_all_sort_types_success">"全ての分類の種類を削除しました"</string>
+
+    <!-- Fuzzy -->
+    <string name="delete_all_post_layouts_success">"全ての投稿レイアウトを削除しました"</string>
+
+    <!-- Fuzzy -->
+    <string name="delete_all_themes_success">"全てのテーマを削除しました"</string>
+
+    <!-- Fuzzy -->
+    <string name="delete_all_front_page_scrolled_positions_success">"全てのフロントページのスクロール位置を削除しました"</string>
+
+    <!-- Fuzzy -->
+    <string name="reset_all_settings_success">"設定を全てリセットしました"</string>
+    <string name="username_preview">"u/Hostilenemy"</string>
+    <string name="subreddit_preview">"r/Infinity_For_Reddit"</string>
+    <string name="primary_text_preview">"メインテキスト"</string>
+    <string name="secondary_text_preview">"サブテキスト"</string>
+    <string name="post_title_preview">"これは投稿です"</string>
+    <string name="post_content_preview">"これが内容です。どうですか？"</string>
+    <string name="post_type_preview">"投稿"</string>
+    <string name="flair_preview">"タグ"</string>
+    <string name="awards_preview">"4 個のアワード"</string>
+    <string name="author_flair_preview">"OPタグ"</string>
+    <string name="comment_content_preview">"コメントの内容です。内容がないよー (ごめんなさい)"</string>
+    <string name="edit_multi_reddit">"マルチレディットを編集"</string>
+    <string name="delete_multi_reddit">"マルチレディットを削除"</string>
+    <string name="n_awards">"%1$d 個のアワード"</string>
+    <string name="one_award">"1個のアワード"</string>
+    <string name="report">"報告"</string>
+    <string name="reporting">"報告しています"</string>
+    <string name="report_successful">"報告しました"</string>
+    <string name="report_failed">"報告できませんでした"</string>
+    <string name="report_reason_not_selected">"理由を選択してください"</string>
+    <string name="report_reason_general_spam">"スパムである"</string>
+    <string name="report_reason_general_copyright_issue">"著作権の侵害が含まれている"</string>
+    <string name="report_reason_general_child_pornography">"児童ポルノが含まれている"</string>
+    <string name="report_reason_general_abusive_content">"虐待的内容が含まれている"</string>
+    <string name="home">"ホーム"</string>
+    <string name="popular">"人気"</string>
+    <string name="notifications">"通知"</string>
+    <string name="messages">"メッセージ"</string>
+    <string name="message">"メッセージ"</string>
+    <string name="fetch_gfycat_video_failed">"Gfycat動画を取得できませんでした"</string>
+    <string name="fetch_redgifs_video_failed">"Redgifs動画を取得できませんでした"</string>
+    <string name="fetching_video_info_please_wait">"動画の情報を取得中。少しお待ちください。"</string>
+    <string name="error_fetching_imgur_media">"画像をロードできません"</string>
+    <string name="downloading_reddit_video">"動画トラックをダウンロード中"</string>
+    <string name="downloading_reddit_video_audio_track">"音声トラックをダウンロード中"</string>
+    <string name="downloading_reddit_video_save_video">"動画トラックを保存中"</string>
+    <string name="downloading_reddit_video_save_audio">"音声トラックを保存中"</string>
+
+    <!-- Shouldn't the english translation be
+"Mixing Video and Audio"? -->
+    <string name="downloading_reddit_video_muxing">"動画と音声をミックス中"</string>
+    <string name="downloading_reddit_video_save_file_to_public_dir">"動画を保存中"</string>
+    <string name="downloading_reddit_video_finished">"ダウンロードしました"</string>
+    <string name="block_user_success">"ブロックしました"</string>
+</resources>
