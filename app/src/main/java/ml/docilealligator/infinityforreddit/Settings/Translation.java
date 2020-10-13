@@ -17,7 +17,7 @@ public class Translation {
 
     public static ArrayList<Translation> getTranslationContributors() {
         ArrayList<Translation> translationContributors = new ArrayList<>();
-        translationContributors.add(new Translation("简体中文", "Gloria, Justin", R.drawable.flag_china));
+        translationContributors.add(new Translation("简体中文", "Gloria, Justin, Steps", R.drawable.flag_china));
         translationContributors.add(new Translation("繁體中文", "", R.drawable.flag_china));
         translationContributors.add(new Translation("Hrvatski", "Josip", R.drawable.flag_croatia));
         translationContributors.add(new Translation("Française", "367, oursonbleu, Owen, pinembour", R.drawable.flag_france));
