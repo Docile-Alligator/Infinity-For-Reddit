@@ -546,6 +546,11 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         }
     }
 
+    public void updateKarma(int karma) {
+        this.karma = karma;
+        notifyItemChanged(0);
+    }
+
     public void setNSFWEnabled(boolean isNSFWEnabled) {
         this.isNSFWEnabled = isNSFWEnabled;
         if (isInMainPage) {

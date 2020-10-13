@@ -11,14 +11,20 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 public class AccountRepository {
     private AccountDao mAccountDao;
     private LiveData<List<Account>> mAccountsExceptCurrentAccountLiveData;
+    private LiveData<Account> mCurrentAccountLiveData;
 
     AccountRepository(RedditDataRoomDatabase redditDataRoomDatabase, String username) {
         mAccountDao = redditDataRoomDatabase.accountDao();
         mAccountsExceptCurrentAccountLiveData = mAccountDao.getAccountsExceptCurrentAccountLiveData();
+        mCurrentAccountLiveData = mAccountDao.getCurrentAccountLiveData();
     }
 
     public LiveData<List<Account>> getAccountsExceptCurrentAccountLiveData() {
         return mAccountsExceptCurrentAccountLiveData;
+    }
+
+    public LiveData<Account> getCurrentAccountLiveData() {
+        return mCurrentAccountLiveData;
     }
 
     public void insert(Account Account) {

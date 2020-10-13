@@ -31,6 +31,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -63,6 +64,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.Account.Account;
 import ml.docilealligator.infinityforreddit.Account.AccountViewModel;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Adapter.NavigationDrawerRecyclerViewAdapter;
@@ -833,6 +835,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         accountViewModel = new ViewModelProvider(this,
                 new AccountViewModel.Factory(getApplication(), mRedditDataRoomDatabase, mAccountName)).get(AccountViewModel.class);
         accountViewModel.getAccountsExceptCurrentAccountLiveData().observe(this, adapter::changeAccountsDataset);
+        accountViewModel.getCurrentAccountLiveData().observe(this, new Observer<Account>() {
+            @Override
+            public void onChanged(Account account) {
+                adapter.updateKarma(account.getKarma());
+            }
+        });
 
         if (getIntent().hasExtra(EXTRA_POST_TYPE)) {
             String type = getIntent().getStringExtra(EXTRA_POST_TYPE);
