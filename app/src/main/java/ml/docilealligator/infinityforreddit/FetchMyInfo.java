@@ -76,9 +76,7 @@ public class FetchMyInfo {
                 if (!jsonResponse.isNull(JSONUtils.SUBREDDIT_KEY)) {
                     bannerImageUrl = Html.fromHtml(jsonResponse.getJSONObject(JSONUtils.SUBREDDIT_KEY).getString(JSONUtils.BANNER_IMG_KEY)).toString();
                 }
-                int linkKarma = jsonResponse.getInt(JSONUtils.LINK_KARMA_KEY);
-                int commentKarma = jsonResponse.getInt(JSONUtils.COMMENT_KARMA_KEY);
-                karma = linkKarma + commentKarma;
+                karma = jsonResponse.getInt(JSONUtils.TOTAL_KARMA_KEY);
 
                 redditDataRoomDatabase.accountDao().updateAccountInfo(name, profileImageUrl, bannerImageUrl, karma);
             } catch (JSONException e) {
