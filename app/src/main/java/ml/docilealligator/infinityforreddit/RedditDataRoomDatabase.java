@@ -28,7 +28,7 @@ import ml.docilealligator.infinityforreddit.User.UserDao;
 import ml.docilealligator.infinityforreddit.User.UserData;
 
 @Database(entities = {Account.class, SubredditData.class, SubscribedSubredditData.class, UserData.class,
-        SubscribedUserData.class, MultiReddit.class, CustomTheme.class, RecentSearchQuery.class}, version = 10)
+        SubscribedUserData.class, MultiReddit.class, CustomTheme.class, RecentSearchQuery.class}, version = 11)
 public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static RedditDataRoomDatabase INSTANCE;
 
@@ -40,7 +40,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                             RedditDataRoomDatabase.class, "reddit_data")
                             .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
                                     MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9,
-                                    MIGRATION_9_10)
+                                    MIGRATION_9_10, MIGRATION_10_11)
                             .build();
                 }
             }
@@ -227,6 +227,20 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
 
             database.execSQL("ALTER TABLE subreddits"
                     + " ADD COLUMN over18 INTEGER DEFAULT 0 NOT NULL");
+        }
+    };
+
+    private static final Migration MIGRATION_10_11 = new Migration(10, 11) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE users"
+                    + " ADD COLUMN awarder_karma INTEGER DEFAULT 0 NOT NULL");
+            database.execSQL("ALTER TABLE users"
+                    + " ADD COLUMN awardee_karma INTEGER DEFAULT 0 NOT NULL");
+            database.execSQL("ALTER TABLE users"
+                    + " ADD COLUMN total_karma INTEGER DEFAULT 0 NOT NULL");
+            database.execSQL("ALTER TABLE users"
+                    + " ADD COLUMN over_18 INTEGER DEFAULT 0 NOT NULL");
         }
     };
 }

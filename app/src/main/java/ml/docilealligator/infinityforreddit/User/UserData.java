@@ -19,6 +19,12 @@ public class UserData {
     private int linkKarma;
     @ColumnInfo(name = "comment_karma")
     private int commentKarma;
+    @ColumnInfo(name = "awarder_karma")
+    private int awarderKarma;
+    @ColumnInfo(name = "awardee_karma")
+    private int awardeeKarma;
+    @ColumnInfo(name = "total_karma")
+    private int totalKarma;
     @ColumnInfo(name = "created_utc")
     private long cakeday;
     @ColumnInfo(name = "is_gold")
@@ -27,20 +33,27 @@ public class UserData {
     private boolean isFriend;
     @ColumnInfo(name = "can_be_followed")
     private boolean canBeFollowed;
+    @ColumnInfo(name = "over_18")
+    private boolean isNSFW;
     @ColumnInfo(name = "description")
     private String description;
 
     public UserData(@NonNull String name, String iconUrl, String banner, int linkKarma, int commentKarma,
-                    long cakeday, boolean isGold, boolean isFriend, boolean canBeFollowed, String description) {
+                    int awarderKarma, int awardeeKarma, int totalKarma, long cakeday, boolean isGold,
+                    boolean isFriend, boolean canBeFollowed, boolean isNSFW, String description) {
         this.name = name;
         this.iconUrl = iconUrl;
         this.banner = banner;
         this.commentKarma = commentKarma;
         this.linkKarma = linkKarma;
+        this.awarderKarma = awarderKarma;
+        this.awarderKarma = awardeeKarma;
+        this.totalKarma = totalKarma;
         this.cakeday = cakeday;
         this.isGold = isGold;
         this.isFriend = isFriend;
         this.canBeFollowed = canBeFollowed;
+        this.isNSFW = isNSFW;
         this.description = description;
     }
 
@@ -65,8 +78,16 @@ public class UserData {
         return commentKarma;
     }
 
-    public int getKarma() {
-        return linkKarma + commentKarma;
+    public int getAwarderKarma() {
+        return awarderKarma;
+    }
+
+    public int getAwardeeKarma() {
+        return awardeeKarma;
+    }
+
+    public int getTotalKarma() {
+        return totalKarma;
     }
 
     public long getCakeday() {
@@ -83,6 +104,10 @@ public class UserData {
 
     public boolean isCanBeFollowed() {
         return canBeFollowed;
+    }
+
+    public boolean isNSFW() {
+        return isNSFW;
     }
 
     public String getDescription() {

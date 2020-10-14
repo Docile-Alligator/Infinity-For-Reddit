@@ -149,6 +149,9 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @Named("post_layout")
     SharedPreferences mPostLayoutSharedPreferences;
     @Inject
+    @Named("nsfw_and_spoiler")
+    SharedPreferences mNsfwAndSpoilerSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     public UserViewModel userViewModel;
     private FragmentManager fragmentManager;
@@ -179,6 +182,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     private String mMessageFullname;
     private String mNewAccountName;
     private SlidrInterface mSlidrInterface;
+    private MaterialAlertDialogBuilder nsfwWarningBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -417,7 +421,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 if (!title.equals(userFullName)) {
                     getSupportActionBar().setTitle(userFullName);
                 }
-                String karma = getString(R.string.karma_info_user_detail, userData.getKarma(), userData.getLinkKarma(), userData.getCommentKarma());
+                String karma = getString(R.string.karma_info_user_detail, userData.getTotalKarma(), userData.getLinkKarma(), userData.getCommentKarma());
                 karmaTextView.setText(karma);
                 cakedayTextView.setText(getString(R.string.cakeday_info, new SimpleDateFormat("MMM d, yyyy",
                         locale).format(userData.getCakeday())));
@@ -427,6 +431,21 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 } else {
                     descriptionTextView.setVisibility(View.VISIBLE);
                     descriptionTextView.setText(userData.getDescription());
+                }
+
+                if (userData.isNSFW()) {
+                    if (nsfwWarningBuilder == null
+                            && !mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false)) {
+                        nsfwWarningBuilder = new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                                .setTitle(R.string.warning)
+                                .setMessage(R.string.this_user_has_nsfw_content)
+                                .setPositiveButton(R.string.leave, (dialogInterface, i)
+                                        -> {
+                                    finish();
+                                })
+                                .setNegativeButton(R.string.dismiss, null);
+                        nsfwWarningBuilder.show();
+                    }
                 }
             }
         });

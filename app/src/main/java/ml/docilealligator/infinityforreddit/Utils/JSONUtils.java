@@ -128,4 +128,6 @@ public class JSONUtils {
     public static final String SUGGESTED_COMMENT_SORT_KEY = "suggested_comment_sort";
     public static final String OVER18_KEY = "over18";
     public static final String TOTAL_KARMA_KEY = "total_karma";
+    public static final String AWARDER_KARMA_KEY = "awarder_karma";
+    public static final String AWARDEE_KARMA_KEY = "awardee_karma";
 }
