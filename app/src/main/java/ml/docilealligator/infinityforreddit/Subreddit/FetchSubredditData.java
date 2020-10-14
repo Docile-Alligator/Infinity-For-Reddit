@@ -56,16 +56,17 @@ public class FetchSubredditData {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParseSubredditData.parseSubredditListingData(response.body(), new ParseSubredditData.ParseSubredditListingDataListener() {
-                        @Override
-                        public void onParseSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
-                            fetchSubredditListingDataListener.onFetchSubredditListingDataSuccess(subredditData, after);
-                        }
+                    ParseSubredditData.parseSubredditListingData(response.body(), nsfw,
+                            new ParseSubredditData.ParseSubredditListingDataListener() {
+                                @Override
+                                public void onParseSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
+                                    fetchSubredditListingDataListener.onFetchSubredditListingDataSuccess(subredditData, after);
+                                }
 
-                        @Override
-                        public void onParseSubredditListingDataFail() {
-                            fetchSubredditListingDataListener.onFetchSubredditListingDataFail();
-                        }
+                                @Override
+                                public void onParseSubredditListingDataFail() {
+                                    fetchSubredditListingDataListener.onFetchSubredditListingDataFail();
+                                }
                     });
                 } else {
                     fetchSubredditListingDataListener.onFetchSubredditListingDataFail();

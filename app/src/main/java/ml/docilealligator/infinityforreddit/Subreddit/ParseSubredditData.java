@@ -16,18 +16,21 @@ class ParseSubredditData {
         new ParseSubredditDataAsyncTask(response, parseSubredditDataListener).execute();
     }
 
-    static void parseSubredditListingData(String response, ParseSubredditListingDataListener parseSubredditListingDataListener) {
-        new ParseSubredditListingDataAsyncTask(response, parseSubredditListingDataListener).execute();
+    static void parseSubredditListingData(String response, boolean nsfw, ParseSubredditListingDataListener parseSubredditListingDataListener) {
+        new ParseSubredditListingDataAsyncTask(response, nsfw, parseSubredditListingDataListener).execute();
     }
 
-    private static SubredditData parseSubredditData(JSONObject subredditDataJsonObject) throws JSONException {
+    private static SubredditData parseSubredditData(JSONObject subredditDataJsonObject, boolean nsfw) throws JSONException {
+        boolean isNSFW = !subredditDataJsonObject.isNull(JSONUtils.OVER18_KEY) && subredditDataJsonObject.getBoolean(JSONUtils.OVER18_KEY);
+        if (!nsfw && isNSFW) {
+            return null;
+        }
         String id = subredditDataJsonObject.getString(JSONUtils.NAME_KEY);
         String subredditFullName = subredditDataJsonObject.getString(JSONUtils.DISPLAY_NAME_KEY);
         String description = subredditDataJsonObject.getString(JSONUtils.PUBLIC_DESCRIPTION_KEY).trim();
         String sidebarDescription = Utils.modifyMarkdown(subredditDataJsonObject.getString(JSONUtils.DESCRIPTION_KEY).trim());
         long createdUTC = subredditDataJsonObject.getLong(JSONUtils.CREATED_UTC_KEY) * 1000;
         String suggestedCommentSort = subredditDataJsonObject.getString(JSONUtils.SUGGESTED_COMMENT_SORT_KEY);
-        boolean isNSFW = !subredditDataJsonObject.isNull(JSONUtils.OVER18_KEY) && subredditDataJsonObject.getBoolean(JSONUtils.OVER18_KEY);
 
         String bannerImageUrl;
         if (subredditDataJsonObject.isNull(JSONUtils.BANNER_BACKGROUND_IMAGE_KEY)) {
@@ -93,7 +96,7 @@ class ParseSubredditData {
             try {
                 JSONObject data = jsonResponse.getJSONObject(JSONUtils.DATA_KEY);
                 mNCurrentOnlineSubscribers = data.getInt(JSONUtils.ACTIVE_USER_COUNT_KEY);
-                subredditData = parseSubredditData(data);
+                subredditData = parseSubredditData(data, true);
             } catch (JSONException e) {
                 parseFailed = true;
                 e.printStackTrace();
@@ -113,15 +116,17 @@ class ParseSubredditData {
 
     private static class ParseSubredditListingDataAsyncTask extends AsyncTask<Void, Void, Void> {
         private JSONObject jsonResponse;
+        private boolean nsfw;
         private boolean parseFailed;
         private ParseSubredditListingDataListener parseSubredditListingDataListener;
         private ArrayList<SubredditData> subredditListingData;
         private String after;
 
-        ParseSubredditListingDataAsyncTask(String response, ParseSubredditListingDataListener parseSubredditListingDataListener) {
+        ParseSubredditListingDataAsyncTask(String response, boolean nsfw, ParseSubredditListingDataListener parseSubredditListingDataListener) {
             this.parseSubredditListingDataListener = parseSubredditListingDataListener;
             try {
                 jsonResponse = new JSONObject(response);
+                this.nsfw = nsfw;
                 parseFailed = false;
                 subredditListingData = new ArrayList<>();
             } catch (JSONException e) {
@@ -138,8 +143,10 @@ class ParseSubredditData {
                             .getJSONArray(JSONUtils.CHILDREN_KEY);
                     for (int i = 0; i < children.length(); i++) {
                         JSONObject data = children.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
-                        SubredditData subredditData = parseSubredditData(data);
-                        subredditListingData.add(subredditData);
+                        SubredditData subredditData = parseSubredditData(data, nsfw);
+                        if (subredditData != null) {
+                            subredditListingData.add(subredditData);
+                        }
                     }
                     after = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
                 }
