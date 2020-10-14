@@ -306,6 +306,7 @@ public class DownloadRedditVideoService extends Service {
                         Intent intent = new Intent();
                         intent.setAction(android.content.Intent.ACTION_VIEW);
                         intent.setDataAndType(destinationFileUri, "video/*");
+                        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
                         updateNotification(R.string.downloading_reddit_video_finished, fileName, pendingIntent);
                         EventBus.getDefault().post(new DownloadRedditVideoEvent(true));

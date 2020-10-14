@@ -2,6 +2,8 @@ package ml.docilealligator.infinityforreddit.Subreddit;
 
 import android.os.AsyncTask;
 
+import androidx.annotation.Nullable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -20,6 +22,7 @@ class ParseSubredditData {
         new ParseSubredditListingDataAsyncTask(response, nsfw, parseSubredditListingDataListener).execute();
     }
 
+    @Nullable
     private static SubredditData parseSubredditData(JSONObject subredditDataJsonObject, boolean nsfw) throws JSONException {
         boolean isNSFW = !subredditDataJsonObject.isNull(JSONUtils.OVER18_KEY) && subredditDataJsonObject.getBoolean(JSONUtils.OVER18_KEY);
         if (!nsfw && isNSFW) {

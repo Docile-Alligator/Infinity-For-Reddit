@@ -36,6 +36,7 @@ public class FetchRandomSubredditOrPostActivity extends BaseActivity {
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    private boolean isCanceled = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,23 +52,25 @@ public class FetchRandomSubredditOrPostActivity extends BaseActivity {
                 || option == RandomBottomSheetFragment.RANDOM_NSFW_POST, new FetchPost.FetchRandomPostListener() {
             @Override
             public void fetchRandomPostSuccess(String postId, String subredditName) {
-                switch (option) {
-                    case RandomBottomSheetFragment.RANDOM_SUBREDDIT:
-                    case RandomBottomSheetFragment.RANDOM_NSFW_SUBREDDIT: {
-                        Intent intent = new Intent(FetchRandomSubredditOrPostActivity.this, ViewSubredditDetailActivity.class);
-                        intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditName);
-                        startActivity(intent);
-                    }
-                    break;
-                    case RandomBottomSheetFragment.RANDOM_POST:
-                    case RandomBottomSheetFragment.RANDOM_NSFW_POST:
-                        Intent intent = new Intent(FetchRandomSubredditOrPostActivity.this, ViewPostDetailActivity.class);
-                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, postId);
-                        startActivity(intent);
+                if (!isCanceled) {
+                    switch (option) {
+                        case RandomBottomSheetFragment.RANDOM_SUBREDDIT:
+                        case RandomBottomSheetFragment.RANDOM_NSFW_SUBREDDIT: {
+                            Intent intent = new Intent(FetchRandomSubredditOrPostActivity.this, ViewSubredditDetailActivity.class);
+                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditName);
+                            startActivity(intent);
+                        }
                         break;
-                }
+                        case RandomBottomSheetFragment.RANDOM_POST:
+                        case RandomBottomSheetFragment.RANDOM_NSFW_POST:
+                            Intent intent = new Intent(FetchRandomSubredditOrPostActivity.this, ViewPostDetailActivity.class);
+                            intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, postId);
+                            startActivity(intent);
+                            break;
+                    }
 
-                finish();
+                    finish();
+                }
             }
 
             @Override
@@ -76,6 +79,12 @@ public class FetchRandomSubredditOrPostActivity extends BaseActivity {
                 finish();
             }
         });
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        isCanceled = true;
     }
 
     @Override
