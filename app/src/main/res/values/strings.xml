@@ -857,10 +857,7 @@
     <string name="downloading_video">Downloading Video</string>
     <string name="downloading_video_save_video">Saving Video</string>
 
-    <string name="downloading_image">Downloading Image</string>
-    <string name="downloading_gif">Downloading Gif</string>
-    <string name="downloading_image_save_image">Saving Image</string>
-    <string name="downloading_gif_save_gif">Saving Gif</string>
+    <string name="downloading">Downloading</string>
     <string name="downloading_media_finished">Downloaded</string>
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">Download failed: cannot access destination directory</string>
     <string name="downloading_media_failed_cannot_download_media">Download failed</string>

@@ -21,6 +21,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -42,11 +43,13 @@ import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.API.DownloadFile;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.DownloadProgressResponseBody;
 import ml.docilealligator.infinityforreddit.Event.DownloadRedditVideoEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.Utils.NotificationUtils;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.Utils.NotificationUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -91,6 +94,46 @@ public class DownloadRedditVideoService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+
+        final DownloadProgressResponseBody.ProgressListener progressListener = new DownloadProgressResponseBody.ProgressListener() {
+            boolean firstUpdate = true;
+
+            @Override public void update(long bytesRead, long contentLength, boolean done) {
+                if (done) {
+                    Log.i("adfasdf", "completed");
+                } else {
+                    if (firstUpdate) {
+                        firstUpdate = false;
+                        if (contentLength == -1) {
+                            Log.i("adfasdf", "content-length: unknown");
+                        } else {
+                            Log.i("adfasdf", "content-length: " + contentLength);
+                        }
+                    }
+
+                    Log.i("adfasdf", "bytes read " + bytesRead);
+
+                    if (contentLength != -1) {
+                        Log.i("adfasdf", "progress: " + ((100 * bytesRead) / contentLength));
+                    }
+                }
+            }
+        };
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addNetworkInterceptor(chain -> {
+                    okhttp3.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                            .body(new DownloadProgressResponseBody(originalResponse.body(), progressListener))
+                            .build();
+                })
+                .build();
+
+        retrofit = retrofit.newBuilder().client(client).build();
+
+
+
 
         String videoUrl = intent.getStringExtra(EXTRA_VIDEO_URL);
         String audioUrl = videoUrl.substring(0, videoUrl.lastIndexOf('/')) + "/DASH_audio.mp4";
