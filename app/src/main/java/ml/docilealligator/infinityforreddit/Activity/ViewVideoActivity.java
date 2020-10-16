@@ -214,22 +214,27 @@ public class ViewVideoActivity extends AppCompatActivity {
                 String videoUrl = savedInstanceState.getString(VIDEO_URI_STATE);
                 if (videoUrl != null) {
                     mVideoUri = Uri.parse(videoUrl);
-                    videoDownloadUrl = savedInstanceState.getString(VIDEO_DOWNLOAD_URL_STATE);
                 }
+                videoDownloadUrl = savedInstanceState.getString(VIDEO_DOWNLOAD_URL_STATE);
             } else {
                 mVideoUri = intent.getData();
+                videoDownloadUrl = intent.getStringExtra(EXTRA_VIDEO_DOWNLOAD_URL);
+            }
+
+            String gfycatId = intent.getStringExtra(EXTRA_GFYCAT_ID);
+            if (gfycatId != null && gfycatId.contains("-")) {
+                gfycatId = gfycatId.substring(0, gfycatId.indexOf('-'));
+            }
+            if (videoType == VIDEO_TYPE_GFYCAT) {
+                videoFileName = "Gfycat-" + gfycatId + ".mp4";
+            } else {
+                videoFileName = "Redgifs-" + gfycatId + ".mp4";
             }
 
             if (mVideoUri == null) {
-                String gfycatId = intent.getStringExtra(EXTRA_GFYCAT_ID);
-                if (gfycatId != null && gfycatId.contains("-")) {
-                    gfycatId = gfycatId.substring(0, gfycatId.indexOf('-'));
-                }
                 if (videoType == VIDEO_TYPE_GFYCAT) {
-                    videoFileName = "Gfycat-" + gfycatId + ".mp4";
                     loadGfycatOrRedgifsVideo(gfycatRetrofit, gfycatId, savedInstanceState, true);
                 } else {
-                    videoFileName = "Redgifs-" + gfycatId + ".mp4";
                     loadGfycatOrRedgifsVideo(redgifsRetrofit, gfycatId, savedInstanceState, false);
                 }
             } else {

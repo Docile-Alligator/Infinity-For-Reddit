@@ -759,8 +759,6 @@ Baziraj na Indigo Amoled temi"</string>
     <string name="error_fetching_imgur_media">"Nije moguće učitati slike"</string>
     <string name="downloading_reddit_video">"Preuzimanje videozapisa"</string>
     <string name="downloading_reddit_video_audio_track">"Preuzimanje audio zapisa"</string>
-    <string name="downloading_reddit_video_save_video">"Spremanje videozapisa"</string>
-    <string name="downloading_reddit_video_save_audio">"Spremanje audio zapisa"</string>
     <string name="downloading_reddit_video_muxing">"Multipleksiranje videa i audija"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"Spremanje videa"</string>
     <string name="downloading_reddit_video_finished">"Preuzeto"</string>

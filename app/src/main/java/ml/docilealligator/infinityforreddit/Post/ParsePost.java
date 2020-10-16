@@ -384,11 +384,19 @@ public class ParsePost {
                 if (authority != null && (authority.contains("gfycat.com"))) {
                     post.setIsGfycat(true);
                     post.setVideoUrl(url);
-                    post.setGfycatId(url.substring(url.lastIndexOf("/") + 1));
+                    String gfycatId = url.substring(url.lastIndexOf("/") + 1);
+                    if (gfycatId.contains("-")) {
+                        gfycatId = gfycatId.substring(0, gfycatId.indexOf('-'));
+                    }
+                    post.setGfycatId(gfycatId);
                 } else if (authority != null && authority.contains("redgifs.com")) {
+                    String gfycatId = url.substring(url.lastIndexOf("/") + 1);
+                    if (gfycatId.contains("-")) {
+                        gfycatId = gfycatId.substring(0, gfycatId.indexOf('-'));
+                    }
                     post.setIsRedgifs(true);
                     post.setVideoUrl(url);
-                    post.setGfycatId(url.substring(url.lastIndexOf("/") + 1));
+                    post.setGfycatId(gfycatId);
                 }
             } catch (IllegalArgumentException ignore) { }
         } else if (post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {

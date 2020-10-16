@@ -754,8 +754,6 @@ Baseado no Tema Indigo Amoled"</string>
     <string name="error_fetching_imgur_media">"Não foi possível carregar as imagens"</string>
     <string name="downloading_reddit_video">"Executando download do vídeo"</string>
     <string name="downloading_reddit_video_audio_track">"Executando download do áudio"</string>
-    <string name="downloading_reddit_video_save_video">"Salvando vídeo"</string>
-    <string name="downloading_reddit_video_save_audio">"Salvando áudio"</string>
     <string name="downloading_reddit_video_muxing">"Sincronizando áudio e vídeo"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"Salvando vídeo"</string>
     <string name="downloading_reddit_video_finished">"Baixado"</string>

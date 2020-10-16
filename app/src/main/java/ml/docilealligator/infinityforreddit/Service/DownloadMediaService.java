@@ -16,7 +16,6 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.IBinder;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
@@ -145,25 +144,13 @@ public class DownloadMediaService extends Service {
         mimeType = mediaType == EXTRA_MEDIA_TYPE_VIDEO ? "video/*" : "image/*";
 
         final DownloadProgressResponseBody.ProgressListener progressListener = new DownloadProgressResponseBody.ProgressListener() {
-            boolean firstUpdate = true;
             long time = 0;
 
             @Override public void update(long bytesRead, long contentLength, boolean done) {
-                if (done) {
-                    //updateNotification(0, null, -1, null);
-                } else {
-                    if (firstUpdate) {
-                        firstUpdate = false;
-                        if (contentLength == -1) {
-                            Log.i("adfasdf", "content-length: unknown");
-                        } else {
-                            Log.i("adfasdf", "content-length: " + contentLength);
-                        }
-                    }
-
+                if (!done) {
                     if (contentLength != -1) {
                         long currentTime = System.currentTimeMillis();
-                        if ((currentTime - time) / 1000 > 2) {
+                        if (currentTime - time > 1000) {
                             time = currentTime;
                             updateNotification(0, (int) ((100 * bytesRead) / contentLength), null);
                         }

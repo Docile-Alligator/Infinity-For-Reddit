@@ -593,12 +593,16 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                 post.setVideoDownloadUrl(mp4);
                                 post.setVideoUrl(webm);
                                 post.setLoadGfyOrRedgifsVideoSuccess(true);
-                                ((PostVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
+                                if (position == holder.getAdapterPosition()) {
+                                    ((PostVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
+                                }
                             }
 
                             @Override
                             public void failed(int errorCode) {
-                                ((PostVideoAutoplayViewHolder) holder).errorLoadingGfycatImageView.setVisibility(View.VISIBLE);
+                                if (position == holder.getAdapterPosition()) {
+                                    ((PostVideoAutoplayViewHolder) holder).errorLoadingGfycatImageView.setVisibility(View.VISIBLE);
+                                }
                             }
                         });
                         ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks

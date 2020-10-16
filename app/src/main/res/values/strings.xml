@@ -843,8 +843,6 @@
 
     <string name="downloading_reddit_video">Downloading Video Track</string>
     <string name="downloading_reddit_video_audio_track">Downloading Audio Track</string>
-    <string name="downloading_reddit_video_save_video">Saving Video Track</string>
-    <string name="downloading_reddit_video_save_audio">Saving Audio Track</string>
     <string name="downloading_reddit_video_muxing">Muxing Video and Audio</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">Saving Video</string>
     <string name="downloading_reddit_video_finished">Downloaded</string>
@@ -854,8 +852,6 @@
     <string name="downloading_reddit_video_failed_cannot_save_audio">Download failed: cannot save audio to cache directory</string>
     <string name="downloading_reddit_video_failed_cannot_mux">Download failed: cannot mux video and audio</string>
     <string name="downloading_reddit_video_failed_cannot_save_mux_video">Download failed: cannot save the video to public directory</string>
-    <string name="downloading_video">Downloading Video</string>
-    <string name="downloading_video_save_video">Saving Video</string>
 
     <string name="downloading">Downloading</string>
     <string name="downloading_media_finished">Downloaded</string>
@@ -885,7 +881,6 @@
     <string name="view_full_comment_markdown">View Full Markdown</string>
 
     <string name="select_user_flair_success">User flair selected</string>
-    <string name="select_user_flair_failed">Cannot select user flair</string>
     <string name="select_this_user_flair">Select this user flair?</string>
 
     <string name="select_header_size">Select Header Size</string>

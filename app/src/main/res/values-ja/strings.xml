@@ -693,8 +693,6 @@ https://play.google.com/store
     <string name="error_fetching_imgur_media">"画像をロードできません"</string>
     <string name="downloading_reddit_video">"動画トラックをダウンロード中"</string>
     <string name="downloading_reddit_video_audio_track">"音声トラックをダウンロード中"</string>
-    <string name="downloading_reddit_video_save_video">"動画トラックを保存中"</string>
-    <string name="downloading_reddit_video_save_audio">"音声トラックを保存中"</string>
 
     <!-- Shouldn't the english translation be
 "Mixing Video and Audio"? -->

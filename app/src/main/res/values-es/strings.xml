@@ -758,8 +758,6 @@ Base: Indigo OLED"</string>
     <string name="error_fetching_imgur_media">"Ocurrió un error cargando las imágenes"</string>
     <string name="downloading_reddit_video">"Descargando Track Vídeo"</string>
     <string name="downloading_reddit_video_audio_track">"Descargando Track Audio"</string>
-    <string name="downloading_reddit_video_save_video">"Guardando Audio"</string>
-    <string name="downloading_reddit_video_save_audio">"Guardado Audio Track"</string>
     <string name="downloading_reddit_video_muxing">"Muxtiplexar Vídeo y Audio"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"Guardando Vídeo"</string>
     <string name="downloading_reddit_video_finished">"Descargado"</string>

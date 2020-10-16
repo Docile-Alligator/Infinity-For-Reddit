@@ -790,8 +790,6 @@ Non è malata o altro, ma potrebbe sicuramente stare meglio."</string>
     <string name="error_fetching_imgur_media">"Impossibile caricare immagini"</string>
     <string name="downloading_reddit_video">"Download Traccia Video"</string>
     <string name="downloading_reddit_video_audio_track">"Download Traccia Audio"</string>
-    <string name="downloading_reddit_video_save_video">"Salvataggio Traccia Video"</string>
-    <string name="downloading_reddit_video_save_audio">"Salvataggio Traccia Audio"</string>
     <string name="downloading_reddit_video_muxing">"Muxing Video e Audio"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"Salvataggio Video"</string>
     <string name="downloading_reddit_video_finished">"Scaricato"</string>

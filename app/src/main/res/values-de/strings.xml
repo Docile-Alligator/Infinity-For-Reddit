@@ -764,8 +764,6 @@ Sie ist nicht krank oder so, aber sie könnte sich definitiv bessern."</string>
     <string name="error_fetching_imgur_media">"Kann Bilder nicht laden"</string>
     <string name="downloading_reddit_video">"Lade Videospur herunter"</string>
     <string name="downloading_reddit_video_audio_track">"Lade Audiospur herunter"</string>
-    <string name="downloading_reddit_video_save_video">"Speichere Videospur"</string>
-    <string name="downloading_reddit_video_save_audio">"Speichere Tonspur"</string>
     <string name="downloading_reddit_video_muxing">"Muxe Ton und Video"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"Speichere Video"</string>
     <string name="downloading_reddit_video_finished">"Heruntergeladen"</string>
