@@ -38,8 +38,8 @@ import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.TrackSelectionDialogBuilder;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
@@ -62,6 +62,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Service.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.Service.DownloadRedditVideoService;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
 
 public class ViewVideoActivity extends AppCompatActivity {
@@ -92,9 +93,12 @@ public class ViewVideoActivity extends AppCompatActivity {
     PlayerView videoPlayerView;
     @BindView(R.id.mute_exo_playback_control_view)
     ImageButton muteButton;
+    @BindView(R.id.hd_exo_playback_control_view)
+    ImageButton hdButton;
 
     private Uri mVideoUri;
     private SimpleExoPlayer player;
+    private DefaultTrackSelector trackSelector;
     private DataSource.Factory dataSourceFactory;
 
     private String videoDownloadUrl;
@@ -108,6 +112,8 @@ public class ViewVideoActivity extends AppCompatActivity {
     private boolean isNSFW;
     private long resumePosition = -1;
     private int videoType;
+    private boolean isDataSavingMode;
+    private boolean isHd;
 
     @Inject
     @Named("gfycat")
@@ -147,6 +153,15 @@ public class ViewVideoActivity extends AppCompatActivity {
         Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setHomeAsUpIndicator(upArrow);
         actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
+
+        String dataSavingModeString = mSharedPreferences.getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
+        int networkType = Utils.getConnectedNetwork(this);
+        if (dataSavingModeString.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ALWAYS)) {
+            isDataSavingMode = true;
+        } else if (dataSavingModeString.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
+            isDataSavingMode = networkType == Utils.NETWORK_TYPE_CELLULAR;
+        }
+        isHd = !isDataSavingMode;
 
         if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.VIDEO_PLAYER_IGNORE_NAV_BAR, false)) {
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || getResources().getBoolean(R.bool.isTablet)) {
@@ -205,7 +220,7 @@ public class ViewVideoActivity extends AppCompatActivity {
         });
 
         TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory();
-        TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
+        trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
         player = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
         videoPlayerView.setPlayer(player);
         videoType = getIntent().getIntExtra(EXTRA_VIDEO_TYPE, VIDEO_TYPE_NORMAL);
@@ -296,6 +311,22 @@ public class ViewVideoActivity extends AppCompatActivity {
             @Override
             public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
                 if (!trackGroups.isEmpty()) {
+                    if (videoType == VIDEO_TYPE_NORMAL) {
+                        if (isDataSavingMode) {
+                            trackSelector.setParameters(
+                                    trackSelector.buildUponParameters()
+                                            .setMaxVideoSize(720, 720));
+                        }
+
+                        hdButton.setVisibility(View.VISIBLE);
+                        hdButton.setOnClickListener(view -> {
+                            TrackSelectionDialogBuilder build = new TrackSelectionDialogBuilder(ViewVideoActivity.this, getString(R.string.select_video_quality), trackSelector, 0);
+                            build.setShowDisableOption(true);
+                            build.setAllowAdaptiveSelections(false);
+                            build.build().show();
+                        });
+                    }
+
                     for (int i = 0; i < trackGroups.length; i++) {
                         String mimeType = trackGroups.get(i).getFormat(0).sampleMimeType;
                         if (mimeType != null && mimeType.contains("audio")) {

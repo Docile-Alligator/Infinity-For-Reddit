@@ -922,4 +922,6 @@
     <string name="random_nsfw_post">Random NSFW post</string>
     <string name="fetch_random_thing_failed">Try again later</string>
 
+    <string name="select_video_quality">Select Video Quality</string>
+
 </resources>
