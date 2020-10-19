@@ -99,6 +99,8 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
+import ml.docilealligator.infinityforreddit.Subreddit.FetchSubredditData;
+import ml.docilealligator.infinityforreddit.Subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.Utils.APIUtils;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
@@ -154,6 +156,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     String mMessageFullname;
     @State
     String mNewAccountName;
+    @State
+    String sortType;
+    @State
+    boolean mRespectSubredditRecommendedSortType;
     @BindView(R.id.coordinator_layout_view_post_detail)
     CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.appbar_layout_view_post_detail_activity)
@@ -208,7 +214,6 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     private int orientation;
     private int postListPosition = -1;
     private String mSingleCommentId;
-    private String sortType;
     private boolean showToast = false;
     private boolean isSortingComments = false;
     private boolean mVolumeKeysNavigateComments;
@@ -216,7 +221,6 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     private boolean mLockFab;
     private boolean mSwipeUpToHideFab;
     private boolean mExpandChildren;
-    private boolean mRespectSubredditRecommendedSortType;
     private int mWindowWidth;
     private LinearLayoutManager mLinearLayoutManager;
     private CommentAndPostRecyclerViewAdapter mAdapter;
@@ -297,7 +301,9 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         mLockFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
         mSwipeUpToHideFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
         mExpandChildren = !mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_TOP_LEVEL_COMMENTS_FIRST, false);
-        mRespectSubredditRecommendedSortType = mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false);
+        if (savedInstanceState == null) {
+            mRespectSubredditRecommendedSortType = mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false);
+        }
 
         mGlide = Glide.with(this);
         Resources resources = getResources();
@@ -503,9 +509,20 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         };
 
         mSingleCommentId = getIntent().getStringExtra(EXTRA_SINGLE_COMMENT_ID);
-        sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value.toUpperCase());
-        mToolbar.setTitle(new SortType(SortType.Type.valueOf(sortType)).getType().fullName);
-        sortType = sortType.toLowerCase();
+        if (savedInstanceState == null) {
+            if (!mRespectSubredditRecommendedSortType) {
+                sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value.toUpperCase());
+                if (sortType != null) {
+                    mToolbar.setTitle(new SortType(SortType.Type.valueOf(sortType)).getType().fullName);
+                    sortType = sortType.toLowerCase();
+                }
+            }
+        } else {
+            if (sortType != null) {
+                mToolbar.setTitle(new SortType(SortType.Type.valueOf(sortType.toUpperCase())).getType().fullName);
+            }
+        }
+
         if (savedInstanceState == null) {
             if (mSingleCommentId != null) {
                 isSingleCommentThreadMode = true;
@@ -638,7 +655,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
                         @Override
                         public void retryFetchingComments() {
-                            fetchComments(false);
+                            fetchCommentsRespectRecommendedSort(false);
                         }
 
                         @Override
@@ -652,13 +669,13 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             mRecyclerView.setAdapter(mAdapter);
 
             if (comments == null) {
-                fetchComments(false);
+                fetchCommentsRespectRecommendedSort(false);
             } else {
                 if (isRefreshing) {
                     isRefreshing = false;
                     refresh(true, true);
                 } else if (isFetchingComments) {
-                    fetchComments(false);
+                    fetchCommentsRespectRecommendedSort(false);
                 } else {
                     mAdapter.addComments(comments, hasMoreChildren);
                     if (isLoadingMoreChildren) {
@@ -802,7 +819,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
                                         @Override
                                         public void retryFetchingComments() {
-                                            fetchComments(false);
+                                            fetchCommentsRespectRecommendedSort(false);
                                         }
 
                                         @Override
@@ -893,6 +910,43 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 showErrorView(subredditId);
             }
         });
+    }
+
+    private void fetchCommentsRespectRecommendedSort(boolean changeRefreshState, boolean checkSortState, String sortType) {
+        if (mRespectSubredditRecommendedSortType && mPost != null) {
+            FetchSubredditData.fetchSubredditData(mRetrofit, mPost.getSubredditName(),
+                    new FetchSubredditData.FetchSubredditDataListener() {
+                        @Override
+                        public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
+                            if (subredditData.getSuggestedCommentSort() == null || subredditData.getSuggestedCommentSort().equals("null") || subredditData.getSuggestedCommentSort().equals("")) {
+                                mRespectSubredditRecommendedSortType = false;
+                                ViewPostDetailActivity.this.sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value.toUpperCase());
+                                if (ViewPostDetailActivity.this.sortType != null) {
+                                    mToolbar.setTitle(new SortType(SortType.Type.valueOf(ViewPostDetailActivity.this.sortType)).getType().fullName);
+                                    ViewPostDetailActivity.this.sortType = ViewPostDetailActivity.this.sortType.toLowerCase();
+                                }
+                                fetchComments(changeRefreshState, checkSortState, sortType);
+                            } else {
+                                ViewPostDetailActivity.this.sortType = subredditData.getSuggestedCommentSort();
+                                String sortTypeTemp = ViewPostDetailActivity.this.sortType.toLowerCase().substring(0, 1).toUpperCase() + ViewPostDetailActivity.this.sortType.substring(1);
+                                mToolbar.setTitle(sortTypeTemp);
+                                fetchComments(changeRefreshState, checkSortState, subredditData.getSuggestedCommentSort());
+                            }
+                        }
+
+                        @Override
+                        public void onFetchSubredditDataFail() {
+                            mRespectSubredditRecommendedSortType = false;
+                            ViewPostDetailActivity.this.sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value.toUpperCase());
+                            if (ViewPostDetailActivity.this.sortType != null) {
+                                mToolbar.setTitle(new SortType(SortType.Type.valueOf(ViewPostDetailActivity.this.sortType)).getType().fullName);
+                                ViewPostDetailActivity.this.sortType = ViewPostDetailActivity.this.sortType.toLowerCase();
+                            }
+                        }
+                    });
+        } else {
+            fetchComments(changeRefreshState, checkSortState, sortType);
+        }
     }
 
     private void fetchComments(boolean changeRefreshState, boolean checkSortState, String sortType) {
@@ -995,8 +1049,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 });
     }
 
-    private void fetchComments(boolean changeRefreshState) {
-        fetchComments(changeRefreshState, true, sortType);
+    private void fetchCommentsRespectRecommendedSort(boolean changeRefreshState) {
+        fetchCommentsRespectRecommendedSort(changeRefreshState, true, sortType);
     }
 
     void fetchMoreComments() {
@@ -1036,11 +1090,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             mGlide.clear(mFetchPostInfoImageView);
 
             if (fetchComments) {
-                if (!fetchPost) {
-                    fetchComments(true);
-                } else {
-                    fetchComments(false);
-                }
+                fetchCommentsRespectRecommendedSort(!fetchPost);
             }
 
             if (fetchPost) {
@@ -1761,8 +1811,12 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         if (children != null) {
             children.clear();
         }
-        fetchComments(false, false, sortType.getType().value);
-        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, sortType.getType().name()).apply();
+        this.sortType = sortType.getType().value;
+        if (!mRespectSubredditRecommendedSortType) {
+            mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, sortType.getType().name()).apply();
+        }
+        mRespectSubredditRecommendedSortType = false;
+        fetchCommentsRespectRecommendedSort(false, false, sortType.getType().value);
 
         mToolbar.setTitle(sortType.getType().fullName);
     }
