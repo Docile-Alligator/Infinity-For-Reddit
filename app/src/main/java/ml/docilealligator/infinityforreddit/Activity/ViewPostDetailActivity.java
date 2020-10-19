@@ -510,7 +510,15 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
         mSingleCommentId = getIntent().getStringExtra(EXTRA_SINGLE_COMMENT_ID);
         if (savedInstanceState == null) {
-            if (!mRespectSubredditRecommendedSortType) {
+            if (mSingleCommentId != null) {
+                isSingleCommentThreadMode = true;
+            }
+            mMessageFullname = getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME);
+            mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
+        }
+
+        if (savedInstanceState == null) {
+            if (!mRespectSubredditRecommendedSortType || isSingleCommentThreadMode) {
                 sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value.toUpperCase());
                 if (sortType != null) {
                     mToolbar.setTitle(new SortType(SortType.Type.valueOf(sortType)).getType().fullName);
@@ -521,14 +529,6 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             if (sortType != null) {
                 mToolbar.setTitle(new SortType(SortType.Type.valueOf(sortType.toUpperCase())).getType().fullName);
             }
-        }
-
-        if (savedInstanceState == null) {
-            if (mSingleCommentId != null) {
-                isSingleCommentThreadMode = true;
-            }
-            mMessageFullname = getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME);
-            mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
         }
 
         orientation = resources.getConfiguration().orientation;
@@ -1329,9 +1329,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 });
     }
 
-    public void changeToSingleThreadMode() {
+    public void changeToNomalThreadMode() {
         isSingleCommentThreadMode = false;
         mSingleCommentId = null;
+        mRespectSubredditRecommendedSortType = mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false);
         refresh(false, true);
     }
 

@@ -3784,12 +3784,12 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 if (mActivity != null && mActivity instanceof ViewPostDetailActivity) {
                     mIsSingleCommentThreadMode = false;
                     mSingleCommentId = null;
-                    ((ViewPostDetailActivity) mActivity).changeToSingleThreadMode();
+                    ((ViewPostDetailActivity) mActivity).changeToNomalThreadMode();
                 }
-
-                itemView.setBackgroundColor(mColorAccent);
-                ((TextView) itemView).setTextColor(mColorAccent);
             });
+
+            itemView.setBackgroundTintList(ColorStateList.valueOf(mCommentBackgroundColor));
+            ((TextView) itemView).setTextColor(mColorAccent);
         }
     }
 }
