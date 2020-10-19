@@ -295,7 +295,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             nColumns = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT, "1"));
         } else {
-            nColumns = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE, "1"));
+            nColumns = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE, "2"));
         }
 
         if (nColumns == 1) {
@@ -714,7 +714,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                             exceedThreshold = true;
                             if (vibrateWhenActionTriggered && v != null) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    v.vibrate(VibrationEffect.createOneShot(10, 175));
+                                    v.vibrate(VibrationEffect.createOneShot(10, 255));
                                 } else {
                                     //deprecated in API 26
                                     v.vibrate(10);
@@ -739,7 +739,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                             exceedThreshold = true;
                             if (vibrateWhenActionTriggered && v != null) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    v.vibrate(VibrationEffect.createOneShot(10, 175));
+                                    v.vibrate(VibrationEffect.createOneShot(10, 255));
                                 } else {
                                     //deprecated in API 26
                                     v.vibrate(10);

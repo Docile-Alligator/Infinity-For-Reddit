@@ -24,7 +24,7 @@ import com.libRG.CustomTextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import ml.docilealligator.infinityforreddit.Activity.ThemePreviewActivity;
+import ml.docilealligator.infinityforreddit.Activity.CustomThemePreviewActivity;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView;
 import ml.docilealligator.infinityforreddit.R;
@@ -84,7 +84,7 @@ public class ThemePreviewPostsFragment extends Fragment {
     ImageView saveButton;
     @BindView(R.id.share_button_theme_preview_posts_fragment)
     ImageView shareButton;
-    private ThemePreviewActivity activity;
+    private CustomThemePreviewActivity activity;
 
     public ThemePreviewPostsFragment() {
         // Required empty public constructor
@@ -148,6 +148,6 @@ public class ThemePreviewPostsFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (ThemePreviewActivity) context;
+        activity = (CustomThemePreviewActivity) context;
     }
 }

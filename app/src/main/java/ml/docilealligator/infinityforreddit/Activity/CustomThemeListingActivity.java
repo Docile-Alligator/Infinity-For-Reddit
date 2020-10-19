@@ -87,6 +87,8 @@ public class CustomThemeListingActivity extends BaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
+        setImmersiveModeNotApplicable();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_custom_theme_listing);
 

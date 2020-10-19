@@ -103,7 +103,7 @@
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".Activity.ThemePreviewActivity"
+            android:name=".Activity.CustomThemePreviewActivity"
             android:label="@string/theme_preview_activity_label"
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/AppTheme.SlidableWithTranslucentWindow" />

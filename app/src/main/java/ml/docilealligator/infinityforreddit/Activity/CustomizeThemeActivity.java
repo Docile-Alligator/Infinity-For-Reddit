@@ -84,6 +84,8 @@ public class CustomizeThemeActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
+        setImmersiveModeNotApplicable();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customize_theme);
 
@@ -191,8 +193,8 @@ public class CustomizeThemeActivity extends BaseActivity {
                 finish();
                 return true;
             case R.id.action_preview_customize_theme_activity:
-                Intent intent = new Intent(this, ThemePreviewActivity.class);
-                intent.putParcelableArrayListExtra(ThemePreviewActivity.EXTRA_CUSTOM_THEME_SETTINGS_ITEMS, customThemeSettingsItems);
+                Intent intent = new Intent(this, CustomThemePreviewActivity.class);
+                intent.putParcelableArrayListExtra(CustomThemePreviewActivity.EXTRA_CUSTOM_THEME_SETTINGS_ITEMS, customThemeSettingsItems);
                 startActivity(intent);
 
                 return true;

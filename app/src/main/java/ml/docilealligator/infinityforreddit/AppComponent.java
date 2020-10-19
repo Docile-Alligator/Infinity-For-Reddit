@@ -9,6 +9,7 @@ import ml.docilealligator.infinityforreddit.Activity.CommentActivity;
 import ml.docilealligator.infinityforreddit.Activity.CommentFullMarkdownActivity;
 import ml.docilealligator.infinityforreddit.Activity.CreateMultiRedditActivity;
 import ml.docilealligator.infinityforreddit.Activity.CustomThemeListingActivity;
+import ml.docilealligator.infinityforreddit.Activity.CustomThemePreviewActivity;
 import ml.docilealligator.infinityforreddit.Activity.CustomizeThemeActivity;
 import ml.docilealligator.infinityforreddit.Activity.EditCommentActivity;
 import ml.docilealligator.infinityforreddit.Activity.EditMultiRedditActivity;
@@ -37,7 +38,6 @@ import ml.docilealligator.infinityforreddit.Activity.SubmitCrosspostActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubredditMultiselectionActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.Activity.SubscribedThingListingActivity;
-import ml.docilealligator.infinityforreddit.Activity.ThemePreviewActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewImageOrGifActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewImgurMediaActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewMultiRedditDetailActivity;
@@ -170,7 +170,7 @@ public interface AppComponent {
 
     void inject(AdvancedPreferenceFragment advancedPreferenceFragment);
 
-    void inject(ThemePreviewActivity themePreviewActivity);
+    void inject(CustomThemePreviewActivity customThemePreviewActivity);
 
     void inject(EditMultiRedditActivity editMultiRedditActivity);
 

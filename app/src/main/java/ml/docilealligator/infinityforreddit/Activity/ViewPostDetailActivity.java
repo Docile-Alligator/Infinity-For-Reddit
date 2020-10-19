@@ -435,7 +435,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                             exceedThreshold = true;
                             if (vibrateWhenActionTriggered && v != null) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    v.vibrate(VibrationEffect.createOneShot(10, 175));
+                                    v.vibrate(VibrationEffect.createOneShot(10, 255));
                                 } else {
                                     //deprecated in API 26
                                     v.vibrate(10);
@@ -460,7 +460,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                             exceedThreshold = true;
                             if (vibrateWhenActionTriggered && v != null) {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    v.vibrate(VibrationEffect.createOneShot(10, 175));
+                                    v.vibrate(VibrationEffect.createOneShot(10, 255));
                                 } else {
                                     //deprecated in API 26
                                     v.vibrate(10);

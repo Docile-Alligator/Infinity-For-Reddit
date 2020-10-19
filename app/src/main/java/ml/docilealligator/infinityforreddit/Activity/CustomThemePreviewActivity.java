@@ -59,7 +59,7 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
-public class ThemePreviewActivity extends AppCompatActivity {
+public class CustomThemePreviewActivity extends AppCompatActivity {
 
     public static final String EXTRA_CUSTOM_THEME_SETTINGS_ITEMS = "ECTSI";
 

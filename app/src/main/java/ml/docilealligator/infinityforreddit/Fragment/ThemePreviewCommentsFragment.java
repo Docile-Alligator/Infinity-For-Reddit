@@ -14,7 +14,7 @@ import androidx.fragment.app.Fragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.Activity.ThemePreviewActivity;
+import ml.docilealligator.infinityforreddit.Activity.CustomThemePreviewActivity;
 import ml.docilealligator.infinityforreddit.CustomTheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.R;
 
@@ -95,7 +95,7 @@ public class ThemePreviewCommentsFragment extends Fragment {
     TextView scoreTextViewFullyCollapsed;
     @BindView(R.id.time_text_view_fully_collapsed_theme_preview_comments_fragment)
     TextView timeTextViewFullyCollapsed;
-    private ThemePreviewActivity activity;
+    private CustomThemePreviewActivity activity;
 
     public ThemePreviewCommentsFragment() {
         // Required empty public constructor
@@ -149,6 +149,6 @@ public class ThemePreviewCommentsFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (ThemePreviewActivity) context;
+        activity = (CustomThemePreviewActivity) context;
     }
 }
