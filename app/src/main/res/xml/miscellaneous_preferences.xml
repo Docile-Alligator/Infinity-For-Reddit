@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="save_front_page_scrolled_position"
+        app:title="@string/settings_save_front_page_scrolled_position_title"
+        app:summary="@string/settings_save_front_page_scrolled_position_summary" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:icon="@drawable/ic_link"
+        app:key="open_link_in_app"
+        app:title="@string/settings_open_link_in_app_title" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="confirm_to_exit"
+        app:icon="@drawable/ic_exit_24dp"
+        app:title="@string/settings_confirm_to_exit" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="respect_subreddit_recommended_comment_sort_type"
+        app:title="@string/settings_respect_subreddit_recommended_comment_sort_type_title"
+        app:summary="@string/settings_respect_subreddit_recommended_comment_sort_type_summary" />
+
+</PreferenceScreen>

@@ -68,6 +68,7 @@ import ml.docilealligator.infinityforreddit.Settings.CustomizeMainPageTabsFragme
 import ml.docilealligator.infinityforreddit.Settings.DownloadLocationPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.GesturesAndButtonsPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.MainPreferenceFragment;
+import ml.docilealligator.infinityforreddit.Settings.MiscellaneousPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.NotificationPreferenceFragment;
 import ml.docilealligator.infinityforreddit.Settings.NsfwAndBlurringFragment;
 import ml.docilealligator.infinityforreddit.Settings.SecurityPreferenceFragment;
@@ -221,4 +222,6 @@ public interface AppComponent {
     void inject(TranslationFragment translationFragment);
 
     void inject(FetchRandomSubredditOrPostActivity fetchRandomSubredditOrPostActivity);
+
+    void inject(MiscellaneousPreferenceFragment miscellaneousPreferenceFragment);
 }

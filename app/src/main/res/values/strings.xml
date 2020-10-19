@@ -494,6 +494,9 @@
     <string name="settings_translation_summary">Translate this app on POEditor. Thanks to all contributors.</string>
     <string name="settings_credits_national_flags">National Flags</string>
     <string name="settings_credits_national_flags_summary">Icon made by Freepik from www.flaticon.com</string>
+    <string name="settings_miscellaneous_title">Miscellaneous</string>
+    <string name="settings_respect_subreddit_recommended_comment_sort_type_title">Respect Subreddit Recommended Comment Sort Type</string>
+    <string name="settings_respect_subreddit_recommended_comment_sort_type_summary">Comment sort type will not be saved</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

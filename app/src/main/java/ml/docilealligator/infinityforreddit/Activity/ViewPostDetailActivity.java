@@ -216,6 +216,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     private boolean mLockFab;
     private boolean mSwipeUpToHideFab;
     private boolean mExpandChildren;
+    private boolean mRespectSubredditRecommendedSortType;
     private int mWindowWidth;
     private LinearLayoutManager mLinearLayoutManager;
     private CommentAndPostRecyclerViewAdapter mAdapter;
@@ -296,6 +297,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         mLockFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
         mSwipeUpToHideFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
         mExpandChildren = !mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_TOP_LEVEL_COMMENTS_FIRST, false);
+        mRespectSubredditRecommendedSortType = mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false);
 
         mGlide = Glide.with(this);
         Resources resources = getResources();

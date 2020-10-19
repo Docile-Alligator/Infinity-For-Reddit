@@ -53,28 +53,15 @@
         app:icon="@drawable/ic_data_saving_mode_black_24dp"
         app:fragment="ml.docilealligator.infinityforreddit.Settings.DataSavingModePreferenceFragment" />
 
-    <SwitchPreference
-        app:defaultValue="false"
-        app:key="save_front_page_scrolled_position"
-        app:title="@string/settings_save_front_page_scrolled_position_title"
-        app:summary="@string/settings_save_front_page_scrolled_position_summary" />
-
-    <SwitchPreference
-        app:defaultValue="false"
-        app:icon="@drawable/ic_link"
-        app:key="open_link_in_app"
-        app:title="@string/settings_open_link_in_app_title" />
-
-    <SwitchPreference
-        app:defaultValue="false"
-        app:key="confirm_to_exit"
-        app:icon="@drawable/ic_exit_24dp"
-        app:title="@string/settings_confirm_to_exit" />
-
     <Preference
         app:icon="@drawable/ic_nsfw_on_24dp"
         app:title="@string/settings_nsfw_and_spoiler_title"
         app:fragment="ml.docilealligator.infinityforreddit.Settings.NsfwAndBlurringFragment"/>
+
+    <Preference
+        app:icon="@drawable/ic_miscellaneous_24dp"
+        app:title="@string/settings_miscellaneous_title"
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.MiscellaneousPreferenceFragment"/>
 
     <Preference
         app:title="@string/settings_advanced_master_title"
