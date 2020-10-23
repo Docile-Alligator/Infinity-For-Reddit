@@ -197,6 +197,17 @@
 
         </com.nex3z.flowlayout.FlowLayout>
 
+        <TextView
+            android:id="@+id/link_text_view_item_post_gallery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textSize="?attr/font_12"
+            android:fontFamily="?attr/font_family"
+            android:visibility="gone" />
+
         <RelativeLayout
             android:id="@+id/image_wrapper_relative_layout_item_post_gallery"
             android:layout_width="match_parent"
@@ -209,6 +220,16 @@
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:scaleType="fitStart" />
+
+            <ImageView
+                android:id="@+id/video_or_gif_indicator_image_view_item_post_gallery"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:layout_gravity="start"
+                android:background="@drawable/play_button_round_background"
+                android:src="@drawable/ic_play_circle_36dp"
+                android:visibility="gone" />
 
             <ProgressBar
                 android:id="@+id/progress_bar_item_post_gallery_type"
