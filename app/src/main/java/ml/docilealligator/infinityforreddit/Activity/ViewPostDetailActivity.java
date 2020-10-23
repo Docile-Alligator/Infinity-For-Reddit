@@ -832,67 +832,71 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                     });
                             mRecyclerView.setAdapter(mAdapter);
 
-                            ParseComment.parseComment(response.body(), new ArrayList<>(), mLocale,
-                                    mExpandChildren, new ParseComment.ParseCommentListener() {
-                                        @Override
-                                        public void onParseCommentSuccess(ArrayList<Comment> expandedComments, String parentId, ArrayList<String> moreChildrenFullnames) {
-                                            ViewPostDetailActivity.this.children = moreChildrenFullnames;
+                            if (mRespectSubredditRecommendedSortType) {
+                                fetchCommentsRespectRecommendedSort(false);
+                            } else {
+                                ParseComment.parseComment(response.body(), new ArrayList<>(), mLocale,
+                                        mExpandChildren, new ParseComment.ParseCommentListener() {
+                                            @Override
+                                            public void onParseCommentSuccess(ArrayList<Comment> expandedComments, String parentId, ArrayList<String> moreChildrenFullnames) {
+                                                ViewPostDetailActivity.this.children = moreChildrenFullnames;
 
-                                            hasMoreChildren = children.size() != 0;
-                                            mAdapter.addComments(expandedComments, hasMoreChildren);
+                                                hasMoreChildren = children.size() != 0;
+                                                mAdapter.addComments(expandedComments, hasMoreChildren);
 
-                                            if (children.size() > 0) {
-                                                mRecyclerView.clearOnScrollListeners();
-                                                mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                                                    @Override
-                                                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                                                        super.onScrolled(recyclerView, dx, dy);
-                                                        if (!mIsSmoothScrolling && !mLockFab) {
-                                                            if (!recyclerView.canScrollVertically(1)) {
-                                                                fab.hide();
-                                                            } else {
-                                                                if (dy > 0) {
-                                                                    if (mSwipeUpToHideFab) {
-                                                                        fab.show();
-                                                                    } else {
-                                                                        fab.hide();
-                                                                    }
+                                                if (children.size() > 0) {
+                                                    mRecyclerView.clearOnScrollListeners();
+                                                    mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                                                        @Override
+                                                        public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                                                            super.onScrolled(recyclerView, dx, dy);
+                                                            if (!mIsSmoothScrolling && !mLockFab) {
+                                                                if (!recyclerView.canScrollVertically(1)) {
+                                                                    fab.hide();
                                                                 } else {
-                                                                    if (mSwipeUpToHideFab) {
-                                                                        fab.hide();
+                                                                    if (dy > 0) {
+                                                                        if (mSwipeUpToHideFab) {
+                                                                            fab.show();
+                                                                        } else {
+                                                                            fab.hide();
+                                                                        }
                                                                     } else {
-                                                                        fab.show();
+                                                                        if (mSwipeUpToHideFab) {
+                                                                            fab.hide();
+                                                                        } else {
+                                                                            fab.show();
+                                                                        }
                                                                     }
+                                                                }
+                                                            }
+
+                                                            if (!isLoadingMoreChildren && loadMoreChildrenSuccess) {
+                                                                int visibleItemCount = mLinearLayoutManager.getChildCount();
+                                                                int totalItemCount = mLinearLayoutManager.getItemCount();
+                                                                int firstVisibleItemPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
+
+                                                                if ((visibleItemCount + firstVisibleItemPosition >= totalItemCount) && firstVisibleItemPosition >= 0) {
+                                                                    fetchMoreComments();
                                                                 }
                                                             }
                                                         }
 
-                                                        if (!isLoadingMoreChildren && loadMoreChildrenSuccess) {
-                                                            int visibleItemCount = mLinearLayoutManager.getChildCount();
-                                                            int totalItemCount = mLinearLayoutManager.getItemCount();
-                                                            int firstVisibleItemPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
-
-                                                            if ((visibleItemCount + firstVisibleItemPosition >= totalItemCount) && firstVisibleItemPosition >= 0) {
-                                                                fetchMoreComments();
+                                                        @Override
+                                                        public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                                                            if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                                                                mIsSmoothScrolling = false;
                                                             }
                                                         }
-                                                    }
-
-                                                    @Override
-                                                    public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                                                        if (newState == RecyclerView.SCROLL_STATE_IDLE) {
-                                                            mIsSmoothScrolling = false;
-                                                        }
-                                                    }
-                                                });
+                                                    });
+                                                }
                                             }
-                                        }
 
-                                        @Override
-                                        public void onParseCommentFailed() {
-                                            mAdapter.initiallyLoadCommentsFailed();
-                                        }
-                                    });
+                                            @Override
+                                            public void onParseCommentFailed() {
+                                                mAdapter.initiallyLoadCommentsFailed();
+                                            }
+                                        });
+                            }
                         }
 
                         @Override

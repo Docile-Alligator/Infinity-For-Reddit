@@ -55,6 +55,7 @@ import com.google.android.material.tabs.TabLayoutMediator;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -813,6 +814,19 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 sectionsPagerAdapter.displaySortTypeInToolbar();
             }
         });
+
+        try {
+            Field recyclerViewField = ViewPager2.class.getDeclaredField("mRecyclerView");
+            recyclerViewField.setAccessible(true);
+
+            RecyclerView recyclerView = (RecyclerView) recyclerViewField.get(viewPager2);
+
+            Field touchSlopField = RecyclerView.class.getDeclaredField("mTouchSlop");
+            touchSlopField.setAccessible(true);
+
+            int touchSlop = (int) touchSlopField.get(recyclerView);
+            touchSlopField.set(recyclerView, touchSlop * 4);
+        } catch (NoSuchFieldException | IllegalAccessException ignore) {}
 
         loadSubscriptions();
 
