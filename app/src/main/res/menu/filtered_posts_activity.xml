@@ -5,14 +5,14 @@
         android:id="@+id/action_sort_filtered_thing_activity"
         android:orderInCategory="1"
         android:title="@string/action_sort"
-        android:icon="@drawable/ic_sort_24dp"
+        android:icon="@drawable/ic_sort_toolbar_24dp"
         app:showAsAction="ifRoom" />
 
     <item
         android:id="@+id/action_refresh_filtered_thing_activity"
         android:orderInCategory="2"
         android:title="@string/action_refresh"
-        android:icon="@drawable/ic_search_24dp"
+        android:icon="@drawable/ic_search_toolbar_24dp"
         app:showAsAction="never" />
 
     <item

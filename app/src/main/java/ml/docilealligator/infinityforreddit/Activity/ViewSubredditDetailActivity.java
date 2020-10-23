@@ -673,7 +673,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     fab.setImageResource(R.drawable.ic_refresh_24dp);
                     break;
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE:
-                    fab.setImageResource(R.drawable.ic_sort_24dp);
+                    fab.setImageResource(R.drawable.ic_sort_toolbar_24dp);
                     break;
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT:
                     fab.setImageResource(R.drawable.ic_post_layout_24dp);
