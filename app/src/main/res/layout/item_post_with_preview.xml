@@ -6,7 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
-    android:id="@+id/card_view_item_post_gallery_type"
+    android:id="@+id/card_view_item_post_with_preview"
     app:cardBackgroundColor="?attr/cardViewBackgroundColor"
     app:cardElevation="2dp"
     app:cardCornerRadius="16dp">
@@ -22,7 +22,7 @@
             android:padding="16dp">
 
             <ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView
-                android:id="@+id/icon_gif_image_view_item_post_gallery_type"
+                android:id="@+id/icon_gif_image_view_item_post_with_preview"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center"
@@ -31,7 +31,7 @@
                 app:layout_constraintTop_toTopOf="parent"/>
 
             <TextView
-                android:id="@+id/subreddit_name_text_view_item_post_gallery_type"
+                android:id="@+id/subreddit_name_text_view_item_post_with_preview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -39,15 +39,15 @@
                 android:layout_marginEnd="8dp"
                 android:textSize="?attr/font_default"
                 android:fontFamily="?attr/font_family"
-                app:layout_constraintBottom_toTopOf="@id/user_text_view_item_post_gallery_type"
-                app:layout_constraintStart_toEndOf="@id/icon_gif_image_view_item_post_gallery_type"
-                app:layout_constraintEnd_toStartOf="@id/stickied_post_image_view_item_post_gallery_type"
+                app:layout_constraintBottom_toTopOf="@id/user_text_view_item_post_with_preview"
+                app:layout_constraintStart_toEndOf="@id/icon_gif_image_view_item_post_with_preview"
+                app:layout_constraintEnd_toStartOf="@id/stickied_post_image_view_item_post_with_preview"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintHorizontal_bias="0"/>
 
             <TextView
-                android:id="@+id/user_text_view_item_post_gallery_type"
+                android:id="@+id/user_text_view_item_post_with_preview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -55,14 +55,14 @@
                 android:textSize="?attr/font_default"
                 android:fontFamily="?attr/font_family"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/icon_gif_image_view_item_post_gallery_type"
-                app:layout_constraintEnd_toStartOf="@id/stickied_post_image_view_item_post_gallery_type"
-                app:layout_constraintTop_toBottomOf="@+id/subreddit_name_text_view_item_post_gallery_type"
+                app:layout_constraintStart_toEndOf="@+id/icon_gif_image_view_item_post_with_preview"
+                app:layout_constraintEnd_toStartOf="@id/stickied_post_image_view_item_post_with_preview"
+                app:layout_constraintTop_toBottomOf="@+id/subreddit_name_text_view_item_post_with_preview"
                 app:layout_constraintHorizontal_bias="0"
                 app:layout_constrainedWidth="true" />
 
             <ImageView
-                android:id="@+id/stickied_post_image_view_item_post_gallery_type"
+                android:id="@+id/stickied_post_image_view_item_post_with_preview"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginEnd="8dp"
@@ -73,7 +73,7 @@
                 tools:visibility="visible" />
 
             <TextView
-                android:id="@+id/post_time_text_view_item_post_gallery_type"
+                android:id="@+id/post_time_text_view_item_post_with_preview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:gravity="end"
@@ -94,7 +94,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
-            android:id="@+id/title_text_view_item_post_gallery_type"
+            android:id="@+id/title_text_view_item_post_with_preview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingStart="16dp"
@@ -103,7 +103,7 @@
             android:fontFamily="?attr/title_font_family" />
 
         <TextView
-            android:id="@+id/content_text_view_item_post_gallery_type"
+            android:id="@+id/content_text_view_item_post_with_preview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
@@ -124,7 +124,7 @@
             app:flRowSpacing="8dp">
 
             <com.libRG.CustomTextView
-                android:id="@+id/type_text_view_item_post_gallery_type"
+                android:id="@+id/type_text_view_item_post_with_preview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
@@ -136,7 +136,7 @@
                 app:lib_setShape="rectangle" />
 
             <com.libRG.CustomTextView
-                android:id="@+id/spoiler_custom_text_view_item_post_gallery_type"
+                android:id="@+id/spoiler_custom_text_view_item_post_with_preview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -150,7 +150,7 @@
                 app:lib_setShape="rectangle" />
 
             <com.libRG.CustomTextView
-                android:id="@+id/nsfw_text_view_item_post_gallery_type"
+                android:id="@+id/nsfw_text_view_item_post_with_preview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
@@ -163,7 +163,7 @@
                 app:lib_setShape="rectangle" />
 
             <com.libRG.CustomTextView
-                android:id="@+id/flair_custom_text_view_item_post_gallery_type"
+                android:id="@+id/flair_custom_text_view_item_post_with_preview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -176,7 +176,7 @@
                 app:lib_setShape="rectangle" />
 
             <com.libRG.CustomTextView
-                android:id="@+id/awards_text_view_item_post_gallery_type"
+                android:id="@+id/awards_text_view_item_post_with_preview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
@@ -188,21 +188,21 @@
                 app:lib_setShape="rectangle" />
 
             <ImageView
-                android:id="@+id/archived_image_view_item_post_gallery_type"
+                android:id="@+id/archived_image_view_item_post_with_preview"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_archive_outline"
                 android:visibility="gone" />
 
             <ImageView
-                android:id="@+id/locked_image_view_item_post_gallery_type"
+                android:id="@+id/locked_image_view_item_post_with_preview"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/ic_outline_lock_24dp"
                 android:visibility="gone" />
 
             <ImageView
-                android:id="@+id/crosspost_image_view_item_post_gallery_type"
+                android:id="@+id/crosspost_image_view_item_post_with_preview"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/crosspost"
@@ -211,7 +211,7 @@
         </com.nex3z.flowlayout.FlowLayout>
 
         <TextView
-            android:id="@+id/link_text_view_item_post_gallery"
+            android:id="@+id/link_text_view_item_post_with_preview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -222,20 +222,20 @@
             android:visibility="gone" />
 
         <RelativeLayout
-            android:id="@+id/image_wrapper_relative_layout_item_post_gallery"
+            android:id="@+id/image_wrapper_relative_layout_item_post_with_preview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone">
 
             <ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView
-                android:id="@+id/image_view_item_post_gallery_type"
+                android:id="@+id/image_view_item_post_with_preview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:scaleType="fitStart" />
 
             <ImageView
-                android:id="@+id/video_or_gif_indicator_image_view_item_post_gallery"
+                android:id="@+id/video_or_gif_indicator_image_view_item_post_with_preview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="16dp"
@@ -245,20 +245,20 @@
                 android:visibility="gone" />
 
             <ProgressBar
-                android:id="@+id/progress_bar_item_post_gallery_type"
+                android:id="@+id/progress_bar_item_post_with_preview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true" />
 
             <RelativeLayout
-                android:id="@+id/load_image_error_relative_layout_item_post_gallery_type"
+                android:id="@+id/load_image_error_relative_layout_item_post_with_preview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_centerInParent="true"
                 android:visibility="gone">
 
                 <TextView
-                    android:id="@+id/load_image_error_text_view_item_post_gallery_type"
+                    android:id="@+id/load_image_error_text_view_item_post_with_preview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:drawableTop="@drawable/ic_error_outline_black_24dp"
@@ -273,7 +273,7 @@
         </RelativeLayout>
 
         <ImageView
-            android:id="@+id/image_view_no_preview_gallery_item_post_gallery_type"
+            android:id="@+id/image_view_no_preview_gallery_item_post_with_preview"
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:scaleType="center"
@@ -282,12 +282,12 @@
             android:visibility="gone" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/bottom_constraint_layout_item_post_gallery_type"
+            android:id="@+id/bottom_constraint_layout_item_post_with_preview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <ImageView
-                android:id="@+id/plus_button_item_post_gallery_type"
+                android:id="@+id/plus_button_item_post_with_preview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
@@ -300,7 +300,7 @@
                 app:layout_constraintStart_toStartOf="parent" />
 
             <TextView
-                android:id="@+id/score_text_view_item_post_gallery_type"
+                android:id="@+id/score_text_view_item_post_with_preview"
                 android:layout_width="64dp"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -309,10 +309,10 @@
                 android:fontFamily="?attr/font_family"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/plus_button_item_post_gallery_type" />
+                app:layout_constraintStart_toEndOf="@id/plus_button_item_post_with_preview" />
 
             <ImageView
-                android:id="@+id/minus_button_item_post_gallery_type"
+                android:id="@+id/minus_button_item_post_with_preview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
@@ -322,10 +322,10 @@
                 android:focusable="true"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/score_text_view_item_post_gallery_type" />
+                app:layout_constraintStart_toEndOf="@id/score_text_view_item_post_with_preview" />
 
             <TextView
-                android:id="@+id/comments_count_item_post_gallery_type"
+                android:id="@+id/comments_count_item_post_with_preview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
@@ -337,10 +337,10 @@
                 android:drawablePadding="12dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/minus_button_item_post_gallery_type" />
+                app:layout_constraintStart_toEndOf="@id/minus_button_item_post_with_preview" />
 
             <ImageView
-                android:id="@+id/save_button_item_post_gallery_type"
+                android:id="@+id/save_button_item_post_with_preview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
@@ -350,11 +350,11 @@
                 app:layout_constraintHorizontal_bias="1"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/comments_count_item_post_gallery_type"
-                app:layout_constraintEnd_toStartOf="@id/share_button_item_post_gallery_type" />
+                app:layout_constraintStart_toEndOf="@id/comments_count_item_post_with_preview"
+                app:layout_constraintEnd_toStartOf="@id/share_button_item_post_with_preview" />
 
             <ImageView
-                android:id="@+id/share_button_item_post_gallery_type"
+                android:id="@+id/share_button_item_post_with_preview"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="12dp"
