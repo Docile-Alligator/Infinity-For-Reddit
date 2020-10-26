@@ -139,7 +139,7 @@ public class GiveAwardActivity extends BaseActivity {
                                     @Override
                                     public void success(String awardsHTML, int awardCount) {
                                         Intent data = new Intent();
-                                        data.putExtra(EXTRA_ITEM_POSITION, itemPosition);
+                                        data.putExtra(EXTRA_RETURN_ITEM_POSITION, itemPosition);
                                         data.putExtra(EXTRA_RETURN_NEW_AWARDS, awardsHTML);
                                         data.putExtra(EXTRA_RETURN_NEW_AWARDS_COUNT, awardCount);
                                         setResult(RESULT_OK, data);

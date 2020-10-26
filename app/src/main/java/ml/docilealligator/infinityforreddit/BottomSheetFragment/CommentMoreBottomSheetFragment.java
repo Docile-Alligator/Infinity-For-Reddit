@@ -23,6 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Activity.CommentFullMarkdownActivity;
 import ml.docilealligator.infinityforreddit.Activity.EditCommentActivity;
+import ml.docilealligator.infinityforreddit.Activity.GiveAwardActivity;
 import ml.docilealligator.infinityforreddit.Activity.ReportActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.Activity.ViewUserDetailActivity;
@@ -37,6 +38,7 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
 
     public static final String EXTRA_COMMENT = "ECF";
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
+    public static final String EXTRA_EDIT_AND_DELETE_AVAILABLE = "EEADA";
     public static final String EXTRA_POSITION = "EP";
     public static final String EXTRA_COMMENT_MARKDOWN = "ECM";
     public static final String EXTRA_IS_NSFW = "EIN";
@@ -48,6 +50,8 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
     TextView shareTextView;
     @BindView(R.id.copy_text_view_comment_more_bottom_sheet_fragment)
     TextView copyTextView;
+    @BindView(R.id.give_award_text_view_comment_more_bottom_sheet_fragment)
+    TextView giveAwardTextView;
     @BindView(R.id.view_full_markdown_text_view_comment_more_bottom_sheet_fragment)
     TextView viewFullMarkdownTextView;
     @BindView(R.id.report_view_comment_more_bottom_sheet_fragment)
@@ -82,34 +86,50 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
             return rootView;
         }
         String accessToken = bundle.getString(EXTRA_ACCESS_TOKEN);
+        boolean editAndDeleteAvailable = bundle.getBoolean(EXTRA_EDIT_AND_DELETE_AVAILABLE, false);
 
         if (accessToken != null && !accessToken.equals("")) {
-            editTextView.setVisibility(View.VISIBLE);
-            deleteTextView.setVisibility(View.VISIBLE);
-
-            editTextView.setOnClickListener(view -> {
-                Intent intent = new Intent(activity, EditCommentActivity.class);
-                intent.putExtra(EditCommentActivity.EXTRA_ACCESS_TOKEN, accessToken);
-                intent.putExtra(EditCommentActivity.EXTRA_FULLNAME, comment.getFullName());
-                intent.putExtra(EditCommentActivity.EXTRA_CONTENT, comment.getCommentMarkdown());
-                intent.putExtra(EditCommentActivity.EXTRA_POSITION, bundle.getInt(EXTRA_POSITION));
+            giveAwardTextView.setVisibility(View.VISIBLE);
+            giveAwardTextView.setOnClickListener(view -> {
+                Intent intent = new Intent(activity, GiveAwardActivity.class);
+                intent.putExtra(GiveAwardActivity.EXTRA_THING_FULLNAME, comment.getFullName());
+                intent.putExtra(GiveAwardActivity.EXTRA_ITEM_POSITION, bundle.getInt(EXTRA_POSITION));
                 if (activity instanceof ViewPostDetailActivity) {
-                    activity.startActivityForResult(intent, ViewPostDetailActivity.EDIT_COMMENT_REQUEST_CODE);
-                } else {
-                    startActivity(intent);
-                }
-
-                dismiss();
-            });
-
-            deleteTextView.setOnClickListener(view -> {
-                dismiss();
-                if (activity instanceof ViewPostDetailActivity) {
-                    ((ViewPostDetailActivity) activity).deleteComment(comment.getFullName(), bundle.getInt(EXTRA_POSITION));
+                    activity.startActivityForResult(intent, ViewPostDetailActivity.GIVE_AWARD_REQUEST_CODE);
                 } else if (activity instanceof ViewUserDetailActivity) {
-                    ((ViewUserDetailActivity) activity).deleteComment(comment.getFullName());
+                    activity.startActivityForResult(intent, ViewUserDetailActivity.GIVE_AWARD_REQUEST_CODE);
                 }
+                dismiss();
             });
+
+            if (editAndDeleteAvailable) {
+                editTextView.setVisibility(View.VISIBLE);
+                deleteTextView.setVisibility(View.VISIBLE);
+
+                editTextView.setOnClickListener(view -> {
+                    Intent intent = new Intent(activity, EditCommentActivity.class);
+                    intent.putExtra(EditCommentActivity.EXTRA_ACCESS_TOKEN, accessToken);
+                    intent.putExtra(EditCommentActivity.EXTRA_FULLNAME, comment.getFullName());
+                    intent.putExtra(EditCommentActivity.EXTRA_CONTENT, comment.getCommentMarkdown());
+                    intent.putExtra(EditCommentActivity.EXTRA_POSITION, bundle.getInt(EXTRA_POSITION));
+                    if (activity instanceof ViewPostDetailActivity) {
+                        activity.startActivityForResult(intent, ViewPostDetailActivity.EDIT_COMMENT_REQUEST_CODE);
+                    } else {
+                        activity.startActivityForResult(intent, ViewUserDetailActivity.EDIT_COMMENT_REQUEST_CODE);
+                    }
+
+                    dismiss();
+                });
+
+                deleteTextView.setOnClickListener(view -> {
+                    dismiss();
+                    if (activity instanceof ViewPostDetailActivity) {
+                        ((ViewPostDetailActivity) activity).deleteComment(comment.getFullName(), bundle.getInt(EXTRA_POSITION));
+                    } else if (activity instanceof ViewUserDetailActivity) {
+                        ((ViewUserDetailActivity) activity).deleteComment(comment.getFullName());
+                    }
+                });
+            }
         }
 
         shareTextView.setOnClickListener(view -> {

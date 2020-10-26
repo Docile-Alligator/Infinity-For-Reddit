@@ -1,4 +1,5 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:overScrollMode="never"
@@ -15,7 +16,6 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
-            android:drawableStart="@drawable/ic_edit_24dp"
             android:drawablePadding="48dp"
             android:focusable="true"
             android:paddingStart="32dp"
@@ -26,7 +26,8 @@
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:drawableStartCompat="@drawable/ic_edit_24dp" />
 
         <TextView
             android:id="@+id/delete_text_view_comment_more_bottom_sheet_fragment"
@@ -34,7 +35,6 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
-            android:drawableStart="@drawable/ic_delete_24dp"
             android:drawablePadding="48dp"
             android:focusable="true"
             android:paddingStart="32dp"
@@ -45,7 +45,8 @@
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:drawableStartCompat="@drawable/ic_delete_24dp" />
 
         <TextView
             android:id="@+id/save_text_view_comment_more_bottom_sheet_fragment"
@@ -53,7 +54,6 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
-            android:drawableStart="@drawable/ic_share_24dp"
             android:drawablePadding="48dp"
             android:focusable="true"
             android:gravity="center_vertical"
@@ -64,7 +64,8 @@
             android:text="@string/share"
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
-            android:fontFamily="?attr/font_family" />
+            android:fontFamily="?attr/font_family"
+            app:drawableStartCompat="@drawable/ic_share_24dp" />
 
         <TextView
             android:id="@+id/copy_text_view_comment_more_bottom_sheet_fragment"
@@ -72,7 +73,6 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
-            android:drawableStart="@drawable/ic_copy_24dp"
             android:drawablePadding="48dp"
             android:focusable="true"
             android:gravity="center_vertical"
@@ -83,7 +83,28 @@
             android:text="@string/copy_text"
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
-            android:fontFamily="?attr/font_family" />
+            android:fontFamily="?attr/font_family"
+            app:drawableStartCompat="@drawable/ic_copy_24dp" />
+
+        <TextView
+            android:id="@+id/give_award_text_view_comment_more_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawablePadding="48dp"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:paddingStart="32dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="32dp"
+            android:paddingBottom="16dp"
+            android:text="@string/action_give_award"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family"
+            android:visibility="gone"
+            app:drawableStartCompat="@drawable/ic_give_award_24dp" />
 
         <TextView
             android:id="@+id/view_full_markdown_text_view_comment_more_bottom_sheet_fragment"
@@ -91,7 +112,6 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
-            android:drawableStart="@drawable/ic_full_markdown_24dp"
             android:drawablePadding="48dp"
             android:focusable="true"
             android:gravity="center_vertical"
@@ -102,7 +122,8 @@
             android:text="@string/view_full_comment_markdown"
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
-            android:fontFamily="?attr/font_family" />
+            android:fontFamily="?attr/font_family"
+            app:drawableStartCompat="@drawable/ic_full_markdown_24dp" />
 
         <TextView
             android:id="@+id/report_view_comment_more_bottom_sheet_fragment"
@@ -110,7 +131,6 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
-            android:drawableStart="@drawable/ic_report_24dp"
             android:drawablePadding="48dp"
             android:focusable="true"
             android:gravity="center_vertical"
@@ -121,7 +141,8 @@
             android:text="@string/report"
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
-            android:fontFamily="?attr/font_family" />
+            android:fontFamily="?attr/font_family"
+            app:drawableStartCompat="@drawable/ic_report_24dp" />
 
         <TextView
             android:id="@+id/see_removed_view_comment_more_bottom_sheet_fragment"
@@ -129,7 +150,6 @@
             android:layout_height="wrap_content"
             android:background="?attr/selectableItemBackground"
             android:clickable="true"
-            android:drawableStart="@drawable/ic_preview_24dp"
             android:drawablePadding="48dp"
             android:focusable="true"
             android:gravity="center_vertical"
@@ -141,7 +161,8 @@
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:drawableStartCompat="@drawable/ic_preview_24dp" />
 
     </LinearLayout>
 

@@ -94,6 +94,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     public static final String EXTRA_USER_NAME_KEY = "EUNK";
     public static final String EXTRA_MESSAGE_FULLNAME = "ENF";
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
+    public static final int GIVE_AWARD_REQUEST_CODE = 200;
+    public static final int EDIT_COMMENT_REQUEST_CODE = 300;
 
     private static final String FETCH_USER_INFO_STATE = "FSIS";
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
@@ -580,7 +582,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             FetchUserData.fetchUserData(mRetrofit, username, new FetchUserData.FetchUserDataListener() {
                 @Override
                 public void onFetchUserDataSuccess(UserData userData) {
-                    new InsertUserDataAsyncTask(mRedditDataRoomDatabase.userDao(), userData,
+                    new ViewUserDetailActivity.InsertUserDataAsyncTask(mRedditDataRoomDatabase.userDao(), userData,
                             () -> mFetchUserInfoSuccess = true).execute();
                 }
 
@@ -731,6 +733,29 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == GIVE_AWARD_REQUEST_CODE) {
+                Toast.makeText(this, R.string.give_award_success, Toast.LENGTH_SHORT).show();
+                int position = data.getIntExtra(GiveAwardActivity.EXTRA_RETURN_ITEM_POSITION, 0);
+                String newAwardsHTML = data.getStringExtra(GiveAwardActivity.EXTRA_RETURN_NEW_AWARDS);
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.giveAward(newAwardsHTML, position);
+                }
+            } else if (requestCode == EDIT_COMMENT_REQUEST_CODE) {
+                if (data != null) {
+                    if (sectionsPagerAdapter != null) {
+                        sectionsPagerAdapter.editComment(
+                                data.getStringExtra(EditCommentActivity.EXTRA_EDITED_COMMENT_CONTENT),
+                                data.getExtras().getInt(EditCommentActivity.EXTRA_EDITED_COMMENT_POSITION));
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -961,6 +986,24 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 } else if (fragment instanceof CommentsListingFragment) {
                     SortType sortType = ((CommentsListingFragment) fragment).getSortType();
                     Utils.displaySortTypeInToolbar(sortType, toolbar);
+                }
+            }
+        }
+
+        void giveAward(String awardsHTML, int position) {
+            if (fragmentManager != null) {
+                Fragment fragment = fragmentManager.findFragmentByTag("f1");
+                if (fragment instanceof CommentsListingFragment) {
+                    ((CommentsListingFragment) fragment).giveAward(awardsHTML, position);
+                }
+            }
+        }
+
+        void editComment(String commentMarkdown, int position) {
+            if (fragmentManager != null) {
+                Fragment fragment = fragmentManager.findFragmentByTag("f1");
+                if (fragment instanceof CommentsListingFragment) {
+                    ((CommentsListingFragment) fragment).editComment(commentMarkdown, position);
                 }
             }
         }

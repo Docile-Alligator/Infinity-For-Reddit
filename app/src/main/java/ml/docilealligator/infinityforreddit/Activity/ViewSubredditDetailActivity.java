@@ -1112,7 +1112,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
         new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
-                .setTitle(R.string.go_to_user)
+                .setTitle(R.string.go_to_subreddit)
                 .setView(thingEditText)
                 .setPositiveButton(R.string.ok, (dialogInterface, i)
                         -> {

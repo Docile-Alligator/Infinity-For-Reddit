@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit.Post;
 
-import android.util.Log;
-
 import androidx.annotation.NonNull;
 
 import java.util.Locale;
@@ -60,7 +58,6 @@ public class FetchPost {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    Log.i("asdasdf", "s " + response.body());
                     new ParsePost.ParseRandomPostAsyncTask(response.body(), isNSFW, new ParsePost.ParseRandomPostListener() {
 
                         @Override

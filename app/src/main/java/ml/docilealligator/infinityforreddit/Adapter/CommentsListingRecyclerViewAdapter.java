@@ -265,6 +265,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 }
 
                 if (comment.getAwards() != null && !comment.getAwards().equals("")) {
+                    ((CommentViewHolder) holder).awardsTextView.setVisibility(View.VISIBLE);
                     Utils.setHTMLWithImageToTextView(((CommentViewHolder) holder).awardsTextView, comment.getAwards());
                 }
 
@@ -359,6 +360,24 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             } else {
                 ((CommentViewHolder) viewHolder).downvoteButton.performClick();
             }
+        }
+    }
+
+    public void giveAward(String awardsHTML, int position) {
+        if (position >= 0 && position < getItemCount()) {
+            Comment comment = getItem(position);
+            if (comment != null) {
+                comment.addAwards(awardsHTML);
+                notifyItemChanged(position);
+            }
+        }
+    }
+
+    public void editComment(String commentContentMarkdown, int position) {
+        Comment comment = getItem(position);
+        if (comment != null) {
+            comment.setCommentMarkdown(commentContentMarkdown);
+            notifyItemChanged(position);
         }
     }
 
@@ -475,10 +494,11 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 if (comment != null) {
                     Bundle bundle = new Bundle();
                     if (comment.getAuthor().equals(mAccountName)) {
-                        bundle.putString(CommentMoreBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                        bundle.putBoolean(CommentMoreBottomSheetFragment.EXTRA_EDIT_AND_DELETE_AVAILABLE, true);
                     }
+                    bundle.putString(CommentMoreBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                     bundle.putParcelable(CommentMoreBottomSheetFragment.EXTRA_COMMENT, comment);
-                    bundle.putInt(CommentMoreBottomSheetFragment.EXTRA_POSITION, getAdapterPosition() - 1);
+                    bundle.putInt(CommentMoreBottomSheetFragment.EXTRA_POSITION, getAdapterPosition());
                     bundle.putString(CommentMoreBottomSheetFragment.EXTRA_COMMENT_MARKDOWN, comment.getCommentMarkdown());
                     CommentMoreBottomSheetFragment commentMoreBottomSheetFragment = new CommentMoreBottomSheetFragment();
                     commentMoreBottomSheetFragment.setArguments(bundle);

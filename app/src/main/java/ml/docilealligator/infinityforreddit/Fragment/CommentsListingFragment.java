@@ -391,4 +391,16 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     public SortType getSortType() {
         return sortType;
     }
+
+    public void giveAward(String awardsHTML, int position) {
+        if (mAdapter != null) {
+            mAdapter.giveAward(awardsHTML, position);
+        }
+    }
+
+    public void editComment(String commentMarkdown, int position) {
+        if (mAdapter != null) {
+            mAdapter.editComment(commentMarkdown, position);
+        }
+    }
 }

@@ -1878,6 +1878,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 notifyItemChanged(0);
             }
         } else {
+            position = mIsSingleCommentThreadMode ? position + 2 : position + 1;
             Comment comment = getCurrentComment(position);
             if (comment != null) {
                 comment.addAwards(awardsHTML);
@@ -3300,8 +3301,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 if (comment != null) {
                     Bundle bundle = new Bundle();
                     if (!mPost.isArchived() && !mPost.isLocked() && comment.getAuthor().equals(mAccountName)) {
-                        bundle.putString(CommentMoreBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                        bundle.putBoolean(CommentMoreBottomSheetFragment.EXTRA_EDIT_AND_DELETE_AVAILABLE, true);
                     }
+                    bundle.putString(CommentMoreBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                     bundle.putParcelable(CommentMoreBottomSheetFragment.EXTRA_COMMENT, comment);
                     if (mIsSingleCommentThreadMode) {
                         bundle.putInt(CommentMoreBottomSheetFragment.EXTRA_POSITION, getAdapterPosition() - 2);

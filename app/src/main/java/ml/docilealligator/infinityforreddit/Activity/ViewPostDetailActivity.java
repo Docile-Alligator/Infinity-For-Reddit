@@ -124,8 +124,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     public static final String EXTRA_MESSAGE_FULLNAME = "ENI";
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
     public static final int EDIT_COMMENT_REQUEST_CODE = 3;
+    public static final int GIVE_AWARD_REQUEST_CODE = 100;
     private static final int EDIT_POST_REQUEST_CODE = 2;
-    private static final int GIVE_AWARD_REQUEST_CODE = 100;
     @State
     boolean mNullAccessToken = false;
     @State
