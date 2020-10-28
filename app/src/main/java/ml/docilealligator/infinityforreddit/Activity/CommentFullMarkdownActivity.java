@@ -12,6 +12,7 @@ import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -86,6 +87,11 @@ public class CommentFullMarkdownActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         applyCustomTheme();
+
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        setTitle(" ");
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
             mSlidrInterface = Slidr.attach(this);
@@ -230,6 +236,16 @@ public class CommentFullMarkdownActivity extends BaseActivity {
         markdownRecyclerView.setAdapter(markwonAdapter);
         markwonAdapter.setMarkdown(markwon, commentMarkdown);
         markwonAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+
+        return false;
     }
 
     @Override
