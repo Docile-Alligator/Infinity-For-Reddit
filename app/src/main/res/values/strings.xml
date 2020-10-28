@@ -501,6 +501,7 @@
     <string name="settings_filter_title">Filter</string>
     <string name="settings_subreddit_filter_category">Hide Subreddits</string>
     <string name="settings_subreddit_filter_popular_and_all">In r/popular and r/all</string>
+    <string name="settings_credits_ufo_capturing_animation_title">UFO Capturing Animation</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

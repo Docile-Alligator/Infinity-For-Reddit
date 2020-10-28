@@ -14,6 +14,7 @@
         android:layout_centerInParent="true"
         app:lottie_autoPlay="true"
         app:lottie_loop="true"
+        app:lottie_speed="5"
         app:lottie_rawRes="@raw/random_subreddit_or_post" />
 
 </RelativeLayout>

@@ -35,6 +35,7 @@ public class CreditsPreferenceFragment extends PreferenceFragmentCompat {
         Preference bestRocketIconPreference = findPreference(SharedPreferencesUtils.BEST_ROCKET_ICON_KEY);
         Preference materialIconsPreference = findPreference(SharedPreferencesUtils.MATERIAL_ICONS_KEY);
         Preference nationalFlagsPreference = findPreference(SharedPreferencesUtils.NATIONAL_FLAGS);
+        Preference ufoAndCowPreference = findPreference(SharedPreferencesUtils.UFO_CAPTURING_ANIMATION);
 
         if (iconForegroundPreference != null) {
             iconForegroundPreference.setOnPreferenceClickListener(preference -> {
@@ -112,6 +113,15 @@ public class CreditsPreferenceFragment extends PreferenceFragmentCompat {
             nationalFlagsPreference.setOnPreferenceClickListener(preference -> {
                 Intent intent = new Intent(activity, LinkResolverActivity.class);
                 intent.setData(Uri.parse("https://www.flaticon.com/packs/countrys-flags"));
+                startActivity(intent);
+                return true;
+            });
+        }
+
+        if (ufoAndCowPreference != null) {
+            ufoAndCowPreference.setOnPreferenceClickListener(preference -> {
+                Intent intent = new Intent(activity, LinkResolverActivity.class);
+                intent.setData(Uri.parse("https://lottiefiles.com/33858-ufo-capturing-animation"));
                 startActivity(intent);
                 return true;
             });

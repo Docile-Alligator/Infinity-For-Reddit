@@ -46,4 +46,9 @@
         app:title="@string/settings_credits_national_flags"
         android:summary="@string/settings_credits_national_flags_summary" />
 
+    <Preference
+        app:key="ufo_capturing_animation"
+        app:title="@string/settings_credits_ufo_capturing_animation_title"
+        android:summary="https://lottiefiles.com/33858-ufo-capturing-animation" />
+
 </PreferenceScreen>
