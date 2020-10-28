@@ -136,6 +136,7 @@ public class SharedPreferencesUtils {
     public static final String DATA_SAVING_MODE_ALWAYS = "2";
     public static final String NATIONAL_FLAGS = "national_flags";
     public static final String RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE = "respect_subreddit_recommended_comment_sort_type";
+    public static final String SUBREDDIT_FILTER_POPULAR_AND_ALL = "subreddit_filter_popular_and_all";
 
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";
     public static final String MAIN_PAGE_TAB_COUNT = "_main_page_tab_count";

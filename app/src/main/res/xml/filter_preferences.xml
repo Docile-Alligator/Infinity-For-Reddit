@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        app:title="@string/settings_subreddit_filter_category" />
+
+    <Preference
+        app:key="subreddit_filter_popular_and_all"
+        app:title="@string/settings_subreddit_filter_popular_and_all" />
+
+</PreferenceScreen>

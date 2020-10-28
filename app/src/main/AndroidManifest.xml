@@ -32,7 +32,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
-        <activity android:name=".Activity.FetchRandomSubredditOrPostActivity"
+        <activity android:name=".Activity.SubredditFilterPopularAndAllActivity"
+            android:label="@string/subreddit_filter_popular_and_all_activity_label"
+            android:parentActivityName=".Activity.SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".Activity.FetchRandomSubredditOrPostActivity"
             android:parentActivityName=".Activity.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity

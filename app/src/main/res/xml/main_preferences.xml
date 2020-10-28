@@ -59,6 +59,11 @@
         app:fragment="ml.docilealligator.infinityforreddit.Settings.NsfwAndBlurringFragment"/>
 
     <Preference
+        app:icon="@drawable/ic_filter_24dp"
+        app:title="@string/settings_filter_title"
+        app:fragment="ml.docilealligator.infinityforreddit.Settings.FilterPreferenceFragment"/>
+
+    <Preference
         app:icon="@drawable/ic_miscellaneous_24dp"
         app:title="@string/settings_miscellaneous_title"
         app:fragment="ml.docilealligator.infinityforreddit.Settings.MiscellaneousPreferenceFragment"/>

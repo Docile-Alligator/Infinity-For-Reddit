@@ -33,6 +33,7 @@
     <string name="view_reddit_gallery_activity_video_label">Video %1$d/%2$d</string>
     <string name="submit_crosspost_activity_label">Crosspost</string>
     <string name="give_award_activity_label">Give Award</string>
+    <string name="subreddit_filter_popular_and_all_activity_label">r/all and r/popular</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -497,6 +498,9 @@
     <string name="settings_miscellaneous_title">Miscellaneous</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_title">Respect Subreddit Recommended Comment Sort Type</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_summary">Comment sort type will not be saved</string>
+    <string name="settings_filter_title">Filter</string>
+    <string name="settings_subreddit_filter_category">Subreddit Filter</string>
+    <string name="settings_subreddit_filter_popular_and_all">r/popular and r/all</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
