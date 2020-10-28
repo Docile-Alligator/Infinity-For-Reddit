@@ -51,6 +51,7 @@ import com.bumptech.glide.RequestManager;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import javax.inject.Inject;
@@ -102,6 +103,8 @@ import ml.docilealligator.infinityforreddit.Post.PostViewModel;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.SubredditFilter.FetchSubredditFilters;
+import ml.docilealligator.infinityforreddit.SubredditFilter.SubredditFilter;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 import retrofit2.Retrofit;
@@ -127,6 +130,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
     private static final String RECYCLER_VIEW_POSITION_STATE = "RVPS";
+    private static final String SUBREDDIT_FILTER_LIST_STATE = "SFLS";
 
     @BindView(R.id.swipe_refresh_layout_post_fragment)
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -203,6 +207,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private Drawable drawableRight;
     private float swipeActionThreshold = 0.3f;
     private ItemTouchHelper touchHelper;
+    private ArrayList<SubredditFilter> subredditFilterList;
 
     public PostFragment() {
         // Required empty public constructor
@@ -363,6 +368,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
 
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
+            subredditFilterList = savedInstanceState.getParcelableArrayList(SUBREDDIT_FILTER_LIST_STATE);
         }
 
         mPostRecyclerView.setOnTouchListener((view, motionEvent) -> {
@@ -503,9 +509,26 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 }
             });
 
-            mPostViewModel = new ViewModelProvider(this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
-                    accountName, getResources().getConfiguration().locale, mSharedPreferences,
-                    postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType, filter, nsfw)).get(PostViewModel.class);
+            if (subredditName.equals("all") || subredditName.equals("popular")) {
+                if (subredditFilterList != null) {
+                    mPostViewModel = new ViewModelProvider(this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
+                            accountName, getResources().getConfiguration().locale, mSharedPreferences,
+                            postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType, filter, nsfw, subredditFilterList)).get(PostViewModel.class);
+                } else {
+                    FetchSubredditFilters.fetchSubredditFilters(mRedditDataRoomDatabase, subredditFilters -> {
+                        subredditFilterList = subredditFilters;
+                        mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
+                                accountName, getResources().getConfiguration().locale, mSharedPreferences,
+                                postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType, filter, nsfw, subredditFilters)).get(PostViewModel.class);
+
+                        bindPostViewModel();
+                    });
+                }
+            } else {
+                mPostViewModel = new ViewModelProvider(this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
+                        accountName, getResources().getConfiguration().locale, mSharedPreferences,
+                        postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType, filter, nsfw)).get(PostViewModel.class);
+            }
         } else if(postType == PostDataSource.TYPE_MULTI_REDDIT) {
             multiRedditPath = getArguments().getString(EXTRA_NAME);
             String sort;
@@ -776,6 +799,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             return new PlaybackInfo(INDEX_UNSET, TIME_UNSET, volumeInfo);
         });
 
+        if (mPostViewModel != null) {
+            bindPostViewModel();
+        }
+
+        return rootView;
+    }
+
+    private void bindPostViewModel() {
         mPostViewModel.getPosts().observe(getViewLifecycleOwner(), posts -> mAdapter.submitList(posts));
 
         mPostViewModel.hasPost().observe(getViewLifecycleOwner(), hasPost -> {
@@ -807,8 +838,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         });
 
         mPostViewModel.getPaginationNetworkState().observe(getViewLifecycleOwner(), networkState -> mAdapter.setNetworkState(networkState));
-
-        return rootView;
     }
 
     public void changeSortType(SortType sortType) {
@@ -869,6 +898,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
+        outState.putParcelableArrayList(SUBREDDIT_FILTER_LIST_STATE, subredditFilterList);
         if (mLinearLayoutManager != null) {
             outState.putInt(RECYCLER_VIEW_POSITION_STATE, mLinearLayoutManager.findFirstVisibleItemPosition());
         } else if (mStaggeredGridLayoutManager != null) {

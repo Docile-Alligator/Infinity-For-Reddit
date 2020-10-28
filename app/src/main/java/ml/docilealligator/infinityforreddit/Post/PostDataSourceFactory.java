@@ -6,9 +6,11 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
 
+import java.util.List;
 import java.util.Locale;
 
 import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.SubredditFilter.SubredditFilter;
 import retrofit2.Retrofit;
 
 class PostDataSourceFactory extends DataSource.Factory {
@@ -25,6 +27,7 @@ class PostDataSourceFactory extends DataSource.Factory {
     private String userWhere;
     private int filter;
     private boolean nsfw;
+    private List<SubredditFilter> subredditFilterList;
 
     private PostDataSource postDataSource;
     private MutableLiveData<PostDataSource> postDataSourceLiveData;
@@ -47,7 +50,8 @@ class PostDataSourceFactory extends DataSource.Factory {
 
     PostDataSourceFactory(Retrofit retrofit, String accessToken, String accountName, Locale locale,
                           SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
-                          String subredditName, int postType, SortType sortType, int filter, boolean nsfw) {
+                          String subredditName, int postType, SortType sortType, int filter, boolean nsfw,
+                          List<SubredditFilter> subredditFilterList) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
@@ -60,6 +64,7 @@ class PostDataSourceFactory extends DataSource.Factory {
         this.sortType = sortType;
         this.filter = filter;
         this.nsfw = nsfw;
+        this.subredditFilterList = subredditFilterList;
     }
 
     PostDataSourceFactory(Retrofit retrofit, String accessToken, String accountName, Locale locale,
@@ -111,7 +116,7 @@ class PostDataSourceFactory extends DataSource.Factory {
                     sharedPreferences, postFeedScrolledPositionSharedPreferences, subredditName, query, postType, sortType, filter, nsfw);
         } else if (postType == PostDataSource.TYPE_SUBREDDIT || postType == PostDataSource.TYPE_MULTI_REDDIT) {
             postDataSource = new PostDataSource(retrofit, accessToken, accountName, locale,
-                    sharedPreferences, postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType, filter, nsfw);
+                    sharedPreferences, postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType, filter, nsfw, subredditFilterList);
         } else {
             postDataSource = new PostDataSource(retrofit, accessToken, accountName, locale,
                     sharedPreferences, postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType, userWhere, filter, nsfw);
