@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit.Post;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.Html;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -563,7 +562,6 @@ public class ParsePost {
                             boolean availablePost = true;
                             if (subredditFilterList != null) {
                                 for (SubredditFilter subredditFilter : subredditFilterList) {
-                                    Log.i("sasdfasdf", subredditFilter.getSubredditName() + " " + post.getSubredditName());
                                     if (subredditFilter.getSubredditName().equals(post.getSubredditName())) {
                                         availablePost = false;
                                         break;

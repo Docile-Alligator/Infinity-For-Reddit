@@ -274,7 +274,8 @@
             android:name=".Activity.SearchActivity"
             android:label="@string/search_activity_label"
             android:parentActivityName=".Activity.MainActivity"
-            android:theme="@style/AppTheme.Slidable" />
+            android:theme="@style/AppTheme.Slidable"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".Activity.RulesActivity"
             android:label="@string/rules_activity_label"
@@ -328,7 +329,8 @@
         <activity
             android:name=".Activity.MainActivity"
             android:label="@string/application_name"
-            android:theme="@style/AppTheme.Launcher">
+            android:theme="@style/AppTheme.Launcher"
+            android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
