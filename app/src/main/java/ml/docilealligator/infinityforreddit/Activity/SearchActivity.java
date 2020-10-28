@@ -39,6 +39,8 @@ import ml.docilealligator.infinityforreddit.CustomTheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Event.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RecentSearchQuery.DeleteRecentSearchQuery;
+import ml.docilealligator.infinityforreddit.RecentSearchQuery.RecentSearchQuery;
 import ml.docilealligator.infinityforreddit.RecentSearchQuery.RecentSearchQueryViewModel;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
@@ -213,7 +215,17 @@ public class SearchActivity extends BaseActivity {
 
     private void bindView() {
         if (mAccountName != null) {
-            adapter = new SearchActivityRecyclerViewAdapter(this, mCustomThemeWrapper, this::search);
+            adapter = new SearchActivityRecyclerViewAdapter(this, mCustomThemeWrapper, new SearchActivityRecyclerViewAdapter.ItemOnClickListener() {
+                @Override
+                public void onClick(String query) {
+                    search(query);
+                }
+
+                @Override
+                public void onDelete(RecentSearchQuery recentSearchQuery) {
+                    DeleteRecentSearchQuery.deleteRecentSearchQueryListener(mRedditDataRoomDatabase, recentSearchQuery, () -> {});
+                }
+            });
             recyclerView.setNestedScrollingEnabled(false);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(adapter);

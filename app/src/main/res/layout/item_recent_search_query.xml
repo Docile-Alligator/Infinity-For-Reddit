@@ -10,10 +10,21 @@
 
     <TextView
         android:id="@+id/recent_search_query_text_view_item_recent_search_query"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_gravity="center_vertical"
         android:fontFamily="?attr/font_family"
         android:textSize="?attr/font_default"
         android:drawablePadding="16dp" />
+
+    <ImageView
+        android:id="@+id/delete_image_view_item_recent_search_query"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/selectableItemBackground" />
 
 </LinearLayout>

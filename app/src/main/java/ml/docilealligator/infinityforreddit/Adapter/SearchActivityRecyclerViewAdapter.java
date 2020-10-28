@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,16 +24,19 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private List<RecentSearchQuery> recentSearchQueries;
     private int primaryTextColor;
     private Drawable historyIcon;
+    private Drawable deleteIcon;
     private ItemOnClickListener itemOnClickListener;
 
     public interface ItemOnClickListener {
         void onClick(String query);
+        void onDelete(RecentSearchQuery recentSearchQuery);
     }
 
     public SearchActivityRecyclerViewAdapter(Activity activity, CustomThemeWrapper customThemeWrapper,
                                              ItemOnClickListener itemOnClickListener) {
         this.primaryTextColor = customThemeWrapper.getPrimaryTextColor();
         this.historyIcon = Utils.getTintedDrawable(activity, R.drawable.ic_history_24dp, customThemeWrapper.getPrimaryIconColor());
+        this.deleteIcon = Utils.getTintedDrawable(activity, R.drawable.ic_delete_24dp, customThemeWrapper.getPrimaryIconColor());
         this.itemOnClickListener = itemOnClickListener;
     }
 
@@ -64,6 +68,8 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     class RecentSearchQueryViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.recent_search_query_text_view_item_recent_search_query)
         TextView recentSearchQueryTextView;
+        @BindView(R.id.delete_image_view_item_recent_search_query)
+        ImageView deleteImageView;
 
         public RecentSearchQueryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -72,11 +78,16 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             recentSearchQueryTextView.setTextColor(primaryTextColor);
             recentSearchQueryTextView.setCompoundDrawablesWithIntrinsicBounds(historyIcon, null, null, null);
+            deleteImageView.setImageDrawable(deleteIcon);
 
             itemView.setOnClickListener(view -> {
                 if (recentSearchQueries != null && !recentSearchQueries.isEmpty()) {
                     itemOnClickListener.onClick(recentSearchQueries.get(getAdapterPosition()).getSearchQuery());
                 }
+            });
+
+            deleteImageView.setOnClickListener(view -> {
+                itemOnClickListener.onDelete(recentSearchQueries.get(getAdapterPosition()));
             });
         }
     }
