@@ -9,9 +9,9 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.VibrationEffect;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
+import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -441,14 +441,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                     if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
                         if (!exceedThreshold) {
                             exceedThreshold = true;
-                            if (vibrateWhenActionTriggered && v != null) {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    v.vibrate(VibrationEffect.createOneShot(10, 255));
-                                } else {
-                                    //deprecated in API 26
-                                    v.vibrate(10);
-                                }
-                            }
+                            viewHolder.itemView.setHapticFeedbackEnabled(true);
+                            viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                         }
                         backgroundLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
                     } else {
@@ -466,14 +460,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                     if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
                         if (!exceedThreshold) {
                             exceedThreshold = true;
-                            if (vibrateWhenActionTriggered && v != null) {
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                    v.vibrate(VibrationEffect.createOneShot(10, 255));
-                                } else {
-                                    //deprecated in API 26
-                                    v.vibrate(10);
-                                }
-                            }
+                            viewHolder.itemView.setHapticFeedbackEnabled(true);
+                            viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                         }
                         backgroundRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
                     } else {
