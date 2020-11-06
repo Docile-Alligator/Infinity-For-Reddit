@@ -815,18 +815,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             }
         });
 
-        try {
-            Field recyclerViewField = ViewPager2.class.getDeclaredField("mRecyclerView");
-            recyclerViewField.setAccessible(true);
-
-            RecyclerView recyclerView = (RecyclerView) recyclerViewField.get(viewPager2);
-
-            Field touchSlopField = RecyclerView.class.getDeclaredField("mTouchSlop");
-            touchSlopField.setAccessible(true);
-
-            int touchSlop = (int) touchSlopField.get(recyclerView);
-            touchSlopField.set(recyclerView, touchSlop * 4);
-        } catch (NoSuchFieldException | IllegalAccessException ignore) {}
+        fixViewPager2Sensitivity(viewPager2);
 
         loadSubscriptions();
 

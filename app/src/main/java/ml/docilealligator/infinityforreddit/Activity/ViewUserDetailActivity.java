@@ -562,6 +562,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             }
         });
 
+        fixViewPager2Sensitivity(viewPager2);
+
         if (mAccessToken != null && mMessageFullname != null) {
             ReadMessage.readMessage(mOauthRetrofit, mAccessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
                 @Override

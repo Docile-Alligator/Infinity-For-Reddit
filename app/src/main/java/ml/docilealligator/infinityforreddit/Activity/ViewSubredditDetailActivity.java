@@ -838,6 +838,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     tab.setText(R.string.sidebar);
             }
         }).attach();
+        fixViewPager2Sensitivity(viewPager2);
 
         boolean viewSidebar = getIntent().getBooleanExtra(EXTRA_VIEW_SIDEBAR, false);
         if (viewSidebar) {

@@ -21,10 +21,14 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.view.menu.MenuItemImpl;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+
+import java.lang.reflect.Field;
 
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
@@ -300,5 +304,23 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected void applyFABTheme(FloatingActionButton fab) {
         fab.setBackgroundTintList(ColorStateList.valueOf(customThemeWrapper.getColorPrimaryLightTheme()));
         fab.setImageTintList(ColorStateList.valueOf(customThemeWrapper.getFABIconColor()));
+    }
+
+    protected void fixViewPager2Sensitivity(ViewPager2 viewPager2) {
+        try {
+            Field recyclerViewField = ViewPager2.class.getDeclaredField("mRecyclerView");
+            recyclerViewField.setAccessible(true);
+
+            RecyclerView recyclerView = (RecyclerView) recyclerViewField.get(viewPager2);
+
+            Field touchSlopField = RecyclerView.class.getDeclaredField("mTouchSlop");
+            touchSlopField.setAccessible(true);
+
+            Object touchSlopBox = touchSlopField.get(recyclerView);
+            if (touchSlopBox != null) {
+                int touchSlop = (int) touchSlopBox;
+                touchSlopField.set(recyclerView, touchSlop * 4);
+            }
+        } catch (NoSuchFieldException | IllegalAccessException ignore) {}
     }
 }

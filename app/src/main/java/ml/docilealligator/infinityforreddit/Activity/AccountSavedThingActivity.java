@@ -221,6 +221,8 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
                 }
             }
         });
+
+        fixViewPager2Sensitivity(viewPager2);
     }
 
     @Override

@@ -249,6 +249,8 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                     break;
             }
         }).attach();
+        fixViewPager2Sensitivity(viewPager2);
+
         if (mAccountName != null && !mInsertSearchQuerySuccess && mQuery != null) {
             InsertRecentSearchQuery.insertRecentSearchQueryListener(mRedditDataRoomDatabase, mAccountName,
                     mQuery, () -> mInsertSearchQuerySuccess = true);
