@@ -612,7 +612,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.VISIBLE);
                         ((PostWithPreviewTypeViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.video));
                     } else if (post.getPostType() == Post.GIF_TYPE) {
-                        ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.VISIBLE);
+                        if (!mAutoplay) {
+                            ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.VISIBLE);
+                        }
                         ((PostWithPreviewTypeViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.gif));
                     } else if (post.getPostType() == Post.IMAGE_TYPE) {
                         ((PostWithPreviewTypeViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.image));
@@ -964,7 +966,13 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private void loadImage(final RecyclerView.ViewHolder holder, final Post post, @NonNull Post.Preview preview) {
         if (preview != null) {
             if (holder instanceof PostWithPreviewTypeViewHolder) {
-                RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(preview.getPreviewUrl()).listener(new RequestListener<Drawable>() {
+                String url;
+                if (post.getPostType() == Post.GIF_TYPE && mAutoplay) {
+                    url = post.getUrl();
+                } else {
+                    url = preview.getPreviewUrl();
+                }
+                RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(url).listener(new RequestListener<Drawable>() {
                     @Override
                     public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                         ((PostWithPreviewTypeViewHolder) holder).progressBar.setVisibility(View.GONE);

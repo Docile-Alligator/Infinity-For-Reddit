@@ -199,6 +199,9 @@ public class ParsePost {
                             nComments, flair, awards, nAwards, hidden, spoiler, nsfw, stickied, archived,
                             locked, saved, isCrosspost);
 
+                    if (previews.isEmpty()) {
+                        previews.add(new Post.Preview(url, 0, 0));
+                    }
                     post.setPreviews(previews);
                 } else {
                     //No preview link post
@@ -278,6 +281,9 @@ public class ParsePost {
                                 voteType, nComments, flair, awards, nAwards, hidden, spoiler, nsfw,
                                 stickied, archived, locked, saved, isCrosspost);
 
+                        if (previews.isEmpty()) {
+                            previews.add(new Post.Preview(url, 0, 0));
+                        }
                         post.setPreviews(previews);
                     } else if (url.endsWith("gif")){
                         //Gif post
@@ -359,6 +365,10 @@ public class ParsePost {
                             authorFlair, authorFlairHTML, postTimeMillis, title, url, permalink, score, postType,
                             voteType, nComments, flair, awards, nAwards, hidden, spoiler, nsfw, stickied,
                             archived, locked, saved, isCrosspost);
+
+                    if (previews.isEmpty()) {
+                        previews.add(new Post.Preview(url, 0, 0));
+                    }
                     post.setPreviews(previews);
                 } else if (url.endsWith("mp4")) {
                     //Video post
