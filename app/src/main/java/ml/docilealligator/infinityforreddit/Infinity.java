@@ -11,6 +11,7 @@ import androidx.annotation.Nullable;
 import com.evernote.android.state.StateSaver;
 import com.livefront.bridge.Bridge;
 import com.livefront.bridge.SavedStateHandler;
+import com.melegy.redscreenofdeath.RedScreenOfDeath;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -26,6 +27,8 @@ public class Infinity extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        RedScreenOfDeath.init(this);
 
         mAppComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
