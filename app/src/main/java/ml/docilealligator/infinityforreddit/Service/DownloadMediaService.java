@@ -284,7 +284,8 @@ public class DownloadMediaService extends Service {
                 downloadFinished(null, ERROR_FILE_CANNOT_DOWNLOAD);
             }
         });
-        return super.onStartCommand(intent, flags, startId);
+
+        return START_NOT_STICKY;
     }
 
     private Notification createNotification(String fileName) {

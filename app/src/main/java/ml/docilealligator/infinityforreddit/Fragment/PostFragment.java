@@ -516,12 +516,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                             postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType, filter, nsfw, subredditFilterList)).get(PostViewModel.class);
                 } else {
                     FetchSubredditFilters.fetchSubredditFilters(mRedditDataRoomDatabase, subredditFilters -> {
-                        subredditFilterList = subredditFilters;
-                        mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
-                                accountName, getResources().getConfiguration().locale, mSharedPreferences,
-                                postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType, filter, nsfw, subredditFilters)).get(PostViewModel.class);
+                        if (activity != null) {
+                            subredditFilterList = subredditFilters;
+                            mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
+                                    accountName, getResources().getConfiguration().locale, mSharedPreferences,
+                                    postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType, filter, nsfw, subredditFilters)).get(PostViewModel.class);
 
-                        bindPostViewModel();
+                            bindPostViewModel();
+                        }
                     });
                 }
             } else {

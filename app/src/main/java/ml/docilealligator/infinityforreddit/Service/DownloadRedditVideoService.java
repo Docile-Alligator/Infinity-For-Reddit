@@ -568,7 +568,7 @@ public class DownloadRedditVideoService extends Service {
 
                 muxer.stop();
                 muxer.release();
-            } catch (IllegalStateException ignore) {
+            } catch (IllegalArgumentException ignore) {
             } catch (IOException e) {
                 e.printStackTrace();
                 return false;
