@@ -313,6 +313,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
         showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false);
         lockBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_BOTTOM_APP_BAR, false);
+        boolean hideSubredditDescription = mSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_SUBREDDIT_DESCRIPTION, false);
 
         subredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME_KEY);
 
@@ -420,7 +421,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 nSubscribersTextView.setText(nSubscribers);
                 creationTimeTextView.setText(new SimpleDateFormat("MMM d, yyyy",
                         locale).format(subredditData.getCreatedUTC()));
-                if (subredditData.getDescription().equals("")) {
+                if (hideSubredditDescription || subredditData.getDescription().equals("")) {
                     descriptionTextView.setVisibility(View.GONE);
                 } else {
                     descriptionTextView.setVisibility(View.VISIBLE);

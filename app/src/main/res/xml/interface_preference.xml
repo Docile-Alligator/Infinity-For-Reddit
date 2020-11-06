@@ -33,6 +33,11 @@
         app:title="@string/settings_time_format_title"
         app:fragment="ml.docilealligator.infinityforreddit.Settings.TimeFormatPreferenceFragment" />
 
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="hide_subreddit_description"
+        app:title="@string/settings_hide_subreddit_description_title" />
+
     <PreferenceCategory
         app:title="@string/settings_category_post_and_comment_title" />
 
