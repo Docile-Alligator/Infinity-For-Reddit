@@ -74,6 +74,7 @@ import ml.docilealligator.infinityforreddit.Event.ChangeAutoplayNsfwVideosEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeCompactLayoutToolbarHiddenByDefaultEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeDataSavingModeEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeDefaultPostLayoutEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeDisableImagePreviewEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeEnableSwipeActionSwitchEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeLongPressToHideToolbarInCompactLayoutEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeMuteAutoplayingVideosEvent;
@@ -1302,6 +1303,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 dataSavingMode = true;
             }
             mAdapter.setDataSavingMode(dataSavingMode);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeDisableImagePreviewEvent(ChangeDisableImagePreviewEvent changeDisableImagePreviewEvent) {
+        if (mAdapter != null) {
+            mAdapter.setDisableImagePreview(changeDisableImagePreviewEvent.disableImagePreview);
             refreshAdapter();
         }
     }

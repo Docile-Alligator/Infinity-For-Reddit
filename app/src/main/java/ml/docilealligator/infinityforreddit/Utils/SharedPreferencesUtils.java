@@ -139,6 +139,7 @@ public class SharedPreferencesUtils {
     public static final String SUBREDDIT_FILTER_POPULAR_AND_ALL = "subreddit_filter_popular_and_all";
     public static final String UFO_CAPTURING_ANIMATION = "ufo_capturing_animation";
     public static final String HIDE_SUBREDDIT_DESCRIPTION = "hide_subreddit_description";
+    public static final String DISABLE_IMAGE_PREVIEW = "disable_image_preview";
 
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";
     public static final String MAIN_PAGE_TAB_COUNT = "_main_page_tab_count";

@@ -503,6 +503,7 @@
     <string name="settings_subreddit_filter_popular_and_all">In r/popular and r/all</string>
     <string name="settings_credits_ufo_capturing_animation_title">UFO Capturing Animation</string>
     <string name="settings_hide_subreddit_description_title">Hide Subreddit Description</string>
+    <string name="settings_disable_image_preview_title">Disable Image Preview in Data Saving Mode</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

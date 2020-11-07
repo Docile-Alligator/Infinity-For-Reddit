@@ -2,6 +2,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <Preference
+        app:icon="@drawable/ic_info_preference_24dp"
+        app:summary="@string/settings_data_saving_mode_info_summary"
+        app:enabled="false" />
+
     <ListPreference
         app:defaultValue="0"
         app:key="data_saving_mode"
@@ -10,9 +15,9 @@
         app:entryValues="@array/settings_data_saving_mode_values"
         app:useSimpleSummaryProvider="true" />
 
-    <Preference
-        app:icon="@drawable/ic_info_preference_24dp"
-        app:summary="@string/settings_data_saving_mode_info_summary"
-        app:enabled="false" />
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="disable_image_preview"
+        android:title="@string/settings_disable_image_preview_title" />
 
 </PreferenceScreen>
