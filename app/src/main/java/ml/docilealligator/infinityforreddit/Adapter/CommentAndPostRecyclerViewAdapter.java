@@ -211,7 +211,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private int mArchivedTintColor;
     private int mLockedTintColor;
     private int mCrosspostTintColor;
-    private int mNoPreviewLinkBackgroundColor;
+    private int mNoPreviewPostTypeBackgroundColor;
+    private int mNoPreviewPostTypeIconTint;
     private int mUpvotedColor;
     private int mDownvotedColor;
     private int mCommentVerticalBarColor1;
@@ -518,7 +519,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mArchivedTintColor = customThemeWrapper.getArchivedIconTint();
         mLockedTintColor = customThemeWrapper.getLockedIconTint();
         mCrosspostTintColor = customThemeWrapper.getCrosspostIconTint();
-        mNoPreviewLinkBackgroundColor = customThemeWrapper.getNoPreviewLinkBackgroundColor();
+        mNoPreviewPostTypeBackgroundColor = customThemeWrapper.getNoPreviewPostTypeBackgroundColor();
+        mNoPreviewPostTypeIconTint = customThemeWrapper.getNoPreviewPostTypeIconTint();
         mFlairBackgroundColor = customThemeWrapper.getFlairBackgroundColor();
         mFlairTextColor = customThemeWrapper.getFlairTextColor();
         mSubredditColor = customThemeWrapper.getSubreddit();
@@ -647,28 +649,28 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             case VIEW_TYPE_POST_DETAIL_VIDEO_AUTOPLAY:
                 if (mDataSavingMode) {
                     if (mDisableImagePreview) {
-                        return new PostDetailNoPreviewLinkViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_no_preview_link, parent, false));
+                        return new PostDetailNoPreviewViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_no_preview, parent, false));
                     }
                     return new PostDetailVideoAndGifPreviewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_video_and_gif_preview, parent, false));
                 }
                 return new PostDetailVideoAutoplayViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_video_autoplay, parent, false));
             case VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW:
                 if (mDataSavingMode && mDisableImagePreview) {
-                    return new PostDetailNoPreviewLinkViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_no_preview_link, parent, false));
+                    return new PostDetailNoPreviewViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_no_preview, parent, false));
                 }
                 return new PostDetailVideoAndGifPreviewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_video_and_gif_preview, parent, false));
             case VIEW_TYPE_POST_DETAIL_IMAGE_AND_GIF_AUTOPLAY:
                 if (mDataSavingMode && mDisableImagePreview) {
-                    return new PostDetailNoPreviewLinkViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_no_preview_link, parent, false));
+                    return new PostDetailNoPreviewViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_no_preview, parent, false));
                 }
                 return new PostDetailImageAndGifAutoplayViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_image_and_gif_autoplay, parent, false));
             case VIEW_TYPE_POST_DETAIL_LINK:
                 if (mDataSavingMode && mDisableImagePreview) {
-                    return new PostDetailNoPreviewLinkViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_no_preview_link, parent, false));
+                    return new PostDetailNoPreviewViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_no_preview, parent, false));
                 }
                 return new PostDetailLinkViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_link, parent, false));
             case VIEW_TYPE_POST_DETAIL_NO_PREVIEW_LINK:
-                return new PostDetailNoPreviewLinkViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_no_preview_link, parent, false));
+                return new PostDetailNoPreviewViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_no_preview, parent, false));
             case VIEW_TYPE_POST_DETAIL_GALLERY:
                 return new PostDetailGalleryViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_gallery, parent, false));
             case VIEW_TYPE_POST_DETAIL_TEXT_TYPE:
@@ -929,39 +931,39 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     loadImage((PostDetailLinkViewHolder) holder, preview);
                 }
 
-            } else if (holder instanceof PostDetailNoPreviewLinkViewHolder) {
+            } else if (holder instanceof PostDetailNoPreviewViewHolder) {
                 if (mPost.getPostType() == Post.LINK_TYPE || mPost.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
                     String noPreviewLinkDomain = Uri.parse(mPost.getUrl()).getHost();
-                    ((PostDetailNoPreviewLinkViewHolder) holder).mLinkTextView.setVisibility(View.VISIBLE);
-                    ((PostDetailNoPreviewLinkViewHolder) holder).mLinkTextView.setText(noPreviewLinkDomain);
+                    ((PostDetailNoPreviewViewHolder) holder).mLinkTextView.setVisibility(View.VISIBLE);
+                    ((PostDetailNoPreviewViewHolder) holder).mLinkTextView.setText(noPreviewLinkDomain);
                 } else {
-                    ((PostDetailNoPreviewLinkViewHolder) holder).mLinkTextView.setVisibility(View.GONE);
+                    ((PostDetailNoPreviewViewHolder) holder).mLinkTextView.setVisibility(View.GONE);
                     switch (mPost.getPostType()) {
                         case Post.VIDEO_TYPE:
-                            ((PostDetailNoPreviewLinkViewHolder) holder).mTypeTextView.setText(R.string.video);
-                            ((PostDetailNoPreviewLinkViewHolder) holder).mNoPreviewLinkImageView.setImageResource(R.drawable.ic_outline_video_24dp);
+                            ((PostDetailNoPreviewViewHolder) holder).mTypeTextView.setText(R.string.video);
+                            ((PostDetailNoPreviewViewHolder) holder).mNoPreviewPostTypeImageView.setImageResource(R.drawable.ic_outline_video_24dp);
                             break;
                         case Post.IMAGE_TYPE:
-                            ((PostDetailNoPreviewLinkViewHolder) holder).mTypeTextView.setText(R.string.image);
-                            ((PostDetailNoPreviewLinkViewHolder) holder).mNoPreviewLinkImageView.setImageResource(R.drawable.ic_image_24dp);
+                            ((PostDetailNoPreviewViewHolder) holder).mTypeTextView.setText(R.string.image);
+                            ((PostDetailNoPreviewViewHolder) holder).mNoPreviewPostTypeImageView.setImageResource(R.drawable.ic_image_24dp);
                             break;
                         case Post.GIF_TYPE:
-                            ((PostDetailNoPreviewLinkViewHolder) holder).mTypeTextView.setText(R.string.gif);
-                            ((PostDetailNoPreviewLinkViewHolder) holder).mNoPreviewLinkImageView.setImageResource(R.drawable.ic_image_24dp);
+                            ((PostDetailNoPreviewViewHolder) holder).mTypeTextView.setText(R.string.gif);
+                            ((PostDetailNoPreviewViewHolder) holder).mNoPreviewPostTypeImageView.setImageResource(R.drawable.ic_image_24dp);
                             break;
                         case Post.LINK_TYPE:
                         case Post.NO_PREVIEW_LINK_TYPE:
-                            ((PostDetailNoPreviewLinkViewHolder) holder).mTypeTextView.setText(R.string.link);
+                            ((PostDetailNoPreviewViewHolder) holder).mTypeTextView.setText(R.string.link);
                             break;
                         case Post.GALLERY_TYPE:
-                            ((PostDetailNoPreviewLinkViewHolder) holder).mTypeTextView.setText(R.string.gallery);
-                            ((PostDetailNoPreviewLinkViewHolder) holder).mNoPreviewLinkImageView.setImageResource(R.drawable.ic_gallery_24dp);
+                            ((PostDetailNoPreviewViewHolder) holder).mTypeTextView.setText(R.string.gallery);
+                            ((PostDetailNoPreviewViewHolder) holder).mNoPreviewPostTypeImageView.setImageResource(R.drawable.ic_gallery_24dp);
                             break;
                     }
                 }
 
                 if (mPost.getSelfText() != null && !mPost.getSelfText().equals("")) {
-                    ((PostDetailNoPreviewLinkViewHolder) holder).mContentMarkdownView.setVisibility(View.VISIBLE);
+                    ((PostDetailNoPreviewViewHolder) holder).mContentMarkdownView.setVisibility(View.VISIBLE);
                     LinearLayoutManager linearLayoutManager = new MarkwonLinearLayoutManager(mActivity, new MarkwonLinearLayoutManager.HorizontalScrollViewScrolledListener() {
                         @Override
                         public void onScrolledLeft() {
@@ -973,8 +975,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             ((ViewPostDetailActivity) mActivity).unlockSwipeRightToGoBack();
                         }
                     });
-                    ((PostDetailNoPreviewLinkViewHolder) holder).mContentMarkdownView.setLayoutManager(linearLayoutManager);
-                    ((PostDetailNoPreviewLinkViewHolder) holder).mContentMarkdownView.setAdapter(mMarkwonAdapter);
+                    ((PostDetailNoPreviewViewHolder) holder).mContentMarkdownView.setLayoutManager(linearLayoutManager);
+                    ((PostDetailNoPreviewViewHolder) holder).mContentMarkdownView.setAdapter(mMarkwonAdapter);
                     mMarkwonAdapter.setMarkdown(mPostDetailMarkwon, mPost.getSelfText());
                     mMarkwonAdapter.notifyDataSetChanged();
                 }
@@ -987,7 +989,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
                     loadImage((PostDetailGalleryViewHolder) holder, preview);
                 } else {
-                    ((PostDetailGalleryViewHolder) holder).mNoPreviewLinkImageView.setVisibility(View.VISIBLE);
+                    ((PostDetailGalleryViewHolder) holder).mNoPreviewPostTypeImageView.setVisibility(View.VISIBLE);
                 }
             } else if (holder instanceof PostDetailTextViewHolder) {
                 if (mPost.getSelfText() != null && !mPost.getSelfText().equals("")) {
@@ -2994,7 +2996,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         }
     }
 
-    class PostDetailNoPreviewLinkViewHolder extends PostDetailBaseViewHolder {
+    class PostDetailNoPreviewViewHolder extends PostDetailBaseViewHolder {
         @BindView(R.id.icon_gif_image_view_item_post_detail_no_preview_link)
         AspectRatioGifImageView mIconGifImageView;
         @BindView(R.id.subreddit_text_view_item_post_detail_no_preview_link)
@@ -3027,8 +3029,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         TextView mAwardsTextView;
         @BindView(R.id.link_text_view_item_post_detail_no_preview_link)
         TextView mLinkTextView;
-        @BindView(R.id.image_view_no_preview_link_item_post_detail_no_preview_link)
-        ImageView mNoPreviewLinkImageView;
+        @BindView(R.id.image_view_no_preview_post_type_item_post_detail_no_preview_link)
+        ImageView mNoPreviewPostTypeImageView;
         @BindView(R.id.bottom_constraint_layout_item_post_detail_no_preview_link)
         ConstraintLayout mBottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_detail_no_preview_link)
@@ -3044,7 +3046,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         @BindView(R.id.share_button_item_post_detail_no_preview_link)
         ImageView mShareButton;
 
-        PostDetailNoPreviewLinkViewHolder(@NonNull View itemView) {
+        PostDetailNoPreviewViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             setBaseView(mIconGifImageView,
@@ -3070,9 +3072,10 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     mShareButton);
 
             mLinkTextView.setTextColor(mSecondaryTextColor);
-            mNoPreviewLinkImageView.setBackgroundColor(mNoPreviewLinkBackgroundColor);
+            mNoPreviewPostTypeImageView.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
+            mNoPreviewPostTypeImageView.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
 
-            mNoPreviewLinkImageView.setOnClickListener(view -> {
+            mNoPreviewPostTypeImageView.setOnClickListener(view -> {
                 if (mPost != null) {
                     if (mPost.getPostType() == Post.VIDEO_TYPE) {
                         Intent intent = new Intent(mActivity, ViewVideoActivity.class);
@@ -3168,7 +3171,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         @BindView(R.id.image_view_item_post_detail_gallery)
         AspectRatioGifImageView mImageView;
         @BindView(R.id.image_view_no_preview_link_item_post_detail_gallery)
-        ImageView mNoPreviewLinkImageView;
+        ImageView mNoPreviewPostTypeImageView;
         @BindView(R.id.bottom_constraint_layout_item_post_detail_gallery)
         ConstraintLayout mBottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_detail_gallery)
@@ -3211,7 +3214,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             mLoadImageProgressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
             mLoadImageErrorTextView.setTextColor(mPrimaryTextColor);
-            mNoPreviewLinkImageView.setBackgroundColor(mNoPreviewLinkBackgroundColor);
+            mNoPreviewPostTypeImageView.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
+            mNoPreviewPostTypeImageView.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
 
             mImageView.setOnClickListener(view -> {
                 Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
@@ -3220,7 +3224,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 mActivity.startActivity(intent);
             });
 
-            mNoPreviewLinkImageView.setOnClickListener(view -> {
+            mNoPreviewPostTypeImageView.setOnClickListener(view -> {
                 mImageView.performClick();
             });
         }

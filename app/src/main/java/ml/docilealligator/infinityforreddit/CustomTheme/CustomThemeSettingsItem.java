@@ -281,6 +281,11 @@ public class CustomThemeSettingsItem implements Parcelable {
                 context.getString(R.string.theme_item_stickied_post_icon_tint_detail),
                 customTheme.stickiedPostIconTint));
         customThemeSettingsItems.add(new CustomThemeSettingsItem(
+                context.getString(R.string.theme_item_no_preview_post_type_icon_tint),
+                context.getString(R.string.theme_item_no_preview_post_type_icon_tint_detail),
+                customTheme.noPreviewPostTypeIconTint
+        ));
+        customThemeSettingsItems.add(new CustomThemeSettingsItem(
                 context.getString(R.string.theme_item_subscribed_color),
                 context.getString(R.string.theme_item_subscribed_color_detail),
                 customTheme.subscribed));
@@ -321,9 +326,9 @@ public class CustomThemeSettingsItem implements Parcelable {
                 context.getString(R.string.theme_item_divider_color_detail),
                 customTheme.dividerColor));
         customThemeSettingsItems.add(new CustomThemeSettingsItem(
-                context.getString(R.string.theme_item_no_preview_link_background_color),
-                context.getString(R.string.theme_item_no_preview_link_background_color_detail),
-                customTheme.noPreviewLinkBackgroundColor));
+                context.getString(R.string.theme_item_no_preview_post_type_background_color),
+                context.getString(R.string.theme_item_no_preview_post_type_background_color_detail),
+                customTheme.noPreviewPostTypeBackgroundColor));
         customThemeSettingsItems.add(new CustomThemeSettingsItem(
                 context.getString(R.string.theme_item_vote_and_reply_unavailable_button_color),
                 context.getString(R.string.theme_item_vote_and_reply_unavailable_button_color_detail),

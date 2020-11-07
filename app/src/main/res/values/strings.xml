@@ -715,6 +715,8 @@
     <string name="theme_item_crosspost_icon_tint_detail">Applied to: Crosspost icon</string>
     <string name="theme_item_stickied_post_icon_tint">Stickied Post Icon Color</string>
     <string name="theme_item_stickied_post_icon_tint_detail">Applied to: Stickied post icon</string>
+    <string name="theme_item_no_preview_post_type_icon_tint">No-preview Post Type Icon Color</string>
+    <string name="theme_item_no_preview_post_type_icon_tint_detail">Applied to: Icon indicating the type of post when there is no preview available</string>
     <string name="theme_item_subscribed_color">Subscribed</string>
     <string name="theme_item_subscribed_color_detail">Applied to: Unsubscribe button</string>
     <string name="theme_item_unsubscribed_color">Unsubscribed</string>
@@ -735,8 +737,8 @@
     <string name="theme_item_unread_message_background_color_detail">Applied to: Unread Message Background Color</string>
     <string name="theme_item_divider_color">Divider Color</string>
     <string name="theme_item_divider_color_detail">Applied to: Comment divider, dividers in pages for submitting posts, etc.</string>
-    <string name="theme_item_no_preview_link_background_color">No-Preview Link Background Color</string>
-    <string name="theme_item_no_preview_link_background_color_detail">Applied to: No-preview link placeholder</string>
+    <string name="theme_item_no_preview_post_type_background_color">No-preview Post Type Background Color</string>
+    <string name="theme_item_no_preview_post_type_background_color_detail">Applied to: Placeholder indicating the type of post when there is no preview available</string>
     <string name="theme_item_vote_and_reply_unavailable_button_color">Vote and Reply Unavailable Button Color</string>
     <string name="theme_item_vote_and_reply_unavailable_button_color_detail">Applied to: Vote and reply buttons (Unavailable)</string>
     <string name="theme_item_comment_vertical_bar_color_1">Comment Vertical Bar Color 1</string>

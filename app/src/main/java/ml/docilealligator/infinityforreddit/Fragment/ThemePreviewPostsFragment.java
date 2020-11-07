@@ -129,7 +129,7 @@ public class ThemePreviewPostsFragment extends Fragment {
         crosspostImageView.setColorFilter(customTheme.crosspostIconTint, PorterDuff.Mode.SRC_IN);
         linkTextView.setTextColor(customTheme.secondaryTextColor);
         progressBar.setIndeterminateTintList(ColorStateList.valueOf(customTheme.colorAccent));
-        noPreviewLinkImageView.setBackgroundColor(customTheme.noPreviewLinkBackgroundColor);
+        noPreviewLinkImageView.setBackgroundColor(customTheme.noPreviewPostTypeBackgroundColor);
         upvoteButton.setColorFilter(customTheme.postIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
         scoreTextView.setTextColor(customTheme.postIconAndInfoColor);
         downvoteButton.setColorFilter(customTheme.postIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);

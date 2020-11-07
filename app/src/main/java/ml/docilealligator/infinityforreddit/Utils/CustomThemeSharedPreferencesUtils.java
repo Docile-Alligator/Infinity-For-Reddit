@@ -58,6 +58,7 @@ public class CustomThemeSharedPreferencesUtils {
     public static final String LOCKED_ICON_TINT = "lockedIconTint";
     public static final String CROSSPOST_ICON_TINT = "crosspostIconTint";
     public static final String STICKIED_POST_ICON_TINT = "stickiedPost";
+    public static final String NO_PREVIEW_POST_TYPE_ICON_TINT = "noPreviewPostTypeIconTint";
     public static final String SUBSCRIBED = "subscribed";
     public static final String UNSUBSCRIBED = "unsubscribed";
     public static final String USERNAME = "username";
@@ -68,7 +69,7 @@ public class CustomThemeSharedPreferencesUtils {
     public static final String SINGLE_COMMENT_THREAD_BACKGROUND_COLOR = "singleCommentThreadBackgroundColor";
     public static final String UNREAD_MESSAGE_BACKGROUND_COLOR = "unreadMessageBackgroundColor";
     public static final String DIVIDER_COLOR = "dividerColor";
-    public static final String NO_PREVIEW_LINK_BACKGROUND_COLOR = "noPreviewLinkBackgroundColor";
+    public static final String NO_PREVIEW_POST_TYPE_BACKGROUND_COLOR = "noPreviewLinkBackgroundColor";
     public static final String VOTE_AND_REPLY_UNAVAILABLE_BUTTON_COLOR = "voteAndReplyUnavailableButtonColor";
     public static final String COMMENT_VERTICAL_BAR_COLOR_1 = "commentVerticalBarColor1";
     public static final String COMMENT_VERTICAL_BAR_COLOR_2 = "commentVerticalBarColor2";
@@ -134,6 +135,7 @@ public class CustomThemeSharedPreferencesUtils {
         editor.putInt(LOCKED_ICON_TINT, customTheme.lockedIconTint);
         editor.putInt(CROSSPOST_ICON_TINT, customTheme.crosspostIconTint);
         editor.putInt(STICKIED_POST_ICON_TINT, customTheme.stickiedPostIconTint);
+        editor.putInt(NO_PREVIEW_POST_TYPE_ICON_TINT, customTheme.noPreviewPostTypeIconTint);
         editor.putInt(SUBSCRIBED, customTheme.subscribed);
         editor.putInt(UNSUBSCRIBED, customTheme.unsubscribed);
         editor.putInt(USERNAME, customTheme.username);
@@ -144,7 +146,7 @@ public class CustomThemeSharedPreferencesUtils {
         editor.putInt(SINGLE_COMMENT_THREAD_BACKGROUND_COLOR, customTheme.singleCommentThreadBackgroundColor);
         editor.putInt(UNREAD_MESSAGE_BACKGROUND_COLOR, customTheme.unreadMessageBackgroundColor);
         editor.putInt(DIVIDER_COLOR, customTheme.dividerColor);
-        editor.putInt(NO_PREVIEW_LINK_BACKGROUND_COLOR, customTheme.noPreviewLinkBackgroundColor);
+        editor.putInt(NO_PREVIEW_POST_TYPE_BACKGROUND_COLOR, customTheme.noPreviewPostTypeBackgroundColor);
         editor.putInt(VOTE_AND_REPLY_UNAVAILABLE_BUTTON_COLOR, customTheme.voteAndReplyUnavailableButtonColor);
         editor.putInt(COMMENT_VERTICAL_BAR_COLOR_1, customTheme.commentVerticalBarColor1);
         editor.putInt(COMMENT_VERTICAL_BAR_COLOR_2, customTheme.commentVerticalBarColor2);

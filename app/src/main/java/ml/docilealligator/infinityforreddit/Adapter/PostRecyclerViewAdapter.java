@@ -161,7 +161,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private int mArchivedIconTint;
     private int mLockedIconTint;
     private int mCrosspostIconTint;
-    private int mNoPreviewLinkBackgroundColor;
+    private int mNoPreviewPostTypeBackgroundColor;
+    private int mNoPreviewPostTypeIconTint;
     private int mUpvotedColor;
     private int mDownvotedColor;
     private int mVoteAndReplyUnavailableVoteButtonColor;
@@ -275,7 +276,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mArchivedIconTint = customThemeWrapper.getArchivedIconTint();
             mLockedIconTint = customThemeWrapper.getLockedIconTint();
             mCrosspostIconTint = customThemeWrapper.getCrosspostIconTint();
-            mNoPreviewLinkBackgroundColor = customThemeWrapper.getNoPreviewLinkBackgroundColor();
+            mNoPreviewPostTypeBackgroundColor = customThemeWrapper.getNoPreviewPostTypeBackgroundColor();
+            mNoPreviewPostTypeIconTint = customThemeWrapper.getNoPreviewPostTypeIconTint();
             mUpvotedColor = customThemeWrapper.getUpvoted();
             mDownvotedColor = customThemeWrapper.getDownvoted();
             mVoteAndReplyUnavailableVoteButtonColor = customThemeWrapper.getVoteAndReplyUnavailableButtonColor();
@@ -2140,7 +2142,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     shareButton);
 
             linkTextView.setTextColor(mSecondaryTextColor);
-            noPreviewLinkImageView.setBackgroundColor(mNoPreviewLinkBackgroundColor);
+            noPreviewLinkImageView.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
+            noPreviewLinkImageView.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
             progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
             errorTextView.setTextColor(mPrimaryTextColor);
 
@@ -2415,7 +2418,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             crosspostImageView.setColorFilter(mCrosspostIconTint, PorterDuff.Mode.SRC_IN);
             linkTextView.setTextColor(mSecondaryTextColor);
             progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
-            noPreviewLinkImageView.setBackgroundColor(mNoPreviewLinkBackgroundColor);
+            noPreviewLinkImageView.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
+            noPreviewLinkImageView.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
             upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             scoreTextView.setTextColor(mPostIconAndInfoColor);
             downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);

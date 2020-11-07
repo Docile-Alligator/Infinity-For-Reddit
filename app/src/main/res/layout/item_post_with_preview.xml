@@ -277,8 +277,6 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:scaleType="center"
-            android:src="@drawable/ic_link"
-            app:tint="@android:color/tab_indicator_text"
             android:visibility="gone" />
 
         <androidx.constraintlayout.widget.ConstraintLayout

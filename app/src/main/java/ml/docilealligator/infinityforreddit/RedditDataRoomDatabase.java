@@ -30,7 +30,7 @@ import ml.docilealligator.infinityforreddit.User.UserDao;
 import ml.docilealligator.infinityforreddit.User.UserData;
 
 @Database(entities = {Account.class, SubredditData.class, SubscribedSubredditData.class, UserData.class,
-        SubscribedUserData.class, MultiReddit.class, CustomTheme.class, RecentSearchQuery.class, SubredditFilter.class}, version = 12)
+        SubscribedUserData.class, MultiReddit.class, CustomTheme.class, RecentSearchQuery.class, SubredditFilter.class}, version = 13)
 public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static RedditDataRoomDatabase INSTANCE;
 
@@ -42,7 +42,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                             RedditDataRoomDatabase.class, "reddit_data")
                             .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
                                     MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9,
-                                    MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12)
+                                    MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13)
                             .build();
                 }
             }
@@ -253,6 +253,14 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("CREATE TABLE subreddit_filter" +
                     "(subreddit_name TEXT NOT NULL, type INTEGER NOT NULL, PRIMARY KEY(subreddit_name, type))");
+        }
+    };
+
+    private static final Migration MIGRATION_12_13 = new Migration(12, 13) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE custom_themes"
+                    + " ADD COLUMN no_preview_post_type_icon_tint INTEGER DEFAULT " + Color.parseColor("#808080") + " NOT NULL");
         }
     };
 }

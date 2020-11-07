@@ -642,8 +642,8 @@ Funktioniert vielleicht nicht auf Android 11"</string>
     <string name="theme_item_unread_message_background_color_detail">"Angewandt auf: Hintergrundfarbe für ungelesene Nachrichten"</string>
     <string name="theme_item_divider_color">"Farbe für Trennleiste"</string>
     <string name="theme_item_divider_color_detail">"Angewandt auf: Trennleisten in Kommentaren, auf Seiten zum Einreichen von Beiträgen, usw."</string>
-    <string name="theme_item_no_preview_link_background_color">"Hintergrundfarbe für Links ohne Vorschau"</string>
-    <string name="theme_item_no_preview_link_background_color_detail">"Angewandt auf: Platzhalter für Links ohne Vorschau"</string>
+    <string name="theme_item_no_preview_post_type_background_color">"Hintergrundfarbe für Links ohne Vorschau"</string>
+    <string name="theme_item_no_preview_post_type_background_color_detail">"Angewandt auf: Platzhalter für Links ohne Vorschau"</string>
     <string name="theme_item_vote_and_reply_unavailable_button_color">"Farbe für deaktivierte Abstimmungs- und Antwort-Knöpfe"</string>
     <string name="theme_item_vote_and_reply_unavailable_button_color_detail">"Angewandt auf: Abstimmungs- und Antwort-Knöpfe (nicht verfügbar)"</string>
     <string name="theme_item_comment_vertical_bar_color_1">"Farbe 1 für vertikale Leiste in Kommenatren"</string>
