@@ -1,7 +1,7 @@
 package ml.docilealligator.infinityforreddit.Activity;
 
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -9,6 +9,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.ViewModelProvider;
@@ -36,6 +37,7 @@ import ml.docilealligator.infinityforreddit.SubredditFilter.SubredditFilterViewM
 
 public class SubredditFilterPopularAndAllActivity extends BaseActivity {
 
+    private static final int SUBREDDIT_SEARCH_REQUEST_CODE = 1;
     @BindView(R.id.coordinator_layout_subreddit_filter_popular_and_all_activity)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_subreddit_filter_popular_and_all_activity)
@@ -111,13 +113,14 @@ public class SubredditFilterPopularAndAllActivity extends BaseActivity {
                                 () -> {});
                     })
                     .setNegativeButton(R.string.cancel, null)
-                    .setNeutralButton(R.string.search, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialogInterface, int i) {
-                            if (imm != null) {
-                                imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                            }
+                    .setNeutralButton(R.string.search, (dialogInterface, i) -> {
+                        if (imm != null) {
+                            imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
                         }
+
+                        Intent intent = new Intent(this, SearchActivity.class);
+                        intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, true);
+                        startActivityForResult(intent, SUBREDDIT_SEARCH_REQUEST_CODE);
                     })
                     .setOnDismissListener(dialogInterface -> {
                         if (imm != null) {
@@ -136,6 +139,16 @@ public class SubredditFilterPopularAndAllActivity extends BaseActivity {
         }
 
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SUBREDDIT_SEARCH_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            SubredditFilter subredditFilter = new SubredditFilter(data.getStringExtra(SearchActivity.EXTRA_RETURN_SUBREDDIT_NAME), SubredditFilter.TYPE_POPULAR_AND_ALL);
+            InsertSubredditFilter.insertSubredditFilter(redditDataRoomDatabase, subredditFilter,
+                    () -> {});
+        }
     }
 
     @Override

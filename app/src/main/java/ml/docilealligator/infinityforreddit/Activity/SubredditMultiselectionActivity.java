@@ -222,7 +222,7 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SUBREDDIT_SEARCH_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+        if (requestCode == SUBREDDIT_SEARCH_REQUEST_CODE && resultCode == RESULT_OK && data != null && mAdapter != null) {
             Intent returnIntent = new Intent();
             ArrayList<String> selectedSubreddits = mAdapter.getAllSelectedSubreddits();
             selectedSubreddits.add(data.getStringExtra(SearchActivity.EXTRA_RETURN_SUBREDDIT_NAME));
