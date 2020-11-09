@@ -11,8 +11,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -113,7 +111,6 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.Utils.APIUtils;
-import ml.docilealligator.infinityforreddit.Utils.GlideImageGetter;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.Utils.Utils;
 import ml.docilealligator.infinityforreddit.VoteThing;
@@ -767,7 +764,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if (mPost.getAuthorFlairHTML() != null && !mPost.getAuthorFlairHTML().equals("")) {
                 ((PostDetailBaseViewHolder) holder).mAuthorFlairTextView.setVisibility(View.VISIBLE);
-                Utils.setHTMLWithImageToTextView(((PostDetailBaseViewHolder) holder).mAuthorFlairTextView, mPost.getAuthorFlairHTML());
+                Utils.setHTMLWithImageToTextView(((PostDetailBaseViewHolder) holder).mAuthorFlairTextView, mPost.getAuthorFlairHTML(), true);
             } else if (mPost.getAuthorFlair() != null && !mPost.getAuthorFlair().equals("")) {
                 ((PostDetailBaseViewHolder) holder).mAuthorFlairTextView.setVisibility(View.VISIBLE);
                 ((PostDetailBaseViewHolder) holder).mAuthorFlairTextView.setText(mPost.getAuthorFlair());
@@ -825,19 +822,12 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if (mPost.getFlair() != null && !mPost.getFlair().equals("")) {
                 ((PostDetailBaseViewHolder) holder).mFlairTextView.setVisibility(View.VISIBLE);
-                Spannable flairHTML;
-                GlideImageGetter glideImageGetter = new GlideImageGetter(((PostDetailBaseViewHolder) holder).mFlairTextView);
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                    flairHTML = (Spannable) Html.fromHtml(mPost.getFlair(), Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
-                } else {
-                    flairHTML = (Spannable) Html.fromHtml(mPost.getFlair(), glideImageGetter, null);
-                }
-                ((PostDetailBaseViewHolder) holder).mFlairTextView.setText(flairHTML);
+                Utils.setHTMLWithImageToTextView(((PostDetailBaseViewHolder) holder).mFlairTextView, mPost.getFlair(), false);
             }
 
             if (mPost.getAwards() != null && !mPost.getAwards().equals("")) {
                 ((PostDetailBaseViewHolder) holder).mAwardsTextView.setVisibility(View.VISIBLE);
-                Utils.setHTMLWithImageToTextView(((PostDetailBaseViewHolder) holder).mAwardsTextView, mPost.getAwards());
+                Utils.setHTMLWithImageToTextView(((PostDetailBaseViewHolder) holder).mAwardsTextView, mPost.getAwards(), true);
             }
 
             if (mPost.isNSFW()) {
@@ -1030,7 +1020,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if (comment.getAuthorFlairHTML() != null && !comment.getAuthorFlairHTML().equals("")) {
                 ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.VISIBLE);
-                Utils.setHTMLWithImageToTextView(((CommentViewHolder) holder).authorFlairTextView, comment.getAuthorFlairHTML());
+                Utils.setHTMLWithImageToTextView(((CommentViewHolder) holder).authorFlairTextView, comment.getAuthorFlairHTML(), true);
             } else if (comment.getAuthorFlair() != null && !comment.getAuthorFlair().equals("")) {
                 ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.VISIBLE);
                 ((CommentViewHolder) holder).authorFlairTextView.setText(comment.getAuthorFlair());
@@ -1065,14 +1055,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             if (comment.getAwards() != null && !comment.getAwards().equals("")) {
                 ((CommentViewHolder) holder).awardsTextView.setVisibility(View.VISIBLE);
-                Spannable awardsHTML;
-                GlideImageGetter glideImageGetter = new GlideImageGetter(((CommentViewHolder) holder).awardsTextView);
-                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                    awardsHTML = (Spannable) Html.fromHtml(comment.getAwards(), Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
-                } else {
-                    awardsHTML = (Spannable) Html.fromHtml(comment.getAwards(), glideImageGetter, null);
-                }
-                ((CommentViewHolder) holder).awardsTextView.setText(awardsHTML);
+                Utils.setHTMLWithImageToTextView(((CommentViewHolder) holder).awardsTextView, comment.getAwards(), true);
             }
 
             mCommentMarkwon.setMarkdown(((CommentViewHolder) holder).commentMarkdownView, comment.getCommentMarkdown());

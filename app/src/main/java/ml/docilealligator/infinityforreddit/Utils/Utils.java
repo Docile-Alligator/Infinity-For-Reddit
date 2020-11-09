@@ -134,9 +134,9 @@ public class Utils {
         }
     }
 
-    public static void setHTMLWithImageToTextView(TextView textView, String content) {
+    public static void setHTMLWithImageToTextView(TextView textView, String content, boolean enlargeImage) {
         Spannable html;
-        GlideImageGetter glideImageGetter = new GlideImageGetter(textView);
+        GlideImageGetter glideImageGetter = new GlideImageGetter(textView, enlargeImage);
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             html = (Spannable) Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
         } else {

@@ -25,12 +25,14 @@ public class GlideImageGetter implements Html.ImageGetter {
 
     private WeakReference<TextView> container;
     private boolean matchParentWidth;
+    private boolean enlargeImage;
     private HtmlImagesHandler imagesHandler;
     private float density = 1.0f;
     private float textSize;
 
-    public GlideImageGetter(TextView textView) {
+    public GlideImageGetter(TextView textView, boolean enlargeImage) {
         this(textView, false, false, null);
+        this.enlargeImage = enlargeImage;
     }
 
     public GlideImageGetter(TextView textView, boolean matchParentWidth, HtmlImagesHandler imagesHandler) {
@@ -88,7 +90,7 @@ public class GlideImageGetter implements Html.ImageGetter {
             int drawableWidth = (int) (drawable.getIntrinsicWidth() * density);
             int drawableHeight = (int) (drawable.getIntrinsicHeight() * density);
             float ratio = (float) drawableWidth / (float) drawableHeight;
-            drawableHeight = (int) (textSize * 1.5);
+            drawableHeight = enlargeImage ? (int) (textSize * 1.5) : (int) textSize;
             drawableWidth = (int) (drawableHeight * ratio);
             int maxWidth = container.get().getMeasuredWidth();
             if ((maxWidth > 0 && (drawableWidth > maxWidth)) || matchParentWidth) {

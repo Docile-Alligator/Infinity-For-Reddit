@@ -523,7 +523,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                 if (flair != null && !flair.equals("")) {
                     ((PostBaseViewHolder) holder).flairTextView.setVisibility(View.VISIBLE);
-                    Utils.setHTMLWithImageToTextView(((PostBaseViewHolder) holder).flairTextView, flair);
+                    Utils.setHTMLWithImageToTextView(((PostBaseViewHolder) holder).flairTextView, flair, false);
                 }
 
                 if (nAwards > 0) {
@@ -837,7 +837,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                 if (flair != null && !flair.equals("")) {
                     ((PostCompactBaseViewHolder) holder).flairTextView.setVisibility(View.VISIBLE);
-                    Utils.setHTMLWithImageToTextView(((PostCompactBaseViewHolder) holder).flairTextView, flair);
+                    Utils.setHTMLWithImageToTextView(((PostCompactBaseViewHolder) holder).flairTextView, flair, false);
                 }
 
                 if (nAwards > 0) {

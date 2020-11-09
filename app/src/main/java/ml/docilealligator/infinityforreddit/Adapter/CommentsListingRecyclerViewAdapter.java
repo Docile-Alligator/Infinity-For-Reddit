@@ -251,7 +251,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
                 if (comment.getAuthorFlairHTML() != null && !comment.getAuthorFlairHTML().equals("")) {
                     ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.VISIBLE);
-                    Utils.setHTMLWithImageToTextView(((CommentViewHolder) holder).authorFlairTextView, comment.getAuthorFlairHTML());
+                    Utils.setHTMLWithImageToTextView(((CommentViewHolder) holder).authorFlairTextView, comment.getAuthorFlairHTML(), true);
                 } else if (comment.getAuthorFlair() != null && !comment.getAuthorFlair().equals("")) {
                     ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.VISIBLE);
                     ((CommentViewHolder) holder).authorFlairTextView.setText(comment.getAuthorFlair());
@@ -266,7 +266,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
                 if (comment.getAwards() != null && !comment.getAwards().equals("")) {
                     ((CommentViewHolder) holder).awardsTextView.setVisibility(View.VISIBLE);
-                    Utils.setHTMLWithImageToTextView(((CommentViewHolder) holder).awardsTextView, comment.getAwards());
+                    Utils.setHTMLWithImageToTextView(((CommentViewHolder) holder).awardsTextView, comment.getAwards(), true);
                 }
 
                 mMarkwon.setMarkdown(((CommentViewHolder) holder).commentMarkdownView, comment.getCommentMarkdown());

@@ -47,7 +47,7 @@ public class UserFlairRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
             if (userFlair.getHtmlText() == null || userFlair.getHtmlText().equals("")) {
                 ((UserFlairViewHolder) holder).userFlairHtmlTextView.setText(userFlair.getText());
             } else {
-                Utils.setHTMLWithImageToTextView(((UserFlairViewHolder) holder).userFlairHtmlTextView, userFlair.getHtmlText());
+                Utils.setHTMLWithImageToTextView(((UserFlairViewHolder) holder).userFlairHtmlTextView, userFlair.getHtmlText(), true);
             }
             if (userFlair.isEditable()) {
                 ((UserFlairViewHolder) holder).editUserFlairImageView.setVisibility(View.VISIBLE);
