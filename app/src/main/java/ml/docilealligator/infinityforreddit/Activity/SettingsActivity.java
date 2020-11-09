@@ -97,6 +97,9 @@ public class SettingsActivity extends BaseActivity implements
 
     private void getCurrentAccountAndBindView(Bundle savedInstanceState) {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if (getSupportFragmentManager().isDestroyed()) {
+                return;
+            }
             if (account == null) {
                 mNullAccountName = true;
             } else {

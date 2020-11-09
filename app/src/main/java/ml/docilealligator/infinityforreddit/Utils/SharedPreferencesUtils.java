@@ -140,6 +140,10 @@ public class SharedPreferencesUtils {
     public static final String UFO_CAPTURING_ANIMATION = "ufo_capturing_animation";
     public static final String HIDE_SUBREDDIT_DESCRIPTION = "hide_subreddit_description";
     public static final String DISABLE_IMAGE_PREVIEW = "disable_image_preview";
+    public static final String SWIPE_LEFT_ACTION = "swipe_left_action";
+    public static final String SWIPE_RIGHT_ACTION = "swipe_right_action";
+    public static final int SWIPE_ACITON_UPVOTE = 0;
+    public static final int SWIPE_ACITON_DOWNVOTE = 1;
 
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";
     public static final String MAIN_PAGE_TAB_COUNT = "_main_page_tab_count";

@@ -6,6 +6,22 @@
         app:key="enable_swipe_action"
         app:title="@string/settings_enable_swipe_action_title" />
 
+    <ListPreference
+        app:defaultValue="0"
+        app:entries="@array/settings_swipe_actions"
+        app:entryValues="@array/settings_swipe_actions_values"
+        app:key="swipe_left_action"
+        app:title="@string/settings_swipe_action_swipe_left_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        app:defaultValue="1"
+        app:entries="@array/settings_swipe_actions"
+        app:entryValues="@array/settings_swipe_actions_values"
+        app:key="swipe_right_action"
+        app:title="@string/settings_swipe_action_swipe_right_title"
+        app:useSimpleSummaryProvider="true" />
+
     <SwitchPreference
         app:defaultValue="true"
         app:key="vibrate_when_action_triggered"

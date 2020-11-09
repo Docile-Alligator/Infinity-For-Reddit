@@ -1312,18 +1312,34 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         return null;
     }
 
-    public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int direction) {
+    public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int direction, int swipeLeftAction, int swipeRightAction) {
         if (viewHolder instanceof PostBaseViewHolder) {
             if (direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.START) {
-                ((PostBaseViewHolder) viewHolder).upvoteButton.performClick();
+                if (swipeLeftAction == SharedPreferencesUtils.SWIPE_ACITON_UPVOTE) {
+                    ((PostBaseViewHolder) viewHolder).upvoteButton.performClick();
+                } else if (swipeLeftAction == SharedPreferencesUtils.SWIPE_ACITON_DOWNVOTE) {
+                    ((PostBaseViewHolder) viewHolder).downvoteButton.performClick();
+                }
             } else {
-                ((PostBaseViewHolder) viewHolder).downvoteButton.performClick();
+                if (swipeRightAction == SharedPreferencesUtils.SWIPE_ACITON_UPVOTE) {
+                    ((PostBaseViewHolder) viewHolder).upvoteButton.performClick();
+                } else if (swipeRightAction == SharedPreferencesUtils.SWIPE_ACITON_DOWNVOTE) {
+                    ((PostBaseViewHolder) viewHolder).downvoteButton.performClick();
+                }
             }
         } else if (viewHolder instanceof PostCompactBaseViewHolder) {
             if (direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.START) {
-                ((PostCompactBaseViewHolder) viewHolder).upvoteButton.performClick();
+                if (swipeLeftAction == SharedPreferencesUtils.SWIPE_ACITON_UPVOTE) {
+                    ((PostCompactBaseViewHolder) viewHolder).upvoteButton.performClick();
+                } else if (swipeLeftAction == SharedPreferencesUtils.SWIPE_ACITON_DOWNVOTE) {
+                    ((PostCompactBaseViewHolder) viewHolder).downvoteButton.performClick();
+                }
             } else {
-                ((PostCompactBaseViewHolder) viewHolder).downvoteButton.performClick();
+                if (swipeRightAction == SharedPreferencesUtils.SWIPE_ACITON_UPVOTE) {
+                    ((PostCompactBaseViewHolder) viewHolder).upvoteButton.performClick();
+                } else if (swipeRightAction == SharedPreferencesUtils.SWIPE_ACITON_DOWNVOTE) {
+                    ((PostCompactBaseViewHolder) viewHolder).downvoteButton.performClick();
+                }
             }
         }
     }

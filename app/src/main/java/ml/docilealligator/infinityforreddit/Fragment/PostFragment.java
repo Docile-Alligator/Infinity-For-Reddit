@@ -14,7 +14,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
@@ -87,6 +86,7 @@ import ml.docilealligator.infinityforreddit.Event.ChangeShowAbsoluteNumberOfVote
 import ml.docilealligator.infinityforreddit.Event.ChangeShowElapsedTimeEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeSpoilerBlurEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeStartAutoplayVisibleAreaOffsetEvent;
+import ml.docilealligator.infinityforreddit.Event.ChangeSwipeActionEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeSwipeActionThresholdEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeTimeFormatEvent;
 import ml.docilealligator.infinityforreddit.Event.ChangeVibrateWhenActionTriggeredEvent;
@@ -202,11 +202,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private int maxPosition = -1;
     private int postLayout;
     private SortType sortType;
-    private ColorDrawable backgroundLeft;
-    private ColorDrawable backgroundRight;
-    private Drawable drawableLeft;
-    private Drawable drawableRight;
-    private float swipeActionThreshold = 0.3f;
+    private ColorDrawable backgroundSwipeRight;
+    private ColorDrawable backgroundSwipeLeft;
+    private Drawable drawableSwipeRight;
+    private Drawable drawableSwipeLeft;
+    private int swipeLeftAction;
+    private int swipeRightAction;
+    private float swipeActionThreshold;
     private ItemTouchHelper touchHelper;
     private ArrayList<SubredditFilter> subredditFilterList;
 
@@ -415,6 +417,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         savePostFeedScrolledPosition = mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_FRONT_PAGE_SCROLLED_POSITION, false);
         vibrateWhenActionTriggered = mSharedPreferences.getBoolean(SharedPreferencesUtils.VIBRATE_WHEN_ACTION_TRIGGERED, true);
         boolean enableSwipeAction = mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SWIPE_ACTION, false);
+        swipeActionThreshold = Float.parseFloat(mSharedPreferences.getString(SharedPreferencesUtils.SWIPE_ACTION_THRESHOLD, "0.3"));
         Locale locale = getResources().getConfiguration().locale;
 
         if (postType == PostDataSource.TYPE_SEARCH) {
@@ -689,11 +692,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             ((ActivityToolbarInterface) activity).displaySortType();
         }
 
-        Vibrator v = (Vibrator) activity.getSystemService(Context.VIBRATOR_SERVICE);
-        backgroundLeft = new ColorDrawable(customThemeWrapper.getDownvoted());
-        backgroundRight = new ColorDrawable(customThemeWrapper.getUpvoted());
-        drawableLeft = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_downward_black_24dp, null);
-        drawableRight = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_upward_black_24dp, null);
+        swipeRightAction = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.SWIPE_RIGHT_ACTION, "1"));
+        swipeLeftAction = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.SWIPE_LEFT_ACTION, "0"));
+        initializeSwipeActionDrawable();
+
         touchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
             boolean exceedThreshold = false;
 
@@ -723,7 +725,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     touchHelper.attachToRecyclerView(null);
                     touchHelper.attachToRecyclerView(mPostRecyclerView);
                     if (mAdapter != null) {
-                        mAdapter.onItemSwipe(viewHolder, direction);
+                        mAdapter.onItemSwipe(viewHolder, direction, swipeLeftAction, swipeRightAction);
                     }
                 }
             }
@@ -741,18 +743,18 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                             viewHolder.itemView.setHapticFeedbackEnabled(true);
                             viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                         }
-                        backgroundLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                        backgroundSwipeRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
                     } else {
                         exceedThreshold = false;
-                        backgroundLeft.setBounds(0, 0, 0, 0);
+                        backgroundSwipeRight.setBounds(0, 0, 0, 0);
                     }
 
-                    drawableLeft.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableLeft.getIntrinsicWidth(),
-                            (itemView.getBottom() + itemView.getTop() - drawableLeft.getIntrinsicHeight()) / 2,
+                    drawableSwipeRight.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableSwipeRight.getIntrinsicWidth(),
+                            (itemView.getBottom() + itemView.getTop() - drawableSwipeRight.getIntrinsicHeight()) / 2,
                             itemView.getLeft() + ((int) dX) - horizontalOffset,
-                            (itemView.getBottom() + itemView.getTop() + drawableLeft.getIntrinsicHeight()) / 2);
-                    backgroundLeft.draw(c);
-                    drawableLeft.draw(c);
+                            (itemView.getBottom() + itemView.getTop() + drawableSwipeRight.getIntrinsicHeight()) / 2);
+                    backgroundSwipeRight.draw(c);
+                    drawableSwipeRight.draw(c);
                 } else if (dX < 0) {
                     if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
                         if (!exceedThreshold) {
@@ -760,17 +762,17 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                             viewHolder.itemView.setHapticFeedbackEnabled(true);
                             viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
                         }
-                        backgroundRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                        backgroundSwipeLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
                     } else {
                         exceedThreshold = false;
-                        backgroundRight.setBounds(0, 0, 0, 0);
+                        backgroundSwipeLeft.setBounds(0, 0, 0, 0);
                     }
-                    drawableRight.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
-                            (itemView.getBottom() + itemView.getTop() - drawableRight.getIntrinsicHeight()) / 2,
-                            itemView.getRight() + ((int) dX) + horizontalOffset + drawableRight.getIntrinsicWidth(),
-                            (itemView.getBottom() + itemView.getTop() + drawableRight.getIntrinsicHeight()) / 2);
-                    backgroundRight.draw(c);
-                    drawableRight.draw(c);
+                    drawableSwipeLeft.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
+                            (itemView.getBottom() + itemView.getTop() - drawableSwipeLeft.getIntrinsicHeight()) / 2,
+                            itemView.getRight() + ((int) dX) + horizontalOffset + drawableSwipeLeft.getIntrinsicWidth(),
+                            (itemView.getBottom() + itemView.getTop() + drawableSwipeLeft.getIntrinsicHeight()) / 2);
+                    backgroundSwipeLeft.draw(c);
+                    drawableSwipeLeft.draw(c);
                 }
             }
 
@@ -877,6 +879,24 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
         this.sortType = sortType;
         mPostViewModel.changeSortType(sortType);
+    }
+
+    private void initializeSwipeActionDrawable() {
+        if (swipeRightAction == SharedPreferencesUtils.SWIPE_ACITON_DOWNVOTE) {
+            backgroundSwipeRight = new ColorDrawable(customThemeWrapper.getDownvoted());
+            drawableSwipeRight = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_downward_black_24dp, null);
+        } else {
+            backgroundSwipeRight = new ColorDrawable(customThemeWrapper.getUpvoted());
+            drawableSwipeRight = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_upward_black_24dp, null);
+        }
+
+        if (swipeLeftAction == SharedPreferencesUtils.SWIPE_ACITON_UPVOTE) {
+            backgroundSwipeLeft = new ColorDrawable(customThemeWrapper.getUpvoted());
+            drawableSwipeLeft = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_upward_black_24dp, null);
+        } else {
+            backgroundSwipeLeft = new ColorDrawable(customThemeWrapper.getDownvoted());
+            drawableSwipeLeft = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_downward_black_24dp, null);
+        }
     }
 
     @Override
@@ -1313,6 +1333,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter.setDisableImagePreview(changeDisableImagePreviewEvent.disableImagePreview);
             refreshAdapter();
         }
+    }
+
+    @Subscribe
+    public void onChangeSwipeActionEvent(ChangeSwipeActionEvent changeSwipeActionEvent) {
+        swipeRightAction = changeSwipeActionEvent.swipeRightAction == -1 ? swipeRightAction : changeSwipeActionEvent.swipeRightAction;
+        swipeLeftAction = changeSwipeActionEvent.swipeLeftAction == -1 ? swipeLeftAction : changeSwipeActionEvent.swipeLeftAction;
+        initializeSwipeActionDrawable();
     }
 
     private void refreshAdapter() {
