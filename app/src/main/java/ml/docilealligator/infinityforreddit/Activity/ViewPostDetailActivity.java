@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.Activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -9,7 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Vibrator;
 import android.util.DisplayMetrics;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
@@ -229,11 +227,13 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     private SlidrInterface mSlidrInterface;
     private Drawable mSavedIcon;
     private Drawable mUnsavedIcon;
-    private ColorDrawable backgroundLeft;
-    private ColorDrawable backgroundRight;
-    private Drawable drawableLeft;
-    private Drawable drawableRight;
-    private float swipeActionThreshold = 0.3f;
+    private ColorDrawable backgroundSwipeRight;
+    private ColorDrawable backgroundSwipeLeft;
+    private Drawable drawableSwipeRight;
+    private Drawable drawableSwipeLeft;
+    private int swipeLeftAction;
+    private int swipeRightAction;
+    private float swipeActionThreshold;
     private ItemTouchHelper touchHelper;
 
     @Override
@@ -392,11 +392,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
         boolean enableSwipeAction = mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SWIPE_ACTION, false);
         boolean vibrateWhenActionTriggered = mSharedPreferences.getBoolean(SharedPreferencesUtils.VIBRATE_WHEN_ACTION_TRIGGERED, true);
-        Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        backgroundLeft = new ColorDrawable(mCustomThemeWrapper.getDownvoted());
-        backgroundRight = new ColorDrawable(mCustomThemeWrapper.getUpvoted());
-        drawableLeft = ResourcesCompat.getDrawable(resources, R.drawable.ic_arrow_downward_black_24dp, null);
-        drawableRight = ResourcesCompat.getDrawable(resources, R.drawable.ic_arrow_upward_black_24dp, null);
+        swipeActionThreshold = Float.parseFloat(mSharedPreferences.getString(SharedPreferencesUtils.SWIPE_ACTION_THRESHOLD, "0.3"));
+        swipeRightAction = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.SWIPE_RIGHT_ACTION, "1"));
+        swipeLeftAction = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.SWIPE_LEFT_ACTION, "0"));
+        initializeSwipeActionDrawable();
         touchHelper = new ItemTouchHelper(new ItemTouchHelper.Callback() {
             boolean exceedThreshold = false;
 
@@ -426,7 +425,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                     touchHelper.attachToRecyclerView(null);
                     touchHelper.attachToRecyclerView(mRecyclerView);
                     if (mAdapter != null) {
-                        mAdapter.onItemSwipe(viewHolder, direction);
+                        mAdapter.onItemSwipe(viewHolder, direction, swipeLeftAction, swipeRightAction);
                     }
                 }
             }
@@ -441,39 +440,43 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                     if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
                         if (!exceedThreshold) {
                             exceedThreshold = true;
-                            viewHolder.itemView.setHapticFeedbackEnabled(true);
-                            viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                            if (vibrateWhenActionTriggered) {
+                                viewHolder.itemView.setHapticFeedbackEnabled(true);
+                                viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                            }
                         }
-                        backgroundLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                        backgroundSwipeRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
                     } else {
                         exceedThreshold = false;
-                        backgroundLeft.setBounds(0, 0, 0, 0);
+                        backgroundSwipeRight.setBounds(0, 0, 0, 0);
                     }
 
-                    drawableLeft.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableLeft.getIntrinsicWidth(),
-                            (itemView.getBottom() + itemView.getTop() - drawableLeft.getIntrinsicHeight()) / 2,
+                    drawableSwipeRight.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableSwipeRight.getIntrinsicWidth(),
+                            (itemView.getBottom() + itemView.getTop() - drawableSwipeRight.getIntrinsicHeight()) / 2,
                             itemView.getLeft() + ((int) dX) - horizontalOffset,
-                            (itemView.getBottom() + itemView.getTop() + drawableLeft.getIntrinsicHeight()) / 2);
-                    backgroundLeft.draw(c);
-                    drawableLeft.draw(c);
+                            (itemView.getBottom() + itemView.getTop() + drawableSwipeRight.getIntrinsicHeight()) / 2);
+                    backgroundSwipeRight.draw(c);
+                    drawableSwipeRight.draw(c);
                 } else if (dX < 0) {
                     if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
                         if (!exceedThreshold) {
                             exceedThreshold = true;
-                            viewHolder.itemView.setHapticFeedbackEnabled(true);
-                            viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                            if (vibrateWhenActionTriggered) {
+                                viewHolder.itemView.setHapticFeedbackEnabled(true);
+                                viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                            }
                         }
-                        backgroundRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                        backgroundSwipeLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
                     } else {
                         exceedThreshold = false;
-                        backgroundRight.setBounds(0, 0, 0, 0);
+                        backgroundSwipeLeft.setBounds(0, 0, 0, 0);
                     }
-                    drawableRight.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
-                            (itemView.getBottom() + itemView.getTop() - drawableRight.getIntrinsicHeight()) / 2,
-                            itemView.getRight() + ((int) dX) + horizontalOffset + drawableRight.getIntrinsicWidth(),
-                            (itemView.getBottom() + itemView.getTop() + drawableRight.getIntrinsicHeight()) / 2);
-                    backgroundRight.draw(c);
-                    drawableRight.draw(c);
+                    drawableSwipeLeft.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
+                            (itemView.getBottom() + itemView.getTop() - drawableSwipeLeft.getIntrinsicHeight()) / 2,
+                            itemView.getRight() + ((int) dX) + horizontalOffset + drawableSwipeLeft.getIntrinsicWidth(),
+                            (itemView.getBottom() + itemView.getTop() + drawableSwipeLeft.getIntrinsicHeight()) / 2);
+                    backgroundSwipeLeft.draw(c);
+                    drawableSwipeLeft.draw(c);
                 }
             }
 
@@ -532,6 +535,24 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         }
 
         mPostCommentSortTypeBottomSheetFragment = new PostCommentSortTypeBottomSheetFragment();
+    }
+
+    private void initializeSwipeActionDrawable() {
+        if (swipeRightAction == SharedPreferencesUtils.SWIPE_ACITON_DOWNVOTE) {
+            backgroundSwipeRight = new ColorDrawable(mCustomThemeWrapper.getDownvoted());
+            drawableSwipeRight = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_downward_black_24dp, null);
+        } else {
+            backgroundSwipeRight = new ColorDrawable(mCustomThemeWrapper.getUpvoted());
+            drawableSwipeRight = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_upward_black_24dp, null);
+        }
+
+        if (swipeLeftAction == SharedPreferencesUtils.SWIPE_ACITON_UPVOTE) {
+            backgroundSwipeLeft = new ColorDrawable(mCustomThemeWrapper.getUpvoted());
+            drawableSwipeLeft = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_upward_black_24dp, null);
+        } else {
+            backgroundSwipeLeft = new ColorDrawable(mCustomThemeWrapper.getDownvoted());
+            drawableSwipeLeft = ResourcesCompat.getDrawable(getResources(), R.drawable.ic_arrow_downward_black_24dp, null);
+        }
     }
 
     @Override

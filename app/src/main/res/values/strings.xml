@@ -471,7 +471,7 @@
     <string name="settings_video_download_location_title">Video Download Location</string>
     <string name="settings_separate_folder_for_each_subreddit">Separate Folder for Each Subreddit</string>
     <string name="settings_swipe_action_title">Swipe Action</string>
-    <string name="settings_vibrate_when_action_triggered_title">Vibrate the phone when an action is triggered</string>
+    <string name="settings_swipe_action_haptic_feedback_title">Haptic Feedback</string>
     <string name="settings_disable_swiping_between_tabs_title">Disable Swiping Between Tabs</string>
     <string name="settings_enable_swipe_action_title">Enable Swipe Action</string>
     <string name="settings_swipe_action_threshold">Threshold</string>
@@ -490,7 +490,7 @@
     <string name="settings_bottom_app_bar_option_4">Option 4</string>
     <string name="settings_bottom_app_bar_fab">Floating Action Button</string>
     <string name="settings_data_saving_mode">Data Saving Mode</string>
-    <string name="settings_data_saving_mode_info_summary">In data saving mode:\nPreview images are in lower resolution.\nReddit videos are in lower resolution.</string>
+    <string name="settings_data_saving_mode_info_summary">In data saving mode:\nPreview images are in lower resolution.\nReddit videos are in lower resolution.\nVideo autoplay is disabled.</string>
     <string name="settings_translation_title">Translation</string>
     <string name="settings_translation_summary">Translate this app on POEditor. Thanks to all contributors.</string>
     <string name="settings_credits_national_flags">National Flags</string>

@@ -69,10 +69,12 @@
         app:fragment="ml.docilealligator.infinityforreddit.Settings.MiscellaneousPreferenceFragment"/>
 
     <Preference
+        android:icon="@drawable/ic_advanced_24dp"
         app:title="@string/settings_advanced_master_title"
         app:fragment="ml.docilealligator.infinityforreddit.Settings.AdvancedPreferenceFragment" />
 
     <Preference
+        android:icon="@drawable/ic_about_24dp"
         app:title="@string/settings_about_master_title"
         app:fragment="ml.docilealligator.infinityforreddit.Settings.AboutPreferenceFragment" />
 

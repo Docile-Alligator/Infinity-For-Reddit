@@ -353,12 +353,20 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         }
     }
 
-    public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int direction) {
+    public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int direction, int swipeLeftAction, int swipeRightAction) {
         if (viewHolder instanceof CommentViewHolder) {
             if (direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.START) {
-                ((CommentViewHolder) viewHolder).upvoteButton.performClick();
+                if (swipeLeftAction == SharedPreferencesUtils.SWIPE_ACITON_UPVOTE) {
+                    ((CommentViewHolder) viewHolder).upvoteButton.performClick();
+                } else if (swipeLeftAction == SharedPreferencesUtils.SWIPE_ACITON_DOWNVOTE) {
+                    ((CommentViewHolder) viewHolder).downvoteButton.performClick();
+                }
             } else {
-                ((CommentViewHolder) viewHolder).downvoteButton.performClick();
+                if (swipeRightAction == SharedPreferencesUtils.SWIPE_ACITON_UPVOTE) {
+                    ((CommentViewHolder) viewHolder).upvoteButton.performClick();
+                } else if (swipeRightAction == SharedPreferencesUtils.SWIPE_ACITON_DOWNVOTE) {
+                    ((CommentViewHolder) viewHolder).downvoteButton.performClick();
+                }
             }
         }
     }

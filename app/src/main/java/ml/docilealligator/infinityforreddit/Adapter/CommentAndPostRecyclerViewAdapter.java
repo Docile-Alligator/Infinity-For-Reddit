@@ -1883,18 +1883,34 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mDataSavingMode = dataSavingMode;
     }
 
-    public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int direction) {
+    public void onItemSwipe(RecyclerView.ViewHolder viewHolder, int direction, int swipeLeftAction, int swipeRightAction) {
         if (viewHolder instanceof PostDetailBaseViewHolder) {
             if (direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.START) {
-                ((PostDetailBaseViewHolder) viewHolder).mUpvoteButton.performClick();
+                if (swipeLeftAction == SharedPreferencesUtils.SWIPE_ACITON_UPVOTE) {
+                    ((PostDetailBaseViewHolder) viewHolder).mUpvoteButton.performClick();
+                } else if (swipeLeftAction == SharedPreferencesUtils.SWIPE_ACITON_DOWNVOTE) {
+                    ((PostDetailBaseViewHolder) viewHolder).mDownvoteButton.performClick();
+                }
             } else {
-                ((PostDetailBaseViewHolder) viewHolder).mDownvoteButton.performClick();
+                if (swipeRightAction == SharedPreferencesUtils.SWIPE_ACITON_UPVOTE) {
+                    ((PostDetailBaseViewHolder) viewHolder).mUpvoteButton.performClick();
+                } else if (swipeRightAction == SharedPreferencesUtils.SWIPE_ACITON_DOWNVOTE) {
+                    ((PostDetailBaseViewHolder) viewHolder).mDownvoteButton.performClick();
+                }
             }
         } else if (viewHolder instanceof CommentViewHolder) {
             if (direction == ItemTouchHelper.LEFT || direction == ItemTouchHelper.START) {
-                ((CommentViewHolder) viewHolder).upvoteButton.performClick();
+                if (swipeLeftAction == SharedPreferencesUtils.SWIPE_ACITON_UPVOTE) {
+                    ((CommentViewHolder) viewHolder).upvoteButton.performClick();
+                } else if (swipeLeftAction == SharedPreferencesUtils.SWIPE_ACITON_DOWNVOTE) {
+                    ((CommentViewHolder) viewHolder).downvoteButton.performClick();
+                }
             } else {
-                ((CommentViewHolder) viewHolder).downvoteButton.performClick();
+                if (swipeRightAction == SharedPreferencesUtils.SWIPE_ACITON_UPVOTE) {
+                    ((CommentViewHolder) viewHolder).upvoteButton.performClick();
+                } else if (swipeRightAction == SharedPreferencesUtils.SWIPE_ACITON_DOWNVOTE) {
+                    ((CommentViewHolder) viewHolder).downvoteButton.performClick();
+                }
             }
         }
     }

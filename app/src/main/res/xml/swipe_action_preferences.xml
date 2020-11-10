@@ -22,16 +22,6 @@
         app:title="@string/settings_swipe_action_swipe_right_title"
         app:useSimpleSummaryProvider="true" />
 
-    <SwitchPreference
-        app:defaultValue="true"
-        app:key="vibrate_when_action_triggered"
-        app:title="@string/settings_vibrate_when_action_triggered_title" />
-
-    <SwitchPreference
-        app:defaultValue="false"
-        app:key="disable_swiping_between_tabs"
-        app:title="@string/settings_disable_swiping_between_tabs_title" />
-
     <ListPreference
         app:defaultValue="0.3"
         app:entries="@array/settings_swipe_action_threshold"
@@ -39,5 +29,15 @@
         app:key="swipe_action_threshold"
         app:title="@string/settings_swipe_action_threshold"
         app:useSimpleSummaryProvider="true" />
+
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="vibrate_when_action_triggered"
+        app:title="@string/settings_swipe_action_haptic_feedback_title" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="disable_swiping_between_tabs"
+        app:title="@string/settings_disable_swiping_between_tabs_title" />
 
 </PreferenceScreen>
