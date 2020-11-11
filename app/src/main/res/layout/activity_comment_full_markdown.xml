@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/coordinator_layout_comment_full_markdown_activity"
-    tools:context=".Activity.CommentFullMarkdownActivity">
+    tools:context=".Activity.FullMarkdownActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_comment_full_markdown_activity"

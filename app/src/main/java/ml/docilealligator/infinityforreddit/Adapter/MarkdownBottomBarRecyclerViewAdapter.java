@@ -134,6 +134,9 @@ public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<R
                                 -> {
                             String text = textEditText.getText().toString();
                             String link = linkEditText.getText().toString();
+                            if (text.equals("")) {
+                                text = link;
+                            }
 
                             commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
                                     "[" + text + "](" + link + ")", 0, "[]()".length() + text.length() + link.length());

@@ -21,7 +21,7 @@ import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.Activity.CommentFullMarkdownActivity;
+import ml.docilealligator.infinityforreddit.Activity.FullMarkdownActivity;
 import ml.docilealligator.infinityforreddit.Activity.EditCommentActivity;
 import ml.docilealligator.infinityforreddit.Activity.GiveAwardActivity;
 import ml.docilealligator.infinityforreddit.Activity.ReportActivity;
@@ -155,9 +155,9 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
         });
 
         viewFullMarkdownTextView.setOnClickListener(view -> {
-            Intent intent = new Intent(activity, CommentFullMarkdownActivity.class);
-            intent.putExtra(CommentFullMarkdownActivity.EXTRA_IS_NSFW, bundle.getBoolean(EXTRA_IS_NSFW, false));
-            intent.putExtra(CommentFullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, bundle.getString(EXTRA_COMMENT_MARKDOWN, ""));
+            Intent intent = new Intent(activity, FullMarkdownActivity.class);
+            intent.putExtra(FullMarkdownActivity.EXTRA_IS_NSFW, bundle.getBoolean(EXTRA_IS_NSFW, false));
+            intent.putExtra(FullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, bundle.getString(EXTRA_COMMENT_MARKDOWN, ""));
             activity.startActivity(intent);
 
             dismiss();

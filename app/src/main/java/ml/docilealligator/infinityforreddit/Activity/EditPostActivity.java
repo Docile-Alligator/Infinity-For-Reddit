@@ -167,7 +167,11 @@ public class EditPostActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_send_edit_post_activity) {
+        if (item.getItemId() == R.id.action_preview_edit_post_activity) {
+            Intent intent = new Intent(this, FullMarkdownActivity.class);
+            intent.putExtra(FullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, contentEditText.getText().toString());
+            startActivity(intent);
+        } else if (item.getItemId() == R.id.action_send_edit_post_activity) {
             if (!isSubmitting) {
                 isSubmitting = true;
 

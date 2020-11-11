@@ -55,7 +55,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Utils.SharedPreferencesUtils;
 
-public class CommentFullMarkdownActivity extends BaseActivity {
+public class FullMarkdownActivity extends BaseActivity {
 
     public static final String EXTRA_COMMENT_MARKDOWN = "ECM";
     public static final String EXTRA_IS_NSFW = "EIN";
@@ -184,7 +184,7 @@ public class CommentFullMarkdownActivity extends BaseActivity {
                     @Override
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
                         builder.linkResolver((view, link) -> {
-                            Intent intent = new Intent(CommentFullMarkdownActivity.this, LinkResolverActivity.class);
+                            Intent intent = new Intent(FullMarkdownActivity.this, LinkResolverActivity.class);
                             Uri uri = Uri.parse(link);
                             if (uri.getScheme() == null && uri.getHost() == null) {
                                 intent.setData(LinkResolverActivity.getRedditUriByPath(link));
@@ -260,7 +260,7 @@ public class CommentFullMarkdownActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
-        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getCommentBackgroundColor());
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
     }
 }

@@ -414,57 +414,61 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                if (isPosting) {
-                    promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
-                    return true;
-                } else {
-                    if (!titleEditText.getText().toString().equals("") || !contentEditText.getText().toString().equals("")) {
-                        promptAlertDialog(R.string.discard, R.string.discard_detail);
-                        return true;
-                    }
-                }
-                finish();
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            if (isPosting) {
+                promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
                 return true;
-            case R.id.action_send_post_text_activity:
-                if (!subredditSelected) {
-                    Snackbar.make(coordinatorLayout, R.string.select_a_subreddit, Snackbar.LENGTH_SHORT).show();
+            } else {
+                if (!titleEditText.getText().toString().equals("") || !contentEditText.getText().toString().equals("")) {
+                    promptAlertDialog(R.string.discard, R.string.discard_detail);
                     return true;
                 }
-
-                if (titleEditText.getText() == null || titleEditText.getText().toString().equals("")) {
-                    Snackbar.make(coordinatorLayout, R.string.title_required, Snackbar.LENGTH_SHORT).show();
-                    return true;
-                }
-
-                isPosting = true;
-
-                item.setEnabled(false);
-                item.getIcon().setAlpha(130);
-
-                mPostingSnackbar.show();
-
-                String subredditName;
-                if (subredditIsUser) {
-                    subredditName = "u_" + subredditNameTextView.getText().toString();
-                } else {
-                    subredditName = subredditNameTextView.getText().toString();
-                }
-
-                Intent intent = new Intent(this, SubmitPostService.class);
-                intent.putExtra(SubmitPostService.EXTRA_ACCESS_TOKEN, mAccessToken);
-                intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
-                intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
-                intent.putExtra(SubmitPostService.EXTRA_CONTENT, contentEditText.getText().toString());
-                intent.putExtra(SubmitPostService.EXTRA_KIND, APIUtils.KIND_SELF);
-                intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);
-                intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);
-                intent.putExtra(SubmitPostService.EXTRA_IS_NSFW, isNSFW);
-                intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TEXT_OR_LINK);
-                startService(intent);
-
+            }
+            finish();
+            return true;
+        } else if (itemId == R.id.action_preview_post_text_activity) {
+            Intent intent = new Intent(this, FullMarkdownActivity.class);
+            intent.putExtra(FullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, contentEditText.getText().toString());
+            startActivity(intent);
+        } else if (itemId == R.id.action_send_post_text_activity) {
+            if (!subredditSelected) {
+                Snackbar.make(coordinatorLayout, R.string.select_a_subreddit, Snackbar.LENGTH_SHORT).show();
                 return true;
+            }
+
+            if (titleEditText.getText() == null || titleEditText.getText().toString().equals("")) {
+                Snackbar.make(coordinatorLayout, R.string.title_required, Snackbar.LENGTH_SHORT).show();
+                return true;
+            }
+
+            isPosting = true;
+
+            item.setEnabled(false);
+            item.getIcon().setAlpha(130);
+
+            mPostingSnackbar.show();
+
+            String subredditName;
+            if (subredditIsUser) {
+                subredditName = "u_" + subredditNameTextView.getText().toString();
+            } else {
+                subredditName = subredditNameTextView.getText().toString();
+            }
+
+            Intent intent = new Intent(this, SubmitPostService.class);
+            intent.putExtra(SubmitPostService.EXTRA_ACCESS_TOKEN, mAccessToken);
+            intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
+            intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
+            intent.putExtra(SubmitPostService.EXTRA_CONTENT, contentEditText.getText().toString());
+            intent.putExtra(SubmitPostService.EXTRA_KIND, APIUtils.KIND_SELF);
+            intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);
+            intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);
+            intent.putExtra(SubmitPostService.EXTRA_IS_NSFW, isNSFW);
+            intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TEXT_OR_LINK);
+            startService(intent);
+
+            return true;
         }
 
         return false;

@@ -327,60 +327,64 @@ public class CommentActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                onBackPressed();
-                return true;
-            case R.id.action_send_comment_activity:
-                if (!isSubmitting) {
-                    isSubmitting = true;
-                    if (commentEditText.getText() == null || commentEditText.getText().toString().equals("")) {
-                        isSubmitting = false;
-                        Snackbar.make(coordinatorLayout, R.string.comment_content_required, Snackbar.LENGTH_SHORT).show();
-                        return true;
-                    }
-
-                    item.setEnabled(false);
-                    item.getIcon().setAlpha(130);
-                    Snackbar sendingSnackbar = Snackbar.make(coordinatorLayout, R.string.sending_comment, Snackbar.LENGTH_INDEFINITE);
-                    sendingSnackbar.show();
-
-                    SendComment.sendComment(commentEditText.getText().toString(), parentFullname, parentDepth,
-                            getResources().getConfiguration().locale, mOauthRetrofit,
-                            mAccessToken,
-                            new SendComment.SendCommentListener() {
-                                @Override
-                                public void sendCommentSuccess(Comment comment) {
-                                    isSubmitting = false;
-                                    item.setEnabled(true);
-                                    item.getIcon().setAlpha(255);
-                                    Toast.makeText(CommentActivity.this, R.string.send_comment_success, Toast.LENGTH_SHORT).show();
-                                    Intent returnIntent = new Intent();
-                                    returnIntent.putExtra(RETURN_EXTRA_COMMENT_DATA_KEY, comment);
-                                    returnIntent.putExtra(EXTRA_PARENT_FULLNAME_KEY, parentFullname);
-                                    if (isReplying) {
-                                        returnIntent.putExtra(EXTRA_PARENT_POSITION_KEY, parentPosition);
-                                    }
-                                    setResult(RESULT_OK, returnIntent);
-                                    finish();
-                                }
-
-                                @Override
-                                public void sendCommentFailed(@Nullable String errorMessage) {
-                                    isSubmitting = false;
-                                    sendingSnackbar.dismiss();
-                                    item.setEnabled(true);
-                                    item.getIcon().setAlpha(255);
-
-                                    if (errorMessage == null || !errorMessage.equals("")) {
-                                        Snackbar.make(coordinatorLayout, R.string.send_comment_failed, Snackbar.LENGTH_SHORT).show();
-                                    } else {
-                                        Snackbar.make(coordinatorLayout, errorMessage, Snackbar.LENGTH_SHORT).show();
-                                    }
-                                }
-                            });
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            onBackPressed();
+            return true;
+        } else if (itemId == R.id.action_preview_comment_activity) {
+            Intent intent = new Intent(this, FullMarkdownActivity.class);
+            intent.putExtra(FullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, commentEditText.getText().toString());
+            startActivity(intent);
+        } else if (itemId == R.id.action_send_comment_activity) {
+            if (!isSubmitting) {
+                isSubmitting = true;
+                if (commentEditText.getText() == null || commentEditText.getText().toString().equals("")) {
+                    isSubmitting = false;
+                    Snackbar.make(coordinatorLayout, R.string.comment_content_required, Snackbar.LENGTH_SHORT).show();
+                    return true;
                 }
-                return true;
+
+                item.setEnabled(false);
+                item.getIcon().setAlpha(130);
+                Snackbar sendingSnackbar = Snackbar.make(coordinatorLayout, R.string.sending_comment, Snackbar.LENGTH_INDEFINITE);
+                sendingSnackbar.show();
+
+                SendComment.sendComment(commentEditText.getText().toString(), parentFullname, parentDepth,
+                        getResources().getConfiguration().locale, mOauthRetrofit,
+                        mAccessToken,
+                        new SendComment.SendCommentListener() {
+                            @Override
+                            public void sendCommentSuccess(Comment comment) {
+                                isSubmitting = false;
+                                item.setEnabled(true);
+                                item.getIcon().setAlpha(255);
+                                Toast.makeText(CommentActivity.this, R.string.send_comment_success, Toast.LENGTH_SHORT).show();
+                                Intent returnIntent = new Intent();
+                                returnIntent.putExtra(RETURN_EXTRA_COMMENT_DATA_KEY, comment);
+                                returnIntent.putExtra(EXTRA_PARENT_FULLNAME_KEY, parentFullname);
+                                if (isReplying) {
+                                    returnIntent.putExtra(EXTRA_PARENT_POSITION_KEY, parentPosition);
+                                }
+                                setResult(RESULT_OK, returnIntent);
+                                finish();
+                            }
+
+                            @Override
+                            public void sendCommentFailed(@Nullable String errorMessage) {
+                                isSubmitting = false;
+                                sendingSnackbar.dismiss();
+                                item.setEnabled(true);
+                                item.getIcon().setAlpha(255);
+
+                                if (errorMessage == null || !errorMessage.equals("")) {
+                                    Snackbar.make(coordinatorLayout, R.string.send_comment_failed, Snackbar.LENGTH_SHORT).show();
+                                } else {
+                                    Snackbar.make(coordinatorLayout, errorMessage, Snackbar.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+            }
+            return true;
         }
 
         return false;
