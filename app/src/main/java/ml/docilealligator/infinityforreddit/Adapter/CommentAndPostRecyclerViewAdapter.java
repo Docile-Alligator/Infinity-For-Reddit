@@ -3351,6 +3351,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 constraintSet.clear(expandButton.getId(), ConstraintSet.END);
                 constraintSet.clear(saveButton.getId(), ConstraintSet.END);
                 constraintSet.clear(replyButton.getId(), ConstraintSet.END);
+                constraintSet.clear(moreButton.getId(), ConstraintSet.END);
                 constraintSet.connect(upvoteButton.getId(), ConstraintSet.END, scoreTextView.getId(), ConstraintSet.START);
                 constraintSet.connect(scoreTextView.getId(), ConstraintSet.END, downvoteButton.getId(), ConstraintSet.START);
                 constraintSet.connect(downvoteButton.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);

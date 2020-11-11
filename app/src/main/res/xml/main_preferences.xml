@@ -50,7 +50,7 @@
     <Preference
         app:key="security"
         app:title="@string/settings_data_saving_mode"
-        app:icon="@drawable/ic_data_saving_mode_black_24dp"
+        app:icon="@drawable/ic_data_saving_mode_24dp"
         app:fragment="ml.docilealligator.infinityforreddit.Settings.DataSavingModePreferenceFragment" />
 
     <Preference
