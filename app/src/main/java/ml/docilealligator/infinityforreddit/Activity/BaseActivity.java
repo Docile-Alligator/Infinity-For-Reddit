@@ -239,7 +239,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     public int getNavBarHeight() {
-        if (getDefaultSharedPreferences().getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_IGNORE_NAV_BAR_KEY, false)) {
+        if (isImmersiveInterfaceApplicable && immersiveInterface && getDefaultSharedPreferences().getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_IGNORE_NAV_BAR_KEY, false)) {
             return 0;
         }
 
