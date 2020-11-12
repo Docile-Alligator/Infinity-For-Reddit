@@ -4,9 +4,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -262,9 +263,10 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                         public void onGlobalLayout() {
                             coordinatorLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
 
-                            DisplayMetrics displayMetrics = new DisplayMetrics();
-                            getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-                            if (displayMetrics.heightPixels == coordinatorLayout.getHeight()) {
+                            Display display = getWindowManager().getDefaultDisplay();
+                            Point size = new Point();
+                            display.getRealSize(size);
+                            if (size.y == coordinatorLayout.getHeight()) {
                                 linearLayoutBottomAppBar.setPadding(0,
                                         linearLayoutBottomAppBar.getPaddingTop(), 0, navBarHeight);
                             }
