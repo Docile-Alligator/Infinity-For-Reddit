@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.Settings;
 
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -74,9 +75,9 @@ public class AboutPreferenceFragment extends PreferenceFragmentCompat {
             emailPreference.setOnPreferenceClickListener(preference -> {
                 Intent intent = new Intent(Intent.ACTION_SENDTO);
                 intent.setData(Uri.parse("mailto:docilealligator.app@gmail.com"));
-                if (intent.resolveActivity(activity.getPackageManager()) != null) {
+                try {
                     startActivity(intent);
-                } else {
+                } catch (ActivityNotFoundException e) {
                     Toast.makeText(activity, R.string.no_email_client, Toast.LENGTH_SHORT).show();
                 }
                 return true;
