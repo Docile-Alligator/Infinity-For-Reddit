@@ -785,7 +785,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
         });
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SWIPE_ACTION, false)) {
+        if (nColumns == 1 && mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SWIPE_ACTION, false)) {
             touchHelper.attachToRecyclerView(mPostRecyclerView);
         }
         mPostRecyclerView.setAdapter(mAdapter);
