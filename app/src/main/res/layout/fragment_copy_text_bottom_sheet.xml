@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:paddingBottom="8dp"
     android:overScrollMode="never"
-    tools:context=".BottomSheetFragment.CopyTextBottomSheetFragment">
+    tools:context=".bottomsheetfragments.CopyTextBottomSheetFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

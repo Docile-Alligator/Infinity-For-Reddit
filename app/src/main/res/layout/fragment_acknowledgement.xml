@@ -3,4 +3,4 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/recycler_view_acknowledgement_fragment"
-    tools:context="ml.docilealligator.infinityforreddit.Settings.AcknowledgementFragment" />
+    tools:context="ml.docilealligator.infinityforreddit.settings.AcknowledgementFragment" />

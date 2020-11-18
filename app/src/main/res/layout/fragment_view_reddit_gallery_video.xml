@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".Fragment.ViewRedditGalleryVideoFragment">
+    tools:context=".fragments.ViewRedditGalleryVideoFragment">
 
     <com.google.android.exoplayer2.ui.PlayerView
         android:id="@+id/player_view_view_reddit_gallery_video_fragment"

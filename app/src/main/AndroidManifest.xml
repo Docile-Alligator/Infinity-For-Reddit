@@ -32,118 +32,118 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
-        <activity android:name=".Activity.SubredditFilterPopularAndAllActivity"
+        <activity android:name=".activities.SubredditFilterPopularAndAllActivity"
             android:label="@string/subreddit_filter_popular_and_all_activity_label"
-            android:parentActivityName=".Activity.SettingsActivity"
+            android:parentActivityName=".activities.SettingsActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".Activity.FetchRandomSubredditOrPostActivity"
-            android:parentActivityName=".Activity.MainActivity"
+            android:name=".activities.FetchRandomSubredditOrPostActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activity.GiveAwardActivity"
+            android:name=".activities.GiveAwardActivity"
             android:label="@string/give_award_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".Activity.SelectUserFlairActivity"
-            android:parentActivityName=".Activity.MainActivity"
+            android:name=".activities.SelectUserFlairActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".Activity.FullMarkdownActivity"
-            android:parentActivityName=".Activity.MainActivity"
+            android:name=".activities.FullMarkdownActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".Activity.SubmitCrosspostActivity"
+            android:name=".activities.SubmitCrosspostActivity"
             android:label="@string/submit_crosspost_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
 
         <service
-            android:name=".Service.DownloadMediaService"
+            android:name=".services.DownloadMediaService"
             android:enabled="true"
             android:exported="false" />
 
         <activity
-            android:name=".Activity.ViewRedditGalleryActivity"
+            android:name=".activities.ViewRedditGalleryActivity"
             android:configChanges="orientation|screenSize|layoutDirection"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Draggable" />
         <activity
-            android:name=".Activity.SendPrivateMessageActivity"
+            android:name=".activities.SendPrivateMessageActivity"
             android:label="@string/send_private_message_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
 
         <service
-            android:name=".Service.DownloadRedditVideoService"
+            android:name=".services.DownloadRedditVideoService"
             android:enabled="true"
             android:exported="false" />
 
         <activity
-            android:name=".Activity.ViewPrivateMessagesActivity"
-            android:parentActivityName=".Activity.MainActivity"
+            android:name=".activities.ViewPrivateMessagesActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".Activity.ViewImgurMediaActivity"
+            android:name=".activities.ViewImgurMediaActivity"
             android:configChanges="orientation|screenSize|layoutDirection"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Draggable" />
         <activity
-            android:name=".Activity.ReportActivity"
+            android:name=".activities.ReportActivity"
             android:label="@string/report_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".Activity.SelectedSubredditsActivity"
+            android:name=".activities.SelectedSubredditsActivity"
             android:label="@string/selected_subeddits_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".Activity.EditMultiRedditActivity"
+            android:name=".activities.EditMultiRedditActivity"
             android:label="@string/edit_multi_reddit_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".Activity.CustomThemePreviewActivity"
+            android:name=".activities.CustomThemePreviewActivity"
             android:label="@string/theme_preview_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.SlidableWithTranslucentWindow" />
         <activity
-            android:name=".Activity.CustomThemeListingActivity"
+            android:name=".activities.CustomThemeListingActivity"
             android:label="@string/custom_theme_listing_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activity.CustomizeThemeActivity"
+            android:name=".activities.CustomizeThemeActivity"
             android:label="@string/customize_theme_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Activity.SubredditMultiselectionActivity"
+            android:name=".activities.SubredditMultiselectionActivity"
             android:label="@string/subreddit_multiselection_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".Activity.CreateMultiRedditActivity"
+            android:name=".activities.CreateMultiRedditActivity"
             android:label="@string/create_multi_reddit_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".Activity.ViewMultiRedditDetailActivity"
-            android:parentActivityName=".Activity.MainActivity"
+            android:name=".activities.ViewMultiRedditDetailActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".Activity.AccountSavedThingActivity"
+            android:name=".activities.AccountSavedThingActivity"
             android:label="@string/account_saved_thing_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
-        <activity android:name=".Activity.ShareDataResolverActivity">
+        <activity android:name=".activities.ShareDataResolverActivity">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -167,41 +167,41 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity.SettingsActivity"
+            android:name=".activities.SettingsActivity"
             android:label="@string/settings_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/PreferenceActivityTheme" />
         <activity
-            android:name=".Activity.InboxActivity"
+            android:name=".activities.InboxActivity"
             android:label="@string/view_message_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".Activity.AccountPostsActivity"
-            android:parentActivityName=".Activity.MainActivity"
+            android:name=".activities.AccountPostsActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".Activity.EditCommentActivity"
+            android:name=".activities.EditCommentActivity"
             android:label="@string/edit_comment_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".Activity.EditPostActivity"
+            android:name=".activities.EditPostActivity"
             android:label="@string/edit_post_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".Activity.FilteredThingActivity"
-            android:parentActivityName=".Activity.MainActivity"
+            android:name=".activities.FilteredThingActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".Activity.SearchSubredditsResultActivity"
+            android:name=".activities.SearchSubredditsResultActivity"
             android:label="@string/search_subreddits_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
-        <activity android:name=".Activity.LinkResolverActivity">
+        <activity android:name=".activities.LinkResolverActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -271,63 +271,63 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity.SearchActivity"
+            android:name=".activities.SearchActivity"
             android:label="@string/search_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".Activity.RulesActivity"
+            android:name=".activities.RulesActivity"
             android:label="@string/rules_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".Activity.PostVideoActivity"
+            android:name=".activities.PostVideoActivity"
             android:label="@string/post_video_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".Activity.PostImageActivity"
+            android:name=".activities.PostImageActivity"
             android:label="@string/post_image_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".Activity.PostLinkActivity"
+            android:name=".activities.PostLinkActivity"
             android:label="@string/post_link_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".Activity.SubscribedThingListingActivity"
+            android:name=".activities.SubscribedThingListingActivity"
             android:label="@string/subscriptions"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".Activity.SubredditSelectionActivity"
+            android:name=".activities.SubredditSelectionActivity"
             android:label="@string/subreddit_selection_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".Activity.PostTextActivity"
+            android:name=".activities.PostTextActivity"
             android:label="@string/post_text_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".Activity.CommentActivity"
+            android:name=".activities.CommentActivity"
             android:label="@string/comment_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".Activity.SearchResultActivity"
+            android:name=".activities.SearchResultActivity"
             android:label="@string/search_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".Activity.MainActivity"
+            android:name=".activities.MainActivity"
             android:label="@string/application_name"
             android:theme="@style/AppTheme.Launcher"
             android:windowSoftInputMode="adjustPan">
@@ -338,30 +338,30 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".Activity.LoginActivity"
+            android:name=".activities.LoginActivity"
             android:label="@string/login_activity_label"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".Activity.ViewImageOrGifActivity"
-            android:parentActivityName=".Activity.MainActivity"
+            android:name=".activities.ViewImageOrGifActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.SlidableWithActionBar" />
         <activity
-            android:name=".Activity.ViewVideoActivity"
+            android:name=".activities.ViewVideoActivity"
             android:configChanges="orientation|screenSize|layoutDirection"
-            android:parentActivityName=".Activity.MainActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Draggable" />
         <activity
-            android:name=".Activity.ViewPostDetailActivity"
-            android:parentActivityName=".Activity.MainActivity"
+            android:name=".activities.ViewPostDetailActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".Activity.ViewSubredditDetailActivity"
-            android:parentActivityName=".Activity.MainActivity"
+            android:name=".activities.ViewSubredditDetailActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.SlidableWithTranslucentWindow" />
         <activity
-            android:name=".Activity.ViewUserDetailActivity"
-            android:parentActivityName=".Activity.MainActivity"
+            android:name=".activities.ViewUserDetailActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.SlidableWithTranslucentWindow" />
 
         <provider
@@ -375,7 +375,7 @@
         </provider>
 
         <service
-            android:name=".Service.SubmitPostService"
+            android:name=".services.SubmitPostService"
             android:enabled="true"
             android:exported="false" />
     </application>

@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:application="ml.docilealligator.infinityforreddit.Activity.MainActivity">
+    tools:application="ml.docilealligator.infinityforreddit.activities.MainActivity">
 
     <item
         android:id="@+id/action_search_main_activity"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/coordinator_layout_edit_post_activity"
-    tools:context=".Activity.EditPostActivity">
+    tools:context=".activities.EditPostActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_edit_post_activity"

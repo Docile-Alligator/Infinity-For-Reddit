@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/relative_layout_fetch_random_subreddit_or_post_activity"
-    tools:context=".Activity.FetchRandomSubredditOrPostActivity">
+    tools:context=".activities.FetchRandomSubredditOrPostActivity">
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/lottie_animation_view_fetch_random_subreddit_or_post_activity"

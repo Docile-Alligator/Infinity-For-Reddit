@@ -15,9 +15,9 @@ import com.melegy.redscreenofdeath.RedScreenOfDeath;
 
 import org.greenrobot.eventbus.EventBus;
 
-import ml.docilealligator.infinityforreddit.BroadcastReceiver.NetworkWifiStatusReceiver;
-import ml.docilealligator.infinityforreddit.Event.ChangeNetworkStatusEvent;
-import ml.docilealligator.infinityforreddit.Utils.Utils;
+import ml.docilealligator.infinityforreddit.broadcastreceivers.NetworkWifiStatusReceiver;
+import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import ml.docilealligator.inifinityforreddit.EventBusIndex;
 
 public class Infinity extends Application {

@@ -5,7 +5,7 @@
     android:id="@+id/coordinator_layout_give_award_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.GiveAwardActivity">
+    tools:context=".activities.GiveAwardActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_give_award_activity"

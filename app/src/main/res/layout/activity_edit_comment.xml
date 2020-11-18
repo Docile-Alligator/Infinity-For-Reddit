@@ -5,7 +5,7 @@
     android:id="@+id/coordinator_layout_edit_comment_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Activity.EditCommentActivity">
+    tools:context=".activities.EditCommentActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_edit_comment_activity"

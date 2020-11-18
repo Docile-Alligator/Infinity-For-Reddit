@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/coordinator_layout_inbox_activity"
-    tools:context=".Activity.InboxActivity">
+    tools:context=".activities.InboxActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_inbox_activity"

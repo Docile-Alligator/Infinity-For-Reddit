@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:id="@+id/coordinator_customize_theme_activity"
     android:background="?attr/backgroundColor"
-    tools:context=".Activity.CustomizeThemeActivity">
+    tools:context=".activities.CustomizeThemeActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_customize_theme_activity"

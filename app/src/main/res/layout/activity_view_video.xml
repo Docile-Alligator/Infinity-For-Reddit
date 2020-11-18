@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:keepScreenOn="true"
     app:dragUpEnabled="true"
-    tools:application="ml.docilealligator.infinityforreddit.Activity.ViewVideoActivity">
+    tools:application="ml.docilealligator.infinityforreddit.activities.ViewVideoActivity">
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"

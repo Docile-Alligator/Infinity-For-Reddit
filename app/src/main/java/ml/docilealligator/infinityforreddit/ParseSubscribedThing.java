@@ -8,10 +8,10 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import ml.docilealligator.infinityforreddit.Subreddit.SubredditData;
-import ml.docilealligator.infinityforreddit.SubscribedSubreddit.SubscribedSubredditData;
-import ml.docilealligator.infinityforreddit.SubscribedUserDatabase.SubscribedUserData;
-import ml.docilealligator.infinityforreddit.Utils.JSONUtils;
+import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
+import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
+import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
+import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 
 class ParseSubscribedThing {
     static void parseSubscribedSubreddits(String response, String accountName,

@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 
-import ml.docilealligator.infinityforreddit.AsyncTask.SetAsWallpaperAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.SetAsWallpaperAsyncTask;
 
 public class WallpaperSetter {
     public static final int HOME_SCREEN = 0;

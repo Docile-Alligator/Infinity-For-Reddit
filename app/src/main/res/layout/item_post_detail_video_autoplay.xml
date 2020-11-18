@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView
+        <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
             android:id="@+id/icon_gif_image_view_item_post_detail_video_autoplay"
             android:layout_width="24dp"
             android:layout_height="24dp"

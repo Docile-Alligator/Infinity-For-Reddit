@@ -1,0 +1,1025 @@
+package ml.docilealligator.infinityforreddit.activities;
+
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
+import android.content.res.Resources;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
+import com.r0adkll.slidr.Slidr;
+import com.r0adkll.slidr.model.SlidrInterface;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
+import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
+import ml.docilealligator.infinityforreddit.asynctasks.CheckIsFollowingUserAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTimeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.UserThingSortTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.DeleteThing;
+import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
+import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.fragments.CommentsListingFragment;
+import ml.docilealligator.infinityforreddit.fragments.PostFragment;
+import ml.docilealligator.infinityforreddit.FragmentCommunicator;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.message.ReadMessage;
+import ml.docilealligator.infinityforreddit.post.PostDataSource;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
+import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserDao;
+import ml.docilealligator.infinityforreddit.user.BlockUser;
+import ml.docilealligator.infinityforreddit.user.FetchUserData;
+import ml.docilealligator.infinityforreddit.user.UserDao;
+import ml.docilealligator.infinityforreddit.user.UserData;
+import ml.docilealligator.infinityforreddit.user.UserFollowing;
+import ml.docilealligator.infinityforreddit.user.UserViewModel;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
+import pl.droidsonroids.gif.GifImageView;
+import retrofit2.Retrofit;
+
+public class ViewUserDetailActivity extends BaseActivity implements SortTypeSelectionCallback,
+        PostLayoutBottomSheetFragment.PostLayoutSelectionCallback, ActivityToolbarInterface {
+
+    public static final String EXTRA_USER_NAME_KEY = "EUNK";
+    public static final String EXTRA_MESSAGE_FULLNAME = "ENF";
+    public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
+    public static final int GIVE_AWARD_REQUEST_CODE = 200;
+    public static final int EDIT_COMMENT_REQUEST_CODE = 300;
+
+    private static final String FETCH_USER_INFO_STATE = "FSIS";
+    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
+    private static final String ACCESS_TOKEN_STATE = "ATS";
+    private static final String ACCOUNT_NAME_STATE = "ANS";
+    private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
+    private static final String MESSAGE_FULLNAME_STATE = "MFS";
+    private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
+
+    @BindView(R.id.coordinator_layout_view_user_detail_activity)
+    CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.view_pager_view_user_detail_activity)
+    ViewPager2 viewPager2;
+    @BindView(R.id.appbar_layout_view_user_detail)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.toolbar_view_user_detail_activity)
+    Toolbar toolbar;
+    @BindView(R.id.toolbar_linear_layout_view_user_detail_activity)
+    LinearLayout linearLayout;
+    @BindView(R.id.tab_layout_view_user_detail_activity)
+    TabLayout tabLayout;
+    @BindView(R.id.collapsing_toolbar_layout_view_user_detail_activity)
+    CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.banner_image_view_view_user_detail_activity)
+    GifImageView bannerImageView;
+    @BindView(R.id.icon_gif_image_view_view_user_detail_activity)
+    GifImageView iconGifImageView;
+    @BindView(R.id.user_name_text_view_view_user_detail_activity)
+    TextView userNameTextView;
+    @BindView(R.id.subscribe_user_chip_view_user_detail_activity)
+    Chip subscribeUserChip;
+    @BindView(R.id.karma_text_view_view_user_detail_activity)
+    TextView karmaTextView;
+    @BindView(R.id.cakeday_text_view_view_user_detail_activity)
+    TextView cakedayTextView;
+    @BindView(R.id.description_text_view_view_user_detail_activity)
+    TextView descriptionTextView;
+    @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
+    @Inject
+    @Named("default")
+    SharedPreferences mSharedPreferences;
+    @Inject
+    @Named("sort_type")
+    SharedPreferences mSortTypeSharedPreferences;
+    @Inject
+    @Named("post_layout")
+    SharedPreferences mPostLayoutSharedPreferences;
+    @Inject
+    @Named("nsfw_and_spoiler")
+    SharedPreferences mNsfwAndSpoilerSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
+    public UserViewModel userViewModel;
+    private FragmentManager fragmentManager;
+    private SectionsPagerAdapter sectionsPagerAdapter;
+    private SubscribedUserDao subscribedUserDao;
+    private RequestManager glide;
+    private Menu mMenu;
+    private AppBarLayout.LayoutParams params;
+    private UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment;
+    private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
+    private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
+    private boolean mNullAccessToken = false;
+    private String mAccessToken;
+    private String mAccountName;
+    private String username;
+    private boolean subscriptionReady = false;
+    private boolean mFetchUserInfoSuccess = false;
+    private boolean isInLazyMode = false;
+    private int expandedTabTextColor;
+    private int expandedTabBackgroundColor;
+    private int expandedTabIndicatorColor;
+    private int collapsedTabTextColor;
+    private int collapsedTabBackgroundColor;
+    private int collapsedTabIndicatorColor;
+    private int unsubscribedColor;
+    private int subscribedColor;
+    private boolean showToast = false;
+    private String mMessageFullname;
+    private String mNewAccountName;
+    private SlidrInterface mSlidrInterface;
+    private MaterialAlertDialogBuilder nsfwWarningBuilder;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        ((Infinity) getApplication()).getAppComponent().inject(this);
+        setTransparentStatusBarAfterToolbarCollapsed();
+
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_view_user_detail);
+
+        ButterKnife.bind(this);
+
+        EventBus.getDefault().register(this);
+
+        applyCustomTheme();
+
+        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
+            mSlidrInterface = Slidr.attach(this);
+        }
+
+        username = getIntent().getStringExtra(EXTRA_USER_NAME_KEY);
+
+        fragmentManager = getSupportFragmentManager();
+
+        if (savedInstanceState == null) {
+            mMessageFullname = getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME);
+            mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
+            getCurrentAccountAndInitializeViewPager();
+        } else {
+            mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
+            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
+            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
+            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
+            isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
+            mMessageFullname = savedInstanceState.getString(MESSAGE_FULLNAME_STATE);
+            mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
+
+            if (!mNullAccessToken && mAccessToken == null) {
+                getCurrentAccountAndInitializeViewPager();
+            } else {
+                initializeViewPager();
+            }
+        }
+
+        fetchUserInfo();
+
+        params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
+
+        Resources resources = getResources();
+
+        adjustToolbar(toolbar);
+
+        String title = "u/" + username;
+        userNameTextView.setText(title);
+        toolbar.setTitle(title);
+
+        setSupportActionBar(toolbar);
+        setToolbarGoToTop(toolbar);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Window window = getWindow();
+            if (isImmersiveInterface()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+                    coordinatorLayout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+                            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+                } else {
+                    window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+                }
+                showToast = true;
+            }
+
+            View decorView = window.getDecorView();
+            if (isChangeStatusBarIconColor()) {
+                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                    @Override
+                    public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                        if (state == State.COLLAPSED) {
+                            decorView.setSystemUiVisibility(getSystemVisibilityToolbarCollapsed());
+                            tabLayout.setTabTextColors(collapsedTabTextColor, collapsedTabTextColor);
+                            tabLayout.setSelectedTabIndicatorColor(collapsedTabIndicatorColor);
+                            tabLayout.setBackgroundColor(collapsedTabBackgroundColor);
+                        } else if (state == State.EXPANDED) {
+                            decorView.setSystemUiVisibility(getSystemVisibilityToolbarExpanded());
+                            tabLayout.setTabTextColors(expandedTabTextColor, expandedTabTextColor);
+                            tabLayout.setSelectedTabIndicatorColor(expandedTabIndicatorColor);
+                            tabLayout.setBackgroundColor(expandedTabBackgroundColor);
+                        }
+                    }
+                });
+            } else {
+                appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                    @Override
+                    public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                        if (state == State.COLLAPSED) {
+                            tabLayout.setTabTextColors(collapsedTabTextColor, collapsedTabTextColor);
+                            tabLayout.setSelectedTabIndicatorColor(collapsedTabIndicatorColor);
+                            tabLayout.setBackgroundColor(collapsedTabBackgroundColor);
+                        } else if (state == State.EXPANDED) {
+                            tabLayout.setTabTextColors(expandedTabTextColor, expandedTabTextColor);
+                            tabLayout.setSelectedTabIndicatorColor(expandedTabIndicatorColor);
+                            tabLayout.setBackgroundColor(expandedTabBackgroundColor);
+                        }
+                    }
+                });
+            }
+        } else {
+            appBarLayout.addOnOffsetChangedListener(new AppBarStateChangeListener() {
+                @Override
+                public void onStateChanged(AppBarLayout appBarLayout, State state) {
+                    if (state == State.EXPANDED) {
+                        tabLayout.setTabTextColors(expandedTabTextColor, expandedTabTextColor);
+                        tabLayout.setSelectedTabIndicatorColor(expandedTabIndicatorColor);
+                        tabLayout.setBackgroundColor(expandedTabBackgroundColor);
+                    } else if (state == State.COLLAPSED) {
+                        tabLayout.setTabTextColors(collapsedTabTextColor, collapsedTabTextColor);
+                        tabLayout.setSelectedTabIndicatorColor(collapsedTabIndicatorColor);
+                        tabLayout.setBackgroundColor(collapsedTabBackgroundColor);
+                    }
+                }
+            });
+        }
+
+        subscribedUserDao = mRedditDataRoomDatabase.subscribedUserDao();
+        glide = Glide.with(this);
+        Locale locale = getResources().getConfiguration().locale;
+
+        userViewModel = new ViewModelProvider(this, new UserViewModel.Factory(getApplication(), mRedditDataRoomDatabase, username))
+                .get(UserViewModel.class);
+        userViewModel.getUserLiveData().observe(this, userData -> {
+            if (userData != null) {
+                if (userData.getBanner().equals("")) {
+                    bannerImageView.setOnClickListener(null);
+                } else {
+                    glide.load(userData.getBanner()).into(bannerImageView);
+                    bannerImageView.setOnClickListener(view -> {
+                        Intent intent = new Intent(this, ViewImageOrGifActivity.class);
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, userData.getBanner());
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, username + "-banner.jpg");
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, username);
+                        startActivity(intent);
+                    });
+                }
+
+                if (userData.getIconUrl().equals("")) {
+                    glide.load(getDrawable(R.drawable.subreddit_default_icon))
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0)))
+                            .into(iconGifImageView);
+                    iconGifImageView.setOnClickListener(null);
+                } else {
+                    glide.load(userData.getIconUrl())
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0)))
+                            .error(glide.load(R.drawable.subreddit_default_icon)
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0))))
+                            .into(iconGifImageView);
+
+                    iconGifImageView.setOnClickListener(view -> {
+                        Intent intent = new Intent(this, ViewImageOrGifActivity.class);
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, userData.getIconUrl());
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, username + "-icon.jpg");
+                        intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, username);
+                        startActivity(intent);
+                    });
+                }
+
+                if (userData.isCanBeFollowed()) {
+                    subscribeUserChip.setVisibility(View.VISIBLE);
+                    subscribeUserChip.setOnClickListener(view -> {
+                        if (mAccessToken == null) {
+                            Toast.makeText(ViewUserDetailActivity.this, R.string.login_first, Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        if (subscriptionReady) {
+                            subscriptionReady = false;
+                            if (subscribeUserChip.getText().equals(resources.getString(R.string.follow))) {
+                                UserFollowing.followUser(mOauthRetrofit, mRetrofit, mAccessToken,
+                                        username, mAccountName, subscribedUserDao, new UserFollowing.UserFollowingListener() {
+                                            @Override
+                                            public void onUserFollowingSuccess() {
+                                                subscribeUserChip.setText(R.string.unfollow);
+                                                subscribeUserChip.setChipBackgroundColor(ColorStateList.valueOf(subscribedColor));
+                                                showMessage(R.string.followed, false);
+                                                subscriptionReady = true;
+                                            }
+
+                                            @Override
+                                            public void onUserFollowingFail() {
+                                                showMessage(R.string.follow_failed, false);
+                                                subscriptionReady = true;
+                                            }
+                                        });
+                            } else {
+                                UserFollowing.unfollowUser(mOauthRetrofit, mRetrofit, mAccessToken,
+                                        username, mAccountName, subscribedUserDao, new UserFollowing.UserFollowingListener() {
+                                            @Override
+                                            public void onUserFollowingSuccess() {
+                                                subscribeUserChip.setText(R.string.follow);
+                                                subscribeUserChip.setChipBackgroundColor(ColorStateList.valueOf(unsubscribedColor));
+                                                showMessage(R.string.unfollowed, false);
+                                                subscriptionReady = true;
+                                            }
+
+                                            @Override
+                                            public void onUserFollowingFail() {
+                                                showMessage(R.string.unfollow_failed, false);
+                                                subscriptionReady = true;
+                                            }
+                                        });
+                            }
+                        }
+                    });
+
+                    new CheckIsFollowingUserAsyncTask(subscribedUserDao, username, mAccountName, new CheckIsFollowingUserAsyncTask.CheckIsFollowingUserListener() {
+                        @Override
+                        public void isSubscribed() {
+                            subscribeUserChip.setText(R.string.unfollow);
+                            subscribeUserChip.setChipBackgroundColor(ColorStateList.valueOf(subscribedColor));
+                            subscriptionReady = true;
+                        }
+
+                        @Override
+                        public void isNotSubscribed() {
+                            subscribeUserChip.setText(R.string.follow);
+                            subscribeUserChip.setChipBackgroundColor(ColorStateList.valueOf(unsubscribedColor));
+                            subscriptionReady = true;
+                        }
+                    }).execute();
+                } else {
+                    subscribeUserChip.setVisibility(View.GONE);
+                }
+
+                String userFullName = "u/" + userData.getName();
+                userNameTextView.setText(userFullName);
+                if (!title.equals(userFullName)) {
+                    getSupportActionBar().setTitle(userFullName);
+                }
+                String karma = getString(R.string.karma_info_user_detail, userData.getTotalKarma(), userData.getLinkKarma(), userData.getCommentKarma());
+                karmaTextView.setText(karma);
+                cakedayTextView.setText(getString(R.string.cakeday_info, new SimpleDateFormat("MMM d, yyyy",
+                        locale).format(userData.getCakeday())));
+
+                if (userData.getDescription() == null || userData.getDescription().equals("")) {
+                    descriptionTextView.setVisibility(View.GONE);
+                } else {
+                    descriptionTextView.setVisibility(View.VISIBLE);
+                    descriptionTextView.setText(userData.getDescription());
+                }
+
+                if (userData.isNSFW()) {
+                    if (nsfwWarningBuilder == null
+                            && !mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false)) {
+                        nsfwWarningBuilder = new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                                .setTitle(R.string.warning)
+                                .setMessage(R.string.this_user_has_nsfw_content)
+                                .setPositiveButton(R.string.leave, (dialogInterface, i)
+                                        -> {
+                                    finish();
+                                })
+                                .setNegativeButton(R.string.dismiss, null);
+                        nsfwWarningBuilder.show();
+                    }
+                }
+            }
+        });
+
+        userThingSortTypeBottomSheetFragment = new UserThingSortTypeBottomSheetFragment();
+        sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
+        postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (sectionsPagerAdapter != null) {
+            return sectionsPagerAdapter.handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
+        }
+
+        return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    public SharedPreferences getDefaultSharedPreferences() {
+        return mSharedPreferences;
+    }
+
+    @Override
+    protected CustomThemeWrapper getCustomThemeWrapper() {
+        return mCustomThemeWrapper;
+    }
+
+    @Override
+    protected void applyCustomTheme() {
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        collapsingToolbarLayout.setContentScrimColor(mCustomThemeWrapper.getColorPrimary());
+        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        expandedTabTextColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTextColor();
+        expandedTabIndicatorColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTabIndicator();
+        expandedTabBackgroundColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTabBackground();
+        collapsedTabTextColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTextColor();
+        collapsedTabIndicatorColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabIndicator();
+        collapsedTabBackgroundColor = mCustomThemeWrapper.getTabLayoutWithCollapsedCollapsingToolbarTabBackground();
+        linearLayout.setBackgroundColor(expandedTabBackgroundColor);
+        unsubscribedColor = mCustomThemeWrapper.getUnsubscribed();
+        subscribedColor = mCustomThemeWrapper.getSubscribed();
+        userNameTextView.setTextColor(mCustomThemeWrapper.getUsername());
+        karmaTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+        cakedayTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+        descriptionTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+        subscribeUserChip.setTextColor(mCustomThemeWrapper.getChipTextColor());
+        applyTabLayoutTheme(tabLayout);
+    }
+
+    private void getCurrentAccountAndInitializeViewPager() {
+        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+            if (mNewAccountName != null) {
+                if (account == null || !account.getUsername().equals(mNewAccountName)) {
+                    new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
+                        EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
+                        Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
+
+                        mNewAccountName = null;
+                        if (newAccount == null) {
+                            mNullAccessToken = true;
+                        } else {
+                            mAccessToken = newAccount.getAccessToken();
+                            mAccountName = newAccount.getUsername();
+                        }
+
+                        initializeViewPager();
+                    }).execute();
+                } else {
+                    mAccessToken = account.getAccessToken();
+                    mAccountName = account.getUsername();
+                    initializeViewPager();
+                }
+            } else {
+                if (account == null) {
+                    mNullAccessToken = true;
+                } else {
+                    mAccessToken = account.getAccessToken();
+                    mAccountName = account.getUsername();
+                }
+
+                initializeViewPager();
+            }
+        }).execute();
+    }
+
+    private void initializeViewPager() {
+        sectionsPagerAdapter = new SectionsPagerAdapter(fragmentManager, getLifecycle());
+        viewPager2.setAdapter(sectionsPagerAdapter);
+        viewPager2.setOffscreenPageLimit(2);
+        viewPager2.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
+        new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
+            switch (position) {
+                case 0:
+                    tab.setText(R.string.posts);
+                    break;
+                case 1:
+                    tab.setText(R.string.comments);
+                    break;
+            }
+        }).attach();
+
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                if (position == 0) {
+                    unlockSwipeRightToGoBack();
+                } else {
+                    lockSwipeRightToGoBack();
+                }
+                sectionsPagerAdapter.displaySortTypeInToolbar();
+            }
+        });
+
+        fixViewPager2Sensitivity(viewPager2);
+
+        if (mAccessToken != null && mMessageFullname != null) {
+            ReadMessage.readMessage(mOauthRetrofit, mAccessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
+                @Override
+                public void readSuccess() {
+                    mMessageFullname = null;
+                }
+
+                @Override
+                public void readFailed() {
+
+                }
+            });
+        }
+    }
+
+    private void fetchUserInfo() {
+        if (!mFetchUserInfoSuccess) {
+            FetchUserData.fetchUserData(mRetrofit, username, new FetchUserData.FetchUserDataListener() {
+                @Override
+                public void onFetchUserDataSuccess(UserData userData) {
+                    new ViewUserDetailActivity.InsertUserDataAsyncTask(mRedditDataRoomDatabase.userDao(), userData,
+                            () -> mFetchUserInfoSuccess = true).execute();
+                }
+
+                @Override
+                public void onFetchUserDataFailed() {
+                    showMessage(R.string.cannot_fetch_user_info, true);
+                    mFetchUserInfoSuccess = false;
+                }
+            });
+        }
+    }
+
+    public void deleteComment(String fullName) {
+        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                .setTitle(R.string.delete_this_comment)
+                .setMessage(R.string.are_you_sure)
+                .setPositiveButton(R.string.delete, (dialogInterface, i)
+                        -> DeleteThing.delete(mOauthRetrofit, fullName, mAccessToken, new DeleteThing.DeleteThingListener() {
+                    @Override
+                    public void deleteSuccess() {
+                        Toast.makeText(ViewUserDetailActivity.this, R.string.delete_post_success, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void deleteFailed() {
+                        Toast.makeText(ViewUserDetailActivity.this, R.string.delete_post_failed, Toast.LENGTH_SHORT).show();
+                    }
+                }))
+                .setNegativeButton(R.string.cancel, null)
+                .show();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.view_user_detail_activity, menu);
+        applyMenuItemTheme(menu);
+        mMenu = menu;
+        MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity);
+        if (isInLazyMode) {
+            lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+            collapsingToolbarLayout.setLayoutParams(params);
+        } else {
+            lazyModeItem.setTitle(R.string.action_start_lazy_mode);
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
+                    AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
+            collapsingToolbarLayout.setLayoutParams(params);
+        }
+
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                return true;
+            case R.id.action_sort_view_user_detail_activity:
+                userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
+                return true;
+            case R.id.action_search_view_user_detail_activity:
+                Intent intent = new Intent(this, SearchActivity.class);
+                intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, username);
+                intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_IS_USER, true);
+                startActivity(intent);
+                return true;
+            case R.id.action_refresh_view_user_detail_activity:
+                if (mMenu != null) {
+                    mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity).setTitle(R.string.action_start_lazy_mode);
+                }
+                sectionsPagerAdapter.refresh();
+                mFetchUserInfoSuccess = false;
+                fetchUserInfo();
+                return true;
+            case R.id.action_lazy_mode_view_user_detail_activity:
+                MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity);
+                if (isInLazyMode) {
+                    isInLazyMode = false;
+                    sectionsPagerAdapter.stopLazyMode();
+                    lazyModeItem.setTitle(R.string.action_start_lazy_mode);
+                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
+                            AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
+                    collapsingToolbarLayout.setLayoutParams(params);
+                } else {
+                    isInLazyMode = true;
+                    if (sectionsPagerAdapter.startLazyMode()) {
+                        lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+                        appBarLayout.setExpanded(false);
+                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
+                        collapsingToolbarLayout.setLayoutParams(params);
+                    } else {
+                        isInLazyMode = false;
+                    }
+                }
+                return true;
+            case R.id.action_change_post_layout_view_user_detail_activity:
+                postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+                return true;
+            case R.id.action_share_view_user_detail_activity:
+                Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, "https://www.reddit.com/user/" + username);
+                if (shareIntent.resolveActivity(getPackageManager()) != null) {
+                    startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
+                } else {
+                    Toast.makeText(this, R.string.no_app, Toast.LENGTH_SHORT).show();
+                }
+                return true;
+            case R.id.action_send_private_message_view_user_detail_activity:
+                if (mAccessToken == null) {
+                    Toast.makeText(this, R.string.login_first, Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+
+                Intent pmIntent = new Intent(this, SendPrivateMessageActivity.class);
+                pmIntent.putExtra(SendPrivateMessageActivity.EXTRA_RECIPIENT_USERNAME, username);
+                startActivity(pmIntent);
+                return true;
+            case R.id.action_report_view_user_detail_activity:
+                Intent reportIntent = new Intent(this, LinkResolverActivity.class);
+                reportIntent.setData(Uri.parse("https://www.reddithelp.com/en/categories/rules-reporting/account-and-community-restrictions/what-should-i-do-if-i-see-something-i"));
+                startActivity(reportIntent);
+                return true;
+            case R.id.action_block_user_view_user_detail_activity:
+                if (mAccessToken == null) {
+                    Toast.makeText(this, R.string.login_first, Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+
+                new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                        .setTitle(R.string.block_user)
+                        .setMessage(R.string.are_you_sure)
+                        .setPositiveButton(R.string.yes, (dialogInterface, i)
+                                -> BlockUser.blockUser(mOauthRetrofit, mAccessToken, username, new BlockUser.BlockUserListener() {
+                            @Override
+                            public void success() {
+                                Toast.makeText(ViewUserDetailActivity.this, R.string.block_user_success, Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void failed() {
+                                Toast.makeText(ViewUserDetailActivity.this, R.string.block_user_failed, Toast.LENGTH_SHORT).show();
+                            }
+                        }))
+                        .setNegativeButton(R.string.no, null)
+                        .show();
+                return true;
+        }
+        return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == GIVE_AWARD_REQUEST_CODE) {
+                Toast.makeText(this, R.string.give_award_success, Toast.LENGTH_SHORT).show();
+                int position = data.getIntExtra(GiveAwardActivity.EXTRA_RETURN_ITEM_POSITION, 0);
+                String newAwardsHTML = data.getStringExtra(GiveAwardActivity.EXTRA_RETURN_NEW_AWARDS);
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.giveAward(newAwardsHTML, position);
+                }
+            } else if (requestCode == EDIT_COMMENT_REQUEST_CODE) {
+                if (data != null) {
+                    if (sectionsPagerAdapter != null) {
+                        sectionsPagerAdapter.editComment(
+                                data.getStringExtra(EditCommentActivity.EXTRA_EDITED_COMMENT_CONTENT),
+                                data.getExtras().getInt(EditCommentActivity.EXTRA_EDITED_COMMENT_POSITION));
+                    }
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(FETCH_USER_INFO_STATE, mFetchUserInfoSuccess);
+        outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
+        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
+        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
+        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
+        outState.putString(MESSAGE_FULLNAME_STATE, mMessageFullname);
+        outState.putString(NEW_ACCOUNT_NAME_STATE, mNewAccountName);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    private void showMessage(int resId, boolean retry) {
+        if (showToast) {
+            Toast.makeText(this, resId, Toast.LENGTH_SHORT).show();
+        } else {
+            if (retry) {
+                Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).setAction(R.string.retry,
+                        view -> fetchUserInfo()).show();
+            } else {
+                Snackbar.make(coordinatorLayout, resId, Snackbar.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public void sortTypeSelected(SortType sortType) {
+        sectionsPagerAdapter.changeSortType(sortType);
+    }
+
+    @Override
+    public void sortTypeSelected(String sortType) {
+        Bundle bundle = new Bundle();
+        bundle.putString(SortTimeBottomSheetFragment.EXTRA_SORT_TYPE, sortType);
+        sortTimeBottomSheetFragment.setArguments(bundle);
+        sortTimeBottomSheetFragment.show(getSupportFragmentManager(), sortTimeBottomSheetFragment.getTag());
+    }
+
+    @Override
+    public void postLayoutSelected(int postLayout) {
+        sectionsPagerAdapter.changePostLayout(postLayout);
+    }
+
+    @Subscribe
+    public void onAccountSwitchEvent(SwitchAccountEvent event) {
+        if (!getClass().getName().equals(event.excludeActivityClassName)) {
+            finish();
+        }
+    }
+
+    @Subscribe
+    public void onChangeNSFWEvent(ChangeNSFWEvent changeNSFWEvent) {
+        sectionsPagerAdapter.changeNSFW(changeNSFWEvent.nsfw);
+    }
+
+    @Override
+    public void onLongPress() {
+        if (sectionsPagerAdapter != null) {
+            sectionsPagerAdapter.goBackToTop();
+        }
+    }
+
+    @Override
+    public void displaySortType() {
+        if (sectionsPagerAdapter != null) {
+            sectionsPagerAdapter.displaySortTypeInToolbar();
+        }
+    }
+
+    private static class InsertUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
+
+        private UserDao userDao;
+        private UserData subredditData;
+        private InsertUserDataAsyncTaskListener insertUserDataAsyncTaskListener;
+        InsertUserDataAsyncTask(UserDao userDao, UserData userData,
+                                InsertUserDataAsyncTaskListener insertUserDataAsyncTaskListener) {
+            this.userDao = userDao;
+            this.subredditData = userData;
+            this.insertUserDataAsyncTaskListener = insertUserDataAsyncTaskListener;
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            userDao.insert(subredditData);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            insertUserDataAsyncTaskListener.insertSuccess();
+        }
+
+        interface InsertUserDataAsyncTaskListener {
+            void insertSuccess();
+        }
+    }
+
+    private class SectionsPagerAdapter extends FragmentStateAdapter {
+
+        SectionsPagerAdapter(FragmentManager fm, Lifecycle lifecycle) {
+            super(fm, lifecycle);
+        }
+
+        @NonNull
+        @Override
+        public Fragment createFragment(int position) {
+            if (position == 0) {
+                PostFragment fragment = new PostFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_USER);
+                bundle.putString(PostFragment.EXTRA_USER_NAME, username);
+                bundle.putString(PostFragment.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_SUBMITTED);
+                bundle.putInt(PostFragment.EXTRA_FILTER, PostFragment.EXTRA_NO_FILTER);
+                bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
+                fragment.setArguments(bundle);
+                return fragment;
+            }
+            CommentsListingFragment fragment = new CommentsListingFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(CommentsListingFragment.EXTRA_USERNAME, username);
+            bundle.putString(CommentsListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+            bundle.putString(CommentsListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
+            bundle.putBoolean(CommentsListingFragment.EXTRA_ARE_SAVED_COMMENTS, false);
+            fragment.setArguments(bundle);
+            return fragment;
+        }
+
+        @Override
+        public int getItemCount() {
+            return 2;
+        }
+
+        @Nullable
+        private Fragment getCurrentFragment() {
+            if (viewPager2 == null || fragmentManager == null) {
+                return null;
+            }
+            return fragmentManager.findFragmentByTag("f" + viewPager2.getCurrentItem());
+        }
+
+        public boolean handleKeyDown(int keyCode) {
+            if (viewPager2.getCurrentItem() == 0) {
+                Fragment fragment = getCurrentFragment();
+                if (fragment instanceof PostFragment) {
+                    return ((PostFragment) fragment).handleKeyDown(keyCode);
+                }
+            }
+            return false;
+        }
+
+        public void refresh() {
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).refresh();
+            } else if (fragment instanceof CommentsListingFragment) {
+                ((CommentsListingFragment) fragment).refresh();
+            }
+        }
+
+        boolean startLazyMode() {
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof FragmentCommunicator) {
+                return ((FragmentCommunicator) fragment).startLazyMode();
+            }
+            return false;
+        }
+
+        void stopLazyMode() {
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof FragmentCommunicator) {
+                ((FragmentCommunicator) fragment).stopLazyMode();
+            }
+        }
+
+        public void changeSortType(SortType sortType) {
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).changeSortType(sortType);
+                Utils.displaySortTypeInToolbar(sortType, toolbar);
+            } else if (fragment instanceof CommentsListingFragment) {
+                mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_USER_COMMENT, sortType.getType().name()).apply();
+                if(sortType.getTime() != null) {
+                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_USER_COMMENT, sortType.getTime().name()).apply();
+                }
+                ((CommentsListingFragment) fragment).changeSortType(sortType);
+                Utils.displaySortTypeInToolbar(sortType, toolbar);
+            }
+        }
+
+        public void changeNSFW(boolean nsfw) {
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).changeNSFW(nsfw);
+            }
+        }
+
+        void changePostLayout(int postLayout) {
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).changePostLayout(postLayout);
+            }
+        }
+
+        void goBackToTop() {
+            Fragment fragment = getCurrentFragment();
+            if (fragment instanceof PostFragment) {
+                ((PostFragment) fragment).goBackToTop();
+            } else if (fragment instanceof CommentsListingFragment) {
+                ((CommentsListingFragment) fragment).goBackToTop();
+            }
+        }
+
+        void displaySortTypeInToolbar() {
+            if (fragmentManager != null) {
+                Fragment fragment = fragmentManager.findFragmentByTag("f" + viewPager2.getCurrentItem());
+                if (fragment instanceof PostFragment) {
+                    SortType sortType = ((PostFragment) fragment).getSortType();
+                    Utils.displaySortTypeInToolbar(sortType, toolbar);
+                } else if (fragment instanceof CommentsListingFragment) {
+                    SortType sortType = ((CommentsListingFragment) fragment).getSortType();
+                    Utils.displaySortTypeInToolbar(sortType, toolbar);
+                }
+            }
+        }
+
+        void giveAward(String awardsHTML, int position) {
+            if (fragmentManager != null) {
+                Fragment fragment = fragmentManager.findFragmentByTag("f1");
+                if (fragment instanceof CommentsListingFragment) {
+                    ((CommentsListingFragment) fragment).giveAward(awardsHTML, position);
+                }
+            }
+        }
+
+        void editComment(String commentMarkdown, int position) {
+            if (fragmentManager != null) {
+                Fragment fragment = fragmentManager.findFragmentByTag("f1");
+                if (fragment instanceof CommentsListingFragment) {
+                    ((CommentsListingFragment) fragment).editComment(commentMarkdown, position);
+                }
+            }
+        }
+    }
+
+    private void lockSwipeRightToGoBack() {
+        if (mSlidrInterface != null) {
+            mSlidrInterface.lock();
+        }
+    }
+
+    private void unlockSwipeRightToGoBack() {
+        if (mSlidrInterface != null) {
+            mSlidrInterface.unlock();
+        }
+    }
+}

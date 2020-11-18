@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:paddingBottom="8dp"
     android:overScrollMode="never"
-    tools:context=".BottomSheetFragment.UrlMenuBottomSheetFragment">
+    tools:context=".bottomsheetfragments.UrlMenuBottomSheetFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

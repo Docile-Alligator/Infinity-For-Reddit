@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/coordinator_layout_theme_preview_activity"
-    tools:context=".Activity.CustomThemePreviewActivity">
+    tools:context=".activities.CustomThemePreviewActivity">
 
     <androidx.viewpager.widget.ViewPager
         android:id="@+id/view_pager_theme_preview_activity"

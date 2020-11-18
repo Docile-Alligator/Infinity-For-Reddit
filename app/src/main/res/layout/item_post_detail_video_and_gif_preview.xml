@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:padding="16dp">
 
-        <ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView
+        <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
             android:id="@+id/icon_gif_image_view_item_post_detail_video_and_gif_preview"
             android:layout_width="24dp"
             android:layout_height="24dp"
@@ -201,7 +201,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
-            <ml.docilealligator.infinityforreddit.CustomView.AspectRatioGifImageView
+            <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
                 android:id="@+id/image_view_item_post_detail_video_and_gif_preview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

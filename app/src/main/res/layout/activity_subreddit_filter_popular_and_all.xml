@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/coordinator_layout_subreddit_filter_popular_and_all_activity"
-    tools:context=".Activity.SubredditFilterPopularAndAllActivity">
+    tools:context=".activities.SubredditFilterPopularAndAllActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_subreddit_filter_popular_and_all_activity"

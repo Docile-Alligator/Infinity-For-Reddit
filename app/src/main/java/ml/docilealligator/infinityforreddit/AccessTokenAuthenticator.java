@@ -10,9 +10,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import ml.docilealligator.infinityforreddit.API.RedditAPI;
-import ml.docilealligator.infinityforreddit.Account.Account;
-import ml.docilealligator.infinityforreddit.Utils.APIUtils;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.account.Account;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import okhttp3.Authenticator;
 import okhttp3.Headers;
 import okhttp3.Request;
