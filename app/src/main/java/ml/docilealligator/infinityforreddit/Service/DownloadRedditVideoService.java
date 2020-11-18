@@ -178,7 +178,7 @@ public class DownloadRedditVideoService extends Service {
                                     return;
                                 }
                             } else {
-                                destinationFileUriString = separateDownloadFolder ? Environment.DIRECTORY_PICTURES + "/Infinity/" + subredditName + "/" : Environment.DIRECTORY_PICTURES + "/Infinity/";
+                                destinationFileUriString = separateDownloadFolder ? Environment.DIRECTORY_MOVIES + "/Infinity/" + subredditName + "/" : Environment.DIRECTORY_MOVIES + "/Infinity/";
                             }
                             isDefaultDestination = true;
                         } else {
