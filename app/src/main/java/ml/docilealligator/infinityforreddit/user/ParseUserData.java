@@ -19,7 +19,7 @@ public class ParseUserData {
         new ParseUserListingDataAsyncTask(response, parseUserListingDataListener).execute();
     }
 
-    private static UserData parseUserDataBase(JSONObject userDataJson) throws JSONException {
+    private static UserData parseUserDataBase(JSONObject userDataJson, boolean parseFullKarma) throws JSONException {
         if(userDataJson == null) {
             return null;
         }
@@ -37,9 +37,14 @@ public class ParseUserData {
         }
         int linkKarma = userDataJson.getInt(JSONUtils.LINK_KARMA_KEY);
         int commentKarma = userDataJson.getInt(JSONUtils.COMMENT_KARMA_KEY);
-        int awarderKarma = userDataJson.getInt(JSONUtils.AWARDER_KARMA_KEY);
-        int awardeeKarma = userDataJson.getInt(JSONUtils.AWARDEE_KARMA_KEY);
-        int totalKarma = userDataJson.getInt(JSONUtils.TOTAL_KARMA_KEY);
+        int awarderKarma = 0;
+        int awardeeKarma = 0;
+        int totalKarma = linkKarma + commentKarma;
+        if (parseFullKarma) {
+            awarderKarma = userDataJson.getInt(JSONUtils.AWARDER_KARMA_KEY);
+            awardeeKarma = userDataJson.getInt(JSONUtils.AWARDEE_KARMA_KEY);
+            totalKarma = userDataJson.getInt(JSONUtils.TOTAL_KARMA_KEY);
+        }
         long cakeday = userDataJson.getLong(JSONUtils.CREATED_UTC_KEY) * 1000;
         boolean isGold = userDataJson.getBoolean(JSONUtils.IS_GOLD_KEY);
         boolean isFriend = userDataJson.getBoolean(JSONUtils.IS_FRIEND_KEY);
@@ -83,7 +88,7 @@ public class ParseUserData {
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                userData = parseUserDataBase(jsonResponse);
+                userData = parseUserDataBase(jsonResponse, true);
             } catch (JSONException e) {
                 parseFailed = true;
                 e.printStackTrace();
@@ -130,7 +135,7 @@ public class ParseUserData {
                     after = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
                     JSONArray children = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
                     for (int i = 0; i < children.length(); i++) {
-                        userDataArrayList.add(parseUserDataBase(children.getJSONObject(i)));
+                        userDataArrayList.add(parseUserDataBase(children.getJSONObject(i), false));
                     }
                 }
             } catch (JSONException e) {
