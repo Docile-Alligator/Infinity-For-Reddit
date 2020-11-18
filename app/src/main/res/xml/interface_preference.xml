@@ -5,23 +5,23 @@
     <Preference
         app:title="@string/settings_font_title"
         app:icon="@drawable/ic_font_size_24dp"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.FontPreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.FontPreferenceFragment" />
 
     <Preference
         app:key="immersive_interface_entry"
         app:title="@string/settings_immersive_interface_title"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.ImmersiveInterfacePreferenceFragment"
+        app:fragment="ml.docilealligator.infinityforreddit.settings.ImmersiveInterfacePreferenceFragment"
         app:isPreferenceVisible="false" />
 
     <Preference
         app:title="@string/settings_customize_tabs_in_main_page_title"
         app:summary="@string/only_for_logged_in_user"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.CustomizeMainPageTabsFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.CustomizeMainPageTabsFragment" />
 
     <Preference
         app:title="@string/settings_customize_bottom_app_bar_title"
         app:summary="@string/only_for_logged_in_user"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.CustomizeBottomAppBarFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.CustomizeBottomAppBarFragment" />
 
     <SwitchPreference
         app:defaultValue="false"
@@ -31,7 +31,7 @@
 
     <Preference
         app:title="@string/settings_time_format_title"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.TimeFormatPreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.TimeFormatPreferenceFragment" />
 
     <SwitchPreference
         app:defaultValue="false"
@@ -84,7 +84,7 @@
 
     <Preference
         app:title="@string/settings_number_of_columns_in_post_feed_title"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.NumberOfColumnsInPostFeedPreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.NumberOfColumnsInPostFeedPreferenceFragment" />
 
     <PreferenceCategory
         app:title="@string/settings_category_comment_title" />

@@ -4,7 +4,7 @@
 
     <Preference
         app:title="@string/settings_preview_font_title"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.FontPreviewFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.FontPreviewFragment" />
 
     <PreferenceCategory
         app:title="@string/settings_font_summary" />

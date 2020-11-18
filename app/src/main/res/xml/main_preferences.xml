@@ -5,27 +5,27 @@
     <Preference
         app:icon="@drawable/ic_outline_notifications_24dp"
         app:title="@string/settings_notification_master_title"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.NotificationPreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.NotificationPreferenceFragment" />
 
     <Preference
         app:icon="@drawable/ic_interface_24dp"
         app:title="@string/settings_interface_title"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.InterfacePreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.InterfacePreferenceFragment" />
 
     <Preference
         app:title="@string/settings_theme_title"
         app:icon="@drawable/ic_outline_color_lens_24dp"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.ThemePreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.ThemePreferenceFragment" />
 
     <Preference
         app:icon="@drawable/ic_gesture_24dp"
         app:title="@string/settings_gestures_and_buttons_title"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.GesturesAndButtonsPreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.GesturesAndButtonsPreferenceFragment" />
 
     <Preference
         app:title="@string/settigns_video_title"
         android:icon="@drawable/ic_outline_video_24dp"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.VideoPreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.VideoPreferenceFragment" />
 
     <ListPreference
         app:defaultValue="2.5"
@@ -39,43 +39,43 @@
     <Preference
         app:title="@string/settings_download_location_title"
         android:icon="@drawable/ic_download_24dp"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.DownloadLocationPreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.DownloadLocationPreferenceFragment" />
 
     <Preference
         app:key="security"
         app:title="@string/settings_security_title"
         android:icon="@drawable/ic_security_24dp"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.SecurityPreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.SecurityPreferenceFragment" />
 
     <Preference
         app:key="security"
         app:title="@string/settings_data_saving_mode"
         app:icon="@drawable/ic_data_saving_mode_24dp"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.DataSavingModePreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.DataSavingModePreferenceFragment" />
 
     <Preference
         app:icon="@drawable/ic_nsfw_on_24dp"
         app:title="@string/settings_nsfw_and_spoiler_title"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.NsfwAndBlurringFragment"/>
+        app:fragment="ml.docilealligator.infinityforreddit.settings.NsfwAndBlurringFragment"/>
 
     <Preference
         app:icon="@drawable/ic_filter_24dp"
         app:title="@string/settings_filter_title"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.FilterPreferenceFragment"/>
+        app:fragment="ml.docilealligator.infinityforreddit.settings.FilterPreferenceFragment"/>
 
     <Preference
         app:icon="@drawable/ic_miscellaneous_24dp"
         app:title="@string/settings_miscellaneous_title"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.MiscellaneousPreferenceFragment"/>
+        app:fragment="ml.docilealligator.infinityforreddit.settings.MiscellaneousPreferenceFragment"/>
 
     <Preference
         android:icon="@drawable/ic_advanced_24dp"
         app:title="@string/settings_advanced_master_title"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.AdvancedPreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.AdvancedPreferenceFragment" />
 
     <Preference
         android:icon="@drawable/ic_about_24dp"
         app:title="@string/settings_about_master_title"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.AboutPreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.AboutPreferenceFragment" />
 
 </androidx.preference.PreferenceScreen>

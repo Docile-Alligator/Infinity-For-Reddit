@@ -1839,6 +1839,9 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         if (mSlidrInterface != null) {
             mSlidrInterface.lock();
         }
+        if (touchHelper != null) {
+            touchHelper.attachToRecyclerView(null);
+        }
     }
 
     public void unlockSwipeRightToGoBack() {

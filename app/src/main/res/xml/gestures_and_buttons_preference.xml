@@ -46,6 +46,6 @@
 
     <Preference
         app:title="@string/settings_swipe_action_title"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.SwipeActionPreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.SwipeActionPreferenceFragment" />
 
 </PreferenceScreen>

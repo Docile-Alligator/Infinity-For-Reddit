@@ -4,17 +4,17 @@
 
     <Preference
         app:title="@string/settings_acknowledgement_master_title"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.AcknowledgementFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.AcknowledgementFragment" />
 
     <Preference
         app:title="@string/settings_credits_master_title"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.CreditsPreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.CreditsPreferenceFragment" />
 
     <Preference
         android:key="translation"
         app:title="@string/settings_translation_title"
         app:summary="@string/settings_translation_summary"
-        app:fragment="ml.docilealligator.infinityforreddit.Settings.TranslationFragment"/>
+        app:fragment="ml.docilealligator.infinityforreddit.settings.TranslationFragment"/>
 
     <Preference
         android:key="open_source"
