@@ -401,8 +401,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
             @Override
             public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-                if (!(viewHolder instanceof CommentAndPostRecyclerViewAdapter.PostDetailBaseViewHolder) &&
-                        !(viewHolder instanceof CommentAndPostRecyclerViewAdapter.CommentViewHolder)) {
+                if (!(viewHolder instanceof CommentAndPostRecyclerViewAdapter.CommentViewHolder)) {
                     return makeMovementFlags(0, 0);
                 }
                 int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
@@ -1838,9 +1837,6 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     public void lockSwipeRightToGoBack() {
         if (mSlidrInterface != null) {
             mSlidrInterface.lock();
-        }
-        if (touchHelper != null) {
-            touchHelper.attachToRecyclerView(null);
         }
     }
 

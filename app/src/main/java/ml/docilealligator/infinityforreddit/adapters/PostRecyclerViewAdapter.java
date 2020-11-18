@@ -630,6 +630,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         ((PostWithPreviewTypeViewHolder) holder).linkTextView.setVisibility(View.VISIBLE);
                         String domain = Uri.parse(post.getUrl()).getHost();
                         ((PostWithPreviewTypeViewHolder) holder).linkTextView.setText(domain);
+                        if (post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
+                            ((PostWithPreviewTypeViewHolder) holder).noPreviewLinkImageView.setVisibility(View.VISIBLE);
+                            ((PostWithPreviewTypeViewHolder) holder).noPreviewLinkImageView.setImageResource(R.drawable.ic_link);
+                        }
                     } else if (post.getPostType() == Post.GALLERY_TYPE) {
                         ((PostWithPreviewTypeViewHolder) holder).typeTextView.setText(mActivity.getString(R.string.gallery));
                     }
@@ -665,6 +669,17 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             loadImage(holder, post, preview);
                         } else {
                             ((PostWithPreviewTypeViewHolder) holder).noPreviewLinkImageView.setVisibility(View.VISIBLE);
+                            if (post.getPostType() == Post.VIDEO_TYPE) {
+                                ((PostWithPreviewTypeViewHolder) holder).noPreviewLinkImageView.setImageResource(R.drawable.ic_outline_video_24dp);
+                                ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.GONE);
+                            } else if (post.getPostType() == Post.IMAGE_TYPE || post.getPostType() == Post.GIF_TYPE) {
+                                ((PostWithPreviewTypeViewHolder) holder).noPreviewLinkImageView.setImageResource(R.drawable.ic_image_24dp);
+                                ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.GONE);
+                            } else if (post.getPostType() == Post.LINK_TYPE) {
+                                ((PostWithPreviewTypeViewHolder) holder).noPreviewLinkImageView.setImageResource(R.drawable.ic_link);
+                            } else if (post.getPostType() == Post.GALLERY_TYPE) {
+                                ((PostWithPreviewTypeViewHolder) holder).noPreviewLinkImageView.setImageResource(R.drawable.ic_gallery_24dp);
+                            }
                         }
                     }
                 } else if (holder instanceof PostTextTypeViewHolder) {

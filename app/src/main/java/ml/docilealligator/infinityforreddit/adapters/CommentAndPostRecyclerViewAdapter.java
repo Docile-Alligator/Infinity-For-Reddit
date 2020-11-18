@@ -923,9 +923,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             } else if (holder instanceof PostDetailNoPreviewViewHolder) {
                 if (mPost.getPostType() == Post.LINK_TYPE || mPost.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
+                    ((PostDetailNoPreviewViewHolder) holder).mTypeTextView.setText(R.string.link);
                     String noPreviewLinkDomain = Uri.parse(mPost.getUrl()).getHost();
                     ((PostDetailNoPreviewViewHolder) holder).mLinkTextView.setVisibility(View.VISIBLE);
                     ((PostDetailNoPreviewViewHolder) holder).mLinkTextView.setText(noPreviewLinkDomain);
+                    ((PostDetailNoPreviewViewHolder) holder).mNoPreviewPostTypeImageView.setImageResource(R.drawable.ic_link);
                 } else {
                     ((PostDetailNoPreviewViewHolder) holder).mLinkTextView.setVisibility(View.GONE);
                     switch (mPost.getPostType()) {
@@ -940,10 +942,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         case Post.GIF_TYPE:
                             ((PostDetailNoPreviewViewHolder) holder).mTypeTextView.setText(R.string.gif);
                             ((PostDetailNoPreviewViewHolder) holder).mNoPreviewPostTypeImageView.setImageResource(R.drawable.ic_image_24dp);
-                            break;
-                        case Post.LINK_TYPE:
-                        case Post.NO_PREVIEW_LINK_TYPE:
-                            ((PostDetailNoPreviewViewHolder) holder).mTypeTextView.setText(R.string.link);
                             break;
                         case Post.GALLERY_TYPE:
                             ((PostDetailNoPreviewViewHolder) holder).mTypeTextView.setText(R.string.gallery);
