@@ -138,8 +138,7 @@ public class DownloadRedditVideoService extends Service {
                     NotificationManager.IMPORTANCE_LOW
             );
 
-            NotificationManagerCompat manager = NotificationManagerCompat.from(this);
-            manager.createNotificationChannel(serviceChannel);
+            notificationManager.createNotificationChannel(serviceChannel);
         }
 
         startForeground(
@@ -246,7 +245,7 @@ public class DownloadRedditVideoService extends Service {
                                                 public void updateProgressNotification(int stringResId) {
                                                     updateNotification(stringResId, -1, null);
                                                 }
-                                            }).execute();
+                                            }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                                 } else {
                                     String videoFilePath = directoryPath + fileNameWithoutExtension[0] + "-cache.mp4";
                                     new SaveTempMuxAndCopyAsyncTask(videoResponse.body(),
@@ -264,7 +263,7 @@ public class DownloadRedditVideoService extends Service {
                                                 public void updateProgressNotification(int stringResId) {
                                                     updateNotification(stringResId, -1, null);
                                                 }
-                                            }).execute();
+                                            }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                                 }
                             }
 
@@ -286,7 +285,7 @@ public class DownloadRedditVideoService extends Service {
                                             public void updateProgressNotification(int stringResId) {
                                                 updateNotification(stringResId, -1, null);
                                             }
-                                        }).execute();
+                                        }).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                             }
                         });
                     } else {

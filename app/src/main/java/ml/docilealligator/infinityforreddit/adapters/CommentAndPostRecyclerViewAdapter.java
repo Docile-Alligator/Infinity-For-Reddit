@@ -862,7 +862,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 ((PostDetailVideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (mPost.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
 
                 if (mPost.isGfycat() || mPost.isRedgifs() && !mPost.isLoadGfyOrRedgifsVideoSuccess()) {
-                    ((PostDetailVideoAutoplayViewHolder) holder).mTypeTextView.setText("GFYCAT");
                     ((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks = new FetchGfycatOrRedgifsVideoLinks(new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
                         @Override
                         public void success(String webm, String mp4) {
@@ -881,7 +880,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             .fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mGfycatRetrofit, mRedgifsRetrofit,
                                     mPost.getGfycatId(), mPost.isGfycat(), mAutomaticallyTryRedgifs);
                 } else {
-                    ((PostDetailVideoAutoplayViewHolder) holder).mTypeTextView.setText("VIDEO");
                     ((PostDetailVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(mPost.getVideoUrl()));
                 }
             } else if (holder instanceof PostDetailVideoAndGifPreviewHolder) {

@@ -178,8 +178,7 @@ public class DownloadMediaService extends Service {
                     NotificationManager.IMPORTANCE_LOW
             );
 
-            NotificationManagerCompat manager = NotificationManagerCompat.from(this);
-            manager.createNotificationChannel(serviceChannel);
+            notificationManager.createNotificationChannel(serviceChannel);
         }
 
         switch (mediaType) {
@@ -275,7 +274,7 @@ public class DownloadMediaService extends Service {
 
                     new SaveImageOrGifAndCopyToExternalStorageAsyncTask(response.body(), mediaType,
                             isDefaultDestination, fileName[0], destinationFileUriString, getContentResolver(),
-                            (destinationFileUri, errorCode) -> downloadFinished(destinationFileUri, errorCode)).execute();
+                            (destinationFileUri, errorCode) -> downloadFinished(destinationFileUri, errorCode)).executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }
             }
 
@@ -289,8 +288,7 @@ public class DownloadMediaService extends Service {
     }
 
     private Notification createNotification(String fileName) {
-        builder.setContentTitle(fileName).setContentText(getString(R.string.downloading))
-                .setProgress(100, 0, false);
+        builder.setContentTitle(fileName).setContentText(getString(R.string.downloading)).setProgress(100, 0, false);
         return builder.setSmallIcon(R.drawable.ic_notification)
                 .setColor(mCustomThemeWrapper.getColorPrimaryLightTheme())
                 .build();
@@ -424,9 +422,9 @@ public class DownloadMediaService extends Service {
                     contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, destinationFileName);
                     contentValues.put(MediaStore.MediaColumns.MIME_TYPE, mediaType == EXTRA_MEDIA_TYPE_VIDEO ? "video/*" : "image/*");
                     contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, destinationFileUriString);
-                    contentValues.put(MediaStore.Images.Media.IS_PENDING, 1);
+                    contentValues.put(mediaType == EXTRA_MEDIA_TYPE_VIDEO ? MediaStore.Video.Media.IS_PENDING : MediaStore.Images.Media.IS_PENDING, 1);
 
-                    final Uri contentUri = MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                    final Uri contentUri = mediaType == EXTRA_MEDIA_TYPE_VIDEO ? MediaStore.Video.Media.EXTERNAL_CONTENT_URI : MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
                     Uri uri = contentResolver.insert(contentUri, contentValues);
 
                     if (uri == null) {
@@ -446,7 +444,7 @@ public class DownloadMediaService extends Service {
                         stream.write(buf, 0, len);
                     }
                     contentValues.clear();
-                    contentValues.put(MediaStore.Images.Media.IS_PENDING, 0);
+                    contentValues.put(mediaType == EXTRA_MEDIA_TYPE_VIDEO ? MediaStore.Video.Media.IS_PENDING : MediaStore.Images.Media.IS_PENDING, 0);
                     contentResolver.update(uri, contentValues, null, null);
                     destinationFileUriString = uri.toString();
                 }
