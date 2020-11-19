@@ -58,13 +58,18 @@ public class GlideImageGetter implements Html.ImageGetter {
 
         BitmapDrawablePlaceholder drawable = new BitmapDrawablePlaceholder(textSize);
 
-        Context context = container.get().getContext();
-        if (!(context instanceof Activity && (((Activity) context).isFinishing() || ((Activity) context).isDestroyed()))) {
-            container.get().post(() -> Glide.with(context)
-                    .asBitmap()
-                    .load(source)
-                    .into(drawable));
-        }
+        container.get().post(() -> {
+            TextView textView = container.get();
+            if (textView != null) {
+                Context context = textView.getContext();
+                if (!(context instanceof Activity && (((Activity) context).isFinishing() || ((Activity) context).isDestroyed()))) {
+                    Glide.with(context)
+                            .asBitmap()
+                            .load(source)
+                            .into(drawable);
+                }
+            }
+        });
 
         return drawable;
     }
