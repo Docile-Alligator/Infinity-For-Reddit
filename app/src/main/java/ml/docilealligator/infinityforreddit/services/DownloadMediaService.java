@@ -33,12 +33,12 @@ import java.io.OutputStream;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.apis.DownloadFile;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.DownloadProgressResponseBody;
-import ml.docilealligator.infinityforreddit.events.DownloadMediaEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.apis.DownloadFile;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.events.DownloadMediaEvent;
 import ml.docilealligator.infinityforreddit.utils.NotificationUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import okhttp3.OkHttpClient;
@@ -133,9 +133,6 @@ public class DownloadMediaService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
-        notificationManager = NotificationManagerCompat.from(this);
-        builder = new NotificationCompat.Builder(this, getNotificationChannelId());
-
         downloadFinished = false;
         String fileUrl = intent.getStringExtra(EXTRA_URL);
         final String[] fileName = {intent.getStringExtra(EXTRA_FILE_NAME)};
@@ -143,32 +140,8 @@ public class DownloadMediaService extends Service {
         mediaType = intent.getIntExtra(EXTRA_MEDIA_TYPE, EXTRA_MEDIA_TYPE_IMAGE);
         mimeType = mediaType == EXTRA_MEDIA_TYPE_VIDEO ? "video/*" : "image/*";
 
-        final DownloadProgressResponseBody.ProgressListener progressListener = new DownloadProgressResponseBody.ProgressListener() {
-            long time = 0;
-
-            @Override public void update(long bytesRead, long contentLength, boolean done) {
-                if (!done) {
-                    if (contentLength != -1) {
-                        long currentTime = System.currentTimeMillis();
-                        if (currentTime - time > 1000) {
-                            time = currentTime;
-                            updateNotification(0, (int) ((100 * bytesRead) / contentLength), null);
-                        }
-                    }
-                }
-            }
-        };
-
-        OkHttpClient client = new OkHttpClient.Builder()
-                .addNetworkInterceptor(chain -> {
-                    okhttp3.Response originalResponse = chain.proceed(chain.request());
-                    return originalResponse.newBuilder()
-                            .body(new DownloadProgressResponseBody(originalResponse.body(), progressListener))
-                            .build();
-                })
-                .build();
-
-        retrofit = retrofit.newBuilder().client(client).build();
+        notificationManager = NotificationManagerCompat.from(this);
+        builder = new NotificationCompat.Builder(this, getNotificationChannelId());
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel;
@@ -200,6 +173,33 @@ public class DownloadMediaService extends Service {
                         createNotification(fileName[0])
                 );
         }
+
+        final DownloadProgressResponseBody.ProgressListener progressListener = new DownloadProgressResponseBody.ProgressListener() {
+            long time = 0;
+
+            @Override public void update(long bytesRead, long contentLength, boolean done) {
+                if (!done) {
+                    if (contentLength != -1) {
+                        long currentTime = System.currentTimeMillis();
+                        if (currentTime - time > 1000) {
+                            time = currentTime;
+                            updateNotification(0, (int) ((100 * bytesRead) / contentLength), null);
+                        }
+                    }
+                }
+            }
+        };
+
+        OkHttpClient client = new OkHttpClient.Builder()
+                .addNetworkInterceptor(chain -> {
+                    okhttp3.Response originalResponse = chain.proceed(chain.request());
+                    return originalResponse.newBuilder()
+                            .body(new DownloadProgressResponseBody(originalResponse.body(), progressListener))
+                            .build();
+                })
+                .build();
+
+        retrofit = retrofit.newBuilder().client(client).build();
 
         boolean separateDownloadFolder = mSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_FOLDER_FOR_EACH_SUBREDDIT, false);
 

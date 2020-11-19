@@ -39,12 +39,12 @@ import java.nio.ByteBuffer;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.apis.DownloadFile;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.DownloadProgressResponseBody;
-import ml.docilealligator.infinityforreddit.events.DownloadRedditVideoEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.apis.DownloadFile;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.events.DownloadRedditVideoEvent;
 import ml.docilealligator.infinityforreddit.utils.NotificationUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import okhttp3.OkHttpClient;
@@ -95,8 +95,29 @@ public class DownloadRedditVideoService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
+        String videoUrl = intent.getStringExtra(EXTRA_VIDEO_URL);
+        String audioUrl = videoUrl.substring(0, videoUrl.lastIndexOf('/')) + "/DASH_audio.mp4";
+        String subredditName = intent.getStringExtra(EXTRA_SUBREDDIT);
+        final String[] fileNameWithoutExtension = {subredditName + "-" + intent.getStringExtra(EXTRA_POST_ID)};
+
         notificationManager = NotificationManagerCompat.from(this);
         builder = new NotificationCompat.Builder(this, NotificationUtils.CHANNEL_ID_DOWNLOAD_REDDIT_VIDEO);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel serviceChannel;
+            serviceChannel = new NotificationChannel(
+                    NotificationUtils.CHANNEL_ID_DOWNLOAD_REDDIT_VIDEO,
+                    NotificationUtils.CHANNEL_DOWNLOAD_REDDIT_VIDEO,
+                    NotificationManager.IMPORTANCE_LOW
+            );
+
+            notificationManager.createNotificationChannel(serviceChannel);
+        }
+
+        startForeground(
+                NotificationUtils.DOWNLOAD_REDDIT_VIDEO_NOTIFICATION_ID,
+                createNotification(fileNameWithoutExtension[0] + ".mp4")
+        );
 
         final DownloadProgressResponseBody.ProgressListener progressListener = new DownloadProgressResponseBody.ProgressListener() {
             long time = 0;
@@ -124,27 +145,6 @@ public class DownloadRedditVideoService extends Service {
                 .build();
 
         retrofit = retrofit.newBuilder().client(client).build();
-
-        String videoUrl = intent.getStringExtra(EXTRA_VIDEO_URL);
-        String audioUrl = videoUrl.substring(0, videoUrl.lastIndexOf('/')) + "/DASH_audio.mp4";
-        String subredditName = intent.getStringExtra(EXTRA_SUBREDDIT);
-        final String[] fileNameWithoutExtension = {subredditName + "-" + intent.getStringExtra(EXTRA_POST_ID)};
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel serviceChannel;
-            serviceChannel = new NotificationChannel(
-                    NotificationUtils.CHANNEL_ID_DOWNLOAD_REDDIT_VIDEO,
-                    NotificationUtils.CHANNEL_DOWNLOAD_REDDIT_VIDEO,
-                    NotificationManager.IMPORTANCE_LOW
-            );
-
-            notificationManager.createNotificationChannel(serviceChannel);
-        }
-
-        startForeground(
-                NotificationUtils.DOWNLOAD_REDDIT_VIDEO_NOTIFICATION_ID,
-                createNotification(fileNameWithoutExtension[0] + ".mp4")
-        );
 
         DownloadFile downloadFile = retrofit.create(DownloadFile.class);
 
