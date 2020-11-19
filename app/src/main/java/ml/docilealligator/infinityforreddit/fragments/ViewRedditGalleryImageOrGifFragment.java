@@ -45,15 +45,15 @@ import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.BuildConfig;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 import ml.docilealligator.infinityforreddit.activities.ViewRedditGalleryActivity;
 import ml.docilealligator.infinityforreddit.asynctasks.SaveBitmapImageToFileAsyncTask;
 import ml.docilealligator.infinityforreddit.asynctasks.SaveGIFToFileAsyncTask;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SetAsWallpaperBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.post.Post;
-import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
-import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 
 public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 
@@ -129,8 +129,6 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                 final SubsamplingScaleImageView view = imageView.getSSIV();
 
                 if (view != null) {
-                    view.setMinimumDpi(80);
-
                     view.setOnImageEventListener(new SubsamplingScaleImageView.OnImageEventListener() {
                         @Override
                         public void onReady() {
@@ -139,7 +137,8 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 
                         @Override
                         public void onImageLoaded() {
-                            view.setDoubleTapZoomDpi(70);
+                            view.setMinimumDpi(80);
+                            view.setDoubleTapZoomDpi(240);
                             view.setDoubleTapZoomStyle(SubsamplingScaleImageView.ZOOM_FOCUS_FIXED);
                             view.setQuickScaleEnabled(true);
                         }

@@ -102,6 +102,8 @@ public class ViewImgurImageFragment extends Fragment {
                 isActionBarHidden = true;
             }
         });
+        imageView.setMinimumDpi(80);
+        imageView.setDoubleTapZoomDpi(240);
 
         errorLinearLayout.setOnClickListener(view -> {
             progressBar.setVisibility(View.VISIBLE);

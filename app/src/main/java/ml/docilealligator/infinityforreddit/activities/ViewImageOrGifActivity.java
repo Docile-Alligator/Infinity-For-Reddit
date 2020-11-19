@@ -52,22 +52,22 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.BuildConfig;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
+import ml.docilealligator.infinityforreddit.WallpaperSetter;
 import ml.docilealligator.infinityforreddit.asynctasks.SaveBitmapImageToFileAsyncTask;
 import ml.docilealligator.infinityforreddit.asynctasks.SaveGIFToFileAsyncTask;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SetAsWallpaperBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.font.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.font.FontFamily;
 import ml.docilealligator.infinityforreddit.font.FontStyle;
 import ml.docilealligator.infinityforreddit.font.TitleFontFamily;
 import ml.docilealligator.infinityforreddit.font.TitleFontStyle;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
-import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.WallpaperSetter;
 
 public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWallpaperCallback {
 
@@ -211,8 +211,6 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
                 final SubsamplingScaleImageView view = mImageView.getSSIV();
 
                 if (view != null) {
-                    view.setMinimumDpi(80);
-
                     view.setOnImageEventListener(new SubsamplingScaleImageView.OnImageEventListener() {
                         @Override
                         public void onReady() {
@@ -221,7 +219,8 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
 
                         @Override
                         public void onImageLoaded() {
-                            view.setDoubleTapZoomDpi(70);
+                            view.setMinimumDpi(80);
+                            view.setDoubleTapZoomDpi(240);
                             view.setDoubleTapZoomStyle(SubsamplingScaleImageView.ZOOM_FOCUS_FIXED);
                             view.setQuickScaleEnabled(true);
                         }
