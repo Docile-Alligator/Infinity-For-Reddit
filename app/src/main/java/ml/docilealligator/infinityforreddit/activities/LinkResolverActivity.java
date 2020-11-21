@@ -139,20 +139,11 @@ public class LinkResolverActivity extends AppCompatActivity {
                                     deepLinkError(uri);
                                 }
                             } else if (path.matches(SUBREDDIT_PATTERN)) {
-                                String subredditName = path.substring(3);
-                                if (subredditName.equals("popular") || subredditName.equals("all")) {
-                                    Intent intent = new Intent(this, MainActivity.class);
-                                    intent.putExtra(MainActivity.EXTRA_POST_TYPE, subredditName);
-                                    intent.putExtra(MainActivity.EXTRA_MESSSAGE_FULLNAME, messageFullname);
-                                    intent.putExtra(MainActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
-                                    startActivity(intent);
-                                } else {
-                                    Intent intent = new Intent(this, ViewSubredditDetailActivity.class);
-                                    intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, path.substring(3));
-                                    intent.putExtra(ViewSubredditDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
-                                    intent.putExtra(ViewSubredditDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
-                                    startActivity(intent);
-                                }
+                                Intent intent = new Intent(this, ViewSubredditDetailActivity.class);
+                                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, path.substring(3));
+                                intent.putExtra(ViewSubredditDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
+                                intent.putExtra(ViewSubredditDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
+                                startActivity(intent);
                             } else if (path.matches(USER_PATTERN)) {
                                 Intent intent = new Intent(this, ViewUserDetailActivity.class);
                                 intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, segments.get(1));

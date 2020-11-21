@@ -112,7 +112,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         PostTypeBottomSheetFragment.PostTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback,
         ActivityToolbarInterface, FABMoreOptionsBottomSheetFragment.FABOptionSelectionCallback, RandomBottomSheetFragment.RandomOptionSelectionCallback {
 
-    static final String EXTRA_POST_TYPE = "EPT";
     static final String EXTRA_MESSSAGE_FULLNAME = "ENF";
     static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
 
@@ -843,15 +842,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 adapter.updateKarma(account.getKarma());
             }
         });
-
-        if (getIntent().hasExtra(EXTRA_POST_TYPE)) {
-            String type = getIntent().getStringExtra(EXTRA_POST_TYPE);
-            if (type != null && type.equals("popular")) {
-                viewPager2.setCurrentItem(1);
-            } else {
-                viewPager2.setCurrentItem(2);
-            }
-        }
 
         loadUserData();
 
