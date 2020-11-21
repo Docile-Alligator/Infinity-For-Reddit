@@ -31,6 +31,7 @@ public class Translation {
         translationContributors.add(new Translation("日本語", "Hira, Issa, Mrigendra Bhandari, Ryan", R.drawable.flag_japan));
         translationContributors.add(new Translation("한국어", "noname", R.drawable.flag_south_korea));
         translationContributors.add(new Translation("norsk", "", R.drawable.flag_norway));
+        translationContributors.add(new Translation("Polskie", "Chupacabra, Maks", R.drawable.flag_poland));
         translationContributors.add(new Translation("Português", "Bruno Guerreiro, Lucas, Ricky", R.drawable.flag_portugal));
         translationContributors.add(new Translation("Português (BR)", "., Laura Vasconcellos Pereira Felippe, Ricardo, Ricky, Super_Iguanna", R.drawable.flag_brazil));
         translationContributors.add(new Translation("Română", "Loading Official", R.drawable.flag_romania));
