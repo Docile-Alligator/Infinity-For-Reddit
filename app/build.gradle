@@ -1,6 +1,17 @@
 apply plugin: 'com.android.application'
 
 android {
+        signingConfigs {
+        'Default' {
+            Properties keystoreProperties = new Properties()
+            keystoreProperties.load(new FileInputStream(file('keystore.conf')))
+
+            storeFile keystoreProperties['storeFile'] ? file(keystoreProperties['storeFile']) : null
+            storePassword keystoreProperties['storePassword']
+            keyAlias keystoreProperties['keyAlias']
+            keyPassword keystoreProperties['keyPassword']
+        }
+    }
     compileSdkVersion 30
     defaultConfig {
         applicationId "ml.docilealligator.infinityforreddit"
@@ -14,6 +25,7 @@ android {
                 arguments = [ eventBusIndex : 'ml.docilealligator.infinityforreddit.EventBusIndex' ]
             }
         }
+        resValue "string", "application_name" , "Infinity"
     }
     buildTypes {
         release {
@@ -27,10 +39,46 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            jniDebuggable true
+            renderscriptDebuggable true
+            versionNameSuffix 'DEBUG'
+            renderscriptOptimLevel 0
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        minifiedDebug {
+            debuggable true
+            jniDebuggable true
+            renderscriptDebuggable true
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+    }
+    flavorDimensions 'Build Types'
+    productFlavors {
+        Development {
+            dimension 'Build Types'
+            signingConfig signingConfigs.'Default'
+            applicationIdSuffix '.development'
+            versionNameSuffix 'd'
+            resValue "string", "application_name" , "Infinity Development"
+        }
+        Beta {
+            dimension 'Build Types'
+            versionNameSuffix 'b'
+            applicationIdSuffix '.beta'
+            resValue "string", "application_name" , "Infinity Beta"
+            signingConfig signingConfigs.'Default'
+        }
+        Production {
+            dimension 'Build Types'
+            signingConfig signingConfigs.'Default'
+        }
     }
 }
 
