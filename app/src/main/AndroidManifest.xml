@@ -366,7 +366,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="ml.docilealligator.infinityforreddit.provider"
+            android:authorities="ml.docilealligator.${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
