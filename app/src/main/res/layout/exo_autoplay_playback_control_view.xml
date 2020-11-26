@@ -5,7 +5,8 @@
     android:layout_height="wrap_content"
     android:paddingStart="16dp"
     android:paddingEnd="8dp"
-    android:layout_gravity="bottom">
+    android:layout_gravity="bottom"
+    android:background="@drawable/gradient_background_autoplay">
 
     <TextView android:id="@id/exo_position"
         android:layout_width="wrap_content"
