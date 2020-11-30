@@ -507,6 +507,7 @@
     <string name="settings_swipe_action_swipe_left_title">Swipe Left</string>
     <string name="settings_swipe_action_swipe_right_title">Swipe Right</string>
     <string name="settings_swipe_action_info_summary">Not applicable to post feed with more than 1 column or post detail.</string>
+    <string name="settings_language_title">Language</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

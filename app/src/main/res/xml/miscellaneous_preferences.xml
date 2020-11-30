@@ -25,4 +25,13 @@
         app:title="@string/settings_respect_subreddit_recommended_comment_sort_type_title"
         app:summary="@string/settings_respect_subreddit_recommended_comment_sort_type_summary" />
 
+    <ListPreference
+        app:defaultValue="auto"
+        app:entries="@array/settings_language"
+        app:entryValues="@array/settings_language_values"
+        app:key="language"
+        app:icon="@drawable/ic_language_24dp"
+        app:title="@string/settings_language_title"
+        app:useSimpleSummaryProvider="true" />
+
 </PreferenceScreen>

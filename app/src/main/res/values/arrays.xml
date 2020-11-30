@@ -295,4 +295,32 @@
         <item>1</item>
     </string-array>
 
+    <string-array name="settings_language">
+        <item>Auto</item>
+        <item>Hrvatski</item>
+        <item>English</item>
+        <item>Française</item>
+        <item>Deutsche</item>
+        <item>हिंदी</item>
+        <item>Italiana</item>
+        <item>日本語</item>
+        <item>Português (BR)</item>
+        <item>Español</item>
+        <item>Türkçe</item>
+    </string-array>
+
+    <string-array name="settings_language_values">
+        <item>auto</item>
+        <item>hr</item>
+        <item>en</item>
+        <item>fr</item>
+        <item>de</item>
+        <item>hi</item>
+        <item>it</item>
+        <item>ja</item>
+        <item>pt-rBR</item>
+        <item>es</item>
+        <item>tr-rTR</item>
+    </string-array>
+
 </resources>
