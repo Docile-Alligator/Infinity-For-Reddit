@@ -21,7 +21,7 @@
     <string name="custom_theme_listing_activity_label">"Özel Temalar"</string>
     <string name="customize_theme_activity_label">"Temayı Özelleştir"</string>
     <string name="customize_theme_activity_create_theme_label">"Tema Oluştur"</string>
-    <string name="theme_preview_activity_label">"Tema Önizleme"</string>
+    <string name="theme_preview_activity_label">"Tema Önizlemesi"</string>
     <string name="edit_multi_reddit_activity_label">"Multireddit'i Düzenle"</string>
     <string name="selected_subeddits_activity_label">"Seçili Subredditler"</string>
     <string name="report_activity_label">"Bildir"</string>
@@ -33,14 +33,14 @@
     <string name="view_reddit_gallery_activity_video_label">"Video %1$d/%2$d"</string>
     <string name="navigation_drawer_open">"Gezinme çekmecesini aç"</string>
     <string name="navigation_drawer_close">"Gezinme çekmecesini kapat"</string>
-    <string name="action_download">"İndirilenler"</string>
+    <string name="action_download">"İndir"</string>
     <string name="action_refresh">"Yenile"</string>
     <string name="action_add_comment">"Yorum yap"</string>
     <string name="action_save_post">"Gönderiyi Kaydet"</string>
     <string name="action_view_crosspost_parent">"Çapraz Gönderi kaynağı"</string>
     <string name="action_search">"Arama"</string>
-    <string name="action_start_lazy_mode">"Uyuşuk Modu'nu Başlat"</string>
-    <string name="action_stop_lazy_mode">"Uyuşuk Modu'nu Durdur"</string>
+    <string name="action_start_lazy_mode">"Uyuşuk Modu Başlat"</string>
+    <string name="action_stop_lazy_mode">"Uyuşuk Modu Durdur"</string>
     <string name="action_send">"Gönder"</string>
     <string name="action_sort">"Sırala"</string>
     <string name="action_hide_post">"Gönderiyi Gizle"</string>
@@ -89,7 +89,7 @@ Tekrar denemek için tıklayın."</string>
 Tekrar denemek için tıklayın."</string>
     <string name="retry">"Tekrar dene"</string>
     <string name="comments">"Yorumlar"</string>
-    <string name="no_comments_yet">"Henüz yorum yapılmamış, ilk yorumu yapan siz olun."</string>
+    <string name="no_comments_yet">"Henüz yorum yok, ilk yorumu yapan siz olun."</string>
     <string name="vote_failed">"Oylama başarısız oldu"</string>
     <string name="refresh_post_failed">"Gönderi yenilenirken hata oluştu"</string>
     <string name="load_messages_failed">"Mesajlar yüklenirken hata oluştu.
@@ -144,7 +144,7 @@ This translation does it work well in this kinda format. People use "since" in s
     <string name="write_comment_hint">"Buradaki ilginç düşünceleriniz"</string>
     <string name="comment_content_required">"İlginç düşünceniz nerede?"</string>
     <string name="sending_comment">"Gönderiliyor"</string>
-    <string name="send_comment_success">"Yorum gönder"</string>
+    <string name="send_comment_success">"Yorum gönderildi"</string>
     <string name="send_comment_failed">"Bu yorum gönderilemedi"</string>
     <string name="send_message_username_hint">"Kullanıcı"</string>
     <string name="send_message_subject_hint">"Konu (maks 100 karakter)"</string>
@@ -176,10 +176,10 @@ This translation does it work well in this kinda format. People use "since" in s
     <string name="post_link_hint">"Bağlantı Adresi"</string>
     <string name="subreddits">"Subredditler"</string>
     <string name="users">"Kullanıcılar"</string>
-    <string name="multi_reddits">"MultiRedditler"</string>
+    <string name="multi_reddits">"MultiRedditlr"</string>
     <string name="bottom_sheet_post_text">"Metin"</string>
     <string name="bottom_sheet_post_link">"Bağlantı"</string>
-    <string name="bottom_sheet_post_image">"Görüntü"</string>
+    <string name="bottom_sheet_post_image">"Fotoğraf"</string>
     <string name="bottom_sheet_post_video">"Video"</string>
     <string name="select_from_gallery">"Bir resim seçin"</string>
     <string name="select_again">"Tekrar seçin"</string>
@@ -201,7 +201,7 @@ Tekrar denemek için tıklayın."</string>
     <string name="error_loading_rules_without_retry">"Kuralllar Yüklenirken Hata Oluştu"</string>
     <string name="search_in">"Arama"</string>
     <string name="all_subreddits">"Tüm subredditler"</string>
-    <string name="sort_best">"En iyileri"</string>
+    <string name="sort_best">"Enler"</string>
     <string name="sort_hot">"Sıcak"</string>
     <string name="sort_new">"Yeni"</string>
     <string name="sort_random">"Rastgele"</string>
@@ -234,19 +234,19 @@ Tekrar denemek için tıklayın."</string>
     <string name="video">"VİDEO"</string>
     <string name="gif">"GIF"</string>
     <string name="gallery">"GALERİ"</string>
-    <string name="best">"En iyileri"</string>
+    <string name="best">"Enler"</string>
     <string name="search">"Arama"</string>
     <string name="posting_video">"Video Paylaşılıyor"</string>
-    <string name="posting_image">"Görüntü Paylaşılıyor"</string>
+    <string name="posting_image">"Fotoğraf Paylaşılıyor"</string>
     <string name="please_wait">"Lütfen bekleyin."</string>
     <string name="add_account">"Hesap ekle"</string>
     <string name="anonymous_account">"Anonim"</string>
     <string name="log_out">"Çıkış yap"</string>
-    <string name="press_here_to_login">"Giriş yapmak için buraya basınız"</string>
+    <string name="press_here_to_login">"Giriş yapmak için basın"</string>
     <string name="login_first">"Önce giriş yap"</string>
     <string name="post_saved_success">"Gönderi kaydedildi"</string>
     <string name="post_saved_failed">"Gönderi kaydedilemiyor"</string>
-    <string name="post_unsaved_success">"Gönderiyi kaydetme"</string>
+    <string name="post_unsaved_success">"Gönderi kaydedilmedi"</string>
     <string name="post_unsaved_failed">"Gönderinin kaydı kaldırılamıyor"</string>
     <string name="post_hide_success">"Gönderi gizlendi"</string>
     <string name="post_hide_failed">"Gönderi gizlenemiyor"</string>
@@ -266,8 +266,8 @@ Tekrar denemek için tıklayın."</string>
     <string name="show_removed_post_failed">"Kaldırılan gönderi bulunamadı"</string>
     <string name="cancel">"İptal"</string>
     <string name="ok">"Tamam"</string>
-    <string name="edit_success">"Düzenleme başarılı"</string>
-    <string name="delete_post_success">"Silinme Başarılı"</string>
+    <string name="edit_success">"Başarıyla düzenlendi"</string>
+    <string name="delete_post_success">"Başarıyla silindi"</string>
     <string name="delete_post_failed">"Silinemedi"</string>
     <string name="mark_nsfw_success">"NSFW başarıyla işaretlendi"</string>
     <string name="mark_nsfw_failed">"NSFW işaretlenemedi"</string>
@@ -293,22 +293,22 @@ Tekrar denemek için tıklayın."</string>
     <string name="account_switched">"Hesap Değiştirildi. Yani tüm diğer sayfalar da gitti."</string>
     <string name="settings_notification_master_title">"Bildirimler"</string>
     <string name="settings_notification_enable_notification_title">"Bildirimleri Etkinleştir"</string>
-    <string name="settings_notification_interval_title">"Bildirim Aralığını Kontrol Edin"</string>
+    <string name="settings_notification_interval_title">"Bildirim Aralığını Ayarla"</string>
     <string name="settings_theme_title">"Tema"</string>
     <string name="settings_amoled_dark_title">"Koyu Amoled"</string>
     <string name="settings_interface_title">"Arayüz"</string>
     <string name="settings_gestures_and_buttons_title">"İşaretler ve Düğmeler"</string>
     <string name="settings_save_front_page_scrolled_position_title">"Ana Sayfada Kaydırma Konumunu Kaydet"</string>
-    <string name="settings_save_front_page_scrolled_position_summary">"Ana Sayfa yenilendikten sonra yeni gönderilere göz atın (Ön Sayfa, sıralama türü: En İyileri)"</string>
-    <string name="settings_open_link_in_app_title">"Bağlantıyı Uygulamada Aç"</string>
+    <string name="settings_save_front_page_scrolled_position_summary">"Ana Sayfa yenilendikten sonra yeni gönderilere göz atın (Ön Sayfa, sıralama türü: Enler)"</string>
+    <string name="settings_open_link_in_app_title">"Bağlantıları Uygulamada Aç"</string>
     <string name="settigns_video_title">"Video"</string>
     <string name="settings_video_autoplay_title">"Otomatik Video Oynatma"</string>
-    <string name="settings_mute_autoplaying_videos_title">"Otomatik Oynatılan Videoların Sesini Kapat"</string>
+    <string name="settings_mute_autoplaying_videos_title">"Otomatik Oynatılan Videoları Sessize Al"</string>
     <string name="settings_autoplay_nsfw_videos_title">"NSFW Videolarını Otomatik Oynat"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Otomatik Oynatılan Videoların Görünür Alan Uzaklığı (Dikey)"</string>
-    <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"Videoları %1$d%% göründüğünde otomatik oynatmaya başlayın"</string>
+    <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"Videoları %1$d%% göründüğünde otomatik oynatmaya başla"</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">"Otomatik Oynatılan Videoların Görünür Alan Uzaklığı (Yatay)"</string>
-    <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Videoları %1$d%% göründüğünde otomatik oynatmaya başlayın"</string>
+    <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Videoları %1$d%% göründüğünde otomatik oynatmaya başla"</string>
     <string name="settings_immersive_interface_title">"Sürükleyici Arayüz"</string>
     <string name="settings_immersive_interface_summary">"Tüm Sayfalara Uygulanamaz"</string>
     <string name="settings_immersive_interface_ignore_nav_bar_title">"Sürükleyici Arayüzde Navigasyon Çubuğunu Yoksay"</string>
@@ -316,7 +316,7 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_customize_tabs_in_main_page_title">"Ana Sayfadaki Sekmeleri Özelleştirin"</string>
     <string name="settings_enable_bottom_app_bar_title">"Alt Navigasyonu Etkinleştir"</string>
     <string name="settings_enable_bottom_app_bar_summary">"Anonim Modda Etkisi Yok"</string>
-    <string name="settings_category_post_and_comment_title">"Yayınla ve Yorum Yap"</string>
+    <string name="settings_category_post_and_comment_title">"Gönderi ve Yorum"</string>
     <string name="settings_vote_buttons_on_the_right_title">"Sağdaki Oy Düğmeleri"</string>
     <string name="settings_volume_keys_navigate_comments_title">"Gönderilerdeki Yorumlarda Gezinmek İçin Ses Tuşlarını Kullanın"</string>
     <string name="settings_volume_keys_navigate_posts_title">"Gönderilerde Gezinmek İçin Ses Tuşlarını Kullanın"</string>
@@ -325,8 +325,8 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_automatically_try_redgifs_title">"Gfycat'taki Videolar Kaldırılırsa Redgif'lere Erişmeyi Otomatik Olarak Deneyin."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Video Oynatıcısındaki Navigasyon Çubuğunu Yoksay"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Video Denetleyicisinde Fazladan Kenar Olmasını Önleyin"</string>
-    <string name="settings_confirm_to_exit">"Çıkmayı Onayla"</string>
-    <string name="settings_category_comment_title">"Yorum yap"</string>
+    <string name="settings_confirm_to_exit">"Çıkışı Doğrula"</string>
+    <string name="settings_category_comment_title">"Yorum"</string>
     <string name="settings_show_top_level_comments_first_title">"Önce En İyi Yorumları Göster"</string>
     <string name="settings_show_comment_divider_title">"Yorum Bölücüsünü Göster"</string>
     <string name="settings_comment_toolbar_hide_on_click">"Yorum Araç Çubuğunu Göstermek / Gizlemek İçin Tıklayın"</string>
@@ -339,7 +339,7 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_default_post_layout">"Varsayılan Gönderi Düzeni"</string>
     <string name="settings_show_divider_in_compact_layout">"Bölücüyü Kompakt Düzende Göster"</string>
     <string name="settings_show_thumbnail_on_the_left_in_compact_layout">"Kompakt Düzende Soldaki Küçük Resmi Göster"</string>
-    <string name="settings_swap_tap_and_long_title">"Yorumlarda Dokunmayı ve Uzunca Basmayı Değiştirme"</string>
+    <string name="settings_swap_tap_and_long_title">"Yorumlarda Dokunmayı ve Uzun Dokunmayı Değiştirme"</string>
     <string name="settings_swipe_to_go_back_title">"Geri Dönmek İçin Sağa Kaydırın"</string>
     <string name="settings_swipe_to_go_back_summary">"Tüm Sayfalara Uygulanamaz"</string>
     <string name="settings_lock_jump_to_next_top_level_comment_button_title">"Bir Sonraki En İyi Yorumlar Düğmesine Geçmeyi Kilitle"</string>
@@ -359,17 +359,17 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_content_font_size_title">"İçeriğin Yazı Tipi Boyutu"</string>
     <string name="settings_enable_nsfw_title">"NSFW'yi Etkinleştir"</string>
     <string name="settings_blur_nsfw_title">"NSFW Görüntülerini Bulanıklaştır"</string>
-    <string name="settings_blur_spoiler_title">"Spoiler Görüntüleri Bulanıklaştır"</string>
+    <string name="settings_blur_spoiler_title">"Spoiler Görüntülerini Bulanıklaştır"</string>
     <string name="settings_about_master_title">"Hakkında"</string>
-    <string name="settings_acknowledgement_master_title">"Alındı"</string>
+    <string name="settings_acknowledgement_master_title">"Özel Teşekkürler"</string>
 
     <!-- Neyi kastettiğini anlamadığım için böyle bıraktım. -->
-    <string name="settings_credits_master_title">"Ön Bilgiler"</string>
+    <string name="settings_credits_master_title">"Alınanlar"</string>
     <string name="settings_credits_icon_foreground_title">"Ön Plan Simgesi"</string>
     <string name="settings_credits_icon_foreground_summary">"Freepik tarafından oluşturulan teknoloji vektörü - www.freepik.com"</string>
     <string name="settings_credits_icon_background_title">"Arka Plan Simgesi"</string>
     <string name="settings_credits_icon_background_summary">"Freepik tarafından oluşturulan arka plan vektörü - www.freepik.com"</string>
-    <string name="settings_credits_error_image_title">"Görüntü Hatası"</string>
+    <string name="settings_credits_error_image_title">"Hata Görüntüsü"</string>
     <string name="settings_credits_error_image_summary">"Freepik tarafından oluşturulan teknoloji vektörü - www.freepik.com"</string>
     <string name="settings_credits_gilded_icon_title">"Yaldızlı Simge"</string>
     <string name="settings_credits_gilded_icon_summary">"Freepik tarafından www.flaticon.com adresinden yapılan simge"</string>
@@ -381,7 +381,7 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_credits_best_rocket_icon_summary">"Freepik tarafından www.flaticon.com adresinden yapılan simge"</string>
     <string name="settings_credits_material_icons_title">"Materyal Simgeleri"</string>
     <string name="settings_open_source_title">"Açık Kaynak"</string>
-    <string name="settings_open_source_summary">"Bu uygulamayı beğendiyseniz Github'da yıldız ekleyin"</string>
+    <string name="settings_open_source_summary">"Bu uygulamayı beğendiyseniz Github'da yıldız verin"</string>
     <string name="settings_rate_title">"Google Play'de Değerlendirin"</string>
     <string name="settings_rate_summary">"Bize 5 yıldız verirseniz gerçekten mutlu oluruz."</string>
     <string name="settings_f_droid_title">"F-Droid"</string>
@@ -406,7 +406,7 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Veritabanındaki Tüm Subredditleri Sil"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Veritabanındaki Tüm Kullanıcıları Sil"</string>
     <string name="settings_delete_all_sort_type_data_in_database_title">"Veritabanındaki Tüm Sıralama Türlerini Sil"</string>
-    <string name="settings_delete_all_post_layout_data_in_database_title">"Veritabanındaki Tüm Gönderi Düzenlemelerini Sil"</string>
+    <string name="settings_delete_all_post_layout_data_in_database_title">"Veritabanındaki Tüm Gönderi Düzenlerini Sil"</string>
     <string name="settings_delete_all_themes_in_database_title">"Veritabanındaki Tüm Temaları Sil"</string>
     <string name="settings_delete_front_page_scrolled_positions_in_database_title">"Veritabanındaki Tüm Ön Sayfa Kaydırma Konumlarını Sil"</string>
     <string name="settings_reset_all_settings_title">"Tüm Ayarları Sıfırla"</string>
@@ -425,8 +425,8 @@ Tekrar denemek için tıklayın."</string>
     <string name="exit_when_submit_post_detail">"Buradan ayrılsanız bile gönderi gönderilecektir."</string>
     <string name="exit_when_edit_post_detail">"Buradan ayrılsanız bile gönderi gönderilebilir."</string>
     <string name="exit_when_edit_comment_detail">"Buradan ayrılsanız bile yorum gönderilebilir."</string>
-    <string name="discard">"Atılsın mı?"</string>
-    <string name="discard_detail">"Tüm taslak Kaydedilmeyecektir."</string>
+    <string name="discard">"Kaldırılsın mı?"</string>
+    <string name="discard_detail">"Taslağın tümü kaydedilmeyecektir."</string>
     <string name="yes">"Evet"</string>
     <string name="no">"Hayır"</string>
     <string name="no_data_received">"Hiç veri alınmadı"</string>
@@ -438,12 +438,12 @@ Tekrar denemek için tıklayın."</string>
     <string name="no_app">"Hiç kullanılabilir uygulama yok"</string>
     <string name="comment_saved_success">"Yorum kaydedildi"</string>
     <string name="comment_saved_failed">"Yorum kaydedilemiyor"</string>
-    <string name="comment_unsaved_success">"Yorum kaydedilemedi"</string>
+    <string name="comment_unsaved_success">"Yorum kaydedilmedi"</string>
     <string name="comment_unsaved_failed">"Yorumun kaydı kaldırılamıyor"</string>
     <string name="favorites">"Favoriler"</string>
     <string name="all">"Tümü"</string>
     <string name="post_layout_card">"Kart Düzeni"</string>
-    <string name="post_layout_compact">"Kompakt Düzen"</string>
+    <string name="post_layout_compact">"Kompakt Düzeni"</string>
     <string name="elapsed_time_just_now">"Şimdi"</string>
     <string name="elapsed_time_a_minute_ago">"1 Dakika"</string>
     <string name="elapsed_time_minutes_ago">"%1$d Dakika"</string>
@@ -584,9 +584,11 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_downvoted_color">"Olumsuz Oylananlar Rengi"</string>
     <string name="theme_item_downvoted_color_detail">"Uygulanan: Oy düğmeleri ve puanları (olumsuz oylananlar)"</string>
     <string name="theme_item_post_type_background_color">"Gönderi Türü Arka Plan Rengi"</string>
-    <string name="theme_item_post_type_background_color_detail">"Uygulanan: Gönderi türü arka planı (GÖRÜNTÜ, METİN, VİDEO, GIF, BAĞLANTI)"</string>
+    <string name="theme_item_post_type_background_color_detail">"Uygulanan: Gönderi türü arka planı
+(FOTOĞRAF, METİN, VİDEO, GIF, BAĞLANTI)"</string>
     <string name="theme_item_post_type_text_color">"Gönderi Türü Metin Rengi"</string>
-    <string name="theme_item_post_type_text_color_detail">"Uygulanan: Gönderi türü metin rengi (GÖRÜNTÜ, METİN, VİDEO, GIF, BAĞLANTI)"</string>
+    <string name="theme_item_post_type_text_color_detail">"Uygulanan: Gönderi türü metin rengi
+(FOTOĞRAF, METİN, VİDEO, GIF, BAĞLANTI)"</string>
     <string name="theme_item_spoiler_background_color">"Spoiler Arka Plan Rengi"</string>
     <string name="theme_item_spoiler_background_color_detail">"Uygulanan: Spoiler etiketinin arka planı"</string>
     <string name="theme_item_spoiler_text_color">"Spoiler Metin Rengi"</string>
@@ -658,15 +660,15 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="user_themes">"Temalarınız"</string>
     <string name="no_theme_name">"Bu temanın adı nedir?"</string>
     <string name="theme_name_hint">"Tema Adı"</string>
-    <string name="theme_name_indigo">"Çivit Mavisi"</string>
-    <string name="theme_name_indigo_dark">"Koyu Çivit Mavisi"</string>
-    <string name="theme_name_indigo_amoled">"Amoled Çivit Mavisi"</string>
-    <string name="theme_name_white">"Ak"</string>
-    <string name="theme_name_white_dark">"Koyu Ak"</string>
-    <string name="theme_name_white_amoled">"Amoled Ak"</string>
-    <string name="theme_name_red">"Kızıl"</string>
-    <string name="theme_name_red_dark">"Koyu Kızıl"</string>
-    <string name="theme_name_red_amoled">"Amoled Kızıl"</string>
+    <string name="theme_name_indigo">"Açık Mavi"</string>
+    <string name="theme_name_indigo_dark">"Koyu Mavi"</string>
+    <string name="theme_name_indigo_amoled">"Amoled Mavi"</string>
+    <string name="theme_name_white">"Beyaz"</string>
+    <string name="theme_name_white_dark">"Koyu Beyaz"</string>
+    <string name="theme_name_white_amoled">"Amoled Beyaz"</string>
+    <string name="theme_name_red">"Kırmızı"</string>
+    <string name="theme_name_red_dark">"Koyu Kırmızı"</string>
+    <string name="theme_name_red_amoled">"Amoled Kırmızı"</string>
     <string name="theme_name_dracula">"Drakula"</string>
     <string name="theme_name_calm_pastel">"Pastel Rengi"</string>
     <string name="create_light_theme">"Çivit Mavisi Renginde
@@ -708,7 +710,7 @@ Amoled Tema Tabanı Oluştur"</string>
     <string name="secondary_text_preview">"İkincil Metin"</string>
     <string name="post_title_preview">"Bu bir gönderidir"</string>
     <string name="post_content_preview">"Bu yerçekimi şakası biraz eskimeye başlasada ona her seferinde düşüyorum."</string>
-    <string name="post_type_preview">"PAYLAŞ"</string>
+    <string name="post_type_preview">"GÖNDERİ"</string>
     <string name="flair_preview">"Etiket"</string>
     <string name="awards_preview">"4 Ödül"</string>
     <string name="author_flair_preview">"Yazar Etiketi"</string>
@@ -783,7 +785,7 @@ Sekmeler, başkalarına geçtikten sonra tüm içeriği kaybedebilir. Bu, sayfay
     <string name="settings_more_tabs_show_favorite_subscribed_subreddits_title">"Favori Subreddit Aboneliklerini Göster"</string>
     <string name="settings_more_tabs_show_subscribed_subreddits_title">"Subreddit Aboneliklerini Göster"</string>
     <string name="settings_download_location_title">"İndirme Konumu"</string>
-    <string name="settings_image_download_location_title">"Görüntü İndirme Konumu"</string>
+    <string name="settings_image_download_location_title">"Fotoğraf İndirme Konumu"</string>
     <string name="settings_gif_download_location_title">"GIF İndirme Konumu"</string>
     <string name="settings_video_download_location_title">"Video İndirme Konumu"</string>
     <string name="settings_separate_folder_for_each_subreddit">"Her Subreddit için Ayrı Klasör"</string>
@@ -794,7 +796,7 @@ Sekmeler, başkalarına geçtikten sonra tüm içeriği kaybedebilir. Bu, sayfay
     <string name="settings_pull_to_refresh_title">"Yenilemek İçin Çektir"</string>
     <string name="settings_security_title">"Güvenlik"</string>
     <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Gezinme Çekmecesinde Hesap Bölümüne Gitmek İçin Kimlik Doğrulaması İste"</string>
-    <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Araç Çubuğunu Kompakt Düzende Gizlemek İçin Uzunca Basın"</string>
+    <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Araç Çubuğunu Kompakt Düzende Gizlemek İçin Uzun Dokunun"</string>
     <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"Varsayılan Gizli Düzende Araç Çubuğu"</string>
     <string name="settings_customize_bottom_app_bar_title">"Alt Navigasyon Çubuğunu Özelleştir"</string>
     <string name="settings_main_activity_bottom_app_bar_group_summary">"Ana Sayfa"</string>
@@ -809,8 +811,7 @@ Sekmeler, başkalarına geçtikten sonra tüm içeriği kaybedebilir. Bu, sayfay
 
     <!-- Fuzzy -->
     <string name="settings_data_saving_mode_info_summary">"Veri tasarrufu modunda:
-Önizleme görüntüleri daha düşük çözünürlükte olur.
-Reddit videoları daha düşük çözünürlükte olur."</string>
+Önizleme görüntüleri ve Reddit videoları daha düşük çözünürlükte olur."</string>
     <string name="settings_translation_title">"Çeviri"</string>
     <string name="settings_translation_summary">"POEditor'da bu uygulamayı çevirin. Tüm katkıda bulunanlara teşekkürler."</string>
     <string name="settings_credits_national_flags">"Ulusal Bayraklar"</string>
@@ -821,7 +822,7 @@ Reddit videoları daha düşük çözünürlükte olur."</string>
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"İndirme başarısız: hedef dizine erişilemiyor"</string>
     <string name="downloading_media_failed_cannot_download_media">"İndirme başarısız"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"İndirme başarısız: dosya hedef dizine kaydedilemiyor"</string>
-    <string name="view_full_comment_markdown">"Tam İndirimi Görüntüle"</string>
+    <string name="view_full_comment_markdown">"Tüm Markdown'u Görüntüle"</string>
     <string name="select_user_flair_success">"Kullanıcı etiketi seçildi"</string>
     <string name="select_this_user_flair">"Bu kullanıcı etiketi seçilsin mi?"</string>
     <string name="select_header_size">"Başlık Boyutunu Seçin"</string>
@@ -832,7 +833,7 @@ Reddit videoları daha düşük çözünürlükte olur."</string>
     <string name="link_hint">"Bağlantı"</string>
     <string name="unlock_account_section">"Hesap Bölümünün Kilidini Aç"</string>
     <string name="unlock">"Kilidini Aç"</string>
-    <string name="submit_post">"Gönderiyi Paylaş"</string>
+    <string name="submit_post">"Gönderi Paylaş"</string>
     <string name="refresh">"Yenile"</string>
     <string name="change_sort_type">"Sıralama Türünü Değiştir"</string>
     <string name="change_post_layout">"Gönderi Düzenini Değiştir"</string>
@@ -859,7 +860,7 @@ Reddit videoları daha düşük çözünürlükte olur."</string>
     <string name="fetch_random_thing_failed">"Daha sonra tekrar deneyin"</string>
     <string name="downloading">"İndiriliyor"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all ve r/popular"</string>
-    <string name="settings_miscellaneous_title">"Karışık"</string>
+    <string name="settings_miscellaneous_title">"Diğerleri"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_title">"İlgili Subreddit Önerilen Yorum Sıralaması Türü"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_summary">"Yorum sıralaması türü kaydedilemedi"</string>
     <string name="settings_filter_title">"Filtrele"</string>
@@ -867,4 +868,14 @@ Reddit videoları daha düşük çözünürlükte olur."</string>
     <string name="settings_subreddit_filter_popular_and_all">"r/popular ve r/all"</string>
     <string name="settings_credits_ufo_capturing_animation_title">"UFO Yakalama Animasyonu"</string>
     <string name="select_video_quality">"Video Kalitesini Seçin"</string>
+    <string name="settings_swipe_action_haptic_feedback_title">"Dokunsal Geribildirim"</string>
+    <string name="settings_hide_subreddit_description_title">"Subreddit Açıklamasını Gizle"</string>
+    <string name="settings_disable_image_preview_title">"Veri Tasarrufu Modunda Görüntüleri Önizlemeyi Devre Dışı Bırak"</string>
+    <string name="settings_swipe_action_swipe_left_title">"Sola Kaydır"</string>
+    <string name="settings_swipe_action_swipe_right_title">"Sağa Kaydır"</string>
+    <string name="settings_swipe_action_info_summary">"1'den fazla sütun veya gönderi ayrıntısı içeren yayın feed'i için geçerli değildir."</string>
+    <string name="theme_item_no_preview_post_type_icon_tint">"Önizlemesiz Gönderi Türü Simge Rengi"</string>
+    <string name="theme_item_no_preview_post_type_icon_tint_detail">"Uygulanan: Önizleme olmadığında gönderinin türünü belirten simge"</string>
+    <string name="theme_item_no_preview_post_type_background_color">"Önizlemesiz Gönderi Türü Arka Plan Rengi"</string>
+    <string name="theme_item_no_preview_post_type_background_color_detail">"Uygulanan: Önizleme olmadığında gönderinin türünü belirten yer tutucu"</string>
 </resources>

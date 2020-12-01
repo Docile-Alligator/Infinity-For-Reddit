@@ -41,9 +41,7 @@
     <string name="action_refresh">"Ricarica"</string>
     <string name="action_add_comment">"Aggiungi un commento"</string>
     <string name="action_save_post">"Salva post"</string>
-
-    <!-- Fuzzy -->
-    <string name="action_view_crosspost_parent">"Esegui crosspost del genitore"</string>
+    <string name="action_view_crosspost_parent">"Mostra origine del crosspost"</string>
     <string name="action_search">"Cerca"</string>
     <string name="action_start_lazy_mode">"Inizia Modalità pigra"</string>
     <string name="action_stop_lazy_mode">"Ferma Modalità pigra"</string>
@@ -213,8 +211,6 @@ Clicca per riprovare."</string>
     <string name="sort_activity">"Attività"</string>
     <string name="sort_confidence">"Migliore"</string>
     <string name="sort_old">"Vecchi"</string>
-
-    <!-- Fuzzy -->
     <string name="sort_qa">"D&amp;R"</string>
     <string name="sort_live">"Live"</string>
     <string name="sort_time_hour">"Ora"</string>
@@ -305,12 +301,10 @@ Clicca per riprovare."</string>
     <string name="label_post">"Post"</string>
     <string name="label_preferences">"Preferenze"</string>
     <string name="account_switched">"Account cambiato. Tutte le altre pagine non sono più disponibili."</string>
-    <string name="settings_notification_master_title">"Notifica"</string>
+    <string name="settings_notification_master_title">"Notifiche"</string>
     <string name="settings_notification_enable_notification_title">"Abilita Notifiche"</string>
     <string name="settings_notification_interval_title">"Controlla Intervallo Notifiche"</string>
     <string name="settings_theme_title">"Tema"</string>
-
-    <!-- Fuzzy -->
     <string name="settings_amoled_dark_title">"Amoled (Scuro)"</string>
     <string name="settings_interface_title">"Interfaccia"</string>
     <string name="settings_gestures_and_buttons_title">"Gesti e pulsanti"</string>
@@ -338,7 +332,7 @@ Potrebbe non funzionare su Android 11"</string>
     <string name="settings_immersive_interface_ignore_nav_bar_summary">"Impedisci che la barra di navigazione inferiore abbia un padding extra"</string>
     <string name="settings_customize_tabs_in_main_page_title">"Personalizza le schede nella pagina principale"</string>
     <string name="settings_enable_bottom_app_bar_title">"Abilita navigazione dal basso"</string>
-    <string name="settings_enable_bottom_app_bar_summary">"Non Ha Effetti in Modalità Anonima"</string>
+    <string name="settings_enable_bottom_app_bar_summary">"Non ha effetti in Modalità anonima"</string>
     <string name="settings_category_post_and_comment_title">"Post e Commenti"</string>
     <string name="settings_vote_buttons_on_the_right_title">"Bottoni di voto sulla destra"</string>
     <string name="settings_volume_keys_navigate_comments_title">"Utilizza i tasti volume per scorrere i commenti dei post"</string>
@@ -387,11 +381,11 @@ Potrebbe non funzionare su Android 11"</string>
     <string name="settings_acknowledgement_master_title">"Riconoscimenti"</string>
     <string name="settings_credits_master_title">"Crediti"</string>
     <string name="settings_credits_icon_foreground_title">"Primo Piano Icona"</string>
-    <string name="settings_credits_icon_foreground_summary">"Technology vector creato da freepik - su www.flaticon.com"</string>
+    <string name="settings_credits_icon_foreground_summary">"Technology vector creato da freepik - www.freepik.com"</string>
     <string name="settings_credits_icon_background_title">"Sfondo dell'Icona"</string>
-    <string name="settings_credits_icon_background_summary">"Background vector creato da freepik su www.flaticon.com"</string>
+    <string name="settings_credits_icon_background_summary">"Sfondo vettoriale creato da freepik - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"Immagine di Errore"</string>
-    <string name="settings_credits_error_image_summary">"Technology vector creato da freepik - su www.flaticon.com"</string>
+    <string name="settings_credits_error_image_summary">"Technology vector creato da freepik - www.freepik.com"</string>
     <string name="settings_credits_gilded_icon_title">"Icona \"Premiato\""</string>
     <string name="settings_credits_gilded_icon_summary">"Icona creata da Freepik su www.flaticon.com"</string>
     <string name="settings_credits_crosspost_icon_title">"Icona \"Cross Post\""</string>
@@ -533,7 +527,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_color_accent">"Colore d'accento"</string>
     <string name="theme_item_color_accent_detail">"Applicato a: Barra di progresso, ecc"</string>
     <string name="theme_item_color_primary_light_theme">"Colore primario del tema chiaro"</string>
-    <string name="theme_item_color_primary_light_theme_detail">"Applicato a: Sfondo del bottone fluttuante e del bottone"</string>
+    <string name="theme_item_color_primary_light_theme_detail">"Applicato a: Sfondo del bottone flottante e del bottone"</string>
     <string name="theme_item_primary_text_color">"Colore del testo principale"</string>
     <string name="theme_item_primary_text_color_detail">"Applicato a: Testo principale"</string>
     <string name="theme_item_secondary_text_color">"Colore del testo secondario"</string>
@@ -592,13 +586,15 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_background_detail">"Applicato a: Sfondo layout scheda (barra degli strumenti espansa)"</string>
     <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_text_color">"Colore del testo del layout delle schede nella barra degli strumenti espansa"</string>
     <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_text_color_detail">"Applicato a: Colore del testo del layout delle schede (barra degli strumenti espansa)"</string>
-    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_indicator">"Colore Indicatore Tab del Layout Tab nella barra degli strumenti espansa"</string>
-    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_indicator_detail">"Applicato a: Colore indicatore tab nel layout tab (barra degli strumenti espansa)"</string>
+    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_indicator">"Colore Indicatore schede del Layout schede nella barra degli strumenti espansa"</string>
+
+    <!-- Fuzzy -->
+    <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_indicator_detail">"Applicato a: Colore indicatore schede nel layout a schede (barra degli strumenti espansa)"</string>
     <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_background">"Colore di sfondo del layout della scheda nella barra degli strumenti compressa"</string>
     <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_background_detail">"Applicato a: Sfondo layout scheda (barra degli strumenti compressa)"</string>
     <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_text_color">"Colore del testo del layout delle schede nella barra degli strumenti compressa"</string>
     <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_text_color_detail">"Applicato a: Colore testo layout scheda (barra degli strumenti compressa)"</string>
-    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_indicator">"Colore Indicatore di Scheda del layout Tab nella Barra degli Strumenti Compressa"</string>
+    <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_indicator">"Colore Indicatore di Scheda del layout schede nella Barra degli Strumenti Compressa"</string>
     <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_indicator_detail">"Applicato a: Colore dell'indicatore della scheda nel layout della scheda (barra degli strumenti compressa)"</string>
     <string name="theme_item_upvoted_color">"Colore Voto Positivo"</string>
     <string name="theme_item_upvoted_color_detail">"Applicato a: Pulsanti di voto e punteggi (voto positivo)"</string>
@@ -660,8 +656,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_unread_message_background_color_detail">"Applicato a: Colore di sfondo del messaggio non letto"</string>
     <string name="theme_item_divider_color">"Colore Divisore"</string>
     <string name="theme_item_divider_color_detail">"Applicato a: Divisore di commento, divisori in pagine per l'invio di post, ecc."</string>
-    <string name="theme_item_no_preview_post_type_background_color">"Colore di sfondo del link senza anteprima"</string>
-    <string name="theme_item_no_preview_post_type_background_color_detail">"Applicato a: Segnaposto per link senza anteprima"</string>
     <string name="theme_item_vote_and_reply_unavailable_button_color">"Colore Pulsante Vota e Rispondi Non Disponibile"</string>
     <string name="theme_item_vote_and_reply_unavailable_button_color_detail">"Applicato a: Bottoni vota e rispondi (Non disponibili)"</string>
     <string name="theme_item_comment_vertical_bar_color_1">"Commento Colore Barra Verticale 1"</string>
@@ -690,25 +684,17 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="no_theme_name">"Qual è il nome di questo tema?"</string>
     <string name="theme_name_hint">"Nome Tema"</string>
     <string name="theme_name_indigo">"Indaco"</string>
-
-    <!-- Fuzzy -->
     <string name="theme_name_indigo_dark">"Indaco (Scuro)"</string>
     <string name="theme_name_indigo_amoled">"Indaco Amoled"</string>
     <string name="theme_name_white">"Bianco"</string>
-
-    <!-- Fuzzy -->
     <string name="theme_name_white_dark">"Bianco (Scuro)"</string>
     <string name="theme_name_white_amoled">"Bianco Amoled"</string>
     <string name="theme_name_red">"Rosso"</string>
-
-    <!-- Fuzzy -->
     <string name="theme_name_red_dark">"Rosso (Scuro)"</string>
     <string name="theme_name_red_amoled">"Rosso Amoled"</string>
     <string name="theme_name_dracula">"Dracula"</string>
     <string name="theme_name_calm_pastel">"Calmo pastello"</string>
     <string name="create_light_theme">"Crea un tema chiaro basato sul tema Indaco"</string>
-
-    <!-- Fuzzy -->
     <string name="create_dark_theme">"Crea un tema scuro basato sul tema Indaco (Scuro)"</string>
     <string name="create_amoled_theme">"Crea un tema Amoled basato sul tema Indaco Amoled"</string>
     <string name="create_theme_info">"Se vuoi creare un tema basato su un altro tema, clicca il pulsante \"+\" su un tema."</string>
@@ -731,6 +717,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="duplicate_theme_name_dialog_message">"Un tema nel database è già chiamato %1$s. Vuoi cambiare il nome del tema importato?"</string>
     <string name="rename">"Rinomina"</string>
     <string name="override">"Annullare"</string>
+
+    <!-- Fuzzy -->
     <string name="color_picker">"Color Picker"</string>
     <string name="invalid_color">"Colore Non Valido"</string>
 
@@ -764,6 +752,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="flair_preview">"Flair"</string>
     <string name="awards_preview">"4 Premi"</string>
     <string name="author_flair_preview">"Flair dell'autore"</string>
+
+    <!-- Fuzzy -->
     <string name="comment_content_preview">"Ho dato una cartolina alla mia ragazza con scritto \"Rimettiti presto\".
 Non è malata o altro, ma potrebbe sicuramente stare meglio."</string>
     <string name="edit_multi_reddit">"Modifica multireddit"</string>
@@ -780,7 +770,7 @@ Non è malata o altro, ma potrebbe sicuramente stare meglio."</string>
     <string name="report_reason_general_child_pornography">"Contiene pedopornografia"</string>
     <string name="report_reason_general_abusive_content">"Contiene contenuto offensivo"</string>
     <string name="home">"Home"</string>
-    <string name="popular">"Popolare"</string>
+    <string name="popular">"Popolari"</string>
     <string name="notifications">"Notifiche"</string>
     <string name="messages">"Messaggi"</string>
     <string name="message">"Messaggio"</string>
@@ -816,4 +806,154 @@ Esempio: latuapassword:123456"</string>
     <string name="block_user">"Blocca Utente"</string>
     <string name="block_user_success">"Bloccato"</string>
     <string name="block_user_failed">"Blocco utente fallito"</string>
+    <string name="submit_crosspost_activity_label">"Crosspost"</string>
+    <string name="give_award_activity_label">"Assegna Premio"</string>
+    <string name="action_crosspost">"Crosspost"</string>
+    <string name="action_select_user_flair">"Seleziona flair utente"</string>
+    <string name="action_give_award">"Assegna Premio"</string>
+    <string name="posts">"Post"</string>
+
+    <!-- Fuzzy -->
+    <string name="sidebar">"Informazioni"</string>
+    <string name="only_for_logged_in_user">"Solo per utenti connessi"</string>
+    <string name="settings_number_of_columns_in_post_feed_title">"Il numero di colonne nel Feed dei post"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_number_of_columns_in_post_feed_portrait_title">"Vista verticale"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_number_of_columns_in_post_feed_landscape_title">"Vista orizzontale"</string>
+    <string name="settings_nsfw_and_spoiler_title">"NSFW &amp; Spoiler"</string>
+    <string name="settings_delete_all_legacy_settings_title">"Elimina tutte le impostazioni precedenti"</string>
+    <string name="restart_app_see_changes">"Riavvia la app per vedere i cambiamenti"</string>
+    <string name="settings_tab_count">"Numero di schede"</string>
+    <string name="settings_show_tab_names">"Mostra il nome delle schede"</string>
+    <string name="settings_more_tabs_summary">"Più schede"</string>
+    <string name="settings_more_tabs_info_summary">"L'attivazione delle seguenti opzioni provoca un comportamento indesiderato:
+Le schede possono perdere tutto il contenuto dopo il passaggio ad altre. Questo equivale a rinfrescare la pagina."</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_more_tabs_show_favorite_subscribed_subreddits_title">"Mostra i subreddit sottoscritti preferiti"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_more_tabs_show_subscribed_subreddits_title">"Mostra i subreddit sottoscritti"</string>
+    <string name="settings_download_location_title">"Posizione dei download"</string>
+    <string name="settings_image_download_location_title">"Posizione di download delle immagini"</string>
+    <string name="settings_gif_download_location_title">"Posizione di download delle gif"</string>
+    <string name="settings_video_download_location_title">"Posizione di download di video"</string>
+    <string name="settings_separate_folder_for_each_subreddit">"Cartelle differenti per ogni subreddit"</string>
+    <string name="settings_swipe_action_title">"Azione di scorrimento"</string>
+    <string name="settings_disable_swiping_between_tabs_title">"Disabilita lo scorrimento tra le schede"</string>
+    <string name="settings_enable_swipe_action_title">"Abilita azione di scorrimento"</string>
+    <string name="settings_swipe_action_threshold">"Soglia"</string>
+    <string name="settings_pull_to_refresh_title">"Trascina per aggiornare"</string>
+    <string name="settings_security_title">"Sicurezza"</string>
+    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Richiedi autenticazione per andare nella sezione account nella barra di navigazione"</string>
+    <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Premere a lungo per nascondere la barra degli strumenti nel layout compatto"</string>
+    <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"Barra degli strumenti nel layout compatto nascosta per impostazione predefinita"</string>
+    <string name="settings_customize_bottom_app_bar_title">"Personalizza la barra di navigazione inferiore"</string>
+    <string name="settings_main_activity_bottom_app_bar_group_summary">"Pagina principale"</string>
+    <string name="settings_other_activities_bottom_app_bar_group_summary">"Altre pagine"</string>
+    <string name="settings_bottom_app_bar_option_count">"Conteggio delle opzioni"</string>
+    <string name="settings_bottom_app_bar_option_1">"Opzione 1"</string>
+    <string name="settings_bottom_app_bar_option_2">"Opzione 2"</string>
+    <string name="settings_bottom_app_bar_option_3">"Opzione 3"</string>
+    <string name="settings_bottom_app_bar_option_4">"Opzione 4"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_bottom_app_bar_fab">"Pulsante d'azione flottante"</string>
+    <string name="settings_data_saving_mode">"Modalità risparmio dati"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_data_saving_mode_info_summary">"In modalità di risparmio dati:
+Le immagini di anteprima sono in minore risoluzione.
+I video di Reddit sono in minore risoluzione."</string>
+    <string name="settings_translation_title">"Traduzione"</string>
+    <string name="settings_translation_summary">"Traduci questa app in POEditor. Grazie a tutti i contributori"</string>
+    <string name="settings_credits_national_flags">"Bandiere nazionali"</string>
+    <string name="settings_credits_national_flags_summary">"Icone create da Freepik su www.flaticon.com"</string>
+
+    <!-- Fuzzy -->
+    <string name="copy_failed">"\"Copia\" fallito"</string>
+
+    <!-- Fuzzy -->
+    <string name="delete_all_legacy_settings_success">"Elimina correttamente tutte le impostazioni precedenti"</string>
+    <string name="downloading_media_finished">"Scaricato"</string>
+    <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"Download fallito: impossibile accedere alla destinazione"</string>
+    <string name="downloading_media_failed_cannot_download_media">"Download fallito"</string>
+    <string name="downloading_media_failed_cannot_save_to_destination_directory">"Download fallito: impossibile salvare il file nella destinazione"</string>
+    <string name="view_full_comment_markdown">"Visualizza Markdown completo"</string>
+    <string name="select_user_flair_success">"Flair utente selezionato"</string>
+    <string name="select_this_user_flair">"Seleziona questa flair utente?"</string>
+    <string name="select_header_size">"Seleziona dimensione intestazione"</string>
+    <string name="large">"Grande"</string>
+    <string name="small">"Piccolo"</string>
+    <string name="insert_link">"Inserisci link"</string>
+    <string name="text_hint">"Testo"</string>
+    <string name="link_hint">"Link"</string>
+    <string name="unlock_account_section">"Sblocca sezione account"</string>
+    <string name="unlock">"Sblocca"</string>
+    <string name="submit_post">"Invia post"</string>
+    <string name="refresh">"Ricarica"</string>
+    <string name="change_sort_type">"Cambia il tipo di ordinamento"</string>
+    <string name="change_post_layout">"Cambia il layout dei post"</string>
+
+    <!-- Fuzzy -->
+    <string name="give_award_dialog_title">"Vuoi dare premio?"</string>
+    <string name="anonymous">"Anonimo"</string>
+    <string name="give_award_error_message">"Codice: %1$d/
+ Messaggio: %2$s"</string>
+    <string name="give_award_success">"Premio conferito"</string>
+    <string name="give_award_failed">"Fallito"</string>
+    <string name="recent_searches">"Ricerche recenti"</string>
+    <string name="warning">"Avvertimento"</string>
+    <string name="this_is_a_nsfw_subreddit">"Questo è un subreddit marcato NSFW"</string>
+    <string name="this_user_has_nsfw_content">"Questo utente è marcato NSFW"</string>
+
+    <!-- Fuzzy -->
+    <string name="dismiss">"Ignora"</string>
+
+    <!-- Fuzzy -->
+    <string name="leave">"Lascia"</string>
+    <string name="go_to_subreddit">"Vai al subreddit"</string>
+    <string name="go_to_user">"Vai all'utente"</string>
+    <string name="go_to_thing_hint">"Nome"</string>
+    <string name="random">"Casuale"</string>
+    <string name="random_subreddit">"Subreddit casuale"</string>
+    <string name="random_nsfw_subreddit">"Subreddit NSFW casuale"</string>
+    <string name="random_post">"Post casuale"</string>
+    <string name="random_nsfw_post">"Post NSFW casuale"</string>
+    <string name="fetch_random_thing_failed">"Riprova più tardi"</string>
+    <string name="downloading">"Download in corso"</string>
+    <string name="subreddit_filter_popular_and_all_activity_label">"r/all e r/popular"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_miscellaneous_title">"Varie"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_respect_subreddit_recommended_comment_sort_type_title">"Rispetta ordinamento dei commenti consigliato dal sub"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_respect_subreddit_recommended_comment_sort_type_summary">"Il tipo di ordinamento dei commenti non verrà salvato"</string>
+    <string name="settings_filter_title">"Filtro"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_subreddit_filter_category">"Nascondi i Subreddit"</string>
+    <string name="settings_subreddit_filter_popular_and_all">"In r/popular e r/all"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_credits_ufo_capturing_animation_title">"Animazione di cattura dell'UFO"</string>
+    <string name="select_video_quality">"Scegli qualità video"</string>
+    <string name="settings_swipe_action_haptic_feedback_title">"Feedback aptico"</string>
+    <string name="settings_hide_subreddit_description_title">"Nascondi descrizione dei subreddit"</string>
+    <string name="settings_disable_image_preview_title">"Disabilita le anteprime delle immagini in modalità risparmio dati"</string>
+    <string name="settings_swipe_action_swipe_left_title">"Scorri a sinistra"</string>
+    <string name="settings_swipe_action_swipe_right_title">"Scorri a destra"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_swipe_action_info_summary">"Non applicabile ai feed con più di una colonna o ai post aperti."</string>
+    <string name="theme_item_no_preview_post_type_icon_tint">"Colore icona dei post \"Senza anteprima\""</string>
+    <string name="theme_item_no_preview_post_type_icon_tint_detail">"Applicato a: Icona che indica il tipo di post quando nessuna anteprima è disponibile"</string>
+    <string name="theme_item_no_preview_post_type_background_color">"Colore sfondo dei post \"Senza anteprima\""</string>
+    <string name="theme_item_no_preview_post_type_background_color_detail">"Applicato a: Segnaposto che indica il tipo di post quando nessuna anteprima è disponibile"</string>
 </resources>

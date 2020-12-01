@@ -15,14 +15,14 @@
     <string name="edit_comment_activity_label">"コメントを編集"</string>
     <string name="view_message_activity_label">"受信トレイ"</string>
     <string name="settings_activity_label">"設定"</string>
-    <string name="account_saved_thing_activity_label">"保存"</string>
-    <string name="create_multi_reddit_activity_label">"マルチRedditを作成"</string>
-    <string name="subreddit_multiselection_activity_label">"Subredditを選択"</string>
+    <string name="account_saved_thing_activity_label">"保存しました"</string>
+    <string name="create_multi_reddit_activity_label">"カスタムフィードを作成"</string>
+    <string name="subreddit_multiselection_activity_label">"カスタムフィードを選択"</string>
     <string name="custom_theme_listing_activity_label">"カスタムテーマ"</string>
     <string name="customize_theme_activity_label">"テーマを編集"</string>
     <string name="customize_theme_activity_create_theme_label">"テーマを作成"</string>
     <string name="theme_preview_activity_label">"テーマをプレビュー"</string>
-    <string name="edit_multi_reddit_activity_label">"マルチRedditを編集"</string>
+    <string name="edit_multi_reddit_activity_label">"カスタムフィードを編集"</string>
     <string name="selected_subeddits_activity_label">"選択したSubreddit"</string>
     <string name="report_activity_label">"通報"</string>
     <string name="view_imgur_media_activity_image_label">"画像 %1$d/%2$d"</string>
@@ -58,8 +58,8 @@
     <string name="action_edit_flair">"フレアーを編集"</string>
     <string name="action_change_post_layout">"表示レイアウトを変更"</string>
     <string name="action_save">"保存"</string>
-    <string name="action_edit_multi_reddit">"マルチRedditを編集"</string>
-    <string name="action_delete_multi_reddit">"マルチRedditを削除"</string>
+    <string name="action_edit_multi_reddit">"カスタムフィードを編集"</string>
+    <string name="action_delete_multi_reddit">"カスタムフィードを削除"</string>
     <string name="action_share">"共有"</string>
     <string name="action_preview">"プレビュー"</string>
     <string name="action_report">"通報"</string>
@@ -87,12 +87,12 @@
     <string name="no_comments">"コメントが見つかりませんでした"</string>
     <string name="no_subreddits">"Subredditが見つかりませんでした"</string>
     <string name="no_users">"ユーザーが見つかりませんでした"</string>
-    <string name="no_multi_reddits">"マルチRedditが見つかりませんでした"</string>
+    <string name="no_multi_reddits">"カスタムフィードが見つかりませんでした"</string>
     <string name="no_storage_permission">"ファイルを保存するためのストレージアクセス許可がありません"</string>
     <string name="load_comments_failed">"コメントをロード中にエラーが発生しました。タップでリトライします。"</string>
     <string name="retry">"リトライ"</string>
     <string name="comments">"コメント"</string>
-    <string name="no_comments_yet">"まだコメントがありません。コメントを書きますか？"</string>
+    <string name="no_comments_yet">"まだコメントがありません。コメントを書いてみませんか？"</string>
     <string name="vote_failed">"評価に失敗しました"</string>
     <string name="refresh_post_failed">"投稿を更新中にエラーが発生しました"</string>
     <string name="load_messages_failed">"メッセージをロード中にエラーが発生しました。タップでリトライします。"</string>
@@ -108,24 +108,28 @@
     <string name="since">"作成日:"</string>
     <string name="profile">"プロフィール"</string>
     <string name="subscriptions">"登録済み"</string>
-    <string name="multi_reddit">"マルチReddit"</string>
+    <string name="multi_reddit">"カスタムフィード"</string>
     <string name="inbox">"受信トレイ"</string>
 
     <!-- Fuzzy -->
-    <string name="upvoted">"上評価"</string>
+    <string name="upvoted">"プラス評価がある投稿"</string>
 
     <!-- Fuzzy -->
-    <string name="downvoted">"下評価"</string>
-    <string name="hidden">"非表示済み"</string>
-    <string name="saved">"保存済み"</string>
-    <string name="gilded">"金ピカ"</string>
+    <string name="downvoted">"マイナス評価がある投稿"</string>
+    <string name="hidden">"非表示にした投稿"</string>
+    <string name="saved">"保存した投稿"</string>
+
+    <!-- What posts the app shows when I select this?
+(1) My posts that someone gave (gold or better only?) rewards for me.
+(2) Someone's posts that I gave (gold or better only?) rewards for them. -->
+    <string name="gilded">"アワードが贈られている投稿"</string>
     <string name="settings">"設定"</string>
     <string name="subscribers_number_detail">"登録者数: %1$d"</string>
     <string name="online_subscribers_number_detail">"オンライン: %1$d"</string>
     <string name="cannot_fetch_subreddit_info">"Subredditの情報が取得できませんでした"</string>
     <string name="cannot_fetch_user_info">"ユーザー情報が取得できませんでした"</string>
     <string name="cannot_fetch_sidebar">"サイドバーが取得できませんでした"</string>
-    <string name="cannot_fetch_multireddit">"マルチReddit情報が取得できませんでした"</string>
+    <string name="cannot_fetch_multireddit">"カスタムフィードの情報が取得できませんでした"</string>
     <string name="subscribe">"登録する"</string>
     <string name="unsubscribe">"登録を解除する"</string>
     <string name="subscribed">"登録済み"</string>
@@ -139,12 +143,12 @@
     <string name="unfollowed">"フォローを解除しました"</string>
     <string name="unfollow_failed">"フォローの解除に失敗しました"</string>
     <string name="content_description_banner_imageview">"Subredditのバナー画像"</string>
-    <string name="app_label">"Infinity"</string>
+    <string name="app_label">"ホーム - Infinity"</string>
     <string name="search_hint">"何でも検索してみてください"</string>
     <string name="no_posts_no_lazy_mode">"投稿がありません"</string>
     <string name="lazy_mode_start">"%1$.1f秒後に自動スクロールが始まります"</string>
     <string name="lazy_mode_stop">"自動スクロールを停止しました"</string>
-    <string name="write_comment_hint">"面白いコメントをここに"</string>
+    <string name="write_comment_hint">"面白いコメントを書いてみましょう"</string>
     <string name="comment_content_required">"コメント内容が必要です"</string>
     <string name="sending_comment">"送信中"</string>
     <string name="send_comment_success">"送信しました"</string>
@@ -179,7 +183,7 @@
     <string name="post_link_hint">"URL"</string>
     <string name="subreddits">"Subreddit"</string>
     <string name="users">"ユーザー"</string>
-    <string name="multi_reddits">"マルチReddit"</string>
+    <string name="multi_reddits">"カスタムフィード"</string>
     <string name="bottom_sheet_post_text">"テキスト"</string>
     <string name="bottom_sheet_post_link">"リンク"</string>
     <string name="bottom_sheet_post_image">"画像"</string>
@@ -214,7 +218,7 @@
     <!-- There's no proper word for "controversial" in Japanese, so I've made it the phonetic translation. -->
     <!-- Fuzzy -->
     <string name="sort_controversial">"論争中"</string>
-    <string name="sort_relevance">"関連性"</string>
+    <string name="sort_relevance">"関連度"</string>
     <string name="sort_comments">"コメント"</string>
     <string name="sort_activity">"アクティビィティ"</string>
 
@@ -304,7 +308,7 @@
     <string name="update_flair_success">"フレアーを更新しました"</string>
     <string name="update_flair_failed">"フレアーを更新できませんでした"</string>
     <string name="edit_flair">"フレアーを編集"</string>
-    <string name="only_allow_64_chars">"64文字未満までが許可されます"</string>
+    <string name="only_allow_64_chars">"63文字まで入力可能です"</string>
     <string name="view_all_comments">"タップして全てのコメントを表示"</string>
     <string name="notification_summary_account">"アカウント"</string>
     <string name="notification_summary_message">"新しいメッセージ"</string>
@@ -329,16 +333,14 @@
     <string name="settings_video_autoplay_title">"動画を自動再生"</string>
     <string name="settings_mute_autoplaying_videos_title">"自動再生の動画をミュート"</string>
     <string name="settings_autoplay_nsfw_videos_title">"NSFW動画を自動再生"</string>
-    <string name="settings_start_autoplay_visible_area_offset_portrait_title">"自動再生開始の表示オフセット(縦画面)"</string>
+    <string name="settings_start_autoplay_visible_area_offset_portrait_title">"自動再生開始の表示オフセット(縦画面時)"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"%1$d%%の動画エリアが画面内に収まっている場合に自動再生を開始します"</string>
-    <string name="settings_start_autoplay_visible_area_offset_landscape_title">"自動再生開始の表示オフセット(横画面)"</string>
+    <string name="settings_start_autoplay_visible_area_offset_landscape_title">"自動再生開始の表示オフセット(横画面時)"</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"%1$d%%の動画エリアが画面内に収まっている場合に自動再生を開始します"</string>
 
     <!-- Fuzzy -->
     <string name="settings_immersive_interface_title">"没入型インターフェース"</string>
-
-    <!-- Fuzzy -->
-    <string name="settings_immersive_interface_summary">"全てのページには適用されません"</string>
+    <string name="settings_immersive_interface_summary">"一部のページでは動作しません"</string>
 
     <!-- Fuzzy -->
     <string name="settings_immersive_interface_ignore_nav_bar_title">"没入型インターフェースでナビゲーションバーを無視"</string>
@@ -361,7 +363,7 @@
     <string name="settings_show_comment_divider_title">"コメントの分割線を表示"</string>
     <string name="settings_comment_toolbar_hide_on_click">"タップでコメントツールバーを表示/非表示"</string>
     <string name="settings_fully_collapse_comment_title">"コメントを完全に折りたたむ"</string>
-    <string name="settings_comment_toolbar_hidden">"標準でコメントツールバーを非表示"</string>
+    <string name="settings_comment_toolbar_hidden">"コメントツールバーを標準で非表示"</string>
     <string name="settings_show_absolute_number_of_votes_title">"評価の絶対数を表示"</string>
     <string name="settings_show_elapsed_time">"投稿とコメントの日時を経過時間で表示"</string>
     <string name="settings_time_format_title">"日時の表示書式"</string>
@@ -371,10 +373,10 @@
     <string name="settings_show_thumbnail_on_the_left_in_compact_layout">"コンパクトレイアウトでサムネイルを左側に表示"</string>
     <string name="settings_swap_tap_and_long_title">"コメントでタップと長押しの操作を入れ替え"</string>
     <string name="settings_swipe_to_go_back_title">"右スワイプで前の画面に戻る"</string>
-    <string name="settings_swipe_to_go_back_summary">"全てのページには適用されません"</string>
+    <string name="settings_swipe_to_go_back_summary">"一部のページでは動作しません"</string>
     <string name="settings_lock_jump_to_next_top_level_comment_button_title">"次の最上位コメントへ移動ボタンを常に表示"</string>
     <string name="settings_lock_bottom_app_bar_title">"下部ナビゲーションバーを常に表示"</string>
-    <string name="settings_swipe_up_to_hide_jump_to_next_top_level_comment_button_title">"次の最上位コメントへ移動ボタンを上スクロールで隠す(OFF=下スクロールで隠す)"</string>
+    <string name="settings_swipe_up_to_hide_jump_to_next_top_level_comment_button_title">"次の最上位コメントへ移動ボタンを上スクロールで非表示(OFF=下スクロールで非表示)"</string>
     <string name="settings_lazy_mode_interval_title">"自動スクロール間隔"</string>
     <string name="settings_font_title">"フォント"</string>
     <string name="settings_preview_font_title">"フォントのプレビュー"</string>
@@ -389,7 +391,7 @@
     <string name="settings_font_size_title">"フォントサイズ"</string>
     <string name="settings_title_font_size_title">"フォントサイズ"</string>
     <string name="settings_content_font_size_title">"フォントサイズ"</string>
-    <string name="settings_enable_nsfw_title">"NSFW(職場閲覧注意)を有効化"</string>
+    <string name="settings_enable_nsfw_title">"NSFWを有効化"</string>
     <string name="settings_blur_nsfw_title">"NSFW画像をぼかして表示"</string>
     <string name="settings_blur_spoiler_title">"ネタバレ画像をぼかして表示"</string>
 
@@ -405,7 +407,7 @@
     <string name="settings_credits_icon_background_summary">"freepikにより作成されたBackground vectorを使用しています - www.freepik.com"</string>
     <string name="settings_credits_error_image_title">"エラー時の画像"</string>
     <string name="settings_credits_error_image_summary">"freepikにより作成されたTechnology vectorを使用しています - www.freepik.com"</string>
-    <string name="settings_credits_gilded_icon_title">"金ピカアイコン"</string>
+    <string name="settings_credits_gilded_icon_title">"アワードアイコン"</string>
     <string name="settings_credits_gilded_icon_summary">"Freepikにより作成されたアイコンを使用しています - www.flaticon.com"</string>
     <string name="settings_credits_crosspost_icon_title">"クロスポストアイコン"</string>
     <string name="settings_credits_crosspost_icon_summary">"Freepikにより作成されたアイコンを使用しています - www.flaticon.com"</string>
@@ -448,10 +450,10 @@
     <string name="settings_tab_1_summary">"タブ1"</string>
     <string name="settings_tab_2_summary">"タブ2"</string>
     <string name="settings_tab_3_summary">"タブ3"</string>
-    <string name="settings_tab_title">"タイトル"</string>
-    <string name="settings_tab_post_type">"種類"</string>
+    <string name="settings_tab_title">"タブ名"</string>
+    <string name="settings_tab_post_type">"表示内容"</string>
     <string name="settings_tab_subreddit_name">"Subreddit名 (「r/」は不要)"</string>
-    <string name="settings_tab_multi_reddit_name">"マルチReddit名 (/user/あなたのユーザー名/m/あなたのマルチReddit名)"</string>
+    <string name="settings_tab_multi_reddit_name">"カスタムフィード名 (/user/あなたのユーザー名/m/あなたのカスタムフィード名)"</string>
     <string name="settings_tab_username">"ユーザー名 (「u/」は不要)"</string>
     <string name="no_developer_easter_egg">"開発者オプションはありません"</string>
     <string name="no_link_available">"リンクを取得できませんでした"</string>
@@ -491,8 +493,8 @@
     <string name="elapsed_time_months_ago">"%1$dヶ月"</string>
     <string name="elapsed_time_a_year_ago">"1年"</string>
     <string name="elapsed_time_years_ago">"%1$d年"</string>
-    <string name="error_getting_multi_reddit_data">"マルチRedditデータを取得中にエラーが発生しました"</string>
-    <string name="error_loading_multi_reddit_list">"マルチRedditの同期ができませんでした"</string>
+    <string name="error_getting_multi_reddit_data">"カスタムフィードのデータを取得中にエラーが発生しました"</string>
+    <string name="error_loading_multi_reddit_list">"カスタムフィードの同期ができませんでした"</string>
     <string name="error_loading_subscriptions">"登録済み情報を同期できませんでした"</string>
     <string name="share_this_app">"便利なRedditアプリを見つけました。Infinity for Redditを試してみて！
 https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit"</string>
@@ -523,9 +525,9 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="private_multi_reddit">"プライベート"</string>
     <string name="select_subreddits">"Subredditを選択"</string>
     <string name="no_multi_reddit_name">"名前が必要です。"</string>
-    <string name="create_multi_reddit_failed">"このマルチRedditを作成できませんでした"</string>
-    <string name="duplicate_multi_reddit">"このマルチRedditは既に存在しています"</string>
-    <string name="edit_multi_reddit_failed">"このマルチRedditを編集できませんでした"</string>
+    <string name="create_multi_reddit_failed">"このカスタムフィードを作成できませんでした"</string>
+    <string name="duplicate_multi_reddit">"このカスタムフィードは既に存在しています"</string>
+    <string name="edit_multi_reddit_failed">"このカスタムフィードを編集できませんでした"</string>
     <string name="logged_out">"ログアウト状態です"</string>
     <string name="delete_multi_reddit_success">"削除が完了しました"</string>
     <string name="delete_multi_reddit_failed">"削除できませんでした"</string>
@@ -547,7 +549,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_color_primary_dark_detail">"適用先: ステータスバー"</string>
     <string name="theme_item_color_accent">"アクセント"</string>
     <string name="theme_item_color_accent_detail">"適用先: プログレスバー、その他"</string>
-    <string name="theme_item_color_primary_light_theme">"プライマリー ライトテーマ"</string>
+    <string name="theme_item_color_primary_light_theme">"プライマリー ライト"</string>
     <string name="theme_item_color_primary_light_theme_detail">"適用先: アクションボタンとボタンの背景"</string>
     <string name="theme_item_primary_text_color">"プライマリー テキスト"</string>
     <string name="theme_item_primary_text_color_detail">"適用先: プライマリーテキスト"</string>
@@ -562,7 +564,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_button_text_color">"ボタン テキスト"</string>
     <string name="theme_item_button_text_color_detail">"適用先: ボタンのテキスト"</string>
     <string name="theme_item_chip_text_color">"チップ テキスト"</string>
-    <string name="theme_item_chip_text_color_detail">"適用先: 登録ボタン"</string>
+    <string name="theme_item_chip_text_color_detail">"適用先: 未登録の際に表示される登録ボタン"</string>
     <string name="theme_item_link_color">"リンク"</string>
     <string name="theme_item_link_color_detail">"適用先: URL"</string>
     <string name="theme_item_received_message_text_color">"受信メッセージ テキスト"</string>
@@ -617,30 +619,30 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_text_color_detail">"適用先: タブレイアウトの折りたたまれたツールバーのテキスト"</string>
     <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_indicator">"タブレイアウトの折りたたまれたツールバー タブインジケーター"</string>
     <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_indicator_detail">"適用先: タブレイアウトの折りたたまれたツールバーのタブインジケーター"</string>
-    <string name="theme_item_upvoted_color">"上評価"</string>
-    <string name="theme_item_upvoted_color_detail">"適用先: 上評価されている評価ボタン、スコア"</string>
-    <string name="theme_item_downvoted_color">"下評価"</string>
-    <string name="theme_item_downvoted_color_detail">"適用先: 下評価されている評価ボタン、スコア"</string>
+    <string name="theme_item_upvoted_color">"プラス評価"</string>
+    <string name="theme_item_upvoted_color_detail">"適用先: プラス評価した評価ボタン、スコア"</string>
+    <string name="theme_item_downvoted_color">"マイナス評価"</string>
+    <string name="theme_item_downvoted_color_detail">"適用先: マイナス評価した評価ボタン、スコア"</string>
     <string name="theme_item_post_type_background_color">"投稿種類 背景"</string>
     <string name="theme_item_post_type_background_color_detail">"適用先: 投稿種類の背景(画像、テキスト、動画、GIF、リンク)"</string>
     <string name="theme_item_post_type_text_color">"投稿種類 テキスト"</string>
     <string name="theme_item_post_type_text_color_detail">"適用先: 投稿種類のテキスト(画像、テキスト、動画、GIF、リンク)"</string>
     <string name="theme_item_spoiler_background_color">"ネタバレ 背景"</string>
-    <string name="theme_item_spoiler_background_color_detail">"適用先: ネタバレタグの背景"</string>
+    <string name="theme_item_spoiler_background_color_detail">"適用先: ネタバレ フレアーの背景"</string>
     <string name="theme_item_spoiler_text_color">"ネタバレ テキスト"</string>
-    <string name="theme_item_spoiler_text_color_detail">"適用先: ネタバレタグのテキスト"</string>
+    <string name="theme_item_spoiler_text_color_detail">"適用先: ネタバレ フレアーのテキスト"</string>
     <string name="theme_item_nsfw_background_color">"NSFW 背景"</string>
-    <string name="theme_item_nsfw_background_color_detail">"適用先: NSFWタグの背景"</string>
+    <string name="theme_item_nsfw_background_color_detail">"適用先: NSFWフレアーの背景"</string>
     <string name="theme_item_nsfw_text_color">"NSFW テキスト"</string>
-    <string name="theme_item_nsfw_text_color_detail">"適用先: NSFWタグのテキスト"</string>
+    <string name="theme_item_nsfw_text_color_detail">"適用先: NSFWフレアーのテキスト"</string>
     <string name="theme_item_flair_background_color">"フレアー 背景"</string>
     <string name="theme_item_flair_background_color_detail">"適用先: フレアーの背景"</string>
     <string name="theme_item_flair_text_color">"フレアー テキスト"</string>
     <string name="theme_item_flair_text_color_detail">"適用先: フレアーのテキスト"</string>
     <string name="theme_item_awards_background_color">"アワード 背景"</string>
-    <string name="theme_item_awards_background_color_detail">"適用先: アワードタグの背景"</string>
+    <string name="theme_item_awards_background_color_detail">"適用先: アワード フレアーの背景"</string>
     <string name="theme_item_awards_text_color">"アワード テキスト"</string>
-    <string name="theme_item_awards_text_color_detail">"適用先: アワードタグのテキスト"</string>
+    <string name="theme_item_awards_text_color_detail">"適用先: アワード フレアーのテキスト"</string>
     <string name="theme_item_archived_tint">"アーカイブ アイコン"</string>
     <string name="theme_item_archived_tint_detail">"適用先: アーカイブのアイコン"</string>
     <string name="theme_item_locked_icon_tint">"ロック アイコン"</string>
@@ -652,7 +654,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_stickied_post_icon_tint">"ピン留めされた投稿 アイコン"</string>
     <string name="theme_item_stickied_post_icon_tint_detail">"適用先: ピン留めされた投稿のアイコン"</string>
     <string name="theme_item_subscribed_color">"登録済み"</string>
-    <string name="theme_item_subscribed_color_detail">"適用先: 登録解除ボタン"</string>
+    <string name="theme_item_subscribed_color_detail">"適用先: 登録済みの際に表示される登録解除ボタン"</string>
     <string name="theme_item_unsubscribed_color">"未登録"</string>
     <string name="theme_item_unsubscribed_color_detail">"適用先: 登録ボタン"</string>
     <string name="theme_item_username_color">"ユーザー名"</string>
@@ -671,10 +673,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_unread_message_background_color_detail">"適用先: 未読メッセージの背景"</string>
     <string name="theme_item_divider_color">"分割線"</string>
     <string name="theme_item_divider_color_detail">"適用先: コメントの分割線、投稿時のページ分割線、等"</string>
-    <string name="theme_item_no_preview_post_type_background_color">"プレビューのないリンク 背景"</string>
-    <string name="theme_item_no_preview_post_type_background_color_detail">"適用先: プレビューのないリンクの背景"</string>
     <string name="theme_item_vote_and_reply_unavailable_button_color">"評価と返信ボタン 無効状態"</string>
-    <string name="theme_item_vote_and_reply_unavailable_button_color_detail">"適用先: 無効となっている評価と返信ボタン"</string>
+    <string name="theme_item_vote_and_reply_unavailable_button_color_detail">"適用先: 無効になっている評価と返信ボタン"</string>
     <string name="theme_item_comment_vertical_bar_color_1">"コメント 縦線1"</string>
     <string name="theme_item_comment_vertical_bar_color_1_detail">"適用先: コメントの縦線 レベル1"</string>
     <string name="theme_item_comment_vertical_bar_color_2">"コメント 縦線2"</string>
@@ -721,7 +721,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="edit_theme_name">"テーマ名を編集"</string>
     <string name="edit_theme">"テーマを編集"</string>
     <string name="delete_theme">"テーマを削除"</string>
-    <string name="delete_theme_dialog_message">"%1$s を削除してよろしいですか？"</string>
+    <string name="delete_theme_dialog_message">"「%1$s」を削除してよろしいですか？"</string>
     <string name="share_theme">"テーマを共有"</string>
     <string name="change_theme_name">"名前を変更"</string>
     <string name="theme_copied">"コピーしました。貼り付けて共有することができます。"</string>
@@ -738,7 +738,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 
     <!-- Fuzzy -->
     <string name="duplicate_theme_name_dialog_title">"同じテーマが登録済みです"</string>
-    <string name="duplicate_theme_name_dialog_message">"%1$s と名付けられているテーマが既に存在します。インポートするテーマの名前を変更しますか？"</string>
+    <string name="duplicate_theme_name_dialog_message">"「%1$s」と名付けられているテーマが既に存在します。インポートするテーマの名前を変更しますか？"</string>
     <string name="rename">"名前を変更"</string>
     <string name="override">"上書き"</string>
     <string name="color_picker">"色を選択してください"</string>
@@ -777,8 +777,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="awards_preview">"4個のアワード"</string>
     <string name="author_flair_preview">"投稿主フレアー"</string>
     <string name="comment_content_preview">"オチがないのがオチなんですね。"</string>
-    <string name="edit_multi_reddit">"マルチRedditを編集"</string>
-    <string name="delete_multi_reddit">"マルチRedditを削除"</string>
+    <string name="edit_multi_reddit">"カスタムフィードを編集"</string>
+    <string name="delete_multi_reddit">"カスタムフィードを削除"</string>
     <string name="n_awards">"%1$d個のアワード"</string>
     <string name="one_award">"1個のアワード"</string>
     <string name="report">"通報"</string>
@@ -802,7 +802,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="downloading_reddit_video">"動画トラックをダウンロード中です"</string>
     <string name="downloading_reddit_video_audio_track">"音声トラックをダウンロード中です"</string>
 
-    <!-- Shouldn't the english translation be 
+    <!-- Shouldn't the english translation be
 "Mixing Video and Audio"? -->
     <string name="downloading_reddit_video_muxing">"動画と音声をミックス中です"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"動画を保存中です"</string>
@@ -818,7 +818,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="set_to_home_screen">"ホーム画面に設定"</string>
     <string name="set_to_lock_screen">"ロック画面に設定"</string>
     <string name="set_to_both">"両方に設定"</string>
-    <string name="default_font_font_preview">"標準"</string>
+    <string name="default_font_font_preview">"Default"</string>
     <string name="load_video_in_redgifs">"Redgifsから動画のロードを試行"</string>
     <string name="top_score">"%1$s点"</string>
     <string name="login_activity_2fa_prompt">"2段階認証を有効にしている場合、パスワードは次のように入力してください 「&lt;パスワード&gt;:&lt;2段階認証コード&gt;」。
@@ -835,9 +835,9 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="sidebar">"サイドバー"</string>
     <string name="only_for_logged_in_user">"ログイン済みユーザー用"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"投稿フィードの表示列数"</string>
-    <string name="settings_number_of_columns_in_post_feed_portrait_title">"縦画面"</string>
-    <string name="settings_number_of_columns_in_post_feed_landscape_title">"横画面"</string>
-    <string name="settings_nsfw_and_spoiler_title">"NSFWとネタバレ"</string>
+    <string name="settings_number_of_columns_in_post_feed_portrait_title">"縦画面時"</string>
+    <string name="settings_number_of_columns_in_post_feed_landscape_title">"横画面時"</string>
+    <string name="settings_nsfw_and_spoiler_title">"NSFW(職場閲覧注意)とネタバレ"</string>
     <string name="settings_delete_all_legacy_settings_title">"古い設定データを削除"</string>
     <string name="restart_app_see_changes">"変更を適用するにはアプリを再起動してください"</string>
     <string name="settings_tab_count">"タブ数"</string>
@@ -854,15 +854,14 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_video_download_location_title">"動画ダウンロード先のフォルダー"</string>
     <string name="settings_separate_folder_for_each_subreddit">"Subreddit毎にフォルダーを分ける"</string>
     <string name="settings_swipe_action_title">"スワイプアクション"</string>
-    <string name="settings_swipe_action_haptic_feedback_title">"アクションが実行される際にデバイスをバイブ"</string>
     <string name="settings_disable_swiping_between_tabs_title">"スワイプによるタブ切り替えを無効化"</string>
     <string name="settings_enable_swipe_action_title">"スワイプアクションを有効化"</string>
     <string name="settings_swipe_action_threshold">"しきい値"</string>
     <string name="settings_pull_to_refresh_title">"引き下げて更新"</string>
     <string name="settings_security_title">"セキュリティ"</string>
     <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"ナビゲーションドロワーからアカウントに移動する際に認証を要求"</string>
-    <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"コンパクトレイアウトのツールバーを長押しで隠す"</string>
-    <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"コンパクトレイアウトのツールバーを標準で隠す"</string>
+    <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"コンパクトレイアウトのツールバーを長押しで非表示"</string>
+    <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"コンパクトレイアウトのツールバーを標準で非表示"</string>
     <string name="settings_customize_bottom_app_bar_title">"下部ナビゲーションバーをカスタマイズ"</string>
     <string name="settings_main_activity_bottom_app_bar_group_summary">"メインページ"</string>
     <string name="settings_other_activities_bottom_app_bar_group_summary">"他のページ"</string>
@@ -873,10 +872,12 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_bottom_app_bar_option_4">"ボタン4"</string>
     <string name="settings_bottom_app_bar_fab">"アクションボタン"</string>
     <string name="settings_data_saving_mode">"データ節約モード"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_data_saving_mode_info_summary">"データ節約モードではプレビュー画像の解像度が下がります。"</string>
     <string name="settings_translation_title">"翻訳"</string>
-    <string name="settings_translation_summary">"このアプリの翻訳はPOEditorで行うことができます。貢献いただきありがとうございます。"</string>
-    <string name="settings_credits_national_flags">"国旗"</string>
+    <string name="settings_translation_summary">"このアプリの翻訳はPOEditorで行うことができます。ご協力いただきありがとうございます。"</string>
+    <string name="settings_credits_national_flags">"国旗アイコン"</string>
     <string name="settings_credits_national_flags_summary">"Freepikにより作成されたアイコンを使用しています - www.flaticon.com"</string>
     <string name="copy_failed">"コピーできませんでした"</string>
     <string name="delete_all_legacy_settings_success">"古い設定データを削除しました"</string>
@@ -895,7 +896,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="link_hint">"リンク"</string>
     <string name="unlock_account_section">"アカウント設定をアンロック"</string>
     <string name="unlock">"アンロック"</string>
-    <string name="submit_post">"投稿を送信"</string>
+    <string name="submit_post">"投稿を作成"</string>
     <string name="refresh">"更新"</string>
     <string name="change_sort_type">"並べ替えを変更"</string>
     <string name="change_post_layout">"表示レイアウトを変更"</string>
@@ -915,10 +916,29 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="go_to_user">"ユーザーに移動"</string>
     <string name="go_to_thing_hint">"名前"</string>
     <string name="random">"ランダム"</string>
-    <string name="random_subreddit">"ランダムなSubreddit"</string>
-    <string name="random_nsfw_subreddit">"ランダムなNSFW Subreddit"</string>
-    <string name="random_post">"ランダムな投稿"</string>
-    <string name="random_nsfw_post">"ランダムなNSFW投稿"</string>
+    <string name="random_subreddit">"ランダムなSubredditに移動"</string>
+    <string name="random_nsfw_subreddit">"ランダムなNSFW Subredditに移動"</string>
+    <string name="random_post">"ランダムな投稿に移動"</string>
+    <string name="random_nsfw_post">"ランダムなNSFW投稿に移動"</string>
     <string name="fetch_random_thing_failed">"後ほど再度お試しください"</string>
     <string name="downloading">"ダウンロード中"</string>
+    <string name="subreddit_filter_popular_and_all_activity_label">"r/all と r/popular"</string>
+    <string name="settings_miscellaneous_title">"その他の設定"</string>
+    <string name="settings_respect_subreddit_recommended_comment_sort_type_title">"Subredditで推奨されているコメントの並び順を使用"</string>
+    <string name="settings_respect_subreddit_recommended_comment_sort_type_summary">"コメントの並び順は保存されません"</string>
+    <string name="settings_filter_title">"フィルター"</string>
+    <string name="settings_subreddit_filter_category">"Subredditを非表示"</string>
+    <string name="settings_subreddit_filter_popular_and_all">"r/all と r/popular 内"</string>
+    <string name="settings_credits_ufo_capturing_animation_title">"UFO捕獲アニメーション"</string>
+    <string name="select_video_quality">"動画の品質を選択"</string>
+    <string name="settings_swipe_action_haptic_feedback_title">"触覚フィードバック"</string>
+    <string name="settings_hide_subreddit_description_title">"Subredditの説明文を隠す"</string>
+    <string name="settings_disable_image_preview_title">"データ節約モードでは画像プレビューを無効化"</string>
+    <string name="settings_swipe_action_swipe_left_title">"左にスワイプ"</string>
+    <string name="settings_swipe_action_swipe_right_title">"右にスワイプ"</string>
+    <string name="settings_swipe_action_info_summary">"複数列表示されている投稿フィードと投稿詳細画面では適用されません"</string>
+    <string name="theme_item_no_preview_post_type_icon_tint">"プレビューのない投稿 種類アイコン"</string>
+    <string name="theme_item_no_preview_post_type_icon_tint_detail">"適用先: プレビューのない投稿種類アイコン"</string>
+    <string name="theme_item_no_preview_post_type_background_color">"プレビューのない投稿 アイコンの背景"</string>
+    <string name="theme_item_no_preview_post_type_background_color_detail">"適用先: プレビューのない投稿種類表示用プレースホルダー"</string>
 </resources>

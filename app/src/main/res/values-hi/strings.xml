@@ -2,9 +2,9 @@
 <resources>
     <string name="login_activity_label">"लाॅग इन करें"</string>
     <string name="search_activity_label">"खोजें"</string>
-    <string name="comment_activity_label">"टिप्पणी भेजें"</string>
+    <string name="comment_activity_label">"टिप्पणी करें "</string>
     <string name="comment_activity_label_is_replying">"उत्तर दें"</string>
-    <string name="post_text_activity_label">"लिखित पोस्ट"</string>
+    <string name="post_text_activity_label">"टैक्स्ट पोस्ट"</string>
     <string name="subreddit_selection_activity_label">"एक सबरैडिट चुनें"</string>
     <string name="post_link_activity_label">"लिंक पोस्ट"</string>
     <string name="post_image_activity_label">"चित्र पोस्ट"</string>
@@ -23,13 +23,13 @@
     <string name="customize_theme_activity_create_theme_label">"थीम बनाएँ"</string>
     <string name="theme_preview_activity_label">"थीम पूर्वदर्शन करें"</string>
     <string name="edit_multi_reddit_activity_label">"मल्टीरैडिट सम्पादित करें"</string>
-    <string name="selected_subeddits_activity_label">"चुने हुई सबरैडिट्स"</string>
+    <string name="selected_subeddits_activity_label">"चुनी हुई सबरैडिट्स"</string>
     <string name="report_activity_label">"शिकायत करें"</string>
     <string name="view_imgur_media_activity_image_label">"चित्र %1$d/%2$d"</string>
     <string name="view_imgur_media_activity_video_label">"वीडियो %1$/%2$d"</string>
 
     <!-- Or one can use as is form in Devnagari script ' पी एम भेजें' -->
-    <string name="send_private_message_activity_label">"प्राइवेट मैसेज भेजें"</string>
+    <string name="send_private_message_activity_label">"व्यक्तिगत संदेश भेजें"</string>
     <string name="view_reddit_gallery_activity_image_label">"चित्र %1$d/%2$d"</string>
     <string name="view_reddit_gallery_activity_gif_label">"गिफ %1$d/%2$d"</string>
     <string name="view_reddit_gallery_activity_video_label">"वीडियो %1$d/%2$d"</string>
@@ -37,7 +37,7 @@
     <string name="navigation_drawer_close">"नेवीगेशन दराज बंद करें"</string>
     <string name="action_download">"डाउनलोड"</string>
     <string name="action_refresh">"ताजा करें"</string>
-    <string name="action_add_comment">"मतामत जोडें"</string>
+    <string name="action_add_comment">"टिप्पणी जोडें"</string>
     <string name="action_save_post">"पोस्ट जमा करे"</string>
 
     <!-- Fuzzy -->
@@ -48,7 +48,7 @@
     <string name="action_send">"भेजें"</string>
 
     <!-- क्रमबन्धन? -->
-    <string name="action_sort">"क्र्म्बर्धण"</string>
+    <string name="action_sort">"क्रमबन्धन "</string>
     <string name="action_hide_post">"पोस्ट छुपाएं"</string>
     <string name="action_unhide_post">"पोस्ट दिखाएं"</string>
     <string name="action_edit_post">"पोस्ट संपादित करें"</string>
@@ -66,61 +66,69 @@
     <string name="action_preview">"पूर्वदर्शन"</string>
     <string name="action_report">"शिकायत करें"</string>
     <string name="action_see_removed">"हटाए हुए पोस्ट देखें"</string>
-    <string name="action_set_wallpaper">"अलपेपर सेट करे"</string>
-    <string name="action_send_private_message">"प्राइबेट बातें भेजें"</string>
-    <string name="action_block_user">"ब्लव्क करे"</string>
+    <string name="action_set_wallpaper">"वालपेपर लगाएं "</string>
+    <string name="action_send_private_message">"व्यक्तिगत संदेश भेजें"</string>
+    <string name="action_block_user">"प्रतिबंधित करें "</string>
     <string name="parse_json_response_error">"JSON प्रतिक्रिया को समझने में त्रुटि"</string>
     <string name="retrieve_token_error">"टोकन प्राप्ति में त्रुटि"</string>
-    <string name="something_went_wrong">"कुछ गलत हे। पुनः प्रयास करें।"</string>
-    <string name="access_denied">"ब्लव्क है"</string>
+    <string name="something_went_wrong">"कुछ गलत हो गया है। बाद में पुनः प्रयास करें।"</string>
+    <string name="access_denied">"प्रवेश अस्वीकृत "</string>
     <string name="parse_user_info_error">"यूजर की जानकारी प्राप्ति में त्रुटि"</string>
-    <string name="no_system_webview_error">"सिस्टम ओएब वियू मे त्रुटि"</string>
-    <string name="error_loading_image_tap_to_retry">"चित्र खुलने में त्रुटि। यहा दबाए।"</string>
-    <string name="load_posts_error">"पोस्ट खुलने में त्रुटि। यहां दबाएं"</string>
+    <string name="no_system_webview_error">"सिस्टम वेब-व्यू खोलने में त्रुटि
+"</string>
+    <string name="error_loading_image_tap_to_retry">"चित्र खुलने में त्रुटि। पुनः प्रयास के लिए यहां दबाएं।"</string>
+    <string name="load_posts_error">"पोस्ट खुलने में त्रुटि।
+पुनः प्रयास के लिए यहां दबाएं।
+"</string>
     <string name="load_more_posts_error">"पोस्ट खुलने में त्रुटि"</string>
-    <string name="load_post_error">"इस पोस्ट के खुलने में त्रुटि
-यहा दबाएं"</string>
+    <string name="load_post_error">"इस पोस्ट के खुलने में त्रुटि।
+पुनः प्रयास के लिए यहां दबाएं।
+"</string>
     <string name="search_subreddits_error">"सबरैडिट खोजने में त्रुटि।
-यहां दबाएं"</string>
+पुनः प्रयास के लिए यहां दबाएं।
+"</string>
     <string name="search_users_error">"यूजर को खोजने में त्रुटि।
-यहां दबाएं"</string>
+पुनः प्रयास के लिए यहां दबाएं।
+"</string>
     <string name="no_posts">"कोई पोस्ट नहीं मिली"</string>
-    <string name="no_comments">"कोई मतामत नहीं मिली"</string>
+    <string name="no_comments">"कोई टिप्पणी नहीं मिली"</string>
     <string name="no_subreddits">"कोई सबरैडिट नहीं मिली"</string>
     <string name="no_users">"कोई यूजर नहीं मिला"</string>
     <string name="no_multi_reddits">"कोई मल्टीरैडिट नहीं मिली"</string>
-    <string name="no_storage_permission">"फाइल सेव करने के लिए स्टोरेज की अनुमति नहीं मिली "</string>
-    <string name="load_comments_failed">"मतामत खुलने में त्रुटि।
+    <string name="no_storage_permission">"फाइल सहेजने के लिए स्टोरेज की अनुमति नहीं मिली "</string>
+    <string name="load_comments_failed">"टिप्पणी खुलने में त्रुटि।
 यहा दबाएं"</string>
     <string name="retry">"पुनः प्रयास"</string>
-    <string name="comments">"मतामत"</string>
-    <string name="no_comments_yet">"अभी तक कोई मतमत नहीं। आप मतामत लिखें?"</string>
-    <string name="vote_failed">"वोट असफल रहा"</string>
+    <string name="comments">"टिप्पणियां "</string>
+    <string name="no_comments_yet">"अभी तक कोई टिप्पणी नहीं। आप एक टिप्पणी लिखें?"</string>
+    <string name="vote_failed">"मत असफल रहा"</string>
     <string name="refresh_post_failed">"पोस्ट को ताजा करने में त्रुटि"</string>
     <string name="load_messages_failed">"संदेश दिखाने में त्रुटि।
-यहां दबाएं"</string>
-    <string name="no_messages">"खाली "</string>
+पुनः प्रयास के लिए यहां दबाएं।"</string>
+    <string name="no_messages">"रिक्त "</string>
     <string name="nsfw">"NSFW"</string>
     <string name="karma_info">"कर्म: %1$d"</string>
     <string name="karma_info_user_detail">"कर्म: %1$d(%2$d + %3$d)"</string>
     <string name="cakeday_info">"केक दिवस: %1$s"</string>
-    <string name="since">"उस समय से:"</string>
+    <string name="since">"से (समय):
+"</string>
     <string name="profile">"प्रोफाइल"</string>
-    <string name="subscriptions">"सब्सक्रिप्शन"</string>
+    <string name="subscriptions">"सब्सक्रिप्शन्स"</string>
     <string name="multi_reddit">"मल्टीरैडिट"</string>
     <string name="inbox">"इनबाॅक्स"</string>
-    <string name="upvoted">"ऊचा"</string>
-    <string name="downvoted">"नीचा"</string>
+    <string name="upvoted">"उत्थापित"</string>
+    <string name="downvoted">"पतित"</string>
     <string name="hidden">"छिपी हुई"</string>
-    <string name="saved">"सेव हुआ"</string>
+    <string name="saved">"सहेजी हुई
+"</string>
     <string name="gilded">"पदक प्राप्त"</string>
     <string name="settings">"सैटिंग्स"</string>
     <string name="subscribers_number_detail">"सब्सक्राइबर्स: %1$d"</string>
     <string name="online_subscribers_number_detail">"ऑनलाइन: %1$d"</string>
-    <string name="cannot_fetch_subreddit_info">"सबरैडिट की जानकारी प्राप्त नहीं करा गया"</string>
-    <string name="cannot_fetch_user_info">"यूजर की जानकारी प्राप्त नहीं कर सका"</string>
-    <string name="cannot_fetch_sidebar">"साइड बार प्राप्त नहीं कर सका"</string>
-    <string name="cannot_fetch_multireddit">"मल्टीरैडिट की जानकारी प्राप्त नहीं कर सका"</string>
+    <string name="cannot_fetch_subreddit_info">"सबरैडिट की जानकारी प्राप्त नहीं हो सकी"</string>
+    <string name="cannot_fetch_user_info">"यूजर की जानकारी प्राप्त नहीं हो सकी"</string>
+    <string name="cannot_fetch_sidebar">"साइड बार प्राप्त नहीं हो सका "</string>
+    <string name="cannot_fetch_multireddit">"मल्टीरैडिट की जानकारी प्राप्त नहीं हो सकी"</string>
     <string name="subscribe">"सब्सक्राइब"</string>
     <string name="unsubscribe">"अनसब्सक्राइब"</string>
     <string name="subscribed">"सब्सक्राइब्ड"</string>
@@ -129,7 +137,7 @@
     <string name="unsubscribe_failed">"अनसब्सक्राइब असफल"</string>
     <string name="follow">"अनुसरण"</string>
     <string name="unfollow">"अ-अनुसरण"</string>
-    <string name="followed">"फोलोड"</string>
+    <string name="followed">"अनुसरित"</string>
     <string name="follow_failed">"अनुसरण असफल"</string>
     <string name="unfollowed">"अनफॉलोड"</string>
     <string name="unfollow_failed">"अ-अनुसरण असफल"</string>
@@ -142,40 +150,42 @@
     <string name="write_comment_hint">"यहां आपके रुचिकर विचार"</string>
     <string name="comment_content_required">"आपका रूचिकर विचार कहाँ है?"</string>
     <string name="sending_comment">"जा रहा है"</string>
-    <string name="send_comment_success">"मतामत भेज दी गई"</string>
-    <string name="send_comment_failed">"मतामत भेजा नहि गया"</string>
-    <string name="send_message_username_hint">"यूजर"</string>
+    <string name="send_comment_success">"टिप्पणी भेज दी गई"</string>
+    <string name="send_comment_failed">"टिप्पणी भेजी नहीं जा सकी
+"</string>
+    <string name="send_message_username_hint">"उपयोगकर्ता "</string>
     <string name="send_message_subject_hint">"बिषय (अधिकतम १०० अक्षर)"</string>
     <string name="send_message_content_hint">"संदेश"</string>
-    <string name="reply_message_failed">"इस संदेश का उत्तर नहीं दिया गया"</string>
+    <string name="reply_message_failed">"इस संदेश का उत्तर नहीं दिया जा सका "</string>
     <string name="error_getting_message">"संदेश प्राप्ति में त्रुटि"</string>
     <string name="message_username_required">"नमस्ते, आप यह संदेश किसे भेजना चाहते हैं?"</string>
     <string name="message_subject_required">"आपके संदेश का एक बिषय होना चाहिए"</string>
     <string name="message_content_required">"आपको प्राप्तकर्ता को कुछ तो बताना चाहिए"</string>
-    <string name="sending_message">"जा रहा हे"</string>
+    <string name="sending_message">"जा रहा है "</string>
     <string name="send_message_success">"संदेश भेज दिया"</string>
-    <string name="send_message_failed">"संदेश नहीं भेज सका"</string>
+    <string name="send_message_failed">"संदेश नहीं भेज जा सका "</string>
     <string name="select_a_subreddit">"कृपया पहले एक सबरैडिट चुनिए"</string>
-    <string name="title_required">"पोस्ट कि अछि शीर्षक दिजीये"</string>
-    <string name="link_required">"जी, लिंक दिजीये?"</string>
+    <string name="title_required">"पोस्ट कि अच्छा शीर्षक चाहिए "</string>
+    <string name="link_required">"जी, लिंक दीजिए?"</string>
     <string name="select_an_image">"कृपया पहले एक चित्र चुनिए"</string>
-    <string name="posting">"हो रहा"</string>
+    <string name="posting">"पोस्ट किया जा रहा है "</string>
     <string name="post_failed">"पोस्ट नहीं कर सका"</string>
-    <string name="error_processing_image">"प्रसंस्करण में त्रुटि"</string>
+    <string name="error_processing_image">"प्रसंस्करण में त्रुटि "</string>
     <string name="error_processing_video">"प्रसंस्करण में त्रुटि"</string>
-    <string name="download_started">"डाउनलोड चालू है। प्रसंस्करण के लिए नोटिफिकेशन देखें।"</string>
-    <string name="comment_load_more_comments">"और मतामत देखें"</string>
-    <string name="comment_load_more_comments_failed">"लोड असफल। यहा दबाएं"</string>
+    <string name="download_started">"डाउनलोड शुरू हो गया है। प्रगति देखने के लिए नोटिफिकेशन देखें।
+"</string>
+    <string name="comment_load_more_comments">"और टिप्पणियां देखें"</string>
+    <string name="comment_load_more_comments_failed">"लोड असफल। पुनः प्रयास के लिए यहां दबाएं।"</string>
     <string name="loading">"लोड हो रहा है"</string>
     <string name="post_title_hint">"शीर्षक"</string>
-    <string name="post_text_content_hint">"प्रकरण"</string>
+    <string name="post_text_content_hint">"अंतःवस्तु"</string>
     <string name="choose_a_subreddit">"एक सबरैडिट चुनें"</string>
     <string name="rules">"नियम"</string>
     <string name="post_link_hint">"URL"</string>
     <string name="subreddits">"सबरैडिट्स"</string>
-    <string name="users">"यूजर्स"</string>
+    <string name="users">"उपयोगकर्ता "</string>
     <string name="multi_reddits">"मल्टीरैडिट्स"</string>
-    <string name="bottom_sheet_post_text">"लेख"</string>
+    <string name="bottom_sheet_post_text">"टैक्स्ट "</string>
     <string name="bottom_sheet_post_link">"लिंक"</string>
     <string name="bottom_sheet_post_image">"चित्र"</string>
     <string name="bottom_sheet_post_video">"वीडियो"</string>
@@ -185,14 +195,14 @@
     <string name="error_getting_video">"वीडियो प्राप्ति में त्रुटि"</string>
     <string name="no_camera_available">"कोई भी कैमरा एप्प उपलब्ध नहीं"</string>
     <string name="error_creating_temp_file">"अस्थाई फाइल बनाने में त्रुटि"</string>
-    <string name="video_is_processing">"वीडियो प्रसंस्करण है रजा हे। कृपया प्रतीक्षा करें।"</string>
-    <string name="image_is_processing">"चित्र प्रसंस्करण हो रहा है। कृपया प्रतीक्षा करें।"</string>
-    <string name="gif_is_processing">"जिफ प्रसंस्करण हो रही है। कृपया प्रतीक्षा करें। "</string>
+    <string name="video_is_processing">"वीडियो प्रसंस्कृत हो रही है। कृपया प्रतीक्षा करें।"</string>
+    <string name="image_is_processing">"चित्र प्रसंस्कृत हो रहा है। कृपया प्रतीक्षा करें।"</string>
+    <string name="gif_is_processing">"जिफ प्रसंस्कृत हो रही है। कृपया प्रतीक्षा करें। "</string>
 
     <!-- Using For??
 Actually It Means स्वभाव In Hindi
 Behavior -->
-    <string name="flair">"स्वभाव"</string>
+    <string name="flair">"फ्लेयर"</string>
     <string name="spoiler">"स्पॉइलर"</string>
     <string name="no_flair">"कोई फ्लेयर नहीं"</string>
     <string name="error_loading_flairs">"फ्लेयर लोड होने में  त्रुटि।
@@ -203,20 +213,20 @@ Behavior -->
     <string name="error_loading_rules_without_retry">"नियम लोड होने में त्रुटि"</string>
     <string name="search_in">"खोजें"</string>
     <string name="all_subreddits">"सभी सबरैडिट्स"</string>
-    <string name="sort_best">"आछा"</string>
-    <string name="sort_hot">"तीखा"</string>
-    <string name="sort_new">"नया"</string>
+    <string name="sort_best">"श्रेष्ठ"</string>
+    <string name="sort_hot">"उत्तेजक"</string>
+    <string name="sort_new">"नवीन "</string>
     <string name="sort_random">"अव्यवस्थित"</string>
     <string name="sort_rising">"आरोही"</string>
-    <string name="sort_top">"शीर्ष"</string>
+    <string name="sort_top">"सर्वोच्च"</string>
     <string name="sort_controversial">"विवादास्पद"</string>
     <string name="sort_relevance">"प्रासंगिक"</string>
-    <string name="sort_comments">"मतामत"</string>
+    <string name="sort_comments">"टिप्पणियां "</string>
     <string name="sort_activity">"गतिविधि"</string>
-    <string name="sort_confidence">"आत्मविश्वास"</string>
+    <string name="sort_confidence">"विश्वसनीय"</string>
     <string name="sort_old">"पुरानी"</string>
     <string name="sort_qa">"प्रश्नोत्तर"</string>
-    <string name="sort_live">"लाइब"</string>
+    <string name="sort_live">"जीवंत"</string>
     <string name="sort_time_hour">"घंटा"</string>
     <string name="sort_time_day">"दिन"</string>
     <string name="sort_time_week">"सप्ताह"</string>
@@ -322,7 +332,7 @@ Behavior -->
     <string name="settings_save_front_page_scrolled_position_summary">"होम में ताजा करने पर नई पोस्ट्स देखें (मुख पृष्ट, क्रम: श्रेष्ठ)"</string>
     <string name="settings_open_link_in_app_title">"लिंक एप में खोलें "</string>
     <string name="settigns_video_title">"वीडियो "</string>
-    <string name="settings_video_autoplay_title">"वीडियो स्वचालित "</string>
+    <string name="settings_video_autoplay_title">"वीडियो स्वचालन"</string>
     <string name="settings_mute_autoplaying_videos_title">"स्वचालित वीडियोज को मौन करें "</string>
     <string name="settings_autoplay_nsfw_videos_title">"स्वचालित NSFW वीडियोड"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"स्वचालित वीडियो के दृश्य क्षेत्र का संतुलन (खड़े में)"</string>
@@ -357,8 +367,8 @@ Behavior -->
     <string name="settings_comment_toolbar_hide_on_click">"टिप्पणी टूलबार को दिखाने/छुपाने के लिए क्लिक "</string>
 
     <!-- डहाना can be good alt. -->
-    <string name="settings_fully_collapse_comment_title">"मतमात सन्खीप्त करे"</string>
-    <string name="settings_comment_toolbar_hidden">"पूर्वनिर्धारित रूप से छिपा हुआ टिप्पणी टूलबार "</string>
+    <string name="settings_fully_collapse_comment_title">"टिप्पणियों को संक्षिप्त करें"</string>
+    <string name="settings_comment_toolbar_hidden">"पूर्वनिर्धारित रूप से टिप्पणी टूलबार अदृश्य "</string>
     <string name="settings_show_absolute_number_of_votes_title">"वोट्स की पूरी संख्या दिखाएं "</string>
     <string name="settings_show_elapsed_time">"पोस्ट्स एवं टिप्पणियों में बीता हुआ समय दिखाएं"</string>
     <string name="settings_time_format_title">"समय प्रारूप "</string>
@@ -397,7 +407,7 @@ Behavior -->
     <string name="settings_credits_error_image_title">"त्रुटि चित्र "</string>
     <string name="settings_credits_error_image_summary">"प्रौद्योगिकी डिज़ाइन बनाया हे फ्रीपिक - www.freepik.com"</string>
     <string name="settings_credits_gilded_icon_title">"पदक आइकॉन "</string>
-    <string name="settings_credits_gilded_icon_summary">"आइकन को डिज़ाइन किया हे फ्रीपिक - www.flaticon.com"</string>
+    <string name="settings_credits_gilded_icon_summary">"फ्रीपिक द्वारा आइकॉन डिजाइन  www.flaticon.com"</string>
     <string name="settings_credits_crosspost_icon_title">"क्रॉसपोस्ट आइकॉन "</string>
     <string name="settings_credits_crosspost_icon_summary">"आइकन बनाया है फ्रीपिक ने - www.flaticon.com"</string>
     <string name="settings_credits_thumbtack_icon_title">"थम्बटेक आइकॉन "</string>
@@ -491,7 +501,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="share_gif_link">"जिफ का लिंक साझा करें "</string>
     <string name="share_video_link">"वीडियो का लिंक साझा करें "</string>
     <string name="share_link">"लिंक साझा करें "</string>
-    <string name="copy_post_link">"पोस्ट "</string>
+    <string name="copy_post_link">"पोस्ट लिंक कॉपी करें "</string>
     <string name="copy_image_link">"इमेज लिंक कॉपी करें "</string>
     <string name="copy_gif_link">"जिफ लिंक कॉपी करें "</string>
     <string name="copy_video_link">"वीडियो लिंक कॉपी करें "</string>
@@ -525,7 +535,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="disable_nsfw">"NSFW बंद करें "</string>
     <string name="cannot_save_image">"चित्र सुरक्षित करने में असफल "</string>
     <string name="cannot_save_gif">"जिफ सुरक्षित करने में असफल "</string>
-    <string name="cannot_get_storage">"एप्प स्टोरेज तक पहुंच नहीं सकता "</string>
+    <string name="cannot_get_storage">"एप्प स्टोरेज तक पहुंच नहीं सका "</string>
     <string name="save_image_first">"चित्र सहेजा जा रहा है। कृपया प्रतीक्षा करें। "</string>
     <string name="save_gif_first">"जिफ सहेजा जा रहा है। कृपया प्रतीक्षा करें।  "</string>
     <string name="theme_name_description">"इस थीम का नाम बदलने के लिए यहां दबाएं।"</string>
@@ -658,8 +668,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_unread_message_background_color_detail">"पर लागू होगा: अपठित संदेश पृष्टभूमि रंग "</string>
     <string name="theme_item_divider_color">"विभाजक रंग "</string>
     <string name="theme_item_divider_color_detail">"पर लागू होगा: टिप्पणी विभाजक, पोस्ट जमा करने के लिए पृष्ठों में विभाजक, इत्यादि "</string>
-    <string name="theme_item_no_preview_post_type_background_color">"कोई पूर्वदर्शन लिंक नहीं पृष्टभूमि रंग "</string>
-    <string name="theme_item_no_preview_post_type_background_color_detail">"पर लागू होगा: कोई पूर्वदर्शन लिंक नहीं"</string>
     <string name="theme_item_vote_and_reply_unavailable_button_color">"वोट एवं उत्तर अनुपलब्ध बटन का रंग "</string>
     <string name="theme_item_vote_and_reply_unavailable_button_color_detail">"पर लागू होगा: वोट एवं उत्तर बटन्स (अनुपलब्ध)"</string>
     <string name="theme_item_comment_vertical_bar_color_1">"टिप्पणी ऊर्ध्वाधर बार रंग 1"</string>
@@ -757,7 +765,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="flair_preview">"फ्लेयर "</string>
     <string name="awards_preview">"4 पदक "</string>
     <string name="author_flair_preview">"रचयिता फ्लेयर "</string>
-    <string name="comment_content_preview">"मैंने अपनी गर्लफ्रेंड को एक 'जल्दी से अच्छी हो जाओ' कार्ड दिया।
+    <string name="comment_content_preview">"मैंने अपनी प्रेमिका को एक 'जल्दी से अच्छी हो जाओ' कार्ड दिया।
 वह बीमार नहीं है, लेकिन वह निश्चित रूप से अच्छी हो जाएगी।"</string>
     <string name="edit_multi_reddit">"मल्टीरैडिट्स संपादित करें "</string>
     <string name="delete_multi_reddit">"मल्टीरैडिट्स मिटा दें "</string>
@@ -799,7 +807,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="set_to_home_screen">"होम स्क्रीन पे सेट करे"</string>
     <string name="set_to_lock_screen">"लक स्क्रीन पे सेट करे"</string>
     <string name="set_to_both">"दोनो पे ही सेट करे"</string>
-    <string name="default_font_font_preview">"अ बदलाभ"</string>
+    <string name="default_font_font_preview">"पूर्वनिर्धारित "</string>
     <string name="load_video_in_redgifs">"वीडियो रेडगिफ्स पर लोड करने कि कोशिश करे"</string>
     <string name="top_score">"%1$s अंक"</string>
     <string name="login_activity_2fa_prompt">"अगार आपका 2-कदाम प्रमाणीकरण चालू है, तो कृपिया आपना पासबर्ड(चाबी) निम्ना लिखित तरीके से दिजीये: &lt;पासबर्ड&gt;:&lt;2FA code&gt;
@@ -807,4 +815,118 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="block_user">"एकाउंट ब्लक करे"</string>
     <string name="block_user_success">"एकाउंट ब्लक"</string>
     <string name="block_user_failed">"ब्लक करना असफल रहा"</string>
+    <string name="submit_crosspost_activity_label">"क्रॉसपोस्ट "</string>
+    <string name="give_award_activity_label">"पुरस्कार दें "</string>
+    <string name="action_crosspost">"क्रॉसपोस्ट"</string>
+    <string name="action_select_user_flair">"उपयोगकर्ता का फ्लेयर चुनें "</string>
+    <string name="action_give_award">"पुरस्कार दें␣"</string>
+    <string name="posts">"पोस्ट्स"</string>
+    <string name="sidebar">"साइडबार "</string>
+    <string name="only_for_logged_in_user">"केवल लाॅग्ड-इन उपयोगकर्ता के लिए "</string>
+    <string name="settings_number_of_columns_in_post_feed_title">"पोस्ट फीड में स्तम्भों की संख्या "</string>
+    <string name="settings_number_of_columns_in_post_feed_portrait_title">"ऊर्ध्वाधर"</string>
+    <string name="settings_number_of_columns_in_post_feed_landscape_title">" क्षैतिज "</string>
+    <string name="settings_nsfw_and_spoiler_title">"समाचारपत्र एवं स्प्वाॅइलर"</string>
+    <string name="settings_delete_all_legacy_settings_title">"सभी पुरानी सैटिंग्स को मिटाएं"</string>
+    <string name="restart_app_see_changes">"परिवर्तन देखने के लिए एप्प को पुनः शुरू करें "</string>
+    <string name="settings_tab_count">"टैब संख्या "</string>
+    <string name="settings_show_tab_names">"टैब के नाम दिखाएं"</string>
+    <string name="settings_more_tabs_summary">"अतिरिक्त टैब्स"</string>
+    <string name="settings_more_tabs_info_summary">"निम्नलिखित विकल्प को शुरू करना अनपेक्षित व्यवहार का कारण बन जाएगा:
+दूसरी टैब में जाने पर टैब्स अपनी अंत:वस्तु खो सकती हैं।
+ यह पृष्ट को ताजा करने जैसा ही है।
+
+"</string>
+    <string name="settings_more_tabs_show_favorite_subscribed_subreddits_title">"पसंदीदा सब्सक्राइब्ड सबरैडिट्स दिखाएं "</string>
+    <string name="settings_more_tabs_show_subscribed_subreddits_title">"सब्सक्राइब्ड सबरैडिट्स दिखाएं"</string>
+    <string name="settings_download_location_title">"डाउनलोड अवस्थिति "</string>
+    <string name="settings_image_download_location_title">"चित्र डाउनलोड अवस्थिति"</string>
+    <string name="settings_gif_download_location_title">"जिफ डाउनलोड अवस्थिति"</string>
+    <string name="settings_video_download_location_title">"वीडियो डाउनलोड अवस्थिति"</string>
+    <string name="settings_separate_folder_for_each_subreddit">"प्रत्येक सबरैडिट के लिए पृथक फोल्डर "</string>
+    <string name="settings_swipe_action_title">"स्वाइप प्रतिक्रिया "</string>
+    <string name="settings_disable_swiping_between_tabs_title">"टैब्स के बीच स्वाइपिंग बंद करें "</string>
+    <string name="settings_enable_swipe_action_title">"स्वाइप प्रतिक्रियाओं को शुरु करें "</string>
+    <string name="settings_swipe_action_threshold">"दहलीज "</string>
+    <string name="settings_pull_to_refresh_title">"ताजा करने के लिए खींचें"</string>
+    <string name="settings_security_title">"सुरक्षा "</string>
+    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"नेवीगेशन दराज में खाता अनुभाग पर जाने के लिए सत्यापन आवश्यक "</string>
+    <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"संक्षिप्त विन्यास में टूलबार को छुपाने के लिए लॉंग प्रैस "</string>
+    <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"संक्षिप्त विन्यास में टूलबार पूर्वनिर्धारित रूप से अदृश्य "</string>
+    <string name="settings_customize_bottom_app_bar_title">"निचले नेवीगेशन बार को अनुकूलित करें "</string>
+    <string name="settings_main_activity_bottom_app_bar_group_summary">"मुख्य पृष्ट "</string>
+    <string name="settings_other_activities_bottom_app_bar_group_summary">"अन्य पृष्ट "</string>
+    <string name="settings_bottom_app_bar_option_count">"विकल्प संख्या "</string>
+    <string name="settings_bottom_app_bar_option_1">"विकल्प 1"</string>
+    <string name="settings_bottom_app_bar_option_2">"विकल्प 2"</string>
+    <string name="settings_bottom_app_bar_option_3">"विकल्प 3"</string>
+    <string name="settings_bottom_app_bar_option_4">"विकल्प 4"</string>
+    <string name="settings_bottom_app_bar_fab">"तैरता क्रिया बटन "</string>
+    <string name="settings_data_saving_mode">"डेटा संरक्षण प्रणाली"</string>
+    <string name="settings_data_saving_mode_info_summary">"डेटा संरक्षण प्रणाली:
+पूर्वावलोकित चित्र की कमतर स्पष्टता।
+रैडिट वीडियोज की कमतर स्पष्टता।
+वीडियो स्वचालन बंद।"</string>
+    <string name="settings_translation_title">"अनुवाद "</string>
+    <string name="settings_translation_summary">"इस एप को POEditor पर अनुवाद कीजिए। सभी योगदानों के लिए धन्यवाद। "</string>
+    <string name="settings_credits_national_flags">"राष्ट्रीय ध्वज "</string>
+    <string name="settings_credits_national_flags_summary">"आइकन www.flaticon.con से Freepik द्वारा बनाया गया है। "</string>
+    <string name="copy_failed">"कॉपी असफल "</string>
+    <string name="delete_all_legacy_settings_success">"सभी पुरानी सैटिंग्स को मिटाना सफल "</string>
+    <string name="downloading_media_finished">"डाउनलोडेड"</string>
+    <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"डाउनलोड असफल: गंतव्य डायरेक्टरी तक अभिगम असफल "</string>
+    <string name="downloading_media_failed_cannot_download_media">"डाउनलोड असफल"</string>
+    <string name="downloading_media_failed_cannot_save_to_destination_directory">"डाउनलोड असफल: गंतव्य डायरेक्टरी में फाइल का संरक्षण असफल"</string>
+    <string name="view_full_comment_markdown">"संपूर्ण मार्कडाउन देखें "</string>
+    <string name="select_user_flair_success">"यूजर फ्लेयर चुन लिया गया "</string>
+    <string name="select_this_user_flair">"इस यूजर फ्लेयर का चुनाव करना है? "</string>
+    <string name="select_header_size">"हेडर माप चुनें "</string>
+    <string name="large">"बड़ा "</string>
+    <string name="small">"छोटा "</string>
+    <string name="insert_link">"लिंक जोड़ें"</string>
+    <string name="text_hint">"टेक्स्ट "</string>
+    <string name="link_hint">"लिंक "</string>
+    <string name="unlock_account_section">"खाता अनुभाग खोलें "</string>
+    <string name="unlock">"खोलें "</string>
+    <string name="submit_post">"पोस्ट जमा करें "</string>
+    <string name="refresh">"ताजा करें "</string>
+    <string name="change_sort_type">"क्रम प्रकार बदलें"</string>
+    <string name="change_post_layout">"पोस्ट विन्यास बदलें "</string>
+    <string name="give_award_dialog_title">"पुरस्कार दें? "</string>
+    <string name="anonymous">"अज्ञात"</string>
+    <string name="give_award_error_message">"कूट: %1$d
+संदेश: %2$s"</string>
+    <string name="give_award_success">"पुरस्कार दे दिया गया "</string>
+    <string name="give_award_failed">"असफल "</string>
+    <string name="recent_searches">"हाल ही की खोजें "</string>
+    <string name="warning">"चेतावनी "</string>
+    <string name="this_is_a_nsfw_subreddit">"यह एक NSFW सबरैडिट है "</string>
+    <string name="this_user_has_nsfw_content">"इस यूजर के पास NSFW सामग्री है। "</string>
+    <string name="dismiss">"रद्द करें "</string>
+    <string name="leave">"निकासी "</string>
+    <string name="go_to_subreddit">"सबरैडिट पर जाएं "</string>
+    <string name="go_to_user">"यूजर पर जाएं "</string>
+    <string name="go_to_thing_hint">"नाम "</string>
+    <string name="random">"यादृच्छिक "</string>
+    <string name="random_subreddit">"यादृच्छिक सबरैडिट "</string>
+    <string name="random_nsfw_subreddit">"यादृच्छिक NSFW सबरैडिट"</string>
+    <string name="random_post">"यादृच्छिक पोस्ट "</string>
+    <string name="random_nsfw_post">"यादृच्छिक NSFW पोस्ट "</string>
+    <string name="fetch_random_thing_failed">"बाद में पुनः प्रयास करें"</string>
+    <string name="downloading">"डाउनलोड हो रहा है "</string>
+    <string name="subreddit_filter_popular_and_all_activity_label">"r/all एवं r/popular"</string>
+    <string name="settings_miscellaneous_title">"विविध "</string>
+    <string name="settings_respect_subreddit_recommended_comment_sort_type_title">"सबरैडिट द्वारा संस्तुतित टिप्पणी क्रम प्रकार बनाए रखें "</string>
+    <string name="settings_respect_subreddit_recommended_comment_sort_type_summary">"टिप्पणी क्रम प्रकार सरंक्षित नहीं किया जाएगा "</string>
+    <string name="settings_filter_title">"छंटनी "</string>
+    <string name="settings_subreddit_filter_category">"सबरैडिट छुपाएं "</string>
+    <string name="settings_subreddit_filter_popular_and_all">"r/popular एवं r/all में "</string>
+    <string name="settings_credits_ufo_capturing_animation_title">"UFO बंदी बनाते हुए एनिमेशन "</string>
+    <string name="select_video_quality">"वीडियो गुणवत्ता चुनें"</string>
+    <string name="settings_swipe_action_haptic_feedback_title">"स्पर्श प्रतिपुष्टि "</string>
+    <string name="settings_hide_subreddit_description_title">"सबरैडिट विवरण छुपाएं "</string>
+    <string name="settings_disable_image_preview_title">"डेटा संरक्षण प्रणाली में चित्र पूर्वावलोकन बंद करें"</string>
+    <string name="settings_swipe_action_swipe_left_title">"बायां स्वाइप"</string>
+    <string name="settings_swipe_action_swipe_right_title">"दायां स्वाइप"</string>
+    <string name="settings_swipe_action_info_summary">"एक स्तंभ या पोस्ट विवरण से अधिक वाली पोस्ट फीड पर लागू नहीं "</string>
 </resources>
