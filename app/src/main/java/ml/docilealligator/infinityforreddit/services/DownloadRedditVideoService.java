@@ -599,7 +599,7 @@ public class DownloadRedditVideoService extends Service {
                     Uri uri = null;
 
                     try {
-                        final Uri contentUri = MediaStore.Video.Media.EXTERNAL_CONTENT_URI;
+                        final Uri contentUri = MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL);
                         uri = contentResolver.insert(contentUri, contentValues);
 
                         if (uri == null) {

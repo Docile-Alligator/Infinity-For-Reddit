@@ -424,7 +424,7 @@ public class DownloadMediaService extends Service {
                     contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, destinationFileUriString);
                     contentValues.put(mediaType == EXTRA_MEDIA_TYPE_VIDEO ? MediaStore.Video.Media.IS_PENDING : MediaStore.Images.Media.IS_PENDING, 1);
 
-                    final Uri contentUri = mediaType == EXTRA_MEDIA_TYPE_VIDEO ? MediaStore.Video.Media.EXTERNAL_CONTENT_URI : MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+                    final Uri contentUri = mediaType == EXTRA_MEDIA_TYPE_VIDEO ? MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL) : MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL);
                     Uri uri = contentResolver.insert(contentUri, contentValues);
 
                     if (uri == null) {
