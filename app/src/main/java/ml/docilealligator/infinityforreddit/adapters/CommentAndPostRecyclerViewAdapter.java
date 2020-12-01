@@ -279,6 +279,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         int start = 0;
                         boolean find = false;
                         while (matcher.find(start)) {
+                            if (markdownStringBuilder.length() < 4
+                                    || matcher.start() < 0
+                                    || matcher.end() > markdownStringBuilder.length()) {
+                                break;
+                            }
                             find = true;
                             markdownStringBuilder.delete(matcher.end() - 2, matcher.end());
                             markdownStringBuilder.delete(matcher.start(), matcher.start() + 2);
@@ -375,6 +380,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         int start = 0;
                         boolean find = false;
                         while (matcher.find(start)) {
+                            if (markdownStringBuilder.length() < 4
+                                    || matcher.start() < 0
+                                    || matcher.end() > markdownStringBuilder.length()) {
+                                break;
+                            }
                             find = true;
                             markdownStringBuilder.delete(matcher.end() - 2, matcher.end());
                             markdownStringBuilder.delete(matcher.start(), matcher.start() + 2);
