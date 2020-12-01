@@ -62,9 +62,11 @@ public class ReportReasonRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
     }
 
     public ReportReason getSelectedReason() {
-        for (ReportReason reportReason : rules) {
-            if (reportReason.isSelected()) {
-                return reportReason;
+        if (rules != null) {
+            for (ReportReason reportReason : rules) {
+                if (reportReason.isSelected()) {
+                    return reportReason;
+                }
             }
         }
 

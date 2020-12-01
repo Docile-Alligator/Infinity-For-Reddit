@@ -323,7 +323,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                         int currentPostsSize = postLinkedHashSet.size();
                                         postLinkedHashSet.addAll(newPosts);
                                         if (currentPostsSize == postLinkedHashSet.size()) {
-                                            callback.onResult(new ArrayList<>(), lastItem);
+                                            loadBestPostsAfter(params, callback, lastItem);
                                         } else {
                                             List<Post> newPostsList = new ArrayList<>(postLinkedHashSet).subList(currentPostsSize, postLinkedHashSet.size());
                                             callback.onResult(newPostsList, lastItem);
@@ -457,7 +457,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                         int currentPostsSize = postLinkedHashSet.size();
                                         postLinkedHashSet.addAll(newPosts);
                                         if (currentPostsSize == postLinkedHashSet.size()) {
-                                            callback.onResult(new ArrayList<>(), lastItem);
+                                            loadSubredditPostsAfter(params, callback, lastItem);
                                         } else {
                                             List<Post> newPostsList = new ArrayList<>(postLinkedHashSet).subList(currentPostsSize, postLinkedHashSet.size());
                                             callback.onResult(newPostsList, lastItem);
@@ -589,7 +589,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                         int currentPostsSize = postLinkedHashSet.size();
                                         postLinkedHashSet.addAll(newPosts);
                                         if (currentPostsSize == postLinkedHashSet.size()) {
-                                            callback.onResult(new ArrayList<>(), lastItem);
+                                            loadUserPostsAfter(params, callback, lastItem);
                                         } else {
                                             List<Post> newPostsList = new ArrayList<>(postLinkedHashSet).subList(currentPostsSize, postLinkedHashSet.size());
                                             callback.onResult(newPostsList, lastItem);
@@ -763,7 +763,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                         int currentPostsSize = postLinkedHashSet.size();
                                         postLinkedHashSet.addAll(newPosts);
                                         if (currentPostsSize == postLinkedHashSet.size()) {
-                                            callback.onResult(new ArrayList<>(), lastItem);
+                                            loadSearchPostsAfter(params, callback, lastItem);
                                         } else {
                                             List<Post> newPostsList = new ArrayList<>(postLinkedHashSet).subList(currentPostsSize, postLinkedHashSet.size());
                                             callback.onResult(newPostsList, lastItem);
@@ -894,7 +894,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                         int currentPostsSize = postLinkedHashSet.size();
                                         postLinkedHashSet.addAll(newPosts);
                                         if (currentPostsSize == postLinkedHashSet.size()) {
-                                            callback.onResult(new ArrayList<>(), lastItem);
+                                            loadMultiRedditPostsAfter(params, callback, lastItem);
                                         } else {
                                             List<Post> newPostsList = new ArrayList<>(postLinkedHashSet).subList(currentPostsSize, postLinkedHashSet.size());
                                             callback.onResult(newPostsList, lastItem);

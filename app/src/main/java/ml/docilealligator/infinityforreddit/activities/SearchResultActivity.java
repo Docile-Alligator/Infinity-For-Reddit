@@ -295,7 +295,9 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 startActivity(intent);
                 return true;
             case R.id.action_refresh_search_result_activity:
-                sectionsPagerAdapter.refresh();
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.refresh();
+                }
                 return true;
             case R.id.action_change_post_layout_search_result_activity:
                 postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
@@ -321,7 +323,10 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
 
     @Override
     public void sortTypeSelected(SortType sortType) {
-        sectionsPagerAdapter.changeSortType(sortType);
+        if (sectionsPagerAdapter != null) {
+            sectionsPagerAdapter.changeSortType(sortType);
+        }
+
     }
 
     @Override
@@ -334,12 +339,18 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
 
     @Override
     public void searchUserAndSubredditSortTypeSelected(SortType sortType, int fragmentPosition) {
-        sectionsPagerAdapter.changeSortType(sortType, fragmentPosition);
+        if (sectionsPagerAdapter != null) {
+            sectionsPagerAdapter.changeSortType(sortType, fragmentPosition);
+        }
+
     }
 
     @Override
     public void postLayoutSelected(int postLayout) {
-        sectionsPagerAdapter.changePostLayout(postLayout);
+        if (sectionsPagerAdapter != null) {
+            sectionsPagerAdapter.changePostLayout(postLayout);
+        }
+
     }
 
     @Subscribe
@@ -349,7 +360,9 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
 
     @Subscribe
     public void onChangeNSFWEvent(ChangeNSFWEvent changeNSFWEvent) {
-        sectionsPagerAdapter.changeNSFW(changeNSFWEvent.nsfw);
+        if (sectionsPagerAdapter != null) {
+            sectionsPagerAdapter.changeNSFW(changeNSFWEvent.nsfw);
+        }
     }
 
     @Override
