@@ -184,7 +184,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     private String mMessageFullname;
     private String mNewAccountName;
     private SlidrInterface mSlidrInterface;
-    private MaterialAlertDialogBuilder nsfwWarningBuilder;
+    //private MaterialAlertDialogBuilder nsfwWarningBuilder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -435,7 +435,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                     descriptionTextView.setText(userData.getDescription());
                 }
 
-                if (userData.isNSFW()) {
+                /*if (userData.isNSFW()) {
                     if (nsfwWarningBuilder == null
                             && !mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false)) {
                         nsfwWarningBuilder = new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
@@ -448,7 +448,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                                 .setNegativeButton(R.string.dismiss, null);
                         nsfwWarningBuilder.show();
                     }
-                }
+                }*/
             }
         });
 
