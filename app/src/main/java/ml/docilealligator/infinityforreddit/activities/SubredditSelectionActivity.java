@@ -174,6 +174,10 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
     }
 
     private void bindView(boolean initializeFragment) {
+        if (isFinishing() || isDestroyed()) {
+            return;
+        }
+
         loadSubscriptions();
 
         if (initializeFragment) {

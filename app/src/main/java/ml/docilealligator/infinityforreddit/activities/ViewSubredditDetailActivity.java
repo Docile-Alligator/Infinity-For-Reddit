@@ -901,9 +901,11 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 if (mMenu != null) {
                     mMenu.findItem(R.id.action_lazy_mode_view_subreddit_detail_activity).setTitle(R.string.action_start_lazy_mode);
                 }
-                sectionsPagerAdapter.refresh();
-                mFetchSubredditInfoSuccess = false;
-                fetchSubredditData();
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.refresh();
+                    mFetchSubredditInfoSuccess = false;
+                    fetchSubredditData();
+                }
                 return true;
             case R.id.action_lazy_mode_view_subreddit_detail_activity:
                 if (sectionsPagerAdapter != null) {

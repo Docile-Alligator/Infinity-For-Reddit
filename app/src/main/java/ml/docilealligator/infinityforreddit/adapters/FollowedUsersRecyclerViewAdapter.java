@@ -102,11 +102,6 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             int offset = (mFavoriteSubscribedUserData != null && mFavoriteSubscribedUserData.size() > 0) ?
                     mFavoriteSubscribedUserData.size() + 2 : 0;
 
-            viewHolder.itemView.setOnClickListener(view -> {
-                Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
-                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mSubscribedUserData.get(viewHolder.getAdapterPosition() - offset).getName());
-                mContext.startActivity(intent);
-            });
             if (!mSubscribedUserData.get(viewHolder.getAdapterPosition() - offset).getIconUrl().equals("")) {
                 glide.load(mSubscribedUserData.get(viewHolder.getAdapterPosition() - offset).getIconUrl())
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -125,66 +120,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             } else {
                 ((UserViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
             }
-
-            ((UserViewHolder) viewHolder).favoriteImageView.setOnClickListener(view -> {
-                if(mSubscribedUserData.get(viewHolder.getAdapterPosition() - offset).isFavorite()) {
-                    ((UserViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
-                    mSubscribedUserData.get(viewHolder.getAdapterPosition() - offset).setFavorite(false);
-                    FavoriteThing.unfavoriteUser(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
-                            mSubscribedUserData.get(viewHolder.getAdapterPosition() - offset),
-                            new FavoriteThing.FavoriteThingListener() {
-                                @Override
-                                public void success() {
-                                    int position = viewHolder.getAdapterPosition() - offset;
-                                    if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
-                                        mFavoriteSubscribedUserData.get(position).setFavorite(false);
-                                    }
-                                    ((UserViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
-                                }
-
-                                @Override
-                                public void failed() {
-                                    Toast.makeText(mContext, R.string.thing_unfavorite_failed, Toast.LENGTH_SHORT).show();
-                                    int position = viewHolder.getAdapterPosition() - offset;
-                                    if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
-                                        mFavoriteSubscribedUserData.get(position).setFavorite(true);
-                                    }
-                                    ((UserViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
-                                }
-                            });
-                } else {
-                    ((UserViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
-                    mSubscribedUserData.get(viewHolder.getAdapterPosition() - offset).setFavorite(true);
-                    FavoriteThing.favoriteUser(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
-                            mSubscribedUserData.get(viewHolder.getAdapterPosition() - offset),
-                            new FavoriteThing.FavoriteThingListener() {
-                                @Override
-                                public void success() {
-                                    int position = viewHolder.getAdapterPosition() - offset;
-                                    if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
-                                        mFavoriteSubscribedUserData.get(position).setFavorite(true);
-                                    }
-                                    ((UserViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
-                                }
-
-                                @Override
-                                public void failed() {
-                                    Toast.makeText(mContext, R.string.thing_favorite_failed, Toast.LENGTH_SHORT).show();
-                                    int position = viewHolder.getAdapterPosition() - offset;
-                                    if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
-                                        mFavoriteSubscribedUserData.get(position).setFavorite(false);
-                                    }
-                                    ((UserViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
-                                }
-                            });
-                }
-            });
         } else if (viewHolder instanceof FavoriteUserViewHolder) {
-            viewHolder.itemView.setOnClickListener(view -> {
-                Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
-                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mFavoriteSubscribedUserData.get(viewHolder.getAdapterPosition() - 1).getName());
-                mContext.startActivity(intent);
-            });
             if (!mFavoriteSubscribedUserData.get(viewHolder.getAdapterPosition() - 1).getIconUrl().equals("")) {
                 glide.load(mFavoriteSubscribedUserData.get(viewHolder.getAdapterPosition() - 1).getIconUrl())
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -203,60 +139,6 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             } else {
                 ((FavoriteUserViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
             }
-
-            ((FavoriteUserViewHolder) viewHolder).favoriteImageView.setOnClickListener(view -> {
-                if(mFavoriteSubscribedUserData.get(viewHolder.getAdapterPosition() - 1).isFavorite()) {
-                    ((FavoriteUserViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
-                    mFavoriteSubscribedUserData.get(viewHolder.getAdapterPosition() - 1).setFavorite(false);
-                    FavoriteThing.unfavoriteUser(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
-                            mFavoriteSubscribedUserData.get(viewHolder.getAdapterPosition() - 1),
-                            new FavoriteThing.FavoriteThingListener() {
-                                @Override
-                                public void success() {
-                                    int position = viewHolder.getAdapterPosition() - 1;
-                                    if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
-                                        mFavoriteSubscribedUserData.get(position).setFavorite(false);
-                                    }
-                                    ((FavoriteUserViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
-                                }
-
-                                @Override
-                                public void failed() {
-                                    Toast.makeText(mContext, R.string.thing_unfavorite_failed, Toast.LENGTH_SHORT).show();
-                                    int position = viewHolder.getAdapterPosition() - 1;
-                                    if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
-                                        mFavoriteSubscribedUserData.get(position).setFavorite(true);
-                                    }
-                                    ((FavoriteUserViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
-                                }
-                            });
-                } else {
-                    ((FavoriteUserViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
-                    mFavoriteSubscribedUserData.get(viewHolder.getAdapterPosition() - 1).setFavorite(true);
-                    FavoriteThing.favoriteUser(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
-                            mFavoriteSubscribedUserData.get(viewHolder.getAdapterPosition() - 1),
-                            new FavoriteThing.FavoriteThingListener() {
-                                @Override
-                                public void success() {
-                                    int position = viewHolder.getAdapterPosition() - 1;
-                                    if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
-                                        mFavoriteSubscribedUserData.get(position).setFavorite(true);
-                                    }
-                                    ((FavoriteUserViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
-                                }
-
-                                @Override
-                                public void failed() {
-                                    Toast.makeText(mContext, R.string.thing_favorite_failed, Toast.LENGTH_SHORT).show();
-                                    int position = viewHolder.getAdapterPosition() - 1;
-                                    if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
-                                        mFavoriteSubscribedUserData.get(position).setFavorite(false);
-                                    }
-                                    ((FavoriteUserViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
-                                }
-                            });
-                }
-            });
         }
     }
 
@@ -317,6 +199,72 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             super(itemView);
             ButterKnife.bind(this, itemView);
             userNameTextView.setTextColor(mPrimaryTextColor);
+
+            itemView.setOnClickListener(view -> {
+                int position = getAdapterPosition() - 1;
+                if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
+                    Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
+                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mFavoriteSubscribedUserData.get(position).getName());
+                    mContext.startActivity(intent);
+                }
+            });
+
+            favoriteImageView.setOnClickListener(view -> {
+                int position = getAdapterPosition() - 1;
+                if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
+                    if(mFavoriteSubscribedUserData.get(position).isFavorite()) {
+                        favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
+                        mFavoriteSubscribedUserData.get(position).setFavorite(false);
+                        FavoriteThing.unfavoriteUser(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
+                                mFavoriteSubscribedUserData.get(position),
+                                new FavoriteThing.FavoriteThingListener() {
+                                    @Override
+                                    public void success() {
+                                        int position = getAdapterPosition() - 1;
+                                        if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
+                                            mFavoriteSubscribedUserData.get(position).setFavorite(false);
+                                        }
+                                        favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
+                                    }
+
+                                    @Override
+                                    public void failed() {
+                                        Toast.makeText(mContext, R.string.thing_unfavorite_failed, Toast.LENGTH_SHORT).show();
+                                        int position = getAdapterPosition() - 1;
+                                        if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
+                                            mFavoriteSubscribedUserData.get(position).setFavorite(true);
+                                        }
+                                        favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
+                                    }
+                                });
+                    } else {
+                        favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
+                        mFavoriteSubscribedUserData.get(position).setFavorite(true);
+                        FavoriteThing.favoriteUser(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
+                                mFavoriteSubscribedUserData.get(position),
+                                new FavoriteThing.FavoriteThingListener() {
+                                    @Override
+                                    public void success() {
+                                        int position = getAdapterPosition() - 1;
+                                        if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
+                                            mFavoriteSubscribedUserData.get(position).setFavorite(true);
+                                        }
+                                        favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
+                                    }
+
+                                    @Override
+                                    public void failed() {
+                                        Toast.makeText(mContext, R.string.thing_favorite_failed, Toast.LENGTH_SHORT).show();
+                                        int position = getAdapterPosition() - 1;
+                                        if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
+                                            mFavoriteSubscribedUserData.get(position).setFavorite(false);
+                                        }
+                                        favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
+                                    }
+                                });
+                    }
+                }
+            });
         }
     }
 
@@ -332,6 +280,77 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             super(itemView);
             ButterKnife.bind(this, itemView);
             userNameTextView.setTextColor(mPrimaryTextColor);
+
+            itemView.setOnClickListener(view -> {
+                int offset = (mFavoriteSubscribedUserData != null && mFavoriteSubscribedUserData.size() > 0) ?
+                        mFavoriteSubscribedUserData.size() + 2 : 0;
+                int position = getAdapterPosition() - offset;
+                if(position >= 0 && mSubscribedUserData.size() > position) {
+                    Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
+                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mSubscribedUserData.get(position).getName());
+                    mContext.startActivity(intent);
+                }
+            });
+
+            favoriteImageView.setOnClickListener(view -> {
+                int offset = (mFavoriteSubscribedUserData != null && mFavoriteSubscribedUserData.size() > 0) ?
+                        mFavoriteSubscribedUserData.size() + 2 : 0;
+                int position = getAdapterPosition() - offset;
+
+                if(position >= 0 && mSubscribedUserData.size() > position) {
+                    if(mSubscribedUserData.get(position).isFavorite()) {
+                        favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
+                        mSubscribedUserData.get(position).setFavorite(false);
+                        FavoriteThing.unfavoriteUser(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
+                                mSubscribedUserData.get(position),
+                                new FavoriteThing.FavoriteThingListener() {
+                                    @Override
+                                    public void success() {
+                                        int position = getAdapterPosition() - offset;
+                                        if(position >= 0 && mSubscribedUserData.size() > position) {
+                                            mSubscribedUserData.get(position).setFavorite(false);
+                                        }
+                                        favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
+                                    }
+
+                                    @Override
+                                    public void failed() {
+                                        Toast.makeText(mContext, R.string.thing_unfavorite_failed, Toast.LENGTH_SHORT).show();
+                                        int position = getAdapterPosition() - offset;
+                                        if(position >= 0 && mSubscribedUserData.size() > position) {
+                                            mSubscribedUserData.get(position).setFavorite(true);
+                                        }
+                                        favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
+                                    }
+                                });
+                    } else {
+                        favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
+                        mSubscribedUserData.get(position).setFavorite(true);
+                        FavoriteThing.favoriteUser(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
+                                mSubscribedUserData.get(position),
+                                new FavoriteThing.FavoriteThingListener() {
+                                    @Override
+                                    public void success() {
+                                        int position = getAdapterPosition() - offset;
+                                        if(position >= 0 && mSubscribedUserData.size() > position) {
+                                            mSubscribedUserData.get(position).setFavorite(true);
+                                        }
+                                        favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
+                                    }
+
+                                    @Override
+                                    public void failed() {
+                                        Toast.makeText(mContext, R.string.thing_favorite_failed, Toast.LENGTH_SHORT).show();
+                                        int position = getAdapterPosition() - offset;
+                                        if(position >= 0 && mSubscribedUserData.size() > position) {
+                                            mSubscribedUserData.get(position).setFavorite(false);
+                                        }
+                                        favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
+                                    }
+                                });
+                    }
+                }
+            });
         }
     }
 
