@@ -397,6 +397,8 @@ public class ViewVideoActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        player.seekToDefaultPosition();
+        player.stop(true);
         player.release();
     }
 

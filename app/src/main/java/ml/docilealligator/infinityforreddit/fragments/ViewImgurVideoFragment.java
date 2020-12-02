@@ -278,6 +278,8 @@ public class ViewImgurVideoFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        player.seekToDefaultPosition();
+        player.stop(true);
         player.release();
     }
 

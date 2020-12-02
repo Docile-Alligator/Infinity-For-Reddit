@@ -282,6 +282,8 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        player.seekToDefaultPosition();
+        player.stop(true);
         player.release();
     }
 

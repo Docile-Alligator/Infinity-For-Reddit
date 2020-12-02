@@ -635,6 +635,8 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     protected void onDestroy() {
         EventBus.getDefault().unregister(this);
         super.onDestroy();
+        player.seekToDefaultPosition();
+        player.stop(true);
         player.release();
     }
 
