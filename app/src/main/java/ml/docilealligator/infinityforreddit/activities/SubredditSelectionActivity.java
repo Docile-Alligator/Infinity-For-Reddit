@@ -133,12 +133,11 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
             mAccountProfileImageUrl = savedInstanceState.getString(ACCOUNT_PROFILE_IMAGE_URL);
 
-            mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, mFragment).commit();
-
             if (!mNullAccessToken && mAccountName == null) {
                 getCurrentAccountAndBindView();
             } else {
+                mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, mFragment).commit();
                 bindView(false);
             }
         }

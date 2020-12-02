@@ -114,6 +114,7 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
             mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
             mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
+
             if (!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndInitializeFragment(query);
             } else {

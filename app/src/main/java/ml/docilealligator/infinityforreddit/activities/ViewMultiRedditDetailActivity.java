@@ -158,11 +158,11 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
 
-            mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_multi_reddit_detail_activity, mFragment).commit();
-
             if (!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndInitializeFragment();
+            } else {
+                mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_multi_reddit_detail_activity, mFragment).commit();
             }
         } else {
             getCurrentAccountAndInitializeFragment();
