@@ -83,7 +83,7 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
         this.params = params;
         this.callback = callback;
 
-        if (params.key.equals("") || params.key.equals("null")) {
+        if (params.key == null || params.key.equals("") || params.key.equals("null")) {
             return;
         }
 

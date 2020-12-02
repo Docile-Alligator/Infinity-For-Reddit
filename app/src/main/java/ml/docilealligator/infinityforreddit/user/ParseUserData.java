@@ -70,28 +70,29 @@ public class ParseUserData {
     private static class ParseUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
         private JSONObject jsonResponse;
         private ParseUserDataListener parseUserDataListener;
-        private boolean parseFailed;
+        private boolean parseFailed = false;
 
         private UserData userData;
 
         ParseUserDataAsyncTask(String response, ParseUserDataListener parseUserDataListener) {
+            this.parseUserDataListener = parseUserDataListener;
             try {
                 jsonResponse = new JSONObject(response);
-                this.parseUserDataListener = parseUserDataListener;
-                parseFailed = false;
             } catch (JSONException e) {
+                parseFailed = true;
                 e.printStackTrace();
-                parseUserDataListener.onParseUserDataFailed();
             }
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
-            try {
-                userData = parseUserDataBase(jsonResponse, true);
-            } catch (JSONException e) {
-                parseFailed = true;
-                e.printStackTrace();
+            if (!parseFailed) {
+                try {
+                    userData = parseUserDataBase(jsonResponse, true);
+                } catch (JSONException e) {
+                    parseFailed = true;
+                    e.printStackTrace();
+                }
             }
             return null;
         }
