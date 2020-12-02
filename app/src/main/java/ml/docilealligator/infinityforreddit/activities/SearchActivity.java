@@ -226,23 +226,27 @@ public class SearchActivity extends BaseActivity {
                     DeleteRecentSearchQuery.deleteRecentSearchQueryListener(mRedditDataRoomDatabase, recentSearchQuery, () -> {});
                 }
             });
+            recyclerView.setVisibility(View.VISIBLE);
             recyclerView.setNestedScrollingEnabled(false);
             recyclerView.setLayoutManager(new LinearLayoutManager(this));
             recyclerView.setAdapter(adapter);
-            mRecentSearchQueryViewModel = new ViewModelProvider(this,
-                    new RecentSearchQueryViewModel.Factory(mRedditDataRoomDatabase, mAccountName))
-                    .get(RecentSearchQueryViewModel.class);
 
-            mRecentSearchQueryViewModel.getAllRecentSearchQueries().observe(this, recentSearchQueries -> {
-                if (recentSearchQueries != null && !recentSearchQueries.isEmpty()) {
-                    divider.setVisibility(View.VISIBLE);
-                    recentSummaryTextView.setVisibility(View.VISIBLE);
-                } else {
-                    divider.setVisibility(View.GONE);
-                    recentSummaryTextView.setVisibility(View.GONE);
-                }
-                adapter.setRecentSearchQueries(recentSearchQueries);
-            });
+            if (mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SEARCH_HISTORY, true)) {
+                mRecentSearchQueryViewModel = new ViewModelProvider(this,
+                        new RecentSearchQueryViewModel.Factory(mRedditDataRoomDatabase, mAccountName))
+                        .get(RecentSearchQueryViewModel.class);
+
+                mRecentSearchQueryViewModel.getAllRecentSearchQueries().observe(this, recentSearchQueries -> {
+                    if (recentSearchQueries != null && !recentSearchQueries.isEmpty()) {
+                        divider.setVisibility(View.VISIBLE);
+                        recentSummaryTextView.setVisibility(View.VISIBLE);
+                    } else {
+                        divider.setVisibility(View.GONE);
+                        recentSummaryTextView.setVisibility(View.GONE);
+                    }
+                    adapter.setRecentSearchQueries(recentSearchQueries);
+                });
+            }
         }
     }
 

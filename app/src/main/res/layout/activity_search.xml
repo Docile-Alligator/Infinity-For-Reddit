@@ -89,7 +89,8 @@
             <View
                 android:id="@+id/divider_search_activity"
                 android:layout_width="match_parent"
-                android:layout_height="1dp" />
+                android:layout_height="1dp"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/recent_summary_text_view_search_activity"
@@ -103,7 +104,8 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recycler_view_search_activity"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
 
         </LinearLayout>
 

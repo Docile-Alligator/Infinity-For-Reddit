@@ -146,6 +146,7 @@ public class SharedPreferencesUtils {
     public static final int SWIPE_ACITON_DOWNVOTE = 1;
     public static final String LANGUAGE = "language";
     public static final String LANGUAGE_DEFAULT_VALUE = "auto";
+    public static final String ENABLE_SEARCH_HISTORY = "enable_search_history";
 
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";
     public static final String MAIN_PAGE_TAB_COUNT = "_main_page_tab_count";
