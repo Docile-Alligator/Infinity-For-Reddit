@@ -229,8 +229,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
     private Drawable mCommentIcon;
     private float mScale;
-    private ShareLinkBottomSheetFragment mShareLinkBottomSheetFragment;
-    private CopyTextBottomSheetFragment mCopyTextBottomSheetFragment;
     private ExoCreator mExoCreator;
 
     public CommentAndPostRecyclerViewAdapter(AppCompatActivity activity, CustomThemeWrapper customThemeWrapper,
@@ -322,8 +320,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             Bundle bundle = new Bundle();
                             bundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, mPost.getSelfTextPlain());
                             bundle.putString(CopyTextBottomSheetFragment.EXTRA_MARKDOWN, mPost.getSelfText());
-                            mCopyTextBottomSheetFragment.setArguments(bundle);
-                            mCopyTextBottomSheetFragment.show(mActivity.getSupportFragmentManager(), mCopyTextBottomSheetFragment.getTag());
+                            CopyTextBottomSheetFragment copyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
+                            copyTextBottomSheetFragment.setArguments(bundle);
+                            copyTextBottomSheetFragment.show(mActivity.getSupportFragmentManager(), copyTextBottomSheetFragment.getTag());
                             return true;
                         });
                     }
@@ -554,8 +553,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             DrawableCompat.setTint(mCommentIcon, mPostIconAndInfoColor);
         }
 
-        mShareLinkBottomSheetFragment = new ShareLinkBottomSheetFragment();
-        mCopyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
         mExoCreator = exoCreator;
     }
 
@@ -2391,8 +2388,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             break;
                     }
                 }
-                mShareLinkBottomSheetFragment.setArguments(bundle);
-                mShareLinkBottomSheetFragment.show(mActivity.getSupportFragmentManager(), mShareLinkBottomSheetFragment.getTag());
+                ShareLinkBottomSheetFragment shareLinkBottomSheetFragment = new ShareLinkBottomSheetFragment();
+                shareLinkBottomSheetFragment.setArguments(bundle);
+                shareLinkBottomSheetFragment.show(mActivity.getSupportFragmentManager(), shareLinkBottomSheetFragment.getTag());
             });
 
             if (mVoteButtonsOnTheRight) {

@@ -193,7 +193,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private NetworkState networkState;
     private ExoCreator mExoCreator;
     private Callback mCallback;
-    private ShareLinkBottomSheetFragment mShareLinkBottomSheetFragment;
 
     public PostRecyclerViewAdapter(AppCompatActivity activity, Retrofit oauthRetrofit, Retrofit retrofit,
                                    Retrofit gfycatRetrofit, Retrofit redgifsRetrofit,
@@ -297,7 +296,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mUserDao = redditDataRoomDatabase.userDao();
             mExoCreator = exoCreator;
             mCallback = callback;
-            mShareLinkBottomSheetFragment = new ShareLinkBottomSheetFragment();
         }
     }
 
@@ -1117,8 +1115,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     break;
             }
         }
-        mShareLinkBottomSheetFragment.setArguments(bundle);
-        mShareLinkBottomSheetFragment.show(mActivity.getSupportFragmentManager(), mShareLinkBottomSheetFragment.getTag());
+        ShareLinkBottomSheetFragment shareLinkBottomSheetFragment = new ShareLinkBottomSheetFragment();
+        shareLinkBottomSheetFragment.setArguments(bundle);
+        shareLinkBottomSheetFragment.show(mActivity.getSupportFragmentManager(), shareLinkBottomSheetFragment.getTag());
     }
 
     @Override
