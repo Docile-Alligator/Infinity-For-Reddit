@@ -1451,27 +1451,29 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 previewIndex = 0;
             }
             preview = previews.get(previewIndex);
-            if (preview.getPreviewWidth() * preview.getPreviewHeight() >= 65 * 1000 * 1000) {
+            if (preview.getPreviewWidth() * preview.getPreviewHeight() > 35_000_000) {
                 for (int i = previews.size() - 1; i >= 1; i--) {
                     preview = previews.get(i);
                     if (mImageViewWidth >= preview.getPreviewWidth()) {
-                        if (preview.getPreviewWidth() * preview.getPreviewHeight() <= 75 * 1000 * 1000) {
+                        if (preview.getPreviewWidth() * preview.getPreviewHeight() <= 35_000_000) {
                             return preview;
                         }
                     } else {
                         int height = mImageViewWidth / preview.getPreviewWidth() * preview.getPreviewHeight();
-                        if (mImageViewWidth * height <= 75 * 1000 * 1000) {
+                        if (mImageViewWidth * height <= 35_000_000) {
                             return preview;
                         }
                     }
                 }
             }
 
-            int divisor = 2;
-            while (preview.getPreviewWidth() * preview.getPreviewHeight() / divisor / divisor > 75 * 1000 * 1000) {
-                preview.setPreviewWidth(preview.getPreviewWidth() / divisor);
-                preview.setPreviewHeight(preview.getPreviewHeight() / divisor);
-                divisor *= 2;
+            if (preview.getPreviewWidth() * preview.getPreviewHeight() > 35_000_000) {
+                int divisor = 2;
+                do {
+                    preview.setPreviewWidth(preview.getPreviewWidth() / divisor);
+                    preview.setPreviewHeight(preview.getPreviewHeight() / divisor);
+                    divisor *= 2;
+                } while (preview.getPreviewWidth() * preview.getPreviewHeight() / divisor / divisor > 35_000_000);
             }
 
             return preview;

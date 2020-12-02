@@ -69,6 +69,12 @@ import im.ene.toro.media.PlaybackInfo;
 import im.ene.toro.widget.Container;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import ml.docilealligator.infinityforreddit.FetchGfycatOrRedgifsVideoLinks;
+import ml.docilealligator.infinityforreddit.NetworkState;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.SaveThing;
+import ml.docilealligator.infinityforreddit.VoteThing;
 import ml.docilealligator.infinityforreddit.activities.FilteredThingActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewImageOrGifActivity;
@@ -83,18 +89,12 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.ShareLinkBottom
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
 import ml.docilealligator.infinityforreddit.events.PostUpdateEventToDetailActivity;
-import ml.docilealligator.infinityforreddit.FetchGfycatOrRedgifsVideoLinks;
-import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostDataSource;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.user.UserDao;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
-import ml.docilealligator.infinityforreddit.VoteThing;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
@@ -994,27 +994,29 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 previewIndex = 0;
             }
             preview = previews.get(previewIndex);
-            if (preview.getPreviewWidth() * preview.getPreviewHeight() >= 75_000_000) {
+            if (preview.getPreviewWidth() * preview.getPreviewHeight() > 35_000_000) {
                 for (int i = previews.size() - 1; i >= 1; i--) {
                     preview = previews.get(i);
                     if (mImageViewWidth >= preview.getPreviewWidth()) {
-                        if (preview.getPreviewWidth() * preview.getPreviewHeight() <= 75_000_000) {
+                        if (preview.getPreviewWidth() * preview.getPreviewHeight() <= 35_000_000) {
                             return preview;
                         }
                     } else {
                         int height = mImageViewWidth / preview.getPreviewWidth() * preview.getPreviewHeight();
-                        if (mImageViewWidth * height <= 75_000_000) {
+                        if (mImageViewWidth * height <= 35_000_000) {
                             return preview;
                         }
                     }
                 }
             }
 
-            int divisor = 2;
-            while (preview.getPreviewWidth() * preview.getPreviewHeight() / divisor / divisor > 75_000_000) {
-                preview.setPreviewWidth(preview.getPreviewWidth() / divisor);
-                preview.setPreviewHeight(preview.getPreviewHeight() / divisor);
-                divisor *= 2;
+            if (preview.getPreviewWidth() * preview.getPreviewHeight() > 35_000_000) {
+                int divisor = 2;
+                do {
+                    preview.setPreviewWidth(preview.getPreviewWidth() / divisor);
+                    preview.setPreviewHeight(preview.getPreviewHeight() / divisor);
+                    divisor *= 2;
+                } while (preview.getPreviewWidth() * preview.getPreviewHeight() / divisor / divisor > 35_000_000);
             }
 
             return preview;
