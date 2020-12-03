@@ -61,6 +61,9 @@ public class SelectedSubredditsActivity extends BaseActivity implements Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        setImmersiveModeNotApplicable();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_selected_subreddits);
 
