@@ -24,25 +24,19 @@ import java.lang.ref.WeakReference;
 public class GlideImageGetter implements Html.ImageGetter {
 
     private WeakReference<TextView> container;
-    private boolean matchParentWidth;
     private boolean enlargeImage;
     private HtmlImagesHandler imagesHandler;
     private float density = 1.0f;
     private float textSize;
 
     public GlideImageGetter(TextView textView, boolean enlargeImage) {
-        this(textView, false, false, null);
+        this(textView, false, null);
         this.enlargeImage = enlargeImage;
     }
 
-    public GlideImageGetter(TextView textView, boolean matchParentWidth, HtmlImagesHandler imagesHandler) {
-        this(textView, matchParentWidth, false, imagesHandler);
-    }
-
-    public GlideImageGetter(TextView textView, boolean matchParentWidth, boolean densityAware,
+    public GlideImageGetter(TextView textView, boolean densityAware,
                             @Nullable HtmlImagesHandler imagesHandler) {
         this.container = new WeakReference<>(textView);
-        this.matchParentWidth = matchParentWidth;
         this.imagesHandler = imagesHandler;
         if (densityAware) {
             density = container.get().getResources().getDisplayMetrics().density;
@@ -97,15 +91,8 @@ public class GlideImageGetter implements Html.ImageGetter {
             float ratio = (float) drawableWidth / (float) drawableHeight;
             drawableHeight = enlargeImage ? (int) (textSize * 1.5) : (int) textSize;
             drawableWidth = (int) (drawableHeight * ratio);
-            int maxWidth = container.get().getMeasuredWidth();
-            if ((maxWidth > 0 && (drawableWidth > maxWidth)) || matchParentWidth) {
-                int calculatedHeight = maxWidth * drawableHeight / drawableWidth;
-                drawable.setBounds(0, 0, maxWidth, calculatedHeight);
-                setBounds(0, 0, maxWidth, calculatedHeight);
-            } else {
-                drawable.setBounds(0, 0, drawableWidth, drawableHeight);
-                setBounds(0, 0, drawableWidth, drawableHeight);
-            }
+            drawable.setBounds(0, 0, drawableWidth, drawableHeight);
+            setBounds(0, 0, drawableWidth, drawableHeight);
 
             container.get().setText(container.get().getText());
         }
