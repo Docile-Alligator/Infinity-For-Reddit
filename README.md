@@ -8,6 +8,9 @@ This is a Reddit client on Android written in Java. It does not have any ads and
      alt="Get it on Google Play"
      height="100">](https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit)
 
+## Donation
+Patreon: https://www.patreon.com/docile_alligator
+
 ## Translation
 POEditor: https://poeditor.com/join/project?hash=b2IRyfaJv6
 
