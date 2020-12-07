@@ -92,6 +92,16 @@ public class CustomThemeWrapper {
                 getDefaultColor("#8A000000", "#B3FFFFFF", "#B3FFFFFF"));
     }
 
+    public int getReadPostTitleColor() {
+        return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.READ_POST_TITLE_COLOR,
+                getDefaultColor("#9D9D9D", "#979797", "#979797"));
+    }
+
+    public int getReadPostContentColor() {
+        return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.READ_POST_CONTENT_COLOR,
+                getDefaultColor("#9D9D9D", "#979797", "#979797"));
+    }
+
     public int getCommentColor() {
         return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.COMMENT_COLOR,
                 getDefaultColor("#000000", "#FFFFFF", "#FFFFFF"));
@@ -110,6 +120,11 @@ public class CustomThemeWrapper {
     public int getCardViewBackgroundColor() {
         return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.CARD_VIEW_BACKGROUND_COLOR,
                 getDefaultColor("#FFFFFF", "#242424", "#000000"));
+    }
+
+    public int getReadPostCardViewBackgroundColor() {
+        return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.READ_POST_CARD_VIEW_BACKGROUND_COLOR,
+                getDefaultColor("#F5F5F5", "#101010", "#000000"));
     }
 
     public int getCommentBackgroundColor() {
@@ -492,10 +507,13 @@ public class CustomThemeWrapper {
         customTheme.secondaryTextColor = Color.parseColor("#8A000000");
         customTheme.postTitleColor = Color.parseColor("#000000");
         customTheme.postContentColor = Color.parseColor("#8A000000");
+        customTheme.readPostTitleColor = Color.parseColor("#9D9D9D");
+        customTheme.readPostContentColor = Color.parseColor("#9D9D9D");
         customTheme.commentColor = Color.parseColor("#000000");
         customTheme.buttonTextColor = Color.parseColor("#FFFFFF");
         customTheme.backgroundColor = Color.parseColor("#FFFFFF");
         customTheme.cardViewBackgroundColor = Color.parseColor("#FFFFFF");
+        customTheme.readPostCardViewBackgroundColor = Color.parseColor("#F5F5F5");
         customTheme.commentBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.primaryIconColor = Color.parseColor("#000000");
@@ -578,10 +596,13 @@ public class CustomThemeWrapper {
         customTheme.secondaryTextColor = Color.parseColor("#B3FFFFFF");
         customTheme.postTitleColor = Color.parseColor("#FFFFFF");
         customTheme.postContentColor = Color.parseColor("#B3FFFFFF");
+        customTheme.readPostTitleColor = Color.parseColor("#979797");
+        customTheme.readPostContentColor = Color.parseColor("#979797");
         customTheme.commentColor = Color.parseColor("#FFFFFF");
         customTheme.buttonTextColor = Color.parseColor("#FFFFFF");
         customTheme.backgroundColor = Color.parseColor("#121212");
         customTheme.cardViewBackgroundColor = Color.parseColor("#242424");
+        customTheme.readPostCardViewBackgroundColor = Color.parseColor("#101010");
         customTheme.commentBackgroundColor = Color.parseColor("#242424");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#121212");
         customTheme.primaryIconColor = Color.parseColor("#FFFFFF");
@@ -664,10 +685,13 @@ public class CustomThemeWrapper {
         customTheme.secondaryTextColor = Color.parseColor("#B3FFFFFF");
         customTheme.postTitleColor = Color.parseColor("#FFFFFF");
         customTheme.postContentColor = Color.parseColor("#B3FFFFFF");
+        customTheme.readPostTitleColor = Color.parseColor("#979797");
+        customTheme.readPostContentColor = Color.parseColor("#979797");
         customTheme.commentColor = Color.parseColor("#FFFFFF");
         customTheme.buttonTextColor = Color.parseColor("#FFFFFF");
         customTheme.backgroundColor = Color.parseColor("#000000");
         customTheme.cardViewBackgroundColor = Color.parseColor("#000000");
+        customTheme.readPostCardViewBackgroundColor = Color.parseColor("#000000");
         customTheme.commentBackgroundColor = Color.parseColor("#000000");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#000000");
         customTheme.primaryIconColor = Color.parseColor("#FFFFFF");
@@ -750,10 +774,13 @@ public class CustomThemeWrapper {
         customTheme.secondaryTextColor = Color.parseColor("#8A000000");
         customTheme.postTitleColor = Color.parseColor("#000000");
         customTheme.postContentColor = Color.parseColor("#8A000000");
+        customTheme.readPostTitleColor = Color.parseColor("#9D9D9D");
+        customTheme.readPostContentColor = Color.parseColor("#9D9D9D");
         customTheme.commentColor = Color.parseColor("#000000");
         customTheme.buttonTextColor = Color.parseColor("#000000");
         customTheme.backgroundColor = Color.parseColor("#FFFFFF");
         customTheme.cardViewBackgroundColor = Color.parseColor("#FFFFFF");
+        customTheme.readPostCardViewBackgroundColor = Color.parseColor("#F5F5F5");
         customTheme.commentBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.primaryIconColor = Color.parseColor("#000000");
@@ -836,10 +863,13 @@ public class CustomThemeWrapper {
         customTheme.secondaryTextColor = Color.parseColor("#B3FFFFFF");
         customTheme.postTitleColor = Color.parseColor("#FFFFFF");
         customTheme.postContentColor = Color.parseColor("#B3FFFFFF");
+        customTheme.readPostTitleColor = Color.parseColor("#979797");
+        customTheme.readPostContentColor = Color.parseColor("#979797");
         customTheme.commentColor = Color.parseColor("#FFFFFF");
         customTheme.buttonTextColor = Color.parseColor("#FFFFFF");
         customTheme.backgroundColor = Color.parseColor("#121212");
         customTheme.cardViewBackgroundColor = Color.parseColor("#242424");
+        customTheme.readPostCardViewBackgroundColor = Color.parseColor("#101010");
         customTheme.commentBackgroundColor = Color.parseColor("#242424");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#121212");
         customTheme.primaryIconColor = Color.parseColor("#FFFFFF");
@@ -922,10 +952,13 @@ public class CustomThemeWrapper {
         customTheme.secondaryTextColor = Color.parseColor("#B3FFFFFF");
         customTheme.postTitleColor = Color.parseColor("#FFFFFF");
         customTheme.postContentColor = Color.parseColor("#B3FFFFFF");
+        customTheme.readPostTitleColor = Color.parseColor("#979797");
+        customTheme.readPostContentColor = Color.parseColor("#979797");
         customTheme.commentColor = Color.parseColor("#FFFFFF");
         customTheme.buttonTextColor = Color.parseColor("#FFFFFF");
         customTheme.backgroundColor = Color.parseColor("#000000");
         customTheme.cardViewBackgroundColor = Color.parseColor("#000000");
+        customTheme.readPostCardViewBackgroundColor = Color.parseColor("#000000");
         customTheme.commentBackgroundColor = Color.parseColor("#000000");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#000000");
         customTheme.primaryIconColor = Color.parseColor("#FFFFFF");
@@ -1008,10 +1041,13 @@ public class CustomThemeWrapper {
         customTheme.secondaryTextColor = Color.parseColor("#8A000000");
         customTheme.postTitleColor = Color.parseColor("#000000");
         customTheme.postContentColor = Color.parseColor("#8A000000");
+        customTheme.readPostTitleColor = Color.parseColor("#9D9D9D");
+        customTheme.readPostContentColor = Color.parseColor("#9D9D9D");
         customTheme.commentColor = Color.parseColor("#000000");
         customTheme.buttonTextColor = Color.parseColor("#FFFFFF");
         customTheme.backgroundColor = Color.parseColor("#FFFFFF");
         customTheme.cardViewBackgroundColor = Color.parseColor("#FFFFFF");
+        customTheme.readPostCardViewBackgroundColor = Color.parseColor("#F5F5F5");
         customTheme.commentBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.primaryIconColor = Color.parseColor("#000000");
@@ -1094,10 +1130,13 @@ public class CustomThemeWrapper {
         customTheme.secondaryTextColor = Color.parseColor("#B3FFFFFF");
         customTheme.postTitleColor = Color.parseColor("#FFFFFF");
         customTheme.postContentColor = Color.parseColor("#B3FFFFFF");
+        customTheme.readPostTitleColor = Color.parseColor("#979797");
+        customTheme.readPostContentColor = Color.parseColor("#979797");
         customTheme.commentColor = Color.parseColor("#FFFFFF");
         customTheme.buttonTextColor = Color.parseColor("#FFFFFF");
         customTheme.backgroundColor = Color.parseColor("#121212");
         customTheme.cardViewBackgroundColor = Color.parseColor("#242424");
+        customTheme.readPostCardViewBackgroundColor = Color.parseColor("#101010");
         customTheme.commentBackgroundColor = Color.parseColor("#242424");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#121212");
         customTheme.primaryIconColor = Color.parseColor("#FFFFFF");
@@ -1180,10 +1219,13 @@ public class CustomThemeWrapper {
         customTheme.secondaryTextColor = Color.parseColor("#B3FFFFFF");
         customTheme.postTitleColor = Color.parseColor("#FFFFFF");
         customTheme.postContentColor = Color.parseColor("#B3FFFFFF");
+        customTheme.readPostTitleColor = Color.parseColor("#979797");
+        customTheme.readPostContentColor = Color.parseColor("#979797");
         customTheme.commentColor = Color.parseColor("#FFFFFF");
         customTheme.buttonTextColor = Color.parseColor("#FFFFFF");
         customTheme.backgroundColor = Color.parseColor("#000000");
         customTheme.cardViewBackgroundColor = Color.parseColor("#000000");
+        customTheme.readPostCardViewBackgroundColor = Color.parseColor("#000000");
         customTheme.commentBackgroundColor = Color.parseColor("#000000");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#000000");
         customTheme.primaryIconColor = Color.parseColor("#FFFFFF");
@@ -1266,10 +1308,13 @@ public class CustomThemeWrapper {
         customTheme.secondaryTextColor = Color.parseColor("#B3FFFFFF");
         customTheme.postTitleColor = Color.parseColor("#FFFFFF");
         customTheme.postContentColor = Color.parseColor("#B3FFFFFF");
+        customTheme.readPostTitleColor = Color.parseColor("#9D9D9D");
+        customTheme.readPostContentColor = Color.parseColor("#9D9D9D");
         customTheme.commentColor = Color.parseColor("#FFFFFF");
         customTheme.buttonTextColor = Color.parseColor("#FFFFFF");
         customTheme.backgroundColor = Color.parseColor("#282A36");
         customTheme.cardViewBackgroundColor = Color.parseColor("#393A59");
+        customTheme.readPostCardViewBackgroundColor = Color.parseColor("#1C1F3D");
         customTheme.commentBackgroundColor = Color.parseColor("#393A59");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#393A59");
         customTheme.primaryIconColor = Color.parseColor("#FFFFFF");
@@ -1352,10 +1397,13 @@ public class CustomThemeWrapper {
         customTheme.secondaryTextColor = Color.parseColor("#8A000000");
         customTheme.postTitleColor = Color.parseColor("#000000");
         customTheme.postContentColor = Color.parseColor("#8A000000");
+        customTheme.readPostTitleColor = Color.parseColor("#979797");
+        customTheme.readPostContentColor = Color.parseColor("#979797");
         customTheme.commentColor = Color.parseColor("#000000");
         customTheme.buttonTextColor = Color.parseColor("#FFFFFF");
         customTheme.backgroundColor = Color.parseColor("#DAD0DE");
         customTheme.cardViewBackgroundColor = Color.parseColor("#C0F0F4");
+        customTheme.readPostCardViewBackgroundColor = Color.parseColor("#D2E7EA");
         customTheme.commentBackgroundColor = Color.parseColor("#C0F0F4");
         customTheme.bottomAppBarBackgroundColor = Color.parseColor("#D48AE0");
         customTheme.primaryIconColor = Color.parseColor("#000000");

@@ -16,6 +16,8 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeDao;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.multireddit.MultiRedditDao;
+import ml.docilealligator.infinityforreddit.readposts.ReadPost;
+import ml.docilealligator.infinityforreddit.readposts.ReadPostDao;
 import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQuery;
 import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQueryDao;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditDao;
@@ -30,7 +32,8 @@ import ml.docilealligator.infinityforreddit.user.UserDao;
 import ml.docilealligator.infinityforreddit.user.UserData;
 
 @Database(entities = {Account.class, SubredditData.class, SubscribedSubredditData.class, UserData.class,
-        SubscribedUserData.class, MultiReddit.class, CustomTheme.class, RecentSearchQuery.class, SubredditFilter.class}, version = 13)
+        SubscribedUserData.class, MultiReddit.class, CustomTheme.class, RecentSearchQuery.class,
+        SubredditFilter.class, ReadPost.class}, version = 14)
 public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static RedditDataRoomDatabase INSTANCE;
 
@@ -67,6 +70,8 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
     public abstract RecentSearchQueryDao recentSearchQueryDao();
 
     public abstract SubredditFilterDao subredditFilterDao();
+
+    public abstract ReadPostDao readPostDao();
 
     private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
@@ -261,6 +266,18 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE custom_themes"
                     + " ADD COLUMN no_preview_post_type_icon_tint INTEGER DEFAULT " + Color.parseColor("#808080") + " NOT NULL");
+        }
+    };
+
+    private static final Migration MIGRATION_13_14 = new Migration(13, 14) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE read_posts"
+                    + "(username TEXT NOT NULL, id TEXT NOT NULL, PRIMARY KEY(username, id), "
+                    + "FOREIGN KEY(username) REFERENCES accounts(username) ON DELETE CASCADE)");
+            database.execSQL("ALTER TABLE custom_themes ADD COLUMN read_post_title_color INTEGER DEFAULT " + Color.parseColor("#9D9D9D") + " NOT NULL");
+            database.execSQL("ALTER TABLE custom_themes ADD COLUMN read_post_content_color INTEGER DEFAULT " + Color.parseColor("#9D9D9D") + " NOT NULL");
+            database.execSQL("ALTER TABLE custom_themes ADD COLUMN read_post_card_view_background_color INTEGER DEFAULT " + Color.parseColor("#F5F5F5") + " NOT NULL");
         }
     };
 }
