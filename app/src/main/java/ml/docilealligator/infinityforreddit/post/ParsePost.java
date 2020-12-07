@@ -568,14 +568,17 @@ public class ParsePost {
                     size = nPosts;
                 }
 
-                HashSet<ReadPost> readPostHashSet = new HashSet<>(readPostList);
+                HashSet<ReadPost> readPostHashSet = null;
+                if (readPostList != null) {
+                    readPostHashSet = new HashSet<>(readPostList);
+                }
                 for (int i = 0; i < size; i++) {
                     try {
                         if (allData.getJSONObject(i).getString(JSONUtils.KIND_KEY).equals("t3")) {
                             JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
                             Post post = parseBasicData(data);
                             boolean availablePost = true;
-                            if (readPostHashSet.contains(ReadPost.convertPost(post))) {
+                            if (readPostHashSet != null && readPostHashSet.contains(ReadPost.convertPost(post))) {
                                 post.markAsRead();
                             }
                             if (subredditFilterList != null) {
