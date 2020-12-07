@@ -1677,19 +1677,25 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
+                            int currentPosition = getAdapterPosition();
                             if (newVoteType.equals(APIUtils.DIR_UPVOTE)) {
                                 post.setVoteType(1);
-                                upvoteButton
-                                        .setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setTextColor(mUpvotedColor);
+                                if (currentPosition == position) {
+                                    upvoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                    scoreTextView.setTextColor(mUpvotedColor);
+                                }
                             } else {
                                 post.setVoteType(0);
-                                upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setTextColor(mPostIconAndInfoColor);
+                                if (currentPosition == position) {
+                                    upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                    scoreTextView.setTextColor(mPostIconAndInfoColor);
+                                }
                             }
 
-                            downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                            scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                            if (currentPosition == position) {
+                                downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                            }
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
@@ -1698,10 +1704,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         public void onVoteThingFail(int position1) {
                             Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                             post.setVoteType(previousVoteType);
-                            scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
-                            upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
-                            downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
-                            scoreTextView.setTextColor(previousScoreTextViewColor);
+                            if (getAdapterPosition() == position) {
+                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
+                                upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
+                                downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
+                                scoreTextView.setTextColor(previousScoreTextViewColor);
+                            }
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
@@ -1755,19 +1763,25 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
+                            int currentPosition = getAdapterPosition();
                             if (newVoteType.equals(APIUtils.DIR_DOWNVOTE)) {
                                 post.setVoteType(-1);
-                                downvoteButton
-                                        .setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setTextColor(mDownvotedColor);
+                                if (currentPosition == position) {
+                                    downvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                    scoreTextView.setTextColor(mDownvotedColor);
+                                }
                             } else {
                                 post.setVoteType(0);
-                                downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setTextColor(mPostIconAndInfoColor);
+                                if (currentPosition == position) {
+                                    downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                    scoreTextView.setTextColor(mPostIconAndInfoColor);
+                                }
                             }
 
-                            upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                            scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                            if (currentPosition == position) {
+                                upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                            }
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
@@ -1776,10 +1790,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         public void onVoteThingFail(int position1) {
                             Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                             post.setVoteType(previousVoteType);
-                            scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
-                            upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
-                            downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
-                            scoreTextView.setTextColor(previousScoreTextViewColor);
+                            if (getAdapterPosition() == position) {
+                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
+                                upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
+                                downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
+                                scoreTextView.setTextColor(previousScoreTextViewColor);
+                            }
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
@@ -1806,7 +1822,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     @Override
                                     public void success() {
                                         post.setSaved(false);
-                                        saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                        if (getAdapterPosition() == position) {
+                                            saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                        }
                                         Toast.makeText(mActivity, R.string.post_unsaved_success, Toast.LENGTH_SHORT).show();
                                         EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                                     }
@@ -1814,7 +1832,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     @Override
                                     public void failed() {
                                         post.setSaved(true);
-                                        saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                        if (getAdapterPosition() == position) {
+                                            saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                        }
                                         Toast.makeText(mActivity, R.string.post_unsaved_failed, Toast.LENGTH_SHORT).show();
                                         EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                                     }
@@ -1826,7 +1846,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     @Override
                                     public void success() {
                                         post.setSaved(true);
-                                        saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                        if (getAdapterPosition() == position) {
+                                            saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                        }
                                         Toast.makeText(mActivity, R.string.post_saved_success, Toast.LENGTH_SHORT).show();
                                         EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                                     }
@@ -1834,7 +1856,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     @Override
                                     public void failed() {
                                         post.setSaved(false);
-                                        saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                        if (getAdapterPosition() == position) {
+                                            saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                        }
                                         Toast.makeText(mActivity, R.string.post_saved_failed, Toast.LENGTH_SHORT).show();
                                         EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                                     }
@@ -2705,19 +2729,25 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
+                            int currentPosition = getAdapterPosition();
                             if (newVoteType.equals(APIUtils.DIR_UPVOTE)) {
                                 post.setVoteType(1);
-                                upvoteButton
-                                        .setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setTextColor(mUpvotedColor);
+                                if (currentPosition == position) {
+                                    upvoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                    scoreTextView.setTextColor(mUpvotedColor);
+                                }
                             } else {
                                 post.setVoteType(0);
-                                upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setTextColor(mPostIconAndInfoColor);
+                                if (currentPosition == position) {
+                                    upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                    scoreTextView.setTextColor(mPostIconAndInfoColor);
+                                }
                             }
 
-                            downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                            scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                            if (currentPosition == position) {
+                                downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                            }
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
@@ -2726,10 +2756,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         public void onVoteThingFail(int position1) {
                             Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                             post.setVoteType(previousVoteType);
-                            scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
-                            upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
-                            downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
-                            scoreTextView.setTextColor(previousScoreTextViewColor);
+                            if (getAdapterPosition() == position) {
+                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
+                                upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
+                                downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
+                                scoreTextView.setTextColor(previousScoreTextViewColor);
+                            }
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
@@ -2783,19 +2815,26 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
+                            int currentPosition = getAdapterPosition();
                             if (newVoteType.equals(APIUtils.DIR_DOWNVOTE)) {
                                 post.setVoteType(-1);
-                                downvoteButton
-                                        .setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setTextColor(mDownvotedColor);
+                                if (currentPosition == position) {
+                                    downvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                    scoreTextView.setTextColor(mDownvotedColor);
+                                }
+
                             } else {
                                 post.setVoteType(0);
-                                downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setTextColor(mPostIconAndInfoColor);
+                                if (currentPosition == position) {
+                                    downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                    scoreTextView.setTextColor(mPostIconAndInfoColor);
+                                }
                             }
 
-                            upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                            scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                            if (currentPosition == position) {
+                                upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                            }
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
@@ -2804,10 +2843,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         public void onVoteThingFail(int position1) {
                             Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                             post.setVoteType(previousVoteType);
-                            scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
-                            upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
-                            downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
-                            scoreTextView.setTextColor(previousScoreTextViewColor);
+                            if (getAdapterPosition() == position) {
+                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
+                                upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
+                                downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
+                                scoreTextView.setTextColor(previousScoreTextViewColor);
+                            }
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
@@ -2834,7 +2875,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     @Override
                                     public void success() {
                                         post.setSaved(false);
-                                        saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                        if (getAdapterPosition() == position) {
+                                            saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                        }
                                         Toast.makeText(mActivity, R.string.post_unsaved_success, Toast.LENGTH_SHORT).show();
                                         EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                                     }
@@ -2842,7 +2885,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     @Override
                                     public void failed() {
                                         post.setSaved(true);
-                                        saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                        if (getAdapterPosition() == position) {
+                                            saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                        }
                                         Toast.makeText(mActivity, R.string.post_unsaved_failed, Toast.LENGTH_SHORT).show();
                                         EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                                     }
@@ -2854,7 +2899,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     @Override
                                     public void success() {
                                         post.setSaved(true);
-                                        saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                        if (getAdapterPosition() == position) {
+                                            saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                        }
                                         Toast.makeText(mActivity, R.string.post_saved_success, Toast.LENGTH_SHORT).show();
                                         EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                                     }
@@ -2862,7 +2909,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     @Override
                                     public void failed() {
                                         post.setSaved(false);
-                                        saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                        if (getAdapterPosition() == position) {
+                                            saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                        }
                                         Toast.makeText(mActivity, R.string.post_saved_failed, Toast.LENGTH_SHORT).show();
                                         EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                                     }

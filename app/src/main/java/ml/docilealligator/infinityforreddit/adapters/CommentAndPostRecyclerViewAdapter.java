@@ -3487,27 +3487,35 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                     comment.getScore() + comment.getVoteType())));
 
+                    int position = getAdapterPosition();
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
+                            int currentPosition = getAdapterPosition();
                             if (newVoteType.equals(APIUtils.DIR_UPVOTE)) {
                                 comment.setVoteType(Comment.VOTE_TYPE_UPVOTE);
-                                upvoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setTextColor(mUpvotedColor);
-                                topScoreTextView.setTextColor(mUpvotedColor);
+                                if (currentPosition == position) {
+                                    upvoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                    scoreTextView.setTextColor(mUpvotedColor);
+                                    topScoreTextView.setTextColor(mUpvotedColor);
+                                }
                             } else {
                                 comment.setVoteType(Comment.VOTE_TYPE_NO_VOTE);
-                                upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setTextColor(mCommentIconAndInfoColor);
-                                topScoreTextView.setTextColor(mSecondaryTextColor);
+                                if (currentPosition == position) {
+                                    upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                    scoreTextView.setTextColor(mCommentIconAndInfoColor);
+                                    topScoreTextView.setTextColor(mSecondaryTextColor);
+                                }
                             }
 
-                            downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                            scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                    comment.getScore() + comment.getVoteType()));
-                            topScoreTextView.setText(mActivity.getString(R.string.top_score,
-                                    Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                            comment.getScore() + comment.getVoteType())));
+                            if (currentPosition == position) {
+                                downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                        comment.getScore() + comment.getVoteType()));
+                                topScoreTextView.setText(mActivity.getString(R.string.top_score,
+                                        Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                                comment.getScore() + comment.getVoteType())));
+                            }
                         }
 
                         @Override
@@ -3557,27 +3565,35 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                     comment.getScore() + comment.getVoteType())));
 
+                    int position = getAdapterPosition();
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
+                            int currentPosition = getAdapterPosition();
                             if (newVoteType.equals(APIUtils.DIR_DOWNVOTE)) {
                                 comment.setVoteType(Comment.VOTE_TYPE_DOWNVOTE);
-                                downvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setTextColor(mDownvotedColor);
-                                topScoreTextView.setTextColor(mDownvotedColor);
+                                if (currentPosition == position) {
+                                    downvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                    scoreTextView.setTextColor(mDownvotedColor);
+                                    topScoreTextView.setTextColor(mDownvotedColor);
+                                }
                             } else {
                                 comment.setVoteType(Comment.VOTE_TYPE_NO_VOTE);
-                                downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setTextColor(mCommentIconAndInfoColor);
-                                topScoreTextView.setTextColor(mSecondaryTextColor);
+                                if (currentPosition == position) {
+                                    downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                    scoreTextView.setTextColor(mCommentIconAndInfoColor);
+                                    topScoreTextView.setTextColor(mSecondaryTextColor);
+                                }
                             }
 
-                            upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                            scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                    comment.getScore() + comment.getVoteType()));
-                            topScoreTextView.setText(mActivity.getString(R.string.top_score,
-                                    Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                            comment.getScore() + comment.getVoteType())));
+                            if (currentPosition == position) {
+                                upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                        comment.getScore() + comment.getVoteType()));
+                                topScoreTextView.setText(mActivity.getString(R.string.top_score,
+                                        Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                                comment.getScore() + comment.getVoteType())));
+                            }
                         }
 
                         @Override
@@ -3590,20 +3606,25 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             saveButton.setOnClickListener(view -> {
                 Comment comment = getCurrentComment(this);
                 if (comment != null) {
+                    int position = getAdapterPosition();
                     if (comment.isSaved()) {
                         comment.setSaved(false);
                         SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
                             @Override
                             public void success() {
                                 comment.setSaved(false);
-                                saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                if (getAdapterPosition() == position) {
+                                    saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                }
                                 Toast.makeText(mActivity, R.string.comment_unsaved_success, Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void failed() {
                                 comment.setSaved(true);
-                                saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                if (getAdapterPosition() == position) {
+                                    saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                }
                                 Toast.makeText(mActivity, R.string.comment_unsaved_failed, Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -3613,14 +3634,18 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             @Override
                             public void success() {
                                 comment.setSaved(true);
-                                saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                if (getAdapterPosition() == position) {
+                                    saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                }
                                 Toast.makeText(mActivity, R.string.comment_saved_success, Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void failed() {
                                 comment.setSaved(false);
-                                saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                if (getAdapterPosition() == position) {
+                                    saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                }
                                 Toast.makeText(mActivity, R.string.comment_saved_failed, Toast.LENGTH_SHORT).show();
                             }
                         });
