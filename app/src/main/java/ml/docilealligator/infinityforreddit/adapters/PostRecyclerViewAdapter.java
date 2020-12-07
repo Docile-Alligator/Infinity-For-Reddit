@@ -1880,14 +1880,16 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         }
 
         void markPostRead(Post post) {
-            post.markAsRead();
-            cardView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
-            titleTextView.setTextColor(mReadPostTitleColor);
-            if (this instanceof PostTextTypeViewHolder) {
-                ((PostTextTypeViewHolder) this).contentTextView.setTextColor(mReadPostContentColor);
-            }
-            if (mActivity != null && mActivity instanceof MarkPostAsReadInterface) {
-                ((MarkPostAsReadInterface) mActivity).markPostAsRead(post);
+            if (!post.isRead()) {
+                post.markAsRead();
+                cardView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
+                titleTextView.setTextColor(mReadPostTitleColor);
+                if (this instanceof PostTextTypeViewHolder) {
+                    ((PostTextTypeViewHolder) this).contentTextView.setTextColor(mReadPostContentColor);
+                }
+                if (mActivity != null && mActivity instanceof MarkPostAsReadInterface) {
+                    ((MarkPostAsReadInterface) mActivity).markPostAsRead(post);
+                }
             }
         }
     }
@@ -2933,11 +2935,13 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         }
 
         void markPostRead(Post post) {
-            post.markAsRead();
-            itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
-            titleTextView.setTextColor(mReadPostTitleColor);
-            if (mActivity != null && mActivity instanceof MarkPostAsReadInterface) {
-                ((MarkPostAsReadInterface) mActivity).markPostAsRead(post);
+            if (!post.isRead()) {
+                post.markAsRead();
+                itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
+                titleTextView.setTextColor(mReadPostTitleColor);
+                if (mActivity != null && mActivity instanceof MarkPostAsReadInterface) {
+                    ((MarkPostAsReadInterface) mActivity).markPostAsRead(post);
+                }
             }
         }
     }
