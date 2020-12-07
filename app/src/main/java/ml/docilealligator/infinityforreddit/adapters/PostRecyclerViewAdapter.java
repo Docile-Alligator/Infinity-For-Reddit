@@ -1981,6 +1981,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
                 Post post = getItem(position);
                 if (post != null) {
+                    ((PostBaseViewHolder) this).markPostRead(post);
                     Intent intent = new Intent(mActivity, ViewVideoActivity.class);
                     if (post.isGfycat()) {
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
@@ -2225,6 +2226,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
                 Post post = getItem(position);
                 if (post != null) {
+                    ((PostBaseViewHolder) this).markPostRead(post);
                     if (post.getPostType() == Post.VIDEO_TYPE) {
                         Intent intent = new Intent(mActivity, ViewVideoActivity.class);
                         if (post.isGfycat()) {
@@ -2600,6 +2602,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
                 Post post = getItem(position);
                 if (post != null) {
+                    markPostRead(post);
                     if (post.getPostType() == Post.VIDEO_TYPE) {
                         Intent intent = new Intent(mActivity, ViewVideoActivity.class);
                         if (post.isGfycat()) {
