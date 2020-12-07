@@ -576,20 +576,27 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
                     VoteThing.voteThing(mContext, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
-                        public void onVoteThingSuccess(int position) {
+                        public void onVoteThingSuccess(int position1) {
+                            int currentPosition = getAdapterPosition();
                             if (newVoteType.equals(APIUtils.DIR_UPVOTE)) {
                                 comment.setVoteType(Comment.VOTE_TYPE_UPVOTE);
-                                upvoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setTextColor(mUpvotedColor);
+                                if (currentPosition == position) {
+                                    upvoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                    scoreTextView.setTextColor(mUpvotedColor);
+                                }
                             } else {
                                 comment.setVoteType(Comment.VOTE_TYPE_NO_VOTE);
-                                upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setTextColor(mCommentIconAndInfoColor);
+                                if (currentPosition == position) {
+                                    upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                    scoreTextView.setTextColor(mCommentIconAndInfoColor);
+                                }
                             }
 
-                            downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                            scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                    comment.getScore() + comment.getVoteType()));
+                            if (currentPosition == position) {
+                                downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                        comment.getScore() + comment.getVoteType()));
+                            }
                         }
 
                         @Override
@@ -636,19 +643,26 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     VoteThing.voteThing(mContext, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
+                            int currentPosition = getAdapterPosition();
                             if (newVoteType.equals(APIUtils.DIR_DOWNVOTE)) {
                                 comment.setVoteType(Comment.VOTE_TYPE_DOWNVOTE);
-                                downvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setTextColor(mDownvotedColor);
+                                if (currentPosition == position) {
+                                    downvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                    scoreTextView.setTextColor(mDownvotedColor);
+                                }
                             } else {
                                 comment.setVoteType(Comment.VOTE_TYPE_NO_VOTE);
-                                downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setTextColor(mCommentIconAndInfoColor);
+                                if (currentPosition == position) {
+                                    downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                    scoreTextView.setTextColor(mCommentIconAndInfoColor);
+                                }
                             }
 
-                            upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                            scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                    comment.getScore() + comment.getVoteType()));
+                            if (currentPosition == position) {
+                                upvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                        comment.getScore() + comment.getVoteType()));
+                            }
                         }
 
                         @Override
@@ -663,7 +677,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 if (position < 0) {
                     return;
                 }
-                Comment comment = getItem(getAdapterPosition());
+                Comment comment = getItem(position);
                 if (comment != null) {
                     if (comment.isSaved()) {
                         comment.setSaved(false);
@@ -671,14 +685,18 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                             @Override
                             public void success() {
                                 comment.setSaved(false);
-                                saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                if (getAdapterPosition() == position) {
+                                    saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                }
                                 Toast.makeText(mContext, R.string.comment_unsaved_success, Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void failed() {
                                 comment.setSaved(true);
-                                saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                if (getAdapterPosition() == position) {
+                                    saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                }
                                 Toast.makeText(mContext, R.string.comment_unsaved_failed, Toast.LENGTH_SHORT).show();
                             }
                         });
@@ -688,14 +706,18 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                             @Override
                             public void success() {
                                 comment.setSaved(true);
-                                saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                if (getAdapterPosition() == position) {
+                                    saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                }
                                 Toast.makeText(mContext, R.string.comment_saved_success, Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
                             public void failed() {
                                 comment.setSaved(false);
-                                saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                if (getAdapterPosition() == position) {
+                                    saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                }
                                 Toast.makeText(mContext, R.string.comment_saved_failed, Toast.LENGTH_SHORT).show();
                             }
                         });
