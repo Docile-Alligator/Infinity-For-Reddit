@@ -11,9 +11,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
 
-import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.readpost.ReadPost;
 import ml.docilealligator.infinityforreddit.subredditfilter.SubredditFilter;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -48,6 +49,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     private SortType sortType;
     private boolean nsfw;
     private int filter;
+    private List<ReadPost> readPostList;
     private List<SubredditFilter> subredditFilterList;
     private String userWhere;
     private String multiRedditPath;
@@ -62,7 +64,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
 
     PostDataSource(Retrofit retrofit, String accessToken, String accountName, Locale locale,
                    SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences, int postType,
-                   SortType sortType, int filter, boolean nsfw) {
+                   SortType sortType, int filter, boolean nsfw, List<ReadPost> readPostList) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
@@ -76,12 +78,14 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         this.sortType = sortType == null ? new SortType(SortType.Type.BEST) : sortType;
         this.filter = filter;
         this.nsfw = nsfw;
+        this.readPostList = readPostList;
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
     PostDataSource(Retrofit retrofit, String accessToken, String accountName, Locale locale,
                    SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
-                   String path, int postType, SortType sortType, int filter, boolean nsfw, List<SubredditFilter> subredditFilterList) {
+                   String path, int postType, SortType sortType, int filter, boolean nsfw, List<ReadPost> readPostList,
+                   List<SubredditFilter> subredditFilterList) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
@@ -116,13 +120,14 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         }
         this.filter = filter;
         this.nsfw = nsfw;
+        this.readPostList = readPostList;
         this.subredditFilterList = subredditFilterList;
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
     PostDataSource(Retrofit retrofit, String accessToken, String accountName, Locale locale,
                    SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences, String subredditOrUserName,
-                   int postType, SortType sortType, String where, int filter, boolean nsfw) {
+                   int postType, SortType sortType, String where, int filter, boolean nsfw, List<ReadPost> readPostList) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
@@ -138,12 +143,14 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         userWhere = where;
         this.filter = filter;
         this.nsfw = nsfw;
+        this.readPostList = readPostList;
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
     PostDataSource(Retrofit retrofit, String accessToken, String accountName, Locale locale,
-                   SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences, String subredditOrUserName,
-                   String query, int postType, SortType sortType, int filter, boolean nsfw) {
+                   SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
+                   String subredditOrUserName, String query, int postType, SortType sortType, int filter,
+                   boolean nsfw, List<ReadPost> readPostList) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
@@ -160,6 +167,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         this.filter = filter;
         this.nsfw = nsfw;
         postLinkedHashSet = new LinkedHashSet<>();
+        this.readPostList = readPostList;
     }
 
     MutableLiveData<NetworkState> getPaginationNetworkStateLiveData() {
@@ -250,7 +258,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, filter, nsfw,
+                    ParsePost.parsePosts(response.body(), -1, filter, nsfw, readPostList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -313,7 +321,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, filter, nsfw,
+                    ParsePost.parsePosts(response.body(), -1, filter, nsfw, readPostList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -373,7 +381,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, filter, nsfw, subredditFilterList,
+                    ParsePost.parsePosts(response.body(), -1, filter, nsfw, readPostList, subredditFilterList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -447,7 +455,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, filter, nsfw, subredditFilterList,
+                    ParsePost.parsePosts(response.body(), -1, filter, nsfw, readPostList, subredditFilterList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -508,7 +516,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, filter, nsfw,
+                    ParsePost.parsePosts(response.body(), -1, filter, nsfw, readPostList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -579,7 +587,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, filter, nsfw,
+                    ParsePost.parsePosts(response.body(), -1, filter, nsfw, readPostList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -662,7 +670,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, filter, nsfw,
+                    ParsePost.parsePosts(response.body(), -1, filter, nsfw, readPostList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -753,7 +761,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, filter, nsfw,
+                    ParsePost.parsePosts(response.body(), -1, filter, nsfw, readPostList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -813,7 +821,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, filter, nsfw,
+                    ParsePost.parsePosts(response.body(), -1, filter, nsfw, readPostList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -884,7 +892,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, filter, nsfw,
+                    ParsePost.parsePosts(response.body(), -1, filter, nsfw, readPostList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {

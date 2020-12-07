@@ -70,6 +70,7 @@ import im.ene.toro.widget.Container;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.FetchGfycatOrRedgifsVideoLinks;
+import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
@@ -141,10 +142,13 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private int mColorPrimaryLightTheme;
     private int mColorAccent;
     private int mCardViewBackgroundColor;
+    private int mReadPostCardViewBackgroundColor;
     private int mPrimaryTextColor;
     private int mSecondaryTextColor;
     private int mPostTitleColor;
     private int mPostContentColor;
+    private int mReadPostTitleColor;
+    private int mReadPostContentColor;
     private int mStickiedPostIconTint;
     private int mPostTypeBackgroundColor;
     private int mPostTypeTextColor;
@@ -255,10 +259,13 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
             mColorAccent = customThemeWrapper.getColorAccent();
             mCardViewBackgroundColor = customThemeWrapper.getCardViewBackgroundColor();
+            mReadPostCardViewBackgroundColor = customThemeWrapper.getReadPostCardViewBackgroundColor();
             mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
             mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
             mPostTitleColor = customThemeWrapper.getPostTitleColor();
             mPostContentColor = customThemeWrapper.getPostContentColor();
+            mReadPostTitleColor = customThemeWrapper.getReadPostTitleColor();
+            mReadPostContentColor = customThemeWrapper.getReadPostContentColor();
             mStickiedPostIconTint = customThemeWrapper.getStickiedPostIconTint();
             mPostTypeBackgroundColor = customThemeWrapper.getPostTypeBackgroundColor();
             mPostTypeTextColor = customThemeWrapper.getPostTypeTextColor();
@@ -386,6 +393,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         if (holder instanceof PostBaseViewHolder) {
             Post post = getItem(position);
             if (post != null) {
+                if (post.isRead()) {
+                    holder.itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
+                    ((PostBaseViewHolder) holder).titleTextView.setTextColor(mReadPostTitleColor);
+                }
                 String subredditNamePrefixed = post.getSubredditNamePrefixed();
                 String subredditName = subredditNamePrefixed.substring(2);
                 String authorPrefixed = "u/" + post.getAuthor();
@@ -683,6 +694,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 } else if (holder instanceof PostTextTypeViewHolder) {
                     if (!post.isSpoiler() && post.getSelfTextPlainTrimmed() != null && !post.getSelfTextPlainTrimmed().equals("")) {
                         ((PostTextTypeViewHolder) holder).contentTextView.setVisibility(View.VISIBLE);
+                        if (post.isRead()) {
+                            ((PostTextTypeViewHolder) holder).contentTextView.setTextColor(mReadPostContentColor);
+                        }
                         ((PostTextTypeViewHolder) holder).contentTextView.setText(post.getSelfTextPlainTrimmed());
                     }
                 }
@@ -691,6 +705,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         } else if (holder instanceof PostCompactBaseViewHolder) {
             Post post = getItem(position);
             if (post != null) {
+                if (post.isRead()) {
+                    holder.itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
+                    ((PostCompactBaseViewHolder) holder).titleTextView.setTextColor(mReadPostTitleColor);
+                }
                 final String subredditNamePrefixed = post.getSubredditNamePrefixed();
                 String subredditName = subredditNamePrefixed.substring(2);
                 String authorPrefixed = "u/" + post.getAuthor();
@@ -1247,6 +1265,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
         if (holder instanceof PostBaseViewHolder) {
+            ((PostBaseViewHolder) holder).itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
+            ((PostBaseViewHolder) holder).titleTextView.setTextColor(mPostTitleColor);
             if (holder instanceof PostVideoAutoplayViewHolder) {
                 ((PostVideoAutoplayViewHolder) holder).mediaUri = null;
                 if (((PostVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks != null) {
@@ -1267,6 +1287,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 ((PostWithPreviewTypeViewHolder) holder).linkTextView.setVisibility(View.GONE);
             } else if (holder instanceof PostTextTypeViewHolder) {
                 ((PostTextTypeViewHolder) holder).contentTextView.setText("");
+                ((PostTextTypeViewHolder) holder).contentTextView.setTextColor(mPostContentColor);
                 ((PostTextTypeViewHolder) holder).contentTextView.setVisibility(View.GONE);
             }
 
@@ -1285,6 +1306,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             ((PostBaseViewHolder) holder).scoreTextView.setTextColor(mPostIconAndInfoColor);
             ((PostBaseViewHolder) holder).downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
         } else if (holder instanceof PostCompactBaseViewHolder) {
+            ((PostCompactBaseViewHolder) holder).itemView.setBackgroundColor(mCardViewBackgroundColor);
+            ((PostCompactBaseViewHolder) holder).titleTextView.setTextColor(mPostTitleColor);
             mGlide.clear(((PostCompactBaseViewHolder) holder).imageView);
             mGlide.clear(((PostCompactBaseViewHolder) holder).iconGifImageView);
             ((PostCompactBaseViewHolder) holder).stickiedPostImageView.setVisibility(View.GONE);
@@ -1499,12 +1522,16 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             cardView.setOnClickListener(view -> {
                 int position = getAdapterPosition();
                 if (position >= 0 && canStartActivity) {
-                    canStartActivity = false;
+                    Post post = getItem(position);
+                    if (post != null) {
+                        markPostRead(post);
+                        canStartActivity = false;
 
-                    Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
-                    intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, getItem(position));
-                    intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, getAdapterPosition());
-                    mActivity.startActivity(intent);
+                        Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
+                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, post);
+                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, getAdapterPosition());
+                        mActivity.startActivity(intent);
+                    }
                 }
             });
 
@@ -1826,6 +1853,18 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     shareLink(post);
                 }
             });
+        }
+
+        void markPostRead(Post post) {
+            post.markAsRead();
+            cardView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
+            titleTextView.setTextColor(mReadPostTitleColor);
+            if (this instanceof PostTextTypeViewHolder) {
+                ((PostTextTypeViewHolder) this).contentTextView.setTextColor(mReadPostContentColor);
+            }
+            if (mActivity != null && mActivity instanceof MarkPostAsReadInterface) {
+                ((MarkPostAsReadInterface) mActivity).markPostAsRead(post);
+            }
         }
     }
 
@@ -2471,6 +2510,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
                 Post post = getItem(position);
                 if (post != null && canStartActivity) {
+                    markPostRead(post);
                     canStartActivity = false;
 
                     Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
@@ -2838,6 +2878,15 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     shareLink(post);
                 }
             });
+        }
+
+        void markPostRead(Post post) {
+            post.markAsRead();
+            itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
+            titleTextView.setTextColor(mReadPostTitleColor);
+            if (mActivity != null && mActivity instanceof MarkPostAsReadInterface) {
+                ((MarkPostAsReadInterface) mActivity).markPostAsRead(post);
+            }
         }
     }
 

@@ -9,10 +9,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
+import ml.docilealligator.infinityforreddit.readpost.ReadPost;
 import ml.docilealligator.infinityforreddit.subredditfilter.SubredditFilter;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -22,14 +24,14 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
  */
 
 public class ParsePost {
-    public static void parsePosts(String response, int nPosts, int filter, boolean nsfw,
+    public static void parsePosts(String response, int nPosts, int filter, boolean nsfw, List<ReadPost> readPostList,
                                   ParsePostsListingListener parsePostsListingListener) {
-        new ParsePostDataAsyncTask(response, nPosts, filter, nsfw, parsePostsListingListener).execute();
+        new ParsePostDataAsyncTask(response, nPosts, filter, nsfw, readPostList, parsePostsListingListener).execute();
     }
 
-    public static void parsePosts(String response, int nPosts, int filter, boolean nsfw,
+    public static void parsePosts(String response, int nPosts, int filter, boolean nsfw, List<ReadPost> readPostList,
                                   List<SubredditFilter> subredditFilterList, ParsePostsListingListener parsePostsListingListener) {
-        new ParsePostDataAsyncTask(response, nPosts, filter, nsfw, subredditFilterList, parsePostsListingListener).execute();
+        new ParsePostDataAsyncTask(response, nPosts, filter, nsfw, readPostList, subredditFilterList, parsePostsListingListener).execute();
     }
 
     public static void parsePost(String response, ParsePostListener parsePostListener) {
@@ -490,6 +492,7 @@ public class ParsePost {
         private int nPosts;
         private int filter;
         private boolean nsfw;
+        private List<ReadPost> readPostList;
         private List<SubredditFilter> subredditFilterList;
         private ParsePostsListingListener parsePostsListingListener;
         private ParsePostListener parsePostListener;
@@ -498,7 +501,7 @@ public class ParsePost {
         private String lastItem;
         private boolean parseFailed;
 
-        ParsePostDataAsyncTask(String response, int nPosts, int filter, boolean nsfw,
+        ParsePostDataAsyncTask(String response, int nPosts, int filter, boolean nsfw, List<ReadPost> readPostList,
                                ParsePostsListingListener parsePostsListingListener) {
             this.parsePostsListingListener = parsePostsListingListener;
             try {
@@ -508,6 +511,7 @@ public class ParsePost {
                 this.nPosts = nPosts;
                 this.filter = filter;
                 this.nsfw = nsfw;
+                this.readPostList = readPostList;
                 newPosts = new LinkedHashSet<>();
                 parseFailed = false;
             } catch (JSONException e) {
@@ -516,9 +520,9 @@ public class ParsePost {
             }
         }
 
-        ParsePostDataAsyncTask(String response, int nPosts, int filter, boolean nsfw,
+        ParsePostDataAsyncTask(String response, int nPosts, int filter, boolean nsfw, List<ReadPost> readPostList,
                                List<SubredditFilter> subredditFilterList, ParsePostsListingListener parsePostsListingListener) {
-            this(response, nPosts, filter, nsfw, parsePostsListingListener);
+            this(response, nPosts, filter, nsfw, readPostList, parsePostsListingListener);
             this.subredditFilterList = subredditFilterList;
         }
 
@@ -564,12 +568,16 @@ public class ParsePost {
                     size = nPosts;
                 }
 
+                HashSet<ReadPost> readPostHashSet = new HashSet<>(readPostList);
                 for (int i = 0; i < size; i++) {
                     try {
                         if (allData.getJSONObject(i).getString(JSONUtils.KIND_KEY).equals("t3")) {
                             JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
                             Post post = parseBasicData(data);
                             boolean availablePost = true;
+                            if (readPostHashSet.contains(ReadPost.convertPost(post))) {
+                                post.markAsRead();
+                            }
                             if (subredditFilterList != null) {
                                 for (SubredditFilter subredditFilter : subredditFilterList) {
                                     if (subredditFilter.getSubredditName().equals(post.getSubredditName())) {

@@ -71,6 +71,7 @@ public class Post implements Parcelable {
     private boolean locked;
     private boolean saved;
     private boolean isCrosspost;
+    private boolean isRead;
     private String crosspostParentId;
     private ArrayList<Preview> previews = new ArrayList<>();
     private ArrayList<Gallery> gallery = new ArrayList<>();
@@ -107,6 +108,7 @@ public class Post implements Parcelable {
         this.locked = locked;
         this.saved = saved;
         this.isCrosspost = isCrosspost;
+        isRead = false;
     }
 
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed,
@@ -142,6 +144,7 @@ public class Post implements Parcelable {
         this.locked = locked;
         this.saved = saved;
         this.isCrosspost = isCrosspost;
+        isRead = false;
     }
 
     protected Post(Parcel in) {
@@ -183,6 +186,7 @@ public class Post implements Parcelable {
         locked = in.readByte() != 0;
         saved = in.readByte() != 0;
         isCrosspost = in.readByte() != 0;
+        isRead = in.readByte() != 0;
         crosspostParentId = in.readString();
         in.readTypedList(previews, Preview.CREATOR);
         in.readTypedList(gallery, Gallery.CREATOR);
@@ -446,6 +450,14 @@ public class Post implements Parcelable {
         return isCrosspost;
     }
 
+    public void markAsRead() {
+        isRead = true;
+    }
+
+    public boolean isRead() {
+        return isRead;
+    }
+
     public String getCrosspostParentId() {
         return crosspostParentId;
     }
@@ -510,6 +522,7 @@ public class Post implements Parcelable {
         parcel.writeByte((byte) (locked ? 1 : 0));
         parcel.writeByte((byte) (saved ? 1 : 0));
         parcel.writeByte((byte) (isCrosspost ? 1 : 0));
+        parcel.writeByte((byte) (isRead ? 1 : 0));
         parcel.writeString(crosspostParentId);
         parcel.writeTypedList(previews);
         parcel.writeTypedList(gallery);

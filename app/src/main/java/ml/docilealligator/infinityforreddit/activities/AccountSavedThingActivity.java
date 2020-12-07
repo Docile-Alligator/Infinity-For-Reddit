@@ -36,6 +36,11 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
+import ml.docilealligator.infinityforreddit.FragmentCommunicator;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -43,16 +48,14 @@ import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.CommentsListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
-import ml.docilealligator.infinityforreddit.FragmentCommunicator;
-import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostDataSource;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
 public class AccountSavedThingActivity extends BaseActivity implements ActivityToolbarInterface,
-        PostLayoutBottomSheetFragment.PostLayoutSelectionCallback {
+        PostLayoutBottomSheetFragment.PostLayoutSelectionCallback, MarkPostAsReadInterface {
 
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
@@ -333,6 +336,11 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
             mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + mAccountName, postLayout).apply();
             sectionsPagerAdapter.changePostLayout(postLayout);
         }
+    }
+
+    @Override
+    public void markPostAsRead(Post post) {
+        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mAccountName, post.getId());
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {

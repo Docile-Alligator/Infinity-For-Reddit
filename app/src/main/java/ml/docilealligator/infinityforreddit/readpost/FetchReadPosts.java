@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.readposts;
+package ml.docilealligator.infinityforreddit.readpost;
 
 import android.os.AsyncTask;
 

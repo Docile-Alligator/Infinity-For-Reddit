@@ -63,6 +63,13 @@ import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
+import ml.docilealligator.infinityforreddit.FragmentCommunicator;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.asynctasks.CheckIsSubscribedToSubredditAsyncTask;
 import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubredditDataAsyncTask;
@@ -79,14 +86,10 @@ import ml.docilealligator.infinityforreddit.events.GoBackToMainPageEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.fragments.SidebarFragment;
-import ml.docilealligator.infinityforreddit.FragmentCommunicator;
-import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
+import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostDataSource;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.SortType;
-import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
+import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
 import ml.docilealligator.infinityforreddit.subreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditSubscription;
@@ -99,7 +102,7 @@ import retrofit2.Retrofit;
 public class ViewSubredditDetailActivity extends BaseActivity implements SortTypeSelectionCallback,
         PostTypeBottomSheetFragment.PostTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback,
         ActivityToolbarInterface, FABMoreOptionsBottomSheetFragment.FABOptionSelectionCallback,
-        RandomBottomSheetFragment.RandomOptionSelectionCallback {
+        RandomBottomSheetFragment.RandomOptionSelectionCallback, MarkPostAsReadInterface {
 
     public static final String EXTRA_SUBREDDIT_NAME_KEY = "ESN";
     public static final String EXTRA_MESSAGE_FULLNAME = "ENF";
@@ -1194,6 +1197,11 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         Intent intent = new Intent(this, FetchRandomSubredditOrPostActivity.class);
         intent.putExtra(FetchRandomSubredditOrPostActivity.EXTRA_RANDOM_OPTION, option);
         startActivity(intent);
+    }
+
+    @Override
+    public void markPostAsRead(Post post) {
+        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mAccountName, post.getId());
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {

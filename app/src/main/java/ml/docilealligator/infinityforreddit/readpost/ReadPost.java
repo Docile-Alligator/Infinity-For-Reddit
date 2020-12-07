@@ -1,14 +1,16 @@
-package ml.docilealligator.infinityforreddit.readposts;
+package ml.docilealligator.infinityforreddit.readpost;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 
 import ml.docilealligator.infinityforreddit.account.Account;
+import ml.docilealligator.infinityforreddit.post.Post;
 
 @Entity(tableName = "read_posts", primaryKeys = {"username", "id"},
         foreignKeys = @ForeignKey(entity = Account.class, parentColumns = "username",
@@ -20,6 +22,10 @@ public class ReadPost implements Parcelable {
     @NonNull
     @ColumnInfo(name = "id")
     private String id;
+
+    public static ReadPost convertPost(Post post) {
+        return new ReadPost("temp", post.getId());
+    }
 
     public ReadPost(@NonNull String username, @NonNull String id) {
         this.username = username;
@@ -70,5 +76,18 @@ public class ReadPost implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(username);
         parcel.writeString(id);
+    }
+
+    @Override
+    public boolean equals(@Nullable Object obj) {
+        if (obj instanceof ReadPost) {
+            return ((ReadPost) obj).id.equals(id);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }
