@@ -173,7 +173,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <include
-        layout="@layout/bottom_app_bar_other_pages"
+        layout="@layout/bottom_app_bar_other_activities"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom" />
@@ -185,6 +185,6 @@
         android:layout_margin="@dimen/fab_margin"
         android:visibility="gone"
         app:tint="@android:color/white"
-        app:layout_anchor="@id/bottom_navigation_view_subreddit_detail_activity" />
+        app:layout_anchor="@id/bottom_app_bar_bottom_app_bar" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

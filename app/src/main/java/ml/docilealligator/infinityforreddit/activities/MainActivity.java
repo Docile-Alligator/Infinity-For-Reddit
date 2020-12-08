@@ -152,17 +152,17 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     RecyclerView navDrawerRecyclerView;
     @BindView(R.id.tab_layout_main_activity)
     TabLayout tabLayout;
-    @BindView(R.id.bottom_app_bar_main_activity)
+    @BindView(R.id.bottom_app_bar_bottom_app_bar)
     BottomAppBar bottomAppBar;
-    @BindView(R.id.linear_layout_bottom_app_bar_main_activity)
+    @BindView(R.id.linear_layout_bottom_app_bar)
     LinearLayout linearLayoutBottomAppBar;
-    @BindView(R.id.option_1_bottom_app_bar_main_activity)
+    @BindView(R.id.option_1_bottom_app_bar)
     ImageView option1BottomAppBar;
-    @BindView(R.id.option_2_bottom_app_bar_main_activity)
+    @BindView(R.id.option_2_bottom_app_bar)
     ImageView option2BottomAppBar;
-    @BindView(R.id.option_3_bottom_app_bar_main_activity)
+    @BindView(R.id.option_3_bottom_app_bar)
     ImageView option3BottomAppBar;
-    @BindView(R.id.option_4_bottom_app_bar_main_activity)
+    @BindView(R.id.option_4_bottom_app_bar)
     ImageView option4BottomAppBar;
     @BindView(R.id.fab_main_activity)
     FloatingActionButton fab;
