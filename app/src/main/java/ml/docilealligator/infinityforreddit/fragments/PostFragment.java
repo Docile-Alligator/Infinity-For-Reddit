@@ -331,20 +331,20 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             @Override
             public void run() {
-                if (isInLazyMode && !isLazyModePaused) {
+                if (isInLazyMode && !isLazyModePaused && mAdapter != null) {
                     int nPosts = mAdapter.getItemCount();
                     if (getCurrentPosition() == -1) {
                         if (mLinearLayoutManager != null) {
-                            setCurrentPosition(mLinearLayoutManager.findFirstVisibleItemPosition());
+                            setCurrentPosition(mAdapter.getNextItemPositionWithoutBeingHidden(mLinearLayoutManager.findFirstVisibleItemPosition()));
                         } else {
                             int[] into = new int[2];
-                            setCurrentPosition(mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[1]);
+                            setCurrentPosition(mAdapter.getNextItemPositionWithoutBeingHidden(mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[1]));
                         }
                     }
 
                     if (getCurrentPosition() != RecyclerView.NO_POSITION && nPosts > getCurrentPosition()) {
                         incrementCurrentPosition();
-                        smoothScroller.setTargetPosition(getCurrentPosition());
+                        smoothScroller.setTargetPosition(mAdapter.getNextItemPositionWithoutBeingHidden(getCurrentPosition()));
                         if (mLinearLayoutManager != null) {
                             mLinearLayoutManager.startSmoothScroll(smoothScroller);
                         } else {

@@ -396,6 +396,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             if (post != null) {
                 if (post.isRead()) {
                     if (position < mHideReadPostsIndex) {
+                        post.hidePostInRecyclerView();
                         holder.itemView.setVisibility(View.GONE);
                         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
                         params.height = 0;
@@ -717,6 +718,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             if (post != null) {
                 if (post.isRead()) {
                     if (position < mHideReadPostsIndex) {
+                        post.hidePostInRecyclerView();
                         holder.itemView.setVisibility(View.GONE);
                         ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
                         params.height = 0;
@@ -1216,6 +1218,20 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
     public void prepareToHideReadPosts() {
         mHideReadPostsIndex = getItemCount();
+    }
+
+    public int getNextItemPositionWithoutBeingHidden(int fromPosition) {
+        int temp = fromPosition;
+        while (temp >= 0 && temp < super.getItemCount()) {
+            Post post = getItem(temp);
+            if (post != null && post.isHiddenInRecyclerView()) {
+                temp++;
+            } else {
+                break;
+            }
+        }
+
+        return temp;
     }
 
     private boolean hasExtraRow() {
