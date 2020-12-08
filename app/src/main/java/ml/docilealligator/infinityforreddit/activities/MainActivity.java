@@ -591,6 +591,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_RANDOM:
                     fab.setImageResource(R.drawable.ic_random_24dp);
                     break;
+                case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
+                    fab.setImageResource(R.drawable.ic_hide_read_posts_24dp);
+                    break;
                 default:
                     fab.setImageResource(R.drawable.ic_add_day_night_24dp);
                     break;
@@ -624,6 +627,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         break;
                     case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_RANDOM:
                         randomThing();
+                        break;
+                    case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
+                        if (sectionsPagerAdapter != null) {
+                            sectionsPagerAdapter.hideReadPosts();
+                        }
                         break;
                     default:
                         postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
@@ -1199,6 +1207,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 randomThing();
                 break;
             }
+            case FABMoreOptionsBottomSheetFragment.FAB_HIDE_READ_POSTS: {
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.hideReadPosts();
+                }
+                break;
+            }
         }
     }
 
@@ -1521,6 +1535,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (currentFragment != null) {
                 SortType sortType = currentFragment.getSortType();
                 Utils.displaySortTypeInToolbar(sortType, toolbar);
+            }
+        }
+
+        void hideReadPosts() {
+            PostFragment currentFragment = getCurrentFragment();
+            if (currentFragment != null) {
+                currentFragment.hideReadPosts();
             }
         }
     }

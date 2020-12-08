@@ -260,6 +260,7 @@
         <item>Go to Subreddit</item>
         <item>Go to User</item>
         <item>Random</item>
+        <item>Hide Read Posts</item>
     </string-array>
 
     <string-array name="settings_swipe_action_threshold">

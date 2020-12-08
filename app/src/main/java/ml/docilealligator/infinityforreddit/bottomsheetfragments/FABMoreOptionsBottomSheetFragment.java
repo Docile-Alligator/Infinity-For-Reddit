@@ -25,6 +25,7 @@ public class FABMoreOptionsBottomSheetFragment extends RoundedBottomSheetDialogF
     public static final int FAB_OPTION_GO_TO_SUBREDDIT = 5;
     public static final int FAB_OPTION_GO_TO_USER = 6;
     public static final int FAB_RANDOM = 7;
+    public static final int FAB_HIDE_READ_POSTS = 8;
 
     @BindView(R.id.submit_post_text_view_fab_more_options_bottom_sheet_fragment)
     TextView submitPostTextView;
@@ -42,6 +43,8 @@ public class FABMoreOptionsBottomSheetFragment extends RoundedBottomSheetDialogF
     TextView goToUserTextView;
     @BindView(R.id.random_text_view_fab_more_options_bottom_sheet_fragment)
     TextView randomTextView;
+    @BindView(R.id.hide_read_posts_text_view_fab_more_options_bottom_sheet_fragment)
+    TextView hideReadPostsTextView;
     private FABOptionSelectionCallback activity;
 
     public FABMoreOptionsBottomSheetFragment() {
@@ -93,6 +96,11 @@ public class FABMoreOptionsBottomSheetFragment extends RoundedBottomSheetDialogF
 
         randomTextView.setOnClickListener(view -> {
             activity.fabOptionSelected(FAB_RANDOM);
+            dismiss();
+        });
+
+        hideReadPostsTextView.setOnClickListener(view -> {
+            activity.fabOptionSelected(FAB_HIDE_READ_POSTS);
             dismiss();
         });
 

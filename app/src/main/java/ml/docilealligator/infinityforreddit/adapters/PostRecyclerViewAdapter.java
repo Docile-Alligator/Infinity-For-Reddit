@@ -173,6 +173,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private int mButtonTextColor;
     private int mPostIconAndInfoColor;
     private int mDividerColor;
+    private int mHideReadPostsIndex = 0;
     private float mScale;
     private boolean mDisplaySubredditName;
     private boolean mVoteButtonsOnTheRight;
@@ -394,6 +395,15 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             Post post = getItem(position);
             if (post != null) {
                 if (post.isRead()) {
+                    if (position < mHideReadPostsIndex) {
+                        holder.itemView.setVisibility(View.GONE);
+                        RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
+                        params.height = 0;
+                        params.topMargin = 0;
+                        params.bottomMargin = 0;
+                        holder.itemView.setLayoutParams(params);
+                        return;
+                    }
                     holder.itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
                     ((PostBaseViewHolder) holder).titleTextView.setTextColor(mReadPostTitleColor);
                 }
@@ -706,6 +716,13 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             Post post = getItem(position);
             if (post != null) {
                 if (post.isRead()) {
+                    if (position < mHideReadPostsIndex) {
+                        holder.itemView.setVisibility(View.GONE);
+                        ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+                        params.height = 0;
+                        holder.itemView.setLayoutParams(params);
+                        return;
+                    }
                     holder.itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
                     ((PostCompactBaseViewHolder) holder).titleTextView.setTextColor(mReadPostTitleColor);
                 }
@@ -1189,6 +1206,18 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         mShowAbsoluteNumberOfVotes = showAbsoluteNumberOfVotes;
     }
 
+    public int getHideReadPostsIndex() {
+        return mHideReadPostsIndex;
+    }
+
+    public void setHideReadPostsIndex(int hideReadPostsIndex) {
+        mHideReadPostsIndex = hideReadPostsIndex;
+    }
+
+    public void prepareToHideReadPosts() {
+        mHideReadPostsIndex = getItemCount();
+    }
+
     private boolean hasExtraRow() {
         return networkState != null && networkState.getStatus() != NetworkState.Status.SUCCESS;
     }
@@ -1265,6 +1294,13 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
         if (holder instanceof PostBaseViewHolder) {
+            ((PostBaseViewHolder) holder).itemView.setVisibility(View.VISIBLE);
+            RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            int marginPixel = (int) Utils.convertDpToPixel(8, mActivity);
+            params.topMargin = marginPixel;
+            params.bottomMargin = marginPixel;
+            holder.itemView.setLayoutParams(params);
             ((PostBaseViewHolder) holder).itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
             ((PostBaseViewHolder) holder).titleTextView.setTextColor(mPostTitleColor);
             if (holder instanceof PostVideoAutoplayViewHolder) {
@@ -1306,6 +1342,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             ((PostBaseViewHolder) holder).scoreTextView.setTextColor(mPostIconAndInfoColor);
             ((PostBaseViewHolder) holder).downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
         } else if (holder instanceof PostCompactBaseViewHolder) {
+            ((PostCompactBaseViewHolder) holder).itemView.setVisibility(View.VISIBLE);
+            ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            holder.itemView.setLayoutParams(params);
             ((PostCompactBaseViewHolder) holder).itemView.setBackgroundColor(mCardViewBackgroundColor);
             ((PostCompactBaseViewHolder) holder).titleTextView.setTextColor(mPostTitleColor);
             mGlide.clear(((PostCompactBaseViewHolder) holder).imageView);

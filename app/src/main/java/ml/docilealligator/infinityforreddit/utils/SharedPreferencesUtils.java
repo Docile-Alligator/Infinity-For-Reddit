@@ -194,6 +194,7 @@ public class SharedPreferencesUtils {
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_GO_TO_SUBREDDIT = 5;
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_GO_TO_USER = 6;
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_RANDOM = 7;
+    public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS = 8;
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HOME = 0;
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS = 1;
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX = 2;

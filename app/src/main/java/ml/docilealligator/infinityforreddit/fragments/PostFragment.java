@@ -135,6 +135,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private static final String RECYCLER_VIEW_POSITION_STATE = "RVPS";
     private static final String READ_POST_LIST_STATE = "RPLS";
     private static final String SUBREDDIT_FILTER_LIST_STATE = "SFLS";
+    private static final String HIDE_READ_POSTS_INDEX_STATE = "HRPIS";
 
     @BindView(R.id.swipe_refresh_layout_post_fragment)
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -370,6 +371,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         mSwipeRefreshLayout.setEnabled(mSharedPreferences.getBoolean(SharedPreferencesUtils.PULL_TO_REFRESH, true));
         mSwipeRefreshLayout.setOnRefreshListener(this::refresh);
 
+        int hideReadPostsIndex = 0;
         if (savedInstanceState != null) {
             int recyclerViewPosition = savedInstanceState.getInt(RECYCLER_VIEW_POSITION_STATE);
             if (recyclerViewPosition > 0) {
@@ -379,6 +381,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             readPosts = savedInstanceState.getParcelableArrayList(READ_POST_LIST_STATE);
             subredditFilterList = savedInstanceState.getParcelableArrayList(SUBREDDIT_FILTER_LIST_STATE);
+            hideReadPostsIndex = savedInstanceState.getInt(HIDE_READ_POSTS_INDEX_STATE, 0);
         }
 
         mPostRecyclerView.setOnTouchListener((view, motionEvent) -> {
@@ -652,6 +655,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 }
             });
         }
+
+        mAdapter.setHideReadPostsIndex(hideReadPostsIndex);
 
         if (activity instanceof ActivityToolbarInterface) {
             ((ActivityToolbarInterface) activity).displaySortType();
@@ -976,6 +981,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
         outState.putParcelableArrayList(READ_POST_LIST_STATE, readPosts);
         outState.putParcelableArrayList(SUBREDDIT_FILTER_LIST_STATE, subredditFilterList);
+        if (mAdapter != null) {
+            outState.putInt(HIDE_READ_POSTS_INDEX_STATE, mAdapter.getHideReadPostsIndex());
+        }
         if (mLinearLayoutManager != null) {
             outState.putInt(RECYCLER_VIEW_POSITION_STATE, mLinearLayoutManager.findFirstVisibleItemPosition());
         } else if (mStaggeredGridLayoutManager != null) {
@@ -1141,6 +1149,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(customThemeWrapper.getCircularProgressBarBackground());
         mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent());
         mFetchPostInfoTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
+    }
+
+    @Override
+    public void hideReadPosts() {
+        if (mAdapter != null) {
+            mAdapter.prepareToHideReadPosts();
+            refreshAdapter();
+        }
     }
 
     @Subscribe

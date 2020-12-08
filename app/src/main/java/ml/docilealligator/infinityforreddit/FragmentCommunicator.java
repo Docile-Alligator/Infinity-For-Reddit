@@ -35,4 +35,7 @@ public interface FragmentCommunicator {
     }
 
     void applyTheme();
+
+    default void hideReadPosts() {
+    }
 }
