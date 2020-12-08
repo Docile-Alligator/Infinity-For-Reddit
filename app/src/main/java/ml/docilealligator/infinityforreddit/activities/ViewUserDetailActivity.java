@@ -1,19 +1,27 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Display;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,8 +42,10 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
@@ -67,11 +77,15 @@ import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.asynctasks.CheckIsFollowingUserAsyncTask;
 import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.RandomBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UserThingSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
+import ml.docilealligator.infinityforreddit.events.GoBackToMainPageEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.CommentsListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
@@ -92,7 +106,9 @@ import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
 public class ViewUserDetailActivity extends BaseActivity implements SortTypeSelectionCallback,
-        PostLayoutBottomSheetFragment.PostLayoutSelectionCallback, ActivityToolbarInterface, MarkPostAsReadInterface {
+        PostLayoutBottomSheetFragment.PostLayoutSelectionCallback, ActivityToolbarInterface,
+        FABMoreOptionsBottomSheetFragment.FABOptionSelectionCallback,
+        RandomBottomSheetFragment.RandomOptionSelectionCallback, MarkPostAsReadInterface {
 
     public static final String EXTRA_USER_NAME_KEY = "EUNK";
     public static final String EXTRA_MESSAGE_FULLNAME = "ENF";
@@ -136,6 +152,20 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     TextView cakedayTextView;
     @BindView(R.id.description_text_view_view_user_detail_activity)
     TextView descriptionTextView;
+    @BindView(R.id.bottom_navigation_view_subreddit_detail_activity)
+    BottomAppBar bottomNavigationView;
+    @BindView(R.id.linear_layout_bottom_app_bar_view_subreddit_detail_activity)
+    LinearLayout linearLayoutBottomAppBar;
+    @BindView(R.id.option_1_bottom_app_bar_view_subreddit_detail_activity)
+    ImageView option1BottomAppBar;
+    @BindView(R.id.option_2_bottom_app_bar_view_subreddit_detail_activity)
+    ImageView option2BottomAppBar;
+    @BindView(R.id.option_3_bottom_app_bar_view_subreddit_detail_activity)
+    ImageView option3BottomAppBar;
+    @BindView(R.id.option_4_bottom_app_bar_view_subreddit_detail_activity)
+    ImageView option4BottomAppBar;
+    @BindView(R.id.fab_view_user_detail_activity)
+    FloatingActionButton fab;
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
@@ -156,6 +186,9 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @Inject
     @Named("nsfw_and_spoiler")
     SharedPreferences mNsfwAndSpoilerSharedPreferences;
+    @Inject
+    @Named("bottom_app_bar")
+    SharedPreferences bottomAppBarSharedPreference;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     public UserViewModel userViewModel;
@@ -184,6 +217,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     private int unsubscribedColor;
     private int subscribedColor;
     private boolean showToast = false;
+    private boolean showBottomAppBar;
+    private boolean lockBottomAppBar;
     private String mMessageFullname;
     private String mNewAccountName;
     private SlidrInterface mSlidrInterface;
@@ -258,6 +293,27 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
+
+                int navBarHeight = getNavBarHeight();
+                if (navBarHeight > 0) {
+                    CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+                    params.bottomMargin += navBarHeight;
+                    fab.setLayoutParams(params);
+                    coordinatorLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                        @Override
+                        public void onGlobalLayout() {
+                            coordinatorLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+
+                            Display display = getWindowManager().getDefaultDisplay();
+                            Point size = new Point();
+                            display.getRealSize(size);
+                            if (size.y == coordinatorLayout.getHeight()) {
+                                linearLayoutBottomAppBar.setPadding(0,
+                                        linearLayoutBottomAppBar.getPaddingTop(), 0, navBarHeight);
+                            }
+                        }
+                    });
+                }
                 showToast = true;
             }
 
@@ -311,6 +367,9 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 }
             });
         }
+
+        showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false);
+        lockBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_BOTTOM_APP_BAR, false);
 
         subscribedUserDao = mRedditDataRoomDatabase.subscribedUserDao();
         glide = Glide.with(this);
@@ -496,6 +555,13 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         userNameTextView.setTextColor(mCustomThemeWrapper.getUsername());
         karmaTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
         cakedayTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+        bottomNavigationView.setBackgroundTint(ColorStateList.valueOf(mCustomThemeWrapper.getBottomAppBarBackgroundColor()));
+        int bottomAppBarIconColor = mCustomThemeWrapper.getBottomAppBarIconColor();
+        option2BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        option1BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        option3BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        option4BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        applyFABTheme(fab);
         descriptionTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
         subscribeUserChip.setTextColor(mCustomThemeWrapper.getChipTextColor());
         applyTabLayoutTheme(tabLayout);
@@ -561,24 +627,216 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 } else {
                     lockSwipeRightToGoBack();
                 }
+
+                if (mAccessToken != null) {
+                    if (showBottomAppBar) {
+                        bottomNavigationView.performShow();
+                    }
+                    fab.show();
+                }
+
                 sectionsPagerAdapter.displaySortTypeInToolbar();
             }
         });
 
         fixViewPager2Sensitivity(viewPager2);
 
-        if (mAccessToken != null && mMessageFullname != null) {
-            ReadMessage.readMessage(mOauthRetrofit, mAccessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
-                @Override
-                public void readSuccess() {
-                    mMessageFullname = null;
+        if (mAccessToken != null) {
+            if (mMessageFullname != null) {
+                ReadMessage.readMessage(mOauthRetrofit, mAccessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
+                    @Override
+                    public void readSuccess() {
+                        mMessageFullname = null;
+                    }
+
+                    @Override
+                    public void readFailed() {
+
+                    }
+                });
+            }
+
+            if (showBottomAppBar) {
+                int optionCount = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_COUNT, 4);
+                int option1 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_1, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HOME);
+                int option2 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_2, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS);
+
+                bottomNavigationView.setVisibility(View.VISIBLE);
+
+                if (optionCount == 2) {
+                    linearLayoutBottomAppBar.setWeightSum(3);
+                    option1BottomAppBar.setVisibility(View.GONE);
+                    option3BottomAppBar.setVisibility(View.GONE);
+
+                    option2BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option1));
+                    option4BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option2));
+
+                    option2BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option1);
+                    });
+
+                    option4BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option2);
+                    });
+                } else {
+                    int option3 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_3, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX);
+                    int option4 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_4, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_PROFILE);
+
+                    option1BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option1));
+                    option2BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option2));
+                    option3BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option3));
+                    option4BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option4));
+
+                    option1BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option1);
+                    });
+
+                    option2BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option2);
+                    });
+
+                    option3BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option3);
+                    });
+
+                    option4BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option4);
+                    });
                 }
+            } else {
+                CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+                lp.setAnchorId(View.NO_ID);
+                lp.gravity = Gravity.END | Gravity.BOTTOM;
+                fab.setLayoutParams(lp);
+            }
 
-                @Override
-                public void readFailed() {
-
+            int fabOption = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS);
+            switch (fabOption) {
+                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH:
+                    fab.setImageResource(R.drawable.ic_refresh_24dp);
+                    break;
+                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE:
+                    fab.setImageResource(R.drawable.ic_sort_toolbar_24dp);
+                    break;
+                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT:
+                    fab.setImageResource(R.drawable.ic_post_layout_24dp);
+                    break;
+                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH:
+                    fab.setImageResource(R.drawable.ic_search_black_24dp);
+                    break;
+                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_SUBREDDIT:
+                    fab.setImageResource(R.drawable.ic_subreddit_24dp);
+                    break;
+                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_USER:
+                    fab.setImageResource(R.drawable.ic_user_24dp);
+                    break;
+                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_RANDOM:
+                    fab.setImageResource(R.drawable.ic_random_24dp);
+                    break;
+                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
+                    fab.setImageResource(R.drawable.ic_hide_read_posts_24dp);
+                    break;
+                default:
+                    fab.setImageResource(R.drawable.ic_add_day_night_24dp);
+                    break;
+            }
+            fab.setOnClickListener(view -> {
+                switch (fabOption) {
+                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH: {
+                        if (sectionsPagerAdapter != null) {
+                            sectionsPagerAdapter.refresh();
+                        }
+                        break;
+                    }
+                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE: {
+                        userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
+                        break;
+                    }
+                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT: {
+                        postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+                        break;
+                    }
+                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH: {
+                        Intent intent = new Intent(this, SearchActivity.class);
+                        startActivity(intent);
+                        break;
+                    }
+                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_SUBREDDIT:
+                        goToSubreddit();
+                        break;
+                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_USER:
+                        goToUser();
+                        break;
+                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_RANDOM:
+                        random();
+                        break;
+                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
+                        if (sectionsPagerAdapter != null) {
+                            sectionsPagerAdapter.hideReadPosts();
+                        }
+                        break;
+                    default:
+                        PostTypeBottomSheetFragment postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
+                        postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
+                        break;
                 }
             });
+            fab.setOnLongClickListener(view -> {
+                FABMoreOptionsBottomSheetFragment fabMoreOptionsBottomSheetFragment = new FABMoreOptionsBottomSheetFragment();
+                fabMoreOptionsBottomSheetFragment.show(getSupportFragmentManager(), fabMoreOptionsBottomSheetFragment.getTag());
+                return true;
+            });
+
+            fab.setVisibility(View.VISIBLE);
+        } else {
+            bottomNavigationView.setVisibility(View.GONE);
+            fab.setVisibility(View.GONE);
+        }
+    }
+
+    private void bottomAppBarOptionAction(int option) {
+        switch (option) {
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HOME: {
+                EventBus.getDefault().post(new GoBackToMainPageEvent());
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS: {
+                Intent intent = new Intent(this, SubscribedThingListingActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX: {
+                Intent intent = new Intent(this, InboxActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_PROFILE: {
+                Intent intent = new Intent(this, ViewUserDetailActivity.class);
+                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mAccountName);
+                startActivity(intent);
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_MULTIREDDITS: {
+                Intent intent = new Intent(this, SubscribedThingListingActivity.class);
+                intent.putExtra(SubscribedThingListingActivity.EXTRA_SHOW_MULTIREDDITS, true);
+                startActivity(intent);
+                break;
+            }
+        }
+    }
+
+    private int getBottomAppBarOptionDrawableResource(int option) {
+        switch (option) {
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HOME:
+                return R.drawable.ic_home_black_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS:
+                return R.drawable.ic_subscritptions_bottom_app_bar_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX:
+                return R.drawable.ic_inbox_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_MULTIREDDITS:
+                return R.drawable.ic_multi_reddit_24dp;
+            default:
+                return R.drawable.ic_account_circle_24dp;
         }
     }
 
@@ -812,6 +1070,141 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         sectionsPagerAdapter.changePostLayout(postLayout);
     }
 
+    @Override
+    public void fabOptionSelected(int option) {
+        switch (option) {
+            case FABMoreOptionsBottomSheetFragment.FAB_OPTION_SUBMIT_POST:
+                PostTypeBottomSheetFragment postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
+                postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
+                break;
+            case FABMoreOptionsBottomSheetFragment.FAB_OPTION_REFRESH:
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.refresh();
+                }
+                break;
+            case FABMoreOptionsBottomSheetFragment.FAB_OPTION_CHANGE_SORT_TYPE:
+                userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
+                break;
+            case FABMoreOptionsBottomSheetFragment.FAB_OPTION_CHANGE_POST_LAYOUT:
+                postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+                break;
+            case FABMoreOptionsBottomSheetFragment.FAB_OPTION_SEARCH:
+                Intent intent = new Intent(this, SearchActivity.class);
+                startActivity(intent);
+                break;
+            case FABMoreOptionsBottomSheetFragment.FAB_OPTION_GO_TO_SUBREDDIT: {
+                goToSubreddit();
+                break;
+            }
+            case FABMoreOptionsBottomSheetFragment.FAB_OPTION_GO_TO_USER: {
+                goToUser();
+                break;
+            }
+            case FABMoreOptionsBottomSheetFragment.FAB_RANDOM: {
+                random();
+                break;
+            }
+            case FABMoreOptionsBottomSheetFragment.FAB_HIDE_READ_POSTS: {
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.hideReadPosts();
+                }
+            }
+        }
+    }
+
+    private void goToSubreddit() {
+        EditText thingEditText = (EditText) getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, null);
+        thingEditText.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
+        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                .setTitle(R.string.go_to_subreddit)
+                .setView(thingEditText)
+                .setPositiveButton(R.string.ok, (dialogInterface, i)
+                        -> {
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
+                    }
+                    Intent subredditIntent = new Intent(this, ViewSubredditDetailActivity.class);
+                    subredditIntent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, thingEditText.getText().toString());
+                    startActivity(subredditIntent);
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .setOnDismissListener(dialogInterface -> {
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
+                    }
+                })
+                .show();
+    }
+
+    private void goToUser() {
+        EditText thingEditText = (EditText) getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, null);
+        thingEditText.requestFocus();
+        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }
+        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                .setTitle(R.string.go_to_user)
+                .setView(thingEditText)
+                .setPositiveButton(R.string.ok, (dialogInterface, i)
+                        -> {
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
+                    }
+                    Intent userIntent = new Intent(this, ViewUserDetailActivity.class);
+                    userIntent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, thingEditText.getText().toString());
+                    startActivity(userIntent);
+                })
+                .setNegativeButton(R.string.cancel, null)
+                .setOnDismissListener(dialogInterface -> {
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
+                    }
+                })
+                .show();
+    }
+
+    private void random() {
+        RandomBottomSheetFragment randomBottomSheetFragment = new RandomBottomSheetFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(RandomBottomSheetFragment.EXTRA_IS_NSFW, mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false));
+        randomBottomSheetFragment.setArguments(bundle);
+        randomBottomSheetFragment.show(getSupportFragmentManager(), randomBottomSheetFragment.getTag());
+    }
+
+    @Override
+    public void randomOptionSelected(int option) {
+        Intent intent = new Intent(this, FetchRandomSubredditOrPostActivity.class);
+        intent.putExtra(FetchRandomSubredditOrPostActivity.EXTRA_RANDOM_OPTION, option);
+        startActivity(intent);
+    }
+
+    public void contentScrollUp() {
+        if (mAccessToken != null) {
+            if (showBottomAppBar && !lockBottomAppBar) {
+                bottomNavigationView.performShow();
+            }
+            if (!(showBottomAppBar && lockBottomAppBar)) {
+                fab.show();
+            }
+        }
+    }
+
+    public void contentScrollDown() {
+        if (mAccessToken != null) {
+            if (!(showBottomAppBar && lockBottomAppBar)) {
+                fab.hide();
+            }
+            if (showBottomAppBar && !lockBottomAppBar) {
+                bottomNavigationView.performHide();
+            }
+        }
+    }
+
     @Subscribe
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
         if (!getClass().getName().equals(event.excludeActivityClassName)) {
@@ -822,6 +1215,11 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @Subscribe
     public void onChangeNSFWEvent(ChangeNSFWEvent changeNSFWEvent) {
         sectionsPagerAdapter.changeNSFW(changeNSFWEvent.nsfw);
+    }
+
+    @Subscribe
+    public void goBackToMainPageEvent(GoBackToMainPageEvent event) {
+        finish();
     }
 
     @Override
@@ -1014,6 +1412,15 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 Fragment fragment = fragmentManager.findFragmentByTag("f1");
                 if (fragment instanceof CommentsListingFragment) {
                     ((CommentsListingFragment) fragment).editComment(commentMarkdown, position);
+                }
+            }
+        }
+
+        void hideReadPosts() {
+            if (fragmentManager != null) {
+                Fragment fragment = fragmentManager.findFragmentByTag("f0");
+                if (fragment instanceof PostFragment) {
+                    ((PostFragment) fragment).hideReadPosts();
                 }
             }
         }

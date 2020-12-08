@@ -254,7 +254,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
-                showToast = true;
 
                 int navBarHeight = getNavBarHeight();
                 if (navBarHeight > 0) {
@@ -275,9 +274,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                             }
                         }
                     });
-
-                    showToast = true;
                 }
+
+                showToast = true;
             }
 
             View decorView = window.getDecorView();

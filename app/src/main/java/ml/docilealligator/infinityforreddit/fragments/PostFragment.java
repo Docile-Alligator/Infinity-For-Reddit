@@ -72,6 +72,7 @@ import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.FilteredThingActivity;
 import ml.docilealligator.infinityforreddit.activities.MainActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.adapters.PostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.CustomToroContainer;
@@ -400,7 +401,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     } else if (dy < 0) {
                         ((MainActivity) activity).postScrollUp();
                     }
-
                 }
             });
         } else if (activity instanceof ViewSubredditDetailActivity) {
@@ -412,7 +412,17 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     } else if (dy < 0) {
                         ((ViewSubredditDetailActivity) activity).contentScrollUp();
                     }
-
+                }
+            });
+        } else if (activity instanceof ViewUserDetailActivity) {
+            mPostRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    if (dy > 0) {
+                        ((ViewUserDetailActivity) activity).contentScrollDown();
+                    } else if (dy < 0) {
+                        ((ViewUserDetailActivity) activity).contentScrollUp();
+                    }
                 }
             });
         }
