@@ -106,8 +106,8 @@ import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
 public class ViewUserDetailActivity extends BaseActivity implements SortTypeSelectionCallback,
-        PostLayoutBottomSheetFragment.PostLayoutSelectionCallback, ActivityToolbarInterface,
-        FABMoreOptionsBottomSheetFragment.FABOptionSelectionCallback,
+        PostTypeBottomSheetFragment.PostTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback,
+        ActivityToolbarInterface, FABMoreOptionsBottomSheetFragment.FABOptionSelectionCallback,
         RandomBottomSheetFragment.RandomOptionSelectionCallback, MarkPostAsReadInterface {
 
     public static final String EXTRA_USER_NAME_KEY = "EUNK";
@@ -1239,6 +1239,28 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @Override
     public void markPostAsRead(Post post) {
         InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mAccountName, post.getId());
+    }
+
+    @Override
+    public void postTypeSelected(int postType) {
+        Intent intent;
+        switch (postType) {
+            case PostTypeBottomSheetFragment.TYPE_TEXT:
+                intent = new Intent(this, PostTextActivity.class);
+                startActivity(intent);
+                break;
+            case PostTypeBottomSheetFragment.TYPE_LINK:
+                intent = new Intent(this, PostLinkActivity.class);
+                startActivity(intent);
+                break;
+            case PostTypeBottomSheetFragment.TYPE_IMAGE:
+                intent = new Intent(this, PostImageActivity.class);
+                startActivity(intent);
+                break;
+            case PostTypeBottomSheetFragment.TYPE_VIDEO:
+                intent = new Intent(this, PostVideoActivity.class);
+                startActivity(intent);
+        }
     }
 
     private static class InsertUserDataAsyncTask extends AsyncTask<Void, Void, Void> {

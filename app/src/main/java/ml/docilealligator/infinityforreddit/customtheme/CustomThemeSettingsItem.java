@@ -99,6 +99,16 @@ public class CustomThemeSettingsItem implements Parcelable {
                 context.getString(R.string.theme_item_post_content_color_detail),
                 customTheme.postContentColor));
         customThemeSettingsItems.add(new CustomThemeSettingsItem(
+                context.getString(R.string.theme_item_read_post_title_color),
+                context.getString(R.string.theme_item_read_post_title_color_detail),
+                customTheme.readPostTitleColor
+        ));
+        customThemeSettingsItems.add(new CustomThemeSettingsItem(
+                context.getString(R.string.theme_item_read_post_content_color),
+                context.getString(R.string.theme_item_read_post_content_color_detail),
+                customTheme.readPostContentColor
+        ));
+        customThemeSettingsItems.add(new CustomThemeSettingsItem(
                 context.getString(R.string.theme_item_comment_color),
                 context.getString(R.string.theme_item_comment_color_detail),
                 customTheme.commentColor));
@@ -130,6 +140,10 @@ public class CustomThemeSettingsItem implements Parcelable {
                 context.getString(R.string.theme_item_card_view_background_color),
                 context.getString(R.string.theme_item_card_view_background_color_detail),
                 customTheme.cardViewBackgroundColor));
+        customThemeSettingsItems.add(new CustomThemeSettingsItem(
+                context.getString(R.string.theme_item_read_post_card_view_background_color),
+                context.getString(R.string.theme_item_read_post_card_view_background_color_detail),
+                customTheme.readPostCardViewBackgroundColor));
         customThemeSettingsItems.add(new CustomThemeSettingsItem(
                 context.getString(R.string.theme_item_comment_background_color),
                 context.getString(R.string.theme_item_comment_background_color_detail),

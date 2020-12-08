@@ -630,6 +630,10 @@
     <string name="theme_item_post_title_color_detail">Applied to: Post title</string>
     <string name="theme_item_post_content_color">Post Content Color</string>
     <string name="theme_item_post_content_color_detail">Applied to: Post content</string>
+    <string name="theme_item_read_post_title_color">Read Post Title Color</string>
+    <string name="theme_item_read_post_title_color_detail">Applied to: Read Post Title</string>
+    <string name="theme_item_read_post_content_color">Read Post Content Color</string>
+    <string name="theme_item_read_post_content_color_detail">Applied to: Read Post Content</string>
     <string name="theme_item_comment_color">Comment Color</string>
     <string name="theme_item_comment_color_detail">Applied to: Comment</string>
     <string name="theme_item_button_text_color">Button Text Color</string>
@@ -646,6 +650,8 @@
     <string name="theme_item_background_color_detail">Applied to: Background of every page and navigation drawer</string>
     <string name="theme_item_card_view_background_color">Card View Background Color</string>
     <string name="theme_item_card_view_background_color_detail">Applied to: Post background and message background</string>
+    <string name="theme_item_read_post_card_view_background_color">Read Post Card View Background Color</string>
+    <string name="theme_item_read_post_card_view_background_color_detail">Applied to: Read Post background</string>
     <string name="theme_item_comment_background_color">Comment Background Color</string>
     <string name="theme_item_comment_background_color_detail">Applied to: Comment background</string>
     <string name="theme_item_fully_collapsed_comment_background_color">Fully-Collapsed Comment Background Color</string>
