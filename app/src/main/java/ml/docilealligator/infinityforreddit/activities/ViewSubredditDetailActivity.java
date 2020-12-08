@@ -711,6 +711,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_RANDOM:
                     fab.setImageResource(R.drawable.ic_random_24dp);
                     break;
+                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
+                    fab.setImageResource(R.drawable.ic_hide_read_posts_24dp);
+                    break;
                 default:
                     fab.setImageResource(R.drawable.ic_add_day_night_24dp);
                     break;
@@ -745,6 +748,11 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                         break;
                     case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_RANDOM:
                         random();
+                        break;
+                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
+                        if (sectionsPagerAdapter != null) {
+                            sectionsPagerAdapter.hideReadPosts();
+                        }
                         break;
                     default:
                         postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
@@ -1125,6 +1133,11 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 random();
                 break;
             }
+            case FABMoreOptionsBottomSheetFragment.FAB_HIDE_READ_POSTS: {
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.hideReadPosts();
+                }
+            }
         }
     }
 
@@ -1310,6 +1323,15 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 if (fragment instanceof PostFragment) {
                     SortType sortType = ((PostFragment) fragment).getSortType();
                     Utils.displaySortTypeInToolbar(sortType, toolbar);
+                }
+            }
+        }
+
+        void hideReadPosts() {
+            if (fragmentManager != null) {
+                Fragment fragment = fragmentManager.findFragmentByTag("f0");
+                if (fragment instanceof PostFragment) {
+                    ((PostFragment) fragment).hideReadPosts();
                 }
             }
         }

@@ -208,6 +208,7 @@ public class SharedPreferencesUtils {
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_SUBREDDIT = 5;
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_USER = 6;
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_RANDOM = 7;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS = 8;
 
     public static final String NSFW_AND_SPOILER_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.nsfw_and_spoiler";
     public static final String NSFW_BASE = "_nsfw";
