@@ -426,6 +426,17 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     }
                 }
             });
+        } else if (activity instanceof FilteredThingActivity) {
+            mPostRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    if (dy > 0) {
+                        ((FilteredThingActivity) activity).contentScrollDown();
+                    } else if (dy < 0) {
+                        ((FilteredThingActivity) activity).contentScrollUp();
+                    }
+                }
+            });
         }
 
         postType = getArguments().getInt(EXTRA_POST_TYPE);

@@ -948,5 +948,7 @@
     <string name="select_video_quality">Select Video Quality</string>
 
     <string name="hide_read_posts">Hide Read Posts</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

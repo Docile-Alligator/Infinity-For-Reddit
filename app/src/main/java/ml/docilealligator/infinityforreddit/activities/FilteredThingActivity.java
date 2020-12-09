@@ -13,10 +13,10 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.r0adkll.slidr.Slidr;
 
 import org.greenrobot.eventbus.EventBus;
@@ -36,6 +36,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.FilteredThingFABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SearchPostSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTimeBottomSheetFragment;
@@ -50,7 +51,8 @@ import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class FilteredThingActivity extends BaseActivity implements SortTypeSelectionCallback,
-        PostLayoutBottomSheetFragment.PostLayoutSelectionCallback, ActivityToolbarInterface, MarkPostAsReadInterface {
+        PostLayoutBottomSheetFragment.PostLayoutSelectionCallback, ActivityToolbarInterface,
+        MarkPostAsReadInterface, FilteredThingFABMoreOptionsBottomSheetFragment.FABOptionSelectionCallback {
 
     public static final String EXTRA_NAME = "ESN";
     public static final String EXTRA_QUERY = "EQ";
@@ -72,6 +74,8 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
     CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.toolbar_filtered_posts_activity)
     Toolbar toolbar;
+    @BindView(R.id.fab_filtered_thing_activity)
+    FloatingActionButton fab;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -89,7 +93,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
     private String name;
     private String userWhere;
     private int postType;
-    private Fragment mFragment;
+    private PostFragment mFragment;
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
     private SortTypeBottomSheetFragment bestSortTypeBottomSheetFragment;
@@ -135,6 +139,13 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
                 adjustToolbar(toolbar);
+
+                int navBarHeight = getNavBarHeight();
+                if (navBarHeight > 0) {
+                    CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+                    params.bottomMargin += navBarHeight;
+                    fab.setLayoutParams(params);
+                }
             }
         }
 
@@ -164,7 +175,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
             if (!mNullAccessToken && mAccessToken == null) {
                 getCurrentAccountAndBindView(filter);
             } else {
-                mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
+                mFragment = (PostFragment) getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_filtered_posts_activity, mFragment).commit();
                 bindView(filter, false);
             }
@@ -198,6 +209,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        applyFABTheme(fab);
     }
 
     private void getCurrentAccountAndBindView(int filter) {
@@ -315,6 +327,19 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
             mFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_filtered_posts_activity, mFragment).commit();
         }
+
+        fab.setOnClickListener(view -> {
+
+        });
+
+        if (mAccessToken != null) {
+            fab.setOnLongClickListener(view -> {
+                FilteredThingFABMoreOptionsBottomSheetFragment filteredThingFABMoreOptionsBottomSheetFragment
+                        = new FilteredThingFABMoreOptionsBottomSheetFragment();
+                filteredThingFABMoreOptionsBottomSheetFragment.show(getSupportFragmentManager(), filteredThingFABMoreOptionsBottomSheetFragment.getTag());
+                return true;
+            });
+        }
     }
 
     @Override
@@ -417,7 +442,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
 
     @Override
     public void sortTypeSelected(SortType sortType) {
-        ((PostFragment) mFragment).changeSortType(sortType);
+        mFragment.changeSortType(sortType);
     }
 
     @Override
@@ -456,12 +481,31 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
     @Override
     public void onLongPress() {
         if (mFragment != null) {
-            ((PostFragment) mFragment).goBackToTop();
+            mFragment.goBackToTop();
         }
     }
 
     @Override
     public void markPostAsRead(Post post) {
         InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mAccountName, post.getId());
+    }
+
+    @Override
+    public void fabOptionSelected(int option) {
+        if (option == FilteredThingFABMoreOptionsBottomSheetFragment.FAB_OPTION_FILTER) {
+
+        } else if (option == FilteredThingFABMoreOptionsBottomSheetFragment.FAB_OPTION_HIDE_READ_POSTS) {
+            if (mFragment != null) {
+                mFragment.hideReadPosts();
+            }
+        }
+    }
+
+    public void contentScrollUp() {
+        fab.show();
+    }
+
+    public void contentScrollDown() {
+        fab.hide();
     }
 }
