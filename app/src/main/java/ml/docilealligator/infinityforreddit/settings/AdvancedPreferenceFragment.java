@@ -20,6 +20,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllPostLayoutsAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllReadPostsAsyncTask;
 import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllSortTypesAsyncTask;
 import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllSubredditsAsyncTask;
 import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllThemesAsyncTask;
@@ -78,6 +79,7 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
         Preference deletePostLaoutPreference = findPreference(SharedPreferencesUtils.DELETE_ALL_POST_LAYOUT_DATA_IN_DATABASE);
         Preference deleteAllThemesPreference = findPreference(SharedPreferencesUtils.DELETE_ALL_THEMES_IN_DATABASE);
         Preference deletePostFeedScrolledPositionsPreference = findPreference(SharedPreferencesUtils.DELETE_FRONT_PAGE_SCROLLED_POSITIONS_IN_DATABASE);
+        Preference deleteReadPostsPreference = findPreference(SharedPreferencesUtils.DELETE_READ_POSTS_IN_DATABASE);
         Preference deleteAllLegacySettingsPreference = findPreference(SharedPreferencesUtils.DELETE_ALL_LEGACY_SETTINGS);
         Preference resetAllSettingsPreference = findPreference(SharedPreferencesUtils.RESET_ALL_SETTINGS);
 
@@ -162,6 +164,20 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
                             postFeedScrolledPositionSharedPreferences.edit().clear().apply();
                             Toast.makeText(activity, R.string.delete_all_front_page_scrolled_positions_success, Toast.LENGTH_SHORT).show();
                         })
+                        .setNegativeButton(R.string.no, null)
+                        .show();
+                return true;
+            });
+        }
+
+        if (deleteReadPostsPreference != null) {
+            deleteReadPostsPreference.setOnPreferenceClickListener(preference -> {
+                new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
+                        .setTitle(R.string.are_you_sure)
+                        .setPositiveButton(R.string.yes, (dialogInterface, i)
+                                -> new DeleteAllReadPostsAsyncTask(mRedditDataRoomDatabase, () -> {
+                            Toast.makeText(activity, R.string.delete_all_read_posts_success, Toast.LENGTH_SHORT).show();
+                        }).execute())
                         .setNegativeButton(R.string.no, null)
                         .show();
                 return true;

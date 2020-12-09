@@ -27,6 +27,10 @@
         app:title="@string/settings_delete_front_page_scrolled_positions_in_database_title" />
 
     <Preference
+        app:key="delete_read_posts_in_database"
+        app:title="@string/settings_delete_read_posts_in_database_title" />
+
+    <Preference
         app:key="delete_all_legacy_settings"
         app:title="@string/settings_delete_all_legacy_settings_title" />
 

@@ -20,4 +20,7 @@ public interface ReadPostDao {
 
     @Query("DELETE FROM read_posts WHERE rowid IN (SELECT rowid FROM read_posts LIMIT 100) AND username = :username")
     void deleteOldestReadPosts(String username);
+
+    @Query("DELETE FROM read_posts")
+    void deleteAllReadPosts();
 }
