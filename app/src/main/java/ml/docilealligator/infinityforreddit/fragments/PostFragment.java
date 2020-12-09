@@ -131,6 +131,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public static final int EXTRA_NO_FILTER = -2;
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
     public static final String EXTRA_ACCOUNT_NAME = "EAN";
+    public static final String EXTRA_DISABLE_READ_POSTS = "EDRP";
 
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
     private static final String RECYCLER_VIEW_POSITION_STATE = "RVPS";
@@ -674,15 +675,19 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         if (accountName != null && !accountName.equals("")) {
             if (readPosts == null) {
-                FetchReadPosts.fetchReadPosts(mRedditDataRoomDatabase, accountName,
-                        postType == PostDataSource.TYPE_SUBREDDIT && subredditName != null && (subredditName.equals("all") || subredditName.equals("popular")),
-                        (readPosts, subredditFilters) -> {
-                            if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
-                                this.readPosts = readPosts;
-                                this.subredditFilterList = subredditFilters;
-                                initializeAndBindPostViewModel(accessToken, locale, filter, nsfw);
-                            }
-                        });
+                if (getArguments().getBoolean(EXTRA_DISABLE_READ_POSTS, false)) {
+                    initializeAndBindPostViewModel(accessToken, locale, filter, nsfw);
+                } else {
+                    FetchReadPosts.fetchReadPosts(mRedditDataRoomDatabase, accountName,
+                            postType == PostDataSource.TYPE_SUBREDDIT && subredditName != null && (subredditName.equals("all") || subredditName.equals("popular")),
+                            (readPosts, subredditFilters) -> {
+                                if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
+                                    this.readPosts = readPosts;
+                                    this.subredditFilterList = subredditFilters;
+                                    initializeAndBindPostViewModel(accessToken, locale, filter, nsfw);
+                                }
+                            });
+                }
             } else {
                 initializeAndBindPostViewModel(accessToken, locale, filter, nsfw);
             }
