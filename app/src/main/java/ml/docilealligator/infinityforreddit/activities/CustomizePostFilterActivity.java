@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.activities;
 
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -16,6 +17,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.r0adkll.slidr.Slidr;
 
 import javax.inject.Inject;
@@ -63,28 +65,52 @@ public class CustomizePostFilterActivity extends BaseActivity {
     TextView postTypeVideoTextView;
     @BindView(R.id.post_type_video_check_box_customize_post_filter_activity)
     MaterialCheckBox postTypeVideoCheckBox;
+    @BindView(R.id.title_excludes_strings_text_input_layout_customize_post_filter_activity)
+    TextInputLayout titleExcludesStringsTextInputLayout;
     @BindView(R.id.title_excludes_strings_text_input_edit_text_customize_post_filter_activity)
     TextInputEditText titleExcludesStringsTextInputEditText;
+    @BindView(R.id.title_excludes_regex_text_input_layout_customize_post_filter_activity)
+    TextInputLayout titleExcludesRegexTextInputLayout;
     @BindView(R.id.title_excludes_regex_text_input_edit_text_customize_post_filter_activity)
     TextInputEditText titleExcludesRegexTextInputEditText;
+    @BindView(R.id.excludes_subreddits_text_input_layout_customize_post_filter_activity)
+    TextInputLayout excludesSubredditsTextInputLayout;
     @BindView(R.id.excludes_subreddits_text_input_edit_text_customize_post_filter_activity)
     TextInputEditText excludesSubredditsTextInputEditText;
+    @BindView(R.id.excludes_users_text_input_layout_customize_post_filter_activity)
+    TextInputLayout excludesUsersTextInputLayout;
     @BindView(R.id.excludes_users_text_input_edit_text_customize_post_filter_activity)
     TextInputEditText excludesUsersTextInputEditText;
+    @BindView(R.id.excludes_flairs_text_input_layout_customize_post_filter_activity)
+    TextInputLayout excludesFlairsTextInputLayout;
     @BindView(R.id.excludes_flairs_text_input_edit_text_customize_post_filter_activity)
     TextInputEditText excludesFlairsTextInputEditText;
+    @BindView(R.id.contains_flairs_text_input_layout_customize_post_filter_activity)
+    TextInputLayout containsFlairsTextInputLayout;
     @BindView(R.id.contains_flairs_text_input_edit_text_customize_post_filter_activity)
     TextInputEditText containsFlairsTextInputEditText;
+    @BindView(R.id.min_vote_text_input_layout_customize_post_filter_activity)
+    TextInputLayout minVoteTextInputLayout;
     @BindView(R.id.min_vote_text_input_edit_text_customize_post_filter_activity)
     TextInputEditText minVoteTextInputEditText;
+    @BindView(R.id.max_vote_text_input_layout_customize_post_filter_activity)
+    TextInputLayout maxVoteTextInputLayout;
     @BindView(R.id.max_vote_text_input_edit_text_customize_post_filter_activity)
     TextInputEditText maxVoteTextInputEditText;
+    @BindView(R.id.min_comments_text_input_layout_customize_post_filter_activity)
+    TextInputLayout minCommentsTextInputLayout;
     @BindView(R.id.min_comments_text_input_edit_text_customize_post_filter_activity)
     TextInputEditText minCommentsTextInputEditText;
+    @BindView(R.id.max_comments_text_input_layout_customize_post_filter_activity)
+    TextInputLayout maxCommentsTextInputLayout;
     @BindView(R.id.max_comments_text_input_edit_text_customize_post_filter_activity)
     TextInputEditText maxCommentsTextInputEditText;
+    @BindView(R.id.min_awards_text_input_layout_customize_post_filter_activity)
+    TextInputLayout minAwardsTextInputLayout;
     @BindView(R.id.min_awards_text_input_edit_text_customize_post_filter_activity)
     TextInputEditText minAwardsTextInputEditText;
+    @BindView(R.id.max_awards_text_input_layout_customize_post_filter_activity)
+    TextInputLayout maxAwardsTextInputLayout;
     @BindView(R.id.max_awards_text_input_edit_text_customize_post_filter_activity)
     TextInputEditText maxAwardsTextInputEditText;
     @Inject
@@ -120,7 +146,21 @@ public class CustomizePostFilterActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setToolbarGoToTop(toolbar);
 
+        postTypeTextLinearLayout.setOnClickListener(view -> {
+            postTypeTextCheckBox.performClick();
+        });
 
+        postTypeLinkLinearLayout.setOnClickListener(view -> {
+            postTypeLinkCheckBox.performClick();
+        });
+
+        postTypeImageLinearLayout.setOnClickListener(view -> {
+            postTypeImageCheckBox.performClick();
+        });
+
+        postTypeVideoLinearLayout.setOnClickListener(view -> {
+            postTypeVideoCheckBox.performClick();
+        });
     }
 
     @Override
@@ -138,7 +178,46 @@ public class CustomizePostFilterActivity extends BaseActivity {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
+        postTypeTextTextView.setTextColor(primaryTextColor);
+        postTypeLinkTextView.setTextColor(primaryTextColor);
+        postTypeImageTextView.setTextColor(primaryTextColor);
+        postTypeVideoTextView.setTextColor(primaryTextColor);
+        titleExcludesStringsTextInputLayout.setBoxStrokeColor(primaryTextColor);
+        titleExcludesStringsTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         titleExcludesStringsTextInputEditText.setTextColor(primaryTextColor);
+        titleExcludesRegexTextInputLayout.setBoxStrokeColor(primaryTextColor);
+        titleExcludesRegexTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
+        titleExcludesRegexTextInputEditText.setTextColor(primaryTextColor);
+        excludesSubredditsTextInputLayout.setBoxStrokeColor(primaryTextColor);
+        excludesSubredditsTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
+        excludesSubredditsTextInputEditText.setTextColor(primaryTextColor);
+        excludesUsersTextInputLayout.setBoxStrokeColor(primaryTextColor);
+        excludesUsersTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
+        excludesUsersTextInputEditText.setTextColor(primaryTextColor);
+        excludesFlairsTextInputLayout.setBoxStrokeColor(primaryTextColor);
+        excludesFlairsTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
+        excludesFlairsTextInputEditText.setTextColor(primaryTextColor);
+        containsFlairsTextInputLayout.setBoxStrokeColor(primaryTextColor);
+        containsFlairsTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
+        containsFlairsTextInputEditText.setTextColor(primaryTextColor);
+        minVoteTextInputLayout.setBoxStrokeColor(primaryTextColor);
+        minVoteTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
+        minVoteTextInputEditText.setTextColor(primaryTextColor);
+        maxVoteTextInputLayout.setBoxStrokeColor(primaryTextColor);
+        maxVoteTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
+        maxVoteTextInputEditText.setTextColor(primaryTextColor);
+        minCommentsTextInputLayout.setBoxStrokeColor(primaryTextColor);
+        minCommentsTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
+        minCommentsTextInputEditText.setTextColor(primaryTextColor);
+        maxCommentsTextInputLayout.setBoxStrokeColor(primaryTextColor);
+        maxCommentsTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
+        maxCommentsTextInputEditText.setTextColor(primaryTextColor);
+        minAwardsTextInputLayout.setBoxStrokeColor(primaryTextColor);
+        minAwardsTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
+        minAwardsTextInputEditText.setTextColor(primaryTextColor);
+        maxAwardsTextInputLayout.setBoxStrokeColor(primaryTextColor);
+        maxAwardsTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
+        maxAwardsTextInputEditText.setTextColor(primaryTextColor);
     }
 
     @Override
