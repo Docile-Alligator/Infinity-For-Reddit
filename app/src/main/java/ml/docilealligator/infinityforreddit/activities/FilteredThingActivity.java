@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -329,7 +330,8 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
         }
 
         fab.setOnClickListener(view -> {
-
+            Intent intent = new Intent(this, CustomizePostFilterActivity.class);
+            startActivity(intent);
         });
 
         if (mAccessToken != null) {

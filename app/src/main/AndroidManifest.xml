@@ -32,7 +32,13 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
-        <activity android:name=".activities.SubredditFilterPopularAndAllActivity"
+        <activity android:name=".activities.CustomizePostFilterActivity"
+            android:parentActivityName=".activities.SettingsActivity"
+            android:label="@string/customize_post_filter_activity_label"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".activities.SubredditFilterPopularAndAllActivity"
             android:label="@string/subreddit_filter_popular_and_all_activity_label"
             android:parentActivityName=".activities.SettingsActivity"
             android:theme="@style/AppTheme.NoActionBar"

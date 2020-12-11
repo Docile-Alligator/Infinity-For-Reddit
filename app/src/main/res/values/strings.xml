@@ -34,6 +34,7 @@
     <string name="submit_crosspost_activity_label">Crosspost</string>
     <string name="give_award_activity_label">Give Award</string>
     <string name="subreddit_filter_popular_and_all_activity_label">r/all and r/popular</string>
+    <string name="customize_post_filter_activity_label">Post Filter</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -950,7 +951,18 @@
     <string name="select_video_quality">Select Video Quality</string>
 
     <string name="hide_read_posts">Hide Read Posts</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="title_excludes_strings_hint">Title: excludes keywords</string>
+    <string name="title_excludes_regex_hint">Title: excludes regex</string>
+    <string name="excludes_subreddits_hint">Excludes subreddits</string>
+    <string name="excludes_users_hint">Excludes users</string>
+    <string name="excludes_flairs_hint">Exclude flairs</string>
+    <string name="contains_flairs_hint">Contains flairs</string>
+    <string name="min_vote_hint">Min vote</string>
+    <string name="max_vote_hint">Max vote</string>
+    <string name="min_comments_hint">Min comments</string>
+    <string name="max_comments_hint">Max comments</string>
+    <string name="min_awards_hint">Min awards</string>
+    <string name="max_awards_hint">Max awards</string>
 
 </resources>

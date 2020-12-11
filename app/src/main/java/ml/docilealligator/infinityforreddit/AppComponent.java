@@ -6,6 +6,7 @@ import dagger.Component;
 import ml.docilealligator.infinityforreddit.activities.AccountPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.AccountSavedThingActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
+import ml.docilealligator.infinityforreddit.activities.CustomizePostFilterActivity;
 import ml.docilealligator.infinityforreddit.activities.FullMarkdownActivity;
 import ml.docilealligator.infinityforreddit.activities.CreateMultiRedditActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomThemeListingActivity;
@@ -227,4 +228,6 @@ public interface AppComponent {
     void inject(MiscellaneousPreferenceFragment miscellaneousPreferenceFragment);
 
     void inject(SubredditFilterPopularAndAllActivity subredditFilterPopularAndAllActivity);
+
+    void inject(CustomizePostFilterActivity customizePostFilterActivity);
 }
