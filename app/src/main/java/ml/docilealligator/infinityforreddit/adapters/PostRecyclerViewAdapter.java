@@ -1936,7 +1936,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         }
 
         void markPostRead(Post post) {
-            if (!post.isRead()) {
+            if (mAccessToken != null && !post.isRead()) {
                 post.markAsRead();
                 cardView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
                 titleTextView.setTextColor(mReadPostTitleColor);
@@ -2991,7 +2991,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         }
 
         void markPostRead(Post post) {
-            if (!post.isRead()) {
+            if (mAccessToken != null && !post.isRead()) {
                 post.markAsRead();
                 itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
                 titleTextView.setTextColor(mReadPostTitleColor);
