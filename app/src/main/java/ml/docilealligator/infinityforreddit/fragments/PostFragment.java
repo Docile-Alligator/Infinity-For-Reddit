@@ -65,6 +65,7 @@ import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NetworkState;
+import ml.docilealligator.infinityforreddit.PostFilter;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
@@ -209,6 +210,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private int maxPosition = -1;
     private int postLayout;
     private SortType sortType;
+    private PostFilter postFilter;
     private ColorDrawable backgroundSwipeRight;
     private ColorDrawable backgroundSwipeLeft;
     private Drawable drawableSwipeRight;
@@ -441,10 +443,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         postType = getArguments().getInt(EXTRA_POST_TYPE);
 
+        //TODO: Initialize PostFilter
+        postFilter = new PostFilter();
+
         int filter = getArguments().getInt(EXTRA_FILTER);
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
-        boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
+        postFilter.allowNSFW = mNsfwAndSpoilerSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
         int defaultPostLayout = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY, "0"));
         savePostFeedScrolledPosition = mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_FRONT_PAGE_SCROLLED_POSITION, false);
         Locale locale = getResources().getConfiguration().locale;
@@ -687,7 +692,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if (accountName != null && !accountName.equals("")) {
             if (readPosts == null) {
                 if (getArguments().getBoolean(EXTRA_DISABLE_READ_POSTS, false)) {
-                    initializeAndBindPostViewModel(accessToken, locale, filter, nsfw);
+                    initializeAndBindPostViewModel(accessToken, locale, filter);
                 } else {
                     FetchReadPosts.fetchReadPosts(mRedditDataRoomDatabase, accountName,
                             postType == PostDataSource.TYPE_SUBREDDIT && subredditName != null && (subredditName.equals("all") || subredditName.equals("popular")),
@@ -695,15 +700,15 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                                 if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
                                     this.readPosts = readPosts;
                                     this.subredditFilterList = subredditFilters;
-                                    initializeAndBindPostViewModel(accessToken, locale, filter, nsfw);
+                                    initializeAndBindPostViewModel(accessToken, locale, filter);
                                 }
                             });
                 }
             } else {
-                initializeAndBindPostViewModel(accessToken, locale, filter, nsfw);
+                initializeAndBindPostViewModel(accessToken, locale, filter);
             }
         } else {
-            initializeAndBindPostViewModelForAnonymous(accessToken, locale, filter, nsfw);
+            initializeAndBindPostViewModelForAnonymous(accessToken, locale, filter);
         }
 
         vibrateWhenActionTriggered = mSharedPreferences.getBoolean(SharedPreferencesUtils.VIBRATE_WHEN_ACTION_TRIGGERED, true);
@@ -815,57 +820,65 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         return rootView;
     }
 
-    private void initializeAndBindPostViewModel(String accessToken, Locale locale, int filter, boolean nsfw) {
+    private void initializeAndBindPostViewModel(String accessToken, Locale locale, int filter) {
         if (postType == PostDataSource.TYPE_SEARCH) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
                     accountName, locale, mSharedPreferences,
-                    postFeedScrolledPositionSharedPreferences, subredditName, query, postType, sortType, filter, nsfw, readPosts)).get(PostViewModel.class);
+                    postFeedScrolledPositionSharedPreferences, subredditName, query, postType, sortType,
+                    postFilter, filter, readPosts)).get(PostViewModel.class);
         } else if (postType == PostDataSource.TYPE_SUBREDDIT) {
             if (subredditName.equals("all") || subredditName.equals("popular")) {
                 mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
                         accountName, locale, mSharedPreferences,
-                        postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType, filter, nsfw, readPosts, subredditFilterList)).get(PostViewModel.class);
+                        postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType,
+                        postFilter, filter, readPosts, subredditFilterList)).get(PostViewModel.class);
             } else {
                 mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
                         accountName, locale, mSharedPreferences,
-                        postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType, filter, nsfw, readPosts)).get(PostViewModel.class);
+                        postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType,
+                        postFilter, filter, readPosts)).get(PostViewModel.class);
             }
         } else if (postType == PostDataSource.TYPE_MULTI_REDDIT) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
                     accountName, locale, mSharedPreferences,
-                    postFeedScrolledPositionSharedPreferences, multiRedditPath, postType, sortType, filter, nsfw, readPosts)).get(PostViewModel.class);
+                    postFeedScrolledPositionSharedPreferences, multiRedditPath, postType, sortType,
+                    postFilter, filter, readPosts)).get(PostViewModel.class);
         } else if (postType == PostDataSource.TYPE_USER) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
                     accountName, locale, mSharedPreferences,
-                    postFeedScrolledPositionSharedPreferences, username, postType, sortType, where, filter, nsfw, readPosts)).get(PostViewModel.class);
+                    postFeedScrolledPositionSharedPreferences, username, postType, sortType, postFilter,
+                    where, filter, readPosts)).get(PostViewModel.class);
         } else {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mOauthRetrofit, accessToken,
                     accountName, locale, mSharedPreferences, postFeedScrolledPositionSharedPreferences,
-                    postType, sortType, filter, nsfw, readPosts)).get(PostViewModel.class);
+                    postType, sortType, postFilter, filter, readPosts)).get(PostViewModel.class);
         }
 
         bindPostViewModel();
     }
 
-    private void initializeAndBindPostViewModelForAnonymous(String accessToken, Locale locale, int filter, boolean nsfw) {
+    private void initializeAndBindPostViewModelForAnonymous(String accessToken, Locale locale, int filter) {
         //For anonymous user
         if (postType == PostDataSource.TYPE_SEARCH) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
                     accountName, locale, mSharedPreferences,
-                    postFeedScrolledPositionSharedPreferences, subredditName, query, postType, sortType, filter, nsfw, readPosts)).get(PostViewModel.class);
+                    postFeedScrolledPositionSharedPreferences, subredditName, query, postType, sortType,
+                    postFilter, filter, readPosts)).get(PostViewModel.class);
         } else if (postType == PostDataSource.TYPE_SUBREDDIT) {
             if (subredditName.equals("all") || subredditName.equals("popular")) {
                 if (subredditFilterList != null) {
                     mPostViewModel = new ViewModelProvider(this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
                             accountName, locale, mSharedPreferences,
-                            postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType, filter, nsfw, readPosts, subredditFilterList)).get(PostViewModel.class);
+                            postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType,
+                            postFilter, filter, readPosts, subredditFilterList)).get(PostViewModel.class);
                 } else {
                     FetchSubredditFilters.fetchSubredditFilters(mRedditDataRoomDatabase, subredditFilters -> {
                         if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
                             subredditFilterList = subredditFilters;
                             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
                                     accountName, locale, mSharedPreferences,
-                                    postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType, filter, nsfw, readPosts, subredditFilterList)).get(PostViewModel.class);
+                                    postFeedScrolledPositionSharedPreferences, subredditName, postType,
+                                    sortType, postFilter, filter, readPosts, subredditFilterList)).get(PostViewModel.class);
 
                             bindPostViewModel();
                         }
@@ -874,20 +887,23 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             } else {
                 mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
                         accountName, locale, mSharedPreferences,
-                        postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType, filter, nsfw, readPosts)).get(PostViewModel.class);
+                        postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType, postFilter,
+                        filter, readPosts)).get(PostViewModel.class);
             }
         } else if (postType == PostDataSource.TYPE_MULTI_REDDIT) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
                     accountName, locale, mSharedPreferences,
-                    postFeedScrolledPositionSharedPreferences, multiRedditPath, postType, sortType, filter, nsfw, readPosts)).get(PostViewModel.class);
+                    postFeedScrolledPositionSharedPreferences, multiRedditPath, postType, sortType, postFilter,
+                    filter, readPosts)).get(PostViewModel.class);
         } else if (postType == PostDataSource.TYPE_USER) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
                     accountName, locale, mSharedPreferences,
-                    postFeedScrolledPositionSharedPreferences, username, postType, sortType, where, filter, nsfw, readPosts)).get(PostViewModel.class);
+                    postFeedScrolledPositionSharedPreferences, username, postType, sortType, postFilter,
+                    where, filter, readPosts)).get(PostViewModel.class);
         } else {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mOauthRetrofit, accessToken,
                     accountName, locale, mSharedPreferences, postFeedScrolledPositionSharedPreferences,
-                    postType, sortType, filter, nsfw, readPosts)).get(PostViewModel.class);
+                    postType, sortType, postFilter, filter, readPosts)).get(PostViewModel.class);
         }
 
         if (mPostViewModel != null) {
@@ -1060,7 +1076,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void changeNSFW(boolean nsfw) {
-        mPostViewModel.changeNSFW(nsfw);
+        postFilter.allowNSFW = nsfw;
+        mPostViewModel.changePostFilter(postFilter);
     }
 
     @Override

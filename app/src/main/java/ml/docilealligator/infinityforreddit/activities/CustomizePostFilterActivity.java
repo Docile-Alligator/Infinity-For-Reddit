@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Build;
@@ -26,12 +28,15 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.PostFilter;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class CustomizePostFilterActivity extends BaseActivity {
+
+    public static final String RETURN_EXTRA_POST_FILTER = "REPF";
 
     @BindView(R.id.coordinator_layout_customize_post_filter_activity)
     CoordinatorLayout coordinatorLayout;
@@ -233,7 +238,30 @@ public class CustomizePostFilterActivity extends BaseActivity {
             finish();
             return true;
         } else if (item.getItemId() == R.id.action_save_customize_post_filter_activity) {
+            PostFilter postFilter = new PostFilter();
+            postFilter.maxVote = maxVoteTextInputEditText.getText() == null ? -1 : Integer.parseInt(maxVoteTextInputEditText.getText().toString());
+            postFilter.minVote = minVoteTextInputEditText.getText() == null ? -1 : Integer.parseInt(minVoteTextInputEditText.getText().toString());
+            postFilter.maxComments = maxCommentsTextInputEditText.getText() == null ? -1 : Integer.parseInt(maxCommentsTextInputEditText.getText().toString());
+            postFilter.minComments = minCommentsTextInputEditText.getText() == null ? -1 : Integer.parseInt(minCommentsTextInputEditText.getText().toString());
+            postFilter.maxAwards = maxAwardsTextInputEditText.getText() == null ? -1 : Integer.parseInt(maxAwardsTextInputEditText.getText().toString());
+            postFilter.minAwards = minAwardsTextInputEditText.getText() == null ? -1 : Integer.parseInt(minAwardsTextInputEditText.getText().toString());
+            postFilter.postTitleRegex = titleExcludesRegexTextInputEditText.getText().toString();
+            postFilter.postTitleExcludesStrings = titleExcludesStringsTextInputEditText.getText().toString();
+            postFilter.excludesSubreddits = excludesSubredditsTextInputEditText.getText().toString();
+            postFilter.excludesUsers = excludesUsersTextInputEditText.getText().toString();
+            postFilter.excludesFlairs = excludesUsersTextInputEditText.getText().toString();
+            postFilter.containsFlairs = containsFlairsTextInputEditText.getText().toString();
+            postFilter.containsTextType = postTypeTextCheckBox.isChecked();
+            postFilter.containsLinkType = postTypeLinkCheckBox.isChecked();
+            postFilter.containsImageType = postTypeImageCheckBox.isChecked();
+            postFilter.containsVideoType = postTypeVideoCheckBox.isChecked();
 
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra(RETURN_EXTRA_POST_FILTER, postFilter);
+            setResult(Activity.RESULT_OK, returnIntent);
+            finish();
+
+            return true;
         }
         return false;
     }

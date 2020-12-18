@@ -9,6 +9,7 @@ import androidx.paging.DataSource;
 import java.util.List;
 import java.util.Locale;
 
+import ml.docilealligator.infinityforreddit.PostFilter;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.readpost.ReadPost;
 import ml.docilealligator.infinityforreddit.subredditfilter.SubredditFilter;
@@ -25,9 +26,9 @@ class PostDataSourceFactory extends DataSource.Factory {
     private String query;
     private int postType;
     private SortType sortType;
+    private PostFilter postFilter;
     private String userWhere;
     private int filter;
-    private boolean nsfw;
     private List<ReadPost> readPostList;
     private List<SubredditFilter> subredditFilterList;
 
@@ -37,7 +38,7 @@ class PostDataSourceFactory extends DataSource.Factory {
     PostDataSourceFactory(Retrofit retrofit, String accessToken, String accountName, Locale locale,
                           SharedPreferences sharedPreferences,
                           SharedPreferences postFeedScrolledPositionSharedPreferences, int postType,
-                          SortType sortType, int filter, boolean nsfw, List<ReadPost> readPostList) {
+                          SortType sortType, PostFilter postFilter, int filter, List<ReadPost> readPostList) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
@@ -47,15 +48,15 @@ class PostDataSourceFactory extends DataSource.Factory {
         postDataSourceLiveData = new MutableLiveData<>();
         this.postType = postType;
         this.sortType = sortType;
+        this.postFilter = postFilter;
         this.filter = filter;
-        this.nsfw = nsfw;
         this.readPostList = readPostList;
     }
 
     PostDataSourceFactory(Retrofit retrofit, String accessToken, String accountName, Locale locale,
                           SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
-                          String subredditName, int postType, SortType sortType, int filter, boolean nsfw,
-                          List<ReadPost> readPostList, List<SubredditFilter> subredditFilterList) {
+                          String subredditName, int postType, SortType sortType, PostFilter postFilter,
+                          int filter, List<ReadPost> readPostList, List<SubredditFilter> subredditFilterList) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
@@ -66,16 +67,16 @@ class PostDataSourceFactory extends DataSource.Factory {
         postDataSourceLiveData = new MutableLiveData<>();
         this.postType = postType;
         this.sortType = sortType;
+        this.postFilter = postFilter;
         this.filter = filter;
-        this.nsfw = nsfw;
         this.readPostList = readPostList;
         this.subredditFilterList = subredditFilterList;
     }
 
     PostDataSourceFactory(Retrofit retrofit, String accessToken, String accountName, Locale locale,
                           SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
-                          String subredditName, int postType, SortType sortType, String where, int filter,
-                          boolean nsfw, List<ReadPost> readPostList) {
+                          String subredditName, int postType, SortType sortType, PostFilter postFilter,
+                          String where, int filter, List<ReadPost> readPostList) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
@@ -86,16 +87,16 @@ class PostDataSourceFactory extends DataSource.Factory {
         postDataSourceLiveData = new MutableLiveData<>();
         this.postType = postType;
         this.sortType = sortType;
+        this.postFilter = postFilter;
         userWhere = where;
         this.filter = filter;
-        this.nsfw = nsfw;
         this.readPostList = readPostList;
     }
 
     PostDataSourceFactory(Retrofit retrofit, String accessToken, String accountName, Locale locale,
                           SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
-                          String subredditName, String query, int postType, SortType sortType, int filter,
-                          boolean nsfw, List<ReadPost> readPostList) {
+                          String subredditName, String query, int postType, SortType sortType, PostFilter postFilter,
+                          int filter, List<ReadPost> readPostList) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
@@ -107,8 +108,8 @@ class PostDataSourceFactory extends DataSource.Factory {
         postDataSourceLiveData = new MutableLiveData<>();
         this.postType = postType;
         this.sortType = sortType;
+        this.postFilter = postFilter;
         this.filter = filter;
-        this.nsfw = nsfw;
         this.readPostList = readPostList;
     }
 
@@ -117,20 +118,20 @@ class PostDataSourceFactory extends DataSource.Factory {
     public DataSource<String, Post> create() {
         if (postType == PostDataSource.TYPE_FRONT_PAGE) {
             postDataSource = new PostDataSource(retrofit, accessToken, accountName, locale,
-                    sharedPreferences, postFeedScrolledPositionSharedPreferences, postType, sortType, filter,
-                    nsfw, readPostList);
+                    sharedPreferences, postFeedScrolledPositionSharedPreferences, postType, sortType,
+                    postFilter, filter, readPostList);
         } else if (postType == PostDataSource.TYPE_SEARCH) {
             postDataSource = new PostDataSource(retrofit, accessToken, accountName, locale,
                     sharedPreferences, postFeedScrolledPositionSharedPreferences, subredditName, query,
-                    postType, sortType, filter, nsfw, readPostList);
+                    postType, sortType, postFilter, filter, readPostList);
         } else if (postType == PostDataSource.TYPE_SUBREDDIT || postType == PostDataSource.TYPE_MULTI_REDDIT) {
             postDataSource = new PostDataSource(retrofit, accessToken, accountName, locale,
                     sharedPreferences, postFeedScrolledPositionSharedPreferences, subredditName, postType,
-                    sortType, filter, nsfw, readPostList, subredditFilterList);
+                    sortType, postFilter, filter, readPostList, subredditFilterList);
         } else {
             postDataSource = new PostDataSource(retrofit, accessToken, accountName, locale,
                     sharedPreferences, postFeedScrolledPositionSharedPreferences, subredditName, postType,
-                    sortType, userWhere, filter, nsfw, readPostList);
+                    sortType, postFilter, userWhere, filter, readPostList);
         }
 
         postDataSourceLiveData.postValue(postDataSource);
@@ -145,8 +146,8 @@ class PostDataSourceFactory extends DataSource.Factory {
         return postDataSource;
     }
 
-    void changeNSFWAndSortType(boolean nsfw, SortType sortType) {
-        this.nsfw = nsfw;
+    void changeSortTypeAndPostFilter(SortType sortType, PostFilter postFilter) {
         this.sortType = sortType;
+        this.postFilter = postFilter;
     }
 }

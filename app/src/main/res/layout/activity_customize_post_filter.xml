@@ -61,7 +61,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
-                    android:text="@string/bottom_sheet_post_text" />
+                    android:text="@string/bottom_sheet_post_text"
+                    android:fontFamily="?attr/font_default"
+                    android:textSize="?attr/font_default" />
 
                 <com.google.android.material.checkbox.MaterialCheckBox
                     android:id="@+id/post_type_text_check_box_customize_post_filter_activity"
@@ -89,7 +91,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
-                    android:text="@string/bottom_sheet_post_link" />
+                    android:text="@string/bottom_sheet_post_link"
+                    android:fontFamily="?attr/font_default"
+                    android:textSize="?attr/font_default" />
 
                 <com.google.android.material.checkbox.MaterialCheckBox
                     android:id="@+id/post_type_link_check_box_customize_post_filter_activity"
@@ -117,7 +121,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
-                    android:text="@string/bottom_sheet_post_image" />
+                    android:text="@string/bottom_sheet_post_image"
+                    android:fontFamily="?attr/font_default"
+                    android:textSize="?attr/font_default" />
 
                 <com.google.android.material.checkbox.MaterialCheckBox
                     android:id="@+id/post_type_image_check_box_customize_post_filter_activity"
@@ -145,7 +151,9 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:layout_gravity="center_vertical"
-                    android:text="@string/bottom_sheet_post_video" />
+                    android:text="@string/bottom_sheet_post_video"
+                    android:fontFamily="?attr/font_default"
+                    android:textSize="?attr/font_default" />
 
                 <com.google.android.material.checkbox.MaterialCheckBox
                     android:id="@+id/post_type_video_check_box_customize_post_filter_activity"
@@ -289,6 +297,7 @@
                     android:id="@+id/min_vote_text_input_edit_text_customize_post_filter_activity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="numberSigned"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
                     android:hint="@string/min_vote_hint" />
@@ -309,6 +318,7 @@
                     android:id="@+id/max_vote_text_input_edit_text_customize_post_filter_activity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="numberSigned"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
                     android:hint="@string/max_vote_hint" />
@@ -329,6 +339,7 @@
                     android:id="@+id/min_comments_text_input_edit_text_customize_post_filter_activity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="numberSigned"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
                     android:hint="@string/min_comments_hint" />
@@ -349,6 +360,7 @@
                     android:id="@+id/max_comments_text_input_edit_text_customize_post_filter_activity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="numberSigned"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
                     android:hint="@string/max_comments_hint" />
@@ -369,6 +381,7 @@
                     android:id="@+id/min_awards_text_input_edit_text_customize_post_filter_activity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="numberSigned"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
                     android:hint="@string/min_awards_hint" />
@@ -389,6 +402,7 @@
                     android:id="@+id/max_awards_text_input_edit_text_customize_post_filter_activity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="numberSigned"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
                     android:hint="@string/max_awards_hint" />
