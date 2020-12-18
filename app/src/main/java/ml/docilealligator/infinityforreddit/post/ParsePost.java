@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 
+import ml.docilealligator.infinityforreddit.PostFilter;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.readpost.ReadPost;
 import ml.docilealligator.infinityforreddit.subredditfilter.SubredditFilter;
@@ -24,18 +25,20 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
  */
 
 public class ParsePost {
-    public static void parsePosts(String response, int nPosts, int filter, boolean nsfw, List<ReadPost> readPostList,
+    public static void parsePosts(String response, int nPosts, int filter, PostFilter postFilter, List<ReadPost> readPostList,
                                   ParsePostsListingListener parsePostsListingListener) {
-        new ParsePostDataAsyncTask(response, nPosts, filter, nsfw, readPostList, parsePostsListingListener).execute();
+        new ParsePostDataAsyncTask(response, nPosts, filter, postFilter, readPostList, parsePostsListingListener).execute();
     }
 
-    public static void parsePosts(String response, int nPosts, int filter, boolean nsfw, List<ReadPost> readPostList,
+    public static void parsePosts(String response, int nPosts, int filter, PostFilter postFilter, List<ReadPost> readPostList,
                                   List<SubredditFilter> subredditFilterList, ParsePostsListingListener parsePostsListingListener) {
-        new ParsePostDataAsyncTask(response, nPosts, filter, nsfw, readPostList, subredditFilterList, parsePostsListingListener).execute();
+        new ParsePostDataAsyncTask(response, nPosts, filter, postFilter, readPostList, subredditFilterList, parsePostsListingListener).execute();
     }
 
     public static void parsePost(String response, ParsePostListener parsePostListener) {
-        new ParsePostDataAsyncTask(response, true, parsePostListener).execute();
+        PostFilter postFilter = new PostFilter();
+        postFilter.allowNSFW = true;
+        new ParsePostDataAsyncTask(response, postFilter, parsePostListener).execute();
     }
 
     private static Post parseBasicData(JSONObject data) throws JSONException {
@@ -491,7 +494,7 @@ public class ParsePost {
         private JSONArray allData;
         private int nPosts;
         private int filter;
-        private boolean nsfw;
+        private PostFilter postFilter;
         private List<ReadPost> readPostList;
         private List<SubredditFilter> subredditFilterList;
         private ParsePostsListingListener parsePostsListingListener;
@@ -501,7 +504,7 @@ public class ParsePost {
         private String lastItem;
         private boolean parseFailed;
 
-        ParsePostDataAsyncTask(String response, int nPosts, int filter, boolean nsfw, List<ReadPost> readPostList,
+        ParsePostDataAsyncTask(String response, int nPosts, int filter, PostFilter postFilter, List<ReadPost> readPostList,
                                ParsePostsListingListener parsePostsListingListener) {
             this.parsePostsListingListener = parsePostsListingListener;
             try {
@@ -510,7 +513,7 @@ public class ParsePost {
                 lastItem = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
                 this.nPosts = nPosts;
                 this.filter = filter;
-                this.nsfw = nsfw;
+                this.postFilter = postFilter;
                 this.readPostList = readPostList;
                 newPosts = new LinkedHashSet<>();
                 parseFailed = false;
@@ -520,18 +523,18 @@ public class ParsePost {
             }
         }
 
-        ParsePostDataAsyncTask(String response, int nPosts, int filter, boolean nsfw, List<ReadPost> readPostList,
+        ParsePostDataAsyncTask(String response, int nPosts, int filter, PostFilter postFilter, List<ReadPost> readPostList,
                                List<SubredditFilter> subredditFilterList, ParsePostsListingListener parsePostsListingListener) {
-            this(response, nPosts, filter, nsfw, readPostList, parsePostsListingListener);
+            this(response, nPosts, filter, postFilter, readPostList, parsePostsListingListener);
             this.subredditFilterList = subredditFilterList;
         }
 
-        ParsePostDataAsyncTask(String response, boolean nsfw,
+        ParsePostDataAsyncTask(String response, PostFilter postFilter,
                                ParsePostListener parsePostListener) {
             this.parsePostListener = parsePostListener;
             try {
                 allData = new JSONArray(response).getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
-                this.nsfw = nsfw;
+                this.postFilter = postFilter;
                 parseFailed = false;
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -589,7 +592,7 @@ public class ParsePost {
                                     }
                                 }
                             }
-                            if (availablePost && !(!nsfw && post.isNSFW())) {
+                            if (availablePost && !(!postFilter.allowNSFW && post.isNSFW())) {
                                 if (filter == PostFragment.EXTRA_NO_FILTER) {
                                     newPosts.add(post);
                                 } else if (filter == post.getPostType()) {
