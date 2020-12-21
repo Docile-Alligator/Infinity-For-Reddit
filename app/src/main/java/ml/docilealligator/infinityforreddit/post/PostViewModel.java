@@ -14,7 +14,6 @@ import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
 import java.util.List;
-import java.util.Locale;
 
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.PostFilter;
@@ -31,12 +30,12 @@ public class PostViewModel extends ViewModel {
     private LiveData<PagedList<Post>> posts;
     private MutableLiveData<SortType> sortTypeLiveData;
     private MutableLiveData<PostFilter> postFilterLiveData;
-    private NSFWAndSortTypeLiveData nsfwAndSortTypeLiveData;
+    private SortTypeAndPostFilterLiveData sortTypeAndPostFilterLiveData;
 
-    public PostViewModel(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+    public PostViewModel(Retrofit retrofit, String accessToken, String accountName,
                          SharedPreferences sharedPreferences, SharedPreferences cache, int postType,
                          SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
-        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, accountName, locale,
+        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, accountName,
                 sharedPreferences, cache, postType, sortType, postFilter, readPostList);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
@@ -51,7 +50,7 @@ public class PostViewModel extends ViewModel {
         postFilterLiveData = new MutableLiveData<>();
         postFilterLiveData.postValue(postFilter);
 
-        nsfwAndSortTypeLiveData = new NSFWAndSortTypeLiveData(sortTypeLiveData, postFilterLiveData);
+        sortTypeAndPostFilterLiveData = new SortTypeAndPostFilterLiveData(sortTypeLiveData, postFilterLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -59,18 +58,18 @@ public class PostViewModel extends ViewModel {
                         .setPageSize(25)
                         .build();
 
-        posts = Transformations.switchMap(nsfwAndSortTypeLiveData, nsfwAndSort -> {
+        posts = Transformations.switchMap(sortTypeAndPostFilterLiveData, sortAndPostFilter -> {
             postDataSourceFactory.changeSortTypeAndPostFilter(
                     sortTypeLiveData.getValue(), postFilterLiveData.getValue());
             return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
         });
     }
 
-    public PostViewModel(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+    public PostViewModel(Retrofit retrofit, String accessToken, String accountName,
                          SharedPreferences sharedPreferences, SharedPreferences cache, String subredditName,
                          int postType, SortType sortType, PostFilter postFilter,
                          List<ReadPost> readPostList, List<SubredditFilter> subredditFilterList) {
-        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, accountName, locale,
+        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, accountName,
                 sharedPreferences, cache, subredditName, postType, sortType, postFilter,
                 readPostList, subredditFilterList);
 
@@ -86,7 +85,7 @@ public class PostViewModel extends ViewModel {
         postFilterLiveData = new MutableLiveData<>();
         postFilterLiveData.postValue(postFilter);
 
-        nsfwAndSortTypeLiveData = new NSFWAndSortTypeLiveData(sortTypeLiveData, postFilterLiveData);
+        sortTypeAndPostFilterLiveData = new SortTypeAndPostFilterLiveData(sortTypeLiveData, postFilterLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -94,18 +93,18 @@ public class PostViewModel extends ViewModel {
                         .setPageSize(25)
                         .build();
 
-        posts = Transformations.switchMap(nsfwAndSortTypeLiveData, nsfwAndSort -> {
+        posts = Transformations.switchMap(sortTypeAndPostFilterLiveData, sortAndPostFilter -> {
             postDataSourceFactory.changeSortTypeAndPostFilter(
                     sortTypeLiveData.getValue(), postFilterLiveData.getValue());
             return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
         });
     }
 
-    public PostViewModel(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+    public PostViewModel(Retrofit retrofit, String accessToken, String accountName,
                          SharedPreferences sharedPreferences, SharedPreferences cache, String subredditName,
                          int postType, SortType sortType, PostFilter postFilter, String where,
                          List<ReadPost> readPostList) {
-        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, accountName, locale,
+        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, accountName,
                 sharedPreferences, cache, subredditName, postType, sortType, postFilter, where, readPostList);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
@@ -120,7 +119,7 @@ public class PostViewModel extends ViewModel {
         postFilterLiveData = new MutableLiveData<>();
         postFilterLiveData.postValue(postFilter);
 
-        nsfwAndSortTypeLiveData = new NSFWAndSortTypeLiveData(sortTypeLiveData, postFilterLiveData);
+        sortTypeAndPostFilterLiveData = new SortTypeAndPostFilterLiveData(sortTypeLiveData, postFilterLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -128,17 +127,17 @@ public class PostViewModel extends ViewModel {
                         .setPageSize(25)
                         .build();
 
-        posts = Transformations.switchMap(nsfwAndSortTypeLiveData, nsfwAndSort -> {
+        posts = Transformations.switchMap(sortTypeAndPostFilterLiveData, sortAndPostFilter -> {
             postDataSourceFactory.changeSortTypeAndPostFilter(
                     sortTypeLiveData.getValue(), postFilterLiveData.getValue());
             return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
         });
     }
 
-    public PostViewModel(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+    public PostViewModel(Retrofit retrofit, String accessToken, String accountName,
                          SharedPreferences sharedPreferences, SharedPreferences cache, String subredditName,
                          String query, int postType, SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
-        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, accountName, locale,
+        postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, accountName,
                 sharedPreferences, cache, subredditName, query, postType, sortType, postFilter,
                 readPostList);
 
@@ -154,7 +153,7 @@ public class PostViewModel extends ViewModel {
         postFilterLiveData = new MutableLiveData<>();
         postFilterLiveData.postValue(postFilter);
 
-        nsfwAndSortTypeLiveData = new NSFWAndSortTypeLiveData(sortTypeLiveData, postFilterLiveData);
+        sortTypeAndPostFilterLiveData = new SortTypeAndPostFilterLiveData(sortTypeLiveData, postFilterLiveData);
 
         PagedList.Config pagedListConfig =
                 (new PagedList.Config.Builder())
@@ -162,7 +161,7 @@ public class PostViewModel extends ViewModel {
                         .setPageSize(25)
                         .build();
 
-        posts = Transformations.switchMap(nsfwAndSortTypeLiveData, nsfwAndSort -> {
+        posts = Transformations.switchMap(sortTypeAndPostFilterLiveData, sortAndPostFilter -> {
             postDataSourceFactory.changeSortTypeAndPostFilter(sortTypeLiveData.getValue(),
                     postFilterLiveData.getValue());
             return (new LivePagedListBuilder(postDataSourceFactory, pagedListConfig)).build();
@@ -205,7 +204,6 @@ public class PostViewModel extends ViewModel {
         private Retrofit retrofit;
         private String accessToken;
         private String accountName;
-        private Locale locale;
         private SharedPreferences sharedPreferences;
         private SharedPreferences postFeedScrolledPositionSharedPreferences;
         private String subredditName;
@@ -217,13 +215,12 @@ public class PostViewModel extends ViewModel {
         private List<ReadPost> readPostList;
         private List<SubredditFilter> subredditFilterList;
 
-        public Factory(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+        public Factory(Retrofit retrofit, String accessToken, String accountName,
                        SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                        int postType, SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.accountName = accountName;
-            this.locale = locale;
             this.sharedPreferences = sharedPreferences;
             this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
             this.postType = postType;
@@ -232,14 +229,13 @@ public class PostViewModel extends ViewModel {
             this.readPostList = readPostList;
         }
 
-        public Factory(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+        public Factory(Retrofit retrofit, String accessToken, String accountName,
                        SharedPreferences sharedPreferences,
                        SharedPreferences postFeedScrolledPositionSharedPreferences, String subredditName,
                        int postType, SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.accountName = accountName;
-            this.locale = locale;
             this.sharedPreferences = sharedPreferences;
             this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
             this.subredditName = subredditName;
@@ -250,7 +246,7 @@ public class PostViewModel extends ViewModel {
         }
 
         //With subreddit filter
-        public Factory(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+        public Factory(Retrofit retrofit, String accessToken, String accountName,
                        SharedPreferences sharedPreferences,
                        SharedPreferences postFeedScrolledPositionSharedPreferences, String subredditName,
                        int postType, SortType sortType, PostFilter postFilter,
@@ -258,7 +254,6 @@ public class PostViewModel extends ViewModel {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.accountName = accountName;
-            this.locale = locale;
             this.sharedPreferences = sharedPreferences;
             this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
             this.subredditName = subredditName;
@@ -270,13 +265,12 @@ public class PostViewModel extends ViewModel {
         }
 
         //User posts
-        public Factory(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+        public Factory(Retrofit retrofit, String accessToken, String accountName,
                        SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences, String subredditName,
                        int postType, SortType sortType, PostFilter postFilter, String where, List<ReadPost> readPostList) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.accountName = accountName;
-            this.locale = locale;
             this.sharedPreferences = sharedPreferences;
             this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
             this.subredditName = subredditName;
@@ -287,13 +281,12 @@ public class PostViewModel extends ViewModel {
             this.readPostList = readPostList;
         }
 
-        public Factory(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+        public Factory(Retrofit retrofit, String accessToken, String accountName,
                        SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences, String subredditName,
                        String query, int postType, SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.accountName = accountName;
-            this.locale = locale;
             this.sharedPreferences = sharedPreferences;
             this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
             this.subredditName = subredditName;
@@ -308,26 +301,26 @@ public class PostViewModel extends ViewModel {
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
             if (postType == PostDataSource.TYPE_FRONT_PAGE) {
-                return (T) new PostViewModel(retrofit, accessToken, accountName, locale, sharedPreferences,
+                return (T) new PostViewModel(retrofit, accessToken, accountName, sharedPreferences,
                         postFeedScrolledPositionSharedPreferences, postType, sortType, postFilter, readPostList);
             } else if (postType == PostDataSource.TYPE_SEARCH) {
-                return (T) new PostViewModel(retrofit, accessToken, accountName, locale, sharedPreferences,
+                return (T) new PostViewModel(retrofit, accessToken, accountName, sharedPreferences,
                         postFeedScrolledPositionSharedPreferences, subredditName, query, postType, sortType,
                         postFilter, readPostList);
             } else if (postType == PostDataSource.TYPE_SUBREDDIT || postType == PostDataSource.TYPE_MULTI_REDDIT) {
-                return (T) new PostViewModel(retrofit, accessToken, accountName, locale, sharedPreferences,
+                return (T) new PostViewModel(retrofit, accessToken, accountName, sharedPreferences,
                         postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType,
                         postFilter, readPostList, subredditFilterList);
             } else {
-                return (T) new PostViewModel(retrofit, accessToken, accountName, locale, sharedPreferences,
+                return (T) new PostViewModel(retrofit, accessToken, accountName, sharedPreferences,
                         postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType,
                         postFilter, userWhere, readPostList);
             }
         }
     }
 
-    private static class NSFWAndSortTypeLiveData extends MediatorLiveData<Pair<PostFilter, SortType>> {
-        public NSFWAndSortTypeLiveData(LiveData<SortType> sortTypeLiveData, LiveData<PostFilter> postFilterLiveData) {
+    private static class SortTypeAndPostFilterLiveData extends MediatorLiveData<Pair<PostFilter, SortType>> {
+        public SortTypeAndPostFilterLiveData(LiveData<SortType> sortTypeLiveData, LiveData<PostFilter> postFilterLiveData) {
             addSource(sortTypeLiveData, sortType -> setValue(Pair.create(postFilterLiveData.getValue(), sortType)));
             addSource(postFilterLiveData, postFilter -> setValue(Pair.create(postFilter, sortTypeLiveData.getValue())));
         }

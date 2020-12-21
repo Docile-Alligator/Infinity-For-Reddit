@@ -172,6 +172,10 @@ public class CustomizePostFilterActivity extends BaseActivity {
         postTypeVideoLinearLayout.setOnClickListener(view -> {
             postTypeVideoCheckBox.performClick();
         });
+
+        postTypeGalleryLinearLayout.setOnClickListener(view -> {
+            postTypeGalleryCheckBox.performClick();
+        });
     }
 
     @Override

@@ -9,7 +9,6 @@ import androidx.paging.PageKeyedDataSource;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Locale;
 
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.PostFilter;
@@ -41,7 +40,6 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     private Retrofit retrofit;
     private String accessToken;
     private String accountName;
-    private Locale locale;
     private SharedPreferences sharedPreferences;
     private SharedPreferences postFeedScrolledPositionSharedPreferences;
     private String subredditOrUserName;
@@ -62,14 +60,13 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     private LoadParams<String> params;
     private LoadCallback<String, Post> callback;
 
-    PostDataSource(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+    PostDataSource(Retrofit retrofit, String accessToken, String accountName,
                    SharedPreferences sharedPreferences,
                    SharedPreferences postFeedScrolledPositionSharedPreferences, int postType,
                    SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
-        this.locale = locale;
         this.sharedPreferences = sharedPreferences;
         this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
         paginationNetworkStateLiveData = new MutableLiveData<>();
@@ -82,14 +79,13 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
-    PostDataSource(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+    PostDataSource(Retrofit retrofit, String accessToken, String accountName,
                    SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                    String path, int postType, SortType sortType, PostFilter postFilter,
                    List<ReadPost> readPostList, List<SubredditFilter> subredditFilterList) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
-        this.locale = locale;
         this.sharedPreferences = sharedPreferences;
         this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
         if (postType == TYPE_SUBREDDIT) {
@@ -124,14 +120,13 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
-    PostDataSource(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+    PostDataSource(Retrofit retrofit, String accessToken, String accountName,
                    SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                    String subredditOrUserName, int postType, SortType sortType, PostFilter postFilter,
                    String where, List<ReadPost> readPostList) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
-        this.locale = locale;
         this.sharedPreferences = sharedPreferences;
         this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
         this.subredditOrUserName = subredditOrUserName;
@@ -146,14 +141,13 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
-    PostDataSource(Retrofit retrofit, String accessToken, String accountName, Locale locale,
+    PostDataSource(Retrofit retrofit, String accessToken, String accountName,
                    SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                    String subredditOrUserName, String query, int postType, SortType sortType, PostFilter postFilter,
                    List<ReadPost> readPostList) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
-        this.locale = locale;
         this.sharedPreferences = sharedPreferences;
         this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
         this.subredditOrUserName = subredditOrUserName;
