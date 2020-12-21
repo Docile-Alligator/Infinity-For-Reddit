@@ -70,6 +70,12 @@ public class CustomizePostFilterActivity extends BaseActivity {
     TextView postTypeVideoTextView;
     @BindView(R.id.post_type_video_check_box_customize_post_filter_activity)
     MaterialCheckBox postTypeVideoCheckBox;
+    @BindView(R.id.post_type_gallery_linear_layout_customize_post_filter_activity)
+    LinearLayout postTypeGalleryLinearLayout;
+    @BindView(R.id.post_type_gallery_text_view_customize_post_filter_activity)
+    TextView postTypeGalleryTextView;
+    @BindView(R.id.post_type_gallery_check_box_customize_post_filter_activity)
+    MaterialCheckBox postTypeGalleryCheckBox;
     @BindView(R.id.title_excludes_strings_text_input_layout_customize_post_filter_activity)
     TextInputLayout titleExcludesStringsTextInputLayout;
     @BindView(R.id.title_excludes_strings_text_input_edit_text_customize_post_filter_activity)
@@ -187,6 +193,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
         postTypeLinkTextView.setTextColor(primaryTextColor);
         postTypeImageTextView.setTextColor(primaryTextColor);
         postTypeVideoTextView.setTextColor(primaryTextColor);
+        postTypeGalleryTextView.setTextColor(primaryTextColor);
         titleExcludesStringsTextInputLayout.setBoxStrokeColor(primaryTextColor);
         titleExcludesStringsTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         titleExcludesStringsTextInputEditText.setTextColor(primaryTextColor);
@@ -239,13 +246,13 @@ public class CustomizePostFilterActivity extends BaseActivity {
             return true;
         } else if (item.getItemId() == R.id.action_save_customize_post_filter_activity) {
             PostFilter postFilter = new PostFilter();
-            postFilter.maxVote = maxVoteTextInputEditText.getText() == null ? -1 : Integer.parseInt(maxVoteTextInputEditText.getText().toString());
-            postFilter.minVote = minVoteTextInputEditText.getText() == null ? -1 : Integer.parseInt(minVoteTextInputEditText.getText().toString());
-            postFilter.maxComments = maxCommentsTextInputEditText.getText() == null ? -1 : Integer.parseInt(maxCommentsTextInputEditText.getText().toString());
-            postFilter.minComments = minCommentsTextInputEditText.getText() == null ? -1 : Integer.parseInt(minCommentsTextInputEditText.getText().toString());
-            postFilter.maxAwards = maxAwardsTextInputEditText.getText() == null ? -1 : Integer.parseInt(maxAwardsTextInputEditText.getText().toString());
-            postFilter.minAwards = minAwardsTextInputEditText.getText() == null ? -1 : Integer.parseInt(minAwardsTextInputEditText.getText().toString());
-            postFilter.postTitleRegex = titleExcludesRegexTextInputEditText.getText().toString();
+            postFilter.maxVote = maxVoteTextInputEditText.getText() == null || maxVoteTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(maxVoteTextInputEditText.getText().toString());
+            postFilter.minVote = minVoteTextInputEditText.getText() == null || minVoteTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(minVoteTextInputEditText.getText().toString());
+            postFilter.maxComments = maxCommentsTextInputEditText.getText() == null || maxCommentsTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(maxCommentsTextInputEditText.getText().toString());
+            postFilter.minComments = minCommentsTextInputEditText.getText() == null || minCommentsTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(minCommentsTextInputEditText.getText().toString());
+            postFilter.maxAwards = maxAwardsTextInputEditText.getText() == null || maxAwardsTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(maxAwardsTextInputEditText.getText().toString());
+            postFilter.minAwards = minAwardsTextInputEditText.getText() == null || minAwardsTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(minAwardsTextInputEditText.getText().toString());
+            postFilter.postTitleExcludesRegex = titleExcludesRegexTextInputEditText.getText().toString();
             postFilter.postTitleExcludesStrings = titleExcludesStringsTextInputEditText.getText().toString();
             postFilter.excludesSubreddits = excludesSubredditsTextInputEditText.getText().toString();
             postFilter.excludesUsers = excludesUsersTextInputEditText.getText().toString();
@@ -255,6 +262,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
             postFilter.containsLinkType = postTypeLinkCheckBox.isChecked();
             postFilter.containsImageType = postTypeImageCheckBox.isChecked();
             postFilter.containsVideoType = postTypeVideoCheckBox.isChecked();
+            postFilter.containsGalleryType = postTypeGalleryCheckBox.isChecked();
 
             Intent returnIntent = new Intent();
             returnIntent.putExtra(RETURN_EXTRA_POST_FILTER, postFilter);

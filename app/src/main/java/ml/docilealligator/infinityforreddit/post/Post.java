@@ -359,7 +359,7 @@ public class Post implements Parcelable {
         awards += newAwardsHTML;
     }
 
-    public int getnAwards() {
+    public int getNAwards() {
         return nAwards;
     }
 

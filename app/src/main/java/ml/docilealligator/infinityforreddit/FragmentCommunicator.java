@@ -38,4 +38,7 @@ public interface FragmentCommunicator {
 
     default void hideReadPosts() {
     }
+
+    default void changePostFilter(PostFilter postFilter) {
+    }
 }

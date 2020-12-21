@@ -412,7 +412,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 String subredditName = subredditNamePrefixed.substring(2);
                 String authorPrefixed = "u/" + post.getAuthor();
                 String flair = post.getFlair();
-                int nAwards = post.getnAwards();
+                int nAwards = post.getNAwards();
 
                 ((PostBaseViewHolder) holder).subredditTextView.setText(subredditNamePrefixed);
                 ((PostBaseViewHolder) holder).userTextView.setText(authorPrefixed);
@@ -736,7 +736,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 boolean nsfw = post.isNSFW();
                 boolean spoiler = post.isSpoiler();
                 String flair = post.getFlair();
-                int nAwards = post.getnAwards();
+                int nAwards = post.getNAwards();
                 boolean isArchived = post.isArchived();
 
                 if (mDisplaySubredditName) {

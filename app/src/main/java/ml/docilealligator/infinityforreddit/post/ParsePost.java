@@ -14,7 +14,6 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import ml.docilealligator.infinityforreddit.PostFilter;
-import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.readpost.ReadPost;
 import ml.docilealligator.infinityforreddit.subredditfilter.SubredditFilter;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
@@ -25,14 +24,14 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
  */
 
 public class ParsePost {
-    public static void parsePosts(String response, int nPosts, int filter, PostFilter postFilter, List<ReadPost> readPostList,
+    public static void parsePosts(String response, int nPosts, PostFilter postFilter, List<ReadPost> readPostList,
                                   ParsePostsListingListener parsePostsListingListener) {
-        new ParsePostDataAsyncTask(response, nPosts, filter, postFilter, readPostList, parsePostsListingListener).execute();
+        new ParsePostDataAsyncTask(response, nPosts, postFilter, readPostList, parsePostsListingListener).execute();
     }
 
-    public static void parsePosts(String response, int nPosts, int filter, PostFilter postFilter, List<ReadPost> readPostList,
+    public static void parsePosts(String response, int nPosts, PostFilter postFilter, List<ReadPost> readPostList,
                                   List<SubredditFilter> subredditFilterList, ParsePostsListingListener parsePostsListingListener) {
-        new ParsePostDataAsyncTask(response, nPosts, filter, postFilter, readPostList, subredditFilterList, parsePostsListingListener).execute();
+        new ParsePostDataAsyncTask(response, nPosts, postFilter, readPostList, subredditFilterList, parsePostsListingListener).execute();
     }
 
     public static void parsePost(String response, ParsePostListener parsePostListener) {
@@ -493,7 +492,6 @@ public class ParsePost {
     private static class ParsePostDataAsyncTask extends AsyncTask<Void, Void, Void> {
         private JSONArray allData;
         private int nPosts;
-        private int filter;
         private PostFilter postFilter;
         private List<ReadPost> readPostList;
         private List<SubredditFilter> subredditFilterList;
@@ -504,7 +502,7 @@ public class ParsePost {
         private String lastItem;
         private boolean parseFailed;
 
-        ParsePostDataAsyncTask(String response, int nPosts, int filter, PostFilter postFilter, List<ReadPost> readPostList,
+        ParsePostDataAsyncTask(String response, int nPosts, PostFilter postFilter, List<ReadPost> readPostList,
                                ParsePostsListingListener parsePostsListingListener) {
             this.parsePostsListingListener = parsePostsListingListener;
             try {
@@ -512,7 +510,6 @@ public class ParsePost {
                 allData = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
                 lastItem = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
                 this.nPosts = nPosts;
-                this.filter = filter;
                 this.postFilter = postFilter;
                 this.readPostList = readPostList;
                 newPosts = new LinkedHashSet<>();
@@ -523,9 +520,9 @@ public class ParsePost {
             }
         }
 
-        ParsePostDataAsyncTask(String response, int nPosts, int filter, PostFilter postFilter, List<ReadPost> readPostList,
+        ParsePostDataAsyncTask(String response, int nPosts, PostFilter postFilter, List<ReadPost> readPostList,
                                List<SubredditFilter> subredditFilterList, ParsePostsListingListener parsePostsListingListener) {
-            this(response, nPosts, filter, postFilter, readPostList, parsePostsListingListener);
+            this(response, nPosts, postFilter, readPostList, parsePostsListingListener);
             this.subredditFilterList = subredditFilterList;
         }
 
@@ -592,16 +589,8 @@ public class ParsePost {
                                     }
                                 }
                             }
-                            if (availablePost && !(!postFilter.allowNSFW && post.isNSFW())) {
-                                if (filter == PostFragment.EXTRA_NO_FILTER) {
-                                    newPosts.add(post);
-                                } else if (filter == post.getPostType()) {
-                                    newPosts.add(post);
-                                } else if (filter == Post.LINK_TYPE && post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
-                                    newPosts.add(post);
-                                } else if (filter == Post.NSFW_TYPE && post.isNSFW()) {
-                                    newPosts.add(post);
-                                }
+                            if (availablePost && PostFilter.isPostAllowed(post, postFilter)) {
+                                newPosts.add(post);
                             }
                         }
                     } catch (JSONException e) {

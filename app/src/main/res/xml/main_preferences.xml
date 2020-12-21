@@ -44,11 +44,10 @@
     <Preference
         app:key="security"
         app:title="@string/settings_security_title"
-        android:icon="@drawable/ic_security_24dp"
+        app:icon="@drawable/ic_security_24dp"
         app:fragment="ml.docilealligator.infinityforreddit.settings.SecurityPreferenceFragment" />
 
     <Preference
-        app:key="security"
         app:title="@string/settings_data_saving_mode"
         app:icon="@drawable/ic_data_saving_mode_24dp"
         app:fragment="ml.docilealligator.infinityforreddit.settings.DataSavingModePreferenceFragment" />

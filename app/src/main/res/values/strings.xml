@@ -199,6 +199,7 @@
     <string name="bottom_sheet_post_link">Link</string>
     <string name="bottom_sheet_post_image">Image</string>
     <string name="bottom_sheet_post_video">Video</string>
+    <string name="post_type_gallery">Gallery</string>
 
     <string name="select_from_gallery">Select a picture</string>
     <string name="select_again">Select again</string>

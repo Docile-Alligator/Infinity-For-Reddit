@@ -12,6 +12,7 @@ import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
@@ -32,6 +33,7 @@ import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
+import ml.docilealligator.infinityforreddit.PostFilter;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
@@ -66,6 +68,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String FRAGMENT_OUT_STATE = "FOS";
+    private static final int CUSTOMIZE_POST_FILTER_ACTIVITY_REQUEST_CODE = 1000;
 
     @BindView(R.id.coordinator_layout_filtered_thing_activity)
     CoordinatorLayout coordinatorLayout;
@@ -159,6 +162,47 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
         name = getIntent().getStringExtra(EXTRA_NAME);
         postType = getIntent().getIntExtra(EXTRA_POST_TYPE, PostDataSource.TYPE_FRONT_PAGE);
         int filter = getIntent().getIntExtra(EXTRA_FILTER, Post.TEXT_TYPE);
+        switch (filter) {
+            case Post.NSFW_TYPE:
+                toolbar.setSubtitle(R.string.nsfw);
+                break;
+            case Post.TEXT_TYPE:
+                toolbar.setSubtitle(R.string.text);
+                break;
+            case Post.LINK_TYPE:
+            case Post.NO_PREVIEW_LINK_TYPE:
+                toolbar.setSubtitle(R.string.link);
+                break;
+            case Post.IMAGE_TYPE:
+                toolbar.setSubtitle(R.string.image);
+                break;
+            case Post.VIDEO_TYPE:
+                toolbar.setSubtitle(R.string.video);
+                break;
+            case Post.GIF_TYPE:
+                toolbar.setSubtitle(R.string.gif);
+                break;
+            case Post.GALLERY_TYPE:
+                toolbar.setSubtitle(R.string.gallery);
+        }
+        PostFilter postFilter = new PostFilter();
+        switch (filter) {
+            case Post.TEXT_TYPE:
+                postFilter.containsTextType = true;
+                break;
+            case Post.LINK_TYPE:
+                postFilter.containsLinkType = true;
+                break;
+            case Post.IMAGE_TYPE:
+                postFilter.containsImageType = true;
+                break;
+            case Post.VIDEO_TYPE:
+                postFilter.containsVideoType = true;
+                break;
+            case Post.GALLERY_TYPE:
+                postFilter.containsGalleryType = true;
+                break;
+        }
 
         if (postType == PostDataSource.TYPE_USER) {
             userWhere = getIntent().getStringExtra(EXTRA_USER_WHERE);
@@ -174,14 +218,14 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
             mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
 
             if (!mNullAccessToken && mAccessToken == null) {
-                getCurrentAccountAndBindView(filter);
+                getCurrentAccountAndBindView(postFilter);
             } else {
                 mFragment = (PostFragment) getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
                 getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_filtered_posts_activity, mFragment).commit();
-                bindView(filter, false);
+                bindView(postFilter, false);
             }
         } else {
-            getCurrentAccountAndBindView(filter);
+            getCurrentAccountAndBindView(postFilter);
         }
 
         postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
@@ -213,7 +257,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
         applyFABTheme(fab);
     }
 
-    private void getCurrentAccountAndBindView(int filter) {
+    private void getCurrentAccountAndBindView(PostFilter postFilter) {
         new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
             if (account == null) {
                 mNullAccessToken = true;
@@ -221,11 +265,11 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
                 mAccessToken = account.getAccessToken();
                 mAccountName = account.getUsername();
             }
-            bindView(filter, true);
+            bindView(postFilter, true);
         }).execute();
     }
 
-    private void bindView(int filter, boolean initializeFragment) {
+    private void bindView(PostFilter postFilter, boolean initializeFragment) {
         switch (postType) {
             case PostDataSource.TYPE_FRONT_PAGE:
                 getSupportActionBar().setTitle(name);
@@ -285,35 +329,11 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
 
         sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
 
-        switch (filter) {
-            case Post.NSFW_TYPE:
-                toolbar.setSubtitle(R.string.nsfw);
-                break;
-            case Post.TEXT_TYPE:
-                toolbar.setSubtitle(R.string.text);
-                break;
-            case Post.LINK_TYPE:
-            case Post.NO_PREVIEW_LINK_TYPE:
-                toolbar.setSubtitle(R.string.link);
-                break;
-            case Post.IMAGE_TYPE:
-                toolbar.setSubtitle(R.string.image);
-                break;
-            case Post.VIDEO_TYPE:
-                toolbar.setSubtitle(R.string.video);
-                break;
-            case Post.GIF_TYPE:
-                toolbar.setSubtitle(R.string.gif);
-                break;
-            case Post.GALLERY_TYPE:
-                toolbar.setSubtitle(R.string.gallery);
-        }
-
         if (initializeFragment) {
             mFragment = new PostFragment();
             Bundle bundle = new Bundle();
             bundle.putInt(PostFragment.EXTRA_POST_TYPE, postType);
-            bundle.putInt(PostFragment.EXTRA_FILTER, filter);
+            bundle.putParcelable(PostFragment.EXTRA_FILTER, postFilter);
             bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
             bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
             if (postType == PostDataSource.TYPE_USER) {
@@ -331,7 +351,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
 
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(this, CustomizePostFilterActivity.class);
-            startActivity(intent);
+            startActivityForResult(intent, CUSTOMIZE_POST_FILTER_ACTIVITY_REQUEST_CODE);
         });
 
         if (mAccessToken != null) {
@@ -424,6 +444,16 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
                 return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == CUSTOMIZE_POST_FILTER_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (mFragment != null) {
+                ((PostFragment) mFragment).changePostFilter(data.getParcelableExtra(CustomizePostFilterActivity.RETURN_EXTRA_POST_FILTER));
+            }
+        }
     }
 
     @Override
