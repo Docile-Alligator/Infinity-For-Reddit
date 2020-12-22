@@ -99,7 +99,7 @@ public class DownloadMediaService extends Service {
             Bundle intent = msg.getData();
             downloadFinished = false;
             String fileUrl = intent.getString(EXTRA_URL);
-            final String[] fileName = {intent.getString(EXTRA_FILE_NAME)};
+            String fileName = intent.getString(EXTRA_FILE_NAME);
             String subredditName = intent.getString(EXTRA_SUBREDDIT_NAME);
             int mediaType = intent.getInt(EXTRA_MEDIA_TYPE, EXTRA_MEDIA_TYPE_IMAGE);
             String mimeType = mediaType == EXTRA_MEDIA_TYPE_VIDEO ? "video/*" : "image/*";
@@ -152,7 +152,7 @@ public class DownloadMediaService extends Service {
                                             null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
                                     return;
                                 }
-                                destinationFileUriString = directoryPath + fileName[0];
+                                destinationFileUriString = directoryPath + fileName;
                             } else {
                                 downloadFinished(mediaType, randomNotificationIdOffset, mimeType,
                                         null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
@@ -191,16 +191,16 @@ public class DownloadMediaService extends Service {
                                 return;
                             }
                         }
-                        DocumentFile checkForDuplicates = dir.findFile(fileName[0]);
-                        int extensionPosition = fileName[0].lastIndexOf('.');
-                        String extension = fileName[0].substring(extensionPosition);
+                        DocumentFile checkForDuplicates = dir.findFile(fileName);
+                        int extensionPosition = fileName.lastIndexOf('.');
+                        String extension = fileName.substring(extensionPosition);
                         int num = 1;
                         while (checkForDuplicates != null) {
-                            fileName[0] = fileName[0].substring(0, extensionPosition) + " (" + num + ")" + extension;
-                            checkForDuplicates = dir.findFile(fileName[0]);
+                            fileName = fileName.substring(0, extensionPosition) + " (" + num + ")" + extension;
+                            checkForDuplicates = dir.findFile(fileName);
                             num++;
                         }
-                        picFile = dir.createFile(mimeType, fileName[0]);
+                        picFile = dir.createFile(mimeType, fileName);
                         if (picFile == null) {
                             downloadFinished(mediaType, randomNotificationIdOffset, mimeType,
                                     null, ERROR_CANNOT_GET_DESTINATION_DIRECTORY);
@@ -219,7 +219,7 @@ public class DownloadMediaService extends Service {
             try {
                 if (response != null && response.body() != null) {
                     Uri destinationFileUri = writeResponseBodyToDisk(response.body(), isDefaultDestination, destinationFileUriString,
-                            fileName[0], mediaType);
+                            fileName, mediaType);
                     downloadFinished(mediaType, randomNotificationIdOffset,
                             mimeType, destinationFileUri, NO_ERROR);
                 }
@@ -348,7 +348,6 @@ public class DownloadMediaService extends Service {
 
     @Override
     public void onCreate() {
-        super.onCreate();
         ((Infinity) getApplication()).getAppComponent().inject(this);
         notificationManager = NotificationManagerCompat.from(this);
         // Start up the thread running the service. Note that we create a
