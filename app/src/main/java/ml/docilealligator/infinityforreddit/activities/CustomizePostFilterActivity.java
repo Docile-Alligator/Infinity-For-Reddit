@@ -37,7 +37,9 @@ import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class CustomizePostFilterActivity extends BaseActivity {
 
+    public static final String EXTRA_POST_FILTER = "EPF";
     public static final String RETURN_EXTRA_POST_FILTER = "REPF";
+    private static final String POST_FILTER_STATE = "PFS";
 
     @BindView(R.id.coordinator_layout_customize_post_filter_activity)
     CoordinatorLayout coordinatorLayout;
@@ -150,6 +152,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    private PostFilter postFilter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -207,6 +210,37 @@ public class CustomizePostFilterActivity extends BaseActivity {
         onlySpoilerLinearLayout.setOnClickListener(view -> {
             onlySpoilerSwitch.performClick();
         });
+
+        if (savedInstanceState != null) {
+            postFilter = savedInstanceState.getParcelable(POST_FILTER_STATE);
+        } else {
+            postFilter = getIntent().getParcelableExtra(EXTRA_POST_FILTER);
+            if (postFilter == null) {
+                postFilter = new PostFilter();
+            }
+            bindView();
+        }
+    }
+
+    private void bindView() {
+        postTypeTextCheckBox.setChecked(postFilter.containsTextType);
+        postTypeLinkCheckBox.setChecked(postFilter.containsLinkType);
+        postTypeImageCheckBox.setChecked(postFilter.containsImageType);
+        postTypeGifCheckBox.setChecked(postFilter.containsGifType);
+        postTypeVideoCheckBox.setChecked(postFilter.containsVideoType);
+        postTypeGalleryCheckBox.setChecked(postFilter.containsGalleryType);
+        titleExcludesStringsTextInputEditText.setText(postFilter.postTitleExcludesStrings);
+        titleExcludesRegexTextInputEditText.setText(postFilter.postTitleExcludesRegex);
+        excludesSubredditsTextInputEditText.setText(postFilter.excludesSubreddits);
+        excludesUsersTextInputEditText.setText(postFilter.excludesUsers);
+        excludesFlairsTextInputEditText.setText(postFilter.excludesFlairs);
+        containsFlairsTextInputEditText.setText(postFilter.containsFlairs);
+        minVoteTextInputEditText.setText(Integer.toString(postFilter.minVote));
+        maxVoteTextInputEditText.setText(Integer.toString(postFilter.maxVote));
+        minCommentsTextInputEditText.setText(Integer.toString(postFilter.minComments));
+        maxCommentsTextInputEditText.setText(Integer.toString(postFilter.maxComments));
+        minAwardsTextInputEditText.setText(Integer.toString(postFilter.minAwards));
+        maxAwardsTextInputEditText.setText(Integer.toString(postFilter.maxAwards));
     }
 
     @Override
@@ -313,5 +347,11 @@ public class CustomizePostFilterActivity extends BaseActivity {
             return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(POST_FILTER_STATE, postFilter);
     }
 }
