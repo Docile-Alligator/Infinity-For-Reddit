@@ -18,6 +18,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.r0adkll.slidr.Slidr;
@@ -76,6 +77,18 @@ public class CustomizePostFilterActivity extends BaseActivity {
     TextView postTypeGalleryTextView;
     @BindView(R.id.post_type_gallery_check_box_customize_post_filter_activity)
     MaterialCheckBox postTypeGalleryCheckBox;
+    @BindView(R.id.only_nsfw_linear_layout_customize_post_filter_activity)
+    LinearLayout onlyNSFWLinearLayout;
+    @BindView(R.id.only_nsfw_text_view_customize_post_filter_activity)
+    TextView onlyNSFWTextView;
+    @BindView(R.id.only_nsfw_switch_customize_post_filter_activity)
+    SwitchMaterial onlyNSFWSwitch;
+    @BindView(R.id.only_spoiler_linear_layout_customize_post_filter_activity)
+    LinearLayout onlySpoilerLinearLayout;
+    @BindView(R.id.only_spoiler_text_view_customize_post_filter_activity)
+    TextView onlySpoilerTextView;
+    @BindView(R.id.only_spoiler_switch_customize_post_filter_activity)
+    SwitchMaterial onlySpoilerSwitch;
     @BindView(R.id.title_excludes_strings_text_input_layout_customize_post_filter_activity)
     TextInputLayout titleExcludesStringsTextInputLayout;
     @BindView(R.id.title_excludes_strings_text_input_edit_text_customize_post_filter_activity)
@@ -176,6 +189,14 @@ public class CustomizePostFilterActivity extends BaseActivity {
         postTypeGalleryLinearLayout.setOnClickListener(view -> {
             postTypeGalleryCheckBox.performClick();
         });
+
+        onlyNSFWLinearLayout.setOnClickListener(view -> {
+            onlyNSFWSwitch.performClick();
+        });
+
+        onlySpoilerLinearLayout.setOnClickListener(view -> {
+            onlySpoilerSwitch.performClick();
+        });
     }
 
     @Override
@@ -198,6 +219,8 @@ public class CustomizePostFilterActivity extends BaseActivity {
         postTypeImageTextView.setTextColor(primaryTextColor);
         postTypeVideoTextView.setTextColor(primaryTextColor);
         postTypeGalleryTextView.setTextColor(primaryTextColor);
+        onlyNSFWTextView.setTextColor(primaryTextColor);
+        onlySpoilerTextView.setTextColor(primaryTextColor);
         titleExcludesStringsTextInputLayout.setBoxStrokeColor(primaryTextColor);
         titleExcludesStringsTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         titleExcludesStringsTextInputEditText.setTextColor(primaryTextColor);
@@ -267,6 +290,8 @@ public class CustomizePostFilterActivity extends BaseActivity {
             postFilter.containsImageType = postTypeImageCheckBox.isChecked();
             postFilter.containsVideoType = postTypeVideoCheckBox.isChecked();
             postFilter.containsGalleryType = postTypeGalleryCheckBox.isChecked();
+            postFilter.onlyNSFW = onlyNSFWSwitch.isChecked();
+            postFilter.onlySpoiler = onlySpoilerSwitch.isChecked();
 
             Intent returnIntent = new Intent();
             returnIntent.putExtra(RETURN_EXTRA_POST_FILTER, postFilter);

@@ -193,6 +193,66 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/only_nsfw_linear_layout_customize_post_filter_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:paddingStart="32dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:id="@+id/only_nsfw_text_view_customize_post_filter_activity"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/only_nsfw"
+                    android:fontFamily="?attr/font_default"
+                    android:textSize="?attr/font_default" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/only_nsfw_switch_customize_post_filter_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/only_spoiler_linear_layout_customize_post_filter_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:paddingStart="32dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:id="@+id/only_spoiler_text_view_customize_post_filter_activity"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/only_spoiler"
+                    android:fontFamily="?attr/font_default"
+                    android:textSize="?attr/font_default" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/only_spoiler_switch_customize_post_filter_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" />
+
+            </LinearLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/title_excludes_strings_text_input_layout_customize_post_filter_activity"
                 android:layout_width="match_parent"

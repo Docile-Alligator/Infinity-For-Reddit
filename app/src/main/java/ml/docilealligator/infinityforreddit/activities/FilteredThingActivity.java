@@ -187,6 +187,8 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
         }
         PostFilter postFilter = new PostFilter();
         switch (filter) {
+            case Post.NSFW_TYPE:
+                postFilter.onlyNSFW = true;
             case Post.TEXT_TYPE:
                 postFilter.containsTextType = true;
                 break;

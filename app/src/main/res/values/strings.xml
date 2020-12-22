@@ -953,6 +953,8 @@
 
     <string name="hide_read_posts">Hide Read Posts</string>
 
+    <string name="only_nsfw">Only NSFW</string>
+    <string name="only_spoiler">Only Spoiler</string>
     <string name="title_excludes_strings_hint">Title: excludes keywords</string>
     <string name="title_excludes_regex_hint">Title: excludes regex</string>
     <string name="excludes_subreddits_hint">Excludes subreddits</string>

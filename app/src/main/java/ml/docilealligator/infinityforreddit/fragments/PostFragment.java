@@ -484,6 +484,16 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 }
 
                 @Override
+                public void nsfwChipClicked() {
+                    Intent intent = new Intent(activity, FilteredThingActivity.class);
+                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, subredditName);
+                    intent.putExtra(FilteredThingActivity.EXTRA_QUERY, query);
+                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, Post.NSFW_TYPE);
+                    startActivity(intent);
+                }
+
+                @Override
                 public void currentlyBindItem(int position) {
                     if (maxPosition < position) {
                         maxPosition = position;
@@ -528,6 +538,15 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     intent.putExtra(FilteredThingActivity.EXTRA_NAME, subredditName);
                     intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void nsfwChipClicked() {
+                    Intent intent = new Intent(activity, FilteredThingActivity.class);
+                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, subredditName);
+                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, Post.NSFW_TYPE);
                     startActivity(intent);
                 }
 
@@ -582,6 +601,15 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 }
 
                 @Override
+                public void nsfwChipClicked() {
+                    Intent intent = new Intent(activity, FilteredThingActivity.class);
+                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, multiRedditPath);
+                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, Post.NSFW_TYPE);
+                    startActivity(intent);
+                }
+
+                @Override
                 public void currentlyBindItem(int position) {
                     if (maxPosition < position) {
                         maxPosition = position;
@@ -631,6 +659,16 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 }
 
                 @Override
+                public void nsfwChipClicked() {
+                    Intent intent = new Intent(activity, FilteredThingActivity.class);
+                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, username);
+                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredThingActivity.EXTRA_USER_WHERE, where);
+                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, Post.NSFW_TYPE);
+                    startActivity(intent);
+                }
+
+                @Override
                 public void currentlyBindItem(int position) {
                     if (maxPosition < position) {
                         maxPosition = position;
@@ -667,6 +705,15 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     intent.putExtra(FilteredThingActivity.EXTRA_NAME, activity.getString(R.string.best));
                     intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void nsfwChipClicked() {
+                    Intent intent = new Intent(activity, FilteredThingActivity.class);
+                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, activity.getString(R.string.best));
+                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, Post.NSFW_TYPE);
                     startActivity(intent);
                 }
 

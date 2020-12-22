@@ -1444,6 +1444,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
         void typeChipClicked(int filter);
 
+        void nsfwChipClicked();
+
         void currentlyBindItem(int position);
 
         void delayTransition();
@@ -1668,11 +1670,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     }
                     Post post = getItem(position);
                     if (post != null) {
-                        Intent intent = new Intent(mActivity, FilteredThingActivity.class);
-                        intent.putExtra(FilteredThingActivity.EXTRA_NAME, post.getSubredditNamePrefixed().substring(2));
-                        intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
-                        intent.putExtra(FilteredThingActivity.EXTRA_FILTER, Post.NSFW_TYPE);
-                        mActivity.startActivity(intent);
+                        mCallback.nsfwChipClicked();
                     }
                 });
                 typeTextView.setOnClickListener(view -> {
@@ -2658,11 +2656,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
                 Post post = getItem(position);
                 if (post != null && !(mActivity instanceof FilteredThingActivity)) {
-                    Intent intent = new Intent(mActivity, FilteredThingActivity.class);
-                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, post.getSubredditNamePrefixed().substring(2));
-                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
-                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, Post.NSFW_TYPE);
-                    mActivity.startActivity(intent);
+                    mCallback.nsfwChipClicked();
                 }
             });
 
