@@ -1257,6 +1257,38 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
     }
 
+    @Override
+    public void filterPosts() {
+        if (postType == PostDataSource.TYPE_SEARCH) {
+            Intent intent = new Intent(activity, FilteredThingActivity.class);
+            intent.putExtra(FilteredThingActivity.EXTRA_NAME, subredditName);
+            intent.putExtra(FilteredThingActivity.EXTRA_QUERY, query);
+            intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+            startActivity(intent);
+        } else if (postType == PostDataSource.TYPE_SUBREDDIT) {
+            Intent intent = new Intent(activity, FilteredThingActivity.class);
+            intent.putExtra(FilteredThingActivity.EXTRA_NAME, subredditName);
+            intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+            startActivity(intent);
+        } else if(postType == PostDataSource.TYPE_MULTI_REDDIT) {
+            Intent intent = new Intent(activity, FilteredThingActivity.class);
+            intent.putExtra(FilteredThingActivity.EXTRA_NAME, multiRedditPath);
+            intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+            startActivity(intent);
+        } else if (postType == PostDataSource.TYPE_USER) {
+            Intent intent = new Intent(activity, FilteredThingActivity.class);
+            intent.putExtra(FilteredThingActivity.EXTRA_NAME, username);
+            intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+            intent.putExtra(FilteredThingActivity.EXTRA_USER_WHERE, where);
+            startActivity(intent);
+        } else {
+            Intent intent = new Intent(activity, FilteredThingActivity.class);
+            intent.putExtra(FilteredThingActivity.EXTRA_NAME, activity.getString(R.string.best));
+            intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+            startActivity(intent);
+        }
+    }
+
     @Subscribe
     public void onPostUpdateEvent(PostUpdateEventToPostList event) {
         PagedList<Post> posts = mAdapter.getCurrentList();

@@ -26,6 +26,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="?attr/actionBarSize"
+                app:subtitle="@string/filtered_posts_activity_subtitle"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
                 app:navigationIcon="?attr/homeAsUpIndicator" />
 

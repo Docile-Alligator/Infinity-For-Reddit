@@ -35,6 +35,7 @@
     <string name="give_award_activity_label">Give Award</string>
     <string name="subreddit_filter_popular_and_all_activity_label">r/all and r/popular</string>
     <string name="customize_post_filter_activity_label">Post Filter</string>
+    <string name="filtered_posts_activity_subtitle">Filtered Posts</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -199,6 +200,7 @@
     <string name="bottom_sheet_post_link">Link</string>
     <string name="bottom_sheet_post_image">Image</string>
     <string name="bottom_sheet_post_video">Video</string>
+    <string name="post_type_gif">Gif</string>
     <string name="post_type_gallery">Gallery</string>
 
     <string name="select_from_gallery">Select a picture</string>
@@ -952,6 +954,7 @@
     <string name="select_video_quality">Select Video Quality</string>
 
     <string name="hide_read_posts">Hide Read Posts</string>
+    <string name="filter_posts">Filter Posts</string>
 
     <string name="only_nsfw">Only NSFW</string>
     <string name="only_spoiler">Only Spoiler</string>

@@ -736,6 +736,9 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
                     fab.setImageResource(R.drawable.ic_hide_read_posts_24dp);
                     break;
+                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
+                    fab.setImageResource(R.drawable.ic_filter_24dp);
+                    break;
                 default:
                     fab.setImageResource(R.drawable.ic_add_day_night_24dp);
                     break;
@@ -773,6 +776,11 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                     case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
                         if (sectionsPagerAdapter != null) {
                             sectionsPagerAdapter.hideReadPosts();
+                        }
+                        break;
+                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
+                        if (sectionsPagerAdapter != null) {
+                            sectionsPagerAdapter.filterPosts();
                         }
                         break;
                     default:
@@ -1108,6 +1116,13 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 if (sectionsPagerAdapter != null) {
                     sectionsPagerAdapter.hideReadPosts();
                 }
+                break;
+            }
+            case FABMoreOptionsBottomSheetFragment.FAB_FILTER_POSTS: {
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.filterPosts();
+                }
+                break;
             }
         }
     }
@@ -1442,6 +1457,15 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 Fragment fragment = fragmentManager.findFragmentByTag("f0");
                 if (fragment instanceof PostFragment) {
                     ((PostFragment) fragment).hideReadPosts();
+                }
+            }
+        }
+
+        void filterPosts() {
+            if (fragmentManager != null) {
+                Fragment fragment = fragmentManager.findFragmentByTag("f0");
+                if (fragment instanceof PostFragment) {
+                    ((PostFragment) fragment).filterPosts();
                 }
             }
         }

@@ -65,6 +65,12 @@ public class CustomizePostFilterActivity extends BaseActivity {
     TextView postTypeImageTextView;
     @BindView(R.id.post_type_image_check_box_customize_post_filter_activity)
     MaterialCheckBox postTypeImageCheckBox;
+    @BindView(R.id.post_type_gif_linear_layout_customize_post_filter_activity)
+    LinearLayout postTypeGifLinearLayout;
+    @BindView(R.id.post_type_gif_text_view_customize_post_filter_activity)
+    TextView postTypeGifTextView;
+    @BindView(R.id.post_type_gif_check_box_customize_post_filter_activity)
+    MaterialCheckBox postTypeGifCheckBox;
     @BindView(R.id.post_type_video_linear_layout_customize_post_filter_activity)
     LinearLayout postTypeVideoLinearLayout;
     @BindView(R.id.post_type_video_text_view_customize_post_filter_activity)
@@ -182,6 +188,10 @@ public class CustomizePostFilterActivity extends BaseActivity {
             postTypeImageCheckBox.performClick();
         });
 
+        postTypeGifLinearLayout.setOnClickListener(view -> {
+            postTypeGifCheckBox.performClick();
+        });
+
         postTypeVideoLinearLayout.setOnClickListener(view -> {
             postTypeVideoCheckBox.performClick();
         });
@@ -217,6 +227,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
         postTypeTextTextView.setTextColor(primaryTextColor);
         postTypeLinkTextView.setTextColor(primaryTextColor);
         postTypeImageTextView.setTextColor(primaryTextColor);
+        postTypeGifTextView.setTextColor(primaryTextColor);
         postTypeVideoTextView.setTextColor(primaryTextColor);
         postTypeGalleryTextView.setTextColor(primaryTextColor);
         onlyNSFWTextView.setTextColor(primaryTextColor);
@@ -288,6 +299,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
             postFilter.containsTextType = postTypeTextCheckBox.isChecked();
             postFilter.containsLinkType = postTypeLinkCheckBox.isChecked();
             postFilter.containsImageType = postTypeImageCheckBox.isChecked();
+            postFilter.containsGifType = postTypeGifCheckBox.isChecked();
             postFilter.containsVideoType = postTypeVideoCheckBox.isChecked();
             postFilter.containsGalleryType = postTypeGalleryCheckBox.isChecked();
             postFilter.onlyNSFW = onlyNSFWSwitch.isChecked();

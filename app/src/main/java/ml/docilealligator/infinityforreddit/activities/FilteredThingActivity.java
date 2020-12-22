@@ -161,47 +161,58 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
 
         name = getIntent().getStringExtra(EXTRA_NAME);
         postType = getIntent().getIntExtra(EXTRA_POST_TYPE, PostDataSource.TYPE_FRONT_PAGE);
-        int filter = getIntent().getIntExtra(EXTRA_FILTER, Post.TEXT_TYPE);
-        switch (filter) {
-            case Post.NSFW_TYPE:
-                toolbar.setSubtitle(R.string.nsfw);
-                break;
-            case Post.TEXT_TYPE:
-                toolbar.setSubtitle(R.string.text);
-                break;
-            case Post.LINK_TYPE:
-            case Post.NO_PREVIEW_LINK_TYPE:
-                toolbar.setSubtitle(R.string.link);
-                break;
-            case Post.IMAGE_TYPE:
-                toolbar.setSubtitle(R.string.image);
-                break;
-            case Post.VIDEO_TYPE:
-                toolbar.setSubtitle(R.string.video);
-                break;
-            case Post.GIF_TYPE:
-                toolbar.setSubtitle(R.string.gif);
-                break;
-            case Post.GALLERY_TYPE:
-                toolbar.setSubtitle(R.string.gallery);
-        }
+        int filter = getIntent().getIntExtra(EXTRA_FILTER, -1000);
         PostFilter postFilter = new PostFilter();
         switch (filter) {
             case Post.NSFW_TYPE:
                 postFilter.onlyNSFW = true;
+                break;
             case Post.TEXT_TYPE:
                 postFilter.containsTextType = true;
+                postFilter.containsLinkType = false;
+                postFilter.containsImageType = false;
+                postFilter.containsGifType = false;
+                postFilter.containsVideoType = false;
+                postFilter.containsGalleryType = false;
                 break;
             case Post.LINK_TYPE:
+                postFilter.containsTextType = false;
                 postFilter.containsLinkType = true;
+                postFilter.containsImageType = false;
+                postFilter.containsGifType = false;
+                postFilter.containsVideoType = false;
+                postFilter.containsGalleryType = false;
                 break;
             case Post.IMAGE_TYPE:
+                postFilter.containsTextType = false;
+                postFilter.containsLinkType = false;
                 postFilter.containsImageType = true;
+                postFilter.containsGifType = false;
+                postFilter.containsVideoType = false;
+                postFilter.containsGalleryType = false;
+                break;
+            case Post.GIF_TYPE:
+                postFilter.containsTextType = false;
+                postFilter.containsLinkType = false;
+                postFilter.containsImageType = false;
+                postFilter.containsGifType = true;
+                postFilter.containsVideoType = false;
+                postFilter.containsGalleryType = false;
                 break;
             case Post.VIDEO_TYPE:
+                postFilter.containsTextType = false;
+                postFilter.containsLinkType = false;
+                postFilter.containsImageType = false;
+                postFilter.containsGifType = false;
                 postFilter.containsVideoType = true;
+                postFilter.containsGalleryType = false;
                 break;
             case Post.GALLERY_TYPE:
+                postFilter.containsTextType = false;
+                postFilter.containsLinkType = false;
+                postFilter.containsImageType = false;
+                postFilter.containsGifType = false;
+                postFilter.containsVideoType = false;
                 postFilter.containsGalleryType = true;
                 break;
         }
@@ -453,7 +464,7 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == CUSTOMIZE_POST_FILTER_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             if (mFragment != null) {
-                ((PostFragment) mFragment).changePostFilter(data.getParcelableExtra(CustomizePostFilterActivity.RETURN_EXTRA_POST_FILTER));
+                mFragment.changePostFilter(data.getParcelableExtra(CustomizePostFilterActivity.RETURN_EXTRA_POST_FILTER));
             }
         }
     }

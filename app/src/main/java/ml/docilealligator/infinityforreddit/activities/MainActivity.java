@@ -594,6 +594,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
                     fab.setImageResource(R.drawable.ic_hide_read_posts_24dp);
                     break;
+                case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
+                    fab.setImageResource(R.drawable.ic_filter_24dp);
+                    break;
                 default:
                     fab.setImageResource(R.drawable.ic_add_day_night_24dp);
                     break;
@@ -631,6 +634,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
                         if (sectionsPagerAdapter != null) {
                             sectionsPagerAdapter.hideReadPosts();
+                        }
+                        break;
+                    case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
+                        if (sectionsPagerAdapter != null) {
+                            sectionsPagerAdapter.filterPosts();
                         }
                         break;
                     default:
@@ -1213,6 +1221,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 }
                 break;
             }
+            case FABMoreOptionsBottomSheetFragment.FAB_FILTER_POSTS: {
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.filterPosts();
+                }
+                break;
+            }
         }
     }
 
@@ -1534,6 +1548,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             PostFragment currentFragment = getCurrentFragment();
             if (currentFragment != null) {
                 currentFragment.hideReadPosts();
+            }
+        }
+
+        void filterPosts() {
+            PostFragment currentFragment = getCurrentFragment();
+            if (currentFragment != null) {
+                currentFragment.filterPosts();
             }
         }
     }

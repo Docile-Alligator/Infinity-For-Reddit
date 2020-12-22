@@ -134,6 +134,36 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/post_type_gif_linear_layout_customize_post_filter_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:paddingStart="32dp"
+                android:paddingEnd="8dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:id="@+id/post_type_gif_text_view_customize_post_filter_activity"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/post_type_gif"
+                    android:fontFamily="?attr/font_default"
+                    android:textSize="?attr/font_default" />
+
+                <com.google.android.material.checkbox.MaterialCheckBox
+                    android:id="@+id/post_type_gif_check_box_customize_post_filter_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:id="@+id/post_type_video_linear_layout_customize_post_filter_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

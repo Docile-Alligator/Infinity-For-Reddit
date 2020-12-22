@@ -28,6 +28,7 @@ public class PostFilter implements Parcelable {
     public boolean containsTextType = true;
     public boolean containsLinkType = true;
     public boolean containsImageType = true;
+    public boolean containsGifType = true;
     public boolean containsVideoType = true;
     public boolean containsGalleryType = true;
 
@@ -70,6 +71,9 @@ public class PostFilter implements Parcelable {
             return false;
         }
         if (!postFilter.containsImageType && post.getPostType() == Post.IMAGE_TYPE) {
+            return false;
+        }
+        if (!postFilter.containsGifType && post.getPostType() == Post.GIF_TYPE) {
             return false;
         }
         if (!postFilter.containsVideoType && post.getPostType() == Post.VIDEO_TYPE) {
