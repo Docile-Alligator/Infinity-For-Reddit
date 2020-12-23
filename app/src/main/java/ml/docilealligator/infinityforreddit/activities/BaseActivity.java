@@ -67,10 +67,18 @@ public abstract class BaseActivity extends AppCompatActivity {
         SharedPreferences mSharedPreferences = getDefaultSharedPreferences();
 
         String language = mSharedPreferences.getString(SharedPreferencesUtils.LANGUAGE, SharedPreferencesUtils.LANGUAGE_DEFAULT_VALUE);
+        Locale systemLocale = Resources.getSystem().getConfiguration().locale;
+        Locale locale;
         if (language.equals(SharedPreferencesUtils.LANGUAGE_DEFAULT_VALUE)) {
-            language = Resources.getSystem().getConfiguration().locale.getLanguage();
+            language = systemLocale.getLanguage();
+            locale = new Locale(language, systemLocale.getCountry());
+        } else {
+            if (language.contains("-")) {
+                locale = new Locale(language.substring(0, 2), language.substring(4));
+            } else {
+                locale = new Locale(language);
+            }
         }
-        Locale locale = new Locale(language);
         Locale.setDefault(locale);
         Resources resources = getResources();
         Configuration config = resources.getConfiguration();

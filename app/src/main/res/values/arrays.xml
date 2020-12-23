@@ -300,6 +300,7 @@
     <string-array name="settings_language">
         <item>Auto</item>
         <item>Hrvatski</item>
+        <item>简体中文</item>
         <item>English</item>
         <item>Française</item>
         <item>Deutsche</item>
@@ -314,6 +315,7 @@
     <string-array name="settings_language_values">
         <item>auto</item>
         <item>hr</item>
+        <item>zh-rCN</item>
         <item>en</item>
         <item>fr</item>
         <item>de</item>
