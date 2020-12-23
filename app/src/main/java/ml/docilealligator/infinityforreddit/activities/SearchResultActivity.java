@@ -16,8 +16,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Lifecycle;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -221,7 +221,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     }
 
     private void initializeViewPager() {
-        sectionsPagerAdapter = new SectionsPagerAdapter(fragmentManager, getLifecycle());
+        sectionsPagerAdapter = new SectionsPagerAdapter(this);
         viewPager2.setAdapter(sectionsPagerAdapter);
         viewPager2.setOffscreenPageLimit(3);
         viewPager2.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
@@ -381,8 +381,8 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm, Lifecycle lifecycle) {
-            super(fm, lifecycle);
+        public SectionsPagerAdapter(FragmentActivity fa) {
+            super(fa);
         }
 
         @NonNull

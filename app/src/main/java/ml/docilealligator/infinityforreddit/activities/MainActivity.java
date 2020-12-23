@@ -30,8 +30,8 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -772,7 +772,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         int tabCount = mMainActivityTabsSharedPreferences.getInt((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_COUNT, 3);
         mShowFavoriteSubscribedSubreddits = mMainActivityTabsSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_SUBSCRIBED_SUBREDDITS, false);
         mShowSubscribedSubreddits = mMainActivityTabsSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS, false);
-        sectionsPagerAdapter = new SectionsPagerAdapter(fragmentManager, getLifecycle(), tabCount,
+        sectionsPagerAdapter = new SectionsPagerAdapter(this, tabCount,
                 mShowFavoriteSubscribedSubreddits, mShowSubscribedSubreddits);
         viewPager2.setAdapter(sectionsPagerAdapter);
         viewPager2.setOffscreenPageLimit(1);
@@ -1313,8 +1313,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         List<SubscribedSubredditData> favoriteSubscribedSubreddits;
         List<SubscribedSubredditData> subscribedSubreddits;
 
-        SectionsPagerAdapter(FragmentManager fm, Lifecycle lifecycle, int tabCount, boolean showFavoriteSubscribedSubreddits, boolean showSubscribedSubreddits) {
-            super(fm, lifecycle);
+        SectionsPagerAdapter(FragmentActivity fa, int tabCount, boolean showFavoriteSubscribedSubreddits, boolean showSubscribedSubreddits) {
+            super(fa);
             this.tabCount = tabCount;
             favoriteSubscribedSubreddits = new ArrayList<>();
             subscribedSubreddits = new ArrayList<>();
