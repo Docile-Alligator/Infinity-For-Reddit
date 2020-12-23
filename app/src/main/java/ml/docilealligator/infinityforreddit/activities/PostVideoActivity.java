@@ -27,7 +27,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.source.ExtractorMediaSource;
+import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -424,7 +424,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
         constraintLayout.setVisibility(View.GONE);
         selectAgainTextView.setVisibility(View.VISIBLE);
         videoPlayerView.setVisibility(View.VISIBLE);
-        player.prepare(new ExtractorMediaSource.Factory(dataSourceFactory).createMediaSource(videoUri));
+        player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(videoUri));
         player.setPlayWhenReady(true);
         wasPlaying = true;
     }
