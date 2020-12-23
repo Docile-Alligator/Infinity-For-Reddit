@@ -70,7 +70,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.activities.FilteredThingActivity;
+import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.MainActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
@@ -427,14 +427,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     }
                 }
             });
-        } else if (activity instanceof FilteredThingActivity) {
+        } else if (activity instanceof FilteredPostsActivity) {
             mPostRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     if (dy > 0) {
-                        ((FilteredThingActivity) activity).contentScrollDown();
+                        ((FilteredPostsActivity) activity).contentScrollDown();
                     } else if (dy < 0) {
-                        ((FilteredThingActivity) activity).contentScrollUp();
+                        ((FilteredPostsActivity) activity).contentScrollUp();
                     }
                 }
             });
@@ -475,21 +475,21 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
                 @Override
                 public void typeChipClicked(int filter) {
-                    Intent intent = new Intent(activity, FilteredThingActivity.class);
-                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, subredditName);
-                    intent.putExtra(FilteredThingActivity.EXTRA_QUERY, query);
-                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
-                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_QUERY, query);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
                     startActivity(intent);
                 }
 
                 @Override
                 public void nsfwChipClicked() {
-                    Intent intent = new Intent(activity, FilteredThingActivity.class);
-                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, subredditName);
-                    intent.putExtra(FilteredThingActivity.EXTRA_QUERY, query);
-                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
-                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, Post.NSFW_TYPE);
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_QUERY, query);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, Post.NSFW_TYPE);
                     startActivity(intent);
                 }
 
@@ -534,19 +534,19 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
                 @Override
                 public void typeChipClicked(int filter) {
-                    Intent intent = new Intent(activity, FilteredThingActivity.class);
-                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, subredditName);
-                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
-                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
                     startActivity(intent);
                 }
 
                 @Override
                 public void nsfwChipClicked() {
-                    Intent intent = new Intent(activity, FilteredThingActivity.class);
-                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, subredditName);
-                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
-                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, Post.NSFW_TYPE);
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, Post.NSFW_TYPE);
                     startActivity(intent);
                 }
 
@@ -593,19 +593,19 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
                 @Override
                 public void typeChipClicked(int filter) {
-                    Intent intent = new Intent(activity, FilteredThingActivity.class);
-                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, multiRedditPath);
-                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
-                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, multiRedditPath);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
                     startActivity(intent);
                 }
 
                 @Override
                 public void nsfwChipClicked() {
-                    Intent intent = new Intent(activity, FilteredThingActivity.class);
-                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, multiRedditPath);
-                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
-                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, Post.NSFW_TYPE);
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, multiRedditPath);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, Post.NSFW_TYPE);
                     startActivity(intent);
                 }
 
@@ -650,21 +650,21 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
                 @Override
                 public void typeChipClicked(int filter) {
-                    Intent intent = new Intent(activity, FilteredThingActivity.class);
-                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, username);
-                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
-                    intent.putExtra(FilteredThingActivity.EXTRA_USER_WHERE, where);
-                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, username);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_USER_WHERE, where);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
                     startActivity(intent);
                 }
 
                 @Override
                 public void nsfwChipClicked() {
-                    Intent intent = new Intent(activity, FilteredThingActivity.class);
-                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, username);
-                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
-                    intent.putExtra(FilteredThingActivity.EXTRA_USER_WHERE, where);
-                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, Post.NSFW_TYPE);
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, username);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_USER_WHERE, where);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, Post.NSFW_TYPE);
                     startActivity(intent);
                 }
 
@@ -701,19 +701,19 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
                 @Override
                 public void typeChipClicked(int filter) {
-                    Intent intent = new Intent(activity, FilteredThingActivity.class);
-                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, activity.getString(R.string.best));
-                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
-                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, filter);
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, activity.getString(R.string.best));
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
                     startActivity(intent);
                 }
 
                 @Override
                 public void nsfwChipClicked() {
-                    Intent intent = new Intent(activity, FilteredThingActivity.class);
-                    intent.putExtra(FilteredThingActivity.EXTRA_NAME, activity.getString(R.string.best));
-                    intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
-                    intent.putExtra(FilteredThingActivity.EXTRA_FILTER, Post.NSFW_TYPE);
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, activity.getString(R.string.best));
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, Post.NSFW_TYPE);
                     startActivity(intent);
                 }
 
@@ -1258,33 +1258,41 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     }
 
     @Override
+    public PostFilter getPostFilter() {
+        if (mPostViewModel != null) {
+            return mPostViewModel.getPostFilter();
+        }
+        return null;
+    }
+
+    @Override
     public void filterPosts() {
         if (postType == PostDataSource.TYPE_SEARCH) {
-            Intent intent = new Intent(activity, FilteredThingActivity.class);
-            intent.putExtra(FilteredThingActivity.EXTRA_NAME, subredditName);
-            intent.putExtra(FilteredThingActivity.EXTRA_QUERY, query);
-            intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+            Intent intent = new Intent(activity, FilteredPostsActivity.class);
+            intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
+            intent.putExtra(FilteredPostsActivity.EXTRA_QUERY, query);
+            intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
             startActivity(intent);
         } else if (postType == PostDataSource.TYPE_SUBREDDIT) {
-            Intent intent = new Intent(activity, FilteredThingActivity.class);
-            intent.putExtra(FilteredThingActivity.EXTRA_NAME, subredditName);
-            intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+            Intent intent = new Intent(activity, FilteredPostsActivity.class);
+            intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
+            intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
             startActivity(intent);
         } else if(postType == PostDataSource.TYPE_MULTI_REDDIT) {
-            Intent intent = new Intent(activity, FilteredThingActivity.class);
-            intent.putExtra(FilteredThingActivity.EXTRA_NAME, multiRedditPath);
-            intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+            Intent intent = new Intent(activity, FilteredPostsActivity.class);
+            intent.putExtra(FilteredPostsActivity.EXTRA_NAME, multiRedditPath);
+            intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
             startActivity(intent);
         } else if (postType == PostDataSource.TYPE_USER) {
-            Intent intent = new Intent(activity, FilteredThingActivity.class);
-            intent.putExtra(FilteredThingActivity.EXTRA_NAME, username);
-            intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
-            intent.putExtra(FilteredThingActivity.EXTRA_USER_WHERE, where);
+            Intent intent = new Intent(activity, FilteredPostsActivity.class);
+            intent.putExtra(FilteredPostsActivity.EXTRA_NAME, username);
+            intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+            intent.putExtra(FilteredPostsActivity.EXTRA_USER_WHERE, where);
             startActivity(intent);
         } else {
-            Intent intent = new Intent(activity, FilteredThingActivity.class);
-            intent.putExtra(FilteredThingActivity.EXTRA_NAME, activity.getString(R.string.best));
-            intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, postType);
+            Intent intent = new Intent(activity, FilteredPostsActivity.class);
+            intent.putExtra(FilteredPostsActivity.EXTRA_NAME, activity.getString(R.string.best));
+            intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
             startActivity(intent);
         }
     }

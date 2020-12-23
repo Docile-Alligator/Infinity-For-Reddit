@@ -199,7 +199,7 @@
             android:theme="@style/AppTheme.Slidable"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".activities.FilteredThingActivity"
+            android:name=".activities.FilteredPostsActivity"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity

@@ -16,7 +16,7 @@ import ml.docilealligator.infinityforreddit.activities.EditCommentActivity;
 import ml.docilealligator.infinityforreddit.activities.EditMultiRedditActivity;
 import ml.docilealligator.infinityforreddit.activities.EditPostActivity;
 import ml.docilealligator.infinityforreddit.activities.FetchRandomSubredditOrPostActivity;
-import ml.docilealligator.infinityforreddit.activities.FilteredThingActivity;
+import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.GiveAwardActivity;
 import ml.docilealligator.infinityforreddit.activities.InboxActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
@@ -119,7 +119,7 @@ public interface AppComponent {
 
     void inject(SubmitPostService submitPostService);
 
-    void inject(FilteredThingActivity filteredPostsActivity);
+    void inject(FilteredPostsActivity filteredPostsActivity);
 
     void inject(SearchResultActivity searchResultActivity);
 

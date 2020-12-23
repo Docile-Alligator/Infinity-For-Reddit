@@ -53,7 +53,7 @@ import ml.docilealligator.infinityforreddit.post.PostDataSource;
 import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
-public class FilteredThingActivity extends BaseActivity implements SortTypeSelectionCallback,
+public class FilteredPostsActivity extends BaseActivity implements SortTypeSelectionCallback,
         PostLayoutBottomSheetFragment.PostLayoutSelectionCallback, ActivityToolbarInterface,
         MarkPostAsReadInterface, FilteredThingFABMoreOptionsBottomSheetFragment.FABOptionSelectionCallback {
 
@@ -364,6 +364,9 @@ public class FilteredThingActivity extends BaseActivity implements SortTypeSelec
 
         fab.setOnClickListener(view -> {
             Intent intent = new Intent(this, CustomizePostFilterActivity.class);
+            if (mFragment != null) {
+                intent.putExtra(CustomizePostFilterActivity.EXTRA_POST_FILTER, mFragment.getPostFilter());
+            }
             startActivityForResult(intent, CUSTOMIZE_POST_FILTER_ACTIVITY_REQUEST_CODE);
         });
 

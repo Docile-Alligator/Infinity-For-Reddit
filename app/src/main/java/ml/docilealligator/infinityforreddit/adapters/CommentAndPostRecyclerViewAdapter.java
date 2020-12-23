@@ -86,7 +86,7 @@ import io.noties.markwon.simple.ext.SimpleExtPlugin;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
-import ml.docilealligator.infinityforreddit.activities.FilteredThingActivity;
+import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewImageOrGifActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
@@ -2135,18 +2135,18 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             });
 
             mTypeTextView.setOnClickListener(view -> {
-                Intent intent = new Intent(mActivity, FilteredThingActivity.class);
-                intent.putExtra(FilteredThingActivity.EXTRA_NAME, mSubredditNamePrefixed.substring(2));
-                intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
-                intent.putExtra(FilteredThingActivity.EXTRA_FILTER, mPost.getPostType());
+                Intent intent = new Intent(mActivity, FilteredPostsActivity.class);
+                intent.putExtra(FilteredPostsActivity.EXTRA_NAME, mSubredditNamePrefixed.substring(2));
+                intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
+                intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, mPost.getPostType());
                 mActivity.startActivity(intent);
             });
 
             mNSFWTextView.setOnClickListener(view -> {
-                Intent intent = new Intent(mActivity, FilteredThingActivity.class);
-                intent.putExtra(FilteredThingActivity.EXTRA_NAME, mSubredditNamePrefixed.substring(2));
-                intent.putExtra(FilteredThingActivity.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
-                intent.putExtra(FilteredThingActivity.EXTRA_FILTER, Post.NSFW_TYPE);
+                Intent intent = new Intent(mActivity, FilteredPostsActivity.class);
+                intent.putExtra(FilteredPostsActivity.EXTRA_NAME, mSubredditNamePrefixed.substring(2));
+                intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
+                intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, Post.NSFW_TYPE);
                 mActivity.startActivity(intent);
             });
 

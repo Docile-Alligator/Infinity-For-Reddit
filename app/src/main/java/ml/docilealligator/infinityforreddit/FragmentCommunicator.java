@@ -42,6 +42,10 @@ public interface FragmentCommunicator {
     default void changePostFilter(PostFilter postFilter) {
     }
 
+    default PostFilter getPostFilter() {
+        return null;
+    }
+
     default void filterPosts() {
 
     };

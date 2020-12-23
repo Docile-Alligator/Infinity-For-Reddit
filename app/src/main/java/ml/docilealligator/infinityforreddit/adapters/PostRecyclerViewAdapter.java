@@ -76,7 +76,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.VoteThing;
-import ml.docilealligator.infinityforreddit.activities.FilteredThingActivity;
+import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewImageOrGifActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
@@ -1662,7 +1662,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 iconGifImageView.setOnClickListener(view -> userTextView.performClick());
             }
 
-            if (!(mActivity instanceof FilteredThingActivity)) {
+            if (!(mActivity instanceof FilteredPostsActivity)) {
                 nsfwTextView.setOnClickListener(view -> {
                     int position = getAdapterPosition();
                     if (position < 0) {
@@ -2655,7 +2655,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     return;
                 }
                 Post post = getItem(position);
-                if (post != null && !(mActivity instanceof FilteredThingActivity)) {
+                if (post != null && !(mActivity instanceof FilteredPostsActivity)) {
                     mCallback.nsfwChipClicked();
                 }
             });
@@ -2666,7 +2666,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     return;
                 }
                 Post post = getItem(position);
-                if (post != null && !(mActivity instanceof FilteredThingActivity)) {
+                if (post != null && !(mActivity instanceof FilteredPostsActivity)) {
                     mCallback.typeChipClicked(post.getPostType());
                 }
             });
