@@ -194,6 +194,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean mCompactLayoutToolbarHiddenByDefault;
     private boolean mDataSavingMode = false;
     private boolean mDisableImagePreview = false;
+    private boolean mMarkPostsAsRead;
+    private boolean mMarkPostsAsReadAfterVoting;
     private Drawable mCommentIcon;
     private NetworkState networkState;
     private ExoCreator mExoCreator;
@@ -205,6 +207,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                    CustomThemeWrapper customThemeWrapper, Locale locale, int imageViewWidth,
                                    String accessToken, String accountName, int postType, int postLayout, boolean displaySubredditName,
                                    SharedPreferences sharedPreferences, SharedPreferences nsfwAndSpoilerSharedPreferences,
+                                   SharedPreferences postHistorySharedPreferences,
                                    ExoCreator exoCreator, Callback callback) {
         super(DIFF_CALLBACK);
         if (activity != null) {
@@ -254,6 +257,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 mDataSavingMode = networkType == Utils.NETWORK_TYPE_CELLULAR;
             }
             mDisableImagePreview = sharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_IMAGE_PREVIEW, false);
+
+            mMarkPostsAsRead = postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false);
+            mMarkPostsAsReadAfterVoting = postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, false);
 
             mPostLayout = postLayout;
 
@@ -1697,6 +1703,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         return;
                     }
 
+                    if (mMarkPostsAsReadAfterVoting) {
+                        markPostRead(post);
+                    }
+
                     if (post.isArchived()) {
                         Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
                         return;
@@ -1781,6 +1791,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     if (mAccessToken == null) {
                         Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                         return;
+                    }
+
+                    if (mMarkPostsAsReadAfterVoting) {
+                        markPostRead(post);
                     }
 
                     if (post.isArchived()) {
@@ -2747,6 +2761,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
                 Post post = getItem(position);
                 if (post != null) {
+                    if (mMarkPostsAsReadAfterVoting) {
+                        markPostRead(post);
+                    }
+
                     if (post.isArchived()) {
                         Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
                         return;
@@ -2833,6 +2851,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
                 Post post = getItem(position);
                 if (post != null) {
+                    if (mMarkPostsAsReadAfterVoting) {
+                        markPostRead(post);
+                    }
+
                     if (post.isArchived()) {
                         Toast.makeText(mActivity, R.string.archived_post_vote_unavailable, Toast.LENGTH_SHORT).show();
                         return;

@@ -28,7 +28,7 @@
     <SwitchPreference
         app:defaultValue="true"
         app:key="enable_search_history"
-        app:title="@string/settings_enable_search_history"
+        app:title="@string/settings_enable_search_history_title"
         app:summary="@string/only_for_logged_in_user" />
 
     <ListPreference

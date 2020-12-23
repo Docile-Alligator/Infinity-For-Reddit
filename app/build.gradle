@@ -98,6 +98,8 @@ dependencies {
     implementation 'androidx.biometric:biometric:1.1.0-rc01'
     implementation 'com.airbnb.android:lottie:3.4.4'
     implementation 'com.melegy.redscreenofdeath:red-screen-of-death:0.1.2'
+    // debugImplementation because LeakCanary should only run in debug builds.
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
 
     def toroVersion = '3.7.0.2010003'
     implementation "im.ene.toro3:toro:$toroVersion"

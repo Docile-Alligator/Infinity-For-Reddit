@@ -58,6 +58,11 @@
         app:fragment="ml.docilealligator.infinityforreddit.settings.NsfwAndBlurringFragment"/>
 
     <Preference
+        app:icon="@drawable/ic_history_24dp"
+        android:title="@string/settings_post_history_title"
+        app:fragment="ml.docilealligator.infinityforreddit.settings.PostHistoryFragment" />
+
+    <Preference
         app:icon="@drawable/ic_filter_24dp"
         app:title="@string/settings_filter_title"
         app:fragment="ml.docilealligator.infinityforreddit.settings.FilterPreferenceFragment"/>

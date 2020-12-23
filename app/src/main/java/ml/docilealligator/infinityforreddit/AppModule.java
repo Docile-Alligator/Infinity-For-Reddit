@@ -223,6 +223,12 @@ class AppModule {
     }
 
     @Provides
+    @Named("post_history")
+    SharedPreferences providePostHistorySharedPreferences() {
+        return mApplication.getSharedPreferences(SharedPreferencesUtils.POST_HISTORY_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+    }
+
+    @Provides
     @Singleton
     CustomThemeWrapper provideCustomThemeWrapper(@Named("light_theme") SharedPreferences lightThemeSharedPreferences,
                                                  @Named("dark_theme") SharedPreferences darkThemeSharedPreferences,

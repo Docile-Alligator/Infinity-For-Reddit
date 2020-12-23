@@ -58,6 +58,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import im.ene.toro.exoplayer.ExoCreator;
 import im.ene.toro.media.PlaybackInfo;
 import im.ene.toro.media.VolumeInfo;
@@ -178,6 +179,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Named("nsfw_and_spoiler")
     SharedPreferences mNsfwAndSpoilerSharedPreferences;
     @Inject
+    @Named("post_history")
+    SharedPreferences mPostHistorySharedPreferences;
+    @Inject
     CustomThemeWrapper customThemeWrapper;
     @Inject
     ExoCreator exoCreator;
@@ -222,6 +226,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private ItemTouchHelper touchHelper;
     private ArrayList<SubredditFilter> subredditFilterList;
     private ArrayList<ReadPost> readPosts;
+    private Unbinder unbinder;
 
     public PostFragment() {
         // Required empty public constructor
@@ -275,7 +280,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
-        ButterKnife.bind(this, rootView);
+        unbinder = ButterKnife.bind(this, rootView);
 
         EventBus.getDefault().register(this);
 
@@ -469,7 +474,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mRedditDataRoomDatabase, customThemeWrapper, locale,
                     windowWidth, accessToken, accountName, postType, postLayout, true,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
+                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
+                    exoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -513,13 +519,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             String sortTime = null;
 
             sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST_BASE + subredditName, SortType.Type.HOT.name());
-            if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
+            if (sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
                 sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST_BASE + subredditName, SortType.Time.ALL.name());
             }
             boolean displaySubredditName = subredditName != null && (subredditName.equals("popular") || subredditName.equals("all"));
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, defaultPostLayout);
 
-            if(sortTime != null) {
+            if (sortTime != null) {
                 sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
             } else {
                 sortType = new SortType(SortType.Type.valueOf(sort));
@@ -528,7 +534,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mRedditDataRoomDatabase, customThemeWrapper, locale,
                     windowWidth, accessToken, accountName, postType, postLayout, displaySubredditName,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
+                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
+                    exoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -564,21 +571,21 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     TransitionManager.beginDelayedTransition(mPostRecyclerView, new AutoTransition());
                 }
             });
-        } else if(postType == PostDataSource.TYPE_MULTI_REDDIT) {
+        } else if (postType == PostDataSource.TYPE_MULTI_REDDIT) {
             multiRedditPath = getArguments().getString(EXTRA_NAME);
             String sort;
             String sortTime = null;
 
             sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE + multiRedditPath,
                     SortType.Type.HOT.name());
-            if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
+            if (sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
                 sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_MULTI_REDDIT_POST_BASE + multiRedditPath,
                         SortType.Time.ALL.name());
             }
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + multiRedditPath,
                     defaultPostLayout);
 
-            if(sortTime != null) {
+            if (sortTime != null) {
                 sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
             } else {
                 sortType = new SortType(SortType.Type.valueOf(sort));
@@ -587,7 +594,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mRedditDataRoomDatabase, customThemeWrapper, locale,
                     windowWidth, accessToken, accountName, postType, postLayout, true,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
+                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
+                    exoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -633,7 +641,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
 
             String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_USER_POST_BASE + username, SortType.Type.NEW.name());
-            if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
+            if (sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
                 String sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_USER_POST_BASE + username, SortType.Time.ALL.name());
                 sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
             } else {
@@ -644,7 +652,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mRedditDataRoomDatabase, customThemeWrapper, locale,
                     windowWidth, accessToken, accountName, postType, postLayout, true,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
+                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
+                    exoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -684,7 +693,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             });
         } else {
             String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_BEST_POST, SortType.Type.BEST.name());
-            if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
+            if (sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
                 String sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_BEST_POST, SortType.Time.ALL.name());
                 sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
             } else {
@@ -695,7 +704,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter = new PostRecyclerViewAdapter(activity, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mRedditDataRoomDatabase, customThemeWrapper, locale,
                     windowWidth, accessToken, accountName, postType, postLayout, true,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, exoCreator, new PostRecyclerViewAdapter.Callback() {
+                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
+                    exoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void retryLoadingMore() {
                     mPostViewModel.retryLoadingMore();
@@ -740,7 +750,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
 
         if (accountName != null && !accountName.equals("")) {
-            if (readPosts == null) {
+            if (mPostHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false) && readPosts == null) {
                 if (getArguments().getBoolean(EXTRA_DISABLE_READ_POSTS, false)) {
                     initializeAndBindPostViewModel(accessToken);
                 } else {
@@ -1011,13 +1021,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 break;
             case PostDataSource.TYPE_USER:
                 mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_USER_POST_BASE + username, sortType.getType().name()).apply();
-                if(sortType.getTime() != null) {
+                if (sortType.getTime() != null) {
                     mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_USER_POST_BASE + username, sortType.getTime().name()).apply();
                 }
                 break;
             case PostDataSource.TYPE_SEARCH:
                 mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SEARCH_POST, sortType.getType().name()).apply();
-                if(sortType.getTime() != null) {
+                if (sortType.getTime() != null) {
                     mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SEARCH_POST, sortType.getTime().name()).apply();
                 }
                 break;
@@ -1279,7 +1289,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
             intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
             startActivity(intent);
-        } else if(postType == PostDataSource.TYPE_MULTI_REDDIT) {
+        } else if (postType == PostDataSource.TYPE_MULTI_REDDIT) {
             Intent intent = new Intent(activity, FilteredPostsActivity.class);
             intent.putExtra(FilteredPostsActivity.EXTRA_NAME, multiRedditPath);
             intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
@@ -1614,6 +1624,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if (mAdapter != null && mPostRecyclerView != null) {
             mPostRecyclerView.onWindowVisibilityChanged(View.GONE);
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        unbinder.unbind();
     }
 
     @Override

@@ -27,7 +27,9 @@ public class InsertReadPost {
             if (readPostDao.getReadPostsCount() > 500) {
                 readPostDao.deleteOldestReadPosts(username);
             }
-            readPostDao.insert(new ReadPost(username, postId));
+            if (username != null && !username.equals("")) {
+                readPostDao.insert(new ReadPost(username, postId));
+            }
             return null;
         }
     }

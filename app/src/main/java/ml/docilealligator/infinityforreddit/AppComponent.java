@@ -73,6 +73,7 @@ import ml.docilealligator.infinityforreddit.settings.MainPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.MiscellaneousPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.NotificationPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.NsfwAndBlurringFragment;
+import ml.docilealligator.infinityforreddit.settings.PostHistoryFragment;
 import ml.docilealligator.infinityforreddit.settings.SecurityPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.ThemePreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.TranslationFragment;
@@ -230,4 +231,6 @@ public interface AppComponent {
     void inject(SubredditFilterPopularAndAllActivity subredditFilterPopularAndAllActivity);
 
     void inject(CustomizePostFilterActivity customizePostFilterActivity);
+
+    void inject(PostHistoryFragment postHistoryFragment);
 }

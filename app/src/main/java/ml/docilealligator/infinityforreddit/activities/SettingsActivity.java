@@ -35,6 +35,7 @@ import ml.docilealligator.infinityforreddit.settings.GesturesAndButtonsPreferenc
 import ml.docilealligator.infinityforreddit.settings.InterfacePreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.MainPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.NsfwAndBlurringFragment;
+import ml.docilealligator.infinityforreddit.settings.PostHistoryFragment;
 
 public class SettingsActivity extends BaseActivity implements
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
@@ -168,6 +169,8 @@ public class SettingsActivity extends BaseActivity implements
             args.putString(NsfwAndBlurringFragment.EXTRA_ACCOUNT_NAME, mAccountName);
         } else if (fragment instanceof CustomizeBottomAppBarFragment) {
             args.putString(CustomizeBottomAppBarFragment.EXTRA_ACCOUNT_NAME, mAccountName);
+        } else if (fragment instanceof PostHistoryFragment) {
+            args.putString(PostHistoryFragment.EXTRA_ACCOUNT_NAME, mAccountName);
         }
         fragment.setArguments(args);
         fragment.setTargetFragment(caller, 0);
