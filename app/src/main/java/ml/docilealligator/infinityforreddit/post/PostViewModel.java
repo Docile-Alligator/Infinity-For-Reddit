@@ -200,10 +200,6 @@ public class PostViewModel extends ViewModel {
         postFilterLiveData.postValue(postFilter);
     }
 
-    public PostFilter getPostFilter() {
-        return postFilterLiveData.getValue();
-    }
-
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
         private Retrofit retrofit;
         private String accessToken;

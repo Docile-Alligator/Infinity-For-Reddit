@@ -138,6 +138,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private static final String READ_POST_LIST_STATE = "RPLS";
     private static final String SUBREDDIT_FILTER_LIST_STATE = "SFLS";
     private static final String HIDE_READ_POSTS_INDEX_STATE = "HRPIS";
+    private static final String POST_FILTER_STATE = "PFS";
 
     @BindView(R.id.swipe_refresh_layout_post_fragment)
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -385,6 +386,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             readPosts = savedInstanceState.getParcelableArrayList(READ_POST_LIST_STATE);
             subredditFilterList = savedInstanceState.getParcelableArrayList(SUBREDDIT_FILTER_LIST_STATE);
             hideReadPostsIndex = savedInstanceState.getInt(HIDE_READ_POSTS_INDEX_STATE, 0);
+            postFilter = savedInstanceState.getParcelable(POST_FILTER_STATE);
+        } else {
+            //TODO: Initialize PostFilter
+            postFilter = getArguments().getParcelable(EXTRA_FILTER);
+            if (postFilter == null) {
+                postFilter = new PostFilter();
+            }
         }
 
         mPostRecyclerView.setOnTouchListener((view, motionEvent) -> {
@@ -441,12 +449,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
 
         postType = getArguments().getInt(EXTRA_POST_TYPE);
-
-        //TODO: Initialize PostFilter
-        postFilter = getArguments().getParcelable(EXTRA_FILTER);
-        if (postFilter == null) {
-            postFilter = new PostFilter();
-        }
 
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
@@ -1081,6 +1083,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             outState.putInt(RECYCLER_VIEW_POSITION_STATE,
                     mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[0]);
         }
+        outState.putParcelable(POST_FILTER_STATE, postFilter);
     }
 
     @Override
@@ -1252,6 +1255,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void changePostFilter(PostFilter postFilter) {
+        this.postFilter = postFilter;
         if (mPostViewModel != null) {
             mPostViewModel.changePostFilter(postFilter);
         }
@@ -1259,10 +1263,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public PostFilter getPostFilter() {
-        if (mPostViewModel != null) {
-            return mPostViewModel.getPostFilter();
-        }
-        return null;
+        return postFilter;
     }
 
     @Override
