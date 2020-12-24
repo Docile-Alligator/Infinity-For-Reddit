@@ -118,6 +118,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private SlidrInterface mSlidrInterface;
+    private int fabOption;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -241,6 +242,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
+                fab.show();
                 sectionsPagerAdapter.displaySortTypeInToolbar();
                 if (position == 0) {
                     unlockSwipeRightToGoBack();
@@ -264,7 +266,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         }).attach();
         fixViewPager2Sensitivity(viewPager2);
 
-        int fabOption = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS);
+        fabOption = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS);
         switch (fabOption) {
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH:
                 fab.setImageResource(R.drawable.ic_refresh_24dp);
@@ -290,6 +292,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
                 if (mAccessToken == null) {
                     fab.setImageResource(R.drawable.ic_filter_24dp);
+                    fabOption = SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_FILTER_POSTS;
                 } else {
                     fab.setImageResource(R.drawable.ic_hide_read_posts_24dp);
                 }
@@ -300,6 +303,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             default:
                 if (mAccessToken == null) {
                     fab.setImageResource(R.drawable.ic_filter_24dp);
+                    fabOption = SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_FILTER_POSTS;
                 } else {
                     fab.setImageResource(R.drawable.ic_add_day_night_24dp);
                 }

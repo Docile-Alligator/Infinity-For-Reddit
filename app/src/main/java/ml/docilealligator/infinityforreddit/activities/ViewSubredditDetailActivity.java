@@ -222,6 +222,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private int collapsedTabIndicatorColor;
     private int unsubscribedColor;
     private int subscribedColor;
+    private int fabOption;
     private SlidrInterface mSlidrInterface;
     private MaterialAlertDialogBuilder nsfwWarningBuilder;
 
@@ -687,96 +688,110 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 lp.gravity = Gravity.END | Gravity.BOTTOM;
                 fab.setLayoutParams(lp);
             }
-
-            int fabOption = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS);
+        } else {
+            CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+            lp.setAnchorId(View.NO_ID);
+            lp.gravity = Gravity.END | Gravity.BOTTOM;
+            fab.setLayoutParams(lp);
+            bottomNavigationView.setVisibility(View.GONE);
+        }
+        fabOption = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS);
+        switch (fabOption) {
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH:
+                fab.setImageResource(R.drawable.ic_refresh_24dp);
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE:
+                fab.setImageResource(R.drawable.ic_sort_toolbar_24dp);
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT:
+                fab.setImageResource(R.drawable.ic_post_layout_24dp);
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH:
+                fab.setImageResource(R.drawable.ic_search_black_24dp);
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_SUBREDDIT:
+                fab.setImageResource(R.drawable.ic_subreddit_24dp);
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_USER:
+                fab.setImageResource(R.drawable.ic_user_24dp);
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_RANDOM:
+                fab.setImageResource(R.drawable.ic_random_24dp);
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
+                if (mAccessToken == null) {
+                    fab.setImageResource(R.drawable.ic_filter_24dp);
+                    fabOption = SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS;
+                } else {
+                    fab.setImageResource(R.drawable.ic_hide_read_posts_24dp);
+                }
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
+                fab.setImageResource(R.drawable.ic_filter_24dp);
+                break;
+            default:
+                if (mAccessToken == null) {
+                    fab.setImageResource(R.drawable.ic_filter_24dp);
+                    fabOption = SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS;
+                } else {
+                    fab.setImageResource(R.drawable.ic_add_day_night_24dp);
+                }
+                break;
+        }
+        fab.setOnClickListener(view -> {
             switch (fabOption) {
-                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH:
-                    fab.setImageResource(R.drawable.ic_refresh_24dp);
+                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH: {
+                    if (sectionsPagerAdapter != null) {
+                        sectionsPagerAdapter.refresh();
+                    }
                     break;
-                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE:
-                    fab.setImageResource(R.drawable.ic_sort_toolbar_24dp);
+                }
+                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE: {
+                    sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
                     break;
-                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT:
-                    fab.setImageResource(R.drawable.ic_post_layout_24dp);
+                }
+                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT: {
+                    postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
                     break;
-                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH:
-                    fab.setImageResource(R.drawable.ic_search_black_24dp);
+                }
+                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH: {
+                    Intent intent = new Intent(this, SearchActivity.class);
+                    intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                    startActivity(intent);
                     break;
+                }
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_SUBREDDIT:
-                    fab.setImageResource(R.drawable.ic_subreddit_24dp);
+                    goToSubreddit();
                     break;
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_USER:
-                    fab.setImageResource(R.drawable.ic_user_24dp);
+                    goToUser();
                     break;
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_RANDOM:
-                    fab.setImageResource(R.drawable.ic_random_24dp);
+                    random();
                     break;
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
-                    fab.setImageResource(R.drawable.ic_hide_read_posts_24dp);
+                    if (sectionsPagerAdapter != null) {
+                        sectionsPagerAdapter.hideReadPosts();
+                    }
                     break;
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
-                    fab.setImageResource(R.drawable.ic_filter_24dp);
+                    if (sectionsPagerAdapter != null) {
+                        sectionsPagerAdapter.filterPosts();
+                    }
                     break;
                 default:
-                    fab.setImageResource(R.drawable.ic_add_day_night_24dp);
+                    postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
                     break;
             }
-            fab.setOnClickListener(view -> {
-                switch (fabOption) {
-                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH: {
-                        if (sectionsPagerAdapter != null) {
-                            sectionsPagerAdapter.refresh();
-                        }
-                        break;
-                    }
-                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE: {
-                        sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
-                        break;
-                    }
-                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT: {
-                        postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
-                        break;
-                    }
-                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH: {
-                        Intent intent = new Intent(this, SearchActivity.class);
-                        intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, subredditName);
-                        startActivity(intent);
-                        break;
-                    }
-                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_SUBREDDIT:
-                        goToSubreddit();
-                        break;
-                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_USER:
-                        goToUser();
-                        break;
-                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_RANDOM:
-                        random();
-                        break;
-                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
-                        if (sectionsPagerAdapter != null) {
-                            sectionsPagerAdapter.hideReadPosts();
-                        }
-                        break;
-                    case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
-                        if (sectionsPagerAdapter != null) {
-                            sectionsPagerAdapter.filterPosts();
-                        }
-                        break;
-                    default:
-                        postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
-                        break;
-                }
-            });
-            fab.setOnLongClickListener(view -> {
-                fabMoreOptionsBottomSheetFragment.show(getSupportFragmentManager(), fabMoreOptionsBottomSheetFragment.getTag());
-                return true;
-            });
-
-            fab.setVisibility(View.VISIBLE);
-        } else {
-            bottomNavigationView.setVisibility(View.GONE);
-            fab.setVisibility(View.GONE);
-        }
+        });
+        fab.setOnLongClickListener(view -> {
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(FABMoreOptionsBottomSheetFragment.EXTRA_ANONYMOUS_MODE, mAccessToken == null);
+            fabMoreOptionsBottomSheetFragment.setArguments(bundle);
+            fabMoreOptionsBottomSheetFragment.show(getSupportFragmentManager(), fabMoreOptionsBottomSheetFragment.getTag());
+            return true;
+        });
+        fab.setVisibility(View.VISIBLE);
 
         subscribeSubredditChip.setOnClickListener(view -> {
             if (mAccessToken == null) {
@@ -857,8 +872,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     if (showBottomAppBar) {
                         bottomNavigationView.performShow();
                     }
-                    fab.show();
                 }
+                fab.show();
 
                 sectionsPagerAdapter.displaySortTypeInToolbar();
             }
