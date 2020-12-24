@@ -29,15 +29,16 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.adapters.UserListingRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NetworkState;
+import ml.docilealligator.infinityforreddit.PostFragmentContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.adapters.UserListingRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.user.UserListingViewModel;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
@@ -134,6 +135,19 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
                 () -> mUserListingViewModel.retryLoadingMore());
 
         mUserListingRecyclerView.setAdapter(mAdapter);
+
+        if (mActivity instanceof PostFragmentContentScrollingInterface) {
+            mUserListingRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    if (dy > 0) {
+                        ((PostFragmentContentScrollingInterface) mActivity).contentScrollDown();
+                    } else if (dy < 0) {
+                        ((PostFragmentContentScrollingInterface) mActivity).contentScrollUp();
+                    }
+                }
+            });
+        }
 
         UserListingViewModel.Factory factory = new UserListingViewModel.Factory(mRetrofit, mQuery,
                 sortType, nsfw);

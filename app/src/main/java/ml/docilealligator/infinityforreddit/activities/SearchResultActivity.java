@@ -69,7 +69,7 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class SearchResultActivity extends BaseActivity implements SortTypeSelectionCallback,
         PostLayoutBottomSheetFragment.PostLayoutSelectionCallback, ActivityToolbarInterface,
-        FABMoreOptionsBottomSheetFragment.FABOptionSelectionCallback,
+        FABMoreOptionsBottomSheetFragment.FABOptionSelectionCallback, RandomBottomSheetFragment.RandomOptionSelectionCallback,
         PostTypeBottomSheetFragment.PostTypeSelectionCallback, PostFragmentContentScrollingInterface {
     static final String EXTRA_QUERY = "QK";
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
@@ -329,7 +329,9 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 }
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH: {
                     Intent intent = new Intent(this, SearchActivity.class);
-                    intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, mSubredditName);
+                    if (mSubredditName != null && !mSubredditName.equals("")) {
+                        intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, mSubredditName);
+                    }
                     startActivity(intent);
                     break;
                 }
@@ -525,7 +527,9 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_SEARCH:
                 Intent intent = new Intent(this, SearchActivity.class);
-                intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, mSubredditName);
+                if (mSubredditName != null && !mSubredditName.equals("")) {
+                    intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, mSubredditName);
+                }
                 startActivity(intent);
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_GO_TO_SUBREDDIT: {
@@ -649,6 +653,13 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     @Override
     public void contentScrollDown() {
         fab.hide();
+    }
+
+    @Override
+    public void randomOptionSelected(int option) {
+        Intent intent = new Intent(this, FetchRandomSubredditOrPostActivity.class);
+        intent.putExtra(FetchRandomSubredditOrPostActivity.EXTRA_RANDOM_OPTION, option);
+        startActivity(intent);
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {
