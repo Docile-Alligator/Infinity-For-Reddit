@@ -8,7 +8,6 @@ import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
 import android.os.Build;
-import android.text.Html;
 import android.text.Spannable;
 import android.util.DisplayMetrics;
 import android.view.inputmethod.InputMethodManager;
@@ -17,6 +16,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.text.HtmlCompat;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -135,13 +135,10 @@ public class Utils {
     }
 
     public static void setHTMLWithImageToTextView(TextView textView, String content, boolean enlargeImage) {
-        Spannable html;
         GlideImageGetter glideImageGetter = new GlideImageGetter(textView, enlargeImage);
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            html = (Spannable) Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
-        } else {
-            html = (Spannable) Html.fromHtml(content, glideImageGetter, null);
-        }
+        Spannable html = (Spannable) HtmlCompat.fromHtml(
+                content, HtmlCompat.FROM_HTML_MODE_LEGACY, glideImageGetter, null);
+
         textView.setText(html);
     }
 

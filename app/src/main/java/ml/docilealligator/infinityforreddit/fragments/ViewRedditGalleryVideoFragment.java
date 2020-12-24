@@ -152,7 +152,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_download_view_reddit_gallery_video_fragment) {
             isDownloading = true;
-            if (Build.VERSION.SDK_INT >= 23) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (ContextCompat.checkSelfPermission(activity,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE)
                         != PackageManager.PERMISSION_GRANTED) {
@@ -193,11 +193,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
         intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
         intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, galleryVideo.fileName);
         intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            activity.startForegroundService(intent);
-        } else {
-            activity.startService(intent);
-        }
+        ContextCompat.startForegroundService(activity, intent);
         Toast.makeText(activity, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
 

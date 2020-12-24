@@ -7,6 +7,7 @@ import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -192,6 +193,6 @@ public class SettingsActivity extends BaseActivity implements
 
     @Subscribe
     public void onRecreateActivityEvent(RecreateActivityEvent recreateActivityEvent) {
-        recreate();
+        ActivityCompat.recreate(this);
     }
 }

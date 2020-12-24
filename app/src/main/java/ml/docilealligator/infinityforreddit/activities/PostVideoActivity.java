@@ -20,6 +20,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -528,11 +529,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
                 intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_VIDEO);
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForegroundService(intent);
-                } else {
-                    startService(intent);
-                }
+                ContextCompat.startForegroundService(this, intent);
 
                 return true;
         }

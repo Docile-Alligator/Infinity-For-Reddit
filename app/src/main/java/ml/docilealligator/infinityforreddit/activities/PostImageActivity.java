@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
@@ -528,11 +529,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
                 }
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    startForegroundService(intent);
-                } else {
-                    startService(intent);
-                }
+                ContextCompat.startForegroundService(this, intent);
 
                 return true;
         }

@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -520,7 +521,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
                 intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);
                 intent.putExtra(SubmitPostService.EXTRA_IS_NSFW, isNSFW);
                 intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_CROSSPOST);
-                startService(intent);
+                ContextCompat.startForegroundService(this, intent);
 
                 return true;
         }

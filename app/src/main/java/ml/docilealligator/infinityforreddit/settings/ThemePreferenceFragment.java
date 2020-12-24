@@ -9,6 +9,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.ListPreference;
@@ -109,7 +110,7 @@ public class ThemePreferenceFragment extends PreferenceFragmentCompat {
             amoledDarkSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                 if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_NO) {
                     EventBus.getDefault().post(new RecreateActivityEvent());
-                    activity.recreate();
+                    ActivityCompat.recreate(activity);
                 }
                 return true;
             });

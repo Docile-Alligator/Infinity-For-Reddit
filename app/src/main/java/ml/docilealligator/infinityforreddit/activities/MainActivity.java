@@ -27,6 +27,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -1144,7 +1145,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
     @Subscribe
     public void onRecreateActivityEvent(RecreateActivityEvent recreateActivityEvent) {
-        recreate();
+        ActivityCompat.recreate(this);
     }
 
     @Subscribe
