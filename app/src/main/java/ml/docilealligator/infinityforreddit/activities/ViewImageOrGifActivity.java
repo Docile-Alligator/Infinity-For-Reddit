@@ -283,7 +283,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
 
                 isDownloading = true;
 
-                if (Build.VERSION.SDK_INT >= 23) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE)
                             != PackageManager.PERMISSION_GRANTED) {
@@ -341,11 +341,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, isGif ? DownloadMediaService.EXTRA_MEDIA_TYPE_GIF : DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
         intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, mImageFileName);
         intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, mSubredditName);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            startForegroundService(intent);
-        } else {
-            startService(intent);
-        }
+        ContextCompat.startForegroundService(this, intent);
         Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
 

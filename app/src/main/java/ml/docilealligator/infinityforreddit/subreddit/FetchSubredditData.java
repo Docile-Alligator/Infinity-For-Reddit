@@ -2,9 +2,9 @@ package ml.docilealligator.infinityforreddit.subreddit;
 
 import androidx.annotation.NonNull;
 
-import com.facebook.common.internal.ImmutableMap;
-
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
@@ -50,7 +50,8 @@ public class FetchSubredditData {
                                           boolean nsfw, final FetchSubredditListingDataListener fetchSubredditListingDataListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
-        Map<String, String> headers = accessToken != null ?  APIUtils.getOAuthHeader(accessToken) : ImmutableMap.of();
+        Map<String, String> map = new HashMap<>();
+        Map<String, String> headers = accessToken != null ?  APIUtils.getOAuthHeader(accessToken) : Collections.unmodifiableMap(map);
         Call<String> subredditDataCall = api.searchSubreddits(query, after, sortType, nsfw ? 1 : 0, headers);
         subredditDataCall.enqueue(new Callback<String>() {
             @Override

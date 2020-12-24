@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
 import androidx.preference.ListPreference;
 import androidx.preference.PreferenceFragmentCompat;
 
@@ -30,7 +31,7 @@ public class FontPreferenceFragment extends PreferenceFragmentCompat {
         if (fontFamilyPreference != null) {
             fontFamilyPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new RecreateActivityEvent());
-                activity.recreate();
+                ActivityCompat.recreate(activity);
                 return true;
             });
         }
@@ -52,7 +53,7 @@ public class FontPreferenceFragment extends PreferenceFragmentCompat {
         if (fontSizePreference != null) {
             fontSizePreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new RecreateActivityEvent());
-                activity.recreate();
+                ActivityCompat.recreate(activity);
                 return true;
             });
         }

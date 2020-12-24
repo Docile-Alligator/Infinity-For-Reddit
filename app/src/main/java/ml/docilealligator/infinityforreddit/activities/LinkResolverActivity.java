@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsIntent;
+import androidx.browser.customtabs.CustomTabsService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,8 +24,6 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-
-import static androidx.browser.customtabs.CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION;
 
 public class LinkResolverActivity extends AppCompatActivity {
 
@@ -276,7 +276,7 @@ public class LinkResolverActivity extends AppCompatActivity {
         ArrayList<ResolveInfo> packagesSupportingCustomTabs = new ArrayList<>();
         for (ResolveInfo info : resolvedActivityList) {
             Intent serviceIntent = new Intent();
-            serviceIntent.setAction(ACTION_CUSTOM_TABS_CONNECTION);
+            serviceIntent.setAction(CustomTabsService.ACTION_CUSTOM_TABS_CONNECTION);
             serviceIntent.setPackage(info.activityInfo.packageName);
             // Check if this package also resolves the Custom Tabs service.
             if (pm.resolveService(serviceIntent, 0) != null) {
@@ -291,8 +291,11 @@ public class LinkResolverActivity extends AppCompatActivity {
         if (!resolveInfos.isEmpty()) {
             CustomTabsIntent.Builder builder = new CustomTabsIntent.Builder();
             // add share action to menu list
-            builder.addDefaultShareMenuItem();
-            builder.setToolbarColor(mCustomThemeWrapper.getColorPrimary());
+            builder.setShareState(CustomTabsIntent.SHARE_STATE_ON);
+            builder.setDefaultColorSchemeParams(
+                    new CustomTabColorSchemeParams.Builder()
+                            .setToolbarColor(mCustomThemeWrapper.getColorPrimary())
+                            .build());
             CustomTabsIntent customTabsIntent = builder.build();
             customTabsIntent.intent.setPackage(resolveInfos.get(0).activityInfo.packageName);
             if (uri.getScheme() == null) {

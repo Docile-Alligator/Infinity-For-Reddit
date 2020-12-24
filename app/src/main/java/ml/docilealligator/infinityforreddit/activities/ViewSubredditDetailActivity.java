@@ -28,8 +28,8 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -842,7 +842,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     }
                 }).execute();
 
-        sectionsPagerAdapter = new SectionsPagerAdapter(fragmentManager, getLifecycle());
+        sectionsPagerAdapter = new SectionsPagerAdapter(this);
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -1233,8 +1233,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {
 
-        SectionsPagerAdapter(FragmentManager fm, Lifecycle lifecycle) {
-            super(fm, lifecycle);
+        SectionsPagerAdapter(FragmentActivity fa) {
+            super(fa);
         }
 
         @NonNull

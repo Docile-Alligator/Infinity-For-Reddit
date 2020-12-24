@@ -14,6 +14,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.ActivityCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -248,7 +249,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
 
     @Subscribe
     public void onRecreateActivityEvent(RecreateActivityEvent recreateActivityEvent) {
-        recreate();
+        ActivityCompat.recreate(this);
     }
 
     @Override

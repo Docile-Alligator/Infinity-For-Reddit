@@ -146,7 +146,7 @@ public class DownloadRedditVideoService extends Service {
                         String destinationFileUriString;
                         boolean isDefaultDestination;
                         if (destinationFileDirectory.equals("")) {
-                            if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                                 File destinationDirectory = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
                                 if (destinationDirectory != null) {
                                     String destinationDirectoryPath = separateDownloadFolder ? destinationDirectory.getAbsolutePath() + "/Infinity/" + subredditName + "/" : destinationDirectory.getAbsolutePath() + "/Infinity/";
@@ -396,7 +396,7 @@ public class DownloadRedditVideoService extends Service {
                                       boolean isDefaultDestination) throws IOException {
             ContentResolver contentResolver = getContentResolver();
             if (isDefaultDestination) {
-                if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                     InputStream in = new FileInputStream(srcPath);
                     OutputStream out = new FileOutputStream(destinationFileUriString);
                     byte[] buf = new byte[1024];

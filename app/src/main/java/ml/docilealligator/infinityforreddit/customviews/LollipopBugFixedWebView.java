@@ -21,7 +21,8 @@ public class LollipopBugFixedWebView extends WebView{
 
     // To fix Android Lollipop WebView problem create a new configuration on that Android version only
     private static Context getFixedContext(Context context) {
-        if (Build.VERSION.SDK_INT == 21 || Build.VERSION.SDK_INT == 22) // Android Lollipop 5.0 & 5.1
+        if (Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP
+                || Build.VERSION.SDK_INT == Build.VERSION_CODES.LOLLIPOP_MR1) // Android Lollipop 5.0 & 5.1
             return context.createConfigurationContext(new Configuration());
         return context;
     }

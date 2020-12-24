@@ -223,7 +223,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 
                 isDownloading = true;
 
-                if (Build.VERSION.SDK_INT >= 23) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (ContextCompat.checkSelfPermission(activity,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE)
                             != PackageManager.PERMISSION_GRANTED) {
@@ -272,11 +272,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
         intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, media.mediaType == Post.Gallery.TYPE_GIF ? DownloadMediaService.EXTRA_MEDIA_TYPE_GIF: DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
         intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, media.fileName);
         intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            activity.startForegroundService(intent);
-        } else {
-            activity.startService(intent);
-        }
+        ContextCompat.startForegroundService(activity, intent);
         Toast.makeText(activity, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
 

@@ -142,7 +142,7 @@ public class DownloadMediaService extends Service {
                 if (response.isSuccessful() && response.body() != null) {
                     String destinationFileDirectory = getDownloadLocation(mediaType);
                     if (destinationFileDirectory.equals("")) {
-                        if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                             File directory = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
                             if (directory != null) {
                                 String directoryPath = separateDownloadFolder && subredditName != null && !subredditName.equals("") ? directory.getAbsolutePath() + "/Infinity/" + subredditName + "/" : directory.getAbsolutePath() + "/Infinity/";
@@ -235,7 +235,7 @@ public class DownloadMediaService extends Service {
                                              int mediaType) throws IOException {
             ContentResolver contentResolver = getContentResolver();
             if (isDefaultDestination) {
-                if (android.os.Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                     InputStream inputStream = body.byteStream();
                     OutputStream outputStream = new FileOutputStream(destinationFileUriString);
                     byte[] fileReader = new byte[4096];

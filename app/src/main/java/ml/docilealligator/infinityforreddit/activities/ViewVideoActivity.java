@@ -419,7 +419,7 @@ public class ViewVideoActivity extends AppCompatActivity {
                 }
 
                 isDownloading = true;
-                if (Build.VERSION.SDK_INT >= 23) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                     if (ContextCompat.checkSelfPermission(this,
                             Manifest.permission.WRITE_EXTERNAL_STORAGE)
                             != PackageManager.PERMISSION_GRANTED) {
@@ -472,29 +472,20 @@ public class ViewVideoActivity extends AppCompatActivity {
     private void download() {
         isDownloading = false;
 
+        Intent intent;
         if (videoType != VIDEO_TYPE_NORMAL) {
-            Intent intent = new Intent(this, DownloadMediaService.class);
+            intent = new Intent(this, DownloadMediaService.class);
             intent.putExtra(DownloadMediaService.EXTRA_URL, videoDownloadUrl);
             intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
             intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, videoFileName);
             intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(intent);
-            } else {
-                startService(intent);
-            }
         } else {
-            Intent intent = new Intent(this, DownloadRedditVideoService.class);
+            intent = new Intent(this, DownloadRedditVideoService.class);
             intent.putExtra(DownloadRedditVideoService.EXTRA_VIDEO_URL, videoDownloadUrl);
             intent.putExtra(DownloadRedditVideoService.EXTRA_POST_ID, id);
             intent.putExtra(DownloadRedditVideoService.EXTRA_SUBREDDIT, subredditName);
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                startForegroundService(intent);
-            } else {
-                startService(intent);
-            }
         }
+        ContextCompat.startForegroundService(this, intent);
         Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
 

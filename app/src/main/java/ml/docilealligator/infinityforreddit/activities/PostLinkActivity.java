@@ -17,6 +17,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
@@ -449,7 +450,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
                 intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);
                 intent.putExtra(SubmitPostService.EXTRA_IS_NSFW, isNSFW);
                 intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TEXT_OR_LINK);
-                startService(intent);
+                ContextCompat.startForegroundService(this, intent);
 
                 return true;
         }
