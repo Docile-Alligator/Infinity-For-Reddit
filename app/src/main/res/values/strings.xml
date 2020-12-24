@@ -517,6 +517,7 @@
     <string name="settings_post_history_title">Post History</string>
     <string name="settings_mark_posts_as_read_title">Mark Posts As Read</string>
     <string name="settings_mark_posts_as_read_after_voting_title">Mark Posts As Read After Voting</string>
+    <string name="settings_hide_read_posts_automatically_title">Hide Read Posts Automatically</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -34,7 +33,6 @@ public class PostFilter implements Parcelable {
 
     public static boolean isPostAllowed(Post post, PostFilter postFilter) {
         if (postFilter == null || post == null) {
-            Log.i("asdasfd", "s " + post.getTitle());
             return true;
         }
         if (post.isNSFW() && !postFilter.allowNSFW) {

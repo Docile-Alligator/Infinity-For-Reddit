@@ -39,6 +39,10 @@ public class PostHistoryFragment extends Fragment {
     LinearLayout markPostsAsReadAfterVotingLinearLayout;
     @BindView(R.id.mark_posts_as_read_after_voting_switch_post_history_fragment)
     SwitchMaterial markPostsAsReadAfterVotingSwitch;
+    @BindView(R.id.hide_read_posts_automatically_linear_layout_post_history_fragment)
+    LinearLayout hideReadPostsAutomaticallyLinearLayout;
+    @BindView(R.id.hide_read_posts_automatically_switch_post_history_fragment)
+    SwitchMaterial hideReadPostsAutomaticallySwitch;
     @Inject
     @Named("post_history")
     SharedPreferences postHistorySharedPreferences;
@@ -67,25 +71,27 @@ public class PostHistoryFragment extends Fragment {
         }
 
         markPostsAsReadSwitch.setChecked(postHistorySharedPreferences.getBoolean(
-                (accountName == null ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false));
+                accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false));
         markPostsAsReadAfterVotingSwitch.setChecked(postHistorySharedPreferences.getBoolean(
-                (accountName == null ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, false));
+                accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, false));
+        hideReadPostsAutomaticallySwitch.setChecked(postHistorySharedPreferences.getBoolean(
+                accountName + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false));
 
         markPostsAsReadLinearLayout.setOnClickListener(view -> {
             markPostsAsReadSwitch.performClick();
         });
 
         markPostsAsReadSwitch.setOnCheckedChangeListener((compoundButton, b) ->
-                postHistorySharedPreferences.edit().putBoolean((accountName == null ? "" : accountName)
-                        + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, b).apply());
+                postHistorySharedPreferences.edit().putBoolean(accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, b).apply());
 
-        markPostsAsReadAfterVotingLinearLayout.setOnClickListener(view -> {
-            markPostsAsReadAfterVotingSwitch.performClick();
-        });
+        markPostsAsReadAfterVotingLinearLayout.setOnClickListener(view -> markPostsAsReadAfterVotingSwitch.performClick());
 
         markPostsAsReadAfterVotingSwitch.setOnCheckedChangeListener((compoundButton, b) ->
-                postHistorySharedPreferences.edit().putBoolean((accountName == null ? "" : accountName)
-                        + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, b).apply());
+                postHistorySharedPreferences.edit().putBoolean(accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, b).apply());
+
+        hideReadPostsAutomaticallyLinearLayout.setOnClickListener(view -> hideReadPostsAutomaticallySwitch.performClick());
+
+        hideReadPostsAutomaticallySwitch.setOnCheckedChangeListener((compoundButton, b) -> postHistorySharedPreferences.edit().putBoolean(accountName + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, b).apply());
 
         return rootView;
     }

@@ -25,6 +25,11 @@
             android:fontFamily="?attr/font_family"
             app:drawableStartCompat="@drawable/ic_info_preference_24dp" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dividerColor" />
+
         <LinearLayout
             android:id="@+id/mark_posts_as_read_linear_layout_post_history_fragment"
             android:layout_width="match_parent"
@@ -82,6 +87,37 @@
 
             <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/mark_posts_as_read_after_voting_switch_post_history_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/hide_read_posts_automatically_linear_layout_post_history_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="16dp"
+                android:layout_gravity="center_vertical"
+                android:text="@string/settings_hide_read_posts_automatically_title"
+                android:textColor="?attr/primaryTextColor"
+                android:textSize="?attr/font_16"
+                android:fontFamily="?attr/font_family" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/hide_read_posts_automatically_switch_post_history_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical" />

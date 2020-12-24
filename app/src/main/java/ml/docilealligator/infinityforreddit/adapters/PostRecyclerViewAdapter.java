@@ -196,6 +196,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean mDisableImagePreview = false;
     private boolean mMarkPostsAsRead;
     private boolean mMarkPostsAsReadAfterVoting;
+    private boolean mHideReadPostsAutomatically;
     private Drawable mCommentIcon;
     private NetworkState networkState;
     private ExoCreator mExoCreator;
@@ -260,6 +261,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             mMarkPostsAsRead = postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false);
             mMarkPostsAsReadAfterVoting = postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, false);
+            mHideReadPostsAutomatically = postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false);
 
             mPostLayout = postLayout;
 
@@ -401,7 +403,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             Post post = getItem(position);
             if (post != null) {
                 if (post.isRead()) {
-                    if (position < mHideReadPostsIndex) {
+                    if (mHideReadPostsAutomatically || position < mHideReadPostsIndex) {
                         post.hidePostInRecyclerView();
                         holder.itemView.setVisibility(View.GONE);
                         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
@@ -723,7 +725,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             Post post = getItem(position);
             if (post != null) {
                 if (post.isRead()) {
-                    if (position < mHideReadPostsIndex) {
+                    if (mHideReadPostsAutomatically || position < mHideReadPostsIndex) {
                         post.hidePostInRecyclerView();
                         holder.itemView.setVisibility(View.GONE);
                         ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
