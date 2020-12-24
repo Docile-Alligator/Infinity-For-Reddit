@@ -66,6 +66,7 @@ import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
+import ml.docilealligator.infinityforreddit.PostFragmentContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
@@ -102,7 +103,7 @@ import retrofit2.Retrofit;
 public class ViewSubredditDetailActivity extends BaseActivity implements SortTypeSelectionCallback,
         PostTypeBottomSheetFragment.PostTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback,
         ActivityToolbarInterface, FABMoreOptionsBottomSheetFragment.FABOptionSelectionCallback,
-        RandomBottomSheetFragment.RandomOptionSelectionCallback, MarkPostAsReadInterface {
+        RandomBottomSheetFragment.RandomOptionSelectionCallback, MarkPostAsReadInterface, PostFragmentContentScrollingInterface {
 
     public static final String EXTRA_SUBREDDIT_NAME_KEY = "ESN";
     public static final String EXTRA_MESSAGE_FULLNAME = "ENF";
@@ -1053,6 +1054,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         sectionsPagerAdapter.changePostLayout(postLayout);
     }
 
+    @Override
     public void contentScrollUp() {
         if (mAccessToken != null) {
             if (showBottomAppBar && !lockBottomAppBar) {
@@ -1064,6 +1066,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         }
     }
 
+    @Override
     public void contentScrollDown() {
         if (mAccessToken != null) {
             if (!(showBottomAppBar && lockBottomAppBar)) {

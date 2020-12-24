@@ -70,6 +70,7 @@ import ml.docilealligator.infinityforreddit.DeleteThing;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
+import ml.docilealligator.infinityforreddit.PostFragmentContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
@@ -108,7 +109,7 @@ import retrofit2.Retrofit;
 public class ViewUserDetailActivity extends BaseActivity implements SortTypeSelectionCallback,
         PostTypeBottomSheetFragment.PostTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback,
         ActivityToolbarInterface, FABMoreOptionsBottomSheetFragment.FABOptionSelectionCallback,
-        RandomBottomSheetFragment.RandomOptionSelectionCallback, MarkPostAsReadInterface {
+        RandomBottomSheetFragment.RandomOptionSelectionCallback, MarkPostAsReadInterface, PostFragmentContentScrollingInterface {
 
     public static final String EXTRA_USER_NAME_KEY = "EUNK";
     public static final String EXTRA_MESSAGE_FULLNAME = "ENF";
@@ -1198,6 +1199,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         startActivity(intent);
     }
 
+    @Override
     public void contentScrollUp() {
         if (mAccessToken != null) {
             if (showBottomAppBar && !lockBottomAppBar) {
@@ -1209,6 +1211,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         }
     }
 
+    @Override
     public void contentScrollDown() {
         if (mAccessToken != null) {
             if (!(showBottomAppBar && lockBottomAppBar)) {

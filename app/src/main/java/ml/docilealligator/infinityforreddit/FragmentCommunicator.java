@@ -48,5 +48,5 @@ public interface FragmentCommunicator {
 
     default void filterPosts() {
 
-    };
+    }
 }

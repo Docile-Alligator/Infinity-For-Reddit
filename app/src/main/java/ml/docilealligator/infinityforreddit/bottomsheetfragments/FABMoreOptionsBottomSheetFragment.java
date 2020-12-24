@@ -17,6 +17,7 @@ import ml.docilealligator.infinityforreddit.R;
 
 public class FABMoreOptionsBottomSheetFragment extends RoundedBottomSheetDialogFragment {
 
+    public static final String EXTRA_ANONYMOUS_MODE = "EAM";
     public static final int FAB_OPTION_SUBMIT_POST = 0;
     public static final int FAB_OPTION_REFRESH = 1;
     public static final int FAB_OPTION_CHANGE_SORT_TYPE = 2;
@@ -62,10 +63,20 @@ public class FABMoreOptionsBottomSheetFragment extends RoundedBottomSheetDialogF
 
         ButterKnife.bind(this, rootView);
 
-        submitPostTextView.setOnClickListener(view -> {
-            activity.fabOptionSelected(FAB_OPTION_SUBMIT_POST);
-            dismiss();
-        });
+        if (getArguments() != null && getArguments().getBoolean(EXTRA_ANONYMOUS_MODE, false)) {
+            submitPostTextView.setVisibility(View.GONE);
+            hideReadPostsTextView.setVisibility(View.GONE);
+        } else {
+            submitPostTextView.setOnClickListener(view -> {
+                activity.fabOptionSelected(FAB_OPTION_SUBMIT_POST);
+                dismiss();
+            });
+
+            hideReadPostsTextView.setOnClickListener(view -> {
+                activity.fabOptionSelected(FAB_HIDE_READ_POSTS);
+                dismiss();
+            });
+        }
 
         refreshTextView.setOnClickListener(view -> {
             activity.fabOptionSelected(FAB_OPTION_REFRESH);
@@ -99,11 +110,6 @@ public class FABMoreOptionsBottomSheetFragment extends RoundedBottomSheetDialogF
 
         randomTextView.setOnClickListener(view -> {
             activity.fabOptionSelected(FAB_RANDOM);
-            dismiss();
-        });
-
-        hideReadPostsTextView.setOnClickListener(view -> {
-            activity.fabOptionSelected(FAB_HIDE_READ_POSTS);
             dismiss();
         });
 

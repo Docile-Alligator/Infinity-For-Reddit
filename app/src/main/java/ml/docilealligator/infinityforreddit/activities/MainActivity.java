@@ -68,6 +68,7 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.FetchMyInfo;
 import ml.docilealligator.infinityforreddit.FetchSubscribedThing;
+import ml.docilealligator.infinityforreddit.PostFragmentContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.PullNotificationWorker;
@@ -115,7 +116,7 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 public class MainActivity extends BaseActivity implements SortTypeSelectionCallback,
         PostTypeBottomSheetFragment.PostTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback,
         ActivityToolbarInterface, FABMoreOptionsBottomSheetFragment.FABOptionSelectionCallback,
-        RandomBottomSheetFragment.RandomOptionSelectionCallback, MarkPostAsReadInterface {
+        RandomBottomSheetFragment.RandomOptionSelectionCallback, MarkPostAsReadInterface, PostFragmentContentScrollingInterface {
 
     static final String EXTRA_MESSSAGE_FULLNAME = "ENF";
     static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
@@ -1106,7 +1107,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         sectionsPagerAdapter.changePostLayout(postLayout);
     }
 
-    public void postScrollUp() {
+    @Override
+    public void contentScrollUp() {
         if (mAccessToken != null) {
             if (showBottomAppBar && !mLockBottomAppBar) {
                 bottomAppBar.performShow();
@@ -1117,7 +1119,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         }
     }
 
-    public void postScrollDown() {
+    @Override
+    public void contentScrollDown() {
         if (mAccessToken != null) {
             if (!(showBottomAppBar && mLockBottomAppBar)) {
                 fab.hide();
