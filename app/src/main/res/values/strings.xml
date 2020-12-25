@@ -34,8 +34,9 @@
     <string name="submit_crosspost_activity_label">Crosspost</string>
     <string name="give_award_activity_label">Give Award</string>
     <string name="subreddit_filter_popular_and_all_activity_label">r/all and r/popular</string>
-    <string name="customize_post_filter_activity_label">Post Filter</string>
+    <string name="customize_post_filter_activity_label">Customize Post Filter</string>
     <string name="filtered_posts_activity_subtitle">Filtered Posts</string>
+    <string name="post_filter_preference_activity_label">Post Filter</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -504,7 +505,7 @@
     <string name="settings_miscellaneous_title">Miscellaneous</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_title">Respect Subreddit Recommended Comment Sort Type</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_summary">Comment sort type will not be saved</string>
-    <string name="settings_filter_title">Filter</string>
+    <string name="settings_post_filter_title">Post Filter</string>
     <string name="settings_subreddit_filter_category">Hide Subreddits</string>
     <string name="settings_subreddit_filter_popular_and_all">In r/popular and r/all</string>
     <string name="settings_credits_ufo_capturing_animation_title">UFO Capturing Animation</string>
@@ -965,18 +966,18 @@
     <string name="only_spoiler">Only Spoiler</string>
     <string name="title_excludes_strings_hint">Title: excludes keywords</string>
     <string name="title_excludes_regex_hint">Title: excludes regex</string>
-    <string name="excludes_subreddits_hint">Excludes subreddits</string>
-    <string name="excludes_users_hint">Excludes users</string>
-    <string name="excludes_flairs_hint">Exclude flairs</string>
-    <string name="contains_flairs_hint">Contains flairs</string>
-    <string name="min_vote_hint">Min vote</string>
-    <string name="max_vote_hint">Max vote</string>
-    <string name="min_comments_hint">Min comments</string>
-    <string name="max_comments_hint">Max comments</string>
-    <string name="min_awards_hint">Min awards</string>
-    <string name="max_awards_hint">Max awards</string>
+    <string name="exclude_subreddits_hint">Exclude subreddits</string>
+    <string name="exclude_users_hint">Exclude users</string>
+    <string name="exclude_flairs_hint">Exclude flairs</string>
+    <string name="contain_flairs_hint">Contain flairs</string>
+    <string name="min_vote_hint">Min vote (-1: no restriction)</string>
+    <string name="max_vote_hint">Max vote (-1: no restriction)</string>
+    <string name="min_comments_hint">Min comments (-1: no restriction)</string>
+    <string name="max_comments_hint">Max comments (-1: no restriction)</string>
+    <string name="min_awards_hint">Min awards (-1: no restriction)</string>
+    <string name="max_awards_hint">Max awards (-1: no restriction)</string>
     <string name="post_filter_name_hint">Post Filter Name</string>
-    <string name="duplicate_post_filter">Duplicate post filter found. Please use another name.</string>
-
+    <string name="post_filter_requires_a_name">What is the name of this post filter?</string>
+    <string name="apply_post_filter_to">Apply to</string>
 
 </resources>

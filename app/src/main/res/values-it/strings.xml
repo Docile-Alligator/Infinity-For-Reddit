@@ -935,7 +935,7 @@ I video di Reddit sono in minore risoluzione."</string>
 
     <!-- Fuzzy -->
     <string name="settings_respect_subreddit_recommended_comment_sort_type_summary">"Il tipo di ordinamento dei commenti non verrà salvato"</string>
-    <string name="settings_filter_title">"Filtro"</string>
+    <string name="settings_post_filter_title">"Filtro"</string>
 
     <!-- Fuzzy -->
     <string name="settings_subreddit_filter_category">"Nascondi i Subreddit"</string>

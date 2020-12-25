@@ -863,7 +863,7 @@ Sekmeler, başkalarına geçtikten sonra tüm içeriği kaybedebilir. Bu, sayfay
     <string name="settings_miscellaneous_title">"Diğerleri"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_title">"İlgili Subreddit Önerilen Yorum Sıralaması Türü"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_summary">"Yorum sıralaması türü kaydedilemedi"</string>
-    <string name="settings_filter_title">"Filtrele"</string>
+    <string name="settings_post_filter_title">"Filtrele"</string>
     <string name="settings_subreddit_filter_category">"Subredditleri Gizle"</string>
     <string name="settings_subreddit_filter_popular_and_all">"r/popular ve r/all"</string>
     <string name="settings_credits_ufo_capturing_animation_title">"UFO Yakalama Animasyonu"</string>

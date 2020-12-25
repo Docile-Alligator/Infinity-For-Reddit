@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.activities;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -10,9 +9,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,7 +20,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.checkbox.MaterialCheckBox;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -48,6 +43,7 @@ import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 public class CustomizePostFilterActivity extends BaseActivity {
 
     public static final String EXTRA_POST_FILTER = "EPF";
+    public static final String EXTRA_FROM_SETTINGS = "EFS";
     public static final String RETURN_EXTRA_POST_FILTER = "REPF";
     private static final String POST_FILTER_STATE = "PFS";
 
@@ -59,6 +55,10 @@ public class CustomizePostFilterActivity extends BaseActivity {
     CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.toolbar_customize_post_filter_activity)
     Toolbar toolbar;
+    @BindView(R.id.name_text_input_layout_customize_post_filter_activity)
+    TextInputLayout nameTextInputLayout;
+    @BindView(R.id.name_text_input_edit_text_customize_post_filter_activity)
+    TextInputEditText nameTextInputEditText;
     @BindView(R.id.post_type_text_linear_layout_customize_post_filter_activity)
     LinearLayout postTypeTextLinearLayout;
     @BindView(R.id.post_type_text_text_view_customize_post_filter_activity)
@@ -165,6 +165,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
     @Inject
     Executor mExecutor;
     private PostFilter postFilter;
+    private boolean fromSettings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,6 +191,8 @@ public class CustomizePostFilterActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setToolbarGoToTop(toolbar);
+
+        fromSettings = getIntent().getBooleanExtra(EXTRA_FROM_SETTINGS, false);
 
         postTypeTextLinearLayout.setOnClickListener(view -> {
             postTypeTextCheckBox.performClick();
@@ -235,6 +238,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
     }
 
     private void bindView() {
+        nameTextInputEditText.setText(postFilter.name);
         postTypeTextCheckBox.setChecked(postFilter.containTextType);
         postTypeLinkCheckBox.setChecked(postFilter.containLinkType);
         postTypeImageCheckBox.setChecked(postFilter.containImageType);
@@ -270,6 +274,9 @@ public class CustomizePostFilterActivity extends BaseActivity {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
+        nameTextInputLayout.setBoxStrokeColor(primaryTextColor);
+        nameTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
+        nameTextInputEditText.setTextColor(primaryTextColor);
         postTypeTextTextView.setTextColor(primaryTextColor);
         postTypeLinkTextView.setTextColor(primaryTextColor);
         postTypeImageTextView.setTextColor(primaryTextColor);
@@ -319,6 +326,9 @@ public class CustomizePostFilterActivity extends BaseActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.customize_post_filter_activity, menu);
+        if (fromSettings) {
+            menu.findItem(R.id.action_save_customize_post_filter_activity).setVisible(false);
+        }
         applyMenuItemTheme(menu);
         return true;
     }
@@ -329,7 +339,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
             finish();
             return true;
         } else if (item.getItemId() == R.id.action_save_customize_post_filter_activity) {
-            PostFilter postFilter = constructPostFilter();
+            constructPostFilter();
             Intent returnIntent = new Intent();
             returnIntent.putExtra(RETURN_EXTRA_POST_FILTER, postFilter);
             setResult(Activity.RESULT_OK, returnIntent);
@@ -337,63 +347,25 @@ public class CustomizePostFilterActivity extends BaseActivity {
 
             return true;
         } else if (item.getItemId() == R.id.action_save_to_database_customize_post_filter_activity) {
-            PostFilter postFilter = constructPostFilter();
+            constructPostFilter();
 
-            View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_name, null);
-            EditText nameEditText = dialogView.findViewById(R.id.theme_name_edit_text_edit_name_dialog);
-            nameEditText.setHint(R.string.post_filter_name_hint);
-            nameEditText.setText(postFilter.name);
-            nameEditText.requestFocus();
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            if (!postFilter.name.equals("")) {
+                Handler handler = new Handler();
+                SavePostFilter.savePostFilter(mRedditDataRoomDatabase, mExecutor, postFilter, () -> handler.post(() -> {
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra(RETURN_EXTRA_POST_FILTER, postFilter);
+                    setResult(Activity.RESULT_OK, returnIntent);
+                    finish();
+                }));
+            } else {
+                Toast.makeText(CustomizePostFilterActivity.this, R.string.post_filter_requires_a_name, Toast.LENGTH_LONG).show();
             }
-            new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
-                    .setTitle(R.string.edit_theme_name)
-                    .setView(dialogView)
-                    .setPositiveButton(R.string.ok, (dialogInterface, i)
-                            -> {
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(nameEditText.getWindowToken(), 0);
-                        }
-                        if (!nameEditText.getText().toString().equals("")) {
-                            postFilter.name = nameEditText.getText().toString();
-                            Handler handler = new Handler();
-                            SavePostFilter.savePostFilter(mRedditDataRoomDatabase, mExecutor, postFilter, new SavePostFilter.SavePostFilterListener() {
-                                @Override
-                                public void success() {
-                                    handler.post(() -> {
-                                        Intent returnIntent = new Intent();
-                                        returnIntent.putExtra(RETURN_EXTRA_POST_FILTER, postFilter);
-                                        setResult(Activity.RESULT_OK, returnIntent);
-                                        finish();
-                                    });
-                                }
-
-                                @Override
-                                public void failed(int errorCode) {
-                                    handler.post(() -> Toast.makeText(CustomizePostFilterActivity.this, R.string.duplicate_post_filter, Toast.LENGTH_LONG).show());
-                                }
-                            });
-                        }
-                    })
-                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(nameEditText.getWindowToken(), 0);
-                        }
-                    })
-                    .setOnDismissListener(dialogInterface -> {
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(nameEditText.getWindowToken(), 0);
-                        }
-                    })
-                    .show();
         }
         return false;
     }
 
-    private PostFilter constructPostFilter() {
-        PostFilter postFilter = new PostFilter();
+    private void constructPostFilter() {
+        postFilter.name = nameTextInputEditText.getText().toString();
         postFilter.maxVote = maxVoteTextInputEditText.getText() == null || maxVoteTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(maxVoteTextInputEditText.getText().toString());
         postFilter.minVote = minVoteTextInputEditText.getText() == null || minVoteTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(minVoteTextInputEditText.getText().toString());
         postFilter.maxComments = maxCommentsTextInputEditText.getText() == null || maxCommentsTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(maxCommentsTextInputEditText.getText().toString());
@@ -414,8 +386,6 @@ public class CustomizePostFilterActivity extends BaseActivity {
         postFilter.containGalleryType = postTypeGalleryCheckBox.isChecked();
         postFilter.onlyNSFW = onlyNSFWSwitch.isChecked();
         postFilter.onlySpoiler = onlySpoilerSwitch.isChecked();
-
-        return postFilter;
     }
 
     @Override

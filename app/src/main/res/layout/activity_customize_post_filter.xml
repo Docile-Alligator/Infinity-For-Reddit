@@ -43,6 +43,26 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/name_text_input_layout_customize_post_filter_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/name_text_input_edit_text_customize_post_filter_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="?attr/font_family"
+                    android:textSize="?attr/font_default"
+                    android:hint="@string/post_filter_name_hint" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
             <LinearLayout
                 android:id="@+id/post_type_text_linear_layout_customize_post_filter_activity"
                 android:layout_width="match_parent"
@@ -339,7 +359,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
-                    android:hint="@string/excludes_subreddits_hint" />
+                    android:hint="@string/exclude_subreddits_hint" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -359,7 +379,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
-                    android:hint="@string/excludes_users_hint" />
+                    android:hint="@string/exclude_users_hint" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -379,7 +399,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
-                    android:hint="@string/excludes_flairs_hint" />
+                    android:hint="@string/exclude_flairs_hint" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -399,7 +419,7 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
-                    android:hint="@string/contains_flairs_hint" />
+                    android:hint="@string/contain_flairs_hint" />
 
             </com.google.android.material.textfield.TextInputLayout>
 

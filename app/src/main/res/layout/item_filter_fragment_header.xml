@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:drawablePadding="32dp"
+        android:text="@string/restart_app_see_changes"
+        android:textColor="@color/settingsSubtitleColor"
+        android:gravity="center_vertical"
+        android:textSize="?attr/font_default"
+        android:fontFamily="?attr/font_family"
+        app:drawableStartCompat="@drawable/ic_info_preference_24dp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/dividerColor" />
+
+</LinearLayout>

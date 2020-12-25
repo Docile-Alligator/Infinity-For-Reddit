@@ -872,6 +872,6 @@ Videos de Reddit están en menor resolución"</string>
     <string name="downloading">"Descargando"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all y r/popular"</string>
     <string name="settings_miscellaneous_title">"Misceláneo"</string>
-    <string name="settings_filter_title">"Filtrar"</string>
+    <string name="settings_post_filter_title">"Filtrar"</string>
     <string name="select_video_quality">"Seleccione calidad del video"</string>
 </resources>

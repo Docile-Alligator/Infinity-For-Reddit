@@ -22,12 +22,12 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccountAsyncTask;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.settings.AboutPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.CustomizeBottomAppBarFragment;
 import ml.docilealligator.infinityforreddit.settings.CustomizeMainPageTabsFragment;
@@ -85,13 +85,16 @@ public class SettingsActivity extends BaseActivity implements
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
                 setTitle(R.string.settings_activity_label);
-            } else if (getSupportFragmentManager().findFragmentById(R.id.frame_layout_settings_activity) instanceof AboutPreferenceFragment) {
+                return;
+            }
+            Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.frame_layout_settings_activity);
+            if (fragment instanceof AboutPreferenceFragment) {
                 setTitle(R.string.settings_about_master_title);
-            } else if (getSupportFragmentManager().findFragmentById(R.id.frame_layout_settings_activity) instanceof InterfacePreferenceFragment) {
+            } else if (fragment instanceof InterfacePreferenceFragment) {
                 setTitle(R.string.settings_interface_title);
-            } else if (getSupportFragmentManager().findFragmentById(R.id.frame_layout_settings_activity) instanceof FontPreferenceFragment) {
+            } else if (fragment instanceof FontPreferenceFragment) {
                 setTitle(R.string.settings_font_title);
-            } else if (getSupportFragmentManager().findFragmentById(R.id.frame_layout_settings_activity) instanceof GesturesAndButtonsPreferenceFragment) {
+            } else if (fragment instanceof GesturesAndButtonsPreferenceFragment) {
                 setTitle(R.string.settings_gestures_and_buttons_title);
             }
         });

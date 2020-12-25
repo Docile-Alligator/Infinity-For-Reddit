@@ -32,9 +32,14 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
-        <activity android:name=".activities.CustomizePostFilterActivity"
+        <activity android:name=".activities.PostFilterPreferenceActivity"
+            android:label="@string/post_filter_preference_activity_label"
             android:parentActivityName=".activities.SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.CustomizePostFilterActivity"
             android:label="@string/customize_post_filter_activity_label"
+            android:parentActivityName=".activities.SettingsActivity"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity

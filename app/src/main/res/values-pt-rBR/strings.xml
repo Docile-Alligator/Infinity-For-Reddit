@@ -849,7 +849,7 @@ Os vídeos do Reddit ficam em menor resolução."</string>
     <string name="settings_miscellaneous_title">"Miscelãnea"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_title">"Respeitar modo de classificação de comentário recomendado pelo subreddit"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_summary">"Modo de classificação de comentário não será salvo"</string>
-    <string name="settings_filter_title">"Filtrar"</string>
+    <string name="settings_post_filter_title">"Filtrar"</string>
     <string name="settings_subreddit_filter_category">"Ocultar subreddits"</string>
     <string name="settings_subreddit_filter_popular_and_all">"Em r/popular e r/all"</string>
     <string name="settings_credits_ufo_capturing_animation_title">"Animação de captura de OVNIs"</string>

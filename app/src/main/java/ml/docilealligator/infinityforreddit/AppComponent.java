@@ -6,22 +6,23 @@ import dagger.Component;
 import ml.docilealligator.infinityforreddit.activities.AccountPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.AccountSavedThingActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
-import ml.docilealligator.infinityforreddit.activities.CustomizePostFilterActivity;
-import ml.docilealligator.infinityforreddit.activities.FullMarkdownActivity;
 import ml.docilealligator.infinityforreddit.activities.CreateMultiRedditActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomThemeListingActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomThemePreviewActivity;
+import ml.docilealligator.infinityforreddit.activities.CustomizePostFilterActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomizeThemeActivity;
 import ml.docilealligator.infinityforreddit.activities.EditCommentActivity;
 import ml.docilealligator.infinityforreddit.activities.EditMultiRedditActivity;
 import ml.docilealligator.infinityforreddit.activities.EditPostActivity;
 import ml.docilealligator.infinityforreddit.activities.FetchRandomSubredditOrPostActivity;
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
+import ml.docilealligator.infinityforreddit.activities.FullMarkdownActivity;
 import ml.docilealligator.infinityforreddit.activities.GiveAwardActivity;
 import ml.docilealligator.infinityforreddit.activities.InboxActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.LoginActivity;
 import ml.docilealligator.infinityforreddit.activities.MainActivity;
+import ml.docilealligator.infinityforreddit.activities.PostFilterPreferenceActivity;
 import ml.docilealligator.infinityforreddit.activities.PostImageActivity;
 import ml.docilealligator.infinityforreddit.activities.PostLinkActivity;
 import ml.docilealligator.infinityforreddit.activities.PostTextActivity;
@@ -233,4 +234,6 @@ public interface AppComponent {
     void inject(CustomizePostFilterActivity customizePostFilterActivity);
 
     void inject(PostHistoryFragment postHistoryFragment);
+
+    void inject(PostFilterPreferenceActivity postFilterPreferenceActivity);
 }

@@ -168,6 +168,7 @@ public class PostFilter implements Parcelable {
     }
 
     protected PostFilter(Parcel in) {
+        name = in.readString();
         maxVote = in.readInt();
         minVote = in.readInt();
         maxComments = in.readInt();
@@ -209,6 +210,7 @@ public class PostFilter implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(name);
         parcel.writeInt(maxVote);
         parcel.writeInt(minVote);
         parcel.writeInt(maxComments);
