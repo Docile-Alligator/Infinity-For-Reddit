@@ -87,8 +87,8 @@ public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         } else if (holder instanceof ThemeNameItemViewHolder) {
             ((ThemeNameItemViewHolder) holder).themeNameTextView.setText(themeName);
             holder.itemView.setOnClickListener(view -> {
-                View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_edit_theme_name, null);
-                EditText themeNameEditText = dialogView.findViewById(R.id.theme_name_edit_text_edit_theme_name_dialog);
+                View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_edit_name, null);
+                EditText themeNameEditText = dialogView.findViewById(R.id.theme_name_edit_text_edit_name_dialog);
                 themeNameEditText.setText(themeName);
                 themeNameEditText.requestFocus();
                 InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);

@@ -11,6 +11,8 @@ import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvicto
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 
 import java.io.File;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Named;
@@ -244,5 +246,11 @@ class AppModule {
         Config config = new Config.Builder(mApplication).setMediaSourceBuilder(MediaSourceBuilder.LOOPING).setCache(cache)
                 .build();
         return ToroExo.with(mApplication).getCreator(config);
+    }
+
+    @Provides
+    @Singleton
+    Executor provideExecutor() {
+        return Executors.newFixedThreadPool(4);
     }
 }

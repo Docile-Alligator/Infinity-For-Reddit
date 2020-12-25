@@ -73,6 +73,7 @@
     <string name="action_block_user">Block User</string>
     <string name="action_select_user_flair">Select User Flair</string>
     <string name="action_give_award">Give Award</string>
+    <string name="action_save_to_database">Save to Database</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -974,5 +975,8 @@
     <string name="max_comments_hint">Max comments</string>
     <string name="min_awards_hint">Min awards</string>
     <string name="max_awards_hint">Max awards</string>
+    <string name="post_filter_name_hint">Post Filter Name</string>
+    <string name="duplicate_post_filter">Duplicate post filter found. Please use another name.</string>
+
 
 </resources>

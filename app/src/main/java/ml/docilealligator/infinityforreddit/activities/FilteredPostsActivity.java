@@ -33,7 +33,7 @@ import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
-import ml.docilealligator.infinityforreddit.PostFilter;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.PostFragmentContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
@@ -170,52 +170,52 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
                 postFilter.onlyNSFW = true;
                 break;
             case Post.TEXT_TYPE:
-                postFilter.containsTextType = true;
-                postFilter.containsLinkType = false;
-                postFilter.containsImageType = false;
-                postFilter.containsGifType = false;
-                postFilter.containsVideoType = false;
-                postFilter.containsGalleryType = false;
+                postFilter.containTextType = true;
+                postFilter.containLinkType = false;
+                postFilter.containImageType = false;
+                postFilter.containGifType = false;
+                postFilter.containVideoType = false;
+                postFilter.containGalleryType = false;
                 break;
             case Post.LINK_TYPE:
-                postFilter.containsTextType = false;
-                postFilter.containsLinkType = true;
-                postFilter.containsImageType = false;
-                postFilter.containsGifType = false;
-                postFilter.containsVideoType = false;
-                postFilter.containsGalleryType = false;
+                postFilter.containTextType = false;
+                postFilter.containLinkType = true;
+                postFilter.containImageType = false;
+                postFilter.containGifType = false;
+                postFilter.containVideoType = false;
+                postFilter.containGalleryType = false;
                 break;
             case Post.IMAGE_TYPE:
-                postFilter.containsTextType = false;
-                postFilter.containsLinkType = false;
-                postFilter.containsImageType = true;
-                postFilter.containsGifType = false;
-                postFilter.containsVideoType = false;
-                postFilter.containsGalleryType = false;
+                postFilter.containTextType = false;
+                postFilter.containLinkType = false;
+                postFilter.containImageType = true;
+                postFilter.containGifType = false;
+                postFilter.containVideoType = false;
+                postFilter.containGalleryType = false;
                 break;
             case Post.GIF_TYPE:
-                postFilter.containsTextType = false;
-                postFilter.containsLinkType = false;
-                postFilter.containsImageType = false;
-                postFilter.containsGifType = true;
-                postFilter.containsVideoType = false;
-                postFilter.containsGalleryType = false;
+                postFilter.containTextType = false;
+                postFilter.containLinkType = false;
+                postFilter.containImageType = false;
+                postFilter.containGifType = true;
+                postFilter.containVideoType = false;
+                postFilter.containGalleryType = false;
                 break;
             case Post.VIDEO_TYPE:
-                postFilter.containsTextType = false;
-                postFilter.containsLinkType = false;
-                postFilter.containsImageType = false;
-                postFilter.containsGifType = false;
-                postFilter.containsVideoType = true;
-                postFilter.containsGalleryType = false;
+                postFilter.containTextType = false;
+                postFilter.containLinkType = false;
+                postFilter.containImageType = false;
+                postFilter.containGifType = false;
+                postFilter.containVideoType = true;
+                postFilter.containGalleryType = false;
                 break;
             case Post.GALLERY_TYPE:
-                postFilter.containsTextType = false;
-                postFilter.containsLinkType = false;
-                postFilter.containsImageType = false;
-                postFilter.containsGifType = false;
-                postFilter.containsVideoType = false;
-                postFilter.containsGalleryType = true;
+                postFilter.containTextType = false;
+                postFilter.containLinkType = false;
+                postFilter.containImageType = false;
+                postFilter.containGifType = false;
+                postFilter.containVideoType = false;
+                postFilter.containGalleryType = true;
                 break;
         }
 

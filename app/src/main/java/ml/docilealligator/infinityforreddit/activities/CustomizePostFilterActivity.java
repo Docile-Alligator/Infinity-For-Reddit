@@ -1,15 +1,21 @@
 package ml.docilealligator.infinityforreddit.activities;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -18,10 +24,13 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.r0adkll.slidr.Slidr;
+
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -29,10 +38,11 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.PostFilter;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
+import ml.docilealligator.infinityforreddit.postfilter.SavePostFilter;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class CustomizePostFilterActivity extends BaseActivity {
@@ -152,6 +162,8 @@ public class CustomizePostFilterActivity extends BaseActivity {
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private PostFilter postFilter;
 
     @Override
@@ -223,18 +235,18 @@ public class CustomizePostFilterActivity extends BaseActivity {
     }
 
     private void bindView() {
-        postTypeTextCheckBox.setChecked(postFilter.containsTextType);
-        postTypeLinkCheckBox.setChecked(postFilter.containsLinkType);
-        postTypeImageCheckBox.setChecked(postFilter.containsImageType);
-        postTypeGifCheckBox.setChecked(postFilter.containsGifType);
-        postTypeVideoCheckBox.setChecked(postFilter.containsVideoType);
-        postTypeGalleryCheckBox.setChecked(postFilter.containsGalleryType);
+        postTypeTextCheckBox.setChecked(postFilter.containTextType);
+        postTypeLinkCheckBox.setChecked(postFilter.containLinkType);
+        postTypeImageCheckBox.setChecked(postFilter.containImageType);
+        postTypeGifCheckBox.setChecked(postFilter.containGifType);
+        postTypeVideoCheckBox.setChecked(postFilter.containVideoType);
+        postTypeGalleryCheckBox.setChecked(postFilter.containGalleryType);
         titleExcludesStringsTextInputEditText.setText(postFilter.postTitleExcludesStrings);
         titleExcludesRegexTextInputEditText.setText(postFilter.postTitleExcludesRegex);
-        excludesSubredditsTextInputEditText.setText(postFilter.excludesSubreddits);
-        excludesUsersTextInputEditText.setText(postFilter.excludesUsers);
-        excludesFlairsTextInputEditText.setText(postFilter.excludesFlairs);
-        containsFlairsTextInputEditText.setText(postFilter.containsFlairs);
+        excludesSubredditsTextInputEditText.setText(postFilter.excludeSubreddits);
+        excludesUsersTextInputEditText.setText(postFilter.excludeUsers);
+        excludesFlairsTextInputEditText.setText(postFilter.excludeFlairs);
+        containsFlairsTextInputEditText.setText(postFilter.containFlairs);
         minVoteTextInputEditText.setText(Integer.toString(postFilter.minVote));
         maxVoteTextInputEditText.setText(Integer.toString(postFilter.maxVote));
         minCommentsTextInputEditText.setText(Integer.toString(postFilter.minComments));
@@ -317,36 +329,93 @@ public class CustomizePostFilterActivity extends BaseActivity {
             finish();
             return true;
         } else if (item.getItemId() == R.id.action_save_customize_post_filter_activity) {
-            PostFilter postFilter = new PostFilter();
-            postFilter.maxVote = maxVoteTextInputEditText.getText() == null || maxVoteTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(maxVoteTextInputEditText.getText().toString());
-            postFilter.minVote = minVoteTextInputEditText.getText() == null || minVoteTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(minVoteTextInputEditText.getText().toString());
-            postFilter.maxComments = maxCommentsTextInputEditText.getText() == null || maxCommentsTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(maxCommentsTextInputEditText.getText().toString());
-            postFilter.minComments = minCommentsTextInputEditText.getText() == null || minCommentsTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(minCommentsTextInputEditText.getText().toString());
-            postFilter.maxAwards = maxAwardsTextInputEditText.getText() == null || maxAwardsTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(maxAwardsTextInputEditText.getText().toString());
-            postFilter.minAwards = minAwardsTextInputEditText.getText() == null || minAwardsTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(minAwardsTextInputEditText.getText().toString());
-            postFilter.postTitleExcludesRegex = titleExcludesRegexTextInputEditText.getText().toString();
-            postFilter.postTitleExcludesStrings = titleExcludesStringsTextInputEditText.getText().toString();
-            postFilter.excludesSubreddits = excludesSubredditsTextInputEditText.getText().toString();
-            postFilter.excludesUsers = excludesUsersTextInputEditText.getText().toString();
-            postFilter.excludesFlairs = excludesUsersTextInputEditText.getText().toString();
-            postFilter.containsFlairs = containsFlairsTextInputEditText.getText().toString();
-            postFilter.containsTextType = postTypeTextCheckBox.isChecked();
-            postFilter.containsLinkType = postTypeLinkCheckBox.isChecked();
-            postFilter.containsImageType = postTypeImageCheckBox.isChecked();
-            postFilter.containsGifType = postTypeGifCheckBox.isChecked();
-            postFilter.containsVideoType = postTypeVideoCheckBox.isChecked();
-            postFilter.containsGalleryType = postTypeGalleryCheckBox.isChecked();
-            postFilter.onlyNSFW = onlyNSFWSwitch.isChecked();
-            postFilter.onlySpoiler = onlySpoilerSwitch.isChecked();
-
+            PostFilter postFilter = constructPostFilter();
             Intent returnIntent = new Intent();
             returnIntent.putExtra(RETURN_EXTRA_POST_FILTER, postFilter);
             setResult(Activity.RESULT_OK, returnIntent);
             finish();
 
             return true;
+        } else if (item.getItemId() == R.id.action_save_to_database_customize_post_filter_activity) {
+            PostFilter postFilter = constructPostFilter();
+
+            View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_name, null);
+            EditText nameEditText = dialogView.findViewById(R.id.theme_name_edit_text_edit_name_dialog);
+            nameEditText.setHint(R.string.post_filter_name_hint);
+            nameEditText.setText(postFilter.name);
+            nameEditText.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            }
+            new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                    .setTitle(R.string.edit_theme_name)
+                    .setView(dialogView)
+                    .setPositiveButton(R.string.ok, (dialogInterface, i)
+                            -> {
+                        if (imm != null) {
+                            imm.hideSoftInputFromWindow(nameEditText.getWindowToken(), 0);
+                        }
+                        if (!nameEditText.getText().toString().equals("")) {
+                            postFilter.name = nameEditText.getText().toString();
+                            Handler handler = new Handler();
+                            SavePostFilter.savePostFilter(mRedditDataRoomDatabase, mExecutor, postFilter, new SavePostFilter.SavePostFilterListener() {
+                                @Override
+                                public void success() {
+                                    handler.post(() -> {
+                                        Intent returnIntent = new Intent();
+                                        returnIntent.putExtra(RETURN_EXTRA_POST_FILTER, postFilter);
+                                        setResult(Activity.RESULT_OK, returnIntent);
+                                        finish();
+                                    });
+                                }
+
+                                @Override
+                                public void failed(int errorCode) {
+                                    handler.post(() -> Toast.makeText(CustomizePostFilterActivity.this, R.string.duplicate_post_filter, Toast.LENGTH_LONG).show());
+                                }
+                            });
+                        }
+                    })
+                    .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                        if (imm != null) {
+                            imm.hideSoftInputFromWindow(nameEditText.getWindowToken(), 0);
+                        }
+                    })
+                    .setOnDismissListener(dialogInterface -> {
+                        if (imm != null) {
+                            imm.hideSoftInputFromWindow(nameEditText.getWindowToken(), 0);
+                        }
+                    })
+                    .show();
         }
         return false;
+    }
+
+    private PostFilter constructPostFilter() {
+        PostFilter postFilter = new PostFilter();
+        postFilter.maxVote = maxVoteTextInputEditText.getText() == null || maxVoteTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(maxVoteTextInputEditText.getText().toString());
+        postFilter.minVote = minVoteTextInputEditText.getText() == null || minVoteTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(minVoteTextInputEditText.getText().toString());
+        postFilter.maxComments = maxCommentsTextInputEditText.getText() == null || maxCommentsTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(maxCommentsTextInputEditText.getText().toString());
+        postFilter.minComments = minCommentsTextInputEditText.getText() == null || minCommentsTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(minCommentsTextInputEditText.getText().toString());
+        postFilter.maxAwards = maxAwardsTextInputEditText.getText() == null || maxAwardsTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(maxAwardsTextInputEditText.getText().toString());
+        postFilter.minAwards = minAwardsTextInputEditText.getText() == null || minAwardsTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(minAwardsTextInputEditText.getText().toString());
+        postFilter.postTitleExcludesRegex = titleExcludesRegexTextInputEditText.getText().toString();
+        postFilter.postTitleExcludesStrings = titleExcludesStringsTextInputEditText.getText().toString();
+        postFilter.excludeSubreddits = excludesSubredditsTextInputEditText.getText().toString();
+        postFilter.excludeUsers = excludesUsersTextInputEditText.getText().toString();
+        postFilter.excludeFlairs = excludesUsersTextInputEditText.getText().toString();
+        postFilter.containFlairs = containsFlairsTextInputEditText.getText().toString();
+        postFilter.containTextType = postTypeTextCheckBox.isChecked();
+        postFilter.containLinkType = postTypeLinkCheckBox.isChecked();
+        postFilter.containImageType = postTypeImageCheckBox.isChecked();
+        postFilter.containGifType = postTypeGifCheckBox.isChecked();
+        postFilter.containVideoType = postTypeVideoCheckBox.isChecked();
+        postFilter.containGalleryType = postTypeGalleryCheckBox.isChecked();
+        postFilter.onlyNSFW = onlyNSFWSwitch.isChecked();
+        postFilter.onlySpoiler = onlySpoilerSwitch.isChecked();
+
+        return postFilter;
     }
 
     @Override

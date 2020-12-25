@@ -16,6 +16,10 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeDao;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.multireddit.MultiRedditDao;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilterDao;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsageDao;
 import ml.docilealligator.infinityforreddit.readpost.ReadPost;
 import ml.docilealligator.infinityforreddit.readpost.ReadPostDao;
 import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQuery;
@@ -33,7 +37,7 @@ import ml.docilealligator.infinityforreddit.user.UserData;
 
 @Database(entities = {Account.class, SubredditData.class, SubscribedSubredditData.class, UserData.class,
         SubscribedUserData.class, MultiReddit.class, CustomTheme.class, RecentSearchQuery.class,
-        SubredditFilter.class, ReadPost.class}, version = 14)
+        SubredditFilter.class, ReadPost.class, PostFilter.class, PostFilterUsage.class}, version = 15)
 public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static RedditDataRoomDatabase INSTANCE;
 
@@ -46,7 +50,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                             .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
                                     MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9,
                                     MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13,
-                                    MIGRATION_13_14)
+                                    MIGRATION_13_14, MIGRATION_14_15)
                             .build();
                 }
             }
@@ -73,6 +77,10 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
     public abstract SubredditFilterDao subredditFilterDao();
 
     public abstract ReadPostDao readPostDao();
+
+    public abstract PostFilterDao postFilterDao();
+
+    public abstract PostFilterUsageDao postFilterUsageDao();
 
     private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
@@ -279,6 +287,23 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
             database.execSQL("ALTER TABLE custom_themes ADD COLUMN read_post_title_color INTEGER DEFAULT " + Color.parseColor("#9D9D9D") + " NOT NULL");
             database.execSQL("ALTER TABLE custom_themes ADD COLUMN read_post_content_color INTEGER DEFAULT " + Color.parseColor("#9D9D9D") + " NOT NULL");
             database.execSQL("ALTER TABLE custom_themes ADD COLUMN read_post_card_view_background_color INTEGER DEFAULT " + Color.parseColor("#F5F5F5") + " NOT NULL");
+        }
+    };
+
+    private static final Migration MIGRATION_14_15 = new Migration(14, 15) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE post_filter"
+                    + "(name TEXT NOT NULL PRIMARY KEY, max_vote INTEGER NOT NULL, min_vote INTEGER NOT NULL, " +
+                    "max_comments INTEGER NOT NULL, min_comments INTEGER NOT NULL, max_awards INTEGER NOT NULL, " +
+                    "min_awards INTEGER NOT NULL, only_nsfw INTEGER NOT NULL, only_spoiler INTEGER NOT NULL, " +
+                    "post_title_excludes_regex TEXT, post_title_excludes_strings TEXT, exclude_subreddits TEXT, " +
+                    "exclude_users TEXT, contain_flairs TEXT, exclude_flairs TEXT, contain_text_type INTEGER NOT NULL, " +
+                    "contain_link_type INTEGER NOT NULL, contain_image_type INTEGER NOT NULL, " +
+                    "contain_gif_type INTEGER NOT NULL, contain_video_type INTEGER NOT NULL, " +
+                    "contain_gallery_type INTEGER NOT NULL)");
+            database.execSQL("CREATE TABLE post_filter_usage (name TEXT NOT NULL, usage INTEGER NOT NULL, " +
+                    "name_of_usage TEXT NOT NULL, PRIMARY KEY(name, usage, name_of_usage), FOREIGN KEY(name) REFERENCES post_filter(name) ON DELETE CASCADE)");
         }
     };
 }
