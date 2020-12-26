@@ -4,16 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.Point;
 import android.os.Build;
 import android.os.Bundle;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -265,20 +262,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
                     params.bottomMargin += navBarHeight;
                     fab.setLayoutParams(params);
-                    coordinatorLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                        @Override
-                        public void onGlobalLayout() {
-                            coordinatorLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-
-                            Display display = getWindowManager().getDefaultDisplay();
-                            Point size = new Point();
-                            display.getRealSize(size);
-                            if (size.y == coordinatorLayout.getHeight()) {
-                                linearLayoutBottomAppBar.setPadding(0,
-                                        linearLayoutBottomAppBar.getPaddingTop(), 0, navBarHeight);
-                            }
-                        }
-                    });
+                    bottomNavigationView.setPadding(0, 0, 0, navBarHeight);
                 }
 
                 showToast = true;
