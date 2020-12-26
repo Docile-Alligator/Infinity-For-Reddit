@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <EditText xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/theme_name_edit_text_edit_name_dialog"
+    android:id="@+id/name_edit_text_edit_name_dialog"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="24dp"

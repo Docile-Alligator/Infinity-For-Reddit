@@ -32,7 +32,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
-        <activity android:name=".activities.PostFilterPreferenceActivity"
+        <activity android:name=".activities.PostFilterUsageListingActivity"
+            android:parentActivityName=".activities.SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.PostFilterPreferenceActivity"
             android:label="@string/post_filter_preference_activity_label"
             android:parentActivityName=".activities.SettingsActivity"
             android:theme="@style/AppTheme.NoActionBar" />

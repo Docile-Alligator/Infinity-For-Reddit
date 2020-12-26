@@ -155,7 +155,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
     @Override
     public void changeName(String oldThemeName) {
         View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_name, null);
-        EditText themeNameEditText = dialogView.findViewById(R.id.theme_name_edit_text_edit_name_dialog);
+        EditText themeNameEditText = dialogView.findViewById(R.id.name_edit_text_edit_name_dialog);
         themeNameEditText.setText(oldThemeName);
         themeNameEditText.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -294,7 +294,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
                                 .setPositiveButton(R.string.rename, (dialogInterface, i)
                                         -> {
                                     View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_name, null);
-                                    EditText themeNameEditText = dialogView.findViewById(R.id.theme_name_edit_text_edit_name_dialog);
+                                    EditText themeNameEditText = dialogView.findViewById(R.id.name_edit_text_edit_name_dialog);
                                     themeNameEditText.setText(customTheme.name);
                                     themeNameEditText.requestFocus();
                                     InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);

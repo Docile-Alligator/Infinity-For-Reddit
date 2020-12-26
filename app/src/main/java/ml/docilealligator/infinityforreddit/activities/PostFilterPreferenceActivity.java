@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.concurrent.Executor;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -25,6 +27,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.adapters.FilterFragmentPostFilterRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostFilterOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.postfilter.DeletePostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterViewModel;
 
@@ -47,6 +50,8 @@ public class PostFilterPreferenceActivity extends BaseActivity {
     RedditDataRoomDatabase redditDataRoomDatabase;
     @Inject
     CustomThemeWrapper customThemeWrapper;
+    @Inject
+    Executor executor;
     public PostFilterViewModel postFilterViewModel;
     private FilterFragmentPostFilterRecyclerViewAdapter adapter;
 
@@ -94,11 +99,13 @@ public class PostFilterPreferenceActivity extends BaseActivity {
     }
 
     public void applyPostFilterTo(PostFilter postFilter) {
-
+        Intent intent = new Intent(this, PostFilterUsageListingActivity.class);
+        intent.putExtra(PostFilterUsageListingActivity.EXTRA_POST_FILTER, postFilter);
+        startActivity(intent);
     }
 
     public void deletePostFilter(PostFilter postFilter) {
-
+        DeletePostFilter.deletePostFilter(redditDataRoomDatabase, executor, postFilter);
     }
 
     @Override
