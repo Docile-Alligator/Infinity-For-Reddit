@@ -505,9 +505,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             }
             mMessageFullname = getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME);
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
-        }
 
-        if (savedInstanceState == null) {
             if (!mRespectSubredditRecommendedSortType || isSingleCommentThreadMode) {
                 sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value.toUpperCase());
                 if (sortType != null) {
@@ -937,7 +935,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                                     mToolbar.setTitle(new SortType(SortType.Type.valueOf(ViewPostDetailActivity.this.sortType)).getType().fullName);
                                     ViewPostDetailActivity.this.sortType = ViewPostDetailActivity.this.sortType.toLowerCase();
                                 }
-                                fetchComments(changeRefreshState, checkSortState, sortType);
+                                fetchComments(changeRefreshState, checkSortState, ViewPostDetailActivity.this.sortType);
                             } else {
                                 ViewPostDetailActivity.this.sortType = subredditData.getSuggestedCommentSort();
                                 String sortTypeTemp = ViewPostDetailActivity.this.sortType.toLowerCase().substring(0, 1).toUpperCase() + ViewPostDetailActivity.this.sortType.substring(1);
@@ -1825,10 +1823,9 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             children.clear();
         }
         this.sortType = sortType.getType().value;
-        if (!mRespectSubredditRecommendedSortType) {
+        if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false)) {
             mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, sortType.getType().name()).apply();
         }
-        mRespectSubredditRecommendedSortType = false;
         fetchCommentsRespectRecommendedSort(false, false, sortType.getType().value);
 
         mToolbar.setTitle(sortType.getType().fullName);
