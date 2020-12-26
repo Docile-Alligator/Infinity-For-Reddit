@@ -47,12 +47,6 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
-            android:name=".activities.SubredditFilterPopularAndAllActivity"
-            android:label="@string/subreddit_filter_popular_and_all_activity_label"
-            android:parentActivityName=".activities.SettingsActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" />
-        <activity
             android:name=".activities.FetchRandomSubredditOrPostActivity"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />

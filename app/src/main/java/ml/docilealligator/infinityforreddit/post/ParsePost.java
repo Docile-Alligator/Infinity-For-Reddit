@@ -16,7 +16,6 @@ import java.util.List;
 
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.readpost.ReadPost;
-import ml.docilealligator.infinityforreddit.subredditfilter.SubredditFilter;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
@@ -28,11 +27,6 @@ public class ParsePost {
     public static void parsePosts(String response, int nPosts, PostFilter postFilter, List<ReadPost> readPostList,
                                   ParsePostsListingListener parsePostsListingListener) {
         new ParsePostDataAsyncTask(response, nPosts, postFilter, readPostList, parsePostsListingListener).execute();
-    }
-
-    public static void parsePosts(String response, int nPosts, PostFilter postFilter, List<ReadPost> readPostList,
-                                  List<SubredditFilter> subredditFilterList, ParsePostsListingListener parsePostsListingListener) {
-        new ParsePostDataAsyncTask(response, nPosts, postFilter, readPostList, subredditFilterList, parsePostsListingListener).execute();
     }
 
     public static void parsePost(String response, ParsePostListener parsePostListener) {
@@ -498,7 +492,6 @@ public class ParsePost {
         private int nPosts;
         private PostFilter postFilter;
         private List<ReadPost> readPostList;
-        private List<SubredditFilter> subredditFilterList;
         private ParsePostsListingListener parsePostsListingListener;
         private ParsePostListener parsePostListener;
         private LinkedHashSet<Post> newPosts;
@@ -522,12 +515,6 @@ public class ParsePost {
                 e.printStackTrace();
                 parseFailed = true;
             }
-        }
-
-        ParsePostDataAsyncTask(String response, int nPosts, PostFilter postFilter, List<ReadPost> readPostList,
-                               List<SubredditFilter> subredditFilterList, ParsePostsListingListener parsePostsListingListener) {
-            this(response, nPosts, postFilter, readPostList, parsePostsListingListener);
-            this.subredditFilterList = subredditFilterList;
         }
 
         ParsePostDataAsyncTask(String response, PostFilter postFilter,
@@ -581,19 +568,10 @@ public class ParsePost {
                         if (allData.getJSONObject(i).getString(JSONUtils.KIND_KEY).equals("t3")) {
                             JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
                             Post post = parseBasicData(data);
-                            boolean availablePost = true;
                             if (readPostHashSet != null && readPostHashSet.contains(ReadPost.convertPost(post))) {
                                 post.markAsRead();
                             }
-                            if (subredditFilterList != null) {
-                                for (SubredditFilter subredditFilter : subredditFilterList) {
-                                    if (subredditFilter.getSubredditName().equals(post.getSubredditName())) {
-                                        availablePost = false;
-                                        break;
-                                    }
-                                }
-                            }
-                            if (availablePost && PostFilter.isPostAllowed(post, postFilter)) {
+                            if (PostFilter.isPostAllowed(post, postFilter)) {
                                 newPosts.add(post);
                             }
                         }

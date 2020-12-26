@@ -26,8 +26,6 @@ import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQuery;
 import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQueryDao;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditDao;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
-import ml.docilealligator.infinityforreddit.subredditfilter.SubredditFilter;
-import ml.docilealligator.infinityforreddit.subredditfilter.SubredditFilterDao;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditDao;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserDao;
@@ -37,7 +35,7 @@ import ml.docilealligator.infinityforreddit.user.UserData;
 
 @Database(entities = {Account.class, SubredditData.class, SubscribedSubredditData.class, UserData.class,
         SubscribedUserData.class, MultiReddit.class, CustomTheme.class, RecentSearchQuery.class,
-        SubredditFilter.class, ReadPost.class, PostFilter.class, PostFilterUsage.class}, version = 15)
+        ReadPost.class, PostFilter.class, PostFilterUsage.class}, version = 16)
 public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static RedditDataRoomDatabase INSTANCE;
 
@@ -50,7 +48,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                             .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
                                     MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9,
                                     MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13,
-                                    MIGRATION_13_14, MIGRATION_14_15)
+                                    MIGRATION_13_14, MIGRATION_14_15, MIGRATION_15_16)
                             .build();
                 }
             }
@@ -73,8 +71,6 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
     public abstract CustomThemeDao customThemeDao();
 
     public abstract RecentSearchQueryDao recentSearchQueryDao();
-
-    public abstract SubredditFilterDao subredditFilterDao();
 
     public abstract ReadPostDao readPostDao();
 
@@ -304,6 +300,13 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                     "contain_gallery_type INTEGER NOT NULL)");
             database.execSQL("CREATE TABLE post_filter_usage (name TEXT NOT NULL, usage INTEGER NOT NULL, " +
                     "name_of_usage TEXT NOT NULL, PRIMARY KEY(name, usage, name_of_usage), FOREIGN KEY(name) REFERENCES post_filter(name) ON DELETE CASCADE)");
+        }
+    };
+
+    private static final Migration MIGRATION_15_16 = new Migration(15, 16) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("DROP TABLE subreddit_filter");
         }
     };
 }

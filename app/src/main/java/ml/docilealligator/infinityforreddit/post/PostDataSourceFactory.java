@@ -12,7 +12,6 @@ import java.util.List;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.readpost.ReadPost;
-import ml.docilealligator.infinityforreddit.subredditfilter.SubredditFilter;
 import retrofit2.Retrofit;
 
 class PostDataSourceFactory extends DataSource.Factory {
@@ -28,7 +27,6 @@ class PostDataSourceFactory extends DataSource.Factory {
     private PostFilter postFilter;
     private String userWhere;
     private List<ReadPost> readPostList;
-    private List<SubredditFilter> subredditFilterList;
 
     private PostDataSource postDataSource;
     private MutableLiveData<PostDataSource> postDataSourceLiveData;
@@ -52,7 +50,7 @@ class PostDataSourceFactory extends DataSource.Factory {
     PostDataSourceFactory(Retrofit retrofit, String accessToken, String accountName,
                           SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                           String subredditName, int postType, SortType sortType, PostFilter postFilter,
-                          List<ReadPost> readPostList, List<SubredditFilter> subredditFilterList) {
+                          List<ReadPost> readPostList) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
@@ -64,7 +62,6 @@ class PostDataSourceFactory extends DataSource.Factory {
         this.sortType = sortType;
         this.postFilter = postFilter;
         this.readPostList = readPostList;
-        this.subredditFilterList = subredditFilterList;
     }
 
     PostDataSourceFactory(Retrofit retrofit, String accessToken, String accountName,
@@ -118,7 +115,7 @@ class PostDataSourceFactory extends DataSource.Factory {
             Log.i("asdasfd", "s5 " + (postFilter == null));
             postDataSource = new PostDataSource(retrofit, accessToken, accountName,
                     sharedPreferences, postFeedScrolledPositionSharedPreferences, subredditName, postType,
-                    sortType, postFilter, readPostList, subredditFilterList);
+                    sortType, postFilter, readPostList);
         } else {
             postDataSource = new PostDataSource(retrofit, accessToken, accountName,
                     sharedPreferences, postFeedScrolledPositionSharedPreferences, subredditName, postType,

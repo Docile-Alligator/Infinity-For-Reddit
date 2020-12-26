@@ -38,7 +38,6 @@ import ml.docilealligator.infinityforreddit.activities.SelectedSubredditsActivit
 import ml.docilealligator.infinityforreddit.activities.SendPrivateMessageActivity;
 import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.activities.SubmitCrosspostActivity;
-import ml.docilealligator.infinityforreddit.activities.SubredditFilterPopularAndAllActivity;
 import ml.docilealligator.infinityforreddit.activities.SubredditMultiselectionActivity;
 import ml.docilealligator.infinityforreddit.activities.SubredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingActivity;
@@ -229,8 +228,6 @@ public interface AppComponent {
     void inject(FetchRandomSubredditOrPostActivity fetchRandomSubredditOrPostActivity);
 
     void inject(MiscellaneousPreferenceFragment miscellaneousPreferenceFragment);
-
-    void inject(SubredditFilterPopularAndAllActivity subredditFilterPopularAndAllActivity);
 
     void inject(CustomizePostFilterActivity customizePostFilterActivity);
 

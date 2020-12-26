@@ -9,6 +9,7 @@ import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -165,6 +166,60 @@ public class PostFilter implements Parcelable {
         }
 
         return true;
+    }
+
+    public static PostFilter mergePostFilter(List<PostFilter> postFilterList) {
+        PostFilter postFilter = new PostFilter();
+        if (postFilterList.size() == 1) {
+            return postFilterList.get(0);
+        }
+        StringBuilder stringBuilder;
+        postFilter.name = "Merged";
+        for (PostFilter p : postFilterList) {
+            postFilter.maxVote = Math.min(p.maxVote, postFilter.maxVote);
+            postFilter.minVote = Math.max(p.minVote, postFilter.minVote);
+            postFilter.maxComments = Math.min(p.maxComments, postFilter.maxComments);
+            postFilter.minComments = Math.max(p.minComments, postFilter.minComments);
+            postFilter.maxAwards = Math.min(p.maxAwards, postFilter.maxAwards);
+            postFilter.minAwards = Math.max(p.minAwards, postFilter.minAwards);
+
+            postFilter.onlyNSFW = p.onlyNSFW ? p.onlyNSFW : postFilter.onlyNSFW;
+            postFilter.onlySpoiler = p.onlySpoiler ? p.onlySpoiler : postFilter.onlySpoiler;
+
+            postFilter.postTitleExcludesRegex = p.postTitleExcludesRegex.equals("") ? postFilter.postTitleExcludesRegex : p.postTitleExcludesRegex;
+            stringBuilder = new StringBuilder(postFilter.postTitleExcludesStrings);
+            stringBuilder.append(",").append(p.postTitleExcludesStrings);
+            postFilter.postTitleExcludesStrings = stringBuilder.toString();
+
+            postFilter.excludeSubreddits = p.excludeSubreddits.equals("") ? postFilter.excludeSubreddits : p.postTitleExcludesRegex;
+            stringBuilder = new StringBuilder(postFilter.excludeSubreddits);
+            stringBuilder.append(",").append(p.excludeSubreddits);
+            postFilter.excludeSubreddits = stringBuilder.toString();
+
+            postFilter.excludeUsers = p.excludeUsers.equals("") ? postFilter.excludeUsers : p.postTitleExcludesRegex;
+            stringBuilder = new StringBuilder(postFilter.excludeUsers);
+            stringBuilder.append(",").append(p.excludeUsers);
+            postFilter.excludeUsers = stringBuilder.toString();
+
+            postFilter.containFlairs = p.containFlairs.equals("") ? postFilter.containFlairs : p.postTitleExcludesRegex;
+            stringBuilder = new StringBuilder(postFilter.containFlairs);
+            stringBuilder.append(",").append(p.containFlairs);
+            postFilter.containFlairs = stringBuilder.toString();
+
+            postFilter.excludeFlairs = p.excludeFlairs.equals("") ? postFilter.excludeFlairs : p.postTitleExcludesRegex;
+            stringBuilder = new StringBuilder(postFilter.excludeFlairs);
+            stringBuilder.append(",").append(p.excludeFlairs);
+            postFilter.excludeFlairs = stringBuilder.toString();
+
+            postFilter.containTextType = p.containTextType || postFilter.containTextType;
+            postFilter.containLinkType = p.containLinkType || postFilter.containLinkType;
+            postFilter.containImageType = p.containImageType || postFilter.containImageType;
+            postFilter.containGifType = p.containGifType || postFilter.containGifType;
+            postFilter.containVideoType = p.containVideoType || postFilter.containVideoType;
+            postFilter.containGalleryType = p.containGalleryType || postFilter.containGalleryType;
+        }
+
+        return postFilter;
     }
 
     protected PostFilter(Parcel in) {

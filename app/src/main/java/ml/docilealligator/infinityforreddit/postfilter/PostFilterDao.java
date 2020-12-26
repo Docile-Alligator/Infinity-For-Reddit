@@ -25,4 +25,7 @@ public interface PostFilterDao {
 
     @Query("SELECT * FROM post_filter")
     LiveData<List<PostFilter>> getAllPostFiltersLiveData();
+
+    @Query("SELECT * FROM post_filter WHERE post_filter.name IN (SELECT post_filter_usage.name FROM post_filter_usage WHERE usage = :usage AND name_of_usage = :nameOfUsage)")
+    List<PostFilter> getValidPostFilters(int usage, String nameOfUsage);
 }

@@ -19,7 +19,6 @@ import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.readpost.ReadPost;
-import ml.docilealligator.infinityforreddit.subredditfilter.SubredditFilter;
 import retrofit2.Retrofit;
 
 public class PostViewModel extends ViewModel {
@@ -68,10 +67,10 @@ public class PostViewModel extends ViewModel {
     public PostViewModel(Retrofit retrofit, String accessToken, String accountName,
                          SharedPreferences sharedPreferences, SharedPreferences cache, String subredditName,
                          int postType, SortType sortType, PostFilter postFilter,
-                         List<ReadPost> readPostList, List<SubredditFilter> subredditFilterList) {
+                         List<ReadPost> readPostList) {
         postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, accountName,
                 sharedPreferences, cache, subredditName, postType, sortType, postFilter,
-                readPostList, subredditFilterList);
+                readPostList);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 PostDataSource::getInitialLoadStateLiveData);
@@ -213,7 +212,6 @@ public class PostViewModel extends ViewModel {
         private PostFilter postFilter;
         private String userWhere;
         private List<ReadPost> readPostList;
-        private List<SubredditFilter> subredditFilterList;
 
         public Factory(Retrofit retrofit, String accessToken, String accountName,
                        SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
@@ -243,25 +241,6 @@ public class PostViewModel extends ViewModel {
             this.sortType = sortType;
             this.postFilter = postFilter;
             this.readPostList = readPostList;
-        }
-
-        //With subreddit filter
-        public Factory(Retrofit retrofit, String accessToken, String accountName,
-                       SharedPreferences sharedPreferences,
-                       SharedPreferences postFeedScrolledPositionSharedPreferences, String subredditName,
-                       int postType, SortType sortType, PostFilter postFilter,
-                       List<ReadPost> readPostList, List<SubredditFilter> subredditFilterList) {
-            this.retrofit = retrofit;
-            this.accessToken = accessToken;
-            this.accountName = accountName;
-            this.sharedPreferences = sharedPreferences;
-            this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
-            this.subredditName = subredditName;
-            this.postType = postType;
-            this.sortType = sortType;
-            this.postFilter = postFilter;
-            this.readPostList = readPostList;
-            this.subredditFilterList = subredditFilterList;
         }
 
         //User posts
@@ -310,7 +289,7 @@ public class PostViewModel extends ViewModel {
             } else if (postType == PostDataSource.TYPE_SUBREDDIT || postType == PostDataSource.TYPE_MULTI_REDDIT) {
                 return (T) new PostViewModel(retrofit, accessToken, accountName, sharedPreferences,
                         postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType,
-                        postFilter, readPostList, subredditFilterList);
+                        postFilter, readPostList);
             } else {
                 return (T) new PostViewModel(retrofit, accessToken, accountName, sharedPreferences,
                         postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType,

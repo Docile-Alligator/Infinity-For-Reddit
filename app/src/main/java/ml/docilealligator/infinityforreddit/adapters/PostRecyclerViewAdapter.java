@@ -1950,7 +1950,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         }
 
         void markPostRead(Post post) {
-            if (mAccessToken != null && !post.isRead()) {
+            if (mAccessToken != null && !post.isRead() && mMarkPostsAsRead) {
                 post.markAsRead();
                 cardView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
                 titleTextView.setTextColor(mReadPostTitleColor);
@@ -2077,7 +2077,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
                 Post post = getItem(position);
                 if (post != null) {
-                    ((PostBaseViewHolder) this).markPostRead(post);
+                    markPostRead(post);
                     Intent intent = new Intent(mActivity, ViewVideoActivity.class);
                     if (post.isGfycat()) {
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
@@ -3009,7 +3009,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         }
 
         void markPostRead(Post post) {
-            if (mAccessToken != null && !post.isRead()) {
+            if (mAccessToken != null && !post.isRead() && mMarkPostsAsRead) {
                 post.markAsRead();
                 itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
                 titleTextView.setTextColor(mReadPostTitleColor);

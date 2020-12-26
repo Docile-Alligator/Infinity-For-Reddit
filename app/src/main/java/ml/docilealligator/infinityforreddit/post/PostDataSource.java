@@ -11,11 +11,10 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import ml.docilealligator.infinityforreddit.NetworkState;
-import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.readpost.ReadPost;
-import ml.docilealligator.infinityforreddit.subredditfilter.SubredditFilter;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Call;
@@ -48,7 +47,6 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     private SortType sortType;
     private PostFilter postFilter;
     private List<ReadPost> readPostList;
-    private List<SubredditFilter> subredditFilterList;
     private String userWhere;
     private String multiRedditPath;
     private LinkedHashSet<Post> postLinkedHashSet;
@@ -82,7 +80,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     PostDataSource(Retrofit retrofit, String accessToken, String accountName,
                    SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                    String path, int postType, SortType sortType, PostFilter postFilter,
-                   List<ReadPost> readPostList, List<SubredditFilter> subredditFilterList) {
+                   List<ReadPost> readPostList) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
@@ -116,7 +114,6 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         }
         this.postFilter = postFilter;
         this.readPostList = readPostList;
-        this.subredditFilterList = subredditFilterList;
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
@@ -373,7 +370,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, postFilter, readPostList, subredditFilterList,
+                    ParsePost.parsePosts(response.body(), -1, postFilter, readPostList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -447,7 +444,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, postFilter, readPostList, subredditFilterList,
+                    ParsePost.parsePosts(response.body(), -1, postFilter, readPostList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
