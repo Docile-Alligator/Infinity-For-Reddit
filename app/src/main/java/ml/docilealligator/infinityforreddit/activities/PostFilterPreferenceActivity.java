@@ -24,7 +24,7 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.adapters.FilterFragmentPostFilterRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.adapters.PostFilterRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostFilterOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.postfilter.DeletePostFilter;
@@ -53,7 +53,7 @@ public class PostFilterPreferenceActivity extends BaseActivity {
     @Inject
     Executor executor;
     public PostFilterViewModel postFilterViewModel;
-    private FilterFragmentPostFilterRecyclerViewAdapter adapter;
+    private PostFilterRecyclerViewAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +75,7 @@ public class PostFilterPreferenceActivity extends BaseActivity {
             startActivity(intent);
         });
 
-        adapter = new FilterFragmentPostFilterRecyclerViewAdapter(postFilter -> {
+        adapter = new PostFilterRecyclerViewAdapter(postFilter -> {
             PostFilterOptionsBottomSheetFragment postFilterOptionsBottomSheetFragment = new PostFilterOptionsBottomSheetFragment();
             Bundle bundle = new Bundle();
             bundle.putParcelable(PostFilterOptionsBottomSheetFragment.EXTRA_POST_FILTER, postFilter);

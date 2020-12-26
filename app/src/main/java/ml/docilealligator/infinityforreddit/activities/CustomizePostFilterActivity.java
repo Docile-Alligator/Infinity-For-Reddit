@@ -245,6 +245,8 @@ public class CustomizePostFilterActivity extends BaseActivity {
         postTypeGifCheckBox.setChecked(postFilter.containGifType);
         postTypeVideoCheckBox.setChecked(postFilter.containVideoType);
         postTypeGalleryCheckBox.setChecked(postFilter.containGalleryType);
+        onlyNSFWSwitch.setChecked(postFilter.onlyNSFW);
+        onlySpoilerSwitch.setChecked(postFilter.onlySpoiler);
         titleExcludesStringsTextInputEditText.setText(postFilter.postTitleExcludesStrings);
         titleExcludesRegexTextInputEditText.setText(postFilter.postTitleExcludesRegex);
         excludesSubredditsTextInputEditText.setText(postFilter.excludeSubreddits);

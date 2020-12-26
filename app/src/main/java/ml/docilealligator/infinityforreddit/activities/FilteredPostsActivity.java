@@ -24,6 +24,8 @@ import com.r0adkll.slidr.Slidr;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.concurrent.Executor;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -33,7 +35,6 @@ import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
-import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.PostFragmentContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
@@ -51,6 +52,7 @@ import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostDataSource;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
@@ -92,6 +94,8 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     SharedPreferences mPostLayoutSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private boolean isInLazyMode = false;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
@@ -537,7 +541,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
 
     @Override
     public void markPostAsRead(Post post) {
-        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mAccountName, post.getId());
+        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId());
     }
 
     @Override

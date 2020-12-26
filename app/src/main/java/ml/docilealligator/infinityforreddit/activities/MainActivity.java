@@ -58,6 +58,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -198,6 +199,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     SharedPreferences bottomAppBarSharedPreference;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private AppBarLayout.LayoutParams params;
@@ -1318,7 +1321,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
     @Override
     public void markPostAsRead(Post post) {
-        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mAccountName, post.getId());
+        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId());
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {

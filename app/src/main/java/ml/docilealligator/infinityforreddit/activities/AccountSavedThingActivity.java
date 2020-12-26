@@ -30,6 +30,8 @@ import com.r0adkll.slidr.model.SlidrInterface;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.concurrent.Executor;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -87,6 +89,8 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
     SharedPreferences mPostLayoutSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private SlidrInterface mSlidrInterface;
@@ -340,7 +344,7 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
 
     @Override
     public void markPostAsRead(Post post) {
-        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mAccountName, post.getId());
+        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId());
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {

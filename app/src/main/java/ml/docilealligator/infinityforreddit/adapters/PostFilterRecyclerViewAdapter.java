@@ -13,7 +13,7 @@ import java.util.List;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 
-public class FilterFragmentPostFilterRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private static final int VIEW_TYPE_HEADER = 1;
     private static final int VIEW_TYPE_POST_FILTER = 2;
@@ -25,7 +25,7 @@ public class FilterFragmentPostFilterRecyclerViewAdapter extends RecyclerView.Ad
         void onItemClick(PostFilter postFilter);
     }
 
-    public FilterFragmentPostFilterRecyclerViewAdapter(OnItemClickListener onItemClickListener) {
+    public PostFilterRecyclerViewAdapter(OnItemClickListener onItemClickListener) {
         this.onItemClickListener = onItemClickListener;
     }
 

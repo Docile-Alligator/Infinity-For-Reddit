@@ -57,6 +57,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.text.SimpleDateFormat;
 import java.util.Locale;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -192,6 +193,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     SharedPreferences bottomAppBarSharedPreference;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     public UserViewModel userViewModel;
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
@@ -1272,7 +1275,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
     @Override
     public void markPostAsRead(Post post) {
-        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mAccountName, post.getId());
+        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId());
     }
 
     @Override

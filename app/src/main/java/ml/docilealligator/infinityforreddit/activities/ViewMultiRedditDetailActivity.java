@@ -23,6 +23,8 @@ import com.r0adkll.slidr.Slidr;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.concurrent.Executor;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -91,6 +93,8 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     SharedPreferences mPostLayoutSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
@@ -366,6 +370,6 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
 
     @Override
     public void markPostAsRead(Post post) {
-        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mAccountName, post.getId());
+        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId());
     }
 }
