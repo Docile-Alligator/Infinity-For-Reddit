@@ -118,8 +118,8 @@ public class PostFilter implements Parcelable {
             return false;
         }
         if (postFilter.postTitleExcludesRegex != null && !postFilter.postTitleExcludesRegex.equals("")) {
-            Pattern spoilerPattern = Pattern.compile(postFilter.postTitleExcludesRegex);
-            Matcher matcher = spoilerPattern.matcher(postFilter.postTitleExcludesRegex);
+            Pattern pattern = Pattern.compile(postFilter.postTitleExcludesRegex);
+            Matcher matcher = pattern.matcher(post.getTitle());
             if (matcher.find()) {
                 return false;
             }
@@ -127,7 +127,7 @@ public class PostFilter implements Parcelable {
         if (postFilter.postTitleExcludesStrings != null && !postFilter.postTitleExcludesStrings.equals("")) {
             String[] titles = postFilter.postTitleExcludesStrings.split(",", 0);
             for (String t : titles) {
-                if (post.getTitle().contains(t)) {
+                if (!t.equals("") && post.getTitle().contains(t)) {
                     return false;
                 }
             }
@@ -135,7 +135,7 @@ public class PostFilter implements Parcelable {
         if (postFilter.excludeSubreddits != null && !postFilter.excludeSubreddits.equals("")) {
             String[] subreddits = postFilter.excludeSubreddits.split(",", 0);
             for (String s : subreddits) {
-                if (post.getSubredditName().equalsIgnoreCase(s)) {
+                if (!s.equals("") && post.getSubredditName().equalsIgnoreCase(s)) {
                     return false;
                 }
             }
@@ -143,7 +143,7 @@ public class PostFilter implements Parcelable {
         if (postFilter.excludeUsers != null && !postFilter.excludeUsers.equals("")) {
             String[] users = postFilter.excludeUsers.split(",", 0);
             for (String u : users) {
-                if (post.getAuthor().equalsIgnoreCase(u)) {
+                if (!u.equals("") && post.getAuthor().equalsIgnoreCase(u)) {
                     return false;
                 }
             }
@@ -151,7 +151,7 @@ public class PostFilter implements Parcelable {
         if (postFilter.excludeFlairs != null && !postFilter.excludeFlairs.equals("")) {
             String[] flairs = postFilter.excludeFlairs.split(",", 0);
             for (String f : flairs) {
-                if (post.getFlair().equalsIgnoreCase(f)) {
+                if (!f.equals("") && post.getFlair().equalsIgnoreCase(f)) {
                     return false;
                 }
             }
@@ -159,7 +159,7 @@ public class PostFilter implements Parcelable {
         if (postFilter.containFlairs != null && !postFilter.containFlairs.equals("")) {
             String[] flairs = postFilter.containFlairs.split(",", 0);
             for (String f : flairs) {
-                if (post.getFlair().equalsIgnoreCase(f)) {
+                if (!f.equals("") && post.getFlair().equalsIgnoreCase(f)) {
                     return false;
                 }
             }

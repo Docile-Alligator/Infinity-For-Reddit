@@ -964,12 +964,12 @@
 
     <string name="only_nsfw">Only NSFW</string>
     <string name="only_spoiler">Only Spoiler</string>
-    <string name="title_excludes_strings_hint">Title: excludes keywords</string>
+    <string name="title_excludes_strings_hint">Title: excludes keywords (key1,key2)</string>
     <string name="title_excludes_regex_hint">Title: excludes regex</string>
-    <string name="exclude_subreddits_hint">Exclude subreddits</string>
-    <string name="exclude_users_hint">Exclude users</string>
-    <string name="exclude_flairs_hint">Exclude flairs</string>
-    <string name="contain_flairs_hint">Contain flairs</string>
+    <string name="exclude_subreddits_hint">Exclude subreddits (e.g. funny,AskReddit)</string>
+    <string name="exclude_users_hint">Exclude users (e.g. Hostilenemy,random)</string>
+    <string name="exclude_flairs_hint">Exclude flairs (e.g. flair1,flair2)</string>
+    <string name="contain_flairs_hint">Contain flairs (e.g. flair1,flair2)</string>
     <string name="min_vote_hint">Min vote (-1: no restriction)</string>
     <string name="max_vote_hint">Max vote (-1: no restriction)</string>
     <string name="min_comments_hint">Min comments (-1: no restriction)</string>

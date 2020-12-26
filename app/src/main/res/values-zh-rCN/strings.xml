@@ -929,5 +929,5 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_no_preview_post_type_background_color">"无预览文章类型背景颜色"</string>
     <string name="theme_item_no_preview_post_type_background_color_detail">"应用于：占位符，指示没有预览可用时的帖子类型"</string>
     <string name="settings_language_title">"语言"</string>
-    <string name="settings_enable_search_history">"启用搜索记录"</string>
+    <string name="settings_enable_search_history_title">"启用搜索记录"</string>
 </resources>

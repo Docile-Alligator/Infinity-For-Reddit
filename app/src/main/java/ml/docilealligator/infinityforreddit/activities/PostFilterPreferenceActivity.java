@@ -59,6 +59,8 @@ public class PostFilterPreferenceActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
+        setImmersiveModeNotApplicable();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_filter_preference);
 
