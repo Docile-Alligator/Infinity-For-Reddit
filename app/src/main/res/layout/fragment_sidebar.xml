@@ -16,7 +16,10 @@
             android:id="@+id/markdown_recycler_view_sidebar_fragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="144dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
             android:clipToPadding="false" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

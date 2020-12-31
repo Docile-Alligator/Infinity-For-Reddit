@@ -139,7 +139,7 @@ public class PullNotificationWorker extends Worker {
 
                             if (kind.equals(Message.TYPE_COMMENT)) {
                                 Intent intent = new Intent(context, LinkResolverActivity.class);
-                                Uri uri = LinkResolverActivity.getRedditUriByPath(message.getContext());
+                                Uri uri = Uri.parse(message.getContext());
                                 intent.setData(uri);
                                 intent.putExtra(LinkResolverActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
                                 intent.putExtra(LinkResolverActivity.EXTRA_MESSAGE_FULLNAME, message.getFullname());
@@ -152,7 +152,7 @@ public class PullNotificationWorker extends Worker {
                                 builder.setContentIntent(summaryPendingIntent);
                             } else if (kind.equals(Message.TYPE_LINK)) {
                                 Intent intent = new Intent(context, LinkResolverActivity.class);
-                                Uri uri = LinkResolverActivity.getRedditUriByPath(message.getContext());
+                                Uri uri = Uri.parse(message.getContext());
                                 intent.setData(uri);
                                 intent.putExtra(LinkResolverActivity.EXTRA_NEW_ACCOUNT_NAME, accountName);
                                 intent.putExtra(LinkResolverActivity.EXTRA_MESSAGE_FULLNAME, message.getFullname());

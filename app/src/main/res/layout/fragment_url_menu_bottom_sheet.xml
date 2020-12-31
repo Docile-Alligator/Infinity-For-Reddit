@@ -13,10 +13,22 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/link_text_view_url_menu_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp" />
+
+        <TextView
             android:id="@+id/open_link_text_view_url_menu_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/copy_raw_text"
+            android:text="@string/open_link"
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family"
@@ -34,7 +46,7 @@
             android:id="@+id/copy_link_text_view_url_menu_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/copy_markdown"
+            android:text="@string/copy_link"
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family"
@@ -52,7 +64,7 @@
             android:id="@+id/share_link_text_view_url_menu_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/copy_all_raw_text"
+            android:text="@string/share_link"
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family"

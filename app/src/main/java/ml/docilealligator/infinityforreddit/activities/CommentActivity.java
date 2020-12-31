@@ -154,11 +154,7 @@ public class CommentActivity extends BaseActivity {
                         builder.linkResolver((view, link) -> {
                             Intent intent = new Intent(CommentActivity.this, LinkResolverActivity.class);
                             Uri uri = Uri.parse(link);
-                            if (uri.getScheme() == null && uri.getHost() == null) {
-                                intent.setData(LinkResolverActivity.getRedditUriByPath(link));
-                            } else {
-                                intent.setData(uri);
-                            }
+                            intent.setData(uri);
                             startActivity(intent);
                         });
                     }
@@ -218,11 +214,7 @@ public class CommentActivity extends BaseActivity {
                             builder.linkResolver((view, link) -> {
                                 Intent intent = new Intent(CommentActivity.this, LinkResolverActivity.class);
                                 Uri uri = Uri.parse(link);
-                                if (uri.getScheme() == null && uri.getHost() == null) {
-                                    intent.setData(LinkResolverActivity.getRedditUriByPath(link));
-                                } else {
-                                    intent.setData(uri);
-                                }
+                                intent.setData(uri);
                                 startActivity(intent);
                             });
                         }

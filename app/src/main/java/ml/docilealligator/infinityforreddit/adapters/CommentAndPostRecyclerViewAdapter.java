@@ -332,11 +332,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         builder.linkResolver((view, link) -> {
                             Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                             Uri uri = Uri.parse(link);
-                            if (uri.getScheme() == null && uri.getHost() == null) {
-                                intent.setData(LinkResolverActivity.getRedditUriByPath(link));
-                            } else {
-                                intent.setData(uri);
-                            }
+                            intent.setData(uri);
                             intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, mPost.isNSFW());
                             mActivity.startActivity(intent);
                         });
@@ -420,11 +416,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         builder.linkResolver((view, link) -> {
                             Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                             Uri uri = Uri.parse(link);
-                            if (uri.getScheme() == null && uri.getHost() == null) {
-                                intent.setData(LinkResolverActivity.getRedditUriByPath(link));
-                            } else {
-                                intent.setData(uri);
-                            }
+                            intent.setData(uri);
                             intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, mPost.isNSFW());
                             mActivity.startActivity(intent);
                         });
@@ -2992,11 +2984,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             mImageView.setOnClickListener(view -> {
                 Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                 Uri uri = Uri.parse(mPost.getUrl());
-                if (uri.getScheme() == null && uri.getHost() == null) {
-                    intent.setData(LinkResolverActivity.getRedditUriByPath(mPost.getUrl()));
-                } else {
-                    intent.setData(uri);
-                }
+                intent.setData(uri);
                 intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, mPost.isNSFW());
                 mActivity.startActivity(intent);
             });
@@ -3120,11 +3108,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     } else if (mPost.getPostType() == Post.LINK_TYPE || mPost.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
                         Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                         Uri uri = Uri.parse(mPost.getUrl());
-                        if (uri.getScheme() == null && uri.getHost() == null) {
-                            intent.setData(LinkResolverActivity.getRedditUriByPath(mPost.getUrl()));
-                        } else {
-                            intent.setData(uri);
-                        }
+                        intent.setData(uri);
                         intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, mPost.isNSFW());
                         mActivity.startActivity(intent);
                     } else if (mPost.getPostType() == Post.GALLERY_TYPE) {

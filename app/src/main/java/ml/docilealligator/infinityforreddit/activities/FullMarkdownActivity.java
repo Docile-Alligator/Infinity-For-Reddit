@@ -191,11 +191,7 @@ public class FullMarkdownActivity extends BaseActivity {
                         builder.linkResolver((view, link) -> {
                             Intent intent = new Intent(FullMarkdownActivity.this, LinkResolverActivity.class);
                             Uri uri = Uri.parse(link);
-                            if (uri.getScheme() == null && uri.getHost() == null) {
-                                intent.setData(LinkResolverActivity.getRedditUriByPath(link));
-                            } else {
-                                intent.setData(uri);
-                            }
+                            intent.setData(uri);
                             intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, isNsfw);
                             startActivity(intent);
                         });

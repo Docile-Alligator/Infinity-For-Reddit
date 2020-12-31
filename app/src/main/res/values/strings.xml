@@ -583,6 +583,7 @@
     <string name="copy_gif_link">Copy Gif Link</string>
     <string name="copy_video_link">Copy Video Link</string>
     <string name="copy_link">Copy Link</string>
+    <string name="open_link">Open Link</string>
 
     <string name="copy_success">Copied</string>
     <string name="copy_link_failed">Cannot copy the link</string>

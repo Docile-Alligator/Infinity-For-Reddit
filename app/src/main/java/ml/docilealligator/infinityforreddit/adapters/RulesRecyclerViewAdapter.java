@@ -43,11 +43,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
                         builder.linkResolver((view, link) -> {
                             Intent intent = new Intent(context, LinkResolverActivity.class);
                             Uri uri = Uri.parse(link);
-                            if (uri.getScheme() == null && uri.getHost() == null) {
-                                intent.setData(LinkResolverActivity.getRedditUriByPath(link));
-                            } else {
-                                intent.setData(uri);
-                            }
+                            intent.setData(uri);
                             context.startActivity(intent);
                         });
                     }

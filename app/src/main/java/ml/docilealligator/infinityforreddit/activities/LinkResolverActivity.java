@@ -51,7 +51,7 @@ public class LinkResolverActivity extends AppCompatActivity {
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
 
-    public static Uri getRedditUriByPath(String path) {
+    private Uri getRedditUriByPath(String path) {
         return Uri.parse("https://www.reddit.com" + path);
     }
 
@@ -62,7 +62,12 @@ public class LinkResolverActivity extends AppCompatActivity {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
         Uri uri = getIntent().getData();
-        handleUri(uri);
+
+        if (uri.getScheme() == null && uri.getHost() == null) {
+            handleUri(getRedditUriByPath(uri.toString()));
+        } else {
+            handleUri(uri);
+        }
     }
 
     private void handleUri(Uri uri) {

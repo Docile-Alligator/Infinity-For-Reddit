@@ -2359,11 +2359,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     } else if (post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
                         Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                         Uri uri = Uri.parse(post.getUrl());
-                        if (uri.getScheme() == null && uri.getHost() == null) {
-                            intent.setData(LinkResolverActivity.getRedditUriByPath(post.getUrl()));
-                        } else {
-                            intent.setData(uri);
-                        }
+                        intent.setData(uri);
                         intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, post.isNSFW());
                         mActivity.startActivity(intent);
                     } else if (post.getPostType() == Post.GALLERY_TYPE) {
@@ -2731,11 +2727,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     } else if (post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
                         Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                         Uri uri = Uri.parse(post.getUrl());
-                        if (uri.getScheme() == null && uri.getHost() == null) {
-                            intent.setData(LinkResolverActivity.getRedditUriByPath(post.getUrl()));
-                        } else {
-                            intent.setData(uri);
-                        }
+                        intent.setData(uri);
                         intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, post.isNSFW());
                         mActivity.startActivity(intent);
                     } else if (post.getPostType() == Post.GALLERY_TYPE) {

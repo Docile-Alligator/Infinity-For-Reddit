@@ -184,11 +184,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         builder.linkResolver((view, link) -> {
                             Intent intent = new Intent(mContext, LinkResolverActivity.class);
                             Uri uri = Uri.parse(link);
-                            if (uri.getScheme() == null && uri.getHost() == null) {
-                                intent.setData(LinkResolverActivity.getRedditUriByPath(link));
-                            } else {
-                                intent.setData(uri);
-                            }
+                            intent.setData(uri);
                             mContext.startActivity(intent);
                         });
 

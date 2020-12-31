@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -25,6 +26,8 @@ import ml.docilealligator.infinityforreddit.R;
 public class UrlMenuBottomSheetFragment extends RoundedBottomSheetDialogFragment {
 
     public static final String EXTRA_URL = "EU";
+    @BindView(R.id.link_text_view_url_menu_bottom_sheet_fragment)
+    TextView linkTextView;
     @BindView(R.id.open_link_text_view_url_menu_bottom_sheet_fragment)
     TextView openLinkTextView;
     @BindView(R.id.copy_link_text_view_url_menu_bottom_sheet_fragment)
@@ -32,6 +35,7 @@ public class UrlMenuBottomSheetFragment extends RoundedBottomSheetDialogFragment
     @BindView(R.id.share_link_text_view_url_menu_bottom_sheet_fragment)
     TextView shareLinkTextView;
     private Activity activity;
+    private String url;
 
     public UrlMenuBottomSheetFragment() {
         // Required empty public constructor
@@ -43,7 +47,14 @@ public class UrlMenuBottomSheetFragment extends RoundedBottomSheetDialogFragment
         View rootView = inflater.inflate(R.layout.fragment_url_menu_bottom_sheet, container, false);
         ButterKnife.bind(this, rootView);
 
-        String url = getArguments().getString(EXTRA_URL);
+        url = getArguments().getString(EXTRA_URL);
+
+        Uri uri = Uri.parse(url);
+        if (uri.getScheme() == null && uri.getHost() == null) {
+            url = "https://www.reddit.com" + url;
+        }
+
+        linkTextView.setText(url);
 
         openLinkTextView.setOnClickListener(view -> {
             Intent intent = new Intent(activity, LinkResolverActivity.class);
@@ -68,9 +79,11 @@ public class UrlMenuBottomSheetFragment extends RoundedBottomSheetDialogFragment
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_TEXT, url);
-            if (intent.resolveActivity(activity.getPackageManager()) != null) {
-                startActivity(intent);
-            } else {
+            try {
+                Intent shareIntent = Intent.createChooser(intent, null);
+                startActivity(shareIntent);
+            } catch (ActivityNotFoundException e) {
+                e.printStackTrace();
                 Toast.makeText(activity, R.string.no_app, Toast.LENGTH_SHORT).show();
             }
             dismiss();

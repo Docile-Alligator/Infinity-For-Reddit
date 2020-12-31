@@ -164,11 +164,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                         builder.linkResolver((view, link) -> {
                             Intent intent = new Intent(mContext, LinkResolverActivity.class);
                             Uri uri = Uri.parse(link);
-                            if (uri.getScheme() == null && uri.getHost() == null) {
-                                intent.setData(LinkResolverActivity.getRedditUriByPath(link));
-                            } else {
-                                intent.setData(uri);
-                            }
+                            intent.setData(uri);
                             mContext.startActivity(intent);
                         });
                     }
@@ -238,7 +234,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 ((DataViewHolder) holder).itemView.setOnClickListener(view -> {
                     if (mMessageType == FetchMessage.MESSAGE_TYPE_INBOX
                             && message.getContext() != null && !message.getContext().equals("")) {
-                        Uri uri = LinkResolverActivity.getRedditUriByPath(message.getContext());
+                        Uri uri = Uri.parse(message.getContext());
                         Intent intent = new Intent(mContext, LinkResolverActivity.class);
                         intent.setData(uri);
                         mContext.startActivity(intent);
