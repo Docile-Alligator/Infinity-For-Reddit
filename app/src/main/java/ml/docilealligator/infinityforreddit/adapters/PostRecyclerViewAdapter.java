@@ -196,6 +196,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean mDisableImagePreview = false;
     private boolean mMarkPostsAsRead;
     private boolean mMarkPostsAsReadAfterVoting;
+    private boolean mMarkPostsAsReadOnScroll;
     private boolean mHideReadPostsAutomatically;
     private Drawable mCommentIcon;
     private NetworkState networkState;
@@ -261,6 +262,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             mMarkPostsAsRead = postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false);
             mMarkPostsAsReadAfterVoting = postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, false);
+            mMarkPostsAsReadOnScroll = postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_ON_SCROLL_BASE, false);
             mHideReadPostsAutomatically = postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false);
 
             mPostLayout = postLayout;
@@ -1318,6 +1320,13 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
         if (holder instanceof PostBaseViewHolder) {
+            if (mMarkPostsAsReadOnScroll) {
+                int position = holder.getAdapterPosition();
+                if (position < super.getItemCount() && position >= 0) {
+                    Post post = getItem(position);
+                    ((PostBaseViewHolder) holder).markPostRead(post, false);
+                }
+            }
             ((PostBaseViewHolder) holder).itemView.setVisibility(View.VISIBLE);
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
             params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -1366,6 +1375,13 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             ((PostBaseViewHolder) holder).scoreTextView.setTextColor(mPostIconAndInfoColor);
             ((PostBaseViewHolder) holder).downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
         } else if (holder instanceof PostCompactBaseViewHolder) {
+            if (mMarkPostsAsReadOnScroll) {
+                int position = holder.getAdapterPosition();
+                if (position < super.getItemCount() && position >= 0) {
+                    Post post = getItem(position);
+                    ((PostCompactBaseViewHolder) holder).markPostRead(post, false);
+                }
+            }
             ((PostCompactBaseViewHolder) holder).itemView.setVisibility(View.VISIBLE);
             ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
             params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
@@ -1590,7 +1606,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 if (position >= 0 && canStartActivity) {
                     Post post = getItem(position);
                     if (post != null) {
-                        markPostRead(post);
+                        markPostRead(post, true);
                         canStartActivity = false;
 
                         Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
@@ -1706,7 +1722,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     }
 
                     if (mMarkPostsAsReadAfterVoting) {
-                        markPostRead(post);
+                        markPostRead(post, true);
                     }
 
                     if (post.isArchived()) {
@@ -1796,7 +1812,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     }
 
                     if (mMarkPostsAsReadAfterVoting) {
-                        markPostRead(post);
+                        markPostRead(post, true);
                     }
 
                     if (post.isArchived()) {
@@ -1949,13 +1965,15 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
         }
 
-        void markPostRead(Post post) {
+        void markPostRead(Post post, boolean changePostItemColor) {
             if (mAccessToken != null && !post.isRead() && mMarkPostsAsRead) {
                 post.markAsRead();
-                cardView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
-                titleTextView.setTextColor(mReadPostTitleColor);
-                if (this instanceof PostTextTypeViewHolder) {
-                    ((PostTextTypeViewHolder) this).contentTextView.setTextColor(mReadPostContentColor);
+                if (changePostItemColor) {
+                    cardView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
+                    titleTextView.setTextColor(mReadPostTitleColor);
+                    if (this instanceof PostTextTypeViewHolder) {
+                        ((PostTextTypeViewHolder) this).contentTextView.setTextColor(mReadPostContentColor);
+                    }
                 }
                 if (mActivity != null && mActivity instanceof MarkPostAsReadInterface) {
                     ((MarkPostAsReadInterface) mActivity).markPostAsRead(post);
@@ -2077,7 +2095,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
                 Post post = getItem(position);
                 if (post != null) {
-                    markPostRead(post);
+                    markPostRead(post, true);
                     Intent intent = new Intent(mActivity, ViewVideoActivity.class);
                     if (post.isGfycat()) {
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
@@ -2322,7 +2340,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
                 Post post = getItem(position);
                 if (post != null) {
-                    ((PostBaseViewHolder) this).markPostRead(post);
+                    markPostRead(post, true);
                     if (post.getPostType() == Post.VIDEO_TYPE) {
                         Intent intent = new Intent(mActivity, ViewVideoActivity.class);
                         if (post.isGfycat()) {
@@ -2604,7 +2622,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
                 Post post = getItem(position);
                 if (post != null && canStartActivity) {
-                    markPostRead(post);
+                    markPostRead(post, true);
                     canStartActivity = false;
 
                     Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
@@ -2623,7 +2641,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         mCallback.delayTransition();
                     } else {
                         mCallback.delayTransition();
-                        ViewGroup.LayoutParams params = (LinearLayout.LayoutParams) bottomConstraintLayout.getLayoutParams();
+                        ViewGroup.LayoutParams params = bottomConstraintLayout.getLayoutParams();
                         params.height = 0;
                         bottomConstraintLayout.setLayoutParams(params);
                     }
@@ -2690,7 +2708,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
                 Post post = getItem(position);
                 if (post != null) {
-                    markPostRead(post);
+                    markPostRead(post, true);
                     if (post.getPostType() == Post.VIDEO_TYPE) {
                         Intent intent = new Intent(mActivity, ViewVideoActivity.class);
                         if (post.isGfycat()) {
@@ -2756,7 +2774,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 Post post = getItem(position);
                 if (post != null) {
                     if (mMarkPostsAsReadAfterVoting) {
-                        markPostRead(post);
+                        markPostRead(post, true);
                     }
 
                     if (post.isArchived()) {
@@ -2846,7 +2864,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 Post post = getItem(position);
                 if (post != null) {
                     if (mMarkPostsAsReadAfterVoting) {
-                        markPostRead(post);
+                        markPostRead(post, true);
                     }
 
                     if (post.isArchived()) {
@@ -3000,11 +3018,13 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
         }
 
-        void markPostRead(Post post) {
+        void markPostRead(Post post, boolean changePostItemColor) {
             if (mAccessToken != null && !post.isRead() && mMarkPostsAsRead) {
                 post.markAsRead();
-                itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
-                titleTextView.setTextColor(mReadPostTitleColor);
+                if (changePostItemColor) {
+                    itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
+                    titleTextView.setTextColor(mReadPostTitleColor);
+                }
                 if (mActivity != null && mActivity instanceof MarkPostAsReadInterface) {
                     ((MarkPostAsReadInterface) mActivity).markPostAsRead(post);
                 }
