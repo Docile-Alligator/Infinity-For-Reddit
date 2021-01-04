@@ -18,7 +18,6 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -445,6 +444,16 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     }
                 })
                 .usePlugin(StrikethroughPlugin.create())
+                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, activity).setOnLinkLongClickListener((textView, url) -> {
+                    if (activity != null && !activity.isDestroyed() && !activity.isFinishing()) {
+                        UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
+                        urlMenuBottomSheetFragment.setArguments(bundle);
+                        urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
+                    }
+                    return true;
+                })))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .usePlugin(SimpleExtPlugin.create(plugin ->
                                 plugin.addExtension(1, '^', (configuration, props) -> {
@@ -3722,9 +3731,16 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     linearLayout.setOnClickListener(hideToolbarOnClickListener);
                     commentTimeTextView.setOnClickListener(hideToolbarOnClickListener);
                 }
-                View.OnLongClickListener expandsCommentsOnLongClickListener = view -> expandComments();
-                commentMarkdownView.setOnLongClickListener(expandsCommentsOnLongClickListener);
-                itemView.setOnLongClickListener(expandsCommentsOnLongClickListener);
+                commentMarkdownView.setOnLongClickListener(view -> {
+                    if (commentMarkdownView.getSelectionStart() == -1 && commentMarkdownView.getSelectionEnd() == -1) {
+                        expandComments();
+                    }
+                    return true;
+                });
+                itemView.setOnLongClickListener(view -> {
+                    expandComments();
+                    return true;
+                });
             }
             commentMarkdownView.setMovementMethod(LinkMovementMethod.getInstance());
             commentMarkdownView.setHighlightColor(Color.TRANSPARENT);
