@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.fragments;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
@@ -37,6 +38,8 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.activities.SearchUsersResultActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.adapters.UserListingRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.user.UserListingViewModel;
@@ -50,6 +53,7 @@ import retrofit2.Retrofit;
 public class UserListingFragment extends Fragment implements FragmentCommunicator {
 
     public static final String EXTRA_QUERY = "EQ";
+    public static final String EXTRA_IS_GETTING_USER_INFO = "EIGUI";
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
     public static final String EXTRA_ACCOUNT_NAME = "EAN";
 
@@ -124,6 +128,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         mUserListingRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         mQuery = getArguments().getString(EXTRA_QUERY);
+        boolean isGettingUserInfo = getArguments().getBoolean(EXTRA_IS_GETTING_USER_INFO);
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
         String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SEARCH_USER, SortType.Type.RELEVANCE.value);
@@ -132,7 +137,23 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
 
         mAdapter = new UserListingRecyclerViewAdapter(getActivity(), mOauthRetrofit, mRetrofit,
                 customThemeWrapper, accessToken, accountName, mRedditDataRoomDatabase.subscribedUserDao(),
-                () -> mUserListingViewModel.retryLoadingMore());
+                new UserListingRecyclerViewAdapter.Callback() {
+                    @Override
+                    public void retryLoadingMore() {
+                        mUserListingViewModel.retryLoadingMore();
+                    }
+
+                    @Override
+                    public void userSelected(String username, String iconUrl) {
+                        if (isGettingUserInfo) {
+                            ((SearchUsersResultActivity) mActivity).getSelectedUser(username, iconUrl);
+                        } else {
+                            Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
+                            intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, username);
+                            mActivity.startActivity(intent);
+                        }
+                    }
+                });
 
         mUserListingRecyclerView.setAdapter(mAdapter);
 

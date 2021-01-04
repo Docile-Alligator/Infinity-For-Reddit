@@ -33,6 +33,7 @@ import ml.docilealligator.infinityforreddit.activities.RulesActivity;
 import ml.docilealligator.infinityforreddit.activities.SearchActivity;
 import ml.docilealligator.infinityforreddit.activities.SearchResultActivity;
 import ml.docilealligator.infinityforreddit.activities.SearchSubredditsResultActivity;
+import ml.docilealligator.infinityforreddit.activities.SearchUsersResultActivity;
 import ml.docilealligator.infinityforreddit.activities.SelectUserFlairActivity;
 import ml.docilealligator.infinityforreddit.activities.SelectedSubredditsActivity;
 import ml.docilealligator.infinityforreddit.activities.SendPrivateMessageActivity;
@@ -236,4 +237,6 @@ public interface AppComponent {
     void inject(PostFilterPreferenceActivity postFilterPreferenceActivity);
 
     void inject(PostFilterUsageListingActivity postFilterUsageListingActivity);
+
+    void inject(SearchUsersResultActivity searchUsersResultActivity);
 }

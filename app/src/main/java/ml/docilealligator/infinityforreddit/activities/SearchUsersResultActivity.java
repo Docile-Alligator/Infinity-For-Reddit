@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -36,14 +35,14 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.fragments.SubredditListingFragment;
+import ml.docilealligator.infinityforreddit.fragments.UserListingFragment;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
-public class SearchSubredditsResultActivity extends BaseActivity implements ActivityToolbarInterface {
+public class SearchUsersResultActivity extends BaseActivity implements ActivityToolbarInterface {
 
     static final String EXTRA_QUERY = "EQ";
-    static final String EXTRA_RETURN_SUBREDDIT_NAME = "ERSN";
-    static final String EXTRA_RETURN_SUBREDDIT_ICON_URL = "ERSIU";
+    static final String EXTRA_RETURN_USER_NAME = "ERUN";
+    static final String EXTRA_RETURN_USER_ICON_URL = "ERUIU";
 
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
@@ -75,8 +74,7 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_search_subreddits_result);
+        setContentView(R.layout.activity_search_users_result);
 
         ButterKnife.bind(this);
 
@@ -130,7 +128,7 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
     }
 
     @Override
-    public SharedPreferences getDefaultSharedPreferences() {
+    protected SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
 
@@ -154,32 +152,23 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
                 mAccountName = account.getUsername();
             }
 
-            mFragment = new SubredditListingFragment();
+            mFragment = new UserListingFragment();
             Bundle bundle = new Bundle();
-            bundle.putString(SubredditListingFragment.EXTRA_QUERY, query);
-            bundle.putBoolean(SubredditListingFragment.EXTRA_IS_GETTING_SUBREDDIT_INFO, true);
-            bundle.putString(SubredditListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
-            bundle.putString(SubredditListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
+            bundle.putString(UserListingFragment.EXTRA_QUERY, query);
+            bundle.putBoolean(UserListingFragment.EXTRA_IS_GETTING_USER_INFO, true);
+            bundle.putString(UserListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+            bundle.putString(UserListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
             mFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_search_subreddits_result_activity, mFragment).commit();
         });
     }
 
-    public void getSelectedSubreddit(String name, String iconUrl) {
+    public void getSelectedUser(String name, String iconUrl) {
         Intent returnIntent = new Intent();
-        returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_NAME, name);
-        returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_ICON_URL, iconUrl);
+        returnIntent.putExtra(EXTRA_RETURN_USER_NAME, name);
+        returnIntent.putExtra(EXTRA_RETURN_USER_ICON_URL, iconUrl);
         setResult(Activity.RESULT_OK, returnIntent);
         finish();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
-        return false;
     }
 
     @Override
@@ -205,7 +194,7 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
     @Override
     public void onLongPress() {
         if (mFragment != null) {
-            ((SubredditListingFragment) mFragment).goBackToTop();
+            ((UserListingFragment) mFragment).goBackToTop();
         }
     }
 }

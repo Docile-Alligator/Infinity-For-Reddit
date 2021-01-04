@@ -53,7 +53,7 @@ import retrofit2.Retrofit;
 public class SubredditListingFragment extends Fragment implements FragmentCommunicator {
 
     public static final String EXTRA_QUERY = "EQ";
-    public static final String EXTRA_IS_POSTING = "EIP";
+    public static final String EXTRA_IS_GETTING_SUBREDDIT_INFO = "EIGSI";
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
     public static final String EXTRA_ACCOUNT_NAME = "EAN";
 
@@ -127,7 +127,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         mSubredditListingRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         String query = getArguments().getString(EXTRA_QUERY);
-        boolean isPosting = getArguments().getBoolean(EXTRA_IS_POSTING);
+        boolean isGettingSubredditInfo = getArguments().getBoolean(EXTRA_IS_GETTING_SUBREDDIT_INFO);
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
 
@@ -145,7 +145,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
                     @Override
                     public void subredditSelected(String subredditName, String iconUrl) {
-                        if (isPosting) {
+                        if (isGettingSubredditInfo) {
                             ((SearchSubredditsResultActivity) mActivity).getSelectedSubreddit(subredditName, iconUrl);
                         } else {
                             Intent intent = new Intent(mActivity, ViewSubredditDetailActivity.class);

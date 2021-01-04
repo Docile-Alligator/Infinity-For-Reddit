@@ -692,7 +692,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                     SubredditListingFragment mFragment = new SubredditListingFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString(SubredditListingFragment.EXTRA_QUERY, mQuery);
-                    bundle.putBoolean(SubredditListingFragment.EXTRA_IS_POSTING, false);
+                    bundle.putBoolean(SubredditListingFragment.EXTRA_IS_GETTING_SUBREDDIT_INFO, false);
                     bundle.putString(SubredditListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                     bundle.putString(SubredditListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                     mFragment.setArguments(bundle);
@@ -702,6 +702,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                     UserListingFragment mFragment = new UserListingFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString(UserListingFragment.EXTRA_QUERY, mQuery);
+                    bundle.putBoolean(UserListingFragment.EXTRA_IS_GETTING_USER_INFO, false);
                     bundle.putString(UserListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                     bundle.putString(UserListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                     mFragment.setArguments(bundle);

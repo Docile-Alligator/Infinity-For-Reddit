@@ -71,6 +71,9 @@ public class SendPrivateMessageActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
+
+        setImmersiveModeNotApplicable();
+        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_private_message);
 

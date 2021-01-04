@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,11 +25,10 @@ import com.bumptech.glide.request.RequestOptions;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
-import ml.docilealligator.infinityforreddit.asynctasks.CheckIsFollowingUserAsyncTask;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.asynctasks.CheckIsFollowingUserAsyncTask;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserDao;
 import ml.docilealligator.infinityforreddit.user.UserData;
 import ml.docilealligator.infinityforreddit.user.UserFollowing;
@@ -67,12 +65,12 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
     private int unsubscribedColor;
 
     private NetworkState networkState;
-    private UserListingRecyclerViewAdapter.RetryLoadingMoreCallback retryLoadingMoreCallback;
+    private final Callback callback;
 
     public UserListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, Retrofit retrofit,
                                           CustomThemeWrapper customThemeWrapper, String accessToken,
                                           String accountName, SubscribedUserDao subscribedUserDao,
-                                          UserListingRecyclerViewAdapter.RetryLoadingMoreCallback retryLoadingMoreCallback) {
+                                          Callback callback) {
         super(DIFF_CALLBACK);
         this.context = context;
         this.oauthRetrofit = oauthRetrofit;
@@ -80,7 +78,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
         this.accessToken = accessToken;
         this.accountName = accountName;
         this.subscribedUserDao = subscribedUserDao;
-        this.retryLoadingMoreCallback = retryLoadingMoreCallback;
+        this.callback = callback;
         glide = Glide.with(context);
         primaryTextColor = customThemeWrapper.getPrimaryTextColor();
         buttonTextColor = customThemeWrapper.getButtonTextColor();
@@ -110,9 +108,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
             UserData userData = getItem(position);
             if (userData != null) {
                 ((UserListingRecyclerViewAdapter.DataViewHolder) holder).constraintLayout.setOnClickListener(view -> {
-                    Intent intent = new Intent(context, ViewUserDetailActivity.class);
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, userData.getName());
-                    context.startActivity(intent);
+                    callback.userSelected(userData.getName(), userData.getIconUrl());
                 });
 
                 if (!userData.getIconUrl().equals("")) {
@@ -211,8 +207,10 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
         }
     }
 
-    public interface RetryLoadingMoreCallback {
+    public interface Callback {
         void retryLoadingMore();
+
+        void userSelected(String username, String iconUrl);
     }
 
     class DataViewHolder extends RecyclerView.ViewHolder {
@@ -242,7 +240,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
         ErrorViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            retryButton.setOnClickListener(view -> retryLoadingMoreCallback.retryLoadingMore());
+            retryButton.setOnClickListener(view -> callback.retryLoadingMore());
             errorTextView.setText(R.string.load_comments_failed);
             errorTextView.setTextColor(primaryTextColor);
             retryButton.setTextColor(buttonTextColor);
