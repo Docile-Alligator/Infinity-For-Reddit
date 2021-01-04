@@ -336,4 +336,7 @@ public interface RedditAPI {
 
     @GET("/r/randnsfw/new.json?sort=new&t=all&limit=1&raw_json=1")
     Call<String> getRandomNSFWPost();
+
+    @POST("/api/read_all_messages")
+    Call<String> readAllMessages(@HeaderMap Map<String, String> headers);
 }

@@ -171,6 +171,27 @@ public class InboxFragment extends Fragment implements FragmentCommunicator {
         }
     }
 
+    public void markAllMessagesRead() {
+        if (mAdapter != null) {
+            mAdapter.setMarkAllMessagesAsRead(true);
+
+            int previousPosition = -1;
+            if (mLinearLayoutManager != null) {
+                previousPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
+            }
+
+            RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
+            mRecyclerView.setAdapter(null);
+            mRecyclerView.setLayoutManager(null);
+            mRecyclerView.setAdapter(mAdapter);
+            mRecyclerView.setLayoutManager(layoutManager);
+
+            if (previousPosition > 0) {
+                mRecyclerView.scrollToPosition(previousPosition);
+            }
+        }
+    }
+
     private void onRefresh() {
         mMessageViewModel.refresh();
         mAdapter.setNetworkState(null);

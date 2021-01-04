@@ -78,6 +78,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
     private int mUnreadMessageBackgroundColor;
     private int mColorPrimaryLightTheme;
     private int mButtonTextColor;
+    private boolean markAllMessagesAsRead = false;
 
     public MessageRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
                                       CustomThemeWrapper customThemeWrapper,
@@ -216,8 +217,12 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                     displayedMessage = message;
                 }
                 if (message.isNew()) {
-                    ((DataViewHolder) holder).itemView.setBackgroundColor(
-                            mUnreadMessageBackgroundColor);
+                    if (markAllMessagesAsRead) {
+                        message.setNew(false);
+                    } else {
+                        ((DataViewHolder) holder).itemView.setBackgroundColor(
+                                mUnreadMessageBackgroundColor);
+                    }
                 }
 
                 if (message.wasComment()) {
@@ -338,6 +343,10 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 notifyItemChanged(position);
             }
         }
+    }
+
+    public void setMarkAllMessagesAsRead(boolean markAllMessagesAsRead) {
+        this.markAllMessagesAsRead = markAllMessagesAsRead;
     }
 
     public interface RetryLoadingMoreCallback {

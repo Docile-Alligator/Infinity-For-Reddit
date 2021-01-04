@@ -75,6 +75,7 @@
     <string name="action_select_user_flair">Select User Flair</string>
     <string name="action_give_award">Give Award</string>
     <string name="action_save_to_database">Save to Database</string>
+    <string name="action_read_all_messages">Read All Messages</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -992,5 +993,9 @@
     <string name="subreddit">Subreddit</string>
     <string name="user">User</string>
     <string name="edit_post_filter_name_of_usage_info">Leave it blank to apply this post filter to all the subreddits / users / multireddits</string>
+    
+    <string name="read_all_messages_time_limit">You are doing this too frequently. Try again later. This is Reddit API\'s rate limit.</string>
+    <string name="read_all_messages_success">Read all messages successfully</string>
+    <string name="read_all_messages_failed">Unable to read all messages</string>
 
 </resources>

@@ -6,4 +6,10 @@
         android:orderInCategory="1"
         android:title="@string/action_refresh"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_read_all_messages_inbox_activity"
+        android:orderInCategory="2"
+        android:title="@string/action_read_all_messages"
+        app:showAsAction="never" />
 </menu>

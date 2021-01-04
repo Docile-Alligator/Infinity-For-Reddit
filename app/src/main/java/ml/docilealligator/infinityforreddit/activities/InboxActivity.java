@@ -41,13 +41,18 @@ import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.InboxFragment;
 import ml.docilealligator.infinityforreddit.message.FetchMessage;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class InboxActivity extends BaseActivity implements ActivityToolbarInterface {
@@ -230,6 +235,33 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
                 sectionsPagerAdapter.refresh();
             }
             return true;
+        } else if (item.getItemId() == R.id.action_read_all_messages_inbox_activity) {
+            if (mAccessToken != null) {
+                Toast.makeText(this, R.string.please_wait, Toast.LENGTH_SHORT).show();
+                mOauthRetrofit.create(RedditAPI.class).readAllMessages(APIUtils.getOAuthHeader(mAccessToken))
+                        .enqueue(new Callback<String>() {
+                            @Override
+                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                                if (response.isSuccessful()) {
+                                    Toast.makeText(InboxActivity.this, R.string.read_all_messages_success, Toast.LENGTH_SHORT).show();
+                                    if (sectionsPagerAdapter != null) {
+                                        sectionsPagerAdapter.readAllMessages();
+                                    }
+                                } else {
+                                    if (response.code() == 429) {
+                                        Toast.makeText(InboxActivity.this, R.string.read_all_messages_time_limit, Toast.LENGTH_LONG).show();
+                                    } else {
+                                        Toast.makeText(InboxActivity.this, R.string.read_all_messages_failed, Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                                Toast.makeText(InboxActivity.this, R.string.read_all_messages_failed, Toast.LENGTH_LONG).show();
+                            }
+                        });
+            }
         } else if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
@@ -352,6 +384,15 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
                 if (tab2 != null) {
                     tab2.goBackToTop();
                 }
+            }
+        }
+
+        void readAllMessages() {
+            if (tab1 != null) {
+                tab1.markAllMessagesRead();
+            }
+            if (tab2 != null) {
+                tab2.markAllMessagesRead();
             }
         }
     }
