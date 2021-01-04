@@ -209,11 +209,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private RequestManager glide;
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
-    private PostTypeBottomSheetFragment postTypeBottomSheetFragment;
-    private SortTypeBottomSheetFragment sortTypeBottomSheetFragment;
-    private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
-    private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
-    private FABMoreOptionsBottomSheetFragment fabMoreOptionsBottomSheetFragment;
     private int expandedTabTextColor;
     private int expandedTabBackgroundColor;
     private int expandedTabIndicatorColor;
@@ -353,17 +348,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         }
 
         fetchSubredditData();
-
-        postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
-
-        sortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-        Bundle bottomSheetBundle = new Bundle();
-        bottomSheetBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-        sortTypeBottomSheetFragment.setArguments(bottomSheetBundle);
-
-        sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
-        postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
-        fabMoreOptionsBottomSheetFragment = new FABMoreOptionsBottomSheetFragment();
 
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
@@ -734,10 +718,11 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     break;
                 }
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE: {
-                    sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
+                    displaySortTypeBottomSheetFragment();
                     break;
                 }
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT: {
+                    PostLayoutBottomSheetFragment postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
                     postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
                     break;
                 }
@@ -767,11 +752,13 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     }
                     break;
                 default:
+                    PostTypeBottomSheetFragment postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
                     postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
                     break;
             }
         });
         fab.setOnLongClickListener(view -> {
+            FABMoreOptionsBottomSheetFragment fabMoreOptionsBottomSheetFragment = new FABMoreOptionsBottomSheetFragment();
             Bundle bundle = new Bundle();
             bundle.putBoolean(FABMoreOptionsBottomSheetFragment.EXTRA_ANONYMOUS_MODE, mAccessToken == null);
             fabMoreOptionsBottomSheetFragment.setArguments(bundle);
@@ -885,6 +872,14 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         }
     }
 
+    private void displaySortTypeBottomSheetFragment() {
+        SortTypeBottomSheetFragment sortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
+        Bundle bottomSheetBundle = new Bundle();
+        bottomSheetBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
+        sortTypeBottomSheetFragment.setArguments(bottomSheetBundle);
+        sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_subreddit_detail_activity, menu);
@@ -911,7 +906,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 finish();
                 return true;
             case R.id.action_sort_view_subreddit_detail_activity:
-                sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
+                displaySortTypeBottomSheetFragment();
                 return true;
             case R.id.action_search_view_subreddit_detail_activity:
                 Intent intent = new Intent(this, SearchActivity.class);
@@ -952,6 +947,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 }
                 return true;
             case R.id.action_change_post_layout_view_subreddit_detail_activity:
+                PostLayoutBottomSheetFragment postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
                 postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
                 return true;
             case R.id.action_select_user_flair_view_subreddit_detail_activity:
@@ -1018,6 +1014,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     @Override
     public void sortTypeSelected(String sortType) {
+        SortTimeBottomSheetFragment sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
         Bundle bundle = new Bundle();
         bundle.putString(SortTimeBottomSheetFragment.EXTRA_SORT_TYPE, sortType);
         sortTimeBottomSheetFragment.setArguments(bundle);
@@ -1115,6 +1112,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     public void fabOptionSelected(int option) {
         switch (option) {
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_SUBMIT_POST:
+                PostTypeBottomSheetFragment postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
                 postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_REFRESH:
@@ -1123,9 +1121,10 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 }
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_CHANGE_SORT_TYPE:
-                sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
+                displaySortTypeBottomSheetFragment();
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_CHANGE_POST_LAYOUT:
+                PostLayoutBottomSheetFragment postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
                 postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_SEARCH:

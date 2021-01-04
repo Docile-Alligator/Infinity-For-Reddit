@@ -71,6 +71,8 @@ public class PostHistoryFragment extends Fragment {
             infoTextView.setText(R.string.only_for_logged_in_user);
             markPostsAsReadLinearLayout.setVisibility(View.GONE);
             markPostsAsReadAfterVotingLinearLayout.setVisibility(View.GONE);
+            markPostsAsReadOnScrollLinearLayout.setVisibility(View.GONE);
+            hideReadPostsAutomaticallyLinearLayout.setVisibility(View.GONE);
             return rootView;
         }
 
