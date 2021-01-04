@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
-import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
@@ -45,21 +43,24 @@ import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
+import io.noties.markwon.movement.MovementMethodPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
+import ml.docilealligator.infinityforreddit.NetworkState;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.SaveThing;
+import ml.docilealligator.infinityforreddit.VoteThing;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CommentMoreBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.NetworkState;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
-import ml.docilealligator.infinityforreddit.VoteThing;
 import retrofit2.Retrofit;
 
 public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment, RecyclerView.ViewHolder> {
@@ -77,7 +78,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             return comment.getCommentMarkdown().equals(t1.getCommentMarkdown());
         }
     };
-    private Context mContext;
+    private AppCompatActivity mActivity;
     private Retrofit mOauthRetrofit;
     private Locale mLocale;
     private Markwon mMarkwon;
@@ -104,16 +105,16 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     private NetworkState networkState;
     private RetryLoadingMoreCallback mRetryLoadingMoreCallback;
 
-    public CommentsListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
+    public CommentsListingRecyclerViewAdapter(AppCompatActivity activity, Retrofit oauthRetrofit,
                                               CustomThemeWrapper customThemeWrapper, Locale locale,
                                               SharedPreferences sharedPreferences, String accessToken,
                                               String accountName, RetryLoadingMoreCallback retryLoadingMoreCallback) {
         super(DIFF_CALLBACK);
-        mContext = context;
+        mActivity = activity;
         mOauthRetrofit = oauthRetrofit;
         mCommentColor = customThemeWrapper.getCommentColor();
         int commentSpoilerBackgroundColor = mCommentColor | 0xFF000000;
-        mMarkwon = Markwon.builder(mContext)
+        mMarkwon = Markwon.builder(mActivity)
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @NonNull
                     @Override
@@ -182,14 +183,24 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     @Override
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
                         builder.linkResolver((view, link) -> {
-                            Intent intent = new Intent(mContext, LinkResolverActivity.class);
+                            Intent intent = new Intent(mActivity, LinkResolverActivity.class);
                             Uri uri = Uri.parse(link);
                             intent.setData(uri);
-                            mContext.startActivity(intent);
+                            mActivity.startActivity(intent);
                         });
 
                     }
                 })
+                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, activity).setOnLinkLongClickListener((textView, url) -> {
+                    if (activity != null && !activity.isDestroyed() && !activity.isFinishing()) {
+                        UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
+                        urlMenuBottomSheetFragment.setArguments(bundle);
+                        urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
+                    }
+                    return true;
+                })))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .usePlugin(StrikethroughPlugin.create())
                 .usePlugin(SimpleExtPlugin.create(plugin ->
@@ -260,7 +271,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
                 if (mShowElapsedTime) {
                     ((CommentViewHolder) holder).commentTimeTextView.setText(
-                            Utils.getElapsedTime(mContext, comment.getCommentTimeMillis()));
+                            Utils.getElapsedTime(mActivity, comment.getCommentTimeMillis()));
                 } else {
                     ((CommentViewHolder) holder).commentTimeTextView.setText(Utils.getFormattedTime(mLocale, comment.getCommentTimeMillis(), mTimeFormatPattern));
                 }
@@ -473,8 +484,6 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             replyButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             commentDivider.setBackgroundColor(mDividerColor);
 
-            commentMarkdownView.setMovementMethod(LinkMovementMethod.getInstance());
-
             authorTextView.setOnClickListener(view -> {
                 int position = getAdapterPosition();
                 if (position < 0) {
@@ -483,13 +492,13 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 Comment comment = getItem(getAdapterPosition());
                 if (comment != null) {
                     if (comment.getSubredditName().substring(2).equals(comment.getLinkAuthor())) {
-                        Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
+                        Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
                         intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, comment.getLinkAuthor());
-                        mContext.startActivity(intent);
+                        mActivity.startActivity(intent);
                     } else {
-                        Intent intent = new Intent(mContext, ViewSubredditDetailActivity.class);
+                        Intent intent = new Intent(mActivity, ViewSubredditDetailActivity.class);
                         intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, comment.getSubredditName());
-                        mContext.startActivity(intent);
+                        mActivity.startActivity(intent);
                     }
                 }
             });
@@ -511,7 +520,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     bundle.putString(CommentMoreBottomSheetFragment.EXTRA_COMMENT_MARKDOWN, comment.getCommentMarkdown());
                     CommentMoreBottomSheetFragment commentMoreBottomSheetFragment = new CommentMoreBottomSheetFragment();
                     commentMoreBottomSheetFragment.setArguments(bundle);
-                    commentMoreBottomSheetFragment.show(((AppCompatActivity) mContext).getSupportFragmentManager(), commentMoreBottomSheetFragment.getTag());
+                    commentMoreBottomSheetFragment.show(((AppCompatActivity) mActivity).getSupportFragmentManager(), commentMoreBottomSheetFragment.getTag());
                 }
             });
 
@@ -522,10 +531,10 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 }
                 Comment comment = getItem(getAdapterPosition());
                 if (comment != null) {
-                    Intent intent = new Intent(mContext, ViewPostDetailActivity.class);
+                    Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
                     intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, comment.getLinkId());
                     intent.putExtra(ViewPostDetailActivity.EXTRA_SINGLE_COMMENT_ID, comment.getId());
-                    mContext.startActivity(intent);
+                    mActivity.startActivity(intent);
                 }
             });
 
@@ -537,7 +546,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
             upvoteButton.setOnClickListener(view -> {
                 if (mAccessToken == null) {
-                    Toast.makeText(mContext, R.string.login_first, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -570,7 +579,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                             comment.getScore() + comment.getVoteType()));
 
-                    VoteThing.voteThing(mContext, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
                             int currentPosition = getAdapterPosition();
@@ -604,7 +613,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
             downvoteButton.setOnClickListener(view -> {
                 if (mAccessToken == null) {
-                    Toast.makeText(mContext, R.string.login_first, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -636,7 +645,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                             comment.getScore() + comment.getVoteType()));
 
-                    VoteThing.voteThing(mContext, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
+                    VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
                             int currentPosition = getAdapterPosition();
@@ -684,7 +693,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                                 if (getAdapterPosition() == position) {
                                     saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                 }
-                                Toast.makeText(mContext, R.string.comment_unsaved_success, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mActivity, R.string.comment_unsaved_success, Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
@@ -693,7 +702,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                                 if (getAdapterPosition() == position) {
                                     saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                 }
-                                Toast.makeText(mContext, R.string.comment_unsaved_failed, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mActivity, R.string.comment_unsaved_failed, Toast.LENGTH_SHORT).show();
                             }
                         });
                     } else {
@@ -705,7 +714,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                                 if (getAdapterPosition() == position) {
                                     saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                 }
-                                Toast.makeText(mContext, R.string.comment_saved_success, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mActivity, R.string.comment_saved_success, Toast.LENGTH_SHORT).show();
                             }
 
                             @Override
@@ -714,7 +723,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                                 if (getAdapterPosition() == position) {
                                     saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                 }
-                                Toast.makeText(mContext, R.string.comment_saved_failed, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(mActivity, R.string.comment_saved_failed, Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

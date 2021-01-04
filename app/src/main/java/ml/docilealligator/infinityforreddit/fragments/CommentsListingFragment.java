@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -19,6 +18,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
@@ -101,7 +101,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private RequestManager mGlide;
-    private Activity mActivity;
+    private AppCompatActivity mActivity;
     private LinearLayoutManager mLinearLayoutManager;
     private CommentsListingRecyclerViewAdapter mAdapter;
     private SortType sortType;
@@ -373,7 +373,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.mActivity = (Activity) context;
+        this.mActivity = (AppCompatActivity) context;
     }
 
     @Override
