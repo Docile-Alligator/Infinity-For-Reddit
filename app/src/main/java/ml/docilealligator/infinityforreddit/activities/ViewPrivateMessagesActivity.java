@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -24,6 +25,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -31,17 +33,17 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.adapters.PrivateMessagesDetailRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadUserDataAsyncTask;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.RepliedToPrivateMessageEvent;
-import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.message.Message;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
 import ml.docilealligator.infinityforreddit.message.ReplyMessage;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import retrofit2.Retrofit;
 
 public class ViewPrivateMessagesActivity extends BaseActivity implements ActivityToolbarInterface {
@@ -83,6 +85,8 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private LinearLayoutManager mLinearLayoutManager;
     private PrivateMessagesDetailRecyclerViewAdapter mAdapter;
     private Message privateMessage;
@@ -139,7 +143,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     }
 
     private void getCurrentAccountAndBindView() {
-        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
             if (account == null) {
                 mNullAccessToken = true;
             } else {
@@ -147,7 +151,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
                 mAccountName = account.getUsername();
             }
             bindView();
-        }).execute();
+        });
     }
 
     private void bindView() {

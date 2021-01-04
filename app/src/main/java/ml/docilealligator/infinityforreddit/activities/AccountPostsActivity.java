@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.activities;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -22,25 +23,27 @@ import com.r0adkll.slidr.Slidr;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.concurrent.Executor;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.FragmentCommunicator;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
+import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
-import ml.docilealligator.infinityforreddit.FragmentCommunicator;
-import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.post.PostDataSource;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.SortType;
-import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class AccountPostsActivity extends BaseActivity implements SortTypeSelectionCallback,
@@ -72,6 +75,8 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     SharedPreferences mPostLayoutSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private boolean isInLazyMode = false;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
@@ -181,7 +186,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     }
 
     private void getCurrentAccountAndInitializeFragment() {
-        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
             if (account == null) {
                 mNullAccessToken = true;
             } else {
@@ -189,7 +194,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
                 mAccountName = account.getUsername();
             }
             initializeFragment();
-        }).execute();
+        });
     }
 
     private void initializeFragment() {

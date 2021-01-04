@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -74,7 +75,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.asynctasks.CheckIsFollowingUserAsyncTask;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
@@ -557,7 +558,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     }
 
     private void getCurrentAccountAndInitializeViewPager() {
-        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
             if (mNewAccountName != null) {
                 if (account == null || !account.getUsername().equals(mNewAccountName)) {
                     new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
@@ -589,7 +590,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
                 initializeViewPager();
             }
-        }).execute();
+        });
     }
 
     private void initializeViewPager() {

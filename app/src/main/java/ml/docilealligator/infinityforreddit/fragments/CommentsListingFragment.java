@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,6 +32,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
+import java.util.concurrent.Executor;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -45,7 +48,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.adapters.CommentsListingRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.comment.CommentViewModel;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -98,6 +101,8 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     SharedPreferences mPostLayoutSharedPreferences;
     @Inject
     CustomThemeWrapper customThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private RequestManager mGlide;
@@ -260,14 +265,14 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     }
 
     private void getCurrentAccountAndBindView(Resources resources) {
-        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
             if (account == null) {
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
             }
             bindView(resources);
-        }).execute();
+        });
     }
 
     private void bindView(Resources resources) {

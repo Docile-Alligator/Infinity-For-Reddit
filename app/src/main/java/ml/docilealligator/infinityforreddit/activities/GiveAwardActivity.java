@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -25,18 +26,20 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.r0adkll.slidr.Slidr;
 
+import java.util.concurrent.Executor;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.adapters.AwardRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccountAsyncTask;
-import ml.docilealligator.infinityforreddit.award.GiveAward;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.adapters.AwardRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
+import ml.docilealligator.infinityforreddit.award.GiveAward;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
@@ -68,6 +71,8 @@ public class GiveAwardActivity extends BaseActivity {
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private String thingFullname;
     private int itemPosition;
     private boolean mNullAccessToken = false;
@@ -118,14 +123,14 @@ public class GiveAwardActivity extends BaseActivity {
     }
 
     private void getCurrentAccountAndBindView() {
-        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
             if (account == null) {
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
             }
             bindView();
-        }).execute();
+        });
     }
 
     private void bindView() {

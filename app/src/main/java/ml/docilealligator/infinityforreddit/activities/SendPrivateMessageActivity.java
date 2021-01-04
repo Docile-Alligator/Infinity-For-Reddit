@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.activities;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -16,17 +17,19 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.util.concurrent.Executor;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccountAsyncTask;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.message.ComposeMessage;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.message.ComposeMessage;
 import retrofit2.Retrofit;
 
 public class SendPrivateMessageActivity extends BaseActivity {
@@ -59,6 +62,8 @@ public class SendPrivateMessageActivity extends BaseActivity {
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private boolean isSubmitting = false;
@@ -96,13 +101,13 @@ public class SendPrivateMessageActivity extends BaseActivity {
     }
 
     private void getCurrentAccount() {
-        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
             if (account == null) {
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
             }
-        }).execute();
+        });
     }
 
     @Override

@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -70,7 +71,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.asynctasks.CheckIsSubscribedToSubredditAsyncTask;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubredditDataAsyncTask;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccountAsyncTask;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
@@ -490,7 +491,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     }
 
     private void getCurrentAccountAndBindView() {
-        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
             if (mNewAccountName != null) {
                 if (account == null || !account.getUsername().equals(mNewAccountName)) {
                     new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
@@ -522,7 +523,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
                 bindView();
             }
-        }).execute();
+        });
     }
 
     private void fetchSubredditData() {

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -22,6 +23,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -29,15 +31,15 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
-import ml.docilealligator.infinityforreddit.adapters.UserFlairRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccountAsyncTask;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FetchUserFlairs;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SelectUserFlair;
 import ml.docilealligator.infinityforreddit.UserFlair;
+import ml.docilealligator.infinityforreddit.adapters.UserFlairRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
@@ -67,6 +69,8 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private LinearLayoutManager mLinearLayoutManager;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
@@ -120,7 +124,7 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
     }
 
     private void getCurrentAccountAndBindView() {
-        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
             if (account == null) {
                 mNullAccessToken = true;
             } else {
@@ -128,7 +132,7 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
                 mAccountName = account.getUsername();
             }
             bindView();
-        }).execute();
+        });
     }
 
     private void bindView() {

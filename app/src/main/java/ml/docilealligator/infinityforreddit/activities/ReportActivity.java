@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.activities;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -18,15 +19,13 @@ import com.google.android.material.snackbar.Snackbar;
 import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.adapters.ReportReasonRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccountAsyncTask;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FetchRules;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
@@ -34,6 +33,9 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.ReportReason;
 import ml.docilealligator.infinityforreddit.ReportThing;
 import ml.docilealligator.infinityforreddit.Rule;
+import ml.docilealligator.infinityforreddit.adapters.ReportReasonRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
@@ -67,6 +69,8 @@ public class ReportActivity extends BaseActivity {
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mFullname;
@@ -142,13 +146,13 @@ public class ReportActivity extends BaseActivity {
     }
 
     private void getCurrentAccount() {
-        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
             if (account == null) {
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
             }
-        }).execute();
+        });
     }
 
     @Override

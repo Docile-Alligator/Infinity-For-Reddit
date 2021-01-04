@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.activities;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -17,6 +18,8 @@ import com.google.android.material.appbar.AppBarLayout;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.concurrent.Executor;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -25,7 +28,7 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.settings.AboutPreferenceFragment;
@@ -57,6 +60,8 @@ public class SettingsActivity extends BaseActivity implements
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,7 +106,7 @@ public class SettingsActivity extends BaseActivity implements
     }
 
     private void getCurrentAccountAndBindView(Bundle savedInstanceState) {
-        new GetCurrentAccountAsyncTask(mRedditDataRoomDatabase.accountDao(), account -> {
+        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
             if (getSupportFragmentManager().isDestroyed()) {
                 return;
             }
@@ -119,7 +124,7 @@ public class SettingsActivity extends BaseActivity implements
             } else {
                 setTitle(savedInstanceState.getCharSequence(TITLE_STATE));
             }
-        }).execute();
+        });
     }
 
     @Override
