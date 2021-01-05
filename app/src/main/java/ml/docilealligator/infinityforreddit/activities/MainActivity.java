@@ -676,89 +676,71 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     @Override
                     public void onMenuClick(int stringId) {
                         Intent intent = null;
-                        switch (stringId) {
-                            case R.string.profile:
-                                intent = new Intent(MainActivity.this, ViewUserDetailActivity.class);
-                                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mAccountName);
-                                break;
-                            case R.string.subscriptions:
-                                intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
-                                break;
-                            case R.string.multi_reddit:
-                                intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
-                                intent.putExtra(SubscribedThingListingActivity.EXTRA_SHOW_MULTIREDDITS, true);
-                                break;
-                            case R.string.inbox:
-                                intent = new Intent(MainActivity.this, InboxActivity.class);
-                                break;
-                            case R.string.upvoted:
-                                intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-                                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_UPVOTED);
-                                break;
-                            case R.string.downvoted:
-                                intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-                                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_DOWNVOTED);
-                                break;
-                            case R.string.hidden:
-                                intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-                                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_HIDDEN);
-                                break;
-                            case R.string.saved:
-                                intent = new Intent(MainActivity.this, AccountSavedThingActivity.class);
-                                break;
-                            case R.string.gilded:
-                                intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-                                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_GILDED);
-                                break;
-                            case R.string.light_theme:
-                                mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "0").apply();
-                                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
-                                mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.LIGHT);
-                                break;
-                            case R.string.dark_theme:
-                                mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "1").apply();
-                                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-                                if (mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
-                                    mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.AMOLED);
-                                } else {
-                                    mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.DARK);
-                                }
-                                break;
-                            case R.string.enable_nsfw:
-                                if (sectionsPagerAdapter != null) {
-                                    mNsfwAndSpoilerSharedPreferences.edit().putBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, true).apply();
-                                    sectionsPagerAdapter.changeNSFW(true);
-                                }
-                                break;
-                            case R.string.disable_nsfw:
-                                if (sectionsPagerAdapter != null) {
-                                    mNsfwAndSpoilerSharedPreferences.edit().putBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false).apply();
-                                    sectionsPagerAdapter.changeNSFW(false);
-                                }
-                                break;
-                            case R.string.settings:
-                                intent = new Intent(MainActivity.this, SettingsActivity.class);
-                                break;
-                            case R.string.add_account:
-                                Intent addAccountIntent = new Intent(MainActivity.this, LoginActivity.class);
-                                startActivityForResult(addAccountIntent, LOGIN_ACTIVITY_REQUEST_CODE);
-                                break;
-                            case R.string.anonymous_account:
-                                new SwitchToAnonymousAccountAsyncTask(mRedditDataRoomDatabase, false,
-                                        () -> {
-                                            Intent anonymousIntent = new Intent(MainActivity.this, MainActivity.class);
-                                            startActivity(anonymousIntent);
-                                            finish();
-                                        }).execute();
-                                break;
-                            case R.string.log_out:
-                                new SwitchToAnonymousAccountAsyncTask(mRedditDataRoomDatabase, true,
-                                        () -> {
-                                            Intent logOutIntent = new Intent(MainActivity.this, MainActivity.class);
-                                            startActivity(logOutIntent);
-                                            finish();
-                                        }).execute();
-
+                        if (stringId == R.string.profile) {
+                            intent = new Intent(MainActivity.this, ViewUserDetailActivity.class);
+                            intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mAccountName);
+                        } else if (stringId == R.string.subscriptions) {
+                            intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
+                        } else if (stringId == R.string.multi_reddit) {
+                            intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
+                            intent.putExtra(SubscribedThingListingActivity.EXTRA_SHOW_MULTIREDDITS, true);
+                        } else if (stringId == R.string.inbox) {
+                            intent = new Intent(MainActivity.this, InboxActivity.class);
+                        } else if (stringId == R.string.upvoted) {
+                            intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+                            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_UPVOTED);
+                        } else if (stringId == R.string.downvoted) {
+                            intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+                            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_DOWNVOTED);
+                        } else if (stringId == R.string.hidden) {
+                            intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+                            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_HIDDEN);
+                        } else if (stringId == R.string.account_saved_thing_activity_label) {
+                            intent = new Intent(MainActivity.this, AccountSavedThingActivity.class);
+                        } else if (stringId == R.string.gilded) {
+                            intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+                            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_GILDED);
+                        } else if (stringId == R.string.light_theme) {
+                            mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "0").apply();
+                            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                            mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.LIGHT);
+                        } else if (stringId == R.string.dark_theme) {
+                            mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "1").apply();
+                            AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                            if (mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
+                                mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.AMOLED);
+                            } else {
+                                mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.DARK);
+                            }
+                        } else if (stringId == R.string.enable_nsfw) {
+                            if (sectionsPagerAdapter != null) {
+                                mNsfwAndSpoilerSharedPreferences.edit().putBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, true).apply();
+                                sectionsPagerAdapter.changeNSFW(true);
+                            }
+                        } else if (stringId == R.string.disable_nsfw) {
+                            if (sectionsPagerAdapter != null) {
+                                mNsfwAndSpoilerSharedPreferences.edit().putBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false).apply();
+                                sectionsPagerAdapter.changeNSFW(false);
+                            }
+                        } else if (stringId == R.string.settings) {
+                            intent = new Intent(MainActivity.this, SettingsActivity.class);
+                        } else if (stringId == R.string.add_account) {
+                            Intent addAccountIntent = new Intent(MainActivity.this, LoginActivity.class);
+                            startActivityForResult(addAccountIntent, LOGIN_ACTIVITY_REQUEST_CODE);
+                        } else if (stringId == R.string.anonymous_account) {
+                            new SwitchToAnonymousAccountAsyncTask(mRedditDataRoomDatabase, false,
+                                    () -> {
+                                        Intent anonymousIntent = new Intent(MainActivity.this, MainActivity.class);
+                                        startActivity(anonymousIntent);
+                                        finish();
+                                    }).execute();
+                        } else if (stringId == R.string.log_out) {
+                            new SwitchToAnonymousAccountAsyncTask(mRedditDataRoomDatabase, true,
+                                    () -> {
+                                        Intent logOutIntent = new Intent(MainActivity.this, MainActivity.class);
+                                        startActivity(logOutIntent);
+                                        finish();
+                                    }).execute();
                         }
                         if (intent != null) {
                             startActivity(intent);

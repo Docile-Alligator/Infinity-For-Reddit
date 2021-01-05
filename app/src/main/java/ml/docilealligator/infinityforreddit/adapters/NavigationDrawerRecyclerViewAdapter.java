@@ -293,7 +293,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                             drawableId = R.drawable.ic_outline_lock_24dp;
                             break;
                         case 10:
-                            stringId = R.string.saved;
+                            stringId = R.string.account_saved_thing_activity_label;
                             drawableId = R.drawable.ic_outline_bookmarks_24dp;
                             break;
                         case 11:
