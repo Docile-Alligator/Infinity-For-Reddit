@@ -58,6 +58,11 @@ public class SelectedSubredditsRecyclerViewAdapter extends RecyclerView.Adapter<
         notifyItemRangeInserted(oldSize, newSubreddits.size());
     }
 
+    public void addUserInSubredditType(String username) {
+        subreddits.add(username);
+        notifyItemInserted(subreddits.size());
+    }
+
     public ArrayList<String> getSubreddits() {
         return subreddits;
     }

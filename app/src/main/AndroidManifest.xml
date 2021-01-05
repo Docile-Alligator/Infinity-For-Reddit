@@ -117,7 +117,7 @@
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".activities.SelectedSubredditsActivity"
+            android:name=".activities.SelectedSubredditsAndUsersActivity"
             android:label="@string/selected_subeddits_activity_label"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />

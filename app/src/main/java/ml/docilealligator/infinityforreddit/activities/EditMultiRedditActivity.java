@@ -179,9 +179,9 @@ public class EditMultiRedditActivity extends BaseActivity {
         }
 
         selectSubredditTextView.setOnClickListener(view -> {
-            Intent intent = new Intent(EditMultiRedditActivity.this, SelectedSubredditsActivity.class);
+            Intent intent = new Intent(EditMultiRedditActivity.this, SelectedSubredditsAndUsersActivity.class);
             if (multiReddit.getSubreddits() != null) {
-                intent.putStringArrayListExtra(SelectedSubredditsActivity.EXTRA_SELECTED_SUBREDDITS, multiReddit.getSubreddits());
+                intent.putStringArrayListExtra(SelectedSubredditsAndUsersActivity.EXTRA_SELECTED_SUBREDDITS, multiReddit.getSubreddits());
             }
             startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
         });
@@ -196,34 +196,34 @@ public class EditMultiRedditActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            finish();
+            return true;
+        } else if (itemId == R.id.action_save_edit_multi_reddit_activity) {
+            if (mAccountName == null || mAccessToken == null) {
+                Snackbar.make(coordinatorLayout, R.string.something_went_wrong, Snackbar.LENGTH_SHORT).show();
                 return true;
-            case R.id.action_save_edit_multi_reddit_activity:
-                if (mAccountName == null || mAccessToken == null) {
-                    Snackbar.make(coordinatorLayout, R.string.something_went_wrong, Snackbar.LENGTH_SHORT).show();
-                    return true;
-                }
-                if (nameEditText.getText() == null || nameEditText.getText().toString().equals("")) {
-                    Snackbar.make(coordinatorLayout, R.string.no_multi_reddit_name, Snackbar.LENGTH_SHORT).show();
-                    return true;
-                }
+            }
+            if (nameEditText.getText() == null || nameEditText.getText().toString().equals("")) {
+                Snackbar.make(coordinatorLayout, R.string.no_multi_reddit_name, Snackbar.LENGTH_SHORT).show();
+                return true;
+            }
 
-                String jsonModel = new MultiRedditJSONModel(nameEditText.getText().toString(), descriptionEditText.getText().toString(),
-                        visibilitySwitch.isChecked(), multiReddit.getSubreddits()).createJSONModel();
-                EditMultiReddit.editMultiReddit(mRetrofit, mAccessToken, multiReddit.getPath(),
-                        jsonModel, new EditMultiReddit.EditMultiRedditListener() {
-                            @Override
-                            public void success() {
-                                finish();
-                            }
+            String jsonModel = new MultiRedditJSONModel(nameEditText.getText().toString(), descriptionEditText.getText().toString(),
+                    visibilitySwitch.isChecked(), multiReddit.getSubreddits()).createJSONModel();
+            EditMultiReddit.editMultiReddit(mRetrofit, mAccessToken, multiReddit.getPath(),
+                    jsonModel, new EditMultiReddit.EditMultiRedditListener() {
+                        @Override
+                        public void success() {
+                            finish();
+                        }
 
-                            @Override
-                            public void failed() {
-                                Snackbar.make(coordinatorLayout, R.string.edit_multi_reddit_failed, Snackbar.LENGTH_SHORT).show();
-                            }
-                        });
+                        @Override
+                        public void failed() {
+                            Snackbar.make(coordinatorLayout, R.string.edit_multi_reddit_failed, Snackbar.LENGTH_SHORT).show();
+                        }
+                    });
         }
         return false;
     }
@@ -234,7 +234,7 @@ public class EditMultiRedditActivity extends BaseActivity {
         if (requestCode == SUBREDDIT_SELECTION_REQUEST_CODE && resultCode == RESULT_OK) {
             if (data != null) {
                 multiReddit.setSubreddits(data.getStringArrayListExtra(
-                        SelectedSubredditsActivity.EXTRA_RETURN_SELECTED_SUBREDDITS));
+                        SelectedSubredditsAndUsersActivity.EXTRA_RETURN_SELECTED_SUBREDDITS));
             }
         }
     }

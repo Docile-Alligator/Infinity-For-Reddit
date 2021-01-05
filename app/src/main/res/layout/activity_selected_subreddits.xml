@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinator_layout_selected_subreddits_activity"
+    android:id="@+id/coordinator_layout_selected_subreddits_and_users_activity"
     tools:context=".activities.AccountPostsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar_layout_selected_subreddits_activity"
+        android:id="@+id/appbar_layout_selected_subreddits_and_users_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -18,10 +18,10 @@
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|enterAlways"
             app:titleEnabled="false"
-            app:toolbarId="@+id/toolbar_selected_subreddits_activity">
+            app:toolbarId="@+id/toolbar_selected_subreddits_and_users_activity">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar_selected_subreddits_activity"
+                android:id="@+id/toolbar_selected_subreddits_and_users_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="?attr/actionBarSize"
@@ -33,13 +33,13 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycler_view_selected_subreddits_activity"
+        android:id="@+id/recycler_view_selected_subreddits_and_users_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab_selected_subreddits_activity"
+        android:id="@+id/fab_selected_subreddits_and_users_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"

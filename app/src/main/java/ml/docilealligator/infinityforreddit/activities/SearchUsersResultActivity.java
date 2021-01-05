@@ -49,11 +49,11 @@ public class SearchUsersResultActivity extends BaseActivity implements ActivityT
     private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String FRAGMENT_OUT_STATE = "FOS";
 
-    @BindView(R.id.coordinator_layout_search_subreddits_result_activity)
+    @BindView(R.id.coordinator_layout_search_users_result_activity)
     CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_search_subreddits_result_activity)
+    @BindView(R.id.appbar_layout_search_users_result_activity)
     AppBarLayout appBarLayout;
-    @BindView(R.id.toolbar_search_subreddits_result_activity)
+    @BindView(R.id.toolbar_search_users_result_activity)
     Toolbar toolbar;
     Fragment mFragment;
     @Inject
@@ -122,7 +122,7 @@ public class SearchUsersResultActivity extends BaseActivity implements ActivityT
                 getCurrentAccountAndInitializeFragment(query);
             } else {
                 mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_search_subreddits_result_activity, mFragment).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_search_users_result_activity, mFragment).commit();
             }
         }
     }
@@ -159,7 +159,7 @@ public class SearchUsersResultActivity extends BaseActivity implements ActivityT
             bundle.putString(UserListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
             bundle.putString(UserListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
             mFragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_search_subreddits_result_activity, mFragment).commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_search_users_result_activity, mFragment).commit();
         });
     }
 

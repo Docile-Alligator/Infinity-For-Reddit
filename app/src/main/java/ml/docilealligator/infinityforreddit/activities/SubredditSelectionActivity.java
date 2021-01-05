@@ -234,15 +234,15 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            case R.id.action_search_subreddit_selection_activity:
-                Intent intent = new Intent(this, SearchActivity.class);
-                intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, true);
-                startActivityForResult(intent, SUBREDDIT_SEARCH_REQUEST_CODE);
-                return true;
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            finish();
+            return true;
+        } else if (itemId == R.id.action_search_subreddit_selection_activity) {
+            Intent intent = new Intent(this, SearchActivity.class);
+            intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, true);
+            startActivityForResult(intent, SUBREDDIT_SEARCH_REQUEST_CODE);
+            return true;
         }
 
         return false;

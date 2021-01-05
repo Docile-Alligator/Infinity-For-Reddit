@@ -491,7 +491,7 @@ Funktioniert vielleicht nicht auf Android 11"</string>
     <string name="multi_reddit_name_hint">"Name (Max. 50 Zeichen)"</string>
     <string name="multi_reddit_description_hint">"Beschreibung"</string>
     <string name="private_multi_reddit">"Privat"</string>
-    <string name="select_subreddits">"Subreddits auswählen"</string>
+    <string name="select_subreddits_and_users">"Subreddits auswählen"</string>
     <string name="no_multi_reddit_name">"Wo ist der Name?"</string>
     <string name="create_multi_reddit_failed">"Kann dieses Multireddit nicht erstellen"</string>
     <string name="duplicate_multi_reddit">"Dieses Multireddit existiert bereits"</string>

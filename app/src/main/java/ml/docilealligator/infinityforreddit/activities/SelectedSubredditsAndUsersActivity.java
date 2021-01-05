@@ -27,27 +27,29 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.adapters.SelectedSubredditsRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.SelectSubredditsOrUsersOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
-public class SelectedSubredditsActivity extends BaseActivity implements ActivityToolbarInterface {
+public class SelectedSubredditsAndUsersActivity extends BaseActivity implements ActivityToolbarInterface {
 
     public static final String EXTRA_SELECTED_SUBREDDITS = "ESS";
     public static final String EXTRA_RETURN_SELECTED_SUBREDDITS = "ERSS";
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 1;
+    private static final int USER_SELECTION_REQUEST_CODE = 2;
     private static final String SELECTED_SUBREDDITS_STATE = "SSS";
 
-    @BindView(R.id.coordinator_layout_selected_subreddits_activity)
+    @BindView(R.id.coordinator_layout_selected_subreddits_and_users_activity)
     CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_selected_subreddits_activity)
+    @BindView(R.id.appbar_layout_selected_subreddits_and_users_activity)
     AppBarLayout appBarLayout;
-    @BindView(R.id.toolbar_selected_subreddits_activity)
+    @BindView(R.id.toolbar_selected_subreddits_and_users_activity)
     Toolbar toolbar;
-    @BindView(R.id.recycler_view_selected_subreddits_activity)
+    @BindView(R.id.recycler_view_selected_subreddits_and_users_activity)
     RecyclerView recyclerView;
-    @BindView(R.id.fab_selected_subreddits_activity)
+    @BindView(R.id.fab_selected_subreddits_and_users_activity)
     FloatingActionButton fab;
     @Inject
     @Named("default")
@@ -102,9 +104,20 @@ public class SelectedSubredditsActivity extends BaseActivity implements Activity
         });
 
         fab.setOnClickListener(view -> {
-            Intent intent = new Intent(this, SubredditMultiselectionActivity.class);
-            startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
+            SelectSubredditsOrUsersOptionsBottomSheetFragment selectSubredditsOrUsersOptionsBottomSheetFragment = new SelectSubredditsOrUsersOptionsBottomSheetFragment();
+            selectSubredditsOrUsersOptionsBottomSheetFragment.show(getSupportFragmentManager(), selectSubredditsOrUsersOptionsBottomSheetFragment.getTag());
         });
+    }
+
+    public void selectSubreddits() {
+        Intent intent = new Intent(this, SubredditMultiselectionActivity.class);
+        startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
+    }
+
+    public void selectUsers() {
+        Intent intent = new Intent(this, SearchActivity.class);
+        intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_USERS, true);
+        startActivityForResult(intent, USER_SELECTION_REQUEST_CODE);
     }
 
     @Override
@@ -133,13 +146,22 @@ public class SelectedSubredditsActivity extends BaseActivity implements Activity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SUBREDDIT_SELECTION_REQUEST_CODE && resultCode == RESULT_OK) {
-            if (data != null) {
-                if (subreddits == null) {
-                    subreddits = new ArrayList<>();
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SUBREDDIT_SELECTION_REQUEST_CODE) {
+                if (data != null) {
+                    if (subreddits == null) {
+                        subreddits = new ArrayList<>();
+                    }
+                    subreddits = data.getStringArrayListExtra(SubredditMultiselectionActivity.EXTRA_RETURN_SELECTED_SUBREDDITS);
+                    adapter.addSubreddits(subreddits);
                 }
-                subreddits = data.getStringArrayListExtra(SubredditMultiselectionActivity.EXTRA_RETURN_SELECTED_SUBREDDITS);
-                adapter.addSubreddits(subreddits);
+            } else if (requestCode == USER_SELECTION_REQUEST_CODE) {
+                if (data != null) {
+                    if (subreddits == null) {
+                        subreddits = new ArrayList<>();
+                    }
+                    adapter.addUserInSubredditType("u_" + data.getStringExtra(SearchActivity.EXTRA_RETURN_USER_NAME));
+                }
             }
         }
     }

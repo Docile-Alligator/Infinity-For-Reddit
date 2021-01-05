@@ -36,7 +36,7 @@ import ml.docilealligator.infinityforreddit.activities.SearchResultActivity;
 import ml.docilealligator.infinityforreddit.activities.SearchSubredditsResultActivity;
 import ml.docilealligator.infinityforreddit.activities.SearchUsersResultActivity;
 import ml.docilealligator.infinityforreddit.activities.SelectUserFlairActivity;
-import ml.docilealligator.infinityforreddit.activities.SelectedSubredditsActivity;
+import ml.docilealligator.infinityforreddit.activities.SelectedSubredditsAndUsersActivity;
 import ml.docilealligator.infinityforreddit.activities.SendPrivateMessageActivity;
 import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.activities.SubmitCrosspostActivity;
@@ -181,7 +181,7 @@ public interface AppComponent {
 
     void inject(EditMultiRedditActivity editMultiRedditActivity);
 
-    void inject(SelectedSubredditsActivity selectedSubredditsActivity);
+    void inject(SelectedSubredditsAndUsersActivity selectedSubredditsAndUsersActivity);
 
     void inject(ReportActivity reportActivity);
 

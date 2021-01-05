@@ -608,7 +608,7 @@
     <string name="multi_reddit_name_hint">Name (Max 50 Characters)</string>
     <string name="multi_reddit_description_hint">Description</string>
     <string name="private_multi_reddit">Private</string>
-    <string name="select_subreddits">Select Subreddits</string>
+    <string name="select_subreddits_and_users">Select Subreddits and Users</string>
     <string name="no_multi_reddit_name">Where is the name?</string>
     <string name="create_multi_reddit_failed">Cannot create this multireddit</string>
     <string name="duplicate_multi_reddit">This multireddit already exists</string>

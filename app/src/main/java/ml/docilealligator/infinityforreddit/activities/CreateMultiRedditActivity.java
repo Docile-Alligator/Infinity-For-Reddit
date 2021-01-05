@@ -144,8 +144,8 @@ public class CreateMultiRedditActivity extends BaseActivity {
 
     private void bindView() {
         selectSubredditTextView.setOnClickListener(view -> {
-            Intent intent = new Intent(CreateMultiRedditActivity.this, SelectedSubredditsActivity.class);
-            intent.putStringArrayListExtra(SelectedSubredditsActivity.EXTRA_SELECTED_SUBREDDITS, mSubreddits);
+            Intent intent = new Intent(CreateMultiRedditActivity.this, SelectedSubredditsAndUsersActivity.class);
+            intent.putStringArrayListExtra(SelectedSubredditsAndUsersActivity.EXTRA_SELECTED_SUBREDDITS, mSubreddits);
             startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
         });
     }
