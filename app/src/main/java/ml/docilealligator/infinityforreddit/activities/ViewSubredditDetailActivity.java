@@ -70,6 +70,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
+import ml.docilealligator.infinityforreddit.asynctasks.AddSubredditOrUserToMultiReddit;
 import ml.docilealligator.infinityforreddit.asynctasks.CheckIsSubscribedToSubredditAsyncTask;
 import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubredditDataAsyncTask;
@@ -87,6 +88,7 @@ import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.fragments.SidebarFragment;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
+import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostDataSource;
 import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
@@ -117,6 +119,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String MESSAGE_FULLNAME_STATE = "MFS";
     private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
+    private static final int ADD_TO_MULTIREDDIT_REQUEST_CODE = 1;
 
     @BindView(R.id.coordinator_layout_view_subreddit_detail_activity)
     CoordinatorLayout coordinatorLayout;
@@ -902,76 +905,111 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            case R.id.action_sort_view_subreddit_detail_activity:
-                displaySortTypeBottomSheetFragment();
-                return true;
-            case R.id.action_search_view_subreddit_detail_activity:
-                Intent intent = new Intent(this, SearchActivity.class);
-                intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, subredditName);
-                startActivity(intent);
-                return true;
-            case R.id.action_refresh_view_subreddit_detail_activity:
-                if (mMenu != null) {
-                    mMenu.findItem(R.id.action_lazy_mode_view_subreddit_detail_activity).setTitle(R.string.action_start_lazy_mode);
-                }
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.refresh();
-                    mFetchSubredditInfoSuccess = false;
-                    fetchSubredditData();
-                }
-                return true;
-            case R.id.action_lazy_mode_view_subreddit_detail_activity:
-                if (sectionsPagerAdapter != null) {
-                    MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_subreddit_detail_activity);
-                    if (isInLazyMode) {
-                        isInLazyMode = false;
-                        sectionsPagerAdapter.stopLazyMode();
-                        lazyModeItem.setTitle(R.string.action_start_lazy_mode);
-                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
-                                AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            finish();
+            return true;
+        } else if (itemId == R.id.action_sort_view_subreddit_detail_activity) {
+            displaySortTypeBottomSheetFragment();
+            return true;
+        } else if (itemId == R.id.action_search_view_subreddit_detail_activity) {
+            Intent intent = new Intent(this, SearchActivity.class);
+            intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+            startActivity(intent);
+            return true;
+        } else if (itemId == R.id.action_refresh_view_subreddit_detail_activity) {
+            if (mMenu != null) {
+                mMenu.findItem(R.id.action_lazy_mode_view_subreddit_detail_activity).setTitle(R.string.action_start_lazy_mode);
+            }
+            if (sectionsPagerAdapter != null) {
+                sectionsPagerAdapter.refresh();
+                mFetchSubredditInfoSuccess = false;
+                fetchSubredditData();
+            }
+            return true;
+        } else if (itemId == R.id.action_lazy_mode_view_subreddit_detail_activity) {
+            if (sectionsPagerAdapter != null) {
+                MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_subreddit_detail_activity);
+                if (isInLazyMode) {
+                    isInLazyMode = false;
+                    sectionsPagerAdapter.stopLazyMode();
+                    lazyModeItem.setTitle(R.string.action_start_lazy_mode);
+                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
+                            AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
+                    collapsingToolbarLayout.setLayoutParams(params);
+                } else {
+                    isInLazyMode = true;
+                    if (sectionsPagerAdapter.startLazyMode()) {
+                        lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+                        appBarLayout.setExpanded(false);
+                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
                         collapsingToolbarLayout.setLayoutParams(params);
                     } else {
-                        isInLazyMode = true;
-                        if (sectionsPagerAdapter.startLazyMode()) {
-                            lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-                            appBarLayout.setExpanded(false);
-                            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
-                            collapsingToolbarLayout.setLayoutParams(params);
-                        } else {
-                            isInLazyMode = false;
-                        }
+                        isInLazyMode = false;
                     }
                 }
+            }
+            return true;
+        } else if (itemId == R.id.action_change_post_layout_view_subreddit_detail_activity) {
+            PostLayoutBottomSheetFragment postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
+            postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+            return true;
+        } else if (itemId == R.id.action_select_user_flair_view_subreddit_detail_activity) {
+            if (mAccessToken == null) {
+                Toast.makeText(this, R.string.login_first, Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.action_change_post_layout_view_subreddit_detail_activity:
-                PostLayoutBottomSheetFragment postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
-                postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+            }
+            Intent selectUserFlairIntent = new Intent(this, SelectUserFlairActivity.class);
+            selectUserFlairIntent.putExtra(SelectUserFlairActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+            startActivity(selectUserFlairIntent);
+            return true;
+        } else if (itemId == R.id.action_add_to_multireddit_view_subreddit_detail_activity) {
+            if (mAccessToken == null) {
+                Toast.makeText(this, R.string.login_first, Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.action_select_user_flair_view_subreddit_detail_activity:
-                if (mAccessToken == null) {
-                    Toast.makeText(this, R.string.login_first, Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-                Intent selectUserFlairIntent = new Intent(this, SelectUserFlairActivity.class);
-                selectUserFlairIntent.putExtra(SelectUserFlairActivity.EXTRA_SUBREDDIT_NAME, subredditName);
-                startActivity(selectUserFlairIntent);
-                return true;
-            case R.id.action_share_view_subreddit_detail_activity:
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, "https://www.reddit.com/r/" + subredditName);
-                if (shareIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
-                } else {
-                    Toast.makeText(this, R.string.no_app, Toast.LENGTH_SHORT).show();
-                }
-                return true;
+            }
+            Intent intent = new Intent(this, MultiredditSelectionActivity.class);
+            startActivityForResult(intent, ADD_TO_MULTIREDDIT_REQUEST_CODE);
+        } else if (itemId == R.id.action_share_view_subreddit_detail_activity) {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "https://www.reddit.com/r/" + subredditName);
+            if (shareIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
+            } else {
+                Toast.makeText(this, R.string.no_app, Toast.LENGTH_SHORT).show();
+            }
+            return true;
         }
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == ADD_TO_MULTIREDDIT_REQUEST_CODE && resultCode == RESULT_OK) {
+            if (data != null) {
+                MultiReddit multiReddit = data.getParcelableExtra(MultiredditSelectionActivity.EXTRA_RETURN_MULTIREDDIT);
+                if (multiReddit != null) {
+                    AddSubredditOrUserToMultiReddit.addSubredditOrUserToMultiReddit(mOauthRetrofit,
+                            mAccessToken, multiReddit.getPath(), subredditName,
+                            new AddSubredditOrUserToMultiReddit.AddSubredditOrUserToMultiRedditListener() {
+                                @Override
+                                public void success() {
+                                    Toast.makeText(ViewSubredditDetailActivity.this,
+                                            getString(R.string.add_subreddit_or_user_to_multireddit_success, subredditName, multiReddit.getDisplayName()), Toast.LENGTH_LONG).show();
+                                }
+
+                                @Override
+                                public void failed(int code) {
+                                    Toast.makeText(ViewSubredditDetailActivity.this,
+                                            getString(R.string.add_subreddit_or_user_to_multireddit_failed, subredditName, multiReddit.getDisplayName()), Toast.LENGTH_LONG).show();
+                                }
+                            });
+                }
+
+            }
+        }
     }
 
     @Override

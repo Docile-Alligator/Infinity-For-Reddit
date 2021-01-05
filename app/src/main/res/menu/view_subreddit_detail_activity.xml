@@ -41,8 +41,14 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_share_view_subreddit_detail_activity"
+        android:id="@+id/action_add_to_multireddit_view_subreddit_detail_activity"
         android:orderInCategory="7"
+        android:title="@string/action_add_to_multireddit"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_share_view_subreddit_detail_activity"
+        android:orderInCategory="8"
         android:title="@string/action_share"
         app:showAsAction="never" />
 </menu>

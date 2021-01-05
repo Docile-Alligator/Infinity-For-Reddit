@@ -22,6 +22,7 @@ import ml.docilealligator.infinityforreddit.activities.InboxActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.LoginActivity;
 import ml.docilealligator.infinityforreddit.activities.MainActivity;
+import ml.docilealligator.infinityforreddit.activities.MultiredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.activities.PostFilterUsageListingActivity;
 import ml.docilealligator.infinityforreddit.activities.PostFilterPreferenceActivity;
 import ml.docilealligator.infinityforreddit.activities.PostImageActivity;
@@ -239,4 +240,6 @@ public interface AppComponent {
     void inject(PostFilterUsageListingActivity postFilterUsageListingActivity);
 
     void inject(SearchUsersResultActivity searchUsersResultActivity);
+
+    void inject(MultiredditSelectionActivity multiredditSelectionActivity);
 }

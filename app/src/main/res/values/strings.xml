@@ -37,6 +37,8 @@
     <string name="customize_post_filter_activity_label">Customize Post Filter</string>
     <string name="filtered_posts_activity_subtitle">Filtered Posts</string>
     <string name="post_filter_preference_activity_label">Post Filter</string>
+    <string name="search_users_result_activity_label">Users</string>
+    <string name="multireddit_selection_activity_label">Select a Multireddit</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -76,6 +78,7 @@
     <string name="action_give_award">Give Award</string>
     <string name="action_save_to_database">Save to Database</string>
     <string name="action_read_all_messages">Read All Messages</string>
+    <string name="action_add_to_multireddit">Add to Multireddit</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -997,5 +1000,8 @@
     <string name="read_all_messages_time_limit">You are doing this too frequently. Try again later. This is Reddit API\'s rate limit.</string>
     <string name="read_all_messages_success">Read all messages successfully</string>
     <string name="read_all_messages_failed">Unable to read all messages</string>
+
+    <string name="add_subreddit_or_user_to_multireddit_success">%1$s is added to multireddit %2$s</string>
+    <string name="add_subreddit_or_user_to_multireddit_failed">Unable to add %1$s to multireddit %2$s</string>
 
 </resources>

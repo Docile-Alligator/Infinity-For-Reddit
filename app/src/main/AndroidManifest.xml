@@ -32,7 +32,14 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
-        <activity android:name=".activities.SearchUsersResultActivity"></activity>
+        <activity android:name=".activities.MultiredditSelectionActivity"
+            android:label="@string/multireddit_selection_activity_label"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".activities.SearchUsersResultActivity"
+            android:label="@string/search_users_result_activity_label"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.PostFilterUsageListingActivity"
             android:parentActivityName=".activities.SettingsActivity"

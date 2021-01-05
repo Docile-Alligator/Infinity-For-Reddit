@@ -339,4 +339,11 @@ public interface RedditAPI {
 
     @POST("/api/read_all_messages")
     Call<String> readAllMessages(@HeaderMap Map<String, String> headers);
+
+
+    @FormUrlEncoded
+    @PUT("/api/multi{multipath}r/{subredditName}")
+    Call<String> addSubredditToMultiReddit(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params,
+                                           @Path(value = "multipath", encoded = true) String multipath, @Path("subredditName") String subredditName);
+
 }

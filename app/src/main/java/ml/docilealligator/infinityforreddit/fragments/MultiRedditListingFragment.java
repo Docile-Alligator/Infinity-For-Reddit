@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -28,15 +30,19 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingActivity;
-import ml.docilealligator.infinityforreddit.adapters.MultiRedditListingRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.multireddit.MultiRedditViewModel;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.activities.MultiredditSelectionActivity;
+import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewMultiRedditDetailActivity;
+import ml.docilealligator.infinityforreddit.adapters.MultiRedditListingRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.MultiRedditOptionsBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
+import ml.docilealligator.infinityforreddit.multireddit.MultiRedditViewModel;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
@@ -44,6 +50,7 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
 
     public static final String EXTRA_ACCOUNT_NAME = "EAN";
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
+    public static final String EXTRA_IS_GETTING_MULTIREDDIT_INFO = "EIGMI";
 
     @BindView(R.id.swipe_refresh_layout_multi_reddit_listing_fragment)
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -67,7 +74,7 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
     CustomThemeWrapper mCustomThemeWrapper;
 
     public MultiRedditViewModel mMultiRedditViewModel;
-    private SubscribedThingListingActivity mActivity;
+    private AppCompatActivity mActivity;
     private RequestManager mGlide;
     private LinearLayoutManager mLinearLayoutManager;
 
@@ -86,7 +93,7 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
 
         applyTheme();
 
-        if ((mActivity instanceof BaseActivity && ((BaseActivity) mActivity).isImmersiveInterface())) {
+        if ((mActivity != null && ((BaseActivity) mActivity).isImmersiveInterface())) {
             mRecyclerView.setPadding(0, 0, 0, ((BaseActivity) mActivity).getNavBarHeight());
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {
@@ -99,25 +106,46 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
 
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
+        boolean isGettingMultiredditInfo = getArguments().getBoolean(EXTRA_IS_GETTING_MULTIREDDIT_INFO, false);
 
         mGlide = Glide.with(this);
 
         mLinearLayoutManager = new LinearLayoutManager(mActivity);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         MultiRedditListingRecyclerViewAdapter adapter = new MultiRedditListingRecyclerViewAdapter(mActivity,
-                mOauthRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, accessToken, accountName);
-        mRecyclerView.setAdapter(adapter);
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                mOauthRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, accessToken, new MultiRedditListingRecyclerViewAdapter.OnItemClickListener() {
             @Override
-            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                if (dy > 0) {
-                    mActivity.fab.hide();
+            public void onClick(MultiReddit multiReddit) {
+                if (mActivity instanceof MultiredditSelectionActivity) {
+                    ((MultiredditSelectionActivity) mActivity).getSelectedMultireddit(multiReddit);
                 } else {
-                    mActivity.fab.show();
+                    Intent intent = new Intent(mActivity, ViewMultiRedditDetailActivity.class);
+                    intent.putExtra(ViewMultiRedditDetailActivity.EXTRA_MULTIREDDIT_DATA, multiReddit);
+                    mActivity.startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onLongClick(MultiReddit multiReddit) {
+                if (!isGettingMultiredditInfo) {
+                    showOptionsBottomSheetFragment(multiReddit);
                 }
             }
         });
+        mRecyclerView.setAdapter(adapter);
+        if (mActivity instanceof SubscribedThingListingActivity) {
+            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    if (dy > 0) {
+                        ((SubscribedThingListingActivity) mActivity).fab.hide();
+                    } else {
+                        ((SubscribedThingListingActivity) mActivity).fab.show();
+                    }
+                }
+            });
+        }
         new FastScrollerBuilder(mRecyclerView).build();
 
         mMultiRedditViewModel = new ViewModelProvider(this,
@@ -149,6 +177,14 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
         return rootView;
     }
 
+    private void showOptionsBottomSheetFragment(MultiReddit multiReddit) {
+        MultiRedditOptionsBottomSheetFragment fragment = new MultiRedditOptionsBottomSheetFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(MultiRedditOptionsBottomSheetFragment.EXTRA_MULTI_REDDIT, multiReddit);
+        fragment.setArguments(bundle);
+        fragment.show(mActivity.getSupportFragmentManager(), fragment.getTag());
+    }
+
     public void goBackToTop() {
         if (mLinearLayoutManager != null) {
             mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
@@ -158,7 +194,7 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mActivity = (SubscribedThingListingActivity) context;
+        mActivity = (AppCompatActivity) context;
     }
 
     @Override

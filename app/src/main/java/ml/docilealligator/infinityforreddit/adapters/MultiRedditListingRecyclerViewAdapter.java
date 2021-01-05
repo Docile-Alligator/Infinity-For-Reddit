@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
-import android.content.Intent;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,13 +21,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.zhanghai.android.fastscroll.PopupTextProvider;
-import ml.docilealligator.infinityforreddit.activities.ViewMultiRedditDetailActivity;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.MultiRedditOptionsBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.multireddit.FavoriteMultiReddit;
-import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.multireddit.FavoriteMultiReddit;
+import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
@@ -46,24 +42,29 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
     private RequestManager mGlide;
 
     private String mAccessToken;
-    private String mAccountName;
     private List<MultiReddit> mMultiReddits;
     private List<MultiReddit> mFavoriteMultiReddits;
     private int mPrimaryTextColor;
     private int mSecondaryTextColor;
+    private OnItemClickListener mOnItemClickListener;
+
+    public interface OnItemClickListener {
+        void onClick(MultiReddit multiReddit);
+        void onLongClick(MultiReddit multiReddit);
+    }
 
     public MultiRedditListingRecyclerViewAdapter(AppCompatActivity activity, Retrofit oauthRetrofit,
                                                  RedditDataRoomDatabase redditDataRoomDatabase,
                                                  CustomThemeWrapper customThemeWrapper,
-                                                 String accessToken, String accountName) {
+                                                 String accessToken, OnItemClickListener onItemClickListener) {
         mActivity = activity;
         mGlide = Glide.with(activity);
         mOauthRetrofit = oauthRetrofit;
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mAccessToken = accessToken;
-        mAccountName = accountName;
         mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
+        mOnItemClickListener = onItemClickListener;
     }
 
     @Override
@@ -176,13 +177,11 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                 }
             });
             holder.itemView.setOnClickListener(view -> {
-                Intent intent = new Intent(mActivity, ViewMultiRedditDetailActivity.class);
-                intent.putExtra(ViewMultiRedditDetailActivity.EXTRA_MULTIREDDIT_DATA, multiReddit);
-                mActivity.startActivity(intent);
+                mOnItemClickListener.onClick(multiReddit);
             });
 
             holder.itemView.setOnLongClickListener(view -> {
-                showOptionsBottomSheetFragment(multiReddit);
+                mOnItemClickListener.onLongClick(multiReddit);
                 return true;
             });
 
@@ -264,13 +263,11 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                 }
             });
             holder.itemView.setOnClickListener(view -> {
-                Intent intent = new Intent(mActivity, ViewMultiRedditDetailActivity.class);
-                intent.putExtra(ViewMultiRedditDetailActivity.EXTRA_MULTIREDDIT_DATA, multiReddit);
-                mActivity.startActivity(intent);
+                mOnItemClickListener.onClick(multiReddit);
             });
 
             holder.itemView.setOnLongClickListener(view -> {
-                showOptionsBottomSheetFragment(multiReddit);
+                mOnItemClickListener.onLongClick(multiReddit);
                 return true;
             });
 
@@ -309,14 +306,6 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
         } else if (holder instanceof FavoriteMultiRedditViewHolder) {
             mGlide.clear(((FavoriteMultiRedditViewHolder) holder).iconImageView);
         }
-    }
-
-    private void showOptionsBottomSheetFragment(MultiReddit multiReddit) {
-        MultiRedditOptionsBottomSheetFragment fragment = new MultiRedditOptionsBottomSheetFragment();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable(MultiRedditOptionsBottomSheetFragment.EXTRA_MULTI_REDDIT, multiReddit);
-        fragment.setArguments(bundle);
-        fragment.show(mActivity.getSupportFragmentManager(), fragment.getTag());
     }
 
     public void setMultiReddits(List<MultiReddit> multiReddits) {
