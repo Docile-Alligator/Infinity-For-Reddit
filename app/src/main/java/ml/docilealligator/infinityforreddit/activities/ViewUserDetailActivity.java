@@ -74,6 +74,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
+import ml.docilealligator.infinityforreddit.asynctasks.AddSubredditOrUserToMultiReddit;
 import ml.docilealligator.infinityforreddit.asynctasks.CheckIsFollowingUserAsyncTask;
 import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccountAsyncTask;
@@ -90,6 +91,7 @@ import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.CommentsListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
+import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostDataSource;
 import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
@@ -115,6 +117,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
     public static final int GIVE_AWARD_REQUEST_CODE = 200;
     public static final int EDIT_COMMENT_REQUEST_CODE = 300;
+    public static final int ADD_TO_MULTIREDDIT_REQUEST_CODE = 400;
 
     private static final String FETCH_USER_INFO_STATE = "FSIS";
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
@@ -913,100 +916,107 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            case R.id.action_sort_view_user_detail_activity:
-                userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
-                return true;
-            case R.id.action_search_view_user_detail_activity:
-                Intent intent = new Intent(this, SearchActivity.class);
-                intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, username);
-                intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_IS_USER, true);
-                startActivity(intent);
-                return true;
-            case R.id.action_refresh_view_user_detail_activity:
-                if (mMenu != null) {
-                    mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity).setTitle(R.string.action_start_lazy_mode);
-                }
-                sectionsPagerAdapter.refresh();
-                mFetchUserInfoSuccess = false;
-                fetchUserInfo();
-                return true;
-            case R.id.action_lazy_mode_view_user_detail_activity:
-                MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity);
-                if (isInLazyMode) {
-                    isInLazyMode = false;
-                    sectionsPagerAdapter.stopLazyMode();
-                    lazyModeItem.setTitle(R.string.action_start_lazy_mode);
-                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
-                            AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            finish();
+            return true;
+        } else if (itemId == R.id.action_sort_view_user_detail_activity) {
+            userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
+            return true;
+        } else if (itemId == R.id.action_search_view_user_detail_activity) {
+            Intent intent = new Intent(this, SearchActivity.class);
+            intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, username);
+            intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_IS_USER, true);
+            startActivity(intent);
+            return true;
+        } else if (itemId == R.id.action_refresh_view_user_detail_activity) {
+            if (mMenu != null) {
+                mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity).setTitle(R.string.action_start_lazy_mode);
+            }
+            sectionsPagerAdapter.refresh();
+            mFetchUserInfoSuccess = false;
+            fetchUserInfo();
+            return true;
+        } else if (itemId == R.id.action_lazy_mode_view_user_detail_activity) {
+            MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity);
+            if (isInLazyMode) {
+                isInLazyMode = false;
+                sectionsPagerAdapter.stopLazyMode();
+                lazyModeItem.setTitle(R.string.action_start_lazy_mode);
+                params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
+                        AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
+                collapsingToolbarLayout.setLayoutParams(params);
+            } else {
+                isInLazyMode = true;
+                if (sectionsPagerAdapter.startLazyMode()) {
+                    lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+                    appBarLayout.setExpanded(false);
+                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
                     collapsingToolbarLayout.setLayoutParams(params);
                 } else {
-                    isInLazyMode = true;
-                    if (sectionsPagerAdapter.startLazyMode()) {
-                        lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-                        appBarLayout.setExpanded(false);
-                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
-                        collapsingToolbarLayout.setLayoutParams(params);
-                    } else {
-                        isInLazyMode = false;
-                    }
+                    isInLazyMode = false;
                 }
+            }
+            return true;
+        } else if (itemId == R.id.action_change_post_layout_view_user_detail_activity) {
+            postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+            return true;
+        } else if (itemId == R.id.action_share_view_user_detail_activity) {
+            Intent shareIntent = new Intent(Intent.ACTION_SEND);
+            shareIntent.setType("text/plain");
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "https://www.reddit.com/user/" + username);
+            if (shareIntent.resolveActivity(getPackageManager()) != null) {
+                startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
+            } else {
+                Toast.makeText(this, R.string.no_app, Toast.LENGTH_SHORT).show();
+            }
+            return true;
+        } else if (itemId == R.id.action_send_private_message_view_user_detail_activity) {
+            if (mAccessToken == null) {
+                Toast.makeText(this, R.string.login_first, Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.action_change_post_layout_view_user_detail_activity:
-                postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
-                return true;
-            case R.id.action_share_view_user_detail_activity:
-                Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, "https://www.reddit.com/user/" + username);
-                if (shareIntent.resolveActivity(getPackageManager()) != null) {
-                    startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
-                } else {
-                    Toast.makeText(this, R.string.no_app, Toast.LENGTH_SHORT).show();
-                }
-                return true;
-            case R.id.action_send_private_message_view_user_detail_activity:
-                if (mAccessToken == null) {
-                    Toast.makeText(this, R.string.login_first, Toast.LENGTH_SHORT).show();
-                    return true;
-                }
+            }
 
-                Intent pmIntent = new Intent(this, SendPrivateMessageActivity.class);
-                pmIntent.putExtra(SendPrivateMessageActivity.EXTRA_RECIPIENT_USERNAME, username);
-                startActivity(pmIntent);
+            Intent pmIntent = new Intent(this, SendPrivateMessageActivity.class);
+            pmIntent.putExtra(SendPrivateMessageActivity.EXTRA_RECIPIENT_USERNAME, username);
+            startActivity(pmIntent);
+            return true;
+        } else if (itemId == R.id.action_add_to_multireddit_view_user_detail_activity) {
+            if (mAccessToken == null) {
+                Toast.makeText(this, R.string.login_first, Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.action_report_view_user_detail_activity:
-                Intent reportIntent = new Intent(this, LinkResolverActivity.class);
-                reportIntent.setData(Uri.parse("https://www.reddithelp.com/en/categories/rules-reporting/account-and-community-restrictions/what-should-i-do-if-i-see-something-i"));
-                startActivity(reportIntent);
+            }
+            Intent intent = new Intent(this, MultiredditSelectionActivity.class);
+            startActivityForResult(intent, ADD_TO_MULTIREDDIT_REQUEST_CODE);
+        } else if (itemId == R.id.action_report_view_user_detail_activity) {
+            Intent reportIntent = new Intent(this, LinkResolverActivity.class);
+            reportIntent.setData(Uri.parse("https://www.reddithelp.com/en/categories/rules-reporting/account-and-community-restrictions/what-should-i-do-if-i-see-something-i"));
+            startActivity(reportIntent);
+            return true;
+        } else if (itemId == R.id.action_block_user_view_user_detail_activity) {
+            if (mAccessToken == null) {
+                Toast.makeText(this, R.string.login_first, Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.action_block_user_view_user_detail_activity:
-                if (mAccessToken == null) {
-                    Toast.makeText(this, R.string.login_first, Toast.LENGTH_SHORT).show();
-                    return true;
-                }
+            }
 
-                new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
-                        .setTitle(R.string.block_user)
-                        .setMessage(R.string.are_you_sure)
-                        .setPositiveButton(R.string.yes, (dialogInterface, i)
-                                -> BlockUser.blockUser(mOauthRetrofit, mAccessToken, username, new BlockUser.BlockUserListener() {
-                            @Override
-                            public void success() {
-                                Toast.makeText(ViewUserDetailActivity.this, R.string.block_user_success, Toast.LENGTH_SHORT).show();
-                            }
+            new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                    .setTitle(R.string.block_user)
+                    .setMessage(R.string.are_you_sure)
+                    .setPositiveButton(R.string.yes, (dialogInterface, i)
+                            -> BlockUser.blockUser(mOauthRetrofit, mAccessToken, username, new BlockUser.BlockUserListener() {
+                        @Override
+                        public void success() {
+                            Toast.makeText(ViewUserDetailActivity.this, R.string.block_user_success, Toast.LENGTH_SHORT).show();
+                        }
 
-                            @Override
-                            public void failed() {
-                                Toast.makeText(ViewUserDetailActivity.this, R.string.block_user_failed, Toast.LENGTH_SHORT).show();
-                            }
-                        }))
-                        .setNegativeButton(R.string.no, null)
-                        .show();
-                return true;
+                        @Override
+                        public void failed() {
+                            Toast.makeText(ViewUserDetailActivity.this, R.string.block_user_failed, Toast.LENGTH_SHORT).show();
+                        }
+                    }))
+                    .setNegativeButton(R.string.no, null)
+                    .show();
+            return true;
         }
         return false;
     }
@@ -1029,6 +1039,28 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                                 data.getStringExtra(EditCommentActivity.EXTRA_EDITED_COMMENT_CONTENT),
                                 data.getExtras().getInt(EditCommentActivity.EXTRA_EDITED_COMMENT_POSITION));
                     }
+                }
+            } else if (requestCode == ADD_TO_MULTIREDDIT_REQUEST_CODE) {
+                if (data != null) {
+                    MultiReddit multiReddit = data.getParcelableExtra(MultiredditSelectionActivity.EXTRA_RETURN_MULTIREDDIT);
+                    if (multiReddit != null) {
+                        AddSubredditOrUserToMultiReddit.addSubredditOrUserToMultiReddit(mOauthRetrofit,
+                                mAccessToken, multiReddit.getPath(), "u_" + username,
+                                new AddSubredditOrUserToMultiReddit.AddSubredditOrUserToMultiRedditListener() {
+                                    @Override
+                                    public void success() {
+                                        Toast.makeText(ViewUserDetailActivity.this,
+                                                getString(R.string.add_subreddit_or_user_to_multireddit_success, username, multiReddit.getDisplayName()), Toast.LENGTH_LONG).show();
+                                    }
+
+                                    @Override
+                                    public void failed(int code) {
+                                        Toast.makeText(ViewUserDetailActivity.this,
+                                                getString(R.string.add_subreddit_or_user_to_multireddit_failed, username, multiReddit.getDisplayName()), Toast.LENGTH_LONG).show();
+                                    }
+                                });
+                    }
+
                 }
             }
         }

@@ -45,12 +45,18 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_report_view_user_detail_activity"
+        android:id="@+id/action_add_to_multireddit_view_user_detail_activity"
         android:orderInCategory="8"
+        android:title="@string/action_add_to_multireddit"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_report_view_user_detail_activity"
+        android:orderInCategory="9"
         android:title="@string/action_report" />
 
     <item
         android:id="@+id/action_block_user_view_user_detail_activity"
-        android:orderInCategory="9"
+        android:orderInCategory="10"
         android:title="@string/action_block_user" />
 </menu>
