@@ -1004,4 +1004,6 @@
     <string name="add_subreddit_or_user_to_multireddit_success">%1$s is added to multireddit %2$s</string>
     <string name="add_subreddit_or_user_to_multireddit_failed">Unable to add %1$s to multireddit %2$s</string>
 
+    <string name="choose_a_user">Choose a user</string>
+
 </resources>

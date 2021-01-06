@@ -68,7 +68,7 @@ import ml.docilealligator.infinityforreddit.FetchPostFilterAndReadPosts;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NetworkState;
-import ml.docilealligator.infinityforreddit.PostFragmentContentScrollingInterface;
+import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
@@ -400,14 +400,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             return false;
         });
 
-        if (activity instanceof PostFragmentContentScrollingInterface) {
+        if (activity instanceof RecyclerViewContentScrollingInterface) {
             mPostRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     if (dy > 0) {
-                        ((PostFragmentContentScrollingInterface) activity).contentScrollDown();
+                        ((RecyclerViewContentScrollingInterface) activity).contentScrollDown();
                     } else if (dy < 0) {
-                        ((PostFragmentContentScrollingInterface) activity).contentScrollUp();
+                        ((RecyclerViewContentScrollingInterface) activity).contentScrollUp();
                     }
                 }
             });

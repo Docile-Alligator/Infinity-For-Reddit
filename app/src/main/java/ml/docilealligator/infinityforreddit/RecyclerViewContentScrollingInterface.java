@@ -1,6 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
-public interface PostFragmentContentScrollingInterface {
+public interface RecyclerViewContentScrollingInterface {
     void contentScrollUp();
 
     void contentScrollDown();

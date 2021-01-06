@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -23,7 +26,10 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.textfield.TextInputEditText;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrInterface;
 
@@ -40,6 +46,7 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
@@ -55,7 +62,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class InboxActivity extends BaseActivity implements ActivityToolbarInterface {
+public class InboxActivity extends BaseActivity implements ActivityToolbarInterface, RecyclerViewContentScrollingInterface {
 
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
     public static final String EXTRA_VIEW_MESSAGE = "EVM";
@@ -63,6 +70,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
+    private static final int SEARCH_USER_REQUEST_CODE = 1;
 
     @BindView(R.id.coordinator_layout_inbox_activity)
     CoordinatorLayout mCoordinatorLayout;
@@ -76,6 +84,8 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     TabLayout tabLayout;
     @BindView(R.id.view_pager_inbox_activity)
     ViewPager viewPager;
+    @BindView(R.id.fab_inbox_activity)
+    FloatingActionButton fab;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -128,6 +138,13 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
                 adjustToolbar(mToolbar);
+
+                int navBarHeight = getNavBarHeight();
+                if (navBarHeight > 0) {
+                    CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+                    params.bottomMargin += navBarHeight;
+                    fab.setLayoutParams(params);
+                }
             }
         }
 
@@ -149,6 +166,51 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
             getCurrentAccountAndFetchMessage(savedInstanceState);
         }
+        
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+            @Override
+            public void onPageSelected(int position) {
+                fab.show();
+            }
+        });
+
+        fab.setOnClickListener(view -> {
+            View rootView = getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, mCoordinatorLayout, false);
+            TextInputEditText thingEditText = rootView.findViewById(R.id.text_input_edit_text_go_to_thing_edit_text);
+            thingEditText.requestFocus();
+            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null) {
+                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+            }
+            new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                    .setTitle(R.string.choose_a_user)
+                    .setView(rootView)
+                    .setPositiveButton(R.string.ok, (dialogInterface, i)
+                            -> {
+                        if (imm != null) {
+                            imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
+                        }
+                        Intent pmIntent = new Intent(this, SendPrivateMessageActivity.class);
+                        pmIntent.putExtra(SendPrivateMessageActivity.EXTRA_RECIPIENT_USERNAME, thingEditText.getText().toString());
+                        startActivity(pmIntent);
+                    })
+                    .setNegativeButton(R.string.cancel, null)
+                    .setNeutralButton(R.string.search, (dialogInterface, i) -> {
+                        if (imm != null) {
+                            imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
+                        }
+
+                        Intent intent = new Intent(this, SearchActivity.class);
+                        intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_USERS, true);
+                        startActivityForResult(intent, SEARCH_USER_REQUEST_CODE);
+                    })
+                    .setOnDismissListener(dialogInterface -> {
+                        if (imm != null) {
+                            imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
+                        }
+                    })
+                    .show();
+        });
     }
 
     @Override
@@ -166,6 +228,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(mAppBarLayout, mToolbar);
         applyTabLayoutTheme(tabLayout);
+        applyFABTheme(fab);
     }
 
     private void getCurrentAccountAndFetchMessage(Bundle savedInstanceState) {
@@ -270,6 +333,17 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && requestCode == SEARCH_USER_REQUEST_CODE && data != null) {
+            String username = data.getStringExtra(SearchActivity.EXTRA_RETURN_USER_NAME);
+            Intent intent = new Intent(this, SendPrivateMessageActivity.class);
+            intent.putExtra(SendPrivateMessageActivity.EXTRA_RECIPIENT_USERNAME, username);
+            startActivity(intent);
+        }
+    }
+
+    @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
@@ -307,6 +381,16 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         if (mSlidrInterface != null) {
             mSlidrInterface.unlock();
         }
+    }
+
+    @Override
+    public void contentScrollUp() {
+        fab.show();
+    }
+
+    @Override
+    public void contentScrollDown() {
+        fab.hide();
     }
 
     private class SectionsPagerAdapter extends FragmentPagerAdapter {

@@ -42,7 +42,7 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NetworkState;
-import ml.docilealligator.infinityforreddit.PostFragmentContentScrollingInterface;
+import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
@@ -295,14 +295,14 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
         mCommentRecyclerView.setAdapter(mAdapter);
 
-        if (mActivity instanceof PostFragmentContentScrollingInterface) {
+        if (mActivity instanceof RecyclerViewContentScrollingInterface) {
             mCommentRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     if (dy > 0) {
-                        ((PostFragmentContentScrollingInterface) mActivity).contentScrollDown();
+                        ((RecyclerViewContentScrollingInterface) mActivity).contentScrollDown();
                     } else if (dy < 0) {
-                        ((PostFragmentContentScrollingInterface) mActivity).contentScrollUp();
+                        ((RecyclerViewContentScrollingInterface) mActivity).contentScrollUp();
                     }
                 }
             });
