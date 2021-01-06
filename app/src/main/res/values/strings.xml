@@ -150,6 +150,8 @@
 
     <string name="app_label">Infinity</string>
     <string name="search_hint">Search anything</string>
+    <string name="search_only_subreddits_hint">Search subreddits</string>
+    <string name="search_only_users_hint">Search users</string>
 
     <string name="no_posts_no_lazy_mode">No posts available</string>
     <string name="lazy_mode_start">Lazy Mode starts in %1$.1fs</string>

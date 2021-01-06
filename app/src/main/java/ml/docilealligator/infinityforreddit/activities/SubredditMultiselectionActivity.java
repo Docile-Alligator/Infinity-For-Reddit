@@ -201,23 +201,23 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            case R.id.action_save_subreddit_multiselection_activity:
-                if (mAdapter != null) {
-                    Intent returnIntent = new Intent();
-                    returnIntent.putStringArrayListExtra(EXTRA_RETURN_SELECTED_SUBREDDITS,
-                            mAdapter.getAllSelectedSubreddits());
-                    setResult(RESULT_OK, returnIntent);
-                }
-                finish();
-                return true;
-            case R.id.action_search_subreddit_multiselection_activity:
-                Intent intent = new Intent(this, SearchActivity.class);
-                intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, true);
-                startActivityForResult(intent, SUBREDDIT_SEARCH_REQUEST_CODE);
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            finish();
+            return true;
+        } else if (itemId == R.id.action_save_subreddit_multiselection_activity) {
+            if (mAdapter != null) {
+                Intent returnIntent = new Intent();
+                returnIntent.putStringArrayListExtra(EXTRA_RETURN_SELECTED_SUBREDDITS,
+                        mAdapter.getAllSelectedSubreddits());
+                setResult(RESULT_OK, returnIntent);
+            }
+            finish();
+            return true;
+        } else if (itemId == R.id.action_search_subreddit_multiselection_activity) {
+            Intent intent = new Intent(this, SearchActivity.class);
+            intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, true);
+            startActivityForResult(intent, SUBREDDIT_SEARCH_REQUEST_CODE);
         }
 
         return false;

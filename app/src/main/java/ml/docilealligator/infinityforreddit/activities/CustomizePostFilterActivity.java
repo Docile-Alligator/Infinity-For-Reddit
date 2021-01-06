@@ -9,11 +9,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
@@ -25,6 +27,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.r0adkll.slidr.Slidr;
 
+import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -39,6 +42,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.SavePostFilter;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class CustomizePostFilterActivity extends BaseActivity {
 
@@ -46,6 +50,8 @@ public class CustomizePostFilterActivity extends BaseActivity {
     public static final String EXTRA_FROM_SETTINGS = "EFS";
     public static final String RETURN_EXTRA_POST_FILTER = "REPF";
     private static final String POST_FILTER_STATE = "PFS";
+    private static final int ADD_SUBREDDITS_REQUEST_CODE = 1;
+    private static final int ADD_USERS_REQUEST_CODE = 2;
 
     @BindView(R.id.coordinator_layout_customize_post_filter_activity)
     CoordinatorLayout coordinatorLayout;
@@ -119,10 +125,14 @@ public class CustomizePostFilterActivity extends BaseActivity {
     TextInputLayout excludesSubredditsTextInputLayout;
     @BindView(R.id.excludes_subreddits_text_input_edit_text_customize_post_filter_activity)
     TextInputEditText excludesSubredditsTextInputEditText;
+    @BindView(R.id.add_subreddits_image_view_customize_post_filter_activity)
+    ImageView addSubredditsImageView;
     @BindView(R.id.excludes_users_text_input_layout_customize_post_filter_activity)
     TextInputLayout excludesUsersTextInputLayout;
     @BindView(R.id.excludes_users_text_input_edit_text_customize_post_filter_activity)
     TextInputEditText excludesUsersTextInputEditText;
+    @BindView(R.id.add_users_image_view_customize_post_filter_activity)
+    ImageView addUsersImageView;
     @BindView(R.id.excludes_flairs_text_input_layout_customize_post_filter_activity)
     TextInputLayout excludesFlairsTextInputLayout;
     @BindView(R.id.excludes_flairs_text_input_edit_text_customize_post_filter_activity)
@@ -226,6 +236,17 @@ public class CustomizePostFilterActivity extends BaseActivity {
             onlySpoilerSwitch.performClick();
         });
 
+        addSubredditsImageView.setOnClickListener(view -> {
+            Intent intent = new Intent(this, SubredditMultiselectionActivity.class);
+            startActivityForResult(intent, ADD_SUBREDDITS_REQUEST_CODE);
+        });
+
+        addUsersImageView.setOnClickListener(view -> {
+            Intent intent = new Intent(this, SearchActivity.class);
+            intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_USERS, true);
+            startActivityForResult(intent, ADD_USERS_REQUEST_CODE);
+        });
+
         if (savedInstanceState != null) {
             postFilter = savedInstanceState.getParcelable(POST_FILTER_STATE);
         } else {
@@ -276,6 +297,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
+        int primaryIconColor = mCustomThemeWrapper.getPrimaryIconColor();
         nameTextInputLayout.setBoxStrokeColor(primaryTextColor);
         nameTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         nameTextInputEditText.setTextColor(primaryTextColor);
@@ -296,9 +318,11 @@ public class CustomizePostFilterActivity extends BaseActivity {
         excludesSubredditsTextInputLayout.setBoxStrokeColor(primaryTextColor);
         excludesSubredditsTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         excludesSubredditsTextInputEditText.setTextColor(primaryTextColor);
+        addSubredditsImageView.setImageDrawable(Utils.getTintedDrawable(this, R.drawable.ic_add_24dp, primaryIconColor));
         excludesUsersTextInputLayout.setBoxStrokeColor(primaryTextColor);
         excludesUsersTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         excludesUsersTextInputEditText.setTextColor(primaryTextColor);
+        addUsersImageView.setImageDrawable(Utils.getTintedDrawable(this, R.drawable.ic_add_24dp, primaryIconColor));
         excludesFlairsTextInputLayout.setBoxStrokeColor(primaryTextColor);
         excludesFlairsTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         excludesFlairsTextInputEditText.setTextColor(primaryTextColor);
@@ -364,6 +388,37 @@ public class CustomizePostFilterActivity extends BaseActivity {
             }
         }
         return false;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && data != null) {
+            if (requestCode == ADD_SUBREDDITS_REQUEST_CODE) {
+                ArrayList<String> subreddits = data.getStringArrayListExtra(SubredditMultiselectionActivity.EXTRA_RETURN_SELECTED_SUBREDDITS);
+                String currentSubreddits = excludesSubredditsTextInputEditText.getText().toString().trim();
+                if (!currentSubreddits.isEmpty() && currentSubreddits.charAt(currentSubreddits.length() - 1) != ',') {
+                    String newString = currentSubreddits + ",";
+                    excludesSubredditsTextInputEditText.setText(newString);
+                }
+                if (subreddits != null) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (String s : subreddits) {
+                        stringBuilder.append(s).append(",");
+                    }
+                    stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+                    excludesSubredditsTextInputEditText.append(stringBuilder.toString());
+                }
+            } else if (requestCode == ADD_USERS_REQUEST_CODE) {
+                String username = data.getStringExtra(SearchActivity.EXTRA_RETURN_USER_NAME);
+                String currentUsers = excludesSubredditsTextInputEditText.getText().toString().trim();
+                if (!currentUsers.isEmpty() && currentUsers.charAt(currentUsers.length() - 1) != ',') {
+                    String newString = currentUsers + ",";
+                    excludesSubredditsTextInputEditText.setText(newString);
+                }
+                excludesUsersTextInputEditText.append(username);
+            }
+        }
     }
 
     private void constructPostFilter() {

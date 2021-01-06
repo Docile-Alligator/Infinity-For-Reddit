@@ -343,45 +343,78 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/excludes_subreddits_text_input_layout_customize_post_filter_activity"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:layout_height="wrap_content">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/excludes_subreddits_text_input_edit_text_customize_post_filter_activity"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/excludes_subreddits_text_input_layout_customize_post_filter_activity"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="?attr/font_family"
-                    android:textSize="?attr/font_default"
-                    android:hint="@string/exclude_subreddits_hint" />
+                    android:layout_weight="1"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:layout_marginStart="16dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/excludes_subreddits_text_input_edit_text_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="?attr/font_family"
+                        android:textSize="?attr/font_default"
+                        android:hint="@string/exclude_subreddits_hint" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/excludes_users_text_input_layout_customize_post_filter_activity"
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/add_subreddits_image_view_customize_post_filter_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="16dp"
+                    android:background="?actionBarItemBackground"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+                android:layout_height="wrap_content">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/excludes_users_text_input_edit_text_customize_post_filter_activity"
-                    android:layout_width="match_parent"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/excludes_users_text_input_layout_customize_post_filter_activity"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:fontFamily="?attr/font_family"
-                    android:textSize="?attr/font_default"
-                    android:hint="@string/exclude_users_hint" />
+                    android:layout_weight="1"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:layout_marginStart="16dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/excludes_users_text_input_edit_text_customize_post_filter_activity"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="?attr/font_family"
+                        android:textSize="?attr/font_default"
+                        android:hint="@string/exclude_users_hint" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <ImageView
+                    android:id="@+id/add_users_image_view_customize_post_filter_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:padding="16dp"
+                    android:background="?actionBarItemBackground"
+                    android:clickable="true"
+                    android:focusable="true" />
+
+            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/excludes_flairs_text_input_layout_customize_post_filter_activity"

@@ -133,6 +133,12 @@ public class SearchActivity extends BaseActivity {
         searchOnlySubreddits = getIntent().getBooleanExtra(EXTRA_SEARCH_ONLY_SUBREDDITS, false);
         searchOnlyUsers = getIntent().getBooleanExtra(EXTRA_SEARCH_ONLY_USERS, false);
 
+        if (searchOnlySubreddits) {
+            simpleSearchView.setHint(getText(R.string.search_only_subreddits_hint));
+        } else if (searchOnlyUsers) {
+            simpleSearchView.setHint(getText(R.string.search_only_users_hint));
+        }
+
         simpleSearchView.setOnSearchViewListener(new SimpleSearchView.SearchViewListener() {
             @Override
             public void onSearchViewShown() {
