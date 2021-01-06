@@ -20,10 +20,13 @@ public interface PostFilterDao {
     @Delete
     void deletePostFilter(PostFilter postFilter);
 
+    @Query("DELETE FROM post_filter WHERE name = :name")
+    void deletePostFilter(String name);
+
     @Query("SELECT * FROM post_filter WHERE name = :name LIMIT 1")
     PostFilter getPostFilter(String name);
 
-    @Query("SELECT * FROM post_filter")
+    @Query("SELECT * FROM post_filter ORDER BY name")
     LiveData<List<PostFilter>> getAllPostFiltersLiveData();
 
     @Query("SELECT * FROM post_filter WHERE post_filter.name IN " +

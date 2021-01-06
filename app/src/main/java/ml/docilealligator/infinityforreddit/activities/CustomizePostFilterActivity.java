@@ -22,6 +22,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.checkbox.MaterialCheckBox;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
@@ -50,6 +51,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
     public static final String EXTRA_FROM_SETTINGS = "EFS";
     public static final String RETURN_EXTRA_POST_FILTER = "REPF";
     private static final String POST_FILTER_STATE = "PFS";
+    private static final String ORIGINAL_NAME_STATE = "ONS";
     private static final int ADD_SUBREDDITS_REQUEST_CODE = 1;
     private static final int ADD_USERS_REQUEST_CODE = 2;
 
@@ -176,6 +178,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
     Executor mExecutor;
     private PostFilter postFilter;
     private boolean fromSettings;
+    private String originalName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -249,10 +252,14 @@ public class CustomizePostFilterActivity extends BaseActivity {
 
         if (savedInstanceState != null) {
             postFilter = savedInstanceState.getParcelable(POST_FILTER_STATE);
+            originalName = savedInstanceState.getString(ORIGINAL_NAME_STATE);
         } else {
             postFilter = getIntent().getParcelableExtra(EXTRA_POST_FILTER);
             if (postFilter == null) {
                 postFilter = new PostFilter();
+                originalName = "";
+            } else {
+                originalName = postFilter.name;
             }
             bindView();
         }
@@ -376,18 +383,35 @@ public class CustomizePostFilterActivity extends BaseActivity {
             constructPostFilter();
 
             if (!postFilter.name.equals("")) {
-                Handler handler = new Handler();
-                SavePostFilter.savePostFilter(mRedditDataRoomDatabase, mExecutor, postFilter, () -> handler.post(() -> {
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra(RETURN_EXTRA_POST_FILTER, postFilter);
-                    setResult(Activity.RESULT_OK, returnIntent);
-                    finish();
-                }));
+                savePostFilter(originalName);
             } else {
                 Toast.makeText(CustomizePostFilterActivity.this, R.string.post_filter_requires_a_name, Toast.LENGTH_LONG).show();
             }
         }
         return false;
+    }
+
+    private void savePostFilter(String originalName) {
+        SavePostFilter.savePostFilter(mExecutor, new Handler(), mRedditDataRoomDatabase, postFilter, originalName,
+                new SavePostFilter.SavePostFilterListener() {
+                    @Override
+                    public void success() {
+                        Intent returnIntent = new Intent();
+                        returnIntent.putExtra(RETURN_EXTRA_POST_FILTER, postFilter);
+                        setResult(Activity.RESULT_OK, returnIntent);
+                        finish();
+                    }
+
+                    @Override
+                    public void duplicate() {
+                        new MaterialAlertDialogBuilder(CustomizePostFilterActivity.this, R.style.MaterialAlertDialogTheme)
+                                .setTitle(getString(R.string.duplicate_post_filter_dialog_title, postFilter.name))
+                                .setMessage(R.string.duplicate_post_filter_dialog_message)
+                                .setPositiveButton(R.string.override, (dialogInterface, i) -> savePostFilter(postFilter.name))
+                                .setNegativeButton(R.string.cancel, null)
+                                .show();
+                    }
+                });
     }
 
     @Override
@@ -449,5 +473,6 @@ public class CustomizePostFilterActivity extends BaseActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(POST_FILTER_STATE, postFilter);
+        outState.putString(ORIGINAL_NAME_STATE, originalName);
     }
 }

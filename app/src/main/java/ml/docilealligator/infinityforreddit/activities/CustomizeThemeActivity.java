@@ -188,34 +188,34 @@ public class CustomizeThemeActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            case R.id.action_preview_customize_theme_activity:
-                Intent intent = new Intent(this, CustomThemePreviewActivity.class);
-                intent.putParcelableArrayListExtra(CustomThemePreviewActivity.EXTRA_CUSTOM_THEME_SETTINGS_ITEMS, customThemeSettingsItems);
-                startActivity(intent);
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            finish();
+            return true;
+        } else if (itemId == R.id.action_preview_customize_theme_activity) {
+            Intent intent = new Intent(this, CustomThemePreviewActivity.class);
+            intent.putParcelableArrayListExtra(CustomThemePreviewActivity.EXTRA_CUSTOM_THEME_SETTINGS_ITEMS, customThemeSettingsItems);
+            startActivity(intent);
 
-                return true;
-            case R.id.action_save_customize_theme_activity:
-                if (adapter != null) {
-                    themeName = adapter.getThemeName();
-                    if (themeName.equals("")) {
-                        Snackbar.make(coordinatorLayout, R.string.no_theme_name, Snackbar.LENGTH_SHORT).show();
-                        return true;
-                    }
-                    CustomTheme customTheme = CustomTheme.convertSettingsItemsToCustomTheme(customThemeSettingsItems, themeName);
-                    new InsertCustomThemeAsyncTask(redditDataRoomDatabase, lightThemeSharedPreferences,
-                            darkThemeSharedPreferences, amoledThemeSharedPreferences, customTheme,
-                            false, () -> {
-                        Toast.makeText(CustomizeThemeActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
-                        EventBus.getDefault().post(new RecreateActivityEvent());
-                        finish();
-                    }).execute();
+            return true;
+        } else if (itemId == R.id.action_save_customize_theme_activity) {
+            if (adapter != null) {
+                themeName = adapter.getThemeName();
+                if (themeName.equals("")) {
+                    Snackbar.make(coordinatorLayout, R.string.no_theme_name, Snackbar.LENGTH_SHORT).show();
+                    return true;
                 }
+                CustomTheme customTheme = CustomTheme.convertSettingsItemsToCustomTheme(customThemeSettingsItems, themeName);
+                new InsertCustomThemeAsyncTask(redditDataRoomDatabase, lightThemeSharedPreferences,
+                        darkThemeSharedPreferences, amoledThemeSharedPreferences, customTheme,
+                        false, () -> {
+                    Toast.makeText(CustomizeThemeActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
+                    EventBus.getDefault().post(new RecreateActivityEvent());
+                    finish();
+                }).execute();
+            }
 
-                return true;
+            return true;
         }
 
         return false;

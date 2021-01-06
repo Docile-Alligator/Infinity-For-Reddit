@@ -68,6 +68,43 @@ public class PostFilter implements Parcelable {
 
     }
 
+    protected PostFilter(Parcel in) {
+        name = in.readString();
+        maxVote = in.readInt();
+        minVote = in.readInt();
+        maxComments = in.readInt();
+        minComments = in.readInt();
+        maxAwards = in.readInt();
+        minAwards = in.readInt();
+        allowNSFW = in.readByte() != 0;
+        onlyNSFW = in.readByte() != 0;
+        onlySpoiler = in.readByte() != 0;
+        postTitleExcludesRegex = in.readString();
+        postTitleExcludesStrings = in.readString();
+        excludeSubreddits = in.readString();
+        excludeUsers = in.readString();
+        containFlairs = in.readString();
+        excludeFlairs = in.readString();
+        containTextType = in.readByte() != 0;
+        containLinkType = in.readByte() != 0;
+        containImageType = in.readByte() != 0;
+        containGifType = in.readByte() != 0;
+        containVideoType = in.readByte() != 0;
+        containGalleryType = in.readByte() != 0;
+    }
+
+    public static final Creator<PostFilter> CREATOR = new Creator<PostFilter>() {
+        @Override
+        public PostFilter createFromParcel(Parcel in) {
+            return new PostFilter(in);
+        }
+
+        @Override
+        public PostFilter[] newArray(int size) {
+            return new PostFilter[size];
+        }
+    };
+
     public static boolean isPostAllowed(Post post, PostFilter postFilter) {
         if (postFilter == null || post == null) {
             return true;
@@ -222,42 +259,6 @@ public class PostFilter implements Parcelable {
         return postFilter;
     }
 
-    protected PostFilter(Parcel in) {
-        name = in.readString();
-        maxVote = in.readInt();
-        minVote = in.readInt();
-        maxComments = in.readInt();
-        minComments = in.readInt();
-        maxAwards = in.readInt();
-        minAwards = in.readInt();
-        allowNSFW = in.readByte() != 0;
-        onlyNSFW = in.readByte() != 0;
-        onlySpoiler = in.readByte() != 0;
-        postTitleExcludesRegex = in.readString();
-        postTitleExcludesStrings = in.readString();
-        excludeSubreddits = in.readString();
-        excludeUsers = in.readString();
-        containFlairs = in.readString();
-        excludeFlairs = in.readString();
-        containTextType = in.readByte() != 0;
-        containLinkType = in.readByte() != 0;
-        containImageType = in.readByte() != 0;
-        containVideoType = in.readByte() != 0;
-        containGalleryType = in.readByte() != 0;
-    }
-
-    public static final Creator<PostFilter> CREATOR = new Creator<PostFilter>() {
-        @Override
-        public PostFilter createFromParcel(Parcel in) {
-            return new PostFilter(in);
-        }
-
-        @Override
-        public PostFilter[] newArray(int size) {
-            return new PostFilter[size];
-        }
-    };
-
     @Override
     public int describeContents() {
         return 0;
@@ -284,6 +285,7 @@ public class PostFilter implements Parcelable {
         parcel.writeByte((byte) (containTextType ? 1 : 0));
         parcel.writeByte((byte) (containLinkType ? 1 : 0));
         parcel.writeByte((byte) (containImageType ? 1 : 0));
+        parcel.writeByte((byte) (containGifType ? 1 : 0));
         parcel.writeByte((byte) (containVideoType ? 1 : 0));
         parcel.writeByte((byte) (containGalleryType ? 1 : 0));
     }
