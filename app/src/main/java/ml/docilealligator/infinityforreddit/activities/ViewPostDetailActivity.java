@@ -1774,6 +1774,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         EventBus.getDefault().unregister(this);
         super.onDestroy();
         Bridge.clear(this);
+        BigImageViewer.imageLoader().cancelAll();
     }
 
     @Override

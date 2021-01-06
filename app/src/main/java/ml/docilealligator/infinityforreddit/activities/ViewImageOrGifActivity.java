@@ -484,4 +484,10 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
                     }
                 });
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        BigImageViewer.imageLoader().cancelAll();
+    }
 }

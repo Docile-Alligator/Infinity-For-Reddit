@@ -373,4 +373,10 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
         super.onAttach(context);
         activity = (ViewRedditGalleryActivity) context;
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        BigImageViewer.imageLoader().cancelAll();
+    }
 }
