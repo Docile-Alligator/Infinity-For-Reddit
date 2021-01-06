@@ -26,8 +26,10 @@ public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<R
     public static final int ORDERED_LIST = 5;
     public static final int UNORDERED_LIST = 6;
     public static final int SPOILER = 7;
+    public static final int QUOTE = 8;
+    public static final int CODE_BLOCK = 9;
 
-    private static final int ITEM_COUNT = 8;
+    private static final int ITEM_COUNT = 10;
 
     private CustomThemeWrapper customThemeWrapper;
     private ItemClickListener itemClickListener;
@@ -75,6 +77,12 @@ public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<R
                     break;
                 case SPOILER:
                     ((MarkdownBottomBarItemViewHolder) holder).imageView.setImageResource(R.drawable.ic_spoiler_black_24dp);
+                    break;
+                case QUOTE:
+                    ((MarkdownBottomBarItemViewHolder) holder).imageView.setImageResource(R.drawable.ic_quote_24dp);
+                    break;
+                case CODE_BLOCK:
+                    ((MarkdownBottomBarItemViewHolder) holder).imageView.setImageResource(R.drawable.ic_code_24dp);
                     break;
             }
         }
@@ -171,23 +179,23 @@ public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<R
                             int end = Math.max(commentEditText.getSelectionEnd(), 0);
                             String hashTags;
                             switch ((int) seekBar.getValue()) {
-                                case 0:
-                                    hashTags = "###### ";
-                                    break;
                                 case 1:
-                                    hashTags = "##### ";
+                                    hashTags = "# ";
                                     break;
                                 case 2:
-                                    hashTags = "#### ";
+                                    hashTags = "## ";
                                     break;
                                 case 3:
                                     hashTags = "### ";
                                     break;
                                 case 4:
-                                    hashTags = "## ";
+                                    hashTags = "#### ";
+                                    break;
+                                case 5:
+                                    hashTags = "##### ";
                                     break;
                                 default:
-                                    hashTags = "# ";
+                                    hashTags = "###### ";
                                     break;
                             }
                             if (end != start) {
@@ -240,6 +248,34 @@ public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<R
                     commentEditText.getText().replace(start, end,
                             ">!!<", 0, ">!!<".length());
                     commentEditText.setSelection(start + ">!".length());
+                }
+                break;
+            }
+            case QUOTE: {
+                int start = Math.max(commentEditText.getSelectionStart(), 0);
+                int end = Math.max(commentEditText.getSelectionEnd(), 0);
+                if (end != start) {
+                    String currentSelection = commentEditText.getText().subSequence(start, end).toString();
+                    commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
+                            "> " + currentSelection + "\n\n", 0, "> \n\n".length() + currentSelection.length());
+                } else {
+                    commentEditText.getText().replace(start, end,
+                            "> \n\n", 0, "> \n\n".length());
+                    commentEditText.setSelection(start + "> ".length());
+                }
+                break;
+            }
+            case CODE_BLOCK: {
+                int start = Math.max(commentEditText.getSelectionStart(), 0);
+                int end = Math.max(commentEditText.getSelectionEnd(), 0);
+                if (end != start) {
+                    String currentSelection = commentEditText.getText().subSequence(start, end).toString();
+                    commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
+                            "```\n" + currentSelection + "\n```\n", 0, "```\n\n```\n".length() + currentSelection.length());
+                } else {
+                    commentEditText.getText().replace(start, end,
+                            "```\n\n```\n", 0, "```\n\n```\n".length());
+                    commentEditText.setSelection(start + "```\n".length());
                 }
                 break;
             }

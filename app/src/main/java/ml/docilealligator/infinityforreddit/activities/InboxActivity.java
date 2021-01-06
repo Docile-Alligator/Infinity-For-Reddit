@@ -166,7 +166,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
             getCurrentAccountAndFetchMessage(savedInstanceState);
         }
-        
+
         viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
             @Override
             public void onPageSelected(int position) {
