@@ -37,39 +37,28 @@ public class Utils {
     private static final long YEAR_MILLIS = 12 * MONTH_MILLIS;
 
     public static String modifyMarkdown(String markdown) {
-        StringBuilder regexed = new StringBuilder(markdown.replaceAll("((?<=[\\s])|^)/[rRuU]/[\\w-]+/{0,1}", "[$0](https://www.reddit.com$0)").replaceAll("((?<=[\\s])|^)[rRuU]/[\\w-]+/{0,1}", "[$0](https://www.reddit.com/$0)"));
+        StringBuilder regexed = new StringBuilder(markdown
+                .replaceAll("((?<=[\\s])|^)/[rRuU]/[\\w-]+/{0,1}", "[$0](https://www.reddit.com$0)")
+                .replaceAll("((?<=[\\s])|^)[rRuU]/[\\w-]+/{0,1}", "[$0](https://www.reddit.com/$0)")
+                .replaceAll("\\^{2,}", "^"));
 
-        /*int startIndex = 0;
-
-        Pattern pattern = Pattern.compile("\\^.+");
-        Matcher matcher = pattern.matcher(regexed);
-        // Check all occurrences
-        while (matcher.find(startIndex)) {
-            int count = 0;
-            Pattern pattern2 = Pattern.compile("(\\^\\([^)]+\\))");
-            Matcher matcher2 = pattern2.matcher(matcher.group());
-            if (matcher2.find()) {
-                regexed.setCharAt(matcher2.end() + matcher.start() - 1, '^');
-                regexed.deleteCharAt(matcher2.start() + matcher.start() + 1);
-
-                startIndex = matcher.start() + matcher2.end();
-                String substring = regexed.substring(matcher.start() + matcher2.start() + 1, matcher.start() + matcher2.end() - 2);
-                String trimmedSubstring = substring.trim();
-                regexed.replace(matcher.start() + matcher2.start() + 1, matcher.start() + matcher2.end() - 2, trimmedSubstring);
-                startIndex -= (substring.length() - trimmedSubstring.length());
-                continue;
-            }
-
-            regexed.insert(matcher.end(), '^');
-
-            for (int i = matcher.end() - 1; i >= matcher.start() + 1; i--) {
-                if (regexed.charAt(i) == '^') {
-                    regexed.deleteCharAt(i);
-                    count++;
+        int startIndex = regexed.indexOf("^");
+        while (startIndex >= 0 && startIndex + 1 < regexed.length()) {
+            char currentChar = regexed.charAt(startIndex + 1);
+            if (currentChar == '^') {
+                regexed.insert(startIndex, '^');
+                startIndex = regexed.indexOf("^", startIndex + 1);
+            } else if (currentChar == ' ' || currentChar == '\n') {
+                regexed.insert(startIndex + 1, '^');
+                startIndex = regexed.indexOf("^", startIndex + 2);
+            } else {
+                if (startIndex + 1 == regexed.length() - 1) {
+                    regexed.append('^');
+                    startIndex++;
                 }
+                startIndex++;
             }
-            startIndex = matcher.end() - count;
-        }*/
+        }
         return regexed.toString();
     }
 
