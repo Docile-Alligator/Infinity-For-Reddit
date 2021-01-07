@@ -1,7 +1,7 @@
 <resources>
     <string name="application_name" translatable="false">Infinity</string>
     <string name="login_activity_label">Login</string>
-    <string name="search_activity_label">Search</string>
+    <string name="search_activity_label" translatable="false"> </string>
     <string name="comment_activity_label">Send Comment</string>
     <string name="comment_activity_label_is_replying">Reply</string>
     <string name="post_text_activity_label">Text Post</string>
@@ -517,6 +517,7 @@
     <string name="settings_credits_ufo_capturing_animation_title">UFO Capturing Animation</string>
     <string name="settings_hide_subreddit_description_title">Hide Subreddit Description</string>
     <string name="settings_disable_image_preview_title">Disable Image Preview in Data Saving Mode</string>
+    <string name="settings_only_disable_preview_in_video_and_gif_posts_title">Only Disable Preview in Video and Gif Posts</string>
     <string name="settings_swipe_action_swipe_left_title">Swipe Left</string>
     <string name="settings_swipe_action_swipe_right_title">Swipe Right</string>
     <string name="settings_swipe_action_info_summary">Not applicable to post feed with more than 1 column or post detail.</string>

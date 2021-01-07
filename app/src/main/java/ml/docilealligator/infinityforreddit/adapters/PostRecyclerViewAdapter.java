@@ -193,7 +193,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean mLongPressToHideToolbarInCompactLayout;
     private boolean mCompactLayoutToolbarHiddenByDefault;
     private boolean mDataSavingMode = false;
-    private boolean mDisableImagePreview = false;
+    private boolean mDisableImagePreview;
+    private boolean mOnlyDisablePreviewInVideoAndGifPosts;
     private boolean mMarkPostsAsRead;
     private boolean mMarkPostsAsReadAfterVoting;
     private boolean mMarkPostsAsReadOnScroll;
@@ -259,6 +260,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 mDataSavingMode = networkType == Utils.NETWORK_TYPE_CELLULAR;
             }
             mDisableImagePreview = sharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_IMAGE_PREVIEW, false);
+            mOnlyDisablePreviewInVideoAndGifPosts = sharedPreferences.getBoolean(SharedPreferencesUtils.ONLY_DISABLE_PREVIEW_IN_VIDEO_AND_GIF_POSTS, false);
 
             mMarkPostsAsRead = postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false);
             mMarkPostsAsReadAfterVoting = postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, false);
@@ -685,6 +687,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         } else if (post.getPostType() == Post.GALLERY_TYPE) {
                             ((PostWithPreviewTypeViewHolder) holder).noPreviewLinkImageView.setImageResource(R.drawable.ic_gallery_24dp);
                         }
+                    } else if (mDataSavingMode && mOnlyDisablePreviewInVideoAndGifPosts && (post.getPostType() == Post.VIDEO_TYPE || post.getPostType() == Post.GIF_TYPE)) {
+                        ((PostWithPreviewTypeViewHolder) holder).noPreviewLinkImageView.setVisibility(View.VISIBLE);
+                        ((PostWithPreviewTypeViewHolder) holder).noPreviewLinkImageView.setImageResource(R.drawable.ic_outline_video_24dp);
+                        ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.GONE);
                     } else {
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
                         if (preview != null) {
@@ -924,16 +930,16 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                 if (post.getPostType() != Post.TEXT_TYPE && post.getPostType() != Post.NO_PREVIEW_LINK_TYPE && !(mDataSavingMode && mDisableImagePreview)) {
                     ((PostCompactBaseViewHolder) holder).relativeLayout.setVisibility(View.VISIBLE);
-                    if (post.getPostType() != Post.GIF_TYPE && post.getPostType() != Post.VIDEO_TYPE) {
-                        ((PostCompactBaseViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
-                    }
-                    if (post.getPostType() == Post.GALLERY_TYPE && post.getPreviews().isEmpty()) {
-                        ((PostCompactBaseViewHolder) holder).noPreviewLinkImageFrameLayout.setVisibility(View.VISIBLE);
-                    } else {
-                        ((PostCompactBaseViewHolder) holder).imageView.setVisibility(View.VISIBLE);
+                    if (post.getPostType() == Post.GALLERY_TYPE && post.getPreviews() != null && post.getPreviews().isEmpty()) {
+                        ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.VISIBLE);
+                        ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_gallery_24dp);
                     }
                     ArrayList<Post.Preview> previews = post.getPreviews();
                     if (previews != null && !previews.isEmpty()) {
+                        if (post.getPostType() != Post.GIF_TYPE && post.getPostType() != Post.VIDEO_TYPE) {
+                            ((PostCompactBaseViewHolder) holder).imageView.setVisibility(View.VISIBLE);
+                            ((PostCompactBaseViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
+                        }
                         loadImage(holder, post, previews.get(0));
                     }
                 }
@@ -960,15 +966,15 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     case Post.IMAGE_TYPE:
                         ((PostCompactBaseViewHolder) holder).typeTextView.setText(R.string.image);
                         if (mDataSavingMode && mDisableImagePreview) {
-                            ((PostCompactBaseViewHolder) holder).noPreviewLinkImageFrameLayout.setVisibility(View.VISIBLE);
-                            ((PostCompactBaseViewHolder) holder).noPreviewLinkImageView.setImageResource(R.drawable.ic_image_24dp);
+                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.VISIBLE);
+                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_image_24dp);
                         }
                         break;
                     case Post.LINK_TYPE:
                         ((PostCompactBaseViewHolder) holder).typeTextView.setText(R.string.link);
                         if (mDataSavingMode && mDisableImagePreview) {
-                            ((PostCompactBaseViewHolder) holder).noPreviewLinkImageFrameLayout.setVisibility(View.VISIBLE);
-                            ((PostCompactBaseViewHolder) holder).noPreviewLinkImageView.setImageResource(R.drawable.ic_link);
+                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.VISIBLE);
+                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_link);
                         }
 
                         ((PostCompactBaseViewHolder) holder).linkTextView.setVisibility(View.VISIBLE);
@@ -977,9 +983,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         break;
                     case Post.GIF_TYPE:
                         ((PostCompactBaseViewHolder) holder).typeTextView.setText(R.string.gif);
-                        if (mDataSavingMode && mDisableImagePreview) {
-                            ((PostCompactBaseViewHolder) holder).noPreviewLinkImageFrameLayout.setVisibility(View.VISIBLE);
-                            ((PostCompactBaseViewHolder) holder).noPreviewLinkImageView.setImageResource(R.drawable.ic_image_24dp);
+                        if (mDataSavingMode && (mDisableImagePreview || mOnlyDisablePreviewInVideoAndGifPosts)) {
+                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.VISIBLE);
+                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_image_24dp);
                         } else {
                             ((PostCompactBaseViewHolder) holder).playButtonImageView.setVisibility(View.VISIBLE);
                         }
@@ -987,9 +993,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         break;
                     case Post.VIDEO_TYPE:
                         ((PostCompactBaseViewHolder) holder).typeTextView.setText(R.string.video);
-                        if (mDataSavingMode && mDisableImagePreview) {
-                            ((PostCompactBaseViewHolder) holder).noPreviewLinkImageFrameLayout.setVisibility(View.VISIBLE);
-                            ((PostCompactBaseViewHolder) holder).noPreviewLinkImageView.setImageResource(R.drawable.ic_outline_video_24dp);
+                        if (mDataSavingMode && (mDisableImagePreview || mOnlyDisablePreviewInVideoAndGifPosts)) {
+                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.VISIBLE);
+                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_outline_video_24dp);
                         } else {
                             ((PostCompactBaseViewHolder) holder).playButtonImageView.setVisibility(View.VISIBLE);
                         }
@@ -1002,14 +1008,14 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         ((PostCompactBaseViewHolder) holder).linkTextView.setVisibility(View.VISIBLE);
                         String noPreviewLinkDomain = Uri.parse(noPreviewLinkUrl).getHost();
                         ((PostCompactBaseViewHolder) holder).linkTextView.setText(noPreviewLinkDomain);
-                        ((PostCompactBaseViewHolder) holder).noPreviewLinkImageFrameLayout.setVisibility(View.VISIBLE);
-                        ((PostCompactBaseViewHolder) holder).noPreviewLinkImageView.setImageResource(R.drawable.ic_link);
+                        ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.VISIBLE);
+                        ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_link);
                         break;
                     case Post.GALLERY_TYPE:
                         ((PostCompactBaseViewHolder) holder).typeTextView.setText(R.string.gallery);
                         if (mDataSavingMode && mDisableImagePreview) {
-                            ((PostCompactBaseViewHolder) holder).noPreviewLinkImageFrameLayout.setVisibility(View.VISIBLE);
-                            ((PostCompactBaseViewHolder) holder).noPreviewLinkImageView.setImageResource(R.drawable.ic_gallery_24dp);
+                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.VISIBLE);
+                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_gallery_24dp);
                         }
                         break;
                     case Post.TEXT_TYPE:
@@ -1316,6 +1322,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         mDisableImagePreview = disableImagePreview;
     }
 
+    public void setOnlyDisablePreviewInVideoPosts(boolean onlyDisablePreviewInVideoAndGifPosts) {
+        mOnlyDisablePreviewInVideoAndGifPosts = onlyDisablePreviewInVideoAndGifPosts;
+    }
+
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
@@ -1405,7 +1415,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             ((PostCompactBaseViewHolder) holder).progressBar.setVisibility(View.GONE);
             ((PostCompactBaseViewHolder) holder).imageView.setVisibility(View.GONE);
             ((PostCompactBaseViewHolder) holder).playButtonImageView.setVisibility(View.GONE);
-            ((PostCompactBaseViewHolder) holder).noPreviewLinkImageFrameLayout.setVisibility(View.GONE);
+            ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.GONE);
             ((PostCompactBaseViewHolder) holder).upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             ((PostCompactBaseViewHolder) holder).scoreTextView.setTextColor(mPostIconAndInfoColor);
             ((PostCompactBaseViewHolder) holder).downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
@@ -2493,8 +2503,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         ProgressBar progressBar;
         ImageView imageView;
         ImageView playButtonImageView;
-        FrameLayout noPreviewLinkImageFrameLayout;
-        ImageView noPreviewLinkImageView;
+        FrameLayout noPreviewPostImageFrameLayout;
+        ImageView noPreviewPostImageView;
         Barrier imageBarrier;
         ConstraintLayout bottomConstraintLayout;
         ImageView upvoteButton;
@@ -2544,8 +2554,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             this.progressBar = progressBar;
             this.imageView = imageView;
             this.playButtonImageView = playButtonImageView;
-            this.noPreviewLinkImageFrameLayout = noPreviewLinkImageFrameLayout;
-            this.noPreviewLinkImageView = noPreviewLinkImageView;
+            this.noPreviewPostImageFrameLayout = noPreviewLinkImageFrameLayout;
+            this.noPreviewPostImageView = noPreviewLinkImageView;
             this.imageBarrier = imageBarrier;
             this.bottomConstraintLayout = bottomConstraintLayout;
             this.upvoteButton = upvoteButton;

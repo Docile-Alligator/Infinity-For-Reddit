@@ -8,9 +8,10 @@ import androidx.preference.SwitchPreference;
 
 import org.greenrobot.eventbus.EventBus;
 
+import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.events.ChangeDataSavingModeEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDisableImagePreviewEvent;
-import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.events.ChangeOnlyDisablePreviewInVideoAndGifPostsEvent;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class DataSavingModePreferenceFragment extends PreferenceFragmentCompat {
@@ -21,6 +22,7 @@ public class DataSavingModePreferenceFragment extends PreferenceFragmentCompat {
 
         ListPreference dataSavingModeListPreference = findPreference(SharedPreferencesUtils.DATA_SAVING_MODE);
         SwitchPreference disableImagePreviewPreference = findPreference(SharedPreferencesUtils.DISABLE_IMAGE_PREVIEW);
+        SwitchPreference onlyDisablePreviewInVideoAndGifPostsPreference = findPreference(SharedPreferencesUtils.ONLY_DISABLE_PREVIEW_IN_VIDEO_AND_GIF_POSTS);
 
         if (dataSavingModeListPreference != null) {
             dataSavingModeListPreference.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -32,6 +34,13 @@ public class DataSavingModePreferenceFragment extends PreferenceFragmentCompat {
         if (disableImagePreviewPreference != null) {
             disableImagePreviewPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new ChangeDisableImagePreviewEvent((Boolean) newValue));
+                return true;
+            });
+        }
+
+        if (onlyDisablePreviewInVideoAndGifPostsPreference != null) {
+            onlyDisablePreviewInVideoAndGifPostsPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                EventBus.getDefault().post(new ChangeOnlyDisablePreviewInVideoAndGifPostsEvent((Boolean) newValue));
                 return true;
             });
         }

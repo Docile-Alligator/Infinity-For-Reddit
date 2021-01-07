@@ -124,20 +124,21 @@ import static ml.docilealligator.infinityforreddit.activities.CommentActivity.WR
 public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements CacheManager {
     private static final int VIEW_TYPE_POST_DETAIL_VIDEO_AUTOPLAY = 1;
     private static final int VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW = 2;
-    private static final int VIEW_TYPE_POST_DETAIL_IMAGE_AND_GIF_AUTOPLAY = 3;
-    private static final int VIEW_TYPE_POST_DETAIL_LINK = 4;
-    private static final int VIEW_TYPE_POST_DETAIL_NO_PREVIEW_LINK = 5;
-    private static final int VIEW_TYPE_POST_DETAIL_GALLERY = 6;
-    private static final int VIEW_TYPE_POST_DETAIL_TEXT_TYPE = 7;
-    private static final int VIEW_TYPE_FIRST_LOADING = 8;
-    private static final int VIEW_TYPE_FIRST_LOADING_FAILED = 9;
-    private static final int VIEW_TYPE_NO_COMMENT_PLACEHOLDER = 10;
-    private static final int VIEW_TYPE_COMMENT = 11;
-    private static final int VIEW_TYPE_COMMENT_FULLY_COLLAPSED = 12;
-    private static final int VIEW_TYPE_LOAD_MORE_CHILD_COMMENTS = 13;
-    private static final int VIEW_TYPE_IS_LOADING_MORE_COMMENTS = 14;
-    private static final int VIEW_TYPE_LOAD_MORE_COMMENTS_FAILED = 15;
-    private static final int VIEW_TYPE_VIEW_ALL_COMMENTS = 16;
+    private static final int VIEW_TYPE_POST_DETAIL_IMAGE = 3;
+    private static final int VIEW_TYPE_POST_DETAIL_GIF_AUTOPLAY = 4;
+    private static final int VIEW_TYPE_POST_DETAIL_LINK = 5;
+    private static final int VIEW_TYPE_POST_DETAIL_NO_PREVIEW_LINK = 6;
+    private static final int VIEW_TYPE_POST_DETAIL_GALLERY = 7;
+    private static final int VIEW_TYPE_POST_DETAIL_TEXT_TYPE = 8;
+    private static final int VIEW_TYPE_FIRST_LOADING = 9;
+    private static final int VIEW_TYPE_FIRST_LOADING_FAILED = 10;
+    private static final int VIEW_TYPE_NO_COMMENT_PLACEHOLDER = 11;
+    private static final int VIEW_TYPE_COMMENT = 12;
+    private static final int VIEW_TYPE_COMMENT_FULLY_COLLAPSED = 13;
+    private static final int VIEW_TYPE_LOAD_MORE_CHILD_COMMENTS = 14;
+    private static final int VIEW_TYPE_IS_LOADING_MORE_COMMENTS = 15;
+    private static final int VIEW_TYPE_LOAD_MORE_COMMENTS_FAILED = 16;
+    private static final int VIEW_TYPE_VIEW_ALL_COMMENTS = 17;
 
     private AppCompatActivity mActivity;
     private Retrofit mRetrofit;
@@ -178,6 +179,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private boolean mAutomaticallyTryRedgifs;
     private boolean mDataSavingMode;
     private boolean mDisableImagePreview;
+    private boolean mOnlyDisablePreviewInVideoAndGifPosts;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private boolean isInitiallyLoading;
     private boolean isInitiallyLoadingFailed;
@@ -513,6 +515,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             mDataSavingMode = networkType == Utils.NETWORK_TYPE_CELLULAR;
         }
         mDisableImagePreview = sharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_IMAGE_PREVIEW, false);
+        mOnlyDisablePreviewInVideoAndGifPosts = sharedPreferences.getBoolean(SharedPreferencesUtils.ONLY_DISABLE_PREVIEW_IN_VIDEO_AND_GIF_POSTS, false);
 
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
         isInitiallyLoading = true;
@@ -590,12 +593,12 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         if (!mAutoplayNsfwVideos && mPost.isNSFW()) {
                             return VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW;
                         }
-                        return VIEW_TYPE_POST_DETAIL_IMAGE_AND_GIF_AUTOPLAY;
+                        return VIEW_TYPE_POST_DETAIL_GIF_AUTOPLAY;
                     } else {
                         return VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW;
                     }
                 case Post.IMAGE_TYPE:
-                    return VIEW_TYPE_POST_DETAIL_IMAGE_AND_GIF_AUTOPLAY;
+                    return VIEW_TYPE_POST_DETAIL_IMAGE;
                 case Post.LINK_TYPE:
                     return VIEW_TYPE_POST_DETAIL_LINK;
                 case Post.NO_PREVIEW_LINK_TYPE:
@@ -668,19 +671,24 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         switch (viewType) {
             case VIEW_TYPE_POST_DETAIL_VIDEO_AUTOPLAY:
                 if (mDataSavingMode) {
-                    if (mDisableImagePreview) {
+                    if (mDisableImagePreview || mOnlyDisablePreviewInVideoAndGifPosts) {
                         return new PostDetailNoPreviewViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_no_preview, parent, false));
                     }
                     return new PostDetailVideoAndGifPreviewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_video_and_gif_preview, parent, false));
                 }
                 return new PostDetailVideoAutoplayViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_video_autoplay, parent, false));
             case VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW:
-                if (mDataSavingMode && mDisableImagePreview) {
+                if (mDataSavingMode && (mDisableImagePreview || mOnlyDisablePreviewInVideoAndGifPosts)) {
                     return new PostDetailNoPreviewViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_no_preview, parent, false));
                 }
                 return new PostDetailVideoAndGifPreviewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_video_and_gif_preview, parent, false));
-            case VIEW_TYPE_POST_DETAIL_IMAGE_AND_GIF_AUTOPLAY:
+            case VIEW_TYPE_POST_DETAIL_IMAGE:
                 if (mDataSavingMode && mDisableImagePreview) {
+                    return new PostDetailNoPreviewViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_no_preview, parent, false));
+                }
+                return new PostDetailImageAndGifAutoplayViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_image_and_gif_autoplay, parent, false));
+            case VIEW_TYPE_POST_DETAIL_GIF_AUTOPLAY:
+                if (mDataSavingMode && (mDisableImagePreview || mOnlyDisablePreviewInVideoAndGifPosts)) {
                     return new PostDetailNoPreviewViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_no_preview, parent, false));
                 }
                 return new PostDetailImageAndGifAutoplayViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_image_and_gif_autoplay, parent, false));

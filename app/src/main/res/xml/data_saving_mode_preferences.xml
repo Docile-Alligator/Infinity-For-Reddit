@@ -20,4 +20,9 @@
         app:key="disable_image_preview"
         android:title="@string/settings_disable_image_preview_title" />
 
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="only_disable_preview_in_video_and_gif_posts"
+        android:title="@string/settings_only_disable_preview_in_video_and_gif_posts_title" />
+
 </PreferenceScreen>
