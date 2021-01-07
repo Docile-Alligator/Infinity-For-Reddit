@@ -131,9 +131,15 @@ public class PostFilter implements Parcelable {
             return false;
         }
         if (postFilter.onlyNSFW && !post.isNSFW()) {
+            if (postFilter.onlySpoiler) {
+                return post.isSpoiler();
+            }
             return false;
         }
         if (postFilter.onlySpoiler && !post.isSpoiler()) {
+            if (postFilter.onlyNSFW) {
+                return post.isNSFW();
+            }
             return false;
         }
         if (!postFilter.containTextType && post.getPostType() == Post.TEXT_TYPE) {
@@ -164,7 +170,7 @@ public class PostFilter implements Parcelable {
         if (postFilter.postTitleExcludesStrings != null && !postFilter.postTitleExcludesStrings.equals("")) {
             String[] titles = postFilter.postTitleExcludesStrings.split(",", 0);
             for (String t : titles) {
-                if (!t.equals("") && post.getTitle().contains(t)) {
+                if (!t.equals("") && post.getTitle().toLowerCase().contains(t.toLowerCase())) {
                     return false;
                 }
             }

@@ -107,14 +107,6 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     private PostFragment mFragment;
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
-    private SortTypeBottomSheetFragment bestSortTypeBottomSheetFragment;
-    private SortTypeBottomSheetFragment popularAndAllSortTypeBottomSheetFragment;
-    private SortTypeBottomSheetFragment subredditSortTypeBottomSheetFragment;
-    private SortTypeBottomSheetFragment multiRedditSortTypeBottomSheetFragment;
-    private UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment;
-    private SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment;
-    private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
-    private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,8 +239,6 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
         } else {
             getCurrentAccountAndBindView(postFilter);
         }
-
-        postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
     }
 
     @Override
@@ -293,35 +283,16 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
         switch (postType) {
             case PostDataSource.TYPE_FRONT_PAGE:
                 getSupportActionBar().setTitle(name);
-
-                bestSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-                Bundle bestBundle = new Bundle();
-                bestBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, false);
-                bestSortTypeBottomSheetFragment.setArguments(bestBundle);
                 break;
             case PostDataSource.TYPE_SEARCH:
                 getSupportActionBar().setTitle(R.string.search);
-
-                searchPostSortTypeBottomSheetFragment = new SearchPostSortTypeBottomSheetFragment();
-                Bundle searchBundle = new Bundle();
-                searchPostSortTypeBottomSheetFragment.setArguments(searchBundle);
                 break;
             case PostDataSource.TYPE_SUBREDDIT:
                 if (name.equals("popular") || name.equals("all")) {
                     getSupportActionBar().setTitle(name.substring(0, 1).toUpperCase() + name.substring(1));
-
-                    popularAndAllSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-                    Bundle popularBundle = new Bundle();
-                    popularBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-                    popularAndAllSortTypeBottomSheetFragment.setArguments(popularBundle);
                 } else {
                     String subredditNamePrefixed = "r/" + name;
                     getSupportActionBar().setTitle(subredditNamePrefixed);
-
-                    subredditSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-                    Bundle subredditSheetBundle = new Bundle();
-                    subredditSheetBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-                    subredditSortTypeBottomSheetFragment.setArguments(subredditSheetBundle);
                 }
                 break;
             case PostDataSource.TYPE_MULTI_REDDIT:
@@ -333,21 +304,12 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
                     multiRedditName = name.substring(name.lastIndexOf("/") + 1);
                 }
                 getSupportActionBar().setTitle(multiRedditName);
-
-                multiRedditSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-                Bundle multiRedditBundle = new Bundle();
-                multiRedditBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-                multiRedditSortTypeBottomSheetFragment.setArguments(multiRedditBundle);
                 break;
             case PostDataSource.TYPE_USER:
                 String usernamePrefixed = "u/" + name;
                 getSupportActionBar().setTitle(usernamePrefixed);
-
-                userThingSortTypeBottomSheetFragment = new UserThingSortTypeBottomSheetFragment();
                 break;
         }
-
-        sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
 
         if (initializeFragment) {
             mFragment = new PostFragment();
@@ -418,22 +380,42 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
             case R.id.action_sort_filtered_thing_activity:
                 switch (postType) {
                     case PostDataSource.TYPE_FRONT_PAGE:
+                        SortTypeBottomSheetFragment bestSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
+                        Bundle bestBundle = new Bundle();
+                        bestBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, false);
+                        bestSortTypeBottomSheetFragment.setArguments(bestBundle);
                         bestSortTypeBottomSheetFragment.show(getSupportFragmentManager(), bestSortTypeBottomSheetFragment.getTag());
                         break;
                     case PostDataSource.TYPE_SEARCH:
+                        SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment = new SearchPostSortTypeBottomSheetFragment();
+                        Bundle searchBundle = new Bundle();
+                        searchPostSortTypeBottomSheetFragment.setArguments(searchBundle);
                         searchPostSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchPostSortTypeBottomSheetFragment.getTag());
                         break;
                     case PostDataSource.TYPE_SUBREDDIT:
                         if (name.equals("popular") || name.equals("all")) {
+                            SortTypeBottomSheetFragment popularAndAllSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
+                            Bundle popularBundle = new Bundle();
+                            popularBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
+                            popularAndAllSortTypeBottomSheetFragment.setArguments(popularBundle);
                             popularAndAllSortTypeBottomSheetFragment.show(getSupportFragmentManager(), popularAndAllSortTypeBottomSheetFragment.getTag());
                         } else {
+                            SortTypeBottomSheetFragment subredditSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
+                            Bundle subredditSheetBundle = new Bundle();
+                            subredditSheetBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
+                            subredditSortTypeBottomSheetFragment.setArguments(subredditSheetBundle);
                             subredditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), subredditSortTypeBottomSheetFragment.getTag());
                         }
                         break;
                     case PostDataSource.TYPE_MULTI_REDDIT:
+                        SortTypeBottomSheetFragment multiRedditSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
+                        Bundle multiRedditBundle = new Bundle();
+                        multiRedditBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
+                        multiRedditSortTypeBottomSheetFragment.setArguments(multiRedditBundle);
                         multiRedditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), multiRedditSortTypeBottomSheetFragment.getTag());
                         break;
                     case PostDataSource.TYPE_USER:
+                        UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment = new UserThingSortTypeBottomSheetFragment();
                         userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
                 }
                 return true;
@@ -463,6 +445,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
                 }
                 return true;
             case R.id.action_change_post_layout_filtered_post_activity:
+                PostLayoutBottomSheetFragment postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
                 postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
                 return true;
         }
@@ -522,6 +505,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
 
     @Override
     public void sortTypeSelected(String sortType) {
+        SortTimeBottomSheetFragment sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
         Bundle bundle = new Bundle();
         bundle.putString(SortTimeBottomSheetFragment.EXTRA_SORT_TYPE, sortType);
         sortTimeBottomSheetFragment.setArguments(bundle);
@@ -548,7 +532,11 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     @Override
     public void fabOptionSelected(int option) {
         if (option == FilteredThingFABMoreOptionsBottomSheetFragment.FAB_OPTION_FILTER) {
-
+            Intent intent = new Intent(this, CustomizePostFilterActivity.class);
+            if (mFragment != null) {
+                intent.putExtra(CustomizePostFilterActivity.EXTRA_POST_FILTER, mFragment.getPostFilter());
+            }
+            startActivityForResult(intent, CUSTOMIZE_POST_FILTER_ACTIVITY_REQUEST_CODE);
         } else if (option == FilteredThingFABMoreOptionsBottomSheetFragment.FAB_OPTION_HIDE_READ_POSTS) {
             if (mFragment != null) {
                 mFragment.hideReadPosts();

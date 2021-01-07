@@ -259,7 +259,11 @@ public class CustomizePostFilterActivity extends BaseActivity {
                 postFilter = new PostFilter();
                 originalName = "";
             } else {
-                originalName = postFilter.name;
+                if (!fromSettings) {
+                    originalName = "";
+                } else {
+                    originalName = postFilter.name;
+                }
             }
             bindView();
         }

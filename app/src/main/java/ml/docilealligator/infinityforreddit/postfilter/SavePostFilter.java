@@ -8,7 +8,6 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class SavePostFilter {
     public interface SavePostFilterListener {
-        //Need to make sure it is running in the UI thread.
         void success();
         void duplicate();
     }
