@@ -141,6 +141,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                             view.setDoubleTapZoomDpi(240);
                             view.setDoubleTapZoomStyle(SubsamplingScaleImageView.ZOOM_FOCUS_FIXED);
                             view.setQuickScaleEnabled(true);
+                            view.resetScaleAndCenter();
                         }
 
                         @Override
