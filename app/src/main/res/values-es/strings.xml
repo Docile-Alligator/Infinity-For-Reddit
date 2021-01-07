@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="login_activity_label">"Iniciar sesión"</string>
-    <string name="search_activity_label">"Buscar"</string>
     <string name="comment_activity_label">"Enviar comentario"</string>
     <string name="comment_activity_label_is_replying">"Responder"</string>
     <string name="post_text_activity_label">"Texto"</string>
@@ -395,8 +394,6 @@ Premio means prize, so it's better suited the first word instead of the second o
     <string name="settings_open_source_summary">"Dale una Estrella en GitHub si te gusta la app"</string>
     <string name="settings_rate_title">"Calificar en Google Play"</string>
     <string name="settings_rate_summary">"Dame 5 estrellas y estaré muy feliz"</string>
-    <string name="settings_f_droid_title">"F-Droid"</string>
-    <string name="settings_f_droid_summary">"Disponible en IzzyOnDroid, un repositorio de F-Droid"</string>
     <string name="settings_email_title">"Email"</string>
     <string name="settings_email_summary">"docilealligator.app@gmail.com"</string>
     <string name="settings_reddit_account_title">"Cuenta de Reddit"</string>

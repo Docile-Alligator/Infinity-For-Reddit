@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="login_activity_label">"Login"</string>
-    <string name="search_activity_label">"Cerca"</string>
     <string name="comment_activity_label">"Invia Commento"</string>
     <string name="comment_activity_label_is_replying">"Rispondi"</string>
     <string name="post_text_activity_label">"Post testuale"</string>
@@ -399,8 +398,6 @@ Potrebbe non funzionare su Android 11"</string>
     <string name="settings_open_source_summary">"Se questa app ti piace, metti una stella al progetto su Github"</string>
     <string name="settings_rate_title">"Vota su Google Play Store"</string>
     <string name="settings_rate_summary">"Dammi una recensione da 5 stelle e sarò veramente contento"</string>
-    <string name="settings_f_droid_title">"F-Droid"</string>
-    <string name="settings_f_droid_summary">"È disponibile in IzzyOnDroid, un repository F-Droid"</string>
     <string name="settings_email_title">"Email"</string>
     <string name="settings_email_summary">"docilealligator.app@gmail.com"</string>
     <string name="settings_reddit_account_title">"Account Reddit"</string>

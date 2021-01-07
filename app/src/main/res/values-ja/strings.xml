@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="login_activity_label">"ログイン"</string>
-    <string name="search_activity_label">"検索"</string>
     <string name="comment_activity_label">"コメントを送信"</string>
     <string name="comment_activity_label_is_replying">"返信"</string>
     <string name="post_text_activity_label">"テキスト"</string>
@@ -420,8 +419,6 @@
     <string name="settings_open_source_summary">"このアプリが気に入ったようでしたらGitHubで星をつけてください"</string>
     <string name="settings_rate_title">"Google Playで評価とレビュー"</string>
     <string name="settings_rate_summary">"五つ星のご評価をいただけるととても嬉しいです"</string>
-    <string name="settings_f_droid_title">"F-Droid"</string>
-    <string name="settings_f_droid_summary">"IzzyOnDroidのF-Droidレポジトリでダウンロード可能です"</string>
     <string name="settings_email_title">"Email"</string>
     <string name="settings_email_summary">"docilealligator.app@gmail.com"</string>
     <string name="settings_reddit_account_title">"Redditアカウント"</string>

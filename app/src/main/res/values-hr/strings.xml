@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="login_activity_label">"Prijava"</string>
-    <string name="search_activity_label">"Pretraživanje"</string>
     <string name="comment_activity_label">"Komentiraj"</string>
     <string name="comment_activity_label_is_replying">"Odgovori"</string>
     <string name="post_text_activity_label">"Tekst"</string>
@@ -388,8 +387,6 @@ Možda ne radi na Androidu 11"</string>
     <string name="settings_open_source_summary">"Ostavite zvijezdicu na Githubu ako Vam se sviđa ova aplikacija"</string>
     <string name="settings_rate_title">"Ocijenite na Google Playu"</string>
     <string name="settings_rate_summary">"Bit ću presretan ako mi date ocjenu 5 zvijezdica"</string>
-    <string name="settings_f_droid_title">"F-Droid"</string>
-    <string name="settings_f_droid_summary">"Dostupan na IzzyOnDroid, repozitorij na F-Droidu"</string>
     <string name="settings_email_title">"E-pošta"</string>
     <string name="settings_email_summary">"docilealligator.app@gmail.com"</string>
     <string name="settings_reddit_account_title">"Reddit račun"</string>

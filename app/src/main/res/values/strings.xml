@@ -433,8 +433,6 @@
     <string name="settings_open_source_summary">Star it on Github if you like this app</string>
     <string name="settings_rate_title">Rate on Google Play</string>
     <string name="settings_rate_summary">Give me a 5-star rating and I will be really happy</string>
-    <string name="settings_f_droid_title">F-Droid</string>
-    <string name="settings_f_droid_summary">It\'s available in IzzyOnDroid, an F-Droid Repository</string>
     <string name="settings_email_title">Email</string>
     <string name="settings_email_summary">docilealligator.app@gmail.com</string>
     <string name="settings_reddit_account_title">Reddit Account</string>

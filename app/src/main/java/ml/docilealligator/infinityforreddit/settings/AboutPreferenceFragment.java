@@ -31,7 +31,6 @@ public class AboutPreferenceFragment extends PreferenceFragmentCompat {
 
         Preference openSourcePreference = findPreference(SharedPreferencesUtils.OPEN_SOURCE_KEY);
         Preference ratePreference = findPreference(SharedPreferencesUtils.RATE_KEY);
-        Preference fDroidPreference = findPreference(SharedPreferencesUtils.F_DROID_KEY);
         Preference emailPreference = findPreference(SharedPreferencesUtils.EMAIL_KEY);
         Preference redditAccountPreference = findPreference(SharedPreferencesUtils.REDDIT_ACCOUNT_KEY);
         Preference subredditPreference = findPreference(SharedPreferencesUtils.SUBREDDIT_KEY);
@@ -58,15 +57,6 @@ public class AboutPreferenceFragment extends PreferenceFragmentCompat {
                     intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit"));
                     startActivity(intent);
                 }
-                return true;
-            });
-        }
-
-        if (fDroidPreference != null) {
-            fDroidPreference.setOnPreferenceClickListener(preference -> {
-                Intent intent = new Intent(activity, LinkResolverActivity.class);
-                intent.setData(Uri.parse("https://www.reddit.com/r/Infinity_For_Reddit/comments/f23o0y/for_anyone_who_wants_to_use_fdroid/"));
-                startActivity(intent);
                 return true;
             });
         }

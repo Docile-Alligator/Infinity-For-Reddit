@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="login_activity_label">"Giriş"</string>
-    <string name="search_activity_label">"Arama"</string>
     <string name="comment_activity_label">"Yorum Gönder"</string>
     <string name="comment_activity_label_is_replying">"Cevapla"</string>
     <string name="post_text_activity_label">"Metin Gönderisi"</string>
@@ -384,8 +383,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_open_source_summary">"Bu uygulamayı beğendiyseniz Github'da yıldız verin"</string>
     <string name="settings_rate_title">"Google Play'de Değerlendirin"</string>
     <string name="settings_rate_summary">"Bize 5 yıldız verirseniz gerçekten mutlu oluruz."</string>
-    <string name="settings_f_droid_title">"F-Droid"</string>
-    <string name="settings_f_droid_summary">"Bir F-Droid Mahzeni olan IzzyOnDroid'de mevcuttur"</string>
     <string name="settings_email_title">"E-posta"</string>
     <string name="settings_email_summary">"docilealligator.app@gmail.com"</string>
     <string name="settings_reddit_account_title">"Reddit Hesabı"</string>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="login_activity_label">"Se Connecter"</string>
-    <string name="search_activity_label">"Rechercher"</string>
     <string name="comment_activity_label">"Envoyer le commentaire"</string>
     <string name="comment_activity_label_is_replying">"Répondre"</string>
     <string name="post_text_activity_label">"Poster du texte"</string>
@@ -426,8 +425,6 @@ peut ne pas fonctionner sur Android 11"</string>
     <string name="settings_open_source_summary">"Si vous aimez cette application, étoilez là sur GitHub"</string>
     <string name="settings_rate_title">"Laissez une note sur Google Play"</string>
     <string name="settings_rate_summary">"Donnez-moi 5 étoiles et je serai ravi"</string>
-    <string name="settings_f_droid_title">"F-Droid"</string>
-    <string name="settings_f_droid_summary">"Infinity est disponible sur IzzyOnDroid, un dépôt F-Droid"</string>
     <string name="settings_email_title">"E-mail"</string>
     <string name="settings_email_summary">"docilealligator.app@gmail.com"</string>
     <string name="settings_reddit_account_title">"Compte Reddit"</string>

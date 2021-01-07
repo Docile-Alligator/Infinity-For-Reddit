@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="login_activity_label">"登录"</string>
-    <string name="search_activity_label">"搜索"</string>
     <string name="comment_activity_label">"发送评论"</string>
     <string name="comment_activity_label_is_replying">"回复"</string>
     <string name="post_text_activity_label">"文字"</string>
@@ -388,8 +387,6 @@
     <string name="settings_open_source_summary">"如果您喜欢此应用，请在Github上给个star"</string>
     <string name="settings_rate_title">"在Google Play上评分"</string>
     <string name="settings_rate_summary">"如果给我一个五星好评，我会非常高兴的"</string>
-    <string name="settings_f_droid_title">"F-Droid应用市场"</string>
-    <string name="settings_f_droid_summary">"现在已经在F-Droid存储库IzzyOnDroid上架"</string>
     <string name="settings_email_title">"作者邮箱"</string>
     <string name="settings_email_summary">"docilealligator.app@gmail.com"</string>
     <string name="settings_reddit_account_title">"作者Reddit帐户"</string>

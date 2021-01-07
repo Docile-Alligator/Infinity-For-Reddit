@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="login_activity_label">"Login"</string>
-    <string name="search_activity_label">"Buscar"</string>
     <string name="comment_activity_label">"Comentar"</string>
     <string name="comment_activity_label_is_replying">"Responder"</string>
     <string name="post_text_activity_label">"Postar Texto"</string>
@@ -375,8 +374,6 @@ Toque para tentar novamente."</string>
     <string name="settings_open_source_summary">"Favorite ele no Github se você está gostando do App"</string>
     <string name="settings_rate_title">"Avalie no Google Play"</string>
     <string name="settings_rate_summary">"Me dê uma classificação de 5 estrelas e eu vou ficar muito feliz"</string>
-    <string name="settings_f_droid_title">"F-Droid"</string>
-    <string name="settings_f_droid_summary">"Disponível para download também em: IzzyOnDroid, um Repositório F-Droid"</string>
     <string name="settings_email_title">"Email"</string>
     <string name="settings_email_summary">"docilealligator.app@gmail.com"</string>
     <string name="settings_reddit_account_title">"Conta Reddit"</string>

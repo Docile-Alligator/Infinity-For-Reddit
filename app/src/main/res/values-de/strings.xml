@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="login_activity_label">"Anmelden"</string>
-    <string name="search_activity_label">"Suchen"</string>
     <string name="comment_activity_label">"Kommentar senden"</string>
     <string name="comment_activity_label_is_replying">"Antworten"</string>
 
@@ -391,8 +390,6 @@ Funktioniert vielleicht nicht auf Android 11"</string>
     <string name="settings_open_source_summary">"Wenn du diese App magst, gib ihr einen Stern auf GitHub"</string>
     <string name="settings_rate_title">"Auf Google Play bewerten"</string>
     <string name="settings_rate_summary">"Gib mir eine 5-Stern-Bewertung und mach mich richtig glücklich"</string>
-    <string name="settings_f_droid_title">"F-Droid"</string>
-    <string name="settings_f_droid_summary">"Es ist auf IzzyOnDroid verfügbar, einem F-Droid Repository"</string>
     <string name="settings_email_title">"E-Mail"</string>
     <string name="settings_email_summary">"docilealligator.app@gmail.com"</string>
     <string name="settings_reddit_account_title">"Reddit-Konto"</string>

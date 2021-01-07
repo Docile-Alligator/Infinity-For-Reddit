@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="login_activity_label">"लाॅग इन करें"</string>
-    <string name="search_activity_label">"खोजें"</string>
     <string name="comment_activity_label">"टिप्पणी करें "</string>
     <string name="comment_activity_label_is_replying">"उत्तर दें"</string>
     <string name="post_text_activity_label">"टैक्स्ट पोस्ट"</string>
@@ -419,8 +418,6 @@ Behavior -->
     <string name="settings_open_source_summary">"यदि आपको यह एप्प पसंद आई तो Github पर इसे तारांकित करें "</string>
     <string name="settings_rate_title">"गूगल प्ले पर रेट करें "</string>
     <string name="settings_rate_summary">"मुझे 5 सितारा रेटिंग दीजिए और मैं खुश हो जाऊंगा"</string>
-    <string name="settings_f_droid_title">"F-Droid"</string>
-    <string name="settings_f_droid_summary">"यह IzzyOnDroid, एक F-Droid रेपोजिटरी पर उपलब्ध है "</string>
     <string name="settings_email_title">"ई मेल "</string>
     <string name="settings_email_summary">"docilealligator.app@gmail.com"</string>
     <string name="settings_reddit_account_title">"रैडिट खाता "</string>
