@@ -133,15 +133,18 @@ public class PostFilterUsageListingActivity extends BaseActivity {
             textInputEditText.setText(nameOfUsage);
         }
         textInputEditText.requestFocus();
+        int titleStringId = R.string.subreddit;
         switch (type) {
             case PostFilterUsage.SUBREDDIT_TYPE:
                 textInputEditText.setHint(R.string.settings_tab_subreddit_name);
                 break;
             case PostFilterUsage.USER_TYPE:
                 textInputEditText.setHint(R.string.settings_tab_username);
+                titleStringId = R.string.user;
                 break;
             case PostFilterUsage.MULTIREDDIT_TYPE:
                 textInputEditText.setHint(R.string.settings_tab_multi_reddit_name);
+                titleStringId = R.string.multi_reddit;
                 break;
         }
 
@@ -150,7 +153,7 @@ public class PostFilterUsageListingActivity extends BaseActivity {
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
         new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
-                .setTitle(R.string.edit_post_filter_name_of_usage_info)
+                .setTitle(titleStringId)
                 .setView(dialogView)
                 .setPositiveButton(R.string.ok, (editTextDialogInterface, i1)
                         -> {
