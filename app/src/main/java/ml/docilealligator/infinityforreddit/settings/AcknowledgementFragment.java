@@ -122,6 +122,9 @@ public class AcknowledgementFragment extends Fragment {
                         "usage and full featured image loading choices. Powered by Subsampling Scale " +
                         "Image View, Fresco, Glide, and Picasso. Even with gif and webp support!",
                 Uri.parse("https://github.com/Piasy/BigImageViewer")));
+        acknowledgements.add(new Acknowledgement("BetterLinkMovementMethod",
+                "Attempts to improve how clickable links are detected, highlighted and handled in TextView.",
+                Uri.parse("https://github.com/saket/Better-Link-Movement-Method")));
 
         AcknowledgementRecyclerViewAdapter adapter = new AcknowledgementRecyclerViewAdapter(activity, acknowledgements);
         recyclerView.setLayoutManager(new LinearLayoutManager(activity));
