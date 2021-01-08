@@ -377,8 +377,6 @@
     <string name="settings_open_source_summary">"Oznacz gwiazdką na Githubie jeśli lubisz tą aplikację"</string>
     <string name="settings_rate_title">"Oceń na Google Play"</string>
     <string name="settings_rate_summary">"Daj mi 5 gwiazdek i będę naprawdę szczęśliwy"</string>
-    <string name="settings_f_droid_title">"F-Droid"</string>
-    <string name="settings_f_droid_summary">"Jest dostępny w IzzyOnDroid w repozytorium F-Droid"</string>
     <string name="settings_email_title">"Email"</string>
     <string name="settings_email_summary">"docilealligator.app@gmail.com"</string>
     <string name="settings_reddit_account_title">"Konto Reddit"</string>
@@ -479,7 +477,7 @@ Nie można zsynchronizować subskrypcji"</string>
     <string name="multi_reddit_name_hint">"Nazwa (Max 50 znaków)"</string>
     <string name="multi_reddit_description_hint">"Opis"</string>
     <string name="private_multi_reddit">"Prywatny"</string>
-    <string name="select_subreddits">"Zaznacz Subreddity"</string>
+    <string name="select_subreddits_and_users">"Zaznacz Subreddity"</string>
     <string name="no_multi_reddit_name">"Gdzie jest nazwa?"</string>
     <string name="create_multi_reddit_failed">"Nie można stworzyć tego multireddita"</string>
     <string name="duplicate_multi_reddit">"Ten multireddit już istnieje"</string>
@@ -856,7 +854,6 @@ Wiadomość: %2$s"</string>
     <string name="settings_miscellaneous_title">"Róźne"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_title">"Szanuj Zalecany typ sortowania komentarzy subreddita"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_summary">"Typ sortowania komentarzy nie zostanie zapisany"</string>
-    <string name="settings_filter_title">"Filtr"</string>
     <string name="settings_subreddit_filter_category">"Ukryj Subreddity"</string>
     <string name="settings_subreddit_filter_popular_and_all">"W r/popular i r/all"</string>
     <string name="settings_credits_ufo_capturing_animation_title">"Animacja przechwytywania UFO"</string>
@@ -872,5 +869,5 @@ Wiadomość: %2$s"</string>
     <string name="theme_item_no_preview_post_type_background_color">"Kolor tła posta bez podglądu"</string>
     <string name="theme_item_no_preview_post_type_background_color_detail">"Zastosowano dla: Symbol zastępczy wskazujący typ wpisu, gdy podgląd nie jest dostępny"</string>
     <string name="settings_language_title">"Język"</string>
-    <string name="settings_enable_search_history">"Włącz historię wyszukiwania"</string>
+    <string name="settings_enable_search_history_title">"Włącz historię wyszukiwania"</string>
 </resources>
