@@ -40,8 +40,9 @@ public class Utils {
         StringBuilder regexed = new StringBuilder(markdown
                 .replaceAll("((?<=[\\s])|^)/[rRuU]/[\\w-]+/{0,1}", "[$0](https://www.reddit.com$0)")
                 .replaceAll("((?<=[\\s])|^)[rRuU]/[\\w-]+/{0,1}", "[$0](https://www.reddit.com/$0)")
-                .replaceAll("\\^{2,}", "^"));
+                .replaceAll("\\^{2,}", "^").replaceAll("#(?![# ])", "# "));
 
+        //Fix superscript
         int startIndex = regexed.indexOf("^");
         while (startIndex >= 0 && startIndex + 1 < regexed.length()) {
             char currentChar = regexed.charAt(startIndex + 1);
