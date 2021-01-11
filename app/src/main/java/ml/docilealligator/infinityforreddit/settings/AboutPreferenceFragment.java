@@ -35,13 +35,14 @@ public class AboutPreferenceFragment extends PreferenceFragmentCompat {
         Preference redditAccountPreference = findPreference(SharedPreferencesUtils.REDDIT_ACCOUNT_KEY);
         Preference subredditPreference = findPreference(SharedPreferencesUtils.SUBREDDIT_KEY);
         Preference sharePreference = findPreference(SharedPreferencesUtils.SHARE_KEY);
+        Preference privacyPolicyPreference = findPreference(SharedPreferencesUtils.PRIVACY_POLICY_KEY);
         Preference versionPreference = findPreference(SharedPreferencesUtils.VERSION_KEY);
 
         if (openSourcePreference != null) {
             openSourcePreference.setOnPreferenceClickListener(preference -> {
                 Intent intent = new Intent(activity, LinkResolverActivity.class);
                 intent.setData(Uri.parse("https://github.com/Docile-Alligator/Infinity-For-Reddit"));
-                startActivity(intent);
+                activity.startActivity(intent);
                 return true;
             });
         }
@@ -55,7 +56,7 @@ public class AboutPreferenceFragment extends PreferenceFragmentCompat {
                 } else {
                     Intent intent = new Intent(activity, LinkResolverActivity.class);
                     intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit"));
-                    startActivity(intent);
+                    activity.startActivity(intent);
                 }
                 return true;
             });
@@ -66,7 +67,7 @@ public class AboutPreferenceFragment extends PreferenceFragmentCompat {
                 Intent intent = new Intent(Intent.ACTION_SENDTO);
                 intent.setData(Uri.parse("mailto:docilealligator.app@gmail.com"));
                 try {
-                    startActivity(intent);
+                    activity.startActivity(intent);
                 } catch (ActivityNotFoundException e) {
                     Toast.makeText(activity, R.string.no_email_client, Toast.LENGTH_SHORT).show();
                 }
@@ -78,7 +79,7 @@ public class AboutPreferenceFragment extends PreferenceFragmentCompat {
             redditAccountPreference.setOnPreferenceClickListener(preference -> {
                 Intent intent = new Intent(activity, LinkResolverActivity.class);
                 intent.setData(Uri.parse("https://www.reddit.com/user/Hostilenemy"));
-                startActivity(intent);
+                activity.startActivity(intent);
                 return true;
             });
         }
@@ -87,7 +88,7 @@ public class AboutPreferenceFragment extends PreferenceFragmentCompat {
             subredditPreference.setOnPreferenceClickListener(preference -> {
                 Intent intent = new Intent(activity, LinkResolverActivity.class);
                 intent.setData(Uri.parse("https://www.reddit.com/r/Infinity_For_Reddit"));
-                startActivity(intent);
+                activity.startActivity(intent);
                 return true;
             });
         }
@@ -98,11 +99,23 @@ public class AboutPreferenceFragment extends PreferenceFragmentCompat {
                 intent.setType("text/plain");
                 intent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_this_app));
                 if (intent.resolveActivity(activity.getPackageManager()) != null) {
-                    startActivity(intent);
+                    activity.startActivity(intent);
                 } else {
                     Toast.makeText(activity, R.string.no_app, Toast.LENGTH_SHORT).show();
                 }
                 return true;
+            });
+        }
+
+        if (privacyPolicyPreference != null) {
+            privacyPolicyPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(activity, LinkResolverActivity.class);
+                    intent.setData(Uri.parse("https://docile-alligator.github.io/"));
+                    activity.startActivity(intent);
+                    return true;
+                }
             });
         }
 

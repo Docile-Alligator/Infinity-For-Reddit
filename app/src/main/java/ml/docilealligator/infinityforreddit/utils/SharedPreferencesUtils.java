@@ -23,6 +23,7 @@ public class SharedPreferencesUtils {
     public static final String REDDIT_ACCOUNT_KEY = "reddit_account";
     public static final String SUBREDDIT_KEY = "subreddit";
     public static final String SHARE_KEY = "share";
+    public static final String PRIVACY_POLICY_KEY = "privacy_policy";
     public static final String VERSION_KEY = "version";
     public static final String FONT_SIZE_KEY = "font_size";
     public static final String TITLE_FONT_SIZE_KEY = "title_font_size";
