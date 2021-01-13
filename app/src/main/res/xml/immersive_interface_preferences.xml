@@ -13,4 +13,9 @@
         app:title="@string/settings_immersive_interface_ignore_nav_bar_title"
         app:summary="@string/settings_immersive_interface_ignore_nav_bar_summary" />
 
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="disable_immersive_interface_in_landscape_mode"
+        app:title="@string/settings_disable_immersive_interface_in_landscape_mode"/>
+
 </PreferenceScreen>
