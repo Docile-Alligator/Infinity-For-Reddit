@@ -69,8 +69,8 @@ import ml.docilealligator.infinityforreddit.DeleteThing;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
-import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
@@ -416,7 +416,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
                         if (subscriptionReady) {
                             subscriptionReady = false;
-                            if (subscribeUserChip.getText().equals(resources.getString(R.string.follow))) {
+                            if (resources.getString(R.string.follow).contentEquals(subscribeUserChip.getText())) {
                                 UserFollowing.followUser(mOauthRetrofit, mRetrofit, mAccessToken,
                                         username, mAccountName, subscribedUserDao, new UserFollowing.UserFollowingListener() {
                                             @Override

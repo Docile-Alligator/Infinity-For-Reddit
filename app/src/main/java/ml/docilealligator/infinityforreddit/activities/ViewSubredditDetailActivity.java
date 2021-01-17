@@ -779,7 +779,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
             if (subscriptionReady) {
                 subscriptionReady = false;
-                if (subscribeSubredditChip.getText().equals(getResources().getString(R.string.subscribe))) {
+                if (getResources().getString(R.string.subscribe).contentEquals(subscribeSubredditChip.getText())) {
                     SubredditSubscription.subscribeToSubreddit(mOauthRetrofit, mRetrofit, mAccessToken,
                             subredditName, mAccountName, mRedditDataRoomDatabase,
                             new SubredditSubscription.SubredditSubscriptionListener() {
