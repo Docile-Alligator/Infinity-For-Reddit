@@ -934,8 +934,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 Post.Preview preview = getSuitablePreview(mPost.getPreviews());
                 if (preview != null) {
                     if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
+                        int height = (int) (400 * mScale);
                         ((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                        ((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView.getLayoutParams().height = (int) (400 * mScale);
+                        ((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView.getLayoutParams().height = height;
+                        preview.setPreviewWidth(mImageViewWidth);
+                        preview.setPreviewHeight(height);
                     } else {
                         ((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView.setRatio((float) preview.getPreviewHeight() / (float) preview.getPreviewWidth());
                     }
@@ -1475,29 +1478,29 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 previewIndex = 0;
             }
             preview = previews.get(previewIndex);
-            if (preview.getPreviewWidth() * preview.getPreviewHeight() > 35_000_000) {
+            if (preview.getPreviewWidth() * preview.getPreviewHeight() > 10_000_000) {
                 for (int i = previews.size() - 1; i >= 1; i--) {
                     preview = previews.get(i);
                     if (mImageViewWidth >= preview.getPreviewWidth()) {
-                        if (preview.getPreviewWidth() * preview.getPreviewHeight() <= 35_000_000) {
+                        if (preview.getPreviewWidth() * preview.getPreviewHeight() <= 10_000_000) {
                             return preview;
                         }
                     } else {
                         int height = mImageViewWidth / preview.getPreviewWidth() * preview.getPreviewHeight();
-                        if (mImageViewWidth * height <= 35_000_000) {
+                        if (mImageViewWidth * height <= 10_000_000) {
                             return preview;
                         }
                     }
                 }
             }
 
-            if (preview.getPreviewWidth() * preview.getPreviewHeight() > 35_000_000) {
+            if (preview.getPreviewWidth() * preview.getPreviewHeight() > 10_000_000) {
                 int divisor = 2;
                 do {
                     preview.setPreviewWidth(preview.getPreviewWidth() / divisor);
                     preview.setPreviewHeight(preview.getPreviewHeight() / divisor);
                     divisor *= 2;
-                } while (preview.getPreviewWidth() * preview.getPreviewHeight() / divisor / divisor > 35_000_000);
+                } while (preview.getPreviewWidth() * preview.getPreviewHeight() / divisor / divisor > 10_000_000);
             }
 
             return preview;

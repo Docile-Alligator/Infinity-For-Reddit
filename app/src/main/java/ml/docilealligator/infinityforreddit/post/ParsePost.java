@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit.post;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.text.Html;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -242,9 +241,6 @@ public class ParsePost {
                 //Video post
                 JSONObject redditVideoObject = data.getJSONObject(JSONUtils.MEDIA_KEY).getJSONObject(JSONUtils.REDDIT_VIDEO_KEY);
                 int postType = Post.VIDEO_TYPE;
-                if (!redditVideoObject.has(JSONUtils.HLS_URL_KEY)) {
-                    Log.i("afasd", "s " + redditVideoObject);
-                }
                 String videoUrl = Html.fromHtml(redditVideoObject.getString(JSONUtils.HLS_URL_KEY)).toString();
                 String videoDownloadUrl = redditVideoObject.getString(JSONUtils.FALLBACK_URL_KEY);
 
