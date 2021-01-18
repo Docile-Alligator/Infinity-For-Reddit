@@ -24,6 +24,11 @@
             android:fontFamily="?attr/font_family"
             app:drawableStartCompat="@drawable/ic_info_preference_24dp" />
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dividerColor" />
+
         <LinearLayout
             android:id="@+id/tab_count_linear_layout_customize_main_page_tabs_fragment"
             android:layout_width="match_parent"

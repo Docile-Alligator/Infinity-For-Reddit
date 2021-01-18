@@ -31,8 +31,6 @@ public class CustomizeBottomAppBarFragment extends Fragment {
 
     @BindView(R.id.info_text_view_customize_bottom_app_bar_fragment)
     TextView infoTextView;
-    @BindView(R.id.divider_1_customize_bottom_app_bar_fragment)
-    View divider1;
     @BindView(R.id.main_activity_group_summary_customize_bottom_app_bar_fragment)
     TextView mainActivityGroupSummaryTextView;
     @BindView(R.id.main_activity_option_count_linear_layout_customize_bottom_app_bar_fragment)
@@ -123,7 +121,6 @@ public class CustomizeBottomAppBarFragment extends Fragment {
 
         if (accountName == null) {
             infoTextView.setText(R.string.only_for_logged_in_user);
-            divider1.setVisibility(View.GONE);
             mainActivityGroupSummaryTextView.setVisibility(View.GONE);
             mainActivityOptionCountLinearLayout.setVisibility(View.GONE);
             mainActivityOption1LinearLayout.setVisibility(View.GONE);

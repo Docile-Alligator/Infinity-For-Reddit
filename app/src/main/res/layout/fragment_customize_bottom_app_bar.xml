@@ -25,7 +25,6 @@
             app:drawableStartCompat="@drawable/ic_info_preference_24dp" />
 
         <View
-            android:id="@+id/divider_1_customize_bottom_app_bar_fragment"
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:background="@color/dividerColor" />
