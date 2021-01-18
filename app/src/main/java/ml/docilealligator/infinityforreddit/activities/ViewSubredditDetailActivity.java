@@ -390,9 +390,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     glide.load(getDrawable(R.drawable.subreddit_default_icon))
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0)))
                             .into(iconGifImageView);
-                    iconGifImageView.setOnClickListener(view -> {
-                        //Do nothing as it is a default icon
-                    });
+                    iconGifImageView.setOnClickListener(null);
                 } else {
                     glide.load(subredditData.getIconUrl())
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0)))
