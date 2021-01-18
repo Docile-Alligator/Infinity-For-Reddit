@@ -12,9 +12,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.slider.Slider;
+import com.google.android.material.textfield.TextInputEditText;
 
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 
 public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -125,8 +126,8 @@ public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<R
             }
             case MarkdownBottomBarRecyclerViewAdapter.LINK: {
                 View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_insert_link, null);
-                EditText textEditText = dialogView.findViewById(R.id.edit_text_insert_link_dialog);
-                EditText linkEditText = dialogView.findViewById(R.id.edit_link_insert_link_dialog);
+                TextInputEditText textEditText = dialogView.findViewById(R.id.edit_text_insert_link_dialog);
+                TextInputEditText linkEditText = dialogView.findViewById(R.id.edit_link_insert_link_dialog);
 
                 int start = Math.max(commentEditText.getSelectionStart(), 0);
                 int end = Math.max(commentEditText.getSelectionEnd(), 0);
