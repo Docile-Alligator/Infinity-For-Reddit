@@ -565,7 +565,7 @@ public class ParsePost {
                             JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
                             Post post = parseBasicData(data);
                             if (readPostHashSet != null && readPostHashSet.contains(ReadPost.convertPost(post))) {
-                                post.markAsRead();
+                                post.markAsRead(false);
                             }
                             if (PostFilter.isPostAllowed(post, postFilter)) {
                                 newPosts.add(post);

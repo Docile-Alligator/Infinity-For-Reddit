@@ -407,7 +407,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             Post post = getItem(position);
             if (post != null) {
                 if (post.isRead()) {
-                    if (mHideReadPostsAutomatically || position < mHideReadPostsIndex) {
+                    if ((mHideReadPostsAutomatically && !post.isHiddenManuallyByUser()) || position < mHideReadPostsIndex) {
                         post.hidePostInRecyclerView();
                         holder.itemView.setVisibility(View.GONE);
                         RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
@@ -736,7 +736,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             Post post = getItem(position);
             if (post != null) {
                 if (post.isRead()) {
-                    if (mHideReadPostsAutomatically || position < mHideReadPostsIndex) {
+                    if ((mHideReadPostsAutomatically && !post.isHiddenManuallyByUser()) || position < mHideReadPostsIndex) {
                         post.hidePostInRecyclerView();
                         holder.itemView.setVisibility(View.GONE);
                         ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
@@ -1980,7 +1980,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
         void markPostRead(Post post, boolean changePostItemColor) {
             if (mAccessToken != null && !post.isRead() && mMarkPostsAsRead) {
-                post.markAsRead();
+                post.markAsRead(true);
                 if (changePostItemColor) {
                     cardView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
                     titleTextView.setTextColor(mReadPostTitleColor);
@@ -3033,7 +3033,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
         void markPostRead(Post post, boolean changePostItemColor) {
             if (mAccessToken != null && !post.isRead() && mMarkPostsAsRead) {
-                post.markAsRead();
+                post.markAsRead(true);
                 if (changePostItemColor) {
                     itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
                     titleTextView.setTextColor(mReadPostTitleColor);
