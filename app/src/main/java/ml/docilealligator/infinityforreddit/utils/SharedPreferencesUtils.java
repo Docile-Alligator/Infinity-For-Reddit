@@ -186,10 +186,22 @@ public class SharedPreferencesUtils {
     public static final String OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_3 = "other_activities_bottom_app_bar_option_3";
     public static final String OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_4 = "other_activities_bottom_app_bar_option_4";
     public static final String OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB = "other_activities_bottom_app_bar_fab";
+
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS = 0;
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_MULTIREDDITS = 1;
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_INBOX = 2;
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_PROFILE = 3;
+    public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_SUBMIT_POSTS = 4;
+    public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_REFRESH = 5;
+    public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_CHANGE_SORT_TYPE = 6;
+    public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_CHANGE_POST_LAYOUT = 7;
+    public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_SEARCH = 8;
+    public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_GO_TO_SUBREDDIT = 9;
+    public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_GO_TO_USER = 10;
+    public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_RANDOM = 11;
+    public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_HIDE_READ_POSTS = 12;
+    public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_FILTER_POSTS = 13;
+
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS = 0;
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_REFRESH = 1;
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE = 2;
@@ -200,11 +212,23 @@ public class SharedPreferencesUtils {
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_RANDOM = 7;
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS = 8;
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_FILTER_POSTS = 9;
+
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HOME = 0;
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS = 1;
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX = 2;
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_PROFILE = 3;
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_MULTIREDDITS = 4;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBMIT_POSTS = 5;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_REFRESH = 6;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_CHANGE_SORT_TYPE = 7;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_CHANGE_POST_LAYOUT = 8;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SEARCH = 9;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_SUBREDDIT = 10;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_USER = 11;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_RANDOM = 12;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HIDE_READ_POSTS = 13;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_FILTER_POSTS = 14;
+
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS = 0;
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH = 1;
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE = 2;

@@ -241,6 +241,16 @@
         <item>Multireddits</item>
         <item>Inbox</item>
         <item>Profile</item>
+        <item>Submit posts</item>
+        <item>Refresh</item>
+        <item>Change sort type</item>
+        <item>Change post layout</item>
+        <item>Search</item>
+        <item>Go to Subreddit</item>
+        <item>Go to User</item>
+        <item>Random</item>
+        <item>Hide Read Posts</item>
+        <item>Filter Posts</item>
     </string-array>
 
     <string-array name="settings_other_activities_bottom_app_bar_options">
@@ -249,6 +259,16 @@
         <item>Inbox</item>
         <item>Profile</item>
         <item>Multireddits</item>
+        <item>Submit posts</item>
+        <item>Refresh</item>
+        <item>Change sort type</item>
+        <item>Change post layout</item>
+        <item>Search</item>
+        <item>Go to Subreddit</item>
+        <item>Go to User</item>
+        <item>Random</item>
+        <item>Hide Read Posts</item>
+        <item>Filter Posts</item>
     </string-array>
 
     <string-array name="settings_bottom_app_bar_fab_options">

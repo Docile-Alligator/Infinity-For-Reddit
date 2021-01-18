@@ -574,6 +574,50 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 startActivity(intent);
                 break;
             }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_REFRESH: {
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.refresh();
+                }
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_CHANGE_SORT_TYPE: {
+                displaySortTypeBottomSheetFragment();
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_CHANGE_POST_LAYOUT: {
+                PostLayoutBottomSheetFragment postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
+                postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SEARCH: {
+                Intent intent = new Intent(this, SearchActivity.class);
+                intent.putExtra(SearchActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                startActivity(intent);
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_SUBREDDIT:
+                goToSubreddit();
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_USER:
+                goToUser();
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_RANDOM:
+                random();
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HIDE_READ_POSTS:
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.hideReadPosts();
+                }
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_FILTER_POSTS:
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.filterPosts();
+                }
+                break;
+            default:
+                PostTypeBottomSheetFragment postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
+                postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
+                break;
         }
     }
 
@@ -587,6 +631,26 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 return R.drawable.ic_inbox_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_MULTIREDDITS:
                 return R.drawable.ic_multi_reddit_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBMIT_POSTS:
+                return R.drawable.ic_add_day_night_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_REFRESH:
+                return R.drawable.ic_refresh_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_CHANGE_SORT_TYPE:
+                return R.drawable.ic_sort_toolbar_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_CHANGE_POST_LAYOUT:
+                return R.drawable.ic_post_layout_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SEARCH:
+                return R.drawable.ic_search_black_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_SUBREDDIT:
+                return R.drawable.ic_subreddit_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_USER:
+                return R.drawable.ic_user_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_RANDOM:
+                return R.drawable.ic_random_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HIDE_READ_POSTS:
+                return R.drawable.ic_hide_read_posts_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_FILTER_POSTS:
+                return R.drawable.ic_filter_24dp;
             default:
                 return R.drawable.ic_account_circle_24dp;
         }
