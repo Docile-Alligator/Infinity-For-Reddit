@@ -349,4 +349,52 @@
         <item>tr-rTR</item>
     </string-array>
 
+    <string-array name="settings_subreddit_default_sort_type">
+        <item>Hot</item>
+        <item>New</item>
+        <item>Rising</item>
+        <item>Top</item>
+        <item>Controversial</item>
+    </string-array>
+
+    <string-array name="settings_subreddit_default_sort_type_values">
+        <item>HOT</item>
+        <item>NEW</item>
+        <item>RISING</item>
+        <item>TOP</item>
+        <item>CONTROVERSIAL</item>
+    </string-array>
+
+    <string-array name="settings_user_default_sort_type">
+        <item>New</item>
+        <item>Hot</item>
+        <item>Top</item>
+        <item>Controversial</item>
+    </string-array>
+
+    <string-array name="settings_user_default_sort_type_values">
+        <item>NEW</item>
+        <item>HOT</item>
+        <item>TOP</item>
+        <item>CONTROVERSIAL</item>
+    </string-array>
+
+    <string-array name="settings_default_sort_time">
+        <item>Hour</item>
+        <item>Day</item>
+        <item>Week</item>
+        <item>Month</item>
+        <item>Year</item>
+        <item>All Time</item>
+    </string-array>
+
+    <string-array name="settings_default_sort_time_values">
+        <item>HOUR</item>
+        <item>DAY</item>
+        <item>WEEK</item>
+        <item>MONTH</item>
+        <item>YEAR</item>
+        <item>ALL</item>
+    </string-array>
+
 </resources>

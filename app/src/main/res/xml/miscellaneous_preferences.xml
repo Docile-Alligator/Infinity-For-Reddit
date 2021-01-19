@@ -20,12 +20,6 @@
         app:title="@string/settings_confirm_to_exit" />
 
     <SwitchPreference
-        app:defaultValue="false"
-        app:key="respect_subreddit_recommended_comment_sort_type"
-        app:title="@string/settings_respect_subreddit_recommended_comment_sort_type_title"
-        app:summary="@string/settings_respect_subreddit_recommended_comment_sort_type_summary" />
-
-    <SwitchPreference
         app:defaultValue="true"
         app:key="enable_search_history"
         app:title="@string/settings_enable_search_history_title"

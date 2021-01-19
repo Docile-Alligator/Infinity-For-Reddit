@@ -68,9 +68,14 @@
         app:title="@string/settings_post_filter_title" />
 
     <Preference
+        app:icon="@drawable/ic_sort_24dp"
+        app:title="@string/settings_sort_type_title"
+        app:fragment="ml.docilealligator.infinityforreddit.settings.SortTypePreferenceFragment" />
+
+    <Preference
         app:icon="@drawable/ic_miscellaneous_24dp"
         app:title="@string/settings_miscellaneous_title"
-        app:fragment="ml.docilealligator.infinityforreddit.settings.MiscellaneousPreferenceFragment"/>
+        app:fragment="ml.docilealligator.infinityforreddit.settings.MiscellaneousPreferenceFragment" />
 
     <Preference
         android:icon="@drawable/ic_advanced_24dp"

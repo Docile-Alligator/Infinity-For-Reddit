@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="save_sort_type"
+        app:title="@string/settings_save_sort_type_title" />
+
+    <ListPreference
+        app:defaultValue="HOT"
+        app:entries="@array/settings_subreddit_default_sort_type"
+        app:entryValues="@array/settings_subreddit_default_sort_type_values"
+        app:key="subreddit_default_sort_type"
+        app:title="@string/settings_subreddit_default_sort_type_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        app:defaultValue="ALL"
+        app:entries="@array/settings_default_sort_time"
+        app:entryValues="@array/settings_default_sort_time_values"
+        app:key="subreddit_default_sort_time"
+        app:title="@string/settings_subreddit_default_sort_time_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        app:defaultValue="NEW"
+        app:entries="@array/settings_user_default_sort_type"
+        app:entryValues="@array/settings_user_default_sort_type_values"
+        app:key="user_default_sort_type"
+        app:title="@string/settings_user_default_sort_type_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        app:defaultValue="ALL"
+        app:entries="@array/settings_default_sort_time"
+        app:entryValues="@array/settings_default_sort_time_values"
+        app:key="user_default_sort_time"
+        app:title="@string/settings_user_default_sort_time_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="respect_subreddit_recommended_comment_sort_type"
+        app:title="@string/settings_respect_subreddit_recommended_comment_sort_type_title"
+        app:summary="@string/settings_respect_subreddit_recommended_comment_sort_type_summary" />
+
+</PreferenceScreen>
