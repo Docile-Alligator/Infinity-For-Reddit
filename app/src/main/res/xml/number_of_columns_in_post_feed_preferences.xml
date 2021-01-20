@@ -6,6 +6,8 @@
         app:summary="@string/restart_app_see_changes"
         app:enabled="false" />
 
+    <PreferenceCategory />
+
     <ListPreference
         app:defaultValue="1"
         app:entries="@array/settings_number_of_columns_in_post_feed"

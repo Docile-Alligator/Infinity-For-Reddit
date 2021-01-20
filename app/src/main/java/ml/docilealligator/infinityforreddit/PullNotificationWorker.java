@@ -245,11 +245,12 @@ public class PullNotificationWorker extends Worker {
 
         Call<String> accessTokenCall = api.getAccessToken(APIUtils.getHttpBasicAuthHeader(), params);
         try {
-            Response response = accessTokenCall.execute();
+            Response<String> response = accessTokenCall.execute();
             if (response.isSuccessful() && response.body() != null) {
-                JSONObject jsonObject = new JSONObject(response.body().toString());
+                JSONObject jsonObject = new JSONObject(response.body());
                 String newAccessToken = jsonObject.getString(APIUtils.ACCESS_TOKEN_KEY);
-                mRedditDataRoomDatabase.accountDao().changeAccessToken(account.getUsername(), newAccessToken);
+                String newRefreshToken = jsonObject.getString(APIUtils.REFRESH_TOKEN_KEY);
+                mRedditDataRoomDatabase.accountDao().updateAccessTokenAndRefreshToken(account.getUsername(), newAccessToken, newRefreshToken);
                 return newAccessToken;
             }
             return "";

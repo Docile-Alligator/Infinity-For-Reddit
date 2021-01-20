@@ -50,6 +50,6 @@ public interface AccountDao {
     @Query("UPDATE accounts SET is_current_user = 1 WHERE username = :username")
     void markAccountCurrent(String username);
 
-    @Query("UPDATE accounts SET access_token = :accessToken WHERE username = :username")
-    void changeAccessToken(String username, String accessToken);
+    @Query("UPDATE accounts SET access_token = :accessToken, refresh_token = :refreshToken WHERE username = :username")
+    void updateAccessTokenAndRefreshToken(String username, String accessToken, String refreshToken);
 }
