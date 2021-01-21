@@ -52,4 +52,7 @@ public interface AccountDao {
 
     @Query("UPDATE accounts SET access_token = :accessToken, refresh_token = :refreshToken WHERE username = :username")
     void updateAccessTokenAndRefreshToken(String username, String accessToken, String refreshToken);
+
+    @Query("UPDATE accounts SET access_token = :accessToken WHERE username = :username")
+    void updateAccessToken(String username, String accessToken);
 }

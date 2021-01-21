@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.account.Account;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import okhttp3.Authenticator;
 import okhttp3.Headers;
@@ -71,8 +71,12 @@ class AccessTokenAuthenticator implements Authenticator {
             if (response.isSuccessful() && response.body() != null) {
                 JSONObject jsonObject = new JSONObject(response.body());
                 String newAccessToken = jsonObject.getString(APIUtils.ACCESS_TOKEN_KEY);
-                String newRefreshToken = jsonObject.getString(APIUtils.REFRESH_TOKEN_KEY);
-                mRedditDataRoomDatabase.accountDao().updateAccessTokenAndRefreshToken(account.getUsername(), newAccessToken, newRefreshToken);
+                String newRefreshToken = jsonObject.has(APIUtils.REFRESH_TOKEN_KEY) ? jsonObject.getString(APIUtils.REFRESH_TOKEN_KEY) : null;
+                if (newRefreshToken == null) {
+                    mRedditDataRoomDatabase.accountDao().updateAccessToken(account.getUsername(), newAccessToken);
+                } else {
+                    mRedditDataRoomDatabase.accountDao().updateAccessTokenAndRefreshToken(account.getUsername(), newAccessToken, newRefreshToken);
+                }
 
                 return newAccessToken;
             }
