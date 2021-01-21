@@ -416,7 +416,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
-                mAccountName = account.getUsername();
+                mAccountName = account.getAccountName();
             }
         });
     }

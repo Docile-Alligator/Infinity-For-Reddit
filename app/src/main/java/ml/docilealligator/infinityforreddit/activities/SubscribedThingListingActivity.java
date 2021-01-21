@@ -194,7 +194,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
-                mAccountName = account.getUsername();
+                mAccountName = account.getAccountName();
             }
             initializeViewPagerAndLoadSubscriptions();
         });

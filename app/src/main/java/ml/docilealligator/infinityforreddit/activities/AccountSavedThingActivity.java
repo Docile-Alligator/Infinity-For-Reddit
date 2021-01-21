@@ -197,7 +197,7 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
-                mAccountName = account.getUsername();
+                mAccountName = account.getAccountName();
             }
             initializeViewPager();
         });

@@ -161,7 +161,7 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
                 finish();
             } else {
                 mAccessToken = account.getAccessToken();
-                mAccountName = account.getUsername();
+                mAccountName = account.getAccountName();
                 bindView();
             }
         });

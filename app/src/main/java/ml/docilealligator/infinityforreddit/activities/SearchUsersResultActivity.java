@@ -149,7 +149,7 @@ public class SearchUsersResultActivity extends BaseActivity implements ActivityT
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
-                mAccountName = account.getUsername();
+                mAccountName = account.getAccountName();
             }
 
             mFragment = new UserListingFragment();

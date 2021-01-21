@@ -169,7 +169,7 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
-                mAccountName = account.getUsername();
+                mAccountName = account.getAccountName();
                 mAccountProfileImageUrl = account.getProfileImageUrl();
             }
             bindView(true);

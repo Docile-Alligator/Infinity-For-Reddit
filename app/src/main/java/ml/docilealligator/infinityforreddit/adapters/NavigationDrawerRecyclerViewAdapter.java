@@ -450,9 +450,9 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                     .error(glide.load(R.drawable.subreddit_default_icon))
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(128, 0)))
                     .into(((AccountViewHolder) holder).profileImageGifImageView);
-            ((AccountViewHolder) holder).usernameTextView.setText(accounts.get(position - 1).getUsername());
+            ((AccountViewHolder) holder).usernameTextView.setText(accounts.get(position - 1).getAccountName());
             ((AccountViewHolder) holder).itemView.setOnClickListener(view ->
-                    itemClickListener.onAccountClick(accounts.get(position - 1).getUsername()));
+                    itemClickListener.onAccountClick(accounts.get(position - 1).getAccountName()));
         }
     }
 

@@ -74,7 +74,7 @@ public class PullNotificationWorker extends Worker {
             for (int accountIndex = 0; accountIndex < accounts.size(); accountIndex++) {
                 Account account = accounts.get(accountIndex);
 
-                String accountName = account.getUsername();
+                String accountName = account.getAccountName();
 
                 Response<String> response = fetchMessages(account, 1);
 
@@ -251,9 +251,9 @@ public class PullNotificationWorker extends Worker {
                 String newAccessToken = jsonObject.getString(APIUtils.ACCESS_TOKEN_KEY);
                 String newRefreshToken = jsonObject.has(APIUtils.REFRESH_TOKEN_KEY) ? jsonObject.getString(APIUtils.REFRESH_TOKEN_KEY) : null;
                 if (newRefreshToken == null) {
-                    mRedditDataRoomDatabase.accountDao().updateAccessToken(account.getUsername(), newAccessToken);
+                    mRedditDataRoomDatabase.accountDao().updateAccessToken(account.getAccountName(), newAccessToken);
                 } else {
-                    mRedditDataRoomDatabase.accountDao().updateAccessTokenAndRefreshToken(account.getUsername(), newAccessToken, newRefreshToken);
+                    mRedditDataRoomDatabase.accountDao().updateAccessTokenAndRefreshToken(account.getAccountName(), newAccessToken, newRefreshToken);
                 }
                 return newAccessToken;
             }

@@ -10,7 +10,7 @@ public class Account {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "username")
-    private String username;
+    private String accountName;
     @ColumnInfo(name = "profile_image_url")
     private String profileImageUrl;
     @ColumnInfo(name = "banner_image_url")
@@ -26,9 +26,9 @@ public class Account {
     @ColumnInfo(name = "is_current_user")
     private boolean isCurrentUser;
 
-    public Account(@NonNull String username, String accessToken, String refreshToken, String code,
+    public Account(@NonNull String accountName, String accessToken, String refreshToken, String code,
                    String profileImageUrl, String bannerImageUrl, int karma, boolean isCurrentUser) {
-        this.username = username;
+        this.accountName = accountName;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;
         this.code = code;
@@ -38,8 +38,9 @@ public class Account {
         this.isCurrentUser = isCurrentUser;
     }
 
-    public String getUsername() {
-        return username;
+    @NonNull
+    public String getAccountName() {
+        return accountName;
     }
 
     public String getProfileImageUrl() {

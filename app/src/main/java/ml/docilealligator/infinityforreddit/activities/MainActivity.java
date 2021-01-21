@@ -72,9 +72,9 @@ import ml.docilealligator.infinityforreddit.FetchMyInfo;
 import ml.docilealligator.infinityforreddit.FetchSubscribedThing;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
-import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.PullNotificationWorker;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
@@ -82,8 +82,8 @@ import ml.docilealligator.infinityforreddit.account.AccountViewModel;
 import ml.docilealligator.infinityforreddit.adapters.NavigationDrawerRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubscribedThingsAsyncTask;
-import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccountAsyncTask;
-import ml.docilealligator.infinityforreddit.asynctasks.SwitchToAnonymousAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
+import ml.docilealligator.infinityforreddit.asynctasks.SwitchToAnonymousMode;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostTypeBottomSheetFragment;
@@ -198,6 +198,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Inject
     @Named("bottom_app_bar")
     SharedPreferences bottomAppBarSharedPreference;
+    @Inject
+    @Named("current_account")
+    SharedPreferences currentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
@@ -367,44 +370,45 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             WorkManager workManager = WorkManager.getInstance(this);
 
             if (mNewAccountName != null) {
-                if (account == null || !account.getUsername().equals(mNewAccountName)) {
-                    new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
-                        EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
-                        Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
+                if (account == null || !account.getAccountName().equals(mNewAccountName)) {
+                    SwitchAccount.switchAccount(mRedditDataRoomDatabase, currentAccountSharedPreferences,
+                            mExecutor, new Handler(), mNewAccountName, newAccount -> {
+                                EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
+                                Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
 
-                        mNewAccountName = null;
-                        if (newAccount == null) {
-                            mNullAccessToken = true;
-                        } else {
-                            mAccessToken = newAccount.getAccessToken();
-                            mAccountName = newAccount.getUsername();
-                            mProfileImageUrl = newAccount.getProfileImageUrl();
-                            mBannerImageUrl = newAccount.getBannerImageUrl();
-                            mKarma = newAccount.getKarma();
-                        }
+                                mNewAccountName = null;
+                                if (newAccount == null) {
+                                    mNullAccessToken = true;
+                                } else {
+                                    mAccessToken = newAccount.getAccessToken();
+                                    mAccountName = newAccount.getAccountName();
+                                    mProfileImageUrl = newAccount.getProfileImageUrl();
+                                    mBannerImageUrl = newAccount.getBannerImageUrl();
+                                    mKarma = newAccount.getKarma();
+                                }
 
-                        if (enableNotification) {
-                            Constraints constraints = new Constraints.Builder()
-                                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                                    .build();
-
-                            PeriodicWorkRequest pullNotificationRequest =
-                                    new PeriodicWorkRequest.Builder(PullNotificationWorker.class,
-                                            notificationInterval, timeUnit)
-                                            .setConstraints(constraints)
+                                if (enableNotification) {
+                                    Constraints constraints = new Constraints.Builder()
+                                            .setRequiredNetworkType(NetworkType.CONNECTED)
                                             .build();
 
-                            workManager.enqueueUniquePeriodicWork(PullNotificationWorker.UNIQUE_WORKER_NAME,
-                                    ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
-                        } else {
-                            workManager.cancelUniqueWork(PullNotificationWorker.UNIQUE_WORKER_NAME);
-                        }
+                                    PeriodicWorkRequest pullNotificationRequest =
+                                            new PeriodicWorkRequest.Builder(PullNotificationWorker.class,
+                                                    notificationInterval, timeUnit)
+                                                    .setConstraints(constraints)
+                                                    .build();
 
-                        bindView();
-                    }).execute();
+                                    workManager.enqueueUniquePeriodicWork(PullNotificationWorker.UNIQUE_WORKER_NAME,
+                                            ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
+                                } else {
+                                    workManager.cancelUniqueWork(PullNotificationWorker.UNIQUE_WORKER_NAME);
+                                }
+
+                                bindView();
+                            });
                 } else {
                     mAccessToken = account.getAccessToken();
-                    mAccountName = account.getUsername();
+                    mAccountName = account.getAccountName();
                     mProfileImageUrl = account.getProfileImageUrl();
                     mBannerImageUrl = account.getBannerImageUrl();
                     mKarma = account.getKarma();
@@ -433,7 +437,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     mNullAccessToken = true;
                 } else {
                     mAccessToken = account.getAccessToken();
-                    mAccountName = account.getUsername();
+                    mAccountName = account.getAccountName();
                     mProfileImageUrl = account.getProfileImageUrl();
                     mBannerImageUrl = account.getBannerImageUrl();
                     mKarma = account.getKarma();
@@ -792,19 +796,20 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                             Intent addAccountIntent = new Intent(MainActivity.this, LoginActivity.class);
                             startActivityForResult(addAccountIntent, LOGIN_ACTIVITY_REQUEST_CODE);
                         } else if (stringId == R.string.anonymous_account) {
-                            new SwitchToAnonymousAccountAsyncTask(mRedditDataRoomDatabase, false,
-                                    () -> {
+                            SwitchToAnonymousMode.switchToAnonymousMode(mRedditDataRoomDatabase, currentAccountSharedPreferences,
+                                    mExecutor, new Handler(), false, () -> {
                                         Intent anonymousIntent = new Intent(MainActivity.this, MainActivity.class);
                                         startActivity(anonymousIntent);
                                         finish();
-                                    }).execute();
+                                    });
                         } else if (stringId == R.string.log_out) {
-                            new SwitchToAnonymousAccountAsyncTask(mRedditDataRoomDatabase, true,
+                            SwitchToAnonymousMode.switchToAnonymousMode(mRedditDataRoomDatabase, currentAccountSharedPreferences,
+                                    mExecutor, new Handler(), true,
                                     () -> {
                                         Intent logOutIntent = new Intent(MainActivity.this, MainActivity.class);
                                         startActivity(logOutIntent);
                                         finish();
-                                    }).execute();
+                                    });
                         }
                         if (intent != null) {
                             startActivity(intent);
@@ -821,11 +826,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
                     @Override
                     public void onAccountClick(String accountName) {
-                        new SwitchAccountAsyncTask(mRedditDataRoomDatabase, accountName, newAccount -> {
+                        SwitchAccount.switchAccount(mRedditDataRoomDatabase, currentAccountSharedPreferences,
+                                mExecutor, new Handler(), accountName, newAccount -> {
                             Intent intent = new Intent(MainActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();
-                        }).execute();
+                        });
                     }
                 });
         navDrawerRecyclerView.setLayoutManager(new LinearLayoutManager(this));

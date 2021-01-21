@@ -129,7 +129,7 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
-                mAccountName = account.getUsername();
+                mAccountName = account.getAccountName();
             }
             bindView();
         });

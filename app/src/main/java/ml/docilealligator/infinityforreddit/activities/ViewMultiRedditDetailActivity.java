@@ -194,7 +194,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
-                mAccountName = account.getUsername();
+                mAccountName = account.getAccountName();
             }
             initializeFragment();
         });

@@ -158,7 +158,7 @@ public class MultiredditSelectionActivity extends BaseActivity implements Activi
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
-                mAccountName = account.getUsername();
+                mAccountName = account.getAccountName();
             }
             bindView(true);
         });

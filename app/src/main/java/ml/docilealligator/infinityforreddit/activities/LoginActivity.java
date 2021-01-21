@@ -73,6 +73,9 @@ public class LoginActivity extends BaseActivity {
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private String authCode;
 
@@ -157,6 +160,8 @@ public class LoginActivity extends BaseActivity {
                                                 accessToken, new FetchMyInfo.FetchMyInfoListener() {
                                                     @Override
                                                     public void onFetchMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
+                                                        mCurrentAccountSharedPreferences.edit().putString(SharedPreferencesUtils.ACCESS_TOKEN, accessToken)
+                                                                .putString(SharedPreferencesUtils.ACCOUNT_NAME, name).apply();
                                                         new ParseAndInsertNewAccountAsyncTask(name, accessToken, refreshToken, profileImageUrl, bannerImageUrl,
                                                                 karma, authCode, mRedditDataRoomDatabase.accountDao(),
                                                                 () -> {

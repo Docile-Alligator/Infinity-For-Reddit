@@ -113,7 +113,7 @@ public class SettingsActivity extends BaseActivity implements
             if (account == null) {
                 mNullAccountName = true;
             } else {
-                mAccountName = account.getUsername();
+                mAccountName = account.getAccountName();
             }
 
             if (savedInstanceState == null) {

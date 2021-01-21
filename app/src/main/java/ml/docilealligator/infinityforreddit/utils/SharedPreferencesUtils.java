@@ -256,6 +256,10 @@ public class SharedPreferencesUtils {
     public static final String MARK_POSTS_AS_READ_ON_SCROLL_BASE = "_mark_posts_as_read_on_scroll";
     public static final String HIDE_READ_POSTS_AUTOMATICALLY_BASE = "_hide_read_posts_automatically";
 
+    public static final String CURRENT_ACCOUNT_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.current_account";
+    public static final String ACCOUNT_NAME = "account_name";
+    public static final String ACCESS_TOKEN = "access_token";
+
     //Legacy Settings
     public static final String MAIN_PAGE_TAB_1_TITLE_LEGACY = "main_page_tab_1_title";
     public static final String MAIN_PAGE_TAB_2_TITLE_LEGACY = "main_page_tab_2_title";

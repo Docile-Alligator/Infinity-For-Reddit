@@ -136,7 +136,7 @@ public class CreateMultiRedditActivity extends BaseActivity {
                 finish();
             } else {
                 mAccessToken = account.getAccessToken();
-                mAccountName = account.getUsername();
+                mAccountName = account.getAccountName();
                 bindView();
             }
         });

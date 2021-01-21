@@ -191,7 +191,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
-                mAccountName = account.getUsername();
+                mAccountName = account.getAccountName();
             }
             initializeFragment();
         });

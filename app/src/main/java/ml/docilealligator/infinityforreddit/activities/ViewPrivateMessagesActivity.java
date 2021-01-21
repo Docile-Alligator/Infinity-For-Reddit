@@ -148,7 +148,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
-                mAccountName = account.getUsername();
+                mAccountName = account.getAccountName();
             }
             bindView();
         });

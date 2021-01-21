@@ -78,7 +78,7 @@ import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.adapters.CommentAndPostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
-import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostCommentSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.comment.Comment;
@@ -204,6 +204,9 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     @Inject
     @Named("nsfw_and_spoiler")
     SharedPreferences mNsfwAndSpoilerSharedPreferences;
+    @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
@@ -595,8 +598,9 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     private void getCurrentAccountAndBindView() {
         GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
             if (mNewAccountName != null) {
-                if (account == null || !account.getUsername().equals(mNewAccountName)) {
-                    new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
+                if (account == null || !account.getAccountName().equals(mNewAccountName)) {
+                    SwitchAccount.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
+                            mExecutor, new Handler(), mNewAccountName, newAccount -> {
                         EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
                         Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
 
@@ -605,14 +609,14 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                             mNullAccessToken = true;
                         } else {
                             mAccessToken = newAccount.getAccessToken();
-                            mAccountName = newAccount.getUsername();
+                            mAccountName = newAccount.getAccountName();
                         }
 
                         bindView();
-                    }).execute();
+                    });
                 } else {
                     mAccessToken = account.getAccessToken();
-                    mAccountName = account.getUsername();
+                    mAccountName = account.getAccountName();
                     bindView();
                 }
             } else {
@@ -620,7 +624,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                     mNullAccessToken = true;
                 } else {
                     mAccessToken = account.getAccessToken();
-                    mAccountName = account.getUsername();
+                    mAccountName = account.getAccountName();
                 }
 
                 bindView();

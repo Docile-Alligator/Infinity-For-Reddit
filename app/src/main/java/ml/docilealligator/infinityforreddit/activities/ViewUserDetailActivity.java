@@ -77,7 +77,7 @@ import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.asynctasks.AddSubredditOrUserToMultiReddit;
 import ml.docilealligator.infinityforreddit.asynctasks.CheckIsFollowingUserAsyncTask;
 import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
-import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostTypeBottomSheetFragment;
@@ -191,7 +191,10 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     SharedPreferences mNsfwAndSpoilerSharedPreferences;
     @Inject
     @Named("bottom_app_bar")
-    SharedPreferences bottomAppBarSharedPreference;
+    SharedPreferences mBottomAppBarSharedPreference;
+    @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
@@ -563,8 +566,9 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     private void getCurrentAccountAndInitializeViewPager() {
         GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
             if (mNewAccountName != null) {
-                if (account == null || !account.getUsername().equals(mNewAccountName)) {
-                    new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
+                if (account == null || !account.getAccountName().equals(mNewAccountName)) {
+                    SwitchAccount.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
+                            mExecutor, new Handler(), mNewAccountName, newAccount -> {
                         EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
                         Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
 
@@ -573,14 +577,14 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                             mNullAccessToken = true;
                         } else {
                             mAccessToken = newAccount.getAccessToken();
-                            mAccountName = newAccount.getUsername();
+                            mAccountName = newAccount.getAccountName();
                         }
 
                         initializeViewPager();
-                    }).execute();
+                    });
                 } else {
                     mAccessToken = account.getAccessToken();
-                    mAccountName = account.getUsername();
+                    mAccountName = account.getAccountName();
                     initializeViewPager();
                 }
             } else {
@@ -588,7 +592,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                     mNullAccessToken = true;
                 } else {
                     mAccessToken = account.getAccessToken();
-                    mAccountName = account.getUsername();
+                    mAccountName = account.getAccountName();
                 }
 
                 initializeViewPager();
@@ -650,9 +654,9 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             }
 
             if (showBottomAppBar) {
-                int optionCount = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_COUNT, 4);
-                int option1 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_1, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HOME);
-                int option2 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_2, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS);
+                int optionCount = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_COUNT, 4);
+                int option1 = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_1, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HOME);
+                int option2 = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_2, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS);
 
                 bottomNavigationView.setVisibility(View.VISIBLE);
 
@@ -672,8 +676,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                         bottomAppBarOptionAction(option2);
                     });
                 } else {
-                    int option3 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_3, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX);
-                    int option4 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_4, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_PROFILE);
+                    int option3 = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_3, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX);
+                    int option4 = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_4, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_PROFILE);
 
                     option1BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option1));
                     option2BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option2));
@@ -709,7 +713,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             fab.setLayoutParams(lp);
             bottomNavigationView.setVisibility(View.GONE);
         }
-        fabOption = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS);
+        fabOption = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS);
         switch (fabOption) {
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH:
                 fab.setImageResource(R.drawable.ic_refresh_24dp);

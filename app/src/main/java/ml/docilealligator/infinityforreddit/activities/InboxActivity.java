@@ -50,7 +50,7 @@ import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterfac
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
-import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccountAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.InboxFragment;
@@ -94,6 +94,9 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
@@ -234,8 +237,9 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     private void getCurrentAccountAndFetchMessage(Bundle savedInstanceState) {
         GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
             if (mNewAccountName != null) {
-                if (account == null || !account.getUsername().equals(mNewAccountName)) {
-                    new SwitchAccountAsyncTask(mRedditDataRoomDatabase, mNewAccountName, newAccount -> {
+                if (account == null || !account.getAccountName().equals(mNewAccountName)) {
+                    SwitchAccount.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
+                            mExecutor, new Handler(), mNewAccountName, newAccount -> {
                         EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
                         Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
 
@@ -247,7 +251,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
                         }
 
                         bindView(savedInstanceState);
-                    }).execute();
+                    });
                 } else {
                     mAccessToken = account.getAccessToken();
                     bindView(savedInstanceState);

@@ -273,7 +273,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
-                mAccountName = account.getUsername();
+                mAccountName = account.getAccountName();
             }
             bindView(postFilter, true);
         });

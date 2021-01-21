@@ -151,7 +151,7 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
                 mNullAccessToken = true;
             } else {
                 mAccessToken = account.getAccessToken();
-                mAccountName = account.getUsername();
+                mAccountName = account.getAccountName();
             }
 
             mFragment = new SubredditListingFragment();

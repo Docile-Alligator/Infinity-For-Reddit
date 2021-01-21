@@ -224,7 +224,7 @@ public class SearchActivity extends BaseActivity {
             if (account == null) {
                 mNullAccountName = true;
             } else {
-                mAccountName = account.getUsername();
+                mAccountName = account.getAccountName();
             }
             bindView();
         });
