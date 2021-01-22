@@ -109,7 +109,6 @@ public class JSONUtils {
     public static final String RESIZED_ICONS_KEY = "resized_icons";
     public static final String GFY_ITEM_KEY = "gfyItem";
     public static final String MP4_URL_KEY = "mp4Url";
-    public static final String WEBM_URL_KEY = "webmUrl";
     public static final String TYPE_KEY = "type";
     public static final String MP4_KEY = "mp4";
     public static final String THINGS_KEY = "things";
@@ -130,7 +129,6 @@ public class JSONUtils {
     public static final String TOTAL_KARMA_KEY = "total_karma";
     public static final String AWARDER_KARMA_KEY = "awarder_karma";
     public static final String AWARDEE_KARMA_KEY = "awardee_karma";
-    public static final String GFY_CONTENT_KEY = "content_urls";
-    public static final String GFY_URL_KEY = "url";
+    public static final String CONTENT_URLS_KEY = "content_urls";;
     public static final String WEBM_KEY = "webm";
 }
