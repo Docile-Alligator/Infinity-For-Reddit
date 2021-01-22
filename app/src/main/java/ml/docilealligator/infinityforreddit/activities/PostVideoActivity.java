@@ -7,7 +7,6 @@ import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -55,13 +54,13 @@ import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIconAsyncTask;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SubmitVideoOrGifPostEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.services.SubmitPostService;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
@@ -79,9 +78,6 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     private static final String FLAIR_STATE = "FS";
     private static final String IS_SPOILER_STATE = "ISS";
     private static final String IS_NSFW_STATE = "INS";
-    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
-    private static final String ACCESS_TOKEN_STATE = "ATS";
-    private static final String ACCOUNT_NAME_STATE = "ANS";
 
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
     private static final int PICK_VIDEO_REQUEST_CODE = 1;
@@ -141,10 +137,12 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
     private String iconUrl;
@@ -208,6 +206,9 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
 
         resources = getResources();
 
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+
         if (savedInstanceState != null) {
             subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
             iconUrl = savedInstanceState.getString(SUBREDDIT_ICON_STATE);
@@ -218,13 +219,6 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
             flair = savedInstanceState.getParcelable(FLAIR_STATE);
             isSpoiler = savedInstanceState.getBoolean(IS_SPOILER_STATE);
             isNSFW = savedInstanceState.getBoolean(IS_NSFW_STATE);
-            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
-            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
-            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
-
-            if (!mNullAccessToken && mAccessToken == null) {
-                getCurrentAccount();
-            }
 
             if (savedInstanceState.getString(VIDEO_URI_STATE) != null) {
                 videoUri = Uri.parse(savedInstanceState.getString(VIDEO_URI_STATE));
@@ -262,8 +256,6 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
                 nsfwTextView.setTextColor(nsfwTextColor);
             }
         } else {
-            getCurrentAccount();
-
             isPosting = false;
 
             if (getIntent().hasExtra(EXTRA_SUBREDDIT_NAME)) {
@@ -413,17 +405,6 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
         applyFABTheme(captureFab);
         applyFABTheme(selectFromLibraryFab);
         selectAgainTextView.setTextColor(mCustomThemeWrapper.getColorAccent());
-    }
-
-    private void getCurrentAccount() {
-        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
-            if (account == null) {
-                mNullAccessToken = true;
-            } else {
-                mAccessToken = account.getAccessToken();
-                mAccountName = account.getAccountName();
-            }
-        });
     }
 
     private void loadVideo() {
@@ -584,9 +565,6 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
         outState.putParcelable(FLAIR_STATE, flair);
         outState.putBoolean(IS_SPOILER_STATE, isSpoiler);
         outState.putBoolean(IS_NSFW_STATE, isNSFW);
-        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
-        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
-        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
     }
 
     @Override

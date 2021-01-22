@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -33,7 +32,6 @@ import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.SubredditListingFragment;
@@ -45,9 +43,6 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
     static final String EXTRA_RETURN_SUBREDDIT_NAME = "ERSN";
     static final String EXTRA_RETURN_SUBREDDIT_ICON_URL = "ERSIU";
 
-    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
-    private static final String ACCESS_TOKEN_STATE = "ATS";
-    private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String FRAGMENT_OUT_STATE = "FOS";
 
     @BindView(R.id.coordinator_layout_search_subreddits_result_activity)
@@ -63,10 +58,12 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
 
@@ -113,19 +110,21 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
 
         String query = getIntent().getExtras().getString(EXTRA_QUERY);
 
-        if (savedInstanceState == null) {
-            getCurrentAccountAndInitializeFragment(query);
-        } else {
-            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
-            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
-            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
 
-            if (!mNullAccessToken && mAccessToken == null) {
-                getCurrentAccountAndInitializeFragment(query);
-            } else {
-                mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_search_subreddits_result_activity, mFragment).commit();
-            }
+        if (savedInstanceState == null) {
+            mFragment = new SubredditListingFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(SubredditListingFragment.EXTRA_QUERY, query);
+            bundle.putBoolean(SubredditListingFragment.EXTRA_IS_GETTING_SUBREDDIT_INFO, true);
+            bundle.putString(SubredditListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+            bundle.putString(SubredditListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
+            mFragment.setArguments(bundle);
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_search_subreddits_result_activity, mFragment).commit();
+        } else {
+            mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_search_subreddits_result_activity, mFragment).commit();
         }
     }
 
@@ -143,26 +142,6 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
-    }
-
-    private void getCurrentAccountAndInitializeFragment(String query) {
-        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
-            if (account == null) {
-                mNullAccessToken = true;
-            } else {
-                mAccessToken = account.getAccessToken();
-                mAccountName = account.getAccountName();
-            }
-
-            mFragment = new SubredditListingFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString(SubredditListingFragment.EXTRA_QUERY, query);
-            bundle.putBoolean(SubredditListingFragment.EXTRA_IS_GETTING_SUBREDDIT_INFO, true);
-            bundle.putString(SubredditListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
-            bundle.putString(SubredditListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
-            mFragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_search_subreddits_result_activity, mFragment).commit();
-        });
     }
 
     public void getSelectedSubreddit(String name, String iconUrl) {
@@ -186,9 +165,6 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE, mFragment);
-        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
-        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
-        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
     }
 
     @Override

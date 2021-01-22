@@ -259,6 +259,7 @@ public class SharedPreferencesUtils {
     public static final String CURRENT_ACCOUNT_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.current_account";
     public static final String ACCOUNT_NAME = "account_name";
     public static final String ACCESS_TOKEN = "access_token";
+    public static final String ACCOUNT_IMAGE_URL = "account_image_url";
 
     //Legacy Settings
     public static final String MAIN_PAGE_TAB_1_TITLE_LEGACY = "main_page_tab_1_title";

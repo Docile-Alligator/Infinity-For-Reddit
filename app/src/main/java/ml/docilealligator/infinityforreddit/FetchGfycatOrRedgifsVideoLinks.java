@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -100,6 +101,7 @@ public class FetchGfycatOrRedgifsVideoLinks {
         protected Void doInBackground(Void... voids) {
             try {
                 JSONObject jsonObject = new JSONObject(response);
+                Log.i("adasdfasdf", "s " + jsonObject);
                 webm = jsonObject.getJSONObject(JSONUtils.GFY_ITEM_KEY).getString(JSONUtils.WEBM_URL_KEY);
                 mp4 = jsonObject.getJSONObject(JSONUtils.GFY_ITEM_KEY).getString(JSONUtils.MP4_URL_KEY);
             } catch (JSONException e) {

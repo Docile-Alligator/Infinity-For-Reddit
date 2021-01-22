@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,12 +35,11 @@ import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
-import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FilteredThingFABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SearchPostSortTypeBottomSheetFragment;
@@ -69,9 +67,6 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     public static final String EXTRA_USER_WHERE = "EUW";
 
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
-    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
-    private static final String ACCESS_TOKEN_STATE = "ATS";
-    private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String FRAGMENT_OUT_STATE = "FOS";
     private static final int CUSTOMIZE_POST_FILTER_ACTIVITY_REQUEST_CODE = 1000;
 
@@ -94,11 +89,13 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     @Named("post_layout")
     SharedPreferences mPostLayoutSharedPreferences;
     @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
     private boolean isInLazyMode = false;
-    private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
     private String name;
@@ -223,21 +220,16 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
             }
         }
 
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+
         if (savedInstanceState != null) {
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
-            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
-            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
-            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
-
-            if (!mNullAccessToken && mAccessToken == null) {
-                getCurrentAccountAndBindView(postFilter);
-            } else {
-                mFragment = (PostFragment) getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_filtered_posts_activity, mFragment).commit();
-                bindView(postFilter, false);
-            }
+            mFragment = (PostFragment) getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_filtered_posts_activity, mFragment).commit();
+            bindView(postFilter, false);
         } else {
-            getCurrentAccountAndBindView(postFilter);
+            bindView(postFilter, true);
         }
     }
 
@@ -265,18 +257,6 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         applyFABTheme(fab);
-    }
-
-    private void getCurrentAccountAndBindView(PostFilter postFilter) {
-        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
-            if (account == null) {
-                mNullAccessToken = true;
-            } else {
-                mAccessToken = account.getAccessToken();
-                mAccountName = account.getAccountName();
-            }
-            bindView(postFilter, true);
-        });
     }
 
     private void bindView(PostFilter postFilter, boolean initializeFragment) {
@@ -467,9 +447,6 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
         super.onSaveInstanceState(outState);
         getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE, mFragment);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
-        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
-        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
-        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
     }
 
     @Override

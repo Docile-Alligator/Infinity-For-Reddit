@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit.activities;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -34,7 +33,6 @@ import ml.docilealligator.infinityforreddit.ReportReason;
 import ml.docilealligator.infinityforreddit.ReportThing;
 import ml.docilealligator.infinityforreddit.Rule;
 import ml.docilealligator.infinityforreddit.adapters.ReportReasonRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
@@ -43,8 +41,6 @@ public class ReportActivity extends BaseActivity {
 
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     public static final String EXTRA_THING_FULLNAME = "ETF";
-    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
-    private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String GENERAL_REASONS_STATE = "GRS";
     private static final String RULES_REASON_STATE = "RRS";
 
@@ -66,12 +62,14 @@ public class ReportActivity extends BaseActivity {
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
+    @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mFullname;
     private String mSubredditName;
@@ -106,18 +104,11 @@ public class ReportActivity extends BaseActivity {
         mFullname = getIntent().getStringExtra(EXTRA_THING_FULLNAME);
         mSubredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME);
 
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+
         if (savedInstanceState != null) {
-            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
-            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
-
-            if (!mNullAccessToken && mAccessToken == null) {
-                getCurrentAccount();
-            }
-
             generalReasons = savedInstanceState.getParcelableArrayList(GENERAL_REASONS_STATE);
             rulesReasons = savedInstanceState.getParcelableArrayList(RULES_REASON_STATE);
-        } else {
-            getCurrentAccount();
         }
 
         if (generalReasons != null) {
@@ -145,16 +136,6 @@ public class ReportActivity extends BaseActivity {
         }
     }
 
-    private void getCurrentAccount() {
-        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
-            if (account == null) {
-                mNullAccessToken = true;
-            } else {
-                mAccessToken = account.getAccessToken();
-            }
-        });
-    }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.report_activity, menu);
@@ -164,31 +145,31 @@ public class ReportActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            case R.id.action_send_report_activity:
-                ReportReason reportReason = mAdapter.getSelectedReason();
-                if (reportReason != null) {
-                    Toast.makeText(ReportActivity.this, R.string.reporting, Toast.LENGTH_SHORT).show();
-                    ReportThing.reportThing(mOauthRetrofit, mAccessToken, mFullname, mSubredditName,
-                            reportReason.getReasonType(), reportReason.getReportReason(), new ReportThing.ReportThingListener() {
-                                @Override
-                                public void success() {
-                                    Toast.makeText(ReportActivity.this, R.string.report_successful, Toast.LENGTH_SHORT).show();
-                                    finish();
-                                }
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            finish();
+            return true;
+        } else if (itemId == R.id.action_send_report_activity) {
+            ReportReason reportReason = mAdapter.getSelectedReason();
+            if (reportReason != null) {
+                Toast.makeText(ReportActivity.this, R.string.reporting, Toast.LENGTH_SHORT).show();
+                ReportThing.reportThing(mOauthRetrofit, mAccessToken, mFullname, mSubredditName,
+                        reportReason.getReasonType(), reportReason.getReportReason(), new ReportThing.ReportThingListener() {
+                            @Override
+                            public void success() {
+                                Toast.makeText(ReportActivity.this, R.string.report_successful, Toast.LENGTH_SHORT).show();
+                                finish();
+                            }
 
-                                @Override
-                                public void failed() {
-                                    Toast.makeText(ReportActivity.this, R.string.report_failed, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                } else {
-                    Toast.makeText(ReportActivity.this, R.string.report_reason_not_selected, Toast.LENGTH_SHORT).show();
-                }
-                return true;
+                            @Override
+                            public void failed() {
+                                Toast.makeText(ReportActivity.this, R.string.report_failed, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            } else {
+                Toast.makeText(ReportActivity.this, R.string.report_reason_not_selected, Toast.LENGTH_SHORT).show();
+            }
+            return true;
         }
 
         return false;
@@ -197,8 +178,6 @@ public class ReportActivity extends BaseActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
-        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
         if (mAdapter != null) {
             outState.putParcelableArrayList(GENERAL_REASONS_STATE, mAdapter.getGeneralReasons());
             outState.putParcelableArrayList(RULES_REASON_STATE, mAdapter.getRules());

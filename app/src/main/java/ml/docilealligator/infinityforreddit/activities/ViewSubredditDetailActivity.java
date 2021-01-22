@@ -65,14 +65,13 @@ import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
-import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.asynctasks.AddSubredditOrUserToMultiReddit;
 import ml.docilealligator.infinityforreddit.asynctasks.CheckIsSubscribedToSubredditAsyncTask;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubredditDataAsyncTask;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
@@ -114,9 +113,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private static final String FETCH_SUBREDDIT_INFO_STATE = "FSIS";
     private static final String CURRENT_ONLINE_SUBSCRIBERS_STATE = "COSS";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
-    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
-    private static final String ACCESS_TOKEN_STATE = "ATS";
-    private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String MESSAGE_FULLNAME_STATE = "MFS";
     private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
     private static final int ADD_TO_MULTIREDDIT_REQUEST_CODE = 1;
@@ -200,7 +196,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     public SubredditViewModel mSubredditViewModel;
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
-    private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
     private String subredditName;
@@ -329,30 +324,25 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
         fragmentManager = getSupportFragmentManager();
 
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+
         if (savedInstanceState == null) {
             mMessageFullname = getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME);
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
-            getCurrentAccountAndBindView();
         } else {
             mFetchSubredditInfoSuccess = savedInstanceState.getBoolean(FETCH_SUBREDDIT_INFO_STATE);
             mNCurrentOnlineSubscribers = savedInstanceState.getInt(CURRENT_ONLINE_SUBSCRIBERS_STATE);
-            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
-            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
-            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             mMessageFullname = savedInstanceState.getString(MESSAGE_FULLNAME_STATE);
             mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
-
-            if (!mNullAccessToken && mAccessToken == null) {
-                getCurrentAccountAndBindView();
-            } else {
-                bindView();
-            }
 
             if (mFetchSubredditInfoSuccess) {
                 nOnlineSubscribersTextView.setText(getString(R.string.online_subscribers_number_detail, mNCurrentOnlineSubscribers));
             }
         }
+
+        checkNewAccountAndBindView();
 
         fetchSubredditData();
 
@@ -494,41 +484,28 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         subscribedColor = mCustomThemeWrapper.getSubscribed();
     }
 
-    private void getCurrentAccountAndBindView() {
-        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
-            if (mNewAccountName != null) {
-                if (account == null || !account.getAccountName().equals(mNewAccountName)) {
-                    SwitchAccount.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
-                            mExecutor, new Handler(), mNewAccountName, newAccount -> {
-                        EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
-                        Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
+    private void checkNewAccountAndBindView() {
+        if (mNewAccountName != null) {
+            if (mAccountName == null || !mAccountName.equals(mNewAccountName)) {
+                SwitchAccount.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
+                        mExecutor, new Handler(), mNewAccountName, newAccount -> {
+                            EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
+                            Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
 
-                        mNewAccountName = null;
-                        if (newAccount == null) {
-                            mNullAccessToken = true;
-                        } else {
-                            mAccessToken = newAccount.getAccessToken();
-                            mAccountName = newAccount.getAccountName();
-                        }
+                            mNewAccountName = null;
+                            if (newAccount != null) {
+                                mAccessToken = newAccount.getAccessToken();
+                                mAccountName = newAccount.getAccountName();
+                            }
 
-                        bindView();
-                    });
-                } else {
-                    mAccessToken = account.getAccessToken();
-                    mAccountName = account.getAccountName();
-                    bindView();
-                }
+                            bindView();
+                        });
             } else {
-                if (account == null) {
-                    mNullAccessToken = true;
-                } else {
-                    mAccessToken = account.getAccessToken();
-                    mAccountName = account.getAccountName();
-                }
-
                 bindView();
             }
-        });
+        } else {
+            bindView();
+        }
     }
 
     private void fetchSubredditData() {
@@ -1084,9 +1061,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         outState.putBoolean(FETCH_SUBREDDIT_INFO_STATE, mFetchSubredditInfoSuccess);
         outState.putInt(CURRENT_ONLINE_SUBSCRIBERS_STATE, mNCurrentOnlineSubscribers);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
-        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
-        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
-        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
         outState.putString(MESSAGE_FULLNAME_STATE, mMessageFullname);
         outState.putString(NEW_ACCOUNT_NAME_STATE, mNewAccountName);
     }

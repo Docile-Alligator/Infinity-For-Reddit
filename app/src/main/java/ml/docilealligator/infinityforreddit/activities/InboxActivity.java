@@ -49,7 +49,6 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -67,8 +66,6 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
     public static final String EXTRA_VIEW_MESSAGE = "EVM";
 
-    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
-    private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
     private static final int SEARCH_USER_REQUEST_CODE = 1;
 
@@ -103,8 +100,8 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     Executor mExecutor;
     private SlidrInterface mSlidrInterface;
     private SectionsPagerAdapter sectionsPagerAdapter;
-    private boolean mNullAccessToken = false;
     private String mAccessToken;
+    private String mAccountName;
     private String mNewAccountName;
 
     @Override
@@ -155,20 +152,15 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         setSupportActionBar(mToolbar);
         setToolbarGoToTop(mToolbar);
 
-        if (savedInstanceState != null) {
-            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
-            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
-            mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
 
-            if (!mNullAccessToken && mAccessToken == null) {
-                getCurrentAccountAndFetchMessage(savedInstanceState);
-            } else {
-                bindView(savedInstanceState);
-            }
+        if (savedInstanceState != null) {
+            mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
         } else {
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
-            getCurrentAccountAndFetchMessage(savedInstanceState);
         }
+        getCurrentAccountAndFetchMessage(savedInstanceState);
 
         viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
             @Override
@@ -235,37 +227,26 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     }
 
     private void getCurrentAccountAndFetchMessage(Bundle savedInstanceState) {
-        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
-            if (mNewAccountName != null) {
-                if (account == null || !account.getAccountName().equals(mNewAccountName)) {
-                    SwitchAccount.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
-                            mExecutor, new Handler(), mNewAccountName, newAccount -> {
-                        EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
-                        Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
+        if (mNewAccountName != null) {
+            if (mAccountName == null || !mAccountName.equals(mNewAccountName)) {
+                SwitchAccount.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
+                        mExecutor, new Handler(), mNewAccountName, newAccount -> {
+                            EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
+                            Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
 
-                        mNewAccountName = null;
-                        if (newAccount == null) {
-                            mNullAccessToken = true;
-                        } else {
-                            mAccessToken = newAccount.getAccessToken();
-                        }
+                            mNewAccountName = null;
+                            if (newAccount != null) {
+                                mAccessToken = newAccount.getAccessToken();
+                            }
 
-                        bindView(savedInstanceState);
-                    });
-                } else {
-                    mAccessToken = account.getAccessToken();
-                    bindView(savedInstanceState);
-                }
+                            bindView(savedInstanceState);
+                        });
             } else {
-                if (account == null) {
-                    mNullAccessToken = true;
-                } else {
-                    mAccessToken = account.getAccessToken();
-                }
-
                 bindView(savedInstanceState);
             }
-        });
+        } else {
+            bindView(savedInstanceState);
+        }
     }
 
     private void bindView(Bundle savedInstanceState) {
@@ -350,8 +331,6 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
-        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
         outState.putString(NEW_ACCOUNT_NAME_STATE, mNewAccountName);
     }
 

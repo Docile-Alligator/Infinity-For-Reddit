@@ -20,7 +20,8 @@ public class SwitchAccount {
             Account account = redditDataRoomDatabase.accountDao().getCurrentAccount();
             currentAccountSharedPreferences.edit()
                     .putString(SharedPreferencesUtils.ACCESS_TOKEN, account.getAccessToken())
-                    .putString(SharedPreferencesUtils.ACCOUNT_NAME, account.getAccountName()).apply();
+                    .putString(SharedPreferencesUtils.ACCOUNT_NAME, account.getAccountName())
+                    .putString(SharedPreferencesUtils.ACCOUNT_IMAGE_URL, account.getProfileImageUrl()).apply();
             handler.post(() -> switchAccountListener.switched(account));
         });
 

@@ -77,7 +77,6 @@ import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.adapters.CommentAndPostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostCommentSortTypeBottomSheetFragment;
@@ -126,9 +125,6 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     public static final int EDIT_COMMENT_REQUEST_CODE = 3;
     public static final int GIVE_AWARD_REQUEST_CODE = 100;
     private static final int EDIT_POST_REQUEST_CODE = 2;
-    @State
-    boolean mNullAccessToken = false;
-    @State
     String mAccessToken;
     @State
     String mAccountName;
@@ -528,11 +524,10 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
         orientation = resources.getConfiguration().orientation;
 
-        if (!mNullAccessToken && mAccessToken == null) {
-            getCurrentAccountAndBindView();
-        } else {
-            bindView();
-        }
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+
+        checkNewAccountAndBindView();
 
         if (getIntent().hasExtra(EXTRA_POST_LIST_POSITION)) {
             postListPosition = getIntent().getIntExtra(EXTRA_POST_LIST_POSITION, -1);
@@ -595,41 +590,28 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         applyFABTheme(fab);
     }
 
-    private void getCurrentAccountAndBindView() {
-        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
-            if (mNewAccountName != null) {
-                if (account == null || !account.getAccountName().equals(mNewAccountName)) {
-                    SwitchAccount.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
-                            mExecutor, new Handler(), mNewAccountName, newAccount -> {
-                        EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
-                        Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
+    private void checkNewAccountAndBindView() {
+        if (mNewAccountName != null) {
+            if (mAccountName == null || !mAccountName.equals(mNewAccountName)) {
+                SwitchAccount.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
+                        mExecutor, new Handler(), mNewAccountName, newAccount -> {
+                            EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
+                            Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
 
-                        mNewAccountName = null;
-                        if (newAccount == null) {
-                            mNullAccessToken = true;
-                        } else {
-                            mAccessToken = newAccount.getAccessToken();
-                            mAccountName = newAccount.getAccountName();
-                        }
+                            mNewAccountName = null;
+                            if (newAccount != null) {
+                                mAccessToken = newAccount.getAccessToken();
+                                mAccountName = newAccount.getAccountName();
+                            }
 
-                        bindView();
-                    });
-                } else {
-                    mAccessToken = account.getAccessToken();
-                    mAccountName = account.getAccountName();
-                    bindView();
-                }
+                            bindView();
+                        });
             } else {
-                if (account == null) {
-                    mNullAccessToken = true;
-                } else {
-                    mAccessToken = account.getAccessToken();
-                    mAccountName = account.getAccountName();
-                }
-
                 bindView();
             }
-        });
+        } else {
+            bindView();
+        }
     }
 
     private void bindView() {

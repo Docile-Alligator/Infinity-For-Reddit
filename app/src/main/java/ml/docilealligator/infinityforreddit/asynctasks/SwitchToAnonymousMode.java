@@ -7,7 +7,6 @@ import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.account.AccountDao;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class SwitchToAnonymousMode {
     public static void switchToAnonymousMode(RedditDataRoomDatabase redditDataRoomDatabase, SharedPreferences currentAccountSharedPreferences,
@@ -20,7 +19,7 @@ public class SwitchToAnonymousMode {
             }
             accountDao.markAllAccountsNonCurrent();
 
-            currentAccountSharedPreferences.edit().remove(SharedPreferencesUtils.ACCESS_TOKEN).remove(SharedPreferencesUtils.ACCOUNT_NAME).apply();
+            currentAccountSharedPreferences.edit().clear().apply();
 
             handler.post(switchToAnonymousAccountAsyncTaskListener::logoutSuccess);
         });

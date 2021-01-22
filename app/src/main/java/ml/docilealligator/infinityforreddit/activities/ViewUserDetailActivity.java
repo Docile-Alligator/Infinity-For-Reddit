@@ -76,7 +76,6 @@ import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.asynctasks.AddSubredditOrUserToMultiReddit;
 import ml.docilealligator.infinityforreddit.asynctasks.CheckIsFollowingUserAsyncTask;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
@@ -120,9 +119,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     public static final int ADD_TO_MULTIREDDIT_REQUEST_CODE = 400;
 
     private static final String FETCH_USER_INFO_STATE = "FSIS";
-    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
-    private static final String ACCESS_TOKEN_STATE = "ATS";
-    private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
     private static final String MESSAGE_FULLNAME_STATE = "MFS";
     private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
@@ -256,25 +252,20 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
         fragmentManager = getSupportFragmentManager();
 
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+
         if (savedInstanceState == null) {
             mMessageFullname = getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME);
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
-            getCurrentAccountAndInitializeViewPager();
         } else {
             mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
-            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
-            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
-            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             mMessageFullname = savedInstanceState.getString(MESSAGE_FULLNAME_STATE);
             mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
-
-            if (!mNullAccessToken && mAccessToken == null) {
-                getCurrentAccountAndInitializeViewPager();
-            } else {
-                initializeViewPager();
-            }
         }
+
+        checkNewAccountAndInitializeViewPager();
 
         fetchUserInfo();
 
@@ -563,41 +554,28 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         applyTabLayoutTheme(tabLayout);
     }
 
-    private void getCurrentAccountAndInitializeViewPager() {
-        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
-            if (mNewAccountName != null) {
-                if (account == null || !account.getAccountName().equals(mNewAccountName)) {
-                    SwitchAccount.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
-                            mExecutor, new Handler(), mNewAccountName, newAccount -> {
-                        EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
-                        Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
+    private void checkNewAccountAndInitializeViewPager() {
+        if (mNewAccountName != null) {
+            if (mAccountName == null || !mAccountName.equals(mNewAccountName)) {
+                SwitchAccount.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
+                        mExecutor, new Handler(), mNewAccountName, newAccount -> {
+                            EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
+                            Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
 
-                        mNewAccountName = null;
-                        if (newAccount == null) {
-                            mNullAccessToken = true;
-                        } else {
-                            mAccessToken = newAccount.getAccessToken();
-                            mAccountName = newAccount.getAccountName();
-                        }
+                            mNewAccountName = null;
+                            if (newAccount != null) {
+                                mAccessToken = newAccount.getAccessToken();
+                                mAccountName = newAccount.getAccountName();
+                            }
 
-                        initializeViewPager();
-                    });
-                } else {
-                    mAccessToken = account.getAccessToken();
-                    mAccountName = account.getAccountName();
-                    initializeViewPager();
-                }
+                            initializeViewPager();
+                        });
             } else {
-                if (account == null) {
-                    mNullAccessToken = true;
-                } else {
-                    mAccessToken = account.getAccessToken();
-                    mAccountName = account.getAccountName();
-                }
-
                 initializeViewPager();
             }
-        });
+        } else {
+            initializeViewPager();
+        }
     }
 
     private void initializeViewPager() {
@@ -1075,9 +1053,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         super.onSaveInstanceState(outState);
         outState.putBoolean(FETCH_USER_INFO_STATE, mFetchUserInfoSuccess);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
-        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
-        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
-        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
         outState.putString(MESSAGE_FULLNAME_STATE, mMessageFullname);
         outState.putString(NEW_ACCOUNT_NAME_STATE, mNewAccountName);
     }

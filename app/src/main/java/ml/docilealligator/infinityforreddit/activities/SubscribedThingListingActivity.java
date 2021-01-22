@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -44,7 +43,6 @@ import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertMultiRedditAsyncTask;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubscribedThingsAsyncTask;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -68,9 +66,6 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     public static final String EXTRA_SHOW_MULTIREDDITS = "ESM";
     private static final String INSERT_SUBSCRIBED_SUBREDDIT_STATE = "ISSS";
     private static final String INSERT_MULTIREDDIT_STATE = "IMS";
-    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
-    private static final String ACCESS_TOKEN_STATE = "ATS";
-    private static final String ACCOUNT_NAME_STATE = "ANS";
 
     @BindView(R.id.coordinator_layout_subscribed_thing_listing_activity)
     CoordinatorLayout coordinatorLayout;
@@ -93,11 +88,13 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
     private SlidrInterface mSlidrInterface;
-    private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
     private boolean mInsertSuccess = false;
@@ -153,21 +150,16 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setToolbarGoToTop(toolbar);
 
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+
         if (savedInstanceState != null) {
             mInsertSuccess = savedInstanceState.getBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE);
             mInsertMultiredditSuccess = savedInstanceState.getBoolean(INSERT_MULTIREDDIT_STATE);
-            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
-            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
-            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
-            if (!mNullAccessToken && mAccessToken == null) {
-                getCurrentAccountAndInitializeViewPager();
-            } else {
-                initializeViewPagerAndLoadSubscriptions();
-            }
         } else {
             showMultiReddits = getIntent().getBooleanExtra(EXTRA_SHOW_MULTIREDDITS, false);
-            getCurrentAccountAndInitializeViewPager();
         }
+        initializeViewPagerAndLoadSubscriptions();
     }
 
     @Override
@@ -186,18 +178,6 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         applyTabLayoutTheme(tabLayout);
         applyFABTheme(fab);
-    }
-
-    private void getCurrentAccountAndInitializeViewPager() {
-        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
-            if (account == null) {
-                mNullAccessToken = true;
-            } else {
-                mAccessToken = account.getAccessToken();
-                mAccountName = account.getAccountName();
-            }
-            initializeViewPagerAndLoadSubscriptions();
-        });
     }
 
     private void initializeViewPagerAndLoadSubscriptions() {
@@ -248,9 +228,6 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         super.onSaveInstanceState(outState);
         outState.putBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE, mInsertSuccess);
         outState.putBoolean(INSERT_MULTIREDDIT_STATE, mInsertMultiredditSuccess);
-        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
-        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
-        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
     }
 
     @Override

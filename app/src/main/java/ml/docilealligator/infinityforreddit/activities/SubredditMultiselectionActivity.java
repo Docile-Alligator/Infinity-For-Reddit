@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -42,7 +41,6 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.adapters.SubredditMultiselectionRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditViewModel;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -53,9 +51,6 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
     static final String EXTRA_RETURN_SELECTED_SUBREDDITS = "ERSS";
 
     private static final int SUBREDDIT_SEARCH_REQUEST_CODE = 1;
-    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
-    private static final String ACCESS_TOKEN_STATE = "ATS";
-    private static final String ACCOUNT_NAME_STATE = "ANS";
 
     @BindView(R.id.coordinator_layout_subreddits_multiselection_activity)
     CoordinatorLayout mCoordinatorLayout;
@@ -82,11 +77,13 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
     public SubscribedSubredditViewModel mSubscribedSubredditViewModel;
-    private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
     private LinearLayoutManager mLinearLayoutManager;
@@ -138,33 +135,13 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
 
         mSwipeRefreshLayout.setEnabled(false);
 
-        if (savedInstanceState != null) {
-            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
-            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
-            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
-
-            if (!mNullAccessToken && mAccountName == null) {
-                getCurrentAccountAndBindView();
-            } else {
-                bindView();
-            }
-        } else {
-            getCurrentAccountAndBindView();
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+        if (mAccessToken == null) {
+            Toast.makeText(this, R.string.logged_out, Toast.LENGTH_SHORT).show();
+            finish();
         }
-    }
-
-    private void getCurrentAccountAndBindView() {
-        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
-            if (account == null) {
-                mNullAccessToken = true;
-                Toast.makeText(this, R.string.logged_out, Toast.LENGTH_SHORT).show();
-                finish();
-            } else {
-                mAccessToken = account.getAccessToken();
-                mAccountName = account.getAccountName();
-                bindView();
-            }
-        });
+        bindView();
     }
 
     private void bindView() {
@@ -239,9 +216,6 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
-        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
-        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
     }
 
     @Override

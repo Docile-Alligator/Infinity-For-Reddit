@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Spanned;
 import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
@@ -50,16 +49,15 @@ import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.adapters.MarkdownBottomBarRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.comment.SendComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
@@ -75,9 +73,6 @@ public class CommentActivity extends BaseActivity {
     public static final String EXTRA_IS_REPLYING_KEY = "EIRK";
     public static final String RETURN_EXTRA_COMMENT_DATA_KEY = "RECDK";
     public static final int WRITE_COMMENT_REQUEST_CODE = 1;
-
-    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
-    private static final String ACCESS_TOKEN_STATE = "ATS";
 
     @BindView(R.id.coordinator_layout_comment_activity)
     CoordinatorLayout coordinatorLayout;
@@ -99,15 +94,15 @@ public class CommentActivity extends BaseActivity {
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
-    RedditDataRoomDatabase mRedditDataRoomDatabase;
-    @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String parentFullname;
     private int parentDepth;
@@ -136,15 +131,7 @@ public class CommentActivity extends BaseActivity {
             addOnOffsetChangedListener(appBarLayout);
         }
 
-        if (savedInstanceState == null) {
-            getCurrentAccount();
-        } else {
-            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
-            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
-            if (!mNullAccessToken && mAccessToken == null) {
-                getCurrentAccount();
-            }
-        }
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
 
         Intent intent = getIntent();
         String parentTextMarkdown = intent.getStringExtra(EXTRA_COMMENT_PARENT_TEXT_MARKDOWN_KEY);
@@ -296,16 +283,6 @@ public class CommentActivity extends BaseActivity {
         markdownColor = secondaryTextColor;
     }
 
-    private void getCurrentAccount() {
-        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
-            if (account == null) {
-                mNullAccessToken = true;
-            } else {
-                mAccessToken = account.getAccessToken();
-            }
-        });
-    }
-
     @Override
     protected void onPause() {
         super.onPause();
@@ -395,13 +372,6 @@ public class CommentActivity extends BaseActivity {
                         -> finish())
                 .setNegativeButton(R.string.no, null)
                 .show();
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
-        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
     }
 
     @Override

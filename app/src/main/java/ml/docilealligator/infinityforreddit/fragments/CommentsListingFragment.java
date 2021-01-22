@@ -9,7 +9,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,13 +41,12 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NetworkState;
-import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.adapters.CommentsListingRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.comment.CommentViewModel;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -65,9 +63,6 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
     public static final String EXTRA_ACCOUNT_NAME = "EAN";
     public static final String EXTRA_ARE_SAVED_COMMENTS = "EISC";
-
-    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
-    private static final String ACCESS_TOKEN_STATE = "ATS";
 
     @BindView(R.id.coordinator_layout_comments_listing_fragment)
     CoordinatorLayout mCoordinatorLayout;
@@ -100,10 +95,12 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     @Named("post_layout")
     SharedPreferences mPostLayoutSharedPreferences;
     @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
+    @Inject
     CustomThemeWrapper customThemeWrapper;
     @Inject
     Executor mExecutor;
-    private boolean mNullAccessToken = false;
     private String mAccessToken;
     private RequestManager mGlide;
     private AppCompatActivity mActivity;
@@ -248,31 +245,11 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
             touchHelper.attachToRecyclerView(mCommentRecyclerView);
         }
 
-        if (savedInstanceState == null) {
-            getCurrentAccountAndBindView(resources);
-        } else {
-            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
-            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
 
-            if (!mNullAccessToken && mAccessToken == null) {
-                getCurrentAccountAndBindView(resources);
-            } else {
-                bindView(resources);
-            }
-        }
+        bindView(resources);
 
         return rootView;
-    }
-
-    private void getCurrentAccountAndBindView(Resources resources) {
-        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
-            if (account == null) {
-                mNullAccessToken = true;
-            } else {
-                mAccessToken = account.getAccessToken();
-            }
-            bindView(resources);
-        });
     }
 
     private void bindView(Resources resources) {
@@ -379,13 +356,6 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         this.mActivity = (AppCompatActivity) context;
-    }
-
-    @Override
-    public void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
-        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
     }
 
     @Override

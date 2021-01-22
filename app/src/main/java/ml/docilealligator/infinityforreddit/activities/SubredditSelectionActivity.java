@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -37,7 +36,6 @@ import ml.docilealligator.infinityforreddit.FetchSubscribedThing;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubscribedThingsAsyncTask;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -57,10 +55,6 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
 
     private static final int SUBREDDIT_SEARCH_REQUEST_CODE = 0;
     private static final String INSERT_SUBSCRIBED_SUBREDDIT_STATE = "ISSS";
-    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
-    private static final String ACCESS_TOKEN_STATE = "ATS";
-    private static final String ACCOUNT_NAME_STATE = "ANS";
-    private static final String ACCOUNT_PROFILE_IMAGE_URL = "APIU";
     private static final String FRAGMENT_OUT_STATE = "FOS";
 
     @BindView(R.id.coordinator_layout_subreddit_selection_activity)
@@ -78,10 +72,12 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
     private String mAccountProfileImageUrl;
@@ -128,22 +124,18 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+        mAccountProfileImageUrl = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_IMAGE_URL, null);
+
         if (savedInstanceState == null) {
-            getCurrentAccountAndBindView();
+            bindView(true);
         } else {
             mInsertSuccess = savedInstanceState.getBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE);
-            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
-            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
-            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
-            mAccountProfileImageUrl = savedInstanceState.getString(ACCOUNT_PROFILE_IMAGE_URL);
 
-            if (!mNullAccessToken && mAccountName == null) {
-                getCurrentAccountAndBindView();
-            } else {
-                mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
-                getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, mFragment).commit();
-                bindView(false);
-            }
+            mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_subreddit_selection_activity, mFragment).commit();
+            bindView(false);
         }
     }
 
@@ -161,19 +153,6 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
-    }
-
-    private void getCurrentAccountAndBindView() {
-        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
-            if (account == null) {
-                mNullAccessToken = true;
-            } else {
-                mAccessToken = account.getAccessToken();
-                mAccountName = account.getAccountName();
-                mAccountProfileImageUrl = account.getProfileImageUrl();
-            }
-            bindView(true);
-        });
     }
 
     private void bindView(boolean initializeFragment) {
@@ -279,10 +258,6 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
         super.onSaveInstanceState(outState);
         getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE, mFragment);
         outState.putBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE, mInsertSuccess);
-        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
-        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
-        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
-        outState.putString(ACCOUNT_PROFILE_IMAGE_URL, mAccountProfileImageUrl);
     }
 
     @Override

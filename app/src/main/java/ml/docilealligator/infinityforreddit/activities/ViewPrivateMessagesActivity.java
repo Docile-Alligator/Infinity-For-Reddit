@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -37,22 +36,19 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.adapters.PrivateMessagesDetailRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadUserDataAsyncTask;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.RepliedToPrivateMessageEvent;
 import ml.docilealligator.infinityforreddit.message.Message;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
 import ml.docilealligator.infinityforreddit.message.ReplyMessage;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
 public class ViewPrivateMessagesActivity extends BaseActivity implements ActivityToolbarInterface {
 
     public static final String EXTRA_PRIVATE_MESSAGE = "EPM";
     public static final String EXTRA_MESSAGE_POSITION = "EMP";
-    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
-    private static final String ACCESS_TOKEN_STATE = "ATS";
-    private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String USER_AVATAR_STATE = "UAS";
     @BindView(R.id.linear_layout_view_private_messages_activity)
     LinearLayout mLinearLayout;
@@ -84,13 +80,15 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
     private LinearLayoutManager mLinearLayoutManager;
     private PrivateMessagesDetailRecyclerViewAdapter mAdapter;
     private Message privateMessage;
-    private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
     private String mUserAvatar;
@@ -126,32 +124,13 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
 
         mProvideUserAvatarCallbacks = new ArrayList<>();
 
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+
         if (savedInstanceState != null) {
-            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
-            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
-            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
             mUserAvatar = savedInstanceState.getString(USER_AVATAR_STATE);
-
-            if (!mNullAccessToken && mAccessToken == null) {
-                getCurrentAccountAndBindView();
-            } else {
-                bindView();
-            }
-        } else {
-            getCurrentAccountAndBindView();
         }
-    }
-
-    private void getCurrentAccountAndBindView() {
-        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
-            if (account == null) {
-                mNullAccessToken = true;
-            } else {
-                mAccessToken = account.getAccessToken();
-                mAccountName = account.getAccountName();
-            }
-            bindView();
-        });
+        bindView();
     }
 
     private void bindView() {
@@ -293,9 +272,6 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
-        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
-        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
         outState.putString(USER_AVATAR_STATE, mUserAvatar);
     }
 

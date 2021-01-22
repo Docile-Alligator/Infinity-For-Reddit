@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit.activities;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,15 +26,13 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.message.ComposeMessage;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
 public class SendPrivateMessageActivity extends BaseActivity {
     public static final String EXTRA_RECIPIENT_USERNAME = "ERU";
-    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
-    private static final String ACCESS_TOKEN_STATE = "ATS";
     @BindView(R.id.coordinator_layout_send_private_message_activity)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_send_private_message_activity)
@@ -61,10 +58,12 @@ public class SendPrivateMessageActivity extends BaseActivity {
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private boolean mNullAccessToken = false;
     private String mAccessToken;
     private boolean isSubmitting = false;
 
@@ -85,15 +84,7 @@ public class SendPrivateMessageActivity extends BaseActivity {
             addOnOffsetChangedListener(appBarLayout);
         }
 
-        if (savedInstanceState == null) {
-            getCurrentAccount();
-        } else {
-            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
-            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
-            if (!mNullAccessToken && mAccessToken == null) {
-                getCurrentAccount();
-            }
-        }
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
 
         setSupportActionBar(toolbar);
 
@@ -101,16 +92,6 @@ public class SendPrivateMessageActivity extends BaseActivity {
         if (username != null) {
             usernameEditText.setText(username);
         }
-    }
-
-    private void getCurrentAccount() {
-        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
-            if (account == null) {
-                mNullAccessToken = true;
-            } else {
-                mAccessToken = account.getAccessToken();
-            }
-        });
     }
 
     @Override
@@ -185,8 +166,6 @@ public class SendPrivateMessageActivity extends BaseActivity {
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
-        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
     }
 
     @Override

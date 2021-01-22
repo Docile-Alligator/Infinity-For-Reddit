@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -38,7 +37,6 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SelectUserFlair;
 import ml.docilealligator.infinityforreddit.UserFlair;
 import ml.docilealligator.infinityforreddit.adapters.UserFlairRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
@@ -46,9 +44,6 @@ import retrofit2.Retrofit;
 public class SelectUserFlairActivity extends BaseActivity implements ActivityToolbarInterface {
 
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
-    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
-    private static final String ACCESS_TOKEN_STATE = "ATS";
-    private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String USER_FLAIRS_STATE = "UFS";
 
     @BindView(R.id.coordinator_layout_select_user_flair_activity)
@@ -67,6 +62,9 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
@@ -107,32 +105,13 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
         mSubredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME);
         setTitle(mSubredditName);
 
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+
         if (savedInstanceState != null) {
-            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
-            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
-            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
             mUserFlairs = savedInstanceState.getParcelableArrayList(USER_FLAIRS_STATE);
-
-            if (!mNullAccessToken && mAccessToken == null) {
-                getCurrentAccountAndBindView();
-            } else {
-                bindView();
-            }
-        } else {
-            getCurrentAccountAndBindView();
         }
-    }
-
-    private void getCurrentAccountAndBindView() {
-        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
-            if (account == null) {
-                mNullAccessToken = true;
-            } else {
-                mAccessToken = account.getAccessToken();
-                mAccountName = account.getAccountName();
-            }
-            bindView();
-        });
+        bindView();
     }
 
     private void bindView() {
@@ -234,9 +213,6 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
-        outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
-        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
         outState.putParcelableArrayList(USER_FLAIRS_STATE, mUserFlairs);
     }
 

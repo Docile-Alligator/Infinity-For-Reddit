@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -29,8 +28,6 @@ import com.r0adkll.slidr.Slidr;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.concurrent.Executor;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -40,7 +37,6 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.adapters.SearchActivityRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.recentsearchquery.DeleteRecentSearchQuery;
@@ -60,8 +56,6 @@ public class SearchActivity extends BaseActivity {
     static final String EXTRA_RETURN_USER_NAME = "ERUN";
     static final String EXTRA_RETURN_USER_ICON_URL = "ERUIU";
 
-    private static final String NULL_ACCOUNT_NAME_STATE = "NANS";
-    private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String SUBREDDIT_NAME_STATE = "SNS";
     private static final String SUBREDDIT_IS_USER_STATE = "SIUS";
 
@@ -95,10 +89,10 @@ public class SearchActivity extends BaseActivity {
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
-    CustomThemeWrapper mCustomThemeWrapper;
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
-    Executor mExecutor;
-    private boolean mNullAccountName = false;
+    CustomThemeWrapper mCustomThemeWrapper;
     private String mAccountName;
     private String query;
     private String subredditName;
@@ -179,9 +173,9 @@ public class SearchActivity extends BaseActivity {
             }
         });
 
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+
         if (savedInstanceState != null) {
-            mNullAccountName = savedInstanceState.getBoolean(NULL_ACCOUNT_NAME_STATE);
-            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
             subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
             subredditIsUser = savedInstanceState.getBoolean(SUBREDDIT_IS_USER_STATE);
 
@@ -190,15 +184,10 @@ public class SearchActivity extends BaseActivity {
             } else {
                 subredditNameTextView.setText(subredditName);
             }
-
-            if (!mNullAccountName && mAccountName == null) {
-                getCurrentAccountAndInitializeViewPager();
-            } else {
-                bindView();
-            }
+            bindView();
         } else {
             query = getIntent().getStringExtra(EXTRA_QUERY);
-            getCurrentAccountAndInitializeViewPager();
+            bindView();
         }
 
         if (searchOnlySubreddits || searchOnlyUsers) {
@@ -217,17 +206,6 @@ public class SearchActivity extends BaseActivity {
             subredditNameTextView.setText(subredditName);
             subredditIsUser = intent.getBooleanExtra(EXTRA_SUBREDDIT_IS_USER, false);
         }
-    }
-
-    private void getCurrentAccountAndInitializeViewPager() {
-        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
-            if (account == null) {
-                mNullAccountName = true;
-            } else {
-                mAccountName = account.getAccountName();
-            }
-            bindView();
-        });
     }
 
     private void bindView() {
@@ -403,8 +381,6 @@ public class SearchActivity extends BaseActivity {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(NULL_ACCOUNT_NAME_STATE, mNullAccountName);
-        outState.putString(ACCOUNT_NAME_STATE, mAccountName);
         outState.putString(SUBREDDIT_NAME_STATE, subredditName);
         outState.putBoolean(SUBREDDIT_IS_USER_STATE, subredditIsUser);
     }

@@ -59,8 +59,8 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private Resources resources;
     private RequestManager glide;
     private String accountName;
-    private String userIconUrl;
-    private String userBannerUrl;
+    private String profileImageUrl;
+    private String bannerImageUrl;
     private int karma;
     private boolean isNSFWEnabled;
     private boolean requireAuthToAccountSection;
@@ -78,16 +78,12 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     public NavigationDrawerRecyclerViewAdapter(AppCompatActivity appCompatActivity, SharedPreferences sharedPreferences,
                                                SharedPreferences nsfwAndSpoilerSharedPreferences,
                                                CustomThemeWrapper customThemeWrapper,
-                                               String accountName, String userIconUrl,
-                                               String userBannerUrl, int karma,
+                                               String accountName,
                                                ItemClickListener itemClickListener) {
         this.appCompatActivity = appCompatActivity;
         resources = appCompatActivity.getResources();
         glide = Glide.with(appCompatActivity);
         this.accountName = accountName;
-        this.userIconUrl = userIconUrl;
-        this.userBannerUrl = userBannerUrl;
-        this.karma = karma;
         isNSFWEnabled = nsfwAndSpoilerSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
         requireAuthToAccountSection = sharedPreferences.getBoolean(SharedPreferencesUtils.REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER, false);
         isLoggedIn = accountName != null;
@@ -180,8 +176,8 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
             if (isLoggedIn) {
                 ((NavHeaderViewHolder) holder).karmaTextView.setText(appCompatActivity.getString(R.string.karma_info, karma));
                 ((NavHeaderViewHolder) holder).accountNameTextView.setText(accountName);
-                if (userIconUrl != null && !userIconUrl.equals("")) {
-                    glide.load(userIconUrl)
+                if (profileImageUrl != null && !profileImageUrl.equals("")) {
+                    glide.load(profileImageUrl)
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0)))
                             .error(glide.load(R.drawable.subreddit_default_icon)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0))))
@@ -192,8 +188,8 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                             .into(((NavHeaderViewHolder) holder).profileImageView);
                 }
 
-                if (userBannerUrl != null && !userBannerUrl.equals("")) {
-                    glide.load(userBannerUrl).into(((NavHeaderViewHolder) holder).bannerImageView);
+                if (bannerImageUrl != null && !bannerImageUrl.equals("")) {
+                    glide.load(bannerImageUrl).into(((NavHeaderViewHolder) holder).bannerImageView);
                 }
             } else {
                 ((NavHeaderViewHolder) holder).karmaTextView.setText(R.string.press_here_to_login);
@@ -546,7 +542,9 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         }
     }
 
-    public void updateKarma(int karma) {
+    public void updateAccountInfo(String profileImageUrl, String bannerImageUrl, int karma) {
+        this.profileImageUrl = profileImageUrl;
+        this.bannerImageUrl = bannerImageUrl;
         this.karma = karma;
         notifyItemChanged(0);
     }

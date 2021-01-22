@@ -80,7 +80,6 @@ import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.account.AccountViewModel;
 import ml.docilealligator.infinityforreddit.adapters.NavigationDrawerRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubscribedThingsAsyncTask;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchToAnonymousMode;
@@ -127,12 +126,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private static final String FETCH_SUBSCRIPTIONS_STATE = "FSS";
     private static final String DRAWER_ON_ACCOUNT_SWITCH_STATE = "DOASS";
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
-    private static final String NULL_ACCESS_TOKEN_STATE = "NATS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";
-    private static final String ACCOUNT_PROFILE_IMAGE_URL_STATE = "APIUS";
-    private static final String ACCOUNT_BANNER_IMAGE_URL_STATE = "ABIUS";
-    private static final String ACCOUNT_KARMA_STATE = "AKS";
     private static final String MESSAGE_FULLNAME_STATE = "MFS";
     private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
 
@@ -197,10 +192,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     SharedPreferences mNsfwAndSpoilerSharedPreferences;
     @Inject
     @Named("bottom_app_bar")
-    SharedPreferences bottomAppBarSharedPreference;
+    SharedPreferences mBottomAppBarSharedPreference;
     @Inject
     @Named("current_account")
-    SharedPreferences currentAccountSharedPreferences;
+    SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
@@ -209,12 +204,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private SectionsPagerAdapter sectionsPagerAdapter;
     private AppBarLayout.LayoutParams params;
     private NavigationDrawerRecyclerViewAdapter adapter;
-    private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
-    private String mProfileImageUrl;
-    private String mBannerImageUrl;
-    private int mKarma;
     private boolean mFetchUserInfoSuccess = false;
     private boolean mFetchSubscriptionsSuccess = false;
     private boolean mDrawerOnAccountSwitch = false;
@@ -309,29 +300,21 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
         fragmentManager = getSupportFragmentManager();
 
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+
         if (savedInstanceState != null) {
             mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
             mFetchSubscriptionsSuccess = savedInstanceState.getBoolean(FETCH_SUBSCRIPTIONS_STATE);
             mDrawerOnAccountSwitch = savedInstanceState.getBoolean(DRAWER_ON_ACCOUNT_SWITCH_STATE);
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
-            mNullAccessToken = savedInstanceState.getBoolean(NULL_ACCESS_TOKEN_STATE);
-            mAccessToken = savedInstanceState.getString(ACCESS_TOKEN_STATE);
-            mAccountName = savedInstanceState.getString(ACCOUNT_NAME_STATE);
-            mProfileImageUrl = savedInstanceState.getString(ACCOUNT_PROFILE_IMAGE_URL_STATE);
-            mBannerImageUrl = savedInstanceState.getString(ACCOUNT_BANNER_IMAGE_URL_STATE);
-            mKarma = savedInstanceState.getInt(ACCOUNT_KARMA_STATE);
             mMessageFullname = savedInstanceState.getString(MESSAGE_FULLNAME_STATE);
             mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
-
-            if (!mNullAccessToken && mAccessToken == null) {
-                getCurrentAccountAndBindView();
-            } else {
-                bindView();
-            }
+            initializeNotificationAndBindView(true);
         } else {
             mMessageFullname = getIntent().getStringExtra(EXTRA_MESSSAGE_FULLNAME);
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
-            getCurrentAccountAndBindView();
+            initializeNotificationAndBindView(false);
         }
     }
 
@@ -361,108 +344,62 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         applyFABTheme(fab);
     }
 
-    private void getCurrentAccountAndBindView() {
-        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
-            boolean enableNotification = mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_NOTIFICATION_KEY, true);
-            long notificationInterval = Long.parseLong(mSharedPreferences.getString(SharedPreferencesUtils.NOTIFICATION_INTERVAL_KEY, "1"));
-            TimeUnit timeUnit = (notificationInterval == 15 || notificationInterval == 30) ? TimeUnit.MINUTES : TimeUnit.HOURS;
+    private void initializeNotificationAndBindView(boolean doNotInitializeNotificationIfNoNewAccount) {
+        boolean enableNotification = mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_NOTIFICATION_KEY, true);
+        long notificationInterval = Long.parseLong(mSharedPreferences.getString(SharedPreferencesUtils.NOTIFICATION_INTERVAL_KEY, "1"));
+        TimeUnit timeUnit = (notificationInterval == 15 || notificationInterval == 30) ? TimeUnit.MINUTES : TimeUnit.HOURS;
 
-            WorkManager workManager = WorkManager.getInstance(this);
+        WorkManager workManager = WorkManager.getInstance(this);
 
-            if (mNewAccountName != null) {
-                if (account == null || !account.getAccountName().equals(mNewAccountName)) {
-                    SwitchAccount.switchAccount(mRedditDataRoomDatabase, currentAccountSharedPreferences,
-                            mExecutor, new Handler(), mNewAccountName, newAccount -> {
-                                EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
-                                Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
+        if (mNewAccountName != null) {
+            if (mAccountName == null || !mAccountName.equals(mNewAccountName)) {
+                SwitchAccount.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
+                        mExecutor, new Handler(), mNewAccountName, newAccount -> {
+                            EventBus.getDefault().post(new SwitchAccountEvent(getClass().getName()));
+                            Toast.makeText(this, R.string.account_switched, Toast.LENGTH_SHORT).show();
 
-                                mNewAccountName = null;
-                                if (newAccount == null) {
-                                    mNullAccessToken = true;
-                                } else {
-                                    mAccessToken = newAccount.getAccessToken();
-                                    mAccountName = newAccount.getAccountName();
-                                    mProfileImageUrl = newAccount.getProfileImageUrl();
-                                    mBannerImageUrl = newAccount.getBannerImageUrl();
-                                    mKarma = newAccount.getKarma();
-                                }
+                            mNewAccountName = null;
+                            if (newAccount != null) {
+                                mAccessToken = newAccount.getAccessToken();
+                                mAccountName = newAccount.getAccountName();
+                            }
 
-                                if (enableNotification) {
-                                    Constraints constraints = new Constraints.Builder()
-                                            .setRequiredNetworkType(NetworkType.CONNECTED)
-                                            .build();
+                            setNotification(workManager, notificationInterval, timeUnit, enableNotification);
 
-                                    PeriodicWorkRequest pullNotificationRequest =
-                                            new PeriodicWorkRequest.Builder(PullNotificationWorker.class,
-                                                    notificationInterval, timeUnit)
-                                                    .setConstraints(constraints)
-                                                    .build();
-
-                                    workManager.enqueueUniquePeriodicWork(PullNotificationWorker.UNIQUE_WORKER_NAME,
-                                            ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
-                                } else {
-                                    workManager.cancelUniqueWork(PullNotificationWorker.UNIQUE_WORKER_NAME);
-                                }
-
-                                bindView();
-                            });
-                } else {
-                    mAccessToken = account.getAccessToken();
-                    mAccountName = account.getAccountName();
-                    mProfileImageUrl = account.getProfileImageUrl();
-                    mBannerImageUrl = account.getBannerImageUrl();
-                    mKarma = account.getKarma();
-
-                    if (enableNotification) {
-                        Constraints constraints = new Constraints.Builder()
-                                .setRequiredNetworkType(NetworkType.CONNECTED)
-                                .build();
-
-                        PeriodicWorkRequest pullNotificationRequest =
-                                new PeriodicWorkRequest.Builder(PullNotificationWorker.class,
-                                        notificationInterval, timeUnit)
-                                        .setConstraints(constraints)
-                                        .build();
-
-                        workManager.enqueueUniquePeriodicWork(PullNotificationWorker.UNIQUE_WORKER_NAME,
-                                ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
-                    } else {
-                        workManager.cancelUniqueWork(PullNotificationWorker.UNIQUE_WORKER_NAME);
-                    }
-
-                    bindView();
-                }
+                            bindView();
+                        });
             } else {
-                if (account == null) {
-                    mNullAccessToken = true;
-                } else {
-                    mAccessToken = account.getAccessToken();
-                    mAccountName = account.getAccountName();
-                    mProfileImageUrl = account.getProfileImageUrl();
-                    mBannerImageUrl = account.getBannerImageUrl();
-                    mKarma = account.getKarma();
-                }
-
-                if (enableNotification) {
-                    Constraints constraints = new Constraints.Builder()
-                            .setRequiredNetworkType(NetworkType.CONNECTED)
-                            .build();
-
-                    PeriodicWorkRequest pullNotificationRequest =
-                            new PeriodicWorkRequest.Builder(PullNotificationWorker.class,
-                                    notificationInterval, timeUnit)
-                                    .setConstraints(constraints)
-                                    .build();
-
-                    workManager.enqueueUniquePeriodicWork(PullNotificationWorker.UNIQUE_WORKER_NAME,
-                            ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
-                } else {
-                    workManager.cancelUniqueWork(PullNotificationWorker.UNIQUE_WORKER_NAME);
-                }
+                setNotification(workManager, notificationInterval, timeUnit, enableNotification);
 
                 bindView();
             }
-        });
+        } else {
+            if (doNotInitializeNotificationIfNoNewAccount) {
+                setNotification(workManager, notificationInterval, timeUnit, enableNotification);
+            }
+
+            bindView();
+        }
+    }
+
+    private void setNotification(WorkManager workManager, long notificationInterval, TimeUnit timeUnit,
+                                 boolean enableNotification) {
+        if (enableNotification) {
+            Constraints constraints = new Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build();
+
+            PeriodicWorkRequest pullNotificationRequest =
+                    new PeriodicWorkRequest.Builder(PullNotificationWorker.class,
+                            notificationInterval, timeUnit)
+                            .setConstraints(constraints)
+                            .build();
+
+            workManager.enqueueUniquePeriodicWork(PullNotificationWorker.UNIQUE_WORKER_NAME,
+                    ExistingPeriodicWorkPolicy.KEEP, pullNotificationRequest);
+        } else {
+            workManager.cancelUniqueWork(PullNotificationWorker.UNIQUE_WORKER_NAME);
+        }
     }
 
     private void bottomAppBarOptionAction(int option) {
@@ -582,9 +519,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             bottomAppBar.setVisibility(View.GONE);
         } else {
             if (showBottomAppBar) {
-                int optionCount = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_COUNT, 4);
-                int option1 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_1, SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS);
-                int option2 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_2, SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_MULTIREDDITS);
+                int optionCount = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_COUNT, 4);
+                int option1 = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_1, SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS);
+                int option2 = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_2, SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_MULTIREDDITS);
 
                 bottomAppBar.setVisibility(View.VISIBLE);
 
@@ -604,8 +541,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         bottomAppBarOptionAction(option2);
                     });
                 } else {
-                    int option3 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_3, SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_INBOX);
-                    int option4 = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_4, SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_PROFILE);
+                    int option3 = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_3, SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_INBOX);
+                    int option4 = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_4, SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_PROFILE);
 
                     option1BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option1));
                     option2BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option2));
@@ -636,7 +573,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             }
         }
 
-        fabOption = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB,
+        fabOption = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB,
                 SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS);
         switch (fabOption) {
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_REFRESH:
@@ -739,7 +676,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
         adapter = new NavigationDrawerRecyclerViewAdapter(this, mSharedPreferences,
                 mNsfwAndSpoilerSharedPreferences, mCustomThemeWrapper, mAccountName,
-                mProfileImageUrl, mBannerImageUrl, mKarma,
                 new NavigationDrawerRecyclerViewAdapter.ItemClickListener() {
                     @Override
                     public void onMenuClick(int stringId) {
@@ -796,14 +732,14 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                             Intent addAccountIntent = new Intent(MainActivity.this, LoginActivity.class);
                             startActivityForResult(addAccountIntent, LOGIN_ACTIVITY_REQUEST_CODE);
                         } else if (stringId == R.string.anonymous_account) {
-                            SwitchToAnonymousMode.switchToAnonymousMode(mRedditDataRoomDatabase, currentAccountSharedPreferences,
+                            SwitchToAnonymousMode.switchToAnonymousMode(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
                                     mExecutor, new Handler(), false, () -> {
                                         Intent anonymousIntent = new Intent(MainActivity.this, MainActivity.class);
                                         startActivity(anonymousIntent);
                                         finish();
                                     });
                         } else if (stringId == R.string.log_out) {
-                            SwitchToAnonymousMode.switchToAnonymousMode(mRedditDataRoomDatabase, currentAccountSharedPreferences,
+                            SwitchToAnonymousMode.switchToAnonymousMode(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
                                     mExecutor, new Handler(), true,
                                     () -> {
                                         Intent logOutIntent = new Intent(MainActivity.this, MainActivity.class);
@@ -826,7 +762,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
                     @Override
                     public void onAccountClick(String accountName) {
-                        SwitchAccount.switchAccount(mRedditDataRoomDatabase, currentAccountSharedPreferences,
+                        SwitchAccount.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
                                 mExecutor, new Handler(), accountName, newAccount -> {
                             Intent intent = new Intent(MainActivity.this, MainActivity.class);
                             startActivity(intent);
@@ -927,7 +863,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         accountViewModel.getAccountsExceptCurrentAccountLiveData().observe(this, adapter::changeAccountsDataset);
         accountViewModel.getCurrentAccountLiveData().observe(this, account -> {
             if (account != null) {
-                adapter.updateKarma(account.getKarma());
+                adapter.updateAccountInfo(account.getProfileImageUrl(), account.getBannerImageUrl(),
+                        account.getKarma());
             }
         });
 
@@ -984,9 +921,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         @Override
                         public void onFetchMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
                             mAccountName = name;
-                            mProfileImageUrl = profileImageUrl;
-                            mBannerImageUrl = bannerImageUrl;
-                            mKarma = karma;
                             mFetchUserInfoSuccess = true;
                         }
 
@@ -1119,12 +1053,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         outState.putBoolean(FETCH_SUBSCRIPTIONS_STATE, mFetchSubscriptionsSuccess);
         outState.putBoolean(DRAWER_ON_ACCOUNT_SWITCH_STATE, mDrawerOnAccountSwitch);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
-        outState.putBoolean(NULL_ACCESS_TOKEN_STATE, mNullAccessToken);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
         outState.putString(ACCOUNT_NAME_STATE, mAccountName);
-        outState.putString(ACCOUNT_PROFILE_IMAGE_URL_STATE, mProfileImageUrl);
-        outState.putString(ACCOUNT_BANNER_IMAGE_URL_STATE, mBannerImageUrl);
-        outState.putInt(ACCOUNT_KARMA_STATE, mKarma);
         outState.putString(MESSAGE_FULLNAME_STATE, mMessageFullname);
         outState.putString(NEW_ACCOUNT_NAME_STATE, mNewAccountName);
     }

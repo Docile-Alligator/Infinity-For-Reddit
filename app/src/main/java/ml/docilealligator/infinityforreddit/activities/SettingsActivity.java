@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit.activities;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -28,7 +27,6 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCurrentAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.settings.AboutPreferenceFragment;
@@ -40,6 +38,7 @@ import ml.docilealligator.infinityforreddit.settings.InterfacePreferenceFragment
 import ml.docilealligator.infinityforreddit.settings.MainPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.NsfwAndBlurringFragment;
 import ml.docilealligator.infinityforreddit.settings.PostHistoryFragment;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class SettingsActivity extends BaseActivity implements
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
@@ -50,12 +49,14 @@ public class SettingsActivity extends BaseActivity implements
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_settings_activity)
     Toolbar toolbar;
-    private boolean mNullAccountName;
     private String mAccountName;
 
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -85,7 +86,16 @@ public class SettingsActivity extends BaseActivity implements
 
         setSupportActionBar(toolbar);
 
-        getCurrentAccountAndBindView(savedInstanceState);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+
+        if (savedInstanceState == null) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.frame_layout_settings_activity, new MainPreferenceFragment())
+                    .commit();
+        } else {
+            setTitle(savedInstanceState.getCharSequence(TITLE_STATE));
+        }
 
         getSupportFragmentManager().addOnBackStackChangedListener(() -> {
             if (getSupportFragmentManager().getBackStackEntryCount() == 0) {
@@ -101,28 +111,6 @@ public class SettingsActivity extends BaseActivity implements
                 setTitle(R.string.settings_font_title);
             } else if (fragment instanceof GesturesAndButtonsPreferenceFragment) {
                 setTitle(R.string.settings_gestures_and_buttons_title);
-            }
-        });
-    }
-
-    private void getCurrentAccountAndBindView(Bundle savedInstanceState) {
-        GetCurrentAccount.getCurrentAccount(mExecutor, new Handler(), mRedditDataRoomDatabase, account -> {
-            if (getSupportFragmentManager().isDestroyed()) {
-                return;
-            }
-            if (account == null) {
-                mNullAccountName = true;
-            } else {
-                mAccountName = account.getAccountName();
-            }
-
-            if (savedInstanceState == null) {
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.frame_layout_settings_activity, new MainPreferenceFragment())
-                        .commit();
-            } else {
-                setTitle(savedInstanceState.getCharSequence(TITLE_STATE));
             }
         });
     }
