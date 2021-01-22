@@ -130,4 +130,7 @@ public class JSONUtils {
     public static final String TOTAL_KARMA_KEY = "total_karma";
     public static final String AWARDER_KARMA_KEY = "awarder_karma";
     public static final String AWARDEE_KARMA_KEY = "awardee_karma";
+    public static final String GFY_CONTENT_KEY = "content_urls";
+    public static final String GFY_URL_KEY = "url";
+    public static final String WEBM_KEY = "webm";
 }

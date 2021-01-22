@@ -100,7 +100,10 @@ public class FetchGfycatOrRedgifsVideoLinks {
         protected Void doInBackground(Void... voids) {
             try {
                 JSONObject jsonObject = new JSONObject(response);
-                webm = jsonObject.getJSONObject(JSONUtils.GFY_ITEM_KEY).getString(JSONUtils.WEBM_URL_KEY);
+				webm = jsonObject.getJSONObject(JSONUtils.GFY_ITEM_KEY)
+                            .getJSONObject(JSONUtils.GFY_CONTENT_KEY)
+                            .getJSONObject(JSONUtils.WEBM_KEY)
+                            .getString(JSONUtils.GFY_URL_KEY);
                 mp4 = jsonObject.getJSONObject(JSONUtils.GFY_ITEM_KEY).getString(JSONUtils.MP4_URL_KEY);
             } catch (JSONException e) {
                 e.printStackTrace();
