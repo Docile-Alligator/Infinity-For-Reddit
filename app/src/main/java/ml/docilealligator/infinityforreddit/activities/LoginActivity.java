@@ -161,7 +161,8 @@ public class LoginActivity extends BaseActivity {
                                                     @Override
                                                     public void onFetchMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
                                                         mCurrentAccountSharedPreferences.edit().putString(SharedPreferencesUtils.ACCESS_TOKEN, accessToken)
-                                                                .putString(SharedPreferencesUtils.ACCOUNT_NAME, name).apply();
+                                                                .putString(SharedPreferencesUtils.ACCOUNT_NAME, name)
+                                                                .putString(SharedPreferencesUtils.ACCOUNT_IMAGE_URL, profileImageUrl).apply();
                                                         new ParseAndInsertNewAccountAsyncTask(name, accessToken, refreshToken, profileImageUrl, bannerImageUrl,
                                                                 karma, authCode, mRedditDataRoomDatabase.accountDao(),
                                                                 () -> {
