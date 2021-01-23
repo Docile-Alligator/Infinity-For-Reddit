@@ -104,7 +104,12 @@ public class FetchGfycatOrRedgifsVideoLinks {
                             .getJSONObject(JSONUtils.CONTENT_URLS_KEY)
                             .getJSONObject(JSONUtils.WEBM_KEY)
                             .getString(JSONUtils.URL_KEY);
-                mp4 = jsonObject.getJSONObject(JSONUtils.GFY_ITEM_KEY).getString(JSONUtils.MP4_URL_KEY);
+                mp4 = jsonObject.getJSONObject(JSONUtils.GFY_ITEM_KEY).has(JSONUtils.MP4_URL_KEY) ?
+                        jsonObject.getJSONObject(JSONUtils.GFY_ITEM_KEY).getString(JSONUtils.MP4_URL_KEY)
+                        : jsonObject.getJSONObject(JSONUtils.GFY_ITEM_KEY)
+                        .getJSONObject(JSONUtils.CONTENT_URLS_KEY)
+                        .getJSONObject(JSONUtils.MP4_KEY)
+                        .getString(JSONUtils.URL_KEY);
             } catch (JSONException e) {
                 e.printStackTrace();
                 parseFailed = true;
