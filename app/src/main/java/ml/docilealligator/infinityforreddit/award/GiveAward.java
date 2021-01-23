@@ -1,6 +1,6 @@
 package ml.docilealligator.infinityforreddit.award;
 
-import android.os.AsyncTask;
+import android.os.Handler;
 import android.text.Html;
 
 import androidx.annotation.NonNull;
@@ -11,6 +11,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -26,8 +27,9 @@ public class GiveAward {
         void failed(int code, String message);
     }
 
-    public static void giveAwardV2(Retrofit oauthRetrofit, String accessToken, String thingFullName, String awardId,
-                                 boolean isAnonymous, GiveAwardListener giveAwardListener) {
+    public static void giveAwardV2(Executor executor, Handler handler, Retrofit oauthRetrofit, String accessToken,
+                                   String thingFullName, String awardId, boolean isAnonymous,
+                                   GiveAwardListener giveAwardListener) {
         Map<String, String> params = new HashMap<>();
         params.put(APIUtils.GILD_TYPE, awardId);
         params.put(APIUtils.IS_ANONYMOUS, Boolean.toString(isAnonymous));
@@ -36,7 +38,7 @@ public class GiveAward {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    new ParseResponseAsyncTask(response.body(), new ParseResponseAsyncTask.ParseResponseAsyncTaskListener() {
+                    executor.execute(() -> parseResponse(handler, response.body(), new ParseResponseAsyncTaskListener() {
                         @Override
                         public void success(String awardsHTML, int awardCount) {
                             giveAwardListener.success(awardsHTML, awardCount);
@@ -46,7 +48,7 @@ public class GiveAward {
                         public void failed(String errorMessage) {
                             giveAwardListener.failed(response.code(), response.body());
                         }
-                    }).execute();
+                    }));
                 } else {
                     giveAwardListener.failed(response.code(), response.body());
                 }
@@ -59,76 +61,50 @@ public class GiveAward {
         });
     }
 
-    private static class ParseResponseAsyncTask extends AsyncTask<Void, Void, Void>  {
+    private static void parseResponse(Handler handler, String response, ParseResponseAsyncTaskListener parseResponseAsyncTaskListener) {
+        try {
+            //Check for error
+            JSONObject responseObject = new JSONObject(response).getJSONObject(JSONUtils.JSON_KEY);
 
-        private String response;
-        private boolean error = false;
-        private String awardsHTML;
-        private int awardCount;
-        private String errorMessage = null;
-        private ParseResponseAsyncTaskListener parseResponseAsyncTaskListener;
-
-        public ParseResponseAsyncTask(String response, ParseResponseAsyncTaskListener parseResponseAsyncTaskListener) {
-            this.response = response;
-            this.parseResponseAsyncTaskListener = parseResponseAsyncTaskListener;
-        }
-
-        interface ParseResponseAsyncTaskListener {
-            void success(String awardsHTML, int awardCount);
-            void failed(String errorMessage);
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                //Check for error
-                JSONObject responseObject = new JSONObject(response).getJSONObject(JSONUtils.JSON_KEY);
-
-                if (responseObject.getJSONArray(JSONUtils.ERRORS_KEY).length() != 0) {
-                    JSONArray errorArray = responseObject.getJSONArray(JSONUtils.ERRORS_KEY)
-                            .getJSONArray(responseObject.getJSONArray(JSONUtils.ERRORS_KEY).length() - 1);
-                    if (errorArray.length() != 0) {
-                        String errorString;
-                        if (errorArray.length() >= 2) {
-                            errorString = errorArray.getString(1);
-                        } else {
-                            errorString = errorArray.getString(0);
-                        }
-                        errorMessage = errorString.substring(0, 1).toUpperCase() + errorString.substring(1);
-                        error = true;
-                        return null;
+            if (responseObject.getJSONArray(JSONUtils.ERRORS_KEY).length() != 0) {
+                JSONArray errorArray = responseObject.getJSONArray(JSONUtils.ERRORS_KEY)
+                        .getJSONArray(responseObject.getJSONArray(JSONUtils.ERRORS_KEY).length() - 1);
+                if (errorArray.length() != 0) {
+                    String errorString;
+                    if (errorArray.length() >= 2) {
+                        errorString = errorArray.getString(1);
+                    } else {
+                        errorString = errorArray.getString(0);
                     }
+                    String errorMessage = errorString.substring(0, 1).toUpperCase() + errorString.substring(1);
+                    handler.post(() -> parseResponseAsyncTaskListener.failed(errorMessage));
                 }
-            } catch (JSONException ignore) {}
-
-            try {
-                JSONArray awardingsArray = new JSONObject(response).getJSONArray(JSONUtils.ALL_AWARDINGS_KEY);
-                StringBuilder awardingsBuilder = new StringBuilder();
-                awardCount = 0;
-                for (int i = 0; i < awardingsArray.length(); i++) {
-                    JSONObject award = awardingsArray.getJSONObject(i);
-                    int count = award.getInt(JSONUtils.COUNT_KEY);
-                    awardCount += count;
-                    String iconUrl = award.getString(JSONUtils.ICON_URL_KEY);
-                    awardingsBuilder.append("<img src=\"").append(Html.escapeHtml(iconUrl)).append("\"> ").append("x").append(count).append(" ");
-                }
-
-                awardsHTML = awardingsBuilder.toString();
-            } catch (JSONException e) {
-                e.printStackTrace();
-                error = true;
             }
-            return null;
-        }
+        } catch (JSONException ignore) {}
 
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if (error) {
-                parseResponseAsyncTaskListener.failed(errorMessage);
-            } else {
-                parseResponseAsyncTaskListener.success(awardsHTML, awardCount);
+        try {
+            JSONArray awardingsArray = new JSONObject(response).getJSONArray(JSONUtils.ALL_AWARDINGS_KEY);
+            StringBuilder awardingsBuilder = new StringBuilder();
+            int awardCount = 0;
+            for (int i = 0; i < awardingsArray.length(); i++) {
+                JSONObject award = awardingsArray.getJSONObject(i);
+                int count = award.getInt(JSONUtils.COUNT_KEY);
+                awardCount += count;
+                String iconUrl = award.getString(JSONUtils.ICON_URL_KEY);
+                awardingsBuilder.append("<img src=\"").append(Html.escapeHtml(iconUrl)).append("\"> ").append("x").append(count).append(" ");
             }
+
+            String awardsHTML = awardingsBuilder.toString();
+            int finalAwardCount = awardCount;
+            handler.post(() -> parseResponseAsyncTaskListener.success(awardsHTML, finalAwardCount));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            handler.post(() -> parseResponseAsyncTaskListener.failed(null));
         }
+    }
+
+    interface ParseResponseAsyncTaskListener {
+        void success(String awardsHTML, int awardCount);
+        void failed(String errorMessage);
     }
 }

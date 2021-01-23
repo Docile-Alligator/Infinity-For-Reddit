@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -29,6 +30,8 @@ import com.google.gson.JsonSyntaxException;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.concurrent.Executor;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -37,8 +40,8 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.adapters.CustomThemeListingRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.asynctasks.ChangeThemeNameAsyncTask;
 import ml.docilealligator.infinityforreddit.asynctasks.DeleteThemeAsyncTask;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCustomThemeAsyncTask;
-import ml.docilealligator.infinityforreddit.asynctasks.InsertCustomThemeAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.GetCustomTheme;
+import ml.docilealligator.infinityforreddit.asynctasks.InsertCustomTheme;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CreateThemeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CustomThemeOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
@@ -82,6 +85,8 @@ public class CustomThemeListingActivity extends BaseActivity implements
     @Inject
     @Named("amoled_theme")
     SharedPreferences amoledThemeSharedPreferences;
+    @Inject
+    Executor executor;
     public CustomThemeViewModel customThemeViewModel;
 
     @Override
@@ -183,7 +188,8 @@ public class CustomThemeListingActivity extends BaseActivity implements
 
     @Override
     public void shareTheme(String themeName) {
-        new GetCustomThemeAsyncTask(redditDataRoomDatabase, themeName, customTheme -> {
+        GetCustomTheme.getCustomTheme(executor, new Handler(), redditDataRoomDatabase, themeName,
+                customTheme -> {
             if (customTheme != null) {
                 String jsonModel = customTheme.getJSONModel();
                 ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
@@ -197,7 +203,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
             } else {
                 Snackbar.make(coordinatorLayout, R.string.cannot_find_theme, Snackbar.LENGTH_SHORT).show();
             }
-        }).execute();
+        });
     }
 
     @Override
@@ -277,9 +283,9 @@ public class CustomThemeListingActivity extends BaseActivity implements
     }
 
     private void checkDuplicateAndImportTheme(CustomTheme customTheme, boolean checkDuplicate) {
-        new InsertCustomThemeAsyncTask(redditDataRoomDatabase, lightThemeSharedPreferences,
+        InsertCustomTheme.insertCustomTheme(executor, new Handler(), redditDataRoomDatabase, lightThemeSharedPreferences,
                 darkThemeSharedPreferences, amoledThemeSharedPreferences, customTheme, checkDuplicate,
-                new InsertCustomThemeAsyncTask.InsertCustomThemeAsyncTaskListener() {
+                new InsertCustomTheme.InsertCustomThemeListener() {
                     @Override
                     public void success() {
                         Toast.makeText(CustomThemeListingActivity.this, R.string.import_theme_success, Toast.LENGTH_SHORT).show();
@@ -327,6 +333,6 @@ public class CustomThemeListingActivity extends BaseActivity implements
                                 })
                                 .show();
                     }
-                }).execute();
+                });
     }
 }

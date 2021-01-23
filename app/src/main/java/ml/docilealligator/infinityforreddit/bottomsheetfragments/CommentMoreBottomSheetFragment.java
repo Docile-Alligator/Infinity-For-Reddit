@@ -108,7 +108,6 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
 
                 editTextView.setOnClickListener(view -> {
                     Intent intent = new Intent(activity, EditCommentActivity.class);
-                    intent.putExtra(EditCommentActivity.EXTRA_ACCESS_TOKEN, accessToken);
                     intent.putExtra(EditCommentActivity.EXTRA_FULLNAME, comment.getFullName());
                     intent.putExtra(EditCommentActivity.EXTRA_CONTENT, comment.getCommentMarkdown());
                     intent.putExtra(EditCommentActivity.EXTRA_POSITION, bundle.getInt(EXTRA_POSITION));

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import com.google.android.material.snackbar.Snackbar;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -27,8 +29,8 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.adapters.CustomizeThemeRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCustomThemeAsyncTask;
-import ml.docilealligator.infinityforreddit.asynctasks.InsertCustomThemeAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.GetCustomTheme;
+import ml.docilealligator.infinityforreddit.asynctasks.InsertCustomTheme;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeSettingsItem;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -74,6 +76,8 @@ public class CustomizeThemeActivity extends BaseActivity {
     RedditDataRoomDatabase redditDataRoomDatabase;
     @Inject
     CustomThemeWrapper customThemeWrapper;
+    @Inject
+    Executor mExecutor;
 
     private String themeName;
     private boolean isPredefinedTheme;
@@ -112,8 +116,7 @@ public class CustomizeThemeActivity extends BaseActivity {
         if (customThemeSettingsItems == null) {
             if (getIntent().hasExtra(EXTRA_THEME_TYPE)) {
                 int themeType = getIntent().getIntExtra(EXTRA_THEME_TYPE, EXTRA_LIGHT_THEME);
-
-                new GetCustomThemeAsyncTask(redditDataRoomDatabase, themeType, customTheme -> {
+                GetCustomTheme.getCustomTheme(mExecutor, new Handler(), redditDataRoomDatabase, themeType, customTheme -> {
                     if (customTheme == null) {
                         isPredefinedTheme = true;
                         switch (themeType) {
@@ -147,7 +150,7 @@ public class CustomizeThemeActivity extends BaseActivity {
                     adapter = new CustomizeThemeRecyclerViewAdapter(this, themeName, isPredefinedTheme);
                     recyclerView.setAdapter(adapter);
                     adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
-                }).execute();
+                });
             } else {
                 isPredefinedTheme = getIntent().getBooleanExtra(EXTRA_IS_PREDEFIINED_THEME, false);
                 themeName = getIntent().getStringExtra(EXTRA_THEME_NAME);
@@ -163,13 +166,13 @@ public class CustomizeThemeActivity extends BaseActivity {
                     recyclerView.setAdapter(adapter);
                     adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
                 } else {
-                    new GetCustomThemeAsyncTask(redditDataRoomDatabase, themeName,
-                            customTheme -> {
+                    GetCustomTheme.getCustomTheme(mExecutor, new Handler(), redditDataRoomDatabase,
+                            themeName, customTheme -> {
                                 customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(
                                         CustomizeThemeActivity.this, customTheme, androidVersion);
 
                                 adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
-                            }).execute();
+                            });
                 }
             }
         } else {
@@ -206,13 +209,13 @@ public class CustomizeThemeActivity extends BaseActivity {
                     return true;
                 }
                 CustomTheme customTheme = CustomTheme.convertSettingsItemsToCustomTheme(customThemeSettingsItems, themeName);
-                new InsertCustomThemeAsyncTask(redditDataRoomDatabase, lightThemeSharedPreferences,
+                InsertCustomTheme.insertCustomTheme(mExecutor, new Handler(), redditDataRoomDatabase, lightThemeSharedPreferences,
                         darkThemeSharedPreferences, amoledThemeSharedPreferences, customTheme,
                         false, () -> {
-                    Toast.makeText(CustomizeThemeActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
-                    EventBus.getDefault().post(new RecreateActivityEvent());
-                    finish();
-                }).execute();
+                            Toast.makeText(CustomizeThemeActivity.this, R.string.saved, Toast.LENGTH_SHORT).show();
+                            EventBus.getDefault().post(new RecreateActivityEvent());
+                            finish();
+                        });
             }
 
             return true;

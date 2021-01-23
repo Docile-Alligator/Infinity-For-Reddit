@@ -22,8 +22,6 @@ import com.r0adkll.slidr.Slidr;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.concurrent.Executor;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -33,7 +31,6 @@ import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
@@ -61,8 +58,6 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     @BindView(R.id.toolbar_account_posts_activity)
     Toolbar toolbar;
     @Inject
-    RedditDataRoomDatabase mRedditDataRoomDatabase;
-    @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
@@ -73,8 +68,6 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
-    @Inject
-    Executor mExecutor;
     private boolean isInLazyMode = false;
     private String mAccessToken;
     private String mAccountName;

@@ -23,7 +23,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
-import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -78,8 +77,6 @@ public class CreateMultiRedditActivity extends BaseActivity {
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
-    @Inject
-    Executor mExecutor;
     private String mAccessToken;
     private String mAccountName;
     private ArrayList<String> mSubreddits;

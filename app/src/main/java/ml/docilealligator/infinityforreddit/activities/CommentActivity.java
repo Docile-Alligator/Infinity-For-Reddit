@@ -32,8 +32,6 @@ import org.commonmark.ext.gfm.tables.TableBlock;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.concurrent.Executor;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -101,8 +99,6 @@ public class CommentActivity extends BaseActivity {
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
-    @Inject
-    Executor mExecutor;
     private String mAccessToken;
     private String parentFullname;
     private int parentDepth;

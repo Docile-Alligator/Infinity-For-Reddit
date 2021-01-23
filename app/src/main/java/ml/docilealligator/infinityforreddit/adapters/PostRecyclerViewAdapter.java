@@ -10,6 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1067,14 +1068,16 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             }
 
             if (preview.getPreviewWidth() * preview.getPreviewHeight() > 10_000_000) {
+                Log.i("afasfasdf", "ssss " + preview.getPreviewUrl());
                 int divisor = 2;
                 do {
                     preview.setPreviewWidth(preview.getPreviewWidth() / divisor);
                     preview.setPreviewHeight(preview.getPreviewHeight() / divisor);
                     divisor *= 2;
-                } while (preview.getPreviewWidth() * preview.getPreviewHeight() / divisor / divisor > 10_000_000);
+                } while (preview.getPreviewWidth() * preview.getPreviewHeight() > 10_000_000);
             }
 
+            Log.i("afasfasdf", "s " + preview.getPreviewWidth() * preview.getPreviewHeight() + " " + preview.getPreviewHeight() + " " + preview.getPreviewWidth() + " " + preview.getPreviewUrl());
             return preview;
         }
 
@@ -1116,7 +1119,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             .into(((PostWithPreviewTypeViewHolder) holder).imageView);
                 } else {
                     if (mImageViewWidth > preview.getPreviewWidth()) {
-                        imageRequestBuilder.override(Target.SIZE_ORIGINAL).into(((PostWithPreviewTypeViewHolder) holder).imageView);
+                        imageRequestBuilder.override(preview.getPreviewWidth(), preview.getPreviewHeight()).into(((PostWithPreviewTypeViewHolder) holder).imageView);
                     } else {
                         imageRequestBuilder.into(((PostWithPreviewTypeViewHolder) holder).imageView);
                     }

@@ -883,7 +883,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 if (preview != null) {
                     ((PostDetailVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio((float) preview.getPreviewWidth() / preview.getPreviewHeight());
                     if (mImageViewWidth > preview.getPreviewWidth()) {
-                        mGlide.load(preview.getPreviewUrl()).override(Target.SIZE_ORIGINAL).into(((PostDetailVideoAutoplayViewHolder) holder).previewImageView);
+                        mGlide.load(preview.getPreviewUrl()).override(preview.getPreviewWidth(), preview.getPreviewHeight()).into(((PostDetailVideoAutoplayViewHolder) holder).previewImageView);
                     } else {
                         mGlide.load(preview.getPreviewUrl()).into(((PostDetailVideoAutoplayViewHolder) holder).previewImageView);
                     }
@@ -1500,7 +1500,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     preview.setPreviewWidth(preview.getPreviewWidth() / divisor);
                     preview.setPreviewHeight(preview.getPreviewHeight() / divisor);
                     divisor *= 2;
-                } while (preview.getPreviewWidth() * preview.getPreviewHeight() / divisor / divisor > 10_000_000);
+                } while (preview.getPreviewWidth() * preview.getPreviewHeight() > 10_000_000);
             }
 
             return preview;
@@ -1537,7 +1537,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10))).into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
             } else {
                 if (mImageViewWidth > preview.getPreviewWidth()) {
-                    imageRequestBuilder.override(Target.SIZE_ORIGINAL).into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
+                    imageRequestBuilder.override(preview.getPreviewWidth(), preview.getPreviewHeight()).into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
                 } else {
                     imageRequestBuilder.into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
                 }
@@ -1569,7 +1569,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         .into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
             } else {
                 if (mImageViewWidth > preview.getPreviewWidth()) {
-                    imageRequestBuilder.override(Target.SIZE_ORIGINAL).into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
+                    imageRequestBuilder.override(preview.getPreviewWidth(), preview.getPreviewHeight()).into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
                 } else {
                     imageRequestBuilder.into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
                 }
@@ -1601,7 +1601,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         .into(((PostDetailLinkViewHolder) holder).mImageView);
             } else {
                 if (mImageViewWidth > preview.getPreviewWidth()) {
-                    imageRequestBuilder.override(Target.SIZE_ORIGINAL).into(((PostDetailLinkViewHolder) holder).mImageView);
+                    imageRequestBuilder.override(preview.getPreviewWidth(), preview.getPreviewHeight()).into(((PostDetailLinkViewHolder) holder).mImageView);
                 } else {
                     imageRequestBuilder.into(((PostDetailLinkViewHolder) holder).mImageView);
                 }
@@ -1632,7 +1632,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10))).into(((PostDetailGalleryViewHolder) holder).mImageView);
             } else {
                 if (mImageViewWidth > preview.getPreviewWidth()) {
-                    imageRequestBuilder.override(Target.SIZE_ORIGINAL).into(((PostDetailGalleryViewHolder) holder).mImageView);
+                    imageRequestBuilder.override(preview.getPreviewWidth(), preview.getPreviewHeight()).into(((PostDetailGalleryViewHolder) holder).mImageView);
                 } else {
                     imageRequestBuilder.into(((PostDetailGalleryViewHolder) holder).mImageView);
                 }

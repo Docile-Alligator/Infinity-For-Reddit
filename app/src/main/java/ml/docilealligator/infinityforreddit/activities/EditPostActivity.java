@@ -53,7 +53,6 @@ public class EditPostActivity extends BaseActivity {
     static final String EXTRA_TITLE = "ET";
     static final String EXTRA_CONTENT = "EC";
     static final String EXTRA_FULLNAME = "EF";
-    static final String EXTRA_ACCESS_TOKEN = "EAT";
 
     @BindView(R.id.coordinator_layout_edit_post_activity)
     CoordinatorLayout coordinatorLayout;
@@ -75,6 +74,9 @@ public class EditPostActivity extends BaseActivity {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private String mFullName;
@@ -110,7 +112,7 @@ public class EditPostActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mFullName = getIntent().getStringExtra(EXTRA_FULLNAME);
-        mAccessToken = getIntent().getStringExtra(EXTRA_ACCESS_TOKEN);
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         titleTextView.setText(getIntent().getStringExtra(EXTRA_TITLE));
         mPostContent = getIntent().getStringExtra(EXTRA_CONTENT);
         contentEditText.setText(mPostContent);

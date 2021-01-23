@@ -1612,7 +1612,6 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                 return true;
             case R.id.action_edit_view_post_detail_activity:
                 Intent editPostIntent = new Intent(this, EditPostActivity.class);
-                editPostIntent.putExtra(EditPostActivity.EXTRA_ACCESS_TOKEN, mAccessToken);
                 editPostIntent.putExtra(EditPostActivity.EXTRA_FULLNAME, mPost.getFullName());
                 editPostIntent.putExtra(EditPostActivity.EXTRA_TITLE, mPost.getTitle());
                 editPostIntent.putExtra(EditPostActivity.EXTRA_CONTENT, mPost.getSelfText());

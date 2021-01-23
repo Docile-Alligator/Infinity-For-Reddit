@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -122,8 +123,8 @@ public class GiveAwardActivity extends BaseActivity {
                     .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
                         boolean isAnonymous = switchMaterial.isChecked();
 
-                        GiveAward.giveAwardV2(mOauthRetrofit, mAccessToken, thingFullname, award.getId(),
-                                isAnonymous, new GiveAward.GiveAwardListener() {
+                        GiveAward.giveAwardV2(mExecutor, new Handler(), mOauthRetrofit, mAccessToken,
+                                thingFullname, award.getId(), isAnonymous, new GiveAward.GiveAwardListener() {
                                     @Override
                                     public void success(String awardsHTML, int awardCount) {
                                         Intent data = new Intent();

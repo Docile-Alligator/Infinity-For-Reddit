@@ -39,6 +39,7 @@ import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,7 +50,6 @@ public class EditCommentActivity extends BaseActivity {
 
     public static final String EXTRA_CONTENT = "EC";
     public static final String EXTRA_FULLNAME = "EF";
-    public static final String EXTRA_ACCESS_TOKEN = "EAT";
     public static final String EXTRA_POSITION = "EP";
 
     static final String EXTRA_EDITED_COMMENT_CONTENT = "EECC";
@@ -71,6 +71,9 @@ public class EditCommentActivity extends BaseActivity {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private String mFullName;
@@ -102,7 +105,7 @@ public class EditCommentActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mFullName = getIntent().getStringExtra(EXTRA_FULLNAME);
-        mAccessToken = getIntent().getStringExtra(EXTRA_ACCESS_TOKEN);
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         mCommentContent = getIntent().getStringExtra(EXTRA_CONTENT);
         contentEditText.setText(mCommentContent);
 
