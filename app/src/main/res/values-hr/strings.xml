@@ -398,7 +398,7 @@ Možda ne radi na Androidu 11"</string>
     <string name="settings_version_title">"Infinity For Reddit"</string>
     <string name="settings_version_summary">"Verzija %s"</string>
     <string name="settings_category_customization_title">"Prilagođavanje"</string>
-    <string name="settings_customize_light_theme_title">"Svjetla tema"</string>
+    <string name="settings_customize_light_theme_title">"Svijetla tema"</string>
     <string name="settings_customize_dark_theme_title">"Tamna tema"</string>
     <string name="settings_customize_amoled_theme_title">"Amoled tema"</string>
     <string name="settings_manage_themes_title">"Upravljaj temama"</string>
@@ -481,12 +481,11 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="copy_all_markdown">"Kopiraj sav Markdown"</string>
     <string name="copy_all_raw_text">"Kopiraj sav obični tekst"</string>
     <string name="exit_app">"Izlaz?"</string>
-    <string name="light_theme">"Svjetla tema"</string>
+    <string name="light_theme">"Svijetla tema"</string>
     <string name="dark_theme">"Tamna tema"</string>
     <string name="multi_reddit_name_hint">"Ime (max. 50 znakova)"</string>
     <string name="multi_reddit_description_hint">"Opis"</string>
     <string name="private_multi_reddit">"Privatno"</string>
-    <string name="select_subreddits_and_users">"Odaberi podreddite"</string>
     <string name="no_multi_reddit_name">"Gdje je ime?"</string>
     <string name="create_multi_reddit_failed">"Nije moguće stvoriti ovaj multireddit"</string>
     <string name="duplicate_multi_reddit">"Ovaj multireddit već postoji"</string>
@@ -503,7 +502,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="save_image_first">"Spremanje slike. Molim pričekajte."</string>
     <string name="save_gif_first">"Spremanje gif-a. Molim pričekajte."</string>
     <string name="theme_name_description">"Dodirnite za promjenu imena teme."</string>
-    <string name="theme_item_is_light_theme">"Postavi kao Svjetlu temu."</string>
+    <string name="theme_item_is_light_theme">"Postavi kao Svijetlu temu."</string>
     <string name="theme_item_is_dark_theme">"Postavi kao Tamnu temu."</string>
     <string name="theme_item_is_amoled_theme">"Postavi kao Amoled temu."</string>
     <string name="theme_item_color_primary">"Primarna boja"</string>
@@ -512,7 +511,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_color_primary_dark_detail">"Primijenjeno na: Statusnu traku"</string>
     <string name="theme_item_color_accent">"Boja naglaska"</string>
     <string name="theme_item_color_accent_detail">"Primijenjeno na: Traku napretka, itd."</string>
-    <string name="theme_item_color_primary_light_theme">"Primarna boja Svijetla tema"</string>
+    <string name="theme_item_color_primary_light_theme">"Primarna boja Svijetle teme"</string>
     <string name="theme_item_color_primary_light_theme_detail">"Primijenjeno na: Pozadinu plutajućeg akcijskog gumba i gumba"</string>
     <string name="theme_item_primary_text_color">"Boja primarnog teksta"</string>
     <string name="theme_item_primary_text_color_detail">"Primijenjeno na: Primarni tekst"</string>
@@ -853,6 +852,8 @@ Reddit videi su niže rezolucije."</string>
     <string name="change_post_layout">"Promjeni raspored objava"</string>
     <string name="give_award_dialog_title">"Nagraditi?"</string>
     <string name="anonymous">"Anonimno"</string>
+
+    <!-- Fuzzy -->
     <string name="give_award_error_message">"Kod: %1$d/
 Poruka: %2$s"</string>
     <string name="give_award_success">"Nagrađeno"</string>
@@ -863,7 +864,11 @@ Poruka: %2$s"</string>
     <string name="this_user_has_nsfw_content">"Ovaj korisnik ima NSFW sadržaj"</string>
     <string name="dismiss">"Odbaci"</string>
     <string name="leave">"Napusti"</string>
+
+    <!-- Fuzzy -->
     <string name="go_to_subreddit">"Idi na podreddit"</string>
+
+    <!-- Fuzzy -->
     <string name="go_to_user">"Idi na profil korisnika"</string>
     <string name="go_to_thing_hint">"Ime"</string>
     <string name="random">"Nasumično"</string>
@@ -877,9 +882,17 @@ Poruka: %2$s"</string>
     <string name="settings_miscellaneous_title">"Razno"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_title">"Poštuj tip sortiranja komentara preporučen na podredditu"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_summary">"Tip sortiranja komentara neće biti spremljen"</string>
-    <string name="settings_post_filter_title">"Filter"</string>
     <string name="settings_subreddit_filter_category">"Sakrij podreddite"</string>
     <string name="settings_subreddit_filter_popular_and_all">"U r/popular i r/all"</string>
     <string name="settings_credits_ufo_capturing_animation_title">"UFO Capturing Animation"</string>
     <string name="select_video_quality">"Odaberi kvalitetu videa"</string>
+    <string name="settings_swipe_action_haptic_feedback_title">"Haptična povratna informacija"</string>
+    <string name="settings_hide_subreddit_description_title">"Sakri opis podreddita"</string>
+    <string name="settings_disable_image_preview_title">"Onemogući predpregled slike u "</string>
+    <string name="settings_swipe_action_swipe_right_title">"Prelazak prstom u desno"</string>
+    <string name="theme_item_no_preview_post_type_icon_tint">"Boja ikone objave bez predpregleda"</string>
+    <string name="theme_item_no_preview_post_type_icon_tint_detail">"Primjenjeno na: Ikonu koja ukazuje vrstu objave kada nema predpregleda"</string>
+    <string name="theme_item_no_preview_post_type_background_color">"Boja pozadine objave bez predpregleda"</string>
+    <string name="theme_item_no_preview_post_type_background_color_detail">"Primjenjeno na: Zamjena koja prikazuje vrstu objave kada nema predpregleda"</string>
+    <string name="settings_language_title">"Jezik"</string>
 </resources>
