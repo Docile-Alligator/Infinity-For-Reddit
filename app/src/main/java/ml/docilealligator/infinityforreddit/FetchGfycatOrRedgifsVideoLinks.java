@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -34,6 +35,7 @@ public class FetchGfycatOrRedgifsVideoLinks {
         gfycatRetrofit.create(GfycatAPI.class).getGfycatData(gfycatId).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                Log.i("asdfasf", "s " + response.body());
                 if (response.isSuccessful()) {
                     new ParseGfycatVideoLinksAsyncTask(response.body(), fetchGfycatOrRedgifsVideoLinksListener).execute();
                 } else {
@@ -100,16 +102,22 @@ public class FetchGfycatOrRedgifsVideoLinks {
         protected Void doInBackground(Void... voids) {
             try {
                 JSONObject jsonObject = new JSONObject(response);
-				webm = jsonObject.getJSONObject(JSONUtils.GFY_ITEM_KEY)
-                            .getJSONObject(JSONUtils.CONTENT_URLS_KEY)
-                            .getJSONObject(JSONUtils.WEBM_KEY)
-                            .getString(JSONUtils.URL_KEY);
                 mp4 = jsonObject.getJSONObject(JSONUtils.GFY_ITEM_KEY).has(JSONUtils.MP4_URL_KEY) ?
                         jsonObject.getJSONObject(JSONUtils.GFY_ITEM_KEY).getString(JSONUtils.MP4_URL_KEY)
                         : jsonObject.getJSONObject(JSONUtils.GFY_ITEM_KEY)
                         .getJSONObject(JSONUtils.CONTENT_URLS_KEY)
                         .getJSONObject(JSONUtils.MP4_KEY)
                         .getString(JSONUtils.URL_KEY);
+                if (jsonObject.getJSONObject(JSONUtils.GFY_ITEM_KEY).has(JSONUtils.WEBM_URL_KEY)) {
+                    webm = jsonObject.getJSONObject(JSONUtils.GFY_ITEM_KEY).getString(JSONUtils.WEBM_URL_KEY);
+                } else if (jsonObject.getJSONObject(JSONUtils.GFY_ITEM_KEY).getJSONObject(JSONUtils.CONTENT_URLS_KEY).has(JSONUtils.WEBM_KEY)) {
+                    webm = jsonObject.getJSONObject(JSONUtils.GFY_ITEM_KEY)
+                            .getJSONObject(JSONUtils.CONTENT_URLS_KEY)
+                            .getJSONObject(JSONUtils.WEBM_KEY)
+                            .getString(JSONUtils.URL_KEY);
+                } else {
+                    webm = mp4;
+                }
             } catch (JSONException e) {
                 e.printStackTrace();
                 parseFailed = true;
