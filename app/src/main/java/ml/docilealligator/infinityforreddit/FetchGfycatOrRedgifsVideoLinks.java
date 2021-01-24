@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 
@@ -35,7 +34,6 @@ public class FetchGfycatOrRedgifsVideoLinks {
         gfycatRetrofit.create(GfycatAPI.class).getGfycatData(gfycatId).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                Log.i("asdfasf", "s " + response.body());
                 if (response.isSuccessful()) {
                     new ParseGfycatVideoLinksAsyncTask(response.body(), fetchGfycatOrRedgifsVideoLinksListener).execute();
                 } else {
