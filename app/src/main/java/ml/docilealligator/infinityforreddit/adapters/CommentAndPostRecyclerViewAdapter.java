@@ -11,6 +11,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -59,6 +60,7 @@ import org.commonmark.ext.gfm.tables.TableBlock;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -100,8 +102,8 @@ import ml.docilealligator.infinityforreddit.activities.ViewRedditGalleryActivity
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity;
-import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIconAsyncTask;
-import ml.docilealligator.infinityforreddit.asynctasks.LoadUserDataAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
+import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CommentMoreBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.ShareLinkBottomSheetFragment;
@@ -141,6 +143,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private static final int VIEW_TYPE_VIEW_ALL_COMMENTS = 17;
 
     private AppCompatActivity mActivity;
+    private Executor mExecutor;
     private Retrofit mRetrofit;
     private Retrofit mOauthRetrofit;
     private Retrofit mGfycatRetrofit;
@@ -235,7 +238,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private float mScale;
     private ExoCreator mExoCreator;
 
-    public CommentAndPostRecyclerViewAdapter(AppCompatActivity activity, CustomThemeWrapper customThemeWrapper,
+    public CommentAndPostRecyclerViewAdapter(AppCompatActivity activity, Executor executor, CustomThemeWrapper customThemeWrapper,
                                              Retrofit retrofit, Retrofit oauthRetrofit, Retrofit gfycatRetrofit,
                                              Retrofit redgifsRetrofit,
                                              RedditDataRoomDatabase redditDataRoomDatabase, RequestManager glide,
@@ -246,6 +249,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                              SharedPreferences nsfwAndSpoilerSharedPreferences, ExoCreator exoCreator,
                                              CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
         mActivity = activity;
+        mExecutor = executor;
         mRetrofit = retrofit;
         mOauthRetrofit = oauthRetrofit;
         mGfycatRetrofit = gfycatRetrofit;
@@ -731,7 +735,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             if (mPost.getSubredditNamePrefixed().startsWith("u/")) {
                 if (mPost.getAuthorIconUrl() == null) {
                     String authorName = mPost.getAuthor().equals("[deleted]") ? mPost.getSubredditNamePrefixed().substring(2) : mPost.getAuthor();
-                    new LoadUserDataAsyncTask(mRedditDataRoomDatabase.userDao(), authorName, mOauthRetrofit, iconImageUrl -> {
+                    LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, authorName, mOauthRetrofit, iconImageUrl -> {
                         if (mActivity != null && getItemCount() > 0) {
                             if (iconImageUrl == null || iconImageUrl.equals("")) {
                                 mGlide.load(R.drawable.subreddit_default_icon)
@@ -749,7 +753,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                 mPost.setAuthorIconUrl(iconImageUrl);
                             }
                         }
-                    }).execute();
+                    });
                 } else if (!mPost.getAuthorIconUrl().equals("")) {
                     mGlide.load(mPost.getAuthorIconUrl())
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -763,7 +767,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 }
             } else {
                 if (mPost.getSubredditIconUrl() == null) {
-                    new LoadSubredditIconAsyncTask(
+                    LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(),
                             mRedditDataRoomDatabase, mPost.getSubredditNamePrefixed().substring(2),
                             mRetrofit, iconImageUrl -> {
                         if (iconImageUrl == null || iconImageUrl.equals("")) {
@@ -779,7 +783,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         }
 
                         mPost.setSubredditIconUrl(iconImageUrl);
-                    }).execute();
+                    });
                 } else if (!mPost.getSubredditIconUrl().equals("")) {
                     mGlide.load(mPost.getSubredditIconUrl())
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))

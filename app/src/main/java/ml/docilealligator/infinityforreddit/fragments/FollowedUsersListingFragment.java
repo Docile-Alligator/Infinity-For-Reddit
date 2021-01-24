@@ -24,20 +24,22 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
+import java.util.concurrent.Executor;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingActivity;
-import ml.docilealligator.infinityforreddit.adapters.FollowedUsersRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingActivity;
+import ml.docilealligator.infinityforreddit.adapters.FollowedUsersRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserViewModel;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
@@ -70,7 +72,9 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
-    CustomThemeWrapper customThemeWrapper;
+    CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     SubscribedUserViewModel mSubscribedUserViewModel;
     private Activity mActivity;
     private RequestManager mGlide;
@@ -108,7 +112,7 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
         mLinearLayoutManager = new LinearLayoutManager(mActivity);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         FollowedUsersRecyclerViewAdapter adapter = new FollowedUsersRecyclerViewAdapter(mActivity,
-                mOauthRetrofit, mRedditDataRoomDatabase, customThemeWrapper,
+                mExecutor, mOauthRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper,
                 getArguments().getString(EXTRA_ACCESS_TOKEN));
         mRecyclerView.setAdapter(adapter);
         new FastScrollerBuilder(mRecyclerView).build();
@@ -117,7 +121,7 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
                 new SubscribedUserViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, getArguments().getString(EXTRA_ACCOUNT_NAME)))
                 .get(SubscribedUserViewModel.class);
 
-        mSubscribedUserViewModel.getAllSubscribedUsers().observe(this, subscribedUserData -> {
+        mSubscribedUserViewModel.getAllSubscribedUsers().observe(getViewLifecycleOwner(), subscribedUserData -> {
             mSwipeRefreshLayout.setRefreshing(false);
             if (subscribedUserData == null || subscribedUserData.size() == 0) {
                 mRecyclerView.setVisibility(View.GONE);
@@ -131,7 +135,7 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
             adapter.setSubscribedUsers(subscribedUserData);
         });
 
-        mSubscribedUserViewModel.getAllFavoriteSubscribedUsers().observe(this, favoriteSubscribedUserData -> {
+        mSubscribedUserViewModel.getAllFavoriteSubscribedUsers().observe(getViewLifecycleOwner(), favoriteSubscribedUserData -> {
             mSwipeRefreshLayout.setRefreshing(false);
             if (favoriteSubscribedUserData != null && favoriteSubscribedUserData.size() > 0) {
                 mLinearLayout.setVisibility(View.GONE);
@@ -159,12 +163,12 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
     public void applyTheme() {
         if (mActivity instanceof SubscribedThingListingActivity) {
             mSwipeRefreshLayout.setOnRefreshListener(() -> ((SubscribedThingListingActivity) mActivity).loadSubscriptions(true));
-            mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(customThemeWrapper.getCircularProgressBarBackground());
-            mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent());
+            mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
+            mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         } else {
             mSwipeRefreshLayout.setEnabled(false);
         }
-        mErrorTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
+        mErrorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
     }
 
     public void goBackToTop() {

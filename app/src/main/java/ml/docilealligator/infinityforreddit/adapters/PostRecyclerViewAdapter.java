@@ -10,7 +10,7 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,6 +57,7 @@ import org.greenrobot.eventbus.EventBus;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executor;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -85,8 +86,8 @@ import ml.docilealligator.infinityforreddit.activities.ViewRedditGalleryActivity
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity;
-import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIconAsyncTask;
-import ml.docilealligator.infinityforreddit.asynctasks.LoadUserDataAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
+import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.ShareLinkBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
@@ -127,6 +128,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         }
     };
     private AppCompatActivity mActivity;
+    private Executor mExecutor;
     private Retrofit mOauthRetrofit;
     private Retrofit mRetrofit;
     private Retrofit mGfycatRetrofit;
@@ -205,7 +207,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private ExoCreator mExoCreator;
     private Callback mCallback;
 
-    public PostRecyclerViewAdapter(AppCompatActivity activity, Retrofit oauthRetrofit, Retrofit retrofit,
+    public PostRecyclerViewAdapter(AppCompatActivity activity, Executor executor, Retrofit oauthRetrofit, Retrofit retrofit,
                                    Retrofit gfycatRetrofit, Retrofit redgifsRetrofit,
                                    RedditDataRoomDatabase redditDataRoomDatabase,
                                    CustomThemeWrapper customThemeWrapper, Locale locale, int imageViewWidth,
@@ -216,6 +218,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         super(DIFF_CALLBACK);
         if (activity != null) {
             mActivity = activity;
+            mExecutor = executor;
             mOauthRetrofit = oauthRetrofit;
             mRetrofit = retrofit;
             mGfycatRetrofit = gfycatRetrofit;
@@ -433,7 +436,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 if (mDisplaySubredditName) {
                     if (authorPrefixed.equals(subredditNamePrefixed)) {
                         if (post.getAuthorIconUrl() == null) {
-                            new LoadUserDataAsyncTask(mUserDao, post.getAuthor(), mRetrofit, iconImageUrl -> {
+                            LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, post.getAuthor(),
+                                    mRetrofit, iconImageUrl -> {
                                 if (mActivity != null && getItemCount() > 0) {
                                     if (iconImageUrl == null || iconImageUrl.equals("")) {
                                         mGlide.load(R.drawable.subreddit_default_icon)
@@ -451,7 +455,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                         post.setAuthorIconUrl(iconImageUrl);
                                     }
                                 }
-                            }).execute();
+                            });
                         } else if (!post.getAuthorIconUrl().equals("")) {
                             mGlide.load(post.getAuthorIconUrl())
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -465,7 +469,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         }
                     } else {
                         if (post.getSubredditIconUrl() == null) {
-                            new LoadSubredditIconAsyncTask(mRedditDataRoomDatabase, subredditName, mRetrofit,
+                            LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase,
+                                    subredditName, mRetrofit,
                                     iconImageUrl -> {
                                         if (mActivity != null && getItemCount() > 0) {
                                             if (iconImageUrl == null || iconImageUrl.equals("")) {
@@ -484,7 +489,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                                 post.setSubredditIconUrl(iconImageUrl);
                                             }
                                         }
-                                    }).execute();
+                                    });
                         } else if (!post.getSubredditIconUrl().equals("")) {
                             mGlide.load(post.getSubredditIconUrl())
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -500,7 +505,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 } else {
                     if (post.getAuthorIconUrl() == null) {
                         String authorName = post.getAuthor().equals("[deleted]") ? post.getSubredditNamePrefixed().substring(2) : post.getAuthor();
-                        new LoadUserDataAsyncTask(mUserDao, authorName, mRetrofit, iconImageUrl -> {
+                        LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, authorName, mRetrofit, iconImageUrl -> {
                             if (mActivity != null && getItemCount() > 0) {
                                 if (iconImageUrl == null || iconImageUrl.equals("")) {
                                     mGlide.load(R.drawable.subreddit_default_icon)
@@ -518,7 +523,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     post.setAuthorIconUrl(iconImageUrl);
                                 }
                             }
-                        }).execute();
+                        });
                     } else if (!post.getAuthorIconUrl().equals("")) {
                         mGlide.load(post.getAuthorIconUrl())
                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -762,7 +767,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 if (mDisplaySubredditName) {
                     if (authorPrefixed.equals(subredditNamePrefixed)) {
                         if (post.getAuthorIconUrl() == null) {
-                            new LoadUserDataAsyncTask(mUserDao, post.getAuthor(), mRetrofit, iconImageUrl -> {
+                            LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, post.getAuthor(), mRetrofit, iconImageUrl -> {
                                 if (mActivity != null && getItemCount() > 0) {
                                     if (iconImageUrl == null || iconImageUrl.equals("")) {
                                         mGlide.load(R.drawable.subreddit_default_icon)
@@ -780,7 +785,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                         post.setAuthorIconUrl(iconImageUrl);
                                     }
                                 }
-                            }).execute();
+                            });
                         } else if (!post.getAuthorIconUrl().equals("")) {
                             mGlide.load(post.getAuthorIconUrl())
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -794,7 +799,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         }
                     } else {
                         if (post.getSubredditIconUrl() == null) {
-                            new LoadSubredditIconAsyncTask(mRedditDataRoomDatabase, subredditName, mRetrofit,
+                            LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase,
+                                    subredditName, mRetrofit,
                                     iconImageUrl -> {
                                         if (mActivity != null && getItemCount() > 0) {
                                             if (iconImageUrl == null || iconImageUrl.equals("")) {
@@ -813,7 +819,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                                 post.setSubredditIconUrl(iconImageUrl);
                                             }
                                         }
-                                    }).execute();
+                                    });
                         } else if (!post.getSubredditIconUrl().equals("")) {
                             mGlide.load(post.getSubredditIconUrl())
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -832,7 +838,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 } else {
                     if (post.getAuthorIconUrl() == null) {
                         String authorName = post.getAuthor().equals("[deleted]") ? post.getSubredditNamePrefixed().substring(2) : post.getAuthor();
-                        new LoadUserDataAsyncTask(mUserDao, authorName, mRetrofit, iconImageUrl -> {
+                        LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, authorName, mRetrofit, iconImageUrl -> {
                             if (mActivity != null && getItemCount() > 0) {
                                 if (iconImageUrl == null || iconImageUrl.equals("")) {
                                     mGlide.load(R.drawable.subreddit_default_icon)
@@ -850,7 +856,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     post.setAuthorIconUrl(iconImageUrl);
                                 }
                             }
-                        }).execute();
+                        });
                     } else if (!post.getAuthorIconUrl().equals("")) {
                         mGlide.load(post.getAuthorIconUrl())
                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -1068,7 +1074,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             }
 
             if (preview.getPreviewWidth() * preview.getPreviewHeight() > 10_000_000) {
-                Log.i("afasfasdf", "ssss " + preview.getPreviewUrl());
                 int divisor = 2;
                 do {
                     preview.setPreviewWidth(preview.getPreviewWidth() / divisor);
@@ -1076,8 +1081,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     divisor *= 2;
                 } while (preview.getPreviewWidth() * preview.getPreviewHeight() > 10_000_000);
             }
-
-            Log.i("afasfasdf", "s " + preview.getPreviewWidth() * preview.getPreviewHeight() + " " + preview.getPreviewHeight() + " " + preview.getPreviewWidth() + " " + preview.getPreviewUrl());
             return preview;
         }
 

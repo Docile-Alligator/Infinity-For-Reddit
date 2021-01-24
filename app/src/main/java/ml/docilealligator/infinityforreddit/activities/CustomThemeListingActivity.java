@@ -38,8 +38,8 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.adapters.CustomThemeListingRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.asynctasks.ChangeThemeNameAsyncTask;
-import ml.docilealligator.infinityforreddit.asynctasks.DeleteThemeAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.ChangeThemeName;
+import ml.docilealligator.infinityforreddit.asynctasks.DeleteTheme;
 import ml.docilealligator.infinityforreddit.asynctasks.GetCustomTheme;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertCustomTheme;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CreateThemeBottomSheetFragment;
@@ -175,7 +175,8 @@ public class CustomThemeListingActivity extends BaseActivity implements
                     if (imm != null) {
                         imm.hideSoftInputFromWindow(themeNameEditText.getWindowToken(), 0);
                     }
-                    new ChangeThemeNameAsyncTask(redditDataRoomDatabase, oldThemeName, themeNameEditText.getText().toString()).execute();
+                    ChangeThemeName.changeThemeName(executor, redditDataRoomDatabase, oldThemeName,
+                            themeNameEditText.getText().toString());
                 })
                 .setNegativeButton(R.string.cancel, null)
                 .setOnDismissListener(dialogInterface -> {
@@ -212,7 +213,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
                 .setTitle(R.string.delete_theme)
                 .setMessage(getString(R.string.delete_theme_dialog_message, themeName))
                 .setPositiveButton(R.string.yes, (dialogInterface, i)
-                        -> new DeleteThemeAsyncTask(redditDataRoomDatabase, themeName, (isLightTheme, isDarkTheme, isAmoledTheme) -> {
+                        -> DeleteTheme.deleteTheme(executor, new Handler(), redditDataRoomDatabase, themeName, (isLightTheme, isDarkTheme, isAmoledTheme) -> {
                             if (isLightTheme) {
                                 CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(
                                         CustomThemeWrapper.getIndigo(CustomThemeListingActivity.this), lightThemeSharedPreferences);
@@ -226,7 +227,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
                                         CustomThemeWrapper.getIndigoAmoled(CustomThemeListingActivity.this), amoledThemeSharedPreferences);
                             }
                             EventBus.getDefault().post(new RecreateActivityEvent());
-                        }).execute())
+                        }))
                 .setNegativeButton(R.string.no, null)
                 .show();
     }

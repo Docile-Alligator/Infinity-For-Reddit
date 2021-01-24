@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +40,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
     private static final int VIEW_TYPE_SUBREDDIT = 3;
 
     private Context mContext;
+    private Executor mExecutor;
     private Retrofit mOauthRetrofit;
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
     private List<SubscribedSubredditData> mSubscribedSubredditData;
@@ -53,11 +56,12 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
     private int primaryTextColor;
     private int secondaryTextColor;
 
-    public SubscribedSubredditsRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
+    public SubscribedSubredditsRecyclerViewAdapter(Context context, Executor executor, Retrofit oauthRetrofit,
                                                    RedditDataRoomDatabase redditDataRoomDatabase,
                                                    CustomThemeWrapper customThemeWrapper,
                                                    String accessToken) {
         mContext = context;
+        mExecutor = executor;
         glide = Glide.with(context);
         mOauthRetrofit = oauthRetrofit;
         mRedditDataRoomDatabase = redditDataRoomDatabase;
@@ -66,12 +70,12 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
         secondaryTextColor = customThemeWrapper.getSecondaryTextColor();
     }
 
-    public SubscribedSubredditsRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
+    public SubscribedSubredditsRecyclerViewAdapter(Context context, Executor executor, Retrofit oauthRetrofit,
                                                    RedditDataRoomDatabase redditDataRoomDatabase,
                                                    CustomThemeWrapper customThemeWrapper,
                                                    String accessToken, boolean hasClearSelectionRow,
                                                    ItemClickListener itemClickListener) {
-        this(context, oauthRetrofit, redditDataRoomDatabase, customThemeWrapper, accessToken);
+        this(context, executor, oauthRetrofit, redditDataRoomDatabase, customThemeWrapper, accessToken);
         this.hasClearSelectionRow = hasClearSelectionRow;
         this.itemClickListener = itemClickListener;
     }
@@ -190,7 +194,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                     if(mSubscribedSubredditData.get(viewHolder.getAdapterPosition() - offset).isFavorite()) {
                         ((SubredditViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
                         mSubscribedSubredditData.get(viewHolder.getAdapterPosition() - offset).setFavorite(false);
-                        FavoriteThing.unfavoriteSubreddit(mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
+                        FavoriteThing.unfavoriteSubreddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
                                 mSubscribedSubredditData.get(viewHolder.getAdapterPosition() - offset),
                                 new FavoriteThing.FavoriteThingListener() {
                                     @Override
@@ -215,7 +219,8 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                     } else {
                         ((SubredditViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
                         mSubscribedSubredditData.get(viewHolder.getAdapterPosition() - offset).setFavorite(true);
-                        FavoriteThing.favoriteSubreddit(mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
+                        FavoriteThing.favoriteSubreddit(mExecutor, new Handler(), mOauthRetrofit,
+                                mRedditDataRoomDatabase, accessToken,
                                 mSubscribedSubredditData.get(viewHolder.getAdapterPosition() - offset),
                                 new FavoriteThing.FavoriteThingListener() {
                                     @Override
@@ -288,7 +293,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                 if(mFavoriteSubscribedSubredditData.get(viewHolder.getAdapterPosition() - offset).isFavorite()) {
                     ((FavoriteSubredditViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
                     mFavoriteSubscribedSubredditData.get(viewHolder.getAdapterPosition() - offset).setFavorite(false);
-                    FavoriteThing.unfavoriteSubreddit(mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
+                    FavoriteThing.unfavoriteSubreddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
                             mFavoriteSubscribedSubredditData.get(viewHolder.getAdapterPosition() - offset),
                             new FavoriteThing.FavoriteThingListener() {
                                 @Override
@@ -313,7 +318,7 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                 } else {
                     ((FavoriteSubredditViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
                     mFavoriteSubscribedSubredditData.get(viewHolder.getAdapterPosition() - offset).setFavorite(true);
-                    FavoriteThing.favoriteSubreddit(mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
+                    FavoriteThing.favoriteSubreddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
                             mFavoriteSubscribedSubredditData.get(viewHolder.getAdapterPosition() - offset),
                             new FavoriteThing.FavoriteThingListener() {
                                 @Override

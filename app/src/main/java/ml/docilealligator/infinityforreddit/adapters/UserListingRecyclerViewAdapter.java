@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,14 +23,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.util.concurrent.Executor;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.asynctasks.CheckIsFollowingUserAsyncTask;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.asynctasks.CheckIsFollowingUser;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserDao;
 import ml.docilealligator.infinityforreddit.user.UserData;
 import ml.docilealligator.infinityforreddit.user.UserFollowing;
 import pl.droidsonroids.gif.GifImageView;
@@ -52,11 +55,12 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
     };
     private RequestManager glide;
     private Context context;
+    private Executor executor;
     private Retrofit oauthRetrofit;
     private Retrofit retrofit;
     private String accessToken;
     private String accountName;
-    private SubscribedUserDao subscribedUserDao;
+    private RedditDataRoomDatabase redditDataRoomDatabase;
 
     private int primaryTextColor;
     private int buttonTextColor;
@@ -67,17 +71,18 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
     private NetworkState networkState;
     private final Callback callback;
 
-    public UserListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, Retrofit retrofit,
+    public UserListingRecyclerViewAdapter(Context context, Executor executor, Retrofit oauthRetrofit, Retrofit retrofit,
                                           CustomThemeWrapper customThemeWrapper, String accessToken,
-                                          String accountName, SubscribedUserDao subscribedUserDao,
+                                          String accountName, RedditDataRoomDatabase redditDataRoomDatabase,
                                           Callback callback) {
         super(DIFF_CALLBACK);
         this.context = context;
+        this.executor = executor;
         this.oauthRetrofit = oauthRetrofit;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
-        this.subscribedUserDao = subscribedUserDao;
+        this.redditDataRoomDatabase = redditDataRoomDatabase;
         this.callback = callback;
         glide = Glide.with(context);
         primaryTextColor = customThemeWrapper.getPrimaryTextColor();
@@ -125,8 +130,8 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
 
                 ((UserListingRecyclerViewAdapter.DataViewHolder) holder).userNameTextView.setText(userData.getName());
 
-                new CheckIsFollowingUserAsyncTask(subscribedUserDao, userData.getName(), accountName,
-                        new CheckIsFollowingUserAsyncTask.CheckIsFollowingUserListener() {
+                CheckIsFollowingUser.checkIsFollowingUser(executor, new Handler(), redditDataRoomDatabase,
+                        userData.getName(), accountName, new CheckIsFollowingUser.CheckIsFollowingUserListener() {
                             @Override
                             public void isSubscribed() {
                                 ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
@@ -137,7 +142,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
                                 ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setVisibility(View.VISIBLE);
                                 ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setOnClickListener(view -> {
                                     UserFollowing.followUser(oauthRetrofit, retrofit,
-                                            accessToken, userData.getName(), accountName, subscribedUserDao,
+                                            accessToken, userData.getName(), accountName, redditDataRoomDatabase,
                                             new UserFollowing.UserFollowingListener() {
                                                 @Override
                                                 public void onUserFollowingSuccess() {
@@ -152,7 +157,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
                                             });
                                 });
                             }
-                        }).execute();
+                        });
             }
         }
     }

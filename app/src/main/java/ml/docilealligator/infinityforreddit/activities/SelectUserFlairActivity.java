@@ -22,7 +22,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
-import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -33,7 +32,6 @@ import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.FetchUserFlairs;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SelectUserFlair;
 import ml.docilealligator.infinityforreddit.UserFlair;
 import ml.docilealligator.infinityforreddit.adapters.UserFlairRecyclerViewAdapter;
@@ -58,8 +56,6 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
-    RedditDataRoomDatabase mRedditDataRoomDatabase;
-    @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
@@ -67,8 +63,6 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
-    @Inject
-    Executor mExecutor;
     private LinearLayoutManager mLinearLayoutManager;
     private boolean mNullAccessToken = false;
     private String mAccessToken;

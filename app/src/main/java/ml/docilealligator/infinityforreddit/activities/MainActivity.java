@@ -80,7 +80,7 @@ import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.account.AccountViewModel;
 import ml.docilealligator.infinityforreddit.adapters.NavigationDrawerRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.asynctasks.InsertSubscribedThingsAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.InsertSubscribedThings;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchToAnonymousMode;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
@@ -897,13 +897,15 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         public void onFetchSubscribedThingSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                                                   ArrayList<SubscribedUserData> subscribedUserData,
                                                                   ArrayList<SubredditData> subredditData) {
-                            new InsertSubscribedThingsAsyncTask(
+                            InsertSubscribedThings.insertSubscribedThings(
+                                    mExecutor,
+                                    new Handler(),
                                     mRedditDataRoomDatabase,
                                     mAccountName,
                                     subscribedSubredditData,
                                     subscribedUserData,
                                     subredditData,
-                                    () -> mFetchSubscriptionsSuccess = true).execute();
+                                    () -> mFetchSubscriptionsSuccess = true);
                         }
 
                         @Override

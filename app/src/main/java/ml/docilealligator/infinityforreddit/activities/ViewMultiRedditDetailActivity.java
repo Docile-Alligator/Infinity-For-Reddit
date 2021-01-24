@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -264,7 +265,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                     .setTitle(R.string.delete)
                     .setMessage(R.string.delete_multi_reddit_dialog_message)
                     .setPositiveButton(R.string.delete, (dialogInterface, i)
-                            -> DeleteMultiReddit.deleteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase,
+                            -> DeleteMultiReddit.deleteMultiReddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase,
                             mAccessToken, mAccountName, multiPath, new DeleteMultiReddit.DeleteMultiRedditListener() {
                                 @Override
                                 public void success() {

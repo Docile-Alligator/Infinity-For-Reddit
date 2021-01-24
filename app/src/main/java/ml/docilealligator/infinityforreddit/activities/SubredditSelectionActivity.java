@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -36,7 +37,7 @@ import ml.docilealligator.infinityforreddit.FetchSubscribedThing;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.asynctasks.InsertSubscribedThingsAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.InsertSubscribedThings;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.SubscribedSubredditsListingFragment;
@@ -187,13 +188,15 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
                         public void onFetchSubscribedThingSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                                                   ArrayList<SubscribedUserData> subscribedUserData,
                                                                   ArrayList<SubredditData> subredditData) {
-                            new InsertSubscribedThingsAsyncTask(
+                            InsertSubscribedThings.insertSubscribedThings(
+                                    mExecutor,
+                                    new Handler(),
                                     mRedditDataRoomDatabase,
                                     mAccountName,
                                     subscribedSubredditData,
                                     subscribedUserData,
                                     subredditData,
-                                    () -> mInsertSuccess = true).execute();
+                                    () -> mInsertSuccess = true);
                         }
 
                         @Override

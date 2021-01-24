@@ -25,6 +25,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 
+import java.util.concurrent.Executor;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -88,7 +90,9 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
     @Named("nsfw_and_spoiler")
     SharedPreferences mNsfwAndSpoilerSharedPreferences;
     @Inject
-    CustomThemeWrapper customThemeWrapper;
+    CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private LinearLayoutManager mLinearLayoutManager;
     private SubredditListingRecyclerViewAdapter mAdapter;
     private Activity mActivity;
@@ -135,8 +139,8 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
         boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
 
-        mAdapter = new SubredditListingRecyclerViewAdapter(mActivity, mOauthRetrofit, mRetrofit,
-                customThemeWrapper, accessToken, accountName, mRedditDataRoomDatabase,
+        mAdapter = new SubredditListingRecyclerViewAdapter(mActivity, mExecutor, mOauthRetrofit, mRetrofit,
+                mCustomThemeWrapper, accessToken, accountName, mRedditDataRoomDatabase,
                 new SubredditListingRecyclerViewAdapter.Callback() {
                     @Override
                     public void retryLoadingMore() {
@@ -236,9 +240,9 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
     @Override
     public void applyTheme() {
-        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(customThemeWrapper.getCircularProgressBarBackground());
-        mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent());
-        mFetchSubredditListingInfoTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
+        mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
+        mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
+        mFetchSubredditListingInfoTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
     }
 
     public void goBackToTop() {

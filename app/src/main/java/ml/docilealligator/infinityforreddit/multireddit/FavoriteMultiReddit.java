@@ -1,12 +1,15 @@
 package ml.docilealligator.infinityforreddit.multireddit;
 
+import android.os.Handler;
+
 import androidx.annotation.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
-import ml.docilealligator.infinityforreddit.asynctasks.InsertMultiRedditAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.InsertMultireddit;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import retrofit2.Call;
@@ -20,7 +23,8 @@ public class FavoriteMultiReddit {
         void failed();
     }
 
-    public static void favoriteMultiReddit(Retrofit oauthRetrofit, RedditDataRoomDatabase redditDataRoomDatabase,
+    public static void favoriteMultiReddit(Executor executor, Handler handler, Retrofit oauthRetrofit,
+                                           RedditDataRoomDatabase redditDataRoomDatabase,
                                            String accessToken, boolean makeFavorite,
                                            MultiReddit multiReddit, FavoriteMultiRedditListener favoriteMultiRedditListener) {
         Map<String, String> params = new HashMap<>();
@@ -33,8 +37,8 @@ public class FavoriteMultiReddit {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
                     multiReddit.setFavorite(makeFavorite);
-                    new InsertMultiRedditAsyncTask(redditDataRoomDatabase, multiReddit,
-                            favoriteMultiRedditListener::success).execute();
+                    InsertMultireddit.insertMultireddit(executor, handler, redditDataRoomDatabase, multiReddit,
+                            favoriteMultiRedditListener::success);
                 } else {
                     favoriteMultiRedditListener.failed();
                 }

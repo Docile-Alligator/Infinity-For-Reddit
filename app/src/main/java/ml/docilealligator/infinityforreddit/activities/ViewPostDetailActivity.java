@@ -639,7 +639,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             setupMenu();
 
             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this,
-                    mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mGfycatRetrofit,
+                    mExecutor, mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mRedditDataRoomDatabase, mGlide,
                     mWindowWidth, mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId,
                     isSingleCommentThreadMode, mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mExoCreator,
@@ -802,7 +802,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                             setupMenu();
 
                             mAdapter = new CommentAndPostRecyclerViewAdapter(ViewPostDetailActivity.this,
-                                    mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mGfycatRetrofit,
+                                    mExecutor, mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mGfycatRetrofit,
                                     mRedgifsRetrofit, mRedditDataRoomDatabase, mGlide,
                                     mWindowWidth, mAccessToken, mAccountName, mPost, mLocale,
                                     mSingleCommentId, isSingleCommentThreadMode, mSharedPreferences,

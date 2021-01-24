@@ -5,6 +5,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -28,6 +29,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -81,6 +83,8 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
     @Inject
     @Named("default")
     SharedPreferences sharedPreferences;
+    @Inject
+    Executor executor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -301,7 +305,7 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
     @Override
     public void setToHomeScreen(int viewPagerPosition) {
         if (images != null && viewPagerPosition >= 0 && viewPagerPosition < images.size()) {
-            WallpaperSetter.set(images.get(viewPagerPosition).getLink(), WallpaperSetter.HOME_SCREEN, this,
+            WallpaperSetter.set(executor, new Handler(), images.get(viewPagerPosition).getLink(), WallpaperSetter.HOME_SCREEN, this,
                     new WallpaperSetter.SetWallpaperListener() {
                         @Override
                         public void success() {
@@ -319,7 +323,7 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
     @Override
     public void setToLockScreen(int viewPagerPosition) {
         if (images != null && viewPagerPosition >= 0 && viewPagerPosition < images.size()) {
-            WallpaperSetter.set(images.get(viewPagerPosition).getLink(), WallpaperSetter.LOCK_SCREEN, this,
+            WallpaperSetter.set(executor, new Handler(), images.get(viewPagerPosition).getLink(), WallpaperSetter.LOCK_SCREEN, this,
                     new WallpaperSetter.SetWallpaperListener() {
                         @Override
                         public void success() {
@@ -337,7 +341,7 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
     @Override
     public void setToBoth(int viewPagerPosition) {
         if (images != null && viewPagerPosition >= 0 && viewPagerPosition < images.size()) {
-            WallpaperSetter.set(images.get(viewPagerPosition).getLink(), WallpaperSetter.BOTH_SCREENS, this,
+            WallpaperSetter.set(executor, new Handler(), images.get(viewPagerPosition).getLink(), WallpaperSetter.BOTH_SCREENS, this,
                     new WallpaperSetter.SetWallpaperListener() {
                         @Override
                         public void success() {

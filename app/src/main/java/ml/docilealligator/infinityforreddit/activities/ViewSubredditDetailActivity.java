@@ -71,8 +71,8 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.asynctasks.AddSubredditOrUserToMultiReddit;
-import ml.docilealligator.infinityforreddit.asynctasks.CheckIsSubscribedToSubredditAsyncTask;
-import ml.docilealligator.infinityforreddit.asynctasks.InsertSubredditDataAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.CheckIsSubscribedToSubreddit;
+import ml.docilealligator.infinityforreddit.asynctasks.InsertSubredditData;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
@@ -515,7 +515,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
                     mNCurrentOnlineSubscribers = nCurrentOnlineSubscribers;
                     nOnlineSubscribersTextView.setText(getString(R.string.online_subscribers_number_detail, nCurrentOnlineSubscribers));
-                    new InsertSubredditDataAsyncTask(mRedditDataRoomDatabase, subredditData, () -> mFetchSubredditInfoSuccess = true).execute();
+                    InsertSubredditData.insertSubredditData(mExecutor, new Handler(), mRedditDataRoomDatabase,
+                            subredditData, () -> mFetchSubredditInfoSuccess = true);
                 }
 
                 @Override
@@ -862,8 +863,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             }
         });
 
-        new CheckIsSubscribedToSubredditAsyncTask(mRedditDataRoomDatabase, subredditName, mAccountName,
-                new CheckIsSubscribedToSubredditAsyncTask.CheckIsSubscribedToSubredditListener() {
+        CheckIsSubscribedToSubreddit.checkIsSubscribedToSubreddit(mExecutor, new Handler(),
+                mRedditDataRoomDatabase, subredditName, mAccountName,
+                new CheckIsSubscribedToSubreddit.CheckIsSubscribedToSubredditListener() {
                     @Override
                     public void isSubscribed() {
                         subscribeSubredditChip.setText(R.string.unsubscribe);
@@ -877,7 +879,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                         subscribeSubredditChip.setChipBackgroundColor(ColorStateList.valueOf(unsubscribedColor));
                         subscriptionReady = true;
                     }
-                }).execute();
+                });
 
         sectionsPagerAdapter = new SectionsPagerAdapter(this);
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {

@@ -1,12 +1,13 @@
 package ml.docilealligator.infinityforreddit.asynctasks;
 
-import android.os.AsyncTask;
+import android.os.Handler;
 
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditDao;
@@ -16,117 +17,99 @@ import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubred
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserDao;
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
 
-public class InsertSubscribedThingsAsyncTask extends AsyncTask<Void, Void, Void> {
+public class InsertSubscribedThings {
 
-    private RedditDataRoomDatabase mRedditDataRoomDatabase;
-    private String mAccountName;
-    private SubscribedSubredditDao mSubscribedSubredditDao;
-    private SubscribedUserDao mSubscribedUserDao;
-    private SubredditDao mSubredditDao;
-    private SubscribedSubredditData mSingleSubscribedSubredditData;
-    private SubscribedUserData mSingleSubscribedUserData;
-    private List<SubscribedSubredditData> subscribedSubredditDataList;
-    private List<SubscribedUserData> subscribedUserDataList;
-    private List<SubredditData> subredditDataList;
-    private InsertSubscribedThingListener mInsertSubscribedThingListener;
+    public static void insertSubscribedThings(Executor executor, Handler handler,
+                                              RedditDataRoomDatabase redditDataRoomDatabase, @Nullable String accountName,
+                                              List<SubscribedSubredditData> subscribedSubredditDataList,
+                                              List<SubscribedUserData> subscribedUserDataList,
+                                              List<SubredditData> subredditDataList,
+                                              InsertSubscribedThingListener insertSubscribedThingListener) {
+        executor.execute(() -> {
+            if (accountName != null && redditDataRoomDatabase.accountDao().getAccountData(accountName) == null) {
+                handler.post(insertSubscribedThingListener::insertSuccess);
+                return;
+            }
 
-    public InsertSubscribedThingsAsyncTask(RedditDataRoomDatabase redditDataRoomDatabase, @Nullable String accountName,
-                                           List<SubscribedSubredditData> subscribedSubredditDataList,
-                                           List<SubscribedUserData> subscribedUserDataList,
-                                           List<SubredditData> subredditDataList,
-                                           InsertSubscribedThingListener insertSubscribedThingListener) {
-        mRedditDataRoomDatabase = redditDataRoomDatabase;
-        mAccountName = accountName;
-        mSubscribedSubredditDao = redditDataRoomDatabase.subscribedSubredditDao();
-        mSubscribedUserDao = redditDataRoomDatabase.subscribedUserDao();
-        mSubredditDao = redditDataRoomDatabase.subredditDao();
+            SubscribedSubredditDao subscribedSubredditDao = redditDataRoomDatabase.subscribedSubredditDao();
+            SubscribedUserDao subscribedUserDao = redditDataRoomDatabase.subscribedUserDao();
+            SubredditDao subredditDao = redditDataRoomDatabase.subredditDao();
 
-        this.subscribedSubredditDataList = subscribedSubredditDataList;
-        this.subscribedUserDataList = subscribedUserDataList;
-        this.subredditDataList = subredditDataList;
-        mInsertSubscribedThingListener = insertSubscribedThingListener;
-    }
-
-    public InsertSubscribedThingsAsyncTask(RedditDataRoomDatabase redditDataRoomDatabase,
-                                           SubscribedSubredditData subscribedSubredditDataList,
-                                           InsertSubscribedThingListener insertSubscribedThingListener) {
-        mRedditDataRoomDatabase = redditDataRoomDatabase;
-        mSubscribedSubredditDao = redditDataRoomDatabase.subscribedSubredditDao();
-        mAccountName = subscribedSubredditDataList.getUsername();
-        mSingleSubscribedSubredditData = subscribedSubredditDataList;
-        mInsertSubscribedThingListener = insertSubscribedThingListener;
-    }
-
-    public InsertSubscribedThingsAsyncTask(RedditDataRoomDatabase redditDataRoomDatabase,
-                                           SubscribedUserData subscribedUserDataList,
-                                           InsertSubscribedThingListener insertSubscribedThingListener) {
-        mRedditDataRoomDatabase = redditDataRoomDatabase;
-        mSubscribedUserDao = redditDataRoomDatabase.subscribedUserDao();
-        mAccountName = subscribedUserDataList.getUsername();
-        mSingleSubscribedUserData = subscribedUserDataList;
-        mInsertSubscribedThingListener = insertSubscribedThingListener;
-    }
-
-    @Override
-    protected Void doInBackground(final Void... params) {
-        if (mAccountName != null && mRedditDataRoomDatabase.accountDao().getAccountData(mAccountName) == null) {
-            return null;
-        }
-
-        if (mSingleSubscribedSubredditData != null) {
-            mSubscribedSubredditDao.insert(mSingleSubscribedSubredditData);
-        } else if (mSingleSubscribedUserData != null) {
-            mSubscribedUserDao.insert(mSingleSubscribedUserData);
-        } else {
             if (subscribedSubredditDataList != null) {
                 List<SubscribedSubredditData> existingSubscribedSubredditDataList =
-                        mSubscribedSubredditDao.getAllSubscribedSubredditsList(mAccountName);
+                        subscribedSubredditDao.getAllSubscribedSubredditsList(accountName);
                 Collections.sort(subscribedSubredditDataList, (subscribedSubredditData, t1) -> subscribedSubredditData.getName().compareToIgnoreCase(t1.getName()));
                 List<String> unsubscribedSubreddits = new ArrayList<>();
                 compareTwoSubscribedSubredditList(subscribedSubredditDataList, existingSubscribedSubredditDataList,
                         unsubscribedSubreddits);
 
                 for (String unsubscribed : unsubscribedSubreddits) {
-                    mSubscribedSubredditDao.deleteSubscribedSubreddit(unsubscribed, mAccountName);
+                    subscribedSubredditDao.deleteSubscribedSubreddit(unsubscribed, accountName);
                 }
 
                 for (SubscribedSubredditData s : subscribedSubredditDataList) {
-                    mSubscribedSubredditDao.insert(s);
+                    subscribedSubredditDao.insert(s);
                 }
             }
 
             if (subscribedUserDataList != null) {
                 List<SubscribedUserData> existingSubscribedUserDataList =
-                        mSubscribedUserDao.getAllSubscribedUsersList(mAccountName);
+                        subscribedUserDao.getAllSubscribedUsersList(accountName);
                 Collections.sort(subscribedUserDataList, (subscribedUserData, t1) -> subscribedUserData.getName().compareToIgnoreCase(t1.getName()));
                 List<String> unsubscribedUsers = new ArrayList<>();
                 compareTwoSubscribedUserList(subscribedUserDataList, existingSubscribedUserDataList,
                         unsubscribedUsers);
 
                 for (String unsubscribed : unsubscribedUsers) {
-                    mSubscribedUserDao.deleteSubscribedUser(unsubscribed, mAccountName);
+                    subscribedUserDao.deleteSubscribedUser(unsubscribed, accountName);
                 }
 
                 for (SubscribedUserData s : subscribedUserDataList) {
-                    mSubscribedUserDao.insert(s);
+                    subscribedUserDao.insert(s);
                 }
             }
 
             if (subredditDataList != null) {
                 for (SubredditData s : subredditDataList) {
-                    mSubredditDao.insert(s);
+                    subredditDao.insert(s);
                 }
             }
-        }
-        return null;
+
+            handler.post(insertSubscribedThingListener::insertSuccess);
+        });
     }
 
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        mInsertSubscribedThingListener.insertSuccess();
+    public static void insertSubscribedThings(Executor executor, Handler handler, RedditDataRoomDatabase redditDataRoomDatabase,
+                                              SubscribedSubredditData singleSubscribedSubredditData,
+                                              InsertSubscribedThingListener insertSubscribedThingListener) {
+        executor.execute(() -> {
+            String accountName = singleSubscribedSubredditData.getUsername();
+            if (accountName != null && redditDataRoomDatabase.accountDao().getAccountData(accountName) == null) {
+                handler.post(insertSubscribedThingListener::insertSuccess);
+                return;
+            }
+
+            redditDataRoomDatabase.subscribedSubredditDao().insert(singleSubscribedSubredditData);
+            handler.post(insertSubscribedThingListener::insertSuccess);
+        });
     }
 
-    private void compareTwoSubscribedSubredditList(List<SubscribedSubredditData> newSubscribedSubreddits,
+    public static void insertSubscribedThings(Executor executor, Handler handler, RedditDataRoomDatabase redditDataRoomDatabase,
+                                              SubscribedUserData mSingleSubscribedUserData,
+                                              InsertSubscribedThingListener insertSubscribedThingListener) {
+        executor.execute(() -> {
+            String accountName = mSingleSubscribedUserData.getUsername();
+            if (accountName != null && redditDataRoomDatabase.accountDao().getAccountData(accountName) == null) {
+                handler.post(insertSubscribedThingListener::insertSuccess);
+                return;
+            }
+
+            redditDataRoomDatabase.subscribedUserDao().insert(mSingleSubscribedUserData);
+            handler.post(insertSubscribedThingListener::insertSuccess);
+        });
+    }
+
+    private static void compareTwoSubscribedSubredditList(List<SubscribedSubredditData> newSubscribedSubreddits,
                                                    List<SubscribedSubredditData> oldSubscribedSubreddits,
                                                    List<String> unsubscribedSubredditNames) {
         int newIndex = 0;
@@ -152,7 +135,7 @@ public class InsertSubscribedThingsAsyncTask extends AsyncTask<Void, Void, Void>
         }
     }
 
-    private void compareTwoSubscribedUserList(List<SubscribedUserData> newSubscribedUsers,
+    private static void compareTwoSubscribedUserList(List<SubscribedUserData> newSubscribedUsers,
                                               List<SubscribedUserData> oldSubscribedUsers,
                                               List<String> unsubscribedUserNames) {
         int newIndex = 0;

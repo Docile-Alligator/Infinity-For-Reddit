@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,6 +39,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
     private static final int VIEW_TYPE_MULTI_REDDIT = 3;
 
     private AppCompatActivity mActivity;
+    private Executor mExecutor;
     private Retrofit mOauthRetrofit;
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
     private RequestManager mGlide;
@@ -53,11 +56,12 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
         void onLongClick(MultiReddit multiReddit);
     }
 
-    public MultiRedditListingRecyclerViewAdapter(AppCompatActivity activity, Retrofit oauthRetrofit,
+    public MultiRedditListingRecyclerViewAdapter(AppCompatActivity activity, Executor executor, Retrofit oauthRetrofit,
                                                  RedditDataRoomDatabase redditDataRoomDatabase,
                                                  CustomThemeWrapper customThemeWrapper,
                                                  String accessToken, OnItemClickListener onItemClickListener) {
         mActivity = activity;
+        mExecutor = executor;
         mGlide = Glide.with(activity);
         mOauthRetrofit = oauthRetrofit;
         mRedditDataRoomDatabase = redditDataRoomDatabase;
@@ -125,7 +129,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                 if(multiReddit.isFavorite()) {
                     ((MultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
                     multiReddit.setFavorite(false);
-                    FavoriteMultiReddit.favoriteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase,
+                    FavoriteMultiReddit.favoriteMultiReddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase,
                             mAccessToken, false, multiReddit,
                             new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                 @Override
@@ -151,7 +155,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                 } else {
                     ((MultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
                     multiReddit.setFavorite(true);
-                    FavoriteMultiReddit.favoriteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase,
+                    FavoriteMultiReddit.favoriteMultiReddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase,
                             mAccessToken, true, multiReddit,
                             new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                 @Override
@@ -211,7 +215,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                 if(multiReddit.isFavorite()) {
                     ((FavoriteMultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
                     multiReddit.setFavorite(false);
-                    FavoriteMultiReddit.favoriteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase,
+                    FavoriteMultiReddit.favoriteMultiReddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase,
                             mAccessToken, false, multiReddit,
                             new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                 @Override
@@ -237,7 +241,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                 } else {
                     ((FavoriteMultiRedditViewHolder) holder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
                     multiReddit.setFavorite(true);
-                    FavoriteMultiReddit.favoriteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase,
+                    FavoriteMultiReddit.favoriteMultiReddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase,
                             mAccessToken, true, multiReddit,
                             new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                 @Override

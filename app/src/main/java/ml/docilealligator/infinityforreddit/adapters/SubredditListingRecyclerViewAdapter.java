@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +23,12 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.util.concurrent.Executor;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import ml.docilealligator.infinityforreddit.asynctasks.CheckIsSubscribedToSubredditAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.CheckIsSubscribedToSubreddit;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
@@ -52,6 +55,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
     };
     private RequestManager glide;
     private Context context;
+    private Executor executor;
     private Retrofit oauthRetrofit;
     private Retrofit retrofit;
     private String accessToken;
@@ -67,13 +71,14 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
     private NetworkState networkState;
     private Callback callback;
 
-    public SubredditListingRecyclerViewAdapter(Context context, Retrofit oauthRetrofit, Retrofit retrofit,
+    public SubredditListingRecyclerViewAdapter(Context context, Executor executor, Retrofit oauthRetrofit, Retrofit retrofit,
                                                CustomThemeWrapper customThemeWrapper,
                                                String accessToken, String accountName,
                                                RedditDataRoomDatabase redditDataRoomDatabase,
                                                Callback callback) {
         super(DIFF_CALLBACK);
         this.context = context;
+        this.executor = executor;
         this.oauthRetrofit = oauthRetrofit;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
@@ -125,8 +130,9 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
 
             ((DataViewHolder) holder).subredditNameTextView.setText(subredditData.getName());
 
-            new CheckIsSubscribedToSubredditAsyncTask(redditDataRoomDatabase, subredditData.getName(), accountName,
-                    new CheckIsSubscribedToSubredditAsyncTask.CheckIsSubscribedToSubredditListener() {
+            CheckIsSubscribedToSubreddit.checkIsSubscribedToSubreddit(executor, new Handler(),
+                    redditDataRoomDatabase, subredditData.getName(), accountName,
+                    new CheckIsSubscribedToSubreddit.CheckIsSubscribedToSubredditListener() {
                         @Override
                         public void isSubscribed() {
                             ((DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
@@ -152,7 +158,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
                                         });
                             });
                         }
-                    }).execute();
+                    });
         }
     }
 

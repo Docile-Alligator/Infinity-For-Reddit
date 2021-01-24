@@ -10,6 +10,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,6 +47,7 @@ import com.r0adkll.slidr.model.SlidrConfig;
 import com.r0adkll.slidr.model.SlidrPosition;
 
 import java.io.File;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -57,8 +59,8 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 import ml.docilealligator.infinityforreddit.WallpaperSetter;
-import ml.docilealligator.infinityforreddit.asynctasks.SaveBitmapImageToFileAsyncTask;
-import ml.docilealligator.infinityforreddit.asynctasks.SaveGIFToFileAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.SaveBitmapImageToFile;
+import ml.docilealligator.infinityforreddit.asynctasks.SaveGIFToFile;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SetAsWallpaperBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.font.ContentFontStyle;
@@ -86,6 +88,8 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    Executor mExecutor;
     private boolean isActionBarHidden = false;
     private boolean isDownloading = false;
     private RequestManager glide;
@@ -273,62 +277,62 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            case R.id.action_download_view_image_or_gif_activity:
-                if (isDownloading) {
-                    return false;
-                }
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            finish();
+            return true;
+        } else if (itemId == R.id.action_download_view_image_or_gif_activity) {
+            if (isDownloading) {
+                return false;
+            }
 
-                isDownloading = true;
+            isDownloading = true;
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
 
-                        // Permission is not granted
-                        // No explanation needed; request the permission
-                        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
-                    } else {
-                        // Permission has already been granted
-                        download();
-                    }
+                    // Permission is not granted
+                    // No explanation needed; request the permission
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
                 } else {
+                    // Permission has already been granted
                     download();
                 }
+            } else {
+                download();
+            }
 
-                return true;
-            case R.id.action_share_view_image_or_gif_activity:
-                if (isGif)
-                    shareGif();
-                else
-                    shareImage();
-                return true;
-            case R.id.action_set_wallpaper_view_image_or_gif_activity:
-                if (!isGif) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        SetAsWallpaperBottomSheetFragment setAsWallpaperBottomSheetFragment = new SetAsWallpaperBottomSheetFragment();
-                        setAsWallpaperBottomSheetFragment.show(getSupportFragmentManager(), setAsWallpaperBottomSheetFragment.getTag());
-                    } else {
-                        WallpaperSetter.set(mImageUrl, WallpaperSetter.BOTH_SCREENS, this,
-                                new WallpaperSetter.SetWallpaperListener() {
-                                    @Override
-                                    public void success() {
-                                        Toast.makeText(ViewImageOrGifActivity.this, R.string.wallpaper_set, Toast.LENGTH_SHORT).show();
-                                    }
+            return true;
+        } else if (itemId == R.id.action_share_view_image_or_gif_activity) {
+            if (isGif)
+                shareGif();
+            else
+                shareImage();
+            return true;
+        } else if (itemId == R.id.action_set_wallpaper_view_image_or_gif_activity) {
+            if (!isGif) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    SetAsWallpaperBottomSheetFragment setAsWallpaperBottomSheetFragment = new SetAsWallpaperBottomSheetFragment();
+                    setAsWallpaperBottomSheetFragment.show(getSupportFragmentManager(), setAsWallpaperBottomSheetFragment.getTag());
+                } else {
+                    WallpaperSetter.set(mExecutor, new Handler(), mImageUrl, WallpaperSetter.BOTH_SCREENS, this,
+                            new WallpaperSetter.SetWallpaperListener() {
+                                @Override
+                                public void success() {
+                                    Toast.makeText(ViewImageOrGifActivity.this, R.string.wallpaper_set, Toast.LENGTH_SHORT).show();
+                                }
 
-                                    @Override
-                                    public void failed() {
-                                        Toast.makeText(ViewImageOrGifActivity.this, R.string.error_set_wallpaper, Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                    }
+                                @Override
+                                public void failed() {
+                                    Toast.makeText(ViewImageOrGifActivity.this, R.string.error_set_wallpaper, Toast.LENGTH_SHORT).show();
+                                }
+                            });
                 }
-                return true;
+            }
+            return true;
         }
 
         return false;
@@ -353,8 +357,9 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                 if (getExternalCacheDir() != null) {
                     Toast.makeText(ViewImageOrGifActivity.this, R.string.save_image_first, Toast.LENGTH_SHORT).show();
-                    new SaveBitmapImageToFileAsyncTask(resource, getExternalCacheDir().getPath(), mImageFileName,
-                            new SaveBitmapImageToFileAsyncTask.SaveBitmapImageToFileAsyncTaskListener() {
+                    SaveBitmapImageToFile.SaveBitmapImageToFile(mExecutor, new Handler(), resource,
+                            getExternalCacheDir().getPath(), mImageFileName,
+                            new SaveBitmapImageToFile.SaveBitmapImageToFileListener() {
                                 @Override
                                 public void saveSuccess(File imageFile) {
                                     Uri uri = FileProvider.getUriForFile(ViewImageOrGifActivity.this,
@@ -372,7 +377,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
                                     Toast.makeText(ViewImageOrGifActivity.this,
                                             R.string.cannot_save_image, Toast.LENGTH_SHORT).show();
                                 }
-                            }).execute();
+                            });
                 } else {
                     Toast.makeText(ViewImageOrGifActivity.this,
                             R.string.cannot_get_storage, Toast.LENGTH_SHORT).show();
@@ -397,8 +402,8 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
             @Override
             public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
                 if (getExternalCacheDir() != null) {
-                    new SaveGIFToFileAsyncTask(resource, getExternalCacheDir().getPath(), mImageFileName,
-                            new SaveGIFToFileAsyncTask.SaveGIFToFileAsyncTaskListener() {
+                    SaveGIFToFile.saveGifToFile(mExecutor, new Handler(), resource, getExternalCacheDir().getPath(), mImageFileName,
+                            new SaveGIFToFile.SaveGIFToFileAsyncTaskListener() {
                                 @Override
                                 public void saveSuccess(File imageFile) {
                                     Uri uri = FileProvider.getUriForFile(ViewImageOrGifActivity.this,
@@ -416,7 +421,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
                                     Toast.makeText(ViewImageOrGifActivity.this,
                                             R.string.cannot_save_gif, Toast.LENGTH_SHORT).show();
                                 }
-                            }).execute();
+                            });
                 } else {
                     Toast.makeText(ViewImageOrGifActivity.this,
                             R.string.cannot_get_storage, Toast.LENGTH_SHORT).show();
@@ -440,7 +445,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
 
     @Override
     public void setToHomeScreen(int viewPagerPosition) {
-        WallpaperSetter.set(mImageUrl, WallpaperSetter.HOME_SCREEN, this,
+        WallpaperSetter.set(mExecutor, new Handler(), mImageUrl, WallpaperSetter.HOME_SCREEN, this,
                 new WallpaperSetter.SetWallpaperListener() {
                     @Override
                     public void success() {
@@ -456,7 +461,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
 
     @Override
     public void setToLockScreen(int viewPagerPosition) {
-        WallpaperSetter.set(mImageUrl, WallpaperSetter.LOCK_SCREEN, this,
+        WallpaperSetter.set(mExecutor, new Handler(), mImageUrl, WallpaperSetter.LOCK_SCREEN, this,
                 new WallpaperSetter.SetWallpaperListener() {
                     @Override
                     public void success() {
@@ -472,7 +477,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
 
     @Override
     public void setToBoth(int viewPagerPosition) {
-        WallpaperSetter.set(mImageUrl, WallpaperSetter.BOTH_SCREENS, this,
+        WallpaperSetter.set(mExecutor, new Handler(), mImageUrl, WallpaperSetter.BOTH_SCREENS, this,
                 new WallpaperSetter.SetWallpaperListener() {
                     @Override
                     public void success() {

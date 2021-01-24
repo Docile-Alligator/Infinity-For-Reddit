@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -36,7 +37,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.adapters.PrivateMessagesDetailRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.asynctasks.LoadUserDataAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.RepliedToPrivateMessageEvent;
 import ml.docilealligator.infinityforreddit.message.Message;
@@ -93,7 +94,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     private String mAccountName;
     private String mUserAvatar;
     private ArrayList<ProvideUserAvatarCallback> mProvideUserAvatarCallbacks;
-    private LoadUserDataAsyncTask mLoadUserDataAsyncTask;
+    private boolean isLoadingUserAvatar = false;
     private boolean isSendingMessage = false;
     private int mSecondaryTextColor;
     private int mSendMessageIconColor;
@@ -234,15 +235,16 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     public void fetchUserAvatar(String username, ProvideUserAvatarCallback provideUserAvatarCallback) {
         if (mUserAvatar == null) {
             mProvideUserAvatarCallbacks.add(provideUserAvatarCallback);
-            if (mLoadUserDataAsyncTask == null) {
-                mLoadUserDataAsyncTask = new LoadUserDataAsyncTask(mRedditDataRoomDatabase.userDao(), username, mRetrofit, iconImageUrl -> {
-                    mUserAvatar = iconImageUrl;
+            if (!isLoadingUserAvatar) {
+                LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase,
+                        username, mRetrofit, iconImageUrl -> {
+                    isLoadingUserAvatar = false;
+                    mUserAvatar = iconImageUrl == null ? "" : iconImageUrl;
                     for (ProvideUserAvatarCallback provideUserAvatarCallbackInArrayList : mProvideUserAvatarCallbacks) {
                         provideUserAvatarCallbackInArrayList.fetchAvatarSuccess(iconImageUrl);
                     }
                     mProvideUserAvatarCallbacks.clear();
                 });
-                mLoadUserDataAsyncTask.execute();
             }
         } else {
             provideUserAvatarCallback.fetchAvatarSuccess(mUserAvatar);

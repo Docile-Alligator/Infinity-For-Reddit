@@ -75,7 +75,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.asynctasks.AddSubredditOrUserToMultiReddit;
-import ml.docilealligator.infinityforreddit.asynctasks.CheckIsFollowingUserAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.CheckIsFollowingUser;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
@@ -94,7 +94,6 @@ import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostDataSource;
 import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
-import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserDao;
 import ml.docilealligator.infinityforreddit.user.BlockUser;
 import ml.docilealligator.infinityforreddit.user.FetchUserData;
 import ml.docilealligator.infinityforreddit.user.UserDao;
@@ -198,7 +197,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     public UserViewModel userViewModel;
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
-    private SubscribedUserDao subscribedUserDao;
     private RequestManager glide;
     private Menu mMenu;
     private AppBarLayout.LayoutParams params;
@@ -358,7 +356,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false);
         lockBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_BOTTOM_APP_BAR, false);
 
-        subscribedUserDao = mRedditDataRoomDatabase.subscribedUserDao();
         glide = Glide.with(this);
         Locale locale = getResources().getConfiguration().locale;
 
@@ -412,7 +409,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                             subscriptionReady = false;
                             if (resources.getString(R.string.follow).contentEquals(subscribeUserChip.getText())) {
                                 UserFollowing.followUser(mOauthRetrofit, mRetrofit, mAccessToken,
-                                        username, mAccountName, subscribedUserDao, new UserFollowing.UserFollowingListener() {
+                                        username, mAccountName, mRedditDataRoomDatabase, new UserFollowing.UserFollowingListener() {
                                             @Override
                                             public void onUserFollowingSuccess() {
                                                 subscribeUserChip.setText(R.string.unfollow);
@@ -429,7 +426,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                                         });
                             } else {
                                 UserFollowing.unfollowUser(mOauthRetrofit, mRetrofit, mAccessToken,
-                                        username, mAccountName, subscribedUserDao, new UserFollowing.UserFollowingListener() {
+                                        username, mAccountName, mRedditDataRoomDatabase, new UserFollowing.UserFollowingListener() {
                                             @Override
                                             public void onUserFollowingSuccess() {
                                                 subscribeUserChip.setText(R.string.follow);
@@ -448,7 +445,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                         }
                     });
 
-                    new CheckIsFollowingUserAsyncTask(subscribedUserDao, username, mAccountName, new CheckIsFollowingUserAsyncTask.CheckIsFollowingUserListener() {
+                    CheckIsFollowingUser.checkIsFollowingUser(mExecutor, new Handler(), mRedditDataRoomDatabase,
+                            username, mAccountName, new CheckIsFollowingUser.CheckIsFollowingUserListener() {
                         @Override
                         public void isSubscribed() {
                             subscribeUserChip.setText(R.string.unfollow);
@@ -462,7 +460,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                             subscribeUserChip.setChipBackgroundColor(ColorStateList.valueOf(unsubscribedColor));
                             subscriptionReady = true;
                         }
-                    }).execute();
+                    });
                 } else {
                     subscribeUserChip.setVisibility(View.GONE);
                 }

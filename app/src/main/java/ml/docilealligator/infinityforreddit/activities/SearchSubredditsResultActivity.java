@@ -21,8 +21,6 @@ import com.r0adkll.slidr.Slidr;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.concurrent.Executor;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -31,7 +29,6 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.SubredditListingFragment;
@@ -53,8 +50,6 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
     Toolbar toolbar;
     Fragment mFragment;
     @Inject
-    RedditDataRoomDatabase mRedditDataRoomDatabase;
-    @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
@@ -62,8 +57,6 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
-    @Inject
-    Executor mExecutor;
     private String mAccessToken;
     private String mAccountName;
 

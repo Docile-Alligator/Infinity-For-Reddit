@@ -17,8 +17,6 @@ import com.google.android.material.appbar.AppBarLayout;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.concurrent.Executor;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -26,7 +24,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.settings.AboutPreferenceFragment;
@@ -58,11 +55,7 @@ public class SettingsActivity extends BaseActivity implements
     @Named("current_account")
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
-    RedditDataRoomDatabase mRedditDataRoomDatabase;
-    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
-    @Inject
-    Executor mExecutor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -42,15 +43,19 @@ import com.github.piasy.biv.view.BigImageView;
 import com.github.piasy.biv.view.GlideImageViewFactory;
 
 import java.io.File;
+import java.util.concurrent.Executor;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.BuildConfig;
+import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 import ml.docilealligator.infinityforreddit.activities.ViewRedditGalleryActivity;
-import ml.docilealligator.infinityforreddit.asynctasks.SaveBitmapImageToFileAsyncTask;
-import ml.docilealligator.infinityforreddit.asynctasks.SaveGIFToFileAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.SaveBitmapImageToFile;
+import ml.docilealligator.infinityforreddit.asynctasks.SaveGIFToFile;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SetAsWallpaperBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
@@ -67,6 +72,8 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     BigImageView imageView;
     @BindView(R.id.load_image_error_linear_layout_view_reddit_gallery_image_or_gif_fragment)
     LinearLayout errorLinearLayout;
+    @Inject
+    Executor mExecutor;
 
     private ViewRedditGalleryActivity activity;
     private RequestManager glide;
@@ -85,6 +92,8 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
         BigImageViewer.initialize(GlideImageLoader.with(activity));
 
         View rootView = inflater.inflate(R.layout.fragment_view_reddit_gallery_image_or_gif, container, false);
+
+        ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
 
@@ -283,9 +292,9 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                 if (activity.getExternalCacheDir() != null) {
                     Toast.makeText(activity, R.string.save_image_first, Toast.LENGTH_SHORT).show();
-                    new SaveBitmapImageToFileAsyncTask(resource, activity.getExternalCacheDir().getPath(),
+                    SaveBitmapImageToFile.SaveBitmapImageToFile(mExecutor, new Handler(), resource, activity.getExternalCacheDir().getPath(),
                             media.fileName,
-                            new SaveBitmapImageToFileAsyncTask.SaveBitmapImageToFileAsyncTaskListener() {
+                            new SaveBitmapImageToFile.SaveBitmapImageToFileListener() {
                                 @Override
                                 public void saveSuccess(File imageFile) {
                                     Uri uri = FileProvider.getUriForFile(activity,
@@ -303,7 +312,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                                     Toast.makeText(activity,
                                             R.string.cannot_save_image, Toast.LENGTH_SHORT).show();
                                 }
-                            }).execute();
+                            });
                 } else {
                     Toast.makeText(activity,
                             R.string.cannot_get_storage, Toast.LENGTH_SHORT).show();
@@ -328,8 +337,8 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
             @Override
             public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
                 if (activity.getExternalCacheDir() != null) {
-                    new SaveGIFToFileAsyncTask(resource, activity.getExternalCacheDir().getPath(), media.fileName,
-                            new SaveGIFToFileAsyncTask.SaveGIFToFileAsyncTaskListener() {
+                    SaveGIFToFile.saveGifToFile(mExecutor, new Handler(), resource, activity.getExternalCacheDir().getPath(), media.fileName,
+                            new SaveGIFToFile.SaveGIFToFileAsyncTaskListener() {
                                 @Override
                                 public void saveSuccess(File imageFile) {
                                     Uri uri = FileProvider.getUriForFile(activity,
@@ -347,7 +356,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                                     Toast.makeText(activity,
                                             R.string.cannot_save_gif, Toast.LENGTH_SHORT).show();
                                 }
-                            }).execute();
+                            });
                 } else {
                     Toast.makeText(activity,
                             R.string.cannot_get_storage, Toast.LENGTH_SHORT).show();

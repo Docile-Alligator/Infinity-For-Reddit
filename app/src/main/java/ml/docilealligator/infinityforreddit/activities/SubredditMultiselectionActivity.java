@@ -29,7 +29,6 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
-import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -81,8 +80,6 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
-    @Inject
-    Executor mExecutor;
     public SubscribedSubredditViewModel mSubscribedSubredditViewModel;
     private String mAccessToken;
     private String mAccountName;

@@ -24,6 +24,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
+import java.util.concurrent.Executor;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -72,6 +74,8 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
     Retrofit mOauthRetrofit;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
 
     public MultiRedditViewModel mMultiRedditViewModel;
     private AppCompatActivity mActivity;
@@ -113,7 +117,8 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
         mLinearLayoutManager = new LinearLayoutManager(mActivity);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         MultiRedditListingRecyclerViewAdapter adapter = new MultiRedditListingRecyclerViewAdapter(mActivity,
-                mOauthRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, accessToken, new MultiRedditListingRecyclerViewAdapter.OnItemClickListener() {
+                mExecutor, mOauthRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, accessToken,
+                new MultiRedditListingRecyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onClick(MultiReddit multiReddit) {
                 if (mActivity instanceof MultiredditSelectionActivity) {

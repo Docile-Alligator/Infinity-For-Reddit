@@ -24,6 +24,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
+import java.util.concurrent.Executor;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -74,7 +76,9 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
-    CustomThemeWrapper customThemeWrapper;
+    CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     public SubscribedSubredditViewModel mSubscribedSubredditViewModel;
     private Activity mActivity;
     private RequestManager mGlide;
@@ -116,12 +120,12 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
 
         SubscribedSubredditsRecyclerViewAdapter adapter;
         if (getArguments().getBoolean(EXTRA_IS_SUBREDDIT_SELECTION)) {
-            adapter = new SubscribedSubredditsRecyclerViewAdapter(mActivity, mOauthRetrofit, mRedditDataRoomDatabase,
-                    customThemeWrapper, accessToken, getArguments().getBoolean(EXTRA_EXTRA_CLEAR_SELECTION),
+            adapter = new SubscribedSubredditsRecyclerViewAdapter(mActivity, mExecutor, mOauthRetrofit, mRedditDataRoomDatabase,
+                    mCustomThemeWrapper, accessToken, getArguments().getBoolean(EXTRA_EXTRA_CLEAR_SELECTION),
                     (name, iconUrl, subredditIsUser) -> ((SubredditSelectionActivity) mActivity).getSelectedSubreddit(name, iconUrl, subredditIsUser));
         } else {
-            adapter = new SubscribedSubredditsRecyclerViewAdapter(mActivity, mOauthRetrofit, mRedditDataRoomDatabase,
-                    customThemeWrapper, accessToken);
+            adapter = new SubscribedSubredditsRecyclerViewAdapter(mActivity, mExecutor, mOauthRetrofit, mRedditDataRoomDatabase,
+                    mCustomThemeWrapper, accessToken);
         }
 
         mRecyclerView.setAdapter(adapter);
@@ -130,7 +134,7 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
         mSubscribedSubredditViewModel = new ViewModelProvider(this,
                 new SubscribedSubredditViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, accountName))
                 .get(SubscribedSubredditViewModel.class);
-        mSubscribedSubredditViewModel.getAllSubscribedSubreddits().observe(this, subscribedSubredditData -> {
+        mSubscribedSubredditViewModel.getAllSubscribedSubreddits().observe(getViewLifecycleOwner(), subscribedSubredditData -> {
             mSwipeRefreshLayout.setRefreshing(false);
             if (subscribedSubredditData == null || subscribedSubredditData.size() == 0) {
                 mRecyclerView.setVisibility(View.GONE);
@@ -146,7 +150,7 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
             adapter.setSubscribedSubreddits(subscribedSubredditData);
         });
 
-        mSubscribedSubredditViewModel.getAllFavoriteSubscribedSubreddits().observe(this, favoriteSubscribedSubredditData -> {
+        mSubscribedSubredditViewModel.getAllFavoriteSubscribedSubreddits().observe(getViewLifecycleOwner(), favoriteSubscribedSubredditData -> {
             mSwipeRefreshLayout.setRefreshing(false);
             if (favoriteSubscribedSubredditData != null && favoriteSubscribedSubredditData.size() > 0) {
                 mLinearLayout.setVisibility(View.GONE);
@@ -175,12 +179,12 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
     public void applyTheme() {
         if (mActivity instanceof SubscribedThingListingActivity) {
             mSwipeRefreshLayout.setOnRefreshListener(() -> ((SubscribedThingListingActivity) mActivity).loadSubscriptions(true));
-            mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(customThemeWrapper.getCircularProgressBarBackground());
-            mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent());
+            mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
+            mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         } else {
             mSwipeRefreshLayout.setEnabled(false);
         }
-        mErrorTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
+        mErrorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
     }
 
     public void goBackToTop() {

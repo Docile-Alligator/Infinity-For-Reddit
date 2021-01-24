@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -37,17 +38,21 @@ import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 
 import java.io.File;
+import java.util.concurrent.Executor;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.activities.ViewImgurMediaActivity;
-import ml.docilealligator.infinityforreddit.asynctasks.SaveBitmapImageToFileAsyncTask;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.SetAsWallpaperBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.ImgurMedia;
+import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
+import ml.docilealligator.infinityforreddit.activities.ViewImgurMediaActivity;
+import ml.docilealligator.infinityforreddit.asynctasks.SaveBitmapImageToFile;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.SetAsWallpaperBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 
 public class ViewImgurImageFragment extends Fragment {
 
@@ -60,6 +65,8 @@ public class ViewImgurImageFragment extends Fragment {
     SubsamplingScaleImageView imageView;
     @BindView(R.id.load_image_error_linear_layout_view_imgur_image_fragment)
     LinearLayout errorLinearLayout;
+    @Inject
+    Executor mExecutor;
 
     private ViewImgurMediaActivity activity;
     private RequestManager glide;
@@ -75,6 +82,8 @@ public class ViewImgurImageFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_view_imgur_images, container, false);
+
+        ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
 
@@ -150,83 +159,83 @@ public class ViewImgurImageFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_download_view_imgur_image_fragment:
-                if (isDownloading) {
-                    return false;
-                }
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_download_view_imgur_image_fragment) {
+            if (isDownloading) {
+                return false;
+            }
 
-                isDownloading = true;
+            isDownloading = true;
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (ContextCompat.checkSelfPermission(activity,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (ContextCompat.checkSelfPermission(activity,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
 
-                        // Permission is not granted
-                        // No explanation needed; request the permission
-                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
-                    } else {
-                        // Permission has already been granted
-                        download();
-                    }
+                    // Permission is not granted
+                    // No explanation needed; request the permission
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
                 } else {
+                    // Permission has already been granted
                     download();
                 }
+            } else {
+                download();
+            }
 
-                return true;
-            case R.id.action_share_view_imgur_image_fragment:
-                glide.asBitmap().load(imgurMedia.getLink()).into(new CustomTarget<Bitmap>() {
+            return true;
+        } else if (itemId == R.id.action_share_view_imgur_image_fragment) {
+            glide.asBitmap().load(imgurMedia.getLink()).into(new CustomTarget<Bitmap>() {
 
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        if (activity.getExternalCacheDir() != null) {
-                            Toast.makeText(activity, R.string.save_image_first, Toast.LENGTH_SHORT).show();
-                            new SaveBitmapImageToFileAsyncTask(resource, activity.getExternalCacheDir().getPath(),
-                                    imgurMedia.getFileName(),
-                                    new SaveBitmapImageToFileAsyncTask.SaveBitmapImageToFileAsyncTaskListener() {
-                                        @Override
-                                        public void saveSuccess(File imageFile) {
-                                            Uri uri = FileProvider.getUriForFile(activity,
-                                                    BuildConfig.APPLICATION_ID + ".provider", imageFile);
-                                            Intent shareIntent = new Intent();
-                                            shareIntent.setAction(Intent.ACTION_SEND);
-                                            shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                                            shareIntent.setType("image/*");
-                                            shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                                            startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
-                                        }
+                @Override
+                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                    if (activity.getExternalCacheDir() != null) {
+                        Toast.makeText(activity, R.string.save_image_first, Toast.LENGTH_SHORT).show();
+                        SaveBitmapImageToFile.SaveBitmapImageToFile(mExecutor, new Handler(), resource, activity.getExternalCacheDir().getPath(),
+                                imgurMedia.getFileName(),
+                                new SaveBitmapImageToFile.SaveBitmapImageToFileListener() {
+                                    @Override
+                                    public void saveSuccess(File imageFile) {
+                                        Uri uri = FileProvider.getUriForFile(activity,
+                                                BuildConfig.APPLICATION_ID + ".provider", imageFile);
+                                        Intent shareIntent = new Intent();
+                                        shareIntent.setAction(Intent.ACTION_SEND);
+                                        shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
+                                        shareIntent.setType("image/*");
+                                        shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                                        startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
+                                    }
 
-                                        @Override
-                                        public void saveFailed() {
-                                            Toast.makeText(activity,
-                                                    R.string.cannot_save_image, Toast.LENGTH_SHORT).show();
-                                        }
-                                    }).execute();
-                        } else {
-                            Toast.makeText(activity,
-                                    R.string.cannot_get_storage, Toast.LENGTH_SHORT).show();
-                        }
+                                    @Override
+                                    public void saveFailed() {
+                                        Toast.makeText(activity,
+                                                R.string.cannot_save_image, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    } else {
+                        Toast.makeText(activity,
+                                R.string.cannot_get_storage, Toast.LENGTH_SHORT).show();
                     }
-
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                    }
-                });
-                return true;
-            case R.id.action_set_wallpaper_view_imgur_image_fragment:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    SetAsWallpaperBottomSheetFragment setAsWallpaperBottomSheetFragment = new SetAsWallpaperBottomSheetFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(SetAsWallpaperBottomSheetFragment.EXTRA_VIEW_PAGER_POSITION, activity.getCurrentPagePosition());
-                    setAsWallpaperBottomSheetFragment.setArguments(bundle);
-                    setAsWallpaperBottomSheetFragment.show(activity.getSupportFragmentManager(), setAsWallpaperBottomSheetFragment.getTag());
-                } else {
-                    ((SetAsWallpaperCallback) activity).setToBoth(activity.getCurrentPagePosition());
                 }
-                return true;
+
+                @Override
+                public void onLoadCleared(@Nullable Drawable placeholder) {
+
+                }
+            });
+            return true;
+        } else if (itemId == R.id.action_set_wallpaper_view_imgur_image_fragment) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                SetAsWallpaperBottomSheetFragment setAsWallpaperBottomSheetFragment = new SetAsWallpaperBottomSheetFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt(SetAsWallpaperBottomSheetFragment.EXTRA_VIEW_PAGER_POSITION, activity.getCurrentPagePosition());
+                setAsWallpaperBottomSheetFragment.setArguments(bundle);
+                setAsWallpaperBottomSheetFragment.show(activity.getSupportFragmentManager(), setAsWallpaperBottomSheetFragment.getTag());
+            } else {
+                ((SetAsWallpaperCallback) activity).setToBoth(activity.getCurrentPagePosition());
+            }
+            return true;
         }
 
         return false;

@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,16 +18,17 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.zhanghai.android.fastscroll.PopupTextProvider;
-import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FavoriteThing;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
@@ -40,6 +42,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     private List<SubscribedUserData> mSubscribedUserData;
     private List<SubscribedUserData> mFavoriteSubscribedUserData;
     private Context mContext;
+    private Executor mExecutor;
     private Retrofit mOauthRetrofit;
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
     private String mAccessToken;
@@ -47,11 +50,12 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     private int mPrimaryTextColor;
     private int mSecondaryTextColor;
 
-    public FollowedUsersRecyclerViewAdapter(Context context, Retrofit oauthRetrofit,
+    public FollowedUsersRecyclerViewAdapter(Context context, Executor executor, Retrofit oauthRetrofit,
                                             RedditDataRoomDatabase redditDataRoomDatabase,
                                             CustomThemeWrapper customThemeWrapper,
                                             String accessToken) {
         mContext = context;
+        mExecutor = executor;
         mOauthRetrofit = oauthRetrofit;
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mAccessToken = accessToken;
@@ -215,7 +219,8 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                     if(mFavoriteSubscribedUserData.get(position).isFavorite()) {
                         favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
                         mFavoriteSubscribedUserData.get(position).setFavorite(false);
-                        FavoriteThing.unfavoriteUser(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
+                        FavoriteThing.unfavoriteUser(mExecutor, new Handler(), mOauthRetrofit,
+                                mRedditDataRoomDatabase, mAccessToken,
                                 mFavoriteSubscribedUserData.get(position),
                                 new FavoriteThing.FavoriteThingListener() {
                                     @Override
@@ -240,7 +245,8 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                     } else {
                         favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
                         mFavoriteSubscribedUserData.get(position).setFavorite(true);
-                        FavoriteThing.favoriteUser(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
+                        FavoriteThing.favoriteUser(mExecutor, new Handler(), mOauthRetrofit,
+                                mRedditDataRoomDatabase, mAccessToken,
                                 mFavoriteSubscribedUserData.get(position),
                                 new FavoriteThing.FavoriteThingListener() {
                                     @Override
@@ -301,7 +307,8 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                     if(mSubscribedUserData.get(position).isFavorite()) {
                         favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
                         mSubscribedUserData.get(position).setFavorite(false);
-                        FavoriteThing.unfavoriteUser(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
+                        FavoriteThing.unfavoriteUser(mExecutor, new Handler(), mOauthRetrofit,
+                                mRedditDataRoomDatabase, mAccessToken,
                                 mSubscribedUserData.get(position),
                                 new FavoriteThing.FavoriteThingListener() {
                                     @Override
@@ -326,7 +333,8 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                     } else {
                         favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
                         mSubscribedUserData.get(position).setFavorite(true);
-                        FavoriteThing.favoriteUser(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
+                        FavoriteThing.favoriteUser(mExecutor, new Handler(), mOauthRetrofit,
+                                mRedditDataRoomDatabase, mAccessToken,
                                 mSubscribedUserData.get(position),
                                 new FavoriteThing.FavoriteThingListener() {
                                     @Override

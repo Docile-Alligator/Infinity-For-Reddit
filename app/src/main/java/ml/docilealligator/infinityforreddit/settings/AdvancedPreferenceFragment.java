@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,19 +17,21 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.greenrobot.eventbus.EventBus;
 
+import java.util.concurrent.Executor;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllPostLayoutsAsyncTask;
-import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllReadPostsAsyncTask;
-import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllSortTypesAsyncTask;
-import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllSubredditsAsyncTask;
-import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllThemesAsyncTask;
-import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllUsersAsyncTask;
-import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllPostLayouts;
+import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllReadPosts;
+import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllSortTypes;
+import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllSubreddits;
+import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllThemes;
+import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllUsers;
+import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 /**
@@ -65,6 +68,8 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
     @Inject
     @Named("nsfw_and_spoiler")
     SharedPreferences nsfwAndBlurringSharedPreferences;
+    @Inject
+    Executor executor;
     private Activity activity;
 
     @Override
@@ -88,8 +93,8 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
                 new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                         .setTitle(R.string.are_you_sure)
                         .setPositiveButton(R.string.yes, (dialogInterface, i)
-                                -> new DeleteAllSubredditsAsyncTask(mRedditDataRoomDatabase,
-                                        () -> Toast.makeText(activity, R.string.delete_all_subreddits_success, Toast.LENGTH_SHORT).show()).execute())
+                                -> DeleteAllSubreddits.deleteAllSubreddits(executor, new Handler(), mRedditDataRoomDatabase,
+                                        () -> Toast.makeText(activity, R.string.delete_all_subreddits_success, Toast.LENGTH_SHORT).show()))
                         .setNegativeButton(R.string.no, null)
                         .show();
                 return true;
@@ -101,8 +106,8 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
                 new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                         .setTitle(R.string.are_you_sure)
                         .setPositiveButton(R.string.yes, (dialogInterface, i)
-                                -> new DeleteAllUsersAsyncTask(mRedditDataRoomDatabase,
-                                        () -> Toast.makeText(activity, R.string.delete_all_users_success, Toast.LENGTH_SHORT).show()).execute())
+                                -> DeleteAllUsers.deleteAllUsers(executor, new Handler(), mRedditDataRoomDatabase,
+                                        () -> Toast.makeText(activity, R.string.delete_all_users_success, Toast.LENGTH_SHORT).show()))
                         .setNegativeButton(R.string.no, null)
                         .show();
                 return true;
@@ -114,10 +119,11 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
                 new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                         .setTitle(R.string.are_you_sure)
                         .setPositiveButton(R.string.yes, (dialogInterface, i)
-                                -> new DeleteAllSortTypesAsyncTask(mSharedPreferences, mSortTypeSharedPreferences, () -> {
+                                -> DeleteAllSortTypes.deleteAllSortTypes(executor, new Handler(),
+                                mSharedPreferences, mSortTypeSharedPreferences, () -> {
                                     Toast.makeText(activity, R.string.delete_all_sort_types_success, Toast.LENGTH_SHORT).show();
                                     EventBus.getDefault().post(new RecreateActivityEvent());
-                                }).execute())
+                                }))
                         .setNegativeButton(R.string.no, null)
                         .show();
                 return true;
@@ -129,10 +135,11 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
                 new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                         .setTitle(R.string.are_you_sure)
                         .setPositiveButton(R.string.yes, (dialogInterface, i)
-                                -> new DeleteAllPostLayoutsAsyncTask(mSharedPreferences, mPostLayoutSharedPreferences, () -> {
+                                -> DeleteAllPostLayouts.deleteAllPostLayouts(executor, new Handler(),
+                                mSharedPreferences, mPostLayoutSharedPreferences, () -> {
                                     Toast.makeText(activity, R.string.delete_all_post_layouts_success, Toast.LENGTH_SHORT).show();
                                     EventBus.getDefault().post(new RecreateActivityEvent());
-                                }).execute())
+                                }))
                         .setNegativeButton(R.string.no, null)
                         .show();
                 return true;
@@ -144,11 +151,12 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
                 new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                         .setTitle(R.string.are_you_sure)
                         .setPositiveButton(R.string.yes, (dialogInterface, i)
-                                -> new DeleteAllThemesAsyncTask(mRedditDataRoomDatabase, lightThemeSharedPreferences,
+                                -> DeleteAllThemes.deleteAllThemes(executor, new Handler(),
+                                mRedditDataRoomDatabase, lightThemeSharedPreferences,
                                         darkThemeSharedPreferences, amoledThemeSharedPreferences, () -> {
                                     Toast.makeText(activity, R.string.delete_all_themes_success, Toast.LENGTH_SHORT).show();
                                     EventBus.getDefault().post(new RecreateActivityEvent());
-                                }).execute())
+                                }))
                         .setNegativeButton(R.string.no, null)
                         .show();
                 return true;
@@ -175,9 +183,10 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
                 new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                         .setTitle(R.string.are_you_sure)
                         .setPositiveButton(R.string.yes, (dialogInterface, i)
-                                -> new DeleteAllReadPostsAsyncTask(mRedditDataRoomDatabase, () -> {
+                                -> DeleteAllReadPosts.deleteAllReadPosts(executor, new Handler(),
+                                mRedditDataRoomDatabase, () -> {
                             Toast.makeText(activity, R.string.delete_all_read_posts_success, Toast.LENGTH_SHORT).show();
-                        }).execute())
+                        }))
                         .setNegativeButton(R.string.no, null)
                         .show();
                 return true;

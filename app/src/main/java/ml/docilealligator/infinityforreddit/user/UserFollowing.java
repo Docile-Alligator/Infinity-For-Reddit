@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import java.util.HashMap;
 import java.util.Map;
 
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserDao;
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
@@ -18,18 +19,18 @@ import retrofit2.Retrofit;
 public class UserFollowing {
     public static void followUser(Retrofit oauthRetrofit, Retrofit retrofit,
                                   String accessToken, String username, String accountName,
-                                  SubscribedUserDao subscribedUserDao,
+                                  RedditDataRoomDatabase redditDataRoomDatabase,
                                   UserFollowingListener userFollowingListener) {
         userFollowing(oauthRetrofit, retrofit, accessToken, username, accountName, "sub",
-                subscribedUserDao, userFollowingListener);
+                redditDataRoomDatabase.subscribedUserDao(), userFollowingListener);
     }
 
     public static void unfollowUser(Retrofit oauthRetrofit, Retrofit retrofit,
                                     String accessToken, String username, String accountName,
-                                    SubscribedUserDao subscribedUserDao,
+                                    RedditDataRoomDatabase redditDataRoomDatabase,
                                     UserFollowingListener userFollowingListener) {
         userFollowing(oauthRetrofit, retrofit, accessToken, username, accountName, "unsub",
-                subscribedUserDao, userFollowingListener);
+                redditDataRoomDatabase.subscribedUserDao(), userFollowingListener);
     }
 
     private static void userFollowing(Retrofit oauthRetrofit, Retrofit retrofit, String accessToken,

@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -20,6 +21,7 @@ import com.thefuntasty.hauler.DragDirection;
 import com.thefuntasty.hauler.HaulerView;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -56,6 +58,8 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     @Inject
     @Named("default")
     SharedPreferences sharedPreferences;
+    @Inject
+    Executor executor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +156,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     @Override
     public void setToHomeScreen(int viewPagerPosition) {
         if (gallery != null && viewPagerPosition >= 0 && viewPagerPosition < gallery.size()) {
-            WallpaperSetter.set(gallery.get(viewPagerPosition).url, WallpaperSetter.HOME_SCREEN, this,
+            WallpaperSetter.set(executor, new Handler(), gallery.get(viewPagerPosition).url, WallpaperSetter.HOME_SCREEN, this,
                     new WallpaperSetter.SetWallpaperListener() {
                         @Override
                         public void success() {
@@ -170,7 +174,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     @Override
     public void setToLockScreen(int viewPagerPosition) {
         if (gallery != null && viewPagerPosition >= 0 && viewPagerPosition < gallery.size()) {
-            WallpaperSetter.set(gallery.get(viewPagerPosition).url, WallpaperSetter.LOCK_SCREEN, this,
+            WallpaperSetter.set(executor, new Handler(), gallery.get(viewPagerPosition).url, WallpaperSetter.LOCK_SCREEN, this,
                     new WallpaperSetter.SetWallpaperListener() {
                         @Override
                         public void success() {
@@ -188,7 +192,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     @Override
     public void setToBoth(int viewPagerPosition) {
         if (gallery != null && viewPagerPosition >= 0 && viewPagerPosition < gallery.size()) {
-            WallpaperSetter.set(gallery.get(viewPagerPosition).url, WallpaperSetter.BOTH_SCREENS, this,
+            WallpaperSetter.set(executor, new Handler(), gallery.get(viewPagerPosition).url, WallpaperSetter.BOTH_SCREENS, this,
                     new WallpaperSetter.SetWallpaperListener() {
                         @Override
                         public void success() {

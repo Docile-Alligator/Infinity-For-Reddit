@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -34,7 +35,7 @@ import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.asynctasks.InsertMultiRedditAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.InsertMultireddit;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.MultiRedditListingFragment;
@@ -167,10 +168,11 @@ public class MultiredditSelectionActivity extends BaseActivity implements Activi
             FetchMyMultiReddits.fetchMyMultiReddits(mOauthRetrofit, mAccessToken, new FetchMyMultiReddits.FetchMyMultiRedditsListener() {
                 @Override
                 public void success(ArrayList<MultiReddit> multiReddits) {
-                    new InsertMultiRedditAsyncTask(mRedditDataRoomDatabase, multiReddits, mAccountName, () -> {
+                    InsertMultireddit.insertMultireddit(mExecutor, new Handler(), mRedditDataRoomDatabase,
+                            multiReddits, mAccountName, () -> {
                         mInsertSuccess = true;
                         ((MultiRedditListingFragment) mFragment).stopRefreshProgressbar();
-                    }).execute();
+                    });
                 }
 
                 @Override

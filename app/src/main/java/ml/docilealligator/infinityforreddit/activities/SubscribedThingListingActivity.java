@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,8 +44,8 @@ import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.asynctasks.InsertMultiRedditAsyncTask;
-import ml.docilealligator.infinityforreddit.asynctasks.InsertSubscribedThingsAsyncTask;
+import ml.docilealligator.infinityforreddit.asynctasks.InsertMultireddit;
+import ml.docilealligator.infinityforreddit.asynctasks.InsertSubscribedThings;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.GoBackToMainPageEvent;
 import ml.docilealligator.infinityforreddit.events.RefreshMultiRedditsEvent;
@@ -246,7 +247,9 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                         public void onFetchSubscribedThingSuccess(ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                                                   ArrayList<SubscribedUserData> subscribedUserData,
                                                                   ArrayList<SubredditData> subredditData) {
-                            new InsertSubscribedThingsAsyncTask(
+                            InsertSubscribedThings.insertSubscribedThings(
+                                    mExecutor,
+                                    new Handler(),
                                     mRedditDataRoomDatabase,
                                     mAccountName,
                                     subscribedSubredditData,
@@ -255,7 +258,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                                     () -> {
                                         mInsertSuccess = true;
                                         sectionsPagerAdapter.stopRefreshProgressbar();
-                                    }).execute();
+                                    });
                         }
 
                         @Override
@@ -277,10 +280,10 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         FetchMyMultiReddits.fetchMyMultiReddits(mOauthRetrofit, mAccessToken, new FetchMyMultiReddits.FetchMyMultiRedditsListener() {
             @Override
             public void success(ArrayList<MultiReddit> multiReddits) {
-                new InsertMultiRedditAsyncTask(mRedditDataRoomDatabase, multiReddits, mAccountName, () -> {
+                InsertMultireddit.insertMultireddit(mExecutor, new Handler(), mRedditDataRoomDatabase, multiReddits, mAccountName, () -> {
                     mInsertMultiredditSuccess = true;
                     sectionsPagerAdapter.stopMultiRedditRefreshProgressbar();
-                }).execute();
+                });
             }
 
             @Override
@@ -297,7 +300,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                 .setTitle(R.string.delete)
                 .setMessage(R.string.delete_multi_reddit_dialog_message)
                 .setPositiveButton(R.string.delete, (dialogInterface, i)
-                        -> DeleteMultiReddit.deleteMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase,
+                        -> DeleteMultiReddit.deleteMultiReddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase,
                         mAccessToken, mAccountName, multiReddit.getPath(), new DeleteMultiReddit.DeleteMultiRedditListener() {
                             @Override
                             public void success() {

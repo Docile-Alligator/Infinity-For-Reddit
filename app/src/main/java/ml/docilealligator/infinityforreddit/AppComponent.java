@@ -62,7 +62,9 @@ import ml.docilealligator.infinityforreddit.fragments.SidebarFragment;
 import ml.docilealligator.infinityforreddit.fragments.SubredditListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.SubscribedSubredditsListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.UserListingFragment;
+import ml.docilealligator.infinityforreddit.fragments.ViewImgurImageFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewImgurVideoFragment;
+import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryImageOrGifFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryVideoFragment;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.services.DownloadRedditVideoService;
@@ -242,4 +244,8 @@ public interface AppComponent {
     void inject(SearchUsersResultActivity searchUsersResultActivity);
 
     void inject(MultiredditSelectionActivity multiredditSelectionActivity);
+
+    void inject(ViewImgurImageFragment viewImgurImageFragment);
+
+    void inject(ViewRedditGalleryImageOrGifFragment viewRedditGalleryImageOrGifFragment);
 }

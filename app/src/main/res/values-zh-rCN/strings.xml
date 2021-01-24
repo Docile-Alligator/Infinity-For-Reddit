@@ -24,8 +24,8 @@
     <string name="edit_multi_reddit_activity_label">"编辑版块聚合"</string>
     <string name="selected_subeddits_activity_label">"被选中的版块"</string>
     <string name="report_activity_label">"报告"</string>
-    <string name="view_imgur_media_activity_image_label">"图片"</string>
-    <string name="view_imgur_media_activity_video_label">"视频"</string>
+    <string name="view_imgur_media_activity_image_label">"图片 %1$d/%2$d"</string>
+    <string name="view_imgur_media_activity_video_label">"视频 %1$d/%2$d"</string>
     <string name="send_private_message_activity_label">"私信"</string>
     <string name="view_reddit_gallery_activity_image_label">"图片 %1$d/%2$d
 "</string>
