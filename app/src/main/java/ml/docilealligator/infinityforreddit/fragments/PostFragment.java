@@ -437,7 +437,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, defaultPostLayout);
 
-            mAdapter = new PostRecyclerViewAdapter(activity, mExecutor, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
+            mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, locale,
                     windowWidth, accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
@@ -503,7 +503,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 sortType = new SortType(SortType.Type.valueOf(sort));
             }
 
-            mAdapter = new PostRecyclerViewAdapter(activity, mExecutor, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
+            mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, locale,
                     windowWidth, accessToken, accountName, postType, postLayout, displaySubredditName,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
@@ -567,7 +567,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 sortType = new SortType(SortType.Type.valueOf(sort));
             }
 
-            mAdapter = new PostRecyclerViewAdapter(activity, mExecutor, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
+            mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, locale,
                     windowWidth, accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
@@ -631,7 +631,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, defaultPostLayout);
 
-            mAdapter = new PostRecyclerViewAdapter(activity, mExecutor, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
+            mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, locale,
                     windowWidth, accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
@@ -686,7 +686,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, defaultPostLayout);
 
-            mAdapter = new PostRecyclerViewAdapter(activity, mExecutor, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
+            mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, locale,
                     windowWidth, accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
@@ -1059,6 +1059,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             backgroundSwipeLeft = new ColorDrawable(mCustomThemeWrapper.getDownvoted());
             drawableSwipeLeft = ResourcesCompat.getDrawable(activity.getResources(), R.drawable.ic_arrow_downward_black_24dp, null);
         }
+    }
+
+    public ArrayList<Post> getPostList() {
+        return new ArrayList<>(mPostViewModel.getPosts().getValue());
     }
 
     @Override

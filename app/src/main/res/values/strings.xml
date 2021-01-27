@@ -1016,7 +1016,5 @@
     <string name="add_subreddit_or_user_to_multireddit_failed">Unable to add %1$s to multireddit %2$s</string>
 
     <string name="choose_a_user">Choose a user</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

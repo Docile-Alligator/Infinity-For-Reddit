@@ -92,6 +92,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.ShareLinkBottom
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
 import ml.docilealligator.infinityforreddit.events.PostUpdateEventToDetailActivity;
+import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostDataSource;
 import ml.docilealligator.infinityforreddit.user.UserDao;
@@ -128,6 +129,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         }
     };
     private AppCompatActivity mActivity;
+    private PostFragment mFragment;
     private Executor mExecutor;
     private Retrofit mOauthRetrofit;
     private Retrofit mRetrofit;
@@ -207,7 +209,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private ExoCreator mExoCreator;
     private Callback mCallback;
 
-    public PostRecyclerViewAdapter(AppCompatActivity activity, Executor executor, Retrofit oauthRetrofit, Retrofit retrofit,
+    public PostRecyclerViewAdapter(AppCompatActivity activity, PostFragment fragment, Executor executor, Retrofit oauthRetrofit, Retrofit retrofit,
                                    Retrofit gfycatRetrofit, Retrofit redgifsRetrofit,
                                    RedditDataRoomDatabase redditDataRoomDatabase,
                                    CustomThemeWrapper customThemeWrapper, Locale locale, int imageViewWidth,
@@ -218,6 +220,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         super(DIFF_CALLBACK);
         if (activity != null) {
             mActivity = activity;
+            mFragment = fragment;
             mExecutor = executor;
             mOauthRetrofit = oauthRetrofit;
             mRetrofit = retrofit;
@@ -1629,7 +1632,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         canStartActivity = false;
 
                         Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
-                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, post);
+                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST, mFragment.getPostList());
                         intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, getAdapterPosition());
                         mActivity.startActivity(intent);
                     }
@@ -2645,7 +2648,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     canStartActivity = false;
 
                     Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
-                    intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, post);
+                    intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST, mFragment.getPostList());
                     intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, getAdapterPosition());
                     mActivity.startActivity(intent);
                 }

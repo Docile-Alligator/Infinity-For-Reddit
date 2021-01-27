@@ -50,9 +50,9 @@ import retrofit2.Retrofit;
 
 public class EditPostActivity extends BaseActivity {
 
-    static final String EXTRA_TITLE = "ET";
-    static final String EXTRA_CONTENT = "EC";
-    static final String EXTRA_FULLNAME = "EF";
+    public static final String EXTRA_TITLE = "ET";
+    public static final String EXTRA_CONTENT = "EC";
+    public static final String EXTRA_FULLNAME = "EF";
 
     @BindView(R.id.coordinator_layout_edit_post_activity)
     CoordinatorLayout coordinatorLayout;

@@ -52,8 +52,8 @@ public class EditCommentActivity extends BaseActivity {
     public static final String EXTRA_FULLNAME = "EF";
     public static final String EXTRA_POSITION = "EP";
 
-    static final String EXTRA_EDITED_COMMENT_CONTENT = "EECC";
-    static final String EXTRA_EDITED_COMMENT_POSITION = "EECP";
+    public static final String EXTRA_EDITED_COMMENT_CONTENT = "EECC";
+    public static final String EXTRA_EDITED_COMMENT_POSITION = "EECP";
 
     @BindView(R.id.coordinator_layout_edit_comment_activity)
     CoordinatorLayout coordinatorLayout;

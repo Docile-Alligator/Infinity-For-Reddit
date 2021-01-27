@@ -968,11 +968,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private void changeSortType() {
         int currentPostType = sectionsPagerAdapter.getCurrentPostType();
         Bundle bundle = new Bundle();
-        if (currentPostType != PostDataSource.TYPE_FRONT_PAGE) {
-            bundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-        } else {
-            bundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, false);
-        }
+        bundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, currentPostType != PostDataSource.TYPE_FRONT_PAGE);
         SortTypeBottomSheetFragment sortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
         sortTypeBottomSheetFragment.setArguments(bundle);
         sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
@@ -980,43 +976,43 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_search_main_activity:
-                Intent intent = new Intent(this, SearchActivity.class);
-                startActivity(intent);
-                return true;
-            case R.id.action_sort_main_activity:
-                changeSortType();
-                return true;
-            case R.id.action_refresh_main_activity:
-                if (mMenu != null) {
-                    mMenu.findItem(R.id.action_lazy_mode_main_activity).setTitle(R.string.action_start_lazy_mode);
-                }
-                sectionsPagerAdapter.refresh();
-                mFetchUserInfoSuccess = false;
-                loadUserData();
-                return true;
-            case R.id.action_lazy_mode_main_activity:
-                MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_main_activity);
-                if (isInLazyMode) {
-                    sectionsPagerAdapter.stopLazyMode();
-                    isInLazyMode = false;
-                    lazyModeItem.setTitle(R.string.action_start_lazy_mode);
-                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_search_main_activity) {
+            Intent intent = new Intent(this, SearchActivity.class);
+            startActivity(intent);
+            return true;
+        } else if (itemId == R.id.action_sort_main_activity) {
+            changeSortType();
+            return true;
+        } else if (itemId == R.id.action_refresh_main_activity) {
+            if (mMenu != null) {
+                mMenu.findItem(R.id.action_lazy_mode_main_activity).setTitle(R.string.action_start_lazy_mode);
+            }
+            sectionsPagerAdapter.refresh();
+            mFetchUserInfoSuccess = false;
+            loadUserData();
+            return true;
+        } else if (itemId == R.id.action_lazy_mode_main_activity) {
+            MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_main_activity);
+            if (isInLazyMode) {
+                sectionsPagerAdapter.stopLazyMode();
+                isInLazyMode = false;
+                lazyModeItem.setTitle(R.string.action_start_lazy_mode);
+                params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+                collapsingToolbarLayout.setLayoutParams(params);
+            } else {
+                if (sectionsPagerAdapter.startLazyMode()) {
+                    isInLazyMode = true;
+                    lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
                     collapsingToolbarLayout.setLayoutParams(params);
-                } else {
-                    if (sectionsPagerAdapter.startLazyMode()) {
-                        isInLazyMode = true;
-                        lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
-                        collapsingToolbarLayout.setLayoutParams(params);
-                    }
                 }
-                return true;
-            case R.id.action_change_post_layout_main_activity:
-                PostLayoutBottomSheetFragment postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
-                postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
-                return true;
+            }
+            return true;
+        } else if (itemId == R.id.action_change_post_layout_main_activity) {
+            PostLayoutBottomSheetFragment postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
+            postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+            return true;
         }
         return false;
     }

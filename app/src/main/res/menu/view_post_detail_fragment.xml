@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_comment_view_post_detail_activity"
+        android:id="@+id/action_comment_view_post_detail_fragment"
         android:orderInCategory="1"
         android:title="@string/action_add_comment"
         android:icon="@drawable/ic_comment_toolbar_24dp"
@@ -10,92 +10,92 @@
         android:visible="false" />
 
     <item
-        android:id="@+id/action_save_view_post_detail_activity"
+        android:id="@+id/action_save_view_post_detail_fragment"
         android:orderInCategory="2"
         android:title="@string/action_save_post"
         app:showAsAction="ifRoom"
         android:visible="false" />
 
     <item
-        android:id="@+id/action_sort_view_post_detail_activity"
+        android:id="@+id/action_sort_view_post_detail_fragment"
         android:orderInCategory="3"
         android:title="@string/action_sort"
         app:showAsAction="never"
         android:visible="false" />
 
     <item
-        android:id="@+id/action_refresh_view_post_detail_activity"
+        android:id="@+id/action_refresh_view_post_detail_fragment"
         android:orderInCategory="4"
         android:title="@string/action_refresh"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_view_crosspost_parent_view_post_detail_activity"
+        android:id="@+id/action_view_crosspost_parent_view_post_detail_fragment"
         android:orderInCategory="5"
         android:title="@string/action_view_crosspost_parent"
         app:showAsAction="never"
         android:visible="false" />
 
     <item
-        android:id="@+id/action_hide_view_post_detail_activity"
+        android:id="@+id/action_hide_view_post_detail_fragment"
         android:orderInCategory="6"
         app:showAsAction="never"
         android:visible="false" />
 
     <item
-        android:id="@+id/action_edit_view_post_detail_activity"
+        android:id="@+id/action_edit_view_post_detail_fragment"
         android:orderInCategory="7"
         android:title="@string/action_edit_post"
         app:showAsAction="never"
         android:visible="false" />
 
     <item
-        android:id="@+id/action_delete_view_post_detail_activity"
+        android:id="@+id/action_delete_view_post_detail_fragment"
         android:orderInCategory="8"
         android:title="@string/action_delete_post"
         app:showAsAction="never"
         android:visible="false" />
 
     <item
-        android:id="@+id/action_nsfw_view_post_detail_activity"
+        android:id="@+id/action_nsfw_view_post_detail_fragment"
         android:orderInCategory="9"
         app:showAsAction="never"
         android:visible="false" />
 
     <item
-        android:id="@+id/action_spoiler_view_post_detail_activity"
+        android:id="@+id/action_spoiler_view_post_detail_fragment"
         android:orderInCategory="10"
         app:showAsAction="never"
         android:visible="false" />
 
     <item
-        android:id="@+id/action_edit_flair_view_post_detail_activity"
+        android:id="@+id/action_edit_flair_view_post_detail_fragment"
         android:orderInCategory="11"
         android:title="@string/action_edit_flair"
         app:showAsAction="never"
         android:visible="false" />
 
     <item
-        android:id="@+id/action_give_award_view_post_detail_activity"
+        android:id="@+id/action_give_award_view_post_detail_fragment"
         android:orderInCategory="12"
         android:title="@string/action_give_award"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_report_view_post_detail_activity"
+        android:id="@+id/action_report_view_post_detail_fragment"
         android:orderInCategory="13"
         android:title="@string/action_report"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_see_removed_view_post_detail_activity"
+        android:id="@+id/action_see_removed_view_post_detail_fragment"
         android:orderInCategory="14"
         android:title="@string/action_see_removed"
         app:showAsAction="never"
         android:visible="false" />
 
     <item
-        android:id="@+id/action_crosspost_view_post_detail_activity"
+        android:id="@+id/action_crosspost_view_post_detail_fragment"
         android:orderInCategory="15"
         android:title="@string/action_crosspost"
         app:showAsAction="never" />

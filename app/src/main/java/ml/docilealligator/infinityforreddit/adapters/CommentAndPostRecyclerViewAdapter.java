@@ -113,6 +113,7 @@ import ml.docilealligator.infinityforreddit.comment.FetchComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
 import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
+import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostDataSource;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -143,6 +144,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private static final int VIEW_TYPE_VIEW_ALL_COMMENTS = 17;
 
     private AppCompatActivity mActivity;
+    private ViewPostDetailFragment mFragment;
     private Executor mExecutor;
     private Retrofit mRetrofit;
     private Retrofit mOauthRetrofit;
@@ -238,7 +240,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private float mScale;
     private ExoCreator mExoCreator;
 
-    public CommentAndPostRecyclerViewAdapter(AppCompatActivity activity, Executor executor, CustomThemeWrapper customThemeWrapper,
+    public CommentAndPostRecyclerViewAdapter(AppCompatActivity activity, ViewPostDetailFragment fragment, Executor executor, CustomThemeWrapper customThemeWrapper,
                                              Retrofit retrofit, Retrofit oauthRetrofit, Retrofit gfycatRetrofit,
                                              Retrofit redgifsRetrofit,
                                              RedditDataRoomDatabase redditDataRoomDatabase, RequestManager glide,
@@ -249,6 +251,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                              SharedPreferences nsfwAndSpoilerSharedPreferences, ExoCreator exoCreator,
                                              CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
         mActivity = activity;
+        mFragment = fragment;
         mExecutor = executor;
         mRetrofit = retrofit;
         mOauthRetrofit = oauthRetrofit;
@@ -3765,9 +3768,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             if (bottomConstraintLayout.getLayoutParams().height == 0) {
                 bottomConstraintLayout.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
                 topScoreTextView.setVisibility(View.GONE);
-                ((ViewPostDetailActivity) mActivity).delayTransition();
+                mFragment.delayTransition();
             } else {
-                ((ViewPostDetailActivity) mActivity).delayTransition();
+                mFragment.delayTransition();
                 bottomConstraintLayout.getLayoutParams().height = 0;
                 topScoreTextView.setVisibility(View.VISIBLE);
             }
@@ -3944,7 +3947,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 if (mActivity != null && mActivity instanceof ViewPostDetailActivity) {
                     mIsSingleCommentThreadMode = false;
                     mSingleCommentId = null;
-                    ((ViewPostDetailActivity) mActivity).changeToNomalThreadMode();
+                    mFragment.changeToNomalThreadMode();
                 }
             });
 
