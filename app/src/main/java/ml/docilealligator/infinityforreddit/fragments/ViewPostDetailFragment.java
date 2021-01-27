@@ -1006,6 +1006,12 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         Bridge.clear(this);
     }
 
+    @Override
+    public void onDestroy() {
+        EventBus.getDefault().unregister(this);
+        super.onDestroy();
+    }
+
     @SuppressLint("RestrictedApi")
     protected boolean applyMenuItemTheme(Menu menu) {
         if (mCustomThemeWrapper != null) {

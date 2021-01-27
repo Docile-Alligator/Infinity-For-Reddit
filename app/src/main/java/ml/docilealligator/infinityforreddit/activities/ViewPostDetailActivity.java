@@ -187,7 +187,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             }
         });
 
-        checkNewAccountAndBindView();
+        checkNewAccountAndBindView(savedInstanceState);
     }
 
     public void setTitle(String title) {
@@ -225,7 +225,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         applyFABTheme(fab);
     }
 
-    private void checkNewAccountAndBindView() {
+    private void checkNewAccountAndBindView(Bundle savedInstanceState) {
         if (mNewAccountName != null) {
             if (mAccountName == null || !mAccountName.equals(mNewAccountName)) {
                 SwitchAccount.switchAccount(mRedditDataRoomDatabase, mCurrentAccountSharedPreferences,
@@ -235,19 +235,22 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
 
                             mNewAccountName = null;
 
-                            bindView();
+                            bindView(savedInstanceState);
                         });
             } else {
-                bindView();
+                bindView(savedInstanceState);
             }
         } else {
-            bindView();
+            bindView(savedInstanceState);
         }
     }
 
-    private void bindView() {
+    private void bindView(Bundle savedInstanceState) {
         sectionsPagerAdapter = new SectionsPagerAdapter(this);
         viewPager2.setAdapter(sectionsPagerAdapter);
+        if (savedInstanceState == null) {
+            viewPager2.setCurrentItem(getIntent().getIntExtra(EXTRA_POST_LIST_POSITION, 0), false);
+        }
     }
 
     private void editComment(String commentAuthor, String commentContentMarkdown, int position) {
@@ -411,10 +414,14 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         public Fragment createFragment(int position) {
             ViewPostDetailFragment fragment = new ViewPostDetailFragment();
             Bundle bundle = new Bundle();
-            if (posts == null) {
-                bundle.putParcelable(ViewPostDetailFragment.EXTRA_POST_DATA, post);
-            } else {
+            if (posts != null) {
                 bundle.putParcelable(ViewPostDetailFragment.EXTRA_POST_DATA, posts.get(position));
+            } else {
+                if (post == null) {
+                    bundle.putString(ViewPostDetailFragment.EXTRA_POST_ID, getIntent().getStringExtra(EXTRA_POST_ID));
+                } else {
+                    bundle.putParcelable(ViewPostDetailFragment.EXTRA_POST_DATA, post);
+                }
             }
             fragment.setArguments(bundle);
             return fragment;
