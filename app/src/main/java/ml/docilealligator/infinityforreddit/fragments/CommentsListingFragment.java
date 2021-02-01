@@ -9,6 +9,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -247,7 +248,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
 
-        bindView(resources);
+        new Handler().postDelayed(() -> bindView(resources), 0);
 
         return rootView;
     }
