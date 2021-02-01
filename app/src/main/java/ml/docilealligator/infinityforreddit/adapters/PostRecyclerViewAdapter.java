@@ -10,7 +10,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1068,7 +1067,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             }
 
             if (preview.getPreviewWidth() * preview.getPreviewHeight() > 10_000_000) {
-                Log.i("afasfasdf", "ssss " + preview.getPreviewUrl());
                 int divisor = 2;
                 do {
                     preview.setPreviewWidth(preview.getPreviewWidth() / divisor);
@@ -1076,8 +1074,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     divisor *= 2;
                 } while (preview.getPreviewWidth() * preview.getPreviewHeight() > 10_000_000);
             }
-
-            Log.i("afasfasdf", "s " + preview.getPreviewWidth() * preview.getPreviewHeight() + " " + preview.getPreviewHeight() + " " + preview.getPreviewWidth() + " " + preview.getPreviewUrl());
             return preview;
         }
 
