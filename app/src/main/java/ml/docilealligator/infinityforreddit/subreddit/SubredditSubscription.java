@@ -56,7 +56,7 @@ public class SubredditSubscription {
                             }
 
                             @Override
-                            public void onFetchSubredditDataFail() {
+                            public void onFetchSubredditDataFail(boolean isQuarantined) {
 
                             }
                         });

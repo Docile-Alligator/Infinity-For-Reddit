@@ -57,7 +57,7 @@ public class LoadSubredditIconAsyncTask extends AsyncTask<Void, Void, Void> {
                     }
 
                     @Override
-                    public void onFetchSubredditDataFail() {
+                    public void onFetchSubredditDataFail(boolean isQuarantined) {
                         loadSubredditIconAsyncTaskListener.loadIconSuccess(null);
                     }
                 });

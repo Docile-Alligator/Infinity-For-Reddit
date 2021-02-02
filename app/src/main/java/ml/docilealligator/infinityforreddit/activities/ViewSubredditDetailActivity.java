@@ -519,7 +519,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 }
 
                 @Override
-                public void onFetchSubredditDataFail() {
+                public void onFetchSubredditDataFail(boolean isQuarantined) {
                     makeSnackbar(R.string.cannot_fetch_subreddit_info, true);
                     mFetchSubredditInfoSuccess = false;
                 }

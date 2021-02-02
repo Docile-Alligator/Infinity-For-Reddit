@@ -193,7 +193,7 @@ public class SidebarFragment extends Fragment {
             }
 
             @Override
-            public void onFetchSubredditDataFail() {
+            public void onFetchSubredditDataFail(boolean isQuarantined) {
                 swipeRefreshLayout.setRefreshing(false);
                 Toast.makeText(activity, R.string.cannot_fetch_sidebar, Toast.LENGTH_SHORT).show();
             }

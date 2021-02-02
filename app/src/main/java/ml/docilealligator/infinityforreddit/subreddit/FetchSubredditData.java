@@ -31,17 +31,17 @@ public class FetchSubredditData {
 
                         @Override
                         public void onParseSubredditDataFail() {
-                            fetchSubredditDataListener.onFetchSubredditDataFail();
+                            fetchSubredditDataListener.onFetchSubredditDataFail(false);
                         }
                     });
                 } else {
-                    fetchSubredditDataListener.onFetchSubredditDataFail();
+                    fetchSubredditDataListener.onFetchSubredditDataFail(response.code() == 403);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                fetchSubredditDataListener.onFetchSubredditDataFail();
+                fetchSubredditDataListener.onFetchSubredditDataFail(false);
             }
         });
     }
@@ -84,7 +84,7 @@ public class FetchSubredditData {
     public interface FetchSubredditDataListener {
         void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers);
 
-        void onFetchSubredditDataFail();
+        void onFetchSubredditDataFail(boolean isQuarantined);
     }
 
     interface FetchSubredditListingDataListener {

@@ -935,7 +935,7 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
                         }
 
                         @Override
-                        public void onFetchSubredditDataFail() {
+                        public void onFetchSubredditDataFail(boolean isQuarantined) {
                             mRespectSubredditRecommendedSortType = false;
                             ViewPostDetailActivity.this.sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value.toUpperCase());
                             if (ViewPostDetailActivity.this.sortType != null) {
