@@ -47,7 +47,7 @@
     <string name="action_stop_lazy_mode">"Faulheitsmodus stoppen"</string>
     <string name="action_send">"Senden"</string>
     <string name="action_sort">"Sortieren"</string>
-    <string name="action_hide_post">"Beitrag verstecksn"</string>
+    <string name="action_hide_post">"Beitrag verstecken"</string>
     <string name="action_unhide_post">"Beitrag wieder anzeigen"</string>
     <string name="action_edit_post">"Beitrag bearbeiten"</string>
     <string name="action_delete_post">"Beitrag löschen"</string>
