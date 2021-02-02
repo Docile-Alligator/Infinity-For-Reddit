@@ -25,6 +25,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -207,17 +208,18 @@ public class DownloadRedditVideoService extends Service {
                         updateNotification(R.string.downloading_reddit_video_audio_track, 0,
                                 randomNotificationIdOffset, null);
 
+                        String videoFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + "-cache.mp4";
+                        String savedVideoFilePath = writeResponseBodyToDisk(videoResponse.body(), videoFilePath);
+                        if (savedVideoFilePath == null) {
+                            downloadFinished(null, ERROR_VIDEO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
+                            return;
+                        }
+
                         Response<ResponseBody> audioResponse = downloadFile.downloadFile(audioUrl).execute();
                         if (audioResponse.isSuccessful() && audioResponse.body() != null) {
-                            String videoFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + "-cache.mp4";
                             String audioFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + "-cache.mp3";
                             String outputFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + ".mp4";
 
-                            String savedVideoFilePath = writeResponseBodyToDisk(videoResponse.body(), videoFilePath);
-                            if (savedVideoFilePath == null) {
-                                downloadFinished(null, ERROR_VIDEO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
-                                return;
-                            }
                             String savedAudioFilePath = writeResponseBodyToDisk(audioResponse.body(), audioFilePath);
                             if (savedAudioFilePath == null) {
                                 downloadFinished(null, ERROR_AUDIO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
@@ -246,8 +248,6 @@ public class DownloadRedditVideoService extends Service {
                                 downloadFinished(null, ERROR_MUXED_VIDEO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
                             }
                         } else {
-                            String videoFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + "-cache.mp4";
-
                             updateNotification(R.string.downloading_reddit_video_save_file_to_public_dir, -1,
                                     randomNotificationIdOffset, null);
                             try {
