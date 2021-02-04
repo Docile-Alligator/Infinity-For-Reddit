@@ -170,7 +170,7 @@ public class PostFilter implements Parcelable {
         if (postFilter.postTitleExcludesStrings != null && !postFilter.postTitleExcludesStrings.equals("")) {
             String[] titles = postFilter.postTitleExcludesStrings.split(",", 0);
             for (String t : titles) {
-                if (!t.equals("") && post.getTitle().toLowerCase().contains(t.toLowerCase())) {
+                if (!t.trim().equals("") && post.getTitle().toLowerCase().contains(t.toLowerCase().trim())) {
                     return false;
                 }
             }
@@ -178,7 +178,7 @@ public class PostFilter implements Parcelable {
         if (postFilter.excludeSubreddits != null && !postFilter.excludeSubreddits.equals("")) {
             String[] subreddits = postFilter.excludeSubreddits.split(",", 0);
             for (String s : subreddits) {
-                if (!s.equals("") && post.getSubredditName().equalsIgnoreCase(s)) {
+                if (!s.trim().equals("") && post.getSubredditName().equalsIgnoreCase(s.trim())) {
                     return false;
                 }
             }
@@ -186,7 +186,7 @@ public class PostFilter implements Parcelable {
         if (postFilter.excludeUsers != null && !postFilter.excludeUsers.equals("")) {
             String[] users = postFilter.excludeUsers.split(",", 0);
             for (String u : users) {
-                if (!u.equals("") && post.getAuthor().equalsIgnoreCase(u)) {
+                if (!u.trim().equals("") && post.getAuthor().equalsIgnoreCase(u.trim())) {
                     return false;
                 }
             }
@@ -194,7 +194,7 @@ public class PostFilter implements Parcelable {
         if (postFilter.excludeFlairs != null && !postFilter.excludeFlairs.equals("")) {
             String[] flairs = postFilter.excludeFlairs.split(",", 0);
             for (String f : flairs) {
-                if (!f.equals("") && post.getFlair().equalsIgnoreCase(f)) {
+                if (!f.trim().equals("") && post.getFlair().equalsIgnoreCase(f.trim())) {
                     return false;
                 }
             }
@@ -202,7 +202,7 @@ public class PostFilter implements Parcelable {
         if (postFilter.containFlairs != null && !postFilter.containFlairs.equals("")) {
             String[] flairs = postFilter.containFlairs.split(",", 0);
             for (String f : flairs) {
-                if (!f.equals("") && post.getFlair().equalsIgnoreCase(f)) {
+                if (!f.trim().equals("") && post.getFlair().equalsIgnoreCase(f.trim())) {
                     return false;
                 }
             }
