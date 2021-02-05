@@ -254,80 +254,82 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     }
 
     private void bindView(Resources resources) {
-        mLinearLayoutManager = new LinearLayoutManager(mActivity);
-        mCommentRecyclerView.setLayoutManager(mLinearLayoutManager);
+        if (mActivity != null && !mActivity.isFinishing() && !mActivity.isDestroyed()) {
+            mLinearLayoutManager = new LinearLayoutManager(mActivity);
+            mCommentRecyclerView.setLayoutManager(mLinearLayoutManager);
 
-        mAdapter = new CommentsListingRecyclerViewAdapter(mActivity, mOauthRetrofit, customThemeWrapper,
-                getResources().getConfiguration().locale, mSharedPreferences,
-                getArguments().getString(EXTRA_ACCESS_TOKEN), getArguments().getString(EXTRA_ACCOUNT_NAME),
-                () -> mCommentViewModel.retryLoadingMore());
+            mAdapter = new CommentsListingRecyclerViewAdapter(mActivity, mOauthRetrofit, customThemeWrapper,
+                    getResources().getConfiguration().locale, mSharedPreferences,
+                    getArguments().getString(EXTRA_ACCESS_TOKEN), getArguments().getString(EXTRA_ACCOUNT_NAME),
+                    () -> mCommentViewModel.retryLoadingMore());
 
-        String username = getArguments().getString(EXTRA_USERNAME);
-        String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_USER_COMMENT, SortType.Type.NEW.name());
-        if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
-            String sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_USER_COMMENT, SortType.Time.ALL.name());
-            sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()), SortType.Time.valueOf(sortTime.toUpperCase()));
-        } else {
-            sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
-        }
+            String username = getArguments().getString(EXTRA_USERNAME);
+            String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_USER_COMMENT, SortType.Type.NEW.name());
+            if(sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
+                String sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_USER_COMMENT, SortType.Time.ALL.name());
+                sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()), SortType.Time.valueOf(sortTime.toUpperCase()));
+            } else {
+                sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
+            }
 
-        mCommentRecyclerView.setAdapter(mAdapter);
+            mCommentRecyclerView.setAdapter(mAdapter);
 
-        if (mActivity instanceof RecyclerViewContentScrollingInterface) {
-            mCommentRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-                @Override
-                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
-                    if (dy > 0) {
-                        ((RecyclerViewContentScrollingInterface) mActivity).contentScrollDown();
-                    } else if (dy < 0) {
-                        ((RecyclerViewContentScrollingInterface) mActivity).contentScrollUp();
+            if (mActivity instanceof RecyclerViewContentScrollingInterface) {
+                mCommentRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                    @Override
+                    public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                        if (dy > 0) {
+                            ((RecyclerViewContentScrollingInterface) mActivity).contentScrollDown();
+                        } else if (dy < 0) {
+                            ((RecyclerViewContentScrollingInterface) mActivity).contentScrollUp();
+                        }
                     }
+                });
+            }
+
+            CommentViewModel.Factory factory;
+
+            if (mAccessToken == null) {
+                factory = new CommentViewModel.Factory(mRetrofit,
+                        resources.getConfiguration().locale, null, username, sortType,
+                        getArguments().getBoolean(EXTRA_ARE_SAVED_COMMENTS));
+            } else {
+                factory = new CommentViewModel.Factory(mOauthRetrofit,
+                        resources.getConfiguration().locale, mAccessToken, username, sortType,
+                        getArguments().getBoolean(EXTRA_ARE_SAVED_COMMENTS));
+            }
+
+            mCommentViewModel = new ViewModelProvider(this, factory).get(CommentViewModel.class);
+            mCommentViewModel.getComments().observe(getViewLifecycleOwner(), comments -> mAdapter.submitList(comments));
+
+            mCommentViewModel.hasComment().observe(getViewLifecycleOwner(), hasComment -> {
+                mSwipeRefreshLayout.setRefreshing(false);
+                if (hasComment) {
+                    mFetchCommentInfoLinearLayout.setVisibility(View.GONE);
+                } else {
+                    mFetchCommentInfoLinearLayout.setOnClickListener(view -> {
+                        //Do nothing
+                    });
+                    showErrorView(R.string.no_comments);
                 }
             });
+
+            mCommentViewModel.getInitialLoadingState().observe(getViewLifecycleOwner(), networkState -> {
+                if (networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                } else if (networkState.getStatus().equals(NetworkState.Status.FAILED)) {
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    mFetchCommentInfoLinearLayout.setOnClickListener(view -> refresh());
+                    showErrorView(R.string.load_comments_failed);
+                } else {
+                    mSwipeRefreshLayout.setRefreshing(true);
+                }
+            });
+
+            mCommentViewModel.getPaginationNetworkState().observe(getViewLifecycleOwner(), networkState -> mAdapter.setNetworkState(networkState));
+
+            mSwipeRefreshLayout.setOnRefreshListener(() -> mCommentViewModel.refresh());
         }
-
-        CommentViewModel.Factory factory;
-
-        if (mAccessToken == null) {
-            factory = new CommentViewModel.Factory(mRetrofit,
-                    resources.getConfiguration().locale, null, username, sortType,
-                    getArguments().getBoolean(EXTRA_ARE_SAVED_COMMENTS));
-        } else {
-            factory = new CommentViewModel.Factory(mOauthRetrofit,
-                    resources.getConfiguration().locale, mAccessToken, username, sortType,
-                    getArguments().getBoolean(EXTRA_ARE_SAVED_COMMENTS));
-        }
-
-        mCommentViewModel = new ViewModelProvider(this, factory).get(CommentViewModel.class);
-        mCommentViewModel.getComments().observe(getViewLifecycleOwner(), comments -> mAdapter.submitList(comments));
-
-        mCommentViewModel.hasComment().observe(getViewLifecycleOwner(), hasComment -> {
-            mSwipeRefreshLayout.setRefreshing(false);
-            if (hasComment) {
-                mFetchCommentInfoLinearLayout.setVisibility(View.GONE);
-            } else {
-                mFetchCommentInfoLinearLayout.setOnClickListener(view -> {
-                    //Do nothing
-                });
-                showErrorView(R.string.no_comments);
-            }
-        });
-
-        mCommentViewModel.getInitialLoadingState().observe(getViewLifecycleOwner(), networkState -> {
-            if (networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            } else if (networkState.getStatus().equals(NetworkState.Status.FAILED)) {
-                mSwipeRefreshLayout.setRefreshing(false);
-                mFetchCommentInfoLinearLayout.setOnClickListener(view -> refresh());
-                showErrorView(R.string.load_comments_failed);
-            } else {
-                mSwipeRefreshLayout.setRefreshing(true);
-            }
-        });
-
-        mCommentViewModel.getPaginationNetworkState().observe(getViewLifecycleOwner(), networkState -> mAdapter.setNetworkState(networkState));
-
-        mSwipeRefreshLayout.setOnRefreshListener(() -> mCommentViewModel.refresh());
     }
 
     public void changeSortType(SortType sortType) {
