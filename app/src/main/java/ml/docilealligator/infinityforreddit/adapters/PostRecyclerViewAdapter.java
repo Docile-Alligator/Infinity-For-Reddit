@@ -454,7 +454,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                                 .into(((PostBaseViewHolder) holder).iconGifImageView);
                                     }
 
-                                    if (holder.getAdapterPosition() >= 0) {
+                                    if (holder.getBindingAdapterPosition() >= 0) {
                                         post.setAuthorIconUrl(iconImageUrl);
                                     }
                                 }
@@ -488,7 +488,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                                         .into(((PostBaseViewHolder) holder).iconGifImageView);
                                             }
 
-                                            if (holder.getAdapterPosition() >= 0) {
+                                            if (holder.getBindingAdapterPosition() >= 0) {
                                                 post.setSubredditIconUrl(iconImageUrl);
                                             }
                                         }
@@ -522,7 +522,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                             .into(((PostBaseViewHolder) holder).iconGifImageView);
                                 }
 
-                                if (holder.getAdapterPosition() >= 0) {
+                                if (holder.getBindingAdapterPosition() >= 0) {
                                     post.setAuthorIconUrl(iconImageUrl);
                                 }
                             }
@@ -637,14 +637,14 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                 post.setVideoDownloadUrl(mp4);
                                 post.setVideoUrl(webm);
                                 post.setLoadGfyOrRedgifsVideoSuccess(true);
-                                if (position == holder.getAdapterPosition()) {
+                                if (position == holder.getBindingAdapterPosition()) {
                                     ((PostVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
                                 }
                             }
 
                             @Override
                             public void failed(int errorCode) {
-                                if (position == holder.getAdapterPosition()) {
+                                if (position == holder.getBindingAdapterPosition()) {
                                     ((PostVideoAutoplayViewHolder) holder).errorLoadingGfycatImageView.setVisibility(View.VISIBLE);
                                 }
                             }
@@ -739,7 +739,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         ((PostTextTypeViewHolder) holder).contentTextView.setText(post.getSelfTextPlainTrimmed());
                     }
                 }
-                mCallback.currentlyBindItem(holder.getAdapterPosition());
+                mCallback.currentlyBindItem(holder.getBindingAdapterPosition());
             }
         } else if (holder instanceof PostCompactBaseViewHolder) {
             Post post = getItem(position);
@@ -784,7 +784,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                                 .into(((PostCompactBaseViewHolder) holder).iconGifImageView);
                                     }
 
-                                    if (holder.getAdapterPosition() >= 0) {
+                                    if (holder.getBindingAdapterPosition() >= 0) {
                                         post.setAuthorIconUrl(iconImageUrl);
                                     }
                                 }
@@ -818,7 +818,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                                         .into(((PostCompactBaseViewHolder) holder).iconGifImageView);
                                             }
 
-                                            if (holder.getAdapterPosition() >= 0) {
+                                            if (holder.getBindingAdapterPosition() >= 0) {
                                                 post.setSubredditIconUrl(iconImageUrl);
                                             }
                                         }
@@ -855,7 +855,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                             .into(((PostCompactBaseViewHolder) holder).iconGifImageView);
                                 }
 
-                                if (holder.getAdapterPosition() >= 0) {
+                                if (holder.getBindingAdapterPosition() >= 0) {
                                     post.setAuthorIconUrl(iconImageUrl);
                                 }
                             }
@@ -1044,7 +1044,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     ((PostCompactBaseViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                 }
 
-                mCallback.currentlyBindItem(holder.getAdapterPosition());
+                mCallback.currentlyBindItem(holder.getBindingAdapterPosition());
             }
         }
     }
@@ -1343,7 +1343,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         super.onViewRecycled(holder);
         if (holder instanceof PostBaseViewHolder) {
             if (mMarkPostsAsReadOnScroll) {
-                int position = holder.getAdapterPosition();
+                int position = holder.getBindingAdapterPosition();
                 if (position < super.getItemCount() && position >= 0) {
                     Post post = getItem(position);
                     ((PostBaseViewHolder) holder).markPostRead(post, false);
@@ -1398,7 +1398,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             ((PostBaseViewHolder) holder).downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
         } else if (holder instanceof PostCompactBaseViewHolder) {
             if (mMarkPostsAsReadOnScroll) {
-                int position = holder.getAdapterPosition();
+                int position = holder.getBindingAdapterPosition();
                 if (position < super.getItemCount() && position >= 0) {
                     Post post = getItem(position);
                     ((PostCompactBaseViewHolder) holder).markPostRead(post, false);
@@ -1624,7 +1624,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             shareButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
             cardView.setOnClickListener(view -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position >= 0 && canStartActivity) {
                     Post post = getItem(position);
                     if (post != null) {
@@ -1632,8 +1632,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         canStartActivity = false;
 
                         Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
-                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST, mFragment.getPostList());
-                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, getAdapterPosition());
+                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, post);
+                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, getBindingAdapterPosition());
+                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_FRAGMENT_ID, mFragment.getPostFragmentId());
                         mActivity.startActivity(intent);
                     }
                 }
@@ -1641,7 +1642,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             userTextView.setOnClickListener(view -> {
                 if (canStartActivity) {
-                    int position = getAdapterPosition();
+                    int position = getBindingAdapterPosition();
                     if (position < 0) {
                         return;
                     }
@@ -1657,7 +1658,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             if (mDisplaySubredditName) {
                 subredditTextView.setOnClickListener(view -> {
-                    int position = getAdapterPosition();
+                    int position = getBindingAdapterPosition();
                     if (position < 0) {
                         return;
                     }
@@ -1683,7 +1684,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 iconGifImageView.setOnClickListener(view -> subredditTextView.performClick());
             } else {
                 subredditTextView.setOnClickListener(view -> {
-                    int position = getAdapterPosition();
+                    int position = getBindingAdapterPosition();
                     if (position < 0) {
                         return;
                     }
@@ -1710,7 +1711,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             if (!(mActivity instanceof FilteredPostsActivity)) {
                 nsfwTextView.setOnClickListener(view -> {
-                    int position = getAdapterPosition();
+                    int position = getBindingAdapterPosition();
                     if (position < 0) {
                         return;
                     }
@@ -1720,7 +1721,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     }
                 });
                 typeTextView.setOnClickListener(view -> {
-                    int position = getAdapterPosition();
+                    int position = getBindingAdapterPosition();
                     if (position < 0) {
                         return;
                     }
@@ -1732,7 +1733,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             }
 
             upvoteButton.setOnClickListener(view -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
@@ -1781,7 +1782,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
-                            int currentPosition = getAdapterPosition();
+                            int currentPosition = getBindingAdapterPosition();
                             if (newVoteType.equals(APIUtils.DIR_UPVOTE)) {
                                 post.setVoteType(1);
                                 if (currentPosition == position) {
@@ -1808,7 +1809,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         public void onVoteThingFail(int position1) {
                             Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                             post.setVoteType(previousVoteType);
-                            if (getAdapterPosition() == position) {
+                            if (getBindingAdapterPosition() == position) {
                                 scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
                                 upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                                 downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
@@ -1817,12 +1818,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
-                    }, post.getFullName(), newVoteType, getAdapterPosition());
+                    }, post.getFullName(), newVoteType, getBindingAdapterPosition());
                 }
             });
 
             downvoteButton.setOnClickListener(view -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
@@ -1871,7 +1872,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
-                            int currentPosition = getAdapterPosition();
+                            int currentPosition = getBindingAdapterPosition();
                             if (newVoteType.equals(APIUtils.DIR_DOWNVOTE)) {
                                 post.setVoteType(-1);
                                 if (currentPosition == position) {
@@ -1898,7 +1899,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         public void onVoteThingFail(int position1) {
                             Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                             post.setVoteType(previousVoteType);
-                            if (getAdapterPosition() == position) {
+                            if (getBindingAdapterPosition() == position) {
                                 scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
                                 upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                                 downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
@@ -1907,12 +1908,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
-                    }, post.getFullName(), newVoteType, getAdapterPosition());
+                    }, post.getFullName(), newVoteType, getBindingAdapterPosition());
                 }
             });
 
             saveButton.setOnClickListener(view -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
@@ -1930,7 +1931,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     @Override
                                     public void success() {
                                         post.setSaved(false);
-                                        if (getAdapterPosition() == position) {
+                                        if (getBindingAdapterPosition() == position) {
                                             saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                         }
                                         Toast.makeText(mActivity, R.string.post_unsaved_success, Toast.LENGTH_SHORT).show();
@@ -1940,7 +1941,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     @Override
                                     public void failed() {
                                         post.setSaved(true);
-                                        if (getAdapterPosition() == position) {
+                                        if (getBindingAdapterPosition() == position) {
                                             saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                         }
                                         Toast.makeText(mActivity, R.string.post_unsaved_failed, Toast.LENGTH_SHORT).show();
@@ -1954,7 +1955,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     @Override
                                     public void success() {
                                         post.setSaved(true);
-                                        if (getAdapterPosition() == position) {
+                                        if (getBindingAdapterPosition() == position) {
                                             saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                         }
                                         Toast.makeText(mActivity, R.string.post_saved_success, Toast.LENGTH_SHORT).show();
@@ -1964,7 +1965,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     @Override
                                     public void failed() {
                                         post.setSaved(false);
-                                        if (getAdapterPosition() == position) {
+                                        if (getBindingAdapterPosition() == position) {
                                             saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                         }
                                         Toast.makeText(mActivity, R.string.post_saved_failed, Toast.LENGTH_SHORT).show();
@@ -1976,7 +1977,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
 
             shareButton.setOnClickListener(view -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
@@ -2111,7 +2112,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
 
             fullscreenButton.setOnClickListener(view -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
@@ -2257,7 +2258,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
         @Override
         public int getPlayerOrder() {
-            return getAdapterPosition();
+            return getBindingAdapterPosition();
         }
     }
 
@@ -2356,7 +2357,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             errorTextView.setTextColor(mPrimaryTextColor);
 
             imageView.setOnClickListener(view -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
@@ -2638,7 +2639,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             noPreviewLinkImageFrameLayout.setClipToOutline(true);
 
             itemView.setOnClickListener(view -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
@@ -2648,8 +2649,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     canStartActivity = false;
 
                     Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
-                    intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST, mFragment.getPostList());
-                    intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, getAdapterPosition());
+                    intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, post);
+                    intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, getBindingAdapterPosition());
+                    intent.putExtra(ViewPostDetailActivity.EXTRA_POST_FRAGMENT_ID, mFragment.getPostFragmentId());
                     mActivity.startActivity(intent);
                 }
             });
@@ -2672,7 +2674,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
 
             nameTextView.setOnClickListener(view -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
@@ -2702,7 +2704,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             iconGifImageView.setOnClickListener(view -> nameTextView.performClick());
 
             nsfwTextView.setOnClickListener(view -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
@@ -2713,7 +2715,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
 
             typeTextView.setOnClickListener(view -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
@@ -2724,7 +2726,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
 
             imageView.setOnClickListener(view -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
@@ -2789,7 +2791,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     return;
                 }
 
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
@@ -2833,7 +2835,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
-                            int currentPosition = getAdapterPosition();
+                            int currentPosition = getBindingAdapterPosition();
                             if (newVoteType.equals(APIUtils.DIR_UPVOTE)) {
                                 post.setVoteType(1);
                                 if (currentPosition == position) {
@@ -2860,7 +2862,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         public void onVoteThingFail(int position1) {
                             Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                             post.setVoteType(previousVoteType);
-                            if (getAdapterPosition() == position) {
+                            if (getBindingAdapterPosition() == position) {
                                 scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
                                 upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                                 downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
@@ -2869,7 +2871,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
-                    }, post.getFullName(), newVoteType, getAdapterPosition());
+                    }, post.getFullName(), newVoteType, getBindingAdapterPosition());
                 }
             });
 
@@ -2879,7 +2881,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     return;
                 }
 
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
@@ -2923,7 +2925,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
-                            int currentPosition = getAdapterPosition();
+                            int currentPosition = getBindingAdapterPosition();
                             if (newVoteType.equals(APIUtils.DIR_DOWNVOTE)) {
                                 post.setVoteType(-1);
                                 if (currentPosition == position) {
@@ -2951,7 +2953,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         public void onVoteThingFail(int position1) {
                             Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                             post.setVoteType(previousVoteType);
-                            if (getAdapterPosition() == position) {
+                            if (getBindingAdapterPosition() == position) {
                                 scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
                                 upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                                 downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
@@ -2960,7 +2962,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
                         }
-                    }, post.getFullName(), newVoteType, getAdapterPosition());
+                    }, post.getFullName(), newVoteType, getBindingAdapterPosition());
                 }
             });
 
@@ -2970,7 +2972,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     return;
                 }
 
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
@@ -2983,7 +2985,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     @Override
                                     public void success() {
                                         post.setSaved(false);
-                                        if (getAdapterPosition() == position) {
+                                        if (getBindingAdapterPosition() == position) {
                                             saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                         }
                                         Toast.makeText(mActivity, R.string.post_unsaved_success, Toast.LENGTH_SHORT).show();
@@ -2993,7 +2995,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     @Override
                                     public void failed() {
                                         post.setSaved(true);
-                                        if (getAdapterPosition() == position) {
+                                        if (getBindingAdapterPosition() == position) {
                                             saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                         }
                                         Toast.makeText(mActivity, R.string.post_unsaved_failed, Toast.LENGTH_SHORT).show();
@@ -3007,7 +3009,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     @Override
                                     public void success() {
                                         post.setSaved(true);
-                                        if (getAdapterPosition() == position) {
+                                        if (getBindingAdapterPosition() == position) {
                                             saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                         }
                                         Toast.makeText(mActivity, R.string.post_saved_success, Toast.LENGTH_SHORT).show();
@@ -3017,7 +3019,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                     @Override
                                     public void failed() {
                                         post.setSaved(false);
-                                        if (getAdapterPosition() == position) {
+                                        if (getBindingAdapterPosition() == position) {
                                             saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                         }
                                         Toast.makeText(mActivity, R.string.post_saved_failed, Toast.LENGTH_SHORT).show();
@@ -3029,7 +3031,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
 
             shareButton.setOnClickListener(view -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }

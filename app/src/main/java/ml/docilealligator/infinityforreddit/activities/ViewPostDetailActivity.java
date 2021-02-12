@@ -54,6 +54,8 @@ import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.events.NeedForPostListFromPostFragmentEvent;
+import ml.docilealligator.infinityforreddit.events.ProvidePostListToViewPostDetailActivityEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
@@ -63,13 +65,13 @@ import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 public class ViewPostDetailActivity extends BaseActivity implements FlairBottomSheetFragment.FlairSelectionCallback,
         SortTypeSelectionCallback, ActivityToolbarInterface {
 
-    public static final String EXTRA_POST_LIST = "EPL";
     public static final String EXTRA_POST_DATA = "EPD";
     public static final String EXTRA_POST_ID = "EPI";
     public static final String EXTRA_POST_LIST_POSITION = "EPLP";
     public static final String EXTRA_SINGLE_COMMENT_ID = "ESCI";
     public static final String EXTRA_MESSAGE_FULLNAME = "ENI";
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
+    public static final String EXTRA_POST_FRAGMENT_ID = "EPFI";
     public static final int EDIT_COMMENT_REQUEST_CODE = 3;
     public static final int GIVE_AWARD_REQUEST_CODE = 100;
     @State
@@ -105,6 +107,8 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
     private FragmentManager fragmentManager;
     private SlidrInterface mSlidrInterface;
     private SectionsPagerAdapter sectionsPagerAdapter;
+    private long postFragmentId;
+    private int postListPosition = -1;
     private int orientation;
     private boolean mVolumeKeysNavigateComments;
 
@@ -157,10 +161,15 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             }
         }
 
+        postFragmentId = getIntent().getLongExtra(EXTRA_POST_FRAGMENT_ID, -1);
+        if (posts == null && postFragmentId > 0) {
+            EventBus.getDefault().post(new NeedForPostListFromPostFragmentEvent(postFragmentId));
+        }
+
+
         fragmentManager = getSupportFragmentManager();
 
         if (savedInstanceState == null) {
-            posts = getIntent().getParcelableArrayListExtra(EXTRA_POST_LIST);
             post = getIntent().getParcelableExtra(EXTRA_POST_DATA);
         }
 
@@ -296,6 +305,17 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
         }
     }
 
+    @Subscribe
+    public void onProvidePostListToViewPostDetailActivityEvent(ProvidePostListToViewPostDetailActivityEvent event) {
+        if (event.postFragmentId == postFragmentId && posts == null) {
+            posts = event.posts;
+            if (sectionsPagerAdapter != null) {
+                if (postListPosition > 0)
+                    sectionsPagerAdapter.notifyDataSetChanged();
+            }
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -415,12 +435,19 @@ public class ViewPostDetailActivity extends BaseActivity implements FlairBottomS
             ViewPostDetailFragment fragment = new ViewPostDetailFragment();
             Bundle bundle = new Bundle();
             if (posts != null) {
-                bundle.putParcelable(ViewPostDetailFragment.EXTRA_POST_DATA, posts.get(position));
+                if (postListPosition == position && post != null) {
+                    bundle.putParcelable(ViewPostDetailFragment.EXTRA_POST_DATA, post);
+                    bundle.putInt(ViewPostDetailFragment.EXTRA_POST_LIST_POSITION, position);
+                } else {
+                    bundle.putParcelable(ViewPostDetailFragment.EXTRA_POST_DATA, posts.get(position));
+                    bundle.putInt(ViewPostDetailFragment.EXTRA_POST_LIST_POSITION, position);
+                }
             } else {
                 if (post == null) {
                     bundle.putString(ViewPostDetailFragment.EXTRA_POST_ID, getIntent().getStringExtra(EXTRA_POST_ID));
                 } else {
                     bundle.putParcelable(ViewPostDetailFragment.EXTRA_POST_DATA, post);
+                    bundle.putInt(ViewPostDetailFragment.EXTRA_POST_LIST_POSITION, position);
                 }
             }
             fragment.setArguments(bundle);

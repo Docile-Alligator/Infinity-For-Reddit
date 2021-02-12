@@ -52,6 +52,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Random;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -101,7 +102,9 @@ import ml.docilealligator.infinityforreddit.events.ChangeTimeFormatEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeVibrateWhenActionTriggeredEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeVideoAutoplayEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeVoteButtonsPositionEvent;
+import ml.docilealligator.infinityforreddit.events.NeedForPostListFromPostFragmentEvent;
 import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostList;
+import ml.docilealligator.infinityforreddit.events.ProvidePostListToViewPostDetailActivityEvent;
 import ml.docilealligator.infinityforreddit.events.ShowDividerInCompactLayoutPreferenceEvent;
 import ml.docilealligator.infinityforreddit.events.ShowThumbnailOnTheRightInCompactLayoutEvent;
 import ml.docilealligator.infinityforreddit.post.Post;
@@ -138,6 +141,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private static final String READ_POST_LIST_STATE = "RPLS";
     private static final String HIDE_READ_POSTS_INDEX_STATE = "HRPIS";
     private static final String POST_FILTER_STATE = "PFS";
+    private static final String POST_FRAGMENT_ID_STATE = "PFIS";
 
     @BindView(R.id.swipe_refresh_layout_post_fragment)
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -192,6 +196,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private AppCompatActivity activity;
     private LinearLayoutManager mLinearLayoutManager;
     private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
+    private long postFragmentId;
     private int postType;
     private boolean isInLazyMode = false;
     private boolean isLazyModePaused = false;
@@ -390,8 +395,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             readPosts = savedInstanceState.getParcelableArrayList(READ_POST_LIST_STATE);
             hideReadPostsIndex = savedInstanceState.getInt(HIDE_READ_POSTS_INDEX_STATE, 0);
             postFilter = savedInstanceState.getParcelable(POST_FILTER_STATE);
+            postFragmentId = savedInstanceState.getLong(POST_FRAGMENT_ID_STATE);
         } else {
             postFilter = getArguments().getParcelable(EXTRA_FILTER);
+            postFragmentId = System.currentTimeMillis() + new Random().nextInt(1000);
         }
 
         mPostRecyclerView.setOnTouchListener((view, motionEvent) -> {
@@ -428,6 +435,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if (postType == PostDataSource.TYPE_SEARCH) {
             subredditName = getArguments().getString(EXTRA_NAME);
             query = getArguments().getString(EXTRA_QUERY);
+            if (savedInstanceState == null) {
+                postFragmentId += query.hashCode();
+            }
 
             usage = PostFilterUsage.SEARCH_TYPE;
             nameOfUsage = PostFilterUsage.NO_USAGE;
@@ -481,6 +491,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             });
         } else if (postType == PostDataSource.TYPE_SUBREDDIT) {
             subredditName = getArguments().getString(EXTRA_NAME);
+            if (savedInstanceState == null) {
+                postFragmentId += subredditName.hashCode();
+            }
 
             usage = PostFilterUsage.SUBREDDIT_TYPE;
             nameOfUsage = subredditName;
@@ -545,6 +558,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             });
         } else if (postType == PostDataSource.TYPE_MULTI_REDDIT) {
             multiRedditPath = getArguments().getString(EXTRA_NAME);
+            if (savedInstanceState == null) {
+                postFragmentId += multiRedditPath.hashCode();
+            }
 
             usage = PostFilterUsage.MULTIREDDIT_TYPE;
             nameOfUsage = multiRedditPath;
@@ -610,6 +626,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         } else if (postType == PostDataSource.TYPE_USER) {
             username = getArguments().getString(EXTRA_USER_NAME);
             where = getArguments().getString(EXTRA_USER_WHERE);
+            if (savedInstanceState == null) {
+                postFragmentId += username.hashCode();
+            }
 
             usage = PostFilterUsage.USER_TYPE;
             nameOfUsage = username;
@@ -1061,8 +1080,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
     }
 
-    public ArrayList<Post> getPostList() {
-        return new ArrayList<>(mPostViewModel.getPosts().getValue());
+    public long getPostFragmentId() {
+        return postFragmentId;
     }
 
     @Override
@@ -1087,6 +1106,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[0]);
         }
         outState.putParcelable(POST_FILTER_STATE, postFilter);
+        outState.putLong(POST_FRAGMENT_ID_STATE, postFragmentId);
     }
 
     @Override
@@ -1573,6 +1593,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         swipeRightAction = changeSwipeActionEvent.swipeRightAction == -1 ? swipeRightAction : changeSwipeActionEvent.swipeRightAction;
         swipeLeftAction = changeSwipeActionEvent.swipeLeftAction == -1 ? swipeLeftAction : changeSwipeActionEvent.swipeLeftAction;
         initializeSwipeActionDrawable();
+    }
+
+    @Subscribe
+    public void onNeedForPostListFromPostRecyclerViewAdapterEvent(NeedForPostListFromPostFragmentEvent event) {
+        if (postFragmentId == event.postFragmentTimeId) {
+            EventBus.getDefault().post(new ProvidePostListToViewPostDetailActivityEvent(postFragmentId, new ArrayList<>(mPostViewModel.getPosts().getValue())));
+        }
     }
 
     private void refreshAdapter() {
