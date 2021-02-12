@@ -1200,7 +1200,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                         }
 
                         @Override
-                        public void onFetchSubredditDataFail() {
+                        public void onFetchSubredditDataFail(boolean isQuarantined) {
                             mRespectSubredditRecommendedSortType = false;
                             ViewPostDetailFragment.this.sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value.toUpperCase());
                             if (ViewPostDetailFragment.this.sortType != null) {

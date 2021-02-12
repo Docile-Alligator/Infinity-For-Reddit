@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.MenuItem;
+import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -20,8 +21,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.r0adkll.slidr.Slidr;
 
 import org.json.JSONException;
@@ -53,6 +57,8 @@ import retrofit2.Retrofit;
 
 public class LoginActivity extends BaseActivity {
 
+    private static final String ENABLE_DOM_STATE = "EDS";
+
     @BindView(R.id.coordinator_layout_login_activity)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_login_activity)
@@ -63,6 +69,8 @@ public class LoginActivity extends BaseActivity {
     TextView twoFAInfoTextView;
     @BindView(R.id.webview_login_activity)
     WebView webView;
+    @BindView(R.id.fab_login_activity)
+    FloatingActionButton fab;
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
@@ -82,6 +90,7 @@ public class LoginActivity extends BaseActivity {
     @Inject
     Executor mExecutor;
     private String authCode;
+    private boolean enableDom = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +121,28 @@ public class LoginActivity extends BaseActivity {
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        if (savedInstanceState != null) {
+            enableDom = savedInstanceState.getBoolean(ENABLE_DOM_STATE);
+        }
+
+        fab.setOnClickListener(view -> {
+            new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                    .setTitle(R.string.have_trouble_login_title)
+                    .setMessage(R.string.have_trouble_login_message)
+                    .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
+                        enableDom = !enableDom;
+                        ActivityCompat.recreate(this);
+                    })
+                    .setNegativeButton(R.string.no, null)
+                    .show();
+        });
+
+        if (enableDom) {
+            twoFAInfoTextView.setVisibility(View.GONE);
+        }
+
         webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setDomStorageEnabled(enableDom);
 
         Uri baseUri = Uri.parse(APIUtils.OAUTH_URL);
         Uri.Builder uriBuilder = baseUri.buildUpon();
@@ -232,6 +262,12 @@ public class LoginActivity extends BaseActivity {
     }
 
     @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(ENABLE_DOM_STATE, enableDom);
+    }
+
+    @Override
     public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }
@@ -248,6 +284,7 @@ public class LoginActivity extends BaseActivity {
         twoFAInfoTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
         Drawable infoDrawable = Utils.getTintedDrawable(this, R.drawable.ic_info_preference_24dp, mCustomThemeWrapper.getPrimaryIconColor());
         twoFAInfoTextView.setCompoundDrawablesWithIntrinsicBounds(infoDrawable, null, null, null);
+        applyFABTheme(fab);
     }
 
     @Override

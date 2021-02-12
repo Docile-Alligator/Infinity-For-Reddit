@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.content.SharedPreferences;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
@@ -13,6 +15,7 @@ import java.util.Map;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import okhttp3.Authenticator;
 import okhttp3.Headers;
 import okhttp3.Request;
@@ -24,10 +27,12 @@ import retrofit2.Retrofit;
 class AccessTokenAuthenticator implements Authenticator {
     private Retrofit mRetrofit;
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
+    private SharedPreferences mCurrentAccountSharedPreferences;
 
-    AccessTokenAuthenticator(Retrofit retrofit, RedditDataRoomDatabase accountRoomDatabase) {
+    AccessTokenAuthenticator(Retrofit retrofit, RedditDataRoomDatabase accountRoomDatabase, SharedPreferences currentAccountSharedPreferences) {
         mRetrofit = retrofit;
         mRedditDataRoomDatabase = accountRoomDatabase;
+        mCurrentAccountSharedPreferences = currentAccountSharedPreferences;
     }
 
     @Nullable
@@ -76,6 +81,9 @@ class AccessTokenAuthenticator implements Authenticator {
                     mRedditDataRoomDatabase.accountDao().updateAccessToken(account.getAccountName(), newAccessToken);
                 } else {
                     mRedditDataRoomDatabase.accountDao().updateAccessTokenAndRefreshToken(account.getAccountName(), newAccessToken, newRefreshToken);
+                }
+                if (mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, "").equals(account.getAccountName())) {
+                    mCurrentAccountSharedPreferences.edit().putString(SharedPreferencesUtils.ACCESS_TOKEN, newAccessToken).apply();
                 }
 
                 return newAccessToken;

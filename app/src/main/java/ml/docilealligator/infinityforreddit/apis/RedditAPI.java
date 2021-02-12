@@ -346,4 +346,7 @@ public interface RedditAPI {
     Call<String> addSubredditToMultiReddit(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params,
                                            @Path(value = "multipath", encoded = true) String multipath, @Path("subredditName") String subredditName);
 
+    @FormUrlEncoded
+    @POST("/api/quarantine_optin?raw_json=1")
+    Call<String> optInQuarantinedSubreddit(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 }

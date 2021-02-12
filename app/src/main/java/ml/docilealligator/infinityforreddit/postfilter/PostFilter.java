@@ -170,7 +170,7 @@ public class PostFilter implements Parcelable {
         if (postFilter.postTitleExcludesStrings != null && !postFilter.postTitleExcludesStrings.equals("")) {
             String[] titles = postFilter.postTitleExcludesStrings.split(",", 0);
             for (String t : titles) {
-                if (!t.equals("") && post.getTitle().toLowerCase().contains(t.toLowerCase())) {
+                if (!t.trim().equals("") && post.getTitle().toLowerCase().contains(t.toLowerCase().trim())) {
                     return false;
                 }
             }
@@ -178,7 +178,7 @@ public class PostFilter implements Parcelable {
         if (postFilter.excludeSubreddits != null && !postFilter.excludeSubreddits.equals("")) {
             String[] subreddits = postFilter.excludeSubreddits.split(",", 0);
             for (String s : subreddits) {
-                if (!s.equals("") && post.getSubredditName().equalsIgnoreCase(s)) {
+                if (!s.trim().equals("") && post.getSubredditName().equalsIgnoreCase(s.trim())) {
                     return false;
                 }
             }
@@ -186,7 +186,7 @@ public class PostFilter implements Parcelable {
         if (postFilter.excludeUsers != null && !postFilter.excludeUsers.equals("")) {
             String[] users = postFilter.excludeUsers.split(",", 0);
             for (String u : users) {
-                if (!u.equals("") && post.getAuthor().equalsIgnoreCase(u)) {
+                if (!u.trim().equals("") && post.getAuthor().equalsIgnoreCase(u.trim())) {
                     return false;
                 }
             }
@@ -194,7 +194,7 @@ public class PostFilter implements Parcelable {
         if (postFilter.excludeFlairs != null && !postFilter.excludeFlairs.equals("")) {
             String[] flairs = postFilter.excludeFlairs.split(",", 0);
             for (String f : flairs) {
-                if (!f.equals("") && post.getFlair().equalsIgnoreCase(f)) {
+                if (!f.trim().equals("") && post.getFlair().equalsIgnoreCase(f.trim())) {
                     return false;
                 }
             }
@@ -202,7 +202,7 @@ public class PostFilter implements Parcelable {
         if (postFilter.containFlairs != null && !postFilter.containFlairs.equals("")) {
             String[] flairs = postFilter.containFlairs.split(",", 0);
             for (String f : flairs) {
-                if (!f.equals("") && post.getFlair().equalsIgnoreCase(f)) {
+                if (!f.trim().equals("") && post.getFlair().equalsIgnoreCase(f.trim())) {
                     return false;
                 }
             }
@@ -212,10 +212,10 @@ public class PostFilter implements Parcelable {
     }
 
     public static PostFilter mergePostFilter(List<PostFilter> postFilterList) {
-        PostFilter postFilter = new PostFilter();
         if (postFilterList.size() == 1) {
             return postFilterList.get(0);
         }
+        PostFilter postFilter = new PostFilter();
         StringBuilder stringBuilder;
         postFilter.name = "Merged";
         for (PostFilter p : postFilterList) {
@@ -229,30 +229,39 @@ public class PostFilter implements Parcelable {
             postFilter.onlyNSFW = p.onlyNSFW ? p.onlyNSFW : postFilter.onlyNSFW;
             postFilter.onlySpoiler = p.onlySpoiler ? p.onlySpoiler : postFilter.onlySpoiler;
 
-            postFilter.postTitleExcludesRegex = p.postTitleExcludesRegex.equals("") ? postFilter.postTitleExcludesRegex : p.postTitleExcludesRegex;
-            stringBuilder = new StringBuilder(postFilter.postTitleExcludesStrings);
-            stringBuilder.append(",").append(p.postTitleExcludesStrings);
-            postFilter.postTitleExcludesStrings = stringBuilder.toString();
+            if (p.postTitleExcludesRegex != null && !p.postTitleExcludesRegex.equals("")) {
+                postFilter.postTitleExcludesRegex = p.postTitleExcludesRegex;
+            }
 
-            postFilter.excludeSubreddits = p.excludeSubreddits.equals("") ? postFilter.excludeSubreddits : p.postTitleExcludesRegex;
-            stringBuilder = new StringBuilder(postFilter.excludeSubreddits);
-            stringBuilder.append(",").append(p.excludeSubreddits);
-            postFilter.excludeSubreddits = stringBuilder.toString();
+            if (p.postTitleExcludesStrings != null && !p.postTitleExcludesStrings.equals("")) {
+                stringBuilder = new StringBuilder(postFilter.postTitleExcludesStrings == null ? "" : postFilter.postTitleExcludesStrings);
+                stringBuilder.append(",").append(p.postTitleExcludesStrings);
+                postFilter.postTitleExcludesStrings = stringBuilder.toString();
+            }
 
-            postFilter.excludeUsers = p.excludeUsers.equals("") ? postFilter.excludeUsers : p.postTitleExcludesRegex;
-            stringBuilder = new StringBuilder(postFilter.excludeUsers);
-            stringBuilder.append(",").append(p.excludeUsers);
-            postFilter.excludeUsers = stringBuilder.toString();
+            if (p.excludeSubreddits != null && !p.excludeSubreddits.equals("")) {
+                stringBuilder = new StringBuilder(postFilter.excludeSubreddits == null ? "" : postFilter.excludeSubreddits);
+                stringBuilder.append(",").append(p.excludeSubreddits);
+                postFilter.excludeSubreddits = stringBuilder.toString();
+            }
 
-            postFilter.containFlairs = p.containFlairs.equals("") ? postFilter.containFlairs : p.postTitleExcludesRegex;
-            stringBuilder = new StringBuilder(postFilter.containFlairs);
-            stringBuilder.append(",").append(p.containFlairs);
-            postFilter.containFlairs = stringBuilder.toString();
+            if (p.excludeUsers != null && !p.excludeUsers.equals("")) {
+                stringBuilder = new StringBuilder(postFilter.excludeUsers == null ? "" : postFilter.excludeUsers);
+                stringBuilder.append(",").append(p.excludeUsers);
+                postFilter.excludeUsers = stringBuilder.toString();
+            }
 
-            postFilter.excludeFlairs = p.excludeFlairs.equals("") ? postFilter.excludeFlairs : p.postTitleExcludesRegex;
-            stringBuilder = new StringBuilder(postFilter.excludeFlairs);
-            stringBuilder.append(",").append(p.excludeFlairs);
-            postFilter.excludeFlairs = stringBuilder.toString();
+            if (p.containFlairs != null && !p.containFlairs.equals("")) {
+                stringBuilder = new StringBuilder(postFilter.containFlairs == null ? "" : postFilter.containFlairs);
+                stringBuilder.append(",").append(p.containFlairs);
+                postFilter.containFlairs = stringBuilder.toString();
+            }
+
+            if (p.excludeFlairs != null && !p.excludeFlairs.equals("")) {
+                stringBuilder = new StringBuilder(postFilter.excludeFlairs == null ? "" : postFilter.excludeFlairs);
+                stringBuilder.append(",").append(p.excludeFlairs);
+                postFilter.excludeFlairs = stringBuilder.toString();
+            }
 
             postFilter.containTextType = p.containTextType || postFilter.containTextType;
             postFilter.containLinkType = p.containLinkType || postFilter.containLinkType;

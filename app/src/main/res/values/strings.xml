@@ -1017,4 +1017,7 @@
 
     <string name="choose_a_user">Choose a user</string>
 
+    <string name="have_trouble_login_title">Having Trouble Login</string>
+    <string name="have_trouble_login_message">Do you want to try another way to login?</string>
+
 </resources>

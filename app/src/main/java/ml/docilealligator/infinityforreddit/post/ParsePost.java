@@ -403,7 +403,7 @@ public class ParsePost {
                     if (gfycatId.contains("-")) {
                         gfycatId = gfycatId.substring(0, gfycatId.indexOf('-'));
                     }
-                    post.setGfycatId(gfycatId);
+                    post.setGfycatId(gfycatId.toLowerCase());
                 } else if (authority != null && authority.contains("redgifs.com")) {
                     String gfycatId = url.substring(url.lastIndexOf("/") + 1);
                     if (gfycatId.contains("-")) {
@@ -411,7 +411,7 @@ public class ParsePost {
                     }
                     post.setIsRedgifs(true);
                     post.setVideoUrl(url);
-                    post.setGfycatId(gfycatId);
+                    post.setGfycatId(gfycatId.toLowerCase());
                 }
             } catch (IllegalArgumentException ignore) { }
         } else if (post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
@@ -449,16 +449,21 @@ public class ParsePost {
             } else if (post.getPostType() == Post.LINK_TYPE) {
                 Uri uri = Uri.parse(url);
                 String authority = uri.getAuthority();
+
+                // Gyfcat ids must be lowercase to resolve to a video through the api, we are not
+                // guaranteed to get an id that is all lowercase.
+                String gfycatId = url.substring(url.lastIndexOf("/") + 1).toLowerCase();
+
                 if (authority != null && (authority.contains("gfycat.com"))) {
                     post.setPostType(Post.VIDEO_TYPE);
                     post.setIsGfycat(true);
                     post.setVideoUrl(url);
-                    post.setGfycatId(url.substring(url.lastIndexOf("/") + 1));
+                    post.setGfycatId(gfycatId);
                 } else if (authority != null && authority.contains("redgifs.com")) {
                     post.setPostType(Post.VIDEO_TYPE);
                     post.setIsRedgifs(true);
                     post.setVideoUrl(url);
-                    post.setGfycatId(url.substring(url.lastIndexOf("/") + 1));
+                    post.setGfycatId(gfycatId);
                 }
             }
         }
