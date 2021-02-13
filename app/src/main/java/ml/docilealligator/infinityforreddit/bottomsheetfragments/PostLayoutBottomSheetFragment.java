@@ -28,6 +28,8 @@ public class PostLayoutBottomSheetFragment extends RoundedBottomSheetDialogFragm
     TextView cardLayoutTextView;
     @BindView(R.id.compact_layout_text_view_post_layout_bottom_sheet_fragment)
     TextView compactLayoutTextView;
+    @BindView(R.id.gallery_layout_text_view_post_layout_bottom_sheet_fragment)
+    TextView galleryLayoutTextView;
     private Activity activity;
     public PostLayoutBottomSheetFragment() {
         // Required empty public constructor
@@ -47,6 +49,10 @@ public class PostLayoutBottomSheetFragment extends RoundedBottomSheetDialogFragm
         });
         compactLayoutTextView.setOnClickListener(view -> {
             ((PostLayoutSelectionCallback) activity).postLayoutSelected(SharedPreferencesUtils.POST_LAYOUT_COMPACT);
+            dismiss();
+        });
+        galleryLayoutTextView.setOnClickListener(view -> {
+            ((PostLayoutSelectionCallback) activity).postLayoutSelected(SharedPreferencesUtils.POST_LAYOUT_GALLERY);
             dismiss();
         });
         return rootView;

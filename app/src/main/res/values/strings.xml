@@ -566,6 +566,7 @@
 
     <string name="post_layout_card">Card Layout</string>
     <string name="post_layout_compact">Compact Layout</string>
+    <string name="post_layout_gallery">Gallery Layout</string>
 
     <string name="elapsed_time_just_now">Just Now</string>
     <string name="elapsed_time_a_minute_ago">1 Minute</string>
