@@ -17,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -30,6 +32,7 @@ import ml.docilealligator.infinityforreddit.FetchFlairs;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.events.FlairSelectedEvent;
 import retrofit2.Retrofit;
 
 
@@ -40,6 +43,7 @@ public class FlairBottomSheetFragment extends BottomSheetDialogFragment {
 
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
+    public static final String EXTRA_VIEW_POST_DETAIL_FRAGMENT_ID = "EPFI";
     @BindView(R.id.progress_bar_flair_bottom_sheet_fragment)
     ProgressBar progressBar;
     @BindView(R.id.error_text_view_flair_bottom_sheet_fragment)
@@ -72,8 +76,14 @@ public class FlairBottomSheetFragment extends BottomSheetDialogFragment {
 
         ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
+        long viewPostFragmentId = getArguments().getLong(EXTRA_VIEW_POST_DETAIL_FRAGMENT_ID, -1);
         mAdapter = new FlairBottomSheetRecyclerViewAdapter(mActivity, mCustomThemeWrapper, flair -> {
-            ((FlairSelectionCallback) mActivity).flairSelected(flair);
+            if (viewPostFragmentId <= 0) {
+                //PostXXXActivity
+                ((FlairSelectionCallback) mActivity).flairSelected(flair);
+            } else {
+                EventBus.getDefault().post(new FlairSelectedEvent(viewPostFragmentId, flair));
+            }
             dismiss();
         });
 

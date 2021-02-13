@@ -88,6 +88,7 @@ import ml.docilealligator.infinityforreddit.customviews.CustomToroContainer;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeSpoilerBlurEvent;
+import ml.docilealligator.infinityforreddit.events.FlairSelectedEvent;
 import ml.docilealligator.infinityforreddit.events.PostUpdateEventToDetailActivity;
 import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
@@ -191,6 +192,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     String sortType;
     @State
     boolean mRespectSubredditRecommendedSortType;
+    @State
+    long viewPostDetailFragmentId;
     private ViewPostDetailActivity activity;
     private RequestManager mGlide;
     private Locale mLocale;
@@ -262,6 +265,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         mExpandChildren = !mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_TOP_LEVEL_COMMENTS_FIRST, false);
         if (savedInstanceState == null) {
             mRespectSubredditRecommendedSortType = mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false);
+            viewPostDetailFragmentId = System.currentTimeMillis();
         }
 
         mGlide = Glide.with(this);
@@ -915,6 +919,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             Bundle bundle = new Bundle();
             bundle.putString(FlairBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
             bundle.putString(FlairBottomSheetFragment.EXTRA_SUBREDDIT_NAME, mPost.getSubredditName());
+            bundle.putLong(FlairBottomSheetFragment.EXTRA_VIEW_POST_DETAIL_FRAGMENT_ID, viewPostDetailFragmentId);
             flairBottomSheetFragment.setArguments(bundle);
             flairBottomSheetFragment.show(activity.getSupportFragmentManager(), flairBottomSheetFragment.getTag());
             return true;
@@ -1721,6 +1726,13 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             if (stateChanged) {
                 refreshAdapter();
             }
+        }
+    }
+
+    @Subscribe
+    public void onFlairSelectedEvent(FlairSelectedEvent event) {
+        if (event.viewPostDetailFragmentId == viewPostDetailFragmentId) {
+            changeFlair(event.flair);
         }
     }
 
