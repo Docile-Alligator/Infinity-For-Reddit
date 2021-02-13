@@ -55,7 +55,6 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.NeedForPostListFromPostFragmentEvent;
 import ml.docilealligator.infinityforreddit.events.ProvidePostListToViewPostDetailActivityEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -454,7 +453,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                 return null;
             }
             Fragment fragment = fragmentManager.findFragmentByTag("f" + viewPager2.getCurrentItem());
-            if (fragment instanceof PostFragment) {
+            if (fragment instanceof ViewPostDetailFragment) {
                 return (ViewPostDetailFragment) fragment;
             }
             return null;

@@ -752,7 +752,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                         .into(((PostDetailBaseViewHolder) holder).mIconGifImageView);
                             }
 
-                            if (holder.getAdapterPosition() >= 0) {
+                            if (holder.getBindingAdapterPosition() >= 0) {
                                 mPost.setAuthorIconUrl(iconImageUrl);
                             }
                         }
@@ -1041,9 +1041,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         } else if (holder instanceof CommentViewHolder) {
             Comment comment;
             if (mIsSingleCommentThreadMode) {
-                comment = mVisibleComments.get(holder.getAdapterPosition() - 2);
+                comment = mVisibleComments.get(holder.getBindingAdapterPosition() - 2);
             } else {
-                comment = mVisibleComments.get(holder.getAdapterPosition() - 1);
+                comment = mVisibleComments.get(holder.getBindingAdapterPosition() - 1);
             }
 
             if (mIsSingleCommentThreadMode && comment.getId().equals(mSingleCommentId)) {
@@ -1189,9 +1189,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         } else if (holder instanceof CommentFullyCollapsedViewHolder) {
             Comment comment;
             if (mIsSingleCommentThreadMode) {
-                comment = mVisibleComments.get(holder.getAdapterPosition() - 2);
+                comment = mVisibleComments.get(holder.getBindingAdapterPosition() - 2);
             } else {
-                comment = mVisibleComments.get(holder.getAdapterPosition() - 1);
+                comment = mVisibleComments.get(holder.getBindingAdapterPosition() - 1);
             }
 
             String authorWithPrefix = "u/" + comment.getAuthor();
@@ -1242,8 +1242,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             }
         } else if (holder instanceof LoadMoreChildCommentsViewHolder) {
             Comment placeholder;
-            placeholder = mIsSingleCommentThreadMode ? mVisibleComments.get(holder.getAdapterPosition() - 2)
-                    : mVisibleComments.get(holder.getAdapterPosition() - 1);
+            placeholder = mIsSingleCommentThreadMode ? mVisibleComments.get(holder.getBindingAdapterPosition() - 2)
+                    : mVisibleComments.get(holder.getBindingAdapterPosition() - 1);
 
             ((LoadMoreChildCommentsViewHolder) holder).itemView.setPadding(placeholder.getDepth() * 8, 0, 0, 0);
             if (placeholder.getDepth() > 0) {
@@ -1292,7 +1292,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             }
 
             ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setOnClickListener(view -> {
-                int commentPosition = mIsSingleCommentThreadMode ? holder.getAdapterPosition() - 2 : holder.getAdapterPosition() - 1;
+                int commentPosition = mIsSingleCommentThreadMode ? holder.getBindingAdapterPosition() - 2 : holder.getBindingAdapterPosition() - 1;
                 int parentPosition = getParentPosition(commentPosition);
                 if (parentPosition >= 0) {
                     Comment parentComment = mVisibleComments.get(parentPosition);
@@ -1421,7 +1421,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                                     if (parentPosition < mVisibleComments.size()
                                             && parentComment.getFullName().equals(mVisibleComments.get(parentPosition).getFullName())) {
                                         if (mVisibleComments.get(parentPosition).isExpanded()) {
-                                            int commentPosition = mIsSingleCommentThreadMode ? holder.getAdapterPosition() - 2 : holder.getAdapterPosition() - 1;
+                                            int commentPosition = mIsSingleCommentThreadMode ? holder.getBindingAdapterPosition() - 2 : holder.getBindingAdapterPosition() - 1;
                                             int placeholderPosition = commentPosition;
                                             if (commentPosition >= mVisibleComments.size() || commentPosition < 0 || !mVisibleComments.get(commentPosition).getFullName().equals(parentComment.getFullName())) {
                                                 for (int i = parentPosition + 1; i < mVisibleComments.size(); i++) {
@@ -2719,7 +2719,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
         @Override
         public int getPlayerOrder() {
-            return getAdapterPosition();
+            return getBindingAdapterPosition();
         }
     }
 
@@ -3430,9 +3430,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     bundle.putString(CommentMoreBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                     bundle.putParcelable(CommentMoreBottomSheetFragment.EXTRA_COMMENT, comment);
                     if (mIsSingleCommentThreadMode) {
-                        bundle.putInt(CommentMoreBottomSheetFragment.EXTRA_POSITION, getAdapterPosition() - 2);
+                        bundle.putInt(CommentMoreBottomSheetFragment.EXTRA_POSITION, getBindingAdapterPosition() - 2);
                     } else {
-                        bundle.putInt(CommentMoreBottomSheetFragment.EXTRA_POSITION, getAdapterPosition() - 1);
+                        bundle.putInt(CommentMoreBottomSheetFragment.EXTRA_POSITION, getBindingAdapterPosition() - 1);
                     }
                     bundle.putString(CommentMoreBottomSheetFragment.EXTRA_COMMENT_MARKDOWN, comment.getCommentMarkdown());
                     bundle.putBoolean(CommentMoreBottomSheetFragment.EXTRA_IS_NSFW, mPost.isNSFW());
@@ -3467,9 +3467,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, comment.getFullName());
                     intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, true);
 
-                    int parentPosition = mIsSingleCommentThreadMode ? getAdapterPosition() - 2 : getAdapterPosition() - 1;
+                    int parentPosition = mIsSingleCommentThreadMode ? getBindingAdapterPosition() - 2 : getBindingAdapterPosition() - 1;
                     intent.putExtra(CommentActivity.EXTRA_PARENT_POSITION_KEY, parentPosition);
-                    mActivity.startActivityForResult(intent, CommentActivity.WRITE_COMMENT_REQUEST_CODE);
+                    mFragment.startActivityForResult(intent, CommentActivity.WRITE_COMMENT_REQUEST_CODE);
                 }
             });
 
@@ -3513,11 +3513,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                     comment.getScore() + comment.getVoteType())));
 
-                    int position = getAdapterPosition();
+                    int position = getBindingAdapterPosition();
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
-                            int currentPosition = getAdapterPosition();
+                            int currentPosition = getBindingAdapterPosition();
                             if (newVoteType.equals(APIUtils.DIR_UPVOTE)) {
                                 comment.setVoteType(Comment.VOTE_TYPE_UPVOTE);
                                 if (currentPosition == position) {
@@ -3547,7 +3547,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         @Override
                         public void onVoteThingFail(int position) {
                         }
-                    }, comment.getFullName(), newVoteType, getAdapterPosition());
+                    }, comment.getFullName(), newVoteType, getBindingAdapterPosition());
                 }
             });
 
@@ -3591,11 +3591,11 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                     comment.getScore() + comment.getVoteType())));
 
-                    int position = getAdapterPosition();
+                    int position = getBindingAdapterPosition();
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
-                            int currentPosition = getAdapterPosition();
+                            int currentPosition = getBindingAdapterPosition();
                             if (newVoteType.equals(APIUtils.DIR_DOWNVOTE)) {
                                 comment.setVoteType(Comment.VOTE_TYPE_DOWNVOTE);
                                 if (currentPosition == position) {
@@ -3625,21 +3625,21 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         @Override
                         public void onVoteThingFail(int position1) {
                         }
-                    }, comment.getFullName(), newVoteType, getAdapterPosition());
+                    }, comment.getFullName(), newVoteType, getBindingAdapterPosition());
                 }
             });
 
             saveButton.setOnClickListener(view -> {
                 Comment comment = getCurrentComment(this);
                 if (comment != null) {
-                    int position = getAdapterPosition();
+                    int position = getBindingAdapterPosition();
                     if (comment.isSaved()) {
                         comment.setSaved(false);
                         SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
                             @Override
                             public void success() {
                                 comment.setSaved(false);
-                                if (getAdapterPosition() == position) {
+                                if (getBindingAdapterPosition() == position) {
                                     saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                 }
                                 Toast.makeText(mActivity, R.string.comment_unsaved_success, Toast.LENGTH_SHORT).show();
@@ -3648,7 +3648,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             @Override
                             public void failed() {
                                 comment.setSaved(true);
-                                if (getAdapterPosition() == position) {
+                                if (getBindingAdapterPosition() == position) {
                                     saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                 }
                                 Toast.makeText(mActivity, R.string.comment_unsaved_failed, Toast.LENGTH_SHORT).show();
@@ -3660,7 +3660,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             @Override
                             public void success() {
                                 comment.setSaved(true);
-                                if (getAdapterPosition() == position) {
+                                if (getBindingAdapterPosition() == position) {
                                     saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                 }
                                 Toast.makeText(mActivity, R.string.comment_saved_success, Toast.LENGTH_SHORT).show();
@@ -3669,7 +3669,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                             @Override
                             public void failed() {
                                 comment.setSaved(false);
-                                if (getAdapterPosition() == position) {
+                                if (getBindingAdapterPosition() == position) {
                                     saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                 }
                                 Toast.makeText(mActivity, R.string.comment_saved_failed, Toast.LENGTH_SHORT).show();
@@ -3690,7 +3690,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             expandButton.setOnClickListener(view -> {
                 if (expandButton.getVisibility() == View.VISIBLE) {
-                    int commentPosition = mIsSingleCommentThreadMode ? getAdapterPosition() - 2 : getAdapterPosition() - 1;
+                    int commentPosition = mIsSingleCommentThreadMode ? getBindingAdapterPosition() - 2 : getBindingAdapterPosition() - 1;
                     if (commentPosition >= 0 && commentPosition < mVisibleComments.size()) {
                         Comment comment = getCurrentComment(this);
                         if (comment != null) {
@@ -3714,7 +3714,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         }
                     }
                 } else if (mFullyCollapseComment) {
-                    int commentPosition = mIsSingleCommentThreadMode ? getAdapterPosition() - 2 : getAdapterPosition() - 1;
+                    int commentPosition = mIsSingleCommentThreadMode ? getBindingAdapterPosition() - 2 : getBindingAdapterPosition() - 1;
                     if (commentPosition >= 0 && commentPosition < mVisibleComments.size()) {
                         collapseChildren(commentPosition);
                     }
@@ -3780,7 +3780,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
     @Nullable
     private Comment getCurrentComment(RecyclerView.ViewHolder holder) {
-        return getCurrentComment(holder.getAdapterPosition());
+        return getCurrentComment(holder.getBindingAdapterPosition());
     }
 
     @Nullable
@@ -3825,7 +3825,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             }
 
             itemView.setOnClickListener(view -> {
-                int commentPosition = mIsSingleCommentThreadMode ? getAdapterPosition() - 2 : getAdapterPosition() - 1;
+                int commentPosition = mIsSingleCommentThreadMode ? getBindingAdapterPosition() - 2 : getBindingAdapterPosition() - 1;
                 if (commentPosition >= 0 && commentPosition < mVisibleComments.size()) {
                     Comment comment = getCurrentComment(this);
                     if (comment != null) {
