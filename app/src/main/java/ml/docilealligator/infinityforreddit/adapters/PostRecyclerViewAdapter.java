@@ -1057,7 +1057,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             Post post = getItem(position);
             if (post != null) {
                 switch (post.getPostType()) {
-                    case Post.IMAGE_TYPE:
+                    case Post.IMAGE_TYPE: {
                         ((PostGalleryViewHolder) holder).imageView.setVisibility(View.VISIBLE);
                         ((PostGalleryViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
 
@@ -1080,39 +1080,121 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                 ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_outline_video_24dp);
                                 ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.GONE);
                             } else if (post.getPostType() == Post.IMAGE_TYPE || post.getPostType() == Post.GIF_TYPE) {
-                                ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_image_24dp);
+
                                 ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.GONE);
                             } else if (post.getPostType() == Post.LINK_TYPE) {
                                 ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_link);
                             } else if (post.getPostType() == Post.GALLERY_TYPE) {
                                 ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_gallery_24dp);
                             }
+                            ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_image_24dp);
                         }
                         break;
-                    case Post.GIF_TYPE:
+                    }
+                    case Post.GIF_TYPE: {
                         ((PostGalleryViewHolder) holder).imageView.setVisibility(View.VISIBLE);
                         ((PostGalleryViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
                         ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.VISIBLE);
+
+                        Post.Preview preview = getSuitablePreview(post.getPreviews());
+                        if (preview != null) {
+                            if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
+                                int height = (int) (400 * mScale);
+                                ((PostGalleryViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                ((PostGalleryViewHolder) holder).imageView.getLayoutParams().height = height;
+                                preview.setPreviewWidth(mImageViewWidth);
+                                preview.setPreviewHeight(height);
+                            } else {
+                                ((PostGalleryViewHolder) holder).imageView
+                                        .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
+                            }
+                            loadImage(holder, post, preview);
+                        } else {
+                            ((PostGalleryViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
+                            ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_image_24dp);
+                        }
                         break;
-                    case Post.VIDEO_TYPE:
+                    }
+                    case Post.VIDEO_TYPE: {
                         ((PostGalleryViewHolder) holder).imageView.setVisibility(View.VISIBLE);
                         ((PostGalleryViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
                         ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.VISIBLE);
+
+                        Post.Preview preview = getSuitablePreview(post.getPreviews());
+                        if (preview != null) {
+                            if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
+                                int height = (int) (400 * mScale);
+                                ((PostGalleryViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                ((PostGalleryViewHolder) holder).imageView.getLayoutParams().height = height;
+                                preview.setPreviewWidth(mImageViewWidth);
+                                preview.setPreviewHeight(height);
+                            } else {
+                                ((PostGalleryViewHolder) holder).imageView
+                                        .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
+                            }
+                            loadImage(holder, post, preview);
+                        } else {
+                            ((PostGalleryViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
+                            ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_outline_video_24dp);
+                        }
                         break;
-                    case Post.LINK_TYPE:
+                    }
+                    case Post.LINK_TYPE: {
                         ((PostGalleryViewHolder) holder).imageView.setVisibility(View.VISIBLE);
                         ((PostGalleryViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
+
+                        Post.Preview preview = getSuitablePreview(post.getPreviews());
+                        if (preview != null) {
+                            if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
+                                int height = (int) (400 * mScale);
+                                ((PostGalleryViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                ((PostGalleryViewHolder) holder).imageView.getLayoutParams().height = height;
+                                preview.setPreviewWidth(mImageViewWidth);
+                                preview.setPreviewHeight(height);
+                            } else {
+                                ((PostGalleryViewHolder) holder).imageView
+                                        .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
+                            }
+                            loadImage(holder, post, preview);
+                        } else {
+                            ((PostGalleryViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
+                            ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_link);
+                        }
                         break;
-                    case Post.NO_PREVIEW_LINK_TYPE:
+                    }
+                    case Post.NO_PREVIEW_LINK_TYPE: {
                         ((PostGalleryViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
+                        ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_link);
                         break;
-                    case Post.TEXT_TYPE:
+                    }
+                    case Post.TEXT_TYPE: {
                         ((PostGalleryViewHolder) holder).titleTextView.setVisibility(View.VISIBLE);
+                        ((PostGalleryViewHolder) holder).titleTextView.setText(post.getTitle());
                         break;
-                    case Post.GALLERY_TYPE:
+                    }
+                    case Post.GALLERY_TYPE: {
                         ((PostGalleryViewHolder) holder).imageView.setVisibility(View.VISIBLE);
                         ((PostGalleryViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
+
+                        Post.Preview preview = getSuitablePreview(post.getPreviews());
+                        if (preview != null) {
+                            if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
+                                int height = (int) (400 * mScale);
+                                ((PostGalleryViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+                                ((PostGalleryViewHolder) holder).imageView.getLayoutParams().height = height;
+                                preview.setPreviewWidth(mImageViewWidth);
+                                preview.setPreviewHeight(height);
+                            } else {
+                                ((PostGalleryViewHolder) holder).imageView
+                                        .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
+                            }
+                            loadImage(holder, post, preview);
+                        } else {
+                            ((PostGalleryViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
+                            ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_gallery_24dp);
+                        }
                         break;
+                    }
                 }
             }
         }
