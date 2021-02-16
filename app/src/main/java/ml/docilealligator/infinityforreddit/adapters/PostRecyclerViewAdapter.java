@@ -1056,6 +1056,21 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         } else if (holder instanceof PostGalleryViewHolder) {
             Post post = getItem(position);
             if (post != null) {
+                if (post.isRead()) {
+                    if ((mHideReadPostsAutomatically && !post.isHiddenManuallyByUser()) || position < mHideReadPostsIndex) {
+                        post.hidePostInRecyclerView();
+                        holder.itemView.setVisibility(View.GONE);
+                        RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
+                        params.height = 0;
+                        params.topMargin = 0;
+                        params.bottomMargin = 0;
+                        holder.itemView.setLayoutParams(params);
+                        return;
+                    }
+                    holder.itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
+                    ((PostGalleryViewHolder) holder).titleTextView.setTextColor(mReadPostTitleColor);
+                }
+
                 switch (post.getPostType()) {
                     case Post.IMAGE_TYPE: {
                         ((PostGalleryViewHolder) holder).imageView.setVisibility(View.VISIBLE);
@@ -1625,6 +1640,22 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             ((PostCompactBaseViewHolder) holder).scoreTextView.setTextColor(mPostIconAndInfoColor);
             ((PostCompactBaseViewHolder) holder).downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
         } else if (holder instanceof PostGalleryViewHolder) {
+            if (mMarkPostsAsReadOnScroll) {
+                int position = holder.getBindingAdapterPosition();
+                if (position < super.getItemCount() && position >= 0) {
+                    Post post = getItem(position);
+                    ((PostGalleryViewHolder) holder).markPostRead(post, false);
+                }
+            }
+            ((PostGalleryViewHolder) holder).itemView.setVisibility(View.VISIBLE);
+            RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
+            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
+            int marginPixel = (int) Utils.convertDpToPixel(8, mActivity);
+            params.topMargin = marginPixel;
+            params.bottomMargin = marginPixel;
+            holder.itemView.setLayoutParams(params);
+            ((PostGalleryViewHolder) holder).itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
+
             ((PostGalleryViewHolder) holder).titleTextView.setText("");
             ((PostGalleryViewHolder) holder).titleTextView.setVisibility(View.GONE);
             mGlide.clear(((PostGalleryViewHolder) holder).imageView);
@@ -3442,7 +3473,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 if (position >= 0 && canStartActivity) {
                     Post post = getItem(position);
                     if (post != null) {
-                        //markPostRead(post, true);
+                        markPostRead(post, true);
                         canStartActivity = false;
 
                         Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
@@ -3453,6 +3484,19 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     }
                 }
             });
+        }
+
+        void markPostRead(Post post, boolean changePostItemColor) {
+            if (mAccessToken != null && !post.isRead() && mMarkPostsAsRead) {
+                post.markAsRead(true);
+                if (changePostItemColor) {
+                    itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
+                    titleTextView.setTextColor(mReadPostTitleColor);
+                }
+                if (mActivity != null && mActivity instanceof MarkPostAsReadInterface) {
+                    ((MarkPostAsReadInterface) mActivity).markPostAsRead(post);
+                }
+            }
         }
     }
 
