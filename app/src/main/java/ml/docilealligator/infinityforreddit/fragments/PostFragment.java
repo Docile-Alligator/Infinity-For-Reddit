@@ -1711,9 +1711,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             int halfOffset = mItemOffset / 2;
 
             if (spanIndex == 0) {
-                outRect.set(halfOffset, 0, halfOffset, 0);
+                outRect.set(halfOffset, 0, halfOffset / 2, 0);
             } else {
-                outRect.set(halfOffset, 0, halfOffset, 0);
+                outRect.set(halfOffset / 2, 0, halfOffset, 0);
             }
         }
     }

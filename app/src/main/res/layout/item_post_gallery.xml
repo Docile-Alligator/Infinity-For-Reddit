@@ -19,14 +19,28 @@
             android:layout_gravity="center"
             android:visibility="gone" />
 
+        <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
+            android:id="@+id/image_view_item_post_gallery"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/image_view_no_preview_item_post_gallery"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:scaleType="center"
+            android:background="@drawable/thumbnail_compact_layout_rounded_edge"
+            android:visibility="gone" />
+
         <ImageView
             android:id="@+id/video_or_gif_indicator_image_view_item_post_gallery"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
             android:layout_margin="16dp"
             android:layout_gravity="start"
+            android:scaleType="center"
             android:background="@drawable/play_button_round_background"
-            android:src="@drawable/ic_play_circle_36dp"
             android:visibility="gone" />
 
         <RelativeLayout
@@ -48,20 +62,6 @@
                 android:fontFamily="?attr/font_family" />
 
         </RelativeLayout>
-
-        <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
-            android:id="@+id/image_view_item_post_gallery"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone" />
-
-        <ImageView
-            android:id="@+id/image_view_no_preview_item_post_gallery"
-            android:layout_width="match_parent"
-            android:layout_height="150dp"
-            android:scaleType="center"
-            android:background="@drawable/thumbnail_compact_layout_rounded_edge"
-            android:visibility="gone" />
 
         <TextView
             android:id="@+id/title_text_view_item_post_gallery"
