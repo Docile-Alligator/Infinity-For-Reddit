@@ -3424,11 +3424,29 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             super(itemView);
             ButterKnife.bind(this, itemView);
 
+            itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
             titleTextView.setTextColor(mPostTitleColor);
             progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
             noPreviewImageView.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
             noPreviewImageView.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
             errorTextView.setTextColor(mPrimaryTextColor);
+
+            itemView.setOnClickListener(view -> {
+                int position = getBindingAdapterPosition();
+                if (position >= 0 && canStartActivity) {
+                    Post post = getItem(position);
+                    if (post != null) {
+                        //markPostRead(post, true);
+                        canStartActivity = false;
+
+                        Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
+                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, post);
+                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, getBindingAdapterPosition());
+                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_FRAGMENT_ID, mFragment.getPostFragmentId());
+                        mActivity.startActivity(intent);
+                    }
+                }
+            });
         }
     }
 
