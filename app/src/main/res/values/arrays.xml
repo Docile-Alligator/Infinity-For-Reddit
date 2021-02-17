@@ -44,11 +44,13 @@
     <string-array name="settings_default_post_layout">
         <item>Card Layout</item>
         <item>Compact Layout</item>
+        <item>Gallery Layout</item>
     </string-array>
 
     <string-array name="settings_default_post_layout_values">
         <item>0</item>
         <item>1</item>
+        <item>2</item>
     </string-array>
 
     <string-array name="settings_video_autoplay">

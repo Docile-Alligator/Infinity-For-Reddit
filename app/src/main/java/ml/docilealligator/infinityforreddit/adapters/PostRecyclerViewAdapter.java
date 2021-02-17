@@ -1730,6 +1730,14 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         void delayTransition();
     }
 
+    private void openViewPostDetailActivity(Post post, int position) {
+        Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
+        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, post);
+        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, position);
+        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_FRAGMENT_ID, mFragment.getPostFragmentId());
+        mActivity.startActivity(intent);
+    }
+
     public class PostBaseViewHolder extends RecyclerView.ViewHolder {
         MaterialCardView cardView;
         AspectRatioGifImageView iconGifImageView;
@@ -1864,11 +1872,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         markPostRead(post, true);
                         canStartActivity = false;
 
-                        Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
-                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, post);
-                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, getBindingAdapterPosition());
-                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_FRAGMENT_ID, mFragment.getPostFragmentId());
-                        mActivity.startActivity(intent);
+                        openViewPostDetailActivity(post, getBindingAdapterPosition());
                     }
                 }
             });
@@ -2881,11 +2885,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     markPostRead(post, true);
                     canStartActivity = false;
 
-                    Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
-                    intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, post);
-                    intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, getBindingAdapterPosition());
-                    intent.putExtra(ViewPostDetailActivity.EXTRA_POST_FRAGMENT_ID, mFragment.getPostFragmentId());
-                    mActivity.startActivity(intent);
+                    openViewPostDetailActivity(post, getBindingAdapterPosition());
                 }
             });
 
@@ -3476,11 +3476,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         markPostRead(post, true);
                         canStartActivity = false;
 
-                        Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
-                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, post);
-                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, getBindingAdapterPosition());
-                        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_FRAGMENT_ID, mFragment.getPostFragmentId());
-                        mActivity.startActivity(intent);
+                        openViewPostDetailActivity(post, getBindingAdapterPosition());
                     }
                 }
             });
