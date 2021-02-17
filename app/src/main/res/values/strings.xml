@@ -1020,5 +1020,7 @@
 
     <string name="have_trouble_login_title">Having Trouble Login</string>
     <string name="have_trouble_login_message">Do you want to try another way to login?</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

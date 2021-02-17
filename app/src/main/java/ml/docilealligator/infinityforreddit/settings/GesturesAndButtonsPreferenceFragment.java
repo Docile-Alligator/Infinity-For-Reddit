@@ -35,7 +35,7 @@ public class GesturesAndButtonsPreferenceFragment extends PreferenceFragmentComp
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-        setPreferencesFromResource(R.xml.gestures_and_buttons_preference, rootKey);
+        setPreferencesFromResource(R.xml.gestures_and_buttons_preferences, rootKey);
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
         SwitchPreference lockJumpToNextTopLevelCommentButtonSwitch =

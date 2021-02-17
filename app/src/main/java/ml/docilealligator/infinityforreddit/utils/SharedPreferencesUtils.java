@@ -79,6 +79,10 @@ public class SharedPreferencesUtils {
     public static final String SHOW_THUMBNAIL_ON_THE_LEFT_IN_COMPACT_LAYOUT = "show_thumbnail_on_the_left_in_compact_layout";
     public static final String NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT = "number_of_columns_in_post_feed_portrait";
     public static final String NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE = "number_of_columns_in_post_feed_landscape";
+    public static final String NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT_COMPACT_LAYOUT = "number_of_columns_in_post_feed_portrait_compact_layout";
+    public static final String NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE_COMPACT_LAYOUT = "number_of_columns_in_post_feed_landscape_compact_layout";
+    public static final String NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT_GALLERY_LAYOUT = "number_of_columns_in_post_feed_portrait_gallery_layout";
+    public static final String NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE_GALLERY_LAYOUT = "number_of_columns_in_post_feed_landscape_gallery_layout";
     public static final String SWIPE_RIGHT_TO_GO_BACK = "swipe_to_go_back_from_post_detail";
     public static final String VOLUME_KEYS_NAVIGATE_COMMENTS = "volume_keys_navigate_comments";
     public static final String VOLUME_KEYS_NAVIGATE_POSTS = "volume_keys_navigate_posts";

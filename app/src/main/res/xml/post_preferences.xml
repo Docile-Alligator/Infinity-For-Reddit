@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ListPreference
+        app:defaultValue="0"
+        android:entries="@array/settings_default_post_layout"
+        app:entryValues="@array/settings_default_post_layout_values"
+        app:key="default_post_layout"
+        app:title="@string/settings_default_post_layout"
+        app:useSimpleSummaryProvider="true" />
+
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="show_divider_in_compact_layout"
+        app:title="@string/settings_show_divider_in_compact_layout" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="show_thumbnail_on_the_left_in_compact_layout"
+        app:title="@string/settings_show_thumbnail_on_the_left_in_compact_layout" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="long_press_to_hide_toolbar_in_compact_layout"
+        app:title="@string/settings_long_press_to_hide_toolbar_in_compact_layout_title" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="post_compact_layout_toolbar_hidden_by_default"
+        app:title="@string/settings_post_compact_layout_toolbar_hidden_by_default_title" />
+
+    <Preference
+        app:title="@string/settings_number_of_columns_in_post_feed_title"
+        app:fragment="ml.docilealligator.infinityforreddit.settings.NumberOfColumnsInPostFeedPreferenceFragment" />
+    
+</PreferenceScreen>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="show_top_level_comments_first"
+        app:title="@string/settings_show_top_level_comments_first_title" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="show_comment_divider"
+        app:title="@string/settings_show_comment_divider_title" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="comment_toolbar_hidden"
+        app:title="@string/settings_comment_toolbar_hidden" />
+
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="comment_toolbar_hide_on_click"
+        app:title="@string/settings_comment_toolbar_hide_on_click" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="fully_collapse_comment"
+        android:title="@string/settings_fully_collapse_comment_title" />
+
+</PreferenceScreen>

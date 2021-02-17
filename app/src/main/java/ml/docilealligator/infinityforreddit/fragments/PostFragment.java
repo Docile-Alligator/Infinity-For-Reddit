@@ -319,25 +319,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int windowWidth = displayMetrics.widthPixels;
 
-        int nColumns;
-        if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            nColumns = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT, "1"));
-        } else {
-            nColumns = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE, "2"));
-        }
-
-        if (nColumns == 1) {
-            mLinearLayoutManager = new LinearLayoutManager(activity);
-            mPostRecyclerView.setLayoutManager(mLinearLayoutManager);
-        } else {
-            mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-            mPostRecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
-            StaggeredGridLayoutManagerItemOffsetDecoration itemDecoration =
-                    new StaggeredGridLayoutManagerItemOffsetDecoration(activity, R.dimen.staggeredLayoutManagerItemOffset);
-            mPostRecyclerView.addItemDecoration(itemDecoration);
-            windowWidth /= 2;
-        }
-
         mGlide = Glide.with(activity);
 
         lazyModeRunnable = new LazyModeRunnable() {
@@ -747,6 +728,19 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             });
         }
 
+        int nColumns = getNColumns(resources);
+        if (nColumns == 1) {
+            mLinearLayoutManager = new LinearLayoutManager(activity);
+            mPostRecyclerView.setLayoutManager(mLinearLayoutManager);
+        } else {
+            mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            mPostRecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
+            StaggeredGridLayoutManagerItemOffsetDecoration itemDecoration =
+                    new StaggeredGridLayoutManagerItemOffsetDecoration(activity, R.dimen.staggeredLayoutManagerItemOffset);
+            mPostRecyclerView.addItemDecoration(itemDecoration);
+            windowWidth /= 2;
+        }
+
         mAdapter.setHideReadPostsIndex(hideReadPostsIndex);
 
         if (activity instanceof ActivityToolbarInterface) {
@@ -917,6 +911,28 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         });
 
         return rootView;
+    }
+
+    private int getNColumns(Resources resources) {
+        if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            switch (postLayout) {
+                case SharedPreferencesUtils.POST_LAYOUT_COMPACT:
+                    return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT_COMPACT_LAYOUT, "1"));
+                case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
+                    return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT_GALLERY_LAYOUT, "2"));
+                default:
+                    return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT, "1"));
+            }
+        } else {
+            switch (postLayout) {
+                case SharedPreferencesUtils.POST_LAYOUT_COMPACT:
+                    return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE_COMPACT_LAYOUT, "2"));
+                case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
+                    return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE_GALLERY_LAYOUT, "2"));
+                default:
+                    return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE, "2"));
+            }
+        }
     }
 
     private void initializeAndBindPostViewModel(String accessToken) {
@@ -1237,6 +1253,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void changePostLayout(int postLayout) {
+        this.postLayout = postLayout;
         switch (postType) {
             case PostDataSource.TYPE_FRONT_PAGE:
                 mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, postLayout).apply();
@@ -1253,6 +1270,23 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             case PostDataSource.TYPE_MULTI_REDDIT:
                 mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + multiRedditPath, postLayout).apply();
                 break;
+        }
+
+        int nColumns = getNColumns(getResources());
+        if (nColumns == 1) {
+            mLinearLayoutManager = new LinearLayoutManager(activity);
+            mPostRecyclerView.setLayoutManager(mLinearLayoutManager);
+            mStaggeredGridLayoutManager = null;
+            if (mPostRecyclerView.getItemDecorationCount() > 0) {
+                mPostRecyclerView.removeItemDecorationAt(0);
+            }
+        } else if (nColumns == 2) {
+            mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            mPostRecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
+            StaggeredGridLayoutManagerItemOffsetDecoration itemDecoration =
+                    new StaggeredGridLayoutManagerItemOffsetDecoration(activity, R.dimen.staggeredLayoutManagerItemOffset);
+            mPostRecyclerView.addItemDecoration(itemDecoration);
+            mLinearLayoutManager = null;
         }
 
         if (mAdapter != null) {
