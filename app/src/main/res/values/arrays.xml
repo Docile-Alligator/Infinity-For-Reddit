@@ -225,6 +225,7 @@
     <string-array name="settings_number_of_columns_in_post_feed">
         <item>1</item>
         <item>2</item>
+        <item>3</item>
     </string-array>
 
     <string-array name="settings_main_page_tab_count">

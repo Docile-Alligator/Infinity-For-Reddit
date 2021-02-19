@@ -733,10 +733,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mLinearLayoutManager = new LinearLayoutManager(activity);
             mPostRecyclerView.setLayoutManager(mLinearLayoutManager);
         } else {
-            mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(nColumns, StaggeredGridLayoutManager.VERTICAL);
             mPostRecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
             StaggeredGridLayoutManagerItemOffsetDecoration itemDecoration =
-                    new StaggeredGridLayoutManagerItemOffsetDecoration(activity, R.dimen.staggeredLayoutManagerItemOffset);
+                    new StaggeredGridLayoutManagerItemOffsetDecoration(activity, R.dimen.staggeredLayoutManagerItemOffset, nColumns);
             mPostRecyclerView.addItemDecoration(itemDecoration);
             windowWidth /= 2;
         }
@@ -1117,7 +1117,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if (mLinearLayoutManager != null) {
             outState.putInt(RECYCLER_VIEW_POSITION_STATE, mLinearLayoutManager.findFirstVisibleItemPosition());
         } else if (mStaggeredGridLayoutManager != null) {
-            int[] into = new int[2];
+            int[] into = new int[mStaggeredGridLayoutManager.getSpanCount()];
             outState.putInt(RECYCLER_VIEW_POSITION_STATE,
                     mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[0]);
         }
@@ -1275,16 +1275,19 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         int nColumns = getNColumns(getResources());
         if (nColumns == 1) {
             mLinearLayoutManager = new LinearLayoutManager(activity);
-            mPostRecyclerView.setLayoutManager(mLinearLayoutManager);
-            mStaggeredGridLayoutManager = null;
             if (mPostRecyclerView.getItemDecorationCount() > 0) {
                 mPostRecyclerView.removeItemDecorationAt(0);
             }
-        } else if (nColumns == 2) {
-            mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            mPostRecyclerView.setLayoutManager(mLinearLayoutManager);
+            mStaggeredGridLayoutManager = null;
+        } else {
+            mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(nColumns, StaggeredGridLayoutManager.VERTICAL);
+            if (mPostRecyclerView.getItemDecorationCount() > 0) {
+                mPostRecyclerView.removeItemDecorationAt(0);
+            }
             mPostRecyclerView.setLayoutManager(mStaggeredGridLayoutManager);
             StaggeredGridLayoutManagerItemOffsetDecoration itemDecoration =
-                    new StaggeredGridLayoutManagerItemOffsetDecoration(activity, R.dimen.staggeredLayoutManagerItemOffset);
+                    new StaggeredGridLayoutManagerItemOffsetDecoration(activity, R.dimen.staggeredLayoutManagerItemOffset, nColumns);
             mPostRecyclerView.addItemDecoration(itemDecoration);
             mLinearLayoutManager = null;
         }
@@ -1641,7 +1644,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if (mLinearLayoutManager != null) {
             previousPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
         } else if (mStaggeredGridLayoutManager != null) {
-            int[] into = new int[2];
+            int[] into = new int[mStaggeredGridLayoutManager.getSpanCount()];
             previousPosition = mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[0];
         }
 
@@ -1724,13 +1727,15 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private static class StaggeredGridLayoutManagerItemOffsetDecoration extends RecyclerView.ItemDecoration {
 
         private int mItemOffset;
+        private int mNColumns;
 
-        StaggeredGridLayoutManagerItemOffsetDecoration(int itemOffset) {
+        StaggeredGridLayoutManagerItemOffsetDecoration(int itemOffset, int nColumns) {
             mItemOffset = itemOffset;
+            mNColumns = nColumns;
         }
 
-        StaggeredGridLayoutManagerItemOffsetDecoration(@NonNull Context context, @DimenRes int itemOffsetId) {
-            this(context.getResources().getDimensionPixelSize(itemOffsetId));
+        StaggeredGridLayoutManagerItemOffsetDecoration(@NonNull Context context, @DimenRes int itemOffsetId, int nColumns) {
+            this(context.getResources().getDimensionPixelSize(itemOffsetId), nColumns);
         }
 
         @Override
@@ -1744,10 +1749,20 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             int halfOffset = mItemOffset / 2;
 
-            if (spanIndex == 0) {
-                outRect.set(halfOffset, 0, halfOffset / 2, 0);
-            } else {
-                outRect.set(halfOffset / 2, 0, halfOffset, 0);
+            if (mNColumns == 2) {
+                if (spanIndex == 0) {
+                    outRect.set(halfOffset, 0, halfOffset / 2, 0);
+                } else {
+                    outRect.set(halfOffset / 2, 0, halfOffset, 0);
+                }
+            } else if (mNColumns == 3) {
+                if (spanIndex == 0) {
+                    outRect.set(halfOffset, 0, halfOffset / 2, 0);
+                } else if (spanIndex == 1) {
+                    outRect.set(halfOffset / 2, 0, halfOffset / 2, 0);
+                } else {
+                    outRect.set(halfOffset / 2, 0, halfOffset, 0);
+                }
             }
         }
     }
