@@ -33,5 +33,13 @@
     <Preference
         app:title="@string/settings_number_of_columns_in_post_feed_title"
         app:fragment="ml.docilealligator.infinityforreddit.settings.NumberOfColumnsInPostFeedPreferenceFragment" />
+
+    <PreferenceCategory
+        app:title="@string/post_layout_gallery" />
+
+    <SwitchPreference
+        android:defaultValue="false"
+        app:key="click_to_show_media_in_gallery_layout"
+        app:title="@string/settings_click_to_show_media_in_gallery_layout" />
     
 </PreferenceScreen>

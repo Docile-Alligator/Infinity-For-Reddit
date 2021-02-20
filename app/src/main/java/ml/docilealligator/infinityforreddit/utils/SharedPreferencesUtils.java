@@ -161,6 +161,7 @@ public class SharedPreferencesUtils {
     public static final String SUBREDDIT_DEFAULT_SORT_TIME = "subreddit_default_sort_time";
     public static final String USER_DEFAULT_SORT_TYPE = "user_default_sort_type";
     public static final String USER_DEFAULT_SORT_TIME = "user_default_sort_time";
+    public static final String CLICK_TO_SHOW_MEDIA_IN_GALLERY_LAYOUT = "click_to_show_media_in_gallery_layout";
 
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";
     public static final String MAIN_PAGE_TAB_COUNT = "_main_page_tab_count";

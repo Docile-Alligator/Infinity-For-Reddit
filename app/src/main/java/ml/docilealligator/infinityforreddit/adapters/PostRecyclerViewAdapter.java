@@ -95,7 +95,6 @@ import ml.docilealligator.infinityforreddit.events.PostUpdateEventToDetailActivi
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostDataSource;
-import ml.docilealligator.infinityforreddit.user.UserDao;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -133,6 +132,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
     private AppCompatActivity mActivity;
     private PostFragment mFragment;
+    private SharedPreferences mSharedPreferences;
     private Executor mExecutor;
     private Retrofit mOauthRetrofit;
     private Retrofit mRetrofit;
@@ -143,7 +143,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private RequestManager mGlide;
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
     private Locale mLocale;
-    private UserDao mUserDao;
     private boolean canStartActivity = true;
     private int mPostType;
     private int mPostLayout;
@@ -224,6 +223,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         if (activity != null) {
             mActivity = activity;
             mFragment = fragment;
+            mSharedPreferences = sharedPreferences;
             mExecutor = executor;
             mOauthRetrofit = oauthRetrofit;
             mRetrofit = retrofit;
@@ -323,7 +323,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mGlide = Glide.with(mActivity);
             mRedditDataRoomDatabase = redditDataRoomDatabase;
             mLocale = locale;
-            mUserDao = redditDataRoomDatabase.userDao();
             mExoCreator = exoCreator;
             mCallback = callback;
         }
@@ -3476,9 +3475,61 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         markPostRead(post, true);
                         canStartActivity = false;
 
-                        openViewPostDetailActivity(post, getBindingAdapterPosition());
+                        if (post.getPostType() == Post.TEXT_TYPE || !mSharedPreferences.getBoolean(SharedPreferencesUtils.CLICK_TO_SHOW_MEDIA_IN_GALLERY_LAYOUT, false)) {
+                            openViewPostDetailActivity(post, getBindingAdapterPosition());
+                        } else {
+                            if (post.getPostType() == Post.VIDEO_TYPE) {
+                                Intent intent = new Intent(mActivity, ViewVideoActivity.class);
+                                if (post.isGfycat()) {
+                                    intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
+                                    intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, post.getGfycatId());
+                                } else if (post.isRedgifs()) {
+                                    intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_REDGIFS);
+                                    intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, post.getGfycatId());
+                                } else {
+                                    intent.setData(Uri.parse(post.getVideoUrl()));
+                                    intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, post.getSubredditName());
+                                    intent.putExtra(ViewVideoActivity.EXTRA_ID, post.getId());
+                                    intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
+                                }
+                                intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, post.getTitle());
+                                intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, post.isNSFW());
+                                mActivity.startActivity(intent);
+                            } else if (post.getPostType() == Post.IMAGE_TYPE) {
+                                Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
+                                intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, post.getUrl());
+                                intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, post.getSubredditName()
+                                        + "-" + post.getId() + ".jpg");
+                                intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, post.getTitle());
+                                intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, post.getSubredditName());
+                                mActivity.startActivity(intent);
+                            } else if (post.getPostType() == Post.GIF_TYPE){
+                                Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
+                                intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, post.getSubredditName()
+                                        + "-" + post.getId() + ".gif");
+                                intent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, post.getVideoUrl());
+                                intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, post.getTitle());
+                                intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, post.getSubredditName());
+                                mActivity.startActivity(intent);
+                            } else if (post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
+                                Intent intent = new Intent(mActivity, LinkResolverActivity.class);
+                                Uri uri = Uri.parse(post.getUrl());
+                                intent.setData(uri);
+                                intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, post.isNSFW());
+                                mActivity.startActivity(intent);
+                            } else if (post.getPostType() == Post.GALLERY_TYPE) {
+                                Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
+                                intent.putParcelableArrayListExtra(ViewRedditGalleryActivity.EXTRA_REDDIT_GALLERY, post.getGallery());
+                                intent.putExtra(ViewRedditGalleryActivity.EXTRA_SUBREDDIT_NAME, post.getSubredditName());
+                                mActivity.startActivity(intent);
+                            }
+                        }
                     }
                 }
+            });
+
+            noPreviewImageView.setOnClickListener(view -> {
+                itemView.performClick();
             });
         }
 
