@@ -7,6 +7,9 @@
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
     android:id="@+id/card_view_item_post_card_2_with_preview"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?attr/selectableItemBackground"
     android:orientation="vertical">
 
     <com.google.android.material.card.MaterialCardView
