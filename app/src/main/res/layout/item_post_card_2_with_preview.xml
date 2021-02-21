@@ -98,6 +98,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp"
+        app:flRowVerticalGravity="center"
         app:flChildSpacing="16dp"
         app:flChildSpacingForLastRow="align"
         app:flRowSpacing="8dp">
@@ -187,18 +188,15 @@
             android:src="@drawable/crosspost"
             android:visibility="gone" />
 
-    </com.nex3z.flowlayout.FlowLayout>
+        <TextView
+            android:id="@+id/link_text_view_item_post_card_2_with_preview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="?attr/font_12"
+            android:fontFamily="?attr/font_family"
+            android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/link_text_view_item_post_card_2_with_preview"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
-        android:paddingStart="16dp"
-        android:paddingEnd="16dp"
-        android:textSize="?attr/font_12"
-        android:fontFamily="?attr/font_family"
-        android:visibility="gone" />
+    </com.nex3z.flowlayout.FlowLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
