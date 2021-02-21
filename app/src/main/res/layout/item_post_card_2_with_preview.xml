@@ -191,6 +191,13 @@
             android:src="@drawable/crosspost"
             android:visibility="gone" />
 
+        <ImageView
+            android:id="@+id/stickied_post_image_view_item_post_card_2_with_preview"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
         <TextView
             android:id="@+id/link_text_view_item_post_card_2_with_preview"
             android:layout_width="wrap_content"
@@ -199,85 +206,45 @@
             android:fontFamily="?attr/font_family"
             android:visibility="gone" />
 
+        <TextView
+            android:id="@+id/post_time_text_view_item_post_card_2_with_preview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
+
     </com.nex3z.flowlayout.FlowLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <com.nex3z.flowlayout.FlowLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingStart="16dp"
-        android:paddingEnd="16dp">
+        android:paddingEnd="16dp"
+        app:flRowVerticalGravity="center"
+        app:flChildSpacing="16dp"
+        app:flChildSpacingForLastRow="align"
+        app:flRowSpacing="8dp">
 
         <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
             android:id="@+id/icon_gif_image_view_item_post_card_2_with_preview"
             android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_gravity="center"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            android:layout_height="24dp" />
 
         <TextView
             android:id="@+id/subreddit_name_text_view_item_post_card_2_with_preview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
             android:textSize="?attr/font_default"
-            android:fontFamily="?attr/font_family"
-            app:layout_constraintBottom_toTopOf="@id/user_text_view_item_post_card_2_with_preview"
-            app:layout_constraintStart_toEndOf="@id/icon_gif_image_view_item_post_card_2_with_preview"
-            app:layout_constraintEnd_toStartOf="@id/stickied_post_image_view_item_post_card_2_with_preview"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constrainedWidth="true"
-            app:layout_constraintHorizontal_bias="0"/>
+            android:fontFamily="?attr/font_family" />
 
         <TextView
             android:id="@+id/user_text_view_item_post_card_2_with_preview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="8dp"
             android:textSize="?attr/font_default"
-            android:fontFamily="?attr/font_family"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/icon_gif_image_view_item_post_card_2_with_preview"
-            app:layout_constraintEnd_toStartOf="@id/stickied_post_image_view_item_post_card_2_with_preview"
-            app:layout_constraintTop_toBottomOf="@+id/subreddit_name_text_view_item_post_card_2_with_preview"
-            app:layout_constraintHorizontal_bias="0"
-            app:layout_constrainedWidth="true" />
+            android:fontFamily="?attr/font_family" />
 
-        <ImageView
-            android:id="@+id/stickied_post_image_view_item_post_card_2_with_preview"
-            android:layout_width="24dp"
-            android:layout_height="24dp"
-            android:layout_marginEnd="8dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:visibility="visible" />
-
-        <TextView
-            android:id="@+id/post_time_text_view_item_post_card_2_with_preview"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:gravity="end"
-            android:textSize="?attr/font_default"
-            android:fontFamily="?attr/font_family"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/guideline2"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.constraintlayout.widget.Guideline
-            android:id="@+id/guideline2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.6" />
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </com.nex3z.flowlayout.FlowLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottom_constraint_layout_item_post_card_2_with_preview"
