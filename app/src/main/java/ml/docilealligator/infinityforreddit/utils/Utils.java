@@ -99,9 +99,13 @@ public class Utils {
                     }
                 } else if (currentChar == ' ' || currentChar == '\n') {
                     if (newestCaretIndex >= 0) {
-                        regexed.insert(i, '^');
-                        newestCaretIndex = -1;
-                        i++;
+                        if (i != newestCaretIndex + 1) {
+                            regexed.insert(i, '^');
+                            newestCaretIndex = -1;
+                            i++;
+                        } else {
+                            newestCaretIndex = -1;
+                        }
                     }
                 } else if (currentChar == '(') {
                     if (newestCaretIndex >= 0 && i == newestCaretIndex + 1) {
