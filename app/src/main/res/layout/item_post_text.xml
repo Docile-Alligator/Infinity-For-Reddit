@@ -6,7 +6,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
-    android:id="@+id/card_view_item_post_text_type"
     app:cardElevation="2dp"
     app:cardCornerRadius="16dp">
 
