@@ -1316,7 +1316,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         ((PostGalleryViewHolder) holder).imageView.setVisibility(View.VISIBLE);
                         ((PostGalleryViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
                         ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.VISIBLE);
-                        ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setImageDrawable(mActivity.getDrawable(R.drawable.ic_link));
+                        ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setImageDrawable(mActivity.getDrawable(R.drawable.ic_link_post_type_indicator));
 
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
                         if (preview != null) {
