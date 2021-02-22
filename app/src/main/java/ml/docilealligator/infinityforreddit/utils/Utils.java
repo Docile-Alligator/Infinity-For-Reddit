@@ -48,8 +48,9 @@ public class Utils {
                 .replaceAll("(^|^ *|\\n *)#####(?!($|\\s|#))", "$0 ")
                 .replaceAll("(^|^ *|\\n *)######(?!($|\\s|#))", "$0 "));
 
+        return fixSuperScript(regexed);
         //Fix superscript
-        int startIndex = regexed.indexOf("^");
+        /*int startIndex = regexed.indexOf("^");
         while (startIndex >= 0 && startIndex + 1 < regexed.length()) {
             char currentChar = regexed.charAt(startIndex + 1);
             if (currentChar == '^') {
@@ -58,6 +59,11 @@ public class Utils {
             } else if (currentChar == ' ' || currentChar == '\n') {
                 regexed.insert(startIndex + 1, '^');
                 startIndex = regexed.indexOf("^", startIndex + 2);
+            } else if (currentChar == '(') {
+                int closeBracketIndex = regexed.indexOf(")", startIndex + 2);
+                if (closeBracketIndex > 0) {
+
+                }
             } else {
                 if (startIndex + 1 == regexed.length() - 1) {
                     regexed.append('^');
@@ -66,6 +72,58 @@ public class Utils {
                 startIndex++;
             }
         }
+        return regexed.toString();*/
+    }
+
+    public static String fixSuperScript(StringBuilder regexed) {
+        int newestCaretIndex = regexed.indexOf("^");
+        if (newestCaretIndex >= 0) {
+            boolean hasBracket = false;
+            int caretWithLeftBracketIndex = -1;
+            for (int i = newestCaretIndex + 1; i < regexed.length(); i++) {
+                char currentChar = regexed.charAt(i);
+                if (currentChar == '^') {
+                    if (!(i > 0 && regexed.charAt(i - 1) == '\\')) {
+                        if (newestCaretIndex < 0) {
+                            newestCaretIndex = i;
+                        } else {
+                            regexed.insert(i, '^');
+                            newestCaretIndex = i + 1;
+                            i++;
+                            if (newestCaretIndex == regexed.length() - 1) {
+                                regexed.deleteCharAt(regexed.length() - 1);
+                                newestCaretIndex = -1;
+                                break;
+                            }
+                        }
+                    }
+                } else if (currentChar == ' ' || currentChar == '\n') {
+                    if (newestCaretIndex >= 0) {
+                        regexed.insert(i, '^');
+                        newestCaretIndex = -1;
+                        i++;
+                    }
+                } else if (currentChar == '(') {
+                    if (newestCaretIndex >= 0 && i == newestCaretIndex + 1) {
+                        hasBracket = true;
+                        newestCaretIndex = -1;
+                        caretWithLeftBracketIndex = i - 1;
+                    }
+                } else if (currentChar == ')') {
+                    if (hasBracket) {
+                        hasBracket = false;
+                        regexed.setCharAt(i, '^');
+                        regexed.replace(caretWithLeftBracketIndex, caretWithLeftBracketIndex + 2, "^");
+                        caretWithLeftBracketIndex = -1;
+                        i--;
+                    }
+                }
+            }
+            if (newestCaretIndex >=0 || caretWithLeftBracketIndex >= 0) {
+                regexed.insert(regexed.length(), '^');
+            }
+        }
+
         return regexed.toString();
     }
 
