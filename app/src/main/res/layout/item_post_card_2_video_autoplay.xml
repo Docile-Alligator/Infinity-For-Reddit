@@ -5,7 +5,6 @@
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
     android:paddingTop="8dp"
-    android:layout_marginBottom="8dp"
     android:clickable="true"
     android:focusable="true"
     android:background="?attr/selectableItemBackground"
@@ -303,6 +302,7 @@
     <View
         android:id="@+id/divider_item_post_card_2_video_autoplay"
         android:layout_width="match_parent"
-        android:layout_height="1dp" />
+        android:layout_height="1dp"
+        android:paddingBottom="8dp" />
 
 </LinearLayout>

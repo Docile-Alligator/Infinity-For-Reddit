@@ -1755,8 +1755,13 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
             params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
             int marginPixel = (int) Utils.convertDpToPixel(8, mActivity);
-            params.topMargin = marginPixel;
-            params.bottomMargin = marginPixel;
+            if (holder instanceof PostCard2VideoAutoplayViewHolder || holder instanceof PostCard2WithPreviewViewHolder
+                    || holder instanceof PostCard2TextTypeViewHolder) {
+                ((PostBaseViewHolder) holder).itemView.setPadding(0, marginPixel, 0, 0);
+            } else {
+                params.topMargin = marginPixel;
+                params.bottomMargin = marginPixel;
+            }
             holder.itemView.setLayoutParams(params);
             ((PostBaseViewHolder) holder).itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
             ((PostBaseViewHolder) holder).titleTextView.setTextColor(mPostTitleColor);
