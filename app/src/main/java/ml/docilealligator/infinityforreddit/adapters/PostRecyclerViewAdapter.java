@@ -865,6 +865,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     } else {
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
                         if (preview != null) {
+                            ((PostCard2WithPreviewViewHolder) holder).imageView.setVisibility(View.VISIBLE);
                             if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
                                 int height = (int) (400 * mScale);
                                 ((PostCard2WithPreviewViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -1783,6 +1784,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 ((PostTextTypeViewHolder) holder).contentTextView.setVisibility(View.GONE);
             } else if (holder instanceof PostCard2WithPreviewViewHolder) {
                 mGlide.clear(((PostCard2WithPreviewViewHolder) holder).imageView);
+                ((PostCard2WithPreviewViewHolder) holder).imageView.setVisibility(View.GONE);
                 ((PostCard2WithPreviewViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
                 ((PostCard2WithPreviewViewHolder) holder).noPreviewImageView.setVisibility(View.GONE);
                 ((PostCard2WithPreviewViewHolder) holder).progressBar.setVisibility(View.GONE);
