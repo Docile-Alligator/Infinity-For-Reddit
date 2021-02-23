@@ -385,8 +385,8 @@
     <string name="settings_time_format_title">Time Format</string>
     <string name="settings_category_post_title">Post</string>
     <string name="settings_default_post_layout">Default Post Layout</string>
-    <string name="settings_show_divider_in_compact_layout">Show Divider in Compact Layout</string>
-    <string name="settings_show_thumbnail_on_the_left_in_compact_layout">Show Thumbnail on the Left in Compact Layout</string>
+    <string name="settings_show_divider_in_compact_layout">Show Divider</string>
+    <string name="settings_show_thumbnail_on_the_left_in_compact_layout">Show Thumbnail on the Left</string>
     <string name="settings_number_of_columns_in_post_feed_title">The Number of Columns in Post Feed</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">Portrait</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">Landscape</string>
@@ -491,8 +491,8 @@
     <string name="settings_pull_to_refresh_title">Pull to Refresh</string>
     <string name="settings_security_title">Security</string>
     <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">Require Authentication to Go to Account Section in Navigation Drawer</string>
-    <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">Long Press to Hide Toolbar in Compact Layout</string>
-    <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">Toolbar in Compact Layout Hidden by Default</string>
+    <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">Long Press to Hide Toolbar</string>
+    <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">Hide Toolbar by Default</string>
     <string name="settings_customize_bottom_app_bar_title">Customize Bottom Navigation Bar</string>
     <string name="settings_main_activity_bottom_app_bar_group_summary">Main Page</string>
     <string name="settings_other_activities_bottom_app_bar_group_summary">Other Pages</string>
@@ -535,6 +535,8 @@
     <string name="settings_user_default_sort_type_title">User Default Sort Type</string>
     <string name="settings_user_default_sort_time_title">User Default Sort Time</string>
     <string name="settings_click_to_show_media_in_gallery_layout">Click to Show Media in Gallery Layout</string>
+    <string name="settings_hide_post_type">Hide Post Type</string>
+    <string name="settings_hide_the_number_of_awards">Hide the Number of Awards</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

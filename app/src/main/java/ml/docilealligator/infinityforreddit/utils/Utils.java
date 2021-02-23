@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.text.HtmlCompat;
 
@@ -49,30 +50,6 @@ public class Utils {
                 .replaceAll("(^|^ *|\\n *)######(?!($|\\s|#))", "$0 "));
 
         return fixSuperScript(regexed);
-        //Fix superscript
-        /*int startIndex = regexed.indexOf("^");
-        while (startIndex >= 0 && startIndex + 1 < regexed.length()) {
-            char currentChar = regexed.charAt(startIndex + 1);
-            if (currentChar == '^') {
-                regexed.insert(startIndex, '^');
-                startIndex = regexed.indexOf("^", startIndex + 1);
-            } else if (currentChar == ' ' || currentChar == '\n') {
-                regexed.insert(startIndex + 1, '^');
-                startIndex = regexed.indexOf("^", startIndex + 2);
-            } else if (currentChar == '(') {
-                int closeBracketIndex = regexed.indexOf(")", startIndex + 2);
-                if (closeBracketIndex > 0) {
-
-                }
-            } else {
-                if (startIndex + 1 == regexed.length() - 1) {
-                    regexed.append('^');
-                    startIndex++;
-                }
-                startIndex++;
-            }
-        }
-        return regexed.toString();*/
     }
 
     public static String fixSuperScript(StringBuilder regexed) {
@@ -309,7 +286,7 @@ public class Utils {
 
     @Nullable
     public static Drawable getTintedDrawable(Context context, int drawableId, int color) {
-        Drawable drawable = context.getDrawable(drawableId);
+        Drawable drawable = ContextCompat.getDrawable(context, drawableId);
         if (drawable != null) {
             Drawable wrappedDrawable = DrawableCompat.wrap(drawable).mutate();
             DrawableCompat.setTint(wrappedDrawable, color);

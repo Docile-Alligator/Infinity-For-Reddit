@@ -10,6 +10,23 @@
         app:title="@string/settings_default_post_layout"
         app:useSimpleSummaryProvider="true" />
 
+    <Preference
+        app:title="@string/settings_number_of_columns_in_post_feed_title"
+        app:fragment="ml.docilealligator.infinityforreddit.settings.NumberOfColumnsInPostFeedPreferenceFragment" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="hide_post_type"
+        app:title="@string/settings_hide_post_type" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="hide_the_number_of_awards"
+        app:title="@string/settings_hide_the_number_of_awards" />
+
+    <PreferenceCategory
+        app:title="@string/post_layout_compact" />
+
     <SwitchPreference
         app:defaultValue="true"
         app:key="show_divider_in_compact_layout"
@@ -29,10 +46,6 @@
         app:defaultValue="false"
         app:key="post_compact_layout_toolbar_hidden_by_default"
         app:title="@string/settings_post_compact_layout_toolbar_hidden_by_default_title" />
-
-    <Preference
-        app:title="@string/settings_number_of_columns_in_post_feed_title"
-        app:fragment="ml.docilealligator.infinityforreddit.settings.NumberOfColumnsInPostFeedPreferenceFragment" />
 
     <PreferenceCategory
         app:title="@string/post_layout_gallery" />

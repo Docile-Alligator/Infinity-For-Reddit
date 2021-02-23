@@ -208,6 +208,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean mMarkPostsAsReadAfterVoting;
     private boolean mMarkPostsAsReadOnScroll;
     private boolean mHideReadPostsAutomatically;
+    private boolean mHidePostType;
+    private boolean mHideTheNumberOfAwards;
     private Drawable mCommentIcon;
     private NetworkState networkState;
     private ExoCreator mExoCreator;
@@ -278,6 +280,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mMarkPostsAsReadAfterVoting = postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, false);
             mMarkPostsAsReadOnScroll = postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MARK_POSTS_AS_READ_ON_SCROLL_BASE, false);
             mHideReadPostsAutomatically = postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false);
+
+            mHidePostType = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_POST_TYPE, false);
+            mHideTheNumberOfAwards = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_AWARDS, false);
 
             mPostLayout = postLayout;
 
@@ -604,7 +609,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     Utils.setHTMLWithImageToTextView(((PostBaseViewHolder) holder).flairTextView, flair, false);
                 }
 
-                if (nAwards > 0) {
+                if (nAwards > 0 && !mHideTheNumberOfAwards) {
                     ((PostBaseViewHolder) holder).awardsTextView.setVisibility(View.VISIBLE);
                     if (nAwards == 1) {
                         ((PostBaseViewHolder) holder).awardsTextView.setText(mActivity.getString(R.string.one_award));
@@ -650,6 +655,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     ((PostBaseViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                 } else {
                     ((PostBaseViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                }
+
+                if (mHidePostType) {
+                    ((PostBaseViewHolder) holder).typeTextView.setVisibility(View.GONE);
+                } else {
+                    ((PostBaseViewHolder) holder).typeTextView.setVisibility(View.VISIBLE);
                 }
 
                 if (holder instanceof PostVideoAutoplayViewHolder) {
@@ -1082,7 +1093,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     Utils.setHTMLWithImageToTextView(((PostCompactBaseViewHolder) holder).flairTextView, flair, false);
                 }
 
-                if (nAwards > 0) {
+                if (nAwards > 0 && !mHideTheNumberOfAwards) {
                     ((PostCompactBaseViewHolder) holder).awardsTextView.setVisibility(View.VISIBLE);
                     if (nAwards == 1) {
                         ((PostCompactBaseViewHolder) holder).awardsTextView.setText(mActivity.getString(R.string.one_award));
@@ -1136,6 +1147,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                 if (post.isCrosspost()) {
                     ((PostCompactBaseViewHolder) holder).crosspostImageView.setVisibility(View.VISIBLE);
+                }
+
+                if (mHidePostType) {
+                    ((PostCompactBaseViewHolder) holder).typeTextView.setVisibility(View.GONE);
+                } else {
+                    ((PostCompactBaseViewHolder) holder).typeTextView.setVisibility(View.VISIBLE);
                 }
 
                 switch (post.getPostType()) {
@@ -1740,6 +1757,14 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         mOnlyDisablePreviewInVideoAndGifPosts = onlyDisablePreviewInVideoAndGifPosts;
     }
 
+    public void setHidePostType(boolean hidePostType) {
+        mHidePostType = hidePostType;
+    }
+
+    public void setHideTheNumberOfAwards(boolean hideTheNumberOfAwards) {
+        mHideTheNumberOfAwards = hideTheNumberOfAwards;
+    }
+
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
@@ -1754,11 +1779,14 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             ((PostBaseViewHolder) holder).itemView.setVisibility(View.VISIBLE);
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
             params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            int marginPixel = (int) Utils.convertDpToPixel(8, mActivity);
-            if (holder instanceof PostCard2VideoAutoplayViewHolder || holder instanceof PostCard2WithPreviewViewHolder
-                    || holder instanceof PostCard2TextTypeViewHolder) {
-                ((PostBaseViewHolder) holder).itemView.setPadding(0, marginPixel, 0, 0);
+            if (holder instanceof PostCard2VideoAutoplayViewHolder || holder instanceof PostCard2WithPreviewViewHolder) {
+                int paddingPixel = (int) Utils.convertDpToPixel(16, mActivity);
+                ((PostBaseViewHolder) holder).itemView.setPadding(0, paddingPixel, 0, 0);
+            } else if (holder instanceof PostCard2TextTypeViewHolder) {
+                int paddingPixel = (int) Utils.convertDpToPixel(12, mActivity);
+                ((PostBaseViewHolder) holder).itemView.setPadding(0, paddingPixel, 0, 0);
             } else {
+                int marginPixel = (int) Utils.convertDpToPixel(8, mActivity);
                 params.topMargin = marginPixel;
                 params.bottomMargin = marginPixel;
             }
