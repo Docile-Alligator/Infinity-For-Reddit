@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit.adapters;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,9 +22,9 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
+import io.noties.markwon.html.HtmlPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.movement.MovementMethodPlugin;
-import io.noties.markwon.simple.ext.SimpleExtPlugin;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Rule;
@@ -41,6 +40,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
 
     public RulesRecyclerViewAdapter(AppCompatActivity activity, CustomThemeWrapper customThemeWrapper) {
         markwon = Markwon.builder(activity)
+                .usePlugin(HtmlPlugin.create())
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
@@ -69,12 +69,6 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
                 })))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .usePlugin(StrikethroughPlugin.create())
-                .usePlugin(SimpleExtPlugin.create(plugin ->
-                                plugin.addExtension(1, '^', (configuration, props) -> {
-                                    return new SuperscriptSpan();
-                                })
-                        )
-                )
                 .build();
         mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();

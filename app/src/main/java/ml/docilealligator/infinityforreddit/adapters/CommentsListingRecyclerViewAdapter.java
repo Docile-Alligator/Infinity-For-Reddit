@@ -42,6 +42,7 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
+import io.noties.markwon.html.HtmlPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.movement.MovementMethodPlugin;
 import io.noties.markwon.simple.ext.SimpleExtPlugin;
@@ -115,6 +116,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         mCommentColor = customThemeWrapper.getCommentColor();
         int commentSpoilerBackgroundColor = mCommentColor | 0xFF000000;
         mMarkwon = Markwon.builder(mActivity)
+                .usePlugin(HtmlPlugin.create())
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @NonNull
                     @Override
@@ -203,12 +205,6 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 })))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .usePlugin(StrikethroughPlugin.create())
-                .usePlugin(SimpleExtPlugin.create(plugin ->
-                                plugin.addExtension(1, '^', (configuration, props) -> {
-                                    return new SuperscriptSpan();
-                                })
-                        )
-                )
                 .build();
         mLocale = locale;
         mAccessToken = accessToken;

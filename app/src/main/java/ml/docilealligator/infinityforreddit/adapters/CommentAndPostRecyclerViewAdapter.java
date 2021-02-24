@@ -16,7 +16,6 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
-import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -79,12 +78,12 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
+import io.noties.markwon.html.HtmlPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.movement.MovementMethodPlugin;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
-import io.noties.markwon.simple.ext.SimpleExtPlugin;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
@@ -266,6 +265,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         int postSpoilerBackgroundColor = markdownColor | 0xFF000000;
         int linkColor = customThemeWrapper.getLinkColor();
         mPostDetailMarkwon = Markwon.builder(mActivity)
+                .usePlugin(HtmlPlugin.create())
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @NonNull
                     @Override
@@ -368,15 +368,10 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     return true;
                 })))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
-                .usePlugin(SimpleExtPlugin.create(plugin ->
-                            plugin.addExtension(1, '^', (configuration, props) -> {
-                                return new SuperscriptSpan();
-                            })
-                        )
-                )
                 .usePlugin(TableEntryPlugin.create(mActivity))
                 .build();
         mCommentMarkwon = Markwon.builder(mActivity)
+                .usePlugin(HtmlPlugin.create())
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @NonNull
                     @Override
@@ -462,12 +457,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     return true;
                 })))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
-                .usePlugin(SimpleExtPlugin.create(plugin ->
-                                plugin.addExtension(1, '^', (configuration, props) -> {
-                                    return new SuperscriptSpan();
-                                })
-                        )
-                )
                 .build();
         mMarkwonAdapter = MarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
                 .include(TableBlock.class, TableEntry.create(builder -> builder

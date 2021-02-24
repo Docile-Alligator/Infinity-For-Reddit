@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Spanned;
-import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -42,11 +41,11 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
+import io.noties.markwon.html.HtmlPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
-import io.noties.markwon.simple.ext.SimpleExtPlugin;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.adapters.MarkdownBottomBarRecyclerViewAdapter;
@@ -136,6 +135,7 @@ public class CommentActivity extends BaseActivity {
 
         int linkColor = mCustomThemeWrapper.getLinkColor();
         Markwon markwon = Markwon.builder(this)
+                .usePlugin(HtmlPlugin.create())
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
@@ -153,12 +153,6 @@ public class CommentActivity extends BaseActivity {
                     }
                 })
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
-                .usePlugin(SimpleExtPlugin.create(plugin ->
-                                plugin.addExtension(1, '^', (configuration, props) -> {
-                                    return new SuperscriptSpan();
-                                })
-                        )
-                )
                 .build();
         if (parentTextMarkdown != null) {
             commentParentMarkwonView.setOnLongClickListener(view -> {
@@ -182,6 +176,7 @@ public class CommentActivity extends BaseActivity {
             contentMarkdownRecyclerView.setVisibility(View.VISIBLE);
             contentMarkdownRecyclerView.setNestedScrollingEnabled(false);
             Markwon postBodyMarkwon = Markwon.builder(this)
+                    .usePlugin(HtmlPlugin.create())
                     .usePlugin(new AbstractMarkwonPlugin() {
                         @Override
                         public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
@@ -214,12 +209,6 @@ public class CommentActivity extends BaseActivity {
                     })
                     .usePlugin(StrikethroughPlugin.create())
                     .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
-                    .usePlugin(SimpleExtPlugin.create(plugin ->
-                                    plugin.addExtension(1, '^', (configuration, props) -> {
-                                        return new SuperscriptSpan();
-                                    })
-                            )
-                    )
                     .usePlugin(TableEntryPlugin.create(this))
                     .build();
             MarkwonAdapter markwonAdapter = MarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)

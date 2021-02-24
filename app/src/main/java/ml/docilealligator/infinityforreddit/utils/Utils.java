@@ -52,57 +52,42 @@ public class Utils {
         return fixSuperScript(regexed);
     }
 
-    public static String fixSuperScript(StringBuilder regexed) {
-        int newestCaretIndex = regexed.indexOf("^");
-        if (newestCaretIndex >= 0) {
-            boolean hasBracket = false;
-            int caretWithLeftBracketIndex = -1;
-            for (int i = newestCaretIndex + 1; i < regexed.length(); i++) {
-                char currentChar = regexed.charAt(i);
-                if (currentChar == '^') {
-                    if (!(i > 0 && regexed.charAt(i - 1) == '\\')) {
-                        if (newestCaretIndex < 0) {
-                            newestCaretIndex = i;
-                        } else {
-                            regexed.insert(i, '^');
-                            newestCaretIndex = i + 1;
-                            i++;
-                            if (newestCaretIndex == regexed.length() - 1) {
-                                regexed.deleteCharAt(regexed.length() - 1);
-                                newestCaretIndex = -1;
-                                break;
-                            }
-                        }
-                    }
-                } else if (currentChar == ' ' || currentChar == '\n') {
-                    if (newestCaretIndex >= 0) {
-                        if (i != newestCaretIndex + 1) {
-                            regexed.insert(i, '^');
-                            newestCaretIndex = -1;
-                            i++;
-                        } else {
-                            newestCaretIndex = -1;
-                        }
-                    }
-                } else if (currentChar == '(') {
-                    if (newestCaretIndex >= 0 && i == newestCaretIndex + 1) {
+    private static String fixSuperScript(StringBuilder regexed) {
+        boolean hasBracket = false;
+        int nCarets = 0;
+        for (int i = 0; i < regexed.length(); i++) {
+            char currentChar = regexed.charAt(i);
+            if (currentChar == '^') {
+                if (!(i > 0 && regexed.charAt(i - 1) == '\\')) {
+                    if (i < regexed.length() - 1 && regexed.charAt(i + 1) == '(') {
+                        regexed.replace(i, i + 2, "<sup>");
                         hasBracket = true;
-                        newestCaretIndex = -1;
-                        caretWithLeftBracketIndex = i - 1;
+                    } else {
+                        regexed.replace(i, i + 1, "<sup>");
                     }
-                } else if (currentChar == ')') {
-                    if (hasBracket) {
-                        hasBracket = false;
-                        regexed.setCharAt(i, '^');
-                        regexed.replace(caretWithLeftBracketIndex, caretWithLeftBracketIndex + 2, "^");
-                        caretWithLeftBracketIndex = -1;
-                        i--;
-                    }
+                    nCarets++;
                 }
+            } else if (currentChar == ')' && hasBracket) {
+                hasBracket = false;
+                regexed.replace(i, i + 1, "</sup>");
+                nCarets--;
+            } else if (currentChar == '\n') {
+                hasBracket = false;
+                for (int j = 0; j < nCarets; j++) {
+                    regexed.insert(i, "</sup>");
+                    i += 6;
+                }
+                nCarets = 0;
+            } else if (currentChar == ' ' && !hasBracket) {
+                for (int j = 0; j < nCarets; j++) {
+                    regexed.insert(i, "</sup>");
+                    i += 6;
+                }
+                nCarets = 0;
             }
-            if (newestCaretIndex >=0 || caretWithLeftBracketIndex >= 0) {
-                regexed.insert(regexed.length(), '^');
-            }
+        }
+        for (int j = 0; j < nCarets; j++) {
+            regexed.append("</sup>");
         }
 
         return regexed.toString();
