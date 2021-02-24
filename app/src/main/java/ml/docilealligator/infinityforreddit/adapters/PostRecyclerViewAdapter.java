@@ -210,6 +210,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean mHideReadPostsAutomatically;
     private boolean mHidePostType;
     private boolean mHideTheNumberOfAwards;
+    private boolean mHideSubredditAndUserPrefix;
+    private boolean mHideTheNumberOfVotes;
     private Drawable mCommentIcon;
     private NetworkState networkState;
     private ExoCreator mExoCreator;
@@ -283,6 +285,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
             mHidePostType = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_POST_TYPE, false);
             mHideTheNumberOfAwards = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_AWARDS, false);
+            mHideSubredditAndUserPrefix = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_SUBREDDIT_AND_USER_PREFIX, false);
+            mHideTheNumberOfVotes = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_VOTES, false);
 
             mPostLayout = postLayout;
 
@@ -475,8 +479,13 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 String flair = post.getFlair();
                 int nAwards = post.getNAwards();
 
-                ((PostBaseViewHolder) holder).subredditTextView.setText(subredditNamePrefixed);
-                ((PostBaseViewHolder) holder).userTextView.setText(authorPrefixed);
+                if (mHideSubredditAndUserPrefix) {
+                    ((PostBaseViewHolder) holder).subredditTextView.setText(subredditName);
+                    ((PostBaseViewHolder) holder).userTextView.setText(post.getAuthor());
+                } else {
+                    ((PostBaseViewHolder) holder).subredditTextView.setText(subredditNamePrefixed);
+                    ((PostBaseViewHolder) holder).userTextView.setText(authorPrefixed);
+                }
 
                 if (mDisplaySubredditName) {
                     if (authorPrefixed.equals(subredditNamePrefixed)) {
@@ -590,7 +599,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
 
                 ((PostBaseViewHolder) holder).titleTextView.setText(post.getTitle());
-                ((PostBaseViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                if (!mHideTheNumberOfVotes) {
+                    ((PostBaseViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                } else {
+                    ((PostBaseViewHolder) holder).scoreTextView.setText(mActivity.getString(R.string.vote));
+                }
 
                 if (post.isLocked()) {
                     ((PostBaseViewHolder) holder).lockedImageView.setVisibility(View.VISIBLE);
@@ -1011,7 +1024,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     }
 
                     ((PostCompactBaseViewHolder) holder).nameTextView.setTextColor(mSubredditColor);
-                    ((PostCompactBaseViewHolder) holder).nameTextView.setText(subredditNamePrefixed);
+                    if (mHideSubredditAndUserPrefix) {
+                        ((PostCompactBaseViewHolder) holder).nameTextView.setText(subredditName);
+                    } else {
+                        ((PostCompactBaseViewHolder) holder).nameTextView.setText(subredditNamePrefixed);
+                    }
                 } else {
                     if (post.getAuthorIconUrl() == null) {
                         String authorName = post.getAuthor().equals("[deleted]") ? post.getSubredditNamePrefixed().substring(2) : post.getAuthor();
@@ -1047,7 +1064,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     }
 
                     ((PostCompactBaseViewHolder) holder).nameTextView.setTextColor(mUsernameColor);
-                    ((PostCompactBaseViewHolder) holder).nameTextView.setText(authorPrefixed);
+                    if (mHideSubredditAndUserPrefix) {
+                        ((PostCompactBaseViewHolder) holder).nameTextView.setText(post.getAuthor());
+                    } else {
+                        ((PostCompactBaseViewHolder) holder).nameTextView.setText(authorPrefixed);
+                    }
                 }
 
                 if (mShowElapsedTime) {
@@ -1074,7 +1095,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
 
                 ((PostCompactBaseViewHolder) holder).titleTextView.setText(title);
-                ((PostCompactBaseViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                if (!mHideTheNumberOfVotes) {
+                    ((PostCompactBaseViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                } else {
+                    ((PostCompactBaseViewHolder) holder).scoreTextView.setText(mActivity.getString(R.string.vote));
+                }
 
                 if (post.isLocked()) {
                     ((PostCompactBaseViewHolder) holder).lockedImageView.setVisibility(View.VISIBLE);
@@ -1765,6 +1790,14 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         mHideTheNumberOfAwards = hideTheNumberOfAwards;
     }
 
+    public void setHideSubredditAndUserPrefix(boolean hideSubredditAndUserPrefix) {
+        mHideSubredditAndUserPrefix = hideSubredditAndUserPrefix;
+    }
+
+    public void setHideTheNumberOfVotes(boolean hideTheNumberOfVotes) {
+        mHideTheNumberOfVotes = hideTheNumberOfVotes;
+    }
+
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
@@ -2298,7 +2331,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         scoreTextView.setTextColor(mPostIconAndInfoColor);
                     }
 
-                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                    if (!mHideTheNumberOfVotes) {
+                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                    }
 
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
@@ -2320,7 +2355,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                             if (currentPosition == position) {
                                 downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                                if (!mHideTheNumberOfVotes) {
+                                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                                }
                             }
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
@@ -2331,7 +2368,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                             post.setVoteType(previousVoteType);
                             if (getBindingAdapterPosition() == position) {
-                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
+                                if (!mHideTheNumberOfVotes) {
+                                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
+                                }
                                 upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                                 downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
                                 scoreTextView.setTextColor(previousScoreTextViewColor);
@@ -2388,7 +2427,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         scoreTextView.setTextColor(mPostIconAndInfoColor);
                     }
 
-                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                    if (!mHideTheNumberOfVotes) {
+                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                    }
 
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
@@ -2410,7 +2451,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                             if (currentPosition == position) {
                                 upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                                if (!mHideTheNumberOfVotes) {
+                                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                                }
                             }
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
@@ -2421,7 +2464,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                             post.setVoteType(previousVoteType);
                             if (getBindingAdapterPosition() == position) {
-                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
+                                if (!mHideTheNumberOfVotes) {
+                                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
+                                }
                                 upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                                 downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
                                 scoreTextView.setTextColor(previousScoreTextViewColor);
@@ -3253,7 +3298,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         scoreTextView.setTextColor(mPostIconAndInfoColor);
                     }
 
-                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                    if (!mHideTheNumberOfVotes) {
+                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                    }
 
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
@@ -3275,7 +3322,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                             if (currentPosition == position) {
                                 downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                                if (!mHideTheNumberOfVotes) {
+                                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                                }
                             }
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
@@ -3286,7 +3335,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                             post.setVoteType(previousVoteType);
                             if (getBindingAdapterPosition() == position) {
-                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
+                                if (!mHideTheNumberOfVotes) {
+                                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
+                                }
                                 upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                                 downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
                                 scoreTextView.setTextColor(previousScoreTextViewColor);
@@ -3343,7 +3394,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         scoreTextView.setTextColor(mPostIconAndInfoColor);
                     }
 
-                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                    if (!mHideTheNumberOfVotes) {
+                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                    }
 
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
@@ -3366,7 +3419,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                             if (currentPosition == position) {
                                 upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                                if (!mHideTheNumberOfVotes) {
+                                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                                }
                             }
 
                             EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
@@ -3377,7 +3432,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                             post.setVoteType(previousVoteType);
                             if (getBindingAdapterPosition() == position) {
-                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
+                                if (!mHideTheNumberOfVotes) {
+                                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
+                                }
                                 upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                                 downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
                                 scoreTextView.setTextColor(previousScoreTextViewColor);

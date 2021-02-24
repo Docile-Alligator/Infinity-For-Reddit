@@ -26,12 +26,12 @@ public class PostLayoutBottomSheetFragment extends RoundedBottomSheetDialogFragm
 
     @BindView(R.id.card_layout_text_view_post_layout_bottom_sheet_fragment)
     TextView cardLayoutTextView;
+    @BindView(R.id.card_layout_2_text_view_post_layout_bottom_sheet_fragment)
+    TextView cardLayout2TextView;
     @BindView(R.id.compact_layout_text_view_post_layout_bottom_sheet_fragment)
     TextView compactLayoutTextView;
     @BindView(R.id.gallery_layout_text_view_post_layout_bottom_sheet_fragment)
     TextView galleryLayoutTextView;
-    @BindView(R.id.card_layout_2_text_view_post_layout_bottom_sheet_fragment)
-    TextView cardLayout2TextView;
     private Activity activity;
     public PostLayoutBottomSheetFragment() {
         // Required empty public constructor

@@ -85,7 +85,9 @@ import ml.docilealligator.infinityforreddit.events.ChangeDefaultPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDisableImagePreviewEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeEnableSwipeActionSwitchEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHidePostTypeEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeHideSubredditAndUserPrefixEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfAwardsEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfVotesEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeLongPressToHideToolbarInCompactLayoutEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeMuteAutoplayingVideosEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeMuteNSFWVideoEvent;
@@ -1653,6 +1655,22 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void onChangeHideTheNumberOfAwardsEvent(ChangeHideTheNumberOfAwardsEvent event) {
         if (mAdapter != null) {
             mAdapter.setHideTheNumberOfAwards(event.hideTheNumberOfAwards);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeHideSubredditAndUserEvent(ChangeHideSubredditAndUserPrefixEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setHideSubredditAndUserPrefix(event.hideSubredditAndUserPrefix);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeHideTheNumberOfVotesEvent(ChangeHideTheNumberOfVotesEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setHideTheNumberOfVotes(event.hideTheNumberOfVotes);
             refreshAdapter();
         }
     }
