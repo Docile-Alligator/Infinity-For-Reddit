@@ -34,6 +34,11 @@
         app:key="hide_the_number_of_votes"
         app:title="@string/settings_hide_the_number_of_votes" />
 
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="hide_the_number_of_comments"
+        app:title="@string/settings_hide_the_number_of_comments" />
+
     <PreferenceCategory
         app:title="@string/post_layout_compact" />
 

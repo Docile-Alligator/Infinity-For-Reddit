@@ -539,6 +539,7 @@
     <string name="settings_hide_the_number_of_awards">Hide the Number of Awards</string>
     <string name="settings_hide_subreddit_and_user_prefix">Hide Subreddit and User Prefix</string>
     <string name="settings_hide_the_number_of_votes">Hide the Number of Votes</string>
+    <string name="settings_hide_the_number_of_comments">Hide the Number of Comments</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

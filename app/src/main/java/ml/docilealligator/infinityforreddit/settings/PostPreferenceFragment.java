@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.settings;
 import android.os.Bundle;
 
 import androidx.preference.ListPreference;
+import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
@@ -14,6 +15,7 @@ import ml.docilealligator.infinityforreddit.events.ChangeDefaultPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHidePostTypeEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideSubredditAndUserPrefixEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfAwardsEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfCommentsEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfVotesEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeLongPressToHideToolbarInCompactLayoutEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeShowAbsoluteNumberOfVotesEvent;
@@ -37,6 +39,7 @@ public class PostPreferenceFragment extends PreferenceFragmentCompat {
         SwitchPreference hideTheNumberOfAwardsSwitch = findPreference(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_AWARDS);
         SwitchPreference hideSubredditAndUserPrefixSwitch = findPreference(SharedPreferencesUtils.HIDE_SUBREDDIT_AND_USER_PREFIX);
         SwitchPreference hideTheNumberOfVotesSwitch = findPreference(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_VOTES);
+        SwitchPreference hideTheNumberOfCommentsSwitch = findPreference(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_COMMENTS);
 
         if (defaultPostLayoutList != null) {
             defaultPostLayoutList.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -105,6 +108,16 @@ public class PostPreferenceFragment extends PreferenceFragmentCompat {
             hideTheNumberOfVotesSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new ChangeHideTheNumberOfVotesEvent((Boolean) newValue));
                 return true;
+            });
+        }
+
+        if (hideTheNumberOfCommentsSwitch != null) {
+            hideTheNumberOfCommentsSwitch.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    EventBus.getDefault().post(new ChangeHideTheNumberOfCommentsEvent((Boolean) newValue));
+                    return true;
+                }
             });
         }
     }

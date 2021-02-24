@@ -212,6 +212,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean mHideTheNumberOfAwards;
     private boolean mHideSubredditAndUserPrefix;
     private boolean mHideTheNumberOfVotes;
+    private boolean mHideTheNumberOfComments;
     private Drawable mCommentIcon;
     private NetworkState networkState;
     private ExoCreator mExoCreator;
@@ -287,6 +288,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mHideTheNumberOfAwards = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_AWARDS, false);
             mHideSubredditAndUserPrefix = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_SUBREDDIT_AND_USER_PREFIX, false);
             mHideTheNumberOfVotes = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_VOTES, false);
+            mHideTheNumberOfComments = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_COMMENTS, false);
 
             mPostLayout = postLayout;
 
@@ -662,7 +664,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     ((PostBaseViewHolder) holder).crosspostImageView.setVisibility(View.VISIBLE);
                 }
 
-                ((PostBaseViewHolder) holder).commentsCountTextView.setText(Integer.toString(post.getNComments()));
+                if (!mHideTheNumberOfComments) {
+                    ((PostBaseViewHolder) holder).commentsCountTextView.setVisibility(View.VISIBLE);
+                    ((PostBaseViewHolder) holder).commentsCountTextView.setText(Integer.toString(post.getNComments()));
+                } else {
+                    ((PostBaseViewHolder) holder).commentsCountTextView.setVisibility(View.GONE);
+                }
 
                 if (post.isSaved()) {
                     ((PostBaseViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
@@ -1241,7 +1248,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         break;
                 }
 
-                ((PostCompactBaseViewHolder) holder).commentsCountTextView.setText(Integer.toString(post.getNComments()));
+                if (!mHideTheNumberOfComments) {
+                    ((PostCompactBaseViewHolder) holder).commentsCountTextView.setVisibility(View.VISIBLE);
+                    ((PostCompactBaseViewHolder) holder).commentsCountTextView.setText(Integer.toString(post.getNComments()));
+                } else {
+                    ((PostCompactBaseViewHolder) holder).commentsCountTextView.setVisibility(View.GONE);
+                }
 
                 if (post.isSaved()) {
                     ((PostCompactBaseViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
@@ -1796,6 +1808,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
     public void setHideTheNumberOfVotes(boolean hideTheNumberOfVotes) {
         mHideTheNumberOfVotes = hideTheNumberOfVotes;
+    }
+
+    public void setHideTheNumberOfComments(boolean hideTheNumberOfComments) {
+        mHideTheNumberOfComments = hideTheNumberOfComments;
     }
 
     @Override

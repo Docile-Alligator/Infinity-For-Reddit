@@ -87,6 +87,7 @@ import ml.docilealligator.infinityforreddit.events.ChangeEnableSwipeActionSwitch
 import ml.docilealligator.infinityforreddit.events.ChangeHidePostTypeEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideSubredditAndUserPrefixEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfAwardsEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfCommentsEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfVotesEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeLongPressToHideToolbarInCompactLayoutEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeMuteAutoplayingVideosEvent;
@@ -1671,6 +1672,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void onChangeHideTheNumberOfVotesEvent(ChangeHideTheNumberOfVotesEvent event) {
         if (mAdapter != null) {
             mAdapter.setHideTheNumberOfVotes(event.hideTheNumberOfVotes);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeHideTheNumberOfCommentsEvent(ChangeHideTheNumberOfCommentsEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setHideTheNumberOfComments(event.hideTheNumberOfComments);
             refreshAdapter();
         }
     }
