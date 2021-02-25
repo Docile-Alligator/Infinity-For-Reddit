@@ -191,6 +191,7 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
         } else if (itemId == R.id.action_search_subreddit_multiselection_activity) {
             Intent intent = new Intent(this, SearchActivity.class);
             intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, true);
+            intent.putExtra(SearchActivity.EXTRA_IS_MULTI_SELECTION, true);
             startActivityForResult(intent, SUBREDDIT_SEARCH_REQUEST_CODE);
         }
 
@@ -203,7 +204,10 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
         if (requestCode == SUBREDDIT_SEARCH_REQUEST_CODE && resultCode == RESULT_OK && data != null && mAdapter != null) {
             Intent returnIntent = new Intent();
             ArrayList<String> selectedSubreddits = mAdapter.getAllSelectedSubreddits();
-            selectedSubreddits.add(data.getStringExtra(SearchActivity.EXTRA_RETURN_SUBREDDIT_NAME));
+            ArrayList<String> searchedSubreddits = data.getStringArrayListExtra(SearchActivity.RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES);
+            if (searchedSubreddits != null) {
+                selectedSubreddits.addAll(searchedSubreddits);
+            }
             returnIntent.putStringArrayListExtra(EXTRA_RETURN_SELECTED_SUBREDDITS, selectedSubreddits);
             setResult(RESULT_OK, returnIntent);
             finish();

@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.subreddit;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "subreddits")
@@ -29,6 +30,8 @@ public class SubredditData {
     private String suggestedCommentSort;
     @ColumnInfo(name = "over18")
     private boolean isNSFW;
+    @Ignore
+    private boolean isSelected;
 
     public SubredditData(@NonNull String id, String name, String iconUrl, String bannerUrl,
                          String description, String sidebarDescription, int nSubscribers, long createdUTC,
@@ -43,6 +46,7 @@ public class SubredditData {
         this.createdUTC = createdUTC;
         this.suggestedCommentSort = suggestedCommentSort;
         this.isNSFW = isNSFW;
+        this.isSelected = false;
     }
 
     @NonNull
@@ -84,5 +88,13 @@ public class SubredditData {
 
     public boolean isNSFW() {
         return isNSFW;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

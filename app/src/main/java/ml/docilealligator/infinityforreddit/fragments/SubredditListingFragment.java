@@ -25,6 +25,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -35,8 +37,8 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NetworkState;
-import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
@@ -44,6 +46,7 @@ import ml.docilealligator.infinityforreddit.activities.SearchSubredditsResultAct
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.adapters.SubredditListingRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditListingViewModel;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
@@ -58,6 +61,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
     public static final String EXTRA_IS_GETTING_SUBREDDIT_INFO = "EIGSI";
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
     public static final String EXTRA_ACCOUNT_NAME = "EAN";
+    public static final String EXTRA_IS_MULTI_SELECTION = "EIMS";
 
     @BindView(R.id.coordinator_layout_subreddit_listing_fragment)
     CoordinatorLayout mCoordinatorLayout;
@@ -140,7 +144,8 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
 
         mAdapter = new SubredditListingRecyclerViewAdapter(mActivity, mExecutor, mOauthRetrofit, mRetrofit,
-                mCustomThemeWrapper, accessToken, accountName, mRedditDataRoomDatabase,
+                mCustomThemeWrapper, accessToken, accountName,
+                mRedditDataRoomDatabase, getArguments().getBoolean(EXTRA_IS_MULTI_SELECTION, false),
                 new SubredditListingRecyclerViewAdapter.Callback() {
                     @Override
                     public void retryLoadingMore() {
@@ -253,5 +258,24 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
     public SortType getSortType() {
         return sortType;
+    }
+
+    public List<SubredditData> getSelectedSubreddits() {
+        if (mSubredditListingViewModel != null) {
+            List<SubredditData> allSubreddits = mSubredditListingViewModel.getSubreddits().getValue();
+            if (allSubreddits == null) {
+                return null;
+            }
+
+            List<SubredditData> selectedSubreddits = new ArrayList<>();
+            for (SubredditData s : allSubreddits) {
+                if (s.isSelected()) {
+                    selectedSubreddits.add(s);
+                }
+            }
+            return selectedSubreddits;
+        }
+
+        return null;
     }
 }

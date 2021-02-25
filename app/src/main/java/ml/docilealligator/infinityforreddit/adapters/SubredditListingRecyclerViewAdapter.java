@@ -22,17 +22,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.checkbox.MaterialCheckBox;
 
 import java.util.concurrent.Executor;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import ml.docilealligator.infinityforreddit.asynctasks.CheckIsSubscribedToSubreddit;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.asynctasks.CheckIsSubscribedToSubreddit;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditSubscription;
 import pl.droidsonroids.gif.GifImageView;
@@ -61,6 +62,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
     private String accessToken;
     private String accountName;
     private RedditDataRoomDatabase redditDataRoomDatabase;
+    private boolean isMultiSelection;
     private int colorPrimaryLightTheme;
     private int primaryTextColor;
     private int secondaryTextColor;
@@ -75,7 +77,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
                                                CustomThemeWrapper customThemeWrapper,
                                                String accessToken, String accountName,
                                                RedditDataRoomDatabase redditDataRoomDatabase,
-                                               Callback callback) {
+                                               boolean isMultiSelection, Callback callback) {
         super(DIFF_CALLBACK);
         this.context = context;
         this.executor = executor;
@@ -84,6 +86,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
         this.accessToken = accessToken;
         this.accountName = accountName;
         this.redditDataRoomDatabase = redditDataRoomDatabase;
+        this.isMultiSelection = isMultiSelection;
         this.callback = callback;
         glide = Glide.with(context);
         colorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
@@ -113,52 +116,66 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof DataViewHolder) {
             SubredditData subredditData = getItem(position);
-            ((DataViewHolder) holder).constraintLayout.setOnClickListener(view ->
-                    callback.subredditSelected(subredditData.getName(), subredditData.getIconUrl()));
+            if (subredditData != null) {
+                if (isMultiSelection) {
+                    ((DataViewHolder) holder).checkBox.setOnCheckedChangeListener((compoundButton, b) -> subredditData.setSelected(b));
+                }
+                ((DataViewHolder) holder).constraintLayout.setOnClickListener(view -> {
+                    if (isMultiSelection) {
+                        ((DataViewHolder) holder).checkBox.performClick();
+                    } else {
+                        callback.subredditSelected(subredditData.getName(), subredditData.getIconUrl());
+                    }
+                });
 
-            if (!subredditData.getIconUrl().equals("")) {
-                glide.load(subredditData.getIconUrl())
-                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                        .error(glide.load(R.drawable.subreddit_default_icon)
-                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                        .into(((DataViewHolder) holder).iconGifImageView);
-            } else {
-                glide.load(R.drawable.subreddit_default_icon)
-                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                        .into(((DataViewHolder) holder).iconGifImageView);
-            }
+                if (!subredditData.getIconUrl().equals("")) {
+                    glide.load(subredditData.getIconUrl())
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                            .error(glide.load(R.drawable.subreddit_default_icon)
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                            .into(((DataViewHolder) holder).iconGifImageView);
+                } else {
+                    glide.load(R.drawable.subreddit_default_icon)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                            .into(((DataViewHolder) holder).iconGifImageView);
+                }
 
-            ((DataViewHolder) holder).subredditNameTextView.setText(subredditData.getName());
+                ((DataViewHolder) holder).subredditNameTextView.setText(subredditData.getName());
 
-            CheckIsSubscribedToSubreddit.checkIsSubscribedToSubreddit(executor, new Handler(),
-                    redditDataRoomDatabase, subredditData.getName(), accountName,
-                    new CheckIsSubscribedToSubreddit.CheckIsSubscribedToSubredditListener() {
-                        @Override
-                        public void isSubscribed() {
-                            ((DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
-                        }
+                if (!isMultiSelection) {
+                    CheckIsSubscribedToSubreddit.checkIsSubscribedToSubreddit(executor, new Handler(),
+                            redditDataRoomDatabase, subredditData.getName(), accountName,
+                            new CheckIsSubscribedToSubreddit.CheckIsSubscribedToSubredditListener() {
+                                @Override
+                                public void isSubscribed() {
+                                    ((DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
+                                }
 
-                        @Override
-                        public void isNotSubscribed() {
-                            ((DataViewHolder) holder).subscribeButton.setVisibility(View.VISIBLE);
-                            ((DataViewHolder) holder).subscribeButton.setOnClickListener(view -> {
-                                SubredditSubscription.subscribeToSubreddit(oauthRetrofit, retrofit,
-                                        accessToken, subredditData.getName(), accountName, redditDataRoomDatabase,
-                                        new SubredditSubscription.SubredditSubscriptionListener() {
-                                            @Override
-                                            public void onSubredditSubscriptionSuccess() {
-                                                ((DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
-                                                Toast.makeText(context, R.string.subscribed, Toast.LENGTH_SHORT).show();
-                                            }
+                                @Override
+                                public void isNotSubscribed() {
+                                    ((DataViewHolder) holder).subscribeButton.setVisibility(View.VISIBLE);
+                                    ((DataViewHolder) holder).subscribeButton.setOnClickListener(view -> {
+                                        SubredditSubscription.subscribeToSubreddit(oauthRetrofit, retrofit,
+                                                accessToken, subredditData.getName(), accountName, redditDataRoomDatabase,
+                                                new SubredditSubscription.SubredditSubscriptionListener() {
+                                                    @Override
+                                                    public void onSubredditSubscriptionSuccess() {
+                                                        ((DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
+                                                        Toast.makeText(context, R.string.subscribed, Toast.LENGTH_SHORT).show();
+                                                    }
 
-                                            @Override
-                                            public void onSubredditSubscriptionFail() {
-                                                Toast.makeText(context, R.string.subscribe_failed, Toast.LENGTH_SHORT).show();
-                                            }
-                                        });
+                                                    @Override
+                                                    public void onSubredditSubscriptionFail() {
+                                                        Toast.makeText(context, R.string.subscribe_failed, Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                    });
+                                }
                             });
-                        }
-                    });
+                } else {
+                    ((DataViewHolder) holder).checkBox.setChecked(subredditData.isSelected());
+                }
+            }
         }
     }
 
@@ -227,12 +244,17 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
         TextView subredditNameTextView;
         @BindView(R.id.subscribe_image_view_item_subreddit_listing)
         ImageView subscribeButton;
+        @BindView(R.id.checkbox__item_subreddit_listing)
+        MaterialCheckBox checkBox;
 
         DataViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             subredditNameTextView.setTextColor(primaryTextColor);
             subscribeButton.setColorFilter(unsubscribed, android.graphics.PorterDuff.Mode.SRC_IN);
+            if (isMultiSelection) {
+                checkBox.setVisibility(View.VISIBLE);
+            }
         }
     }
 

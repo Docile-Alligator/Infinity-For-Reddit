@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -21,6 +22,9 @@ import com.r0adkll.slidr.Slidr;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -32,6 +36,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.SubredditListingFragment;
+import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class SearchSubredditsResultActivity extends BaseActivity implements ActivityToolbarInterface {
@@ -39,6 +44,8 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
     static final String EXTRA_QUERY = "EQ";
     static final String EXTRA_RETURN_SUBREDDIT_NAME = "ERSN";
     static final String EXTRA_RETURN_SUBREDDIT_ICON_URL = "ERSIU";
+    static final String EXTRA_IS_MULTI_SELECTION = "EIMS";
+    static final String RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES = "RESS";
 
     private static final String FRAGMENT_OUT_STATE = "FOS";
 
@@ -113,6 +120,7 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
             bundle.putBoolean(SubredditListingFragment.EXTRA_IS_GETTING_SUBREDDIT_INFO, true);
             bundle.putString(SubredditListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
             bundle.putString(SubredditListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
+            bundle.putBoolean(SubredditListingFragment.EXTRA_IS_MULTI_SELECTION, getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false));
             mFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_search_subreddits_result_activity, mFragment).commit();
         } else {
@@ -146,10 +154,31 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false)) {
+            getMenuInflater().inflate(R.menu.search_subreddits_result_activity, menu);
+            applyMenuItemTheme(menu);
+        }
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
+        } else if (item.getItemId() == R.id.action_save_search_subreddits_result_activity) {
+            if (mFragment != null) {
+                List<SubredditData> subreddits = ((SubredditListingFragment) mFragment).getSelectedSubreddits();
+                ArrayList<String> subredditNames = new ArrayList<>();
+                for (SubredditData s : subreddits) {
+                    subredditNames.add(s.getName());
+                }
+                Intent returnIntent = new Intent();
+                returnIntent.putStringArrayListExtra(RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES, subredditNames);
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
+            }
         }
         return false;
     }
