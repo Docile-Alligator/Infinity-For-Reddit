@@ -53,7 +53,8 @@ public class CustomizePostFilterActivity extends BaseActivity {
     private static final String POST_FILTER_STATE = "PFS";
     private static final String ORIGINAL_NAME_STATE = "ONS";
     private static final int ADD_SUBREDDITS_REQUEST_CODE = 1;
-    private static final int ADD_USERS_REQUEST_CODE = 2;
+    private static final int ADD_SUBREDDITS_ANONYMOUS_REQUEST_CODE = 2;
+    private static final int ADD_USERS_REQUEST_CODE = 3;
 
     @BindView(R.id.coordinator_layout_customize_post_filter_activity)
     CoordinatorLayout coordinatorLayout;
@@ -173,6 +174,9 @@ public class CustomizePostFilterActivity extends BaseActivity {
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
+    @Named("current_account")
+    SharedPreferences currentAccountSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
@@ -239,9 +243,17 @@ public class CustomizePostFilterActivity extends BaseActivity {
             onlySpoilerSwitch.performClick();
         });
 
+        String accessToken = currentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         addSubredditsImageView.setOnClickListener(view -> {
-            Intent intent = new Intent(this, SubredditMultiselectionActivity.class);
-            startActivityForResult(intent, ADD_SUBREDDITS_REQUEST_CODE);
+            if (accessToken == null) {
+                Intent intent = new Intent(this, SearchActivity.class);
+                intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_SUBREDDITS, true);
+                intent.putExtra(SearchActivity.EXTRA_IS_MULTI_SELECTION, true);
+                startActivityForResult(intent, ADD_SUBREDDITS_ANONYMOUS_REQUEST_CODE);
+            } else {
+                Intent intent = new Intent(this, SubredditMultiselectionActivity.class);
+                startActivityForResult(intent, ADD_SUBREDDITS_REQUEST_CODE);
+            }
         });
 
         addUsersImageView.setOnClickListener(view -> {
@@ -425,19 +437,10 @@ public class CustomizePostFilterActivity extends BaseActivity {
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == ADD_SUBREDDITS_REQUEST_CODE) {
                 ArrayList<String> subredditNames = data.getStringArrayListExtra(SubredditMultiselectionActivity.EXTRA_RETURN_SELECTED_SUBREDDITS);
-                String currentSubreddits = excludesSubredditsTextInputEditText.getText().toString().trim();
-                if (subredditNames != null && !currentSubreddits.isEmpty() && currentSubreddits.charAt(currentSubreddits.length() - 1) != ',') {
-                    String newString = currentSubreddits + ",";
-                    excludesSubredditsTextInputEditText.setText(newString);
-                }
-                if (subredditNames != null) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    for (String s : subredditNames) {
-                        stringBuilder.append(s).append(",");
-                    }
-                    stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-                    excludesSubredditsTextInputEditText.append(stringBuilder.toString());
-                }
+                updateExcludeSubredditNames(subredditNames);
+            } else if (requestCode == ADD_SUBREDDITS_ANONYMOUS_REQUEST_CODE) {
+                ArrayList<String> subredditNames = data.getStringArrayListExtra(SearchActivity.RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES);
+                updateExcludeSubredditNames(subredditNames);
             } else if (requestCode == ADD_USERS_REQUEST_CODE) {
                 ArrayList<String> usernames = data.getStringArrayListExtra(SearchActivity.RETURN_EXTRA_SELECTED_USERNAMES);
                 String currentUsers = excludesUsersTextInputEditText.getText().toString().trim();
@@ -454,6 +457,22 @@ public class CustomizePostFilterActivity extends BaseActivity {
                     excludesUsersTextInputEditText.append(stringBuilder.toString());
                 }
             }
+        }
+    }
+
+    private void updateExcludeSubredditNames(ArrayList<String> subredditNames) {
+        String currentSubreddits = excludesSubredditsTextInputEditText.getText().toString().trim();
+        if (subredditNames != null && !currentSubreddits.isEmpty() && currentSubreddits.charAt(currentSubreddits.length() - 1) != ',') {
+            String newString = currentSubreddits + ",";
+            excludesSubredditsTextInputEditText.setText(newString);
+        }
+        if (subredditNames != null) {
+            StringBuilder stringBuilder = new StringBuilder();
+            for (String s : subredditNames) {
+                stringBuilder.append(s).append(",");
+            }
+            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+            excludesSubredditsTextInputEditText.append(stringBuilder.toString());
         }
     }
 
