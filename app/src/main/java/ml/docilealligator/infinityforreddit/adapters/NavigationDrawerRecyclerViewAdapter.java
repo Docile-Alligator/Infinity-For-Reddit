@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -64,6 +65,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private int karma;
     private boolean isNSFWEnabled;
     private boolean requireAuthToAccountSection;
+    private boolean showAvatarOnTheRightInTheNavigationDrawer;
     private ItemClickListener itemClickListener;
     private boolean isLoggedIn;
     private boolean isInMainPage = true;
@@ -86,6 +88,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         this.accountName = accountName;
         isNSFWEnabled = nsfwAndSpoilerSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
         requireAuthToAccountSection = sharedPreferences.getBoolean(SharedPreferencesUtils.REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER, false);
+        showAvatarOnTheRightInTheNavigationDrawer = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_AVATAR_ON_THE_RIGHT_IN_THE_NAVIGATION_DRAWER, false);
         isLoggedIn = accountName != null;
         this.itemClickListener = itemClickListener;
         primaryTextColor = customThemeWrapper.getPrimaryTextColor();
@@ -173,6 +176,15 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof NavHeaderViewHolder) {
+            if (showAvatarOnTheRightInTheNavigationDrawer) {
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((NavHeaderViewHolder) holder).profileImageView.getLayoutParams();
+                params.addRule(RelativeLayout.ALIGN_PARENT_END);
+                ((NavHeaderViewHolder) holder).profileImageView.setLayoutParams(params);
+            } else {
+                RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) ((NavHeaderViewHolder) holder).profileImageView.getLayoutParams();
+                params.removeRule(RelativeLayout.ALIGN_PARENT_END);
+                ((NavHeaderViewHolder) holder).profileImageView.setLayoutParams(params);
+            }
             if (isLoggedIn) {
                 ((NavHeaderViewHolder) holder).karmaTextView.setText(appCompatActivity.getString(R.string.karma_info, karma));
                 ((NavHeaderViewHolder) holder).accountNameTextView.setText(accountName);
@@ -562,6 +574,10 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
     public void setRequireAuthToAccountSection(boolean requireAuthToAccountSection) {
         this.requireAuthToAccountSection = requireAuthToAccountSection;
+    }
+
+    public void setShowAvatarOnTheRightInTheNavigationDrawer(boolean showAvatarOnTheRightInTheNavigationDrawer) {
+        this.showAvatarOnTheRightInTheNavigationDrawer = showAvatarOnTheRightInTheNavigationDrawer;
     }
 
     class NavHeaderViewHolder extends RecyclerView.ViewHolder {

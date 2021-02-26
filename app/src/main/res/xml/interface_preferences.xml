@@ -29,6 +29,11 @@
         app:title="@string/settings_enable_bottom_app_bar_title"
         app:summary="@string/settings_enable_bottom_app_bar_summary" />
 
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="show_avatar_on_the_right_in_the_navigation_drawer"
+        app:title="@string/settings_show_avatar_on_the_right_in_the_navigation_drawer" />
+
     <Preference
         app:title="@string/settings_time_format_title"
         app:fragment="ml.docilealligator.infinityforreddit.settings.TimeFormatPreferenceFragment" />

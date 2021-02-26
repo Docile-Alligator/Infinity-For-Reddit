@@ -38,6 +38,7 @@ public class SharedPreferencesUtils {
     public static final String DISABLE_IMMERSIVE_INTERFACE_IN_LANDSCAPE_MODE = "disable_immersive_interface_in_landscape_mode";
     public static final String BOTTOM_APP_BAR_KEY = "bottom_app_bar";
     public static final String VOTE_BUTTONS_ON_THE_RIGHT_KEY = "vote_buttons_on_the_right";
+    public static final String SHOW_AVATAR_ON_THE_RIGHT_IN_THE_NAVIGATION_DRAWER = "show_avatar_on_the_right_in_the_navigation_drawer";
 
     public static final String SORT_TYPE_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.sort_type";
     public static final String SORT_TYPE_BEST_POST = "sort_type_best_post";

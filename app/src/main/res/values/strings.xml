@@ -540,6 +540,7 @@
     <string name="settings_hide_subreddit_and_user_prefix">Hide Subreddit and User Prefix</string>
     <string name="settings_hide_the_number_of_votes">Hide the Number of Votes</string>
     <string name="settings_hide_the_number_of_comments">Hide the Number of Comments</string>
+    <string name="settings_show_avatar_on_the_right_in_the_navigation_drawer">Show Avatar on the Left in the Navigation Drawer</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

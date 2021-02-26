@@ -11,6 +11,7 @@ import androidx.preference.SwitchPreference;
 import org.greenrobot.eventbus.EventBus;
 
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.events.ChangeShowAvatarOnTheRightInTheNavigationDrawerEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeVoteButtonsPositionEvent;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -23,6 +24,7 @@ public class InterfacePreferenceFragment extends PreferenceFragmentCompat {
 
         Preference immersiveInterfaceEntryPreference = findPreference(SharedPreferencesUtils.IMMERSIVE_INTERFACE_ENTRY_KEY);
         SwitchPreference bottomAppBarSwitch = findPreference(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY);
+        SwitchPreference showAvatarOnTheRightInTheNavigationDrawer = findPreference(SharedPreferencesUtils.SHOW_AVATAR_ON_THE_RIGHT_IN_THE_NAVIGATION_DRAWER);
         SwitchPreference voteButtonsOnTheRightSwitch = findPreference(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY);
 
         if (immersiveInterfaceEntryPreference != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -32,6 +34,13 @@ public class InterfacePreferenceFragment extends PreferenceFragmentCompat {
         if (bottomAppBarSwitch != null) {
             bottomAppBarSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new RecreateActivityEvent());
+                return true;
+            });
+        }
+
+        if (showAvatarOnTheRightInTheNavigationDrawer != null) {
+            showAvatarOnTheRightInTheNavigationDrawer.setOnPreferenceChangeListener((preference, newValue) -> {
+                EventBus.getDefault().post(new ChangeShowAvatarOnTheRightInTheNavigationDrawerEvent((Boolean) newValue));
                 return true;
             });
         }

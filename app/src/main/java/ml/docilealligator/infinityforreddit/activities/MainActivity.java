@@ -95,6 +95,7 @@ import ml.docilealligator.infinityforreddit.events.ChangeDisableSwipingBetweenTa
 import ml.docilealligator.infinityforreddit.events.ChangeLockBottomAppBarEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeRequireAuthToAccountSectionEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeShowAvatarOnTheRightInTheNavigationDrawerEvent;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
@@ -1162,7 +1163,30 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
     @Subscribe
     public void onChangeRequireAuthToAccountSectionEvent(ChangeRequireAuthToAccountSectionEvent changeRequireAuthToAccountSectionEvent) {
-        adapter.setRequireAuthToAccountSection(changeRequireAuthToAccountSectionEvent.requireAuthToAccountSection);
+        if (adapter != null) {
+            adapter.setRequireAuthToAccountSection(changeRequireAuthToAccountSectionEvent.requireAuthToAccountSection);
+        }
+    }
+
+    @Subscribe
+    public void onChangeShowAvatarOnTheRightInTheNavigationDrawerEvent(ChangeShowAvatarOnTheRightInTheNavigationDrawerEvent event) {
+        if (adapter != null) {
+            adapter.setShowAvatarOnTheRightInTheNavigationDrawer(event.showAvatarOnTheRightInTheNavigationDrawer);
+            int previousPosition = -1;
+            if (navDrawerRecyclerView.getLayoutManager() != null) {
+                previousPosition = ((LinearLayoutManager) navDrawerRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+            }
+
+            RecyclerView.LayoutManager layoutManager = navDrawerRecyclerView.getLayoutManager();
+            navDrawerRecyclerView.setAdapter(null);
+            navDrawerRecyclerView.setLayoutManager(null);
+            navDrawerRecyclerView.setAdapter(adapter);
+            navDrawerRecyclerView.setLayoutManager(layoutManager);
+
+            if (previousPosition > 0) {
+                navDrawerRecyclerView.scrollToPosition(previousPosition);
+            }
+        }
     }
 
     @Override
