@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.user;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "users")
@@ -37,6 +38,8 @@ public class UserData {
     private boolean isNSFW;
     @ColumnInfo(name = "description")
     private String description;
+    @Ignore
+    private boolean isSelected;
 
     public UserData(@NonNull String name, String iconUrl, String banner, int linkKarma, int commentKarma,
                     int awarderKarma, int awardeeKarma, int totalKarma, long cakeday, boolean isGold,
@@ -55,6 +58,7 @@ public class UserData {
         this.canBeFollowed = canBeFollowed;
         this.isNSFW = isNSFW;
         this.description = description;
+        this.isSelected = false;
     }
 
     @NonNull
@@ -112,5 +116,13 @@ public class UserData {
 
     public String getDescription() {
         return description;
+    }
+
+    public boolean isSelected() {
+        return isSelected;
+    }
+
+    public void setSelected(boolean selected) {
+        isSelected = selected;
     }
 }

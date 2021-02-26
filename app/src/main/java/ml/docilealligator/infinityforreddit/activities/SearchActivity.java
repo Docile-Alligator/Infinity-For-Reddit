@@ -54,6 +54,7 @@ public class SearchActivity extends BaseActivity {
     static final String EXTRA_RETURN_SUBREDDIT_NAME = "ERSN";
     static final String EXTRA_RETURN_SUBREDDIT_ICON_URL = "ERSIU";
     static final String RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES = "RESSN";
+    static final String RETURN_EXTRA_SELECTED_USERNAMES = "RESU";
     static final String EXTRA_RETURN_USER_NAME = "ERUN";
     static final String EXTRA_RETURN_USER_ICON_URL = "ERUIU";
     static final String EXTRA_IS_MULTI_SELECTION = "EIMS";
@@ -256,6 +257,7 @@ public class SearchActivity extends BaseActivity {
         } else if (searchOnlyUsers) {
             Intent intent = new Intent(this, SearchUsersResultActivity.class);
             intent.putExtra(SearchUsersResultActivity.EXTRA_QUERY, query);
+            intent.putExtra(SearchUsersResultActivity.EXTRA_IS_MULTI_SELECTION, getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false));
             startActivityForResult(intent, USER_SEARCH_REQUEST_CODE);
         } else {
             Intent intent = new Intent(SearchActivity.this, SearchResultActivity.class);
@@ -355,11 +357,15 @@ public class SearchActivity extends BaseActivity {
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             } else if (requestCode == USER_SEARCH_REQUEST_CODE) {
-                String username = data.getStringExtra(SearchUsersResultActivity.EXTRA_RETURN_USER_NAME);
-                String iconUrl = data.getStringExtra(SearchUsersResultActivity.EXTRA_RETURN_USER_ICON_URL);
                 Intent returnIntent = new Intent();
-                returnIntent.putExtra(EXTRA_RETURN_USER_NAME, username);
-                returnIntent.putExtra(EXTRA_RETURN_USER_ICON_URL, iconUrl);
+                if (getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false)) {
+                    returnIntent.putStringArrayListExtra(RETURN_EXTRA_SELECTED_USERNAMES, data.getStringArrayListExtra(SearchUsersResultActivity.RETURN_EXTRA_SELECTED_USERNAMES));
+                } else {
+                    String username = data.getStringExtra(SearchUsersResultActivity.EXTRA_RETURN_USER_NAME);
+                    String iconUrl = data.getStringExtra(SearchUsersResultActivity.EXTRA_RETURN_USER_ICON_URL);
+                    returnIntent.putExtra(EXTRA_RETURN_USER_NAME, username);
+                    returnIntent.putExtra(EXTRA_RETURN_USER_ICON_URL, iconUrl);
+                }
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }

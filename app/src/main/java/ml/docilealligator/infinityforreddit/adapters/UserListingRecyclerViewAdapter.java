@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.material.checkbox.MaterialCheckBox;
 
 import java.util.concurrent.Executor;
 
@@ -61,6 +62,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
     private String accessToken;
     private String accountName;
     private RedditDataRoomDatabase redditDataRoomDatabase;
+    private boolean isMultiSelection;
 
     private int primaryTextColor;
     private int buttonTextColor;
@@ -74,7 +76,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
     public UserListingRecyclerViewAdapter(Context context, Executor executor, Retrofit oauthRetrofit, Retrofit retrofit,
                                           CustomThemeWrapper customThemeWrapper, String accessToken,
                                           String accountName, RedditDataRoomDatabase redditDataRoomDatabase,
-                                          Callback callback) {
+                                          boolean isMultiSelection, Callback callback) {
         super(DIFF_CALLBACK);
         this.context = context;
         this.executor = executor;
@@ -83,6 +85,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
         this.accessToken = accessToken;
         this.accountName = accountName;
         this.redditDataRoomDatabase = redditDataRoomDatabase;
+        this.isMultiSelection = isMultiSelection;
         this.callback = callback;
         glide = Glide.with(context);
         primaryTextColor = customThemeWrapper.getPrimaryTextColor();
@@ -97,7 +100,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_DATA) {
             ConstraintLayout constraintLayout = (ConstraintLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_user_listing, parent, false);
-            return new UserListingRecyclerViewAdapter.DataViewHolder(constraintLayout);
+            return new DataViewHolder(constraintLayout);
         } else if (viewType == VIEW_TYPE_ERROR) {
             RelativeLayout relativeLayout = (RelativeLayout) LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_error, parent, false);
             return new UserListingRecyclerViewAdapter.ErrorViewHolder(relativeLayout);
@@ -109,11 +112,15 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof UserListingRecyclerViewAdapter.DataViewHolder) {
+        if (holder instanceof DataViewHolder) {
             UserData userData = getItem(position);
             if (userData != null) {
-                ((UserListingRecyclerViewAdapter.DataViewHolder) holder).constraintLayout.setOnClickListener(view -> {
-                    callback.userSelected(userData.getName(), userData.getIconUrl());
+                ((DataViewHolder) holder).constraintLayout.setOnClickListener(view -> {
+                    if (isMultiSelection) {
+                        ((DataViewHolder) holder).checkBox.performClick();
+                    } else {
+                        callback.userSelected(userData.getName(), userData.getIconUrl());
+                    }
                 });
 
                 if (!userData.getIconUrl().equals("")) {
@@ -121,43 +128,47 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                             .error(glide.load(R.drawable.subreddit_default_icon)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                            .into(((UserListingRecyclerViewAdapter.DataViewHolder) holder).iconGifImageView);
+                            .into(((DataViewHolder) holder).iconGifImageView);
                 } else {
                     glide.load(R.drawable.subreddit_default_icon)
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                            .into(((UserListingRecyclerViewAdapter.DataViewHolder) holder).iconGifImageView);
+                            .into(((DataViewHolder) holder).iconGifImageView);
                 }
 
-                ((UserListingRecyclerViewAdapter.DataViewHolder) holder).userNameTextView.setText(userData.getName());
+                ((DataViewHolder) holder).userNameTextView.setText(userData.getName());
 
-                CheckIsFollowingUser.checkIsFollowingUser(executor, new Handler(), redditDataRoomDatabase,
-                        userData.getName(), accountName, new CheckIsFollowingUser.CheckIsFollowingUserListener() {
-                            @Override
-                            public void isSubscribed() {
-                                ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
-                            }
+                if (!isMultiSelection) {
+                    CheckIsFollowingUser.checkIsFollowingUser(executor, new Handler(), redditDataRoomDatabase,
+                            userData.getName(), accountName, new CheckIsFollowingUser.CheckIsFollowingUserListener() {
+                                @Override
+                                public void isSubscribed() {
+                                    ((DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
+                                }
 
-                            @Override
-                            public void isNotSubscribed() {
-                                ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setVisibility(View.VISIBLE);
-                                ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setOnClickListener(view -> {
-                                    UserFollowing.followUser(oauthRetrofit, retrofit,
-                                            accessToken, userData.getName(), accountName, redditDataRoomDatabase,
-                                            new UserFollowing.UserFollowingListener() {
-                                                @Override
-                                                public void onUserFollowingSuccess() {
-                                                    ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
-                                                    Toast.makeText(context, R.string.followed, Toast.LENGTH_SHORT).show();
-                                                }
+                                @Override
+                                public void isNotSubscribed() {
+                                    ((DataViewHolder) holder).subscribeButton.setVisibility(View.VISIBLE);
+                                    ((DataViewHolder) holder).subscribeButton.setOnClickListener(view -> {
+                                        UserFollowing.followUser(oauthRetrofit, retrofit,
+                                                accessToken, userData.getName(), accountName, redditDataRoomDatabase,
+                                                new UserFollowing.UserFollowingListener() {
+                                                    @Override
+                                                    public void onUserFollowingSuccess() {
+                                                        ((DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
+                                                        Toast.makeText(context, R.string.followed, Toast.LENGTH_SHORT).show();
+                                                    }
 
-                                                @Override
-                                                public void onUserFollowingFail() {
-                                                    Toast.makeText(context, R.string.follow_failed, Toast.LENGTH_SHORT).show();
-                                                }
-                                            });
-                                });
-                            }
-                        });
+                                                    @Override
+                                                    public void onUserFollowingFail() {
+                                                        Toast.makeText(context, R.string.follow_failed, Toast.LENGTH_SHORT).show();
+                                                    }
+                                                });
+                                    });
+                                }
+                            });
+                } else {
+                    ((DataViewHolder) holder).checkBox.setOnCheckedChangeListener((compoundButton, b) -> userData.setSelected(b));
+                }
             }
         }
     }
@@ -206,9 +217,9 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
 
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
-        if (holder instanceof UserListingRecyclerViewAdapter.DataViewHolder) {
-            glide.clear(((UserListingRecyclerViewAdapter.DataViewHolder) holder).iconGifImageView);
-            ((UserListingRecyclerViewAdapter.DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
+        if (holder instanceof DataViewHolder) {
+            glide.clear(((DataViewHolder) holder).iconGifImageView);
+            ((DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
         }
     }
 
@@ -227,12 +238,17 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
         TextView userNameTextView;
         @BindView(R.id.subscribe_image_view_item_user_listing)
         ImageView subscribeButton;
+        @BindView(R.id.checkbox__item_user_listing)
+        MaterialCheckBox checkBox;
 
         DataViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             userNameTextView.setTextColor(primaryTextColor);
             subscribeButton.setColorFilter(unsubscribedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            if (isMultiSelection) {
+                checkBox.setVisibility(View.VISIBLE);
+            }
         }
     }
 

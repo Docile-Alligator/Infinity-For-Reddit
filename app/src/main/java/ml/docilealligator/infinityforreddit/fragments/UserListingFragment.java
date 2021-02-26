@@ -25,6 +25,8 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -35,8 +37,8 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NetworkState;
-import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
@@ -44,6 +46,7 @@ import ml.docilealligator.infinityforreddit.activities.SearchUsersResultActivity
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.adapters.UserListingRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.user.UserData;
 import ml.docilealligator.infinityforreddit.user.UserListingViewModel;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
@@ -56,6 +59,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
 
     public static final String EXTRA_QUERY = "EQ";
     public static final String EXTRA_IS_GETTING_USER_INFO = "EIGUI";
+    public static final String EXTRA_IS_MULTI_SELECTION = "EIMS";
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
     public static final String EXTRA_ACCOUNT_NAME = "EAN";
 
@@ -141,6 +145,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
 
         mAdapter = new UserListingRecyclerViewAdapter(getActivity(), mExecutor, mOauthRetrofit, mRetrofit,
                 mCustomThemeWrapper, accessToken, accountName, mRedditDataRoomDatabase,
+                getArguments().getBoolean(EXTRA_IS_MULTI_SELECTION, false),
                 new UserListingRecyclerViewAdapter.Callback() {
                     @Override
                     public void retryLoadingMore() {
@@ -255,5 +260,23 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
 
     public SortType getSortType() {
         return sortType;
+    }
+
+    public ArrayList<String> getSelectedUsernames() {
+        if (mUserListingViewModel != null) {
+            List<UserData> allUsers = mUserListingViewModel.getUsers().getValue();
+            if (allUsers != null) {
+                ArrayList<String> selectedUsernames = new ArrayList<>();
+                for (UserData u : allUsers) {
+                    if (u.isSelected()) {
+                        selectedUsernames.add(u.getName());
+                    }
+                }
+                return selectedUsernames;
+            } else {
+                return null;
+            }
+        }
+        return null;
     }
 }

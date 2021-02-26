@@ -247,6 +247,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
         addUsersImageView.setOnClickListener(view -> {
             Intent intent = new Intent(this, SearchActivity.class);
             intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_USERS, true);
+            intent.putExtra(SearchActivity.EXTRA_IS_MULTI_SELECTION, true);
             startActivityForResult(intent, ADD_USERS_REQUEST_CODE);
         });
 
@@ -423,28 +424,35 @@ public class CustomizePostFilterActivity extends BaseActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == ADD_SUBREDDITS_REQUEST_CODE) {
-                ArrayList<String> subreddits = data.getStringArrayListExtra(SubredditMultiselectionActivity.EXTRA_RETURN_SELECTED_SUBREDDITS);
+                ArrayList<String> subredditNames = data.getStringArrayListExtra(SubredditMultiselectionActivity.EXTRA_RETURN_SELECTED_SUBREDDITS);
                 String currentSubreddits = excludesSubredditsTextInputEditText.getText().toString().trim();
-                if (!currentSubreddits.isEmpty() && currentSubreddits.charAt(currentSubreddits.length() - 1) != ',') {
+                if (subredditNames != null && !currentSubreddits.isEmpty() && currentSubreddits.charAt(currentSubreddits.length() - 1) != ',') {
                     String newString = currentSubreddits + ",";
                     excludesSubredditsTextInputEditText.setText(newString);
                 }
-                if (subreddits != null) {
+                if (subredditNames != null) {
                     StringBuilder stringBuilder = new StringBuilder();
-                    for (String s : subreddits) {
+                    for (String s : subredditNames) {
                         stringBuilder.append(s).append(",");
                     }
                     stringBuilder.deleteCharAt(stringBuilder.length() - 1);
                     excludesSubredditsTextInputEditText.append(stringBuilder.toString());
                 }
             } else if (requestCode == ADD_USERS_REQUEST_CODE) {
-                String username = data.getStringExtra(SearchActivity.EXTRA_RETURN_USER_NAME);
-                String currentUsers = excludesSubredditsTextInputEditText.getText().toString().trim();
-                if (!currentUsers.isEmpty() && currentUsers.charAt(currentUsers.length() - 1) != ',') {
+                ArrayList<String> usernames = data.getStringArrayListExtra(SearchActivity.RETURN_EXTRA_SELECTED_USERNAMES);
+                String currentUsers = excludesUsersTextInputEditText.getText().toString().trim();
+                if (usernames != null && !currentUsers.isEmpty() && currentUsers.charAt(currentUsers.length() - 1) != ',') {
                     String newString = currentUsers + ",";
-                    excludesSubredditsTextInputEditText.setText(newString);
+                    excludesUsersTextInputEditText.setText(newString);
                 }
-                excludesUsersTextInputEditText.append(username);
+                if (usernames != null) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (String s : usernames) {
+                        stringBuilder.append(s).append(",");
+                    }
+                    stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+                    excludesUsersTextInputEditText.append(stringBuilder.toString());
+                }
             }
         }
     }

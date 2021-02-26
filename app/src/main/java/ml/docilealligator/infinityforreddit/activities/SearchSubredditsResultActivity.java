@@ -169,13 +169,9 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
             return true;
         } else if (item.getItemId() == R.id.action_save_search_subreddits_result_activity) {
             if (mFragment != null) {
-                List<SubredditData> subreddits = ((SubredditListingFragment) mFragment).getSelectedSubreddits();
-                ArrayList<String> subredditNames = new ArrayList<>();
-                for (SubredditData s : subreddits) {
-                    subredditNames.add(s.getName());
-                }
+                ArrayList<String> selectedSubredditNames = ((SubredditListingFragment) mFragment).getSelectedSubredditNames();
                 Intent returnIntent = new Intent();
-                returnIntent.putStringArrayListExtra(RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES, subredditNames);
+                returnIntent.putStringArrayListExtra(RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES, selectedSubredditNames);
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
             }
