@@ -23,7 +23,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:scaleType="fitStart" />
+            android:scaleType="fitStart"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/video_or_gif_indicator_image_view_item_post_card_2_with_preview"
@@ -45,7 +46,7 @@
             android:id="@+id/load_image_error_relative_layout_item_post_card_2_with_preview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_centerInParent="true"
+            android:layout_gravity="center"
             android:visibility="gone">
 
             <TextView
