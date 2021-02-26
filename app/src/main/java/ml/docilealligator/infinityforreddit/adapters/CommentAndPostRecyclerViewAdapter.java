@@ -1070,6 +1070,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         moderatorDrawable, null, null, null);
             } else if (comment.getAuthor().equals(mAccountName)) {
                 ((CommentViewHolder) holder).authorTextView.setTextColor(mCurrentUserColor);
+                Drawable currentUserDrawable = Utils.getTintedDrawable(mActivity, R.drawable.ic_current_user_14dp, mCurrentUserColor);
+                ((CommentViewHolder) holder).authorTextView.setCompoundDrawablesWithIntrinsicBounds(
+                        currentUserDrawable, null, null, null);
             }
 
             if (mShowElapsedTime) {

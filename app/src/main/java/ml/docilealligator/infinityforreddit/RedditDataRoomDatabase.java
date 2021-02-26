@@ -321,7 +321,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static final Migration MIGRATION_17_18 = new Migration(17, 18) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("ALTER TABLE custom_themes ADD COLUMN current_user INTEGER DEFAULT " + Color.parseColor("#A202EE") + " NOT NULL");
+            database.execSQL("ALTER TABLE custom_themes ADD COLUMN current_user INTEGER DEFAULT " + Color.parseColor("#00D5EA") + " NOT NULL");
             database.execSQL("ALTER TABLE custom_themes ADD COLUMN upvote_ratio_icon_tint INTEGER DEFAULT " + Color.parseColor("#0256EE") + " NOT NULL");
         }
     };
