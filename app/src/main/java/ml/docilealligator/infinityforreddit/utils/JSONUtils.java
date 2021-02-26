@@ -132,4 +132,5 @@ public class JSONUtils {
     public static final String CONTENT_URLS_KEY = "content_urls";;
     public static final String WEBM_KEY = "webm";
     public static final String WEBM_URL_KEY = "webmUrl";
+    public static final String UPVOTE_RATIO = "upvote_ratio";
 }

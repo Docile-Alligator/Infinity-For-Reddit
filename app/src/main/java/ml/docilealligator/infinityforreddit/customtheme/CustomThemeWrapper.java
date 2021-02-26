@@ -277,6 +277,11 @@ public class CustomThemeWrapper {
                 getDefaultColor("#FF4081", "#FF4081", "#FF4081"));
     }
 
+    public int getUpvoteRatioIconTint() {
+        return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.UPVOTE_RATIO_ICON_TINT,
+                getDefaultColor("#0256EE", "#0256EE", "#0256EE"));
+    }
+
     public int getStickiedPostIconTint() {
         return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.STICKIED_POST_ICON_TINT,
                 getDefaultColor("#0D47A1", "#1565C0", "#1565C0"));
@@ -320,6 +325,11 @@ public class CustomThemeWrapper {
     public int getModerator() {
         return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.MODERATOR,
                 getDefaultColor("#00BA81", "#00BA81", "#00BA81"));
+    }
+
+    public int getCurrentUser() {
+        return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.CURRENT_USER,
+                getDefaultColor("#A202EE", "#A202EE", "#A202EE"));
     }
 
     public int getSingleCommentThreadBackgroundColor() {
@@ -544,6 +554,7 @@ public class CustomThemeWrapper {
         customTheme.archivedTint = Color.parseColor("#B4009F");
         customTheme.lockedIconTint = Color.parseColor("#EE7302");
         customTheme.crosspostIconTint = Color.parseColor("#FF4081");
+        customTheme.upvoteRatioIconTint = Color.parseColor("#0256EE");
         customTheme.stickiedPostIconTint = Color.parseColor("#0D47A1");
         customTheme.noPreviewPostTypeIconTint = Color.parseColor("#808080");
         customTheme.subscribed = Color.parseColor("#FF4081");
@@ -553,6 +564,7 @@ public class CustomThemeWrapper {
         customTheme.authorFlairTextColor = Color.parseColor("#EE02C4");
         customTheme.submitter = Color.parseColor("#EE8A02");
         customTheme.moderator = Color.parseColor("#00BA81");
+        customTheme.currentUser = Color.parseColor("#A202EE");
         customTheme.singleCommentThreadBackgroundColor = Color.parseColor("#B3E5F9");
         customTheme.unreadMessageBackgroundColor = Color.parseColor("#B3E5F9");
         customTheme.dividerColor = Color.parseColor("#E0E0E0");
@@ -633,6 +645,7 @@ public class CustomThemeWrapper {
         customTheme.archivedTint = Color.parseColor("#B4009F");
         customTheme.lockedIconTint = Color.parseColor("#EE7302");
         customTheme.crosspostIconTint = Color.parseColor("#FF4081");
+        customTheme.upvoteRatioIconTint = Color.parseColor("#0256EE");
         customTheme.stickiedPostIconTint = Color.parseColor("#1565C0");
         customTheme.noPreviewPostTypeIconTint = Color.parseColor("#808080");
         customTheme.subscribed = Color.parseColor("#FF4081");
@@ -642,6 +655,7 @@ public class CustomThemeWrapper {
         customTheme.authorFlairTextColor = Color.parseColor("#EE02C4");
         customTheme.submitter = Color.parseColor("#EE8A02");
         customTheme.moderator = Color.parseColor("#00BA81");
+        customTheme.currentUser = Color.parseColor("#A202EE");
         customTheme.singleCommentThreadBackgroundColor = Color.parseColor("#123E77");
         customTheme.unreadMessageBackgroundColor = Color.parseColor("#123E77");
         customTheme.dividerColor = Color.parseColor("#69666C");
@@ -722,6 +736,7 @@ public class CustomThemeWrapper {
         customTheme.archivedTint = Color.parseColor("#B4009F");
         customTheme.lockedIconTint = Color.parseColor("#EE7302");
         customTheme.crosspostIconTint = Color.parseColor("#FF4081");
+        customTheme.upvoteRatioIconTint = Color.parseColor("#0256EE");
         customTheme.stickiedPostIconTint = Color.parseColor("#1565C0");
         customTheme.noPreviewPostTypeIconTint = Color.parseColor("#808080");
         customTheme.subscribed = Color.parseColor("#FF4081");
@@ -731,6 +746,7 @@ public class CustomThemeWrapper {
         customTheme.authorFlairTextColor = Color.parseColor("#EE02C4");
         customTheme.submitter = Color.parseColor("#EE8A02");
         customTheme.moderator = Color.parseColor("#00BA81");
+        customTheme.currentUser = Color.parseColor("#A202EE");
         customTheme.singleCommentThreadBackgroundColor = Color.parseColor("#123E77");
         customTheme.unreadMessageBackgroundColor = Color.parseColor("#123E77");
         customTheme.dividerColor = Color.parseColor("#69666C");
@@ -811,6 +827,7 @@ public class CustomThemeWrapper {
         customTheme.archivedTint = Color.parseColor("#B4009F");
         customTheme.lockedIconTint = Color.parseColor("#EE7302");
         customTheme.crosspostIconTint = Color.parseColor("#FF4081");
+        customTheme.upvoteRatioIconTint = Color.parseColor("#0256EE");
         customTheme.stickiedPostIconTint = Color.parseColor("#0D47A1");
         customTheme.noPreviewPostTypeIconTint = Color.parseColor("#FFFFFF");
         customTheme.subscribed = Color.parseColor("#FF4081");
@@ -820,6 +837,7 @@ public class CustomThemeWrapper {
         customTheme.authorFlairTextColor = Color.parseColor("#EE02C4");
         customTheme.submitter = Color.parseColor("#EE8A02");
         customTheme.moderator = Color.parseColor("#00BA81");
+        customTheme.currentUser = Color.parseColor("#A202EE");
         customTheme.singleCommentThreadBackgroundColor = Color.parseColor("#B3E5F9");
         customTheme.unreadMessageBackgroundColor = Color.parseColor("#B3E5F9");
         customTheme.dividerColor = Color.parseColor("#E0E0E0");
@@ -900,6 +918,7 @@ public class CustomThemeWrapper {
         customTheme.archivedTint = Color.parseColor("#B4009F");
         customTheme.lockedIconTint = Color.parseColor("#EE7302");
         customTheme.crosspostIconTint = Color.parseColor("#FF4081");
+        customTheme.upvoteRatioIconTint = Color.parseColor("#0256EE");
         customTheme.stickiedPostIconTint = Color.parseColor("#1565C0");
         customTheme.noPreviewPostTypeIconTint = Color.parseColor("#FFFFFF");
         customTheme.subscribed = Color.parseColor("#FF4081");
@@ -909,6 +928,7 @@ public class CustomThemeWrapper {
         customTheme.authorFlairTextColor = Color.parseColor("#EE02C4");
         customTheme.submitter = Color.parseColor("#EE8A02");
         customTheme.moderator = Color.parseColor("#00BA81");
+        customTheme.currentUser = Color.parseColor("#A202EE");
         customTheme.singleCommentThreadBackgroundColor = Color.parseColor("#123E77");
         customTheme.unreadMessageBackgroundColor = Color.parseColor("#123E77");
         customTheme.dividerColor = Color.parseColor("#69666C");
@@ -989,6 +1009,7 @@ public class CustomThemeWrapper {
         customTheme.archivedTint = Color.parseColor("#B4009F");
         customTheme.lockedIconTint = Color.parseColor("#EE7302");
         customTheme.crosspostIconTint = Color.parseColor("#FF4081");
+        customTheme.upvoteRatioIconTint = Color.parseColor("#0256EE");
         customTheme.stickiedPostIconTint = Color.parseColor("#1565C0");
         customTheme.noPreviewPostTypeIconTint = Color.parseColor("#FFFFFF");
         customTheme.subscribed = Color.parseColor("#FF4081");
@@ -998,6 +1019,7 @@ public class CustomThemeWrapper {
         customTheme.authorFlairTextColor = Color.parseColor("#EE02C4");
         customTheme.submitter = Color.parseColor("#EE8A02");
         customTheme.moderator = Color.parseColor("#00BA81");
+        customTheme.currentUser = Color.parseColor("#A202EE");
         customTheme.singleCommentThreadBackgroundColor = Color.parseColor("#123E77");
         customTheme.unreadMessageBackgroundColor = Color.parseColor("#123E77");
         customTheme.dividerColor = Color.parseColor("#69666C");
@@ -1078,6 +1100,7 @@ public class CustomThemeWrapper {
         customTheme.archivedTint = Color.parseColor("#B4009F");
         customTheme.lockedIconTint = Color.parseColor("#EE7302");
         customTheme.crosspostIconTint = Color.parseColor("#FF4081");
+        customTheme.upvoteRatioIconTint = Color.parseColor("#0256EE");
         customTheme.stickiedPostIconTint = Color.parseColor("#0D47A1");
         customTheme.noPreviewPostTypeIconTint = Color.parseColor("#808080");
         customTheme.subscribed = Color.parseColor("#FF4081");
@@ -1087,6 +1110,7 @@ public class CustomThemeWrapper {
         customTheme.authorFlairTextColor = Color.parseColor("#EE02C4");
         customTheme.submitter = Color.parseColor("#EE8A02");
         customTheme.moderator = Color.parseColor("#00BA81");
+        customTheme.currentUser = Color.parseColor("#A202EE");
         customTheme.singleCommentThreadBackgroundColor = Color.parseColor("#B3E5F9");
         customTheme.unreadMessageBackgroundColor = Color.parseColor("#B3E5F9");
         customTheme.dividerColor = Color.parseColor("#E0E0E0");
@@ -1167,6 +1191,7 @@ public class CustomThemeWrapper {
         customTheme.archivedTint = Color.parseColor("#B4009F");
         customTheme.lockedIconTint = Color.parseColor("#EE7302");
         customTheme.crosspostIconTint = Color.parseColor("#FF4081");
+        customTheme.upvoteRatioIconTint = Color.parseColor("#0256EE");
         customTheme.stickiedPostIconTint = Color.parseColor("#1565C0");
         customTheme.noPreviewPostTypeIconTint = Color.parseColor("#808080");
         customTheme.subscribed = Color.parseColor("#FF4081");
@@ -1176,6 +1201,7 @@ public class CustomThemeWrapper {
         customTheme.authorFlairTextColor = Color.parseColor("#EE02C4");
         customTheme.submitter = Color.parseColor("#EE8A02");
         customTheme.moderator = Color.parseColor("#00BA81");
+        customTheme.currentUser = Color.parseColor("#A202EE");
         customTheme.singleCommentThreadBackgroundColor = Color.parseColor("#123E77");
         customTheme.unreadMessageBackgroundColor = Color.parseColor("#123E77");
         customTheme.dividerColor = Color.parseColor("#69666C");
@@ -1256,6 +1282,7 @@ public class CustomThemeWrapper {
         customTheme.archivedTint = Color.parseColor("#B4009F");
         customTheme.lockedIconTint = Color.parseColor("#EE7302");
         customTheme.crosspostIconTint = Color.parseColor("#FF4081");
+        customTheme.upvoteRatioIconTint = Color.parseColor("#0256EE");
         customTheme.stickiedPostIconTint = Color.parseColor("#1565C0");
         customTheme.noPreviewPostTypeIconTint = Color.parseColor("#808080");
         customTheme.subscribed = Color.parseColor("#FF4081");
@@ -1265,6 +1292,7 @@ public class CustomThemeWrapper {
         customTheme.authorFlairTextColor = Color.parseColor("#EE02C4");
         customTheme.submitter = Color.parseColor("#EE8A02");
         customTheme.moderator = Color.parseColor("#00BA81");
+        customTheme.currentUser = Color.parseColor("#A202EE");
         customTheme.singleCommentThreadBackgroundColor = Color.parseColor("#123E77");
         customTheme.unreadMessageBackgroundColor = Color.parseColor("#123E77");
         customTheme.dividerColor = Color.parseColor("#69666C");
@@ -1345,6 +1373,7 @@ public class CustomThemeWrapper {
         customTheme.archivedTint = Color.parseColor("#B4009F");
         customTheme.lockedIconTint = Color.parseColor("#EE7302");
         customTheme.crosspostIconTint = Color.parseColor("#FF4081");
+        customTheme.upvoteRatioIconTint = Color.parseColor("#0256EE");
         customTheme.stickiedPostIconTint = Color.parseColor("#0D47A1");
         customTheme.noPreviewPostTypeIconTint = Color.parseColor("#FFFFFF");
         customTheme.subscribed = Color.parseColor("#FF4081");
@@ -1354,6 +1383,7 @@ public class CustomThemeWrapper {
         customTheme.authorFlairTextColor = Color.parseColor("#EE02C4");
         customTheme.submitter = Color.parseColor("#EE8A02");
         customTheme.moderator = Color.parseColor("#00BA81");
+        customTheme.currentUser = Color.parseColor("#A202EE");
         customTheme.singleCommentThreadBackgroundColor = Color.parseColor("#5F5B85");
         customTheme.unreadMessageBackgroundColor = Color.parseColor("#5F5B85");
         customTheme.dividerColor = Color.parseColor("#69666C");
@@ -1434,6 +1464,7 @@ public class CustomThemeWrapper {
         customTheme.archivedTint = Color.parseColor("#B4009F");
         customTheme.lockedIconTint = Color.parseColor("#EE7302");
         customTheme.crosspostIconTint = Color.parseColor("#FF4081");
+        customTheme.upvoteRatioIconTint = Color.parseColor("#0256EE");
         customTheme.stickiedPostIconTint = Color.parseColor("#0D47A1");
         customTheme.noPreviewPostTypeIconTint = Color.parseColor("#808080");
         customTheme.subscribed = Color.parseColor("#FF4081");
@@ -1443,6 +1474,7 @@ public class CustomThemeWrapper {
         customTheme.authorFlairTextColor = Color.parseColor("#EE02C4");
         customTheme.submitter = Color.parseColor("#EE8A02");
         customTheme.moderator = Color.parseColor("#00BA81");
+        customTheme.currentUser = Color.parseColor("#A202EE");
         customTheme.singleCommentThreadBackgroundColor = Color.parseColor("#25D5E5");
         customTheme.unreadMessageBackgroundColor = Color.parseColor("#25D5E5");
         customTheme.dividerColor = Color.parseColor("#E0E0E0");

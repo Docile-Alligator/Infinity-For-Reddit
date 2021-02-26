@@ -63,6 +63,7 @@ public class Post implements Parcelable {
     private int postType;
     private int voteType;
     private int nComments;
+    private int upvoteRatio;
     private boolean hidden;
     private boolean spoiler;
     private boolean nsfw;
@@ -79,11 +80,11 @@ public class Post implements Parcelable {
     private ArrayList<Gallery> gallery = new ArrayList<>();
 
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed,
-                String author, String authorFlair, String authorFlairHTML,
-                long postTimeMillis, String title,
-                String permalink, int score, int postType, int voteType, int nComments, String flair,
-                String awards, int nAwards, boolean hidden, boolean spoiler, boolean nsfw, boolean stickied,
-                boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
+                String author, String authorFlair, String authorFlairHTML, long postTimeMillis,
+                String title, String permalink, int score, int postType, int voteType, int nComments,
+                int upvoteRatio, String flair, String awards, int nAwards, boolean hidden, boolean spoiler,
+                boolean nsfw, boolean stickied, boolean archived, boolean locked, boolean saved,
+                boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -99,6 +100,7 @@ public class Post implements Parcelable {
         this.postType = postType;
         this.voteType = voteType;
         this.nComments = nComments;
+        this.upvoteRatio = upvoteRatio;
         this.flair = flair;
         this.awards = awards;
         this.nAwards = nAwards;
@@ -114,11 +116,11 @@ public class Post implements Parcelable {
     }
 
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed,
-                String author, String authorFlair, String authorFlairHTML,
-                long postTimeMillis, String title,
+                String author, String authorFlair, String authorFlairHTML, long postTimeMillis, String title,
                 String url, String permalink, int score, int postType, int voteType, int nComments,
-                String flair, String awards, int nAwards, boolean hidden, boolean spoiler, boolean nsfw,
-                boolean stickied, boolean archived, boolean locked, boolean saved, boolean isCrosspost) {
+                int upvoteRatio, String flair, String awards, int nAwards, boolean hidden, boolean spoiler,
+                boolean nsfw, boolean stickied, boolean archived, boolean locked, boolean saved,
+                boolean isCrosspost) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -135,6 +137,7 @@ public class Post implements Parcelable {
         this.postType = postType;
         this.voteType = voteType;
         this.nComments = nComments;
+        this.upvoteRatio = upvoteRatio;
         this.flair = flair;
         this.awards = awards;
         this.nAwards = nAwards;
@@ -180,6 +183,7 @@ public class Post implements Parcelable {
         postType = in.readInt();
         voteType = in.readInt();
         nComments = in.readInt();
+        upvoteRatio = in.readInt();
         hidden = in.readByte() != 0;
         spoiler = in.readByte() != 0;
         nsfw = in.readByte() != 0;
@@ -401,6 +405,14 @@ public class Post implements Parcelable {
         this.nComments = nComments;
     }
 
+    public int getUpvoteRatio() {
+        return upvoteRatio;
+    }
+
+    public void setUpvoteRatio(int upvoteRatio) {
+        this.upvoteRatio = upvoteRatio;
+    }
+
     public boolean isHidden() {
         return hidden;
     }
@@ -531,6 +543,7 @@ public class Post implements Parcelable {
         parcel.writeInt(postType);
         parcel.writeInt(voteType);
         parcel.writeInt(nComments);
+        parcel.writeInt(upvoteRatio);
         parcel.writeByte((byte) (hidden ? 1 : 0));
         parcel.writeByte((byte) (spoiler ? 1 : 0));
         parcel.writeByte((byte) (nsfw ? 1 : 0));

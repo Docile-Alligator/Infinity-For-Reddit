@@ -291,6 +291,11 @@ public class CustomThemeSettingsItem implements Parcelable {
                 context.getString(R.string.theme_item_crosspost_icon_tint_detail),
                 customTheme.crosspostIconTint));
         customThemeSettingsItems.add(new CustomThemeSettingsItem(
+                context.getString(R.string.theme_item_upvote_ratio_icon_tint),
+                context.getString(R.string.theme_item_upvote_ratio_icon_tint_detail),
+                customTheme.upvoteRatioIconTint
+        ));
+        customThemeSettingsItems.add(new CustomThemeSettingsItem(
                 context.getString(R.string.theme_item_stickied_post_icon_tint),
                 context.getString(R.string.theme_item_stickied_post_icon_tint_detail),
                 customTheme.stickiedPostIconTint));
@@ -327,6 +332,11 @@ public class CustomThemeSettingsItem implements Parcelable {
                 context.getString(R.string.theme_item_moderator_color),
                 context.getString(R.string.theme_item_moderator_color_detail),
                 customTheme.moderator));
+        customThemeSettingsItems.add(new CustomThemeSettingsItem(
+                context.getString(R.string.theme_item_current_user_color),
+                context.getString(R.string.theme_item_current_user_color_detail),
+                customTheme.currentUser
+        ));
         customThemeSettingsItems.add(new CustomThemeSettingsItem(
                 context.getString(R.string.theme_item_single_comment_thread_background_color),
                 context.getString(R.string.theme_item_single_comment_thread_background_color_detail),

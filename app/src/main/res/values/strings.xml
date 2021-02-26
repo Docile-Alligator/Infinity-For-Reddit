@@ -758,6 +758,8 @@
     <string name="theme_item_locked_icon_tint_detail">Applied to: Locked icon</string>
     <string name="theme_item_crosspost_icon_tint">Crosspost Icon Color</string>
     <string name="theme_item_crosspost_icon_tint_detail">Applied to: Crosspost icon</string>
+    <string name="theme_item_upvote_ratio_icon_tint">Upvote Ratio Icon Color</string>
+    <string name="theme_item_upvote_ratio_icon_tint_detail">Applied to: Upvote ratio icon</string>
     <string name="theme_item_stickied_post_icon_tint">Stickied Post Icon Color</string>
     <string name="theme_item_stickied_post_icon_tint_detail">Applied to: Stickied post icon</string>
     <string name="theme_item_no_preview_post_type_icon_tint">No-preview Post Type Icon Color</string>
@@ -776,6 +778,8 @@
     <string name="theme_item_submitter_color_detail">Applied to: Submitter in comments</string>
     <string name="theme_item_moderator_color">Moderator</string>
     <string name="theme_item_moderator_color_detail">Applied to: Moderator in comments</string>
+    <string name="theme_item_current_user_color">Current User</string>
+    <string name="theme_item_current_user_color_detail">Applied to: Current user in comments</string>
     <string name="theme_item_single_comment_thread_background_color">Single Comment Thread Background Color</string>
     <string name="theme_item_single_comment_thread_background_color_detail">Applied to: Single Comment</string>
     <string name="theme_item_unread_message_background_color">Unread Message Background Color</string>

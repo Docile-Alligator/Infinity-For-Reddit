@@ -35,7 +35,7 @@ import ml.docilealligator.infinityforreddit.user.UserData;
 
 @Database(entities = {Account.class, SubredditData.class, SubscribedSubredditData.class, UserData.class,
         SubscribedUserData.class, MultiReddit.class, CustomTheme.class, RecentSearchQuery.class,
-        ReadPost.class, PostFilter.class, PostFilterUsage.class}, version = 17)
+        ReadPost.class, PostFilter.class, PostFilterUsage.class}, version = 18)
 public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static RedditDataRoomDatabase INSTANCE;
 
@@ -48,7 +48,8 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                             .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
                                     MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9,
                                     MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13,
-                                    MIGRATION_13_14, MIGRATION_14_15, MIGRATION_15_16, MIGRATION_16_17)
+                                    MIGRATION_13_14, MIGRATION_14_15, MIGRATION_15_16, MIGRATION_16_17,
+                                    MIGRATION_17_18)
                             .build();
                 }
             }
@@ -314,6 +315,14 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("UPDATE accounts SET is_current_user = 0");
+        }
+    };
+
+    private static final Migration MIGRATION_17_18 = new Migration(17, 18) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE custom_themes ADD COLUMN current_user INTEGER DEFAULT " + Color.parseColor("#A202EE") + " NOT NULL");
+            database.execSQL("ALTER TABLE custom_themes ADD COLUMN upvote_ratio_icon_tint INTEGER DEFAULT " + Color.parseColor("#0256EE") + " NOT NULL");
         }
     };
 }

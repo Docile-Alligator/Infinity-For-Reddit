@@ -206,6 +206,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private int mUsernameColor;
     private int mSubmitterColor;
     private int mModeratorColor;
+    private int mCurrentUserColor;
     private int mAuthorFlairTextColor;
     private int mSpoilerBackgroundColor;
     private int mSpoilerTextColor;
@@ -216,6 +217,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private int mArchivedTintColor;
     private int mLockedTintColor;
     private int mCrosspostTintColor;
+    private int mUpvoteRatioTintColor;
     private int mNoPreviewPostTypeBackgroundColor;
     private int mNoPreviewPostTypeIconTint;
     private int mUpvotedColor;
@@ -532,6 +534,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mPostTypeTextColor = customThemeWrapper.getPostTypeTextColor();
         mSubmitterColor = customThemeWrapper.getSubmitter();
         mModeratorColor = customThemeWrapper.getModerator();
+        mCurrentUserColor = customThemeWrapper.getCurrentUser();
         mAuthorFlairTextColor = customThemeWrapper.getAuthorFlairTextColor();
         mSpoilerBackgroundColor = customThemeWrapper.getSpoilerBackgroundColor();
         mSpoilerTextColor = customThemeWrapper.getSpoilerTextColor();
@@ -540,6 +543,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mArchivedTintColor = customThemeWrapper.getArchivedIconTint();
         mLockedTintColor = customThemeWrapper.getLockedIconTint();
         mCrosspostTintColor = customThemeWrapper.getCrosspostIconTint();
+        mUpvoteRatioTintColor = customThemeWrapper.getUpvoteRatioIconTint();
         mNoPreviewPostTypeBackgroundColor = customThemeWrapper.getNoPreviewPostTypeBackgroundColor();
         mNoPreviewPostTypeIconTint = customThemeWrapper.getNoPreviewPostTypeIconTint();
         mFlairBackgroundColor = customThemeWrapper.getFlairBackgroundColor();
@@ -857,6 +861,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 Utils.setHTMLWithImageToTextView(((PostDetailBaseViewHolder) holder).mAwardsTextView, mPost.getAwards(), true);
             }
 
+            ((PostDetailBaseViewHolder) holder).mUpvoteRatioTextView.setText(mPost.getUpvoteRatio() + "%");
+
             if (mPost.isNSFW()) {
                 ((PostDetailBaseViewHolder) holder).mNSFWTextView.setVisibility(View.VISIBLE);
             } else {
@@ -1062,6 +1068,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 Drawable moderatorDrawable = Utils.getTintedDrawable(mActivity, R.drawable.ic_verified_user_14dp, mModeratorColor);
                 ((CommentViewHolder) holder).authorTextView.setCompoundDrawablesWithIntrinsicBounds(
                         moderatorDrawable, null, null, null);
+            } else if (comment.getAuthor().equals(mAccountName)) {
+                ((CommentViewHolder) holder).authorTextView.setTextColor(mCurrentUserColor);
             }
 
             if (mShowElapsedTime) {
@@ -2073,6 +2081,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         CustomTextView mSpoilerTextView;
         CustomTextView mFlairTextView;
         TextView mAwardsTextView;
+        TextView mUpvoteRatioTextView;
         ConstraintLayout mBottomConstraintLayout;
         ImageView mUpvoteButton;
         TextView mScoreTextView;
@@ -2086,26 +2095,27 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         }
 
         void setBaseView(AspectRatioGifImageView mIconGifImageView,
-                                TextView mSubredditTextView,
-                                TextView mUserTextView,
-                                TextView mAuthorFlairTextView,
-                                TextView mPostTimeTextView,
-                                TextView mTitleTextView,
-                                CustomTextView mTypeTextView,
-                                ImageView mCrosspostImageView,
-                                ImageView mArchivedImageView,
-                                ImageView mLockedImageView,
-                                CustomTextView mNSFWTextView,
-                                CustomTextView mSpoilerTextView,
-                                CustomTextView mFlairTextView,
-                                TextView mAwardsTextView,
-                                ConstraintLayout mBottomConstraintLayout,
-                                ImageView mUpvoteButton,
-                                TextView mScoreTextView,
-                                ImageView mDownvoteButton,
-                                TextView commentsCountTextView,
-                                ImageView mSaveButton,
-                                ImageView mShareButton) {
+                         TextView mSubredditTextView,
+                         TextView mUserTextView,
+                         TextView mAuthorFlairTextView,
+                         TextView mPostTimeTextView,
+                         TextView mTitleTextView,
+                         CustomTextView mTypeTextView,
+                         ImageView mCrosspostImageView,
+                         ImageView mArchivedImageView,
+                         ImageView mLockedImageView,
+                         CustomTextView mNSFWTextView,
+                         CustomTextView mSpoilerTextView,
+                         CustomTextView mFlairTextView,
+                         TextView mAwardsTextView,
+                         TextView mUpvoteRatioTextView,
+                         ConstraintLayout mBottomConstraintLayout,
+                         ImageView mUpvoteButton,
+                         TextView mScoreTextView,
+                         ImageView mDownvoteButton,
+                         TextView commentsCountTextView,
+                         ImageView mSaveButton,
+                         ImageView mShareButton) {
             this.mIconGifImageView = mIconGifImageView;
             this.mSubredditTextView = mSubredditTextView;
             this.mUserTextView = mUserTextView;
@@ -2120,6 +2130,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             this.mSpoilerTextView = mSpoilerTextView;
             this.mFlairTextView = mFlairTextView;
             this.mAwardsTextView = mAwardsTextView;
+            this.mUpvoteRatioTextView = mUpvoteRatioTextView;
             this.mBottomConstraintLayout = mBottomConstraintLayout;
             this.mUpvoteButton = mUpvoteButton;
             this.mScoreTextView = mScoreTextView;
@@ -2459,6 +2470,10 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             mLockedImageView.setColorFilter(mLockedTintColor, PorterDuff.Mode.SRC_IN);
             mCrosspostImageView.setColorFilter(mCrosspostTintColor, PorterDuff.Mode.SRC_IN);
             mAwardsTextView.setTextColor(mSecondaryTextColor);
+            Drawable upvoteRatioDrawable = Utils.getTintedDrawable(mActivity, R.drawable.ic_upvote_ratio, mUpvoteRatioTintColor);
+            mUpvoteRatioTextView.setCompoundDrawablesWithIntrinsicBounds(
+                    upvoteRatioDrawable, null, null, null);
+            mUpvoteRatioTextView.setTextColor(mSecondaryTextColor);
             mUpvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             mScoreTextView.setTextColor(mPostIconAndInfoColor);
             mDownvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
@@ -2498,6 +2513,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         CustomTextView mFlairTextView;
         @BindView(R.id.awards_text_view_item_post_detail_video_autoplay)
         TextView mAwardsTextView;
+        @BindView(R.id.upvote_ratio_text_view_item_post_detail_video_autoplay)
+        TextView mUpvoteRatioTextView;
         @BindView(R.id.aspect_ratio_frame_layout_item_post_detail_video_autoplay)
         AspectRatioFrameLayout aspectRatioFrameLayout;
         @BindView(R.id.player_view_item_post_detail_video_autoplay)
@@ -2548,6 +2565,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     mSpoilerTextView,
                     mFlairTextView,
                     mAwardsTextView,
+                    mUpvoteRatioTextView,
                     mBottomConstraintLayout,
                     mUpvoteButton,
                     mScoreTextView,
@@ -2741,6 +2759,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         CustomTextView mFlairTextView;
         @BindView(R.id.awards_text_view_item_post_detail_video_and_gif_preview)
         TextView mAwardsTextView;
+        @BindView(R.id.upvote_ratio_text_view_item_post_detail_video_and_gif_preview)
+        TextView mUpvoteRatioTextView;
         @BindView(R.id.load_wrapper_item_post_detail_video_and_gif_preview)
         RelativeLayout mLoadWrapper;
         @BindView(R.id.progress_bar_item_post_detail_video_and_gif_preview)
@@ -2781,6 +2801,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     mSpoilerTextView,
                     mFlairTextView,
                     mAwardsTextView,
+                    mUpvoteRatioTextView,
                     mBottomConstraintLayout,
                     mUpvoteButton,
                     mScoreTextView,
@@ -2852,6 +2873,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         CustomTextView mFlairTextView;
         @BindView(R.id.awards_text_view_item_post_detail_image_and_gif_autoplay)
         TextView mAwardsTextView;
+        @BindView(R.id.upvote_ratio_text_view_item_post_detail_image_and_gif_autoplay)
+        TextView mUpvoteRatioTextView;
         @BindView(R.id.image_view_wrapper_item_post_detail_image_and_gif_autoplay)
         RelativeLayout mRelativeLayout;
         @BindView(R.id.load_wrapper_item_post_detail_image_and_gif_autoplay)
@@ -2894,6 +2917,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     mSpoilerTextView,
                     mFlairTextView,
                     mAwardsTextView,
+                    mUpvoteRatioTextView,
                     mBottomConstraintLayout,
                     mUpvoteButton,
                     mScoreTextView,
@@ -2956,6 +2980,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         CustomTextView mFlairTextView;
         @BindView(R.id.awards_text_view_item_post_detail_link)
         TextView mAwardsTextView;
+        @BindView(R.id.upvote_ratio_text_view_item_post_detail_link)
+        TextView mUpvoteRatioTextView;
         @BindView(R.id.link_text_view_item_post_detail_link)
         TextView mLinkTextView;
         @BindView(R.id.image_view_wrapper_item_post_detail_link)
@@ -3000,6 +3026,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     mSpoilerTextView,
                     mFlairTextView,
                     mAwardsTextView,
+                    mUpvoteRatioTextView,
                     mBottomConstraintLayout,
                     mUpvoteButton,
                     mScoreTextView,
@@ -3053,6 +3080,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         CustomTextView mFlairTextView;
         @BindView(R.id.awards_text_view_item_post_detail_no_preview_link)
         TextView mAwardsTextView;
+        @BindView(R.id.upvote_ratio_text_view_item_post_detail_no_preview_link)
+        TextView mUpvoteRatioTextView;
         @BindView(R.id.link_text_view_item_post_detail_no_preview_link)
         TextView mLinkTextView;
         @BindView(R.id.image_view_no_preview_post_type_item_post_detail_no_preview_link)
@@ -3089,6 +3118,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     mSpoilerTextView,
                     mFlairTextView,
                     mAwardsTextView,
+                    mUpvoteRatioTextView,
                     mBottomConstraintLayout,
                     mUpvoteButton,
                     mScoreTextView,
@@ -3182,6 +3212,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         CustomTextView mFlairTextView;
         @BindView(R.id.awards_text_view_item_post_detail_gallery)
         TextView mAwardsTextView;
+        @BindView(R.id.upvote_ratio_text_view_item_post_detail_gallery)
+        TextView mUpvoteRatioTextView;
         @BindView(R.id.image_view_wrapper_item_post_detail_gallery)
         RelativeLayout mRelativeLayout;
         @BindView(R.id.load_wrapper_item_post_detail_gallery)
@@ -3226,6 +3258,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     mSpoilerTextView,
                     mFlairTextView,
                     mAwardsTextView,
+                    mUpvoteRatioTextView,
                     mBottomConstraintLayout,
                     mUpvoteButton,
                     mScoreTextView,
@@ -3283,6 +3316,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         CustomTextView mFlairTextView;
         @BindView(R.id.awards_text_view_item_post_detail_text)
         TextView mAwardsTextView;
+        @BindView(R.id.upvote_ratio_text_view_item_post_detail_text)
+        TextView mUpvoteRatioTextView;
         @BindView(R.id.bottom_constraint_layout_item_post_detail_text)
         ConstraintLayout mBottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_detail_text)
@@ -3315,6 +3350,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     mSpoilerTextView,
                     mFlairTextView,
                     mAwardsTextView,
+                    mUpvoteRatioTextView,
                     mBottomConstraintLayout,
                     mUpvoteButton,
                     mScoreTextView,

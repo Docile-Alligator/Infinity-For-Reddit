@@ -109,7 +109,8 @@
         android:padding="16dp"
         app:flChildSpacing="16dp"
         app:flChildSpacingForLastRow="align"
-        app:flRowSpacing="8dp">
+        app:flRowSpacing="8dp"
+        app:flRowVerticalGravity="center">
 
         <com.libRG.CustomTextView
             android:id="@+id/type_text_view_item_post_detail_link"
@@ -162,6 +163,13 @@
             app:lib_setRadius="3dp"
             app:lib_setRoundedView="true"
             app:lib_setShape="rectangle" />
+
+        <TextView
+            android:id="@+id/upvote_ratio_text_view_item_post_detail_link"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="?attr/font_12"
+            android:fontFamily="?attr/font_family" />
 
         <ImageView
             android:id="@+id/archived_image_view_item_post_detail_link"
