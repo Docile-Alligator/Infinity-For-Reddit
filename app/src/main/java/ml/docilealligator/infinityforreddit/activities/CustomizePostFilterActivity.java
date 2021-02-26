@@ -444,11 +444,11 @@ public class CustomizePostFilterActivity extends BaseActivity {
             } else if (requestCode == ADD_USERS_REQUEST_CODE) {
                 ArrayList<String> usernames = data.getStringArrayListExtra(SearchActivity.RETURN_EXTRA_SELECTED_USERNAMES);
                 String currentUsers = excludesUsersTextInputEditText.getText().toString().trim();
-                if (usernames != null && !currentUsers.isEmpty() && currentUsers.charAt(currentUsers.length() - 1) != ',') {
-                    String newString = currentUsers + ",";
-                    excludesUsersTextInputEditText.setText(newString);
-                }
-                if (usernames != null) {
+                if (usernames != null && !usernames.isEmpty()) {
+                    if (!currentUsers.isEmpty() && currentUsers.charAt(currentUsers.length() - 1) != ',') {
+                        String newString = currentUsers + ",";
+                        excludesUsersTextInputEditText.setText(newString);
+                    }
                     StringBuilder stringBuilder = new StringBuilder();
                     for (String s : usernames) {
                         stringBuilder.append(s).append(",");
@@ -462,11 +462,11 @@ public class CustomizePostFilterActivity extends BaseActivity {
 
     private void updateExcludeSubredditNames(ArrayList<String> subredditNames) {
         String currentSubreddits = excludesSubredditsTextInputEditText.getText().toString().trim();
-        if (subredditNames != null && !currentSubreddits.isEmpty() && currentSubreddits.charAt(currentSubreddits.length() - 1) != ',') {
-            String newString = currentSubreddits + ",";
-            excludesSubredditsTextInputEditText.setText(newString);
-        }
-        if (subredditNames != null) {
+        if (subredditNames != null && !subredditNames.isEmpty()) {
+            if (!currentSubreddits.isEmpty() && currentSubreddits.charAt(currentSubreddits.length() - 1) != ',') {
+                String newString = currentSubreddits + ",";
+                excludesSubredditsTextInputEditText.setText(newString);
+            }
             StringBuilder stringBuilder = new StringBuilder();
             for (String s : subredditNames) {
                 stringBuilder.append(s).append(",");
