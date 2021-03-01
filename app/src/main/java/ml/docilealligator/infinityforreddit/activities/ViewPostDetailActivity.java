@@ -162,7 +162,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             EventBus.getDefault().post(new NeedForPostListFromPostFragmentEvent(postFragmentId));
         }
 
-
         fragmentManager = getSupportFragmentManager();
 
         if (savedInstanceState == null) {
@@ -426,6 +425,8 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                 if (postListPosition == position && post != null) {
                     bundle.putParcelable(ViewPostDetailFragment.EXTRA_POST_DATA, post);
                     bundle.putInt(ViewPostDetailFragment.EXTRA_POST_LIST_POSITION, position);
+                    bundle.putString(ViewPostDetailFragment.EXTRA_SINGLE_COMMENT_ID, getIntent().getStringExtra(EXTRA_SINGLE_COMMENT_ID));
+                    bundle.putString(ViewPostDetailFragment.EXTRA_MESSAGE_FULLNAME, getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME));
                 } else {
                     bundle.putParcelable(ViewPostDetailFragment.EXTRA_POST_DATA, posts.get(position));
                     bundle.putInt(ViewPostDetailFragment.EXTRA_POST_LIST_POSITION, position);
@@ -437,6 +438,8 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                     bundle.putParcelable(ViewPostDetailFragment.EXTRA_POST_DATA, post);
                     bundle.putInt(ViewPostDetailFragment.EXTRA_POST_LIST_POSITION, position);
                 }
+                bundle.putString(ViewPostDetailFragment.EXTRA_SINGLE_COMMENT_ID, getIntent().getStringExtra(EXTRA_SINGLE_COMMENT_ID));
+                bundle.putString(ViewPostDetailFragment.EXTRA_MESSAGE_FULLNAME, getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME));
             }
             fragment.setArguments(bundle);
             return fragment;
