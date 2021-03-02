@@ -397,7 +397,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 if (post != null) {
                     switch (post.getPostType()) {
                         case Post.VIDEO_TYPE:
-                        case Post.GIF_TYPE:
                             if (mAutoplay) {
                                 if (!mAutoplayNsfwVideos && post.isNSFW()) {
                                     return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW;
@@ -405,6 +404,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                 return VIEW_TYPE_POST_CARD_2_VIDEO_AUTOPLAY_TYPE;
                             }
                             return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW;
+                        case Post.GIF_TYPE:
                         case Post.IMAGE_TYPE:
                         case Post.LINK_TYPE:
                         case Post.NO_PREVIEW_LINK_TYPE:
