@@ -1457,6 +1457,33 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                 fragment.setArguments(bundle);
                 return fragment;
+            } else if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_UPVOTED
+                    || postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_DOWNVOTED
+                    || postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HIDDEN
+                    || postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_SAVED
+                    || postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_GILDED) {
+                PostFragment fragment = new PostFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_USER);
+                bundle.putString(PostFragment.EXTRA_USER_NAME, mAccountName);
+                bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
+                bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
+                bundle.putBoolean(PostFragment.EXTRA_DISABLE_READ_POSTS, true);
+
+                if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_UPVOTED) {
+                    bundle.putString(PostFragment.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_UPVOTED);
+                } else if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_DOWNVOTED) {
+                    bundle.putString(PostFragment.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_DOWNVOTED);
+                } else if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HIDDEN) {
+                    bundle.putString(PostFragment.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_HIDDEN);
+                } else if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_SAVED) {
+                    bundle.putString(PostFragment.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_SAVED);
+                } else {
+                    bundle.putString(PostFragment.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_GILDED);
+                }
+
+                fragment.setArguments(bundle);
+                return fragment;
             } else {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();

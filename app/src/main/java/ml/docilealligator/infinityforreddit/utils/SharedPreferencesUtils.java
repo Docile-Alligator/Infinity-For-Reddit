@@ -188,6 +188,11 @@ public class SharedPreferencesUtils {
     public static final int MAIN_PAGE_TAB_POST_TYPE_SUBREDDIT = 3;
     public static final int MAIN_PAGE_TAB_POST_TYPE_MULTIREDDIT = 4;
     public static final int MAIN_PAGE_TAB_POST_TYPE_USER = 5;
+    public static final int MAIN_PAGE_TAB_POST_TYPE_UPVOTED = 6;
+    public static final int MAIN_PAGE_TAB_POST_TYPE_DOWNVOTED = 7;
+    public static final int MAIN_PAGE_TAB_POST_TYPE_HIDDEN = 8;
+    public static final int MAIN_PAGE_TAB_POST_TYPE_SAVED = 9;
+    public static final int MAIN_PAGE_TAB_POST_TYPE_GILDED = 10;
     public static final String MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS = "_main_page_show_subscribed_subreddits";
     public static final String MAIN_PAGE_SHOW_FAVORITE_SUBSCRIBED_SUBREDDITS = "_main_page_show_favorite_subscribed_subreddits";
 

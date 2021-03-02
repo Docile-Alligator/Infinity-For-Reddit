@@ -172,6 +172,11 @@
         <item>Subreddit</item>
         <item>MultiReddit</item>
         <item>User</item>
+        <item>Upvoted</item>
+        <item>Downvoted</item>
+        <item>Hidden</item>
+        <item>Saved</item>
+        <item>Gilded</item>
     </string-array>
 
     <string-array name="settings_time_format">
