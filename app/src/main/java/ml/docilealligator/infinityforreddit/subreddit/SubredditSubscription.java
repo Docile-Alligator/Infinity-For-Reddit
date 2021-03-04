@@ -1,39 +1,77 @@
 package ml.docilealligator.infinityforreddit.subreddit;
 
-import android.os.AsyncTask;
+import android.os.Handler;
 
 import androidx.annotation.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class SubredditSubscription {
-    public static void subscribeToSubreddit(Retrofit oauthRetrofit, Retrofit retrofit,
-                                            String accessToken, String subredditName, String accountName,
-                                            RedditDataRoomDatabase redditDataRoomDatabase,
+    public static void subscribeToSubreddit(Executor executor, Handler handler, Retrofit oauthRetrofit,
+                                            Retrofit retrofit, String accessToken, String subredditName,
+                                            String accountName, RedditDataRoomDatabase redditDataRoomDatabase,
                                             SubredditSubscriptionListener subredditSubscriptionListener) {
-        subredditSubscription(oauthRetrofit, retrofit, accessToken, subredditName, accountName, "sub",
-                redditDataRoomDatabase, subredditSubscriptionListener);
+        subredditSubscription(executor, handler, oauthRetrofit, retrofit, accessToken, subredditName,
+                accountName, "sub", redditDataRoomDatabase, subredditSubscriptionListener);
     }
 
-    public static void unsubscribeToSubreddit(Retrofit oauthRetrofit, String accessToken,
-                                              String subredditName, String accountName,
+    public static void anonymousSubscribeToSubreddit(Executor executor, Handler handler, Retrofit retrofit,
+                                                     RedditDataRoomDatabase redditDataRoomDatabase,
+                                                     String subredditName,
+                                                     SubredditSubscriptionListener subredditSubscriptionListener) {
+        retrofit.create(RedditAPI.class).getSubredditData(subredditName).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                FetchSubredditData.fetchSubredditData(retrofit, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
+                    @Override
+                    public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
+                        insertSubscription(executor, handler, redditDataRoomDatabase,
+                                subredditData, "-", subredditSubscriptionListener);
+                    }
+
+                    @Override
+                    public void onFetchSubredditDataFail(boolean isQuarantined) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                subredditSubscriptionListener.onSubredditSubscriptionFail();
+            }
+        });
+    }
+
+    public static void unsubscribeToSubreddit(Executor executor, Handler handler, Retrofit oauthRetrofit,
+                                              String accessToken, String subredditName, String accountName,
                                               RedditDataRoomDatabase redditDataRoomDatabase,
                                               SubredditSubscriptionListener subredditSubscriptionListener) {
-        subredditSubscription(oauthRetrofit, null, accessToken, subredditName, accountName, "unsub",
-                redditDataRoomDatabase, subredditSubscriptionListener);
+        subredditSubscription(executor, handler, oauthRetrofit, null, accessToken, subredditName,
+                accountName, "unsub", redditDataRoomDatabase, subredditSubscriptionListener);
     }
 
-    private static void subredditSubscription(Retrofit oauthRetrofit, Retrofit retrofit, String accessToken,
-                                              String subredditName, String accountName, String action,
+    public static void anonymousUnsubscribeToSubreddit(Executor executor, Handler handler,
+                                                       RedditDataRoomDatabase redditDataRoomDatabase,
+                                                       String subredditName,
+                                                       SubredditSubscriptionListener subredditSubscriptionListener) {
+        removeSubscription(executor, handler, redditDataRoomDatabase, subredditName, "-", subredditSubscriptionListener);
+    }
+
+    private static void subredditSubscription(Executor executor, Handler handler, Retrofit oauthRetrofit,
+                                              Retrofit retrofit, String accessToken, String subredditName,
+                                              String accountName, String action,
                                               RedditDataRoomDatabase redditDataRoomDatabase,
                                               SubredditSubscriptionListener subredditSubscriptionListener) {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
@@ -51,8 +89,8 @@ public class SubredditSubscription {
                         FetchSubredditData.fetchSubredditData(retrofit, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
                             @Override
                             public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
-                                new UpdateSubscriptionAsyncTask(redditDataRoomDatabase,
-                                        subredditData, accountName, true).execute();
+                                insertSubscription(executor, handler, redditDataRoomDatabase,
+                                        subredditData, accountName, subredditSubscriptionListener);
                             }
 
                             @Override
@@ -61,9 +99,9 @@ public class SubredditSubscription {
                             }
                         });
                     } else {
-                        new UpdateSubscriptionAsyncTask(redditDataRoomDatabase, subredditName, accountName, false).execute();
+                        removeSubscription(executor, handler, redditDataRoomDatabase, subredditName,
+                                accountName, subredditSubscriptionListener);
                     }
-                    subredditSubscriptionListener.onSubredditSubscriptionSuccess();
                 } else {
                     subredditSubscriptionListener.onSubredditSubscriptionFail();
                 }
@@ -82,39 +120,25 @@ public class SubredditSubscription {
         void onSubredditSubscriptionFail();
     }
 
-    private static class UpdateSubscriptionAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        private RedditDataRoomDatabase redditDataRoomDatabase;
-        private String subredditName;
-        private String accountName;
-        private SubscribedSubredditData subscribedSubredditData;
-        private boolean isSubscribing;
-
-        UpdateSubscriptionAsyncTask(RedditDataRoomDatabase redditDataRoomDatabase, String subredditName,
-                                    String accountName, boolean isSubscribing) {
-            this.redditDataRoomDatabase = redditDataRoomDatabase;
-            this.subredditName = subredditName;
-            this.accountName = accountName;
-            this.isSubscribing = isSubscribing;
-        }
-
-        UpdateSubscriptionAsyncTask(RedditDataRoomDatabase redditDataRoomDatabase, SubredditData subredditData,
-                                    String accountName, boolean isSubscribing) {
-            this.redditDataRoomDatabase = redditDataRoomDatabase;
-            this.subscribedSubredditData = new SubscribedSubredditData(subredditData.getId(), subredditData.getName(),
+    private static void insertSubscription(Executor executor, Handler handler,
+                                           RedditDataRoomDatabase redditDataRoomDatabase,
+                                           SubredditData subredditData, String accountName,
+                                           SubredditSubscriptionListener subredditSubscriptionListener) {
+        executor.execute(() -> {
+            SubscribedSubredditData subscribedSubredditData = new SubscribedSubredditData(subredditData.getId(), subredditData.getName(),
                     subredditData.getIconUrl(), accountName, false);
-            this.accountName = accountName;
-            this.isSubscribing = isSubscribing;
-        }
+            redditDataRoomDatabase.subscribedSubredditDao().insert(subscribedSubredditData);
+            handler.post(subredditSubscriptionListener::onSubredditSubscriptionSuccess);
+        });
+    }
 
-        @Override
-        protected Void doInBackground(Void... voids) {
-            if (isSubscribing) {
-                redditDataRoomDatabase.subscribedSubredditDao().insert(subscribedSubredditData);
-            } else {
-                redditDataRoomDatabase.subscribedSubredditDao().deleteSubscribedSubreddit(subredditName, accountName);
-            }
-            return null;
-        }
+    private static void removeSubscription(Executor executor, Handler handler,
+                                           RedditDataRoomDatabase redditDataRoomDatabase,
+                                           String subredditName, String accountName,
+                                           SubredditSubscriptionListener subredditSubscriptionListener) {
+        executor.execute(() -> {
+            redditDataRoomDatabase.subscribedSubredditDao().deleteSubscribedSubreddit(subredditName, accountName);
+            handler.post(subredditSubscriptionListener::onSubredditSubscriptionSuccess);
+        });
     }
 }

@@ -155,8 +155,9 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
                                 public void isNotSubscribed() {
                                     ((DataViewHolder) holder).subscribeButton.setVisibility(View.VISIBLE);
                                     ((DataViewHolder) holder).subscribeButton.setOnClickListener(view -> {
-                                        SubredditSubscription.subscribeToSubreddit(oauthRetrofit, retrofit,
-                                                accessToken, subredditData.getName(), accountName, redditDataRoomDatabase,
+                                        SubredditSubscription.subscribeToSubreddit(executor, new Handler(),
+                                                oauthRetrofit, retrofit, accessToken, subredditData.getName(),
+                                                accountName, redditDataRoomDatabase,
                                                 new SubredditSubscription.SubredditSubscriptionListener() {
                                                     @Override
                                                     public void onSubredditSubscriptionSuccess() {

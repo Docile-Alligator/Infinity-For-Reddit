@@ -817,48 +817,86 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
         subscribeSubredditChip.setOnClickListener(view -> {
             if (mAccessToken == null) {
-                Toast.makeText(ViewSubredditDetailActivity.this, R.string.login_first, Toast.LENGTH_SHORT).show();
-                return;
-            }
+                if (subscriptionReady) {
+                    subscriptionReady = false;
+                    if (getResources().getString(R.string.subscribe).contentEquals(subscribeSubredditChip.getText())) {
+                        SubredditSubscription.anonymousSubscribeToSubreddit(mExecutor, new Handler(),
+                                mRetrofit, mRedditDataRoomDatabase, subredditName,
+                                new SubredditSubscription.SubredditSubscriptionListener() {
+                                    @Override
+                                    public void onSubredditSubscriptionSuccess() {
+                                        subscribeSubredditChip.setText(R.string.unsubscribe);
+                                        subscribeSubredditChip.setChipBackgroundColor(ColorStateList.valueOf(subscribedColor));
+                                        makeSnackbar(R.string.subscribed, false);
+                                        subscriptionReady = true;
+                                    }
 
-            if (subscriptionReady) {
-                subscriptionReady = false;
-                if (getResources().getString(R.string.subscribe).contentEquals(subscribeSubredditChip.getText())) {
-                    SubredditSubscription.subscribeToSubreddit(mOauthRetrofit, mRetrofit, mAccessToken,
-                            subredditName, mAccountName, mRedditDataRoomDatabase,
-                            new SubredditSubscription.SubredditSubscriptionListener() {
-                                @Override
-                                public void onSubredditSubscriptionSuccess() {
-                                    subscribeSubredditChip.setText(R.string.unsubscribe);
-                                    subscribeSubredditChip.setChipBackgroundColor(ColorStateList.valueOf(subscribedColor));
-                                    makeSnackbar(R.string.subscribed, false);
-                                    subscriptionReady = true;
-                                }
+                                    @Override
+                                    public void onSubredditSubscriptionFail() {
+                                        makeSnackbar(R.string.subscribe_failed, false);
+                                        subscriptionReady = true;
+                                    }
+                                });
+                    } else {
+                        SubredditSubscription.anonymousUnsubscribeToSubreddit(mExecutor, new Handler(),
+                                mRedditDataRoomDatabase, subredditName,
+                                new SubredditSubscription.SubredditSubscriptionListener() {
+                                    @Override
+                                    public void onSubredditSubscriptionSuccess() {
+                                        subscribeSubredditChip.setText(R.string.subscribe);
+                                        subscribeSubredditChip.setChipBackgroundColor(ColorStateList.valueOf(unsubscribedColor));
+                                        makeSnackbar(R.string.unsubscribed, false);
+                                        subscriptionReady = true;
+                                    }
 
-                                @Override
-                                public void onSubredditSubscriptionFail() {
-                                    makeSnackbar(R.string.subscribe_failed, false);
-                                    subscriptionReady = true;
-                                }
-                            });
-                } else {
-                    SubredditSubscription.unsubscribeToSubreddit(mOauthRetrofit, mAccessToken,
-                            subredditName, mAccountName, mRedditDataRoomDatabase,
-                            new SubredditSubscription.SubredditSubscriptionListener() {
-                                @Override
-                                public void onSubredditSubscriptionSuccess() {
-                                    subscribeSubredditChip.setText(R.string.subscribe);
-                                    subscribeSubredditChip.setChipBackgroundColor(ColorStateList.valueOf(unsubscribedColor));
-                                    makeSnackbar(R.string.unsubscribed, false);
-                                    subscriptionReady = true;
-                                }
+                                    @Override
+                                    public void onSubredditSubscriptionFail() {
+                                        makeSnackbar(R.string.unsubscribe_failed, false);
+                                        subscriptionReady = true;
+                                    }
+                                });
+                    }
+                }
+            } else {
+                if (subscriptionReady) {
+                    subscriptionReady = false;
+                    if (getResources().getString(R.string.subscribe).contentEquals(subscribeSubredditChip.getText())) {
+                        SubredditSubscription.subscribeToSubreddit(mExecutor, new Handler(), mOauthRetrofit,
+                                mRetrofit, mAccessToken, subredditName, mAccountName, mRedditDataRoomDatabase,
+                                new SubredditSubscription.SubredditSubscriptionListener() {
+                                    @Override
+                                    public void onSubredditSubscriptionSuccess() {
+                                        subscribeSubredditChip.setText(R.string.unsubscribe);
+                                        subscribeSubredditChip.setChipBackgroundColor(ColorStateList.valueOf(subscribedColor));
+                                        makeSnackbar(R.string.subscribed, false);
+                                        subscriptionReady = true;
+                                    }
 
-                                @Override
-                                public void onSubredditSubscriptionFail() {
-                                    makeSnackbar(R.string.unsubscribe_failed, false);
-                                    subscriptionReady = true;
-                                }
-                            });
+                                    @Override
+                                    public void onSubredditSubscriptionFail() {
+                                        makeSnackbar(R.string.subscribe_failed, false);
+                                        subscriptionReady = true;
+                                    }
+                                });
+                    } else {
+                        SubredditSubscription.unsubscribeToSubreddit(mExecutor, new Handler(), mOauthRetrofit,
+                                mAccessToken, subredditName, mAccountName, mRedditDataRoomDatabase,
+                                new SubredditSubscription.SubredditSubscriptionListener() {
+                                    @Override
+                                    public void onSubredditSubscriptionSuccess() {
+                                        subscribeSubredditChip.setText(R.string.subscribe);
+                                        subscribeSubredditChip.setChipBackgroundColor(ColorStateList.valueOf(unsubscribedColor));
+                                        makeSnackbar(R.string.unsubscribed, false);
+                                        subscriptionReady = true;
+                                    }
+
+                                    @Override
+                                    public void onSubredditSubscriptionFail() {
+                                        makeSnackbar(R.string.unsubscribe_failed, false);
+                                        subscriptionReady = true;
+                                    }
+                                });
+                    }
                 }
             }
         });
