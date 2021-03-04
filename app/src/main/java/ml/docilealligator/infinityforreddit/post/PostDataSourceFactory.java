@@ -20,7 +20,7 @@ class PostDataSourceFactory extends DataSource.Factory {
     private String accountName;
     private SharedPreferences sharedPreferences;
     private SharedPreferences postFeedScrolledPositionSharedPreferences;
-    private String subredditName;
+    private String name;
     private String query;
     private int postType;
     private SortType sortType;
@@ -49,14 +49,14 @@ class PostDataSourceFactory extends DataSource.Factory {
 
     PostDataSourceFactory(Retrofit retrofit, String accessToken, String accountName,
                           SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
-                          String subredditName, int postType, SortType sortType, PostFilter postFilter,
+                          String name, int postType, SortType sortType, PostFilter postFilter,
                           List<ReadPost> readPostList) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
         this.sharedPreferences = sharedPreferences;
         this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
-        this.subredditName = subredditName;
+        this.name = name;
         postDataSourceLiveData = new MutableLiveData<>();
         this.postType = postType;
         this.sortType = sortType;
@@ -66,14 +66,14 @@ class PostDataSourceFactory extends DataSource.Factory {
 
     PostDataSourceFactory(Retrofit retrofit, String accessToken, String accountName,
                           SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
-                          String subredditName, int postType, SortType sortType, PostFilter postFilter,
+                          String name, int postType, SortType sortType, PostFilter postFilter,
                           String where, List<ReadPost> readPostList) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
         this.sharedPreferences = sharedPreferences;
         this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
-        this.subredditName = subredditName;
+        this.name = name;
         postDataSourceLiveData = new MutableLiveData<>();
         this.postType = postType;
         this.sortType = sortType;
@@ -84,14 +84,14 @@ class PostDataSourceFactory extends DataSource.Factory {
 
     PostDataSourceFactory(Retrofit retrofit, String accessToken, String accountName,
                           SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
-                          String subredditName, String query, int postType, SortType sortType, PostFilter postFilter,
+                          String name, String query, int postType, SortType sortType, PostFilter postFilter,
                           List<ReadPost> readPostList) {
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
         this.sharedPreferences = sharedPreferences;
         this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
-        this.subredditName = subredditName;
+        this.name = name;
         this.query = query;
         postDataSourceLiveData = new MutableLiveData<>();
         this.postType = postType;
@@ -109,16 +109,20 @@ class PostDataSourceFactory extends DataSource.Factory {
                     postFilter, readPostList);
         } else if (postType == PostDataSource.TYPE_SEARCH) {
             postDataSource = new PostDataSource(retrofit, accessToken, accountName,
-                    sharedPreferences, postFeedScrolledPositionSharedPreferences, subredditName, query,
+                    sharedPreferences, postFeedScrolledPositionSharedPreferences, name, query,
                     postType, sortType, postFilter, readPostList);
         } else if (postType == PostDataSource.TYPE_SUBREDDIT || postType == PostDataSource.TYPE_MULTI_REDDIT) {
             Log.i("asdasfd", "s5 " + (postFilter == null));
             postDataSource = new PostDataSource(retrofit, accessToken, accountName,
-                    sharedPreferences, postFeedScrolledPositionSharedPreferences, subredditName, postType,
+                    sharedPreferences, postFeedScrolledPositionSharedPreferences, name, postType,
                     sortType, postFilter, readPostList);
+        } else if (postType == PostDataSource.TYPE_ANONYMOUS_FRONT_PAGE) {
+            postDataSource = new PostDataSource(retrofit, null, null,
+                    sharedPreferences, null, name, postType,
+                    sortType, postFilter, null);
         } else {
             postDataSource = new PostDataSource(retrofit, accessToken, accountName,
-                    sharedPreferences, postFeedScrolledPositionSharedPreferences, subredditName, postType,
+                    sharedPreferences, postFeedScrolledPositionSharedPreferences, name, postType,
                     sortType, postFilter, userWhere, readPostList);
         }
 

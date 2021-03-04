@@ -100,11 +100,11 @@ public class PostViewModel extends ViewModel {
     }
 
     public PostViewModel(Retrofit retrofit, String accessToken, String accountName,
-                         SharedPreferences sharedPreferences, SharedPreferences cache, String subredditName,
+                         SharedPreferences sharedPreferences, SharedPreferences cache, String username,
                          int postType, SortType sortType, PostFilter postFilter, String where,
                          List<ReadPost> readPostList) {
         postDataSourceFactory = new PostDataSourceFactory(retrofit, accessToken, accountName,
-                sharedPreferences, cache, subredditName, postType, sortType, postFilter, where, readPostList);
+                sharedPreferences, cache, username, postType, sortType, postFilter, where, readPostList);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
                 PostDataSource::getInitialLoadStateLiveData);
@@ -205,7 +205,7 @@ public class PostViewModel extends ViewModel {
         private String accountName;
         private SharedPreferences sharedPreferences;
         private SharedPreferences postFeedScrolledPositionSharedPreferences;
-        private String subredditName;
+        private String name;
         private String query;
         private int postType;
         private SortType sortType;
@@ -229,14 +229,14 @@ public class PostViewModel extends ViewModel {
 
         public Factory(Retrofit retrofit, String accessToken, String accountName,
                        SharedPreferences sharedPreferences,
-                       SharedPreferences postFeedScrolledPositionSharedPreferences, String subredditName,
+                       SharedPreferences postFeedScrolledPositionSharedPreferences, String name,
                        int postType, SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.accountName = accountName;
             this.sharedPreferences = sharedPreferences;
             this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
-            this.subredditName = subredditName;
+            this.name = name;
             this.postType = postType;
             this.sortType = sortType;
             this.postFilter = postFilter;
@@ -245,14 +245,14 @@ public class PostViewModel extends ViewModel {
 
         //User posts
         public Factory(Retrofit retrofit, String accessToken, String accountName,
-                       SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences, String subredditName,
+                       SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences, String username,
                        int postType, SortType sortType, PostFilter postFilter, String where, List<ReadPost> readPostList) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.accountName = accountName;
             this.sharedPreferences = sharedPreferences;
             this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
-            this.subredditName = subredditName;
+            this.name = username;
             this.postType = postType;
             this.sortType = sortType;
             this.postFilter = postFilter;
@@ -261,19 +261,30 @@ public class PostViewModel extends ViewModel {
         }
 
         public Factory(Retrofit retrofit, String accessToken, String accountName,
-                       SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences, String subredditName,
+                       SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences, String name,
                        String query, int postType, SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
             this.retrofit = retrofit;
             this.accessToken = accessToken;
             this.accountName = accountName;
             this.sharedPreferences = sharedPreferences;
             this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
-            this.subredditName = subredditName;
+            this.name = name;
             this.query = query;
             this.postType = postType;
             this.sortType = sortType;
             this.postFilter = postFilter;
             this.readPostList = readPostList;
+        }
+
+        //Anonymous Front Page
+        public Factory(Retrofit retrofit, SharedPreferences sharedPreferences, String concatenatedSubredditNames,
+                       int postType, SortType sortType, PostFilter postFilter) {
+            this.retrofit = retrofit;
+            this.sharedPreferences = sharedPreferences;
+            this.name = concatenatedSubredditNames;
+            this.postType = postType;
+            this.sortType = sortType;
+            this.postFilter = postFilter;
         }
 
         @NonNull
@@ -284,15 +295,19 @@ public class PostViewModel extends ViewModel {
                         postFeedScrolledPositionSharedPreferences, postType, sortType, postFilter, readPostList);
             } else if (postType == PostDataSource.TYPE_SEARCH) {
                 return (T) new PostViewModel(retrofit, accessToken, accountName, sharedPreferences,
-                        postFeedScrolledPositionSharedPreferences, subredditName, query, postType, sortType,
+                        postFeedScrolledPositionSharedPreferences, name, query, postType, sortType,
                         postFilter, readPostList);
             } else if (postType == PostDataSource.TYPE_SUBREDDIT || postType == PostDataSource.TYPE_MULTI_REDDIT) {
                 return (T) new PostViewModel(retrofit, accessToken, accountName, sharedPreferences,
-                        postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType,
+                        postFeedScrolledPositionSharedPreferences, name, postType, sortType,
                         postFilter, readPostList);
+            } else if (postType == PostDataSource.TYPE_ANONYMOUS_FRONT_PAGE) {
+                return (T) new PostViewModel(retrofit, null, null, sharedPreferences,
+                        null, name, postType, sortType,
+                        postFilter, null);
             } else {
                 return (T) new PostViewModel(retrofit, accessToken, accountName, sharedPreferences,
-                        postFeedScrolledPositionSharedPreferences, subredditName, postType, sortType,
+                        postFeedScrolledPositionSharedPreferences, name, postType, sortType,
                         postFilter, userWhere, readPostList);
             }
         }

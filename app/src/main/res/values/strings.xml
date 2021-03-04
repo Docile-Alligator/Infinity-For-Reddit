@@ -1035,4 +1035,6 @@
 
     <string name="vote">Vote</string>
 
+    <string name="anonymous_front_page_no_subscriptions">Start by joining a subreddit!</string>
+
 </resources>

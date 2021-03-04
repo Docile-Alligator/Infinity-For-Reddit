@@ -13,19 +13,19 @@ public interface AccountDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Account account);
 
-    @Query("SELECT * FROM accounts")
+    @Query("SELECT * FROM accounts WHERE username != '-'")
     List<Account> getAllAccounts();
 
-    @Query("SELECT * FROM accounts WHERE is_current_user = 0")
+    @Query("SELECT * FROM accounts WHERE is_current_user = 0 AND username != '-'")
     List<Account> getAllNonCurrentAccounts();
 
-    @Query("UPDATE accounts SET is_current_user = 0 WHERE is_current_user = 1")
+    @Query("UPDATE accounts SET is_current_user = 0 WHERE is_current_user = 1 AND username != '-'")
     void markAllAccountsNonCurrent();
 
-    @Query("DELETE FROM accounts WHERE is_current_user = 1")
+    @Query("DELETE FROM accounts WHERE is_current_user = 1 AND username != '-'")
     void deleteCurrentAccount();
 
-    @Query("DELETE FROM accounts")
+    @Query("DELETE FROM accounts WHERE username != '-'")
     void deleteAllAccounts();
 
     @Query("SELECT * FROM accounts WHERE username = :username COLLATE NOCASE LIMIT 1")
@@ -34,17 +34,17 @@ public interface AccountDao {
     @Query("SELECT * FROM accounts WHERE username = :username COLLATE NOCASE LIMIT 1")
     Account getAccountData(String username);
 
-    @Query("SELECT * FROM accounts WHERE is_current_user = 1 LIMIT 1")
+    @Query("SELECT * FROM accounts WHERE is_current_user = 1 AND username != '-' LIMIT 1")
     Account getCurrentAccount();
 
-    @Query("SELECT * FROM accounts WHERE is_current_user = 1 LIMIT 1")
+    @Query("SELECT * FROM accounts WHERE is_current_user = 1 AND username != '-' LIMIT 1")
     LiveData<Account> getCurrentAccountLiveData();
 
     @Query("UPDATE accounts SET profile_image_url = :profileImageUrl, banner_image_url = :bannerImageUrl, " +
             "karma = :karma WHERE username = :username")
     void updateAccountInfo(String username, String profileImageUrl, String bannerImageUrl, int karma);
 
-    @Query("SELECT * FROM accounts WHERE is_current_user = 0 ORDER BY username COLLATE NOCASE ASC")
+    @Query("SELECT * FROM accounts WHERE is_current_user = 0 AND username != '-' ORDER BY username COLLATE NOCASE ASC")
     LiveData<List<Account>> getAccountsExceptCurrentAccountLiveData();
 
     @Query("UPDATE accounts SET is_current_user = 1 WHERE username = :username")

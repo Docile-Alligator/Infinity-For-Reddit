@@ -792,9 +792,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 if (mAccessToken == null) {
                     switch (position) {
                         case 0:
-                            tab.setText(R.string.popular);
+                            tab.setText(R.string.home);
                             break;
                         case 1:
+                            tab.setText(R.string.popular);
+                            break;
+                        case 2:
                             tab.setText(R.string.all);
                             break;
                     }
@@ -1354,6 +1357,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 if (position == 0) {
                     PostFragment fragment = new PostFragment();
                     Bundle bundle = new Bundle();
+                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_ANONYMOUS_FRONT_PAGE);
+                    fragment.setArguments(bundle);
+                    return fragment;
+                } else if (position == 1) {
+                    PostFragment fragment = new PostFragment();
+                    Bundle bundle = new Bundle();
                     bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
                     bundle.putString(PostFragment.EXTRA_NAME, "popular");
                     bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
@@ -1499,7 +1508,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         @Override
         public int getItemCount() {
             if (mAccessToken == null) {
-                return 2;
+                return 3;
             }
             return tabCount + favoriteSubscribedSubreddits.size() + subscribedSubreddits.size();
         }

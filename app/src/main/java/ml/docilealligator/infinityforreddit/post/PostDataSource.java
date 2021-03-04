@@ -28,6 +28,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     public static final int TYPE_USER = 2;
     public static final int TYPE_SEARCH = 3;
     public static final int TYPE_MULTI_REDDIT = 4;
+    public static final int TYPE_ANONYMOUS_FRONT_PAGE = 5;
 
     public static final String USER_WHERE_SUBMITTED = "submitted";
     public static final String USER_WHERE_UPVOTED = "upvoted";
@@ -86,7 +87,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         this.accountName = accountName;
         this.sharedPreferences = sharedPreferences;
         this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
-        if (postType == TYPE_SUBREDDIT) {
+        if (postType == TYPE_SUBREDDIT || postType == TYPE_ANONYMOUS_FRONT_PAGE) {
             this.subredditOrUserName = path;
         } else {
             if (sortType != null) {
@@ -196,6 +197,8 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             case TYPE_MULTI_REDDIT:
                 loadMultiRedditPostsInitial(callback, null);
                 break;
+            case TYPE_ANONYMOUS_FRONT_PAGE:
+                break;
         }
     }
 
@@ -230,6 +233,8 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                 break;
             case TYPE_MULTI_REDDIT:
                 loadMultiRedditPostsAfter(params, callback, null);
+                break;
+            case TYPE_ANONYMOUS_FRONT_PAGE:
                 break;
         }
     }
@@ -892,6 +897,120 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                                         postLinkedHashSet.addAll(newPosts);
                                         if (currentPostsSize == postLinkedHashSet.size()) {
                                             loadMultiRedditPostsAfter(params, callback, lastItem);
+                                        } else {
+                                            List<Post> newPostsList = new ArrayList<>(postLinkedHashSet).subList(currentPostsSize, postLinkedHashSet.size());
+                                            callback.onResult(newPostsList, lastItem);
+                                        }
+                                        paginationNetworkStateLiveData.postValue(NetworkState.LOADED);
+                                    }
+                                }
+
+                                @Override
+                                public void onParsePostsListingFail() {
+                                    paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing data"));
+                                }
+                            });
+                } else {
+                    paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, response.message()));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                String errorMessage = t.getMessage();
+                paginationNetworkStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, errorMessage));
+            }
+        });
+    }
+
+    private void loadAnonymousFrontPagePostsInitial(@NonNull final LoadInitialCallback<String, Post> callback, String lastItem) {
+        RedditAPI api = retrofit.create(RedditAPI.class);
+
+        Call<String> getPost;
+        if (sortType.getTime() != null) {
+            getPost = api.getSubredditBestPosts(subredditOrUserName, sortType.getType().value, sortType.getTime().value, lastItem);
+        } else {
+            getPost = api.getSubredditBestPosts(subredditOrUserName, sortType.getType().value, lastItem);
+        }
+        getPost.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
+                if (response.isSuccessful()) {
+                    ParsePost.parsePosts(response.body(), -1, postFilter, null,
+                            new ParsePost.ParsePostsListingListener() {
+                                @Override
+                                public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
+                                    String nextPageKey;
+                                    if (lastItem == null || lastItem.equals("") || lastItem.equals("null")) {
+                                        nextPageKey = null;
+                                    } else {
+                                        nextPageKey = lastItem;
+                                    }
+
+                                    if (newPosts.size() != 0) {
+                                        postLinkedHashSet.addAll(newPosts);
+                                        callback.onResult(new ArrayList<>(newPosts), null, nextPageKey);
+                                        hasPostLiveData.postValue(true);
+                                    } else if (nextPageKey != null) {
+                                        loadAnonymousFrontPagePostsInitial(callback, nextPageKey);
+                                        return;
+                                    } else {
+                                        postLinkedHashSet.addAll(newPosts);
+                                        callback.onResult(new ArrayList<>(newPosts), null, nextPageKey);
+                                        hasPostLiveData.postValue(false);
+                                    }
+
+                                    initialLoadStateLiveData.postValue(NetworkState.LOADED);
+                                }
+
+                                @Override
+                                public void onParsePostsListingFail() {
+                                    initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED, "Error parsing posts"));
+                                }
+                            });
+                } else {
+                    initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED,
+                            "code: " + response + " message: " + response.message()));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                String errorMessage = t.getMessage();
+                initialLoadStateLiveData.postValue(new NetworkState(NetworkState.Status.FAILED,
+                        errorMessage + " " + call.request().url().toString()));
+            }
+        });
+    }
+
+    private void loadAnonymousFrontPagePostsAfter(@NonNull LoadParams<String> params, @NonNull final LoadCallback<String, Post> callback, String lastItem) {
+        String after = lastItem == null ? params.key : lastItem;
+
+        RedditAPI api = retrofit.create(RedditAPI.class);
+
+        Call<String> getPost;
+        if (sortType.getTime() != null) {
+            getPost = api.getSubredditBestPosts(subredditOrUserName, sortType.getType().value,
+                    sortType.getTime().value, after);
+        } else {
+            getPost = api.getSubredditBestPosts(subredditOrUserName, sortType.getType().value, after);
+        }
+
+        getPost.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
+                if (response.isSuccessful()) {
+                    ParsePost.parsePosts(response.body(), -1, postFilter, null,
+                            new ParsePost.ParsePostsListingListener() {
+                                @Override
+                                public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
+                                    if (newPosts.size() == 0 && lastItem != null && !lastItem.equals("") && !lastItem.equals("null")) {
+                                        loadAnonymousFrontPagePostsAfter(params, callback, lastItem);
+                                    } else {
+                                        int currentPostsSize = postLinkedHashSet.size();
+                                        postLinkedHashSet.addAll(newPosts);
+                                        if (currentPostsSize == postLinkedHashSet.size()) {
+                                            loadAnonymousFrontPagePostsAfter(params, callback, lastItem);
                                         } else {
                                             List<Post> newPostsList = new ArrayList<>(postLinkedHashSet).subList(currentPostsSize, postLinkedHashSet.size());
                                             callback.onResult(newPostsList, lastItem);
