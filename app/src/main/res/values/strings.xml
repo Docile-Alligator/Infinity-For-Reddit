@@ -541,6 +541,8 @@
     <string name="settings_hide_the_number_of_votes">Hide the Number of Votes</string>
     <string name="settings_hide_the_number_of_comments">Hide the Number of Comments</string>
     <string name="settings_show_avatar_on_the_right_in_the_navigation_drawer">Show Avatar on the Left in the Navigation Drawer</string>
+    <string name="settings_backup_settings_title">Backup Settings</string>
+    <string name="settings_restore_settings_title">Restore Settings</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -1036,5 +1038,9 @@
     <string name="vote">Vote</string>
 
     <string name="anonymous_front_page_no_subscriptions">Start by joining a subreddit!</string>
+
+    <string name="backup_settings_success">Successfully exported settings to the destination directory</string>
+    <string name="create_zip_in_destination_directory_failed">Could not create backup zip in the destination directory</string>
+    <string name="backup_some_settings_failed">Could not backup some settings but others were successfully exported to the destination directory</string>
 
 </resources>

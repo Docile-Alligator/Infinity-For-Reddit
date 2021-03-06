@@ -170,6 +170,9 @@ dependencies {
     // Crash screen
     implementation 'com.melegy.redscreenofdeath:red-screen-of-death:0.1.2'
 
+    implementation 'net.lingala.zip4j:zip4j:2.7.0'
+    implementation 'org.apache.commons:commons-io:1.3.2'
+
 
 /**** Builds and flavors ****/
     // debugImplementation because LeakCanary should only run in debug builds.

@@ -2,12 +2,15 @@ package ml.docilealligator.infinityforreddit.settings;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
@@ -25,6 +28,7 @@ import javax.inject.Named;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.asynctasks.BackupSettings;
 import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllPostLayouts;
 import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllReadPosts;
 import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllSortTypes;
@@ -34,11 +38,15 @@ import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllUsers;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
+import static android.app.Activity.RESULT_OK;
+import static android.content.Intent.ACTION_OPEN_DOCUMENT_TREE;
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
 
+    private static final int SELECT_BACKUP_SETTINGS_DIRECTORY_REQUEST_CODE = 1;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -69,6 +77,12 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
     @Named("nsfw_and_spoiler")
     SharedPreferences nsfwAndBlurringSharedPreferences;
     @Inject
+    @Named("bottom_app_bar")
+    SharedPreferences bottomAppBarSharedPreferences;
+    @Inject
+    @Named("post_history")
+    SharedPreferences postHistorySharedPreferences;
+    @Inject
     Executor executor;
     private Activity activity;
 
@@ -87,6 +101,8 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
         Preference deleteReadPostsPreference = findPreference(SharedPreferencesUtils.DELETE_READ_POSTS_IN_DATABASE);
         Preference deleteAllLegacySettingsPreference = findPreference(SharedPreferencesUtils.DELETE_ALL_LEGACY_SETTINGS);
         Preference resetAllSettingsPreference = findPreference(SharedPreferencesUtils.RESET_ALL_SETTINGS);
+        Preference backupSettingsPreference = findPreference(SharedPreferencesUtils.BACKUP_SETTINGS);
+        Preference restoreSettingsPreference = findPreference(SharedPreferencesUtils.RESTORE_SETTINGS);
 
         if (deleteSubredditsPreference != null) {
             deleteSubredditsPreference.setOnPreferenceClickListener(preference -> {
@@ -251,6 +267,67 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
                         .show();
                 return true;
             });
+        }
+
+        if (backupSettingsPreference != null) {
+            backupSettingsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    Intent intent = new Intent(ACTION_OPEN_DOCUMENT_TREE);
+                    intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                    startActivityForResult(intent, SELECT_BACKUP_SETTINGS_DIRECTORY_REQUEST_CODE);
+
+                    /*BackupSettings.backupSettings(activity, executor, new Handler(), activity.getContentResolver(), null,
+                            mSharedPreferences, lightThemeSharedPreferences, darkThemeSharedPreferences,
+                            amoledThemeSharedPreferences, mSortTypeSharedPreferences, mPostLayoutSharedPreferences,
+                            postFeedScrolledPositionSharedPreferences, mainActivityTabsSharedPreferences,
+                            nsfwAndBlurringSharedPreferences, bottomAppBarSharedPreferences, postHistorySharedPreferences,
+                            new BackupSettings.BackupSettingsListener() {
+                                @Override
+                                public void success() {
+
+                                }
+
+                                @Override
+                                public void failed() {
+
+                                }
+                            });*/
+                    return true;
+                }
+            });
+        }
+
+        if (restoreSettingsPreference != null) {
+            restoreSettingsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    return true;
+                }
+            });
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == SELECT_BACKUP_SETTINGS_DIRECTORY_REQUEST_CODE && resultCode == RESULT_OK) {
+            Uri uri = data.getData();
+            BackupSettings.backupSettings(activity, executor, new Handler(), activity.getContentResolver(), uri,
+                    mSharedPreferences, lightThemeSharedPreferences, darkThemeSharedPreferences,
+                    amoledThemeSharedPreferences, mSortTypeSharedPreferences, mPostLayoutSharedPreferences,
+                    postFeedScrolledPositionSharedPreferences, mainActivityTabsSharedPreferences,
+                    nsfwAndBlurringSharedPreferences, bottomAppBarSharedPreferences, postHistorySharedPreferences,
+                    new BackupSettings.BackupSettingsListener() {
+                        @Override
+                        public void success() {
+                            Toast.makeText(activity, R.string.backup_settings_success, Toast.LENGTH_LONG).show();
+                        }
+
+                        @Override
+                        public void failed(String errorMessage) {
+                            Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show();
+                        }
+                    });
         }
     }
 
