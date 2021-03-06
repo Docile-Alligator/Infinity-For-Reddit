@@ -1042,5 +1042,9 @@
     <string name="backup_settings_success">Successfully exported settings to the destination directory</string>
     <string name="create_zip_in_destination_directory_failed">Could not create backup zip in the destination directory</string>
     <string name="backup_some_settings_failed">Could not backup some settings but others were successfully exported to the destination directory</string>
+    <string name="restore_settings_success">Successfully restored settings. Restart the app to see the changes.</string>
+    <string name="restore_settings_partially_failed">Some settings may not be restored successfully. Restart the app to see the changes.</string>
+    <string name="restore_settings_failed_file_corrupted">Cannot restore settings. The file may be corrupted.</string>
+    <string name="restore_settings_failed_cannot_get_file">Cannot access the file</string>
 
 </resources>

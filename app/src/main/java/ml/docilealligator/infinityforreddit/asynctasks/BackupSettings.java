@@ -95,17 +95,18 @@ public class BackupSettings {
                                                        String fileName) {
 
         boolean result = false;
-        ObjectOutputStream output = null;
-        String backupDir = context.getExternalCacheDir() + "/Backup/" + BuildConfig.VERSION_NAME;
-        if (!new File(backupDir).exists()) {
-            new File(backupDir).mkdirs();
-        } else {
-            File backupDirFile = new File(backupDir);
-            backupDirFile.delete();
-            backupDirFile.mkdirs();
-        }
 
+        ObjectOutputStream output = null;
         try {
+            String backupDir = context.getExternalCacheDir() + "/Backup/" + BuildConfig.VERSION_NAME;
+            if (!new File(backupDir).exists()) {
+                new File(backupDir).mkdirs();
+            } else {
+                File backupDirFile = new File(backupDir);
+                FileUtils.deleteDirectory(backupDirFile);
+                backupDirFile.mkdirs();
+            }
+
             output = new ObjectOutputStream(new FileOutputStream(new File(backupDir + "/" + fileName + ".txt")));
             output.writeObject(sharedPreferences.getAll());
 

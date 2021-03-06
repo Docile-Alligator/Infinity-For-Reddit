@@ -35,6 +35,7 @@ import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllSortTypes;
 import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllSubreddits;
 import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllThemes;
 import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllUsers;
+import ml.docilealligator.infinityforreddit.asynctasks.RestoreSettings;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
@@ -47,6 +48,7 @@ import static android.content.Intent.ACTION_OPEN_DOCUMENT_TREE;
 public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
 
     private static final int SELECT_BACKUP_SETTINGS_DIRECTORY_REQUEST_CODE = 1;
+    private static final int SELECT_RESTORE_SETTINGS_DIRECTORY_REQUEST_CODE = 2;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -276,23 +278,6 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
                     Intent intent = new Intent(ACTION_OPEN_DOCUMENT_TREE);
                     intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                     startActivityForResult(intent, SELECT_BACKUP_SETTINGS_DIRECTORY_REQUEST_CODE);
-
-                    /*BackupSettings.backupSettings(activity, executor, new Handler(), activity.getContentResolver(), null,
-                            mSharedPreferences, lightThemeSharedPreferences, darkThemeSharedPreferences,
-                            amoledThemeSharedPreferences, mSortTypeSharedPreferences, mPostLayoutSharedPreferences,
-                            postFeedScrolledPositionSharedPreferences, mainActivityTabsSharedPreferences,
-                            nsfwAndBlurringSharedPreferences, bottomAppBarSharedPreferences, postHistorySharedPreferences,
-                            new BackupSettings.BackupSettingsListener() {
-                                @Override
-                                public void success() {
-
-                                }
-
-                                @Override
-                                public void failed() {
-
-                                }
-                            });*/
                     return true;
                 }
             });
@@ -302,6 +287,10 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
             restoreSettingsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
                 @Override
                 public boolean onPreferenceClick(Preference preference) {
+                    Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+                    chooseFile.setType("application/zip");
+                    chooseFile = Intent.createChooser(chooseFile, "Choose a file");
+                    startActivityForResult(chooseFile, SELECT_RESTORE_SETTINGS_DIRECTORY_REQUEST_CODE);
                     return true;
                 }
             });
@@ -310,24 +299,44 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (requestCode == SELECT_BACKUP_SETTINGS_DIRECTORY_REQUEST_CODE && resultCode == RESULT_OK) {
-            Uri uri = data.getData();
-            BackupSettings.backupSettings(activity, executor, new Handler(), activity.getContentResolver(), uri,
-                    mSharedPreferences, lightThemeSharedPreferences, darkThemeSharedPreferences,
-                    amoledThemeSharedPreferences, mSortTypeSharedPreferences, mPostLayoutSharedPreferences,
-                    postFeedScrolledPositionSharedPreferences, mainActivityTabsSharedPreferences,
-                    nsfwAndBlurringSharedPreferences, bottomAppBarSharedPreferences, postHistorySharedPreferences,
-                    new BackupSettings.BackupSettingsListener() {
-                        @Override
-                        public void success() {
-                            Toast.makeText(activity, R.string.backup_settings_success, Toast.LENGTH_LONG).show();
-                        }
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SELECT_BACKUP_SETTINGS_DIRECTORY_REQUEST_CODE) {
+                Uri uri = data.getData();
+                BackupSettings.backupSettings(activity, executor, new Handler(), activity.getContentResolver(), uri,
+                        mSharedPreferences, lightThemeSharedPreferences, darkThemeSharedPreferences,
+                        amoledThemeSharedPreferences, mSortTypeSharedPreferences, mPostLayoutSharedPreferences,
+                        postFeedScrolledPositionSharedPreferences, mainActivityTabsSharedPreferences,
+                        nsfwAndBlurringSharedPreferences, bottomAppBarSharedPreferences, postHistorySharedPreferences,
+                        new BackupSettings.BackupSettingsListener() {
+                            @Override
+                            public void success() {
+                                Toast.makeText(activity, R.string.backup_settings_success, Toast.LENGTH_LONG).show();
+                            }
 
-                        @Override
-                        public void failed(String errorMessage) {
-                            Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show();
-                        }
-                    });
+                            @Override
+                            public void failed(String errorMessage) {
+                                Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show();
+                            }
+                        });
+            } else if (requestCode == SELECT_RESTORE_SETTINGS_DIRECTORY_REQUEST_CODE) {
+                Uri uri = data.getData();
+                RestoreSettings.restoreSettings(activity, executor, new Handler(), activity.getContentResolver(), uri,
+                        mSharedPreferences, lightThemeSharedPreferences, darkThemeSharedPreferences,
+                        amoledThemeSharedPreferences, mSortTypeSharedPreferences, mPostLayoutSharedPreferences,
+                        postFeedScrolledPositionSharedPreferences, mainActivityTabsSharedPreferences,
+                        nsfwAndBlurringSharedPreferences, bottomAppBarSharedPreferences, postHistorySharedPreferences,
+                        new RestoreSettings.RestoreSettingsListener() {
+                            @Override
+                            public void success() {
+                                Toast.makeText(activity, R.string.restore_settings_success, Toast.LENGTH_LONG).show();
+                            }
+
+                            @Override
+                            public void failed(String errorMessage) {
+                                Toast.makeText(activity, errorMessage, Toast.LENGTH_LONG).show();
+                            }
+                        });
+            }
         }
     }
 
