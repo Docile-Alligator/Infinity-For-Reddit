@@ -51,4 +51,9 @@
         app:title="@string/settings_credits_ufo_capturing_animation_title"
         android:summary="https://lottiefiles.com/33858-ufo-capturing-animation" />
 
+    <Preference
+        app:key="love_animation"
+        app:title="@string/settings_credits_love_animation_title"
+        android:summary="https://lottiefiles.com/52103-love" />
+
 </PreferenceScreen>

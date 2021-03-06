@@ -43,6 +43,7 @@ import ml.docilealligator.infinityforreddit.activities.SubmitCrosspostActivity;
 import ml.docilealligator.infinityforreddit.activities.SubredditMultiselectionActivity;
 import ml.docilealligator.infinityforreddit.activities.SubredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingActivity;
+import ml.docilealligator.infinityforreddit.activities.SuicidePreventionActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewImageOrGifActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewImgurMediaActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewMultiRedditDetailActivity;
@@ -251,4 +252,6 @@ public interface AppComponent {
     void inject(ViewRedditGalleryImageOrGifFragment viewRedditGalleryImageOrGifFragment);
 
     void inject(ViewPostDetailFragment viewPostDetailFragment);
+
+    void inject(SuicidePreventionActivity suicidePreventionActivity);
 }

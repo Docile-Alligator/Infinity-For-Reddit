@@ -36,6 +36,7 @@ public class CreditsPreferenceFragment extends PreferenceFragmentCompat {
         Preference materialIconsPreference = findPreference(SharedPreferencesUtils.MATERIAL_ICONS_KEY);
         Preference nationalFlagsPreference = findPreference(SharedPreferencesUtils.NATIONAL_FLAGS);
         Preference ufoAndCowPreference = findPreference(SharedPreferencesUtils.UFO_CAPTURING_ANIMATION);
+        Preference loveAnimationPreference = findPreference(SharedPreferencesUtils.LOVE_ANIMATION);
 
         if (iconForegroundPreference != null) {
             iconForegroundPreference.setOnPreferenceClickListener(preference -> {
@@ -122,6 +123,15 @@ public class CreditsPreferenceFragment extends PreferenceFragmentCompat {
             ufoAndCowPreference.setOnPreferenceClickListener(preference -> {
                 Intent intent = new Intent(activity, LinkResolverActivity.class);
                 intent.setData(Uri.parse("https://lottiefiles.com/33858-ufo-capturing-animation"));
+                startActivity(intent);
+                return true;
+            });
+        }
+
+        if (loveAnimationPreference != null) {
+            loveAnimationPreference.setOnPreferenceClickListener(preference -> {
+                Intent intent = new Intent(activity, LinkResolverActivity.class);
+                intent.setData(Uri.parse("https://lottiefiles.com/52103-love"));
                 startActivity(intent);
                 return true;
             });

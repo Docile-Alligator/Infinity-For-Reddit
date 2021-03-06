@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/linear_layout_suicide_prevention_activity"
+    tools:context=".activities.SuicidePreventionActivity">
+
+    <com.airbnb.lottie.LottieAnimationView
+        android:id="@+id/lottie_animation_view"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal"
+        app:lottie_autoPlay="true"
+        app:lottie_loop="true"
+        app:lottie_rawRes="@raw/love" />
+
+    <TextView
+        android:id="@+id/quote_text_view_suicide_prevention_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:padding="16dp"
+        android:text="@string/suicide_prevention_quote"
+        android:fontFamily="?attr/font_family"
+        android:textSize="?attr/font_20" />
+
+    <LinearLayout
+        android:id="@+id/linear_layout_check_box_wrapper_suicide_prevention_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/do_not_show_this_again_check_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/do_not_show_this_again_text_view"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/do_not_show_this_again"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="?attr/font_family"
+            android:textSize="?attr/font_default" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/continue_button_suicide_prevention_activity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:text="@string/continue_suicide_prevention_activity" />
+
+    </LinearLayout>
+
+</LinearLayout>

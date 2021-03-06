@@ -6,18 +6,16 @@ import android.os.Bundle;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.airbnb.lottie.LottieAnimationView;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.RandomBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.post.FetchPost;
-import ml.docilealligator.infinityforreddit.R;
 import retrofit2.Retrofit;
 
 public class FetchRandomSubredditOrPostActivity extends BaseActivity {
@@ -26,8 +24,6 @@ public class FetchRandomSubredditOrPostActivity extends BaseActivity {
 
     @BindView(R.id.relative_layout_fetch_random_subreddit_or_post_activity)
     RelativeLayout relativeLayout;
-    @BindView(R.id.lottie_animation_view_fetch_random_subreddit_or_post_activity)
-    LottieAnimationView lottieAnimationView;
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
