@@ -173,6 +173,7 @@ public class SharedPreferencesUtils {
     public static final String RESTORE_SETTINGS = "restore_settings";
     public static final String SHOW_SUICIDE_PREVENTION_ACTIVITY = "show_suicide_prevention_activity";
     public static final String LOVE_ANIMATION = "love_animation";
+    public static final String SWIPE_BETWEEN_POSTS = "swipe_between_posts";
 
     public static final String DEFAULT_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit_preferences";
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";

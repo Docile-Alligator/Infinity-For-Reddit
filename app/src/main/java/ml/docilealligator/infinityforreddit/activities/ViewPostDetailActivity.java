@@ -30,6 +30,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.livefront.bridge.Bridge;
+import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrInterface;
 
 import org.greenrobot.eventbus.EventBus;
@@ -127,10 +128,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
         applyCustomTheme();
 
-        /*if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSlidrInterface = Slidr.attach(this);
-        }*/
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
 
@@ -157,8 +154,12 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             }
         }
 
+        boolean swipeBetweenPosts = mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_BETWEEN_POSTS, false);
+        if (!swipeBetweenPosts && mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
+            mSlidrInterface = Slidr.attach(this);
+        }
         postFragmentId = getIntent().getLongExtra(EXTRA_POST_FRAGMENT_ID, -1);
-        if (posts == null && postFragmentId > 0) {
+        if (swipeBetweenPosts && posts == null && postFragmentId > 0) {
             EventBus.getDefault().post(new NeedForPostListFromPostFragmentEvent(postFragmentId));
         }
 

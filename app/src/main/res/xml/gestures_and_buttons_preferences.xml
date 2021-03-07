@@ -44,6 +44,11 @@
         app:key="pull_to_refresh"
         app:title="@string/settings_pull_to_refresh_title" />
 
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="swipe_between_posts"
+        app:title="@string/settings_swipe_between_posts_title" />
+
     <Preference
         app:title="@string/settings_swipe_action_title"
         app:fragment="ml.docilealligator.infinityforreddit.settings.SwipeActionPreferenceFragment" />

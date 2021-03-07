@@ -544,6 +544,7 @@
     <string name="settings_backup_settings_title">Backup Settings</string>
     <string name="settings_restore_settings_title">Restore Settings</string>
     <string name="settings_credits_love_animation_title">Love Animation</string>
+    <string name="settings_swipe_between_posts_title">Swipe Between Posts</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
