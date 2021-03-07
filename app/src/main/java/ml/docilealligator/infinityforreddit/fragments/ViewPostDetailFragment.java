@@ -717,7 +717,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             children.clear();
         }
         this.sortType = sortType.getType().value;
-        if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false)) {
+        if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false)
+                && mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_SORT_TYPE, true)) {
             mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, sortType.getType().name()).apply();
         }
         fetchCommentsRespectRecommendedSort(false, false, sortType.getType().value);

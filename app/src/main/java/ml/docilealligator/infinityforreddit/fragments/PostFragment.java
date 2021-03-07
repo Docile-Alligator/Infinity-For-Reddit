@@ -1133,39 +1133,41 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     public void changeSortType(SortType sortType) {
         if (mPostViewModel != null) {
-            switch (postType) {
-                case PostDataSource.TYPE_FRONT_PAGE:
-                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_BEST_POST, sortType.getType().name()).apply();
-                    if (sortType.getTime() != null) {
-                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_BEST_POST, sortType.getTime().name()).apply();
-                    }
-                    break;
-                case PostDataSource.TYPE_SUBREDDIT:
-                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST_BASE + subredditName, sortType.getType().name()).apply();
-                    if (sortType.getTime() != null) {
-                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST_BASE + subredditName, sortType.getTime().name()).apply();
-                    }
-                    break;
-                case PostDataSource.TYPE_USER:
-                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_USER_POST_BASE + username, sortType.getType().name()).apply();
-                    if (sortType.getTime() != null) {
-                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_USER_POST_BASE + username, sortType.getTime().name()).apply();
-                    }
-                    break;
-                case PostDataSource.TYPE_SEARCH:
-                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SEARCH_POST, sortType.getType().name()).apply();
-                    if (sortType.getTime() != null) {
-                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SEARCH_POST, sortType.getTime().name()).apply();
-                    }
-                    break;
-                case PostDataSource.TYPE_MULTI_REDDIT:
-                    mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE + multiRedditPath,
-                            sortType.getType().name()).apply();
-                    if (sortType.getTime() != null) {
-                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_MULTI_REDDIT_POST_BASE + multiRedditPath,
-                                sortType.getTime().name()).apply();
-                    }
-                    break;
+            if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_SORT_TYPE, true)) {
+                switch (postType) {
+                    case PostDataSource.TYPE_FRONT_PAGE:
+                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_BEST_POST, sortType.getType().name()).apply();
+                        if (sortType.getTime() != null) {
+                            mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_BEST_POST, sortType.getTime().name()).apply();
+                        }
+                        break;
+                    case PostDataSource.TYPE_SUBREDDIT:
+                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST_BASE + subredditName, sortType.getType().name()).apply();
+                        if (sortType.getTime() != null) {
+                            mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST_BASE + subredditName, sortType.getTime().name()).apply();
+                        }
+                        break;
+                    case PostDataSource.TYPE_USER:
+                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_USER_POST_BASE + username, sortType.getType().name()).apply();
+                        if (sortType.getTime() != null) {
+                            mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_USER_POST_BASE + username, sortType.getTime().name()).apply();
+                        }
+                        break;
+                    case PostDataSource.TYPE_SEARCH:
+                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SEARCH_POST, sortType.getType().name()).apply();
+                        if (sortType.getTime() != null) {
+                            mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SEARCH_POST, sortType.getTime().name()).apply();
+                        }
+                        break;
+                    case PostDataSource.TYPE_MULTI_REDDIT:
+                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE + multiRedditPath,
+                                sortType.getType().name()).apply();
+                        if (sortType.getTime() != null) {
+                            mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_MULTI_REDDIT_POST_BASE + multiRedditPath,
+                                    sortType.getTime().name()).apply();
+                        }
+                        break;
+                }
             }
             if (mFetchPostInfoLinearLayout.getVisibility() != View.GONE) {
                 mFetchPostInfoLinearLayout.setVisibility(View.GONE);
