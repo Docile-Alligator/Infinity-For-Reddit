@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -21,6 +22,8 @@ import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class SuicidePreventionActivity extends BaseActivity {
 
+    static final String EXTRA_QUERY = "EQ";
+    static final String EXTRA_RETURN_QUERY = "ERQ";
     @BindView(R.id.linear_layout_suicide_prevention_activity)
     LinearLayout linearLayout;
     @BindView(R.id.quote_text_view_suicide_prevention_activity)
@@ -57,6 +60,9 @@ public class SuicidePreventionActivity extends BaseActivity {
             if (doNotShowThisAgainCheckBox.isChecked()) {
                 mSharedPreferences.edit().putBoolean(SharedPreferencesUtils.SHOW_SUICIDE_PREVENTION_ACTIVITY, false).apply();
             }
+            Intent returnIntent = new Intent();
+            returnIntent.putExtra(EXTRA_RETURN_QUERY, getIntent().getStringExtra(EXTRA_QUERY));
+            setResult(RESULT_OK, returnIntent);
             finish();
         });
     }

@@ -1049,7 +1049,7 @@
     <string name="restore_settings_failed_cannot_get_file">Cannot access the file</string>
 
     <string name="suicide_prevention_quote">If you are looking for a sign not to kill yourself, this is it.\u2764</string>
-    <string name="do_not_show_this_again">Do not show this again</string>
+    <string name="do_not_show_this_again">Don\'t show this again</string>
     <string name="continue_suicide_prevention_activity">Continue</string>
 
 </resources>

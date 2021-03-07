@@ -58,6 +58,7 @@ public class SearchActivity extends BaseActivity {
     static final String EXTRA_RETURN_USER_NAME = "ERUN";
     static final String EXTRA_RETURN_USER_ICON_URL = "ERUIU";
     static final String EXTRA_IS_MULTI_SELECTION = "EIMS";
+    static final int SUICIDE_PREVENTION_ACTIVITY_REQUEST_CODE = 101;
 
     private static final String SUBREDDIT_NAME_STATE = "SNS";
     private static final String SUBREDDIT_IS_USER_STATE = "SIUS";
@@ -251,31 +252,36 @@ public class SearchActivity extends BaseActivity {
     private void search(String query) {
         if (query.equalsIgnoreCase("suicide") && mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_SUICIDE_PREVENTION_ACTIVITY, true)) {
             Intent intent = new Intent(this, SuicidePreventionActivity.class);
-            startActivity(intent);
+            intent.putExtra(SuicidePreventionActivity.EXTRA_QUERY, query);
+            startActivityForResult(intent, SUICIDE_PREVENTION_ACTIVITY_REQUEST_CODE);
         } else {
-            if (searchOnlySubreddits) {
-                Intent intent = new Intent(SearchActivity.this, SearchSubredditsResultActivity.class);
-                intent.putExtra(SearchSubredditsResultActivity.EXTRA_QUERY, query);
-                intent.putExtra(SearchSubredditsResultActivity.EXTRA_IS_MULTI_SELECTION, getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false));
-                startActivityForResult(intent, SUBREDDIT_SEARCH_REQUEST_CODE);
-            } else if (searchOnlyUsers) {
-                Intent intent = new Intent(this, SearchUsersResultActivity.class);
-                intent.putExtra(SearchUsersResultActivity.EXTRA_QUERY, query);
-                intent.putExtra(SearchUsersResultActivity.EXTRA_IS_MULTI_SELECTION, getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false));
-                startActivityForResult(intent, USER_SEARCH_REQUEST_CODE);
-            } else {
-                Intent intent = new Intent(SearchActivity.this, SearchResultActivity.class);
-                intent.putExtra(SearchResultActivity.EXTRA_QUERY, query);
-                if (subredditName != null) {
-                    if (subredditIsUser) {
-                        intent.putExtra(SearchResultActivity.EXTRA_SUBREDDIT_NAME, "u_" + subredditName);
-                    } else {
-                        intent.putExtra(SearchResultActivity.EXTRA_SUBREDDIT_NAME, subredditName);
-                    }
+            openSearchResult(query);
+        }
+    }
+
+    private void openSearchResult(String query) {
+        if (searchOnlySubreddits) {
+            Intent intent = new Intent(SearchActivity.this, SearchSubredditsResultActivity.class);
+            intent.putExtra(SearchSubredditsResultActivity.EXTRA_QUERY, query);
+            intent.putExtra(SearchSubredditsResultActivity.EXTRA_IS_MULTI_SELECTION, getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false));
+            startActivityForResult(intent, SUBREDDIT_SEARCH_REQUEST_CODE);
+        } else if (searchOnlyUsers) {
+            Intent intent = new Intent(this, SearchUsersResultActivity.class);
+            intent.putExtra(SearchUsersResultActivity.EXTRA_QUERY, query);
+            intent.putExtra(SearchUsersResultActivity.EXTRA_IS_MULTI_SELECTION, getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false));
+            startActivityForResult(intent, USER_SEARCH_REQUEST_CODE);
+        } else {
+            Intent intent = new Intent(SearchActivity.this, SearchResultActivity.class);
+            intent.putExtra(SearchResultActivity.EXTRA_QUERY, query);
+            if (subredditName != null) {
+                if (subredditIsUser) {
+                    intent.putExtra(SearchResultActivity.EXTRA_SUBREDDIT_NAME, "u_" + subredditName);
+                } else {
+                    intent.putExtra(SearchResultActivity.EXTRA_SUBREDDIT_NAME, subredditName);
                 }
-                startActivity(intent);
-                finish();
             }
+            startActivity(intent);
+            finish();
         }
     }
 
@@ -373,6 +379,8 @@ public class SearchActivity extends BaseActivity {
                 }
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
+            } else if (requestCode == SUICIDE_PREVENTION_ACTIVITY_REQUEST_CODE) {
+                openSearchResult(data.getStringExtra(SuicidePreventionActivity.EXTRA_RETURN_QUERY));
             }
         }
 
