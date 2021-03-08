@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Preference
+        app:icon="@drawable/ic_info_preference_24dp"
+        app:summary="@string/restart_app_see_changes"
+        app:enabled="false" />
+
+    <PreferenceCategory
+        app:title="@string/post_layout_card" />
+
     <ListPreference
-        app:defaultValue="2"
+        app:defaultValue="1"
         app:entries="@array/settings_number_of_columns_in_post_feed"
         app:entryValues="@array/settings_number_of_columns_in_post_feed"
         app:key="number_of_columns_in_post_feed_portrait"
@@ -13,6 +21,63 @@
         app:entries="@array/settings_number_of_columns_in_post_feed"
         app:entryValues="@array/settings_number_of_columns_in_post_feed"
         app:key="number_of_columns_in_post_feed_landscape"
+        app:title="@string/settings_number_of_columns_in_post_feed_landscape_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <PreferenceCategory
+        app:title="@string/post_layout_card_2" />
+
+    <ListPreference
+        app:defaultValue="1"
+        app:entries="@array/settings_number_of_columns_in_post_feed"
+        app:entryValues="@array/settings_number_of_columns_in_post_feed"
+        app:key="number_of_columns_in_post_feed_portrait_card_layout_2"
+        app:title="@string/settings_number_of_columns_in_post_feed_portrait_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        app:defaultValue="2"
+        app:entries="@array/settings_number_of_columns_in_post_feed"
+        app:entryValues="@array/settings_number_of_columns_in_post_feed"
+        app:key="number_of_columns_in_post_feed_landscape_card_layout_2"
+        app:title="@string/settings_number_of_columns_in_post_feed_landscape_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <PreferenceCategory
+        app:title="@string/post_layout_compact" />
+
+    <ListPreference
+        app:defaultValue="1"
+        app:entries="@array/settings_number_of_columns_in_post_feed"
+        app:entryValues="@array/settings_number_of_columns_in_post_feed"
+        app:key="number_of_columns_in_post_feed_portrait_compact_layout"
+        app:title="@string/settings_number_of_columns_in_post_feed_portrait_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        app:defaultValue="2"
+        app:entries="@array/settings_number_of_columns_in_post_feed"
+        app:entryValues="@array/settings_number_of_columns_in_post_feed"
+        app:key="number_of_columns_in_post_feed_landscape_compact_layout"
+        app:title="@string/settings_number_of_columns_in_post_feed_landscape_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <PreferenceCategory
+        app:title="@string/post_layout_gallery" />
+
+    <ListPreference
+        app:defaultValue="2"
+        app:entries="@array/settings_number_of_columns_in_post_feed"
+        app:entryValues="@array/settings_number_of_columns_in_post_feed"
+        app:key="number_of_columns_in_post_feed_portrait_gallery_layout"
+        app:title="@string/settings_number_of_columns_in_post_feed_portrait_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        app:defaultValue="2"
+        app:entries="@array/settings_number_of_columns_in_post_feed"
+        app:entryValues="@array/settings_number_of_columns_in_post_feed"
+        app:key="number_of_columns_in_post_feed_landscape_gallery_layout"
         app:title="@string/settings_number_of_columns_in_post_feed_landscape_title"
         app:useSimpleSummaryProvider="true" />
 </PreferenceScreen>

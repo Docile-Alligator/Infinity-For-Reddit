@@ -27,6 +27,25 @@
         app:useSimpleSummaryProvider="true" />
 
     <PreferenceCategory
+        android:title="@string/post_layout_card_2" />
+
+    <ListPreference
+        app:defaultValue="1"
+        app:entries="@array/settings_number_of_columns_in_post_feed"
+        app:entryValues="@array/settings_number_of_columns_in_post_feed"
+        app:key="number_of_columns_in_post_feed_portrait_card_layout_2"
+        app:title="@string/settings_number_of_columns_in_post_feed_portrait_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <ListPreference
+        app:defaultValue="2"
+        app:entries="@array/settings_number_of_columns_in_post_feed"
+        app:entryValues="@array/settings_number_of_columns_in_post_feed"
+        app:key="number_of_columns_in_post_feed_landscape_card_layout_2"
+        app:title="@string/settings_number_of_columns_in_post_feed_landscape_title"
+        app:useSimpleSummaryProvider="true" />
+
+    <PreferenceCategory
         android:title="@string/post_layout_compact" />
 
     <ListPreference

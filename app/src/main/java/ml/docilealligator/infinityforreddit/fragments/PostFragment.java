@@ -1018,15 +1018,22 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private int getNColumns(Resources resources) {
         if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             switch (postLayout) {
+                case SharedPreferencesUtils.POST_LAYOUT_CARD_2:
+                    return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT_CARD_LAYOUT_2, "1"));
                 case SharedPreferencesUtils.POST_LAYOUT_COMPACT:
                     return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT_COMPACT_LAYOUT, "1"));
                 case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
                     return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT_GALLERY_LAYOUT, "2"));
                 default:
+                    if (getResources().getBoolean(R.bool.isTablet)) {
+                        return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT, "2"));
+                    }
                     return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT, "1"));
             }
         } else {
             switch (postLayout) {
+                case SharedPreferencesUtils.POST_LAYOUT_CARD_2:
+                    return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE_CARD_LAYOUT_2, "2"));
                 case SharedPreferencesUtils.POST_LAYOUT_COMPACT:
                     return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE_COMPACT_LAYOUT, "2"));
                 case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
