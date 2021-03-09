@@ -11,6 +11,8 @@ This is a Reddit client on Android written in Java. It does not have any ads and
 ## Donation
 Patreon: https://www.patreon.com/docile_alligator
 
+Bitcoin: bc1qxtkd5ap9na7uy8nr9qpt6jny6tdwaj4v43ddle
+
 ## Translation
 POEditor: https://poeditor.com/join/project?hash=b2IRyfaJv6
 
