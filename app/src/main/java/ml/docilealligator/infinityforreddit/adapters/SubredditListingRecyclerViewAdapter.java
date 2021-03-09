@@ -155,21 +155,38 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
                                 public void isNotSubscribed() {
                                     ((DataViewHolder) holder).subscribeButton.setVisibility(View.VISIBLE);
                                     ((DataViewHolder) holder).subscribeButton.setOnClickListener(view -> {
-                                        SubredditSubscription.subscribeToSubreddit(executor, new Handler(),
-                                                oauthRetrofit, retrofit, accessToken, subredditData.getName(),
-                                                accountName, redditDataRoomDatabase,
-                                                new SubredditSubscription.SubredditSubscriptionListener() {
-                                                    @Override
-                                                    public void onSubredditSubscriptionSuccess() {
-                                                        ((DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
-                                                        Toast.makeText(context, R.string.subscribed, Toast.LENGTH_SHORT).show();
-                                                    }
+                                        if (accessToken != null) {
+                                            SubredditSubscription.subscribeToSubreddit(executor, new Handler(),
+                                                    oauthRetrofit, retrofit, accessToken, subredditData.getName(),
+                                                    accountName, redditDataRoomDatabase,
+                                                    new SubredditSubscription.SubredditSubscriptionListener() {
+                                                        @Override
+                                                        public void onSubredditSubscriptionSuccess() {
+                                                            ((DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
+                                                            Toast.makeText(context, R.string.subscribed, Toast.LENGTH_SHORT).show();
+                                                        }
 
-                                                    @Override
-                                                    public void onSubredditSubscriptionFail() {
-                                                        Toast.makeText(context, R.string.subscribe_failed, Toast.LENGTH_SHORT).show();
-                                                    }
-                                                });
+                                                        @Override
+                                                        public void onSubredditSubscriptionFail() {
+                                                            Toast.makeText(context, R.string.subscribe_failed, Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                        } else {
+                                            SubredditSubscription.anonymousSubscribeToSubreddit(executor, new Handler(),
+                                                    retrofit, redditDataRoomDatabase, subredditData.getName(),
+                                                    new SubredditSubscription.SubredditSubscriptionListener() {
+                                                        @Override
+                                                        public void onSubredditSubscriptionSuccess() {
+                                                            ((DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
+                                                            Toast.makeText(context, R.string.subscribed, Toast.LENGTH_SHORT).show();
+                                                        }
+
+                                                        @Override
+                                                        public void onSubredditSubscriptionFail() {
+                                                            Toast.makeText(context, R.string.subscribe_failed, Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                        }
                                     });
                                 }
                             });

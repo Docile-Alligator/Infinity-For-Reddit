@@ -16,6 +16,9 @@ public interface AccountDao {
     @Query("SELECT EXISTS (SELECT 1 FROM accounts WHERE username = '-')")
     boolean isAnonymousAccountInserted();
 
+    @Query("INSERT INTO accounts(username, karma, is_current_user) VALUES('-', 0, 0)")
+    void insertAnonymousAccount();
+
     @Query("SELECT * FROM accounts WHERE username != '-'")
     List<Account> getAllAccounts();
 
