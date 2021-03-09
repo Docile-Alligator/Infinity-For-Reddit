@@ -13,6 +13,9 @@ public interface AccountDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Account account);
 
+    @Query("SELECT EXISTS (SELECT 1 FROM accounts WHERE username = '-')")
+    boolean isAnonymousAccountInserted();
+
     @Query("SELECT * FROM accounts WHERE username != '-'")
     List<Account> getAllAccounts();
 

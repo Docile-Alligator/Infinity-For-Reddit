@@ -9,6 +9,7 @@ import java.util.Map;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -127,6 +128,11 @@ public class SubredditSubscription {
         executor.execute(() -> {
             SubscribedSubredditData subscribedSubredditData = new SubscribedSubredditData(subredditData.getId(), subredditData.getName(),
                     subredditData.getIconUrl(), accountName, false);
+            if (accountName.equals("-")) {
+                if (!redditDataRoomDatabase.accountDao().isAnonymousAccountInserted()) {
+                    redditDataRoomDatabase.accountDao().insert(new Account("-", null, null, null, null, null, 0, false));
+                }
+            }
             redditDataRoomDatabase.subscribedSubredditDao().insert(subscribedSubredditData);
             handler.post(subredditSubscriptionListener::onSubredditSubscriptionSuccess);
         });
@@ -137,6 +143,11 @@ public class SubredditSubscription {
                                            String subredditName, String accountName,
                                            SubredditSubscriptionListener subredditSubscriptionListener) {
         executor.execute(() -> {
+            if (accountName.equals("-")) {
+                if (!redditDataRoomDatabase.accountDao().isAnonymousAccountInserted()) {
+                    redditDataRoomDatabase.accountDao().insert(new Account("-", null, null, null, null, null, 0, false));
+                }
+            }
             redditDataRoomDatabase.subscribedSubredditDao().deleteSubscribedSubreddit(subredditName, accountName);
             handler.post(subredditSubscriptionListener::onSubredditSubscriptionSuccess);
         });
