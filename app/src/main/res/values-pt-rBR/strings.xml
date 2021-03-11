@@ -213,7 +213,6 @@ Toque para tentar novamente."</string>
     <string name="sort_time_month">"Mês"</string>
     <string name="sort_time_year">"Ano"</string>
     <string name="sort_time_all_time">"Desde o começo"</string>
-    <string name="no_browser_found">"Nenhum navegador encontrado"</string>
     <string name="no_activity_found_for_share">"Não há nenhum app que possa realizar a ação compartilhada"</string>
     <string name="archived_post_vote_unavailable">"Post arquivado. Não é possível votar."</string>
     <string name="archived_post_comment_unavailable">"Post arquivado. Não é possível comentar."</string>

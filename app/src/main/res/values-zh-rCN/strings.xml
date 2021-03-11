@@ -218,7 +218,6 @@
     <string name="sort_time_month">"月"</string>
     <string name="sort_time_year">"年"</string>
     <string name="sort_time_all_time">"所有时间"</string>
-    <string name="no_browser_found">"未找到浏览器"</string>
     <string name="no_activity_found_for_share">"找不到共享的app"</string>
     <string name="archived_post_vote_unavailable">"帖子已存档，无法投票"</string>
     <string name="archived_post_comment_unavailable">"帖子已存档，无法评论"</string>

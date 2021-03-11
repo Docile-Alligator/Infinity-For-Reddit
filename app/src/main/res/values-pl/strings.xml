@@ -210,7 +210,6 @@
     <string name="sort_time_month">"Miesiąc"</string>
     <string name="sort_time_year">"Rok"</string>
     <string name="sort_time_all_time">"Od początku"</string>
-    <string name="no_browser_found">"Nie znaleziono przeglądarki"</string>
     <string name="no_activity_found_for_share">"Brak aplikacji zdolnej do udostępnienia"</string>
     <string name="archived_post_vote_unavailable">"Post zarchiwizowany. Nie można dać upvote."</string>
     <string name="archived_post_comment_unavailable">"Post zarchiwizowany. Nie można skomentować."</string>

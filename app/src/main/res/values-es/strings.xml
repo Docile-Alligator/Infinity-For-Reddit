@@ -214,7 +214,6 @@ Toca para reintentar."</string>
     <string name="sort_time_month">"Mes"</string>
     <string name="sort_time_year">"Año"</string>
     <string name="sort_time_all_time">"Todo el tiempo"</string>
-    <string name="no_browser_found">"No se encontró un navegador"</string>
     <string name="no_activity_found_for_share">"No se encontró ninguna aplicación para compartir"</string>
     <string name="archived_post_vote_unavailable">"Publicación archivada. Votar no está disponible"</string>
     <string name="archived_post_comment_unavailable">"Publicación archivada. Comentar no está disponible "</string>

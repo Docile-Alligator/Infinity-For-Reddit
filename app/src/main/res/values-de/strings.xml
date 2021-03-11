@@ -212,7 +212,6 @@
     <string name="sort_time_month">"Monat"</string>
     <string name="sort_time_year">"Jahr"</string>
     <string name="sort_time_all_time">"Gesamter Zeitraum"</string>
-    <string name="no_browser_found">"Kein Browser gefunden"</string>
     <string name="no_activity_found_for_share">"Es gibt keine App, die diese Teilen-Aktion unterstützt"</string>
     <string name="archived_post_vote_unavailable">"Archivierter Beitrag. Abstimmung nicht verfügbar."</string>
     <string name="archived_post_comment_unavailable">"Archivierter Beitrag. Kommentieren nicht verfügbar."</string>

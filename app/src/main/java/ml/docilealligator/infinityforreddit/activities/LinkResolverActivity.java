@@ -20,9 +20,9 @@ import java.util.List;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class LinkResolverActivity extends AppCompatActivity {
@@ -264,7 +264,7 @@ public class LinkResolverActivity extends AppCompatActivity {
             if (handleError) {
                 openInCustomTabs(uri, pm, false);
             } else {
-                Toast.makeText(this, R.string.no_browser_found, Toast.LENGTH_SHORT).show();
+                openInWebView(uri);
             }
         }
     }
@@ -312,15 +312,21 @@ public class LinkResolverActivity extends AppCompatActivity {
                 if (handleError) {
                     openInBrowser(uri, pm, false);
                 } else {
-                    Toast.makeText(this, R.string.no_browser_found, Toast.LENGTH_SHORT).show();
+                    openInWebView(uri);
                 }
             }
         } else {
             if (handleError) {
                 openInBrowser(uri, pm, false);
             } else {
-                Toast.makeText(this, R.string.no_browser_found, Toast.LENGTH_SHORT).show();
+                openInWebView(uri);
             }
         }
+    }
+
+    private void openInWebView(Uri uri) {
+        Intent intent = new Intent(this, WebViewActivity.class);
+        intent.setData(uri);
+        startActivity(intent);
     }
 }

@@ -211,7 +211,6 @@
     <string name="sort_time_month">"Mjesec"</string>
     <string name="sort_time_year">"Godina"</string>
     <string name="sort_time_all_time">"Svo vrijeme"</string>
-    <string name="no_browser_found">"Preglednik nije pronađen"</string>
     <string name="no_activity_found_for_share">"Nema aplikacije koja može podijeliti ovo"</string>
     <string name="archived_post_vote_unavailable">"Arhivirana objava. Glasanje nedostupno."</string>
     <string name="archived_post_comment_unavailable">"Arhivirana objava. Komentiranje nedostupno."</string>

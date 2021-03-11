@@ -236,7 +236,6 @@
     <string name="sort_time_month">"1ヶ月"</string>
     <string name="sort_time_year">"1年"</string>
     <string name="sort_time_all_time">"全て"</string>
-    <string name="no_browser_found">"ブラウザが見つかりませんでした"</string>
     <string name="no_activity_found_for_share">"共有に使用できるアプリが見つかりませんでした"</string>
     <string name="archived_post_vote_unavailable">"アーカイブされた投稿です。評価は無効です。"</string>
     <string name="archived_post_comment_unavailable">"アーカイブされた投稿です。コメントは無効です。"</string>

@@ -205,7 +205,6 @@
     <string name="sort_time_month">Maand</string>
     <string name="sort_time_year">Jaar</string>
     <string name="sort_time_all_time">Aller Tijden</string>
-    <string name="no_browser_found">Geen browser gevonden</string>
     <string name="no_activity_found_for_share">Er is geen app die de deelactie aankan</string>
     <string name="archived_post_vote_unavailable">Gearchiveerd post. Stem niet beschikbaar.</string>
     <string name="archived_post_comment_unavailable">Gearchiveerd post. Opmerking niet beschikbaar.</string>

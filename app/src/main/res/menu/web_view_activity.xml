@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_share_link_web_view_activity"
+        android:orderInCategory="1"
+        android:title="@string/action_share_link"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_copy_link_web_view_activity"
+        android:orderInCategory="2"
+        android:title="@string/action_copy_link"
+        app:showAsAction="never" />
+</menu>

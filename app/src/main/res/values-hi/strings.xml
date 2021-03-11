@@ -234,7 +234,6 @@ Behavior -->
 
     <!-- I translated it to 'timeless' or 'irrelevant of time'. -->
     <string name="sort_time_all_time">"असामयिक"</string>
-    <string name="no_browser_found">"कोई ब्राउजर नहीं मिला"</string>
     <string name="no_activity_found_for_share">"कोई ऐसी एप्प उपलब्ध नहीं है जो साझा कर सके "</string>
     <string name="archived_post_vote_unavailable">"संग्रहित पोस्ट। वोट अनुपलब्ध।"</string>
     <string name="archived_post_comment_unavailable">"संग्रहित पोस्ट। टिप्पणी अनुपलब्ध।"</string>

@@ -218,7 +218,6 @@ Clicca per riprovare."</string>
     <string name="sort_time_month">"Mese"</string>
     <string name="sort_time_year">"Anno"</string>
     <string name="sort_time_all_time">"Sempre"</string>
-    <string name="no_browser_found">"Nessun browser trovato"</string>
     <string name="no_activity_found_for_share">"Non esiste un'app in grado di gestire l'azione di condivisione"</string>
     <string name="archived_post_vote_unavailable">"Post archiviato. Non è possibile votare."</string>
     <string name="archived_post_comment_unavailable">"Post archiviato. Non è possibile commentare."</string>

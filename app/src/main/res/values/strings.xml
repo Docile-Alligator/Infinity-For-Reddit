@@ -79,6 +79,8 @@
     <string name="action_save_to_database">Save to Database</string>
     <string name="action_read_all_messages">Read All Messages</string>
     <string name="action_add_to_multireddit">Add to Multireddit</string>
+    <string name="action_share_link">Share Link</string>
+    <string name="action_copy_link">Copy Link</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -256,7 +258,6 @@
     <string name="sort_time_year">Year</string>
     <string name="sort_time_all_time">All Time</string>
 
-    <string name="no_browser_found">No browser found</string>
     <string name="no_activity_found_for_share">There is no app that can handle the share action</string>
 
     <string name="archived_post_vote_unavailable">Archived post. Vote unavailable.</string>

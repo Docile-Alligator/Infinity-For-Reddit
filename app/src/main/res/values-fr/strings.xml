@@ -225,7 +225,6 @@ Appuyez pour réessayer."</string>
     <string name="sort_time_month">"Mois"</string>
     <string name="sort_time_year">"Année"</string>
     <string name="sort_time_all_time">"Tout le temps"</string>
-    <string name="no_browser_found">"Aucun navigatuer trouvé"</string>
 
     <!-- Fuzzy -->
     <string name="no_activity_found_for_share">"Il n'y a pas d'application qui peut gérer l'action de partage"</string>

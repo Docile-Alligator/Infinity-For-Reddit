@@ -220,7 +220,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="sort_time_month">"Ay"</string>
     <string name="sort_time_year">"Yıl"</string>
     <string name="sort_time_all_time">"Tüm Zamanlar"</string>
-    <string name="no_browser_found">"Tarayıcı bulunamadı"</string>
     <string name="no_activity_found_for_share">"Paylaşma eylemini gerçekleştirebilecek uygulama yok"</string>
     <string name="archived_post_vote_unavailable">"Arşivlenmiş gönderi. Oy kullanım dışı."</string>
     <string name="archived_post_comment_unavailable">"Arşivlenmiş gönderi. Yorum kullanım dışı."</string>

@@ -42,8 +42,7 @@
         <ml.docilealligator.infinityforreddit.customviews.LollipopBugFixedWebView
             android:id="@+id/webview_login_activity"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 
