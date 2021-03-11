@@ -198,6 +198,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                 loadMultiRedditPostsInitial(callback, null);
                 break;
             case TYPE_ANONYMOUS_FRONT_PAGE:
+                loadAnonymousFrontPagePostsInitial(callback, null);
                 break;
         }
     }
@@ -235,6 +236,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
                 loadMultiRedditPostsAfter(params, callback, null);
                 break;
             case TYPE_ANONYMOUS_FRONT_PAGE:
+                loadAnonymousFrontPagePostsAfter(params, callback, null);
                 break;
         }
     }
