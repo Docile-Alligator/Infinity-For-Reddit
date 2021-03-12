@@ -1055,4 +1055,8 @@
     <string name="do_not_show_this_again">Don\'t show this again</string>
     <string name="continue_suicide_prevention_activity">Continue</string>
 
+    <string name="error_fetching_v_redd_it_video_cannot_get_redirect_url">Error fetching v.redd.it video: Cannot get the redirect url</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_post">Error fetching v.redd.it video: Cannot get the post</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_post_id">Error fetching v.redd.it video: Cannot get the post id</string>
+
 </resources>
