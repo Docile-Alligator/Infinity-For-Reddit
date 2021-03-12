@@ -48,21 +48,29 @@ import com.google.android.material.snackbar.Snackbar;
 import com.thefuntasty.hauler.DragDirection;
 import com.thefuntasty.hauler.HaulerView;
 
+import java.util.List;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.FetchGfycatOrRedgifsVideoLinks;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.apis.VReddIt;
 import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.font.FontFamily;
 import ml.docilealligator.infinityforreddit.font.TitleFontFamily;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.post.FetchPost;
+import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.services.DownloadRedditVideoService;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class ViewVideoActivity extends AppCompatActivity {
@@ -74,15 +82,22 @@ public class ViewVideoActivity extends AppCompatActivity {
     public static final String EXTRA_PROGRESS_SECONDS = "EPS";
     public static final String EXTRA_VIDEO_TYPE = "EVT";
     public static final String EXTRA_GFYCAT_ID = "EGI";
+    public static final String EXTRA_V_REDD_IT_URL = "EVRIU";
     public static final String EXTRA_IS_NSFW = "EIN";
+    public static final int VIDEO_TYPE_V_REDD_IT = 4;
     public static final int VIDEO_TYPE_DIRECT = 3;
     public static final int VIDEO_TYPE_REDGIFS = 2;
     public static final int VIDEO_TYPE_GFYCAT = 1;
     private static final int VIDEO_TYPE_NORMAL = 0;
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
+
     private static final String IS_MUTE_STATE = "IMS";
     private static final String VIDEO_DOWNLOAD_URL_STATE = "VDUS";
     private static final String VIDEO_URI_STATE = "VUS";
+    private static final String VIDEO_TYPE_STATE = "VTS";
+    private static final String SUBREDDIT_NAME_STATE = "SNS";
+    private static final String ID_STATE=  "IS";
+
     @BindView(R.id.hauler_view_view_video_activity)
     HaulerView haulerView;
     @BindView(R.id.coordinator_layout_view_video_activity)
@@ -116,12 +131,20 @@ public class ViewVideoActivity extends AppCompatActivity {
     private boolean isHd;
 
     @Inject
+    @Named("no_oauth")
+    Retrofit retrofit;
+
+    @Inject
     @Named("gfycat")
     Retrofit gfycatRetrofit;
 
     @Inject
     @Named("redgifs")
     Retrofit redgifsRetrofit;
+
+    @Inject
+    @Named("vReddIt")
+    Retrofit vReddItRetrofit;
 
     @Inject
     @Named("default")
@@ -186,7 +209,6 @@ public class ViewVideoActivity extends AppCompatActivity {
         });
 
         Intent intent = getIntent();
-        mVideoUri = intent.getData();
         postTitle = intent.getStringExtra(EXTRA_POST_TITLE);
         isNSFW = intent.getBooleanExtra(EXTRA_IS_NSFW, false);
         if (savedInstanceState == null) {
@@ -223,17 +245,24 @@ public class ViewVideoActivity extends AppCompatActivity {
         trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
         player = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
         videoPlayerView.setPlayer(player);
-        videoType = getIntent().getIntExtra(EXTRA_VIDEO_TYPE, VIDEO_TYPE_NORMAL);
-        if (videoType == VIDEO_TYPE_GFYCAT || videoType == VIDEO_TYPE_REDGIFS) {
+        if (savedInstanceState == null) {
+            mVideoUri = intent.getData();
+            videoType = getIntent().getIntExtra(EXTRA_VIDEO_TYPE, VIDEO_TYPE_NORMAL);
+        } else {
+            String videoUrl = savedInstanceState.getString(VIDEO_URI_STATE);
+            if (videoUrl != null) {
+                mVideoUri = Uri.parse(videoUrl);
+            }
+            videoType = savedInstanceState.getInt(VIDEO_TYPE_STATE);
+            subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
+            id = savedInstanceState.getString(ID_STATE);
+        }
+
+        if (videoType == VIDEO_TYPE_V_REDD_IT) {
+            loadVReddItVideo(savedInstanceState);
+        } else if (videoType == VIDEO_TYPE_GFYCAT || videoType == VIDEO_TYPE_REDGIFS) {
             if (savedInstanceState != null) {
-                String videoUrl = savedInstanceState.getString(VIDEO_URI_STATE);
-                if (videoUrl != null) {
-                    mVideoUri = Uri.parse(videoUrl);
-                }
                 videoDownloadUrl = savedInstanceState.getString(VIDEO_DOWNLOAD_URL_STATE);
-            } else {
-                mVideoUri = intent.getData();
-                videoDownloadUrl = intent.getStringExtra(EXTRA_VIDEO_DOWNLOAD_URL);
             }
 
             String gfycatId = intent.getStringExtra(EXTRA_GFYCAT_ID);
@@ -265,6 +294,7 @@ public class ViewVideoActivity extends AppCompatActivity {
             dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "Infinity"));
             // Prepare the player with the source.
             player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
+            preparePlayer(savedInstanceState);
         } else {
             videoDownloadUrl = intent.getStringExtra(EXTRA_VIDEO_DOWNLOAD_URL);
             subredditName = intent.getStringExtra(EXTRA_SUBREDDIT);
@@ -274,9 +304,8 @@ public class ViewVideoActivity extends AppCompatActivity {
             dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "Infinity"));
             // Prepare the player with the source.
             player.prepare(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
+            preparePlayer(savedInstanceState);
         }
-
-        preparePlayer(savedInstanceState);
     }
 
     private void preparePlayer(Bundle savedInstanceState) {
@@ -388,6 +417,77 @@ public class ViewVideoActivity extends AppCompatActivity {
                 });
     }
 
+    private void loadVReddItVideo(Bundle savedInstanceState) {
+        progressBar.setVisibility(View.VISIBLE);
+        vReddItRetrofit.create(VReddIt.class).getRedirectUrl(getIntent().getStringExtra(EXTRA_V_REDD_IT_URL)).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                Uri redirectUri = Uri.parse(response.raw().request().url().toString());
+                String redirectPath = redirectUri.getPath();
+                if (redirectPath.matches("/r/\\w+/comments/\\w+/?\\w+/?") || redirectPath.matches("/user/\\w+/comments/\\w+/?\\w+/?")) {
+                    List<String> segments = redirectUri.getPathSegments();
+                    int commentsIndex = segments.lastIndexOf("comments");
+                    String postId = segments.get(commentsIndex + 1);
+                    FetchPost.fetchPost(retrofit, postId, null, new FetchPost.FetchPostListener() {
+                        @Override
+                        public void fetchPostSuccess(Post post) {
+                            if (post.isGfycat()) {
+                                videoType = VIDEO_TYPE_GFYCAT;
+                                String gfycatId = post.getGfycatId();
+                                if (gfycatId != null && gfycatId.contains("-")) {
+                                    gfycatId = gfycatId.substring(0, gfycatId.indexOf('-'));
+                                }
+                                if (videoType == VIDEO_TYPE_GFYCAT) {
+                                    videoFileName = "Gfycat-" + gfycatId + ".mp4";
+                                } else {
+                                    videoFileName = "Redgifs-" + gfycatId + ".mp4";
+                                }
+                                loadGfycatOrRedgifsVideo(gfycatRetrofit, gfycatId, savedInstanceState, true);
+                            } else if (post.isRedgifs()) {
+                                videoType = VIDEO_TYPE_REDGIFS;
+                                String gfycatId = post.getGfycatId();
+                                if (gfycatId != null && gfycatId.contains("-")) {
+                                    gfycatId = gfycatId.substring(0, gfycatId.indexOf('-'));
+                                }
+                                if (videoType == VIDEO_TYPE_GFYCAT) {
+                                    videoFileName = "Gfycat-" + gfycatId + ".mp4";
+                                } else {
+                                    videoFileName = "Redgifs-" + gfycatId + ".mp4";
+                                }
+                                loadGfycatOrRedgifsVideo(redgifsRetrofit, gfycatId, savedInstanceState, false);
+                            } else {
+                                progressBar.setVisibility(View.INVISIBLE);
+                                mVideoUri = Uri.parse(post.getVideoUrl());
+                                subredditName = post.getSubredditName();
+                                id = post.getId();
+                                videoDownloadUrl = post.getVideoDownloadUrl();
+
+                                videoFileName = subredditName + "-" + id + ".mp4";
+                                // Produces DataSource instances through which media data is loaded.
+                                dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(ViewVideoActivity.this, "Infinity"));
+                                // Prepare the player with the source.
+                                player.prepare(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
+                                preparePlayer(savedInstanceState);
+                            }
+                        }
+
+                        @Override
+                        public void fetchPostFailed() {
+
+                        }
+                    });
+                } else {
+
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+
+            }
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_video, menu);
@@ -404,39 +504,39 @@ public class ViewVideoActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            finish();
+            return true;
+        } else if (itemId == R.id.action_download_view_video_activity) {
+            if (isDownloading) {
+                return false;
+            }
+
+            if (videoDownloadUrl == null) {
+                Toast.makeText(this, R.string.fetching_video_info_please_wait, Toast.LENGTH_SHORT).show();
                 return true;
-            case R.id.action_download_view_video_activity:
-                if (isDownloading) {
-                    return false;
-                }
+            }
 
-                if (videoDownloadUrl == null) {
-                    Toast.makeText(this, R.string.fetching_video_info_please_wait, Toast.LENGTH_SHORT).show();
-                    return true;
-                }
+            isDownloading = true;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (ContextCompat.checkSelfPermission(this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
 
-                isDownloading = true;
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (ContextCompat.checkSelfPermission(this,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED) {
-
-                        // Permission is not granted
-                        // No explanation needed; request the permission
-                        ActivityCompat.requestPermissions(this,
-                                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
-                    } else {
-                        // Permission has already been granted
-                        download();
-                    }
+                    // Permission is not granted
+                    // No explanation needed; request the permission
+                    ActivityCompat.requestPermissions(this,
+                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
                 } else {
+                    // Permission has already been granted
                     download();
                 }
-                return true;
+            } else {
+                download();
+            }
+            return true;
         }
 
         return false;
@@ -493,9 +593,12 @@ public class ViewVideoActivity extends AppCompatActivity {
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(IS_MUTE_STATE, isMute);
+        outState.putInt(VIDEO_TYPE_STATE, videoType);
         if (mVideoUri != null) {
             outState.putString(VIDEO_URI_STATE, mVideoUri.toString());
             outState.putString(VIDEO_DOWNLOAD_URL_STATE, videoDownloadUrl);
+            outState.putString(SUBREDDIT_NAME_STATE, subredditName);
+            outState.putString(ID_STATE, id);
         }
     }
 }

@@ -1371,7 +1371,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 } else {
                     retrofit = mOauthRetrofit;
                 }
-                FetchPost.fetchPost(retrofit, mPost.getId(), mAccessToken, mLocale,
+                FetchPost.fetchPost(retrofit, mPost.getId(), mAccessToken,
                         new FetchPost.FetchPostListener() {
                             @Override
                             public void fetchPostSuccess(Post post) {

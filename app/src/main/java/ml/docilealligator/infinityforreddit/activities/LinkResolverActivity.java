@@ -113,7 +113,12 @@ public class LinkResolverActivity extends AppCompatActivity {
                     List<String> segments = uri.getPathSegments();
 
                     if (authority != null) {
-                        if (authority.contains("reddit.com") || authority.contains("redd.it") || authority.contains("reddit.app")) {
+                        if (authority.equals("v.redd.it")) {
+                            Intent intent = new Intent(this, ViewVideoActivity.class);
+                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_V_REDD_IT);
+                            intent.putExtra(ViewVideoActivity.EXTRA_V_REDD_IT_URL, uri.toString());
+                            startActivity(intent);
+                        } else if (authority.contains("reddit.com") || authority.contains("redd.it") || authority.contains("reddit.app")) {
                             if (authority.equals("reddit.app.link") && path.isEmpty()) {
                                 String redirect = uri.getQueryParameter("$og_redirect");
                                 handleUri(Uri.parse(redirect));

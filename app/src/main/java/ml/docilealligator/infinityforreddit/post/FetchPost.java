@@ -2,8 +2,6 @@ package ml.docilealligator.infinityforreddit.post;
 
 import androidx.annotation.NonNull;
 
-import java.util.Locale;
-
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import retrofit2.Call;
@@ -12,7 +10,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FetchPost {
-    public static void fetchPost(Retrofit retrofit, String id, String accessToken, Locale locale, FetchPostListener fetchPostListener) {
+    public static void fetchPost(Retrofit retrofit, String id, String accessToken, FetchPostListener fetchPostListener) {
         Call<String> postCall;
         if (accessToken == null) {
             postCall = retrofit.create(RedditAPI.class).getPost(id);

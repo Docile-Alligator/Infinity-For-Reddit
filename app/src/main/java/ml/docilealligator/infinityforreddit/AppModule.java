@@ -143,6 +143,16 @@ class AppModule {
     }
 
     @Provides
+    @Named("vReddIt")
+    @Singleton
+    Retrofit provideVReddItRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl("http://localhost/")
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+    }
+
+    @Provides
     @Singleton
     OkHttpClient provideOkHttpClient(@Named("no_oauth") Retrofit retrofit, RedditDataRoomDatabase accountRoomDatabase,
                                      @Named("current_account") SharedPreferences currentAccountSharedPreferences) {
