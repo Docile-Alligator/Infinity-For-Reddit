@@ -55,7 +55,7 @@
     <Preference
         app:icon="@drawable/ic_nsfw_on_24dp"
         app:title="@string/settings_nsfw_and_spoiler_title"
-        app:fragment="ml.docilealligator.infinityforreddit.settings.NsfwAndBlurringFragment"/>
+        app:fragment="ml.docilealligator.infinityforreddit.settings.NsfwAndSpoilerFragment"/>
 
     <Preference
         app:icon="@drawable/ic_history_24dp"

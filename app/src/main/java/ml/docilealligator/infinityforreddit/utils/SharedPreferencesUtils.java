@@ -274,6 +274,7 @@ public class SharedPreferencesUtils {
     public static final String NSFW_AND_SPOILER_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.nsfw_and_spoiler";
     public static final String NSFW_BASE = "_nsfw";
     public static final String BLUR_NSFW_BASE = "_blur_nsfw";
+    public static final String DO_NOT_BLUR_NSFW_IN_NSFW_SUBREDDITS = "do_not_blur_nsfw_in_nsfw_subreddits";
     public static final String BLUR_SPOILER_BASE = "_blur_spoiler";
 
     public static final String POST_HISTORY_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.post_history";

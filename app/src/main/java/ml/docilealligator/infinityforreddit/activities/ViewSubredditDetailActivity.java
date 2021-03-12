@@ -201,6 +201,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private String subredditName;
     private boolean mFetchSubredditInfoSuccess = false;
     private int mNCurrentOnlineSubscribers = 0;
+    private boolean isNsfwSubreddit = false;
     private boolean subscriptionReady = false;
     private boolean isInLazyMode = false;
     private boolean showToast = false;
@@ -364,6 +365,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 .get(SubredditViewModel.class);
         mSubredditViewModel.getSubredditLiveData().observe(this, subredditData -> {
             if (subredditData != null) {
+                isNsfwSubreddit = subredditData.isNSFW();
+
                 if (subredditData.getBannerUrl().equals("")) {
                     iconGifImageView.setOnClickListener(view -> {
                         //Do nothing as it has no image
@@ -1109,6 +1112,10 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    public boolean isNsfwSubreddit() {
+        return isNsfwSubreddit;
     }
 
     private void makeSnackbar(int resId, boolean retry) {

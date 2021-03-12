@@ -1664,6 +1664,13 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 });
     }
 
+    public boolean getIsNsfwSubreddit() {
+        if (activity != null) {
+            return activity.isNsfwSubreddit();
+        }
+        return false;
+    }
+
     @Subscribe
     public void onPostUpdateEvent(PostUpdateEventToDetailActivity event) {
         if (mPost.getId().equals(event.post.getId())) {
@@ -1682,7 +1689,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
     @Subscribe
     public void onChangeNSFWBlurEvent(ChangeNSFWBlurEvent event) {
-        mAdapter.setBlurNSFW(event.needBlurNSFW);
+        mAdapter.setBlurNsfwAndDoNotBlurNsfwInNsfwSubreddits(event.needBlurNSFW, event.doNotBlurNsfwInNsfwSubreddits);
         refreshAdapter();
     }
 

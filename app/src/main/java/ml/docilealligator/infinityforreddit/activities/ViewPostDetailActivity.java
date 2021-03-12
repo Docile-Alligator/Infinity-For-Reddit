@@ -69,6 +69,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     public static final String EXTRA_MESSAGE_FULLNAME = "ENI";
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
     public static final String EXTRA_POST_FRAGMENT_ID = "EPFI";
+    public static final String EXTRA_IS_NSFW_SUBREDDIT = "EINS";
     public static final int EDIT_COMMENT_REQUEST_CODE = 3;
     public static final int GIVE_AWARD_REQUEST_CODE = 100;
     @State
@@ -108,6 +109,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     private int postListPosition = -1;
     private int orientation;
     private boolean mVolumeKeysNavigateComments;
+    private boolean isNsfwSubreddit;
 
 
     @Override
@@ -162,6 +164,8 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         if (swipeBetweenPosts && posts == null && postFragmentId > 0) {
             EventBus.getDefault().post(new NeedForPostListFromPostFragmentEvent(postFragmentId));
         }
+
+        isNsfwSubreddit = getIntent().getBooleanExtra(EXTRA_IS_NSFW_SUBREDDIT, false);
 
         fragmentManager = getSupportFragmentManager();
 
@@ -256,6 +260,10 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         if (savedInstanceState == null) {
             viewPager2.setCurrentItem(getIntent().getIntExtra(EXTRA_POST_LIST_POSITION, 0), false);
         }
+    }
+
+    public boolean isNsfwSubreddit() {
+        return isNsfwSubreddit;
     }
 
     private void editComment(String commentAuthor, String commentContentMarkdown, int position) {

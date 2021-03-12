@@ -32,6 +32,7 @@ public class LinkResolverActivity extends AppCompatActivity {
     public static final String EXTRA_IS_NSFW = "EIN";
 
     private static final String POST_PATTERN = "/r/\\w+/comments/\\w+/?\\w+/?";
+    private static final String POST_PATTERN_2 = "/(u|U|user)/\\w+/comments/\\w+/?\\w+/?";
     private static final String COMMENT_PATTERN = "/(r|u|U|user)/\\w+/comments/\\w+/?\\w+/\\w+/?";
     private static final String SUBREDDIT_PATTERN = "/[rR]/[\\w-]+/?";
     private static final String USER_PATTERN = "/(u|U|user)/[\\w-]+/?";
@@ -125,7 +126,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                             } else if (path.isEmpty()) {
                                 Intent intent = new Intent(this, MainActivity.class);
                                 startActivity(intent);
-                            } else if (path.matches(POST_PATTERN)) {
+                            } else if (path.matches(POST_PATTERN) || path.matches(POST_PATTERN_2)) {
                                 int commentsIndex = segments.lastIndexOf("comments");
                                 if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
                                     Intent intent = new Intent(this, ViewPostDetailActivity.class);

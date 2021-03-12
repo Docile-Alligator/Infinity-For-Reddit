@@ -75,6 +75,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.adapters.PostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.CustomToroContainer;
@@ -1476,6 +1477,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
     }
 
+    public boolean getIsNsfwSubreddit() {
+        if (activity instanceof ViewSubredditDetailActivity) {
+            return ((ViewSubredditDetailActivity) activity).isNsfwSubreddit();
+        } else {
+            return false;
+        }
+    }
+
     @Subscribe
     public void onPostUpdateEvent(PostUpdateEventToPostList event) {
         PagedList<Post> posts = mAdapter.getCurrentList();
@@ -1522,7 +1531,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Subscribe
     public void onChangeNSFWBlurEvent(ChangeNSFWBlurEvent event) {
         if (mAdapter != null) {
-            mAdapter.setBlurNSFW(event.needBlurNSFW);
+            mAdapter.setBlurNsfwAndDoNotBlurNsfwInNsfwSubreddits(event.needBlurNSFW, event.doNotBlurNsfwInNsfwSubreddits);
             refreshAdapter();
         }
     }

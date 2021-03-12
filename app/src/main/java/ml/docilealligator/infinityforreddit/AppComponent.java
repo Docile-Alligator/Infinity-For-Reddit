@@ -80,7 +80,7 @@ import ml.docilealligator.infinityforreddit.settings.GesturesAndButtonsPreferenc
 import ml.docilealligator.infinityforreddit.settings.MainPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.MiscellaneousPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.NotificationPreferenceFragment;
-import ml.docilealligator.infinityforreddit.settings.NsfwAndBlurringFragment;
+import ml.docilealligator.infinityforreddit.settings.NsfwAndSpoilerFragment;
 import ml.docilealligator.infinityforreddit.settings.PostHistoryFragment;
 import ml.docilealligator.infinityforreddit.settings.SecurityPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.ThemePreferenceFragment;
@@ -224,7 +224,7 @@ public interface AppComponent {
 
     void inject(SecurityPreferenceFragment securityPreferenceFragment);
 
-    void inject(NsfwAndBlurringFragment nsfwAndBlurringFragment);
+    void inject(NsfwAndSpoilerFragment nsfwAndSpoilerFragment);
 
     void inject(CustomizeBottomAppBarFragment customizeBottomAppBarFragment);
 

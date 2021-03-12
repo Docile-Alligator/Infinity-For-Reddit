@@ -413,6 +413,7 @@
     <string name="settings_enable_nsfw_title">Enable NSFW</string>
     <string name="settings_blur_nsfw_title">Blur NSFW Images</string>
     <string name="settings_blur_spoiler_title">Blur Spoiler Images</string>
+    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">Don\'t blur NSFW Images in NSFW Subreddits</string>
     <string name="settings_about_master_title">About</string>
     <string name="settings_acknowledgement_master_title">Acknowledgement</string>
     <string name="settings_credits_master_title">Credits</string>

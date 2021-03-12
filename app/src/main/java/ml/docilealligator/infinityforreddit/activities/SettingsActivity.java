@@ -33,7 +33,7 @@ import ml.docilealligator.infinityforreddit.settings.FontPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.GesturesAndButtonsPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.InterfacePreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.MainPreferenceFragment;
-import ml.docilealligator.infinityforreddit.settings.NsfwAndBlurringFragment;
+import ml.docilealligator.infinityforreddit.settings.NsfwAndSpoilerFragment;
 import ml.docilealligator.infinityforreddit.settings.PostHistoryFragment;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
@@ -155,8 +155,8 @@ public class SettingsActivity extends BaseActivity implements
                 pref.getFragment());
         if (fragment instanceof CustomizeMainPageTabsFragment) {
             args.putString(CustomizeMainPageTabsFragment.EXTRA_ACCOUNT_NAME, mAccountName);
-        } else if (fragment instanceof NsfwAndBlurringFragment) {
-            args.putString(NsfwAndBlurringFragment.EXTRA_ACCOUNT_NAME, mAccountName);
+        } else if (fragment instanceof NsfwAndSpoilerFragment) {
+            args.putString(NsfwAndSpoilerFragment.EXTRA_ACCOUNT_NAME, mAccountName);
         } else if (fragment instanceof CustomizeBottomAppBarFragment) {
             args.putString(CustomizeBottomAppBarFragment.EXTRA_ACCOUNT_NAME, mAccountName);
         } else if (fragment instanceof PostHistoryFragment) {
