@@ -248,6 +248,12 @@ class AppModule {
     }
 
     @Provides
+    @Named("navigation_drawer")
+    SharedPreferences provideNavigationDrawerSharedPreferences() {
+        return mApplication.getSharedPreferences(SharedPreferencesUtils.NAVIGATION_DRAWER_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+    }
+
+    @Provides
     @Singleton
     CustomThemeWrapper provideCustomThemeWrapper(@Named("light_theme") SharedPreferences lightThemeSharedPreferences,
                                                  @Named("dark_theme") SharedPreferences darkThemeSharedPreferences,

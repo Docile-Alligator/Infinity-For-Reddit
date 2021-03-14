@@ -288,6 +288,15 @@ public class SharedPreferencesUtils {
     public static final String ACCESS_TOKEN = "access_token";
     public static final String ACCOUNT_IMAGE_URL = "account_image_url";
 
+    public static final String NAVIGATION_DRAWER_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.navigation_drawer";
+    public static final String COLLAPSE_ACCOUNT_SECTION = "collapse_account_section";
+    public static final String COLLAPSE_POST_SECTION = "collapse_post_section";
+    public static final String COLLAPSE_PREFERENCES_SECTION = "collapse_preferences_section";
+    public static final String COLLAPSE_FAVORITE_SUBREDDITS_SECTION = "collapse_favorite_subreddits_section";
+    public static final String COLLAPSE_SUBSCRIBED_SUBREDDITS_SECTION = "collapse_subscribed_subreddits_section";
+    public static final String HIDE_FAVORITE_SUBREDDITS_SECTION = "hide_favorite_subreddits_sections";
+    public static final String HIDE_SUBSCRIBED_SUBREDDITS_SECTIONS = "hide_subscribed_subreddits_sections";
+
     //Legacy Settings
     public static final String MAIN_PAGE_TAB_1_TITLE_LEGACY = "main_page_tab_1_title";
     public static final String MAIN_PAGE_TAB_2_TITLE_LEGACY = "main_page_tab_2_title";

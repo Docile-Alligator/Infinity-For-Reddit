@@ -29,9 +29,9 @@ import java.util.concurrent.Executor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import pl.droidsonroids.gif.GifImageView;
@@ -55,6 +55,9 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private static final int VIEW_TYPE_SUBSCRIBED_SUBREDDIT = 5;
     private static final int VIEW_TYPE_ACCOUNT = 6;
     private static final int CURRENT_MENU_ITEMS = 17;
+    private static final int ACCOUNT_SECTION_ITEMS = 4;
+    private static final int POST_SECTION_ITEMS = 5;
+    private static final int PREFERENCES_SECTION_ITEMS = 3;
 
     private AppCompatActivity appCompatActivity;
     private Resources resources;
@@ -69,6 +72,13 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private ItemClickListener itemClickListener;
     private boolean isLoggedIn;
     private boolean isInMainPage = true;
+    private boolean collapseAccountSection;
+    private boolean collapsePostSection;
+    private boolean collapsePreferencesSection;
+    private boolean collapseFavoriteSubredditsSection;
+    private boolean collapseSubscribedSubredditsSection;
+    private boolean hideFavoriteSubredditsSection;
+    private boolean hideSubscribedSubredditsSection;
     private ArrayList<SubscribedSubredditData> favoriteSubscribedSubreddits;
     private ArrayList<SubscribedSubredditData> subscribedSubreddits;
     private ArrayList<Account> accounts;
@@ -79,6 +89,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
     public NavigationDrawerRecyclerViewAdapter(AppCompatActivity appCompatActivity, SharedPreferences sharedPreferences,
                                                SharedPreferences nsfwAndSpoilerSharedPreferences,
+                                               SharedPreferences navigationDrawerSharedPreferences,
                                                CustomThemeWrapper customThemeWrapper,
                                                String accountName,
                                                ItemClickListener itemClickListener) {
@@ -90,6 +101,14 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         requireAuthToAccountSection = sharedPreferences.getBoolean(SharedPreferencesUtils.REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER, false);
         showAvatarOnTheRightInTheNavigationDrawer = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_AVATAR_ON_THE_RIGHT_IN_THE_NAVIGATION_DRAWER, false);
         isLoggedIn = accountName != null;
+        collapseAccountSection = navigationDrawerSharedPreferences.getBoolean(SharedPreferencesUtils.COLLAPSE_ACCOUNT_SECTION, false);
+        collapsePostSection = navigationDrawerSharedPreferences.getBoolean(SharedPreferencesUtils.COLLAPSE_POST_SECTION, false);
+        collapsePreferencesSection = navigationDrawerSharedPreferences.getBoolean(SharedPreferencesUtils.COLLAPSE_PREFERENCES_SECTION, false);
+        collapseFavoriteSubredditsSection = navigationDrawerSharedPreferences.getBoolean(SharedPreferencesUtils.COLLAPSE_FAVORITE_SUBREDDITS_SECTION, false);
+        collapseSubscribedSubredditsSection = navigationDrawerSharedPreferences.getBoolean(SharedPreferencesUtils.COLLAPSE_SUBSCRIBED_SUBREDDITS_SECTION, false);
+        hideFavoriteSubredditsSection = navigationDrawerSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_FAVORITE_SUBREDDITS_SECTION, false);
+        hideSubscribedSubredditsSection = navigationDrawerSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_SUBSCRIBED_SUBREDDITS_SECTIONS, false);
+
         this.itemClickListener = itemClickListener;
         primaryTextColor = customThemeWrapper.getPrimaryTextColor();
         secondaryTextColor = customThemeWrapper.getSecondaryTextColor();
@@ -103,21 +122,38 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     public int getItemViewType(int position) {
         if (isInMainPage) {
             if (isLoggedIn) {
-                if (position == CURRENT_MENU_ITEMS) {
+                if (position == CURRENT_MENU_ITEMS - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
+                        - (collapsePostSection ? POST_SECTION_ITEMS : 0)
+                        - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0)) {
                     return VIEW_TYPE_MENU_GROUP_TITLE;
-                } else if (!favoriteSubscribedSubreddits.isEmpty() && position == CURRENT_MENU_ITEMS + favoriteSubscribedSubreddits.size() + 1) {
+                } else if (!favoriteSubscribedSubreddits.isEmpty() && position == CURRENT_MENU_ITEMS
+                        - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
+                        - (collapsePostSection ? POST_SECTION_ITEMS : 0)
+                        - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0)
+                        + (collapseFavoriteSubredditsSection ? 0 : favoriteSubscribedSubreddits.size()) + 1) {
                     return VIEW_TYPE_MENU_GROUP_TITLE;
-                } else if (position > CURRENT_MENU_ITEMS) {
-                    if (!favoriteSubscribedSubreddits.isEmpty() && position <= CURRENT_MENU_ITEMS + favoriteSubscribedSubreddits.size()) {
+                } else if (position > CURRENT_MENU_ITEMS - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
+                        - (collapsePostSection ? POST_SECTION_ITEMS : 0)
+                        - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0)) {
+                    if (!favoriteSubscribedSubreddits.isEmpty() && !collapseFavoriteSubredditsSection && position <= CURRENT_MENU_ITEMS
+                            - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
+                            - (collapsePostSection ? POST_SECTION_ITEMS : 0)
+                            - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0)
+                            + favoriteSubscribedSubreddits.size()) {
                         return VIEW_TYPE_FAVORITE_SUBSCRIBED_SUBREDDIT;
                     } else {
                         return VIEW_TYPE_SUBSCRIBED_SUBREDDIT;
                     }
                 } else if (position == 0) {
                     return VIEW_TYPE_NAV_HEADER;
-                } else if (position == 1 || position == 6 || position == 12) {
+                } else if (position == 1
+                        || position == 6 - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
+                        || position == 12 - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
+                        - (collapsePostSection ? POST_SECTION_ITEMS : 0)) {
                     return VIEW_TYPE_MENU_GROUP_TITLE;
-                } else if (position == 16) {
+                } else if (position == 16 - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
+                        - (collapsePostSection ? POST_SECTION_ITEMS : 0)
+                        - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0)) {
                     return VIEW_TYPE_DIVIDER;
                 } else {
                     return VIEW_TYPE_MENU_ITEM;
@@ -251,19 +287,80 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                 }
             });
         } else if (holder instanceof MenuGroupTitleViewHolder) {
+            int type;
             if (position == 1) {
                 ((MenuGroupTitleViewHolder) holder).titleTextView.setText(R.string.label_account);
-            } else if (position == 6) {
+                type = 0;
+            } else if (position == 6 - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)) {
                 ((MenuGroupTitleViewHolder) holder).titleTextView.setText(R.string.label_post);
-            } else if (position == 12) {
+                type = 1;
+            } else if (position == 12 - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
+                    - (collapsePostSection ? POST_SECTION_ITEMS : 0)) {
                 ((MenuGroupTitleViewHolder) holder).titleTextView.setText(R.string.label_preferences);
+                type = 2;
             } else {
-                if (!favoriteSubscribedSubreddits.isEmpty() && position == CURRENT_MENU_ITEMS) {
+                if (!favoriteSubscribedSubreddits.isEmpty() && position == CURRENT_MENU_ITEMS
+                        - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
+                        - (collapsePostSection ? POST_SECTION_ITEMS : 0)
+                        - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0)) {
                     ((MenuGroupTitleViewHolder) holder).titleTextView.setText(R.string.favorites);
+                    type = 3;
                 } else {
                     ((MenuGroupTitleViewHolder) holder).titleTextView.setText(R.string.subscriptions);
+                    type = 4;
                 }
             }
+
+            ((MenuGroupTitleViewHolder) holder).itemView.setOnClickListener(view -> {
+                switch (type) {
+                    case 0:
+                        if (collapseAccountSection) {
+                            collapseAccountSection = !collapseAccountSection;
+                            notifyItemRangeInserted(position + 1, ACCOUNT_SECTION_ITEMS);
+                        } else {
+                            collapseAccountSection = !collapseAccountSection;
+                            notifyItemRangeRemoved(position + 1, ACCOUNT_SECTION_ITEMS);
+                        }
+                        break;
+                    case 1:
+                        if (collapsePostSection) {
+                            collapsePostSection = !collapsePostSection;
+                            notifyItemRangeInserted(position + 1, POST_SECTION_ITEMS);
+                        } else {
+                            collapsePostSection = !collapsePostSection;
+                            notifyItemRangeRemoved(position + 1, POST_SECTION_ITEMS);
+                        }
+                        break;
+                    case 2:
+                        if (collapsePreferencesSection) {
+                            collapsePreferencesSection = !collapsePreferencesSection;
+                            notifyItemRangeInserted(position + 1, PREFERENCES_SECTION_ITEMS);
+                        } else {
+                            collapsePreferencesSection = !collapsePreferencesSection;
+                            notifyItemRangeRemoved(position + 1, PREFERENCES_SECTION_ITEMS);
+                        }
+                        break;
+                    case 3:
+                        if (collapseFavoriteSubredditsSection) {
+                            collapseFavoriteSubredditsSection = !collapseFavoriteSubredditsSection;
+                            notifyItemRangeInserted(position + 1, favoriteSubscribedSubreddits.size());
+                        } else {
+                            collapseFavoriteSubredditsSection = !collapseFavoriteSubredditsSection;
+                            notifyItemRangeRemoved(position + 1, favoriteSubscribedSubreddits.size());
+                        }
+                        break;
+                    case 4:
+                        if (collapseSubscribedSubredditsSection) {
+                            collapseSubscribedSubredditsSection = !collapseSubscribedSubredditsSection;
+                            notifyItemRangeInserted(position + 1, subscribedSubreddits.size());
+                        } else {
+                            collapseSubscribedSubredditsSection = !collapseSubscribedSubredditsSection;
+                            notifyItemRangeRemoved(position + 1, subscribedSubreddits.size());
+                        }
+                        break;
+                }
+                notifyDataSetChanged();
+            });
         } else if (holder instanceof MenuItemViewHolder) {
             int stringId = 0;
             int drawableId = 0;
@@ -271,7 +368,19 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
             if (isInMainPage) {
                 if (isLoggedIn) {
-                    switch (position) {
+                    int pseudoPosition = position;
+                    if (collapseAccountSection && collapsePostSection) {
+                        pseudoPosition += ACCOUNT_SECTION_ITEMS + POST_SECTION_ITEMS;
+                    } else if (collapseAccountSection && collapsePreferencesSection) {
+                        pseudoPosition += ACCOUNT_SECTION_ITEMS;
+                    } else if (collapseAccountSection) {
+                        pseudoPosition += ACCOUNT_SECTION_ITEMS;
+                    } else if (collapsePostSection) {
+                        if (position > ACCOUNT_SECTION_ITEMS + 1) {
+                            pseudoPosition += POST_SECTION_ITEMS;
+                        }
+                    }
+                    switch (pseudoPosition) {
                         case 2:
                             stringId = R.string.profile;
                             drawableId = R.drawable.ic_account_circle_24dp;
@@ -413,7 +522,11 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                 }
             }
         } else if (holder instanceof FavoriteSubscribedThingViewHolder) {
-            SubscribedSubredditData subreddit = favoriteSubscribedSubreddits.get(position - CURRENT_MENU_ITEMS - 1);
+            SubscribedSubredditData subreddit = favoriteSubscribedSubreddits.get(position - (CURRENT_MENU_ITEMS
+                    - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
+                    - (collapsePostSection ? POST_SECTION_ITEMS : 0)
+                    - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0))
+                    - 1);
             String subredditName = subreddit.getName();
             String iconUrl = subreddit.getIconUrl();
             ((FavoriteSubscribedThingViewHolder) holder).subredditNameTextView.setText(subredditName);
@@ -433,8 +546,17 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                 itemClickListener.onSubscribedSubredditClick(subredditName);
             });
         } else if (holder instanceof SubscribedThingViewHolder) {
-            SubscribedSubredditData subreddit = favoriteSubscribedSubreddits.isEmpty() ? subscribedSubreddits.get(position - CURRENT_MENU_ITEMS - 1)
-                    : subscribedSubreddits.get(position - CURRENT_MENU_ITEMS - favoriteSubscribedSubreddits.size() - 2);
+            SubscribedSubredditData subreddit = favoriteSubscribedSubreddits.isEmpty() ? subscribedSubreddits.get(position - (CURRENT_MENU_ITEMS
+                    - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
+                    - (collapsePostSection ? POST_SECTION_ITEMS : 0)
+                    - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0))
+                    - 1)
+                    : subscribedSubreddits.get(position - (CURRENT_MENU_ITEMS
+                    - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
+                    - (collapsePostSection ? POST_SECTION_ITEMS : 0)
+                    - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0))
+                    - (collapseFavoriteSubredditsSection ? 0 : favoriteSubscribedSubreddits.size())
+                    - 2);
             String subredditName = subreddit.getName();
             String iconUrl = subreddit.getIconUrl();
             ((SubscribedThingViewHolder) holder).subredditNameTextView.setText(subredditName);
@@ -501,10 +623,37 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         if (isInMainPage) {
             if (isLoggedIn) {
                 if (!(favoriteSubscribedSubreddits.isEmpty() && subscribedSubreddits.isEmpty())) {
+                    if (hideFavoriteSubredditsSection && hideSubscribedSubredditsSection) {
+                        return CURRENT_MENU_ITEMS
+                                - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
+                                - (collapsePostSection ? POST_SECTION_ITEMS : 0)
+                                - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0);
+                    } else if (hideFavoriteSubredditsSection) {
+                        return CURRENT_MENU_ITEMS
+                                + (subscribedSubreddits.isEmpty() ? 0 : subscribedSubreddits.size() + 1)
+                                - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
+                                - (collapsePostSection ? POST_SECTION_ITEMS : 0)
+                                - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0)
+                                - (collapseSubscribedSubredditsSection ? subscribedSubreddits.size() : 0);
+                    } else if (hideSubscribedSubredditsSection) {
+                        return CURRENT_MENU_ITEMS + (favoriteSubscribedSubreddits.isEmpty() ? 0 : favoriteSubscribedSubreddits.size() + 1)
+                                - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
+                                - (collapsePostSection ? POST_SECTION_ITEMS : 0)
+                                - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0)
+                                - (collapseFavoriteSubredditsSection ? favoriteSubscribedSubreddits.size() : 0);
+                    }
                     return CURRENT_MENU_ITEMS + (favoriteSubscribedSubreddits.isEmpty() ? 0 : favoriteSubscribedSubreddits.size() + 1)
-                            + (subscribedSubreddits.isEmpty() ? 0 : subscribedSubreddits.size() + 1);
+                            + (subscribedSubreddits.isEmpty() ? 0 : subscribedSubreddits.size() + 1)
+                            - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
+                            - (collapsePostSection ? POST_SECTION_ITEMS : 0)
+                            - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0)
+                            - (collapseFavoriteSubredditsSection ? favoriteSubscribedSubreddits.size() : 0)
+                            - (collapseSubscribedSubredditsSection ? subscribedSubreddits.size() : 0);
                 }
-                return CURRENT_MENU_ITEMS - 1;
+                return CURRENT_MENU_ITEMS - 1
+                        - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
+                        - (collapsePostSection ? POST_SECTION_ITEMS : 0)
+                        - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0);
             } else {
                 return 4;
             }
