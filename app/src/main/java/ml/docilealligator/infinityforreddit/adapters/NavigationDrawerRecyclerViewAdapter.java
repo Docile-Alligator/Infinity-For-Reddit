@@ -290,13 +290,28 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
             int type;
             if (position == 1) {
                 ((MenuGroupTitleViewHolder) holder).titleTextView.setText(R.string.label_account);
+                if (collapseAccountSection) {
+                    ((MenuGroupTitleViewHolder) holder).collapseIndicatorImageView.setImageResource(R.drawable.ic_baseline_arrow_drop_up_24px);
+                } else {
+                    ((MenuGroupTitleViewHolder) holder).collapseIndicatorImageView.setImageResource(R.drawable.ic_baseline_arrow_drop_down_24px);
+                }
                 type = 0;
             } else if (position == 6 - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)) {
                 ((MenuGroupTitleViewHolder) holder).titleTextView.setText(R.string.label_post);
+                if (collapsePostSection) {
+                    ((MenuGroupTitleViewHolder) holder).collapseIndicatorImageView.setImageResource(R.drawable.ic_baseline_arrow_drop_up_24px);
+                } else {
+                    ((MenuGroupTitleViewHolder) holder).collapseIndicatorImageView.setImageResource(R.drawable.ic_baseline_arrow_drop_down_24px);
+                }
                 type = 1;
             } else if (position == 12 - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
                     - (collapsePostSection ? POST_SECTION_ITEMS : 0)) {
                 ((MenuGroupTitleViewHolder) holder).titleTextView.setText(R.string.label_preferences);
+                if (collapsePreferencesSection) {
+                    ((MenuGroupTitleViewHolder) holder).collapseIndicatorImageView.setImageResource(R.drawable.ic_baseline_arrow_drop_up_24px);
+                } else {
+                    ((MenuGroupTitleViewHolder) holder).collapseIndicatorImageView.setImageResource(R.drawable.ic_baseline_arrow_drop_down_24px);
+                }
                 type = 2;
             } else {
                 if (!favoriteSubscribedSubreddits.isEmpty() && position == CURRENT_MENU_ITEMS
@@ -304,9 +319,19 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                         - (collapsePostSection ? POST_SECTION_ITEMS : 0)
                         - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0)) {
                     ((MenuGroupTitleViewHolder) holder).titleTextView.setText(R.string.favorites);
+                    if (collapseFavoriteSubredditsSection) {
+                        ((MenuGroupTitleViewHolder) holder).collapseIndicatorImageView.setImageResource(R.drawable.ic_baseline_arrow_drop_up_24px);
+                    } else {
+                        ((MenuGroupTitleViewHolder) holder).collapseIndicatorImageView.setImageResource(R.drawable.ic_baseline_arrow_drop_down_24px);
+                    }
                     type = 3;
                 } else {
                     ((MenuGroupTitleViewHolder) holder).titleTextView.setText(R.string.subscriptions);
+                    if (collapseSubscribedSubredditsSection) {
+                        ((MenuGroupTitleViewHolder) holder).collapseIndicatorImageView.setImageResource(R.drawable.ic_baseline_arrow_drop_up_24px);
+                    } else {
+                        ((MenuGroupTitleViewHolder) holder).collapseIndicatorImageView.setImageResource(R.drawable.ic_baseline_arrow_drop_down_24px);
+                    }
                     type = 4;
                 }
             }
@@ -316,50 +341,50 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                     case 0:
                         if (collapseAccountSection) {
                             collapseAccountSection = !collapseAccountSection;
-                            notifyItemRangeInserted(position + 1, ACCOUNT_SECTION_ITEMS);
+                            notifyItemRangeInserted(holder.getBindingAdapterPosition() + 1, ACCOUNT_SECTION_ITEMS);
                         } else {
                             collapseAccountSection = !collapseAccountSection;
-                            notifyItemRangeRemoved(position + 1, ACCOUNT_SECTION_ITEMS);
+                            notifyItemRangeRemoved(holder.getBindingAdapterPosition() + 1, ACCOUNT_SECTION_ITEMS);
                         }
                         break;
                     case 1:
                         if (collapsePostSection) {
                             collapsePostSection = !collapsePostSection;
-                            notifyItemRangeInserted(position + 1, POST_SECTION_ITEMS);
+                            notifyItemRangeInserted(holder.getBindingAdapterPosition() + 1, POST_SECTION_ITEMS);
                         } else {
                             collapsePostSection = !collapsePostSection;
-                            notifyItemRangeRemoved(position + 1, POST_SECTION_ITEMS);
+                            notifyItemRangeRemoved(holder.getBindingAdapterPosition() + 1, POST_SECTION_ITEMS);
                         }
                         break;
                     case 2:
                         if (collapsePreferencesSection) {
                             collapsePreferencesSection = !collapsePreferencesSection;
-                            notifyItemRangeInserted(position + 1, PREFERENCES_SECTION_ITEMS);
+                            notifyItemRangeInserted(holder.getBindingAdapterPosition() + 1, PREFERENCES_SECTION_ITEMS);
                         } else {
                             collapsePreferencesSection = !collapsePreferencesSection;
-                            notifyItemRangeRemoved(position + 1, PREFERENCES_SECTION_ITEMS);
+                            notifyItemRangeRemoved(holder.getBindingAdapterPosition() + 1, PREFERENCES_SECTION_ITEMS);
                         }
                         break;
                     case 3:
                         if (collapseFavoriteSubredditsSection) {
                             collapseFavoriteSubredditsSection = !collapseFavoriteSubredditsSection;
-                            notifyItemRangeInserted(position + 1, favoriteSubscribedSubreddits.size());
+                            notifyItemRangeInserted(holder.getBindingAdapterPosition() + 1, favoriteSubscribedSubreddits.size());
                         } else {
                             collapseFavoriteSubredditsSection = !collapseFavoriteSubredditsSection;
-                            notifyItemRangeRemoved(position + 1, favoriteSubscribedSubreddits.size());
+                            notifyItemRangeRemoved(holder.getBindingAdapterPosition() + 1, favoriteSubscribedSubreddits.size());
                         }
                         break;
                     case 4:
                         if (collapseSubscribedSubredditsSection) {
                             collapseSubscribedSubredditsSection = !collapseSubscribedSubredditsSection;
-                            notifyItemRangeInserted(position + 1, subscribedSubreddits.size());
+                            notifyItemRangeInserted(holder.getBindingAdapterPosition() + 1, subscribedSubreddits.size());
                         } else {
                             collapseSubscribedSubredditsSection = !collapseSubscribedSubredditsSection;
-                            notifyItemRangeRemoved(position + 1, subscribedSubreddits.size());
+                            notifyItemRangeRemoved(holder.getBindingAdapterPosition() + 1, subscribedSubreddits.size());
                         }
                         break;
                 }
-                notifyDataSetChanged();
+                notifyItemChanged(holder.getBindingAdapterPosition());
             });
         } else if (holder instanceof MenuItemViewHolder) {
             int stringId = 0;
@@ -748,12 +773,16 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     }
 
     class MenuGroupTitleViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.title_text_view_item_nav_drawer_menu_group_title)
         TextView titleTextView;
+        @BindView(R.id.collapse_indicator_image_view_item_nav_drawer_menu_group_title)
+        ImageView collapseIndicatorImageView;
 
         MenuGroupTitleViewHolder(@NonNull View itemView) {
             super(itemView);
-            titleTextView = (TextView) itemView;
+            ButterKnife.bind(this, itemView);
             titleTextView.setTextColor(secondaryTextColor);
+            collapseIndicatorImageView.setColorFilter(secondaryTextColor, android.graphics.PorterDuff.Mode.SRC_IN);
         }
     }
 
