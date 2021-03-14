@@ -31,4 +31,14 @@
         app:key="collapse_subscribed_subreddits_section"
         app:title="@string/settings_collapse_subscribed_subreddits_section_title" />
 
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="hide_favorite_subreddits_sections"
+        app:title="@string/settings_hide_favorite_subreddits_sections_title" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="hide_subscribed_subreddits_sections"
+        app:title="@string/settings_hide_subscribed_subreddits_sections_title" />
+
 </PreferenceScreen>

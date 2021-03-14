@@ -126,7 +126,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                         - (collapsePostSection ? POST_SECTION_ITEMS : 0)
                         - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0)) {
                     return VIEW_TYPE_MENU_GROUP_TITLE;
-                } else if (!favoriteSubscribedSubreddits.isEmpty() && position == CURRENT_MENU_ITEMS
+                } else if (!hideFavoriteSubredditsSection && !favoriteSubscribedSubreddits.isEmpty() && position == CURRENT_MENU_ITEMS
                         - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
                         - (collapsePostSection ? POST_SECTION_ITEMS : 0)
                         - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0)
@@ -135,7 +135,8 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                 } else if (position > CURRENT_MENU_ITEMS - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
                         - (collapsePostSection ? POST_SECTION_ITEMS : 0)
                         - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0)) {
-                    if (!favoriteSubscribedSubreddits.isEmpty() && !collapseFavoriteSubredditsSection && position <= CURRENT_MENU_ITEMS
+                    if (!favoriteSubscribedSubreddits.isEmpty() && !hideFavoriteSubredditsSection &&
+                            !collapseFavoriteSubredditsSection && position <= CURRENT_MENU_ITEMS
                             - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
                             - (collapsePostSection ? POST_SECTION_ITEMS : 0)
                             - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0)
@@ -314,7 +315,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                 }
                 type = 2;
             } else {
-                if (!favoriteSubscribedSubreddits.isEmpty() && position == CURRENT_MENU_ITEMS
+                if (!hideFavoriteSubredditsSection && !favoriteSubscribedSubreddits.isEmpty() && position == CURRENT_MENU_ITEMS
                         - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
                         - (collapsePostSection ? POST_SECTION_ITEMS : 0)
                         - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0)) {
@@ -571,7 +572,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                 itemClickListener.onSubscribedSubredditClick(subredditName);
             });
         } else if (holder instanceof SubscribedThingViewHolder) {
-            SubscribedSubredditData subreddit = favoriteSubscribedSubreddits.isEmpty() ? subscribedSubreddits.get(position - (CURRENT_MENU_ITEMS
+            SubscribedSubredditData subreddit = favoriteSubscribedSubreddits.isEmpty() || hideFavoriteSubredditsSection ? subscribedSubreddits.get(position - (CURRENT_MENU_ITEMS
                     - (collapseAccountSection ? ACCOUNT_SECTION_ITEMS : 0)
                     - (collapsePostSection ? POST_SECTION_ITEMS : 0)
                     - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0))

@@ -553,6 +553,8 @@
     <string name="settings_collapse_preferences_section_title">Collapse Preferences Section</string>
     <string name="settings_collapse_favorite_subreddits_section_title">Collapse Favorite Subreddits Section</string>
     <string name="settings_collapse_subscribed_subreddits_section_title">Collapse Subscribed Subreddits Section</string>
+    <string name="settings_hide_favorite_subreddits_sections_title">Hide Favorite Subreddits Section</string>
+    <string name="settings_hide_subscribed_subreddits_sections_title">Hide Subscribed Subreddits Section</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
