@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <Preference
+        app:icon="@drawable/ic_info_preference_24dp"
+        app:summary="@string/restart_app_see_changes"
+        app:enabled="false" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="collapse_account_section"
+        app:title="@string/settings_collapse_account_section_title" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="collapse_post_section"
+        app:title="@string/settings_collapse_post_section_title" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="collapse_preferences_section"
+        app:title="@string/settings_collapse_preferences_section_title" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="collapse_favorite_subreddits_section"
+        app:title="@string/settings_collapse_favorite_subreddits_section_title" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="collapse_subscribed_subreddits_section"
+        app:title="@string/settings_collapse_subscribed_subreddits_section_title" />
+
+</PreferenceScreen>

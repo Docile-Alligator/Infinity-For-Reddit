@@ -547,6 +547,12 @@
     <string name="settings_restore_settings_title">Restore Settings</string>
     <string name="settings_credits_love_animation_title">Love Animation</string>
     <string name="settings_swipe_between_posts_title">Swipe Between Posts</string>
+    <string name="settings_navigation_drawer_title">Navigation Drawer</string>
+    <string name="settings_collapse_account_section_title">Collapse Account Section</string>
+    <string name="settings_collapse_post_section_title">Collapse Post Section</string>
+    <string name="settings_collapse_preferences_section_title">Collapse Preferences Section</string>
+    <string name="settings_collapse_favorite_subreddits_section_title">Collapse Favorite Subreddits Section</string>
+    <string name="settings_collapse_subscribed_subreddits_section_title">Collapse Subscribed Subreddits Section</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

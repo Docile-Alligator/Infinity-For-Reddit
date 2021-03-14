@@ -14,6 +14,10 @@
         app:isPreferenceVisible="false" />
 
     <Preference
+        app:title="@string/settings_navigation_drawer_title"
+        app:fragment="ml.docilealligator.infinityforreddit.settings.NavigationDrawerPreferenceFragment" />
+
+    <Preference
         app:title="@string/settings_customize_tabs_in_main_page_title"
         app:summary="@string/only_for_logged_in_user"
         app:fragment="ml.docilealligator.infinityforreddit.settings.CustomizeMainPageTabsFragment" />
