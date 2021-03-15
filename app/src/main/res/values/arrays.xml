@@ -24,15 +24,15 @@
     </string-array>
 
     <string-array name="settings_theme_q">
-        <item>Light Theme</item>
-        <item>Dark Theme</item>
-        <item>Device Default</item>
+        <item>@string/light_theme</item>
+        <item>@string/dark_theme</item>
+        <item>@string/device_default</item>
     </string-array>
 
     <string-array name="settings_theme">
-        <item>Light Theme</item>
-        <item>Dark Theme</item>
-        <item>Set by Battery Saver</item>
+        <item>@string/light_theme</item>
+        <item>@string/dark_theme</item>
+        <item>@string/set_by_battery_saver</item>
     </string-array>
 
     <string-array name="settings_theme_values">
@@ -42,10 +42,10 @@
     </string-array>
 
     <string-array name="settings_default_post_layout">
-        <item>Card Layout</item>
-        <item>Card Layout 2</item>
-        <item>Compact Layout</item>
-        <item>Gallery Layout</item>
+        <item>@string/post_layout_card</item>
+        <item>@string/post_layout_card_2</item>
+        <item>@string/post_layout_compact</item>
+        <item>@string/post_layout_gallery</item>
     </string-array>
 
     <string-array name="settings_default_post_layout_values">
@@ -56,9 +56,9 @@
     </string-array>
 
     <string-array name="settings_video_autoplay">
-        <item>Always On</item>
-        <item>Only on Wifi</item>
-        <item>Never</item>
+        <item>@string/always_on</item>
+        <item>@string/only_on_wifi</item>
+        <item>@string/never</item>
     </string-array>
 
     <string-array name="settings_video_autoplay_values">
@@ -88,10 +88,10 @@
     </string-array>
 
     <string-array name="settings_font_size">
-        <item>Small</item>
-        <item>Normal</item>
-        <item>Large</item>
-        <item>Extra Large</item>
+        <item>@string/small</item>
+        <item>@string/normal</item>
+        <item>@string/large</item>
+        <item>@string/extra_large</item>
     </string-array>
 
     <string-array name="settings_font_size_values">
@@ -102,10 +102,10 @@
     </string-array>
 
     <string-array name="settings_title_font_size">
-        <item>Small</item>
-        <item>Normal</item>
-        <item>Large</item>
-        <item>Extra Large</item>
+        <item>@string/small</item>
+        <item>@string/normal</item>
+        <item>@string/large</item>
+        <item>@string/extra_large</item>
     </string-array>
 
     <string-array name="settings_title_font_size_values">
@@ -116,11 +116,11 @@
     </string-array>
 
     <string-array name="settings_content_font_size">
-        <item>Small</item>
-        <item>Normal</item>
-        <item>Large</item>
-        <item>Extra Large</item>
-        <item>Enormously Large</item>
+        <item>@string/small</item>
+        <item>@string/normal</item>
+        <item>@string/large</item>
+        <item>@string/extra_large</item>
+        <item>@string/enormously_large</item>
     </string-array>
 
     <string-array name="settings_content_font_size_values">
@@ -132,7 +132,7 @@
     </string-array>
 
     <string-array name="settings_font_family">
-        <item>Default</item>
+        <item>@string/default_in_array</item>
         <item>Balsamiq Sans</item>
         <item>Balsamiq Sans Bold</item>
         <item>Noto Sans</item>
@@ -166,17 +166,17 @@
     </string-array>
 
     <string-array name="settings_tab_post_type">
-        <item>Home</item>
-        <item>Popular</item>
-        <item>All</item>
-        <item>Subreddit</item>
-        <item>MultiReddit</item>
-        <item>User</item>
-        <item>Upvoted</item>
-        <item>Downvoted</item>
-        <item>Hidden</item>
-        <item>Saved</item>
-        <item>Gilded</item>
+        <item>@string/home</item>
+        <item>@string/popular</item>
+        <item>@string/all</item>
+        <item>@string/subreddit</item>
+        <item>@string/multi_reddit</item>
+        <item>@string/user</item>
+        <item>@string/upvoted</item>
+        <item>@string/downvoted</item>
+        <item>@string/hidden</item>
+        <item>@string/saved</item>
+        <item>@string/gilded</item>
     </string-array>
 
     <string-array name="settings_time_format">
@@ -247,51 +247,51 @@
     </string-array>
 
     <string-array name="settings_main_activity_bottom_app_bar_options">
-        <item>Subscriptions</item>
-        <item>Multireddits</item>
-        <item>Inbox</item>
-        <item>Profile</item>
-        <item>Submit posts</item>
-        <item>Refresh</item>
-        <item>Change sort type</item>
-        <item>Change post layout</item>
-        <item>Search</item>
-        <item>Go to Subreddit</item>
-        <item>Go to User</item>
-        <item>Random</item>
-        <item>Hide Read Posts</item>
-        <item>Filter Posts</item>
+        <item>@string/subscriptions</item>
+        <item>@string/multi_reddits</item>
+        <item>@string/inbox</item>
+        <item>@string/profile</item>
+        <item>@string/submit_post</item>
+        <item>@string/refresh</item>
+        <item>@string/change_sort_type</item>
+        <item>@string/change_post_layout</item>
+        <item>@string/search</item>
+        <item>@string/go_to_subreddit</item>
+        <item>@string/go_to_user</item>
+        <item>@string/random</item>
+        <item>@string/hide_read_posts</item>
+        <item>@string/filter_posts</item>
     </string-array>
 
     <string-array name="settings_other_activities_bottom_app_bar_options">
-        <item>Home</item>
-        <item>Subscriptions</item>
-        <item>Inbox</item>
-        <item>Profile</item>
-        <item>Multireddits</item>
-        <item>Submit posts</item>
-        <item>Refresh</item>
-        <item>Change sort type</item>
-        <item>Change post layout</item>
-        <item>Search</item>
-        <item>Go to Subreddit</item>
-        <item>Go to User</item>
-        <item>Random</item>
-        <item>Hide Read Posts</item>
-        <item>Filter Posts</item>
+        <item>@string/home</item>
+        <item>@string/subscriptions</item>
+        <item>@string/inbox</item>
+        <item>@string/profile</item>
+        <item>@string/multi_reddits</item>
+        <item>@string/submit_post</item>
+        <item>@string/refresh</item>
+        <item>@string/change_sort_type</item>
+        <item>@string/change_post_layout</item>
+        <item>@string/search</item>
+        <item>@string/go_to_subreddit</item>
+        <item>@string/go_to_user</item>
+        <item>@string/random</item>
+        <item>@string/hide_read_posts</item>
+        <item>@string/filter_posts</item>
     </string-array>
 
     <string-array name="settings_bottom_app_bar_fab_options">
-        <item>Submit posts</item>
-        <item>Refresh</item>
-        <item>Change sort type</item>
-        <item>Change post layout</item>
-        <item>Search</item>
-        <item>Go to Subreddit</item>
-        <item>Go to User</item>
-        <item>Random</item>
-        <item>Hide Read Posts</item>
-        <item>Filter Posts</item>
+        <item>@string/submit_post</item>
+        <item>@string/refresh</item>
+        <item>@string/change_sort_type</item>
+        <item>@string/change_post_layout</item>
+        <item>@string/search</item>
+        <item>@string/go_to_subreddit</item>
+        <item>@string/go_to_user</item>
+        <item>@string/random</item>
+        <item>@string/hide_read_posts</item>
+        <item>@string/filter_posts</item>
     </string-array>
 
     <string-array name="settings_swipe_action_threshold">
@@ -306,9 +306,9 @@
     </string-array>
 
     <string-array name="settings_data_saving_mode">
-        <item>Off</item>
-        <item>Only on Cellular Data</item>
-        <item>Always on</item>
+        <item>@string/off</item>
+        <item>@string/only_on_cellular_data</item>
+        <item>@string/always_on</item>
     </string-array>
 
     <string-array name="settings_data_saving_mode_values">
@@ -318,8 +318,8 @@
     </string-array>
 
     <string-array name="settings_swipe_actions">
-        <item>Upvote</item>
-        <item>Downvote</item>
+        <item>@string/upvote</item>
+        <item>@string/downvote</item>
     </string-array>
 
     <string-array name="settings_swipe_actions_values">

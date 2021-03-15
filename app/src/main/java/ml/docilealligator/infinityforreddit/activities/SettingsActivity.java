@@ -35,6 +35,7 @@ import ml.docilealligator.infinityforreddit.settings.InterfacePreferenceFragment
 import ml.docilealligator.infinityforreddit.settings.MainPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.NsfwAndSpoilerFragment;
 import ml.docilealligator.infinityforreddit.settings.PostHistoryFragment;
+import ml.docilealligator.infinityforreddit.settings.PostPreferenceFragment;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class SettingsActivity extends BaseActivity implements
@@ -104,6 +105,8 @@ public class SettingsActivity extends BaseActivity implements
                 setTitle(R.string.settings_font_title);
             } else if (fragment instanceof GesturesAndButtonsPreferenceFragment) {
                 setTitle(R.string.settings_gestures_and_buttons_title);
+            } else if (fragment instanceof PostPreferenceFragment) {
+                setTitle(R.string.settings_category_post_title);
             }
         });
     }

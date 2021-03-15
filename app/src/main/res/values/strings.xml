@@ -637,6 +637,8 @@
 
     <string name="light_theme">Light Theme</string>
     <string name="dark_theme">Dark Theme</string>
+    <string name="device_default">Device Default</string>
+    <string name="set_by_battery_saver">Set by Battery Saver</string>
 
     <string name="multi_reddit_name_hint">Name (Max 50 Characters)</string>
     <string name="multi_reddit_description_hint">Description</string>
@@ -1067,5 +1069,17 @@
     <string name="error_fetching_v_redd_it_video_cannot_get_redirect_url">Error fetching v.redd.it video: Cannot get the redirect url</string>
     <string name="error_fetching_v_redd_it_video_cannot_get_post">Error fetching v.redd.it video: Cannot get the post</string>
     <string name="error_fetching_v_redd_it_video_cannot_get_post_id">Error fetching v.redd.it video: Cannot get the post id</string>
+
+    <string name="always_on">Always On</string>
+    <string name="only_on_wifi">Only on Wifi</string>
+    <string name="never">Never</string>
+    <string name="normal">Normal</string>
+    <string name="extra_large">Extra Large</string>
+    <string name="enormously_large">Enormously Large</string>
+    <string name="default_in_array">Default</string>
+    <string name="off">Off</string>
+    <string name="only_on_cellular_data">Only on Cellular Data</string>
+    <string name="upvote">Upvote</string>
+    <string name="downvote">Downvote</string>
 
 </resources>

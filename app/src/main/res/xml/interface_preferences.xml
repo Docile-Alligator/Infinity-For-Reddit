@@ -33,9 +33,10 @@
         app:title="@string/settings_enable_bottom_app_bar_title"
         app:summary="@string/settings_enable_bottom_app_bar_summary" />
 
-    <Preference
-        app:title="@string/settings_time_format_title"
-        app:fragment="ml.docilealligator.infinityforreddit.settings.TimeFormatPreferenceFragment" />
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="hide_subreddit_description"
+        app:title="@string/settings_hide_subreddit_description_title" />
 
     <ListPreference
         app:defaultValue="0"
@@ -45,10 +46,9 @@
         app:title="@string/settings_default_search_result_tab"
         app:useSimpleSummaryProvider="true" />
 
-    <SwitchPreference
-        app:defaultValue="false"
-        app:key="hide_subreddit_description"
-        app:title="@string/settings_hide_subreddit_description_title" />
+    <Preference
+        app:title="@string/settings_time_format_title"
+        app:fragment="ml.docilealligator.infinityforreddit.settings.TimeFormatPreferenceFragment" />
 
     <Preference
         app:title="@string/settings_category_post_title"
