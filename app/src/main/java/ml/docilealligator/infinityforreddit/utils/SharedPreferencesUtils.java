@@ -38,7 +38,8 @@ public class SharedPreferencesUtils {
     public static final String DISABLE_IMMERSIVE_INTERFACE_IN_LANDSCAPE_MODE = "disable_immersive_interface_in_landscape_mode";
     public static final String BOTTOM_APP_BAR_KEY = "bottom_app_bar";
     public static final String VOTE_BUTTONS_ON_THE_RIGHT_KEY = "vote_buttons_on_the_right";
-    public static final String SHOW_AVATAR_ON_THE_RIGHT_IN_THE_NAVIGATION_DRAWER = "show_avatar_on_the_right_in_the_navigation_drawer";
+    public static final String SHOW_AVATAR_ON_THE_RIGHT = "show_avatar_on_the_right";
+    public static final String DEFAULT_SEARCH_RESULT_TAB = "default_search_result_tab";
 
     public static final String SORT_TYPE_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.sort_type";
     public static final String SORT_TYPE_BEST_POST = "sort_type_best_post";
@@ -145,7 +146,6 @@ public class SharedPreferencesUtils {
     public static final String DATA_SAVING_MODE_ALWAYS = "2";
     public static final String NATIONAL_FLAGS = "national_flags";
     public static final String RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE = "respect_subreddit_recommended_comment_sort_type";
-    public static final String SUBREDDIT_FILTER_POPULAR_AND_ALL = "subreddit_filter_popular_and_all";
     public static final String UFO_CAPTURING_ANIMATION = "ufo_capturing_animation";
     public static final String HIDE_SUBREDDIT_DESCRIPTION = "hide_subreddit_description";
     public static final String DISABLE_IMAGE_PREVIEW = "disable_image_preview";

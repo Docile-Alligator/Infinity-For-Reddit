@@ -185,7 +185,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         if (savedInstanceState != null) {
             mInsertSearchQuerySuccess = savedInstanceState.getBoolean(INSERT_SEARCH_QUERY_SUCCESS_STATE);
         }
-        bindView();
+        bindView(savedInstanceState);
     }
 
     @Override
@@ -214,7 +214,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         applyFABTheme(fab);
     }
 
-    private void bindView() {
+    private void bindView(Bundle savedInstanceState) {
         sectionsPagerAdapter = new SectionsPagerAdapter(this);
         viewPager2.setAdapter(sectionsPagerAdapter);
         viewPager2.setOffscreenPageLimit(3);
@@ -245,6 +245,10 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             }
         }).attach();
         fixViewPager2Sensitivity(viewPager2);
+
+        if (savedInstanceState == null) {
+            viewPager2.setCurrentItem(Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_SEARCH_RESULT_TAB, "0")), false);
+        }
 
         fabOption = bottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS);
         switch (fabOption) {

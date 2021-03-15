@@ -8,6 +8,11 @@
 
     <SwitchPreference
         app:defaultValue="false"
+        app:key="show_avatar_on_the_right"
+        app:title="@string/settings_show_avatar_on_the_right" />
+
+    <SwitchPreference
+        app:defaultValue="false"
         app:key="collapse_account_section"
         app:title="@string/settings_collapse_account_section_title" />
 

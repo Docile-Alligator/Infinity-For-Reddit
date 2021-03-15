@@ -409,4 +409,16 @@
         <item>ALL</item>
     </string-array>
 
+    <string-array name="settings_default_search_result_tab">
+        <item>@string/posts</item>
+        <item>@string/subreddits</item>
+        <item>@string/users</item>
+    </string-array>
+
+    <string-array name="settings_default_search_result_tab_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
 </resources>

@@ -33,14 +33,17 @@
         app:title="@string/settings_enable_bottom_app_bar_title"
         app:summary="@string/settings_enable_bottom_app_bar_summary" />
 
-    <SwitchPreference
-        app:defaultValue="false"
-        app:key="show_avatar_on_the_right_in_the_navigation_drawer"
-        app:title="@string/settings_show_avatar_on_the_right_in_the_navigation_drawer" />
-
     <Preference
         app:title="@string/settings_time_format_title"
         app:fragment="ml.docilealligator.infinityforreddit.settings.TimeFormatPreferenceFragment" />
+
+    <ListPreference
+        app:defaultValue="0"
+        app:entries="@array/settings_default_search_result_tab"
+        app:entryValues="@array/settings_default_search_result_tab_values"
+        app:key="default_search_result_tab"
+        app:title="@string/settings_default_search_result_tab"
+        app:useSimpleSummaryProvider="true" />
 
     <SwitchPreference
         app:defaultValue="false"
