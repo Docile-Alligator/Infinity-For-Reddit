@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,13 +32,13 @@ public class LinkResolverActivity extends AppCompatActivity {
     public static final String EXTRA_NEW_ACCOUNT_NAME = "ENAN";
     public static final String EXTRA_IS_NSFW = "EIN";
 
-    private static final String POST_PATTERN = "/r/\\w+/comments/\\w+/?\\w+/?";
-    private static final String POST_PATTERN_2 = "/(u|U|user)/\\w+/comments/\\w+/?\\w+/?";
-    private static final String COMMENT_PATTERN = "/(r|u|U|user)/\\w+/comments/\\w+/?\\w+/\\w+/?";
+    private static final String POST_PATTERN = "/r/[\\w-]+/comments/\\w+/?\\w+/?";
+    private static final String POST_PATTERN_2 = "/(u|U|user)/[\\w-]+/comments/\\w+/?\\w+/?";
+    private static final String COMMENT_PATTERN = "/(r|u|U|user)/[\\w-]+/comments/\\w+/?\\w+/\\w+/?";
     private static final String SUBREDDIT_PATTERN = "/[rR]/[\\w-]+/?";
     private static final String USER_PATTERN = "/(u|U|user)/[\\w-]+/?";
-    private static final String SIDEBAR_PATTERN = "/[rR]/\\w+/about/sidebar";
-    private static final String MULTIREDDIT_PATTERN = "/user/\\w+/m/\\w+/?";
+    private static final String SIDEBAR_PATTERN = "/[rR]/[\\w-]+/about/sidebar";
+    private static final String MULTIREDDIT_PATTERN = "/user/[\\w-]+/m/\\w+/?";
     private static final String MULTIREDDIT_PATTERN_2 = "/[rR]/(\\w+\\+?)+/?";
     private static final String REDD_IT_POST_PATTERN = "/\\w+/?";
     private static final String GFYCAT_PATTERN = "(/ifr)?/[\\w-]+$";
@@ -245,6 +246,7 @@ public class LinkResolverActivity extends AppCompatActivity {
     }
 
     private void deepLinkError(Uri uri) {
+        Log.i("ASDASFD", "s " + uri.toString());
         PackageManager pm = getPackageManager();
 
         String authority = uri.getAuthority();
