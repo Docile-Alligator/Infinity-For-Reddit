@@ -51,6 +51,8 @@ public class PostFilter implements Parcelable {
     public String containFlairs;
     @ColumnInfo(name = "exclude_flairs")
     public String excludeFlairs;
+    @ColumnInfo(name =  "exclude_domains")
+    public String excludeDomains;
     @ColumnInfo(name = "contain_text_type")
     public boolean containTextType = true;
     @ColumnInfo(name = "contain_link_type")
@@ -85,6 +87,7 @@ public class PostFilter implements Parcelable {
         excludeUsers = in.readString();
         containFlairs = in.readString();
         excludeFlairs = in.readString();
+        excludeDomains = in.readString();
         containTextType = in.readByte() != 0;
         containLinkType = in.readByte() != 0;
         containImageType = in.readByte() != 0;
@@ -199,6 +202,14 @@ public class PostFilter implements Parcelable {
                 }
             }
         }
+        if (postFilter.excludeDomains != null && !postFilter.excludeDomains.equals("")) {
+            String[] domains = postFilter.excludeDomains.split(",", 0);
+            for (String f : domains) {
+                if (!f.trim().equals("") && post.getUrl().toLowerCase().contains(f.trim().toLowerCase())) {
+                    return false;
+                }
+            }
+        }
         if (postFilter.containFlairs != null && !postFilter.containFlairs.equals("")) {
             String[] flairs = postFilter.containFlairs.split(",", 0);
             for (String f : flairs) {
@@ -263,6 +274,12 @@ public class PostFilter implements Parcelable {
                 postFilter.excludeFlairs = stringBuilder.toString();
             }
 
+            if (p.excludeDomains != null && !p.excludeDomains.equals("")) {
+                stringBuilder = new StringBuilder(postFilter.excludeDomains == null ? "" : postFilter.excludeDomains);
+                stringBuilder.append(",").append(p.excludeDomains);
+                postFilter.excludeDomains = stringBuilder.toString();
+            }
+
             postFilter.containTextType = p.containTextType || postFilter.containTextType;
             postFilter.containLinkType = p.containLinkType || postFilter.containLinkType;
             postFilter.containImageType = p.containImageType || postFilter.containImageType;
@@ -297,6 +314,7 @@ public class PostFilter implements Parcelable {
         parcel.writeString(excludeUsers);
         parcel.writeString(containFlairs);
         parcel.writeString(excludeFlairs);
+        parcel.writeString(excludeDomains);
         parcel.writeByte((byte) (containTextType ? 1 : 0));
         parcel.writeByte((byte) (containLinkType ? 1 : 0));
         parcel.writeByte((byte) (containImageType ? 1 : 0));

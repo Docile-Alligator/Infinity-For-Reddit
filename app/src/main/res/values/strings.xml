@@ -1015,6 +1015,7 @@
     <string name="exclude_users_hint">Exclude users (e.g. Hostilenemy,random)</string>
     <string name="exclude_flairs_hint">Exclude flairs (e.g. flair1,flair2)</string>
     <string name="contain_flairs_hint">Contain flairs (e.g. flair1,flair2)</string>
+    <string name="exclude_domains_hint">Exclude domains</string>
     <string name="min_vote_hint">Min vote (-1: no restriction)</string>
     <string name="max_vote_hint">Max vote (-1: no restriction)</string>
     <string name="min_comments_hint">Min comments (-1: no restriction)</string>

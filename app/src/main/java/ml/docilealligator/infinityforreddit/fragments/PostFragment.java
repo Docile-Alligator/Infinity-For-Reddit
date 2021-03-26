@@ -1285,7 +1285,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Override
     public void changeNSFW(boolean nsfw) {
         postFilter.allowNSFW = nsfw;
-        mPostViewModel.changePostFilter(postFilter);
+        if (mPostViewModel != null) {
+            mPostViewModel.changePostFilter(postFilter);
+        }
     }
 
     @Override

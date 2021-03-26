@@ -144,6 +144,10 @@ public class CustomizePostFilterActivity extends BaseActivity {
     TextInputLayout containsFlairsTextInputLayout;
     @BindView(R.id.contains_flairs_text_input_edit_text_customize_post_filter_activity)
     TextInputEditText containsFlairsTextInputEditText;
+    @BindView(R.id.excludes_domains_text_input_layout_customize_post_filter_activity)
+    TextInputLayout excludesDomainsTextInputLayout;
+    @BindView(R.id.excludes_domains_text_input_edit_text_customize_post_filter_activity)
+    TextInputEditText excludesDomainsTextInputEditText;
     @BindView(R.id.min_vote_text_input_layout_customize_post_filter_activity)
     TextInputLayout minVoteTextInputLayout;
     @BindView(R.id.min_vote_text_input_edit_text_customize_post_filter_activity)
@@ -298,6 +302,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
         excludesUsersTextInputEditText.setText(postFilter.excludeUsers);
         excludesFlairsTextInputEditText.setText(postFilter.excludeFlairs);
         containsFlairsTextInputEditText.setText(postFilter.containFlairs);
+        excludesDomainsTextInputEditText.setText(postFilter.excludeDomains);
         minVoteTextInputEditText.setText(Integer.toString(postFilter.minVote));
         maxVoteTextInputEditText.setText(Integer.toString(postFilter.maxVote));
         minCommentsTextInputEditText.setText(Integer.toString(postFilter.minComments));
@@ -353,6 +358,9 @@ public class CustomizePostFilterActivity extends BaseActivity {
         containsFlairsTextInputLayout.setBoxStrokeColor(primaryTextColor);
         containsFlairsTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         containsFlairsTextInputEditText.setTextColor(primaryTextColor);
+        excludesDomainsTextInputLayout.setBoxStrokeColor(primaryTextColor);
+        excludesDomainsTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
+        excludesDomainsTextInputEditText.setTextColor(primaryTextColor);
         minVoteTextInputLayout.setBoxStrokeColor(primaryTextColor);
         minVoteTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         minVoteTextInputEditText.setTextColor(primaryTextColor);
@@ -490,6 +498,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
         postFilter.excludeUsers = excludesUsersTextInputEditText.getText().toString();
         postFilter.excludeFlairs = excludesUsersTextInputEditText.getText().toString();
         postFilter.containFlairs = containsFlairsTextInputEditText.getText().toString();
+        postFilter.excludeDomains = excludesDomainsTextInputEditText.getText().toString();
         postFilter.containTextType = postTypeTextCheckBox.isChecked();
         postFilter.containLinkType = postTypeLinkCheckBox.isChecked();
         postFilter.containImageType = postTypeImageCheckBox.isChecked();

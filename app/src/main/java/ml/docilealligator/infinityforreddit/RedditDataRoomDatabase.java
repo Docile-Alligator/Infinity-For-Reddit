@@ -35,7 +35,7 @@ import ml.docilealligator.infinityforreddit.user.UserData;
 
 @Database(entities = {Account.class, SubredditData.class, SubscribedSubredditData.class, UserData.class,
         SubscribedUserData.class, MultiReddit.class, CustomTheme.class, RecentSearchQuery.class,
-        ReadPost.class, PostFilter.class, PostFilterUsage.class}, version = 19)
+        ReadPost.class, PostFilter.class, PostFilterUsage.class}, version = 20)
 public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static RedditDataRoomDatabase INSTANCE;
 
@@ -49,7 +49,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                                     MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9,
                                     MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13,
                                     MIGRATION_13_14, MIGRATION_14_15, MIGRATION_15_16, MIGRATION_16_17,
-                                    MIGRATION_17_18, MIGRATION_18_19)
+                                    MIGRATION_17_18, MIGRATION_18_19, MIGRATION_19_20)
                             .build();
                 }
             }
@@ -330,6 +330,13 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("INSERT INTO accounts(username, karma, is_current_user) VALUES (\"-\", 0, false)");
+        }
+    };
+
+    private static final Migration MIGRATION_19_20 = new Migration(19, 20) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE post_filter ADD COLUMN exclude_domains TEXT");
         }
     };
 }
