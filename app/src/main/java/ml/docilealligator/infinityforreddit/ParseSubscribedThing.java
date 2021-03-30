@@ -99,7 +99,7 @@ class ParseSubscribedThing {
                         String description = data.getString(JSONUtils.PUBLIC_DESCRIPTION_KEY).trim();
                         String sidebarDescription = data.getString(JSONUtils.DESCRIPTION_KEY);
                         int nSubscribers = data.getInt(JSONUtils.SUBSCRIBERS_KEY);
-                        long createdUTC = data.getLong(JSONUtils.CREATED_UTC_KEY);
+                        long createdUTC = data.getLong(JSONUtils.CREATED_UTC_KEY) * 1000;
                         String suggestedCommentSort = data.getString(JSONUtils.SUGGESTED_COMMENT_SORT_KEY);
                         boolean isNSFW = data.getBoolean(JSONUtils.OVER18_KEY);
                         newSubscribedSubredditData.add(new SubscribedSubredditData(id, name, iconUrl, accountName, isFavorite));

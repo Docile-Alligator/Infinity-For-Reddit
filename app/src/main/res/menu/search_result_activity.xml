@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_sort_search_result_activity"
+        android:id="@+id/action_search_search_result_activity"
         android:orderInCategory="1"
-        android:title="@string/action_sort"
-        android:icon="@drawable/ic_sort_toolbar_24dp"
+        android:title="@string/action_search"
+        android:icon="@drawable/ic_search_toolbar_24dp"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_search_search_result_activity"
+        android:id="@+id/action_sort_search_result_activity"
         android:orderInCategory="2"
-        android:title="@string/action_search"
-        android:icon="@drawable/ic_search_toolbar_24dp"
+        android:title="@string/action_sort"
+        android:icon="@drawable/ic_sort_toolbar_24dp"
         app:showAsAction="ifRoom" />
 
     <item

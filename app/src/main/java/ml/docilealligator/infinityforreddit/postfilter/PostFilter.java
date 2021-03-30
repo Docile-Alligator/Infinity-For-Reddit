@@ -202,10 +202,11 @@ public class PostFilter implements Parcelable {
                 }
             }
         }
-        if (postFilter.excludeDomains != null && !postFilter.excludeDomains.equals("")) {
+        if (post.getUrl() != null && postFilter.excludeDomains != null && !postFilter.excludeDomains.equals("")) {
             String[] domains = postFilter.excludeDomains.split(",", 0);
+            String url = post.getUrl().toLowerCase();
             for (String f : domains) {
-                if (!f.trim().equals("") && post.getUrl().toLowerCase().contains(f.trim().toLowerCase())) {
+                if (!f.trim().equals("") && url.contains(f.trim().toLowerCase())) {
                     return false;
                 }
             }
