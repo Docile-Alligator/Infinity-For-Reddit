@@ -33,6 +33,7 @@ public class LinkResolverActivity extends AppCompatActivity {
 
     private static final String POST_PATTERN = "/r/[\\w-]+/comments/\\w+/?\\w+/?";
     private static final String POST_PATTERN_2 = "/(u|U|user)/[\\w-]+/comments/\\w+/?\\w+/?";
+    private static final String POST_PATTERN_3 = "/[\\w-]+$";
     private static final String COMMENT_PATTERN = "/(r|u|U|user)/[\\w-]+/comments/\\w+/?[\\w-]+/\\w+/?";
     private static final String SUBREDDIT_PATTERN = "/[rR]/[\\w-]+/?";
     private static final String USER_PATTERN = "/(u|U|user)/[\\w-]+/?";
@@ -137,6 +138,12 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 } else {
                                     deepLinkError(uri);
                                 }
+                            } else if (path.matches(POST_PATTERN_3)) {
+                                Intent intent = new Intent(this, ViewPostDetailActivity.class);
+                                intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, path.substring(1));
+                                intent.putExtra(ViewPostDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
+                                intent.putExtra(ViewPostDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
+                                startActivity(intent);
                             } else if (path.matches(COMMENT_PATTERN)) {
                                 int commentsIndex = segments.lastIndexOf("comments");
                                 if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
