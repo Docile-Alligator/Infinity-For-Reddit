@@ -40,7 +40,7 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String MULTIREDDIT_PATTERN = "/user/[\\w-]+/m/\\w+/?";
     private static final String MULTIREDDIT_PATTERN_2 = "/[rR]/(\\w+\\+?)+/?";
     private static final String REDD_IT_POST_PATTERN = "/\\w+/?";
-    private static final String GFYCAT_PATTERN = "(/ifr)?/[\\w-]+$";
+    private static final String GFYCAT_PATTERN = "(/i?fr)?/[\\w-]+$";
     private static final String REDGIFS_PATTERN = "/watch/[\\w-]+$";
     private static final String IMGUR_GALLERY_PATTERN = "/gallery/\\w+/?";
     private static final String IMGUR_ALBUM_PATTERN = "/(album|a)/\\w+/?";
