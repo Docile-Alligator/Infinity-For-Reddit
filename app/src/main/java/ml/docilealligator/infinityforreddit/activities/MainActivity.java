@@ -469,6 +469,41 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     sectionsPagerAdapter.filterPosts();
                 }
                 break;
+            case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_UPVOTED: {
+                Intent intent = new Intent(this, AccountPostsActivity.class);
+                intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_UPVOTED);
+                startActivity(intent);
+                break;
+            }
+            case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_DOWNVOTED: {
+                Intent intent = new Intent(this, AccountPostsActivity.class);
+                intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_DOWNVOTED);
+                startActivity(intent);
+                break;
+            }
+            case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_HIDDEN: {
+                Intent intent = new Intent(this, AccountPostsActivity.class);
+                intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_HIDDEN);
+                startActivity(intent);
+                break;
+            }
+            case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_SAVED: {
+                Intent intent = new Intent(this, AccountPostsActivity.class);
+                intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_SAVED);
+                startActivity(intent);
+                break;
+            }
+            case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_GILDED: {
+                Intent intent = new Intent(this, AccountPostsActivity.class);
+                intent = new Intent(MainActivity.this, AccountPostsActivity.class);
+                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_GILDED);
+                startActivity(intent);
+                break;
+            }
             default:
                 PostTypeBottomSheetFragment postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
                 postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
@@ -505,6 +540,16 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 return R.drawable.ic_hide_read_posts_24dp;
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_FILTER_POSTS:
                 return R.drawable.ic_filter_24dp;
+            case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_UPVOTED:
+                return R.drawable.ic_arrow_upward_black_24dp;
+            case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_DOWNVOTED:
+                return R.drawable.ic_arrow_downward_black_24dp;
+            case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_HIDDEN:
+                return R.drawable.ic_outline_lock_24dp;
+            case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_SAVED:
+                return R.drawable.ic_outline_bookmarks_24dp;
+            case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_GILDED:
+                return R.drawable.ic_star_border_24dp;
             default:
                 return R.drawable.ic_account_circle_24dp;
         }

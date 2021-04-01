@@ -261,6 +261,11 @@
         <item>@string/random</item>
         <item>@string/hide_read_posts</item>
         <item>@string/filter_posts</item>
+        <item>@string/upvoted</item>
+        <item>@string/downvoted</item>
+        <item>@string/hidden</item>
+        <item>@string/saved</item>
+        <item>@string/gilded</item>
     </string-array>
 
     <string-array name="settings_other_activities_bottom_app_bar_options">
@@ -279,6 +284,11 @@
         <item>@string/random</item>
         <item>@string/hide_read_posts</item>
         <item>@string/filter_posts</item>
+        <item>@string/upvoted</item>
+        <item>@string/downvoted</item>
+        <item>@string/hidden</item>
+        <item>@string/saved</item>
+        <item>@string/gilded</item>
     </string-array>
 
     <string-array name="settings_bottom_app_bar_fab_options">
