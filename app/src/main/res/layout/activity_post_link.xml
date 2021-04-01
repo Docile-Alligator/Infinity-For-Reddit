@@ -132,18 +132,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp" />
 
-            <EditText
-                android:id="@+id/post_title_edit_text_post_link_activity"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#00000000"
-                android:gravity="top"
-                android:hint="@string/post_title_hint"
-                android:inputType="textCapSentences|textMultiLine"
-                android:padding="16dp"
-                android:textColor="?attr/primaryTextColor"
-                android:textSize="?attr/title_font_18"
-                android:fontFamily="?attr/title_font_family" />
+                android:paddingStart="0dp"
+                android:paddingEnd="16dp">
+
+                <EditText
+                    android:id="@+id/post_title_edit_text_post_link_activity"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:background="#00000000"
+                    android:gravity="top"
+                    android:hint="@string/post_title_hint"
+                    android:inputType="textCapSentences|textMultiLine"
+                    android:padding="16dp"
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="?attr/title_font_18"
+                    android:fontFamily="?attr/title_font_family" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/suggest_title_button_post_link_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/suggest_title" />
+
+            </LinearLayout>
 
             <View
                 android:id="@+id/divider_3_post_link_activity"

@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.libRG.CustomTextView;
@@ -43,6 +45,7 @@ import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.apis.TitleSuggestion;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -52,7 +55,11 @@ import ml.docilealligator.infinityforreddit.services.SubmitPostService;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import pl.droidsonroids.gif.GifImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFragment.FlairSelectionCallback {
 
@@ -97,6 +104,8 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
     CustomTextView nsfwTextView;
     @BindView(R.id.post_title_edit_text_post_link_activity)
     EditText titleEditText;
+    @BindView(R.id.suggest_title_button_post_link_activity)
+    MaterialButton suggestTitleButton;
     @BindView(R.id.post_link_edit_text_post_link_activity)
     EditText linkEditText;
     @Inject
@@ -300,6 +309,32 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
                 isNSFW = false;
             }
         });
+
+        suggestTitleButton.setOnClickListener(view -> {
+            Toast.makeText(this, R.string.please_wait, Toast.LENGTH_SHORT).show();
+            String url = linkEditText.getText().toString().trim();
+            if (!url.startsWith("https://") || !url.startsWith("http://")) {
+                url = "https://" + url;
+            }
+            new Retrofit.Builder()
+                    .baseUrl("http://localhost/")
+                    .addConverterFactory(ScalarsConverterFactory.create())
+                    .build().create(TitleSuggestion.class).getHtml(url).enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                    if (response.isSuccessful()) {
+                        titleEditText.setText(response.body().substring(response.body().indexOf("<title>") + 7, response.body().indexOf("</title>")));
+                    } else {
+                        Toast.makeText(PostLinkActivity.this, R.string.suggest_title_failed, Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                    Toast.makeText(PostLinkActivity.this, R.string.suggest_title_failed, Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
     }
 
     @Override
@@ -336,6 +371,8 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
         nsfwTextView.setTextColor(primaryTextColor);
         titleEditText.setTextColor(primaryTextColor);
         titleEditText.setHintTextColor(secondaryTextColor);
+        suggestTitleButton.setBackgroundColor(mCustomThemeWrapper.getColorPrimaryLightTheme());
+        suggestTitleButton.setTextColor(mCustomThemeWrapper.getButtonTextColor());
         linkEditText.setTextColor(primaryTextColor);
         linkEditText.setHintTextColor(secondaryTextColor);
     }
@@ -386,62 +423,62 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                if (isPosting) {
-                    promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
-                    return true;
-                } else {
-                    if (!titleEditText.getText().toString().equals("") || !linkEditText.getText().toString().equals("")) {
-                        promptAlertDialog(R.string.discard, R.string.discard_detail);
-                        return true;
-                    }
-                }
-                finish();
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            if (isPosting) {
+                promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
                 return true;
-            case R.id.action_send_post_link_activity:
-                if (!subredditSelected) {
-                    Snackbar.make(coordinatorLayout, R.string.select_a_subreddit, Snackbar.LENGTH_SHORT).show();
+            } else {
+                if (!titleEditText.getText().toString().equals("") || !linkEditText.getText().toString().equals("")) {
+                    promptAlertDialog(R.string.discard, R.string.discard_detail);
                     return true;
                 }
-
-                if (titleEditText.getText() == null || titleEditText.getText().toString().equals("")) {
-                    Snackbar.make(coordinatorLayout, R.string.title_required, Snackbar.LENGTH_SHORT).show();
-                    return true;
-                }
-
-                if (linkEditText.getText() == null || linkEditText.getText().toString().equals("")) {
-                    Snackbar.make(coordinatorLayout, R.string.link_required, Snackbar.LENGTH_SHORT).show();
-                    return true;
-                }
-
-                isPosting = true;
-
-                item.setEnabled(false);
-                item.getIcon().setAlpha(130);
-
-                mPostingSnackbar.show();
-
-                String subredditName;
-                if (subredditIsUser) {
-                    subredditName = "u_" + subredditNameTextView.getText().toString();
-                } else {
-                    subredditName = subredditNameTextView.getText().toString();
-                }
-
-                Intent intent = new Intent(this, SubmitPostService.class);
-                intent.putExtra(SubmitPostService.EXTRA_ACCESS_TOKEN, mAccessToken);
-                intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
-                intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
-                intent.putExtra(SubmitPostService.EXTRA_CONTENT, linkEditText.getText().toString());
-                intent.putExtra(SubmitPostService.EXTRA_KIND, APIUtils.KIND_LINK);
-                intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);
-                intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);
-                intent.putExtra(SubmitPostService.EXTRA_IS_NSFW, isNSFW);
-                intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TEXT_OR_LINK);
-                ContextCompat.startForegroundService(this, intent);
-
+            }
+            finish();
+            return true;
+        } else if (itemId == R.id.action_send_post_link_activity) {
+            if (!subredditSelected) {
+                Snackbar.make(coordinatorLayout, R.string.select_a_subreddit, Snackbar.LENGTH_SHORT).show();
                 return true;
+            }
+
+            if (titleEditText.getText() == null || titleEditText.getText().toString().equals("")) {
+                Snackbar.make(coordinatorLayout, R.string.title_required, Snackbar.LENGTH_SHORT).show();
+                return true;
+            }
+
+            if (linkEditText.getText() == null || linkEditText.getText().toString().equals("")) {
+                Snackbar.make(coordinatorLayout, R.string.link_required, Snackbar.LENGTH_SHORT).show();
+                return true;
+            }
+
+            isPosting = true;
+
+            item.setEnabled(false);
+            item.getIcon().setAlpha(130);
+
+            mPostingSnackbar.show();
+
+            String subredditName;
+            if (subredditIsUser) {
+                subredditName = "u_" + subredditNameTextView.getText().toString();
+            } else {
+                subredditName = subredditNameTextView.getText().toString();
+            }
+
+            Intent intent = new Intent(this, SubmitPostService.class);
+            intent.putExtra(SubmitPostService.EXTRA_ACCESS_TOKEN, mAccessToken);
+            intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
+            intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
+            intent.putExtra(SubmitPostService.EXTRA_CONTENT, linkEditText.getText().toString());
+            intent.putExtra(SubmitPostService.EXTRA_KIND, APIUtils.KIND_LINK);
+            intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);
+            intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);
+            intent.putExtra(SubmitPostService.EXTRA_IS_NSFW, isNSFW);
+            intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TEXT_OR_LINK);
+            ContextCompat.startForegroundService(this, intent);
+
+            return true;
         }
 
         return false;

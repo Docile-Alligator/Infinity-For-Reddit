@@ -1091,4 +1091,7 @@
     <string name="contain_flair">Contain this flair</string>
     <string name="exclude_domain">Exclude Domain</string>
 
+    <string name="suggest_title">Suggest Title</string>
+    <string name="suggest_title_failed">Failed to suggest a title</string>
+
 </resources>
