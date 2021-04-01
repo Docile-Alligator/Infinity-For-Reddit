@@ -99,4 +99,10 @@
         android:orderInCategory="15"
         android:title="@string/action_crosspost"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_add_to_post_filter_view_post_detail_fragment"
+        android:orderInCategory="16"
+        android:title="@string/action_add_to_post_filter"
+        app:showAsAction="never" />
 </menu>

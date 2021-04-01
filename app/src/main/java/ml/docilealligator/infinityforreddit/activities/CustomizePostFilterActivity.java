@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -49,6 +50,11 @@ public class CustomizePostFilterActivity extends BaseActivity {
 
     public static final String EXTRA_POST_FILTER = "EPF";
     public static final String EXTRA_FROM_SETTINGS = "EFS";
+    public static final String EXTRA_EXCLUDE_SUBREDDIT = "EES";
+    public static final String EXTRA_EXCLUDE_USER = "EEU";
+    public static final String EXTRA_EXCLUDE_FLAIR = "EEF";
+    public static final String EXTRA_CONTAIN_FLAIR = "ECF";
+    public static final String EXTRA_EXCLUDE_DOMAIN = "EED";
     public static final String RETURN_EXTRA_POST_FILTER = "REPF";
     private static final String POST_FILTER_STATE = "PFS";
     private static final String ORIGINAL_NAME_STATE = "ONS";
@@ -309,6 +315,44 @@ public class CustomizePostFilterActivity extends BaseActivity {
         maxCommentsTextInputEditText.setText(Integer.toString(postFilter.maxComments));
         minAwardsTextInputEditText.setText(Integer.toString(postFilter.minAwards));
         maxAwardsTextInputEditText.setText(Integer.toString(postFilter.maxAwards));
+
+        Intent intent = getIntent();
+        String excludeSubreddit = intent.getStringExtra(EXTRA_EXCLUDE_SUBREDDIT);
+        String excludeUser = intent.getStringExtra(EXTRA_EXCLUDE_USER);
+        String excludeFlair = intent.getStringExtra(EXTRA_EXCLUDE_FLAIR);
+        String containFlair = intent.getStringExtra(EXTRA_CONTAIN_FLAIR);
+        String excludeDomain = intent.getStringExtra(EXTRA_EXCLUDE_DOMAIN);
+
+        if (excludeSubreddit != null && !excludeSubreddit.equals("")) {
+            if (!excludesSubredditsTextInputEditText.getText().toString().equals("")) {
+                excludesSubredditsTextInputEditText.append(",");
+            }
+            excludesSubredditsTextInputEditText.append(excludeSubreddit);
+        }
+        if (excludeUser != null && !excludeUser.equals("")) {
+            if (!excludesUsersTextInputEditText.getText().toString().equals("")) {
+                excludesUsersTextInputEditText.append(",");
+            }
+            excludesUsersTextInputEditText.append(excludeUser);
+        }
+        if (excludeFlair != null && !excludeFlair.equals("")) {
+            if (!excludesFlairsTextInputEditText.getText().toString().equals("")) {
+                excludesFlairsTextInputEditText.append(",");
+            }
+            excludesFlairsTextInputEditText.append(excludeFlair);
+        }
+        if (containFlair != null && !containFlair.equals("")) {
+            if (!containsFlairsTextInputEditText.getText().toString().equals("")) {
+                containsFlairsTextInputEditText.append(",");
+            }
+            containsFlairsTextInputEditText.append(containFlair);
+        }
+        if (excludeDomain != null && !excludeDomain.equals("")) {
+            if (!excludesDomainsTextInputEditText.getText().toString().equals("")) {
+                excludesDomainsTextInputEditText.append(",");
+            }
+            excludesDomainsTextInputEditText.append(Uri.parse(excludeDomain).getHost());
+        }
     }
 
     @Override
@@ -496,7 +540,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
         postFilter.postTitleExcludesStrings = titleExcludesStringsTextInputEditText.getText().toString();
         postFilter.excludeSubreddits = excludesSubredditsTextInputEditText.getText().toString();
         postFilter.excludeUsers = excludesUsersTextInputEditText.getText().toString();
-        postFilter.excludeFlairs = excludesUsersTextInputEditText.getText().toString();
+        postFilter.excludeFlairs = excludesFlairsTextInputEditText.getText().toString();
         postFilter.containFlairs = containsFlairsTextInputEditText.getText().toString();
         postFilter.excludeDomains = excludesDomainsTextInputEditText.getText().toString();
         postFilter.containTextType = postTypeTextCheckBox.isChecked();

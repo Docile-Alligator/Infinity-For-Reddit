@@ -72,6 +72,7 @@ import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
 import ml.docilealligator.infinityforreddit.activities.EditPostActivity;
 import ml.docilealligator.infinityforreddit.activities.GiveAwardActivity;
+import ml.docilealligator.infinityforreddit.activities.PostFilterPreferenceActivity;
 import ml.docilealligator.infinityforreddit.activities.ReportActivity;
 import ml.docilealligator.infinityforreddit.activities.SubmitCrosspostActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
@@ -952,6 +953,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             Intent submitCrosspostIntent = new Intent(activity, SubmitCrosspostActivity.class);
             submitCrosspostIntent.putExtra(SubmitCrosspostActivity.EXTRA_POST, mPost);
             startActivity(submitCrosspostIntent);
+            return true;
+        } else if (itemId == R.id.action_add_to_post_filter_view_post_detail_fragment) {
+            Intent intent = new Intent(activity, PostFilterPreferenceActivity.class);
+            intent.putExtra(PostFilterPreferenceActivity.EXTRA_POST, mPost);
+            startActivity(intent);
             return true;
         }
         return false;

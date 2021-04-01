@@ -71,7 +71,7 @@ public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             super(itemView);
             textView = (TextView) itemView;
             itemView.setOnClickListener(view -> {
-                onItemClickListener.onItemClick(postFilterList.get(getAdapterPosition() - 1));
+                onItemClickListener.onItemClick(postFilterList.get(getBindingAdapterPosition() - 1));
             });
         }
     }

@@ -421,4 +421,12 @@
         <item>2</item>
     </string-array>
 
+    <string-array name="add_to_post_filter_options">
+        <item>@string/exclude_subreddit</item>
+        <item>@string/exclude_user</item>
+        <item>@string/exclude_flair</item>
+        <item>@string/contain_flair</item>
+        <item>@string/exclude_domain</item>
+    </string-array>
+
 </resources>

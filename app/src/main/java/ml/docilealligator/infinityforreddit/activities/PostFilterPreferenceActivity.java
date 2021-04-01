@@ -12,6 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.concurrent.Executor;
@@ -27,11 +28,14 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.adapters.PostFilterRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostFilterOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.postfilter.DeletePostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterViewModel;
 
 public class PostFilterPreferenceActivity extends BaseActivity {
+
+    public static final String EXTRA_POST = "EP";
 
     @BindView(R.id.coordinator_layout_post_filter_preference_activity)
     CoordinatorLayout coordinatorLayout;
@@ -71,18 +75,28 @@ public class PostFilterPreferenceActivity extends BaseActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        Post post = getIntent().getParcelableExtra(EXTRA_POST);
+
         fab.setOnClickListener(view -> {
-            Intent intent = new Intent(PostFilterPreferenceActivity.this, CustomizePostFilterActivity.class);
-            intent.putExtra(CustomizePostFilterActivity.EXTRA_FROM_SETTINGS, true);
-            startActivity(intent);
+            if (post == null) {
+                Intent intent = new Intent(PostFilterPreferenceActivity.this, CustomizePostFilterActivity.class);
+                intent.putExtra(CustomizePostFilterActivity.EXTRA_FROM_SETTINGS, true);
+                startActivity(intent);
+            } else {
+                showPostFilterOptions(post, null);
+            }
         });
 
         adapter = new PostFilterRecyclerViewAdapter(postFilter -> {
-            PostFilterOptionsBottomSheetFragment postFilterOptionsBottomSheetFragment = new PostFilterOptionsBottomSheetFragment();
-            Bundle bundle = new Bundle();
-            bundle.putParcelable(PostFilterOptionsBottomSheetFragment.EXTRA_POST_FILTER, postFilter);
-            postFilterOptionsBottomSheetFragment.setArguments(bundle);
-            postFilterOptionsBottomSheetFragment.show(getSupportFragmentManager(), postFilterOptionsBottomSheetFragment.getTag());
+            if (post == null) {
+                PostFilterOptionsBottomSheetFragment postFilterOptionsBottomSheetFragment = new PostFilterOptionsBottomSheetFragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(PostFilterOptionsBottomSheetFragment.EXTRA_POST_FILTER, postFilter);
+                postFilterOptionsBottomSheetFragment.setArguments(bundle);
+                postFilterOptionsBottomSheetFragment.show(getSupportFragmentManager(), postFilterOptionsBottomSheetFragment.getTag());
+            } else {
+                showPostFilterOptions(post, postFilter);
+            }
         });
 
         recyclerView.setAdapter(adapter);
@@ -91,6 +105,44 @@ public class PostFilterPreferenceActivity extends BaseActivity {
                 new PostFilterViewModel.Factory(redditDataRoomDatabase)).get(PostFilterViewModel.class);
 
         postFilterViewModel.getPostFilterListLiveData().observe(this, postFilters -> adapter.setPostFilterList(postFilters));
+    }
+
+    public void showPostFilterOptions(Post post, PostFilter postFilter) {
+        String[] options = getResources().getStringArray(R.array.add_to_post_filter_options);
+        boolean[] selectedOptions = new boolean[]{false, false, false, false, false};
+        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                .setTitle(R.string.select)
+                .setMultiChoiceItems(options, selectedOptions, (dialogInterface, i, b) -> selectedOptions[i] = b)
+                .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+                    Intent intent = new Intent(PostFilterPreferenceActivity.this, CustomizePostFilterActivity.class);
+                    if (postFilter != null) {
+                        intent.putExtra(CustomizePostFilterActivity.EXTRA_POST_FILTER, postFilter);
+                    }
+                    intent.putExtra(CustomizePostFilterActivity.EXTRA_FROM_SETTINGS, true);
+                    for (int j = 0; j < selectedOptions.length; j++) {
+                        if (selectedOptions[j]) {
+                            switch (j) {
+                                case 0:
+                                    intent.putExtra(CustomizePostFilterActivity.EXTRA_EXCLUDE_SUBREDDIT, post.getSubredditName());
+                                    break;
+                                case 1:
+                                    intent.putExtra(CustomizePostFilterActivity.EXTRA_EXCLUDE_USER, post.getAuthor());
+                                    break;
+                                case 2:
+                                    intent.putExtra(CustomizePostFilterActivity.EXTRA_EXCLUDE_FLAIR, post.getFlair());
+                                    break;
+                                case 3:
+                                    intent.putExtra(CustomizePostFilterActivity.EXTRA_CONTAIN_FLAIR, post.getFlair());
+                                    break;
+                                case 4:
+                                    intent.putExtra(CustomizePostFilterActivity.EXTRA_EXCLUDE_DOMAIN, post.getUrl());
+                                    break;
+                            }
+                        }
+                    }
+                    startActivity(intent);
+                })
+                .show();
     }
 
     public void editPostFilter(PostFilter postFilter) {

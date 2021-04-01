@@ -81,6 +81,7 @@
     <string name="action_add_to_multireddit">Add to Multireddit</string>
     <string name="action_share_link">Share Link</string>
     <string name="action_copy_link">Copy Link</string>
+    <string name="action_add_to_post_filter">Add to Post Filter</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -1082,5 +1083,12 @@
     <string name="only_on_cellular_data">Only on Cellular Data</string>
     <string name="upvote">Upvote</string>
     <string name="downvote">Downvote</string>
+
+    <string name="select">Select</string>
+    <string name="exclude_subreddit">Exclude this subreddit</string>
+    <string name="exclude_user">Exclude this user</string>
+    <string name="exclude_flair">Exclude this flair</string>
+    <string name="contain_flair">Contain this flair</string>
+    <string name="exclude_domain">Exclude Domain</string>
 
 </resources>
