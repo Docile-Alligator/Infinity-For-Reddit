@@ -268,6 +268,9 @@
                     android:host="s.reddit.com"
                     android:scheme="https" />
                 <data
+                    android:host="click.redditmail.com"
+                    android:scheme="https" />
+                <data
                     android:host="www.reddit.com"
                     android:scheme="http" />
                 <data
@@ -296,6 +299,9 @@
                     android:scheme="http" />
                 <data
                     android:host="s.reddit.com"
+                    android:scheme="http" />
+                <data
+                    android:host="click.redditmail.com"
                     android:scheme="http" />
             </intent-filter>
         </activity>

@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -185,6 +184,10 @@ public class LinkResolverActivity extends AppCompatActivity {
                             } else {
                                 deepLinkError(uri);
                             }
+                        } else if (authority.equals("click.redditmail.com")) {
+                            if (path.startsWith("/CL0/")) {
+                                handleUri(Uri.parse(path.substring("/CL0/".length())));
+                            }
                         } else if (authority.contains("gfycat.com")) {
                             if (path.matches(GFYCAT_PATTERN)) {
                                 Intent intent = new Intent(this, ViewVideoActivity.class);
@@ -246,7 +249,6 @@ public class LinkResolverActivity extends AppCompatActivity {
     }
 
     private void deepLinkError(Uri uri) {
-        Log.i("ASDASFD", "s " + uri.toString());
         PackageManager pm = getPackageManager();
 
         String authority = uri.getAuthority();
