@@ -33,7 +33,7 @@ public class LinkResolverActivity extends AppCompatActivity {
 
     private static final String POST_PATTERN = "/r/[\\w-]+/comments/\\w+/?\\w+/?";
     private static final String POST_PATTERN_2 = "/(u|U|user)/[\\w-]+/comments/\\w+/?\\w+/?";
-    private static final String COMMENT_PATTERN = "/(r|u|U|user)/[\\w-]+/comments/\\w+/?\\w+/\\w+/?";
+    private static final String COMMENT_PATTERN = "/(r|u|U|user)/[\\w-]+/comments/\\w+/?[\\w-]+/\\w+/?";
     private static final String SUBREDDIT_PATTERN = "/[rR]/[\\w-]+/?";
     private static final String USER_PATTERN = "/(u|U|user)/[\\w-]+/?";
     private static final String SIDEBAR_PATTERN = "/[rR]/[\\w-]+/about/sidebar";
