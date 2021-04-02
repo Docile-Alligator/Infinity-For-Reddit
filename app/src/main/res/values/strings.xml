@@ -556,6 +556,7 @@
     <string name="settings_hide_favorite_subreddits_sections_title">Hide Favorite Subreddits Section</string>
     <string name="settings_hide_subscribed_subreddits_sections_title">Hide Subscribed Subreddits Section</string>
     <string name="settings_default_search_result_tab">Default Search Result Tab</string>
+    <string name="settings_crash_reports_title">Crash Reports</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

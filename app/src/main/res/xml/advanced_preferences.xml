@@ -46,4 +46,8 @@
         app:key="restore_settings"
         app:title="@string/settings_restore_settings_title" />
 
+    <Preference
+        app:title="@string/settings_crash_reports_title"
+        app:fragment="ml.docilealligator.infinityforreddit.settings.CrashReportsFragment" />
+
 </PreferenceScreen>

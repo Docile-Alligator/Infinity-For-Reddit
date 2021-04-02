@@ -95,6 +95,7 @@ public class LoginActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
+        int llll = 0 / 0;
 
         setImmersiveModeNotApplicable();
 

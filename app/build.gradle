@@ -173,7 +173,8 @@ dependencies {
     implementation 'net.lingala.zip4j:zip4j:2.7.0'
     implementation 'org.apache.commons:commons-io:1.3.2'
 
-    implementation 'com.github.razir.progressbutton:progressbutton:2.1.0'
+    implementation "androidx.startup:startup-runtime:1.0.0"
+    implementation 'com.github.FunkyMuse:Crashy:1.1.0'
 
 
 /**** Builds and flavors ****/
