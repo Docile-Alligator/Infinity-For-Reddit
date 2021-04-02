@@ -82,6 +82,7 @@
     <string name="action_share_link">Share Link</string>
     <string name="action_copy_link">Copy Link</string>
     <string name="action_add_to_post_filter">Add to Post Filter</string>
+    <string name="action_delete_logs">Delete Logs</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -1093,5 +1094,7 @@
 
     <string name="suggest_title">Suggest Title</string>
     <string name="suggest_title_failed">Failed to suggest a title</string>
+
+    <string name="crash_reports_deleted">Crash reports are deleted</string>
 
 </resources>
