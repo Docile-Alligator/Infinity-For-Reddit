@@ -341,7 +341,11 @@ Možda ne radi na Androidu 11"</string>
     <string name="settings_time_format_title">"Vremenski format"</string>
     <string name="settings_category_post_title">"Objava"</string>
     <string name="settings_default_post_layout">"Zadani raspored objave"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_divider_in_compact_layout">"Prikaži razdjelnik u Kompaktnom rasporedu"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_thumbnail_on_the_left_in_compact_layout">"Prikaži sličicu na lijevoj strani u Kompaktnom rasporedu"</string>
     <string name="settings_swap_tap_and_long_title">"Zamijeni kratki i dugi dodir u komentarima"</string>
     <string name="settings_swipe_to_go_back_title">"Prelazak prstom u desno za natrag"</string>
@@ -410,7 +414,6 @@ Možda ne radi na Androidu 11"</string>
     <string name="settings_delete_all_themes_in_database_title">"Obriši sve teme u bazi podataka"</string>
     <string name="settings_delete_front_page_scrolled_positions_in_database_title">"Obriši sve pozicije naslovne stranice u bazi podataka"</string>
     <string name="settings_reset_all_settings_title">"Resertiraj sve postavke"</string>
-    <string name="settings_advanced_settings_summary">"Očisti bazu podataka i dijeljene preference"</string>
     <string name="settings_tab_1_summary">"Kartica 1"</string>
     <string name="settings_tab_2_summary">"Kartica 2"</string>
     <string name="settings_tab_3_summary">"Kartica 3"</string>
@@ -807,7 +810,11 @@ Baziraj na Indigo Amoled temi"</string>
     <string name="settings_pull_to_refresh_title">"Povuci za ovježavanje"</string>
     <string name="settings_security_title">"Sigurnost"</string>
     <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Zatraži autentikaciju pri ulasku u Račun u navigacijskoj ladici"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Dugo pritisni za skrivanje alatne trake u Kompaktnom rasporedu"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"Alatna traka u Kompaktnom rasporedu je zadano skrivena"</string>
     <string name="settings_customize_bottom_app_bar_title">"Uredi donju navigacijsku traku"</string>
     <string name="settings_main_activity_bottom_app_bar_group_summary">"Glavna stranica"</string>

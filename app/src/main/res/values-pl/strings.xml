@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="login_activity_label">"Zaloguj się"</string>
-    <string name="search_activity_label">"Wyszukaj"</string>
     <string name="comment_activity_label">"Wyślij komentarz"</string>
     <string name="comment_activity_label_is_replying">"Odpowiedz"</string>
     <string name="post_text_activity_label">"Tekst"</string>
@@ -300,9 +299,7 @@
     <string name="settings_immersive_interface_title">"interfejs immersyjny"</string>
     <string name="settings_immersive_interface_summary">"Nie ma zastosowania do wszystkich stron"</string>
     <string name="settings_immersive_interface_ignore_nav_bar_title">"Ignoruj pasek nawigacyjny w interfejsie immersyjnym"</string>
-
-    <!-- Fuzzy -->
-    <string name="settings_immersive_interface_ignore_nav_bar_summary">"Zapobiec sytuacji, w której dolny pasek nawigacyjny posiada dodatkową podkładkę"</string>
+    <string name="settings_immersive_interface_ignore_nav_bar_summary">"Zapobiegaj sytuacji, w której dolny pasek nawigacyjny posiada dodatkowy margines"</string>
     <string name="settings_customize_tabs_in_main_page_title">"Dostosuj zakładki na stronie głównej"</string>
     <string name="settings_enable_bottom_app_bar_title">"Włącz dolny pasek nawigacyjny"</string>
     <string name="settings_enable_bottom_app_bar_summary">"Nie ma żadnego efektu w trybie anonima"</string>
@@ -327,7 +324,11 @@
     <string name="settings_time_format_title">"Format czasu"</string>
     <string name="settings_category_post_title">"Post"</string>
     <string name="settings_default_post_layout">"Domyślny układ postów"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_divider_in_compact_layout">"Pokaż dzielnik w układzie kompaktowym"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_thumbnail_on_the_left_in_compact_layout">"Pokaż miniaturę po lewej stronie w układzie kompaktowym"</string>
     <string name="settings_swap_tap_and_long_title">"Zamień kliknięcie i przytrzymanie w komentarzach"</string>
     <string name="settings_swipe_to_go_back_title">"Przesuń w prawo aby wrócić"</string>
@@ -401,7 +402,6 @@
     <string name="settings_delete_all_themes_in_database_title">"Usuń wszystkie motywy w bazie danych"</string>
     <string name="settings_delete_front_page_scrolled_positions_in_database_title">"Usuń wszystkie przewinięte pozycje na stronie głównej w bazie danych"</string>
     <string name="settings_reset_all_settings_title">"Resetowanie wszystkich ustawień"</string>
-    <string name="settings_advanced_settings_summary">"Wyczyść bazę danych i udostępnione preferencje"</string>
     <string name="settings_tab_1_summary">"Zakładka 1"</string>
     <string name="settings_tab_2_summary">"Zakładka 2"</string>
     <string name="settings_tab_3_summary">"Zakładka 3"</string>
@@ -476,7 +476,6 @@ Nie można zsynchronizować subskrypcji"</string>
     <string name="multi_reddit_name_hint">"Nazwa (Max 50 znaków)"</string>
     <string name="multi_reddit_description_hint">"Opis"</string>
     <string name="private_multi_reddit">"Prywatny"</string>
-    <string name="select_subreddits_and_users">"Zaznacz Subreddity"</string>
     <string name="no_multi_reddit_name">"Gdzie jest nazwa?"</string>
     <string name="create_multi_reddit_failed">"Nie można stworzyć tego multireddita"</string>
     <string name="duplicate_multi_reddit">"Ten multireddit już istnieje"</string>
@@ -734,6 +733,8 @@ Nie jest chora ani nic, ale na pewno może wyzdrowieć."</string>
     <string name="downloading_reddit_video_muxing">"Łączenie wideo i audio"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"Zapisywanie wideo"</string>
     <string name="downloading_reddit_video_finished">"Pobrano"</string>
+
+    <!-- Fuzzy -->
     <string name="downloading_reddit_video_failed_cannot_get_cache_directory">"Pobieranie nie powiodło się: nie można uzyskać dostępu do katalogu pamięci podręcznej"</string>
     <string name="downloading_reddit_video_failed_cannot_download_video">"Pobieranie nie powiodło się: nie można pobrać wideo"</string>
     <string name="downloading_reddit_video_failed_cannot_save_video">"Pobieranie nie powiodło się: nie można zapisać wideo w katalogu pamięci podręcznej"</string>
@@ -786,7 +787,11 @@ Po przełączeniu się na inne karty mogą utracić całą zawartość. To jest 
     <string name="settings_pull_to_refresh_title">"Pociągnij, żeby odświeżyć"</string>
     <string name="settings_security_title">"Bezpieczeństwo"</string>
     <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Wymagaj uwierzytelnienia, aby przejść do sekcji Konto w szufladzie nawigacji"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Długie naciśnięcie powoduje ukrycie paska narzędzi w układzie kompaktowym"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"Pasek narzędzi domyślnie ukryty w układzie kompaktowym "</string>
     <string name="settings_customize_bottom_app_bar_title">"Dostosuj dolny pasek nawigacji"</string>
     <string name="settings_main_activity_bottom_app_bar_group_summary">"Strona główna"</string>
@@ -829,6 +834,8 @@ Autoodtwarzanie wideo jest wyłączone."</string>
     <string name="change_post_layout">"Zmień układ postów"</string>
     <string name="give_award_dialog_title">"Dać nagrodę?"</string>
     <string name="anonymous">"Anonim"</string>
+
+    <!-- Fuzzy -->
     <string name="give_award_error_message">"Kod: %1$d/
 Wiadomość: %2$s"</string>
     <string name="give_award_success">"Nagroda przyznana"</string>
@@ -839,6 +846,8 @@ Wiadomość: %2$s"</string>
     <string name="this_user_has_nsfw_content">"Ten użytkownik posiada treści NSFW"</string>
     <string name="dismiss">"Odrzuć"</string>
     <string name="leave">"Opuść"</string>
+
+    <!-- Fuzzy -->
     <string name="go_to_subreddit">"Przejdź do subreddita"</string>
     <string name="go_to_user">"Przejdź do użytkownika"</string>
     <string name="go_to_thing_hint">"Nazwa"</string>
@@ -868,5 +877,43 @@ Wiadomość: %2$s"</string>
     <string name="theme_item_no_preview_post_type_background_color">"Kolor tła posta bez podglądu"</string>
     <string name="theme_item_no_preview_post_type_background_color_detail">"Zastosowano dla: Symbol zastępczy wskazujący typ wpisu, gdy podgląd nie jest dostępny"</string>
     <string name="settings_language_title">"Język"</string>
+    <string name="customize_post_filter_activity_label">"Dostosuj Filtr Posta"</string>
+    <string name="post_filter_preference_activity_label">"Filtr postów"</string>
+    <string name="search_users_result_activity_label">"Użytkownicy"</string>
+    <string name="multireddit_selection_activity_label">"Wybierz Multireddit"</string>
+    <string name="action_save_to_database">"Zapisz do bazy danych"</string>
+    <string name="action_read_all_messages">"Przeczytaj wszystkie wiadomości"</string>
+    <string name="action_add_to_multireddit">"Dodaj do Multireddita"</string>
+    <string name="search_only_subreddits_hint">"Przeszukaj subreddity"</string>
+    <string name="search_only_users_hint">"Przeszukaj użytkowników"</string>
+    <string name="post_type_gif">"Gif"</string>
+    <string name="post_type_gallery">"Galeria"</string>
+    <string name="settings_disable_immersive_interface_in_landscape_mode">"Wyłącz Immersywny Interfejs Horyzontalnie"</string>
+    <string name="settings_privacy_policy_title">"Polityka prywatności"</string>
+    <string name="settings_delete_read_posts_in_database_title">"Usuń wszystkie przeczytane wiadomości z bazy danych"</string>
+    <string name="settings_post_filter_title">"Filtr postów"</string>
+    <string name="settings_only_disable_preview_in_video_and_gif_posts_title">"Wyłącz podgląd tylko dla postów z filmami i gifami"</string>
     <string name="settings_enable_search_history_title">"Włącz historię wyszukiwania"</string>
+    <string name="settings_post_history_title">"Historia postów"</string>
+    <string name="settings_mark_posts_as_read_title">"Oznacz posty jako przeczytane"</string>
+    <string name="settings_mark_posts_as_read_on_scroll_title">"Oznacz posty jako przeczytane podczas przewijania"</string>
+    <string name="settings_hide_read_posts_automatically_title">"Automatycznie ukrywaj przeczytane posty"</string>
+    <string name="settings_sort_type_title">"Typ Sortu"</string>
+    <string name="open_link">"Otwórz link"</string>
+    <string name="select_subreddits_and_users">"Wybierz subreddity i użytkowników"</string>
+    <string name="only_nsfw">"Tylko NSFW"</string>
+    <string name="only_spoiler">"Tylko spoilery"</string>
+    <string name="exclude_subreddits_hint">"Bez subredditów (np. funny,AskReddit)"</string>
+    <string name="exclude_users_hint">"Bez użytkowników"</string>
+    <string name="post_filter_requires_a_name">"Jaka jest nazwa filtru tego posta?"</string>
+    <string name="duplicate_post_filter_dialog_title">"'%1$s' już istnieje"</string>
+    <string name="duplicate_post_filter_dialog_message">"Nadpisać?"</string>
+    <string name="post_filter_usage_home">"Strona główna"</string>
+    <string name="post_filter_usage_subreddit_all">"Subreddit"</string>
+    <string name="post_filter_usage_user">"Użytkownik: %1$s"</string>
+    <string name="post_filter_usage_user_all">"Użytkownik"</string>
+    <string name="post_filter_usage_multireddit">"MultiReddit: %1$s"</string>
+    <string name="post_filter_usage_multireddit_all">"Multireddit"</string>
+    <string name="post_filter_usage_search">"Szukaj"</string>
+    <string name="choose_a_user">"Wybierz użytkownika"</string>
 </resources>

@@ -375,7 +375,11 @@ peut ne pas fonctionner sur Android 11"</string>
     <string name="settings_time_format_title">"Format de l'heure"</string>
     <string name="settings_category_post_title">"Publication"</string>
     <string name="settings_default_post_layout">"Mise en Page par Défaut des Publications"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_divider_in_compact_layout">"Afficher le Diviseur de Commentaires dans la Mise en Page Compacte"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_thumbnail_on_the_left_in_compact_layout">"Afficher la Miniature à Gauche en Format Compact"</string>
 
     <!-- Fuzzy -->
@@ -448,7 +452,6 @@ peut ne pas fonctionner sur Android 11"</string>
     <string name="settings_delete_all_themes_in_database_title">"Supprimer Tous les Thèmes de la Base de Donnée"</string>
     <string name="settings_delete_front_page_scrolled_positions_in_database_title">"Supprimer Toutes les Positions de Défilement de la Page d'Accueil de la Base de Donnée"</string>
     <string name="settings_reset_all_settings_title">"Remettre à zéro tous les paramètres"</string>
-    <string name="settings_advanced_settings_summary">"Vider la base de donnée et les préférences partagées"</string>
     <string name="settings_tab_1_summary">"Onglet 1"</string>
     <string name="settings_tab_2_summary">"Onglet 2"</string>
     <string name="settings_tab_3_summary">"Onglet 2"</string>
@@ -527,7 +530,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="multi_reddit_name_hint">"Nom ( Max. 50 caractères )"</string>
     <string name="multi_reddit_description_hint">"Description"</string>
     <string name="private_multi_reddit">"Privé"</string>
-    <string name="select_subreddits_and_users">"Sélectionnez des Subreddits"</string>
     <string name="no_multi_reddit_name">"Où est le nom ?"</string>
     <string name="create_multi_reddit_failed">"Impossible de créer ce multireddit"</string>
     <string name="duplicate_multi_reddit">"Ce multireddit existe déjà"</string>
@@ -536,7 +538,11 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="delete_multi_reddit_success">"Supprimé avec succès"</string>
     <string name="delete_multi_reddit_failed">"Supression échouée"</string>
     <string name="delete_multi_reddit_dialog_message">"Êtes vous sûr ?"</string>
-    <string name="enable_nsfw">"Activer NSFW /!\ ?"</string>
+
+    <!-- Removed '/!\'  because it was causing weird characters inside the app
+
+https://s3.eu-west-1.amazonaws.com/po-pub/i/dFZKKms9HbrDGOlcgW9QTcwF.jpg -->
+    <string name="enable_nsfw">"Activer NSFW"</string>
     <string name="disable_nsfw">"Désactiver NSFW ?"</string>
     <string name="cannot_save_image">"Ne peut pas enregistrer l'image"</string>
     <string name="cannot_save_gif">"Ne peut pas enregistrer le gif"</string>
@@ -861,7 +867,11 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="settings_pull_to_refresh_title">"Tirer pour rafraîchir"</string>
     <string name="settings_security_title">"Sécurité"</string>
     <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Requérir une authentification pour accéder à la section \"compte\" dans le tiroir de navigation "</string>
+
+    <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Appuyer longuement pour cacher la barre d'outils dans la disposition \"compacte\""</string>
+
+    <!-- Fuzzy -->
     <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"Cacher la barre d'outil par défaut dans la disposition \"compacte\" "</string>
     <string name="settings_customize_bottom_app_bar_title">"Personnaliser la barre de navigation inférieure"</string>
     <string name="settings_main_activity_bottom_app_bar_group_summary">"Page Principale"</string>
@@ -903,6 +913,8 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="change_post_layout">"Changer la disposition des posts"</string>
     <string name="give_award_dialog_title">"Êtes-vous sûr de vouloir récompenser ce post ? "</string>
     <string name="anonymous">"Anonyme"</string>
+
+    <!-- Fuzzy -->
     <string name="give_award_error_message">"Erreur: %2$s, code: %1$d/"</string>
     <string name="give_award_success">"Succès ! "</string>
     <string name="give_award_failed">"Échec de la récompense. "</string>
@@ -912,7 +924,11 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="this_user_has_nsfw_content">"Cet utilisateur poste du contenu NSFW"</string>
     <string name="dismiss">"Annuler"</string>
     <string name="leave">"Quitter"</string>
+
+    <!-- Fuzzy -->
     <string name="go_to_subreddit">"Aller au subreddit"</string>
+
+    <!-- Fuzzy -->
     <string name="go_to_user">"Aller à l'utilisateur"</string>
     <string name="go_to_thing_hint">"Nom"</string>
     <string name="random">"Aléatoire"</string>
@@ -926,9 +942,31 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="settings_miscellaneous_title">"Divers"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_title">"Respecter l'ordre de tri recommandé par le subreddit pour les commentaires "</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_summary">"L'ordre de tri des commentaires ne sera pas sauvegardé "</string>
-    <string name="settings_post_filter_title">"Filtre"</string>
     <string name="settings_subreddit_filter_category">"Cacher des Subreddits"</string>
     <string name="settings_subreddit_filter_popular_and_all">"Dans r/popular et r/all"</string>
     <string name="settings_credits_ufo_capturing_animation_title">"Animation de capture de l'OVNI"</string>
     <string name="select_video_quality">"Sélectionner la qualité vidéo"</string>
+    <string name="settings_hide_subreddit_description_title">"Cacher la description des subreddits"</string>
+    <string name="settings_language_title">"Langage"</string>
+    <string name="filtered_posts_activity_subtitle">"Posts filtrés"</string>
+    <string name="post_filter_preference_activity_label">"Filtre des posts"</string>
+    <string name="search_users_result_activity_label">"Utilisateurs"</string>
+    <string name="post_type_gallery">"Gallerie"</string>
+    <string name="settings_privacy_policy_title">"Politique de confidentialité"</string>
+    <string name="settings_post_history_title">"Historique des posts"</string>
+    <string name="settings_mark_posts_as_read_after_voting_title">"Marquer les posts comme lus après avoir voté"</string>
+    <string name="settings_hide_read_posts_automatically_title">"Cacher les posts lus automatiquement"</string>
+    <string name="open_link">"Ouvrir le lien"</string>
+    <string name="hide_read_posts">"Cacher les posts lus"</string>
+    <string name="only_nsfw">"Seulement NSFW"</string>
+    <string name="only_spoiler">"Seulement Spoiler"</string>
+    <string name="exclude_subreddits_hint">"Exclure des subreddits (e.g. funny, AskReddit)"</string>
+    <string name="exclude_users_hint">"Exclure des utilisateurs (e.g. Hostilenemy, random)"</string>
+    <string name="duplicate_post_filter_dialog_title">"'%1$s' Éxiste déjà"</string>
+    <string name="apply_post_filter_to">"Appliquer à"</string>
+    <string name="post_filter_usage_home">"Acceuil"</string>
+    <string name="post_filter_usage_user">"Utilisateur: %1$s"</string>
+    <string name="post_filter_usage_user_all">"Utilisateur"</string>
+    <string name="read_all_messages_time_limit">"You faites cela trop fréquemment. Essayez plus tard. C'est le taux limite de l'Api Reddit."</string>
+    <string name="choose_a_user">"Choisir un utilisateur"</string>
 </resources>

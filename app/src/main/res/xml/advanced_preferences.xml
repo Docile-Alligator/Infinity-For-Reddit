@@ -46,9 +46,4 @@
         app:key="restore_settings"
         app:title="@string/settings_restore_settings_title" />
 
-    <Preference
-        android:icon="@drawable/ic_info_preference_24dp"
-        app:summary="@string/settings_advanced_settings_summary"
-        app:enabled="false" />
-
 </PreferenceScreen>

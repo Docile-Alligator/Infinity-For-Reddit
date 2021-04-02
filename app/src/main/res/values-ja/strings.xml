@@ -14,7 +14,7 @@
     <string name="edit_comment_activity_label">"コメントを編集"</string>
     <string name="view_message_activity_label">"受信トレイ"</string>
     <string name="settings_activity_label">"設定"</string>
-    <string name="account_saved_thing_activity_label">"保存しました"</string>
+    <string name="account_saved_thing_activity_label">"保存した投稿"</string>
     <string name="create_multi_reddit_activity_label">"カスタムフィードを作成"</string>
     <string name="subreddit_multiselection_activity_label">"カスタムフィードを選択"</string>
     <string name="custom_theme_listing_activity_label">"カスタムテーマ"</string>
@@ -111,23 +111,23 @@
     <string name="inbox">"受信トレイ"</string>
 
     <!-- Fuzzy -->
-    <string name="upvoted">"プラス評価がある投稿"</string>
+    <string name="upvoted">"プラス評価した投稿"</string>
 
     <!-- Fuzzy -->
-    <string name="downvoted">"マイナス評価がある投稿"</string>
+    <string name="downvoted">"マイナス評価した投稿"</string>
     <string name="hidden">"非表示にした投稿"</string>
-    <string name="saved">"保存した投稿"</string>
+    <string name="saved">"保存しました"</string>
 
     <!-- What posts the app shows when I select this?
 (1) My posts that someone gave (gold or better only?) rewards for me.
 (2) Someone's posts that I gave (gold or better only?) rewards for them. -->
-    <string name="gilded">"アワードが贈られている投稿"</string>
+    <string name="gilded">"アワードを贈った投稿"</string>
     <string name="settings">"設定"</string>
     <string name="subscribers_number_detail">"登録者数: %1$d"</string>
     <string name="online_subscribers_number_detail">"オンライン: %1$d"</string>
     <string name="cannot_fetch_subreddit_info">"Subredditの情報が取得できませんでした"</string>
     <string name="cannot_fetch_user_info">"ユーザー情報が取得できませんでした"</string>
-    <string name="cannot_fetch_sidebar">"サイドバーが取得できませんでした"</string>
+    <string name="cannot_fetch_sidebar">"サイドバー情報が取得できませんでした"</string>
     <string name="cannot_fetch_multireddit">"カスタムフィードの情報が取得できませんでした"</string>
     <string name="subscribe">"登録する"</string>
     <string name="unsubscribe">"登録を解除する"</string>
@@ -318,7 +318,7 @@
     <string name="label_preferences">"環境設定"</string>
     <string name="account_switched">"アカウントを切り替えました。表示されるページが変化します。"</string>
     <string name="settings_notification_master_title">"通知"</string>
-    <string name="settings_notification_enable_notification_title">"通知を有効可"</string>
+    <string name="settings_notification_enable_notification_title">"通知を有効化"</string>
     <string name="settings_notification_interval_title">"通知の確認間隔"</string>
     <string name="settings_theme_title">"テーマ"</string>
     <string name="settings_amoled_dark_title">"AMOLEDダークテーマ"</string>
@@ -367,7 +367,11 @@
     <string name="settings_time_format_title">"日時の表示書式"</string>
     <string name="settings_category_post_title">"投稿"</string>
     <string name="settings_default_post_layout">"標準の表示レイアウト"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_divider_in_compact_layout">"コンパクトレイアウトで分割線を表示"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_thumbnail_on_the_left_in_compact_layout">"コンパクトレイアウトでサムネイルを左側に表示"</string>
     <string name="settings_swap_tap_and_long_title">"コメントでタップと長押しの操作を入れ替え"</string>
     <string name="settings_swipe_to_go_back_title">"右スワイプで前の画面に戻る"</string>
@@ -442,7 +446,6 @@
     <string name="settings_delete_all_themes_in_database_title">"データベース中の全てのテーマ情報を削除"</string>
     <string name="settings_delete_front_page_scrolled_positions_in_database_title">"データベース中の全てのフロントページのスクロール位置情報を削除"</string>
     <string name="settings_reset_all_settings_title">"全ての設定をリセット"</string>
-    <string name="settings_advanced_settings_summary">"データベースと、共有されている環境設定情報を初期化します"</string>
     <string name="settings_tab_1_summary">"タブ1"</string>
     <string name="settings_tab_2_summary">"タブ2"</string>
     <string name="settings_tab_3_summary">"タブ3"</string>
@@ -519,7 +522,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="multi_reddit_name_hint">"名前 (最大50文字)"</string>
     <string name="multi_reddit_description_hint">"詳細"</string>
     <string name="private_multi_reddit">"プライベート"</string>
-    <string name="select_subreddits_and_users">"Subredditを選択"</string>
     <string name="no_multi_reddit_name">"名前が必要です。"</string>
     <string name="create_multi_reddit_failed">"このカスタムフィードを作成できませんでした"</string>
     <string name="duplicate_multi_reddit">"このカスタムフィードは既に存在しています"</string>
@@ -803,6 +805,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="downloading_reddit_video_muxing">"動画と音声をミックス中です"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"動画を保存中です"</string>
     <string name="downloading_reddit_video_finished">"ダウンロードしました"</string>
+
+    <!-- Fuzzy -->
     <string name="downloading_reddit_video_failed_cannot_get_cache_directory">"ダウンロードに失敗しました (キャッシュフォルダーにアクセスできません)"</string>
     <string name="downloading_reddit_video_failed_cannot_download_video">"ダウンロードに失敗しました (動画をダウンロードできません)"</string>
     <string name="downloading_reddit_video_failed_cannot_save_video">"ダウンロードに失敗しました (キャッシュフォルダーに動画を保存できません)"</string>
@@ -856,7 +860,11 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_pull_to_refresh_title">"引き下げて更新"</string>
     <string name="settings_security_title">"セキュリティ"</string>
     <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"ナビゲーションドロワーからアカウントに移動する際に認証を要求"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"コンパクトレイアウトのツールバーを長押しで非表示"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"コンパクトレイアウトのツールバーを標準で非表示"</string>
     <string name="settings_customize_bottom_app_bar_title">"下部ナビゲーションバーをカスタマイズ"</string>
     <string name="settings_main_activity_bottom_app_bar_group_summary">"メインページ"</string>
@@ -898,6 +906,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="change_post_layout">"表示レイアウトを変更"</string>
     <string name="give_award_dialog_title">"アワードを贈りますか？"</string>
     <string name="anonymous">"匿名"</string>
+
+    <!-- Fuzzy -->
     <string name="give_award_error_message">"コード: %1$d/
 メッセージ: %2$s"</string>
     <string name="give_award_success">"アワードを贈りました"</string>
@@ -908,7 +918,11 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="this_user_has_nsfw_content">"このユーザーはNSFWの投稿を含んでいます"</string>
     <string name="dismiss">"無視する"</string>
     <string name="leave">"離れる"</string>
+
+    <!-- Fuzzy -->
     <string name="go_to_subreddit">"Subredditに移動"</string>
+
+    <!-- Fuzzy -->
     <string name="go_to_user">"ユーザーに移動"</string>
     <string name="go_to_thing_hint">"名前"</string>
     <string name="random">"ランダム"</string>
@@ -922,7 +936,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_miscellaneous_title">"その他の設定"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_title">"Subredditで推奨されているコメントの並び順を使用"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_summary">"コメントの並び順は保存されません"</string>
-    <string name="settings_post_filter_title">"フィルター"</string>
     <string name="settings_subreddit_filter_category">"Subredditを非表示"</string>
     <string name="settings_subreddit_filter_popular_and_all">"r/all と r/popular 内"</string>
     <string name="settings_credits_ufo_capturing_animation_title">"UFO捕獲アニメーション"</string>
@@ -937,4 +950,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_no_preview_post_type_icon_tint_detail">"適用先: プレビューのない投稿種類アイコン"</string>
     <string name="theme_item_no_preview_post_type_background_color">"プレビューのない投稿 アイコンの背景"</string>
     <string name="theme_item_no_preview_post_type_background_color_detail">"適用先: プレビューのない投稿種類表示用プレースホルダー"</string>
+    <string name="settings_language_title">"言語/Language"</string>
+    <string name="only_nsfw">"NSFWのみ"</string>
+    <string name="only_spoiler">"ネタバレのみ"</string>
 </resources>

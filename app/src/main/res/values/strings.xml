@@ -464,7 +464,6 @@
     <string name="settings_delete_read_posts_in_database_title">Delete All Read Posts in Database</string>
     <string name="settings_delete_all_legacy_settings_title">Delete All Legacy Settings</string>
     <string name="settings_reset_all_settings_title">Reset All Settings</string>
-    <string name="settings_advanced_settings_summary">Clean the database and shared preferences</string>
     <string name="restart_app_see_changes">Restart the app to see the changes</string>
     <string name="settings_tab_count">Tab Count</string>
     <string name="settings_show_tab_names">Show Tab Names</string>

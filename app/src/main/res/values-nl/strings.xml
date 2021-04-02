@@ -320,7 +320,11 @@
     <string name="settings_time_format_title">Tijd Formaat</string>
     <string name="settings_category_post_title">Post</string>
     <string name="settings_default_post_layout">Standaard Post Layout</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_divider_in_compact_layout">Toon Verdeler in Compact Layout</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_thumbnail_on_the_left_in_compact_layout">Thumbnail aan de Linkerkant Weergeven in Compacte Layout</string>
     <string name="settings_swap_tap_and_long_title">Wissel Tikken en Lang Indrukken in Opmerkingen</string>
     <string name="settings_swipe_to_go_back_title">Veeg naar Rechts om Terug te Gaan</string>
@@ -389,7 +393,6 @@
     <string name="settings_delete_all_themes_in_database_title">Verwijder Alle Thema\'s in de Database</string>
     <string name="settings_delete_front_page_scrolled_positions_in_database_title">Verwijder alle voorpagina gescrolde posities in de database</string>
     <string name="settings_reset_all_settings_title">Reset alle instellingen</string>
-    <string name="settings_advanced_settings_summary">Maak de database en gedeelde voorkeuren schoon</string>
     <string name="settings_tab_1_summary">Tabblad 1</string>
     <string name="settings_tab_2_summary">Tabblad 2</string>
     <string name="settings_tab_3_summary">Tabblad 3</string>
@@ -766,7 +769,11 @@
     <string name="settings_pull_to_refresh_title">Trek om te vernieuwen</string>
     <string name="settings_security_title">Beveiliging</string>
     <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">Verificatie vereist om naar het accountgedeelte in de navigatielade te gaan</string>
+
+    <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">Druk lang in om werkbalk in compacte layout te verbergen</string>
+
+    <!-- Fuzzy -->
     <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">Werkbalk in compacte layout standaard verborgen</string>
     <string name="settings_customize_bottom_app_bar_title">Pas de onderste navigatiebalk aan</string>
     <string name="settings_main_activity_bottom_app_bar_group_summary">Hoofdpagina</string>

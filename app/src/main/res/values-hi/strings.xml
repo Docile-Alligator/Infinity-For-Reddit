@@ -3,9 +3,9 @@
     <string name="login_activity_label">"लाॅग इन करें"</string>
     <string name="comment_activity_label">"टिप्पणी करें "</string>
     <string name="comment_activity_label_is_replying">"उत्तर दें"</string>
-    <string name="post_text_activity_label">"टैक्स्ट पोस्ट"</string>
+    <string name="post_text_activity_label">"लेख पोस्ट"</string>
     <string name="subreddit_selection_activity_label">"एक सबरैडिट चुनें"</string>
-    <string name="post_link_activity_label">"लिंक पोस्ट"</string>
+    <string name="post_link_activity_label">"पोस्ट लिंक करें"</string>
     <string name="post_image_activity_label">"चित्र पोस्ट"</string>
     <string name="post_video_activity_label">"वीडियो पोस्ट"</string>
     <string name="rules_activity_label">"नियम"</string>
@@ -40,7 +40,7 @@
     <string name="action_save_post">"पोस्ट जमा करे"</string>
 
     <!-- Fuzzy -->
-    <string name="action_view_crosspost_parent">"क्रॉसपोस्ट करें"</string>
+    <string name="action_view_crosspost_parent">"क्रॉसपोस्ट पैरेंट देखें "</string>
     <string name="action_search">"खोजें"</string>
     <string name="action_start_lazy_mode">"औटो मोड शुरू करे"</string>
     <string name="action_stop_lazy_mode">"औटो मोड बन्द करें "</string>
@@ -184,7 +184,7 @@
     <string name="subreddits">"सबरैडिट्स"</string>
     <string name="users">"उपयोगकर्ता "</string>
     <string name="multi_reddits">"मल्टीरैडिट्स"</string>
-    <string name="bottom_sheet_post_text">"टैक्स्ट "</string>
+    <string name="bottom_sheet_post_text">"लेख "</string>
     <string name="bottom_sheet_post_link">"लिंक"</string>
     <string name="bottom_sheet_post_image">"चित्र"</string>
     <string name="bottom_sheet_post_video">"वीडियो"</string>
@@ -340,8 +340,7 @@ Behavior -->
     <string name="settings_immersive_interface_title">"इमरसिव इंटरफेस "</string>
 
     <!-- Fuzzy -->
-    <string name="settings_immersive_interface_summary">"सभी पृष्ठों पर लागू नहीं होता है
-एंड्रॉयड 11 पर आवश्यक रूप से काम नहीं करता"</string>
+    <string name="settings_immersive_interface_summary">"सभी पृष्ठों पर लागू नहीं होता है"</string>
     <string name="settings_immersive_interface_ignore_nav_bar_title">"इमरसिव इंटरफेस में नेवीगेशन बार को छिपा दें"</string>
     <string name="settings_immersive_interface_ignore_nav_bar_summary">"निचले नेवीगेशन बार को अतिरिक्त स्थान लेने से रोकें "</string>
     <string name="settings_customize_tabs_in_main_page_title">"मुख्य पृष्ट पर टैब्स अनुकूलित करें "</string>
@@ -372,7 +371,11 @@ Behavior -->
     <string name="settings_time_format_title">"समय प्रारूप "</string>
     <string name="settings_category_post_title">"पोस्ट "</string>
     <string name="settings_default_post_layout">"पूर्वनिर्धारित पोस्ट विन्यास "</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_divider_in_compact_layout">"संक्षिप्त विन्यास में विभाजक दिखाएं "</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_thumbnail_on_the_left_in_compact_layout">"संक्षिप्त विन्यास में थम्बनेल बाईं तरफ दिखाएं "</string>
     <string name="settings_swap_tap_and_long_title">"टिप्पणियों के  लिए टैप एवं लॉंग प्रैस की अदला बदली करें "</string>
     <string name="settings_swipe_to_go_back_title">"वापस जाने के लिए दाईं ओर स्वाइप करें "</string>
@@ -441,7 +444,6 @@ Behavior -->
     <string name="settings_delete_all_themes_in_database_title">"डेटाबेस से सभी थीम्स मिटा दें "</string>
     <string name="settings_delete_front_page_scrolled_positions_in_database_title">"डेटाबेस से सभी मुख पृष्ट की स्क्रोल्ड स्थितियां मिटा दें "</string>
     <string name="settings_reset_all_settings_title">"सभी सेटिंग्स रीसेट कर दें "</string>
-    <string name="settings_advanced_settings_summary">"डेटाबेस एवं साझा की गई प्राथमिकताओं को मिटा दें "</string>
     <string name="settings_tab_1_summary">"टैब 1"</string>
     <string name="settings_tab_2_summary">"टैब 2"</string>
     <string name="settings_tab_3_summary">"टैब 3"</string>
@@ -518,7 +520,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="multi_reddit_name_hint">"नाम (अधिकतम 50 वर्ण)"</string>
     <string name="multi_reddit_description_hint">"विवरण "</string>
     <string name="private_multi_reddit">"गुप्त "</string>
-    <string name="select_subreddits_and_users">"सबरैडिट चुनें "</string>
     <string name="no_multi_reddit_name">"नाम कहाँ है? "</string>
     <string name="create_multi_reddit_failed">"इस मल्टीरैडिट का  निर्माण असफल "</string>
     <string name="duplicate_multi_reddit">"यह मल्टीरैडिट पहले से उपलब्ध है "</string>
@@ -531,7 +532,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="disable_nsfw">"NSFW बंद करें "</string>
     <string name="cannot_save_image">"चित्र सुरक्षित करने में असफल "</string>
     <string name="cannot_save_gif">"जिफ सुरक्षित करने में असफल "</string>
-    <string name="cannot_get_storage">"एप्प स्टोरेज तक पहुंच नहीं सका "</string>
+    <string name="cannot_get_storage">"एप्प स्टोरेज तक अभिगम असफल "</string>
     <string name="save_image_first">"चित्र सहेजा जा रहा है। कृपया प्रतीक्षा करें। "</string>
     <string name="save_gif_first">"जिफ सहेजा जा रहा है। कृपया प्रतीक्षा करें।  "</string>
     <string name="theme_name_description">"इस थीम का नाम बदलने के लिए यहां दबाएं।"</string>
@@ -792,7 +793,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="downloading_reddit_video_finished">"वीडियो सेब हो गया"</string>
 
     <!-- Fuzzy -->
-    <string name="downloading_reddit_video_failed_cannot_get_cache_directory">"सेव करना असफल: केच डायरेक्ट्री मे नहि जा सकते"</string>
+    <string name="downloading_reddit_video_failed_cannot_get_cache_directory">"डाउनलोड असफल: कैस डायरेक्ट्री तक अभिगम असफल "</string>
     <string name="downloading_reddit_video_failed_cannot_download_video">"सेव करना असफल: वीडियो डाउनलोड नहीं की जा सकी"</string>
     <string name="downloading_reddit_video_failed_cannot_save_video">"सेव करना असफल: केच डायरेक्ट्री मे वीडियो सेव नहि कर सकते"</string>
     <string name="downloading_reddit_video_failed_cannot_save_audio">"सेव करना असफल: केच डायरेक्ट्री मे अडियो सेव नहि कर सकते"</string>
@@ -847,7 +848,11 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_pull_to_refresh_title">"ताजा करने के लिए खींचें"</string>
     <string name="settings_security_title">"सुरक्षा "</string>
     <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"नेवीगेशन दराज में खाता अनुभाग पर जाने के लिए सत्यापन आवश्यक "</string>
+
+    <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"संक्षिप्त विन्यास में टूलबार को छुपाने के लिए लॉंग प्रैस "</string>
+
+    <!-- Fuzzy -->
     <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"संक्षिप्त विन्यास में टूलबार पूर्वनिर्धारित रूप से अदृश्य "</string>
     <string name="settings_customize_bottom_app_bar_title">"निचले नेवीगेशन बार को अनुकूलित करें "</string>
     <string name="settings_main_activity_bottom_app_bar_group_summary">"मुख्य पृष्ट "</string>
@@ -880,7 +885,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="large">"बड़ा "</string>
     <string name="small">"छोटा "</string>
     <string name="insert_link">"लिंक जोड़ें"</string>
-    <string name="text_hint">"टेक्स्ट "</string>
+    <string name="text_hint">"लेख "</string>
     <string name="link_hint">"लिंक "</string>
     <string name="unlock_account_section">"खाता अनुभाग खोलें "</string>
     <string name="unlock">"खोलें "</string>
@@ -890,6 +895,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="change_post_layout">"पोस्ट विन्यास बदलें "</string>
     <string name="give_award_dialog_title">"पुरस्कार दें? "</string>
     <string name="anonymous">"अज्ञात"</string>
+
+    <!-- Fuzzy -->
     <string name="give_award_error_message">"कूट: %1$d
 संदेश: %2$s"</string>
     <string name="give_award_success">"पुरस्कार दे दिया गया "</string>
@@ -900,7 +907,11 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="this_user_has_nsfw_content">"इस यूजर के पास NSFW सामग्री है। "</string>
     <string name="dismiss">"रद्द करें "</string>
     <string name="leave">"निकासी "</string>
+
+    <!-- Fuzzy -->
     <string name="go_to_subreddit">"सबरैडिट पर जाएं "</string>
+
+    <!-- Fuzzy -->
     <string name="go_to_user">"यूजर पर जाएं "</string>
     <string name="go_to_thing_hint">"नाम "</string>
     <string name="random">"यादृच्छिक "</string>
@@ -914,7 +925,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_miscellaneous_title">"विविध "</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_title">"सबरैडिट द्वारा संस्तुतित टिप्पणी क्रम प्रकार बनाए रखें "</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_summary">"टिप्पणी क्रम प्रकार सरंक्षित नहीं किया जाएगा "</string>
-    <string name="settings_post_filter_title">"छंटनी "</string>
     <string name="settings_subreddit_filter_category">"सबरैडिट छुपाएं "</string>
     <string name="settings_subreddit_filter_popular_and_all">"r/popular एवं r/all में "</string>
     <string name="settings_credits_ufo_capturing_animation_title">"UFO बंदी बनाते हुए एनिमेशन "</string>
@@ -925,4 +935,11 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_swipe_action_swipe_left_title">"बायां स्वाइप"</string>
     <string name="settings_swipe_action_swipe_right_title">"दायां स्वाइप"</string>
     <string name="settings_swipe_action_info_summary">"एक स्तंभ या पोस्ट विवरण से अधिक वाली पोस्ट फीड पर लागू नहीं "</string>
+    <string name="theme_item_no_preview_post_type_icon_tint">"पूर्वदर्शन अनुपलब्ध पोस्ट प्रकार आइकन रंग "</string>
+    <string name="theme_item_no_preview_post_type_icon_tint_detail">"पूर्वदर्शन अनुपलब्ध पोस्ट प्रकार दर्शाने वाले आइकन पर लागू "</string>
+    <string name="theme_item_no_preview_post_type_background_color">"पूर्वदर्शन अनुपलब्ध पोस्ट प्रकार पृष्टभूमि रंग"</string>
+    <string name="theme_item_no_preview_post_type_background_color_detail">"पूर्वदर्शन अनुपलब्ध पोस्ट प्रकार दर्शाने वाले प्लेसहोल्डर पर लागू "</string>
+    <string name="settings_language_title">"भाषा "</string>
+    <string name="multireddit_selection_activity_label">"मल्टीरेड्डिट चुनें"</string>
+    <string name="action_add_to_multireddit">"मल्टीरेड्डिट में जोड़ें"</string>
 </resources>

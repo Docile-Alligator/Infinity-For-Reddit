@@ -272,27 +272,21 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
         }
 
         if (backupSettingsPreference != null) {
-            backupSettingsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    Intent intent = new Intent(ACTION_OPEN_DOCUMENT_TREE);
-                    intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
-                    startActivityForResult(intent, SELECT_BACKUP_SETTINGS_DIRECTORY_REQUEST_CODE);
-                    return true;
-                }
+            backupSettingsPreference.setOnPreferenceClickListener(preference -> {
+                Intent intent = new Intent(ACTION_OPEN_DOCUMENT_TREE);
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                startActivityForResult(intent, SELECT_BACKUP_SETTINGS_DIRECTORY_REQUEST_CODE);
+                return true;
             });
         }
 
         if (restoreSettingsPreference != null) {
-            restoreSettingsPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
-                    chooseFile.setType("application/zip");
-                    chooseFile = Intent.createChooser(chooseFile, "Choose a file");
-                    startActivityForResult(chooseFile, SELECT_RESTORE_SETTINGS_DIRECTORY_REQUEST_CODE);
-                    return true;
-                }
+            restoreSettingsPreference.setOnPreferenceClickListener(preference -> {
+                Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
+                chooseFile.setType("application/zip");
+                chooseFile = Intent.createChooser(chooseFile, "Choose a backup file");
+                startActivityForResult(chooseFile, SELECT_RESTORE_SETTINGS_DIRECTORY_REQUEST_CODE);
+                return true;
             });
         }
     }

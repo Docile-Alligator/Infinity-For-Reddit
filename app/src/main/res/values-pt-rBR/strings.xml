@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="login_activity_label">"Login"</string>
-    <string name="comment_activity_label">"Comentar"</string>
+    <string name="login_activity_label">"Entrar"</string>
+    <string name="comment_activity_label">"Enviar Comentário"</string>
     <string name="comment_activity_label_is_replying">"Responder"</string>
-    <string name="post_text_activity_label">"Postar Texto"</string>
+    <string name="post_text_activity_label">"Publicar Texto"</string>
     <string name="subreddit_selection_activity_label">"Selecionar um Subreddit"</string>
     <string name="post_link_activity_label">"Postar Link"</string>
     <string name="post_image_activity_label">"Postar Imagem"</string>
@@ -30,6 +30,8 @@
     <string name="view_reddit_gallery_activity_image_label">"Imagem %1$d/%2$d"</string>
     <string name="view_reddit_gallery_activity_gif_label">"Gif %1$d/%2$d"</string>
     <string name="view_reddit_gallery_activity_video_label">"Vídeo %1$d/%2$d"</string>
+
+    <!-- What's the context of this? I can't find it in-App -->
     <string name="navigation_drawer_open">"Abrir menu de navegação"</string>
     <string name="navigation_drawer_close">"Fechar menu de navegação"</string>
     <string name="action_download">"Baixar"</string>
@@ -53,8 +55,8 @@
     <string name="action_edit_flair">"Editar Etiqueta"</string>
     <string name="action_change_post_layout">"Alterar Aparência do Post"</string>
     <string name="action_save">"Salvar"</string>
-    <string name="action_edit_multi_reddit">"Editar MultiReddit"</string>
-    <string name="action_delete_multi_reddit">"Excluir MultiReddit"</string>
+    <string name="action_edit_multi_reddit">"Editar Multireddit"</string>
+    <string name="action_delete_multi_reddit">"Excluir Multireddit"</string>
     <string name="action_share">"Compartilhar"</string>
     <string name="action_preview">"Pré-visualizar"</string>
     <string name="action_report">"Reportar"</string>
@@ -82,7 +84,7 @@ Toque para tentar novamente."</string>
     <string name="no_comments">"Nenhum comentário encontrado"</string>
     <string name="no_subreddits">"Nenhum subreddit encontrado"</string>
     <string name="no_users">"Nenhum usuário encontrado"</string>
-    <string name="no_multi_reddits">"Nenhum MultiReddit encontrado"</string>
+    <string name="no_multi_reddits">"Nenhum Multireddit encontrado"</string>
     <string name="no_storage_permission">"Nenhuma permissão de armazenamento para salvar este arquivo"</string>
     <string name="load_comments_failed">"Falha ao carregar comentários.
 Toque para tentar novamente."</string>
@@ -100,8 +102,12 @@ Toque para tentar novamente."</string>
     <string name="cakeday_info">"Dia do bolo: %1$s"</string>
     <string name="since">"Desde:"</string>
     <string name="profile">"Perfil"</string>
-    <string name="subscriptions">"Incrições"</string>
-    <string name="multi_reddit">"MultiReddit"</string>
+
+    <!-- Estava "incrições" (sem o S depois no N) -->
+    <string name="subscriptions">"Inscrições"</string>
+
+    <!-- Acho que pode deixar o "reddit" descapitalizado que nem no original mesmo -->
+    <string name="multi_reddit">"Multireddit"</string>
     <string name="inbox">"Caixa de Entrada"</string>
     <string name="upvoted">"Upvoted"</string>
     <string name="downvoted">"Downvoted"</string>
@@ -114,7 +120,7 @@ Toque para tentar novamente."</string>
     <string name="cannot_fetch_subreddit_info">"Não foi possível obter informações do subreddit"</string>
     <string name="cannot_fetch_user_info">"Não foi possível obter informações do usuário"</string>
     <string name="cannot_fetch_sidebar">"Não foi possível obter a descrição"</string>
-    <string name="cannot_fetch_multireddit">"Não foi possível obter informações do MultiReddit"</string>
+    <string name="cannot_fetch_multireddit">"Não foi possível obter informações do Multireddit"</string>
     <string name="subscribe">"Inscrever-se"</string>
     <string name="unsubscribe">"Cancelar Inscrição"</string>
     <string name="subscribed">"Inscrito"</string>
@@ -168,7 +174,7 @@ Toque para tentar novamente."</string>
     <string name="post_link_hint">"URL"</string>
     <string name="subreddits">"Subreddits"</string>
     <string name="users">"Usuários"</string>
-    <string name="multi_reddits">"MultiReddits"</string>
+    <string name="multi_reddits">"Multireddits"</string>
     <string name="bottom_sheet_post_text">"Texto"</string>
     <string name="bottom_sheet_post_link">"Link"</string>
     <string name="bottom_sheet_post_image">"Imagem"</string>
@@ -328,7 +334,11 @@ Toque para tentar novamente."</string>
     <string name="settings_time_format_title">"Formato de Hora"</string>
     <string name="settings_category_post_title">"Post"</string>
     <string name="settings_default_post_layout">"Aparência de Post Padrão"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_divider_in_compact_layout">"Exibir Divisão no Modo Compacto"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_thumbnail_on_the_left_in_compact_layout">"Exibir Miniatura à Esquerda no Modo Compacto"</string>
     <string name="settings_swap_tap_and_long_title">"Toque Deslizante e Toque Longo nos Comentários"</string>
     <string name="settings_swipe_to_go_back_title">"Deslizar para Direita para Retornar"</string>
@@ -397,14 +407,13 @@ Toque para tentar novamente."</string>
     <string name="settings_delete_all_themes_in_database_title">"Excluir Todos os Temas no Banco de Dados"</string>
     <string name="settings_delete_front_page_scrolled_positions_in_database_title">"Excluir Todas as Posições de Rolagem da Primeira Página no Banco de Dados"</string>
     <string name="settings_reset_all_settings_title">"Redefinir Todas as Configurações"</string>
-    <string name="settings_advanced_settings_summary">"Limpar o Banco de Dados e as Preferências Compartilhadas"</string>
     <string name="settings_tab_1_summary">"Aba 1"</string>
     <string name="settings_tab_2_summary">"Aba 2"</string>
     <string name="settings_tab_3_summary">"Aba 3"</string>
     <string name="settings_tab_title">"Título"</string>
     <string name="settings_tab_post_type">"Tipo"</string>
     <string name="settings_tab_subreddit_name">"Nome do Subreddit (Sem o Prefixo \"r/\")"</string>
-    <string name="settings_tab_multi_reddit_name">"Nome do MultiReddit (/usuário/nomedoseuusuário/m/nomedoseumultireddit)"</string>
+    <string name="settings_tab_multi_reddit_name">"Nome do Multireddit (/usuário/nomedoseuusuário/m/nomedoseumultireddit)"</string>
     <string name="settings_tab_username">"Usuário (Sem o Prefixo \"u/\")"</string>
     <string name="no_developer_easter_egg">"Não existem opções de desenvolvedor aqui"</string>
     <string name="no_link_available">"Link não disponível"</string>
@@ -442,8 +451,8 @@ Toque para tentar novamente."</string>
     <string name="elapsed_time_months_ago">"%1$d Meses"</string>
     <string name="elapsed_time_a_year_ago">"1 Ano"</string>
     <string name="elapsed_time_years_ago">"%1$d Anos"</string>
-    <string name="error_getting_multi_reddit_data">"Falha ao obter os dados do multiReddit"</string>
-    <string name="error_loading_multi_reddit_list">"Não foi possível sincronizar os multiReddits"</string>
+    <string name="error_getting_multi_reddit_data">"Falha ao obter os dados do multireddit"</string>
+    <string name="error_loading_multi_reddit_list">"Não foi possível sincronizar os multireddits"</string>
     <string name="error_loading_subscriptions">"Não foi possível sincronizar as inscrições"</string>
     <string name="share_this_app">"Conheça o Infinity for Reddit, um cliente incrível para o Reddit!
 https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit"</string>
@@ -472,11 +481,10 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="multi_reddit_name_hint">"Nome (Limite de 50 caracteres)"</string>
     <string name="multi_reddit_description_hint">"Descrição"</string>
     <string name="private_multi_reddit">"Privado"</string>
-    <string name="select_subreddits_and_users">"Selecionar Subreddits"</string>
     <string name="no_multi_reddit_name">"Onde está o nome?"</string>
-    <string name="create_multi_reddit_failed">"Não foi possível criar este multiReddit"</string>
-    <string name="duplicate_multi_reddit">"Este multiReddit já existe"</string>
-    <string name="edit_multi_reddit_failed">"Não foi possível editar este multiReddit"</string>
+    <string name="create_multi_reddit_failed">"Não foi possível criar este multireddit"</string>
+    <string name="duplicate_multi_reddit">"Este multireddit já existe"</string>
+    <string name="edit_multi_reddit_failed">"Não foi possível editar este multireddit"</string>
     <string name="logged_out">"Você está deslogado"</string>
     <string name="delete_multi_reddit_success">"Excluído com sucesso"</string>
     <string name="delete_multi_reddit_failed">"Falha ao excluir"</string>
@@ -701,7 +709,7 @@ Baseado no tema Índigo Amoled"</string>
     <string name="author_flair_preview">"Etiqueta de autor"</string>
     <string name="comment_content_preview">"Prévia do comentário"</string>
     <string name="edit_multi_reddit">"Editar multireddit"</string>
-    <string name="delete_multi_reddit">"Excluir multireddit"</string>
+    <string name="delete_multi_reddit">"Excluir Multireddit"</string>
     <string name="n_awards">"%1$d Prêmios"</string>
     <string name="one_award">"1 Prêmio"</string>
     <string name="report">"Reportar"</string>
@@ -727,6 +735,8 @@ Baseado no tema Índigo Amoled"</string>
     <string name="downloading_reddit_video_muxing">"Sincronizando vídeo e áudio"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"Salvando vídeo"</string>
     <string name="downloading_reddit_video_finished">"Baixado"</string>
+
+    <!-- Fuzzy -->
     <string name="downloading_reddit_video_failed_cannot_get_cache_directory">"Falha ao baixar: não foi possível acessar o diretório de cache"</string>
     <string name="downloading_reddit_video_failed_cannot_download_video">"Falha ao baixar: não foi possível baixar o vídeo"</string>
     <string name="downloading_reddit_video_failed_cannot_save_video">"Falha ao baixar: não foi possível salvar o vídeo no diretório de cache"</string>
@@ -758,7 +768,7 @@ Exemplo: suasenha:123456"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Retrato"</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">"Paisagem"</string>
     <string name="settings_nsfw_and_spoiler_title">"NSFW &amp; Spoiler"</string>
-    <string name="settings_delete_all_legacy_settings_title">"Excluir todas as configurações intigas"</string>
+    <string name="settings_delete_all_legacy_settings_title">"Excluir todas as configurações antigas"</string>
     <string name="restart_app_see_changes">"Reinicie o app para ver as alterações"</string>
     <string name="settings_tab_count">"Contador de abas"</string>
     <string name="settings_show_tab_names">"Mostrar nome de abas"</string>
@@ -779,7 +789,11 @@ As abas podem perder todo o conteúdo após alternar para outras. Isso é o mesm
     <string name="settings_pull_to_refresh_title">"Puxar para atualizar"</string>
     <string name="settings_security_title">"Segurança"</string>
     <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Requer autenticação para ir a sessão de conta no menu de navegação"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Aperte e segure para esconder a barra de ferramentas no modo compacto"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"Barra de ferramentas no modo compacto oculta por padrão"</string>
     <string name="settings_customize_bottom_app_bar_title">"Personalizar barra de navegação inferior"</string>
     <string name="settings_main_activity_bottom_app_bar_group_summary">"Página inicial"</string>
@@ -821,8 +835,10 @@ Os vídeos do Reddit ficam em menor resolução."</string>
     <string name="change_post_layout">"Alterar aparência do post"</string>
     <string name="give_award_dialog_title">"Dar prêmio?"</string>
     <string name="anonymous">"Anônimo"</string>
+
+    <!-- Fuzzy -->
     <string name="give_award_error_message">"Código: %1$d/
- Mensagem: %2$s"</string>
+Mensagem: %2$s"</string>
     <string name="give_award_success">"Prêmio concedido"</string>
     <string name="give_award_failed">"Falhou"</string>
     <string name="recent_searches">"Buscas recentes"</string>
@@ -831,7 +847,11 @@ Os vídeos do Reddit ficam em menor resolução."</string>
     <string name="this_user_has_nsfw_content">"Este usuário tem conteúdo NSFW."</string>
     <string name="dismiss">"Dispensar"</string>
     <string name="leave">"Sair"</string>
+
+    <!-- Fuzzy -->
     <string name="go_to_subreddit">"Ir para subreddit"</string>
+
+    <!-- Fuzzy -->
     <string name="go_to_user">"Ir para usuário"</string>
     <string name="go_to_thing_hint">"Nome"</string>
     <string name="random">"Aleatório"</string>
@@ -842,10 +862,9 @@ Os vídeos do Reddit ficam em menor resolução."</string>
     <string name="fetch_random_thing_failed">"Tente novamente mais tarde"</string>
     <string name="downloading">"Baixando"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all e r/popular"</string>
-    <string name="settings_miscellaneous_title">"Miscelãnea"</string>
+    <string name="settings_miscellaneous_title">"Miscelânea"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_title">"Respeitar modo de classificação de comentário recomendado pelo subreddit"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_summary">"Modo de classificação de comentário não será salvo"</string>
-    <string name="settings_post_filter_title">"Filtrar"</string>
     <string name="settings_subreddit_filter_category">"Ocultar subreddits"</string>
     <string name="settings_subreddit_filter_popular_and_all">"Em r/popular e r/all"</string>
     <string name="settings_credits_ufo_capturing_animation_title">"Animação de captura de OVNIs"</string>
@@ -860,4 +879,81 @@ Os vídeos do Reddit ficam em menor resolução."</string>
     <string name="theme_item_no_preview_post_type_icon_tint_detail">"Aplicado a: Ícone indicando o tipo de post quando não há pré-visualização disponível"</string>
     <string name="theme_item_no_preview_post_type_background_color">"Cor de fundo do tipo de post sem pré-visualização"</string>
     <string name="theme_item_no_preview_post_type_background_color_detail">"Aplicado a: Espaço reservado indicando o tipo de post quando não há pré-visualização disponível"</string>
+    <string name="settings_language_title">"Idioma"</string>
+    <string name="customize_post_filter_activity_label">"Customizar Filtro de Posts"</string>
+    <string name="filtered_posts_activity_subtitle">"Posts filtrados"</string>
+    <string name="post_filter_preference_activity_label">"Filtro de Post"</string>
+    <string name="search_users_result_activity_label">"Usuários"</string>
+    <string name="multireddit_selection_activity_label">"Selecionar um Multirredit"</string>
+    <string name="action_save_to_database">"Salvar no banco de dados"</string>
+    <string name="action_read_all_messages">"Ler todas mensagens"</string>
+    <string name="action_add_to_multireddit">"Adicionar a um Multireddit"</string>
+    <string name="search_only_subreddits_hint">"Buscar subreddits"</string>
+    <string name="search_only_users_hint">"Buscar usuários"</string>
+    <string name="post_type_gif">"Gif"</string>
+    <string name="post_type_gallery">"Galeria"</string>
+    <string name="settings_disable_immersive_interface_in_landscape_mode">"Desabilitar interface imersiva em formato retrato"</string>
+    <string name="settings_privacy_policy_title">"Política de Privacidade"</string>
+    <string name="settings_delete_read_posts_in_database_title">"Deletar todos os posts lidos no banco de dados"</string>
+    <string name="settings_post_filter_title">"Filtro de Post"</string>
+    <string name="settings_only_disable_preview_in_video_and_gif_posts_title">"Desativar pré-visualização apenas em Gifs e Vídeos"</string>
+    <string name="settings_enable_search_history_title">"Habilitar histórico de busca"</string>
+    <string name="settings_post_history_title">"Histórico de busca"</string>
+    <string name="settings_mark_posts_as_read_title">"Marque Posts como Lido"</string>
+    <string name="settings_mark_posts_as_read_after_voting_title">"Marque Posts como Lido depois de votar"</string>
+    <string name="settings_mark_posts_as_read_on_scroll_title">"Marcar post como lido ao rolar página"</string>
+    <string name="settings_hide_read_posts_automatically_title">"Esconder posts lidos automaticamente"</string>
+    <string name="settings_sort_type_title">"Tipo de Classificação"</string>
+    <string name="settings_save_sort_type_title">"Lembrar Classificação"</string>
+    <string name="settings_subreddit_default_sort_type_title">"Classificação Padrão em Subreddits"</string>
+    <string name="settings_subreddit_default_sort_time_title">"Classificação Padrão por Tempo em Subreddits"</string>
+    <string name="settings_user_default_sort_type_title">"Classificação Padrão em Usuários"</string>
+    <string name="settings_user_default_sort_time_title">"Classificação Padrão por Tempo em Usuários"</string>
+    <string name="open_link">"Abrir Link"</string>
+    <string name="select_subreddits_and_users">"Selecionar subreddits e usuários"</string>
+    <string name="theme_item_read_post_title_color">"Cor do Título de Post Lido"</string>
+    <string name="theme_item_read_post_title_color_detail">"Título de Post Lido"</string>
+    <string name="theme_item_read_post_content_color">"Cor do Conteúdo de Post Lido"</string>
+    <string name="theme_item_read_post_content_color_detail">"Conteúdo de Post Lido"</string>
+    <string name="theme_item_read_post_card_view_background_color">"Cor de Fundo da Visualização de Posts em Cartão"</string>
+    <string name="theme_item_read_post_card_view_background_color_detail">"Aplicado a: Fundo de Post Lido"</string>
+    <string name="delete_all_read_posts_success">"Sucesso ao deletar todos os posts já lidos"</string>
+    <string name="hide_read_posts">"Esconder Posts Lidos"</string>
+    <string name="filter_posts">"Filtrar Posts"</string>
+    <string name="only_nsfw">"Apenas NSFW"</string>
+    <string name="only_spoiler">"Apenas Spoiler"</string>
+    <string name="title_excludes_strings_hint">"Título: excluir palavras-chave (chave1,chave2)"</string>
+    <string name="title_excludes_regex_hint">"Título: excluir expressão regular"</string>
+    <string name="exclude_subreddits_hint">"Excluir subreddits (e.g. funny,AskReddit)"</string>
+    <string name="exclude_users_hint">"Excluir usuários (e.g. Hostilenemy,random)"</string>
+    <string name="exclude_flairs_hint">"Excluir flairs (e.g. flair1,flair2)"</string>
+    <string name="contain_flairs_hint">"Contém flairs (e.g. flair1,flair2)"</string>
+    <string name="min_vote_hint">"Voto Mínimo (-1: sem restrição)"</string>
+    <string name="max_vote_hint">"Voto máximo (-1: sem restrição)"</string>
+    <string name="min_comments_hint">"Comentários mínimos (-1: sem restrição)"</string>
+    <string name="max_comments_hint">"Comentários máximos (-1: sem restrição)"</string>
+    <string name="min_awards_hint">"Prêmios mínimos (-1: sem restrição)"</string>
+    <string name="max_awards_hint">"Prêmios máximos (-1: sem restrição)"</string>
+    <string name="post_filter_name_hint">"Nome do Filtro de Post"</string>
+    <string name="post_filter_requires_a_name">"Qual é o nome deste filtro de post?"</string>
+    <string name="duplicate_post_filter_dialog_title">"'%1$s' Já existe"</string>
+    <string name="duplicate_post_filter_dialog_message">"Sobrescrever isso?"</string>
+    <string name="apply_post_filter_to">"Aplicar para"</string>
+    <string name="post_filter_usage_home">"Início"</string>
+    <string name="post_filter_usage_subreddit">"Subreddit: %1$s"</string>
+    <string name="post_filter_usage_subreddit_all">"Subreddit"</string>
+    <string name="post_filter_usage_user">"Usuário: %1$s"</string>
+    <string name="post_filter_usage_user_all">"Usuário"</string>
+    <string name="post_filter_usage_multireddit">"Multireddit: %1$s"</string>
+    <string name="post_filter_usage_multireddit_all">"Multireddit"</string>
+    <string name="post_filter_usage_search">"Pesquisar"</string>
+    <string name="subreddit">"Subreddit"</string>
+    <string name="user">"Usuário"</string>
+    <string name="edit_post_filter_name_of_usage_info">"Deixe em branco para aplicar o filtro do post para todos os subreddits / usuários / multireddits"</string>
+    <string name="read_all_messages_time_limit">"Você está fazendo isso com muita frequência. Tente novamente mais tarde. Esse é o limite da API do Reddit."</string>
+    <string name="read_all_messages_success">"Sucesso ao ler todas as mensagens"</string>
+    <string name="read_all_messages_failed">"Não foi possível ler todas as mensagens"</string>
+    <string name="add_subreddit_or_user_to_multireddit_success">"%1$s está adicionado a multireddit %2$s"</string>
+    <string name="add_subreddit_or_user_to_multireddit_failed">"Não foi possível adicionar %1$s para o multireddit %2$s"</string>
+    <string name="choose_a_user">"Escolha um usuário"</string>
 </resources>

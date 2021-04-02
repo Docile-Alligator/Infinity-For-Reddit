@@ -5,7 +5,6 @@
     <string name="comment_activity_label_is_replying">"Antworten"</string>
 
     <!-- Ja wür ich auch sagen -->
-    <!-- Fuzzy -->
     <string name="post_text_activity_label">"Text-Beitrag"</string>
     <string name="subreddit_selection_activity_label">"Wähle einen Subreddit"</string>
     <string name="post_link_activity_label">"Beitrag verlinken"</string>
@@ -39,12 +38,10 @@
     <string name="action_refresh">"Aktualisieren"</string>
     <string name="action_add_comment">"Kommentar hinzufügen"</string>
     <string name="action_save_post">"Beitrag speichern"</string>
-
-    <!-- Fuzzy -->
     <string name="action_view_crosspost_parent">"Originalbeitrag crossposten"</string>
     <string name="action_search">"Suchen"</string>
-    <string name="action_start_lazy_mode">"Faulheitsmodus starten"</string>
-    <string name="action_stop_lazy_mode">"Faulheitsmodus stoppen"</string>
+    <string name="action_start_lazy_mode">"Lazy Mode starten"</string>
+    <string name="action_stop_lazy_mode">"Lazy Mode stoppen"</string>
     <string name="action_send">"Senden"</string>
     <string name="action_sort">"Sortieren"</string>
     <string name="action_hide_post">"Beitrag verstecken"</string>
@@ -342,7 +339,11 @@ Funktioniert vielleicht nicht auf Android 11"</string>
     <string name="settings_time_format_title">"Zeitformat"</string>
     <string name="settings_category_post_title">"Beitrag"</string>
     <string name="settings_default_post_layout">"Standard Beitragslayout"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_divider_in_compact_layout">"Trennleiste im kompakten Layout anzeigen"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_thumbnail_on_the_left_in_compact_layout">"Thumbnail auf der Linken Seite des kompakten Layouts anzeigen"</string>
     <string name="settings_swap_tap_and_long_title">"Antippen und Gedrückthalten in Kommentaren tauschen"</string>
     <string name="settings_swipe_to_go_back_title">"Nach rechts wischen, um zurück zu gehen"</string>
@@ -413,7 +414,6 @@ Funktioniert vielleicht nicht auf Android 11"</string>
     <string name="settings_delete_all_themes_in_database_title">"Alle benutzerdefinierten Themen aus der Datenbank löschen"</string>
     <string name="settings_delete_front_page_scrolled_positions_in_database_title">"Alle Scrollpositionen der Hauptseite aus der Datenbank löschen"</string>
     <string name="settings_reset_all_settings_title">"Alle Einstellungen zurücksetzen"</string>
-    <string name="settings_advanced_settings_summary">"Datenbank und geteilte Einstellungen aufräumen"</string>
     <string name="settings_tab_1_summary">"Reiter 1"</string>
     <string name="settings_tab_2_summary">"Reiter 2"</string>
     <string name="settings_tab_3_summary">"Reiter 3"</string>
@@ -487,7 +487,6 @@ Funktioniert vielleicht nicht auf Android 11"</string>
     <string name="multi_reddit_name_hint">"Name (Max. 50 Zeichen)"</string>
     <string name="multi_reddit_description_hint">"Beschreibung"</string>
     <string name="private_multi_reddit">"Privat"</string>
-    <string name="select_subreddits_and_users">"Subreddits auswählen"</string>
     <string name="no_multi_reddit_name">"Wo ist der Name?"</string>
     <string name="create_multi_reddit_failed">"Kann dieses Multireddit nicht erstellen"</string>
     <string name="duplicate_multi_reddit">"Dieses Multireddit existiert bereits"</string>
@@ -821,7 +820,11 @@ Reiter könnten den Inhalt verlieren, wenn zu anderen gewechselt wird. Selbes Ve
     <string name="settings_pull_to_refresh_title">"Ziehen zum Aktualisieren"</string>
     <string name="settings_security_title">"Sicherheit"</string>
     <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Authentifizierung für die Kontosektion in der Seitenleiste erfordern"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Langes Drücken, um die Werkzeugleiste in der Kompaktansicht zu verstecken"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"Werkzeugleiste in der Kompaktansicht standardmäßig verstecken"</string>
     <string name="settings_customize_bottom_app_bar_title">"Untere Werkzeugleiste anpassen"</string>
     <string name="settings_main_activity_bottom_app_bar_group_summary">"Hauptseite"</string>
@@ -863,6 +866,8 @@ Reiter könnten den Inhalt verlieren, wenn zu anderen gewechselt wird. Selbes Ve
     <string name="change_post_layout">"Beitragslayout ändern"</string>
     <string name="give_award_dialog_title">"Auszeichnung verleihen?"</string>
     <string name="anonymous">"Anonym"</string>
+
+    <!-- Fuzzy -->
     <string name="give_award_error_message">"Code: %1$d/ Nachricht: %2$s"</string>
     <string name="give_award_success">"Auszeichnung verliehen"</string>
     <string name="give_award_failed">"Fehlgeschlagen"</string>
@@ -872,7 +877,11 @@ Reiter könnten den Inhalt verlieren, wenn zu anderen gewechselt wird. Selbes Ve
     <string name="this_user_has_nsfw_content">"Dieser Nutzer hat NSFW-Inhalte"</string>
     <string name="dismiss">"Verwerfen"</string>
     <string name="leave">"Verlassen"</string>
+
+    <!-- Fuzzy -->
     <string name="go_to_subreddit">"Zum Subreddit gehen"</string>
+
+    <!-- Fuzzy -->
     <string name="go_to_user">"Zum Benutzer gehen"</string>
     <string name="go_to_thing_hint">"Name"</string>
     <string name="random">"Zufällig"</string>
@@ -888,7 +897,6 @@ Reiter könnten den Inhalt verlieren, wenn zu anderen gewechselt wird. Selbes Ve
     <string name="settings_miscellaneous_title">"Sonstiges"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_title">"Vom Subreddit vorgeschlagenen Kommentar Sortier-Typ respektieren"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_summary">"Kommentar Sortier-Typ wird nicht gespeichert"</string>
-    <string name="settings_post_filter_title">"Filter"</string>
     <string name="settings_subreddit_filter_category">"Verstecke Subreddits"</string>
     <string name="settings_subreddit_filter_popular_and_all">"In r/popular und r/all"</string>
     <string name="settings_credits_ufo_capturing_animation_title">"UFO-Aufnahmeanimation"</string>
@@ -903,4 +911,85 @@ Reiter könnten den Inhalt verlieren, wenn zu anderen gewechselt wird. Selbes Ve
     <string name="theme_item_no_preview_post_type_icon_tint_detail">"Angewandt auf: Icon, welches den Tyo des Posts angibt, wenn keine Vorschau verfügbar ist"</string>
     <string name="theme_item_no_preview_post_type_background_color">"Keine Post-Typ Hintergrundfarbe"</string>
     <string name="theme_item_no_preview_post_type_background_color_detail">"Angewandt auf: Platzhalter, der die Art des Beitrags angibt, wenn keine Vorschau verfügbar ist"</string>
+    <string name="settings_language_title">"Sprache"</string>
+    <string name="customize_post_filter_activity_label">"Beitragsfilter anpassen"</string>
+    <string name="filtered_posts_activity_subtitle">"Gefilterte Beiträge"</string>
+    <string name="post_filter_preference_activity_label">"Beitragsfilter"</string>
+    <string name="search_users_result_activity_label">"Benutzer"</string>
+    <string name="multireddit_selection_activity_label">"Wähle ein Multireddit"</string>
+    <string name="action_save_to_database">"In der Datenbank speichern"</string>
+    <string name="action_read_all_messages">"Alle Nachrichten lesen"</string>
+    <string name="action_add_to_multireddit">"Zum Multireddit hinzufügen"</string>
+    <string name="search_only_subreddits_hint">"Subreddits durchsuchen"</string>
+    <string name="search_only_users_hint">"Benutzer durchsuchen"</string>
+    <string name="post_type_gif">"GIF"</string>
+    <string name="post_type_gallery">"Galerie"</string>
+    <string name="settings_disable_immersive_interface_in_landscape_mode">"Immersive Oberfläche im horizontalen Modus deaktivieren"</string>
+    <string name="settings_privacy_policy_title">"Datenschutz-Bestimmungen"</string>
+    <string name="settings_delete_read_posts_in_database_title">"Alle gelesenen Beitrage aus der Datenbank löschen"</string>
+    <string name="settings_post_filter_title">"Beitragsfilter"</string>
+    <string name="settings_only_disable_preview_in_video_and_gif_posts_title">"Vorschau nur bei Video- und GIF-Beiträgen deaktivieren"</string>
+    <string name="settings_enable_search_history_title">"Suchverlauf aktivieren"</string>
+    <string name="settings_post_history_title">"Beitragsverlauf aktivieren"</string>
+    <string name="settings_mark_posts_as_read_title">"Beiträge als gelesen markieren"</string>
+    <string name="settings_mark_posts_as_read_after_voting_title">"Beiträge nach dem Abstimmen als gelesen markieren"</string>
+    <string name="settings_mark_posts_as_read_on_scroll_title">"Beiträge beim Scrollen als gelesen markieren"</string>
+    <string name="settings_hide_read_posts_automatically_title">"Gelesene Beiträge automatisch verstecken"</string>
+    <string name="settings_sort_type_title">"Art der Sortierung"</string>
+    <string name="settings_save_sort_type_title">"Art der Sortierung speichern"</string>
+    <string name="settings_subreddit_default_sort_type_title">"Standard Art der Sortierung für Subreddits"</string>
+    <string name="settings_subreddit_default_sort_time_title">"Standard Sortierzeit für Subreddits"</string>
+    <string name="settings_user_default_sort_type_title">"Standard Art der Sortierung für Benutzer"</string>
+    <string name="settings_user_default_sort_time_title">"Standard Sortierzeit für Benutzer"</string>
+    <string name="open_link">"Link öffnen"</string>
+    <string name="select_subreddits_and_users">"Subreddit und Benutzer auswählen"</string>
+    <string name="theme_item_read_post_title_color">"Titelfarbe für gelesene Beiträge"</string>
+    <string name="theme_item_read_post_title_color_detail">"Wird angewendet auf: Titel von gelesenen Beiträgen"</string>
+    <string name="theme_item_read_post_content_color">"Inhaltsfarbe für gelesene Beiträge"</string>
+    <string name="theme_item_read_post_content_color_detail">"Wird angewendet auf: Inhalte gelesener Beiträge"</string>
+    <string name="theme_item_read_post_card_view_background_color">"Hintergrundfarbe für gelesene Beiträge"</string>
+    <string name="theme_item_read_post_card_view_background_color_detail">"Wird angewendet auf: Hintergründe gelesener Beiträge"</string>
+    <string name="delete_all_read_posts_success">"Alle gelesenen Beiträge erfolgreich gelöscht"</string>
+    <string name="hide_read_posts">"Gelesene Beiträge verstecken"</string>
+    <string name="filter_posts">"Beiträge filtern"</string>
+    <string name="only_nsfw">"Nur NSFW"</string>
+    <string name="only_spoiler">"Nur Spoiler"</string>
+    <string name="title_excludes_strings_hint">"Titel: schließt Schlüsselwörter aus (Wort 1, Wort 2)"</string>
+    <string name="title_excludes_regex_hint">"Titel: Schließt RegEx aus"</string>
+    <string name="exclude_subreddits_hint">"Schließt Subreddits aus (z. B. funny, AskReddit)"</string>
+    <string name="exclude_users_hint">"Schließt Benutzer aus (z. B. Hostileenemy, random)"</string>
+    <string name="exclude_flairs_hint">"Schließt Flairs aus (z. B. Flair 1, Flair 2)"</string>
+    <string name="contain_flairs_hint">"Beinhaltet Flairs (z. B. Flair 1, Flair 2)"</string>
+    <string name="min_vote_hint">"Minimale Abstimmungen (-1: Keine Einschränkung)"</string>
+    <string name="max_vote_hint">"Maximale Abstimmungen (-1: Keine Einschränkung)"</string>
+    <string name="min_comments_hint">"Minimale Kommentare (-1: Keine Einschränkung)"</string>
+    <string name="max_comments_hint">"Maximale Kommentare (-1: Keine Einschränkung)"</string>
+    <string name="min_awards_hint">"Minimale Auszeichnungen (-1: Keine Einschränkung)"</string>
+    <string name="max_awards_hint">"Maximale Auszeichnungen (-1: Keine Einschränkung)"</string>
+    <string name="post_filter_name_hint">"Name des Beitragsfilters"</string>
+    <string name="post_filter_requires_a_name">"Wie lautet der Name des Beitragsfilters?"</string>
+    <string name="duplicate_post_filter_dialog_title">"'%1$s' existiert bereits"</string>
+    <string name="duplicate_post_filter_dialog_message">"Überschreiben?"</string>
+    <string name="apply_post_filter_to">"Anwenden auf"</string>
+    <string name="post_filter_usage_home">"Home"</string>
+    <string name="post_filter_usage_subreddit">"Subreddit: %1$s"</string>
+    <string name="post_filter_usage_subreddit_all">"Subreddit"</string>
+    <string name="post_filter_usage_user">"Benutzer: %1$s"</string>
+    <string name="post_filter_usage_user_all">"Benutzer"</string>
+
+    <!-- This is inconsistant. Sometimes we call it Multireddit, other times MultiReddit. -->
+    <string name="post_filter_usage_multireddit">"Multireddit: %1$s"</string>
+
+    <!-- This is inconsistant. Sometimes we call it Multireddit, other times MultiReddit. -->
+    <string name="post_filter_usage_multireddit_all">"Multireddit"</string>
+    <string name="post_filter_usage_search">"Suche"</string>
+    <string name="subreddit">"Subreddit"</string>
+    <string name="user">"Benutzer"</string>
+    <string name="edit_post_filter_name_of_usage_info">"Leer lassen, um diesen Beitragsfilter auf alle Subreddits / Benutzer / Multireddits anzuwenden"</string>
+    <string name="read_all_messages_time_limit">"Du machst das zu oft hintereinander. Versuche es später noch einmal. Dies ist eine Beschränkung der Reddit-API."</string>
+    <string name="read_all_messages_success">"Alle Nachrichten erfolgreich als gelesen markiert"</string>
+    <string name="read_all_messages_failed">"Kann nicht alle Nachrichten als gelesen markieren"</string>
+    <string name="add_subreddit_or_user_to_multireddit_success">"%1$s wurde zu Multireddit %2$s hinzugefügt"</string>
+    <string name="add_subreddit_or_user_to_multireddit_failed">"Konnte %1$s nicht zu Multireddit %2$s hinzufügen"</string>
+    <string name="choose_a_user">"Wähle einen Benutzer"</string>
 </resources>

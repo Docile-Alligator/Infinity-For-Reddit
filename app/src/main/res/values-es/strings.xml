@@ -348,7 +348,11 @@ Premio means prize, so it's better suited the first word instead of the second o
     <string name="settings_time_format_title">"Formato de Tiempo"</string>
     <string name="settings_category_post_title">"Publicaciones"</string>
     <string name="settings_default_post_layout">"Modo de Interfaz por Defecto"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_divider_in_compact_layout">"Mostrar Barra de División en Modo Compacto"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_thumbnail_on_the_left_in_compact_layout">"Mostrar Miniatura a la Izquierda por Defecto en el Modo Compacto"</string>
     <string name="settings_swap_tap_and_long_title">"Cambiar el Toque y el Mantener Pulsado para los Comentarios"</string>
     <string name="settings_swipe_to_go_back_title">"Deslizar a la Derecha para ir Atrás"</string>
@@ -417,7 +421,6 @@ Premio means prize, so it's better suited the first word instead of the second o
     <string name="settings_delete_all_themes_in_database_title">"Borrar Todos los Temas Guardados"</string>
     <string name="settings_delete_front_page_scrolled_positions_in_database_title">"Borrar Todas las Posiciones Guardadas de la Página Principal de la Base de Datos"</string>
     <string name="settings_reset_all_settings_title">"Reiniciar Toda la Configuración"</string>
-    <string name="settings_advanced_settings_summary">"Limpiar la Base de Datos y las Preferencias al Compartir"</string>
     <string name="settings_tab_1_summary">"Pestaña 1"</string>
     <string name="settings_tab_2_summary">"Pestaña 2"</string>
     <string name="settings_tab_3_summary">"Pestaña 3"</string>
@@ -498,7 +501,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="multi_reddit_name_hint">"Nombre (Max. 50 Caracteres)"</string>
     <string name="multi_reddit_description_hint">"Descripción"</string>
     <string name="private_multi_reddit">"Privado"</string>
-    <string name="select_subreddits_and_users">"Selecciona Subreddits"</string>
     <string name="no_multi_reddit_name">"Introduce un nombre"</string>
     <string name="create_multi_reddit_failed">"Ocurrió un error creando este multireddit"</string>
     <string name="duplicate_multi_reddit">"Este multireddit ya existe"</string>
@@ -819,6 +821,8 @@ Ejemplo: contraseña:123456"</string>
     <string name="settings_enable_swipe_action_title">"Activar opción para deslizar"</string>
     <string name="settings_pull_to_refresh_title">"Jale para refrescar"</string>
     <string name="settings_security_title">"Seguridad"</string>
+    <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"Ocultar Barra de Herramientas por defecto"</string>
+    <string name="settings_customize_bottom_app_bar_title">"Personalizar Barra de Navegación Inferior"</string>
     <string name="settings_main_activity_bottom_app_bar_group_summary">"Página principal"</string>
     <string name="settings_other_activities_bottom_app_bar_group_summary">"Otras páginas"</string>
     <string name="settings_bottom_app_bar_option_1">"Opción 1"</string>
@@ -834,6 +838,11 @@ Imágenes previsualizadas están en menor resolución
 Videos de Reddit están en menor resolución"</string>
     <string name="settings_translation_title">"Traducción"</string>
     <string name="settings_translation_summary">"Traduzca esta app en POEditor. Grácias a todos los contribuyentes."</string>
+    <string name="settings_credits_national_flags">"Banderas Nacionales"</string>
+    <string name="settings_credits_national_flags_summary">"Icono hecho por Freepik desde www.flaticon.com"</string>
+    <string name="copy_failed">"Copia fallida"</string>
+    <string name="downloading_media_finished">"Descargado"</string>
+    <string name="downloading_media_failed_cannot_download_media">"Descarga fallida"</string>
     <string name="select_header_size">"Seleccionar tamaño de encabezado"</string>
     <string name="large">"Grande"</string>
     <string name="small">"Pequeño"</string>
@@ -856,7 +865,11 @@ Videos de Reddit están en menor resolución"</string>
     <string name="this_user_has_nsfw_content">"Este usuario tiene contenido NSFW"</string>
     <string name="dismiss">"Descartar"</string>
     <string name="leave">"Salir"</string>
+
+    <!-- Fuzzy -->
     <string name="go_to_subreddit">"Ir al Subreddit"</string>
+
+    <!-- Fuzzy -->
     <string name="go_to_user">"Ir al usuario"</string>
     <string name="go_to_thing_hint">"Nombre"</string>
     <string name="random">"Aleatorio"</string>
@@ -868,6 +881,25 @@ Videos de Reddit están en menor resolución"</string>
     <string name="downloading">"Descargando"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all y r/popular"</string>
     <string name="settings_miscellaneous_title">"Misceláneo"</string>
-    <string name="settings_post_filter_title">"Filtrar"</string>
     <string name="select_video_quality">"Seleccione calidad del video"</string>
+    <string name="settings_hide_subreddit_description_title">"Ocultar Descripción del Subreddit"</string>
+    <string name="settings_disable_image_preview_title">"Deshabilitar Vista Previa de Imagen en Modo Ahorro de Datos"</string>
+    <string name="settings_swipe_action_swipe_left_title">"Deslizar a la izquierda"</string>
+    <string name="settings_swipe_action_swipe_right_title">"Deslizar a la derecha"</string>
+    <string name="settings_language_title">"Lenguaje"</string>
+    <string name="customize_post_filter_activity_label">"Personalizar Filtro de Publicaciones"</string>
+    <string name="filtered_posts_activity_subtitle">"Publicaciones filtradas"</string>
+    <string name="post_filter_preference_activity_label">"Filtro de Publicaciones"</string>
+    <string name="search_users_result_activity_label">"Usuarios"</string>
+    <string name="multireddit_selection_activity_label">"Seleccionar Multireddit"</string>
+    <string name="action_save_to_database">"Guardar a la Base de Datos"</string>
+    <string name="action_read_all_messages">"Leer Todos los Mensajes"</string>
+    <string name="action_add_to_multireddit">"Añadir a Multireddit"</string>
+    <string name="search_only_subreddits_hint">"Buscar subreddits"</string>
+    <string name="search_only_users_hint">"Buscar usuarios"</string>
+    <string name="post_type_gallery">"Galería"</string>
+    <string name="settings_privacy_policy_title">"Política de privacidad
+"</string>
+    <string name="open_link">"Abrir Link"</string>
+    <string name="select_subreddits_and_users">"Seleccionar Subreddits y Usuarios"</string>
 </resources>

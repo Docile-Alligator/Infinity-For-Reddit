@@ -44,7 +44,11 @@ public class TranslationFragmentRecyclerViewAdapter extends RecyclerView.Adapter
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof TranslationContributorViewHolder) {
             Translation translation = translationContributors.get(position);
-            ((TranslationContributorViewHolder) holder).countryFlagImageView.setImageResource(translation.flagDrawableId);
+            if (translation.flagDrawableId < 0) {
+                ((TranslationContributorViewHolder) holder).countryFlagImageView.setImageDrawable(null);
+            } else {
+                ((TranslationContributorViewHolder) holder).countryFlagImageView.setImageResource(translation.flagDrawableId);
+            }
             ((TranslationContributorViewHolder) holder).languageNameTextView.setText(translation.language);
             ((TranslationContributorViewHolder) holder).contributorNamesTextView.setText(translation.contributors);
         }
