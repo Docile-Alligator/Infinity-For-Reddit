@@ -146,7 +146,9 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
                 mGlide.clear(mImageView);
             }
 
-            adapter.addUser(accountName, getArguments().getString(EXTRA_ACCOUNT_PROFILE_IMAGE_URL));
+            if (accessToken != null) {
+                adapter.addUser(accountName, getArguments().getString(EXTRA_ACCOUNT_PROFILE_IMAGE_URL));
+            }
             adapter.setSubscribedSubreddits(subscribedSubredditData);
         });
 

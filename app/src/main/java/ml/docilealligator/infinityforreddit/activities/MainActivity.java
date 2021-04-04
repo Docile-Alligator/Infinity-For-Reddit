@@ -733,7 +733,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                             intent = new Intent(MainActivity.this, ViewUserDetailActivity.class);
                             intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mAccountName);
                         } else if (stringId == R.string.subscriptions) {
-                            intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
+                            if (mAccessToken != null) {
+                                intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
+                            } else {
+                                intent = new Intent(MainActivity.this, AnonymousSubscriptionsActivity.class);
+                            }
                         } else if (stringId == R.string.multi_reddit) {
                             intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
                             intent.putExtra(SubscribedThingListingActivity.EXTRA_SHOW_MULTIREDDITS, true);

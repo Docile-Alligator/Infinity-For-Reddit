@@ -483,6 +483,10 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                 } else {
                     switch (position) {
                         case 1:
+                            stringId = R.string.subscriptions;
+                            drawableId = R.drawable.ic_subscritptions_bottom_app_bar_24dp;
+                            break;
+                        case 2:
                             if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
                                 stringId = R.string.dark_theme;
                                 drawableId = R.drawable.ic_dark_theme_24dp;
@@ -491,7 +495,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                                 drawableId = R.drawable.ic_light_theme_24dp;
                             }
                             break;
-                        case 2:
+                        case 3:
                             setOnClickListener = false;
                             if (isNSFWEnabled) {
                                 stringId = R.string.disable_nsfw;
@@ -515,7 +519,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                                 }
                             });
                             break;
-                        case 3:
+                        case 4:
                             stringId = R.string.settings;
                             drawableId = R.drawable.ic_settings_24dp;
                     }
@@ -681,7 +685,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                         - (collapsePostSection ? POST_SECTION_ITEMS : 0)
                         - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0);
             } else {
-                return 4;
+                return 5;
             }
         } else {
             if (isLoggedIn) {
@@ -742,7 +746,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
             if (isLoggedIn) {
                 notifyItemChanged(CURRENT_MENU_ITEMS - 3);
             } else {
-                notifyItemChanged(2);
+                notifyItemChanged(3);
             }
         }
     }
