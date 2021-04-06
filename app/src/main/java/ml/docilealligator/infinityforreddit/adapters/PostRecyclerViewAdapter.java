@@ -2014,6 +2014,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
         void typeChipClicked(int filter);
 
+        void flairChipClicked(String flair);
+
         void nsfwChipClicked();
 
         void currentlyBindItem(int position);
@@ -2302,6 +2304,17 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     Post post = getItem(position);
                     if (post != null) {
                         mCallback.typeChipClicked(post.getPostType());
+                    }
+                });
+
+                flairTextView.setOnClickListener(view -> {
+                    int position = getBindingAdapterPosition();
+                    if (position < 0) {
+                        return;
+                    }
+                    Post post = getItem(position);
+                    if (post != null) {
+                        mCallback.flairChipClicked(post.getFlair());
                     }
                 });
             }
@@ -3254,6 +3267,17 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 Post post = getItem(position);
                 if (post != null && !(mActivity instanceof FilteredPostsActivity)) {
                     mCallback.typeChipClicked(post.getPostType());
+                }
+            });
+
+            flairTextView.setOnClickListener(view -> {
+                int position = getBindingAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
+                if (post != null && !(mActivity instanceof FilteredPostsActivity)) {
+                    mCallback.flairChipClicked(post.getFlair());
                 }
             });
 

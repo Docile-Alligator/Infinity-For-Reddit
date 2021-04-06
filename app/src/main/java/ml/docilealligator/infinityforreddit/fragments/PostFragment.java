@@ -458,6 +458,16 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 }
 
                 @Override
+                public void flairChipClicked(String flair) {
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_QUERY, query);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_CONTAIN_FLAIR, flair);
+                    startActivity(intent);
+                }
+
+                @Override
                 public void nsfwChipClicked() {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
@@ -526,6 +536,15 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 }
 
                 @Override
+                public void flairChipClicked(String flair) {
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_CONTAIN_FLAIR, flair);
+                    startActivity(intent);
+                }
+
+                @Override
                 public void nsfwChipClicked() {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
@@ -589,6 +608,15 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, multiRedditPath);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void flairChipClicked(String flair) {
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, multiRedditPath);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_CONTAIN_FLAIR, flair);
                     startActivity(intent);
                 }
 
@@ -661,6 +689,16 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 }
 
                 @Override
+                public void flairChipClicked(String flair) {
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, username);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_USER_WHERE, where);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_CONTAIN_FLAIR, flair);
+                    startActivity(intent);
+                }
+
+                @Override
                 public void nsfwChipClicked() {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, username);
@@ -709,16 +747,22 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 @Override
                 public void typeChipClicked(int filter) {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
-                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, activity.getString(R.string.best));
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
                     startActivity(intent);
                 }
 
                 @Override
+                public void flairChipClicked(String flair) {
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_CONTAIN_FLAIR, flair);
+                    startActivity(intent);
+                }
+
+                @Override
                 public void nsfwChipClicked() {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
-                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, activity.getString(R.string.best));
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, Post.NSFW_TYPE);
                     startActivity(intent);
@@ -762,16 +806,22 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 @Override
                 public void typeChipClicked(int filter) {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
-                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, activity.getString(R.string.best));
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
                     startActivity(intent);
                 }
 
                 @Override
+                public void flairChipClicked(String flair) {
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_CONTAIN_FLAIR, flair);
+                    startActivity(intent);
+                }
+
+                @Override
                 public void nsfwChipClicked() {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
-                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, activity.getString(R.string.best));
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, Post.NSFW_TYPE);
                     startActivity(intent);

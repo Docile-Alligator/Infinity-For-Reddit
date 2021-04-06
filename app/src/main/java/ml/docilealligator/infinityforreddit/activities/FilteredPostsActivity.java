@@ -63,6 +63,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     public static final String EXTRA_NAME = "ESN";
     public static final String EXTRA_QUERY = "EQ";
     public static final String EXTRA_FILTER = "EF";
+    public static final String EXTRA_CONTAIN_FLAIR = "ECF";
     public static final String EXTRA_POST_TYPE = "EPT";
     public static final String EXTRA_USER_WHERE = "EUW";
 
@@ -213,6 +214,11 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
                 break;
         }
 
+        String flair = getIntent().getStringExtra(EXTRA_CONTAIN_FLAIR);
+        if (flair != null) {
+            postFilter.containFlairs = flair;
+        }
+
         if (postType == PostDataSource.TYPE_USER) {
             userWhere = getIntent().getStringExtra(EXTRA_USER_WHERE);
             if (userWhere != null && !PostDataSource.USER_WHERE_SUBMITTED.equals(userWhere) && mMenu != null) {
@@ -262,7 +268,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     private void bindView(PostFilter postFilter, boolean initializeFragment) {
         switch (postType) {
             case PostDataSource.TYPE_FRONT_PAGE:
-                getSupportActionBar().setTitle(name);
+                getSupportActionBar().setTitle(R.string.home);
                 break;
             case PostDataSource.TYPE_SEARCH:
                 getSupportActionBar().setTitle(R.string.search);

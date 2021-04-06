@@ -213,10 +213,20 @@ public class PostFilter implements Parcelable {
         }
         if (postFilter.containFlairs != null && !postFilter.containFlairs.equals("")) {
             String[] flairs = postFilter.containFlairs.split(",", 0);
-            for (String f : flairs) {
-                if (!f.trim().equals("") && post.getFlair().equalsIgnoreCase(f.trim())) {
-                    return false;
+            if (flairs.length > 0) {
+                boolean match = false;
+                for (int i = 0; i < flairs.length; i++) {
+                    String flair = flairs[i].trim();
+                    if (flair.equals("") && i == flairs.length - 1) {
+                       return false;
+                    }
+                    if (!flair.equals("") && post.getFlair().equalsIgnoreCase(flair)) {
+                        match = true;
+                        break;
+                    }
                 }
+
+                return match;
             }
         }
 
