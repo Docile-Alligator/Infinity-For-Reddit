@@ -133,6 +133,7 @@ public class ParsePost {
         }
         if (data.has(JSONUtils.CROSSPOST_PARENT_LIST)) {
             //Cross post
+            //data.getJSONArray(JSONUtils.CROSSPOST_PARENT_LIST).getJSONObject(0) out of bounds????????????
             data = data.getJSONArray(JSONUtils.CROSSPOST_PARENT_LIST).getJSONObject(0);
             Post crosspostParent = parseBasicData(data);
             Post post = parseData(data, permalink, id, fullName, subredditName, subredditNamePrefixed,
@@ -227,7 +228,7 @@ public class ParsePost {
 
                     JSONArray thumbnailPreviews = images.getJSONArray(JSONUtils.RESOLUTIONS_KEY);
                     for (int i = 0; i < thumbnailPreviews.length(); i++) {
-                        JSONObject thumbnailPreview = images.getJSONArray(JSONUtils.RESOLUTIONS_KEY).getJSONObject(2);
+                        JSONObject thumbnailPreview = images.getJSONArray(JSONUtils.RESOLUTIONS_KEY).getJSONObject(i);
                         String thumbnailPreviewUrl = thumbnailPreview.getString(JSONUtils.URL_KEY);
                         int thumbnailPreviewWidth = thumbnailPreview.getInt(JSONUtils.WIDTH_KEY);
                         int thumbnailPreviewHeight = thumbnailPreview.getInt(JSONUtils.HEIGHT_KEY);

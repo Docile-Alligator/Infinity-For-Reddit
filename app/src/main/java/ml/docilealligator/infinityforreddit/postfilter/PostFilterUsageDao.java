@@ -14,6 +14,9 @@ public interface PostFilterUsageDao {
     @Query("SELECT * FROM post_filter_usage WHERE name = :name")
     LiveData<List<PostFilterUsage>> getAllPostFilterUsageLiveData(String name);
 
+    @Query("SELECT * FROM post_filter_usage WHERE name = :name")
+    List<PostFilterUsage> getAllPostFilterUsage(String name);
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertPostFilterUsage(PostFilterUsage postFilterUsage);
 
