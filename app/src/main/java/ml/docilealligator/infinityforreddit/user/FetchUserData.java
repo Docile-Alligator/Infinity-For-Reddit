@@ -4,24 +4,36 @@ import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;
 
 public class FetchUserData {
     public static void fetchUserData(Retrofit retrofit, String userName, FetchUserDataListener fetchUserDataListener) {
+        fetchUserData(null, retrofit, null, userName, fetchUserDataListener);
+    }
+
+    public static void fetchUserData(RedditDataRoomDatabase redditDataRoomDatabase, Retrofit retrofit,
+                                     String accessToken, String userName, FetchUserDataListener fetchUserDataListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
 
-        Call<String> userInfo = api.getUserData(userName);
+        Call<String> userInfo;
+        if (redditDataRoomDatabase == null) {
+            userInfo = api.getUserData(userName);
+        } else {
+            userInfo = api.getUserDataOauth(APIUtils.getOAuthHeader(accessToken), userName);
+        }
         userInfo.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParseUserData.parseUserData(response.body(), new ParseUserData.ParseUserDataListener() {
+                    ParseUserData.parseUserData(redditDataRoomDatabase, response.body(), new ParseUserData.ParseUserDataListener() {
                         @Override
-                        public void onParseUserDataSuccess(UserData userData) {
-                            fetchUserDataListener.onFetchUserDataSuccess(userData);
+                        public void onParseUserDataSuccess(UserData userData, int inboxCount) {
+                            fetchUserDataListener.onFetchUserDataSuccess(userData, inboxCount);
                         }
 
                         @Override
@@ -74,7 +86,7 @@ public class FetchUserData {
     }
 
     public interface FetchUserDataListener {
-        void onFetchUserDataSuccess(UserData userData);
+        void onFetchUserDataSuccess(UserData userData, int inboxCount);
 
         void onFetchUserDataFailed();
     }

@@ -8,11 +8,13 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 
 public class ParseUserData {
-    static void parseUserData(String response, ParseUserDataListener parseUserDataListener) {
-        new ParseUserDataAsyncTask(response, parseUserDataListener).execute();
+    static void parseUserData(RedditDataRoomDatabase redditDataRoomDatabase, String response,
+                              ParseUserDataListener parseUserDataListener) {
+        new ParseUserDataAsyncTask(redditDataRoomDatabase, response, parseUserDataListener).execute();
     }
 
     static void parseUserListingData(String response, ParseUserListingDataListener parseUserListingDataListener) {
@@ -56,7 +58,7 @@ public class ParseUserData {
     }
 
     interface ParseUserDataListener {
-        void onParseUserDataSuccess(UserData userData);
+        void onParseUserDataSuccess(UserData userData, int inboxCount);
 
         void onParseUserDataFailed();
     }
@@ -68,13 +70,16 @@ public class ParseUserData {
     }
 
     private static class ParseUserDataAsyncTask extends AsyncTask<Void, Void, Void> {
+        private RedditDataRoomDatabase redditDataRoomDatabase;
         private JSONObject jsonResponse;
         private ParseUserDataListener parseUserDataListener;
         private boolean parseFailed = false;
 
         private UserData userData;
+        private int inboxCount = -1;
 
-        ParseUserDataAsyncTask(String response, ParseUserDataListener parseUserDataListener) {
+        ParseUserDataAsyncTask(RedditDataRoomDatabase redditDataRoomDatabase, String response, ParseUserDataListener parseUserDataListener) {
+            this.redditDataRoomDatabase = redditDataRoomDatabase;
             this.parseUserDataListener = parseUserDataListener;
             try {
                 jsonResponse = new JSONObject(response);
@@ -89,6 +94,12 @@ public class ParseUserData {
             if (!parseFailed) {
                 try {
                     userData = parseUserDataBase(jsonResponse, true);
+                    if (redditDataRoomDatabase != null) {
+                        redditDataRoomDatabase.accountDao().updateAccountInfo(userData.getName(), userData.getIconUrl(), userData.getBanner(), userData.getTotalKarma());
+                    }
+                    if (jsonResponse.getJSONObject(JSONUtils.DATA_KEY).has(JSONUtils.INBOX_COUNT_KEY)) {
+                        inboxCount = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getInt(JSONUtils.INBOX_COUNT_KEY);
+                    }
                 } catch (JSONException e) {
                     parseFailed = true;
                     e.printStackTrace();
@@ -100,7 +111,7 @@ public class ParseUserData {
         @Override
         protected void onPostExecute(Void aVoid) {
             if (!parseFailed) {
-                parseUserDataListener.onParseUserDataSuccess(userData);
+                parseUserDataListener.onParseUserDataSuccess(userData, inboxCount);
             } else {
                 parseUserDataListener.onParseUserDataFailed();
             }

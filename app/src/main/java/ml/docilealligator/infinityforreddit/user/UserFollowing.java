@@ -50,7 +50,7 @@ public class UserFollowing {
                     if (action.equals("sub")) {
                         FetchUserData.fetchUserData(retrofit, username, new FetchUserData.FetchUserDataListener() {
                             @Override
-                            public void onFetchUserDataSuccess(UserData userData) {
+                            public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
                                 new UpdateSubscriptionAsyncTask(subscribedUserDao, userData, accountName, true).execute();
                             }
 

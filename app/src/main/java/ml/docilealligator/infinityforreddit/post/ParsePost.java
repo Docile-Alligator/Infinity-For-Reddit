@@ -59,7 +59,7 @@ public class ParsePost {
         int score = data.getInt(JSONUtils.SCORE_KEY);
         int voteType;
         int nComments = data.getInt(JSONUtils.NUM_COMMENTS_KEY);
-        int upvoteRatio = (int) (data.getDouble(JSONUtils.UPVOTE_RATIO) * 100);
+        int upvoteRatio = (int) (data.getDouble(JSONUtils.UPVOTE_RATIO_KEY) * 100);
         boolean hidden = data.getBoolean(JSONUtils.HIDDEN_KEY);
         boolean spoiler = data.getBoolean(JSONUtils.SPOILER_KEY);
         boolean nsfw = data.getBoolean(JSONUtils.NSFW_KEY);

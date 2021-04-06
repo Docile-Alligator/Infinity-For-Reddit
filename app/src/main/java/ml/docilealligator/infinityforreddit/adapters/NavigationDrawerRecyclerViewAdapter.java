@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -31,6 +32,7 @@ import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.account.Account;
+import ml.docilealligator.infinityforreddit.activities.InboxActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -66,6 +68,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private String profileImageUrl;
     private String bannerImageUrl;
     private int karma;
+    private int inboxCount;
     private boolean isNSFWEnabled;
     private boolean requireAuthToAccountSection;
     private boolean showAvatarOnTheRightInTheNavigationDrawer;
@@ -420,8 +423,17 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                             drawableId = R.drawable.ic_multi_reddit_24dp;
                             break;
                         case 5:
-                            stringId = R.string.inbox;
-                            drawableId = R.drawable.ic_inbox_24dp;
+                            setOnClickListener = false;
+                            if (inboxCount > 0) {
+                                ((MenuItemViewHolder) holder).menuTextView.setText(appCompatActivity.getString(R.string.inbox_with_count, inboxCount));
+                            } else {
+                                ((MenuItemViewHolder) holder).menuTextView.setText(R.string.inbox);
+                            }
+                            ((MenuItemViewHolder) holder).imageView.setImageDrawable(ContextCompat.getDrawable(appCompatActivity, R.drawable.ic_inbox_24dp));
+                            ((MenuItemViewHolder) holder).itemView.setOnClickListener(view -> {
+                                Intent intent = new Intent(appCompatActivity, InboxActivity.class);
+                                appCompatActivity.startActivity(intent);
+                            });
                             break;
                         case 7:
                             stringId = R.string.upvoted;
@@ -757,6 +769,11 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
     public void setShowAvatarOnTheRightInTheNavigationDrawer(boolean showAvatarOnTheRightInTheNavigationDrawer) {
         this.showAvatarOnTheRightInTheNavigationDrawer = showAvatarOnTheRightInTheNavigationDrawer;
+    }
+
+    public void setInboxCount(int inboxCount) {
+        this.inboxCount = inboxCount;
+        notifyDataSetChanged();
     }
 
     class NavHeaderViewHolder extends RecyclerView.ViewHolder {

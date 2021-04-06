@@ -840,7 +840,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         if (!mFetchUserInfoSuccess) {
             FetchUserData.fetchUserData(mRetrofit, username, new FetchUserData.FetchUserDataListener() {
                 @Override
-                public void onFetchUserDataSuccess(UserData userData) {
+                public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
                     new ViewUserDetailActivity.InsertUserDataAsyncTask(mRedditDataRoomDatabase.userDao(), userData,
                             () -> mFetchUserInfoSuccess = true).execute();
                 }

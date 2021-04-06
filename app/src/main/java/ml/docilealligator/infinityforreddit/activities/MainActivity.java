@@ -68,7 +68,6 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
-import ml.docilealligator.infinityforreddit.FetchMyInfo;
 import ml.docilealligator.infinityforreddit.FetchSubscribedThing;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
@@ -107,6 +106,8 @@ import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditViewModel;
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
+import ml.docilealligator.infinityforreddit.user.FetchUserData;
+import ml.docilealligator.infinityforreddit.user.UserData;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -131,6 +132,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String MESSAGE_FULLNAME_STATE = "MFS";
     private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
+    private static final String INBOX_COUNT_STATE = "ICS";
 
     private static final int LOGIN_ACTIVITY_REQUEST_CODE = 0;
 
@@ -224,6 +226,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private boolean mShowFavoriteSubscribedSubreddits;
     private boolean mShowSubscribedSubreddits;
     private int fabOption;
+    private int inboxCount;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -314,6 +317,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             mMessageFullname = savedInstanceState.getString(MESSAGE_FULLNAME_STATE);
             mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
+            inboxCount = savedInstanceState.getInt(INBOX_COUNT_STATE);
             initializeNotificationAndBindView(true);
         } else {
             mMessageFullname = getIntent().getStringExtra(EXTRA_MESSSAGE_FULLNAME);
@@ -741,8 +745,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         } else if (stringId == R.string.multi_reddit) {
                             intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
                             intent.putExtra(SubscribedThingListingActivity.EXTRA_SHOW_MULTIREDDITS, true);
-                        } else if (stringId == R.string.inbox) {
-                            intent = new Intent(MainActivity.this, InboxActivity.class);
                         } else if (stringId == R.string.upvoted) {
                             intent = new Intent(MainActivity.this, AccountPostsActivity.class);
                             intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_UPVOTED);
@@ -823,6 +825,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         });
                     }
                 });
+        adapter.setInboxCount(inboxCount);
         navDrawerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         navDrawerRecyclerView.setAdapter(adapter);
 
@@ -974,7 +977,24 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
     private void loadUserData() {
         if (!mFetchUserInfoSuccess) {
-            FetchMyInfo.fetchAccountInfo(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
+            FetchUserData.fetchUserData(mRedditDataRoomDatabase, mOauthRetrofit, mAccessToken,
+                    mAccountName, new FetchUserData.FetchUserDataListener() {
+                @Override
+                public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
+                    MainActivity.this.inboxCount = inboxCount;
+                    mAccountName = userData.getName();
+                    mFetchUserInfoSuccess = true;
+                    if (adapter != null) {
+                        adapter.setInboxCount(inboxCount);
+                    }
+                }
+
+                @Override
+                public void onFetchUserDataFailed() {
+                    mFetchUserInfoSuccess = false;
+                }
+            });
+            /*FetchMyInfo.fetchAccountInfo(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
                     new FetchMyInfo.FetchMyInfoListener() {
                         @Override
                         public void onFetchMyInfoSuccess(String name, String profileImageUrl, String bannerImageUrl, int karma) {
@@ -986,7 +1006,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         public void onFetchMyInfoFailed(boolean parseFailed) {
                             mFetchUserInfoSuccess = false;
                         }
-                    });
+                    });*/
         }
     }
 
@@ -1111,6 +1131,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         outState.putString(ACCOUNT_NAME_STATE, mAccountName);
         outState.putString(MESSAGE_FULLNAME_STATE, mMessageFullname);
         outState.putString(NEW_ACCOUNT_NAME_STATE, mNewAccountName);
+        outState.putInt(INBOX_COUNT_STATE, inboxCount);
     }
 
     @Override

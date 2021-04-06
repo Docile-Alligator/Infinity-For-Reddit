@@ -22,7 +22,7 @@ public class LoadUserData {
             } else {
                 handler.post(() -> FetchUserData.fetchUserData(retrofit, userName, new FetchUserData.FetchUserDataListener() {
                     @Override
-                    public void onFetchUserDataSuccess(UserData userData) {
+                    public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
                         InsertUserData.insertUserData(executor, handler, redditDataRoomDatabase, userData,
                                 () -> loadUserDataAsyncTaskListener.loadUserDataSuccess(userData.getIconUrl()));
                     }
