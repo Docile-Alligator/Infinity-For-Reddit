@@ -140,7 +140,7 @@ public class ParseComment {
         String distinguished = singleCommentData.getString(JSONUtils.DISTINGUISHED_KEY);
         String commentMarkdown = "";
         if (!singleCommentData.isNull(JSONUtils.BODY_KEY)) {
-            commentMarkdown = Utils.modifyMarkdown(singleCommentData.getString(JSONUtils.BODY_KEY).trim());
+            commentMarkdown = Utils.parseInlineGifInComments(Utils.modifyMarkdown(singleCommentData.getString(JSONUtils.BODY_KEY).trim()));
         }
         String commentRawText = Utils.trimTrailingWhitespace(
                 Html.fromHtml(singleCommentData.getString(JSONUtils.BODY_HTML_KEY))).toString();

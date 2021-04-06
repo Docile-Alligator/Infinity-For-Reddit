@@ -22,6 +22,8 @@ import androidx.core.text.HtmlCompat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SortType;
@@ -91,6 +93,23 @@ public class Utils {
         }
 
         return regexed.toString();
+    }
+
+    public static String parseInlineGifInComments(String markdown) {
+        StringBuilder markdownStringBuilder = new StringBuilder(markdown);
+        Pattern inlineGifPattern = Pattern.compile("!\\[gif]\\(giphy\\|\\w+\\)");
+        Matcher matcher = inlineGifPattern.matcher(markdownStringBuilder);
+        while (matcher.find()) {
+            markdownStringBuilder.replace(matcher.start(), matcher.end(), "[gif](https://media3.giphy.com/media/" + markdownStringBuilder.substring(matcher.start() + "![gif](giphy|".length(), matcher.end() - 1) + "/giphy.mp4)");
+        }
+
+        Pattern inlineGifPattern2 = Pattern.compile("!\\[gif]\\(giphy\\|\\w+\\|downsized\\)");
+        Matcher matcher2 = inlineGifPattern2.matcher(markdownStringBuilder);
+        while (matcher2.find()) {
+            markdownStringBuilder.replace(matcher2.start(), matcher2.end(), "[gif](https://media3.giphy.com/media/" + markdownStringBuilder.substring(matcher2.start() + "![gif](giphy|".length(), matcher2.end() - "|downsized\\)".length()) + "/giphy.mp4)");
+        }
+
+        return markdownStringBuilder.toString();
     }
 
     public static CharSequence trimTrailingWhitespace(CharSequence source) {
