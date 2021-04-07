@@ -14,6 +14,8 @@ import androidx.browser.customtabs.CustomTabColorSchemeParams;
 import androidx.browser.customtabs.CustomTabsIntent;
 import androidx.browser.customtabs.CustomTabsService;
 
+import org.apache.commons.io.FilenameUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,7 +90,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                 if (path.endsWith("jpg") || path.endsWith("png")) {
                     Intent intent = new Intent(this, ViewImageOrGifActivity.class);
                     String url = uri.toString();
-                    String fileName = url.substring(url.lastIndexOf('/') + 1);
+                    String fileName = FilenameUtils.getName(path);
                     intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, url);
                     intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, fileName);
                     intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, fileName);
@@ -96,7 +98,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                 } else if (path.endsWith("gif")) {
                     Intent intent = new Intent(this, ViewImageOrGifActivity.class);
                     String url = uri.toString();
-                    String fileName = url.substring(url.lastIndexOf('/') + 1);
+                    String fileName = FilenameUtils.getName(path);
                     intent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, url);
                     intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, fileName);
                     intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, fileName);

@@ -48,6 +48,8 @@ import com.google.android.material.snackbar.Snackbar;
 import com.thefuntasty.hauler.DragDirection;
 import com.thefuntasty.hauler.HaulerView;
 
+import org.apache.commons.io.FilenameUtils;
+
 import java.util.List;
 
 import javax.inject.Inject;
@@ -289,7 +291,7 @@ public class ViewVideoActivity extends AppCompatActivity {
             }
         } else if (videoType == VIDEO_TYPE_DIRECT) {
             videoDownloadUrl = mVideoUri.toString();
-            videoFileName = videoDownloadUrl.substring(videoDownloadUrl.lastIndexOf('/') + 1);
+            videoFileName = FilenameUtils.getName(videoDownloadUrl);
             // Produces DataSource instances through which media data is loaded.
             dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "Infinity"));
             // Prepare the player with the source.
