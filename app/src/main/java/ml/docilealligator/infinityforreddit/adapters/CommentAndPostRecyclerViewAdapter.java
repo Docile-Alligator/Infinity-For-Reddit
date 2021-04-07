@@ -1104,7 +1104,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                     comment.getScore() + comment.getVoteType())));
 
-            ((CommentViewHolder) holder).itemView.setPadding(comment.getDepth() * 8, 0, 0, 0);
+            ((CommentViewHolder) holder).linearLayout.setPadding(comment.getDepth() * 24, 0, 0, 0);
             if (comment.getDepth() > 0) {
                 switch (comment.getDepth() % 7) {
                     case 0:
@@ -1137,7 +1137,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         break;
                 }
                 ViewGroup.LayoutParams params = ((CommentViewHolder) holder).verticalBlock.getLayoutParams();
-                params.width = 8;
+                params.width = 12;
                 ((CommentViewHolder) holder).verticalBlock.setLayoutParams(params);
             }
 
@@ -1206,7 +1206,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ((CommentFullyCollapsedViewHolder) holder).scoreTextView.setText(mActivity.getString(R.string.top_score,
                     Utils.getNVotes(mShowAbsoluteNumberOfVotes, comment.getScore() + comment.getVoteType())));
 
-            ((CommentFullyCollapsedViewHolder) holder).itemView.setPadding(comment.getDepth() * 8, 0, 0, 0);
+            ((CommentFullyCollapsedViewHolder) holder).itemView.setPadding(comment.getDepth() * 24, 0, 0, 0);
             if (comment.getDepth() > 0) {
                 switch (comment.getDepth() % 7) {
                     case 0:
@@ -1239,7 +1239,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         break;
                 }
                 ViewGroup.LayoutParams params = ((CommentFullyCollapsedViewHolder) holder).verticalBlock.getLayoutParams();
-                params.width = 8;
+                params.width = 12;
                 ((CommentFullyCollapsedViewHolder) holder).verticalBlock.setLayoutParams(params);
             }
         } else if (holder instanceof LoadMoreChildCommentsViewHolder) {
@@ -1247,7 +1247,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             placeholder = mIsSingleCommentThreadMode ? mVisibleComments.get(holder.getBindingAdapterPosition() - 2)
                     : mVisibleComments.get(holder.getBindingAdapterPosition() - 1);
 
-            ((LoadMoreChildCommentsViewHolder) holder).itemView.setPadding(placeholder.getDepth() * 8, 0, 0, 0);
+            ((LoadMoreChildCommentsViewHolder) holder).itemView.setPadding(placeholder.getDepth() * 24, 0, 0, 0);
             if (placeholder.getDepth() > 0) {
                 switch (placeholder.getDepth() % 7) {
                     case 0:
@@ -1281,7 +1281,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 }
 
                 ViewGroup.LayoutParams params = ((LoadMoreChildCommentsViewHolder) holder).verticalBlock.getLayoutParams();
-                params.width = 8;
+                params.width = 12;
                 ((LoadMoreChildCommentsViewHolder) holder).verticalBlock.setLayoutParams(params);
             }
 
@@ -1992,7 +1992,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ViewGroup.LayoutParams params = ((CommentViewHolder) holder).verticalBlock.getLayoutParams();
             params.width = 0;
             ((CommentViewHolder) holder).verticalBlock.setLayoutParams(params);
-            ((CommentViewHolder) holder).itemView.setPadding(0, 0, 0, 0);
+            ((CommentViewHolder) holder).linearLayout.setPadding(0, 0, 0, 0);
             ((CommentViewHolder) holder).itemView.setBackgroundColor(mCommentBackgroundColor);
         } else if (holder instanceof CommentFullyCollapsedViewHolder) {
             ViewGroup.LayoutParams params = ((CommentFullyCollapsedViewHolder) holder).verticalBlock.getLayoutParams();
@@ -3763,7 +3763,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             if (mSwapTapAndLong) {
                 if (mCommentToolbarHideOnClick) {
                     View.OnLongClickListener hideToolbarOnLongClickListener = view -> hideToolbar();
-                    linearLayout.setOnLongClickListener(hideToolbarOnLongClickListener);
+                    itemView.setOnLongClickListener(hideToolbarOnLongClickListener);
                     commentMarkdownView.setOnLongClickListener(hideToolbarOnLongClickListener);
                     commentTimeTextView.setOnLongClickListener(hideToolbarOnLongClickListener);
                 }
@@ -3781,7 +3781,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         }
                     });
                     View.OnClickListener hideToolbarOnClickListener = view -> hideToolbar();
-                    linearLayout.setOnClickListener(hideToolbarOnClickListener);
+                    itemView.setOnClickListener(hideToolbarOnClickListener);
                     commentTimeTextView.setOnClickListener(hideToolbarOnClickListener);
                 }
                 commentMarkdownView.setOnLongClickListener(view -> {

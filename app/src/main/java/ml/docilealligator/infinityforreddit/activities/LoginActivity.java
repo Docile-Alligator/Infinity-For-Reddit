@@ -231,6 +231,7 @@ public class LoginActivity extends BaseActivity {
                             @Override
                             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                                 Toast.makeText(LoginActivity.this, R.string.retrieve_token_error, Toast.LENGTH_SHORT).show();
+                                t.printStackTrace();
                                 finish();
                             }
                         });
