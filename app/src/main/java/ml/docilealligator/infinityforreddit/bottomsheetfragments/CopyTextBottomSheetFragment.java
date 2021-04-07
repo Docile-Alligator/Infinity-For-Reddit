@@ -53,7 +53,7 @@ public class CopyTextBottomSheetFragment extends RoundedBottomSheetDialogFragmen
         ButterKnife.bind(this, rootView);
 
         String rawText = getArguments().getString(EXTRA_RAW_TEXT);
-        String markdownText = getArguments().getString(EXTRA_MARKDOWN);
+        String markdownText = getArguments().getString(EXTRA_MARKDOWN).replaceAll("<sup>", "^").replaceAll("</sup>", "");
 
         copyRawTextTextView.setOnClickListener(view -> {
             showCopyDialog(rawText);
