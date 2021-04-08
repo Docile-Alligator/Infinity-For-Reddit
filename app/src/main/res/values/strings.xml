@@ -897,6 +897,8 @@
     <string name="author_flair_preview">Author Flair</string>
     <string name="comment_content_preview">I got my girlfriend a “Get better soon” card.\nShe\'s not ill or anything, but she could definitely get better.</string>
 
+    <string name="copy_multi_reddit_path">Copy Multireddit\'s Path</string>
+    <string name="copy_multi_reddit_path_failed">Unable to copy multireddit\'s path</string>
     <string name="edit_multi_reddit">Edit Multireddit</string>
     <string name="delete_multi_reddit">Delete Multireddit</string>
 

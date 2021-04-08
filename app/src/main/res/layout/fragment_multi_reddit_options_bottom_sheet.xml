@@ -11,6 +11,25 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/copy_multi_reddit_path_text_view_multi_reddit_options_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:text="@string/copy_multi_reddit_path"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family"
+            android:drawableStart="@drawable/ic_copy_24dp"
+            android:drawablePadding="48dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
+
+        <TextView
             android:id="@+id/edit_multi_reddit_text_view_multi_reddit_options_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
