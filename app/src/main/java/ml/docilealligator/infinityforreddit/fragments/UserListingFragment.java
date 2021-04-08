@@ -141,7 +141,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
         String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SEARCH_USER, SortType.Type.RELEVANCE.value);
         sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
-        boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
+        boolean nsfw = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
 
         mAdapter = new UserListingRecyclerViewAdapter(getActivity(), mExecutor, mOauthRetrofit, mRetrofit,
                 mCustomThemeWrapper, accessToken, accountName, mRedditDataRoomDatabase,

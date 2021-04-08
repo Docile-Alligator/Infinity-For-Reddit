@@ -868,7 +868,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                                 new Handler(), null, usage, nameOfUsage, (postFilter, readPostList) -> {
                                     if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
                                         this.postFilter = postFilter;
-                                        postFilter.allowNSFW = mNsfwAndSpoilerSharedPreferences.getBoolean(accountName + SharedPreferencesUtils.NSFW_BASE, false);
+                                        postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(accountName + SharedPreferencesUtils.NSFW_BASE, false);
                                         initializeAndBindPostViewModel(accessToken);
                                     }
                                 });
@@ -881,7 +881,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                                 if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
                                     if (this.postFilter == null) {
                                         this.postFilter = postFilter;
-                                        postFilter.allowNSFW = mNsfwAndSpoilerSharedPreferences.getBoolean(accountName + SharedPreferencesUtils.NSFW_BASE, false);
+                                        postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(accountName + SharedPreferencesUtils.NSFW_BASE, false);
                                     }
                                     this.readPosts = readPostList;
                                     initializeAndBindPostViewModel(accessToken);
@@ -894,7 +894,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                             new Handler(), null, usage, nameOfUsage, (postFilter, readPostList) -> {
                                 if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
                                     this.postFilter = postFilter;
-                                    postFilter.allowNSFW = mNsfwAndSpoilerSharedPreferences.getBoolean(accountName + SharedPreferencesUtils.NSFW_BASE, false);
+                                    postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(accountName + SharedPreferencesUtils.NSFW_BASE, false);
                                     initializeAndBindPostViewModel(accessToken);
                                 }
                             });
@@ -910,7 +910,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                                 (postFilter, concatenatedSubredditNames) -> {
                                     if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
                                         this.postFilter = postFilter;
-                                        postFilter.allowNSFW = mNsfwAndSpoilerSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_BASE, false);
+                                        postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_BASE, false);
                                         this.concatenatedSubredditNames = concatenatedSubredditNames;
                                         if (concatenatedSubredditNames == null) {
                                             showErrorView(R.string.anonymous_front_page_no_subscriptions);
@@ -927,7 +927,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                             new Handler(), null, usage, nameOfUsage, (postFilter, readPostList) -> {
                                 if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
                                     this.postFilter = postFilter;
-                                    postFilter.allowNSFW = mNsfwAndSpoilerSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_BASE, false);
+                                    postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_BASE, false);
                                     initializeAndBindPostViewModelForAnonymous(null);
                                 }
                             });
@@ -939,7 +939,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                                 (postFilter, concatenatedSubredditNames) -> {
                                     if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
                                         this.postFilter = postFilter;
-                                        postFilter.allowNSFW = mNsfwAndSpoilerSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_BASE, false);
+                                        postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_BASE, false);
                                         this.concatenatedSubredditNames = concatenatedSubredditNames;
                                         if (concatenatedSubredditNames == null) {
                                             showErrorView(R.string.anonymous_front_page_no_subscriptions);
@@ -1334,7 +1334,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void changeNSFW(boolean nsfw) {
-        postFilter.allowNSFW = nsfw;
+        postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && nsfw;
         if (mPostViewModel != null) {
             mPostViewModel.changePostFilter(postFilter);
         }
@@ -1486,7 +1486,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Override
     public void changePostFilter(PostFilter postFilter) {
         this.postFilter = postFilter;
-        postFilter.allowNSFW = mNsfwAndSpoilerSharedPreferences.getBoolean((accountName == null || accountName.equals("-") ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
+        postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((accountName == null || accountName.equals("-") ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
         if (mPostViewModel != null) {
             mPostViewModel.changePostFilter(postFilter);
         }
