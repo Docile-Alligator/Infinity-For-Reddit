@@ -141,6 +141,54 @@
 
         </LinearLayout>
 
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/dividerColor" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="16dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:text="@string/settings_nsfw_and_spoiler_dangerous_group_title"
+            android:textColor="@color/colorAccent"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
+
+        <LinearLayout
+            android:id="@+id/disable_nsfw_forever_linear_layout_nsfw_and_spoiler_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="4dp"
+            android:paddingBottom="4dp"
+            android:paddingStart="72dp"
+            android:paddingEnd="16dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <TextView
+                android:id="@+id/disable_nsfw_forever_text_view_nsfw_and_spoiler_fragment"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginEnd="16dp"
+                android:layout_gravity="center_vertical"
+                android:text="@string/settings_disable_nsfw_forever_title"
+                android:textColor="?attr/primaryTextColor"
+                android:textSize="?attr/font_16"
+                android:fontFamily="?attr/font_family" />
+
+            <com.google.android.material.switchmaterial.SwitchMaterial
+                android:id="@+id/disable_nsfw_forever_switch_nsfw_and_spoiler_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical" />
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

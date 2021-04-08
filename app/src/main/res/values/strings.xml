@@ -559,6 +559,8 @@
     <string name="settings_hide_subscribed_subreddits_sections_title">Hide Subscribed Subreddits Section</string>
     <string name="settings_default_search_result_tab">Default Search Result Tab</string>
     <string name="settings_crash_reports_title">Crash Reports</string>
+    <string name="settings_nsfw_and_spoiler_dangerous_group_title">Dangerous</string>
+    <string name="settings_disable_nsfw_forever_title">Disable NSFW Forever</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -1097,5 +1099,7 @@
     <string name="suggest_title_failed">Failed to suggest a title</string>
 
     <string name="crash_reports_deleted">Crash reports are deleted</string>
+
+    <string name="disable_nsfw_forever_message">Once enabled, NSFW will be permanently disabled, regardless of whether the NSFW setting is enabled or not. And this option is irreversible, the only way to re-enable NSFW is to clear the app data.\n\nStill want to enable it?</string>
 
 </resources>

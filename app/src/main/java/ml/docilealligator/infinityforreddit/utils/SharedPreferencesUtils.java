@@ -176,6 +176,7 @@ public class SharedPreferencesUtils {
     public static final String SWIPE_BETWEEN_POSTS = "swipe_between_posts";
     public static final String NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT_CARD_LAYOUT_2 = "number_of_columns_in_post_feed_portrait_card_layout_2";
     public static final String NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE_CARD_LAYOUT_2 = "number_of_columns_in_post_feed_landscape_card_layout_2";
+    public static final String DISABLE_NSFW_FOREVER = "disable_nsfw_forever";
 
     public static final String DEFAULT_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit_preferences";
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";

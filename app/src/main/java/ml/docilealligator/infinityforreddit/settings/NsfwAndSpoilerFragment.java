@@ -8,11 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import org.greenrobot.eventbus.EventBus;
@@ -49,6 +52,15 @@ public class NsfwAndSpoilerFragment extends Fragment {
     LinearLayout blurSpoilerLinearLayout;
     @BindView(R.id.blur_spoiler_switch_nsfw_and_spoiler_fragment)
     SwitchMaterial blurSpoilerSwitchMaterial;
+    @BindView(R.id.disable_nsfw_forever_linear_layout_nsfw_and_spoiler_fragment)
+    LinearLayout disableNsfwForeverLinearLayout;
+    @BindView(R.id.disable_nsfw_forever_text_view_nsfw_and_spoiler_fragment)
+    TextView disableNsfwForeverTextView;
+    @BindView(R.id.disable_nsfw_forever_switch_nsfw_and_spoiler_fragment)
+    SwitchMaterial disableNsfwForeverSwitchMaterial;
+    @Inject
+    @Named("default")
+    SharedPreferences sharedPreferences;
     @Inject
     @Named("nsfw_and_spoiler")
     SharedPreferences nsfwAndBlurringSharedPreferences;
@@ -56,6 +68,8 @@ public class NsfwAndSpoilerFragment extends Fragment {
     private Activity activity;
     private boolean blurNsfw;
     private boolean doNotBlurNsfwInNsfwSubreddits;
+    private boolean disableNsfwForever;
+    private boolean manuallyCheckDisableNsfwForever = true;
 
     public NsfwAndSpoilerFragment() {
         // Required empty public constructor
@@ -77,6 +91,7 @@ public class NsfwAndSpoilerFragment extends Fragment {
         blurNsfw = nsfwAndBlurringSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.BLUR_NSFW_BASE, true);
         doNotBlurNsfwInNsfwSubreddits = nsfwAndBlurringSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.DO_NOT_BLUR_NSFW_IN_NSFW_SUBREDDITS, false);
         boolean blurSpoiler = nsfwAndBlurringSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.BLUR_SPOILER_BASE, false);
+        disableNsfwForever = sharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false);
 
         if (enableNsfw) {
             blurNsfwLinearLayout.setVisibility(View.VISIBLE);
@@ -87,6 +102,12 @@ public class NsfwAndSpoilerFragment extends Fragment {
         blurNsfwSwitchMaterial.setChecked(blurNsfw);
         doNotBlurNsfwInNsfwSubredditsSwitch.setChecked(doNotBlurNsfwInNsfwSubreddits);
         blurSpoilerSwitchMaterial.setChecked(blurSpoiler);
+        disableNsfwForeverSwitchMaterial.setChecked(disableNsfwForever);
+        disableNsfwForeverSwitchMaterial.setEnabled(!disableNsfwForever);
+        if (disableNsfwForever) {
+            disableNsfwForeverTextView.setTextColor(ContextCompat.getColor(activity, R.color.settingsSubtitleColor));
+            disableNsfwForeverLinearLayout.setEnabled(false);
+        }
 
         enableNsfwLinearLayout.setOnClickListener(view -> enableNsfwSwitchMaterial.performClick());
         enableNsfwSwitchMaterial.setOnCheckedChangeListener((compoundButton, b) -> {
@@ -119,6 +140,39 @@ public class NsfwAndSpoilerFragment extends Fragment {
         blurSpoilerSwitchMaterial.setOnCheckedChangeListener((compoundButton, b) -> {
             nsfwAndBlurringSharedPreferences.edit().putBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.BLUR_SPOILER_BASE, b).apply();
             EventBus.getDefault().post(new ChangeSpoilerBlurEvent(b));
+        });
+
+        disableNsfwForeverLinearLayout.setOnClickListener(view -> {
+            disableNsfwForeverSwitchMaterial.performClick();
+        });
+        disableNsfwForeverSwitchMaterial.setOnCheckedChangeListener((compoundButton, b) -> {
+            if (manuallyCheckDisableNsfwForever) {
+                manuallyCheckDisableNsfwForever = false;
+                new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
+                        .setTitle(R.string.warning)
+                        .setMessage(R.string.disable_nsfw_forever_message)
+                        .setPositiveButton(R.string.yes, (dialogInterface, i)
+                                -> {
+                            sharedPreferences.edit().putBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, true).apply();
+                            disableNsfwForever = true;
+                            disableNsfwForeverSwitchMaterial.setEnabled(false);
+                            disableNsfwForeverLinearLayout.setEnabled(false);
+                            disableNsfwForeverSwitchMaterial.setChecked(true);
+                            disableNsfwForeverTextView.setTextColor(ContextCompat.getColor(activity, R.color.settingsSubtitleColor));
+                            EventBus.getDefault().post(new ChangeNSFWEvent(false));
+                        })
+                        .setNegativeButton(R.string.no, (dialogInterface, i) -> {
+                            disableNsfwForeverSwitchMaterial.setChecked(false);
+                            manuallyCheckDisableNsfwForever = true;
+                        })
+                        .setOnDismissListener(dialogInterface -> {
+                            if (!disableNsfwForever) {
+                                disableNsfwForeverSwitchMaterial.setChecked(false);
+                            }
+                            manuallyCheckDisableNsfwForever = true;
+                        })
+                        .show();
+            }
         });
         return rootView;
     }
