@@ -258,9 +258,14 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
                         .setTitle(R.string.are_you_sure)
                         .setPositiveButton(R.string.yes, (dialogInterface, i)
                                 -> {
+                            boolean disableNsfwForever = mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false);
                             mSharedPreferences.edit().clear().apply();
                             mainActivityTabsSharedPreferences.edit().clear().apply();
                             nsfwAndBlurringSharedPreferences.edit().clear().apply();
+
+                            if (disableNsfwForever) {
+                                mSharedPreferences.edit().putBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, true).apply();
+                            }
 
                             Toast.makeText(activity, R.string.reset_all_settings_success, Toast.LENGTH_SHORT).show();
                             EventBus.getDefault().post(new RecreateActivityEvent());
