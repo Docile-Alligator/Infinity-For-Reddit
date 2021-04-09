@@ -111,6 +111,7 @@ import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.comment.FetchComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
+import ml.docilealligator.infinityforreddit.customviews.CommentIndentationView;
 import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
@@ -237,6 +238,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private int mCommentIconAndInfoColor;
     private int mFullyCollapsedCommentBackgroundColor;
     private int mAwardedCommentBackgroundColor;
+    private int[] verticalBlockColors;
 
     private Drawable mCommentIcon;
     private float mScale;
@@ -568,6 +570,16 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mCommentIconAndInfoColor = customThemeWrapper.getCommentIconAndInfoColor();
         mFullyCollapsedCommentBackgroundColor = customThemeWrapper.getFullyCollapsedCommentBackgroundColor();
         mAwardedCommentBackgroundColor = customThemeWrapper.getAwardedCommentBackgroundColor();
+
+        verticalBlockColors = new int[] {
+                customThemeWrapper.getCommentVerticalBarColor1(),
+                customThemeWrapper.getCommentVerticalBarColor2(),
+                customThemeWrapper.getCommentVerticalBarColor3(),
+                customThemeWrapper.getCommentVerticalBarColor4(),
+                customThemeWrapper.getCommentVerticalBarColor5(),
+                customThemeWrapper.getCommentVerticalBarColor6(),
+                customThemeWrapper.getCommentVerticalBarColor7(),
+        };
 
         mCommentIcon = activity.getDrawable(R.drawable.ic_comment_grey_24dp);
         if (mCommentIcon != null) {
@@ -1104,42 +1116,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                     comment.getScore() + comment.getVoteType())));
 
-            ((CommentViewHolder) holder).linearLayout.setPadding(comment.getDepth() * 24, 0, 0, 0);
-            if (comment.getDepth() > 0) {
-                switch (comment.getDepth() % 7) {
-                    case 0:
-                        ((CommentViewHolder) holder).verticalBlock
-                                .setBackgroundColor(mCommentVerticalBarColor7);
-                        break;
-                    case 1:
-                        ((CommentViewHolder) holder).verticalBlock
-                                .setBackgroundColor(mCommentVerticalBarColor1);
-                        break;
-                    case 2:
-                        ((CommentViewHolder) holder).verticalBlock
-                                .setBackgroundColor(mCommentVerticalBarColor2);
-                        break;
-                    case 3:
-                        ((CommentViewHolder) holder).verticalBlock
-                                .setBackgroundColor(mCommentVerticalBarColor3);
-                        break;
-                    case 4:
-                        ((CommentViewHolder) holder).verticalBlock
-                                .setBackgroundColor(mCommentVerticalBarColor4);
-                        break;
-                    case 5:
-                        ((CommentViewHolder) holder).verticalBlock
-                                .setBackgroundColor(mCommentVerticalBarColor5);
-                        break;
-                    case 6:
-                        ((CommentViewHolder) holder).verticalBlock
-                                .setBackgroundColor(mCommentVerticalBarColor6);
-                        break;
-                }
-                ViewGroup.LayoutParams params = ((CommentViewHolder) holder).verticalBlock.getLayoutParams();
-                params.width = 12;
-                ((CommentViewHolder) holder).verticalBlock.setLayoutParams(params);
-            }
+            ((CommentViewHolder) holder).commentIndentationView.setLevelAndColors(comment.getDepth(), verticalBlockColors);
 
             if (comment.hasReply()) {
                 if (comment.isExpanded()) {
@@ -1205,85 +1182,13 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             }
             ((CommentFullyCollapsedViewHolder) holder).scoreTextView.setText(mActivity.getString(R.string.top_score,
                     Utils.getNVotes(mShowAbsoluteNumberOfVotes, comment.getScore() + comment.getVoteType())));
-
-            ((CommentFullyCollapsedViewHolder) holder).itemView.setPadding(comment.getDepth() * 24, 0, 0, 0);
-            if (comment.getDepth() > 0) {
-                switch (comment.getDepth() % 7) {
-                    case 0:
-                        ((CommentFullyCollapsedViewHolder) holder).verticalBlock
-                                .setBackgroundColor(mCommentVerticalBarColor7);
-                        break;
-                    case 1:
-                        ((CommentFullyCollapsedViewHolder) holder).verticalBlock
-                                .setBackgroundColor(mCommentVerticalBarColor1);
-                        break;
-                    case 2:
-                        ((CommentFullyCollapsedViewHolder) holder).verticalBlock
-                                .setBackgroundColor(mCommentVerticalBarColor2);
-                        break;
-                    case 3:
-                        ((CommentFullyCollapsedViewHolder) holder).verticalBlock
-                                .setBackgroundColor(mCommentVerticalBarColor3);
-                        break;
-                    case 4:
-                        ((CommentFullyCollapsedViewHolder) holder).verticalBlock
-                                .setBackgroundColor(mCommentVerticalBarColor4);
-                        break;
-                    case 5:
-                        ((CommentFullyCollapsedViewHolder) holder).verticalBlock
-                                .setBackgroundColor(mCommentVerticalBarColor5);
-                        break;
-                    case 6:
-                        ((CommentFullyCollapsedViewHolder) holder).verticalBlock
-                                .setBackgroundColor(mCommentVerticalBarColor6);
-                        break;
-                }
-                ViewGroup.LayoutParams params = ((CommentFullyCollapsedViewHolder) holder).verticalBlock.getLayoutParams();
-                params.width = 12;
-                ((CommentFullyCollapsedViewHolder) holder).verticalBlock.setLayoutParams(params);
-            }
+            ((CommentFullyCollapsedViewHolder) holder).commentIndentationView.setLevelAndColors(comment.getDepth(), verticalBlockColors);
         } else if (holder instanceof LoadMoreChildCommentsViewHolder) {
             Comment placeholder;
             placeholder = mIsSingleCommentThreadMode ? mVisibleComments.get(holder.getBindingAdapterPosition() - 2)
                     : mVisibleComments.get(holder.getBindingAdapterPosition() - 1);
 
-            ((LoadMoreChildCommentsViewHolder) holder).itemView.setPadding(placeholder.getDepth() * 24, 0, 0, 0);
-            if (placeholder.getDepth() > 0) {
-                switch (placeholder.getDepth() % 7) {
-                    case 0:
-                        ((LoadMoreChildCommentsViewHolder) holder).verticalBlock
-                                .setBackgroundColor(mCommentVerticalBarColor7);
-                        break;
-                    case 1:
-                        ((LoadMoreChildCommentsViewHolder) holder).verticalBlock
-                                .setBackgroundColor(mCommentVerticalBarColor1);
-                        break;
-                    case 2:
-                        ((LoadMoreChildCommentsViewHolder) holder).verticalBlock
-                                .setBackgroundColor(mCommentVerticalBarColor2);
-                        break;
-                    case 3:
-                        ((LoadMoreChildCommentsViewHolder) holder).verticalBlock
-                                .setBackgroundColor(mCommentVerticalBarColor3);
-                        break;
-                    case 4:
-                        ((LoadMoreChildCommentsViewHolder) holder).verticalBlock
-                                .setBackgroundColor(mCommentVerticalBarColor4);
-                        break;
-                    case 5:
-                        ((LoadMoreChildCommentsViewHolder) holder).verticalBlock
-                                .setBackgroundColor(mCommentVerticalBarColor5);
-                        break;
-                    case 6:
-                        ((LoadMoreChildCommentsViewHolder) holder).verticalBlock
-                                .setBackgroundColor(mCommentVerticalBarColor6);
-                        break;
-                }
-
-                ViewGroup.LayoutParams params = ((LoadMoreChildCommentsViewHolder) holder).verticalBlock.getLayoutParams();
-                params.width = 12;
-                ((LoadMoreChildCommentsViewHolder) holder).verticalBlock.setLayoutParams(params);
-            }
+            ((LoadMoreChildCommentsViewHolder) holder).commentIndentationView.setLevelAndColors(placeholder.getDepth(), verticalBlockColors);
 
             if (placeholder.isLoadingMoreChildren()) {
                 ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.loading);
@@ -1989,16 +1894,12 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ((CommentViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
             ((CommentViewHolder) holder).downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             ((CommentViewHolder) holder).replyButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-            ViewGroup.LayoutParams params = ((CommentViewHolder) holder).verticalBlock.getLayoutParams();
-            params.width = 0;
-            ((CommentViewHolder) holder).verticalBlock.setLayoutParams(params);
-            ((CommentViewHolder) holder).linearLayout.setPadding(0, 0, 0, 0);
             ((CommentViewHolder) holder).itemView.setBackgroundColor(mCommentBackgroundColor);
+            ((CommentViewHolder) holder).commentIndentationView.setLevelAndColors(0, verticalBlockColors);
         } else if (holder instanceof CommentFullyCollapsedViewHolder) {
-            ViewGroup.LayoutParams params = ((CommentFullyCollapsedViewHolder) holder).verticalBlock.getLayoutParams();
-            params.width = 0;
-            ((CommentFullyCollapsedViewHolder) holder).verticalBlock.setLayoutParams(params);
-            ((CommentFullyCollapsedViewHolder) holder).itemView.setPadding(0, 0, 0, 0);
+            ((CommentFullyCollapsedViewHolder) holder).commentIndentationView.setLevelAndColors(0, verticalBlockColors);
+        } else if (holder instanceof LoadMoreChildCommentsViewHolder) {
+            ((LoadMoreChildCommentsViewHolder) holder).commentIndentationView.setLevelAndColors(0, verticalBlockColors);
         } else if (holder instanceof PostDetailBaseViewHolder) {
             ((PostDetailBaseViewHolder) holder).mUpvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             ((PostDetailBaseViewHolder) holder).mScoreTextView.setTextColor(mPostIconAndInfoColor);
@@ -2023,11 +1924,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             } else if (holder instanceof PostDetailLinkViewHolder) {
                 mGlide.clear(((PostDetailLinkViewHolder) holder).mImageView);
             }
-        } else if (holder instanceof LoadMoreChildCommentsViewHolder) {
-            ((LoadMoreChildCommentsViewHolder) holder).itemView.setPadding(0, 0, 0, 0);
-            ViewGroup.LayoutParams params = ((LoadMoreChildCommentsViewHolder) holder).verticalBlock.getLayoutParams();
-            params.width = 0;
-            ((LoadMoreChildCommentsViewHolder) holder).verticalBlock.setLayoutParams(params);
         }
     }
 
@@ -3376,8 +3272,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     }
 
     public class CommentViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.linear_layout_item_comment)
-        LinearLayout linearLayout;
         @BindView(R.id.author_text_view_item_post_comment)
         TextView authorTextView;
         @BindView(R.id.author_flair_text_view_item_post_comment)
@@ -3406,8 +3300,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         ImageView expandButton;
         @BindView(R.id.reply_button_item_post_comment)
         ImageView replyButton;
-        @BindView(R.id.vertical_block_item_post_comment)
-        View verticalBlock;
+        @BindView(R.id.vertical_block_indentation_item_comment)
+        CommentIndentationView commentIndentationView;
         @BindView(R.id.divider_item_comment)
         View commentDivider;
 
@@ -3838,8 +3732,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     }
 
     class CommentFullyCollapsedViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.vertical_block_item_comment_fully_collapsed)
-        View verticalBlock;
+        @BindView(R.id.vertical_block_indentation_item_comment_fully_collapsed)
+        CommentIndentationView commentIndentationView;
         @BindView(R.id.user_name_text_view_item_comment_fully_collapsed)
         TextView usernameTextView;
         @BindView(R.id.score_text_view_item_comment_fully_collapsed)
@@ -3893,8 +3787,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     }
 
     class LoadMoreChildCommentsViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.vertical_block_item_load_more_comments)
-        View verticalBlock;
+        @BindView(R.id.vertical_block_indentation_item_load_more_comments_placeholder)
+        CommentIndentationView commentIndentationView;
         @BindView(R.id.placeholder_text_view_item_load_more_comments)
         TextView placeholderTextView;
         @BindView(R.id.divider_item_load_more_comments_placeholder)

@@ -9,8 +9,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <View
-            android:id="@+id/vertical_block_item_load_more_comments"
+        <ml.docilealligator.infinityforreddit.customviews.CommentIndentationView
+            android:id="@+id/vertical_block_indentation_item_load_more_comments_placeholder"
             android:layout_width="wrap_content"
             android:layout_height="match_parent" />
 

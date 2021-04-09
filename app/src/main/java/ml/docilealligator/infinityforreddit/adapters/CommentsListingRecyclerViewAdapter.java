@@ -10,14 +10,12 @@ import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
-import android.text.style.SuperscriptSpan;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +43,6 @@ import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.html.HtmlPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.movement.MovementMethodPlugin;
-import io.noties.markwon.simple.ext.SimpleExtPlugin;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
@@ -59,6 +56,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.CommentMoreBott
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.CommentIndentationView;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -295,8 +293,6 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         break;
                 }
 
-                ((CommentViewHolder) holder).verticalBlock.setVisibility(View.GONE);
-
                 if (comment.isSaved()) {
                     ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                 } else {
@@ -402,10 +398,8 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     }
 
     public class CommentViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.linear_layout_item_comment)
-        LinearLayout linearLayout;
-        @BindView(R.id.vertical_block_item_post_comment)
-        View verticalBlock;
+        @BindView(R.id.vertical_block_indentation_item_comment)
+        CommentIndentationView commentIndentationView;
         @BindView(R.id.author_text_view_item_post_comment)
         TextView authorTextView;
         @BindView(R.id.author_flair_text_view_item_post_comment)
@@ -460,6 +454,8 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 constraintSet.setHorizontalBias(moreButton.getId(), 0);
                 constraintSet.applyTo(bottomConstraintLayout);
             }
+
+            commentIndentationView.setVisibility(View.GONE);
 
             if (mShowCommentDivider) {
                 commentDivider.setVisibility(View.VISIBLE);
@@ -520,7 +516,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 }
             });
 
-            linearLayout.setOnClickListener(view -> {
+            itemView.setOnClickListener(view -> {
                 int position = getAdapterPosition();
                 if (position < 0) {
                     return;
@@ -536,7 +532,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
             commentMarkdownView.setOnClickListener(view -> {
                 if (commentMarkdownView.getSelectionStart() == -1 && commentMarkdownView.getSelectionEnd() == -1) {
-                    linearLayout.callOnClick();
+                    itemView.callOnClick();
                 }
             });
 
