@@ -16,7 +16,7 @@ public class CheckIsSubscribedToSubreddit {
             if (!redditDataRoomDatabase.accountDao().isAnonymousAccountInserted()) {
                 redditDataRoomDatabase.accountDao().insertAnonymousAccount();
             }
-            SubscribedSubredditData subscribedSubredditData = redditDataRoomDatabase.subscribedSubredditDao().getSubscribedSubreddit(subredditName, accountName);
+            SubscribedSubredditData subscribedSubredditData = redditDataRoomDatabase.subscribedSubredditDao().getSubscribedSubreddit(subredditName, accountName == null ? "-" : accountName);
             handler.post(() -> {
                 if (subscribedSubredditData != null) {
                     checkIsSubscribedToSubredditListener.isSubscribed();
