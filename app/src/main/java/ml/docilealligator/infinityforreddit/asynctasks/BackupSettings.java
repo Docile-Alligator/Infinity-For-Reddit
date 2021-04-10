@@ -132,7 +132,7 @@ public class BackupSettings {
         boolean result = false;
         try {
             String time = new SimpleDateFormat("yyyyMMdd-HHmmss").format(new Date(System.currentTimeMillis()));
-            String fileName = "Infinity_For_Reddit_Settings_Backup_v" + BuildConfig.VERSION_NAME + "-" + time + ".zip";
+            String fileName = "Infinity_For_Reddit_Settings_Backup_v" + BuildConfig.VERSION_NAME + "-" + BuildConfig.VERSION_CODE + "-" + time + ".zip";
             String filePath = context.getExternalCacheDir() + "/Backup/" + fileName;
             ZipFile zip = new ZipFile(filePath, "123321".toCharArray());
             ZipParameters zipParameters = new ZipParameters();
