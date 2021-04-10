@@ -27,6 +27,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.settings.AboutPreferenceFragment;
+import ml.docilealligator.infinityforreddit.settings.AdvancedPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.CustomizeBottomAppBarFragment;
 import ml.docilealligator.infinityforreddit.settings.CustomizeMainPageTabsFragment;
 import ml.docilealligator.infinityforreddit.settings.FontPreferenceFragment;
@@ -107,6 +108,8 @@ public class SettingsActivity extends BaseActivity implements
                 setTitle(R.string.settings_gestures_and_buttons_title);
             } else if (fragment instanceof PostPreferenceFragment) {
                 setTitle(R.string.settings_category_post_title);
+            } else if (fragment instanceof AdvancedPreferenceFragment) {
+                setTitle(R.string.settings_advanced_master_title);
             }
         });
     }
