@@ -1896,11 +1896,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ((CommentViewHolder) holder).downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             ((CommentViewHolder) holder).replyButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             ((CommentViewHolder) holder).itemView.setBackgroundColor(mCommentBackgroundColor);
-            ((CommentViewHolder) holder).commentIndentationView.setLevelAndColors(0, verticalBlockColors);
         } else if (holder instanceof CommentFullyCollapsedViewHolder) {
-            ((CommentFullyCollapsedViewHolder) holder).commentIndentationView.setLevelAndColors(0, verticalBlockColors);
         } else if (holder instanceof LoadMoreChildCommentsViewHolder) {
-            ((LoadMoreChildCommentsViewHolder) holder).commentIndentationView.setLevelAndColors(0, verticalBlockColors);
         } else if (holder instanceof PostDetailBaseViewHolder) {
             ((PostDetailBaseViewHolder) holder).mUpvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             ((PostDetailBaseViewHolder) holder).mScoreTextView.setTextColor(mPostIconAndInfoColor);
