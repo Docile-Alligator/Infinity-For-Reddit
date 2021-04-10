@@ -45,27 +45,38 @@ public class BackupSettings {
                                       SharedPreferences postHistorySharedPreferences,
                                       BackupSettingsListener backupSettingsListener) {
         executor.execute(() -> {
-            boolean res = saveSharedPreferencesToFile(context, defaultSharedPreferences,
+            String backupDir = context.getExternalCacheDir() + "/Backup/" + BuildConfig.VERSION_NAME;
+            File backupDirFile = new File(backupDir);
+            if (new File(backupDir).exists()) {
+                try {
+                    FileUtils.deleteDirectory(backupDirFile);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            backupDirFile.mkdirs();
+
+            boolean res = saveSharedPreferencesToFile(context, defaultSharedPreferences, backupDir,
                     SharedPreferencesUtils.DEFAULT_PREFERENCES_FILE);
-            boolean res1 = saveSharedPreferencesToFile(context, lightThemeSharedPreferences,
+            boolean res1 = saveSharedPreferencesToFile(context, lightThemeSharedPreferences, backupDir,
                     CustomThemeSharedPreferencesUtils.LIGHT_THEME_SHARED_PREFERENCES_FILE);
-            boolean res2 = saveSharedPreferencesToFile(context, darkThemeSharedPreferences,
+            boolean res2 = saveSharedPreferencesToFile(context, darkThemeSharedPreferences, backupDir,
                     CustomThemeSharedPreferencesUtils.DARK_THEME_SHARED_PREFERENCES_FILE);
-            boolean res3 = saveSharedPreferencesToFile(context, amoledThemeSharedPreferences,
+            boolean res3 = saveSharedPreferencesToFile(context, amoledThemeSharedPreferences, backupDir,
                     CustomThemeSharedPreferencesUtils.AMOLED_THEME_SHARED_PREFERENCES_FILE);
-            boolean res4 = saveSharedPreferencesToFile(context, sortTypeSharedPreferences,
+            boolean res4 = saveSharedPreferencesToFile(context, sortTypeSharedPreferences, backupDir,
                     SharedPreferencesUtils.SORT_TYPE_SHARED_PREFERENCES_FILE);
-            boolean res5 = saveSharedPreferencesToFile(context, postLayoutSharedPreferences,
+            boolean res5 = saveSharedPreferencesToFile(context, postLayoutSharedPreferences, backupDir,
                     SharedPreferencesUtils.POST_LAYOUT_SHARED_PREFERENCES_FILE);
-            boolean res6 = saveSharedPreferencesToFile(context, postFeedScrolledPositionSharedPreferences,
+            boolean res6 = saveSharedPreferencesToFile(context, postFeedScrolledPositionSharedPreferences, backupDir,
                     SharedPreferencesUtils.FRONT_PAGE_SCROLLED_POSITION_SHARED_PREFERENCES_FILE);
-            boolean res7 = saveSharedPreferencesToFile(context, mainActivityTabsSharedPreferences,
+            boolean res7 = saveSharedPreferencesToFile(context, mainActivityTabsSharedPreferences, backupDir,
                     SharedPreferencesUtils.MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE);
-            boolean res8 = saveSharedPreferencesToFile(context, nsfwAndSpoilerSharedPreferencs,
+            boolean res8 = saveSharedPreferencesToFile(context, nsfwAndSpoilerSharedPreferencs, backupDir,
                     SharedPreferencesUtils.NSFW_AND_SPOILER_SHARED_PREFERENCES_FILE);
-            boolean res9 = saveSharedPreferencesToFile(context, bottomAppBarSharedPreferences,
+            boolean res9 = saveSharedPreferencesToFile(context, bottomAppBarSharedPreferences, backupDir,
                     SharedPreferencesUtils.BOTTOM_APP_BAR_SHARED_PREFERENCES_FILE);
-            boolean res10 = saveSharedPreferencesToFile(context, postHistorySharedPreferences,
+            boolean res10 = saveSharedPreferencesToFile(context, postHistorySharedPreferences, backupDir,
                     SharedPreferencesUtils.POST_HISTORY_SHARED_PREFERENCES_FILE);
 
             boolean zipRes = zipAndMoveToDestinationDir(context, contentResolver, destinationDirUri);
@@ -92,21 +103,12 @@ public class BackupSettings {
     }
 
     private static boolean saveSharedPreferencesToFile(Context context, SharedPreferences sharedPreferences,
-                                                       String fileName) {
+                                                       String backupDir, String fileName) {
 
         boolean result = false;
 
         ObjectOutputStream output = null;
         try {
-            String backupDir = context.getExternalCacheDir() + "/Backup/" + BuildConfig.VERSION_NAME;
-            if (!new File(backupDir).exists()) {
-                new File(backupDir).mkdirs();
-            } else {
-                File backupDirFile = new File(backupDir);
-                FileUtils.deleteDirectory(backupDirFile);
-                backupDirFile.mkdirs();
-            }
-
             output = new ObjectOutputStream(new FileOutputStream(new File(backupDir + "/" + fileName + ".txt")));
             output.writeObject(sharedPreferences.getAll());
 
