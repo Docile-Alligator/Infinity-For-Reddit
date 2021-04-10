@@ -238,7 +238,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private int mCommentIconAndInfoColor;
     private int mFullyCollapsedCommentBackgroundColor;
     private int mAwardedCommentBackgroundColor;
-    private int[] verticalBlockColors;
+    private Integer[] verticalBlockColors;
 
     private Drawable mCommentIcon;
     private float mScale;
@@ -572,7 +572,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mFullyCollapsedCommentBackgroundColor = customThemeWrapper.getFullyCollapsedCommentBackgroundColor();
         mAwardedCommentBackgroundColor = customThemeWrapper.getAwardedCommentBackgroundColor();
 
-        verticalBlockColors = new int[] {
+        verticalBlockColors = new Integer[] {
                 customThemeWrapper.getCommentVerticalBarColor1(),
                 customThemeWrapper.getCommentVerticalBarColor2(),
                 customThemeWrapper.getCommentVerticalBarColor3(),
@@ -1896,9 +1896,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ((CommentViewHolder) holder).downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             ((CommentViewHolder) holder).replyButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             ((CommentViewHolder) holder).itemView.setBackgroundColor(mCommentBackgroundColor);
-        } else if (holder instanceof CommentFullyCollapsedViewHolder) {
-        } else if (holder instanceof LoadMoreChildCommentsViewHolder) {
-        } else if (holder instanceof PostDetailBaseViewHolder) {
+        }  else if (holder instanceof PostDetailBaseViewHolder) {
             ((PostDetailBaseViewHolder) holder).mUpvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             ((PostDetailBaseViewHolder) holder).mScoreTextView.setTextColor(mPostIconAndInfoColor);
             ((PostDetailBaseViewHolder) holder).mDownvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
