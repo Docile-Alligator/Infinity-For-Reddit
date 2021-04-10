@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.readpost.ReadPost;
@@ -176,7 +178,8 @@ public class ParsePost {
                 if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                     post.setSelfText("");
                 } else {
-                    post.setSelfText(Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
+                    String selfText = Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim());
+                    post.setSelfText(selfText);
                     if (data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
                         post.setSelfTextPlainTrimmed("");
                     } else {
@@ -186,7 +189,17 @@ public class ParsePost {
                         if (selfTextPlain.length() > 250) {
                             selfTextPlain = selfTextPlain.substring(0, 250);
                         }
-                        post.setSelfTextPlainTrimmed(selfTextPlain);
+                        if (!selfText.equals("")) {
+                            Pattern p = Pattern.compile(">!.+!<");
+                            Matcher m = p.matcher(selfText.substring(0, Math.min(selfText.length(), 400)));
+                            if (m.find()) {
+                                post.setSelfTextPlainTrimmed("");
+                            } else {
+                                post.setSelfTextPlainTrimmed(selfTextPlain);
+                            }
+                        } else {
+                            post.setSelfTextPlainTrimmed(selfTextPlain);
+                        }
                     }
                 }
             } else {
@@ -320,7 +333,8 @@ public class ParsePost {
                             if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                                 post.setSelfText("");
                             } else {
-                                post.setSelfText(Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
+                                String selfText = Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim());
+                                post.setSelfText(selfText);
                                 if (data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
                                     post.setSelfTextPlainTrimmed("");
                                 } else {
@@ -330,7 +344,17 @@ public class ParsePost {
                                     if (selfTextPlain.length() > 250) {
                                         selfTextPlain = selfTextPlain.substring(0, 250);
                                     }
-                                    post.setSelfTextPlainTrimmed(selfTextPlain);
+                                    if (!selfText.equals("")) {
+                                        Pattern p = Pattern.compile(">!.+!<");
+                                        Matcher m = p.matcher(selfText.substring(0, Math.min(selfText.length(), 400)));
+                                        if (m.find()) {
+                                            post.setSelfTextPlainTrimmed("");
+                                        } else {
+                                            post.setSelfTextPlainTrimmed(selfTextPlain);
+                                        }
+                                    } else {
+                                        post.setSelfTextPlainTrimmed(selfTextPlain);
+                                    }
                                 }
                             }
                         } else {
