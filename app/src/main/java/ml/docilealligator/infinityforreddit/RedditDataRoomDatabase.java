@@ -329,7 +329,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static final Migration MIGRATION_18_19 = new Migration(18, 19) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("INSERT INTO accounts(username, karma, is_current_user) VALUES (\"-\", 0, false)");
+            database.execSQL("INSERT INTO accounts(username, karma, is_current_user) VALUES (\"-\", 0, 0)");
         }
     };
 
