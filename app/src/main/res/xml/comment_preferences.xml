@@ -12,10 +12,10 @@
         app:key="show_comment_divider"
         app:title="@string/settings_show_comment_divider_title" />
 
-    <!--<SwitchPreference
+    <SwitchPreference
         app:defaultValue="false"
         app:key="comment_toolbar_hidden"
-        app:title="@string/settings_comment_toolbar_hidden" />-->
+        app:title="@string/settings_comment_toolbar_hidden" />
 
     <SwitchPreference
         app:defaultValue="true"
