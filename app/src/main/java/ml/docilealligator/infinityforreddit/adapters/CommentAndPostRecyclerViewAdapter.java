@@ -192,6 +192,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private boolean mHasMoreComments;
     private boolean loadMoreCommentsFailed;
 
+    private int depthThreshold = 5;
     private int mColorPrimaryLightTheme;
     private int mColorAccent;
     private int mCircularProgressBarBackgroundColor;
@@ -224,13 +225,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private int mNoPreviewPostTypeIconTint;
     private int mUpvotedColor;
     private int mDownvotedColor;
-    private int mCommentVerticalBarColor1;
-    private int mCommentVerticalBarColor2;
-    private int mCommentVerticalBarColor3;
-    private int mCommentVerticalBarColor4;
-    private int mCommentVerticalBarColor5;
-    private int mCommentVerticalBarColor6;
-    private int mCommentVerticalBarColor7;
     private int mSingleCommentThreadBackgroundColor;
     private int mVoteAndReplyUnavailableVoteButtonColor;
     private int mButtonTextColor;
@@ -485,8 +479,8 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mShowElapsedTime = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
         mTimeFormatPattern = sharedPreferences.getString(SharedPreferencesUtils.TIME_FORMAT_KEY, SharedPreferencesUtils.TIME_FORMAT_DEFAULT_VALUE);
         mExpandChildren = !sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_TOP_LEVEL_COMMENTS_FIRST, false);
-        //mCommentToolbarHidden = sharedPreferences.getBoolean(SharedPreferencesUtils.COMMENT_TOOLBAR_HIDDEN, false);
-        mCommentToolbarHidden = true;
+        mCommentToolbarHidden = sharedPreferences.getBoolean(SharedPreferencesUtils.COMMENT_TOOLBAR_HIDDEN, false);
+        //mCommentToolbarHidden = true;
         mCommentToolbarHideOnClick = sharedPreferences.getBoolean(SharedPreferencesUtils.COMMENT_TOOLBAR_HIDE_ON_CLICK, true);
         mSwapTapAndLong = sharedPreferences.getBoolean(SharedPreferencesUtils.SWAP_TAP_AND_LONG_COMMENTS, false);
         mShowCommentDivider = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_DIVIDER, false);
@@ -557,13 +551,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mUsernameColor = customThemeWrapper.getUsername();
         mUpvotedColor = customThemeWrapper.getUpvoted();
         mDownvotedColor = customThemeWrapper.getDownvoted();
-        mCommentVerticalBarColor1 = customThemeWrapper.getCommentVerticalBarColor1();
-        mCommentVerticalBarColor2 = customThemeWrapper.getCommentVerticalBarColor2();
-        mCommentVerticalBarColor3 = customThemeWrapper.getCommentVerticalBarColor3();
-        mCommentVerticalBarColor4 = customThemeWrapper.getCommentVerticalBarColor4();
-        mCommentVerticalBarColor5 = customThemeWrapper.getCommentVerticalBarColor5();
-        mCommentVerticalBarColor6 = customThemeWrapper.getCommentVerticalBarColor6();
-        mCommentVerticalBarColor7 = customThemeWrapper.getCommentVerticalBarColor7();
         mSingleCommentThreadBackgroundColor = customThemeWrapper.getSingleCommentThreadBackgroundColor();
         mVoteAndReplyUnavailableVoteButtonColor = customThemeWrapper.getVoteAndReplyUnavailableButtonColor();
         mButtonTextColor = customThemeWrapper.getButtonTextColor();
@@ -1118,6 +1105,13 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     comment.getScore() + comment.getVoteType())));
 
             ((CommentViewHolder) holder).commentIndentationView.setLevelAndColors(comment.getDepth(), verticalBlockColors);
+            if (comment.getDepth() > depthThreshold) {
+                ((CommentViewHolder) holder).saveButton.setVisibility(View.GONE);
+                ((CommentViewHolder) holder).replyButton.setVisibility(View.GONE);
+            } else {
+                ((CommentViewHolder) holder).saveButton.setVisibility(View.VISIBLE);
+                ((CommentViewHolder) holder).replyButton.setVisibility(View.VISIBLE);
+            }
 
             if (comment.hasReply()) {
                 if (comment.isExpanded()) {
@@ -1879,6 +1873,13 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 comment.addAwards(awardsHTML);
                 notifyItemChanged(position);
             }
+        }
+    }
+
+    public void setSaveComment(int position, boolean isSaved) {
+        Comment comment = getCurrentComment(position);
+        if (comment != null) {
+            comment.setSaved(isSaved);
         }
     }
 
@@ -3365,6 +3366,9 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     }
                     bundle.putString(CommentMoreBottomSheetFragment.EXTRA_COMMENT_MARKDOWN, comment.getCommentMarkdown());
                     bundle.putBoolean(CommentMoreBottomSheetFragment.EXTRA_IS_NSFW, mPost.isNSFW());
+                    if (comment.getDepth() > depthThreshold) {
+                        bundle.putBoolean(CommentMoreBottomSheetFragment.EXTRA_SHOW_REPLY_AND_SAVE_OPTION, true);
+                    }
                     CommentMoreBottomSheetFragment commentMoreBottomSheetFragment = new CommentMoreBottomSheetFragment();
                     commentMoreBottomSheetFragment.setArguments(bundle);
                     commentMoreBottomSheetFragment.show(mActivity.getSupportFragmentManager(), commentMoreBottomSheetFragment.getTag());

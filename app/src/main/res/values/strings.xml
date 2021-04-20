@@ -583,6 +583,8 @@
     <string name="no_email_client">No Email client found</string>
     <string name="no_app">No app available</string>
 
+    <string name="save_comment">Save</string>
+    <string name="unsave_comment">Unsave</string>
     <string name="comment_saved_success">Comment saved</string>
     <string name="comment_saved_failed">Unable to save comment</string>
     <string name="comment_unsaved_success">Comment unsaved</string>
@@ -1103,5 +1105,7 @@
     <string name="crash_reports_deleted">Crash reports are deleted</string>
 
     <string name="disable_nsfw_forever_message">Once enabled, NSFW will be permanently disabled, regardless of whether the NSFW setting is enabled or not. And this option is irreversible, the only way to re-enable NSFW is to clear the app data.\n\nStill want to enable it?</string>
+
+    <string name="reply">Reply</string>
 
 </resources>

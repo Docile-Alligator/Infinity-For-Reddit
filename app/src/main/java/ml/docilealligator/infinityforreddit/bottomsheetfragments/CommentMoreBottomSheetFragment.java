@@ -15,20 +15,22 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.activities.FullMarkdownActivity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.CommentActivity;
 import ml.docilealligator.infinityforreddit.activities.EditCommentActivity;
+import ml.docilealligator.infinityforreddit.activities.FullMarkdownActivity;
 import ml.docilealligator.infinityforreddit.activities.GiveAwardActivity;
 import ml.docilealligator.infinityforreddit.activities.ReportActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.comment.Comment;
-import ml.docilealligator.infinityforreddit.R;
 
 
 /**
@@ -40,13 +42,18 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
     public static final String EXTRA_EDIT_AND_DELETE_AVAILABLE = "EEADA";
     public static final String EXTRA_POSITION = "EP";
+    public static final String EXTRA_SHOW_REPLY_AND_SAVE_OPTION = "ESSARO";
     public static final String EXTRA_COMMENT_MARKDOWN = "ECM";
     public static final String EXTRA_IS_NSFW = "EIN";
     @BindView(R.id.edit_text_view_comment_more_bottom_sheet_fragment)
     TextView editTextView;
     @BindView(R.id.delete_text_view_comment_more_bottom_sheet_fragment)
     TextView deleteTextView;
+    @BindView(R.id.reply_text_view_comment_more_bottom_sheet_fragment)
+    TextView replyTextView;
     @BindView(R.id.save_text_view_comment_more_bottom_sheet_fragment)
+    TextView saveTextView;
+    @BindView(R.id.share_text_view_comment_more_bottom_sheet_fragment)
     TextView shareTextView;
     @BindView(R.id.copy_text_view_comment_more_bottom_sheet_fragment)
     TextView copyTextView;
@@ -87,6 +94,7 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
         }
         String accessToken = bundle.getString(EXTRA_ACCESS_TOKEN);
         boolean editAndDeleteAvailable = bundle.getBoolean(EXTRA_EDIT_AND_DELETE_AVAILABLE, false);
+        boolean showReplyAndSaveOption = bundle.getBoolean(EXTRA_SHOW_REPLY_AND_SAVE_OPTION, false);
 
         if (accessToken != null && !accessToken.equals("")) {
             giveAwardTextView.setVisibility(View.VISIBLE);
@@ -129,6 +137,38 @@ public class CommentMoreBottomSheetFragment extends RoundedBottomSheetDialogFrag
                     }
                 });
             }
+        }
+
+        if (showReplyAndSaveOption) {
+            replyTextView.setVisibility(View.VISIBLE);
+            saveTextView.setVisibility(View.VISIBLE);
+            if (comment.isSaved()) {
+                saveTextView.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(activity, R.drawable.ic_bookmark_24dp), null, null, null);
+                saveTextView.setText(R.string.unsave_comment);
+            } else {
+                saveTextView.setCompoundDrawablesWithIntrinsicBounds(ContextCompat.getDrawable(activity, R.drawable.ic_bookmark_border_24dp), null, null, null);
+                saveTextView.setText(R.string.save_comment);
+            }
+            replyTextView.setOnClickListener(view -> {
+                Intent intent = new Intent(activity, CommentActivity.class);
+                intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, comment.getDepth() + 1);
+                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_MARKDOWN_KEY, comment.getCommentMarkdown());
+                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, comment.getCommentRawText());
+                intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, comment.getFullName());
+                intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, true);
+
+                intent.putExtra(CommentActivity.EXTRA_PARENT_POSITION_KEY, bundle.getInt(EXTRA_POSITION));
+                activity.startActivityForResult(intent, CommentActivity.WRITE_COMMENT_REQUEST_CODE);
+
+                dismiss();
+            });
+
+            saveTextView.setOnClickListener(view -> {
+                if (activity instanceof ViewPostDetailActivity) {
+                    ((ViewPostDetailActivity) activity).saveComment(comment, bundle.getInt(EXTRA_POSITION));
+                }
+                dismiss();
+            });
         }
 
         shareTextView.setOnClickListener(view -> {

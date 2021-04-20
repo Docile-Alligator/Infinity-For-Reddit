@@ -48,6 +48,7 @@ import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
@@ -59,6 +60,9 @@ import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import retrofit2.Retrofit;
+
+import static ml.docilealligator.infinityforreddit.activities.CommentActivity.RETURN_EXTRA_COMMENT_DATA_KEY;
 
 public class ViewPostDetailActivity extends BaseActivity implements SortTypeSelectionCallback, ActivityToolbarInterface {
 
@@ -73,8 +77,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     public static final int EDIT_COMMENT_REQUEST_CODE = 3;
     public static final int GIVE_AWARD_REQUEST_CODE = 100;
     @State
-    String mAccountName;
-    @State
     String mNewAccountName;
     @BindView(R.id.coordinator_layout_view_post_detail)
     CoordinatorLayout mCoordinatorLayout;
@@ -86,6 +88,9 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     ViewPager2 viewPager2;
     @BindView(R.id.fab_view_post_detail_activity)
     FloatingActionButton fab;
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -105,6 +110,8 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     private FragmentManager fragmentManager;
     private SlidrInterface mSlidrInterface;
     private SectionsPagerAdapter sectionsPagerAdapter;
+    private String mAccessToken;
+    private String mAccountName;
     private long postFragmentId;
     private int postListPosition = -1;
     private int orientation;
@@ -183,6 +190,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
         }
 
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
 
         mVolumeKeysNavigateComments = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOLUME_KEYS_NAVIGATE_COMMENTS, false);
@@ -302,6 +310,52 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         }
     }
 
+    public void saveComment(@NonNull Comment comment, int position) {
+        if (comment.isSaved()) {
+            comment.setSaved(false);
+            SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
+                @Override
+                public void success() {
+                    ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
+                    if (fragment != null) {
+                        fragment.saveComment(position, false);
+                    }
+                    Toast.makeText(ViewPostDetailActivity.this, R.string.comment_unsaved_success, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void failed() {
+                    ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
+                    if (fragment != null) {
+                        fragment.saveComment(position, true);
+                    }
+                    Toast.makeText(ViewPostDetailActivity.this, R.string.comment_unsaved_failed, Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            comment.setSaved(true);
+            SaveThing.saveThing(mOauthRetrofit, mAccessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
+                @Override
+                public void success() {
+                    ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
+                    if (fragment != null) {
+                        fragment.saveComment(position, true);
+                    }
+                    Toast.makeText(ViewPostDetailActivity.this, R.string.comment_saved_success, Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void failed() {
+                    ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
+                    if (fragment != null) {
+                        fragment.saveComment(position, false);
+                    }
+                    Toast.makeText(ViewPostDetailActivity.this, R.string.comment_saved_failed, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
+    }
+
     @Subscribe
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
         if (!getClass().getName().equals(event.excludeActivityClassName)) {
@@ -345,6 +399,26 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                 String newAwardsHTML = data.getStringExtra(GiveAwardActivity.EXTRA_RETURN_NEW_AWARDS);
                 int newAwardsCount = data.getIntExtra(GiveAwardActivity.EXTRA_RETURN_NEW_AWARDS_COUNT, 0);
                 awardGiven(newAwardsHTML, newAwardsCount, position);
+            }
+        } else if (requestCode == CommentActivity.WRITE_COMMENT_REQUEST_CODE) {
+            if (data != null && resultCode == Activity.RESULT_OK) {
+                if (data.hasExtra(RETURN_EXTRA_COMMENT_DATA_KEY)) {
+                    ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
+                    if (fragment != null) {
+                        Comment comment = data.getParcelableExtra(RETURN_EXTRA_COMMENT_DATA_KEY);
+                        if (comment != null && comment.getDepth() == 0) {
+                            fragment.addComment(comment);
+                        } else {
+                            String parentFullname = data.getStringExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY);
+                            int parentPosition = data.getIntExtra(CommentActivity.EXTRA_PARENT_POSITION_KEY, -1);
+                            if (parentFullname != null && parentPosition >= 0) {
+                                fragment.addChildComment(comment, parentFullname, parentPosition);
+                            }
+                        }
+                    }
+                } else {
+                    Toast.makeText(this, R.string.send_comment_failed, Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }

@@ -729,6 +729,12 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         }
     }
 
+    public void saveComment(int position, boolean isSaved) {
+        if (mAdapter != null) {
+            mAdapter.setSaveComment(position, isSaved);
+        }
+    }
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.view_post_detail_fragment, menu);
