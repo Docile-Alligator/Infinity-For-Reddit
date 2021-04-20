@@ -113,7 +113,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     private String mAccessToken;
     private String mAccountName;
     private long postFragmentId;
-    private int postListPosition = -1;
+    private int postListPosition;
     private int orientation;
     private boolean mVolumeKeysNavigateComments;
     private boolean isNsfwSubreddit;
@@ -172,6 +172,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             EventBus.getDefault().post(new NeedForPostListFromPostFragmentEvent(postFragmentId));
         }
 
+        postListPosition = getIntent().getIntExtra(EXTRA_POST_LIST_POSITION, -1);
         isNsfwSubreddit = getIntent().getBooleanExtra(EXTRA_IS_NSFW_SUBREDDIT, false);
 
         fragmentManager = getSupportFragmentManager();
@@ -519,7 +520,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                     bundle.putString(ViewPostDetailFragment.EXTRA_POST_ID, getIntent().getStringExtra(EXTRA_POST_ID));
                 } else {
                     bundle.putParcelable(ViewPostDetailFragment.EXTRA_POST_DATA, post);
-                    bundle.putInt(ViewPostDetailFragment.EXTRA_POST_LIST_POSITION, position);
+                    bundle.putInt(ViewPostDetailFragment.EXTRA_POST_LIST_POSITION, postListPosition);
                 }
                 bundle.putString(ViewPostDetailFragment.EXTRA_SINGLE_COMMENT_ID, getIntent().getStringExtra(EXTRA_SINGLE_COMMENT_ID));
                 bundle.putString(ViewPostDetailFragment.EXTRA_MESSAGE_FULLNAME, getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME));

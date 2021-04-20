@@ -89,7 +89,7 @@ import ml.docilealligator.infinityforreddit.events.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeSpoilerBlurEvent;
 import ml.docilealligator.infinityforreddit.events.FlairSelectedEvent;
-import ml.docilealligator.infinityforreddit.events.PostUpdateEventToDetailActivity;
+import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostDetailFragment;
 import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostList;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
 import ml.docilealligator.infinityforreddit.post.FetchPost;
@@ -1682,7 +1682,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     }
 
     @Subscribe
-    public void onPostUpdateEvent(PostUpdateEventToDetailActivity event) {
+    public void onPostUpdateEvent(PostUpdateEventToPostDetailFragment event) {
         if (mPost.getId().equals(event.post.getId())) {
             mPost.setVoteType(event.post.getVoteType());
             mPost.setSaved(event.post.isSaved());

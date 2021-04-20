@@ -90,7 +90,7 @@ import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.ShareLinkBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
-import ml.docilealligator.infinityforreddit.events.PostUpdateEventToDetailActivity;
+import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostDetailFragment;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostDataSource;
@@ -2393,7 +2393,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                 }
                             }
 
-                            EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
+                            EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                         }
 
                         @Override
@@ -2409,7 +2409,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                 scoreTextView.setTextColor(previousScoreTextViewColor);
                             }
 
-                            EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
+                            EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                         }
                     }, post.getFullName(), newVoteType, getBindingAdapterPosition());
                 }
@@ -2489,7 +2489,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                 }
                             }
 
-                            EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
+                            EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                         }
 
                         @Override
@@ -2505,7 +2505,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                 scoreTextView.setTextColor(previousScoreTextViewColor);
                             }
 
-                            EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
+                            EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                         }
                     }, post.getFullName(), newVoteType, getBindingAdapterPosition());
                 }
@@ -2534,7 +2534,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                             saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                         }
                                         Toast.makeText(mActivity, R.string.post_unsaved_success, Toast.LENGTH_SHORT).show();
-                                        EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
+                                        EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                                     }
 
                                     @Override
@@ -2544,7 +2544,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                             saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                         }
                                         Toast.makeText(mActivity, R.string.post_unsaved_failed, Toast.LENGTH_SHORT).show();
-                                        EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
+                                        EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                                     }
                                 });
                     } else {
@@ -2558,7 +2558,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                             saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                         }
                                         Toast.makeText(mActivity, R.string.post_saved_success, Toast.LENGTH_SHORT).show();
-                                        EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
+                                        EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                                     }
 
                                     @Override
@@ -2568,7 +2568,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                             saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                         }
                                         Toast.makeText(mActivity, R.string.post_saved_failed, Toast.LENGTH_SHORT).show();
-                                        EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
+                                        EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                                     }
                                 });
                     }
@@ -3371,7 +3371,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                 }
                             }
 
-                            EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
+                            EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                         }
 
                         @Override
@@ -3387,7 +3387,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                 scoreTextView.setTextColor(previousScoreTextViewColor);
                             }
 
-                            EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
+                            EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                         }
                     }, post.getFullName(), newVoteType, getBindingAdapterPosition());
                 }
@@ -3468,7 +3468,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                 }
                             }
 
-                            EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
+                            EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                         }
 
                         @Override
@@ -3484,7 +3484,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                 scoreTextView.setTextColor(previousScoreTextViewColor);
                             }
 
-                            EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
+                            EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                         }
                     }, post.getFullName(), newVoteType, getBindingAdapterPosition());
                 }
@@ -3513,7 +3513,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                             saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                         }
                                         Toast.makeText(mActivity, R.string.post_unsaved_success, Toast.LENGTH_SHORT).show();
-                                        EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
+                                        EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                                     }
 
                                     @Override
@@ -3523,7 +3523,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                             saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                         }
                                         Toast.makeText(mActivity, R.string.post_unsaved_failed, Toast.LENGTH_SHORT).show();
-                                        EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
+                                        EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                                     }
                                 });
                     } else {
@@ -3537,7 +3537,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                             saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                         }
                                         Toast.makeText(mActivity, R.string.post_saved_success, Toast.LENGTH_SHORT).show();
-                                        EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
+                                        EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                                     }
 
                                     @Override
@@ -3547,7 +3547,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                             saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                         }
                                         Toast.makeText(mActivity, R.string.post_saved_failed, Toast.LENGTH_SHORT).show();
-                                        EventBus.getDefault().post(new PostUpdateEventToDetailActivity(post));
+                                        EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                                     }
                                 });
                     }
