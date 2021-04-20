@@ -480,7 +480,6 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         mTimeFormatPattern = sharedPreferences.getString(SharedPreferencesUtils.TIME_FORMAT_KEY, SharedPreferencesUtils.TIME_FORMAT_DEFAULT_VALUE);
         mExpandChildren = !sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_TOP_LEVEL_COMMENTS_FIRST, false);
         mCommentToolbarHidden = sharedPreferences.getBoolean(SharedPreferencesUtils.COMMENT_TOOLBAR_HIDDEN, false);
-        //mCommentToolbarHidden = true;
         mCommentToolbarHideOnClick = sharedPreferences.getBoolean(SharedPreferencesUtils.COMMENT_TOOLBAR_HIDE_ON_CLICK, true);
         mSwapTapAndLong = sharedPreferences.getBoolean(SharedPreferencesUtils.SWAP_TAP_AND_LONG_COMMENTS, false);
         mShowCommentDivider = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_DIVIDER, false);
@@ -1889,6 +1888,7 @@ public class CommentAndPostRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             ((CommentViewHolder) holder).authorTextView.setTextColor(mUsernameColor);
             ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.GONE);
             ((CommentViewHolder) holder).authorTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            ((CommentViewHolder) holder).topScoreTextView.setTextColor(mSecondaryTextColor);
             ((CommentViewHolder) holder).awardsTextView.setText("");
             ((CommentViewHolder) holder).awardsTextView.setVisibility(View.GONE);
             ((CommentViewHolder) holder).expandButton.setVisibility(View.GONE);
