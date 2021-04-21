@@ -79,7 +79,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     @BindView(R.id.view_pager_subscribed_thing_listing_activity)
     ViewPager viewPager;
     @BindView(R.id.fab_subscribed_thing_listing_activity)
-    public FloatingActionButton fab;
+    FloatingActionButton fab;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -189,6 +189,9 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(3);
+        if (viewPager.getCurrentItem() != 2) {
+            fab.hide();
+        }
         viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageSelected(int position) {
@@ -197,7 +200,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                     fab.hide();
                 } else {
                     lockSwipeRightToGoBack();
-                    if (position == 1) {
+                    if (position != 2) {
                         fab.hide();
                     } else {
                         fab.show();
@@ -273,6 +276,18 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
 
         if (!(!forceLoad && mInsertMultiredditSuccess)) {
             loadMultiReddits();
+        }
+    }
+
+    public void showFabInMultiredditTab() {
+        if (viewPager.getCurrentItem() == 2) {
+            fab.show();
+        }
+    }
+
+    public void hideFabInMultiredditTab() {
+        if (viewPager.getCurrentItem() == 2) {
+            fab.hide();
         }
     }
 

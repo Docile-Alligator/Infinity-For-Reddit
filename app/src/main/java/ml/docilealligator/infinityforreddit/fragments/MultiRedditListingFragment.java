@@ -144,9 +144,9 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
                     if (dy > 0) {
-                        ((SubscribedThingListingActivity) mActivity).fab.hide();
+                        ((SubscribedThingListingActivity) mActivity).hideFabInMultiredditTab();
                     } else {
-                        ((SubscribedThingListingActivity) mActivity).fab.show();
+                        ((SubscribedThingListingActivity) mActivity).showFabInMultiredditTab();
                     }
                 }
             });
