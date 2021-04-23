@@ -167,6 +167,7 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
             mFragment = new SubscribedSubredditsListingFragment();
             Bundle bundle = new Bundle();
             bundle.putString(SubscribedSubredditsListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
+            bundle.putString(SubscribedSubredditsListingFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
             bundle.putString(SubscribedSubredditsListingFragment.EXTRA_ACCOUNT_PROFILE_IMAGE_URL, mAccountProfileImageUrl);
             bundle.putBoolean(SubscribedSubredditsListingFragment.EXTRA_IS_SUBREDDIT_SELECTION, true);
             if (getIntent().hasExtra(EXTRA_EXTRA_CLEAR_SELECTION)) {
