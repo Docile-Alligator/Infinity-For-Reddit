@@ -80,8 +80,12 @@ public class CommentIndentationView extends LinearLayout {
     public void setLevelAndColors(int level, Integer[] colors) {
         this.colors = colors;
         this.level = level;
-        int indentationSpacing = (level * spacing + pathWidth);
-        setPaddingRelative(indentationSpacing, 0, pathWidth, 0);
+        if (level > 0) {
+            int indentationSpacing = level * spacing + pathWidth;
+            setPaddingRelative(indentationSpacing, 0, pathWidth, 0);
+        } else {
+            setPaddingRelative(0, 0, 0, 0);
+        }
         invalidate();
     }
 
