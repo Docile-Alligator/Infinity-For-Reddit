@@ -193,6 +193,7 @@
 
     <string name="comment_load_more_comments">Load more comments</string>
     <string name="comment_load_more_comments_failed">Load failed. Tap to retry.</string>
+    <string name="comment_continue_thread">Continue thread</string>
 
     <string name="loading">Loading</string>
 

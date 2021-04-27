@@ -6,6 +6,7 @@ package ml.docilealligator.infinityforreddit.utils;
 
 public class JSONUtils {
     public static final String KIND_KEY = "kind";
+    public static final String KIND_VALUE_MORE = "more";
     public static final String DATA_KEY = "data";
     public static final String AFTER_KEY = "after";
     public static final String CHILDREN_KEY = "children";

@@ -197,18 +197,18 @@ public interface RedditAPI {
     @GET("/r/{subredditName}/about/rules.json?raw_json=1")
     Call<String> getRules(@Path("subredditName") String subredditName);
 
-    @GET("/comments/{id}/placeholder/{singleCommentId}.json?context=8&raw_json=1")
+    @GET("/comments/{id}/placeholder/{singleCommentId}.json?raw_json=1")
     Call<String> getPostAndCommentsSingleThreadByIdOauth(@Path("id") String id, @Path("singleCommentId") String singleCommentId,
-                                                         @Query("sort") String sortType,
+                                                         @Query("sort") String sortType, @Query("context") String contextNumber,
                                                          @HeaderMap Map<String, String> headers);
 
     @GET("/comments/{id}.json?raw_json=1")
     Call<String> getPostAndCommentsByIdOauth(@Path("id") String id, @Query("sort") String sortType,
                                              @HeaderMap Map<String, String> headers);
 
-    @GET("/comments/{id}/placeholder/{singleCommentId}.json?context=8&raw_json=1")
+    @GET("/comments/{id}/placeholder/{singleCommentId}.json?raw_json=1")
     Call<String> getPostAndCommentsSingleThreadById(@Path("id") String id, @Path("singleCommentId") String singleCommentId,
-                                                    @Query("sort") String sortType);
+                                                    @Query("sort") String sortType, @Query("context") String contextNumber);
 
     @GET("/comments/{id}.json?raw_json=1")
     Call<String> getPostAndCommentsById(@Path("id") String id, @Query("sort") String sortType);

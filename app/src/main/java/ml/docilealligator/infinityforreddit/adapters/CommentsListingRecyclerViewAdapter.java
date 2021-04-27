@@ -243,7 +243,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof CommentViewHolder) {
-            Comment comment = getItem(holder.getAdapterPosition());
+            Comment comment = getItem(holder.getBindingAdapterPosition());
             if (comment != null) {
                 if (comment.getSubredditName().substring(2).equals(comment.getLinkAuthor())) {
                     String name = "u/" + comment.getLinkAuthor();
@@ -477,11 +477,11 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             commentDivider.setBackgroundColor(mDividerColor);
 
             authorTextView.setOnClickListener(view -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
-                Comment comment = getItem(getAdapterPosition());
+                Comment comment = getItem(getBindingAdapterPosition());
                 if (comment != null) {
                     if (comment.getSubredditName().substring(2).equals(comment.getLinkAuthor())) {
                         Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
@@ -496,11 +496,11 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             });
 
             moreButton.setOnClickListener(view -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
-                Comment comment = getItem(getAdapterPosition());
+                Comment comment = getItem(getBindingAdapterPosition());
                 if (comment != null) {
                     Bundle bundle = new Bundle();
                     if (comment.getAuthor().equals(mAccountName)) {
@@ -508,7 +508,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     }
                     bundle.putString(CommentMoreBottomSheetFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                     bundle.putParcelable(CommentMoreBottomSheetFragment.EXTRA_COMMENT, comment);
-                    bundle.putInt(CommentMoreBottomSheetFragment.EXTRA_POSITION, getAdapterPosition());
+                    bundle.putInt(CommentMoreBottomSheetFragment.EXTRA_POSITION, getBindingAdapterPosition());
                     bundle.putString(CommentMoreBottomSheetFragment.EXTRA_COMMENT_MARKDOWN, comment.getCommentMarkdown());
                     CommentMoreBottomSheetFragment commentMoreBottomSheetFragment = new CommentMoreBottomSheetFragment();
                     commentMoreBottomSheetFragment.setArguments(bundle);
@@ -517,11 +517,11 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             });
 
             itemView.setOnClickListener(view -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
-                Comment comment = getItem(getAdapterPosition());
+                Comment comment = getItem(getBindingAdapterPosition());
                 if (comment != null) {
                     Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
                     intent.putExtra(ViewPostDetailActivity.EXTRA_POST_ID, comment.getLinkId());
@@ -542,11 +542,11 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     return;
                 }
 
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
-                Comment comment = getItem(getAdapterPosition());
+                Comment comment = getItem(getBindingAdapterPosition());
                 if (comment != null) {
                     int previousVoteType = comment.getVoteType();
                     String newVoteType;
@@ -574,7 +574,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
-                            int currentPosition = getAdapterPosition();
+                            int currentPosition = getBindingAdapterPosition();
                             if (newVoteType.equals(APIUtils.DIR_UPVOTE)) {
                                 comment.setVoteType(Comment.VOTE_TYPE_UPVOTE);
                                 if (currentPosition == position) {
@@ -599,7 +599,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         @Override
                         public void onVoteThingFail(int position) {
                         }
-                    }, comment.getFullName(), newVoteType, getAdapterPosition());
+                    }, comment.getFullName(), newVoteType, getBindingAdapterPosition());
                 }
             });
 
@@ -609,11 +609,11 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     return;
                 }
 
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
-                Comment comment = getItem(getAdapterPosition());
+                Comment comment = getItem(getBindingAdapterPosition());
                 if (comment != null) {
                     int previousVoteType = comment.getVoteType();
                     String newVoteType;
@@ -640,7 +640,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position1) {
-                            int currentPosition = getAdapterPosition();
+                            int currentPosition = getBindingAdapterPosition();
                             if (newVoteType.equals(APIUtils.DIR_DOWNVOTE)) {
                                 comment.setVoteType(Comment.VOTE_TYPE_DOWNVOTE);
                                 if (currentPosition == position) {
@@ -665,12 +665,12 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         @Override
                         public void onVoteThingFail(int position1) {
                         }
-                    }, comment.getFullName(), newVoteType, getAdapterPosition());
+                    }, comment.getFullName(), newVoteType, getBindingAdapterPosition());
                 }
             });
 
             saveButton.setOnClickListener(view -> {
-                int position = getAdapterPosition();
+                int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
@@ -682,7 +682,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                             @Override
                             public void success() {
                                 comment.setSaved(false);
-                                if (getAdapterPosition() == position) {
+                                if (getBindingAdapterPosition() == position) {
                                     saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                 }
                                 Toast.makeText(mActivity, R.string.comment_unsaved_success, Toast.LENGTH_SHORT).show();
@@ -691,7 +691,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                             @Override
                             public void failed() {
                                 comment.setSaved(true);
-                                if (getAdapterPosition() == position) {
+                                if (getBindingAdapterPosition() == position) {
                                     saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                 }
                                 Toast.makeText(mActivity, R.string.comment_unsaved_failed, Toast.LENGTH_SHORT).show();
@@ -703,7 +703,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                             @Override
                             public void success() {
                                 comment.setSaved(true);
-                                if (getAdapterPosition() == position) {
+                                if (getBindingAdapterPosition() == position) {
                                     saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                                 }
                                 Toast.makeText(mActivity, R.string.comment_saved_success, Toast.LENGTH_SHORT).show();
@@ -712,7 +712,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                             @Override
                             public void failed() {
                                 comment.setSaved(false);
-                                if (getAdapterPosition() == position) {
+                                if (getBindingAdapterPosition() == position) {
                                     saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
                                 }
                                 Toast.makeText(mActivity, R.string.comment_saved_failed, Toast.LENGTH_SHORT).show();

@@ -15,7 +15,7 @@ import retrofit2.Retrofit;
 
 public class FetchComment {
     public static void fetchComments(Retrofit retrofit, @Nullable String accessToken, String article,
-                                     String commentId, String sortType, boolean expandChildren,
+                                     String commentId, String sortType, String contextNumber, boolean expandChildren,
                                      Locale locale, FetchCommentListener fetchCommentListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> comments;
@@ -23,13 +23,13 @@ public class FetchComment {
             if (commentId == null) {
                 comments = api.getPostAndCommentsById(article, sortType);
             } else {
-                comments = api.getPostAndCommentsSingleThreadById(article, commentId, sortType);
+                comments = api.getPostAndCommentsSingleThreadById(article, commentId, sortType, contextNumber);
             }
         } else {
             if (commentId == null) {
                 comments = api.getPostAndCommentsByIdOauth(article, sortType, APIUtils.getOAuthHeader(accessToken));
             } else {
-                comments = api.getPostAndCommentsSingleThreadByIdOauth(article, commentId, sortType,
+                comments = api.getPostAndCommentsSingleThreadByIdOauth(article, commentId, sortType, contextNumber,
                         APIUtils.getOAuthHeader(accessToken));
             }
         }

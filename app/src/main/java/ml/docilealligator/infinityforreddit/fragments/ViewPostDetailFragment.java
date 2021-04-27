@@ -117,6 +117,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     public static final String EXTRA_POST_DATA = "EPD";
     public static final String EXTRA_POST_ID = "EPI";
     public static final String EXTRA_SINGLE_COMMENT_ID = "ESCI";
+    public static final String EXTRA_CONTEXT_NUMBER = "ECN";
     public static final String EXTRA_MESSAGE_FULLNAME = "EMF";
     public static final String EXTRA_POST_LIST_POSITION = "EPLP";
     private static final int EDIT_POST_REQUEST_CODE = 2;
@@ -202,6 +203,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private String mAccountName;
     private int postListPosition = -1;
     private String mSingleCommentId;
+    private String mContextNumber;
     private boolean showToast = false;
     private boolean isSortingComments = false;
     private boolean mIsSmoothScrolling = false;
@@ -461,6 +463,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         };
 
         mSingleCommentId = getArguments().getString(EXTRA_SINGLE_COMMENT_ID);
+        mContextNumber = getArguments().getString(EXTRA_CONTEXT_NUMBER, "8");
+
         if (savedInstanceState == null) {
             if (mSingleCommentId != null) {
                 isSingleCommentThreadMode = true;
@@ -1055,7 +1059,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (mAccessToken == null) {
             if (isSingleCommentThreadMode && mSingleCommentId != null) {
                 postAndComments = mRetrofit.create(RedditAPI.class).getPostAndCommentsSingleThreadById(
-                        subredditId, mSingleCommentId, sortType);
+                        subredditId, mSingleCommentId, sortType, mContextNumber);
             } else {
                 postAndComments = mRetrofit.create(RedditAPI.class).getPostAndCommentsById(subredditId,
                         sortType);
@@ -1063,7 +1067,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         } else {
             if (isSingleCommentThreadMode && mSingleCommentId != null) {
                 postAndComments = mOauthRetrofit.create(RedditAPI.class).getPostAndCommentsSingleThreadByIdOauth(subredditId,
-                        mSingleCommentId, sortType, APIUtils.getOAuthHeader(mAccessToken));
+                        mSingleCommentId, sortType, mContextNumber, APIUtils.getOAuthHeader(mAccessToken));
             } else {
                 postAndComments = mOauthRetrofit.create(RedditAPI.class).getPostAndCommentsByIdOauth(subredditId,
                         sortType, APIUtils.getOAuthHeader(mAccessToken));
@@ -1240,8 +1244,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         }
 
         Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
-        FetchComment.fetchComments(retrofit, mAccessToken, mPost.getId(), commentId, sortType, mExpandChildren,
-                mLocale, new FetchComment.FetchCommentListener() {
+        FetchComment.fetchComments(retrofit, mAccessToken, mPost.getId(), commentId, sortType,
+                mContextNumber, mExpandChildren, mLocale, new FetchComment.FetchCommentListener() {
                     @Override
                     public void onFetchCommentSuccess(ArrayList<Comment> expandedComments,
                                                       String parentId, ArrayList<String> children) {

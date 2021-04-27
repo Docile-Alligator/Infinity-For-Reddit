@@ -245,7 +245,7 @@ public class CommentDataSource extends PageKeyedDataSource<String, Comment> {
             for (int i = 0; i < commentsJSONArray.length(); i++) {
                 try {
                     JSONObject commentJSON = commentsJSONArray.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
-                    comments.add(ParseComment.parseSingleComment(commentJSON, 0, locale));
+                    comments.add(ParseComment.parseSingleComment(commentJSON, 0));
                 } catch (JSONException ignored) {
                 }
             }

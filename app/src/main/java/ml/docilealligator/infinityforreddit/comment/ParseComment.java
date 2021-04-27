@@ -70,13 +70,18 @@ public class ParseComment {
             }
 
             actualCommentLength = comments.length() - 1;
+
+            if (moreChildrenFullnames.isEmpty() && comments.getJSONObject(comments.length() - 1).getString(JSONUtils.KIND_KEY).equals(JSONUtils.KIND_VALUE_MORE)) {
+                newCommentData.add(new Comment(more.getString(JSONUtils.PARENT_ID_KEY), more.getInt(JSONUtils.DEPTH_KEY), Comment.PLACEHOLDER_CONTINUE_THREAD));
+                return;
+            }
         } else {
             actualCommentLength = comments.length();
         }
 
         for (int i = 0; i < actualCommentLength; i++) {
             JSONObject data = comments.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
-            Comment singleComment = parseSingleComment(data, depth, locale);
+            Comment singleComment = parseSingleComment(data, depth);
 
             if (data.get(JSONUtils.REPLIES_KEY) instanceof JSONObject) {
                 JSONArray childrenArray = data.getJSONObject(JSONUtils.REPLIES_KEY)
@@ -107,14 +112,14 @@ public class ParseComment {
             }
             if (c.hasMoreChildrenFullnames() && c.getMoreChildrenFullnames().size() > c.getMoreChildrenStartingIndex()) {
                 //Add a load more placeholder
-                Comment placeholder = new Comment(c.getFullName(), c.getDepth() + 1);
+                Comment placeholder = new Comment(c.getFullName(), c.getDepth() + 1, Comment.PLACEHOLDER_LOAD_MORE_COMMENTS);
                 visibleComments.add(placeholder);
                 c.addChild(placeholder, c.getChildren().size());
             }
         }
     }
 
-    static Comment parseSingleComment(JSONObject singleCommentData, int depth, Locale locale) throws JSONException {
+    static Comment parseSingleComment(JSONObject singleCommentData, int depth) throws JSONException {
         String id = singleCommentData.getString(JSONUtils.ID_KEY);
         String fullName = singleCommentData.getString(JSONUtils.NAME_KEY);
         String author = singleCommentData.getString(JSONUtils.AUTHOR_KEY);
@@ -262,6 +267,7 @@ public class ParseComment {
                 expandChildren(newComments, expandedNewComments, expandChildren);
             } catch (JSONException e) {
                 parseFailed = true;
+                e.printStackTrace();
             }
             return null;
         }
@@ -302,7 +308,7 @@ public class ParseComment {
         protected Void doInBackground(Void... voids) {
             try {
                 JSONObject sentCommentData = new JSONObject(response);
-                comment = parseSingleComment(sentCommentData, depth, locale);
+                comment = parseSingleComment(sentCommentData, depth);
             } catch (JSONException e) {
                 e.printStackTrace();
                 errorMessage = parseSentCommentErrorMessage(response);

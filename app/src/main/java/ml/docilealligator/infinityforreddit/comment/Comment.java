@@ -11,6 +11,9 @@ public class Comment implements Parcelable {
     public static final int VOTE_TYPE_NO_VOTE = 0;
     public static final int VOTE_TYPE_UPVOTE = 1;
     public static final int VOTE_TYPE_DOWNVOTE = -1;
+    public static final int NOT_PLACEHOLDER = 0;
+    public static final int PLACEHOLDER_LOAD_MORE_COMMENTS = 1;
+    public static final int PLACEHOLDER_CONTINUE_THREAD = 2;
     public static final Creator<Comment> CREATOR = new Creator<Comment>() {
         @Override
         public Comment createFromParcel(Parcel in) {
@@ -50,7 +53,7 @@ public class Comment implements Parcelable {
     private ArrayList<Comment> children;
     private ArrayList<String> moreChildrenFullnames;
     private int moreChildrenStartingIndex;
-    private boolean isPlaceHolder;
+    private int placeholderType;
     private boolean isLoadingMoreChildren;
     private boolean loadMoreChildrenFailed;
 
@@ -87,15 +90,23 @@ public class Comment implements Parcelable {
         this.isExpanded = false;
         this.hasExpandedBefore = false;
         moreChildrenStartingIndex = 0;
-        isPlaceHolder = false;
+        placeholderType = NOT_PLACEHOLDER;
     }
 
-    public Comment(String parentFullName, int depth) {
-        this.fullName = parentFullName;
+    public Comment(String parentFullName, int depth, int placeholderType) {
+        if (placeholderType == PLACEHOLDER_LOAD_MORE_COMMENTS) {
+            this.fullName = parentFullName;
+        } else {
+            this.parentId = parentFullName.substring(3);
+        }
         this.depth = depth;
-        isPlaceHolder = true;
+        this.placeholderType = placeholderType;
         isLoadingMoreChildren = false;
         loadMoreChildrenFailed = false;
+    }
+
+    public Comment(String parentFullName) {
+
     }
 
     protected Comment(Parcel in) {
@@ -126,7 +137,7 @@ public class Comment implements Parcelable {
         children = in.readArrayList(Comment.class.getClassLoader());
         moreChildrenFullnames = in.readArrayList(Comment.class.getClassLoader());
         moreChildrenStartingIndex = in.readInt();
-        isPlaceHolder = in.readByte() != 0;
+        placeholderType = in.readInt();
         isLoadingMoreChildren = in.readByte() != 0;
         loadMoreChildrenFailed = in.readByte() != 0;
     }
@@ -286,7 +297,7 @@ public class Comment implements Parcelable {
         if (children == null || children.size() == 0) {
             setChildren(moreChildren);
         } else {
-            if (children.size() > 1 && children.get(children.size() - 1).isPlaceHolder) {
+            if (children.size() > 1 && children.get(children.size() - 1).placeholderType == PLACEHOLDER_LOAD_MORE_COMMENTS) {
                 children.addAll(children.size() - 2, moreChildren);
             } else {
                 children.addAll(moreChildren);
@@ -329,8 +340,8 @@ public class Comment implements Parcelable {
         this.moreChildrenStartingIndex = moreChildrenStartingIndex;
     }
 
-    public boolean isPlaceHolder() {
-        return isPlaceHolder;
+    public int getPlaceholderType() {
+        return placeholderType;
     }
 
     public boolean isLoadingMoreChildren() {
@@ -383,7 +394,7 @@ public class Comment implements Parcelable {
         parcel.writeList(children);
         parcel.writeList(moreChildrenFullnames);
         parcel.writeInt(moreChildrenStartingIndex);
-        parcel.writeByte((byte) (isPlaceHolder ? 1 : 0));
+        parcel.writeInt(placeholderType);
         parcel.writeByte((byte) (isLoadingMoreChildren ? 1 : 0));
         parcel.writeByte((byte) (loadMoreChildrenFailed ? 1 : 0));
     }
