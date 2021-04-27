@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.text.Spannable;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
@@ -96,6 +97,7 @@ public class Utils {
     }
 
     public static String parseInlineGifInComments(String markdown) {
+        Log.i("asdfsdf", "s " + markdown);
         StringBuilder markdownStringBuilder = new StringBuilder(markdown);
         Pattern inlineGifPattern = Pattern.compile("!\\[gif]\\(giphy\\|\\w+\\)");
         Matcher matcher = inlineGifPattern.matcher(markdownStringBuilder);
@@ -107,6 +109,15 @@ public class Utils {
         Matcher matcher2 = inlineGifPattern2.matcher(markdownStringBuilder);
         while (matcher2.find()) {
             markdownStringBuilder.replace(matcher2.start(), matcher2.end(), "[gif](https://media3.giphy.com/media/" + markdownStringBuilder.substring(matcher2.start() + "![gif](giphy|".length(), matcher2.end() - "|downsized\\)".length()) + "/giphy.mp4)");
+        }
+
+        Pattern inlineGifPattern3 = Pattern.compile("!\\[gif]\\(emote\\|\\w+\\|\\w+\\)");
+        Matcher matcher3 = inlineGifPattern3.matcher(markdownStringBuilder);
+        while (matcher3.find()) {
+            markdownStringBuilder.replace(matcher3.start(), matcher3.end(),
+                    "[gif](https://reddit-meta-production.s3.amazonaws.com/public/fortnitebr/emotes/snoomoji_emotes/"
+                            + markdownStringBuilder.substring(
+                                    matcher3.start() + "![gif](emote|".length(), matcher3.end() - 1).replace('|', '/') + ".gif)");
         }
 
         return markdownStringBuilder.toString();
