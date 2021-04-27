@@ -10,7 +10,6 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.text.Spannable;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 
@@ -97,18 +96,19 @@ public class Utils {
     }
 
     public static String parseInlineGifInComments(String markdown) {
-        Log.i("asdfsdf", "s " + markdown);
         StringBuilder markdownStringBuilder = new StringBuilder(markdown);
         Pattern inlineGifPattern = Pattern.compile("!\\[gif]\\(giphy\\|\\w+\\)");
         Matcher matcher = inlineGifPattern.matcher(markdownStringBuilder);
         while (matcher.find()) {
             markdownStringBuilder.replace(matcher.start(), matcher.end(), "[gif](https://media3.giphy.com/media/" + markdownStringBuilder.substring(matcher.start() + "![gif](giphy|".length(), matcher.end() - 1) + "/giphy.mp4)");
+            matcher = inlineGifPattern.matcher(markdownStringBuilder);
         }
 
         Pattern inlineGifPattern2 = Pattern.compile("!\\[gif]\\(giphy\\|\\w+\\|downsized\\)");
         Matcher matcher2 = inlineGifPattern2.matcher(markdownStringBuilder);
         while (matcher2.find()) {
             markdownStringBuilder.replace(matcher2.start(), matcher2.end(), "[gif](https://media3.giphy.com/media/" + markdownStringBuilder.substring(matcher2.start() + "![gif](giphy|".length(), matcher2.end() - "|downsized\\)".length()) + "/giphy.mp4)");
+            matcher2 = inlineGifPattern2.matcher(markdownStringBuilder);
         }
 
         Pattern inlineGifPattern3 = Pattern.compile("!\\[gif]\\(emote\\|\\w+\\|\\w+\\)");
@@ -118,6 +118,7 @@ public class Utils {
                     "[gif](https://reddit-meta-production.s3.amazonaws.com/public/fortnitebr/emotes/snoomoji_emotes/"
                             + markdownStringBuilder.substring(
                                     matcher3.start() + "![gif](emote|".length(), matcher3.end() - 1).replace('|', '/') + ".gif)");
+            matcher3 = inlineGifPattern3.matcher(markdownStringBuilder);
         }
 
         return markdownStringBuilder.toString();
