@@ -176,6 +176,8 @@ dependencies {
     implementation "androidx.startup:startup-runtime:1.0.0"
     implementation 'com.github.FunkyMuse:Crashy:1.1.0'
 
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+
 
 /**** Builds and flavors ****/
     // debugImplementation because LeakCanary should only run in debug builds.

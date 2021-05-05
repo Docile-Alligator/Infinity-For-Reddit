@@ -39,6 +39,7 @@ public class CopyTextBottomSheetFragment extends RoundedBottomSheetDialogFragmen
     TextView copyAllMarkdownTextView;
 
     private Activity activity;
+    private String markdownText;
 
     public CopyTextBottomSheetFragment() {
         // Required empty public constructor
@@ -53,7 +54,10 @@ public class CopyTextBottomSheetFragment extends RoundedBottomSheetDialogFragmen
         ButterKnife.bind(this, rootView);
 
         String rawText = getArguments().getString(EXTRA_RAW_TEXT);
-        String markdownText = getArguments().getString(EXTRA_MARKDOWN).replaceAll("<sup>", "^").replaceAll("</sup>", "");
+        markdownText = getArguments().getString(EXTRA_MARKDOWN);
+        if (markdownText != null) {
+            markdownText = markdownText.replaceAll("<sup>", "^").replaceAll("</sup>", "");
+        }
 
         copyRawTextTextView.setOnClickListener(view -> {
             showCopyDialog(rawText);
