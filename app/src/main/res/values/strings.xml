@@ -562,6 +562,7 @@
     <string name="settings_crash_reports_title">Crash Reports</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">Dangerous</string>
     <string name="settings_disable_nsfw_forever_title">Disable NSFW Forever</string>
+    <string name="settings_show_only_one_comment_level_indicator">Show Only One Comment Level Indicator</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

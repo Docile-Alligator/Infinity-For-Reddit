@@ -14,6 +14,11 @@
 
     <SwitchPreference
         app:defaultValue="false"
+        app:key="show_only_one_comment_level_indicator"
+        app:title="@string/settings_show_only_one_comment_level_indicator" />
+
+    <SwitchPreference
+        app:defaultValue="false"
         app:key="comment_toolbar_hidden"
         app:title="@string/settings_comment_toolbar_hidden" />
 
