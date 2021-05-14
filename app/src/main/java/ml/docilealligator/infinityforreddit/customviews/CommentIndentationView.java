@@ -21,7 +21,7 @@ public class CommentIndentationView extends LinearLayout {
     private Integer[] colors;
     private ArrayList<Integer> startXs;
     private final int spacing;
-    private final int pathWidth;
+    private int pathWidth;
     private boolean showOnlyOneDivider = false;
 
     public CommentIndentationView(Context context, @Nullable AttributeSet attrs) {
@@ -53,7 +53,7 @@ public class CommentIndentationView extends LinearLayout {
         if (showOnlyOneDivider) {
             if (startXs.size() > 0) {
                 paint.setColor(colors[(startXs.size() - 1) % 7]);
-                canvas.drawLine(startXs.get(startXs.size() - 1), 0, startXs.get(startXs.size() - 1), getHeight(), paint);
+                canvas.drawLine(level * pathWidth, 0, level * pathWidth, getHeight(), paint);
             }
         } else {
             for (int i = 0; i < startXs.size(); i++) {
@@ -89,7 +89,7 @@ public class CommentIndentationView extends LinearLayout {
         this.colors = colors;
         this.level = level;
         if (level > 0) {
-            int indentationSpacing = level * spacing + pathWidth;
+            int indentationSpacing = showOnlyOneDivider ? pathWidth * level : level * spacing + pathWidth;
             setPaddingRelative(indentationSpacing, 0, pathWidth, 0);
         } else {
             setPaddingRelative(0, 0, 0, 0);
@@ -99,6 +99,9 @@ public class CommentIndentationView extends LinearLayout {
 
     public void setShowOnlyOneDivider(boolean showOnlyOneDivider) {
         this.showOnlyOneDivider = showOnlyOneDivider;
+        if (showOnlyOneDivider) {
+            pathWidth = (int) Utils.convertDpToPixel(4, getContext());
+        }
     }
 
     private static class SavedState extends BaseSavedState {
