@@ -8,6 +8,11 @@
         app:summary="@string/settings_swipe_to_go_back_summary" />
 
     <SwitchPreference
+        app:defaultValue="true"
+        app:key="swipe_vertically_to_go_back_from_media"
+        app:title="@string/settings_swipe_vertically_to_go_back_from_media_title" />
+
+    <SwitchPreference
         app:defaultValue="false"
         app:key="lock_jump_to_next_top_level_comment_button"
         app:title="@string/settings_lock_jump_to_next_top_level_comment_button_title" />

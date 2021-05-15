@@ -204,11 +204,15 @@ public class ViewVideoActivity extends AppCompatActivity {
             }
         }
 
-        haulerView.setOnDragDismissedListener(dragDirection -> {
-            int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
-            finish();
-            overridePendingTransition(0, slide);
-        });
+        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_VERTICALLY_TO_GO_BACK_FROM_MEDIA, true)) {
+            haulerView.setOnDragDismissedListener(dragDirection -> {
+                int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
+                finish();
+                overridePendingTransition(0, slide);
+            });
+        } else {
+            haulerView.setDragEnabled(false);
+        }
 
         Intent intent = getIntent();
         postTitle = intent.getStringExtra(EXTRA_POST_TITLE);

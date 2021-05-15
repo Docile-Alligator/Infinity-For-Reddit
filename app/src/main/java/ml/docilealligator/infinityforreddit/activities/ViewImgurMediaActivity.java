@@ -133,11 +133,15 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
             images = savedInstanceState.getParcelableArrayList(IMGUR_IMAGES_STATE);
         }
 
-        haulerView.setOnDragDismissedListener(dragDirection -> {
-            int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
-            finish();
-            overridePendingTransition(0, slide);
-        });
+        if (sharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_VERTICALLY_TO_GO_BACK_FROM_MEDIA, true)) {
+            haulerView.setOnDragDismissedListener(dragDirection -> {
+                int slide = dragDirection == DragDirection.UP ? R.anim.slide_out_up : R.anim.slide_out_down;
+                finish();
+                overridePendingTransition(0, slide);
+            });
+        } else {
+            haulerView.setDragEnabled(false);
+        }
 
         if (images == null) {
             fetchImgurMedia(imgurId);
