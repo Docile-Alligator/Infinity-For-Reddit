@@ -541,6 +541,7 @@
     <string name="settings_user_default_sort_time_title">User Default Sort Time</string>
     <string name="settings_click_to_show_media_in_gallery_layout">Click to Show Media in Gallery Layout</string>
     <string name="settings_hide_post_type">Hide Post Type</string>
+    <string name="settings_hide_post_flair">Hide Post Flair</string>
     <string name="settings_hide_the_number_of_awards">Hide the Number of Awards</string>
     <string name="settings_hide_subreddit_and_user_prefix">Hide Subreddit and User Prefix</string>
     <string name="settings_hide_the_number_of_votes">Hide the Number of Votes</string>

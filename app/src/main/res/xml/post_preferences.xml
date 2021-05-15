@@ -21,6 +21,11 @@
 
     <SwitchPreference
         app:defaultValue="false"
+        app:key="hide_post_flair"
+        app:title="@string/settings_hide_post_flair" />
+
+    <SwitchPreference
+        app:defaultValue="false"
         app:key="hide_the_number_of_awards"
         app:title="@string/settings_hide_the_number_of_awards" />
 

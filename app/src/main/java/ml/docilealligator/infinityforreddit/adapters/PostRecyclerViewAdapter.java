@@ -210,6 +210,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean mMarkPostsAsReadOnScroll;
     private boolean mHideReadPostsAutomatically;
     private boolean mHidePostType;
+    private boolean mHidePostFlair;
     private boolean mHideTheNumberOfAwards;
     private boolean mHideSubredditAndUserPrefix;
     private boolean mHideTheNumberOfVotes;
@@ -287,6 +288,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mHideReadPostsAutomatically = postHistorySharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.HIDE_READ_POSTS_AUTOMATICALLY_BASE, false);
 
             mHidePostType = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_POST_TYPE, false);
+            mHidePostFlair = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_POST_FLAIR, false);
             mHideTheNumberOfAwards = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_AWARDS, false);
             mHideSubredditAndUserPrefix = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_SUBREDDIT_AND_USER_PREFIX, false);
             mHideTheNumberOfVotes = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_VOTES, false);
@@ -622,8 +624,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
 
                 if (flair != null && !flair.equals("")) {
-                    ((PostBaseViewHolder) holder).flairTextView.setVisibility(View.VISIBLE);
-                    Utils.setHTMLWithImageToTextView(((PostBaseViewHolder) holder).flairTextView, flair, false);
+                    if (mHidePostFlair) {
+                        ((PostBaseViewHolder) holder).flairTextView.setVisibility(View.GONE);
+                    } else {
+                        ((PostBaseViewHolder) holder).flairTextView.setVisibility(View.VISIBLE);
+                        Utils.setHTMLWithImageToTextView(((PostBaseViewHolder) holder).flairTextView, flair, false);
+                    }
                 }
 
                 if (nAwards > 0 && !mHideTheNumberOfAwards) {
@@ -1123,8 +1129,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
 
                 if (flair != null && !flair.equals("")) {
-                    ((PostCompactBaseViewHolder) holder).flairTextView.setVisibility(View.VISIBLE);
-                    Utils.setHTMLWithImageToTextView(((PostCompactBaseViewHolder) holder).flairTextView, flair, false);
+                    if (mHidePostFlair) {
+                        ((PostCompactBaseViewHolder) holder).flairTextView.setVisibility(View.GONE);
+                    } else {
+                        ((PostCompactBaseViewHolder) holder).flairTextView.setVisibility(View.VISIBLE);
+                        Utils.setHTMLWithImageToTextView(((PostCompactBaseViewHolder) holder).flairTextView, flair, false);
+                    }
                 }
 
                 if (nAwards > 0 && !mHideTheNumberOfAwards) {
@@ -1799,6 +1809,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
     public void setHidePostType(boolean hidePostType) {
         mHidePostType = hidePostType;
+    }
+
+    public void setHidePostFlair(boolean hidePostFlair) {
+        mHidePostFlair = hidePostFlair;
     }
 
     public void setHideTheNumberOfAwards(boolean hideTheNumberOfAwards) {

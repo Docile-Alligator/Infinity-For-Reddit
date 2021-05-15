@@ -165,6 +165,7 @@ public class SharedPreferencesUtils {
     public static final String USER_DEFAULT_SORT_TIME = "user_default_sort_time";
     public static final String CLICK_TO_SHOW_MEDIA_IN_GALLERY_LAYOUT = "click_to_show_media_in_gallery_layout";
     public static final String HIDE_POST_TYPE = "hide_post_type";
+    public static final String HIDE_POST_FLAIR = "hide_post_flair";
     public static final String HIDE_THE_NUMBER_OF_AWARDS = "hide_the_number_of_awards";
     public static final String HIDE_SUBREDDIT_AND_USER_PREFIX = "hide_subreddit_and_user_prefix";
     public static final String HIDE_THE_NUMBER_OF_VOTES = "hide_the_number_of_votes";

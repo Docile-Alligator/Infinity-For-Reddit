@@ -85,6 +85,7 @@ import ml.docilealligator.infinityforreddit.events.ChangeDataSavingModeEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDefaultPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDisableImagePreviewEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeEnableSwipeActionSwitchEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeHidePostFlairEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHidePostTypeEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideSubredditAndUserPrefixEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfAwardsEvent;
@@ -1821,6 +1822,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void onChangeHidePostTypeEvent(ChangeHidePostTypeEvent event) {
         if (mAdapter != null) {
             mAdapter.setHidePostType(event.hidePostType);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeHidePostFlairEvent(ChangeHidePostFlairEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setHidePostFlair(event.hidePostFlair);
             refreshAdapter();
         }
     }

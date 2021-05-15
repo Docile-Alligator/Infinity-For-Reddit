@@ -12,6 +12,7 @@ import org.greenrobot.eventbus.EventBus;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.events.ChangeCompactLayoutToolbarHiddenByDefaultEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDefaultPostLayoutEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeHidePostFlairEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHidePostTypeEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideSubredditAndUserPrefixEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfAwardsEvent;
@@ -36,6 +37,7 @@ public class PostPreferenceFragment extends PreferenceFragmentCompat {
         SwitchPreference longPressToHideToolbarInCompactLayoutSwitch = findPreference(SharedPreferencesUtils.LONG_PRESS_TO_HIDE_TOOLBAR_IN_COMPACT_LAYOUT);
         SwitchPreference postCompactLayoutToolbarHiddenByDefaultSwitch = findPreference(SharedPreferencesUtils.POST_COMPACT_LAYOUT_TOOLBAR_HIDDEN_BY_DEFAULT);
         SwitchPreference hidePostTypeSwitch = findPreference(SharedPreferencesUtils.HIDE_POST_TYPE);
+        SwitchPreference hidePostFlairSwitch = findPreference(SharedPreferencesUtils.HIDE_POST_FLAIR);
         SwitchPreference hideTheNumberOfAwardsSwitch = findPreference(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_AWARDS);
         SwitchPreference hideSubredditAndUserPrefixSwitch = findPreference(SharedPreferencesUtils.HIDE_SUBREDDIT_AND_USER_PREFIX);
         SwitchPreference hideTheNumberOfVotesSwitch = findPreference(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_VOTES);
@@ -86,6 +88,13 @@ public class PostPreferenceFragment extends PreferenceFragmentCompat {
         if (hidePostTypeSwitch != null) {
             hidePostTypeSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new ChangeHidePostTypeEvent((Boolean) newValue));
+                return true;
+            });
+        }
+
+        if (hidePostFlairSwitch != null) {
+            hidePostFlairSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                EventBus.getDefault().post(new ChangeHidePostFlairEvent((Boolean) newValue));
                 return true;
             });
         }

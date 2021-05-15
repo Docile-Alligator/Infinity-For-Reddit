@@ -79,16 +79,16 @@ dependencies {
 
     // Reactive stuff for event and async related
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.20'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
 
     // HTTP clients
     def retrofitVersion = "2.9.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-scalars:$retrofitVersion"
-    implementation 'com.squareup.okhttp3:okhttp:4.2.2'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
 
     // Dependency injection
-    def daggerVersion = "2.30.1"
+    def daggerVersion = "2.34"
     implementation "com.google.dagger:dagger:$daggerVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
 
@@ -120,7 +120,7 @@ dependencies {
 /**** User Interface (frontend) ****/
 
     //Image loading
-    def glideVersion = "4.11.0"
+    def glideVersion = "4.12.0"
     implementation "com.github.bumptech.glide:glide:$glideVersion"
     annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
