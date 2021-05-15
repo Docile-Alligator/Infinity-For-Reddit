@@ -374,12 +374,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         mSwipeRefreshLayout.setEnabled(mSharedPreferences.getBoolean(SharedPreferencesUtils.PULL_TO_REFRESH, true));
         mSwipeRefreshLayout.setOnRefreshListener(this::refresh);
 
+        int recyclerViewPosition = 0;
         int hideReadPostsIndex = 0;
         if (savedInstanceState != null) {
-            int recyclerViewPosition = savedInstanceState.getInt(RECYCLER_VIEW_POSITION_STATE);
-            if (recyclerViewPosition > 0) {
-                mPostRecyclerView.scrollToPosition(recyclerViewPosition);
-            }
+            recyclerViewPosition = savedInstanceState.getInt(RECYCLER_VIEW_POSITION_STATE);
 
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             readPosts = savedInstanceState.getParcelableArrayList(READ_POST_LIST_STATE);
@@ -853,6 +851,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     new StaggeredGridLayoutManagerItemOffsetDecoration(activity, R.dimen.staggeredLayoutManagerItemOffset, nColumns);
             mPostRecyclerView.addItemDecoration(itemDecoration);
             windowWidth /= 2;
+        }
+
+        if (recyclerViewPosition > 0) {
+            mPostRecyclerView.scrollToPosition(recyclerViewPosition);
         }
 
         mAdapter.setHideReadPostsIndex(hideReadPostsIndex);
