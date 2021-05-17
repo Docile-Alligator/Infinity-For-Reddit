@@ -217,16 +217,32 @@ public class ParsePost {
                     }
                     post.setPreviews(previews);
                 } else {
-                    //No preview link post
-                    int postType = Post.NO_PREVIEW_LINK_TYPE;
-                    post = new Post(id, fullName, subredditName, subredditNamePrefixed, author,
-                            authorFlair, authorFlairHTML, postTimeMillis, title, url, permalink, score,
-                            postType, voteType, nComments, upvoteRatio, flair, awards, nAwards, hidden,
-                            spoiler, nsfw, stickied, archived, locked, saved, isCrosspost);
-                    if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
-                        post.setSelfText("");
+                    if (isVideo) {
+                        //No preview video post
+                        JSONObject redditVideoObject = data.getJSONObject(JSONUtils.MEDIA_KEY).getJSONObject(JSONUtils.REDDIT_VIDEO_KEY);
+                        int postType = Post.VIDEO_TYPE;
+                        String videoUrl = Html.fromHtml(redditVideoObject.getString(JSONUtils.HLS_URL_KEY)).toString();
+                        String videoDownloadUrl = redditVideoObject.getString(JSONUtils.FALLBACK_URL_KEY);
+
+                        post = new Post(id, fullName, subredditName, subredditNamePrefixed, author, authorFlair,
+                                authorFlairHTML, postTimeMillis, title, permalink, score, postType, voteType,
+                                nComments, upvoteRatio, flair, awards, nAwards, hidden, spoiler, nsfw, stickied,
+                                archived, locked, saved, isCrosspost);
+
+                        post.setVideoUrl(videoUrl);
+                        post.setVideoDownloadUrl(videoDownloadUrl);
                     } else {
-                        post.setSelfText(Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
+                        //No preview link post
+                        int postType = Post.NO_PREVIEW_LINK_TYPE;
+                        post = new Post(id, fullName, subredditName, subredditNamePrefixed, author,
+                                authorFlair, authorFlairHTML, postTimeMillis, title, url, permalink, score,
+                                postType, voteType, nComments, upvoteRatio, flair, awards, nAwards, hidden,
+                                spoiler, nsfw, stickied, archived, locked, saved, isCrosspost);
+                        if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
+                            post.setSelfText("");
+                        } else {
+                            post.setSelfText(Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
+                        }
                     }
                 }
             }
