@@ -97,6 +97,7 @@ public class Comment implements Parcelable {
         if (placeholderType == PLACEHOLDER_LOAD_MORE_COMMENTS) {
             this.fullName = parentFullName;
         } else {
+            this.fullName = parentFullName;
             this.parentId = parentFullName.substring(3);
         }
         this.depth = depth;
