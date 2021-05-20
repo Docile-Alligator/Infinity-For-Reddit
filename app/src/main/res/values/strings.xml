@@ -547,7 +547,7 @@
     <string name="settings_hide_subreddit_and_user_prefix">Hide Subreddit and User Prefix</string>
     <string name="settings_hide_the_number_of_votes">Hide the Number of Votes</string>
     <string name="settings_hide_the_number_of_comments">Hide the Number of Comments</string>
-    <string name="settings_show_avatar_on_the_right">Show Avatar on the Left</string>
+    <string name="settings_show_avatar_on_the_right">Show Avatar on the Right</string>
     <string name="settings_backup_settings_title">Backup Settings</string>
     <string name="settings_restore_settings_title">Restore Settings</string>
     <string name="settings_credits_love_animation_title">Love Animation</string>

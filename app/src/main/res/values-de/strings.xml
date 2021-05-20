@@ -1007,7 +1007,6 @@ Reiter könnten den Inhalt verlieren, wenn zu anderen gewechselt wird. Selbes Ve
     <string name="action_copy_link">"Link kopieren"</string>
     <string name="action_add_to_post_filter">"Zum Beitrags-Filter hinzufügen"</string>
     <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"NSFW-Bilder in NSFW-Subreddits nicht verwischen"</string>
-    <string name="settings_show_avatar_on_the_right">"Avatar links anzeigen"</string>
     <string name="settings_backup_settings_title">"Einstellungen sichern"</string>
     <string name="settings_restore_settings_title">"Einstellungen wiederherstellen"</string>
     <string name="settings_credits_love_animation_title">"Liebes-Animation"</string>
