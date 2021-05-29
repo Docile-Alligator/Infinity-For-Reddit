@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.account;
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "accounts")
@@ -25,6 +26,11 @@ public class Account {
     private String code;
     @ColumnInfo(name = "is_current_user")
     private boolean isCurrentUser;
+
+    @Ignore
+    public static Account getAnonymousAccount() {
+        return new Account("-", null, null, null, null, null, 0, false);
+    }
 
     public Account(@NonNull String accountName, String accessToken, String refreshToken, String code,
                    String profileImageUrl, String bannerImageUrl, int karma, boolean isCurrentUser) {

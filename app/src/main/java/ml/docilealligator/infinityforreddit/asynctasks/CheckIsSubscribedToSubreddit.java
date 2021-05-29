@@ -5,6 +5,7 @@ import android.os.Handler;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 
 public class CheckIsSubscribedToSubreddit {
@@ -13,8 +14,10 @@ public class CheckIsSubscribedToSubreddit {
                                                     String subredditName, String accountName,
                                                     CheckIsSubscribedToSubredditListener checkIsSubscribedToSubredditListener) {
         executor.execute(() -> {
-            if (!redditDataRoomDatabase.accountDao().isAnonymousAccountInserted()) {
-                redditDataRoomDatabase.accountDao().insertAnonymousAccount();
+            if (accountName == null) {
+                if (!redditDataRoomDatabase.accountDao().isAnonymousAccountInserted()) {
+                    redditDataRoomDatabase.accountDao().insert(Account.getAnonymousAccount());
+                }
             }
             SubscribedSubredditData subscribedSubredditData = redditDataRoomDatabase.subscribedSubredditDao().getSubscribedSubreddit(subredditName, accountName == null ? "-" : accountName);
             handler.post(() -> {
