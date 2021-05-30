@@ -956,4 +956,10 @@ Mensagem: %2$s"</string>
     <string name="add_subreddit_or_user_to_multireddit_success">"%1$s está adicionado a multireddit %2$s"</string>
     <string name="add_subreddit_or_user_to_multireddit_failed">"Não foi possível adicionar %1$s para o multireddit %2$s"</string>
     <string name="choose_a_user">"Escolha um usuário"</string>
+    <string name="action_share_link">"Compartilhar Link"</string>
+    <string name="action_copy_link">"Copiar Link"</string>
+    <string name="device_default">"Dispositivo Padrão"</string>
+    <string name="never">"Nunca"</string>
+    <string name="normal">"Normal"</string>
+    <string name="default_in_array">"Padrão"</string>
 </resources>

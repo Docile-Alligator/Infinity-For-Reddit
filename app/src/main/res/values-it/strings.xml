@@ -30,11 +30,7 @@
     <string name="view_reddit_gallery_activity_image_label">"Immagine %1$d/%2$d"</string>
     <string name="view_reddit_gallery_activity_gif_label">"Gif %1$d/%2$d"</string>
     <string name="view_reddit_gallery_activity_video_label">"Video %1$d/%2$d"</string>
-
-    <!-- Fuzzy -->
     <string name="navigation_drawer_open">"Apri drawer navigazione"</string>
-
-    <!-- Fuzzy -->
     <string name="navigation_drawer_close">"Chiudi drawer navigazione"</string>
     <string name="action_download">"Scarica"</string>
     <string name="action_refresh">"Ricarica"</string>
@@ -536,7 +532,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_sent_message_text_color">"Colore del testo dei messaggi inviati"</string>
     <string name="theme_item_sent_message_text_color_detail">"Applicato a: Messaggi privati inviati"</string>
     <string name="theme_item_background_color">"Colore Sfondo"</string>
-    <string name="theme_item_background_color_detail">"Applicato a: Sfondo di ogni pagina e drawer di navigazione"</string>
+    <string name="theme_item_background_color_detail">"Applicato a: Sfondo di ogni pagina e drawer navigazione"</string>
     <string name="theme_item_card_view_background_color">"Colore di sfondo della visualizzazione a schede"</string>
     <string name="theme_item_card_view_background_color_detail">"Applicato a: Sfondo dei post e dei messaggi"</string>
     <string name="theme_item_comment_background_color">"Colore di sfondo dei commenti"</string>
@@ -552,7 +548,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_bottom_app_bar_background_color">"Colore barra di navigazione inferiore"</string>
     <string name="theme_item_bottom_app_bar_background_color_detail">"Applicato a: Barra di navigazione inferiore"</string>
     <string name="theme_item_primary_icon_color">"Colore Primario Icona"</string>
-    <string name="theme_item_primary_icon_color_detail">"Si applica a: Icone nel riquadro di navigazione a scomparsa."</string>
+    <string name="theme_item_primary_icon_color_detail">"Si applica a: Icone nel drawer navigazione."</string>
     <string name="theme_item_bottom_app_bar_icon_color">"Colore icona barra di navigazione inferiore"</string>
     <string name="theme_item_bottom_app_bar_icon_color_detail">"Applicato a: Icone nella barra di navigazione inferiore"</string>
     <string name="theme_item_post_icon_and_info_color">"Colore Icone Post e Info"</string>
@@ -815,7 +811,7 @@ Le schede possono perdere tutto il contenuto dopo il passaggio ad altre. Questo 
     <string name="settings_swipe_action_threshold">"Soglia"</string>
     <string name="settings_pull_to_refresh_title">"Trascina per aggiornare"</string>
     <string name="settings_security_title">"Sicurezza"</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Richiedi autenticazione per andare nella sezione account nella barra di navigazione"</string>
+    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Richiede autenticazione per andare nella sezione account nella barra di navigazione"</string>
 
     <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Premere a lungo per nascondere la barra degli strumenti nel layout compatto"</string>
@@ -993,4 +989,67 @@ La riproduzione automatica video è disabilitata"</string>
     <string name="have_trouble_login_title">"Problemi di accesso"</string>
     <string name="have_trouble_login_message">"Vuoi provare un altro metodo di accesso?"</string>
     <string name="vote">"Vota"</string>
+    <string name="action_share_link">"Condividi Link"</string>
+    <string name="action_copy_link">"Copia Link"</string>
+    <string name="action_add_to_post_filter">"Aggiungi al filtro dei post"</string>
+    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Non oscurare immagini NSFW nei Subbreddits NSFW"</string>
+    <string name="settings_show_avatar_on_the_right">"Mostra l'avatar a sinistra"</string>
+    <string name="settings_backup_settings_title">"Impostazioni Backup"</string>
+    <string name="settings_restore_settings_title">"Reimposta le impostazioni"</string>
+    <string name="settings_credits_love_animation_title">"Animazione d'amore"</string>
+    <string name="settings_swipe_between_posts_title">"Scorri tra i post"</string>
+
+    <!-- I don't know how to translate this term, being a technical term I suppose it can be left as is -->
+    <!-- Fuzzy -->
+    <string name="settings_navigation_drawer_title">"Drawer Navigazione"</string>
+    <string name="settings_collapse_account_section_title">"Comprimi Sezione Account"</string>
+    <string name="settings_collapse_post_section_title">"Comprimi Sezione Post"</string>
+    <string name="settings_collapse_preferences_section_title">"Comprimi la Sezione Preferenze"</string>
+    <string name="settings_collapse_favorite_subreddits_section_title">"Comprimi la sezione Subreddit preferiti"</string>
+    <string name="settings_collapse_subscribed_subreddits_section_title">"Comprimi la sezione Subreddit sottoscritti"</string>
+    <string name="settings_hide_favorite_subreddits_sections_title">"Nascondi Sezione Subreddit Favoriti"</string>
+    <string name="settings_hide_subscribed_subreddits_sections_title">"Nascondi la sezione Subreddit a cui sei iscritto"</string>
+    <string name="settings_default_search_result_tab">"Scheda predefinita dei risultati di ricerca"</string>
+    <string name="device_default">"Dispositivo Predefinito"</string>
+    <string name="set_by_battery_saver">"Impostato dal risparmio batteria"</string>
+    <string name="theme_item_upvote_ratio_icon_tint">"Colore Icona Rapporto Voti Positivi"</string>
+    <string name="theme_item_upvote_ratio_icon_tint_detail">"Applicato a: icona rapporto voti positivi"</string>
+    <string name="theme_item_current_user_color">"Utente corrente"</string>
+    <string name="theme_item_current_user_color_detail">"Applicato a: Utente corrente nei commenti"</string>
+    <string name="exclude_domains_hint">"Escludi domini"</string>
+    <string name="anonymous_front_page_no_subscriptions">"Inizia unendoti a un subreddit!"</string>
+
+    <!-- Fuzzy -->
+    <string name="backup_settings_success">"Impostazioni esportate con successo nella directory di destinazione"</string>
+    <string name="create_zip_in_destination_directory_failed">"Non è stato possibile creare un backup zip nella directory destinazione"</string>
+    <string name="backup_some_settings_failed">"Impossibile eseguire il backup di alcune impostazioni ma altre sono state esportate correttamente nella directory di destinazione"</string>
+    <string name="restore_settings_success">"Impostazioni resettate con successo. Riavvia l'app per vedere i cambiamenti"</string>
+    <string name="restore_settings_partially_failed">"Alcune impostazioni non sono state ripristinate correttamente. Riavvia l'app per vedere i cambiamenti."</string>
+    <string name="restore_settings_failed_file_corrupted">"Impossibile ripristinare le impostazioni. Potrebbero essere corrotte."</string>
+    <string name="restore_settings_failed_cannot_get_file">"Impossibile accedere al file"</string>
+    <string name="suicide_prevention_quote">"Se stai cercando un segno per non ucciderti, eccolo.\u2764"</string>
+    <string name="do_not_show_this_again">"Non mostrare di nuovo"</string>
+    <string name="continue_suicide_prevention_activity">"Continua"</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_redirect_url">"Errore durante il recupero del video di v.redd.it: impossibile ottenere l'url di reindirizzamento"</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_post">"Errore durante il recupero del video di v.redd.it: impossibile ottenere il post"</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_post_id">"Errore durante il recupero del video di v.redd.it: impossibile ottenere l'ID del post"</string>
+    <string name="always_on">"Sempre acceso"</string>
+    <string name="only_on_wifi">"Solo su Wifi"</string>
+    <string name="never">"Mai"</string>
+    <string name="normal">"Normal"</string>
+    <string name="extra_large">"Extra Grande"</string>
+    <string name="enormously_large">"Enormemente Grande"</string>
+    <string name="default_in_array">"Default"</string>
+    <string name="off">"Off"</string>
+    <string name="only_on_cellular_data">"Solo su dati mobili"</string>
+    <string name="upvote">"Voto Positivo"</string>
+    <string name="downvote">"Voto Negativo"</string>
+    <string name="select">"Seleziona"</string>
+    <string name="exclude_subreddit">"Escludi questo subreddit"</string>
+    <string name="exclude_user">"Escludi questo utente"</string>
+    <string name="exclude_flair">"Escludi questa flair"</string>
+    <string name="contain_flair">"Contiene questa flair"</string>
+    <string name="exclude_domain">"Escludi dominio"</string>
+    <string name="suggest_title">"Suggerisci titolo"</string>
+    <string name="suggest_title_failed">"Impossibile suggerire un titolo"</string>
 </resources>

@@ -895,10 +895,67 @@ Poruka: %2$s"</string>
     <string name="settings_swipe_action_haptic_feedback_title">"Haptična povratna informacija"</string>
     <string name="settings_hide_subreddit_description_title">"Sakri opis podreddita"</string>
     <string name="settings_disable_image_preview_title">"Onemogući predpregled slike u "</string>
+    <string name="settings_swipe_action_swipe_left_title">"Povuci lijevo"</string>
     <string name="settings_swipe_action_swipe_right_title">"Prelazak prstom u desno"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_swipe_action_info_summary">"Nije primjenjivo na feed sa više od 1 stupca ili pojedinosti o objavi"</string>
     <string name="theme_item_no_preview_post_type_icon_tint">"Boja ikone objave bez predpregleda"</string>
     <string name="theme_item_no_preview_post_type_icon_tint_detail">"Primjenjeno na: Ikonu koja ukazuje vrstu objave kada nema predpregleda"</string>
     <string name="theme_item_no_preview_post_type_background_color">"Boja pozadine objave bez predpregleda"</string>
     <string name="theme_item_no_preview_post_type_background_color_detail">"Primjenjeno na: Zamjena koja prikazuje vrstu objave kada nema predpregleda"</string>
     <string name="settings_language_title">"Jezik"</string>
+    <string name="customize_post_filter_activity_label">"Uredi filter objava"</string>
+    <string name="filtered_posts_activity_subtitle">"Filtrirane objave"</string>
+    <string name="post_filter_preference_activity_label">"Filter objava"</string>
+    <string name="search_users_result_activity_label">"Korisnici"</string>
+    <string name="multireddit_selection_activity_label">"Izaberi multireddit"</string>
+    <string name="action_save_to_database">"Spremi u bazu podataka"</string>
+    <string name="action_read_all_messages">"Procitaj sve poruke"</string>
+    <string name="action_add_to_multireddit">"Dodaj u multireddit"</string>
+    <string name="search_only_subreddits_hint">"Pretrazi subreddite"</string>
+    <string name="search_only_users_hint">"Trazi korisnike"</string>
+    <string name="post_type_gif">"Gif"</string>
+    <string name="post_type_gallery">"Galerija"</string>
+    <string name="settings_disable_immersive_interface_in_landscape_mode">"Onemogućite imerzivno sučelje u pejzažnom načinu"</string>
+    <string name="settings_privacy_policy_title">"Politika privatnosti"</string>
+    <string name="settings_delete_read_posts_in_database_title">"Obriši sve isčitane objave u bazi podataka"</string>
+    <string name="settings_post_filter_title">"Filter objava"</string>
+    <string name="settings_only_disable_preview_in_video_and_gif_posts_title">"Iskljuci pregled u videima i GIF objavama"</string>
+    <string name="settings_enable_search_history_title">"Uključi povijest pretraživanja"</string>
+    <string name="settings_post_history_title">"Povijest objava"</string>
+    <string name="settings_mark_posts_as_read_title">"Označi objave kao pročitano"</string>
+    <string name="settings_mark_posts_as_read_after_voting_title">"Označi objave kao pročitano nakon glasanja"</string>
+    <string name="settings_hide_read_posts_automatically_title">"Sakrij pročitane objave automatski"</string>
+    <string name="settings_sort_type_title">"Vrsta sortiranja"</string>
+    <string name="settings_save_sort_type_title">"Spremi vrstu sortiranja"</string>
+    <string name="settings_subreddit_default_sort_type_title">"Zadana vrsta sortiranja subreddit-a"</string>
+    <string name="settings_subreddit_default_sort_time_title">"Zadano vrijeme sortiranja subreddit-a"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_user_default_sort_type_title">"Zadana tip sortiranja korisnika"</string>
+    <string name="settings_user_default_sort_time_title">"Zadano vrijeme sortiranja korisnika"</string>
+    <string name="open_link">"Otvori link"</string>
+    <string name="post_filter_requires_a_name">"Koje je ime filtera objave"</string>
+    <string name="duplicate_post_filter_dialog_message">"Poništi?"</string>
+    <string name="post_filter_usage_home">"Home"</string>
+    <string name="post_filter_usage_subreddit_all">"Subreddit"</string>
+    <string name="subreddit">"Subreddit"</string>
+    <string name="user">"Korisnik"</string>
+    <string name="choose_a_user">"Odaberi korisnika"</string>
+    <string name="settings_click_to_show_media_in_gallery_layout">"Klikni da prikažeš medij u obliku galerije"</string>
+    <string name="settings_hide_post_type">"Sakrij vrstu objave"</string>
+    <string name="settings_hide_the_number_of_awards">"Sakrij broj nagrada"</string>
+    <string name="settings_hide_the_number_of_votes">"Sakrij broj glasanja"</string>
+    <string name="settings_hide_the_number_of_comments">"Sakrij broj komentara"</string>
+    <string name="post_layout_gallery">"Izgled galerije"</string>
+    <string name="post_layout_card_2">"Izgled karte 2"</string>
+    <string name="have_trouble_login_message">"Želite li se prijaviti na drugi način?"</string>
+    <string name="vote">"Glasaj"</string>
+    <string name="action_share_link">"Podjeli link"</string>
+    <string name="action_copy_link">"Kopiraj link"</string>
+    <string name="action_add_to_post_filter">"Dodaj u vrstu objave"</string>
+    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Nemoj blurati NSFW slike u NSFW Subredditima"</string>
+    <string name="settings_show_avatar_on_the_right">"Prikazi sliku Avatara sa lijeve strane"</string>
+    <string name="settings_restore_settings_title">"Vrati postavke"</string>
 </resources>
