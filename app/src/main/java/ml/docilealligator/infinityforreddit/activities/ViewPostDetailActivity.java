@@ -165,8 +165,11 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         }
 
         boolean swipeBetweenPosts = mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_BETWEEN_POSTS, false);
-        if (!swipeBetweenPosts && mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSlidrInterface = Slidr.attach(this);
+        if (!swipeBetweenPosts) {
+            if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
+                mSlidrInterface = Slidr.attach(this);
+            }
+            viewPager2.setUserInputEnabled(false);
         }
         postFragmentId = getIntent().getLongExtra(EXTRA_POST_FRAGMENT_ID, -1);
         if (swipeBetweenPosts && posts == null && postFragmentId > 0) {

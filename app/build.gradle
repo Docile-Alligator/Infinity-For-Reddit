@@ -167,16 +167,15 @@ dependencies {
     // RecyclerView fast scrolling
     implementation 'me.zhanghai.android.fastscroll:library:1.1.5'
 
-    // Crash screen
-    implementation 'com.melegy.redscreenofdeath:red-screen-of-death:0.1.2'
-
     implementation 'net.lingala.zip4j:zip4j:2.7.0'
     implementation 'org.apache.commons:commons-io:1.3.2'
 
     implementation "androidx.startup:startup-runtime:1.0.0"
     implementation 'com.github.FunkyMuse:Crashy:1.1.0'
 
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    //implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+
+    implementation 'androidx.palette:palette:1.0.0'
 
 
 /**** Builds and flavors ****/
