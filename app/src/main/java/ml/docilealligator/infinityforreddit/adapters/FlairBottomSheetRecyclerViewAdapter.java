@@ -39,7 +39,7 @@ public class FlairBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter<Fl
     @NonNull
     @Override
     public FlairViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new FlairViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_flair, null, false));
+        return new FlairViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_flair, parent, false));
     }
 
     @Override

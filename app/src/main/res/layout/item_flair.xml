@@ -9,19 +9,24 @@
 
     <TextView
         android:id="@+id/flair_text_view_item_flair"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="16dp"
+        android:layout_weight="1"
+        android:paddingTop="16dp"
+        android:paddingBottom="16dp"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
         android:textColor="?attr/primaryTextColor"
         android:textSize="?attr/font_default"
         android:fontFamily="?attr/font_family" />
 
     <ImageView
         android:id="@+id/edit_flair_image_view_item_flair"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="center_vertical|end"
-        android:layout_marginStart="32dp"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
         android:src="@drawable/ic_edit_24dp"
         android:visibility="gone"
         app:tint="?attr/primaryTextColor"
