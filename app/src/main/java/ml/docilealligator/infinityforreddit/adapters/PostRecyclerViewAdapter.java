@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -476,7 +477,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         holder.itemView.setLayoutParams(params);
                         return;
                     }
-                    holder.itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
+                    if (((PostBaseViewHolder) holder).itemViewIsNotCardView) {
+                        holder.itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
+                    } else {
+                        holder.itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
+                    }
+
                     ((PostBaseViewHolder) holder).titleTextView.setTextColor(mReadPostTitleColor);
                 }
                 String subredditNamePrefixed = post.getSubredditNamePrefixed();
@@ -1857,7 +1863,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 params.bottomMargin = marginPixel;
             }
             holder.itemView.setLayoutParams(params);
-            ((PostBaseViewHolder) holder).itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
+            if (((PostBaseViewHolder) holder).itemViewIsNotCardView) {
+                ((PostBaseViewHolder) holder).itemView.setBackgroundColor(mCardViewBackgroundColor);
+            } else {
+                ((PostBaseViewHolder) holder).itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
+            }
             ((PostBaseViewHolder) holder).titleTextView.setTextColor(mPostTitleColor);
             if (holder instanceof PostVideoAutoplayViewHolder) {
                 ((PostVideoAutoplayViewHolder) holder).mediaUri = null;
@@ -2117,6 +2127,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         ImageView saveButton;
         ImageView shareButton;
 
+        boolean itemViewIsNotCardView = false;
+
         PostBaseViewHolder(@NonNull View itemView) {
             super(itemView);
         }
@@ -2185,7 +2197,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 constraintSet.applyTo(bottomConstraintLayout);
             }
 
-            itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
+            if (itemViewIsNotCardView) {
+                itemView.setBackgroundColor(mCardViewBackgroundColor);
+            } else {
+                itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
+            }
             subredditTextView.setTextColor(mSubredditColor);
             userTextView.setTextColor(mUsernameColor);
             postTimeTextView.setTextColor(mSecondaryTextColor);
@@ -2601,11 +2617,44 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
         }
 
+        void setBaseView(AspectRatioGifImageView iconGifImageView,
+                         TextView subredditTextView,
+                         TextView userTextView,
+                         ImageView stickiedPostImageView,
+                         TextView postTimeTextView,
+                         TextView titleTextView,
+                         CustomTextView typeTextView,
+                         ImageView archivedImageView,
+                         ImageView lockedImageView,
+                         ImageView crosspostImageView,
+                         CustomTextView nsfwTextView,
+                         CustomTextView spoilerTextView,
+                         CustomTextView flairTextView,
+                         CustomTextView awardsTextView,
+                         ConstraintLayout bottomConstraintLayout,
+                         ImageView upvoteButton,
+                         TextView scoreTextView,
+                         ImageView downvoteButton,
+                         TextView commentsCountTextView,
+                         ImageView saveButton,
+                         ImageView shareButton, boolean itemViewIsNotCardView) {
+            this.itemViewIsNotCardView = itemViewIsNotCardView;
+
+            setBaseView(iconGifImageView, subredditTextView, userTextView, stickiedPostImageView, postTimeTextView,
+                    titleTextView, typeTextView, archivedImageView, lockedImageView, crosspostImageView,
+                    nsfwTextView, spoilerTextView, flairTextView, awardsTextView, bottomConstraintLayout,
+                    upvoteButton, scoreTextView, downvoteButton, commentsCountTextView, saveButton, shareButton);
+        }
+
         void markPostRead(Post post, boolean changePostItemColor) {
             if (mAccessToken != null && !post.isRead() && mMarkPostsAsRead) {
                 post.markAsRead(true);
                 if (changePostItemColor) {
-                    itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
+                    if (itemViewIsNotCardView) {
+                        itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
+                    } else {
+                        itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
+                    }
                     titleTextView.setTextColor(mReadPostTitleColor);
                     if (this instanceof PostTextTypeViewHolder) {
                         ((PostTextTypeViewHolder) this).contentTextView.setTextColor(mReadPostContentColor);
@@ -3916,7 +3965,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     downvoteButton,
                     commentsCountTextView,
                     saveButton,
-                    shareButton);
+                    shareButton,
+                    true);
 
             divider.setBackgroundColor(mDividerColor);
 
@@ -4171,7 +4221,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     downvoteButton,
                     commentsCountTextView,
                     saveButton,
-                    shareButton);
+                    shareButton,
+                    true);
 
             linkTextView.setTextColor(mSecondaryTextColor);
             noPreviewImageView.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
@@ -4270,7 +4321,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     downvoteButton,
                     commentsCountTextView,
                     saveButton,
-                    shareButton);
+                    shareButton,
+                    true);
 
             contentTextView.setTextColor(mPostContentColor);
             divider.setBackgroundColor(mDividerColor);
