@@ -33,6 +33,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -99,6 +100,8 @@ import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
+import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
+import ml.docilealligator.infinityforreddit.multireddit.MultiRedditViewModel;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostDataSource;
 import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
@@ -168,6 +171,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     ImageView option4BottomAppBar;
     @BindView(R.id.fab_main_activity)
     FloatingActionButton fab;
+    MultiRedditViewModel multiRedditViewModel;
     SubscribedSubredditViewModel subscribedSubredditViewModel;
     AccountViewModel accountViewModel;
     @Inject
@@ -223,6 +227,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private boolean mConfirmToExit;
     private boolean mLockBottomAppBar;
     private boolean mDisableSwipingBetweenTabs;
+    private boolean mShowFavoriteMultiReddits;
+    private boolean mShowMultiReddits;
     private boolean mShowFavoriteSubscribedSubreddits;
     private boolean mShowSubscribedSubreddits;
     private int fabOption;
@@ -830,15 +836,17 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         navDrawerRecyclerView.setAdapter(adapter);
 
         int tabCount = mMainActivityTabsSharedPreferences.getInt((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_COUNT, 3);
+        mShowFavoriteMultiReddits = mMainActivityTabsSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_MULTIREDDITS, false);
+        mShowMultiReddits = mMainActivityTabsSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_MULTIREDDITS, false);
         mShowFavoriteSubscribedSubreddits = mMainActivityTabsSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_SUBSCRIBED_SUBREDDITS, false);
         mShowSubscribedSubreddits = mMainActivityTabsSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS, false);
-        sectionsPagerAdapter = new SectionsPagerAdapter(this, tabCount,
-                mShowFavoriteSubscribedSubreddits, mShowSubscribedSubreddits);
+        sectionsPagerAdapter = new SectionsPagerAdapter(this, tabCount, mShowFavoriteMultiReddits,
+                mShowMultiReddits, mShowFavoriteSubscribedSubreddits, mShowSubscribedSubreddits);
         viewPager2.setAdapter(sectionsPagerAdapter);
         viewPager2.setOffscreenPageLimit(1);
         viewPager2.setUserInputEnabled(!mDisableSwipingBetweenTabs);
         if (mMainActivityTabsSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_TAB_NAMES, true)) {
-            if (mShowFavoriteSubscribedSubreddits || mShowSubscribedSubreddits) {
+            if (mShowFavoriteMultiReddits || mShowMultiReddits || mShowFavoriteSubscribedSubreddits || mShowSubscribedSubreddits) {
                 tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
             } else {
                 tabLayout.setTabMode(TabLayout.MODE_FIXED);
@@ -868,13 +876,26 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                             tab.setText(mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_TITLE, getString(R.string.all)));
                             break;
                     }
-                    if (position >= tabCount && (mShowFavoriteSubscribedSubreddits || mShowSubscribedSubreddits) && sectionsPagerAdapter != null) {
-                        List<SubscribedSubredditData> favoriteSubscribedSubreddits = sectionsPagerAdapter.favoriteSubscribedSubreddits;
-                        List<SubscribedSubredditData> subscribedSubreddits = sectionsPagerAdapter.subscribedSubreddits;
-                        if (position - tabCount < favoriteSubscribedSubreddits.size()) {
-                            tab.setText(favoriteSubscribedSubreddits.get(position - tabCount).getName());
-                        } else if (position - tabCount - favoriteSubscribedSubreddits.size() < subscribedSubreddits.size()) {
-                            tab.setText(subscribedSubreddits.get(position - tabCount - favoriteSubscribedSubreddits.size()).getName());
+                    if (position >= tabCount && (mShowFavoriteMultiReddits || mShowMultiReddits ||
+                            mShowFavoriteSubscribedSubreddits || mShowSubscribedSubreddits)
+                            && sectionsPagerAdapter != null) {
+                        if (position - tabCount < sectionsPagerAdapter.favoriteMultiReddits.size()) {
+                            tab.setText(sectionsPagerAdapter.favoriteMultiReddits.get(position - tabCount).getName());
+                        } else if (position - tabCount - sectionsPagerAdapter.favoriteMultiReddits.size() < sectionsPagerAdapter.multiReddits.size()) {
+                            tab.setText(sectionsPagerAdapter.multiReddits.get(position - tabCount
+                                    - sectionsPagerAdapter.favoriteMultiReddits.size()).getName());
+                        } else if (position - tabCount - sectionsPagerAdapter.favoriteMultiReddits.size()
+                                - sectionsPagerAdapter.multiReddits.size() < sectionsPagerAdapter.favoriteSubscribedSubreddits.size()) {
+                            tab.setText(sectionsPagerAdapter.favoriteSubscribedSubreddits.get(position - tabCount
+                                    - sectionsPagerAdapter.favoriteMultiReddits.size()
+                                    - sectionsPagerAdapter.multiReddits.size()).getName());
+                        } else if (position - tabCount - sectionsPagerAdapter.favoriteMultiReddits.size()
+                                - sectionsPagerAdapter.multiReddits.size()
+                                - sectionsPagerAdapter.favoriteSubscribedSubreddits.size() < sectionsPagerAdapter.subscribedSubreddits.size()) {
+                            tab.setText(sectionsPagerAdapter.subscribedSubreddits.get(position - tabCount
+                                    - sectionsPagerAdapter.favoriteMultiReddits.size()
+                                    - sectionsPagerAdapter.multiReddits.size()
+                                    - sectionsPagerAdapter.favoriteSubscribedSubreddits.size()).getName());
                         }
                     }
                 }
@@ -899,6 +920,25 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         fixViewPager2Sensitivity(viewPager2);
 
         loadSubscriptions();
+
+        multiRedditViewModel = new ViewModelProvider(this, new MultiRedditViewModel.Factory(getApplication(),
+                mRedditDataRoomDatabase, mAccountName))
+                .get(MultiRedditViewModel.class);
+
+        multiRedditViewModel.getAllFavoriteMultiReddits().observe(this, multiReddits -> {
+            if (mShowFavoriteMultiReddits && sectionsPagerAdapter != null) {
+                sectionsPagerAdapter.setFavoriteMultiReddits(multiReddits);
+            }
+        });
+
+        multiRedditViewModel.getAllMultiReddits().observe(this, new Observer<List<MultiReddit>>() {
+            @Override
+            public void onChanged(List<MultiReddit> multiReddits) {
+                if (mShowMultiReddits && sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.setMultiReddits(multiReddits);
+                }
+            }
+        });
 
         subscribedSubredditViewModel = new ViewModelProvider(this,
                 new SubscribedSubredditViewModel.Factory(getApplication(), mRedditDataRoomDatabase, mAccountName))
@@ -1409,16 +1449,26 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {
         int tabCount;
+        boolean showFavoriteMultiReddits;
+        boolean showMultiReddits;
         boolean showFavoriteSubscribedSubreddits;
         boolean showSubscribedSubreddits;
+        List<MultiReddit> favoriteMultiReddits;
+        List<MultiReddit> multiReddits;
         List<SubscribedSubredditData> favoriteSubscribedSubreddits;
         List<SubscribedSubredditData> subscribedSubreddits;
 
-        SectionsPagerAdapter(FragmentActivity fa, int tabCount, boolean showFavoriteSubscribedSubreddits, boolean showSubscribedSubreddits) {
+        SectionsPagerAdapter(FragmentActivity fa, int tabCount, boolean showFavoriteMultiReddits,
+                             boolean showMultiReddits, boolean showFavoriteSubscribedSubreddits,
+                             boolean showSubscribedSubreddits) {
             super(fa);
             this.tabCount = tabCount;
+            favoriteMultiReddits = new ArrayList<>();
+            multiReddits = new ArrayList<>();
             favoriteSubscribedSubreddits = new ArrayList<>();
             subscribedSubreddits = new ArrayList<>();
+            this.showFavoriteMultiReddits = showFavoriteMultiReddits;
+            this.showMultiReddits = showMultiReddits;
             this.showFavoriteSubscribedSubreddits = showFavoriteSubscribedSubreddits;
             this.showSubscribedSubreddits = showSubscribedSubreddits;
         }
@@ -1463,17 +1513,38 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 String name = mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, "");
                 return generatePostFragment(postType, name);
             } else {
+                if (showFavoriteMultiReddits) {
+                    if (position >= tabCount && position - tabCount < favoriteMultiReddits.size()) {
+                        int postType = SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_MULTIREDDIT;
+                        String name = favoriteMultiReddits.get(position - tabCount).getPath();
+                        return generatePostFragment(postType, name);
+                    }
+                }
+
+                if (showMultiReddits) {
+                    if (position >= tabCount && position - tabCount - favoriteMultiReddits.size() < multiReddits.size()) {
+                        int postType = SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_MULTIREDDIT;
+                        String name = multiReddits.get(position - tabCount - favoriteMultiReddits.size()).getPath();
+                        return generatePostFragment(postType, name);
+                    }
+                }
+
                 if (showFavoriteSubscribedSubreddits) {
-                    if (position >= tabCount && position - tabCount < favoriteSubscribedSubreddits.size()) {
+                    if (position >= tabCount && position - tabCount - favoriteMultiReddits.size()
+                            - multiReddits.size() < favoriteSubscribedSubreddits.size()) {
                         int postType = SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_SUBREDDIT;
-                        String name = favoriteSubscribedSubreddits.get(position - tabCount).getName();
+                        String name = favoriteSubscribedSubreddits.get(position - tabCount
+                                - favoriteMultiReddits.size()
+                                - multiReddits.size()).getName();
                         return generatePostFragment(postType, name);
                     }
                 }
                 if (showSubscribedSubreddits) {
-                    if (position >= tabCount && position - tabCount - favoriteSubscribedSubreddits.size() < subscribedSubreddits.size()) {
+                    if (position >= tabCount && position - tabCount - favoriteMultiReddits.size()
+                            - multiReddits.size() - favoriteSubscribedSubreddits.size() < subscribedSubreddits.size()) {
                         int postType = SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_SUBREDDIT;
-                        String name = subscribedSubreddits.get(position - tabCount - favoriteSubscribedSubreddits.size()).getName();
+                        String name = subscribedSubreddits.get(position - tabCount - favoriteMultiReddits.size()
+                                - multiReddits.size() - favoriteSubscribedSubreddits.size()).getName();
                         return generatePostFragment(postType, name);
                     }
                 }
@@ -1481,6 +1552,16 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 String name = mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, "");
                 return generatePostFragment(postType, name);
             }
+        }
+
+        public void setFavoriteMultiReddits(List<MultiReddit> favoriteMultiReddits) {
+            this.favoriteMultiReddits = favoriteMultiReddits;
+            notifyDataSetChanged();
+        }
+
+        public void setMultiReddits(List<MultiReddit> multiReddits) {
+            this.multiReddits = multiReddits;
+            notifyDataSetChanged();
         }
 
         public void setFavoriteSubscribedSubreddits(List<SubscribedSubredditData> favoriteSubscribedSubreddits) {
@@ -1583,7 +1664,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (mAccessToken == null) {
                 return 3;
             }
-            return tabCount + favoriteSubscribedSubreddits.size() + subscribedSubreddits.size();
+            return tabCount + favoriteMultiReddits.size() + multiReddits.size() +
+                    favoriteSubscribedSubreddits.size() + subscribedSubreddits.size();
         }
 
         @Nullable
