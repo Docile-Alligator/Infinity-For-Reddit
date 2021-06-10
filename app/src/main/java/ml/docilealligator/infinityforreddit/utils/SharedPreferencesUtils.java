@@ -205,6 +205,8 @@ public class SharedPreferencesUtils {
     public static final int MAIN_PAGE_TAB_POST_TYPE_HIDDEN = 8;
     public static final int MAIN_PAGE_TAB_POST_TYPE_SAVED = 9;
     public static final int MAIN_PAGE_TAB_POST_TYPE_GILDED = 10;
+    public static final String MAIN_PAGE_SHOW_MULTIREDDITS = "_main_page_show_multireddits";
+    public static final String MAIN_PAGE_SHOW_FAVORITE_MULTIREDDITS = "_main_page_show_favorite_multireddits";
     public static final String MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS = "_main_page_show_subscribed_subreddits";
     public static final String MAIN_PAGE_SHOW_FAVORITE_SUBSCRIBED_SUBREDDITS = "_main_page_show_favorite_subscribed_subreddits";
 
