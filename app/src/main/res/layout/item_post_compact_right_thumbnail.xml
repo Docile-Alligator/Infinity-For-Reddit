@@ -30,7 +30,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
             android:fontFamily="?attr/font_family"
-            android:textColor="#E91E63"
             android:textSize="?attr/font_default"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@id/stickied_post_image_view_item_post_compact_right_thumbnail"

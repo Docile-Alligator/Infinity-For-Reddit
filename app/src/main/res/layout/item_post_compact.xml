@@ -31,7 +31,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
             android:fontFamily="?attr/font_family"
-            android:textColor="#E91E63"
             android:textSize="?attr/font_default"
             app:layout_constraintHorizontal_bias="0"
             app:layout_constraintBottom_toBottomOf="parent"

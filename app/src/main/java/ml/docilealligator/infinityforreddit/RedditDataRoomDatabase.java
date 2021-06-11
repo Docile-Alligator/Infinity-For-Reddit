@@ -211,7 +211,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE custom_themes"
-                    + " ADD COLUMN link_color INTEGER DEFAULT " + Color.parseColor("#FF4081") + " NOT NULL");
+                    + " ADD COLUMN link_color INTEGER DEFAULT " + Color.parseColor("#FF1868") + " NOT NULL");
             database.execSQL("ALTER TABLE custom_themes"
                     + " ADD COLUMN received_message_text_color INTEGER DEFAULT " + Color.parseColor("#FFFFFF") + " NOT NULL");
             database.execSQL("ALTER TABLE custom_themes"
