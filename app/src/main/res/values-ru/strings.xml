@@ -709,7 +709,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 Она не больна или что-то вроде того, но определённо может поправиться."</string>
     <string name="edit_multi_reddit">"Изменить МультиРеддит"</string>
     <string name="delete_multi_reddit">"Удалить мультиреддит"</string>
-    <string name="n_awards">"наград"</string>
+    <string name="n_awards">%1$d наград</string>
     <string name="one_award">"1 награда"</string>
     <string name="report">"Отчёт"</string>
     <string name="reporting">"Отчёт отправляется"</string>
