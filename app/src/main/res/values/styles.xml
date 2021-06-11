@@ -422,7 +422,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorPrimaryLightTheme">#1565C0</item>
+        <item name="colorPrimaryLightTheme">#0336FF</item>
         <item name="primaryTextColor">#FFFFFF</item>
         <item name="secondaryTextColor">#B3FFFFFF</item>
         <item name="backgroundColor">@color/backgroundColor</item>
@@ -433,7 +433,7 @@
         <item name="colorPrimary">#000000</item>
         <item name="colorPrimaryDark">#000000</item>
         <item name="colorAccent">@color/colorAccent</item>
-        <item name="colorPrimaryLightTheme">#1565C0</item>
+        <item name="colorPrimaryLightTheme">#0336FF</item>
         <item name="primaryTextColor">#FFFFFF</item>
         <item name="secondaryTextColor">#B3FFFFFF</item>
         <item name="backgroundColor">#000000</item>

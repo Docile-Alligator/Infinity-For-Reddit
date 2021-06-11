@@ -56,7 +56,7 @@ public class GesturesAndButtonsPreferenceFragment extends PreferenceFragmentComp
                 return true;
             });
 
-            if (sharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false)) {
+            if (sharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, true)) {
                 lockBottomAppBarSwitch.setVisible(true);
                 lockBottomAppBarSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                     EventBus.getDefault().post(new ChangeLockBottomAppBarEvent((Boolean) newValue));
