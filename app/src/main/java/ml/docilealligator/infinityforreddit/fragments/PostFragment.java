@@ -30,7 +30,6 @@ import android.widget.Toast;
 import androidx.annotation.DimenRes;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -649,12 +648,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             usage = PostFilterUsage.USER_TYPE;
             nameOfUsage = username;
-
-            if (where != null && where.equals(PostDataSource.USER_WHERE_SUBMITTED)) {
-                CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) mFetchPostInfoLinearLayout.getLayoutParams();
-                params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-                mFetchPostInfoLinearLayout.setLayoutParams(params);
-            }
 
             String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_USER_POST_BASE + username,
                     mSharedPreferences.getString(SharedPreferencesUtils.USER_DEFAULT_SORT_TYPE, SortType.Type.NEW.name()));
