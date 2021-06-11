@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -1377,6 +1378,18 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         if (imm != null) {
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
+        thingEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
+            if (i == EditorInfo.IME_ACTION_DONE) {
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
+                }
+                Intent subredditIntent = new Intent(this, ViewSubredditDetailActivity.class);
+                subredditIntent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, thingEditText.getText().toString());
+                startActivity(subredditIntent);
+                return true;
+            }
+            return false;
+        });
         new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                 .setTitle(R.string.go_to_subreddit)
                 .setView(rootView)
@@ -1406,6 +1419,18 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         if (imm != null) {
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
+        thingEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
+            if (i == EditorInfo.IME_ACTION_DONE) {
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
+                }
+                Intent userIntent = new Intent(this, ViewUserDetailActivity.class);
+                userIntent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, thingEditText.getText().toString());
+                startActivity(userIntent);
+                return true;
+            }
+            return false;
+        });
         new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                 .setTitle(R.string.go_to_user)
                 .setView(rootView)
