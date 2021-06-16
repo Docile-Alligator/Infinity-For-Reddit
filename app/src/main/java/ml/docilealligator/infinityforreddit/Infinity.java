@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.app.Application;
+import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import com.livefront.bridge.SavedStateHandler;
 import org.greenrobot.eventbus.EventBus;
 
 import ml.docilealligator.infinityforreddit.broadcastreceivers.NetworkWifiStatusReceiver;
+import ml.docilealligator.infinityforreddit.broadcastreceivers.WallpaperChangeReceiver;
 import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
@@ -87,6 +89,8 @@ public class Infinity extends Application implements LifecycleObserver {
         mNetworkWifiStatusReceiver =
                 new NetworkWifiStatusReceiver(() -> EventBus.getDefault().post(new ChangeNetworkStatusEvent(Utils.getConnectedNetwork(getApplicationContext()))));
         registerReceiver(mNetworkWifiStatusReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+
+        registerReceiver(new WallpaperChangeReceiver(), new IntentFilter(Intent.ACTION_WALLPAPER_CHANGED));
     }
 
 //    @OnLifecycleEvent(Lifecycle.Event.ON_START)

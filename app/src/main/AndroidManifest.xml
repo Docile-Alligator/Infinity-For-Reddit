@@ -32,7 +32,8 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
-        <activity android:name=".activities.LockScreenActivity"
+        <activity
+            android:name=".activities.LockScreenActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.AnonymousSubscriptionsActivity"
@@ -428,6 +429,10 @@
         <service
             android:name=".services.SubmitPostService"
             android:enabled="true"
+            android:exported="false" />
+
+        <service
+            android:name=".services.MaterialYouService"
             android:exported="false" />
     </application>
 

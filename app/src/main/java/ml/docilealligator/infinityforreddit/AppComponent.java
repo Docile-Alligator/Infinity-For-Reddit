@@ -73,6 +73,7 @@ import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryImageOrGi
 import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryVideoFragment;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.services.DownloadRedditVideoService;
+import ml.docilealligator.infinityforreddit.services.MaterialYouService;
 import ml.docilealligator.infinityforreddit.services.SubmitPostService;
 import ml.docilealligator.infinityforreddit.settings.AdvancedPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.CrashReportsFragment;
@@ -266,4 +267,6 @@ public interface AppComponent {
     void inject(AnonymousSubscriptionsActivity anonymousSubscriptionsActivity);
 
     void inject(LockScreenActivity lockScreenActivity);
+
+    void inject(MaterialYouService materialYouService);
 }
