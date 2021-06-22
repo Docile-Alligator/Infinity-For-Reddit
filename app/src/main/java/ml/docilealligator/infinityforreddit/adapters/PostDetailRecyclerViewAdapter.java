@@ -127,15 +127,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private static final int VIEW_TYPE_POST_DETAIL_NO_PREVIEW_LINK = 6;
     private static final int VIEW_TYPE_POST_DETAIL_GALLERY = 7;
     private static final int VIEW_TYPE_POST_DETAIL_TEXT_TYPE = 8;
-    private static final int VIEW_TYPE_FIRST_LOADING = 9;
-    private static final int VIEW_TYPE_FIRST_LOADING_FAILED = 10;
-    private static final int VIEW_TYPE_NO_COMMENT_PLACEHOLDER = 11;
-    private static final int VIEW_TYPE_COMMENT = 12;
-    private static final int VIEW_TYPE_COMMENT_FULLY_COLLAPSED = 13;
-    private static final int VIEW_TYPE_LOAD_MORE_CHILD_COMMENTS = 14;
-    private static final int VIEW_TYPE_IS_LOADING_MORE_COMMENTS = 15;
-    private static final int VIEW_TYPE_LOAD_MORE_COMMENTS_FAILED = 16;
-    private static final int VIEW_TYPE_VIEW_ALL_COMMENTS = 17;
 
     private AppCompatActivity mActivity;
     private ViewPostDetailFragment mFragment;
@@ -446,91 +437,35 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
     @Override
     public int getItemViewType(int position) {
-        if (position == 0) {
-            switch (mPost.getPostType()) {
-                case Post.VIDEO_TYPE:
-                    if (mAutoplay) {
-                        if (!mAutoplayNsfwVideos && mPost.isNSFW()) {
-                            return VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW;
-                        }
-                        return VIEW_TYPE_POST_DETAIL_VIDEO_AUTOPLAY;
-                    } else {
+        switch (mPost.getPostType()) {
+            case Post.VIDEO_TYPE:
+                if (mAutoplay) {
+                    if (!mAutoplayNsfwVideos && mPost.isNSFW()) {
                         return VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW;
                     }
-                case Post.GIF_TYPE:
-                    if (mAutoplay) {
-                        if (!mAutoplayNsfwVideos && mPost.isNSFW()) {
-                            return VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW;
-                        }
-                        return VIEW_TYPE_POST_DETAIL_GIF_AUTOPLAY;
-                    } else {
+                    return VIEW_TYPE_POST_DETAIL_VIDEO_AUTOPLAY;
+                } else {
+                    return VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW;
+                }
+            case Post.GIF_TYPE:
+                if (mAutoplay) {
+                    if (!mAutoplayNsfwVideos && mPost.isNSFW()) {
                         return VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW;
                     }
-                case Post.IMAGE_TYPE:
-                    return VIEW_TYPE_POST_DETAIL_IMAGE;
-                case Post.LINK_TYPE:
-                    return VIEW_TYPE_POST_DETAIL_LINK;
-                case Post.NO_PREVIEW_LINK_TYPE:
-                    return VIEW_TYPE_POST_DETAIL_NO_PREVIEW_LINK;
-                case Post.GALLERY_TYPE:
-                    return VIEW_TYPE_POST_DETAIL_GALLERY;
-                default:
-                    return VIEW_TYPE_POST_DETAIL_TEXT_TYPE;
-            }
-        }
-
-        if (mVisibleComments.size() == 0) {
-            if (position == 1) {
-                if (isInitiallyLoading) {
-                    return VIEW_TYPE_FIRST_LOADING;
-                } else if (isInitiallyLoadingFailed) {
-                    return VIEW_TYPE_FIRST_LOADING_FAILED;
+                    return VIEW_TYPE_POST_DETAIL_GIF_AUTOPLAY;
                 } else {
-                    return VIEW_TYPE_NO_COMMENT_PLACEHOLDER;
+                    return VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW;
                 }
-            }
-        }
-
-        if (mIsSingleCommentThreadMode) {
-            if (position == 1) {
-                return VIEW_TYPE_VIEW_ALL_COMMENTS;
-            }
-
-            if (position == mVisibleComments.size() + 2) {
-                if (mHasMoreComments) {
-                    return VIEW_TYPE_IS_LOADING_MORE_COMMENTS;
-                } else {
-                    return VIEW_TYPE_LOAD_MORE_COMMENTS_FAILED;
-                }
-            }
-
-            Comment comment = mVisibleComments.get(position - 2);
-            if (comment.getPlaceholderType() == Comment.NOT_PLACEHOLDER) {
-                if (mFullyCollapseComment && !comment.isExpanded() && comment.hasExpandedBefore()) {
-                    return VIEW_TYPE_COMMENT_FULLY_COLLAPSED;
-                }
-                return VIEW_TYPE_COMMENT;
-            } else {
-                return VIEW_TYPE_LOAD_MORE_CHILD_COMMENTS;
-            }
-        } else {
-            if (position == mVisibleComments.size() + 1) {
-                if (mHasMoreComments) {
-                    return VIEW_TYPE_IS_LOADING_MORE_COMMENTS;
-                } else {
-                    return VIEW_TYPE_LOAD_MORE_COMMENTS_FAILED;
-                }
-            }
-
-            Comment comment = mVisibleComments.get(position - 1);
-            if (comment.getPlaceholderType() == Comment.NOT_PLACEHOLDER) {
-                if (mFullyCollapseComment && !comment.isExpanded() && comment.hasExpandedBefore()) {
-                    return VIEW_TYPE_COMMENT_FULLY_COLLAPSED;
-                }
-                return VIEW_TYPE_COMMENT;
-            } else {
-                return VIEW_TYPE_LOAD_MORE_CHILD_COMMENTS;
-            }
+            case Post.IMAGE_TYPE:
+                return VIEW_TYPE_POST_DETAIL_IMAGE;
+            case Post.LINK_TYPE:
+                return VIEW_TYPE_POST_DETAIL_LINK;
+            case Post.NO_PREVIEW_LINK_TYPE:
+                return VIEW_TYPE_POST_DETAIL_NO_PREVIEW_LINK;
+            case Post.GALLERY_TYPE:
+                return VIEW_TYPE_POST_DETAIL_GALLERY;
+            default:
+                return VIEW_TYPE_POST_DETAIL_TEXT_TYPE;
         }
     }
 
@@ -1063,224 +998,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     public void updatePost(Post post) {
         mPost = post;
         notifyItemChanged(0);
-    }
-
-    private int getParentPosition(int position) {
-        if (position >= 0 && position < mVisibleComments.size()) {
-            int childDepth = mVisibleComments.get(position).getDepth();
-            for (int i = position; i >= 0; i--) {
-                if (mVisibleComments.get(i).getDepth() < childDepth) {
-                    return i;
-                }
-            }
-        }
-        return -1;
-    }
-
-    private void expandChildren(ArrayList<Comment> comments, ArrayList<Comment> newList, int position) {
-        if (comments != null && comments.size() > 0) {
-            newList.addAll(position, comments);
-            for (int i = 0; i < comments.size(); i++) {
-                position++;
-                if (comments.get(i).getChildren() != null && comments.get(i).getChildren().size() > 0) {
-                    expandChildren(comments.get(i).getChildren(), newList, position);
-                    position = position + comments.get(i).getChildren().size();
-                }
-                comments.get(i).setExpanded(true);
-            }
-        }
-    }
-
-    private void collapseChildren(int position) {
-        mVisibleComments.get(position).setExpanded(false);
-        int depth = mVisibleComments.get(position).getDepth();
-        int allChildrenSize = 0;
-        for (int i = position + 1; i < mVisibleComments.size(); i++) {
-            if (mVisibleComments.get(i).getDepth() > depth) {
-                allChildrenSize++;
-            } else {
-                break;
-            }
-        }
-
-        if (allChildrenSize > 0) {
-            mVisibleComments.subList(position + 1, position + 1 + allChildrenSize).clear();
-        }
-        if (mIsSingleCommentThreadMode) {
-            if (mFullyCollapseComment) {
-                notifyItemChanged(position + 2);
-            }
-            notifyItemRangeRemoved(position + 3, allChildrenSize);
-        } else {
-            if (mFullyCollapseComment) {
-                notifyItemChanged(position + 1);
-            }
-            notifyItemRangeRemoved(position + 2, allChildrenSize);
-        }
-    }
-
-    public void addComments(@NonNull ArrayList<Comment> comments, boolean hasMoreComments) {
-        if (mVisibleComments.size() == 0) {
-            isInitiallyLoading = false;
-            isInitiallyLoadingFailed = false;
-            if (comments.size() == 0) {
-                notifyItemChanged(1);
-            } else {
-                notifyItemRemoved(1);
-            }
-        }
-
-        int sizeBefore = mVisibleComments.size();
-        mVisibleComments.addAll(comments);
-        if (mIsSingleCommentThreadMode) {
-            notifyItemRangeInserted(sizeBefore + 2, comments.size());
-        } else {
-            notifyItemRangeInserted(sizeBefore + 1, comments.size());
-        }
-
-        if (mHasMoreComments != hasMoreComments) {
-            if (hasMoreComments) {
-                if (mIsSingleCommentThreadMode) {
-                    notifyItemInserted(mVisibleComments.size() + 2);
-                } else {
-                    notifyItemInserted(mVisibleComments.size() + 1);
-                }
-            } else {
-                if (mIsSingleCommentThreadMode) {
-                    notifyItemRemoved(mVisibleComments.size() + 2);
-                } else {
-                    notifyItemRemoved(mVisibleComments.size() + 1);
-                }
-            }
-        }
-        mHasMoreComments = hasMoreComments;
-    }
-
-    public void addComment(Comment comment) {
-        if (mVisibleComments.size() == 0 || isInitiallyLoadingFailed) {
-            notifyItemRemoved(1);
-        }
-
-        mVisibleComments.add(0, comment);
-
-        if (isInitiallyLoading) {
-            notifyItemInserted(2);
-        } else {
-            notifyItemInserted(1);
-        }
-    }
-
-    public void addChildComment(Comment comment, String parentFullname, int parentPosition) {
-        if (!parentFullname.equals(mVisibleComments.get(parentPosition).getFullName())) {
-            for (int i = 0; i < mVisibleComments.size(); i++) {
-                if (parentFullname.equals(mVisibleComments.get(i).getFullName())) {
-                    parentPosition = i;
-                    break;
-                }
-            }
-        }
-
-        mVisibleComments.get(parentPosition).addChild(comment);
-        mVisibleComments.get(parentPosition).setHasReply(true);
-        if (!mVisibleComments.get(parentPosition).isExpanded()) {
-            ArrayList<Comment> newList = new ArrayList<>();
-            expandChildren(mVisibleComments.get(parentPosition).getChildren(), newList, 0);
-            mVisibleComments.get(parentPosition).setExpanded(true);
-            mVisibleComments.addAll(parentPosition + 1, newList);
-            if (mIsSingleCommentThreadMode) {
-                notifyItemChanged(parentPosition + 2);
-                notifyItemRangeInserted(parentPosition + 3, newList.size());
-            } else {
-                notifyItemChanged(parentPosition + 1);
-                notifyItemRangeInserted(parentPosition + 2, newList.size());
-            }
-        } else {
-            mVisibleComments.add(parentPosition + 1, comment);
-            if (mIsSingleCommentThreadMode) {
-                notifyItemInserted(parentPosition + 3);
-            } else {
-                notifyItemInserted(parentPosition + 2);
-            }
-        }
-    }
-
-    public void setSingleComment(String singleCommentId, boolean isSingleCommentThreadMode) {
-        mSingleCommentId = singleCommentId;
-        mIsSingleCommentThreadMode = isSingleCommentThreadMode;
-    }
-
-    public ArrayList<Comment> getVisibleComments() {
-        return mVisibleComments;
-    }
-
-    public void initiallyLoading() {
-        if (mVisibleComments.size() != 0) {
-            int previousSize = mVisibleComments.size();
-            mVisibleComments.clear();
-            if (mIsSingleCommentThreadMode) {
-                notifyItemRangeRemoved(1, previousSize + 1);
-            } else {
-                notifyItemRangeRemoved(1, previousSize);
-            }
-        }
-
-        if (isInitiallyLoading || isInitiallyLoadingFailed || mVisibleComments.size() == 0) {
-            isInitiallyLoading = true;
-            isInitiallyLoadingFailed = false;
-            notifyItemChanged(1);
-        } else {
-            isInitiallyLoading = true;
-            isInitiallyLoadingFailed = false;
-            notifyItemInserted(1);
-        }
-    }
-
-    public void initiallyLoadCommentsFailed() {
-        isInitiallyLoading = false;
-        isInitiallyLoadingFailed = true;
-        notifyItemChanged(1);
-    }
-
-    public void loadMoreCommentsFailed() {
-        loadMoreCommentsFailed = true;
-        if (mIsSingleCommentThreadMode) {
-            notifyItemChanged(mVisibleComments.size() + 2);
-        } else {
-            notifyItemChanged(mVisibleComments.size() + 1);
-        }
-    }
-
-    public void editComment(String commentAuthor, String commentContentMarkdown, int position) {
-        if (commentAuthor != null)
-            mVisibleComments.get(position).setAuthor(commentAuthor);
-
-        mVisibleComments.get(position).setCommentMarkdown(commentContentMarkdown);
-        if (mIsSingleCommentThreadMode) {
-            notifyItemChanged(position + 2);
-        } else {
-            notifyItemChanged(position + 1);
-        }
-    }
-
-    public void deleteComment(int position) {
-        if (mVisibleComments != null && position >= 0 && position < mVisibleComments.size()) {
-            if (mVisibleComments.get(position).hasReply()) {
-                mVisibleComments.get(position).setAuthor("[deleted]");
-                mVisibleComments.get(position).setCommentMarkdown("[deleted]");
-                if (mIsSingleCommentThreadMode) {
-                    notifyItemChanged(position + 2);
-                } else {
-                    notifyItemChanged(position + 1);
-                }
-            } else {
-                mVisibleComments.remove(position);
-                if (mIsSingleCommentThreadMode) {
-                    notifyItemRemoved(position + 2);
-                } else {
-                    notifyItemRemoved(position + 1);
-                }
-            }
-        }
     }
 
     public void setBlurNsfwAndDoNotBlurNsfwInNsfwSubreddits(boolean needBlurNsfw, boolean doNotBlurNsfwInNsfwSubreddits) {
@@ -2044,7 +1761,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
         @Override
         public int getPlayerOrder() {
-            return getBindingAdapterPosition();
+            return 0;
         }
     }
 

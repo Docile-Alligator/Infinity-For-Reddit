@@ -393,9 +393,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             Comment comment = getCurrentComment(position);
             if (comment != null) {
                 if (mIsSingleCommentThreadMode && comment.getId().equals(mSingleCommentId)) {
-                    ((CommentViewHolder) holder).itemView.setBackgroundColor(mSingleCommentThreadBackgroundColor);
+                    holder.itemView.setBackgroundColor(mSingleCommentThreadBackgroundColor);
                 } else if (comment.getAwards() != null && !comment.getAwards().equals("")) {
-                    ((CommentViewHolder) holder).itemView.setBackgroundColor(mAwardedCommentBackgroundColor);
+                    holder.itemView.setBackgroundColor(mAwardedCommentBackgroundColor);
                 }
 
                 String authorPrefixed = "u/" + comment.getAuthor();
@@ -591,9 +591,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
                                                     mVisibleComments.addAll(placeholderPosition, expandedComments);
                                                     if (mIsSingleCommentThreadMode) {
-                                                        notifyItemRangeInserted(placeholderPosition + 2, expandedComments.size());
-                                                    } else {
                                                         notifyItemRangeInserted(placeholderPosition + 1, expandedComments.size());
+                                                    } else {
+                                                        notifyItemRangeInserted(placeholderPosition, expandedComments.size());
                                                     }
                                                 } else {
                                                     mVisibleComments.get(parentPosition).getChildren()
@@ -612,16 +612,16 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
                                                     mVisibleComments.remove(placeholderPosition);
                                                     if (mIsSingleCommentThreadMode) {
-                                                        notifyItemRemoved(placeholderPosition + 2);
-                                                    } else {
                                                         notifyItemRemoved(placeholderPosition + 1);
+                                                    } else {
+                                                        notifyItemRemoved(placeholderPosition);
                                                     }
 
                                                     mVisibleComments.addAll(placeholderPosition, expandedComments);
                                                     if (mIsSingleCommentThreadMode) {
-                                                        notifyItemRangeInserted(placeholderPosition + 2, expandedComments.size());
-                                                    } else {
                                                         notifyItemRangeInserted(placeholderPosition + 1, expandedComments.size());
+                                                    } else {
+                                                        notifyItemRangeInserted(placeholderPosition, expandedComments.size());
                                                     }
                                                 }
                                             } else {
@@ -654,9 +654,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
                                                         mVisibleComments.addAll(placeholderPosition, expandedComments);
                                                         if (mIsSingleCommentThreadMode) {
-                                                            notifyItemRangeInserted(placeholderPosition + 2, expandedComments.size());
-                                                        } else {
                                                             notifyItemRangeInserted(placeholderPosition + 1, expandedComments.size());
+                                                        } else {
+                                                            notifyItemRangeInserted(placeholderPosition, expandedComments.size());
                                                         }
                                                     }
 
@@ -785,14 +785,14 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         }
         if (mIsSingleCommentThreadMode) {
             if (mFullyCollapseComment) {
-                notifyItemChanged(position + 2);
-            }
-            notifyItemRangeRemoved(position + 3, allChildrenSize);
-        } else {
-            if (mFullyCollapseComment) {
                 notifyItemChanged(position + 1);
             }
             notifyItemRangeRemoved(position + 2, allChildrenSize);
+        } else {
+            if (mFullyCollapseComment) {
+                notifyItemChanged(position);
+            }
+            notifyItemRangeRemoved(position + 1, allChildrenSize);
         }
     }
 
@@ -801,32 +801,32 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             isInitiallyLoading = false;
             isInitiallyLoadingFailed = false;
             if (comments.size() == 0) {
-                notifyItemChanged(1);
+                notifyItemChanged(0);
             } else {
-                notifyItemRemoved(1);
+                notifyItemRemoved(0);
             }
         }
 
         int sizeBefore = mVisibleComments.size();
         mVisibleComments.addAll(comments);
         if (mIsSingleCommentThreadMode) {
-            notifyItemRangeInserted(sizeBefore + 2, comments.size());
-        } else {
             notifyItemRangeInserted(sizeBefore + 1, comments.size());
+        } else {
+            notifyItemRangeInserted(sizeBefore, comments.size());
         }
 
         if (mHasMoreComments != hasMoreComments) {
             if (hasMoreComments) {
                 if (mIsSingleCommentThreadMode) {
-                    notifyItemInserted(mVisibleComments.size() + 2);
-                } else {
                     notifyItemInserted(mVisibleComments.size() + 1);
+                } else {
+                    notifyItemInserted(mVisibleComments.size());
                 }
             } else {
                 if (mIsSingleCommentThreadMode) {
-                    notifyItemRemoved(mVisibleComments.size() + 2);
-                } else {
                     notifyItemRemoved(mVisibleComments.size() + 1);
+                } else {
+                    notifyItemRemoved(mVisibleComments.size());
                 }
             }
         }
@@ -865,18 +865,18 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             mVisibleComments.get(parentPosition).setExpanded(true);
             mVisibleComments.addAll(parentPosition + 1, newList);
             if (mIsSingleCommentThreadMode) {
-                notifyItemChanged(parentPosition + 2);
-                notifyItemRangeInserted(parentPosition + 3, newList.size());
-            } else {
                 notifyItemChanged(parentPosition + 1);
                 notifyItemRangeInserted(parentPosition + 2, newList.size());
+            } else {
+                notifyItemChanged(parentPosition);
+                notifyItemRangeInserted(parentPosition + 1, newList.size());
             }
         } else {
             mVisibleComments.add(parentPosition + 1, comment);
             if (mIsSingleCommentThreadMode) {
-                notifyItemInserted(parentPosition + 3);
-            } else {
                 notifyItemInserted(parentPosition + 2);
+            } else {
+                notifyItemInserted(parentPosition + 1);
             }
         }
     }
@@ -895,35 +895,35 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             int previousSize = mVisibleComments.size();
             mVisibleComments.clear();
             if (mIsSingleCommentThreadMode) {
-                notifyItemRangeRemoved(1, previousSize + 1);
+                notifyItemRangeRemoved(0, previousSize + 1);
             } else {
-                notifyItemRangeRemoved(1, previousSize);
+                notifyItemRangeRemoved(0, previousSize);
             }
         }
 
-        if (isInitiallyLoading || isInitiallyLoadingFailed || mVisibleComments.size() == 0) {
+        if (isInitiallyLoading || isInitiallyLoadingFailed) {
             isInitiallyLoading = true;
             isInitiallyLoadingFailed = false;
-            notifyItemChanged(1);
+            notifyItemChanged(0);
         } else {
             isInitiallyLoading = true;
             isInitiallyLoadingFailed = false;
-            notifyItemInserted(1);
+            notifyItemInserted(0);
         }
     }
 
     public void initiallyLoadCommentsFailed() {
         isInitiallyLoading = false;
         isInitiallyLoadingFailed = true;
-        notifyItemChanged(1);
+        notifyItemChanged(0);
     }
 
     public void loadMoreCommentsFailed() {
         loadMoreCommentsFailed = true;
         if (mIsSingleCommentThreadMode) {
-            notifyItemChanged(mVisibleComments.size() + 2);
-        } else {
             notifyItemChanged(mVisibleComments.size() + 1);
+        } else {
+            notifyItemChanged(mVisibleComments.size());
         }
     }
 
@@ -933,9 +933,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
         mVisibleComments.get(position).setCommentMarkdown(commentContentMarkdown);
         if (mIsSingleCommentThreadMode) {
-            notifyItemChanged(position + 2);
-        } else {
             notifyItemChanged(position + 1);
+        } else {
+            notifyItemChanged(position);
         }
     }
 
@@ -945,16 +945,16 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 mVisibleComments.get(position).setAuthor("[deleted]");
                 mVisibleComments.get(position).setCommentMarkdown("[deleted]");
                 if (mIsSingleCommentThreadMode) {
-                    notifyItemChanged(position + 2);
-                } else {
                     notifyItemChanged(position + 1);
+                } else {
+                    notifyItemChanged(position);
                 }
             } else {
                 mVisibleComments.remove(position);
                 if (mIsSingleCommentThreadMode) {
-                    notifyItemRemoved(position + 2);
-                } else {
                     notifyItemRemoved(position + 1);
+                } else {
+                    notifyItemRemoved(position);
                 }
             }
         }
@@ -1160,6 +1160,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             authorFlairTextView.setOnClickListener(view -> authorTextView.performClick());
 
             moreButton.setOnClickListener(view -> {
+                getItemCount();
                 Comment comment = getCurrentComment(this);
                 if (comment != null) {
                     Bundle bundle = new Bundle();
@@ -1447,9 +1448,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                                 mVisibleComments.addAll(commentPosition + 1, newList);
 
                                 if (mIsSingleCommentThreadMode) {
-                                    notifyItemRangeInserted(commentPosition + 3, newList.size());
-                                } else {
                                     notifyItemRangeInserted(commentPosition + 2, newList.size());
+                                } else {
+                                    notifyItemRangeInserted(commentPosition + 1, newList.size());
                                 }
                                 expandButton.setImageResource(R.drawable.ic_expand_less_grey_24dp);
                             }
@@ -1578,11 +1579,11 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         mVisibleComments.addAll(commentPosition + 1, newList);
 
                         if (mIsSingleCommentThreadMode) {
-                            notifyItemChanged(commentPosition + 2);
-                            notifyItemRangeInserted(commentPosition + 3, newList.size());
-                        } else {
                             notifyItemChanged(commentPosition + 1);
                             notifyItemRangeInserted(commentPosition + 2, newList.size());
+                        } else {
+                            notifyItemChanged(commentPosition);
+                            notifyItemRangeInserted(commentPosition + 1, newList.size());
                         }
                     }
                 }

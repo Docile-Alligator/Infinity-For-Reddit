@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -126,8 +127,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
     @BindView(R.id.swipe_refresh_layout_view_post_detail_fragment)
     SwipeRefreshLayout mSwipeRefreshLayout;
-    @BindView(R.id.recycler_view_view_post_detail_fragment)
+    @BindView(R.id.post_detail_recycler_view_view_post_detail_fragment)
     CustomToroContainer mRecyclerView;
+    RecyclerView mCommentsRecyclerView;
     @BindView(R.id.fetch_post_info_linear_layout_view_post_detail_fragment)
     LinearLayout mFetchPostInfoLinearLayout;
     @BindView(R.id.fetch_post_info_image_view_view_post_detail_fragment)
@@ -216,7 +218,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private LinearLayoutManager mLinearLayoutManager;
     private ConcatAdapter mConcatAdapter;
     private PostDetailRecyclerViewAdapter mPostAdapter;
-    private CommentsRecyclerViewAdapter mCommentAdapter;
+    private CommentsRecyclerViewAdapter mCommentsAdapter;
     private RecyclerView.SmoothScroller mSmoothScroller;
     private Drawable mSavedIcon;
     private Drawable mUnsavedIcon;
@@ -277,8 +279,15 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         mGlide = Glide.with(this);
         mLocale = getResources().getConfiguration().locale;
 
-        mLinearLayoutManager = new LinearLayoutManager(activity);
-        mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        if (getResources().getBoolean(R.bool.isTablet) || getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            mLinearLayoutManager = new LinearLayoutManager(activity);
+            mCommentsRecyclerView = rootView.findViewById(R.id.comments_recycler_view_view_post_detail_fragment);
+            mCommentsRecyclerView.setLayoutManager(mLinearLayoutManager);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        } else {
+            mLinearLayoutManager = new LinearLayoutManager(activity);
+            mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        }
 
         if (children != null && children.size() > 0) {
             mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -391,8 +400,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 if (touchHelper != null) {
                     touchHelper.attachToRecyclerView(null);
                     touchHelper.attachToRecyclerView(mRecyclerView);
-                    if (mCommentAdapter != null) {
-                        mCommentAdapter.onItemSwipe(viewHolder, direction, swipeLeftAction, swipeRightAction);
+                    if (mCommentsAdapter != null) {
+                        mCommentsAdapter.onItemSwipe(viewHolder, direction, swipeLeftAction, swipeRightAction);
                     }
                 }
             }
@@ -531,7 +540,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                 }
             });
-            mCommentAdapter = new CommentsRecyclerViewAdapter(activity,
+            mCommentsAdapter = new CommentsRecyclerViewAdapter(activity,
                     this, mCustomThemeWrapper, mRetrofit, mOauthRetrofit,
                     mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId,
                     isSingleCommentThreadMode, mSharedPreferences,
@@ -549,8 +558,14 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             fetchMoreComments();
                         }
                     });
-            mConcatAdapter = new ConcatAdapter(mPostAdapter, mCommentAdapter);
-            mRecyclerView.setAdapter(mConcatAdapter);
+            if (mCommentsRecyclerView != null) {
+                mRecyclerView.setAdapter(mPostAdapter);
+                mCommentsRecyclerView.setAdapter(mCommentsAdapter);
+            } else {
+                mConcatAdapter = new ConcatAdapter(mPostAdapter, mCommentsAdapter);
+                mRecyclerView.setAdapter(mConcatAdapter);
+            }
+
 
             if (comments == null) {
                 fetchCommentsRespectRecommendedSort(false);
@@ -561,7 +576,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 } else if (isFetchingComments) {
                     fetchCommentsRespectRecommendedSort(false);
                 } else {
-                    mCommentAdapter.addComments(comments, hasMoreChildren);
+                    mCommentsAdapter.addComments(comments, hasMoreChildren);
                     if (isLoadingMoreChildren) {
                         isLoadingMoreChildren = false;
                         fetchMoreComments();
@@ -670,28 +685,28 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     }
 
     public void addComment(Comment comment) {
-        if (mCommentAdapter != null) {
-            mCommentAdapter.addComment(comment);
+        if (mCommentsAdapter != null) {
+            mCommentsAdapter.addComment(comment);
         }
     }
 
     public void addChildComment(Comment comment, String parentFullname, int parentPosition) {
-        if (mCommentAdapter != null) {
-            mCommentAdapter.addChildComment(comment, parentFullname, parentPosition);
+        if (mCommentsAdapter != null) {
+            mCommentsAdapter.addChildComment(comment, parentFullname, parentPosition);
         }
     }
 
     public void editComment(String commentAuthor, String commentContentMarkdown, int position) {
-        if (mCommentAdapter != null) {
-            mCommentAdapter.editComment(commentAuthor,
+        if (mCommentsAdapter != null) {
+            mCommentsAdapter.editComment(commentAuthor,
                     commentContentMarkdown,
                     position);
         }
     }
 
     public void awardGiven(String awardsHTML, int awardCount, int position) {
-        if (mCommentAdapter != null) {
-            mCommentAdapter.giveAward(awardsHTML, awardCount, position);
+        if (mCommentsAdapter != null) {
+            mCommentsAdapter.giveAward(awardsHTML, awardCount, position);
         }
     }
 
@@ -743,8 +758,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     }
 
     public void saveComment(int position, boolean isSaved) {
-        if (mCommentAdapter != null) {
-            mCommentAdapter.setSaveComment(position, isSaved);
+        if (mCommentsAdapter != null) {
+            mCommentsAdapter.setSaveComment(position, isSaved);
         }
     }
 
@@ -1009,7 +1024,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @Override
     public void onResume() {
         super.onResume();
-        if (mCommentAdapter != null && mRecyclerView != null) {
+        if (mRecyclerView != null) {
             mRecyclerView.onWindowVisibilityChanged(View.VISIBLE);
         }
     }
@@ -1017,7 +1032,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @Override
     public void onPause() {
         super.onPause();
-        if (mCommentAdapter != null && mRecyclerView != null) {
+        if (mRecyclerView != null) {
             mRecyclerView.onWindowVisibilityChanged(View.GONE);
         }
     }
@@ -1025,7 +1040,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        comments = mCommentAdapter == null ? null : mCommentAdapter.getVisibleComments();
+        comments = mCommentsAdapter == null ? null : mCommentsAdapter.getVisibleComments();
         Bridge.saveInstanceState(this, outState);
     }
 
@@ -1107,7 +1122,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                 }
                             });
 
-                            mCommentAdapter = new CommentsRecyclerViewAdapter(activity,
+                            mCommentsAdapter = new CommentsRecyclerViewAdapter(activity,
                                     ViewPostDetailFragment.this, mCustomThemeWrapper, mRetrofit, mOauthRetrofit,
                                     mAccessToken, mAccountName, mPost, mLocale,
                                     mSingleCommentId, isSingleCommentThreadMode, mSharedPreferences,
@@ -1125,8 +1140,13 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                             fetchMoreComments();
                                         }
                                     });
-                            mConcatAdapter = new ConcatAdapter(mPostAdapter, mCommentAdapter);
-                            mRecyclerView.setAdapter(mConcatAdapter);
+                            if (mCommentsRecyclerView != null) {
+                                mRecyclerView.setAdapter(mPostAdapter);
+                                mCommentsRecyclerView.setAdapter(mCommentsAdapter);
+                            } else {
+                                mConcatAdapter = new ConcatAdapter(mPostAdapter, mCommentsAdapter);
+                                mRecyclerView.setAdapter(mConcatAdapter);
+                            }
 
                             if (mRespectSubredditRecommendedSortType) {
                                 fetchCommentsRespectRecommendedSort(false);
@@ -1138,7 +1158,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                                 ViewPostDetailFragment.this.children = moreChildrenFullnames;
 
                                                 hasMoreChildren = children.size() != 0;
-                                                mCommentAdapter.addComments(expandedComments, hasMoreChildren);
+                                                mCommentsAdapter.addComments(expandedComments, hasMoreChildren);
 
                                                 if (children.size() > 0) {
                                                     mRecyclerView.clearOnScrollListeners();
@@ -1189,7 +1209,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
                                             @Override
                                             public void onParseCommentFailed() {
-                                                mCommentAdapter.initiallyLoadCommentsFailed();
+                                                mCommentsAdapter.initiallyLoadCommentsFailed();
                                             }
                                         });
                             }
@@ -1251,8 +1271,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
     private void fetchComments(boolean changeRefreshState, boolean checkSortState, String sortType) {
         isFetchingComments = true;
-        mCommentAdapter.setSingleComment(mSingleCommentId, isSingleCommentThreadMode);
-        mCommentAdapter.initiallyLoading();
+        mCommentsAdapter.setSingleComment(mSingleCommentId, isSingleCommentThreadMode);
+        mCommentsAdapter.initiallyLoading();
         String commentId = null;
         if (isSingleCommentThreadMode) {
             commentId = mSingleCommentId;
@@ -1276,7 +1296,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
                         comments = expandedComments;
                         hasMoreChildren = children.size() != 0;
-                        mCommentAdapter.addComments(expandedComments, hasMoreChildren);
+                        mCommentsAdapter.addComments(expandedComments, hasMoreChildren);
 
                         if (children.size() > 0) {
                             mRecyclerView.clearOnScrollListeners();
@@ -1341,7 +1361,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             return;
                         }
 
-                        mCommentAdapter.initiallyLoadCommentsFailed();
+                        mCommentsAdapter.initiallyLoadCommentsFailed();
                         if (changeRefreshState) {
                             isRefreshing = false;
                         }
@@ -1366,7 +1386,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     @Override
                     public void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments, int childrenStartingIndex) {
                         hasMoreChildren = childrenStartingIndex < children.size();
-                        mCommentAdapter.addComments(expandedComments, hasMoreChildren);
+                        mCommentsAdapter.addComments(expandedComments, hasMoreChildren);
                         mChildrenStartingIndex = childrenStartingIndex;
                         isLoadingMoreChildren = false;
                         loadMoreChildrenSuccess = true;
@@ -1376,7 +1396,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     public void onFetchMoreCommentFailed() {
                         isLoadingMoreChildren = false;
                         loadMoreChildrenSuccess = false;
-                        mCommentAdapter.loadMoreCommentsFailed();
+                        mCommentsAdapter.loadMoreCommentsFailed();
                     }
                 });
     }
@@ -1599,7 +1619,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     @Override
                     public void deleteSuccess() {
                         Toast.makeText(activity, R.string.delete_post_success, Toast.LENGTH_SHORT).show();
-                        mCommentAdapter.deleteComment(position);
+                        mCommentsAdapter.deleteComment(position);
                     }
 
                     @Override
@@ -1619,7 +1639,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 new FetchRemovedComment.FetchRemovedCommentListener() {
                     @Override
                     public void fetchSuccess(Comment comment) {
-                        mCommentAdapter.editComment(comment.getAuthor(), comment.getCommentMarkdown(), position);
+                        mCommentsAdapter.editComment(comment.getAuthor(), comment.getCommentMarkdown(), position);
                     }
 
                     @Override
@@ -1639,8 +1659,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     public void scrollToNextParentComment() {
         if (mLinearLayoutManager != null) {
             int currentPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
-            if (mCommentAdapter != null) {
-                int nextParentPosition = mCommentAdapter.getNextParentCommentPosition(currentPosition);
+            if (mCommentsAdapter != null) {
+                int nextParentPosition = mCommentsAdapter.getNextParentCommentPosition(currentPosition);
                 if (nextParentPosition < 0) {
                     return;
                 }
@@ -1656,8 +1676,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     public void scrollToPreviousParentComment() {
         if (mLinearLayoutManager != null) {
             int currentPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
-            if (mCommentAdapter != null) {
-                int nextParentPosition = mCommentAdapter.getPreviousParentCommentPosition(currentPosition);
+            if (mCommentsAdapter != null) {
+                int nextParentPosition = mCommentsAdapter.getPreviousParentCommentPosition(currentPosition);
                 if (nextParentPosition < 0) {
                     return;
                 }
@@ -1725,7 +1745,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (mPostAdapter != null) {
             mPostAdapter.setBlurNsfwAndDoNotBlurNsfwInNsfwSubreddits(event.needBlurNSFW, event.doNotBlurNsfwInNsfwSubreddits);
         }
-        refreshAdapter();
+        if (mCommentsRecyclerView != null) {
+            refreshAdapter(mRecyclerView, mConcatAdapter);
+        } else {
+            refreshAdapter(mRecyclerView, mPostAdapter);
+        }
     }
 
     @Subscribe
@@ -1733,23 +1757,27 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (mPostAdapter != null) {
             mPostAdapter.setBlurSpoiler(event.needBlurSpoiler);
         }
-        refreshAdapter();
+        if (mCommentsRecyclerView != null) {
+            refreshAdapter(mRecyclerView, mConcatAdapter);
+        } else {
+            refreshAdapter(mRecyclerView, mPostAdapter);
+        }
     }
 
-    private void refreshAdapter() {
+    private void refreshAdapter(RecyclerView recyclerView, RecyclerView.Adapter<RecyclerView.ViewHolder> adapter) {
         int previousPosition = -1;
-        if (mLinearLayoutManager != null) {
-            previousPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
+        if (recyclerView.getLayoutManager() != null) {
+            previousPosition = ((LinearLayoutManager) recyclerView.getLayoutManager()).findFirstVisibleItemPosition();
         }
 
-        RecyclerView.LayoutManager layoutManager = mRecyclerView.getLayoutManager();
-        mRecyclerView.setAdapter(null);
-        mRecyclerView.setLayoutManager(null);
-        mRecyclerView.setAdapter(mConcatAdapter);
-        mRecyclerView.setLayoutManager(layoutManager);
+        RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+        recyclerView.setAdapter(null);
+        recyclerView.setLayoutManager(null);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(layoutManager);
 
         if (previousPosition > 0) {
-            mRecyclerView.scrollToPosition(previousPosition);
+            recyclerView.scrollToPosition(previousPosition);
         }
     }
 
@@ -1769,7 +1797,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             }
 
             if (stateChanged) {
-                refreshAdapter();
+                if (mCommentsRecyclerView != null) {
+                    refreshAdapter(mRecyclerView, mConcatAdapter);
+                } else {
+                    refreshAdapter(mRecyclerView, mPostAdapter);
+                }
             }
         }
     }
