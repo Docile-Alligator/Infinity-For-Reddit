@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
@@ -177,6 +178,18 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
             if (imm != null) {
                 imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
             }
+            thingEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
+                if (i == EditorInfo.IME_ACTION_DONE) {
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
+                    }
+                    Intent pmIntent = new Intent(this, SendPrivateMessageActivity.class);
+                    pmIntent.putExtra(SendPrivateMessageActivity.EXTRA_RECIPIENT_USERNAME, thingEditText.getText().toString());
+                    startActivity(pmIntent);
+                    return true;
+                }
+                return false;
+            });
             new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                     .setTitle(R.string.choose_a_user)
                     .setView(rootView)
