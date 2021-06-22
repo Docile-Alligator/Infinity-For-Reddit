@@ -1388,7 +1388,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 Intent userIntent = new Intent(this, ViewUserDetailActivity.class);
                 userIntent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, thingEditText.getText().toString());
                 startActivity(userIntent);
+                return true;
             }
+            return false;
         });
         new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                 .setTitle(R.string.go_to_user)
