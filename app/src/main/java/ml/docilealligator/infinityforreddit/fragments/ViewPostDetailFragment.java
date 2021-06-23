@@ -290,7 +290,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         }
 
         if (children != null && children.size() > 0) {
-            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
@@ -333,7 +333,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 }
             });
         } else {
-            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
@@ -1162,7 +1162,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
                                                 if (children.size() > 0) {
                                                     mRecyclerView.clearOnScrollListeners();
-                                                    mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                                                    (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).addOnScrollListener(new RecyclerView.OnScrollListener() {
                                                         @Override
                                                         public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                                                             super.onScrolled(recyclerView, dx, dy);
@@ -1300,7 +1300,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
                         if (children.size() > 0) {
                             mRecyclerView.clearOnScrollListeners();
-                            mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                            (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).addOnScrollListener(new RecyclerView.OnScrollListener() {
                                 @Override
                                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                                     super.onScrolled(recyclerView, dx, dy);
