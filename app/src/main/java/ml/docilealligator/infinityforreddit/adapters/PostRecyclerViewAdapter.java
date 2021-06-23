@@ -31,7 +31,6 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.paging.PagedListAdapter;
-import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
@@ -732,8 +731,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             }
                         });
                         ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks
-                                .fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mGfycatRetrofit, mRedgifsRetrofit,
-                                        post.getGfycatId(), post.isGfycat(), mAutomaticallyTryRedgifs);
+                                .fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
+                                        mGfycatRetrofit, mRedgifsRetrofit, post.getGfycatId(),
+                                        post.isGfycat(), mAutomaticallyTryRedgifs);
                     } else {
                         ((PostVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
                     }
@@ -855,8 +855,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             }
                         });
                         ((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks
-                                .fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mGfycatRetrofit, mRedgifsRetrofit,
-                                        post.getGfycatId(), post.isGfycat(), mAutomaticallyTryRedgifs);
+                                .fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
+                                        mGfycatRetrofit, mRedgifsRetrofit, post.getGfycatId(), post.isGfycat(),
+                                        mAutomaticallyTryRedgifs);
                     } else {
                         ((PostCard2VideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
                     }

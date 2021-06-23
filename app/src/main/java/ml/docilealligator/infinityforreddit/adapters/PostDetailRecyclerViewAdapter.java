@@ -696,8 +696,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         }
                     });
                     ((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks
-                            .fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mGfycatRetrofit, mRedgifsRetrofit,
-                                    mPost.getGfycatId(), mPost.isGfycat(), mAutomaticallyTryRedgifs);
+                            .fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
+                                    mGfycatRetrofit, mRedgifsRetrofit, mPost.getGfycatId(),
+                                    mPost.isGfycat(), mAutomaticallyTryRedgifs);
                 } else {
                     ((PostDetailVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(mPost.getVideoUrl()));
                 }

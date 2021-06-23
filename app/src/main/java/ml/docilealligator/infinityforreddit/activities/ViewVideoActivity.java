@@ -390,7 +390,7 @@ public class ViewVideoActivity extends AppCompatActivity {
 
     private void loadGfycatOrRedgifsVideo(Retrofit retrofit, String gfycatId, Bundle savedInstanceState, boolean needErrorHandling) {
         progressBar.setVisibility(View.VISIBLE);
-        FetchGfycatOrRedgifsVideoLinks.fetchGfycatOrRedgifsVideoLinks(retrofit, gfycatId,
+        FetchGfycatOrRedgifsVideoLinks.fetchGfycatOrRedgifsVideoLinks(mExecutor, new Handler(), retrofit, gfycatId,
                 new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
                     @Override
                     public void success(String webm, String mp4) {
