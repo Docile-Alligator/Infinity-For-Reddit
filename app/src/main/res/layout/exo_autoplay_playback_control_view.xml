@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/linear_layout_exo_playback_control_view"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -85,6 +86,7 @@
     <com.google.android.exoplayer2.ui.DefaultTimeBar
         android:id="@id/exo_progress"
         android:layout_width="wrap_content"
-        android:layout_height="26dp"/>
+        android:layout_height="26dp"
+        app:bar_height="2dp" />
 
 </LinearLayout>
