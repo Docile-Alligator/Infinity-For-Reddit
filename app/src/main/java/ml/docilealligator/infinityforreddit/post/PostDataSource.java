@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.post;
 
 import android.content.SharedPreferences;
+import android.os.Handler;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -9,6 +10,7 @@ import androidx.paging.PageKeyedDataSource;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.SortType;
@@ -37,6 +39,8 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     public static final String USER_WHERE_SAVED = "saved";
     public static final String USER_WHERE_GILDED = "gilded";
 
+    private Executor executor;
+    private Handler handler;
     private Retrofit retrofit;
     private String accessToken;
     private String accountName;
@@ -59,10 +63,12 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     private LoadParams<String> params;
     private LoadCallback<String, Post> callback;
 
-    PostDataSource(Retrofit retrofit, String accessToken, String accountName,
+    PostDataSource(Executor executor, Handler handler, Retrofit retrofit, String accessToken, String accountName,
                    SharedPreferences sharedPreferences,
                    SharedPreferences postFeedScrolledPositionSharedPreferences, int postType,
                    SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
+        this.executor = executor;
+        this.handler = handler;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
@@ -78,10 +84,12 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
-    PostDataSource(Retrofit retrofit, String accessToken, String accountName,
+    PostDataSource(Executor executor, Handler handler, Retrofit retrofit, String accessToken, String accountName,
                    SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                    String path, int postType, SortType sortType, PostFilter postFilter,
                    List<ReadPost> readPostList) {
+        this.executor = executor;
+        this.handler = handler;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
@@ -118,10 +126,12 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
-    PostDataSource(Retrofit retrofit, String accessToken, String accountName,
+    PostDataSource(Executor executor, Handler handler, Retrofit retrofit, String accessToken, String accountName,
                    SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                    String subredditOrUserName, int postType, SortType sortType, PostFilter postFilter,
                    String where, List<ReadPost> readPostList) {
+        this.executor = executor;
+        this.handler = handler;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
@@ -139,10 +149,12 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
-    PostDataSource(Retrofit retrofit, String accessToken, String accountName,
+    PostDataSource(Executor executor, Handler handler, Retrofit retrofit, String accessToken, String accountName,
                    SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                    String subredditOrUserName, String query, int postType, SortType sortType, PostFilter postFilter,
                    List<ReadPost> readPostList) {
+        this.executor = executor;
+        this.handler = handler;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
@@ -254,7 +266,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, postFilter, readPostList,
+                    ParsePost.parsePosts(executor, handler, response.body(), -1, postFilter, readPostList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -317,7 +329,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, postFilter, readPostList,
+                    ParsePost.parsePosts(executor, handler, response.body(), -1, postFilter, readPostList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -377,7 +389,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, postFilter, readPostList,
+                    ParsePost.parsePosts(executor, handler, response.body(), -1, postFilter, readPostList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -451,7 +463,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, postFilter, readPostList,
+                    ParsePost.parsePosts(executor, handler, response.body(), -1, postFilter, readPostList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -512,7 +524,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, postFilter, readPostList,
+                    ParsePost.parsePosts(executor, handler, response.body(), -1, postFilter, readPostList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -583,7 +595,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, postFilter, readPostList,
+                    ParsePost.parsePosts(executor, handler, response.body(), -1, postFilter, readPostList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -666,7 +678,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, postFilter, readPostList,
+                    ParsePost.parsePosts(executor, handler, response.body(), -1, postFilter, readPostList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -757,7 +769,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, postFilter, readPostList,
+                    ParsePost.parsePosts(executor, handler, response.body(), -1, postFilter, readPostList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -817,7 +829,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, postFilter, readPostList,
+                    ParsePost.parsePosts(executor, handler, response.body(), -1, postFilter, readPostList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -888,7 +900,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, postFilter, readPostList,
+                    ParsePost.parsePosts(executor, handler, response.body(), -1, postFilter, readPostList,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -938,7 +950,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, postFilter, null,
+                    ParsePost.parsePosts(executor, handler, response.body(), -1, postFilter, null,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {
@@ -1002,7 +1014,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePosts(response.body(), -1, postFilter, null,
+                    ParsePost.parsePosts(executor, handler, response.body(), -1, postFilter, null,
                             new ParsePost.ParsePostsListingListener() {
                                 @Override
                                 public void onParsePostsListingSuccess(LinkedHashSet<Post> newPosts, String lastItem) {

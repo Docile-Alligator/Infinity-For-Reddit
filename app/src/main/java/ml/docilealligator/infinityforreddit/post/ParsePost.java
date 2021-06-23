@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.post;
 
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Handler;
 import android.text.Html;
 
 import org.json.JSONArray;
@@ -12,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,9 +27,58 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
  */
 
 public class ParsePost {
-    public static void parsePosts(String response, int nPosts, PostFilter postFilter, List<ReadPost> readPostList,
+    public static void parsePosts(Executor executor, Handler handler, String response, int nPosts,
+                                  PostFilter postFilter, List<ReadPost> readPostList,
                                   ParsePostsListingListener parsePostsListingListener) {
-        new ParsePostDataAsyncTask(response, nPosts, postFilter, readPostList, parsePostsListingListener).execute();
+        executor.execute(() -> {
+            boolean parseFailed = false;
+            LinkedHashSet<Post> newPosts = new LinkedHashSet<>();
+            String lastItem = null;
+            try {
+                JSONObject jsonResponse = new JSONObject(response);
+                JSONArray allData = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
+                lastItem = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
+
+                //Posts listing
+                int size;
+                if (nPosts < 0 || nPosts > allData.length()) {
+                    size = allData.length();
+                } else {
+                    size = nPosts;
+                }
+
+                HashSet<ReadPost> readPostHashSet = null;
+                if (readPostList != null) {
+                    readPostHashSet = new HashSet<>(readPostList);
+                }
+                for (int i = 0; i < size; i++) {
+                    try {
+                        if (allData.getJSONObject(i).getString(JSONUtils.KIND_KEY).equals("t3")) {
+                            JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
+                            Post post = parseBasicData(data);
+                            if (readPostHashSet != null && readPostHashSet.contains(ReadPost.convertPost(post))) {
+                                post.markAsRead(false);
+                            }
+                            if (PostFilter.isPostAllowed(post, postFilter)) {
+                                newPosts.add(post);
+                            }
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                parseFailed = true;
+            }
+
+            if (!parseFailed) {
+                String finalLastItem = lastItem;
+                handler.post(() -> parsePostsListingListener.onParsePostsListingSuccess(newPosts, finalLastItem));
+            } else {
+                handler.post(parsePostsListingListener::onParsePostsListingFail);
+            }
+        });
     }
 
     public static void parsePost(String response, ParsePostListener parsePostListener) {

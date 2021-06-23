@@ -1093,27 +1093,32 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     private void initializeAndBindPostViewModel(String accessToken) {
         if (postType == PostDataSource.TYPE_SEARCH) {
-            mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
+            mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
+                    new Handler(), accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
                     accountName, mSharedPreferences,
                     mPostFeedScrolledPositionSharedPreferences, subredditName, query, postType, sortType,
                     postFilter, readPosts)).get(PostViewModel.class);
         } else if (postType == PostDataSource.TYPE_SUBREDDIT) {
-            mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
+            mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
+                    new Handler(), accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
                     accountName, mSharedPreferences,
                     mPostFeedScrolledPositionSharedPreferences, subredditName, postType, sortType,
                     postFilter, readPosts)).get(PostViewModel.class);
         } else if (postType == PostDataSource.TYPE_MULTI_REDDIT) {
-            mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
+            mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
+                    new Handler(), accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
                     accountName, mSharedPreferences,
                     mPostFeedScrolledPositionSharedPreferences, multiRedditPath, postType, sortType,
                     postFilter, readPosts)).get(PostViewModel.class);
         } else if (postType == PostDataSource.TYPE_USER) {
-            mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
+            mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
+                    new Handler(), accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
                     accountName, mSharedPreferences,
                     mPostFeedScrolledPositionSharedPreferences, username, postType, sortType, postFilter,
                     where, readPosts)).get(PostViewModel.class);
         } else {
-            mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mOauthRetrofit, accessToken,
+            mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
+                    new Handler(), mOauthRetrofit, accessToken,
                     accountName, mSharedPreferences, mPostFeedScrolledPositionSharedPreferences,
                     postType, sortType, postFilter, readPosts)).get(PostViewModel.class);
         }
@@ -1124,28 +1129,33 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private void initializeAndBindPostViewModelForAnonymous(String concatenatedSubredditNames) {
         //For anonymous user
         if (postType == PostDataSource.TYPE_SEARCH) {
-            mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mRetrofit, null,
+            mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
+                    new Handler(), mRetrofit, null,
                     accountName, mSharedPreferences,
                     mPostFeedScrolledPositionSharedPreferences, subredditName, query, postType, sortType,
                     postFilter, readPosts)).get(PostViewModel.class);
         } else if (postType == PostDataSource.TYPE_SUBREDDIT) {
-            mPostViewModel = new ViewModelProvider(this, new PostViewModel.Factory(mRetrofit, null,
+            mPostViewModel = new ViewModelProvider(this, new PostViewModel.Factory(mExecutor,
+                    new Handler(), mRetrofit, null,
                     accountName, mSharedPreferences,
                     mPostFeedScrolledPositionSharedPreferences, subredditName, postType, sortType,
                     postFilter, readPosts)).get(PostViewModel.class);
         } else if (postType == PostDataSource.TYPE_MULTI_REDDIT) {
-            mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mRetrofit, null,
+            mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
+                    new Handler(), mRetrofit, null,
                     accountName, mSharedPreferences,
                     mPostFeedScrolledPositionSharedPreferences, multiRedditPath, postType, sortType, postFilter,
                     readPosts)).get(PostViewModel.class);
         } else if (postType == PostDataSource.TYPE_USER) {
-            mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mRetrofit, null,
+            mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
+                    new Handler(), mRetrofit, null,
                     accountName, mSharedPreferences,
                     mPostFeedScrolledPositionSharedPreferences, username, postType, sortType, postFilter,
                     where, readPosts)).get(PostViewModel.class);
         } else {
             //Anonymous Front Page
-            mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mRetrofit,
+            mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
+                    new Handler(), mRetrofit,
                     mSharedPreferences, concatenatedSubredditNames, postType, sortType, postFilter)).get(PostViewModel.class);
         }
 

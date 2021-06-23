@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.post;
 
 import android.content.SharedPreferences;
+import android.os.Handler;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -8,13 +9,16 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.readpost.ReadPost;
 import retrofit2.Retrofit;
 
 class PostDataSourceFactory extends DataSource.Factory {
+    private Executor executor;
+    private Handler handler;
     private Retrofit retrofit;
     private String accessToken;
     private String accountName;
@@ -31,10 +35,12 @@ class PostDataSourceFactory extends DataSource.Factory {
     private PostDataSource postDataSource;
     private MutableLiveData<PostDataSource> postDataSourceLiveData;
 
-    PostDataSourceFactory(Retrofit retrofit, String accessToken, String accountName,
+    PostDataSourceFactory(Executor executor, Handler handler, Retrofit retrofit, String accessToken, String accountName,
                           SharedPreferences sharedPreferences,
                           SharedPreferences postFeedScrolledPositionSharedPreferences, int postType,
                           SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
+        this.executor = executor;
+        this.handler = handler;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
@@ -47,10 +53,12 @@ class PostDataSourceFactory extends DataSource.Factory {
         this.readPostList = readPostList;
     }
 
-    PostDataSourceFactory(Retrofit retrofit, String accessToken, String accountName,
+    PostDataSourceFactory(Executor executor, Handler handler, Retrofit retrofit, String accessToken, String accountName,
                           SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                           String name, int postType, SortType sortType, PostFilter postFilter,
                           List<ReadPost> readPostList) {
+        this.executor = executor;
+        this.handler = handler;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
@@ -64,10 +72,12 @@ class PostDataSourceFactory extends DataSource.Factory {
         this.readPostList = readPostList;
     }
 
-    PostDataSourceFactory(Retrofit retrofit, String accessToken, String accountName,
+    PostDataSourceFactory(Executor executor, Handler handler, Retrofit retrofit, String accessToken, String accountName,
                           SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                           String name, int postType, SortType sortType, PostFilter postFilter,
                           String where, List<ReadPost> readPostList) {
+        this.executor = executor;
+        this.handler = handler;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
@@ -82,10 +92,12 @@ class PostDataSourceFactory extends DataSource.Factory {
         this.readPostList = readPostList;
     }
 
-    PostDataSourceFactory(Retrofit retrofit, String accessToken, String accountName,
+    PostDataSourceFactory(Executor executor, Handler handler, Retrofit retrofit, String accessToken, String accountName,
                           SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                           String name, String query, int postType, SortType sortType, PostFilter postFilter,
                           List<ReadPost> readPostList) {
+        this.executor = executor;
+        this.handler = handler;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
         this.accountName = accountName;
@@ -104,24 +116,24 @@ class PostDataSourceFactory extends DataSource.Factory {
     @Override
     public DataSource<String, Post> create() {
         if (postType == PostDataSource.TYPE_FRONT_PAGE) {
-            postDataSource = new PostDataSource(retrofit, accessToken, accountName,
+            postDataSource = new PostDataSource(executor, handler, retrofit, accessToken, accountName,
                     sharedPreferences, postFeedScrolledPositionSharedPreferences, postType, sortType,
                     postFilter, readPostList);
         } else if (postType == PostDataSource.TYPE_SEARCH) {
-            postDataSource = new PostDataSource(retrofit, accessToken, accountName,
+            postDataSource = new PostDataSource(executor, handler, retrofit, accessToken, accountName,
                     sharedPreferences, postFeedScrolledPositionSharedPreferences, name, query,
                     postType, sortType, postFilter, readPostList);
         } else if (postType == PostDataSource.TYPE_SUBREDDIT || postType == PostDataSource.TYPE_MULTI_REDDIT) {
             Log.i("asdasfd", "s5 " + (postFilter == null));
-            postDataSource = new PostDataSource(retrofit, accessToken, accountName,
+            postDataSource = new PostDataSource(executor, handler, retrofit, accessToken, accountName,
                     sharedPreferences, postFeedScrolledPositionSharedPreferences, name, postType,
                     sortType, postFilter, readPostList);
         } else if (postType == PostDataSource.TYPE_ANONYMOUS_FRONT_PAGE) {
-            postDataSource = new PostDataSource(retrofit, null, null,
+            postDataSource = new PostDataSource(executor, handler, retrofit, null, null,
                     sharedPreferences, null, name, postType,
                     sortType, postFilter, null);
         } else {
-            postDataSource = new PostDataSource(retrofit, accessToken, accountName,
+            postDataSource = new PostDataSource(executor, handler, retrofit, accessToken, accountName,
                     sharedPreferences, postFeedScrolledPositionSharedPreferences, name, postType,
                     sortType, postFilter, userWhere, readPostList);
         }

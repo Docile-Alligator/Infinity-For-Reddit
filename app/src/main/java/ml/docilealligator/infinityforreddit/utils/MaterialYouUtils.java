@@ -30,7 +30,7 @@ public class MaterialYouUtils {
 
                 if (wallpaperColors != null) {
                     int colorPrimaryInt = shiftColorTo255(wallpaperColors.getPrimaryColor().toArgb(), 0.4);
-                    int colorPrimaryDarkInt = shiftColorTo0(colorPrimaryInt, 0.4);
+                    int colorPrimaryDarkInt = shiftColorTo0(colorPrimaryInt, 0.3);
                     int backgroundColor = shiftColorTo255(colorPrimaryInt, 0.6);
                     int cardViewBackgroundColor = shiftColorTo255(colorPrimaryInt, 0.9);
                     Color colorAccent = wallpaperColors.getSecondaryColor();
@@ -62,7 +62,7 @@ public class MaterialYouUtils {
                             .putInt(CustomThemeSharedPreferencesUtils.TAB_LAYOUT_WITH_EXPANDED_COLLAPSING_TOOLBAR_TAB_INDICATOR, colorPrimaryAppropriateTextColor)
                             .putInt(CustomThemeSharedPreferencesUtils.TAB_LAYOUT_WITH_EXPANDED_COLLAPSING_TOOLBAR_TEXT_COLOR, colorPrimaryAppropriateTextColor)
                             .putInt(CustomThemeSharedPreferencesUtils.CIRCULAR_PROGRESS_BAR_BACKGROUND, colorPrimaryInt)
-                            .putBoolean(CustomThemeSharedPreferencesUtils.LIGHT_STATUS_BAR, getAppropriateTextColor(colorPrimaryDarkInt) == Color.toArgb(Color.BLACK))
+                            .putBoolean(CustomThemeSharedPreferencesUtils.LIGHT_STATUS_BAR, getAppropriateTextColor(colorPrimaryInt) == Color.toArgb(Color.BLACK))
                             .apply();
                     darkThemeSharedPreferences.edit()
                             .putInt(CustomThemeSharedPreferencesUtils.COLOR_ACCENT, colorPrimaryInt)
