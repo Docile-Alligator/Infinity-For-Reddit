@@ -46,6 +46,7 @@ public class MaterialYouUtils {
                             .putInt(CustomThemeSharedPreferencesUtils.BACKGROUND_COLOR, backgroundColor)
                             .putInt(CustomThemeSharedPreferencesUtils.CARD_VIEW_BACKGROUND_COLOR, cardViewBackgroundColor)
                             .putInt(CustomThemeSharedPreferencesUtils.COMMENT_BACKGROUND_COLOR, cardViewBackgroundColor)
+                            .putInt(CustomThemeSharedPreferencesUtils.AWARDED_COMMENT_BACKGROUND_COLOR, cardViewBackgroundColor)
                             .putInt(CustomThemeSharedPreferencesUtils.BOTTOM_APP_BAR_BACKGROUND_COLOR, colorPrimaryInt)
                             .putInt(CustomThemeSharedPreferencesUtils.NAV_BAR_COLOR, colorPrimaryInt)
                             .putInt(CustomThemeSharedPreferencesUtils.PRIMARY_TEXT_COLOR, backgroundColorAppropriateTextColor)
