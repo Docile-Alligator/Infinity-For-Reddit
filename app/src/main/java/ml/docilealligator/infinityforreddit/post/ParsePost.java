@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.post;
 
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Handler;
 import android.text.Html;
 
@@ -31,13 +30,11 @@ public class ParsePost {
                                   PostFilter postFilter, List<ReadPost> readPostList,
                                   ParsePostsListingListener parsePostsListingListener) {
         executor.execute(() -> {
-            boolean parseFailed = false;
             LinkedHashSet<Post> newPosts = new LinkedHashSet<>();
-            String lastItem = null;
             try {
                 JSONObject jsonResponse = new JSONObject(response);
                 JSONArray allData = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
-                lastItem = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
+                String lastItem = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
 
                 //Posts listing
                 int size;
@@ -67,24 +64,59 @@ public class ParsePost {
                         e.printStackTrace();
                     }
                 }
+
+                handler.post(() -> parsePostsListingListener.onParsePostsListingSuccess(newPosts, lastItem));
             } catch (JSONException e) {
                 e.printStackTrace();
-                parseFailed = true;
-            }
-
-            if (!parseFailed) {
-                String finalLastItem = lastItem;
-                handler.post(() -> parsePostsListingListener.onParsePostsListingSuccess(newPosts, finalLastItem));
-            } else {
                 handler.post(parsePostsListingListener::onParsePostsListingFail);
             }
         });
     }
 
-    public static void parsePost(String response, ParsePostListener parsePostListener) {
+    public static void parsePost(Executor executor, Handler handler, String response, ParsePostListener parsePostListener) {
         PostFilter postFilter = new PostFilter();
         postFilter.allowNSFW = true;
-        new ParsePostDataAsyncTask(response, postFilter, parsePostListener).execute();
+
+        executor.execute(() -> {
+            try {
+                JSONArray allData = new JSONArray(response).getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
+                if (allData.length() == 0) {
+                    handler.post(parsePostListener::onParsePostFail);
+                    return;
+                }
+                JSONObject data = allData.getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY);
+                Post post = parseBasicData(data);
+                handler.post(() -> parsePostListener.onParsePostSuccess(post));
+            } catch (JSONException e) {
+                e.printStackTrace();
+                handler.post(parsePostListener::onParsePostFail);
+            }
+        });
+    }
+
+    public static void parseRandomPost(Executor executor, Handler handler, String response, boolean isNSFW,
+                                       ParseRandomPostListener parseRandomPostListener) {
+        executor.execute(() -> {
+            try {
+                JSONArray postsArray = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
+                if (postsArray.length() == 0) {
+                    handler.post(parseRandomPostListener::onParseRandomPostFailed);
+                } else {
+                    JSONObject post = postsArray.getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY);
+                    String subredditName = post.getString(JSONUtils.SUBREDDIT_KEY);
+                    String postId;
+                    if (isNSFW) {
+                        postId = post.getString(JSONUtils.ID_KEY);
+                    } else {
+                        postId = post.getString(JSONUtils.LINK_ID_KEY).substring("t3_".length());
+                    }
+                    handler.post(() -> parseRandomPostListener.onParseRandomPostSuccess(postId, subredditName));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                handler.post(parseRandomPostListener::onParseRandomPostFailed);
+            }
+        });
     }
 
     private static Post parseBasicData(JSONObject data) throws JSONException {
@@ -561,180 +593,16 @@ public class ParsePost {
 
     public interface ParsePostsListingListener {
         void onParsePostsListingSuccess(LinkedHashSet<Post> newPostData, String lastItem);
-
         void onParsePostsListingFail();
     }
 
     public interface ParsePostListener {
         void onParsePostSuccess(Post post);
-
         void onParsePostFail();
     }
 
     public interface ParseRandomPostListener {
         void onParseRandomPostSuccess(String postId, String subredditName);
         void onParseRandomPostFailed();
-    }
-
-    private static class ParsePostDataAsyncTask extends AsyncTask<Void, Void, Void> {
-        private JSONArray allData;
-        private int nPosts;
-        private PostFilter postFilter;
-        private List<ReadPost> readPostList;
-        private ParsePostsListingListener parsePostsListingListener;
-        private ParsePostListener parsePostListener;
-        private LinkedHashSet<Post> newPosts;
-        private Post post;
-        private String lastItem;
-        private boolean parseFailed;
-
-        ParsePostDataAsyncTask(String response, int nPosts, PostFilter postFilter, List<ReadPost> readPostList,
-                               ParsePostsListingListener parsePostsListingListener) {
-            this.parsePostsListingListener = parsePostsListingListener;
-            try {
-                JSONObject jsonResponse = new JSONObject(response);
-                allData = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
-                lastItem = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
-                this.nPosts = nPosts;
-                this.postFilter = postFilter;
-                this.readPostList = readPostList;
-                newPosts = new LinkedHashSet<>();
-                parseFailed = false;
-            } catch (JSONException e) {
-                e.printStackTrace();
-                parseFailed = true;
-            }
-        }
-
-        ParsePostDataAsyncTask(String response, PostFilter postFilter,
-                               ParsePostListener parsePostListener) {
-            this.parsePostListener = parsePostListener;
-            try {
-                allData = new JSONArray(response).getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
-                this.postFilter = postFilter;
-                parseFailed = false;
-            } catch (JSONException e) {
-                e.printStackTrace();
-                parseFailed = true;
-            }
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            if (parseFailed) {
-                return null;
-            }
-
-            if (newPosts == null) {
-                //Only one post
-                if (allData.length() == 0) {
-                    parseFailed = true;
-                    return null;
-                }
-
-                try {
-                    JSONObject data = allData.getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY);
-                    post = parseBasicData(data);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    parseFailed = true;
-                }
-            } else {
-                //Posts listing
-                int size;
-                if (nPosts < 0 || nPosts > allData.length()) {
-                    size = allData.length();
-                } else {
-                    size = nPosts;
-                }
-
-                HashSet<ReadPost> readPostHashSet = null;
-                if (readPostList != null) {
-                    readPostHashSet = new HashSet<>(readPostList);
-                }
-                for (int i = 0; i < size; i++) {
-                    try {
-                        if (allData.getJSONObject(i).getString(JSONUtils.KIND_KEY).equals("t3")) {
-                            JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
-                            Post post = parseBasicData(data);
-                            if (readPostHashSet != null && readPostHashSet.contains(ReadPost.convertPost(post))) {
-                                post.markAsRead(false);
-                            }
-                            if (PostFilter.isPostAllowed(post, postFilter)) {
-                                newPosts.add(post);
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            if (!parseFailed) {
-                if (newPosts != null) {
-                    parsePostsListingListener.onParsePostsListingSuccess(newPosts, lastItem);
-                } else {
-                    parsePostListener.onParsePostSuccess(post);
-                }
-            } else {
-                if (parsePostsListingListener != null) {
-                    parsePostsListingListener.onParsePostsListingFail();
-                } else {
-                    parsePostListener.onParsePostFail();
-                }
-            }
-        }
-    }
-
-    public static class ParseRandomPostAsyncTask extends AsyncTask<Void, Void, Void> {
-
-        private String response;
-        private boolean isNSFW;
-        private ParseRandomPostListener parseRandomPostListener;
-        private String subredditName;
-        private String postId;
-        private boolean parseFailed = false;
-
-        ParseRandomPostAsyncTask(String response, boolean isNSFW, ParseRandomPostListener parseRandomPostListener) {
-            this.response = response;
-            this.isNSFW = isNSFW;
-            this.parseRandomPostListener = parseRandomPostListener;
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            try {
-                JSONArray postsArray = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
-                if (postsArray.length() == 0) {
-                    parseFailed = true;
-                } else {
-                    JSONObject post = postsArray.getJSONObject(0).getJSONObject(JSONUtils.DATA_KEY);
-                    subredditName = post.getString(JSONUtils.SUBREDDIT_KEY);
-                    if (isNSFW) {
-                        postId = post.getString(JSONUtils.ID_KEY);
-                    } else {
-                        postId = post.getString(JSONUtils.LINK_ID_KEY).substring("t3_".length());
-                    }
-                }
-            } catch (JSONException e) {
-                e.printStackTrace();
-                parseFailed = true;
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if (parseFailed) {
-                parseRandomPostListener.onParseRandomPostFailed();
-            } else {
-                parseRandomPostListener.onParseRandomPostSuccess(postId, subredditName);
-            }
-        }
     }
 }

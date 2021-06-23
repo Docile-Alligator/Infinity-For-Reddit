@@ -11,6 +11,7 @@ import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -51,6 +52,7 @@ import com.thefuntasty.hauler.HaulerView;
 import org.apache.commons.io.FilenameUtils;
 
 import java.util.List;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -151,6 +153,9 @@ public class ViewVideoActivity extends AppCompatActivity {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+
+    @Inject
+    Executor mExecutor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -430,54 +435,55 @@ public class ViewVideoActivity extends AppCompatActivity {
                     List<String> segments = redirectUri.getPathSegments();
                     int commentsIndex = segments.lastIndexOf("comments");
                     String postId = segments.get(commentsIndex + 1);
-                    FetchPost.fetchPost(retrofit, postId, null, new FetchPost.FetchPostListener() {
-                        @Override
-                        public void fetchPostSuccess(Post post) {
-                            if (post.isGfycat()) {
-                                videoType = VIDEO_TYPE_GFYCAT;
-                                String gfycatId = post.getGfycatId();
-                                if (gfycatId != null && gfycatId.contains("-")) {
-                                    gfycatId = gfycatId.substring(0, gfycatId.indexOf('-'));
-                                }
-                                if (videoType == VIDEO_TYPE_GFYCAT) {
-                                    videoFileName = "Gfycat-" + gfycatId + ".mp4";
-                                } else {
-                                    videoFileName = "Redgifs-" + gfycatId + ".mp4";
-                                }
-                                loadGfycatOrRedgifsVideo(gfycatRetrofit, gfycatId, savedInstanceState, true);
-                            } else if (post.isRedgifs()) {
-                                videoType = VIDEO_TYPE_REDGIFS;
-                                String gfycatId = post.getGfycatId();
-                                if (gfycatId != null && gfycatId.contains("-")) {
-                                    gfycatId = gfycatId.substring(0, gfycatId.indexOf('-'));
-                                }
-                                if (videoType == VIDEO_TYPE_GFYCAT) {
-                                    videoFileName = "Gfycat-" + gfycatId + ".mp4";
-                                } else {
-                                    videoFileName = "Redgifs-" + gfycatId + ".mp4";
-                                }
-                                loadGfycatOrRedgifsVideo(redgifsRetrofit, gfycatId, savedInstanceState, false);
-                            } else {
-                                progressBar.setVisibility(View.INVISIBLE);
-                                mVideoUri = Uri.parse(post.getVideoUrl());
-                                subredditName = post.getSubredditName();
-                                id = post.getId();
-                                videoDownloadUrl = post.getVideoDownloadUrl();
+                    FetchPost.fetchPost(mExecutor, new Handler(), retrofit, postId, null,
+                            new FetchPost.FetchPostListener() {
+                                @Override
+                                public void fetchPostSuccess(Post post) {
+                                    if (post.isGfycat()) {
+                                        videoType = VIDEO_TYPE_GFYCAT;
+                                        String gfycatId = post.getGfycatId();
+                                        if (gfycatId != null && gfycatId.contains("-")) {
+                                            gfycatId = gfycatId.substring(0, gfycatId.indexOf('-'));
+                                        }
+                                        if (videoType == VIDEO_TYPE_GFYCAT) {
+                                            videoFileName = "Gfycat-" + gfycatId + ".mp4";
+                                        } else {
+                                            videoFileName = "Redgifs-" + gfycatId + ".mp4";
+                                        }
+                                        loadGfycatOrRedgifsVideo(gfycatRetrofit, gfycatId, savedInstanceState, true);
+                                    } else if (post.isRedgifs()) {
+                                        videoType = VIDEO_TYPE_REDGIFS;
+                                        String gfycatId = post.getGfycatId();
+                                        if (gfycatId != null && gfycatId.contains("-")) {
+                                            gfycatId = gfycatId.substring(0, gfycatId.indexOf('-'));
+                                        }
+                                        if (videoType == VIDEO_TYPE_GFYCAT) {
+                                            videoFileName = "Gfycat-" + gfycatId + ".mp4";
+                                        } else {
+                                            videoFileName = "Redgifs-" + gfycatId + ".mp4";
+                                        }
+                                        loadGfycatOrRedgifsVideo(redgifsRetrofit, gfycatId, savedInstanceState, false);
+                                    } else {
+                                        progressBar.setVisibility(View.INVISIBLE);
+                                        mVideoUri = Uri.parse(post.getVideoUrl());
+                                        subredditName = post.getSubredditName();
+                                        id = post.getId();
+                                        videoDownloadUrl = post.getVideoDownloadUrl();
 
-                                videoFileName = subredditName + "-" + id + ".mp4";
-                                // Produces DataSource instances through which media data is loaded.
-                                dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(ViewVideoActivity.this, "Infinity"));
-                                // Prepare the player with the source.
-                                player.prepare(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
-                                preparePlayer(savedInstanceState);
-                            }
-                        }
+                                        videoFileName = subredditName + "-" + id + ".mp4";
+                                        // Produces DataSource instances through which media data is loaded.
+                                        dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(ViewVideoActivity.this, "Infinity"));
+                                        // Prepare the player with the source.
+                                        player.prepare(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
+                                        preparePlayer(savedInstanceState);
+                                    }
+                                }
 
-                        @Override
-                        public void fetchPostFailed() {
-                            Toast.makeText(ViewVideoActivity.this, R.string.error_fetching_v_redd_it_video_cannot_get_post, Toast.LENGTH_LONG).show();
-                        }
-                    });
+                                @Override
+                                public void fetchPostFailed() {
+                                    Toast.makeText(ViewVideoActivity.this, R.string.error_fetching_v_redd_it_video_cannot_get_post, Toast.LENGTH_LONG).show();
+                                }
+                            });
                 } else {
                     Toast.makeText(ViewVideoActivity.this, R.string.error_fetching_v_redd_it_video_cannot_get_post_id, Toast.LENGTH_LONG).show();
                 }

@@ -33,6 +33,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -77,6 +78,9 @@ public class SubmitPostService extends Service {
     Retrofit mUploadVideoRetrofit;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
+    private Handler handler;
     private ServiceHandler serviceHandler;
 
     public SubmitPostService() {
@@ -111,7 +115,8 @@ public class SubmitPostService extends Service {
                 submitTextOrLinkPost(accessToken, subredditName, title, content, flair, isSpoiler, isNSFW, kind);
             } else if (postType == EXTRA_POST_TYPE_CROSSPOST) {
                 String content = bundle.getString(EXTRA_CONTENT);
-                submitCrosspost(accessToken, subredditName, title, content, flair, isSpoiler, isNSFW);
+                submitCrosspost(mExecutor, handler, accessToken, subredditName, title, content,
+                        flair, isSpoiler, isNSFW);
             } else if (postType == EXTRA_POST_TYPE_IMAGE) {
                 Uri mediaUri = Uri.parse(bundle.getString(EXTRA_MEDIA_URI));
                 submitImagePost(accessToken, mediaUri, subredditName, title, flair, isSpoiler, isNSFW);
@@ -129,6 +134,7 @@ public class SubmitPostService extends Service {
         // separate thread because the service normally runs in the process's
         // main thread, which we don't want to block. We also make it
         // background priority so CPU-intensive work doesn't disrupt our UI.
+        handler = new Handler();
         HandlerThread thread = new HandlerThread("ServiceStartArguments",
                 Process.THREAD_PRIORITY_BACKGROUND);
         thread.start();
@@ -185,8 +191,9 @@ public class SubmitPostService extends Service {
     }
 
     private void submitTextOrLinkPost(String accessToken, String subredditName, String title, String content, Flair flair, boolean isSpoiler, boolean isNSFW, String kind) {
-        SubmitPost.submitTextOrLinkPost(mOauthRetrofit, accessToken, getResources().getConfiguration().locale,
-                subredditName, title, content, flair, isSpoiler, isNSFW, kind, new SubmitPost.SubmitPostListener() {
+        SubmitPost.submitTextOrLinkPost(mExecutor, handler, mOauthRetrofit, accessToken,
+                getResources().getConfiguration().locale, subredditName, title, content, flair, isSpoiler,
+                isNSFW, kind, new SubmitPost.SubmitPostListener() {
                     @Override
                     public void submitSuccessful(Post post) {
                         EventBus.getDefault().post(new SubmitTextOrLinkPostEvent(true, post, null));
@@ -203,9 +210,10 @@ public class SubmitPostService extends Service {
                 });
     }
 
-    private void submitCrosspost(String accessToken, String subredditName, String title, String content, Flair flair, boolean isSpoiler, boolean isNSFW) {
-        SubmitPost.submitCrosspost(mOauthRetrofit, accessToken, subredditName, title, content, flair, isSpoiler,
-                isNSFW, APIUtils.KIND_CROSSPOST, new SubmitPost.SubmitPostListener() {
+    private void submitCrosspost(Executor executor, Handler handler, String accessToken, String subredditName,
+                                 String title, String content, Flair flair, boolean isSpoiler, boolean isNSFW) {
+        SubmitPost.submitCrosspost(executor, handler, mOauthRetrofit, accessToken, subredditName, title,
+                content, flair, isSpoiler, isNSFW, APIUtils.KIND_CROSSPOST, new SubmitPost.SubmitPostListener() {
                     @Override
                     public void submitSuccessful(Post post) {
                         EventBus.getDefault().post(new SubmitCrosspostEvent(true, post, null));
@@ -225,8 +233,9 @@ public class SubmitPostService extends Service {
     private void submitImagePost(String accessToken, Uri mediaUri, String subredditName, String title, Flair flair, boolean isSpoiler, boolean isNSFW) {
         try {
             Bitmap resource = Glide.with(this).asBitmap().load(mediaUri).submit().get();
-            SubmitPost.submitImagePost(mOauthRetrofit, mUploadMediaRetrofit, accessToken, subredditName, title, resource,
-                    flair, isSpoiler, isNSFW, new SubmitPost.SubmitPostListener() {
+            SubmitPost.submitImagePost(mExecutor, handler, mOauthRetrofit, mUploadMediaRetrofit,
+                    accessToken, subredditName, title, resource, flair, isSpoiler, isNSFW,
+                    new SubmitPost.SubmitPostListener() {
                         @Override
                         public void submitSuccessful(Post post) {
                             EventBus.getDefault().post(new SubmitImagePostEvent(true, null));
@@ -266,9 +275,9 @@ public class SubmitPostService extends Service {
             Bitmap resource = Glide.with(this).asBitmap().load(mediaUri).submit().get();
 
             if (type != null) {
-                SubmitPost.submitVideoPost(mOauthRetrofit, mUploadMediaRetrofit, mUploadVideoRetrofit,
-                        accessToken, subredditName, title, new File(cacheFilePath), type, resource, flair,
-                        isSpoiler, isNSFW, new SubmitPost.SubmitPostListener() {
+                SubmitPost.submitVideoPost(mExecutor, handler, mOauthRetrofit, mUploadMediaRetrofit,
+                        mUploadVideoRetrofit, accessToken, subredditName, title, new File(cacheFilePath),
+                        type, resource, flair, isSpoiler, isNSFW, new SubmitPost.SubmitPostListener() {
                             @Override
                             public void submitSuccessful(Post post) {
                                 EventBus.getDefault().post(new SubmitVideoOrGifPostEvent(true, false, null));

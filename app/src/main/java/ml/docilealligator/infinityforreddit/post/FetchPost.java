@@ -1,6 +1,10 @@
 package ml.docilealligator.infinityforreddit.post;
 
+import android.os.Handler;
+
 import androidx.annotation.NonNull;
+
+import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -10,7 +14,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FetchPost {
-    public static void fetchPost(Retrofit retrofit, String id, String accessToken, FetchPostListener fetchPostListener) {
+    public static void fetchPost(Executor executor, Handler handler, Retrofit retrofit, String id, String accessToken,
+                                 FetchPostListener fetchPostListener) {
         Call<String> postCall;
         if (accessToken == null) {
             postCall = retrofit.create(RedditAPI.class).getPost(id);
@@ -21,7 +26,7 @@ public class FetchPost {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParsePost.parsePost(response.body(), new ParsePost.ParsePostListener() {
+                    ParsePost.parsePost(executor, handler, response.body(), new ParsePost.ParsePostListener() {
                         @Override
                         public void onParsePostSuccess(Post post) {
                             fetchPostListener.fetchPostSuccess(post);
@@ -44,7 +49,8 @@ public class FetchPost {
         });
     }
 
-    public static void fetchRandomPost(Retrofit retrofit, boolean isNSFW, FetchRandomPostListener fetchRandomPostListener) {
+    public static void fetchRandomPost(Executor executor, Handler handler, Retrofit retrofit, boolean isNSFW,
+                                       FetchRandomPostListener fetchRandomPostListener) {
         Call<String> call;
         if (isNSFW) {
             call = retrofit.create(RedditAPI.class).getRandomNSFWPost();
@@ -56,18 +62,18 @@ public class FetchPost {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    new ParsePost.ParseRandomPostAsyncTask(response.body(), isNSFW, new ParsePost.ParseRandomPostListener() {
+                    ParsePost.parseRandomPost(executor, handler, response.body(), isNSFW,
+                            new ParsePost.ParseRandomPostListener() {
+                                @Override
+                                public void onParseRandomPostSuccess(String postId, String subredditName) {
+                                    fetchRandomPostListener.fetchRandomPostSuccess(postId, subredditName);
+                                }
 
-                        @Override
-                        public void onParseRandomPostSuccess(String postId, String subredditName) {
-                            fetchRandomPostListener.fetchRandomPostSuccess(postId, subredditName);
-                        }
-
-                        @Override
-                        public void onParseRandomPostFailed() {
-                            fetchRandomPostListener.fetchRandomPostFailed();
-                        }
-                    }).execute();
+                                @Override
+                                public void onParseRandomPostFailed() {
+                                    fetchRandomPostListener.fetchRandomPostFailed();
+                                }
+                            });
                 } else {
                     fetchRandomPostListener.fetchRandomPostFailed();
                 }

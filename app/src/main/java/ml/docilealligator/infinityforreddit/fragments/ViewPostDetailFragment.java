@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
@@ -1103,7 +1104,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 mSwipeRefreshLayout.setRefreshing(false);
 
                 if (response.isSuccessful()) {
-                    ParsePost.parsePost(response.body(), new ParsePost.ParsePostListener() {
+                    ParsePost.parsePost(mExecutor, new Handler(), response.body(), new ParsePost.ParsePostListener() {
                         @Override
                         public void onParsePostSuccess(Post post) {
                             mPost = post;
@@ -1420,7 +1421,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 } else {
                     retrofit = mOauthRetrofit;
                 }
-                FetchPost.fetchPost(retrofit, mPost.getId(), mAccessToken,
+                FetchPost.fetchPost(mExecutor, new Handler(), retrofit, mPost.getId(), mAccessToken,
                         new FetchPost.FetchPostListener() {
                             @Override
                             public void fetchPostSuccess(Post post) {
