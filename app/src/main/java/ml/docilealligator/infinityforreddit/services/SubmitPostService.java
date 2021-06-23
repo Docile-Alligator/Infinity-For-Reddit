@@ -196,14 +196,14 @@ public class SubmitPostService extends Service {
                 isNSFW, kind, new SubmitPost.SubmitPostListener() {
                     @Override
                     public void submitSuccessful(Post post) {
-                        EventBus.getDefault().post(new SubmitTextOrLinkPostEvent(true, post, null));
+                        handler.post(() -> EventBus.getDefault().post(new SubmitTextOrLinkPostEvent(true, post, null)));
 
                         stopService();
                     }
 
                     @Override
                     public void submitFailed(@Nullable String errorMessage) {
-                        EventBus.getDefault().post(new SubmitTextOrLinkPostEvent(false, null, errorMessage));
+                        handler.post(() -> EventBus.getDefault().post(new SubmitTextOrLinkPostEvent(false, null, errorMessage)));
 
                         stopService();
                     }
@@ -216,14 +216,14 @@ public class SubmitPostService extends Service {
                 content, flair, isSpoiler, isNSFW, APIUtils.KIND_CROSSPOST, new SubmitPost.SubmitPostListener() {
                     @Override
                     public void submitSuccessful(Post post) {
-                        EventBus.getDefault().post(new SubmitCrosspostEvent(true, post, null));
+                        handler.post(() -> EventBus.getDefault().post(new SubmitCrosspostEvent(true, post, null)));
 
                         stopService();
                     }
 
                     @Override
                     public void submitFailed(@Nullable String errorMessage) {
-                        EventBus.getDefault().post(new SubmitCrosspostEvent(false, null, errorMessage));
+                        handler.post(() -> EventBus.getDefault().post(new SubmitCrosspostEvent(false, null, errorMessage)));
 
                         stopService();
                     }
@@ -238,22 +238,24 @@ public class SubmitPostService extends Service {
                     new SubmitPost.SubmitPostListener() {
                         @Override
                         public void submitSuccessful(Post post) {
-                            EventBus.getDefault().post(new SubmitImagePostEvent(true, null));
-                            Toast.makeText(SubmitPostService.this, R.string.image_is_processing, Toast.LENGTH_SHORT).show();
+                            handler.post(() -> {
+                                EventBus.getDefault().post(new SubmitImagePostEvent(true, null));
+                                Toast.makeText(SubmitPostService.this, R.string.image_is_processing, Toast.LENGTH_SHORT).show();
+                            });
 
                             stopService();
                         }
 
                         @Override
                         public void submitFailed(@Nullable String errorMessage) {
-                            EventBus.getDefault().post(new SubmitImagePostEvent(false, errorMessage));
+                            handler.post(() -> EventBus.getDefault().post(new SubmitImagePostEvent(false, errorMessage)));
 
                             stopService();
                         }
                     });
         } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
-            EventBus.getDefault().post(new SubmitImagePostEvent(false, getString(R.string.error_processing_image)));
+            handler.post(() -> EventBus.getDefault().post(new SubmitImagePostEvent(false, getString(R.string.error_processing_image))));
             stopService();
         }
     }
@@ -280,31 +282,34 @@ public class SubmitPostService extends Service {
                         type, resource, flair, isSpoiler, isNSFW, new SubmitPost.SubmitPostListener() {
                             @Override
                             public void submitSuccessful(Post post) {
-                                EventBus.getDefault().post(new SubmitVideoOrGifPostEvent(true, false, null));
-                                if (type.contains("gif")) {
-                                    Toast.makeText(SubmitPostService.this, R.string.gif_is_processing, Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(SubmitPostService.this, R.string.video_is_processing, Toast.LENGTH_SHORT).show();
-                                }
+                                handler.post(() -> {
+                                    EventBus.getDefault().post(new SubmitVideoOrGifPostEvent(true, false, null));
+                                    if (type.contains("gif")) {
+                                        Toast.makeText(SubmitPostService.this, R.string.gif_is_processing, Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(SubmitPostService.this, R.string.video_is_processing, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+
 
                                 stopService();
                             }
 
                             @Override
                             public void submitFailed(@Nullable String errorMessage) {
-                                EventBus.getDefault().post(new SubmitVideoOrGifPostEvent(false, false, errorMessage));
+                                handler.post(() -> EventBus.getDefault().post(new SubmitVideoOrGifPostEvent(false, false, errorMessage)));
 
                                 stopService();
                             }
                         });
             } else {
-                EventBus.getDefault().post(new SubmitVideoOrGifPostEvent(false, true, null));
+                handler.post(() -> EventBus.getDefault().post(new SubmitVideoOrGifPostEvent(false, true, null)));
 
                 stopService();
             }
         } catch (IOException | InterruptedException | ExecutionException e) {
             e.printStackTrace();
-            EventBus.getDefault().post(new SubmitVideoOrGifPostEvent(false, true, null));
+            handler.post(() -> EventBus.getDefault().post(new SubmitVideoOrGifPostEvent(false, true, null)));
 
             stopService();
         }
