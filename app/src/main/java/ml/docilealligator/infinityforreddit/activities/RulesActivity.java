@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -24,6 +25,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -64,6 +66,8 @@ public class RulesActivity extends BaseActivity {
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private String mSubredditName;
     private RulesRecyclerViewAdapter mAdapter;
 
@@ -119,9 +123,7 @@ public class RulesActivity extends BaseActivity {
         mAdapter = new RulesRecyclerViewAdapter(this, mCustomThemeWrapper);
         recyclerView.setAdapter(mAdapter);
 
-        //fetchRules();
-
-        FetchRules.fetchRules(mRetrofit, mSubredditName, new FetchRules.FetchRulesListener() {
+        FetchRules.fetchRules(mExecutor, new Handler(), mRetrofit, mSubredditName, new FetchRules.FetchRulesListener() {
             @Override
             public void success(ArrayList<Rule> rules) {
                 progressBar.setVisibility(View.GONE);
@@ -159,46 +161,6 @@ public class RulesActivity extends BaseActivity {
         errorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
     }
 
-    /*private void fetchRules() {
-        progressBar.setVisibility(View.VISIBLE);
-        errorTextView.setVisibility(View.GONE);
-
-        RedditAPI api = mRetrofit.create(RedditAPI.class);
-        Call<String> rulesCall = api.getRules(mSubredditName);
-        rulesCall.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                if (response.isSuccessful()) {
-                    new ParseRulesAsyncTask(response.body(), new ParseRulesAsyncTask.ParseRulesAsyncTaskListener() {
-                        @Override
-                        public void parseSuccessful(ArrayList<Rule> rules) {
-                            progressBar.setVisibility(View.GONE);
-                            if (rules == null || rules.size() == 0) {
-                                errorTextView.setVisibility(View.VISIBLE);
-                                errorTextView.setText(R.string.no_rule);
-                                errorTextView.setOnClickListener(view -> {
-                                });
-                            }
-                            mAdapter.changeDataset(rules);
-                        }
-
-                        @Override
-                        public void parseFailed() {
-                            displayError();
-                        }
-                    }).execute();
-                } else {
-                    displayError();
-                }
-            }
-
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                displayError();
-            }
-        });
-    }*/
-
     private void displayError() {
         progressBar.setVisibility(View.GONE);
         errorTextView.setVisibility(View.VISIBLE);
@@ -206,7 +168,7 @@ public class RulesActivity extends BaseActivity {
         errorTextView.setOnClickListener(view -> {
             progressBar.setVisibility(View.VISIBLE);
             errorTextView.setVisibility(View.GONE);
-            FetchRules.fetchRules(mRetrofit, mSubredditName, new FetchRules.FetchRulesListener() {
+            FetchRules.fetchRules(mExecutor, new Handler(), mRetrofit, mSubredditName, new FetchRules.FetchRulesListener() {
                 @Override
                 public void success(ArrayList<Rule> rules) {
                     progressBar.setVisibility(View.GONE);
@@ -247,49 +209,4 @@ public class RulesActivity extends BaseActivity {
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
         finish();
     }
-
-    /*private static class ParseRulesAsyncTask extends AsyncTask<Void, ArrayList<Rule>, ArrayList<Rule>> {
-        private String response;
-        private ParseRulesAsyncTaskListener parseRulesAsyncTaskListener;
-
-        ParseRulesAsyncTask(String response, ParseRulesAsyncTaskListener parseRulesAsyncTaskListener) {
-            this.response = response;
-            this.parseRulesAsyncTaskListener = parseRulesAsyncTaskListener;
-        }
-
-        @Override
-        protected ArrayList<Rule> doInBackground(Void... voids) {
-            try {
-                JSONArray rulesArray = new JSONObject(response).getJSONArray(JSONUtils.RULES_KEY);
-                ArrayList<Rule> rules = new ArrayList<>();
-                for (int i = 0; i < rulesArray.length(); i++) {
-                    String shortName = rulesArray.getJSONObject(i).getString(JSONUtils.SHORT_NAME_KEY);
-                    String description = null;
-                    if (rulesArray.getJSONObject(i).has(JSONUtils.DESCRIPTION_KEY)) {
-                        description = Utils.modifyMarkdown(rulesArray.getJSONObject(i).getString(JSONUtils.DESCRIPTION_KEY));
-                    }
-                    rules.add(new Rule(shortName, description));
-                }
-                return rules;
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Rule> rules) {
-            if (rules != null) {
-                parseRulesAsyncTaskListener.parseSuccessful(rules);
-            } else {
-                parseRulesAsyncTaskListener.parseFailed();
-            }
-        }
-
-        interface ParseRulesAsyncTaskListener {
-            void parseSuccessful(ArrayList<Rule> rules);
-
-            void parseFailed();
-        }
-    }*/
 }

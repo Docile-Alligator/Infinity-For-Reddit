@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.activities;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -18,6 +19,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -67,6 +69,8 @@ public class ReportActivity extends BaseActivity {
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private String mAccessToken;
     private String mFullname;
     private String mSubredditName;
@@ -117,7 +121,7 @@ public class ReportActivity extends BaseActivity {
         recyclerView.setAdapter(mAdapter);
 
         if (rulesReasons == null) {
-            FetchRules.fetchRules(mRetrofit, mSubredditName, new FetchRules.FetchRulesListener() {
+            FetchRules.fetchRules(mExecutor, new Handler(), mRetrofit, mSubredditName, new FetchRules.FetchRulesListener() {
                 @Override
                 public void success(ArrayList<Rule> rules) {
                     mAdapter.setRules(ReportReason.convertRulesToReasons(rules));

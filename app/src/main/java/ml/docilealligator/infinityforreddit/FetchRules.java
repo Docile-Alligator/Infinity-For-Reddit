@@ -1,6 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
-import android.os.AsyncTask;
+import android.os.Handler;
 
 import androidx.annotation.NonNull;
 
@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
@@ -24,25 +25,25 @@ public class FetchRules {
         void failed();
     }
 
-    public static void fetchRules(Retrofit retrofit, String subredditName, FetchRulesListener fetchRulesListener) {
-
+    public static void fetchRules(Executor executor, Handler handler, Retrofit retrofit, String subredditName,
+                                  FetchRulesListener fetchRulesListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> rulesCall = api.getRules(subredditName);
         rulesCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    new ParseRulesAsyncTask(response.body(), new ParseRulesAsyncTask.ParseRulesAsyncTaskListener() {
+                    parseRules(executor, handler, response.body(), new FetchRulesListener() {
                         @Override
-                        public void parseSuccessful(ArrayList<Rule> rules) {
+                        public void success(ArrayList<Rule> rules) {
                             fetchRulesListener.success(rules);
                         }
 
                         @Override
-                        public void parseFailed() {
+                        public void failed() {
                             fetchRulesListener.failed();
                         }
-                    }).execute();
+                    });
                 } else {
                     fetchRulesListener.failed();
                 }
@@ -55,17 +56,9 @@ public class FetchRules {
         });
     }
 
-    private static class ParseRulesAsyncTask extends AsyncTask<Void, ArrayList<Rule>, ArrayList<Rule>> {
-        private String response;
-        private ParseRulesAsyncTask.ParseRulesAsyncTaskListener parseRulesAsyncTaskListener;
-
-        ParseRulesAsyncTask(String response, ParseRulesAsyncTask.ParseRulesAsyncTaskListener parseRulesAsyncTaskListener) {
-            this.response = response;
-            this.parseRulesAsyncTaskListener = parseRulesAsyncTaskListener;
-        }
-
-        @Override
-        protected ArrayList<Rule> doInBackground(Void... voids) {
+    private static void parseRules(Executor executor, Handler handler, String response,
+                                   FetchRulesListener fetchRulesListener) {
+        executor.execute(() -> {
             try {
                 JSONArray rulesArray = new JSONObject(response).getJSONArray(JSONUtils.RULES_KEY);
                 ArrayList<Rule> rules = new ArrayList<>();
@@ -77,26 +70,11 @@ public class FetchRules {
                     }
                     rules.add(new Rule(shortName, description));
                 }
-                return rules;
+                handler.post(() -> fetchRulesListener.success(rules));
             } catch (JSONException e) {
                 e.printStackTrace();
+                handler.post(fetchRulesListener::failed);
             }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(ArrayList<Rule> rules) {
-            if (rules != null) {
-                parseRulesAsyncTaskListener.parseSuccessful(rules);
-            } else {
-                parseRulesAsyncTaskListener.parseFailed();
-            }
-        }
-
-        interface ParseRulesAsyncTaskListener {
-            void parseSuccessful(ArrayList<Rule> rules);
-
-            void parseFailed();
-        }
+        });
     }
 }
