@@ -260,8 +260,21 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         mSavedIcon = getMenuItemIcon(R.drawable.ic_bookmark_toolbar_24dp);
         mUnsavedIcon = getMenuItemIcon(R.drawable.ic_bookmark_border_toolbar_24dp);
 
+        if (getResources().getBoolean(R.bool.isTablet) || getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            mLinearLayoutManager = new LinearLayoutManager(activity);
+            mCommentsRecyclerView = rootView.findViewById(R.id.comments_recycler_view_view_post_detail_fragment);
+            mCommentsRecyclerView.setLayoutManager(mLinearLayoutManager);
+            mRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
+        } else {
+            mLinearLayoutManager = new LinearLayoutManager(activity);
+            mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        }
+
         if (activity != null && activity.isImmersiveInterface()) {
             mRecyclerView.setPadding(0, 0, 0, activity.getNavBarHeight() + mRecyclerView.getPaddingBottom());
+            if (mCommentsRecyclerView != null) {
+                mCommentsRecyclerView.setPadding(0, 0, 0, activity.getNavBarHeight() + mCommentsRecyclerView.getPaddingBottom());
+            }
             showToast = true;
         }
 
@@ -279,16 +292,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
         mGlide = Glide.with(this);
         mLocale = getResources().getConfiguration().locale;
-
-        if (getResources().getBoolean(R.bool.isTablet) || getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            mLinearLayoutManager = new LinearLayoutManager(activity);
-            mCommentsRecyclerView = rootView.findViewById(R.id.comments_recycler_view_view_post_detail_fragment);
-            mCommentsRecyclerView.setLayoutManager(mLinearLayoutManager);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
-        } else {
-            mLinearLayoutManager = new LinearLayoutManager(activity);
-            mRecyclerView.setLayoutManager(mLinearLayoutManager);
-        }
 
         if (children != null && children.size() > 0) {
             (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -1159,7 +1162,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                                 mCommentsAdapter.addComments(expandedComments, hasMoreChildren);
 
                                                 if (children.size() > 0) {
-                                                    mRecyclerView.clearOnScrollListeners();
+                                                    (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).clearOnScrollListeners();
                                                     (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).addOnScrollListener(new RecyclerView.OnScrollListener() {
                                                         @Override
                                                         public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -1297,7 +1300,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                         mCommentsAdapter.addComments(expandedComments, hasMoreChildren);
 
                         if (children.size() > 0) {
-                            mRecyclerView.clearOnScrollListeners();
+                            (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).clearOnScrollListeners();
                             (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).addOnScrollListener(new RecyclerView.OnScrollListener() {
                                 @Override
                                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
@@ -1689,7 +1692,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     }
 
     public void delayTransition() {
-        TransitionManager.beginDelayedTransition(mRecyclerView, new AutoTransition());
+        TransitionManager.beginDelayedTransition((mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView), new AutoTransition());
     }
 
     public void showRemovedPost() {
