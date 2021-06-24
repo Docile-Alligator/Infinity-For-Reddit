@@ -1112,16 +1112,13 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             setupMenu();
 
                             mPostAdapter = new PostDetailRecyclerViewAdapter(activity,
-                                    ViewPostDetailFragment.this, mExecutor, mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mGfycatRetrofit,
-                                    mRedgifsRetrofit, mRedditDataRoomDatabase, mGlide,
-                                    mWindowWidth, mAccessToken, mAccountName, mPost, mLocale,
-                                    mSingleCommentId, isSingleCommentThreadMode, mSharedPreferences,
-                                    mNsfwAndSpoilerSharedPreferences, mExoCreator, new PostDetailRecyclerViewAdapter.PostDetailRecyclerViewAdapterCallback() {
-                                @Override
-                                public void updatePost(Post post) {
-                                    EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                                }
-                            });
+                                    ViewPostDetailFragment.this, mExecutor, mCustomThemeWrapper,
+                                    mRetrofit, mOauthRetrofit, mGfycatRetrofit, mRedgifsRetrofit,
+                                    mRedditDataRoomDatabase, mGlide, mWindowWidth, mAccessToken,
+                                    mAccountName, mPost, mLocale, mSingleCommentId,
+                                    isSingleCommentThreadMode, mSharedPreferences,
+                                    mNsfwAndSpoilerSharedPreferences, mExoCreator,
+                                    post1 -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
 
                             mCommentsAdapter = new CommentsRecyclerViewAdapter(activity,
                                     ViewPostDetailFragment.this, mCustomThemeWrapper, mExecutor,

@@ -1643,6 +1643,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
                     }
                 } else {
+                    intent.setData(Uri.parse(mPost.getVideoUrl()));
                     intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
                     intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, mPost.getSubredditName());
                     intent.putExtra(ViewVideoActivity.EXTRA_ID, mPost.getId());
