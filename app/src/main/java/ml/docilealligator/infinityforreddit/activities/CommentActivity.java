@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.Spanned;
 import android.text.util.Linkify;
 import android.view.Menu;
@@ -30,6 +31,8 @@ import com.google.android.material.snackbar.Snackbar;
 import org.commonmark.ext.gfm.tables.TableBlock;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -98,6 +101,8 @@ public class CommentActivity extends BaseActivity {
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private String mAccessToken;
     private String parentFullname;
     private int parentDepth;
@@ -308,9 +313,8 @@ public class CommentActivity extends BaseActivity {
                 Snackbar sendingSnackbar = Snackbar.make(coordinatorLayout, R.string.sending_comment, Snackbar.LENGTH_INDEFINITE);
                 sendingSnackbar.show();
 
-                SendComment.sendComment(commentEditText.getText().toString(), parentFullname, parentDepth,
-                        getResources().getConfiguration().locale, mOauthRetrofit,
-                        mAccessToken,
+                SendComment.sendComment(mExecutor, new Handler(), commentEditText.getText().toString(),
+                        parentFullname, parentDepth, mOauthRetrofit, mAccessToken,
                         new SendComment.SendCommentListener() {
                             @Override
                             public void sendCommentSuccess(Comment comment) {

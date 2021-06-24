@@ -542,7 +542,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 }
             });
             mCommentsAdapter = new CommentsRecyclerViewAdapter(activity,
-                    this, mCustomThemeWrapper, mRetrofit, mOauthRetrofit,
+                    this, mCustomThemeWrapper, mExecutor, mRetrofit, mOauthRetrofit,
                     mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId,
                     isSingleCommentThreadMode, mSharedPreferences,
                     new CommentsRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
@@ -1124,8 +1124,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             });
 
                             mCommentsAdapter = new CommentsRecyclerViewAdapter(activity,
-                                    ViewPostDetailFragment.this, mCustomThemeWrapper, mRetrofit, mOauthRetrofit,
-                                    mAccessToken, mAccountName, mPost, mLocale,
+                                    ViewPostDetailFragment.this, mCustomThemeWrapper, mExecutor,
+                                    mRetrofit, mOauthRetrofit, mAccessToken, mAccountName, mPost, mLocale,
                                     mSingleCommentId, isSingleCommentThreadMode, mSharedPreferences,
                                     new CommentsRecyclerViewAdapter.CommentRecyclerViewAdapterCallback() {
                                         @Override
@@ -1152,7 +1152,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             if (mRespectSubredditRecommendedSortType) {
                                 fetchCommentsRespectRecommendedSort(false);
                             } else {
-                                ParseComment.parseComment(response.body(), new ArrayList<>(), mLocale,
+                                ParseComment.parseComment(mExecutor, new Handler(), response.body(), new ArrayList<>(),
                                         mExpandChildren, new ParseComment.ParseCommentListener() {
                                             @Override
                                             public void onParseCommentSuccess(ArrayList<Comment> expandedComments, String parentId, ArrayList<String> moreChildrenFullnames) {
@@ -1280,7 +1280,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         }
 
         Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
-        FetchComment.fetchComments(retrofit, mAccessToken, mPost.getId(), commentId, sortType,
+        FetchComment.fetchComments(mExecutor, new Handler(), retrofit, mAccessToken, mPost.getId(), commentId, sortType,
                 mContextNumber, mExpandChildren, mLocale, new FetchComment.FetchCommentListener() {
                     @Override
                     public void onFetchCommentSuccess(ArrayList<Comment> expandedComments,
@@ -1382,8 +1382,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         isLoadingMoreChildren = true;
 
         Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
-        FetchComment.fetchMoreComment(retrofit, mAccessToken, children, mChildrenStartingIndex,
-                0, mExpandChildren, mLocale, new FetchComment.FetchMoreCommentListener() {
+        FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken, children, mChildrenStartingIndex,
+                0, mExpandChildren, new FetchComment.FetchMoreCommentListener() {
                     @Override
                     public void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments, int childrenStartingIndex) {
                         hasMoreChildren = childrenStartingIndex < children.size();

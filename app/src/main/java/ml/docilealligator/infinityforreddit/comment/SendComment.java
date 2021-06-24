@@ -1,11 +1,13 @@
 package ml.docilealligator.infinityforreddit.comment;
 
+import android.os.Handler;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.HashMap;
-import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -15,9 +17,9 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class SendComment {
-
-    public static void sendComment(String commentMarkdown, String thingFullname, int parentDepth,
-                                   Locale locale, Retrofit oauthRetrofit, String accessToken,
+    public static void sendComment(Executor executor, Handler handler, String commentMarkdown,
+                                   String thingFullname, int parentDepth,
+                                   Retrofit oauthRetrofit, String accessToken,
                                    SendCommentListener sendCommentListener) {
         Map<String, String> headers = APIUtils.getOAuthHeader(accessToken);
         Map<String, String> params = new HashMap<>();
@@ -30,7 +32,7 @@ public class SendComment {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParseComment.parseSentComment(response.body(), parentDepth, locale, new ParseComment.ParseSentCommentListener() {
+                    ParseComment.parseSentComment(executor, handler, response.body(), parentDepth, new ParseComment.ParseSentCommentListener() {
                         @Override
                         public void onParseSentCommentSuccess(Comment comment) {
                             sendCommentListener.sendCommentSuccess(comment);

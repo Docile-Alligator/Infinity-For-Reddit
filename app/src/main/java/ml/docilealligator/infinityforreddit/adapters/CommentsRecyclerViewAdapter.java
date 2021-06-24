@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.TextPaint;
@@ -35,6 +36,7 @@ import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -82,6 +84,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     private AppCompatActivity mActivity;
     private ViewPostDetailFragment mFragment;
+    private Executor mExecutor;
     private Retrofit mRetrofit;
     private Retrofit mOauthRetrofit;
     private Markwon mCommentMarkwon;
@@ -138,7 +141,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public CommentsRecyclerViewAdapter(AppCompatActivity activity, ViewPostDetailFragment fragment,
                                        CustomThemeWrapper customThemeWrapper,
-                                       Retrofit retrofit, Retrofit oauthRetrofit,
+                                       Executor executor, Retrofit retrofit, Retrofit oauthRetrofit,
                                        String accessToken, String accountName,
                                        Post post, Locale locale, String singleCommentId,
                                        boolean isSingleCommentThreadMode,
@@ -146,6 +149,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                                        CommentRecyclerViewAdapterCallback commentRecyclerViewAdapterCallback) {
         mActivity = activity;
         mFragment = fragment;
+        mExecutor = executor;
         mRetrofit = retrofit;
         mOauthRetrofit = oauthRetrofit;
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
@@ -558,10 +562,10 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.loading);
 
                         Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
-                        FetchComment.fetchMoreComment(retrofit, mAccessToken, parentComment.getMoreChildrenFullnames(),
+                        FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken,
+                                parentComment.getMoreChildrenFullnames(),
                                 parentComment.getMoreChildrenStartingIndex(), parentComment.getDepth() + 1,
-                                mExpandChildren, mLocale,
-                                new FetchComment.FetchMoreCommentListener() {
+                                mExpandChildren, new FetchComment.FetchMoreCommentListener() {
                                     @Override
                                     public void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments,
                                                                           int childrenStartingIndex) {

@@ -1,10 +1,13 @@
 package ml.docilealligator.infinityforreddit.comment;
 
+import android.os.Handler;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 import java.util.Locale;
+import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -14,7 +17,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FetchComment {
-    public static void fetchComments(Retrofit retrofit, @Nullable String accessToken, String article,
+    public static void fetchComments(Executor executor, Handler handler, Retrofit retrofit,
+                                     @Nullable String accessToken, String article,
                                      String commentId, String sortType, String contextNumber, boolean expandChildren,
                                      Locale locale, FetchCommentListener fetchCommentListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
@@ -38,8 +42,8 @@ public class FetchComment {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParseComment.parseComment(response.body(), new ArrayList<>(),
-                            locale, expandChildren, new ParseComment.ParseCommentListener() {
+                    ParseComment.parseComment(executor, handler, response.body(), new ArrayList<>(),
+                            expandChildren, new ParseComment.ParseCommentListener() {
                                 @Override
                                 public void onParseCommentSuccess(ArrayList<Comment> expandedComments,
                                                                   String parentId, ArrayList<String> moreChildrenFullnames) {
@@ -64,9 +68,10 @@ public class FetchComment {
         });
     }
 
-    public static void fetchMoreComment(Retrofit retrofit, @Nullable String accessToken,
+    public static void fetchMoreComment(Executor executor, Handler handler, Retrofit retrofit,
+                                        @Nullable String accessToken,
                                         ArrayList<String> allChildren, int startingIndex,
-                                        int depth, boolean expandChildren, Locale locale,
+                                        int depth, boolean expandChildren,
                                         FetchMoreCommentListener fetchMoreCommentListener) {
         if (allChildren == null) {
             return;
@@ -98,7 +103,7 @@ public class FetchComment {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParseComment.parseMoreComment(response.body(), new ArrayList<>(), locale,
+                    ParseComment.parseMoreComment(executor, handler, response.body(), new ArrayList<>(),
                             depth, expandChildren, new ParseComment.ParseCommentListener() {
                                 @Override
                                 public void onParseCommentSuccess(ArrayList<Comment> expandedComments,
