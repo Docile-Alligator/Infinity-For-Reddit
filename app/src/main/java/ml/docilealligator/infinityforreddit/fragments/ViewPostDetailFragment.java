@@ -570,7 +570,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 mRecyclerView.setAdapter(mConcatAdapter);
             }
 
-
             if (comments == null) {
                 fetchCommentsRespectRecommendedSort(false);
             } else {

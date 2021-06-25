@@ -845,9 +845,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mVisibleComments.add(0, comment);
 
         if (isInitiallyLoading) {
-            notifyItemInserted(2);
-        } else {
             notifyItemInserted(1);
+        } else {
+            notifyItemInserted(0);
         }
     }
 
