@@ -209,6 +209,17 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             }
         });
 
+        fab.setOnLongClickListener(view -> {
+            if (sectionsPagerAdapter != null) {
+                ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
+                if (fragment != null) {
+                    fragment.scrollToPreviousParentComment();
+                    return true;
+                }
+            }
+            return false;
+        });
+
         checkNewAccountAndBindView(savedInstanceState);
     }
 

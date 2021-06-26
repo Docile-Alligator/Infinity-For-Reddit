@@ -1660,7 +1660,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (mLinearLayoutManager != null) {
             int currentPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
             if (mCommentsAdapter != null) {
-                int nextParentPosition = mCommentsAdapter.getNextParentCommentPosition(currentPosition);
+                int nextParentPosition = mCommentsAdapter.getNextParentCommentPosition(mCommentsRecyclerView == null ? currentPosition - 1 : currentPosition);
                 if (nextParentPosition < 0) {
                     return;
                 }
@@ -1677,11 +1677,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (mLinearLayoutManager != null) {
             int currentPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
             if (mCommentsAdapter != null) {
-                int nextParentPosition = mCommentsAdapter.getPreviousParentCommentPosition(currentPosition);
-                if (nextParentPosition < 0) {
+                int previousParentPosition = mCommentsAdapter.getPreviousParentCommentPosition(mCommentsRecyclerView == null ? currentPosition - 1 : currentPosition);
+                if (previousParentPosition < 0) {
                     return;
                 }
-                mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null ? nextParentPosition + 1 : nextParentPosition);
+                mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null ? previousParentPosition + 1 : previousParentPosition);
                 if (mLinearLayoutManager != null) {
                     mIsSmoothScrolling = true;
                     mLinearLayoutManager.startSmoothScroll(mSmoothScroller);
