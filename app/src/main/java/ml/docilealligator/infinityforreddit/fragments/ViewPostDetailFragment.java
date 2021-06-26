@@ -12,7 +12,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -1665,7 +1664,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 if (nextParentPosition < 0) {
                     return;
                 }
-                mSmoothScroller.setTargetPosition(nextParentPosition);
+                mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null ? nextParentPosition + 1 : nextParentPosition);
                 if (mLinearLayoutManager != null) {
                     mIsSmoothScrolling = true;
                     mLinearLayoutManager.startSmoothScroll(mSmoothScroller);
@@ -1682,7 +1681,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 if (nextParentPosition < 0) {
                     return;
                 }
-                mSmoothScroller.setTargetPosition(nextParentPosition);
+                mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null ? nextParentPosition + 1 : nextParentPosition);
                 if (mLinearLayoutManager != null) {
                     mIsSmoothScrolling = true;
                     mLinearLayoutManager.startSmoothScroll(mSmoothScroller);
