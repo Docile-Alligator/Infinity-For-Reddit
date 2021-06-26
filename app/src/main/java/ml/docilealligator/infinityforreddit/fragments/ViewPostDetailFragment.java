@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -323,7 +324,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                         int totalItemCount = mLinearLayoutManager.getItemCount();
                         int firstVisibleItemPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
 
-                        if ((visibleItemCount + firstVisibleItemPosition >= totalItemCount) && firstVisibleItemPosition >= 0) {
+                        if (mCommentsAdapter != null && mCommentsAdapter.getItemCount() >= 1 && (visibleItemCount + firstVisibleItemPosition >= totalItemCount) && firstVisibleItemPosition >= 0) {
                             fetchMoreComments();
                         }
                     }
@@ -403,7 +404,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 if (touchHelper != null) {
                     touchHelper.attachToRecyclerView(null);
-                    touchHelper.attachToRecyclerView(mRecyclerView);
+                    touchHelper.attachToRecyclerView((mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView));
                     if (mCommentsAdapter != null) {
                         mCommentsAdapter.onItemSwipe(viewHolder, direction, swipeLeftAction, swipeRightAction);
                     }
@@ -467,7 +468,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         });
 
         if (enableSwipeAction) {
-            touchHelper.attachToRecyclerView(mRecyclerView);
+            touchHelper.attachToRecyclerView((mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView));
         }
 
         mSwipeRefreshLayout.setOnRefreshListener(() -> refresh(true, true));
@@ -1797,10 +1798,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             }
 
             if (stateChanged) {
-                if (mCommentsRecyclerView != null) {
+                if (mCommentsRecyclerView == null) {
                     refreshAdapter(mRecyclerView, mConcatAdapter);
                 } else {
                     refreshAdapter(mRecyclerView, mPostAdapter);
+                    refreshAdapter(mCommentsRecyclerView, mCommentsAdapter);
                 }
             }
         }
