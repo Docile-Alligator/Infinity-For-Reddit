@@ -13,7 +13,6 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -774,7 +773,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     private void collapseChildren(int position) {
-        Log.i("asdfasdf", "s " + position);
         mVisibleComments.get(position).setExpanded(false);
         int depth = mVisibleComments.get(position).getDepth();
         int allChildrenSize = 0;
@@ -790,7 +788,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             mVisibleComments.subList(position + 1, position + 1 + allChildrenSize).clear();
         }
         if (mIsSingleCommentThreadMode) {
-            Log.i("asdfasdf", "s1 " + getItemCount());
             notifyItemRangeRemoved(position + 2, allChildrenSize);
             if (mFullyCollapseComment) {
                 notifyItemChanged(position + 1);
@@ -1072,7 +1069,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         }
 
         if (mIsSingleCommentThreadMode) {
-            Log.i("asdfasdf", "now " + (mVisibleComments.size() + 1));
             return mVisibleComments.size() + 1;
         } else {
             return mVisibleComments.size();
@@ -1446,7 +1442,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     if (comment != null) {
                         if (mVisibleComments.get(commentPosition).isExpanded()) {
                             collapseChildren(commentPosition);
-                            Log.i("asdfasdf", "ssf");
                             expandButton.setImageResource(R.drawable.ic_expand_more_grey_24dp);
                         } else {
                             comment.setExpanded(true);
@@ -1697,6 +1692,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 if (mActivity != null && mActivity instanceof ViewPostDetailActivity) {
                     mIsSingleCommentThreadMode = false;
                     mSingleCommentId = null;
+                    notifyItemRemoved(0);
                     mFragment.changeToNomalThreadMode();
                 }
             });
