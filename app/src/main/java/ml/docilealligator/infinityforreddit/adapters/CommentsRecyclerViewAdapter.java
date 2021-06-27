@@ -13,6 +13,7 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -773,6 +774,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     private void collapseChildren(int position) {
+        Log.i("asdfasdf", "s " + position);
         mVisibleComments.get(position).setExpanded(false);
         int depth = mVisibleComments.get(position).getDepth();
         int allChildrenSize = 0;
@@ -788,15 +790,16 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             mVisibleComments.subList(position + 1, position + 1 + allChildrenSize).clear();
         }
         if (mIsSingleCommentThreadMode) {
+            Log.i("asdfasdf", "s1 " + getItemCount());
+            notifyItemRangeRemoved(position + 2, allChildrenSize);
             if (mFullyCollapseComment) {
                 notifyItemChanged(position + 1);
             }
-            notifyItemRangeRemoved(position + 2, allChildrenSize);
         } else {
+            notifyItemRangeRemoved(position + 1, allChildrenSize);
             if (mFullyCollapseComment) {
                 notifyItemChanged(position);
             }
-            notifyItemRangeRemoved(position + 1, allChildrenSize);
         }
     }
 
@@ -814,7 +817,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         int sizeBefore = mVisibleComments.size();
         mVisibleComments.addAll(comments);
         if (mIsSingleCommentThreadMode) {
-            notifyItemRangeInserted(sizeBefore + 1, comments.size());
+            notifyItemRangeInserted(sizeBefore, comments.size() + 1);
         } else {
             notifyItemRangeInserted(sizeBefore, comments.size());
         }
@@ -1069,6 +1072,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         }
 
         if (mIsSingleCommentThreadMode) {
+            Log.i("asdfasdf", "now " + (mVisibleComments.size() + 1));
             return mVisibleComments.size() + 1;
         } else {
             return mVisibleComments.size();
@@ -1438,26 +1442,25 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             expandButton.setOnClickListener(view -> {
                 if (expandButton.getVisibility() == View.VISIBLE) {
                     int commentPosition = mIsSingleCommentThreadMode ? getBindingAdapterPosition() - 1 : getBindingAdapterPosition();
-                    if (commentPosition >= 0 && commentPosition < mVisibleComments.size()) {
-                        Comment comment = getCurrentComment(this);
-                        if (comment != null) {
-                            if (mVisibleComments.get(commentPosition).isExpanded()) {
-                                collapseChildren(commentPosition);
-                                expandButton.setImageResource(R.drawable.ic_expand_more_grey_24dp);
-                            } else {
-                                comment.setExpanded(true);
-                                ArrayList<Comment> newList = new ArrayList<>();
-                                expandChildren(mVisibleComments.get(commentPosition).getChildren(), newList, 0);
-                                mVisibleComments.get(commentPosition).setExpanded(true);
-                                mVisibleComments.addAll(commentPosition + 1, newList);
+                    Comment comment = getCurrentComment(this);
+                    if (comment != null) {
+                        if (mVisibleComments.get(commentPosition).isExpanded()) {
+                            collapseChildren(commentPosition);
+                            Log.i("asdfasdf", "ssf");
+                            expandButton.setImageResource(R.drawable.ic_expand_more_grey_24dp);
+                        } else {
+                            comment.setExpanded(true);
+                            ArrayList<Comment> newList = new ArrayList<>();
+                            expandChildren(mVisibleComments.get(commentPosition).getChildren(), newList, 0);
+                            mVisibleComments.get(commentPosition).setExpanded(true);
+                            mVisibleComments.addAll(commentPosition + 1, newList);
 
-                                if (mIsSingleCommentThreadMode) {
-                                    notifyItemRangeInserted(commentPosition + 2, newList.size());
-                                } else {
-                                    notifyItemRangeInserted(commentPosition + 1, newList.size());
-                                }
-                                expandButton.setImageResource(R.drawable.ic_expand_less_grey_24dp);
+                            if (mIsSingleCommentThreadMode) {
+                                notifyItemRangeInserted(commentPosition + 2, newList.size());
+                            } else {
+                                notifyItemRangeInserted(commentPosition + 1, newList.size());
                             }
+                            expandButton.setImageResource(R.drawable.ic_expand_less_grey_24dp);
                         }
                     }
                 } else if (mFullyCollapseComment) {
