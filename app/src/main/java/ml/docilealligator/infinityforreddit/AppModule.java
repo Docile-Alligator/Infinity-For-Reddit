@@ -263,10 +263,15 @@ class AppModule {
 
     @Provides
     @Singleton
-    ExoCreator provideExoCreator() {
-        SimpleCache cache = new SimpleCache(new File(mApplication.getCacheDir(), "/toro_cache"),
+    SimpleCache provideSimpleCache() {
+        return new SimpleCache(new File(mApplication.getCacheDir(), "/exoplayer"),
                 new LeastRecentlyUsedCacheEvictor(200 * 1024 * 1024), new ExoDatabaseProvider(mApplication));
-        Config config = new Config.Builder(mApplication).setMediaSourceBuilder(MediaSourceBuilder.LOOPING).setCache(cache)
+    }
+
+    @Provides
+    @Singleton
+    ExoCreator provideExoCreator(SimpleCache simpleCache) {
+        Config config = new Config.Builder(mApplication).setMediaSourceBuilder(MediaSourceBuilder.LOOPING).setCache(simpleCache)
                 .build();
         return ToroExo.with(mApplication).getCreator(config);
     }

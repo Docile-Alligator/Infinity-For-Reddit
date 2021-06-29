@@ -44,6 +44,8 @@ import com.google.android.exoplayer2.ui.TrackSelectionDialogBuilder;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
+import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
+import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.material.snackbar.Snackbar;
 import com.thefuntasty.hauler.DragDirection;
@@ -156,6 +158,9 @@ public class ViewVideoActivity extends AppCompatActivity {
 
     @Inject
     Executor mExecutor;
+
+    @Inject
+    SimpleCache mSimpleCache;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -289,8 +294,9 @@ public class ViewVideoActivity extends AppCompatActivity {
                     loadGfycatOrRedgifsVideo(redgifsRetrofit, gfycatId, savedInstanceState, false);
                 }
             } else {
-                dataSourceFactory = new DefaultDataSourceFactory(ViewVideoActivity.this,
-                        Util.getUserAgent(ViewVideoActivity.this, "Infinity"));
+                dataSourceFactory = new CacheDataSourceFactory(mSimpleCache,
+                        new DefaultDataSourceFactory(ViewVideoActivity.this,
+                        Util.getUserAgent(ViewVideoActivity.this, "Infinity")));
                 player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
                 preparePlayer(savedInstanceState);
             }
@@ -298,7 +304,8 @@ public class ViewVideoActivity extends AppCompatActivity {
             videoDownloadUrl = mVideoUri.toString();
             videoFileName = FilenameUtils.getName(videoDownloadUrl);
             // Produces DataSource instances through which media data is loaded.
-            dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "Infinity"));
+            dataSourceFactory = new CacheDataSourceFactory(mSimpleCache,
+                    new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "Infinity")));
             // Prepare the player with the source.
             player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
             preparePlayer(savedInstanceState);
@@ -308,7 +315,8 @@ public class ViewVideoActivity extends AppCompatActivity {
             id = intent.getStringExtra(EXTRA_ID);
             videoFileName = subredditName + "-" + id + ".mp4";
             // Produces DataSource instances through which media data is loaded.
-            dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "Infinity"));
+            dataSourceFactory = new CacheDataSourceFactory(mSimpleCache,
+                    new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "Infinity")));
             // Prepare the player with the source.
             player.prepare(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
             preparePlayer(savedInstanceState);
@@ -397,8 +405,9 @@ public class ViewVideoActivity extends AppCompatActivity {
                         progressBar.setVisibility(View.GONE);
                         mVideoUri = Uri.parse(webm);
                         videoDownloadUrl = mp4;
-                        dataSourceFactory = new DefaultDataSourceFactory(ViewVideoActivity.this,
-                                Util.getUserAgent(ViewVideoActivity.this, "Infinity"));
+                        dataSourceFactory = new CacheDataSourceFactory(mSimpleCache,
+                                new DefaultDataSourceFactory(ViewVideoActivity.this,
+                                Util.getUserAgent(ViewVideoActivity.this, "Infinity")));
                         player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
                         preparePlayer(savedInstanceState);
                     }
@@ -472,7 +481,10 @@ public class ViewVideoActivity extends AppCompatActivity {
 
                                         videoFileName = subredditName + "-" + id + ".mp4";
                                         // Produces DataSource instances through which media data is loaded.
-                                        dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(ViewVideoActivity.this, "Infinity"));
+                                        dataSourceFactory = new CacheDataSourceFactory(mSimpleCache,
+                                                new DefaultHttpDataSourceFactory(
+                                                        Util.getUserAgent(ViewVideoActivity.this,
+                                                                "Infinity")));
                                         // Prepare the player with the source.
                                         player.prepare(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
                                         preparePlayer(savedInstanceState);
