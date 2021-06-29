@@ -2811,7 +2811,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
 
             previewImageView.setOnLongClickListener(view -> fullscreenButton.performClick());
-            videoPlayer.setOnLongClickListener(view -> fullscreenButton.performClick());
         }
 
         void bindVideoUri(Uri videoUri) {
@@ -4026,7 +4025,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             });
 
             previewImageView.setOnLongClickListener(view -> fullscreenButton.performClick());
-            videoPlayer.setOnLongClickListener(view -> fullscreenButton.performClick());
         }
 
         void bindVideoUri(Uri videoUri) {
