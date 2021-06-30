@@ -355,9 +355,9 @@
     <string name="settings_enable_nsfw_title">"Włącz NSFW"</string>
     <string name="settings_blur_nsfw_title">"Rozmazuj zdjęcia NSFW"</string>
     <string name="settings_blur_spoiler_title">"Rozmazuj zdjęcia z spoilerami"</string>
-    <string name="settings_about_master_title">"O"</string>
-    <string name="settings_acknowledgement_master_title">"Podziękowanie"</string>
-    <string name="settings_credits_master_title">"Zasługa"</string>
+    <string name="settings_about_master_title">"O aplikacji"</string>
+    <string name="settings_acknowledgement_master_title">"Podziękowania"</string>
+    <string name="settings_credits_master_title">"Zasoby"</string>
     <string name="settings_credits_icon_foreground_title">"Ikona pierwszego planu"</string>
     <string name="settings_credits_icon_foreground_summary">"Wektor technologii stworzony przez freepik - www.freepik.com"</string>
     <string name="settings_credits_icon_background_title">"Tło ikony"</string>
@@ -373,7 +373,7 @@
     <string name="settings_credits_best_rocket_icon_title">"Ikona rakiety"</string>
     <string name="settings_credits_best_rocket_icon_summary">"Ikona stworzona przez Freepik z www.flaticon.com"</string>
     <string name="settings_credits_material_icons_title">"Ikona matieriałów"</string>
-    <string name="settings_open_source_title">"otwartoźródłowy"</string>
+    <string name="settings_open_source_title">"Projekt otwartoźródłowy"</string>
     <string name="settings_open_source_summary">"Oznacz gwiazdką na Githubie jeśli lubisz tą aplikację"</string>
     <string name="settings_rate_title">"Oceń na Google Play"</string>
     <string name="settings_rate_summary">"Daj mi 5 gwiazdek i będę naprawdę szczęśliwy"</string>
@@ -866,7 +866,7 @@ Wiadomość: %2$s"</string>
     <string name="fetch_random_thing_failed">"Spróbuj ponownie później"</string>
     <string name="downloading">"Pobieranie"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all i r/popular"</string>
-    <string name="settings_miscellaneous_title">"Róźne"</string>
+    <string name="settings_miscellaneous_title">"Różne"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_title">"Szanuj Zalecany typ sortowania komentarzy subreddita"</string>
     <string name="settings_respect_subreddit_recommended_comment_sort_type_summary">"Typ sortowania komentarzy nie zostanie zapisany"</string>
     <string name="settings_subreddit_filter_category">"Ukryj Subreddity"</string>
@@ -907,7 +907,7 @@ Wiadomość: %2$s"</string>
     <string name="settings_mark_posts_as_read_after_voting_title">"Zaznacz post jako przeczytany po dodaniu vota"</string>
     <string name="settings_mark_posts_as_read_on_scroll_title">"Oznacz posty jako przeczytane podczas przewijania"</string>
     <string name="settings_hide_read_posts_automatically_title">"Automatycznie ukrywaj przeczytane posty"</string>
-    <string name="settings_sort_type_title">"Typ Sortu"</string>
+    <string name="settings_sort_type_title">"Sortowanie"</string>
     <string name="settings_save_sort_type_title">"Zapisz typ sortowania"</string>
     <string name="settings_subreddit_default_sort_type_title">"Domyślny typ sortowania subbreditów"</string>
     <string name="settings_subreddit_default_sort_time_title">"Domyślny typ sortowania czasu subredditów"</string>
