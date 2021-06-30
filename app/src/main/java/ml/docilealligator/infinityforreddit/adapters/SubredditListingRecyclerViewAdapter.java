@@ -262,7 +262,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
         TextView subredditNameTextView;
         @BindView(R.id.subscribe_image_view_item_subreddit_listing)
         ImageView subscribeButton;
-        @BindView(R.id.checkbox__item_subreddit_listing)
+        @BindView(R.id.checkbox_item_subreddit_listing)
         MaterialCheckBox checkBox;
 
         DataViewHolder(View itemView) {

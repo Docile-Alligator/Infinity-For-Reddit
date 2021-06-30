@@ -28,6 +28,8 @@ import com.r0adkll.slidr.Slidr;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -37,12 +39,21 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.adapters.SearchActivityRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.adapters.SubredditAutocompleteRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.recentsearchquery.DeleteRecentSearchQuery;
 import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQuery;
 import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQueryViewModel;
+import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData;
+import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
 public class SearchActivity extends BaseActivity {
 
@@ -83,10 +94,11 @@ public class SearchActivity extends BaseActivity {
     TextView subredditNameTextView;
     @BindView(R.id.divider_search_activity)
     View divider;
-    @BindView(R.id.recent_summary_text_view_search_activity)
-    TextView recentSummaryTextView;
     @BindView(R.id.recycler_view_search_activity)
     RecyclerView recyclerView;
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -96,14 +108,20 @@ public class SearchActivity extends BaseActivity {
     @Named("current_account")
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
+    @Named("nsfw_and_spoiler")
+    SharedPreferences mNsfwAndSpoilerSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private String mAccountName;
+    private String mAccessToken;
     private String query;
     private String subredditName;
     private boolean subredditIsUser;
     private boolean searchOnlySubreddits;
     private boolean searchOnlyUsers;
     private SearchActivityRecyclerViewAdapter adapter;
+    private SubredditAutocompleteRecyclerViewAdapter subredditAutocompleteRecyclerViewAdapter;
+    private Call<String> subredditAutocompleteCall;
     RecentSearchQueryViewModel mRecentSearchQueryViewModel;
 
     @Override
@@ -159,6 +177,18 @@ public class SearchActivity extends BaseActivity {
             }
         });
 
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false);
+
+        subredditAutocompleteRecyclerViewAdapter = new SubredditAutocompleteRecyclerViewAdapter(this,
+                mCustomThemeWrapper, subredditData -> {
+                    Intent intent = new Intent(SearchActivity.this, ViewSubredditDetailActivity.class);
+                    intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditData.getName());
+                    startActivity(intent);
+                    finish();
+                });
+
         simpleSearchView.setOnQueryTextListener(new SimpleSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -168,6 +198,38 @@ public class SearchActivity extends BaseActivity {
 
             @Override
             public boolean onQueryTextChange(String newText) {
+                if (!newText.isEmpty()) {
+                    if (subredditAutocompleteCall != null) {
+                        subredditAutocompleteCall.cancel();
+                    }
+                    subredditAutocompleteCall = mOauthRetrofit.create(RedditAPI.class).subredditAutocomplete(APIUtils.getOAuthHeader(mAccessToken),
+                            newText, nsfw);
+                    subredditAutocompleteCall.enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                            if (response.isSuccessful()) {
+                                ParseSubredditData.parseSubredditListingData(response.body(), nsfw, new ParseSubredditData.ParseSubredditListingDataListener() {
+                                    @Override
+                                    public void onParseSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
+                                        subredditAutocompleteRecyclerViewAdapter.setSubreddits(subredditData);
+                                        recyclerView.setAdapter(subredditAutocompleteRecyclerViewAdapter);
+                                    }
+
+                                    @Override
+                                    public void onParseSubredditListingDataFail() {
+
+                                    }
+                                });
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+
+                        }
+                    });
+                    return true;
+                }
                 return false;
             }
 
@@ -176,8 +238,6 @@ public class SearchActivity extends BaseActivity {
                 return false;
             }
         });
-
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
 
         if (savedInstanceState != null) {
             subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
@@ -238,10 +298,8 @@ public class SearchActivity extends BaseActivity {
                 mRecentSearchQueryViewModel.getAllRecentSearchQueries().observe(this, recentSearchQueries -> {
                     if (recentSearchQueries != null && !recentSearchQueries.isEmpty()) {
                         divider.setVisibility(View.VISIBLE);
-                        recentSummaryTextView.setVisibility(View.VISIBLE);
                     } else {
                         divider.setVisibility(View.GONE);
-                        recentSummaryTextView.setVisibility(View.GONE);
                     }
                     adapter.setRecentSearchQueries(recentSearchQueries);
                 });
@@ -309,7 +367,6 @@ public class SearchActivity extends BaseActivity {
         searchInTextView.setTextColor(colorAccent);
         subredditNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
         divider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
-        recentSummaryTextView.setTextColor(colorAccent);
     }
 
     @Override

@@ -847,7 +847,6 @@ Sekmeler, diğerlerine geçtikten sonra tüm içeriği kaybedebilir. Bu, sayfay�
  Mesaj: %2$s"</string>
     <string name="give_award_success">"Ödül verildi"</string>
     <string name="give_award_failed">"İşlem Başarısız Oldu"</string>
-    <string name="recent_searches">"Son aramalar"</string>
     <string name="warning">"Uyarı"</string>
     <string name="this_is_a_nsfw_subreddit">"Bu bir NSFW subredditidir."</string>
     <string name="this_user_has_nsfw_content">"Bu kullanıcının NSFW içeriği var"</string>

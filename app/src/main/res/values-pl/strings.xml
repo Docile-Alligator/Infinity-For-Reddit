@@ -840,7 +840,6 @@ Autoodtwarzanie wideo jest wyłączone."</string>
 Wiadomość: %2$s"</string>
     <string name="give_award_success">"Nagroda przyznana"</string>
     <string name="give_award_failed">"Niepowodzenie"</string>
-    <string name="recent_searches">"Ostatnie wyszukiwania"</string>
     <string name="warning">"Ostrzeżenie "</string>
     <string name="this_is_a_nsfw_subreddit">"To jest subreddit NSFW"</string>
     <string name="this_user_has_nsfw_content">"Ten użytkownik posiada treści NSFW"</string>

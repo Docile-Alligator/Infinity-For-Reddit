@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
-class ParseSubredditData {
-    static void parseSubredditData(String response, ParseSubredditDataListener parseSubredditDataListener) {
+public class ParseSubredditData {
+    public static void parseSubredditData(String response, ParseSubredditDataListener parseSubredditDataListener) {
         new ParseSubredditDataAsyncTask(response, parseSubredditDataListener).execute();
     }
 
-    static void parseSubredditListingData(String response, boolean nsfw, ParseSubredditListingDataListener parseSubredditListingDataListener) {
+    public static void parseSubredditListingData(String response, boolean nsfw, ParseSubredditListingDataListener parseSubredditListingDataListener) {
         new ParseSubredditListingDataAsyncTask(response, nsfw, parseSubredditListingDataListener).execute();
     }
 
@@ -70,7 +70,7 @@ class ParseSubredditData {
         void onParseSubredditDataFail();
     }
 
-    interface ParseSubredditListingDataListener {
+    public interface ParseSubredditListingDataListener {
         void onParseSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after);
 
         void onParseSubredditListingDataFail();

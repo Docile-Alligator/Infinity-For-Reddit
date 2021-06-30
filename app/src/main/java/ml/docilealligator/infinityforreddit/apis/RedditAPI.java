@@ -352,4 +352,8 @@ public interface RedditAPI {
     @FormUrlEncoded
     @POST("/api/quarantine_optin?raw_json=1")
     Call<String> optInQuarantinedSubreddit(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @GET("/api/subreddit_autocomplete_v2?typeahead_active=true&include_profiles=false&raw_json=1")
+    Call<String> subredditAutocomplete(@HeaderMap Map<String ,String> headers, @Query("query") String query,
+                                       @Query("include_over_18") boolean nsfw);
 }

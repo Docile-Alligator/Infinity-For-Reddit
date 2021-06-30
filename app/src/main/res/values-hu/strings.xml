@@ -835,7 +835,6 @@ Videó autómatikus lejátszása le van tiltva."</string>
 Üzenet %2$s"</string>
     <string name="give_award_success">"Kitüntetés megadva"</string>
     <string name="give_award_failed">"Nem sikerült"</string>
-    <string name="recent_searches">"Utóbbi keresések"</string>
     <string name="warning">"Figyelem"</string>
     <string name="this_is_a_nsfw_subreddit">"Ez egy NSFW subreddit."</string>
     <string name="this_user_has_nsfw_content">"Ennek a felhasználónak van NSFW tartlama"</string>

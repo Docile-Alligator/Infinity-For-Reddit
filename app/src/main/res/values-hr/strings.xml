@@ -864,7 +864,6 @@ Reddit videi su niže rezolucije."</string>
 Poruka: %2$s"</string>
     <string name="give_award_success">"Nagrađeno"</string>
     <string name="give_award_failed">"Nagrađivanje nije uspjelo"</string>
-    <string name="recent_searches">"Nedavne pretrage"</string>
     <string name="warning">"Upozorenje"</string>
     <string name="this_is_a_nsfw_subreddit">"Ovo je NSFW podreddit."</string>
     <string name="this_user_has_nsfw_content">"Ovaj korisnik ima NSFW sadržaj"</string>

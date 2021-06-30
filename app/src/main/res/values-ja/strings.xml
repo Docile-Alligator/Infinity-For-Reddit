@@ -912,7 +912,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 メッセージ: %2$s"</string>
     <string name="give_award_success">"アワードを贈りました"</string>
     <string name="give_award_failed">"失敗しました"</string>
-    <string name="recent_searches">"検索履歴"</string>
     <string name="warning">"警告"</string>
     <string name="this_is_a_nsfw_subreddit">"このSubredditはNSFWです"</string>
     <string name="this_user_has_nsfw_content">"このユーザーはNSFWの投稿を含んでいます"</string>

@@ -892,7 +892,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 错误信息：%2$s"</string>
     <string name="give_award_success">"奖励已赠送"</string>
     <string name="give_award_failed">"失败"</string>
-    <string name="recent_searches">"最近搜索"</string>
     <string name="warning">"警告"</string>
     <string name="this_is_a_nsfw_subreddit">"这是一个 NSFW 版块。"</string>
     <string name="this_user_has_nsfw_content">"该用户有 NSFW 内容"</string>

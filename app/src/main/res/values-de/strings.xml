@@ -871,7 +871,6 @@ Reiter könnten den Inhalt verlieren, wenn zu anderen gewechselt wird. Selbes Ve
     <string name="give_award_error_message">"Code: %1$d/ Nachricht: %2$s"</string>
     <string name="give_award_success">"Auszeichnung verliehen"</string>
     <string name="give_award_failed">"Fehlgeschlagen"</string>
-    <string name="recent_searches">"Kürzliche Suchanfragen"</string>
     <string name="warning">"Warnung"</string>
     <string name="this_is_a_nsfw_subreddit">"Dieses ist ein NSFW-Subreddit"</string>
     <string name="this_user_has_nsfw_content">"Dieser Nutzer hat NSFW-Inhalte"</string>

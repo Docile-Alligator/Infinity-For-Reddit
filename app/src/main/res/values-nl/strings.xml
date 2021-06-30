@@ -838,7 +838,6 @@ Automatisch afspelen van video is uitgeschakeld."</string>
 Bericht: %2$s"</string>
     <string name="give_award_success">"Award gegeven"</string>
     <string name="give_award_failed">"Mislukt"</string>
-    <string name="recent_searches">"Recente zoekopdrachten"</string>
     <string name="warning">"Waarschuwing"</string>
     <string name="this_is_a_nsfw_subreddit">"Dit is een NSFW subreddit."</string>
     <string name="this_user_has_nsfw_content">"Deze gebruiker heeft NSFW inhoud"</string>

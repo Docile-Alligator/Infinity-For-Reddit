@@ -832,7 +832,6 @@ Tự động phát video bị tắt."</string>
 Thông báo: %2$s"</string>
     <string name="give_award_success">"Giải thưởng đã được cho"</string>
     <string name="give_award_failed">"Thất bại"</string>
-    <string name="recent_searches">"Tìm kiếm gần đây"</string>
     <string name="warning">"Cảnh báo"</string>
     <string name="this_is_a_nsfw_subreddit">"Đây là một subreddit NSFW."</string>
     <string name="this_user_has_nsfw_content">"Người dùng này có nội dung NSFW"</string>

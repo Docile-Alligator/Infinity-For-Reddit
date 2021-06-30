@@ -833,7 +833,6 @@ Reddit видео - уменьшенное разрешение.
 Сообщение: %2$s"</string>
     <string name="give_award_success">"Награда выдана"</string>
     <string name="give_award_failed">"Ошибка"</string>
-    <string name="recent_searches">"Недавние запросы"</string>
     <string name="warning">"Предупреждение"</string>
     <string name="this_is_a_nsfw_subreddit">"Это NSFW сабреддит"</string>
     <string name="this_user_has_nsfw_content">"У пользователь есть NSFW контент"</string>
