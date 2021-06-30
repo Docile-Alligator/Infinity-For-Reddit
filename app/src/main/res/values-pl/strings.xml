@@ -278,9 +278,9 @@
     <string name="label_post">"Post"</string>
     <string name="label_preferences">"Preferencje"</string>
     <string name="account_switched">"Konto zostało zmienione. Więc wszystkie inne strony zniknęły."</string>
-    <string name="settings_notification_master_title">"Powiadomienie"</string>
+    <string name="settings_notification_master_title">"Powiadomienia"</string>
     <string name="settings_notification_enable_notification_title">"Włącz powiadomienia"</string>
-    <string name="settings_notification_interval_title">"Sprawdź Interwał powiadomień"</string>
+    <string name="settings_notification_interval_title">"Częstotliwość sprawdzania powiadomień"</string>
     <string name="settings_theme_title">"Motyw"</string>
     <string name="settings_amoled_dark_title">"Ciemny (Amoled)"</string>
     <string name="settings_interface_title">"Interfejs"</string>
@@ -296,7 +296,7 @@
     <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"Rozpocznij autoodtwarzanie wideo gdy %1$d%% z nich są widoczne"</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">"Odsunięcie widocznego obszaru automatycznie odtwarzanych filmów (w poziomie)"</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Rozpocznij autoodtwarzanie wideo gdy %1$d%% z nich są widoczne"</string>
-    <string name="settings_immersive_interface_title">"interfejs immersyjny"</string>
+    <string name="settings_immersive_interface_title">"Immersyjny interfejs"</string>
     <string name="settings_immersive_interface_summary">"Nie ma zastosowania do wszystkich stron"</string>
     <string name="settings_immersive_interface_ignore_nav_bar_title">"Ignoruj pasek nawigacyjny w interfejsie immersyjnym"</string>
     <string name="settings_immersive_interface_ignore_nav_bar_summary">"Zapobiegaj sytuacji, w której dolny pasek nawigacyjny posiada dodatkowy margines"</string>
@@ -411,6 +411,12 @@
     <string name="settings_tab_multi_reddit_name">"Nazwa multireddita (/user/twoja_nazwa/m/nazwa_twojego_multireddita)"</string>
     <string name="settings_tab_username">"Nazwa użytkownika (bez prefixu u/)"</string>
     <string name="no_developer_easter_egg">"Nie ma tutaj opcji dla programistów"</string>
+    <string name="settings_navigation_drawer_title">Menu boczne</string>
+    <string name="settings_collapse_account_section_title">Zwiń sekcję konta</string>
+    <string name="settings_collapse_post_section_title">Zwiń sekcję postów</string>
+    <string name="settings_collapse_preferences_section_title">Zwiń sekcję ustawień</string>
+    <string name="settings_collapse_favorite_subreddits_section_title">Zwiń sekcję ulubionych subredditów</string>
+    <string name="settings_collapse_subscribed_subreddits_section_title">Zwiń sekcję zasubskrybowanych subredditów</string>
     <string name="no_link_available">"Nie można uzyskać linku"</string>
     <string name="exit_when_submit">"Wyjść?"</string>
     <string name="exit_when_submit_post_detail">"Post zostanie przesłany, nawet jeśli stąd wyjdziesz."</string>
@@ -448,8 +454,7 @@
     <string name="elapsed_time_years_ago">"%1$d lat temu"</string>
     <string name="error_getting_multi_reddit_data">"Błąd podczas pobierania danych multiredditu"</string>
     <string name="error_loading_multi_reddit_list">"Nie można zsynchronizować multiredditów"</string>
-    <string name="error_loading_subscriptions">"
-Nie można zsynchronizować subskrypcji"</string>
+    <string name="error_loading_subscriptions">"Nie można zsynchronizować subskrypcji"</string>
     <string name="share_this_app">"Sprawdź Infinity for Reddit, niesamowitego klienta dla Reddita! https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit"</string>
     <string name="error_getting_subreddit_name">"Błąd podczas uzyskiwania nazwy subreddita"</string>
     <string name="share_post_link">"Udostępnij link do posta"</string>
@@ -473,6 +478,7 @@ Nie można zsynchronizować subskrypcji"</string>
     <string name="exit_app">"Wyjść?"</string>
     <string name="light_theme">"Jasny motyw"</string>
     <string name="dark_theme">"Ciemny motyw"</string>
+    <string name="device_default">Domyślne urządzenia</string>
     <string name="multi_reddit_name_hint">"Nazwa (Max 50 znaków)"</string>
     <string name="multi_reddit_description_hint">"Opis"</string>
     <string name="private_multi_reddit">"Prywatny"</string>
@@ -773,6 +779,8 @@ Example: yourpass:123456"</string>
     <string name="settings_more_tabs_summary">"Więcej kart"</string>
     <string name="settings_more_tabs_info_summary">"Włączenie następujących opcji spowoduje niezamierzone zachowanie:
 Po przełączeniu się na inne karty mogą utracić całą zawartość. To jest to samo, co odświeżanie strony."</string>
+    <string name="settings_more_tabs_show_favorite_multireddits_title">Pokaż ulubione multireddity</string>
+    <string name="settings_more_tabs_show_multireddits_title">Pokaż multireddity</string>
     <string name="settings_more_tabs_show_favorite_subscribed_subreddits_title">"Pokaż ulubione subskrybowane subreddity"</string>
     <string name="settings_more_tabs_show_subscribed_subreddits_title">"Pokaż subskrybowane subreddity"</string>
     <string name="settings_download_location_title">"Lokalizacja pobierania"</string>
@@ -905,6 +913,7 @@ Wiadomość: %2$s"</string>
     <string name="settings_subreddit_default_sort_time_title">"Domyślny typ sortowania czasu subredditów"</string>
     <string name="settings_user_default_sort_type_title">"Domyślny typ sortowania użytkowników"</string>
     <string name="settings_user_default_sort_time_title">"Domyślny typ sortowania czasu użytkowników"</string>
+    <string name="settings_click_to_show_media_in_gallery_layout">Naciśnij aby pokazać multimedia w widoku galerii</string>
     <string name="open_link">"Otwórz link"</string>
     <string name="select_subreddits_and_users">"Wybierz subreddity i użytkowników"</string>
     <string name="hide_read_posts">"Ukryj przeczytane posty"</string>
@@ -947,6 +956,7 @@ użytkownika / multireddita"</string>
     <string name="settings_show_avatar_on_the_right">"Pokazuj awatary z lewej strony"</string>
     <string name="settings_backup_settings_title">"Opcje backupu"</string>
     <string name="settings_restore_settings_title">"Przywróć ustawienia"</string>
+    <string name="settings_swipe_between_posts_title">Gest przesuwania między postami w lewo/prawo</string>
     <string name="settings_hide_favorite_subreddits_sections_title">"Schowaj sekcję ulubionych subredditów"</string>
     <string name="settings_hide_subscribed_subreddits_sections_title">"Schowaj sekcję subskrybowanych subredditów"</string>
     <string name="anonymous_front_page_no_subscriptions">"Zacznij dołączając do subreddita!"</string>
@@ -970,8 +980,11 @@ użytkownika / multireddita"</string>
     <string name="select">"Wybierz"</string>
     <string name="suggest_title">"Zasugeruj tytuł"</string>
     <string name="suggest_title_failed">"Nie można zasugerować tytułu"</string>
+    <string name="settings_default_search_result_tab">Domyślna zakładka dla wyszukiwania</string>
     <string name="settings_crash_reports_title">"Crash reporty"</string>
-    <string name="settings_disable_nsfw_forever_title">"Wyłącz NSFW na zawszę"</string>
+    <string name="settings_nsfw_and_spoiler_dangerous_group_title">Niebezpieczne</string>
+    <string name="settings_disable_nsfw_forever_title">"Permanentnie wyłącz NSFW"</string>
+    <string name="settings_show_only_one_comment_level_indicator">Pokaż tylko jeden poziom wskaźnika komentarzy</string>
     <string name="save_comment">"Zapisz"</string>
     <string name="copy_multi_reddit_path">"Skopiuj ścieżkę multireddita"</string>
     <string name="copy_multi_reddit_path_failed">"Nie można skopiować ścieżki multireddita"</string>
