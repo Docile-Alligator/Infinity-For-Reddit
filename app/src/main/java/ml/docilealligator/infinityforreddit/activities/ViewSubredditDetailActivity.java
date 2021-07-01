@@ -7,6 +7,8 @@ import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -29,6 +31,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -52,6 +55,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.Executor;
 
@@ -71,6 +75,8 @@ import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterfac
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
+import ml.docilealligator.infinityforreddit.adapters.SubredditAutocompleteRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.AddSubredditOrUserToMultiReddit;
 import ml.docilealligator.infinityforreddit.asynctasks.CheckIsSubscribedToSubreddit;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubredditData;
@@ -93,12 +99,17 @@ import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostDataSource;
 import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
 import ml.docilealligator.infinityforreddit.subreddit.FetchSubredditData;
+import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditSubscription;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditViewModel;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import pl.droidsonroids.gif.GifImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class ViewSubredditDetailActivity extends BaseActivity implements SortTypeSelectionCallback,
@@ -197,6 +208,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     public SubredditViewModel mSubredditViewModel;
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
+    private Call<String> subredditAutocompleteCall;
     private String mAccessToken;
     private String mAccountName;
     private String subredditName;
@@ -1334,8 +1346,19 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private void goToSubreddit() {
         View rootView = getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, coordinatorLayout, false);
         TextInputEditText thingEditText = rootView.findViewById(R.id.text_input_edit_text_go_to_thing_edit_text);
+        RecyclerView recyclerView = rootView.findViewById(R.id.recycler_view_go_to_thing_edit_text);
         thingEditText.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+        SubredditAutocompleteRecyclerViewAdapter adapter = new SubredditAutocompleteRecyclerViewAdapter(
+                this, mCustomThemeWrapper, subredditData -> {
+            if (imm != null) {
+                imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
+            }
+            Intent intent = new Intent(ViewSubredditDetailActivity.this, ViewSubredditDetailActivity.class);
+            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditData.getName());
+            startActivity(intent);
+        });
+        recyclerView.setAdapter(adapter);
         if (imm != null) {
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
         }
@@ -1350,6 +1373,51 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 return true;
             }
             return false;
+        });
+
+        boolean nsfw = mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false);
+        thingEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                if (subredditAutocompleteCall != null) {
+                    subredditAutocompleteCall.cancel();
+                }
+                subredditAutocompleteCall = mOauthRetrofit.create(RedditAPI.class).subredditAutocomplete(APIUtils.getOAuthHeader(mAccessToken),
+                        editable.toString(), nsfw);
+                subredditAutocompleteCall.enqueue(new Callback<String>() {
+                    @Override
+                    public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                        if (response.isSuccessful()) {
+                            ParseSubredditData.parseSubredditListingData(response.body(), nsfw, new ParseSubredditData.ParseSubredditListingDataListener() {
+                                @Override
+                                public void onParseSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
+                                    adapter.setSubreddits(subredditData);
+                                }
+
+                                @Override
+                                public void onParseSubredditListingDataFail() {
+
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+
+                    }
+                });
+            }
         });
         new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                 .setTitle(R.string.go_to_subreddit)
