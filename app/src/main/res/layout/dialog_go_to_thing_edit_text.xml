@@ -1,25 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.textfield.TextInputLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingStart="16dp"
-    android:paddingTop="8dp"
-    android:paddingEnd="16dp"
-    android:paddingBottom="8dp"
-    app:boxStrokeColor="?attr/primaryTextColor"
-    app:hintTextColor="?attr/primaryTextColor">
+    android:orientation="vertical">
 
-    <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/text_input_edit_text_go_to_thing_edit_text"
+    <com.google.android.material.textfield.TextInputLayout
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:fontFamily="?attr/font_family"
-        android:hint="@string/go_to_thing_hint"
-        android:textColor="?attr/primaryTextColor"
-        android:textSize="?attr/font_default"
-        android:singleLine="true"
-        android:imeOptions="actionDone"/>
+        android:paddingStart="16dp"
+        android:paddingTop="8dp"
+        android:paddingEnd="16dp"
+        android:paddingBottom="8dp"
+        app:boxStrokeColor="?attr/primaryTextColor"
+        app:hintTextColor="?attr/primaryTextColor">
 
-</com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/text_input_edit_text_go_to_thing_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="?attr/font_family"
+            android:hint="@string/go_to_thing_hint"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:singleLine="true"
+            android:imeOptions="actionDone"/>
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycler_view_go_to_thing_edit_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+</LinearLayout>
