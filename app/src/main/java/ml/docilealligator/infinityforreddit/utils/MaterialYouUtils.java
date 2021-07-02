@@ -14,11 +14,33 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.concurrent.Executor;
 
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 
 public class MaterialYouUtils {
+    public interface CheckThemeNameListener {
+        void themeNotExists();
+        void themeExists();
+    }
+
+    public static void checkThemeName(Executor executor, Handler handler,
+                                      RedditDataRoomDatabase redditDataRoomDatabase,
+                                      CheckThemeNameListener checkThemeNameListener) {
+        executor.execute(() -> {
+            if (redditDataRoomDatabase.customThemeDao().getCustomTheme("Material You") != null
+                    || redditDataRoomDatabase.customThemeDao().getCustomTheme("Material You Dark") != null
+                    || redditDataRoomDatabase.customThemeDao().getCustomTheme("Material You Amoled") != null) {
+                handler.post(checkThemeNameListener::themeExists);
+            } else {
+                handler.post(checkThemeNameListener::themeNotExists);
+            }
+        });
+    }
+
     public static void changeTheme(Context context, Executor executor, Handler handler,
+                                   RedditDataRoomDatabase redditDataRoomDatabase,
                                    CustomThemeWrapper customThemeWrapper,
                                    SharedPreferences lightThemeSharedPreferences,
                                    SharedPreferences darkThemeSharedPreferences,
@@ -29,6 +51,10 @@ public class MaterialYouUtils {
                 WallpaperColors wallpaperColors = wallpaperManager.getWallpaperColors(WallpaperManager.FLAG_SYSTEM);
 
                 if (wallpaperColors != null) {
+                    CustomTheme lightTheme = CustomThemeWrapper.getIndigo(context);
+                    CustomTheme darkTheme = CustomThemeWrapper.getIndigoDark(context);
+                    CustomTheme amoledTheme = CustomThemeWrapper.getIndigoAmoled(context);
+
                     int colorPrimaryInt = shiftColorTo255(wallpaperColors.getPrimaryColor().toArgb(), 0.4);
                     int colorPrimaryDarkInt = shiftColorTo0(colorPrimaryInt, 0.3);
                     int backgroundColor = shiftColorTo255(colorPrimaryInt, 0.6);
@@ -39,39 +65,51 @@ public class MaterialYouUtils {
                     int colorPrimaryAppropriateTextColor = getAppropriateTextColor(colorPrimaryInt);
                     int backgroundColorAppropriateTextColor = getAppropriateTextColor(backgroundColor);
 
-                    lightThemeSharedPreferences.edit().putInt(CustomThemeSharedPreferencesUtils.COLOR_PRIMARY, colorPrimaryInt)
-                            .putInt(CustomThemeSharedPreferencesUtils.COLOR_PRIMARY_DARK, colorPrimaryDarkInt)
-                            .putInt(CustomThemeSharedPreferencesUtils.COLOR_ACCENT, colorAccentInt)
-                            .putInt(CustomThemeSharedPreferencesUtils.COLOR_PRIMARY_LIGHT_THEME, colorPrimaryInt)
-                            .putInt(CustomThemeSharedPreferencesUtils.BACKGROUND_COLOR, backgroundColor)
-                            .putInt(CustomThemeSharedPreferencesUtils.CARD_VIEW_BACKGROUND_COLOR, cardViewBackgroundColor)
-                            .putInt(CustomThemeSharedPreferencesUtils.COMMENT_BACKGROUND_COLOR, cardViewBackgroundColor)
-                            .putInt(CustomThemeSharedPreferencesUtils.AWARDED_COMMENT_BACKGROUND_COLOR, cardViewBackgroundColor)
-                            .putInt(CustomThemeSharedPreferencesUtils.BOTTOM_APP_BAR_BACKGROUND_COLOR, colorPrimaryInt)
-                            .putInt(CustomThemeSharedPreferencesUtils.NAV_BAR_COLOR, colorPrimaryInt)
-                            .putInt(CustomThemeSharedPreferencesUtils.PRIMARY_TEXT_COLOR, backgroundColorAppropriateTextColor)
-                            .putInt(CustomThemeSharedPreferencesUtils.BOTTOM_APP_BAR_ICON_COLOR, colorPrimaryAppropriateTextColor)
-                            .putInt(CustomThemeSharedPreferencesUtils.PRIMARY_ICON_COLOR, backgroundColorAppropriateTextColor)
-                            .putInt(CustomThemeSharedPreferencesUtils.FAB_ICON_COLOR, colorPrimaryAppropriateTextColor)
-                            .putInt(CustomThemeSharedPreferencesUtils.TOOLBAR_PRIMARY_TEXT_AND_ICON_COLOR, colorPrimaryAppropriateTextColor)
-                            .putInt(CustomThemeSharedPreferencesUtils.TOOLBAR_SECONDARY_TEXT_COLOR, colorPrimaryAppropriateTextColor)
-                            .putInt(CustomThemeSharedPreferencesUtils.TAB_LAYOUT_WITH_COLLAPSED_COLLAPSING_TOOLBAR_TAB_INDICATOR, colorPrimaryAppropriateTextColor)
-                            .putInt(CustomThemeSharedPreferencesUtils.TAB_LAYOUT_WITH_COLLAPSED_COLLAPSING_TOOLBAR_TEXT_COLOR, colorPrimaryAppropriateTextColor)
-                            .putInt(CustomThemeSharedPreferencesUtils.TAB_LAYOUT_WITH_COLLAPSED_COLLAPSING_TOOLBAR_TAB_BACKGROUND, colorPrimaryInt)
-                            .putInt(CustomThemeSharedPreferencesUtils.TAB_LAYOUT_WITH_EXPANDED_COLLAPSING_TOOLBAR_TAB_BACKGROUND, colorPrimaryInt)
-                            .putInt(CustomThemeSharedPreferencesUtils.TAB_LAYOUT_WITH_EXPANDED_COLLAPSING_TOOLBAR_TAB_INDICATOR, colorPrimaryAppropriateTextColor)
-                            .putInt(CustomThemeSharedPreferencesUtils.TAB_LAYOUT_WITH_EXPANDED_COLLAPSING_TOOLBAR_TEXT_COLOR, colorPrimaryAppropriateTextColor)
-                            .putInt(CustomThemeSharedPreferencesUtils.CIRCULAR_PROGRESS_BAR_BACKGROUND, colorPrimaryInt)
-                            .putBoolean(CustomThemeSharedPreferencesUtils.LIGHT_STATUS_BAR, getAppropriateTextColor(colorPrimaryInt) == Color.toArgb(Color.BLACK))
-                            .apply();
-                    darkThemeSharedPreferences.edit()
-                            .putInt(CustomThemeSharedPreferencesUtils.COLOR_ACCENT, colorPrimaryInt)
-                            .putInt(CustomThemeSharedPreferencesUtils.COLOR_PRIMARY_LIGHT_THEME, colorPrimaryInt)
-                            .apply();
-                    amoledThemeSharedPreferences.edit()
-                            .putInt(CustomThemeSharedPreferencesUtils.COLOR_ACCENT, colorPrimaryInt)
-                            .putInt(CustomThemeSharedPreferencesUtils.COLOR_PRIMARY_LIGHT_THEME, colorPrimaryInt)
-                            .apply();
+                    lightTheme.colorPrimary = colorPrimaryInt;
+                    lightTheme.colorPrimaryDark = colorPrimaryDarkInt;
+                    lightTheme.colorAccent = colorAccentInt;
+                    lightTheme.colorPrimaryLightTheme = colorPrimaryInt;
+                    lightTheme.backgroundColor = backgroundColor;
+                    lightTheme.cardViewBackgroundColor = cardViewBackgroundColor;
+                    lightTheme.commentBackgroundColor = cardViewBackgroundColor;
+                    lightTheme.awardedCommentBackgroundColor = cardViewBackgroundColor;
+                    lightTheme.bottomAppBarBackgroundColor = colorPrimaryInt;
+                    lightTheme.navBarColor = colorPrimaryInt;
+                    lightTheme.primaryTextColor = backgroundColorAppropriateTextColor;
+                    lightTheme.bottomAppBarIconColor = colorPrimaryAppropriateTextColor;
+                    lightTheme.primaryIconColor = backgroundColorAppropriateTextColor;
+                    lightTheme.fabIconColor = colorPrimaryAppropriateTextColor;
+                    lightTheme.toolbarPrimaryTextAndIconColor = colorPrimaryAppropriateTextColor;
+                    lightTheme.toolbarSecondaryTextColor = colorPrimaryAppropriateTextColor;
+                    lightTheme.tabLayoutWithCollapsedCollapsingToolbarTabIndicator = colorPrimaryAppropriateTextColor;
+                    lightTheme.tabLayoutWithCollapsedCollapsingToolbarTextColor = colorPrimaryAppropriateTextColor;
+                    lightTheme.tabLayoutWithCollapsedCollapsingToolbarTabBackground = colorPrimaryInt;
+                    lightTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground = colorPrimaryInt;
+                    lightTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator = colorPrimaryAppropriateTextColor;
+                    lightTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = colorPrimaryAppropriateTextColor;
+                    lightTheme.circularProgressBarBackground = colorPrimaryInt;
+                    lightTheme.isLightStatusBar = getAppropriateTextColor(colorPrimaryInt) == Color.toArgb(Color.BLACK);
+                    lightTheme.name = "Material You";
+
+                    darkTheme.colorAccent = colorPrimaryInt;
+                    darkTheme.colorPrimaryLightTheme = colorPrimaryInt;
+                    darkTheme.name = "Material You Dark";
+
+                    amoledTheme.colorAccent = colorPrimaryInt;
+                    amoledTheme.colorPrimaryLightTheme = colorPrimaryInt;
+                    amoledTheme.name = "Material You Amoled";
+
+                    redditDataRoomDatabase.customThemeDao().unsetLightTheme();
+                    redditDataRoomDatabase.customThemeDao().unsetDarkTheme();
+                    redditDataRoomDatabase.customThemeDao().unsetAmoledTheme();
+                    
+                    redditDataRoomDatabase.customThemeDao().insert(lightTheme);
+                    redditDataRoomDatabase.customThemeDao().insert(darkTheme);
+                    redditDataRoomDatabase.customThemeDao().insert(amoledTheme);
+
+                    CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(lightTheme, lightThemeSharedPreferences);
+                    CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(darkTheme, darkThemeSharedPreferences);
+                    CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(amoledTheme, amoledThemeSharedPreferences);
 
                     handler.post(() -> EventBus.getDefault().post(new RecreateActivityEvent()));
                 }

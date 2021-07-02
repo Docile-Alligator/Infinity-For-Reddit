@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint android:id="@+id/material_card_view_item_post_with_preview" />
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint android:id="@id/material_card_view_item_post_with_preview"
+            android:layout_width="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintWidth_percent="0.7" />
+    </ConstraintSet>
+
+    <Transition
+        app:constraintSetEnd="@id/end"
+        app:constraintSetStart="@+id/start">
+
+        <OnSwipe
+            app:dragDirection="dragRight"
+            app:touchAnchorId="@id/material_card_view_item_post_with_preview"
+            app:touchAnchorSide="right" />
+
+    </Transition>
+</MotionScene>

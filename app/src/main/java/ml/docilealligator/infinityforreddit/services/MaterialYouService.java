@@ -40,7 +40,8 @@ public class MaterialYouService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
-        MaterialYouUtils.changeTheme(this, executor, new Handler(), customThemeWrapper,
-                lightThemeSharedPreferences, darkThemeSharedPreferences, amoledThemeSharedPreferences);
+        MaterialYouUtils.changeTheme(this, executor, new Handler(), redditDataRoomDatabase,
+                customThemeWrapper, lightThemeSharedPreferences, darkThemeSharedPreferences,
+                amoledThemeSharedPreferences);
     }
 }

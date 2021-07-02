@@ -12,6 +12,7 @@
     <SwitchPreference
         app:defaultValue="false"
         app:key="amoled_dark"
+        app:icon="@drawable/ic_amoled_theme_preference_24dp"
         app:title="@string/settings_amoled_dark_title" />
 
     <PreferenceCategory
@@ -40,8 +41,18 @@
         app:icon="@drawable/ic_edit_24dp"
         app:title="@string/settings_manage_themes_title" />
 
+    <Preference
+        app:icon="@drawable/ic_info_preference_24dp"
+        app:summary="@string/settings_custom_theme_cannot_apply_to_settings_page_summary"
+        app:enabled="false" />
+
     <PreferenceCategory
         app:title="@string/settings_category_material_you_title" />
+
+    <Preference
+        app:icon="@drawable/ic_info_preference_24dp"
+        app:summary="@string/settings_enable_material_you_warning_summary"
+        app:enabled="false" />
 
     <SwitchPreference
         app:defaultValue="false"
@@ -50,8 +61,8 @@
         app:summary="@string/settings_enable_material_you_summary" />
 
     <Preference
-        app:icon="@drawable/ic_info_preference_24dp"
-        app:summary="@string/settings_custom_theme_cannot_apply_to_settings_page_summary"
-        app:enabled="false" />
+        app:key="apply_material_you"
+        app:title="@string/settings_apply_material_you_title"
+        app:summary="@string/settings_apply_material_you_summary" />
 
 </PreferenceScreen>

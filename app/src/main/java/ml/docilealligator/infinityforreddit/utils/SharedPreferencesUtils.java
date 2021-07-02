@@ -181,6 +181,7 @@ public class SharedPreferencesUtils {
     public static final String DISABLE_NSFW_FOREVER = "disable_nsfw_forever";
     public static final String SHOW_ONLY_ONE_COMMENT_LEVEL_INDICATOR = "show_only_one_comment_level_indicator";
     public static final String ENABLE_MATERIAL_YOU = "enable_material_you";
+    public static final String APPLY_MATERIAL_YOU = "apply_material_you";
 
     public static final String DEFAULT_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit_preferences";
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";

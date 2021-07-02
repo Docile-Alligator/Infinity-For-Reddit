@@ -50,6 +50,9 @@ public class ThemePreferenceFragment extends PreferenceFragmentCompat {
 
     private AppCompatActivity activity;
     @Inject
+    @Named("default")
+    SharedPreferences sharedPreferences;
+    @Inject
     @Named("light_theme")
     SharedPreferences lightThemeSharedPreferences;
     @Inject
@@ -79,6 +82,7 @@ public class ThemePreferenceFragment extends PreferenceFragmentCompat {
         Preference customizeAmoledThemePreference = findPreference(SharedPreferencesUtils.CUSTOMIZE_AMOLED_THEME);
         Preference selectAndCustomizeThemePreference = findPreference(SharedPreferencesUtils.MANAGE_THEMES);
         SwitchPreference enableMaterialYouSwitchPreference = findPreference(SharedPreferencesUtils.ENABLE_MATERIAL_YOU);
+        Preference applyMaterialYouPreference = findPreference(SharedPreferencesUtils.APPLY_MATERIAL_YOU);
 
         boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
         if (themePreference != null && amoledDarkSwitch != null) {
@@ -169,14 +173,32 @@ public class ThemePreferenceFragment extends PreferenceFragmentCompat {
             });
         }
 
-        if (enableMaterialYouSwitchPreference != null) {
-            Handler handler = new Handler();
+        if (enableMaterialYouSwitchPreference != null && applyMaterialYouPreference != null) {
+            applyMaterialYouPreference.setVisible(
+                    sharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_MATERIAL_YOU, false));
+
             enableMaterialYouSwitchPreference.setOnPreferenceChangeListener((preference, newValue) -> {
-                if (true) {
-                    MaterialYouUtils.changeTheme(activity, executor, new Handler(), customThemeWrapper,
-                            lightThemeSharedPreferences, darkThemeSharedPreferences, amoledThemeSharedPreferences);
+                if ((Boolean) newValue) {
+                    MaterialYouUtils.changeTheme(activity, executor, new Handler(),
+                            redditDataRoomDatabase, customThemeWrapper,
+                            lightThemeSharedPreferences, darkThemeSharedPreferences,
+                            amoledThemeSharedPreferences);
+                    applyMaterialYouPreference.setVisible(true);
+                } else {
+                    applyMaterialYouPreference.setVisible(false);
                 }
                 return true;
+            });
+
+            applyMaterialYouPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+                @Override
+                public boolean onPreferenceChange(Preference preference, Object newValue) {
+                    MaterialYouUtils.changeTheme(activity, executor, new Handler(),
+                            redditDataRoomDatabase, customThemeWrapper,
+                            lightThemeSharedPreferences, darkThemeSharedPreferences,
+                            amoledThemeSharedPreferences);
+                    return true;
+                }
             });
         }
 
