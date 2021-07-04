@@ -8,14 +8,10 @@ import androidx.annotation.Nullable;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
-import org.xmlpull.v1.XmlPullParserFactory;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -25,6 +21,7 @@ import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
+import ml.docilealligator.infinityforreddit.utils.UploadImageUtils;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
@@ -45,7 +42,7 @@ public class SubmitPost {
                                        String accessToken, String subredditName, String title, Bitmap image,
                                        Flair flair, boolean isSpoiler, boolean isNSFW, SubmitPostListener submitPostListener) {
         try {
-            String imageUrlOrError = uploadImage(oauthRetrofit, uploadMediaRetrofit, accessToken, image);
+            String imageUrlOrError = UploadImageUtils.uploadImage(oauthRetrofit, uploadMediaRetrofit, accessToken, image);
             if (imageUrlOrError != null && !imageUrlOrError.startsWith("Error: ")) {
                 submitPost(executor, handler, oauthRetrofit, accessToken,
                         subredditName, title, imageUrlOrError, flair, isSpoiler, isNSFW,
@@ -76,7 +73,7 @@ public class SubmitPost {
         try {
             Response<String> uploadImageResponse = uploadImageCall.execute();
             if (uploadImageResponse.isSuccessful()) {
-                Map<String, RequestBody> nameValuePairsMap = parseJSONResponseFromAWS(uploadImageResponse.body());
+                Map<String, RequestBody> nameValuePairsMap = UploadImageUtils.parseJSONResponseFromAWS(uploadImageResponse.body());
 
                 RequestBody fileBody = RequestBody.create(buffer, MediaType.parse("application/octet-stream"));
                 MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", "post_video." + fileType, fileBody);
@@ -90,12 +87,12 @@ public class SubmitPost {
                 Call<String> uploadMediaToAWS = uploadVideoToAWSApi.uploadMediaToAWS(nameValuePairsMap, fileToUpload);
                 Response<String> uploadMediaToAWSResponse = uploadMediaToAWS.execute();
                 if (uploadMediaToAWSResponse.isSuccessful()) {
-                    String url = parseXMLResponseFromAWS(uploadMediaToAWSResponse.body());
+                    String url = UploadImageUtils.parseXMLResponseFromAWS(uploadMediaToAWSResponse.body());
                     if (url == null) {
                         submitPostListener.submitFailed(null);
                         return;
                     }
-                    String imageUrlOrError = uploadImage(oauthRetrofit, uploadMediaRetrofit, accessToken, posterBitmap);
+                    String imageUrlOrError = UploadImageUtils.uploadImage(oauthRetrofit, uploadMediaRetrofit, accessToken, posterBitmap);
                     if (imageUrlOrError != null && !imageUrlOrError.startsWith("Error: ")) {
                         if (fileType.equals("gif")) {
                             submitPost(executor, handler, oauthRetrofit, accessToken,
@@ -185,40 +182,6 @@ public class SubmitPost {
         }
     }
 
-    @Nullable
-    private static String uploadImage(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
-                                    String accessToken, Bitmap image) throws IOException, JSONException, XmlPullParserException {
-        RedditAPI api = oauthRetrofit.create(RedditAPI.class);
-
-        Map<String, String> uploadImageParams = new HashMap<>();
-        uploadImageParams.put(APIUtils.FILEPATH_KEY, "post_image.jpg");
-        uploadImageParams.put(APIUtils.MIMETYPE_KEY, "image/jpeg");
-
-        Call<String> uploadImageCall = api.uploadImage(APIUtils.getOAuthHeader(accessToken), uploadImageParams);
-        Response<String> uploadImageResponse = uploadImageCall.execute();
-        if (uploadImageResponse.isSuccessful()) {
-            Map<String, RequestBody> nameValuePairsMap = parseJSONResponseFromAWS(uploadImageResponse.body());
-
-            ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            image.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-            byte[] byteArray = stream.toByteArray();
-
-            RequestBody fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), byteArray);
-            MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", "post_image.jpg", fileBody);
-
-            RedditAPI uploadMediaToAWSApi = uploadMediaRetrofit.create(RedditAPI.class);
-            Call<String> uploadMediaToAWS = uploadMediaToAWSApi.uploadMediaToAWS(nameValuePairsMap, fileToUpload);
-            Response<String> uploadMediaToAWSResponse = uploadMediaToAWS.execute();
-            if (uploadMediaToAWSResponse.isSuccessful()) {
-                return parseXMLResponseFromAWS(uploadMediaToAWSResponse.body());
-            } else {
-                return "Error: " + uploadMediaToAWSResponse.code();
-            }
-        } else {
-            return "Error: " + uploadImageResponse.message();
-        }
-    }
-
     private static void getSubmittedPost(Executor executor, Handler handler, String response, String kind,
                                          Retrofit oauthRetrofit, String accessToken,
                                          SubmitPostListener submitPostListener) throws JSONException, IOException {
@@ -272,41 +235,5 @@ public class SubmitPost {
         void submitSuccessful(Post post);
 
         void submitFailed(@Nullable String errorMessage);
-    }
-
-    private static Map<String, RequestBody> parseJSONResponseFromAWS(String response) throws JSONException {
-        JSONObject responseObject = new JSONObject(response);
-        JSONArray nameValuePairs = responseObject.getJSONObject(JSONUtils.ARGS_KEY).getJSONArray(JSONUtils.FIELDS_KEY);
-
-        Map<String, RequestBody> nameValuePairsMap = new HashMap<>();
-        for (int i = 0; i < nameValuePairs.length(); i++) {
-            nameValuePairsMap.put(nameValuePairs.getJSONObject(i).getString(JSONUtils.NAME_KEY),
-                    APIUtils.getRequestBody(nameValuePairs.getJSONObject(i).getString(JSONUtils.VALUE_KEY)));
-        }
-
-        return nameValuePairsMap;
-    }
-
-    @Nullable
-    private static String parseXMLResponseFromAWS(String response) throws XmlPullParserException, IOException {
-        XmlPullParser xmlPullParser = XmlPullParserFactory.newInstance().newPullParser();
-        xmlPullParser.setInput(new StringReader(response));
-
-        boolean isLocationTag = false;
-        int eventType = xmlPullParser.getEventType();
-        while (eventType != XmlPullParser.END_DOCUMENT) {
-            if (eventType == XmlPullParser.START_TAG) {
-                if (xmlPullParser.getName().equals("Location")) {
-                    isLocationTag = true;
-                }
-            } else if (eventType == XmlPullParser.TEXT) {
-                if (isLocationTag) {
-                    return xmlPullParser.getText();
-                }
-            }
-            eventType = xmlPullParser.next();
-        }
-
-        return null;
     }
 }
