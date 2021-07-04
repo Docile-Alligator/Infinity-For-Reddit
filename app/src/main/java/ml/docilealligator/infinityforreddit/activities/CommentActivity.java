@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +25,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
@@ -31,7 +33,11 @@ import com.google.android.material.snackbar.Snackbar;
 import org.commonmark.ext.gfm.tables.TableBlock;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
+import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -58,6 +64,7 @@ import ml.docilealligator.infinityforreddit.comment.SendComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.UploadImageUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
@@ -73,6 +80,7 @@ public class CommentActivity extends BaseActivity {
     public static final String EXTRA_IS_REPLYING_KEY = "EIRK";
     public static final String RETURN_EXTRA_COMMENT_DATA_KEY = "RECDK";
     public static final int WRITE_COMMENT_REQUEST_CODE = 1;
+    private static final int PICK_IMAGE_REQUEST_CODE = 100;
 
     @BindView(R.id.coordinator_layout_comment_activity)
     CoordinatorLayout coordinatorLayout;
@@ -93,6 +101,9 @@ public class CommentActivity extends BaseActivity {
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
+    @Inject
+    @Named("upload_media")
+    Retrofit mUploadMediaRetrofit;
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
@@ -246,7 +257,11 @@ public class CommentActivity extends BaseActivity {
 
             @Override
             public void onUploadImage() {
-
+                Intent intent = new Intent();
+                intent.setType("image/*");
+                intent.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intent,
+                        getResources().getString(R.string.select_from_gallery)), PICK_IMAGE_REQUEST_CODE);
             }
         });
 
@@ -371,6 +386,43 @@ public class CommentActivity extends BaseActivity {
                         -> finish())
                 .setNegativeButton(R.string.no, null)
                 .show();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == PICK_IMAGE_REQUEST_CODE) {
+                if (data == null) {
+                    Toast.makeText(CommentActivity.this, R.string.error_getting_image, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                Handler handler = new Handler();
+                mExecutor.execute(() -> {
+                    try {
+                        Bitmap bitmap = Glide.with(CommentActivity.this).asBitmap().load(data.getData()).submit().get();
+                        String imageUrlOrError = UploadImageUtils.uploadImage(mOauthRetrofit, mUploadMediaRetrofit, mAccessToken, bitmap);
+                        handler.post(() -> {
+                            if (imageUrlOrError != null && !imageUrlOrError.startsWith("Error: ")) {
+                                int start = Math.max(commentEditText.getSelectionStart(), 0);
+                                int end = Math.max(commentEditText.getSelectionEnd(), 0);
+                                commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
+                                        "[" + imageUrlOrError + "](" + imageUrlOrError + ")",
+                                        0, "[]()".length() + imageUrlOrError.length() + imageUrlOrError.length());
+                            } else {
+                                Toast.makeText(CommentActivity.this, R.string.upload_image_failed, Toast.LENGTH_LONG).show();
+                            }
+                        });
+                    } catch (ExecutionException | InterruptedException e) {
+                        e.printStackTrace();
+                        handler.post(() -> Toast.makeText(CommentActivity.this, R.string.get_image_bitmap_failed, Toast.LENGTH_LONG).show());
+                    } catch (XmlPullParserException | JSONException | IOException e) {
+                        e.printStackTrace();
+                        handler.post(() -> Toast.makeText(CommentActivity.this, R.string.error_processing_image, Toast.LENGTH_LONG).show());
+                    }
+                });
+            }
+        }
     }
 
     @Override
