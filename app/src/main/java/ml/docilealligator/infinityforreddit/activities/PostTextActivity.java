@@ -310,8 +310,18 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
             }
         });
 
-        MarkdownBottomBarRecyclerViewAdapter adapter = new MarkdownBottomBarRecyclerViewAdapter(mCustomThemeWrapper, item -> {
-            MarkdownBottomBarRecyclerViewAdapter.bindEditTextWithItemClickListener(this, contentEditText, item);
+        MarkdownBottomBarRecyclerViewAdapter adapter = new MarkdownBottomBarRecyclerViewAdapter(
+                mCustomThemeWrapper, new MarkdownBottomBarRecyclerViewAdapter.ItemClickListener() {
+            @Override
+            public void onClick(int item) {
+                MarkdownBottomBarRecyclerViewAdapter.bindEditTextWithItemClickListener(
+                        PostTextActivity.this, contentEditText, item);
+            }
+
+            @Override
+            public void onUploadImage() {
+
+            }
         });
 
         markdownBottomBarRecyclerView.setLayoutManager(new LinearLayoutManager(this,

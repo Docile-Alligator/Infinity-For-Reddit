@@ -117,8 +117,18 @@ public class EditPostActivity extends BaseActivity {
         mPostContent = getIntent().getStringExtra(EXTRA_CONTENT);
         contentEditText.setText(mPostContent);
 
-        MarkdownBottomBarRecyclerViewAdapter adapter = new MarkdownBottomBarRecyclerViewAdapter(mCustomThemeWrapper, item -> {
-            MarkdownBottomBarRecyclerViewAdapter.bindEditTextWithItemClickListener(this, contentEditText, item);
+        MarkdownBottomBarRecyclerViewAdapter adapter = new MarkdownBottomBarRecyclerViewAdapter(
+                mCustomThemeWrapper, new MarkdownBottomBarRecyclerViewAdapter.ItemClickListener() {
+            @Override
+            public void onClick(int item) {
+                MarkdownBottomBarRecyclerViewAdapter.bindEditTextWithItemClickListener(
+                        EditPostActivity.this, contentEditText, item);
+            }
+
+            @Override
+            public void onUploadImage() {
+
+            }
         });
 
         markdownBottomBarRecyclerView.setLayoutManager(new LinearLayoutManager(this,

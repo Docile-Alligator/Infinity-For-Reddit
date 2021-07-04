@@ -236,8 +236,18 @@ public class CommentActivity extends BaseActivity {
 
         setSupportActionBar(toolbar);
 
-        MarkdownBottomBarRecyclerViewAdapter adapter = new MarkdownBottomBarRecyclerViewAdapter(mCustomThemeWrapper, item -> {
-            MarkdownBottomBarRecyclerViewAdapter.bindEditTextWithItemClickListener(this, commentEditText, item);
+        MarkdownBottomBarRecyclerViewAdapter adapter = new MarkdownBottomBarRecyclerViewAdapter(
+                mCustomThemeWrapper, new MarkdownBottomBarRecyclerViewAdapter.ItemClickListener() {
+            @Override
+            public void onClick(int item) {
+                MarkdownBottomBarRecyclerViewAdapter.bindEditTextWithItemClickListener(
+                        CommentActivity.this, commentEditText, item);
+            }
+
+            @Override
+            public void onUploadImage() {
+
+            }
         });
 
         markdownBottomBarRecyclerView.setLayoutManager(new LinearLayoutManager(this,

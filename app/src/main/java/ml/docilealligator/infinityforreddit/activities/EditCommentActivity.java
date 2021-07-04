@@ -32,12 +32,12 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.apis.RedditAPI;
-import ml.docilealligator.infinityforreddit.adapters.MarkdownBottomBarRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.adapters.MarkdownBottomBarRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -109,8 +109,18 @@ public class EditCommentActivity extends BaseActivity {
         mCommentContent = getIntent().getStringExtra(EXTRA_CONTENT);
         contentEditText.setText(mCommentContent);
 
-        MarkdownBottomBarRecyclerViewAdapter adapter = new MarkdownBottomBarRecyclerViewAdapter(mCustomThemeWrapper, item -> {
-            MarkdownBottomBarRecyclerViewAdapter.bindEditTextWithItemClickListener(this, contentEditText, item);
+        MarkdownBottomBarRecyclerViewAdapter adapter = new MarkdownBottomBarRecyclerViewAdapter(
+                mCustomThemeWrapper, new MarkdownBottomBarRecyclerViewAdapter.ItemClickListener() {
+            @Override
+            public void onClick(int item) {
+                MarkdownBottomBarRecyclerViewAdapter.bindEditTextWithItemClickListener(
+                        EditCommentActivity.this, contentEditText, item);
+            }
+
+            @Override
+            public void onUploadImage() {
+
+            }
         });
 
         markdownBottomBarRecyclerView.setLayoutManager(new LinearLayoutManager(this,
