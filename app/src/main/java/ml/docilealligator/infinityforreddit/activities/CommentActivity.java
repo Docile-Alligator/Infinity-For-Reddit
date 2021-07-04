@@ -433,6 +433,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     }
 
     private void uploadImageToReddit(Uri imageUri) {
+        Toast.makeText(this, R.string.uploading_image, Toast.LENGTH_SHORT).show();
         Handler handler = new Handler();
         mExecutor.execute(() -> {
             try {
@@ -449,8 +450,9 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                         int start = Math.max(commentEditText.getSelectionStart(), 0);
                         int end = Math.max(commentEditText.getSelectionEnd(), 0);
                         commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
-                                "[" + imageUrlOrError + "](" + imageUrlOrError + ")",
-                                0, "[]()".length() + imageUrlOrError.length() + imageUrlOrError.length());
+                                "[" + fileName + "](" + imageUrlOrError + ")",
+                                0, "[]()".length() + fileName.length() + imageUrlOrError.length());
+                        Snackbar.make(coordinatorLayout, R.string.upload_image_success, Snackbar.LENGTH_LONG).show();
                     } else {
                         Toast.makeText(CommentActivity.this, R.string.upload_image_failed, Toast.LENGTH_LONG).show();
                     }
@@ -497,7 +499,11 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             if (cursor != null) {
                 int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
                 cursor.moveToFirst();
-                return cursor.getString(nameIndex);
+                String fileName = cursor.getString(nameIndex);
+                if(fileName != null && fileName.contains(".")) {
+                    fileName = fileName.substring(0, fileName.lastIndexOf('.'));
+                }
+                return fileName;
             }
         }
 

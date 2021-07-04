@@ -1121,6 +1121,8 @@
     <string name="uploaded_images">Uploaded Images</string>
     <string name="upload">Upload</string>
     <string name="capture">Capture</string>
+    <string name="uploading_image">Uploading</string>
+    <string name="upload_image_success">Upload image successfully. Click the image button again to see the uploaded images.</string>
     <string name="get_image_bitmap_failed">Unable to get the bitmap of the image</string>
     <string name="upload_image_failed">Unable to upload the image</string>
 
