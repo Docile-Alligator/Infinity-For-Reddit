@@ -1,11 +1,9 @@
 package ml.docilealligator.infinityforreddit.activities;
 
 import android.content.ActivityNotFoundException;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -13,7 +11,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
-import android.provider.OpenableColumns;
 import android.text.Spanned;
 import android.text.util.Linkify;
 import android.view.Menu;
@@ -425,9 +422,11 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     Toast.makeText(CommentActivity.this, R.string.error_getting_image, Toast.LENGTH_LONG).show();
                     return;
                 }
-                uploadImageToReddit(data.getData());
+                Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
+                        mAccessToken, commentEditText, coordinatorLayout, data.getData(), uploadedImages);
             } else if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
-                uploadImageToReddit(capturedImageUri);
+                Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
+                        mAccessToken, commentEditText, coordinatorLayout, capturedImageUri, uploadedImages);
             }
         }
     }
@@ -441,7 +440,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                 String imageUrlOrError = UploadImageUtils.uploadImage(mOauthRetrofit, mUploadMediaRetrofit, mAccessToken, bitmap);
                 handler.post(() -> {
                     if (imageUrlOrError != null && !imageUrlOrError.startsWith("Error: ")) {
-                        String fileName = getFileName(imageUri);
+                        String fileName = Utils.getFileName(this, imageUri);
                         if (fileName == null) {
                             fileName = imageUrlOrError;
                         }
@@ -489,25 +488,6 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     @Subscribe
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
         finish();
-    }
-
-    @Nullable
-    private String getFileName(Uri uri) {
-        ContentResolver contentResolver = getContentResolver();
-        if (contentResolver != null) {
-            Cursor cursor = contentResolver.query(uri, null, null, null, null);
-            if (cursor != null) {
-                int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
-                cursor.moveToFirst();
-                String fileName = cursor.getString(nameIndex);
-                if(fileName != null && fileName.contains(".")) {
-                    fileName = fileName.substring(0, fileName.lastIndexOf('.'));
-                }
-                return fileName;
-            }
-        }
-
-        return null;
     }
 
     @Override

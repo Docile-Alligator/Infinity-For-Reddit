@@ -1,32 +1,53 @@
 package ml.docilealligator.infinityforreddit.utils;
 
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
+import android.os.Handler;
+import android.provider.OpenableColumns;
 import android.text.Spannable;
 import android.util.DisplayMetrics;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.text.HtmlCompat;
 
+import com.bumptech.glide.Glide;
+import com.google.android.material.snackbar.Snackbar;
+
+import org.json.JSONException;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.UploadedImage;
+import retrofit2.Retrofit;
 
 public class Utils {
     public static final int NETWORK_TYPE_OTHER = -1;
@@ -307,6 +328,63 @@ public class Utils {
             Drawable wrappedDrawable = DrawableCompat.wrap(drawable).mutate();
             DrawableCompat.setTint(wrappedDrawable, color);
             return wrappedDrawable;
+        }
+
+        return null;
+    }
+
+    public static void uploadImageToReddit(Context context, Executor executor, Retrofit oauthRetrofit,
+                                           Retrofit uploadMediaRetrofit, String accessToken, EditText editText,
+                                           CoordinatorLayout coordinatorLayout, Uri imageUri,
+                                           ArrayList<UploadedImage>uploadedImages) {
+        Toast.makeText(context, R.string.uploading_image, Toast.LENGTH_SHORT).show();
+        Handler handler = new Handler();
+        executor.execute(() -> {
+            try {
+                Bitmap bitmap = Glide.with(context).asBitmap().load(imageUri).submit().get();
+                String imageUrlOrError = UploadImageUtils.uploadImage(oauthRetrofit, uploadMediaRetrofit, accessToken, bitmap);
+                handler.post(() -> {
+                    if (imageUrlOrError != null && !imageUrlOrError.startsWith("Error: ")) {
+                        String fileName = Utils.getFileName(context, imageUri);
+                        if (fileName == null) {
+                            fileName = imageUrlOrError;
+                        }
+                        uploadedImages.add(new UploadedImage(fileName, imageUrlOrError));
+
+                        int start = Math.max(editText.getSelectionStart(), 0);
+                        int end = Math.max(editText.getSelectionEnd(), 0);
+                        editText.getText().replace(Math.min(start, end), Math.max(start, end),
+                                "[" + fileName + "](" + imageUrlOrError + ")",
+                                0, "[]()".length() + fileName.length() + imageUrlOrError.length());
+                        Snackbar.make(coordinatorLayout, R.string.upload_image_success, Snackbar.LENGTH_LONG).show();
+                    } else {
+                        Toast.makeText(context, R.string.upload_image_failed, Toast.LENGTH_LONG).show();
+                    }
+                });
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                handler.post(() -> Toast.makeText(context, R.string.get_image_bitmap_failed, Toast.LENGTH_LONG).show());
+            } catch (XmlPullParserException | JSONException | IOException e) {
+                e.printStackTrace();
+                handler.post(() -> Toast.makeText(context, R.string.error_processing_image, Toast.LENGTH_LONG).show());
+            }
+        });
+    }
+
+    @Nullable
+    public static String getFileName(Context context, Uri uri) {
+        ContentResolver contentResolver = context.getContentResolver();
+        if (contentResolver != null) {
+            Cursor cursor = contentResolver.query(uri, null, null, null, null);
+            if (cursor != null) {
+                int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
+                cursor.moveToFirst();
+                String fileName = cursor.getString(nameIndex);
+                if(fileName != null && fileName.contains(".")) {
+                    fileName = fileName.substring(0, fileName.lastIndexOf('.'));
+                }
+                return fileName;
+            }
         }
 
         return null;

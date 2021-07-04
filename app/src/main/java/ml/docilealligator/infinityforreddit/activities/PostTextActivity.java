@@ -1,24 +1,30 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +39,9 @@ import com.libRG.CustomTextView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -45,19 +54,24 @@ import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.UploadImageEnabledActivity;
+import ml.docilealligator.infinityforreddit.UploadedImage;
 import ml.docilealligator.infinityforreddit.adapters.MarkdownBottomBarRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.UploadedImagesBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SubmitTextOrLinkPostEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.services.SubmitPostService;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-public class PostTextActivity extends BaseActivity implements FlairBottomSheetFragment.FlairSelectionCallback {
+public class PostTextActivity extends BaseActivity implements FlairBottomSheetFragment.FlairSelectionCallback,
+        UploadImageEnabledActivity {
 
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
     static final String EXTRA_CONTENT = "EC";
@@ -71,8 +85,11 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
     private static final String FLAIR_STATE = "FS";
     private static final String IS_SPOILER_STATE = "ISS";
     private static final String IS_NSFW_STATE = "INS";
+    private static final String UPLOADED_IMAGES_STATE = "UIS";
 
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
+    private static final int PICK_IMAGE_REQUEST_CODE = 100;
+    private static final int CAPTURE_IMAGE_REQUEST_CODE = 200;
 
     @BindView(R.id.coordinator_layout_post_text_activity)
     CoordinatorLayout coordinatorLayout;
@@ -111,6 +128,9 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
+    @Named("upload_media")
+    Retrofit mUploadMediaRetrofit;
+    @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
     @Named("default")
@@ -144,6 +164,8 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
     private RequestManager mGlide;
     private FlairBottomSheetFragment flairSelectionBottomSheetFragment;
     private Snackbar mPostingSnackbar;
+    private Uri capturedImageUri;
+    private ArrayList<UploadedImage> uploadedImages = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,6 +208,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
             flair = savedInstanceState.getParcelable(FLAIR_STATE);
             isSpoiler = savedInstanceState.getBoolean(IS_SPOILER_STATE);
             isNSFW = savedInstanceState.getBoolean(IS_NSFW_STATE);
+            uploadedImages = savedInstanceState.getParcelableArrayList(UPLOADED_IMAGES_STATE);
 
             if (subredditName != null) {
                 subredditNameTextView.setTextColor(primaryTextColor);
@@ -320,7 +343,13 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
 
             @Override
             public void onUploadImage() {
-
+                Utils.hideKeyboard(PostTextActivity.this);
+                UploadedImagesBottomSheetFragment fragment = new UploadedImagesBottomSheetFragment();
+                Bundle arguments = new Bundle();
+                arguments.putParcelableArrayList(UploadedImagesBottomSheetFragment.EXTRA_UPLOADED_IMAGES,
+                        uploadedImages);
+                fragment.setArguments(arguments);
+                fragment.show(getSupportFragmentManager(), fragment.getTag());
             }
         });
 
@@ -499,13 +528,14 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
         outState.putParcelable(FLAIR_STATE, flair);
         outState.putBoolean(IS_SPOILER_STATE, isSpoiler);
         outState.putBoolean(IS_NSFW_STATE, isNSFW);
+        outState.putParcelableArrayList(UPLOADED_IMAGES_STATE, uploadedImages);
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SUBREDDIT_SELECTION_REQUEST_CODE) {
-            if (resultCode == RESULT_OK) {
+        if (resultCode == RESULT_OK) {
+            if (requestCode == SUBREDDIT_SELECTION_REQUEST_CODE) {
                 subredditName = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME);
                 iconUrl = data.getExtras().getString(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_ICON_URL);
                 subredditSelected = true;
@@ -520,8 +550,20 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
                 flairTextView.setTextColor(primaryTextColor);
                 flairTextView.setText(getString(R.string.flair));
                 flair = null;
+
+            } else if (requestCode == PICK_IMAGE_REQUEST_CODE) {
+                if (data == null) {
+                    Toast.makeText(PostTextActivity.this, R.string.error_getting_image, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
+                        mAccessToken, contentEditText, coordinatorLayout, data.getData(), uploadedImages);
+            } else if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
+                Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
+                        mAccessToken, contentEditText, coordinatorLayout, capturedImageUri, uploadedImages);
             }
         }
+
     }
 
     @Override
@@ -563,5 +605,38 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
                         + submitTextOrLinkPostEvent.errorMessage.substring(1), Snackbar.LENGTH_SHORT).show();
             }
         }
+    }
+
+    @Override
+    public void uploadImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,
+                getResources().getString(R.string.select_from_gallery)), PICK_IMAGE_REQUEST_CODE);
+    }
+
+    @Override
+    public void captureImage() {
+        Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            capturedImageUri = FileProvider.getUriForFile(this, "ml.docilealligator.infinityforreddit.provider",
+                    File.createTempFile("captured_image", ".jpg", getExternalFilesDir(Environment.DIRECTORY_PICTURES)));
+            pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri);
+            startActivityForResult(pictureIntent, CAPTURE_IMAGE_REQUEST_CODE);
+        } catch (IOException ex) {
+            Toast.makeText(this, R.string.error_creating_temp_file, Toast.LENGTH_SHORT).show();
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, R.string.no_camera_available, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void insertImageUrl(UploadedImage uploadedImage) {
+        int start = Math.max(contentEditText.getSelectionStart(), 0);
+        int end = Math.max(contentEditText.getSelectionEnd(), 0);
+        contentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
+                "[" + uploadedImage.imageName + "](" + uploadedImage.imageUrl + ")",
+                0, "[]()".length() + uploadedImage.imageName.length() + uploadedImage.imageUrl.length());
     }
 }
