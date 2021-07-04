@@ -190,15 +190,12 @@ public class ThemePreferenceFragment extends PreferenceFragmentCompat {
                 return true;
             });
 
-            applyMaterialYouPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
-                @Override
-                public boolean onPreferenceChange(Preference preference, Object newValue) {
-                    MaterialYouUtils.changeTheme(activity, executor, new Handler(),
-                            redditDataRoomDatabase, customThemeWrapper,
-                            lightThemeSharedPreferences, darkThemeSharedPreferences,
-                            amoledThemeSharedPreferences);
-                    return true;
-                }
+            applyMaterialYouPreference.setOnPreferenceClickListener(preference -> {
+                MaterialYouUtils.changeTheme(activity, executor, new Handler(),
+                        redditDataRoomDatabase, customThemeWrapper,
+                        lightThemeSharedPreferences, darkThemeSharedPreferences,
+                        amoledThemeSharedPreferences);
+                return true;
             });
         }
 

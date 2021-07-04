@@ -14,9 +14,13 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.utils.MaterialYouUtils;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class MaterialYouService extends IntentService {
 
+    @Inject
+    @Named("default")
+    SharedPreferences mSharedPreferences;
     @Inject
     @Named("light_theme")
     SharedPreferences lightThemeSharedPreferences;
@@ -40,8 +44,10 @@ public class MaterialYouService extends IntentService {
     @Override
     protected void onHandleIntent(Intent intent) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
-        MaterialYouUtils.changeTheme(this, executor, new Handler(), redditDataRoomDatabase,
-                customThemeWrapper, lightThemeSharedPreferences, darkThemeSharedPreferences,
-                amoledThemeSharedPreferences);
+        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_MATERIAL_YOU, false)) {
+            MaterialYouUtils.changeTheme(this, executor, new Handler(), redditDataRoomDatabase,
+                    customThemeWrapper, lightThemeSharedPreferences, darkThemeSharedPreferences,
+                    amoledThemeSharedPreferences);
+        }
     }
 }
