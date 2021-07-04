@@ -1,10 +1,14 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,8 +18,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -27,32 +33,45 @@ import com.r0adkll.slidr.Slidr;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.apis.RedditAPI;
-import ml.docilealligator.infinityforreddit.adapters.MarkdownBottomBarRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.UploadImageEnabledActivity;
+import ml.docilealligator.infinityforreddit.UploadedImage;
+import ml.docilealligator.infinityforreddit.adapters.MarkdownBottomBarRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.UploadedImagesBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class EditPostActivity extends BaseActivity {
+public class EditPostActivity extends BaseActivity implements UploadImageEnabledActivity {
 
     public static final String EXTRA_TITLE = "ET";
     public static final String EXTRA_CONTENT = "EC";
     public static final String EXTRA_FULLNAME = "EF";
+
+    private static final int PICK_IMAGE_REQUEST_CODE = 100;
+    private static final int CAPTURE_IMAGE_REQUEST_CODE = 200;
+
+    private static final String UPLOADED_IMAGES_STATE = "UIS";
 
     @BindView(R.id.coordinator_layout_edit_post_activity)
     CoordinatorLayout coordinatorLayout;
@@ -72,6 +91,9 @@ public class EditPostActivity extends BaseActivity {
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
+    @Named("upload_media")
+    Retrofit mUploadMediaRetrofit;
+    @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
@@ -79,10 +101,14 @@ public class EditPostActivity extends BaseActivity {
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private String mFullName;
     private String mAccessToken;
     private String mPostContent;
     private boolean isSubmitting = false;
+    private Uri capturedImageUri;
+    private ArrayList<UploadedImage> uploadedImages = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +143,10 @@ public class EditPostActivity extends BaseActivity {
         mPostContent = getIntent().getStringExtra(EXTRA_CONTENT);
         contentEditText.setText(mPostContent);
 
+        if (savedInstanceState != null) {
+            uploadedImages = savedInstanceState.getParcelableArrayList(UPLOADED_IMAGES_STATE);
+        }
+
         MarkdownBottomBarRecyclerViewAdapter adapter = new MarkdownBottomBarRecyclerViewAdapter(
                 mCustomThemeWrapper, new MarkdownBottomBarRecyclerViewAdapter.ItemClickListener() {
             @Override
@@ -127,7 +157,13 @@ public class EditPostActivity extends BaseActivity {
 
             @Override
             public void onUploadImage() {
-
+                Utils.hideKeyboard(EditPostActivity.this);
+                UploadedImagesBottomSheetFragment fragment = new UploadedImagesBottomSheetFragment();
+                Bundle arguments = new Bundle();
+                arguments.putParcelableArrayList(UploadedImagesBottomSheetFragment.EXTRA_UPLOADED_IMAGES,
+                        uploadedImages);
+                fragment.setArguments(arguments);
+                fragment.show(getSupportFragmentManager(), fragment.getTag());
             }
         });
 
@@ -221,6 +257,30 @@ public class EditPostActivity extends BaseActivity {
         return false;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == PICK_IMAGE_REQUEST_CODE) {
+                if (data == null) {
+                    Toast.makeText(EditPostActivity.this, R.string.error_getting_image, Toast.LENGTH_LONG).show();
+                    return;
+                }
+                Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
+                        mAccessToken, contentEditText, coordinatorLayout, data.getData(), uploadedImages);
+            } else if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
+                Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
+                        mAccessToken, contentEditText, coordinatorLayout, capturedImageUri, uploadedImages);
+            }
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(UPLOADED_IMAGES_STATE, uploadedImages);
+    }
+
     private void promptAlertDialog(int titleResId, int messageResId) {
         new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                 .setTitle(titleResId)
@@ -253,5 +313,38 @@ public class EditPostActivity extends BaseActivity {
     @Subscribe
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
         finish();
+    }
+
+    @Override
+    public void uploadImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent,
+                getResources().getString(R.string.select_from_gallery)), PICK_IMAGE_REQUEST_CODE);
+    }
+
+    @Override
+    public void captureImage() {
+        Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        try {
+            capturedImageUri = FileProvider.getUriForFile(this, "ml.docilealligator.infinityforreddit.provider",
+                    File.createTempFile("captured_image", ".jpg", getExternalFilesDir(Environment.DIRECTORY_PICTURES)));
+            pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri);
+            startActivityForResult(pictureIntent, CAPTURE_IMAGE_REQUEST_CODE);
+        } catch (IOException ex) {
+            Toast.makeText(this, R.string.error_creating_temp_file, Toast.LENGTH_SHORT).show();
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, R.string.no_camera_available, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void insertImageUrl(UploadedImage uploadedImage) {
+        int start = Math.max(contentEditText.getSelectionStart(), 0);
+        int end = Math.max(contentEditText.getSelectionEnd(), 0);
+        contentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
+                "[" + uploadedImage.imageName + "](" + uploadedImage.imageUrl + ")",
+                0, "[]()".length() + uploadedImage.imageName.length() + uploadedImage.imageUrl.length());
     }
 }
