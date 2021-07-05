@@ -153,6 +153,17 @@ class AppModule {
     }
 
     @Provides
+    @Named("strapi")
+    @Singleton
+    Retrofit providestrapiRetrofit(OkHttpClient okHttpClient) {
+        return new Retrofit.Builder()
+                .baseUrl(APIUtils.STRAPI_BASE_URI)
+                .client(okHttpClient)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+    }
+
+    @Provides
     @Singleton
     OkHttpClient provideOkHttpClient(@Named("no_oauth") Retrofit retrofit, RedditDataRoomDatabase accountRoomDatabase,
                                      @Named("current_account") SharedPreferences currentAccountSharedPreferences) {
