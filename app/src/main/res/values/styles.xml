@@ -48,6 +48,10 @@
         <item name="android:fontFamily">?attr/font_family</item>
     </style>
 
+    <style name="AppTheme.TranslucentStatusBar" parent="AppTheme">
+        <item name="android:windowTranslucentStatus">true</item>
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.DayNight.ActionBar">
         <item name="android:fontFamily">?attr/font_family</item>
     </style>

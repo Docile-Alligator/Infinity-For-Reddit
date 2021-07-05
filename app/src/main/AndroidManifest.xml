@@ -35,7 +35,7 @@
         <activity android:name=".activities.RPANActivity"
             android:label="@string/rpan_activity_label"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.TranslucentStatusBar" />
         <activity
             android:name=".activities.MotionTestActivity"
             android:theme="@style/AppTheme.NoActionBar" />

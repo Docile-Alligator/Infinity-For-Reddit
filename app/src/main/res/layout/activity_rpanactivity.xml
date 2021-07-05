@@ -8,23 +8,6 @@
     android:id="@+id/coordinator_layout_rpan_activity"
     tools:context=".activities.RPANActivity">
 
-    <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar_layout_rpan_activity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
-
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_rpan_activity"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
-            android:minHeight="?attr/actionBarSize"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:navigationIcon="?attr/homeAsUpIndicator" />
-
-    </com.google.android.material.appbar.AppBarLayout>
-
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager_2_rpan_activity"
         android:layout_width="match_parent"

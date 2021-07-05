@@ -1,24 +1,22 @@
 package ml.docilealligator.infinityforreddit.activities;
 
 import android.content.SharedPreferences;
-import android.os.Build;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
-
-import com.google.android.material.appbar.AppBarLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,6 +35,9 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RPANBroadcast;
 import ml.docilealligator.infinityforreddit.apis.Strapi;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
+import ml.docilealligator.infinityforreddit.font.FontFamily;
+import ml.docilealligator.infinityforreddit.font.TitleFontFamily;
 import ml.docilealligator.infinityforreddit.fragments.ViewRPANBroadcastFragment;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
@@ -46,14 +47,10 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class RPANActivity extends BaseActivity {
+public class RPANActivity extends AppCompatActivity {
 
     @BindView(R.id.coordinator_layout_rpan_activity)
     CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_rpan_activity)
-    AppBarLayout appBarLayout;
-    @BindView(R.id.toolbar_rpan_activity)
-    Toolbar toolbar;
     @BindView(R.id.view_pager_2_rpan_activity)
     ViewPager2 viewPager2;
     @Inject
@@ -80,33 +77,28 @@ public class RPANActivity extends BaseActivity {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
         super.onCreate(savedInstanceState);
+
+        getTheme().applyStyle(R.style.Theme_Normal, true);
+
+        getTheme().applyStyle(FontFamily.valueOf(mSharedPreferences
+                .getString(SharedPreferencesUtils.FONT_FAMILY_KEY, FontFamily.Default.name())).getResId(), true);
+
+        getTheme().applyStyle(TitleFontFamily.valueOf(mSharedPreferences
+                .getString(SharedPreferencesUtils.TITLE_FONT_FAMILY_KEY, TitleFontFamily.Default.name())).getResId(), true);
+
+        getTheme().applyStyle(ContentFontFamily.valueOf(mSharedPreferences
+                .getString(SharedPreferencesUtils.CONTENT_FONT_FAMILY_KEY, ContentFontFamily.Default.name())).getResId(), true);
+
         setContentView(R.layout.activity_rpanactivity);
+
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         ButterKnife.bind(this);
 
-        applyCustomTheme();
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Window window = getWindow();
-
-            if (isChangeStatusBarIconColor()) {
-                addOnOffsetChangedListener(appBarLayout);
-            }
-
-            if (isImmersiveInterface()) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    coordinatorLayout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
-                } else {
-                    window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-                }
-                adjustToolbar(toolbar);
-            }
-        }
-
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        ActionBar actionBar = getSupportActionBar();
+        Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
+        actionBar.setHomeAsUpIndicator(upArrow);
+        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
 
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
@@ -208,22 +200,7 @@ public class RPANActivity extends BaseActivity {
         viewPager2.setAdapter(sectionsPagerAdapter);
         viewPager2.setOffscreenPageLimit(3);
         viewPager2.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
-        fixViewPager2Sensitivity(viewPager2);
-    }
-
-    @Override
-    protected SharedPreferences getDefaultSharedPreferences() {
-        return mSharedPreferences;
-    }
-
-    @Override
-    protected CustomThemeWrapper getCustomThemeWrapper() {
-        return mCustomThemeWrapper;
-    }
-
-    @Override
-    protected void applyCustomTheme() {
-
+        //fixViewPager2Sensitivity(viewPager2);
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {
