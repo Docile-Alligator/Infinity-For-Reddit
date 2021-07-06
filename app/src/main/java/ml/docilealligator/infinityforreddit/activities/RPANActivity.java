@@ -1,11 +1,14 @@
 package ml.docilealligator.infinityforreddit.activities;
 
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,6 +20,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
+
+import com.evernote.android.state.State;
+import com.livefront.bridge.Bridge;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,6 +59,8 @@ public class RPANActivity extends AppCompatActivity {
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.view_pager_2_rpan_activity)
     ViewPager2 viewPager2;
+    @BindView(R.id.progress_bar_rpan_activity)
+    ProgressBar progressBar;
     @Inject
     @Named("strapi")
     Retrofit strapiRetrofit;
@@ -68,8 +76,10 @@ public class RPANActivity extends AppCompatActivity {
     Executor mExecutor;
     private String mAccessToken;
     private String mAccountName;
-    private ArrayList<RPANBroadcast> rpanBroadcasts;
-    private String nextCursor;
+    @State
+    ArrayList<RPANBroadcast> rpanBroadcasts;
+    @State
+    String nextCursor;
     private SectionsPagerAdapter sectionsPagerAdapter;
 
     @Override
@@ -93,23 +103,30 @@ public class RPANActivity extends AppCompatActivity {
 
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
+        Bridge.restoreInstanceState(this, savedInstanceState);
+
         ButterKnife.bind(this);
 
         ActionBar actionBar = getSupportActionBar();
         Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setHomeAsUpIndicator(upArrow);
-        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
+        actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
 
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
 
-        loadRPANVideos();
+        if (rpanBroadcasts == null) {
+            loadRPANVideos();
+        } else {
+            initializeViewPager();
+        }
     }
 
     private void loadRPANVideos() {
         strapiRetrofit.create(Strapi.class).getAllBroadcasts(APIUtils.getOAuthHeader(mAccessToken)).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                progressBar.setVisibility(View.GONE);
                 if (response.isSuccessful()) {
                     parseRPANBroadcasts(response.body());
                 } else {
@@ -120,6 +137,7 @@ public class RPANActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                progressBar.setVisibility(View.GONE);
                 Toast.makeText(RPANActivity.this,
                         R.string.load_rpan_broadcasts_failed, Toast.LENGTH_SHORT).show();
             }
@@ -199,7 +217,6 @@ public class RPANActivity extends AppCompatActivity {
         sectionsPagerAdapter = new SectionsPagerAdapter(this);
         viewPager2.setAdapter(sectionsPagerAdapter);
         viewPager2.setOffscreenPageLimit(3);
-        viewPager2.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
         //fixViewPager2Sensitivity(viewPager2);
     }
 

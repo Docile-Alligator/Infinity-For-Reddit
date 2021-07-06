@@ -8,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
-import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -50,8 +49,6 @@ public class ViewRPANBroadcastFragment extends Fragment {
 
     @BindView(R.id.player_view_view_rpan_broadcast_fragment)
     PlayerView playerView;
-    @BindView(R.id.progress_bar_view_rpan_broadcast_fragment)
-    ProgressBar progressBar;
     @BindView(R.id.mute_exo_playback_control_view)
     ImageButton muteButton;
     @BindView(R.id.hd_exo_playback_control_view)
@@ -124,7 +121,6 @@ public class ViewRPANBroadcastFragment extends Fragment {
         if (resumePosition > 0) {
             player.seekTo(resumePosition);
         }
-        player.setPlayWhenReady(true);
         wasPlaying = true;
 
         boolean muteVideo = mSharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_VIDEO, false) ||
@@ -214,16 +210,16 @@ public class ViewRPANBroadcastFragment extends Fragment {
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
+    public void onResume() {
+        super.onResume();
         if (wasPlaying) {
             player.setPlayWhenReady(true);
         }
     }
 
     @Override
-    public void onStop() {
-        super.onStop();
+    public void onPause() {
+        super.onPause();
         wasPlaying = player.getPlayWhenReady();
         player.setPlayWhenReady(false);
     }

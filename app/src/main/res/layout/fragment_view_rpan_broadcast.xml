@@ -12,11 +12,4 @@
         android:layout_height="match_parent"
         app:controller_layout_id="@layout/exo_playback_control_view" />
 
-    <ProgressBar
-        android:id="@+id/progress_bar_view_rpan_broadcast_fragment"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:visibility="gone" />
-
 </FrameLayout>

@@ -6,11 +6,18 @@
     android:layout_height="match_parent"
     android:background="#000000"
     android:id="@+id/coordinator_layout_rpan_activity"
+    android:keepScreenOn="true"
     tools:context=".activities.RPANActivity">
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager_2_rpan_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar_rpan_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -33,6 +33,7 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
         <activity android:name=".activities.RPANActivity"
+            android:configChanges="orientation|screenSize|layoutDirection"
             android:label="@string/rpan_activity_label"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.TranslucentStatusBar" />
