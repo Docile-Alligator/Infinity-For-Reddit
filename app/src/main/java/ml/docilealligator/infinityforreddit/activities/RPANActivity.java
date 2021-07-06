@@ -18,6 +18,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -28,6 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
@@ -217,7 +219,25 @@ public class RPANActivity extends AppCompatActivity {
         sectionsPagerAdapter = new SectionsPagerAdapter(this);
         viewPager2.setAdapter(sectionsPagerAdapter);
         viewPager2.setOffscreenPageLimit(3);
-        //fixViewPager2Sensitivity(viewPager2);
+        fixViewPager2Sensitivity(viewPager2);
+    }
+
+    private void fixViewPager2Sensitivity(ViewPager2 viewPager2) {
+        try {
+            Field recyclerViewField = ViewPager2.class.getDeclaredField("mRecyclerView");
+            recyclerViewField.setAccessible(true);
+
+            RecyclerView recyclerView = (RecyclerView) recyclerViewField.get(viewPager2);
+
+            Field touchSlopField = RecyclerView.class.getDeclaredField("mTouchSlop");
+            touchSlopField.setAccessible(true);
+
+            Object touchSlopBox = touchSlopField.get(recyclerView);
+            if (touchSlopBox != null) {
+                int touchSlop = (int) touchSlopBox;
+                touchSlopField.set(recyclerView, touchSlop * 4);
+            }
+        } catch (NoSuchFieldException | IllegalAccessException ignore) {}
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {

@@ -177,6 +177,8 @@ dependencies {
 
     implementation 'androidx.palette:palette:1.0.0'
 
+    implementation 'com.tinder.scarlet:scarlet:0.1.12'
+
 
 /**** Builds and flavors ****/
     // debugImplementation because LeakCanary should only run in debug builds.

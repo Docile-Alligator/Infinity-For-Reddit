@@ -2,8 +2,11 @@ package ml.docilealligator.infinityforreddit.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +14,9 @@ import android.widget.ImageButton;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -28,8 +33,13 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.ui.TrackSelectionDialogBuilder;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.exoplayer2.util.Util;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -39,19 +49,30 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RPANBroadcast;
+import ml.docilealligator.infinityforreddit.RPANComment;
+import ml.docilealligator.infinityforreddit.adapters.RPANCommentStreamRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.WebSocket;
+import okhttp3.WebSocketListener;
 
 public class ViewRPANBroadcastFragment extends Fragment {
 
     public static final String EXTRA_RPAN_BROADCAST = "ERB";
     private static final String IS_MUTE_STATE = "IMS";
 
+    @BindView(R.id.constraint_layout_exo_rpan_broadcast_playback_control_view)
+    ConstraintLayout constraintLayout;
     @BindView(R.id.player_view_view_rpan_broadcast_fragment)
     PlayerView playerView;
-    @BindView(R.id.mute_exo_playback_control_view)
+    @BindView(R.id.recycler_view_exo_rpan_broadcast_playback_control_view)
+    RecyclerView recyclerView;
+    @BindView(R.id.mute_exo_rpan_broadcast_playback_control_view)
     ImageButton muteButton;
-    @BindView(R.id.hd_exo_playback_control_view)
+    @BindView(R.id.hd_exo_rpan_broadcast_playback_control_view)
     ImageButton hdButton;
     @Inject
     @Named("default")
@@ -62,12 +83,14 @@ public class ViewRPANBroadcastFragment extends Fragment {
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
-    SimpleCache mSimpleCache;
+    Executor mExecutor;
     private AppCompatActivity mActivity;
     private RPANBroadcast rpanBroadcast;
     private SimpleExoPlayer player;
     private DefaultTrackSelector trackSelector;
     private DataSource.Factory dataSourceFactory;
+    private Handler handler;
+    private RPANCommentStreamRecyclerViewAdapter adapter;
 
     private boolean wasPlaying;
     private boolean isMute = false;
@@ -89,6 +112,20 @@ public class ViewRPANBroadcastFragment extends Fragment {
         ButterKnife.bind(this, rootView);
 
         rpanBroadcast = getArguments().getParcelable(EXTRA_RPAN_BROADCAST);
+
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || getResources().getBoolean(R.bool.isTablet)) {
+            //Set player controller bottom margin in order to display it above the navbar
+            int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+            //LinearLayout controllerLinearLayout = findViewById(R.id.linear_layout_exo_playback_control_view);
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) constraintLayout.getLayoutParams();
+            params.bottomMargin = getResources().getDimensionPixelSize(resourceId);
+        } else {
+            //Set player controller right margin in order to display it above the navbar
+            int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+            //LinearLayout controllerLinearLayout = findViewById(R.id.linear_layout_exo_playback_control_view);
+            ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) constraintLayout.getLayoutParams();
+            params.rightMargin = getResources().getDimensionPixelSize(resourceId);
+        }
 
         playerView.setControllerVisibilityListener(visibility -> {
             switch (visibility) {
@@ -186,6 +223,21 @@ public class ViewRPANBroadcastFragment extends Fragment {
             }
         });
 
+        adapter = new RPANCommentStreamRecyclerViewAdapter(mActivity);
+        recyclerView.setAdapter(adapter);
+
+        handler = new Handler();
+
+        Request request = new Request.Builder().url(rpanBroadcast.rpanPost.liveCommentsWebsocketUrl).build();
+        CommentStreamWebSocketListener listener = new CommentStreamWebSocketListener(this::parseComment);
+        OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build();
+        WebSocket webSocket = okHttpClient.newWebSocket(request, listener);
+        okHttpClient.dispatcher().executorService().shutdown();
+
         return rootView;
     }
 
@@ -201,6 +253,26 @@ public class ViewRPANBroadcastFragment extends Fragment {
             cause = cause.getCause();
         }
         return false;
+    }
+
+    private void parseComment(String commentJson) {
+        mExecutor.execute(() -> {
+            try {
+                JSONObject commentObject = new JSONObject(commentJson);
+                if (commentObject.getString(JSONUtils.TYPE_KEY).equals("new_comment")) {
+                    JSONObject payload = commentObject.getJSONObject(JSONUtils.PAYLOAD_KEY);
+                    RPANComment rpanComment = new RPANComment(
+                            payload.getString(JSONUtils.AUTHOR_KEY),
+                            payload.getString(JSONUtils.AUTHOR_ICON_IMAGE),
+                            payload.getString(JSONUtils.BODY_KEY),
+                            payload.getLong(JSONUtils.CREATED_UTC_KEY));
+
+                    handler.post(() -> adapter.addRPANComment(rpanComment));
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override
@@ -236,5 +308,23 @@ public class ViewRPANBroadcastFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mActivity = (AppCompatActivity) context;
+    }
+
+    private static class CommentStreamWebSocketListener extends WebSocketListener {
+        MessageReceivedListener messageReceivedListener;
+
+        CommentStreamWebSocketListener(MessageReceivedListener messageReceivedListener) {
+            this.messageReceivedListener = messageReceivedListener;
+        }
+
+        @Override
+        public void onMessage(@NonNull WebSocket webSocket, @NonNull String text) {
+            Log.i("asfasdf", "s " + text);
+            messageReceivedListener.onMessage(text);
+        }
+
+        interface MessageReceivedListener {
+            void onMessage(String text);
+        }
     }
 }

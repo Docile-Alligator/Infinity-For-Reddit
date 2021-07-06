@@ -162,4 +162,6 @@ public class JSONUtils {
     public static final String CHAT_DISABLED_KEY = "chat_disabled";
     public static final String BROADCAST_TIME_KEY = "broadcast_time";
     public static final String ESTIMATED_REMAINING_TIME_KEY = "estimated_remaining_time";
+    public static final String PAYLOAD_KEY = "payload";
+    public static final String AUTHOR_ICON_IMAGE = "author_icon_img";
 }
