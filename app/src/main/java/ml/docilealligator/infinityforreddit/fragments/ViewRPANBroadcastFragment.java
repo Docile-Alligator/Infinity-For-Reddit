@@ -40,7 +40,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.concurrent.Executor;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -85,6 +84,9 @@ public class ViewRPANBroadcastFragment extends Fragment {
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
+    @Inject
+    @Named("rpan")
+    OkHttpClient okHttpClient;
     private AppCompatActivity mActivity;
     private RPANBroadcast rpanBroadcast;
     private SimpleExoPlayer player;
@@ -92,6 +94,7 @@ public class ViewRPANBroadcastFragment extends Fragment {
     private DataSource.Factory dataSourceFactory;
     private Handler handler;
     private RPANCommentStreamRecyclerViewAdapter adapter;
+    private WebSocket webSocket;
 
     private boolean wasPlaying;
     private boolean isMute = false;
@@ -152,13 +155,6 @@ public class ViewRPANBroadcastFragment extends Fragment {
         player = ExoPlayerFactory.newSimpleInstance(mActivity, trackSelector);
         playerView.setPlayer(player);
 
-        dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(mActivity, "Infinity"));
-        // Prepare the player with the source.
-        player.prepare(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(rpanBroadcast.rpanStream.hlsUrl)));
-        player.setRepeatMode(Player.REPEAT_MODE_ALL);
-        if (resumePosition > 0) {
-            player.seekTo(resumePosition);
-        }
         wasPlaying = true;
 
         boolean muteVideo = mSharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_VIDEO, false) ||
@@ -229,16 +225,6 @@ public class ViewRPANBroadcastFragment extends Fragment {
 
         handler = new Handler();
 
-        Request request = new Request.Builder().url(rpanBroadcast.rpanPost.liveCommentsWebsocketUrl).build();
-        CommentStreamWebSocketListener listener = new CommentStreamWebSocketListener(this::parseComment);
-        OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(30, TimeUnit.SECONDS)
-                .readTimeout(30, TimeUnit.SECONDS)
-                .writeTimeout(30, TimeUnit.SECONDS)
-                .build();
-        WebSocket webSocket = okHttpClient.newWebSocket(request, listener);
-        okHttpClient.dispatcher().executorService().shutdown();
-
         return rootView;
     }
 
@@ -299,8 +285,25 @@ public class ViewRPANBroadcastFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (dataSourceFactory == null) {
+            dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(mActivity, "Infinity"));
+            // Prepare the player with the source.
+            player.prepare(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(rpanBroadcast.rpanStream.hlsUrl)));
+            player.setRepeatMode(Player.REPEAT_MODE_ALL);
+            if (resumePosition > 0) {
+                player.seekTo(resumePosition);
+            }
+        }
+
         if (wasPlaying) {
             player.setPlayWhenReady(true);
+        }
+
+        if (webSocket == null) {
+            Request request = new Request.Builder().url(rpanBroadcast.rpanPost.liveCommentsWebsocketUrl).build();
+            CommentStreamWebSocketListener listener = new CommentStreamWebSocketListener(this::parseComment);
+            webSocket = okHttpClient.newWebSocket(request, listener);
+            okHttpClient.dispatcher().executorService().shutdown();
         }
     }
 

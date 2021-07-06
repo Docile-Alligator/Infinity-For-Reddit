@@ -44,7 +44,7 @@ class AppModule {
     @Provides
     @Named("oauth")
     @Singleton
-    Retrofit provideOauthRetrofit(OkHttpClient okHttpClient) {
+    Retrofit provideOauthRetrofit(@Named("default") OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .baseUrl(APIUtils.OAUTH_API_BASE_URI)
                 .client(okHttpClient)
@@ -155,7 +155,7 @@ class AppModule {
     @Provides
     @Named("strapi")
     @Singleton
-    Retrofit providestrapiRetrofit(OkHttpClient okHttpClient) {
+    Retrofit providestrapiRetrofit(@Named("default") OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .baseUrl(APIUtils.STRAPI_BASE_URI)
                 .client(okHttpClient)
@@ -164,6 +164,7 @@ class AppModule {
     }
 
     @Provides
+    @Named("default")
     @Singleton
     OkHttpClient provideOkHttpClient(@Named("no_oauth") Retrofit retrofit, RedditDataRoomDatabase accountRoomDatabase,
                                      @Named("current_account") SharedPreferences currentAccountSharedPreferences) {
@@ -174,6 +175,17 @@ class AppModule {
                 .writeTimeout(30, TimeUnit.SECONDS)
                 .connectionPool(new ConnectionPool(0, 1, TimeUnit.NANOSECONDS));
         return okHttpClientBuilder.build();
+    }
+
+    @Provides
+    @Named("rpan")
+    @Singleton
+    OkHttpClient provideRPANOkHttpClient() {
+        return new OkHttpClient.Builder()
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .build();
     }
 
     @Provides
