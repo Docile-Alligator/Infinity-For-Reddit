@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -267,7 +268,21 @@ public class ViewRPANBroadcastFragment extends Fragment {
                             payload.getString(JSONUtils.BODY_KEY),
                             payload.getLong(JSONUtils.CREATED_UTC_KEY));
 
-                    handler.post(() -> adapter.addRPANComment(rpanComment));
+                    handler.post(() -> {
+                        LinearLayoutManager manager = ((LinearLayoutManager) recyclerView.getLayoutManager());
+                        boolean shouldScrollToBottom = false;
+                        if (manager != null) {
+                            int lastPosition = manager.findLastCompletelyVisibleItemPosition();
+                            int currentItemCount = adapter.getItemCount();
+                            if (currentItemCount > 0 && lastPosition == currentItemCount - 1) {
+                                shouldScrollToBottom = true;
+                            }
+                        }
+                        adapter.addRPANComment(rpanComment);
+                        if (shouldScrollToBottom) {
+                            recyclerView.smoothScrollToPosition(adapter.getItemCount() - 1);
+                        }
+                    });
                 }
             } catch (JSONException e) {
                 e.printStackTrace();
