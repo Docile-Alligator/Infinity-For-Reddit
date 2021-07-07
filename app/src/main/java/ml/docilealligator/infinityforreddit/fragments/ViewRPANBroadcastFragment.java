@@ -303,7 +303,6 @@ public class ViewRPANBroadcastFragment extends Fragment {
             Request request = new Request.Builder().url(rpanBroadcast.rpanPost.liveCommentsWebsocketUrl).build();
             CommentStreamWebSocketListener listener = new CommentStreamWebSocketListener(this::parseComment);
             webSocket = okHttpClient.newWebSocket(request, listener);
-            okHttpClient.dispatcher().executorService().shutdown();
         }
     }
 
@@ -320,6 +319,10 @@ public class ViewRPANBroadcastFragment extends Fragment {
         player.seekToDefaultPosition();
         player.stop(true);
         player.release();
+
+        if (webSocket != null) {
+            webSocket.cancel();
+        }
     }
 
     @Override
