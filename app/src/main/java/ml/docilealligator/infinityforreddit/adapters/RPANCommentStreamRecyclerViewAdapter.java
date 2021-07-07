@@ -23,10 +23,12 @@ import ml.docilealligator.infinityforreddit.RPANComment;
 public class RPANCommentStreamRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private RequestManager glide;
     private ArrayList<RPANComment> rpanComments;
+    private ItemClickListener itemClickListener;
 
-    public RPANCommentStreamRecyclerViewAdapter(Context context) {
+    public RPANCommentStreamRecyclerViewAdapter(Context context, ItemClickListener itemClickListener) {
         glide = Glide.with(context);
         rpanComments = new ArrayList<>();
+        this.itemClickListener = itemClickListener;
     }
 
     @NonNull
@@ -78,6 +80,14 @@ public class RPANCommentStreamRecyclerViewAdapter extends RecyclerView.Adapter<R
             iconImageView = itemView.findViewById(R.id.icon_image_view_item_rpan_comment);
             authorTextView = itemView.findViewById(R.id.author_text_view_item_rpan_comment);
             contentTextView = itemView.findViewById(R.id.content_text_view_item_rpan_comment);
+
+            itemView.setOnClickListener(view -> {
+                itemClickListener.onClick();
+            });
         }
+    }
+
+    public interface ItemClickListener {
+        void onClick();
     }
 }

@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -220,7 +221,39 @@ public class ViewRPANBroadcastFragment extends Fragment {
             }
         });
 
-        adapter = new RPANCommentStreamRecyclerViewAdapter(mActivity);
+        recyclerView.setOnTouchListener(new View.OnTouchListener() {
+            float x1;
+            float x2;
+            float y1;
+            float y2;
+
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                switch (motionEvent.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        x1 = motionEvent.getX();
+                        y1 = motionEvent.getY();
+                        return true;
+                    case MotionEvent.ACTION_UP:
+                        x2 = motionEvent.getX();
+                        y2 = motionEvent.getY();
+
+                        if (x1 == x2 && y1 == y2) {
+                            playerView.hideController();
+                        }
+
+                        return true;
+                }
+
+                return false;
+            }
+        });
+        adapter = new RPANCommentStreamRecyclerViewAdapter(mActivity, new RPANCommentStreamRecyclerViewAdapter.ItemClickListener() {
+            @Override
+            public void onClick() {
+
+            }
+        });
         recyclerView.setAdapter(adapter);
 
         handler = new Handler();
