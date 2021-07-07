@@ -77,6 +77,7 @@ public class RPANBroadcast implements Parcelable {
     }
 
     public static class RPANPost implements Parcelable{
+        public String fullname;
         public String title;
         public String subredditName;
         public String subredditIconUrl;
@@ -92,10 +93,11 @@ public class RPANBroadcast implements Parcelable {
         public String suggestedCommentSort;
         public String liveCommentsWebsocketUrl;
 
-        public RPANPost(String title, String subredditName, String subredditIconUrl, String username,
+        public RPANPost(String fullname, String title, String subredditName, String subredditIconUrl, String username,
                         int postScore, String voteState, double upvoteRatio, String postPermalink, String rpanUrl,
                         boolean isNsfw, boolean isLocked, boolean isArchived, boolean isSpoiler,
                         String suggestedCommentSort, String liveCommentsWebsocketUrl) {
+            this.fullname = fullname;
             this.title = title;
             this.subredditName = subredditName;
             this.subredditIconUrl = subredditIconUrl;

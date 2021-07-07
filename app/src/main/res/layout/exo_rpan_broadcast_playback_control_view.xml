@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:background="#44000000"
     android:id="@+id/constraint_layout_exo_rpan_broadcast_playback_control_view"
+    android:focusableInTouchMode="true"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <LinearLayout

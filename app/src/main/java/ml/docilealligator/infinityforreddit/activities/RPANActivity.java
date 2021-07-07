@@ -159,6 +159,7 @@ public class RPANActivity extends AppCompatActivity {
                     JSONObject singleData = dataArray.getJSONObject(i);
                     JSONObject rpanPostObject = singleData.getJSONObject(JSONUtils.POST_KEY);
                     RPANBroadcast.RPANPost rpanPost = new RPANBroadcast.RPANPost(
+                            rpanPostObject.getString(JSONUtils.ID_KEY),
                             rpanPostObject.getString(JSONUtils.TITLE_KEY),
                             rpanPostObject.getJSONObject(JSONUtils.SUBREDDIT_KEY).getString(JSONUtils.NAME_KEY),
                             rpanPostObject.getJSONObject(JSONUtils.SUBREDDIT_KEY).getJSONObject(JSONUtils.STYLES_KEY).getString(JSONUtils.ICON_KEY),

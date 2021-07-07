@@ -36,7 +36,8 @@
             android:configChanges="orientation|screenSize|layoutDirection"
             android:label="@string/rpan_activity_label"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.TranslucentStatusBar" />
+            android:theme="@style/AppTheme.TranslucentStatusBar"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.MotionTestActivity"
             android:theme="@style/AppTheme.NoActionBar" />

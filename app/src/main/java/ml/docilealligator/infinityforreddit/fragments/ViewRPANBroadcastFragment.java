@@ -59,6 +59,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.WebSocket;
 import okhttp3.WebSocketListener;
+import retrofit2.Retrofit;
 
 public class ViewRPANBroadcastFragment extends Fragment {
 
@@ -75,6 +76,9 @@ public class ViewRPANBroadcastFragment extends Fragment {
     ImageButton muteButton;
     @BindView(R.id.hd_exo_rpan_broadcast_playback_control_view)
     ImageButton hdButton;
+    @Inject
+    @Named("strapi")
+    Retrofit mStrapiRetrofit;
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
@@ -142,6 +146,7 @@ public class ViewRPANBroadcastFragment extends Fragment {
                                     | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                                     | View.SYSTEM_UI_FLAG_FULLSCREEN
                                     | View.SYSTEM_UI_FLAG_IMMERSIVE);
+                    playerView.setControllerShowTimeoutMs(0);
                     break;
                 case View.VISIBLE:
                     mActivity.getWindow().getDecorView().setSystemUiVisibility(
@@ -248,12 +253,7 @@ public class ViewRPANBroadcastFragment extends Fragment {
                 return false;
             }
         });
-        adapter = new RPANCommentStreamRecyclerViewAdapter(mActivity, new RPANCommentStreamRecyclerViewAdapter.ItemClickListener() {
-            @Override
-            public void onClick() {
-
-            }
-        });
+        adapter = new RPANCommentStreamRecyclerViewAdapter(mActivity);
         recyclerView.setAdapter(adapter);
 
         handler = new Handler();
