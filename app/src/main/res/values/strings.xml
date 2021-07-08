@@ -1131,5 +1131,6 @@
 
     <string name="load_rpan_broadcasts_failed">Cannot load RPAN broadcasts</string>
     <string name="parse_rpan_broadcasts_failed">Cannot parse RPAN broadcasts</string>
+    <string name="parse_rpan_broadcast_failed">Cannot parse RPAN broadcast</string>
 
 </resources>

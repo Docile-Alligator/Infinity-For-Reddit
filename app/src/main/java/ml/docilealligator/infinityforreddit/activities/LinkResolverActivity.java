@@ -48,6 +48,7 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String IMGUR_GALLERY_PATTERN = "/gallery/\\w+/?";
     private static final String IMGUR_ALBUM_PATTERN = "/(album|a)/\\w+/?";
     private static final String IMGUR_IMAGE_PATTERN = "/\\w+/?";
+    private static final String RPAN_BROADCAST_PATTERN = "/rpan/r/[\\w-]+/\\w+/?\\w+/?";
 
     @Inject
     @Named("default")
@@ -185,6 +186,10 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditName);
                                 intent.putExtra(ViewSubredditDetailActivity.EXTRA_MESSAGE_FULLNAME, messageFullname);
                                 intent.putExtra(ViewSubredditDetailActivity.EXTRA_NEW_ACCOUNT_NAME, newAccountName);
+                                startActivity(intent);
+                            } else if (path.matches(RPAN_BROADCAST_PATTERN)) {
+                                Intent intent = new Intent(this, RPANActivity.class);
+                                intent.putExtra(RPANActivity.EXTRA_RPAN_BROADCAST_FULLNAME_OR_ID, path.substring(path.lastIndexOf('/') + 1));
                                 startActivity(intent);
                             } else if (authority.equals("redd.it") && path.matches(REDD_IT_POST_PATTERN)) {
                                 Intent intent = new Intent(this, ViewPostDetailActivity.class);

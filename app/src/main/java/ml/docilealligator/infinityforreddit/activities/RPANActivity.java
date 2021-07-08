@@ -51,7 +51,6 @@ import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.font.FontFamily;
 import ml.docilealligator.infinityforreddit.font.TitleFontFamily;
 import ml.docilealligator.infinityforreddit.fragments.ViewRPANBroadcastFragment;
-import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Call;
@@ -60,6 +59,8 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class RPANActivity extends AppCompatActivity {
+
+    public static final String EXTRA_RPAN_BROADCAST_FULLNAME_OR_ID = "ERBFOI";
 
     @BindView(R.id.coordinator_layout_rpan_activity)
     CoordinatorLayout coordinatorLayout;
@@ -129,25 +130,59 @@ public class RPANActivity extends AppCompatActivity {
     }
 
     private void loadRPANVideos() {
-        strapiRetrofit.create(Strapi.class).getAllBroadcasts(APIUtils.getOAuthHeader(mAccessToken)).enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                progressBar.setVisibility(View.GONE);
-                if (response.isSuccessful()) {
-                    parseRPANBroadcasts(response.body());
-                } else {
+        String rpanBroadcastFullNameOrId = getIntent().getStringExtra(EXTRA_RPAN_BROADCAST_FULLNAME_OR_ID);
+        if (rpanBroadcastFullNameOrId == null) {
+            strapiRetrofit.create(Strapi.class).getAllBroadcasts().enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                    progressBar.setVisibility(View.GONE);
+                    if (response.isSuccessful()) {
+                        parseRPANBroadcasts(response.body());
+                    } else {
+                        Toast.makeText(RPANActivity.this,
+                                R.string.load_rpan_broadcasts_failed, Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                    progressBar.setVisibility(View.GONE);
                     Toast.makeText(RPANActivity.this,
                             R.string.load_rpan_broadcasts_failed, Toast.LENGTH_SHORT).show();
                 }
-            }
+            });
+        } else {
+            strapiRetrofit.create(Strapi.class).getRPANBroadcast(rpanBroadcastFullNameOrId).enqueue(new Callback<String>() {
+                @Override
+                public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                    progressBar.setVisibility(View.GONE);
+                    if (response.isSuccessful()) {
+                        Handler handler = new Handler();
+                        mExecutor.execute(() -> {
+                            try {
+                                rpanBroadcasts = new ArrayList<>();
+                                rpanBroadcasts.add(parseSingleRPANBroadcast(new JSONObject(response.body()).getJSONObject(JSONUtils.DATA_KEY)));
+                                handler.post(() -> initializeViewPager());
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                handler.post(() -> Toast.makeText(RPANActivity.this,
+                                        R.string.parse_rpan_broadcasts_failed, Toast.LENGTH_SHORT).show());
+                            }
+                        });
+                    } else {
+                        Toast.makeText(RPANActivity.this,
+                                R.string.load_rpan_broadcasts_failed, Toast.LENGTH_SHORT).show();
+                    }
+                }
 
-            @Override
-            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                progressBar.setVisibility(View.GONE);
-                Toast.makeText(RPANActivity.this,
-                        R.string.load_rpan_broadcasts_failed, Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                    progressBar.setVisibility(View.GONE);
+                    Toast.makeText(RPANActivity.this,
+                            R.string.load_rpan_broadcasts_failed, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     private void parseRPANBroadcasts(String response) {
@@ -160,50 +195,12 @@ public class RPANActivity extends AppCompatActivity {
 
                 JSONArray dataArray = responseObject.getJSONArray(JSONUtils.DATA_KEY);
                 for (int i = 0; i < dataArray.length(); i++) {
-                    JSONObject singleData = dataArray.getJSONObject(i);
-                    JSONObject rpanPostObject = singleData.getJSONObject(JSONUtils.POST_KEY);
-                    RPANBroadcast.RPANPost rpanPost = new RPANBroadcast.RPANPost(
-                            rpanPostObject.getString(JSONUtils.ID_KEY),
-                            rpanPostObject.getString(JSONUtils.TITLE_KEY),
-                            rpanPostObject.getJSONObject(JSONUtils.SUBREDDIT_KEY).getString(JSONUtils.NAME_KEY),
-                            rpanPostObject.getJSONObject(JSONUtils.SUBREDDIT_KEY).getJSONObject(JSONUtils.STYLES_KEY).getString(JSONUtils.ICON_KEY),
-                            rpanPostObject.getJSONObject(JSONUtils.AUTHOR_INFO_KEY).getString(JSONUtils.NAME_KEY),
-                            rpanPostObject.getInt(JSONUtils.SCORE_KEY),
-                            rpanPostObject.getString(JSONUtils.VOTE_STATE_KEY),
-                            rpanPostObject.getDouble(JSONUtils.UPVOTE_RATIO_CAMEL_CASE_KEY),
-                            rpanPostObject.getString(JSONUtils.PERMALINK_KEY),
-                            rpanPostObject.getJSONObject(JSONUtils.OUTBOUND_LINK_KEY).getString(JSONUtils.URL_KEY),
-                            rpanPostObject.getBoolean(JSONUtils.IS_NSFW_KEY),
-                            rpanPostObject.getBoolean(JSONUtils.IS_LOCKED_KEY),
-                            rpanPostObject.getBoolean(JSONUtils.IS_ARCHIVED_KEY),
-                            rpanPostObject.getBoolean(JSONUtils.IS_SPOILER),
-                            rpanPostObject.getString(JSONUtils.SUGGESTED_COMMENT_SORT_CAMEL_CASE_KEY),
-                            rpanPostObject.getString(JSONUtils.LIVE_COMMENTS_WEBSOCKET_KEY)
-                    );
-
-                    JSONObject rpanStreamObject = singleData.getJSONObject(JSONUtils.STREAM_KEY);
-                    RPANBroadcast.RPANStream rpanStream = new RPANBroadcast.RPANStream(
-                            rpanStreamObject.getString(JSONUtils.STREAM_ID_KEY),
-                            rpanStreamObject.getString(JSONUtils.HLS_URL_KEY),
-                            rpanStreamObject.getString(JSONUtils.THUMBNAIL_KEY),
-                            rpanStreamObject.getInt(JSONUtils.WIDTH_KEY),
-                            rpanStreamObject.getInt(JSONUtils.HEIGHT_KEY),
-                            rpanStreamObject.getLong(JSONUtils.PUBLISH_AT_KEY),
-                            rpanStreamObject.getString(JSONUtils.STATE_KEY)
-                    );
-
-                    rpanBroadcasts.add(new RPANBroadcast(
-                            singleData.getInt(JSONUtils.UPVOTES_KEY),
-                            singleData.getInt(JSONUtils.DOWNVOTES_KEY),
-                            singleData.getInt(JSONUtils.UNIQUE_WATCHERS_KEY),
-                            singleData.getInt(JSONUtils.CONTINUOUS_WATCHERS_KEY),
-                            singleData.getInt(JSONUtils.TOTAL_CONTINUOUS_WATCHERS_KEY),
-                            singleData.getBoolean(JSONUtils.CHAT_DISABLED_KEY),
-                            singleData.getDouble(JSONUtils.BROADCAST_TIME_KEY),
-                            singleData.getDouble(JSONUtils.ESTIMATED_REMAINING_TIME_KEY),
-                            rpanPost,
-                            rpanStream
-                    ));
+                    try {
+                        JSONObject singleData = dataArray.getJSONObject(i);
+                        rpanBroadcasts.add(parseSingleRPANBroadcast(singleData));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 handler.post(() -> {
@@ -218,6 +215,52 @@ public class RPANActivity extends AppCompatActivity {
                         R.string.parse_rpan_broadcasts_failed, Toast.LENGTH_SHORT).show());
             }
         });
+    }
+
+    private RPANBroadcast parseSingleRPANBroadcast(JSONObject singleData) throws JSONException {
+        JSONObject rpanPostObject = singleData.getJSONObject(JSONUtils.POST_KEY);
+        RPANBroadcast.RPANPost rpanPost = new RPANBroadcast.RPANPost(
+                rpanPostObject.getString(JSONUtils.ID_KEY),
+                rpanPostObject.getString(JSONUtils.TITLE_KEY),
+                rpanPostObject.getJSONObject(JSONUtils.SUBREDDIT_KEY).getString(JSONUtils.NAME_KEY),
+                rpanPostObject.getJSONObject(JSONUtils.SUBREDDIT_KEY).getJSONObject(JSONUtils.STYLES_KEY).getString(JSONUtils.ICON_KEY),
+                rpanPostObject.getJSONObject(JSONUtils.AUTHOR_INFO_KEY).getString(JSONUtils.NAME_KEY),
+                rpanPostObject.getInt(JSONUtils.SCORE_KEY),
+                rpanPostObject.getString(JSONUtils.VOTE_STATE_KEY),
+                rpanPostObject.getDouble(JSONUtils.UPVOTE_RATIO_CAMEL_CASE_KEY),
+                rpanPostObject.getString(JSONUtils.PERMALINK_KEY),
+                rpanPostObject.getJSONObject(JSONUtils.OUTBOUND_LINK_KEY).getString(JSONUtils.URL_KEY),
+                rpanPostObject.getBoolean(JSONUtils.IS_NSFW_KEY),
+                rpanPostObject.getBoolean(JSONUtils.IS_LOCKED_KEY),
+                rpanPostObject.getBoolean(JSONUtils.IS_ARCHIVED_KEY),
+                rpanPostObject.getBoolean(JSONUtils.IS_SPOILER),
+                rpanPostObject.getString(JSONUtils.SUGGESTED_COMMENT_SORT_CAMEL_CASE_KEY),
+                rpanPostObject.getString(JSONUtils.LIVE_COMMENTS_WEBSOCKET_KEY)
+        );
+
+        JSONObject rpanStreamObject = singleData.getJSONObject(JSONUtils.STREAM_KEY);
+        RPANBroadcast.RPANStream rpanStream = new RPANBroadcast.RPANStream(
+                rpanStreamObject.getString(JSONUtils.STREAM_ID_KEY),
+                rpanStreamObject.getString(JSONUtils.HLS_URL_KEY),
+                rpanStreamObject.getString(JSONUtils.THUMBNAIL_KEY),
+                rpanStreamObject.getInt(JSONUtils.WIDTH_KEY),
+                rpanStreamObject.getInt(JSONUtils.HEIGHT_KEY),
+                rpanStreamObject.getLong(JSONUtils.PUBLISH_AT_KEY),
+                rpanStreamObject.getString(JSONUtils.STATE_KEY)
+        );
+
+        return new RPANBroadcast(
+                singleData.getInt(JSONUtils.UPVOTES_KEY),
+                singleData.getInt(JSONUtils.DOWNVOTES_KEY),
+                singleData.getInt(JSONUtils.UNIQUE_WATCHERS_KEY),
+                singleData.getInt(JSONUtils.CONTINUOUS_WATCHERS_KEY),
+                singleData.getInt(JSONUtils.TOTAL_CONTINUOUS_WATCHERS_KEY),
+                singleData.getBoolean(JSONUtils.CHAT_DISABLED_KEY),
+                singleData.getDouble(JSONUtils.BROADCAST_TIME_KEY),
+                singleData.getDouble(JSONUtils.ESTIMATED_REMAINING_TIME_KEY),
+                rpanPost,
+                rpanStream
+        );
     }
 
     private void initializeViewPager() {
