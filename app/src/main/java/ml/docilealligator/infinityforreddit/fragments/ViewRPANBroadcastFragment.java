@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -70,6 +71,8 @@ public class ViewRPANBroadcastFragment extends Fragment {
     ConstraintLayout constraintLayout;
     @BindView(R.id.player_view_view_rpan_broadcast_fragment)
     PlayerView playerView;
+    @BindView(R.id.title_text_view_exo_rpan_broadcast_playback_control_view)
+    TextView titleTextView;
     @BindView(R.id.recycler_view_exo_rpan_broadcast_playback_control_view)
     RecyclerView recyclerView;
     @BindView(R.id.mute_exo_rpan_broadcast_playback_control_view)
@@ -225,6 +228,8 @@ public class ViewRPANBroadcastFragment extends Fragment {
                 }
             }
         });
+
+        titleTextView.setText(rpanBroadcast.rpanPost.title);
 
         recyclerView.setOnTouchListener(new View.OnTouchListener() {
             float x1;

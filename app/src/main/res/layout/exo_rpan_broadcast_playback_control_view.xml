@@ -7,6 +7,17 @@
     android:focusableInTouchMode="true"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <TextView
+        android:id="@+id/title_text_view_exo_rpan_broadcast_playback_control_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:textColor="#FFFFFF"
+        android:textSize="20sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/control_linear_layout"
+        app:layout_constraintVertical_bias="1" />
+
     <LinearLayout
         android:id="@+id/control_linear_layout"
         android:layout_width="match_parent"

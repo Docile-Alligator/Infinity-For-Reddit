@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -7,6 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ProgressBar;
 import android.widget.Toast;
@@ -239,6 +243,48 @@ public class RPANActivity extends AppCompatActivity {
                 touchSlopField.set(recyclerView, touchSlop * 4);
             }
         } catch (NoSuchFieldException | IllegalAccessException ignore) {}
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.rpan_activity, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        } else if (item.getItemId() == R.id.action_share_rpan_link_rpan_activity) {
+            if (rpanBroadcasts != null) {
+                int position = viewPager2.getCurrentItem();
+                if (position >= 0 && position < rpanBroadcasts.size()) {
+                    shareLink(rpanBroadcasts.get(position).rpanPost.rpanUrl);
+                    return true;
+                }
+            }
+        } else if (item.getItemId() == R.id.action_share_post_link_rpan_activity) {
+            if (rpanBroadcasts != null) {
+                int position = viewPager2.getCurrentItem();
+                if (position >= 0 && position < rpanBroadcasts.size()) {
+                    shareLink(rpanBroadcasts.get(position).rpanPost.postPermalink);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void shareLink(String link) {
+        try {
+            Intent intent = new Intent(Intent.ACTION_SEND);
+            intent.setType("text/plain");
+            intent.putExtra(Intent.EXTRA_TEXT, link);
+            startActivity(Intent.createChooser(intent, getString(R.string.share)));
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, R.string.no_activity_found_for_share, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {

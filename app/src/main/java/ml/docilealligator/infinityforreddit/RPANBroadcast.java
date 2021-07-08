@@ -3,6 +3,8 @@ package ml.docilealligator.infinityforreddit;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
+
 public class RPANBroadcast implements Parcelable {
 
     public int upvotes;
@@ -76,7 +78,7 @@ public class RPANBroadcast implements Parcelable {
         parcel.writeParcelable(rpanStream, i);
     }
 
-    public static class RPANPost implements Parcelable{
+    public static class RPANPost implements Parcelable {
         public String fullname;
         public String title;
         public String subredditName;
@@ -86,6 +88,7 @@ public class RPANBroadcast implements Parcelable {
         public String voteState;
         public double upvoteRatio;
         public String postPermalink;
+        public String rpanUrl;
         public boolean isNsfw;
         public boolean isLocked;
         public boolean isArchived;
@@ -105,7 +108,8 @@ public class RPANBroadcast implements Parcelable {
             this.postScore = postScore;
             this.voteState = voteState;
             this.upvoteRatio = upvoteRatio;
-            this.postPermalink = postPermalink;
+            this.postPermalink = APIUtils.API_BASE_URI + postPermalink;
+            this.rpanUrl = rpanUrl;
             this.isNsfw = isNsfw;
             this.isLocked = isLocked;
             this.isArchived = isArchived;
@@ -115,6 +119,7 @@ public class RPANBroadcast implements Parcelable {
         }
 
         protected RPANPost(Parcel in) {
+            fullname = in.readString();
             title = in.readString();
             subredditName = in.readString();
             subredditIconUrl = in.readString();
@@ -123,6 +128,7 @@ public class RPANBroadcast implements Parcelable {
             voteState = in.readString();
             upvoteRatio = in.readDouble();
             postPermalink = in.readString();
+            rpanUrl = in.readString();
             isNsfw = in.readByte() != 0;
             isLocked = in.readByte() != 0;
             isArchived = in.readByte() != 0;
@@ -150,6 +156,7 @@ public class RPANBroadcast implements Parcelable {
 
         @Override
         public void writeToParcel(Parcel parcel, int i) {
+            parcel.writeString(fullname);
             parcel.writeString(title);
             parcel.writeString(subredditName);
             parcel.writeString(subredditIconUrl);
@@ -158,6 +165,7 @@ public class RPANBroadcast implements Parcelable {
             parcel.writeString(voteState);
             parcel.writeDouble(upvoteRatio);
             parcel.writeString(postPermalink);
+            parcel.writeString(rpanUrl);
             parcel.writeByte((byte) (isNsfw ? 1 : 0));
             parcel.writeByte((byte) (isLocked ? 1 : 0));
             parcel.writeByte((byte) (isArchived ? 1 : 0));
