@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#44000000"
@@ -66,42 +67,71 @@
         app:layout_constraintBottom_toTopOf="@id/control_linear_layout"
         app:layout_constraintVertical_bias="1" />
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/control_linear_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:paddingTop="4dp"
         android:orientation="horizontal"
-        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent">
+        app:layout_constraintTop_toTopOf="parent">
 
         <ImageButton
             android:id="@+id/hd_exo_rpan_broadcast_playback_control_view"
-            android:src="@drawable/ic_video_quality_24dp"
             style="@style/ExoMediaButton"
-            android:visibility="gone" />
+            android:src="@drawable/ic_video_quality_24dp"
+            android:visibility="gone"
+            app:layout_constraintEnd_toStartOf="@+id/exo_rew"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:layout_editor_absoluteY="4dp" />
 
-        <ImageButton android:id="@id/exo_rew"
-            style="@style/ExoMediaButton.Rewind" />
+        <ImageButton
+            android:id="@id/exo_rew"
+            style="@style/ExoMediaButton.Rewind"
+            app:layout_constraintEnd_toStartOf="@+id/exo_play"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/hd_exo_rpan_broadcast_playback_control_view"
+            tools:layout_editor_absoluteY="4dp" />
 
-        <ImageButton android:id="@id/exo_play"
-            style="@style/ExoMediaButton.Play"/>
+        <ImageButton
+            android:id="@id/exo_play"
+            style="@style/ExoMediaButton.Play"
+            app:layout_constraintEnd_toStartOf="@+id/exo_pause"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/exo_rew"
+            tools:layout_editor_absoluteY="4dp" />
 
-        <ImageButton android:id="@id/exo_pause"
-            style="@style/ExoMediaButton.Pause" />
+        <ImageButton
+            android:id="@id/exo_pause"
+            style="@style/ExoMediaButton.Pause"
+            app:layout_constraintEnd_toStartOf="@+id/exo_ffwd"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/exo_play"
+            tools:layout_editor_absoluteY="4dp" />
 
-        <ImageButton android:id="@id/exo_ffwd"
-            style="@style/ExoMediaButton.FastForward" />
+        <ImageButton
+            android:id="@id/exo_ffwd"
+            style="@style/ExoMediaButton.FastForward"
+            app:layout_constraintEnd_toStartOf="@+id/mute_exo_rpan_broadcast_playback_control_view"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/exo_pause"
+            tools:layout_editor_absoluteY="4dp" />
 
         <ImageButton
             android:id="@+id/mute_exo_rpan_broadcast_playback_control_view"
             style="@style/ExoMediaButton"
-            android:visibility="gone" />
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/exo_ffwd"
+            tools:layout_editor_absoluteY="4dp" />
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view_exo_rpan_broadcast_playback_control_view"
