@@ -12,6 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -21,6 +22,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.Player;
@@ -48,6 +51,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RPANBroadcast;
@@ -71,6 +75,12 @@ public class ViewRPANBroadcastFragment extends Fragment {
     ConstraintLayout constraintLayout;
     @BindView(R.id.player_view_view_rpan_broadcast_fragment)
     PlayerView playerView;
+    @BindView(R.id.subreddit_icon_image_view_exo_rpan_broadcast_playback_control_view)
+    ImageView subredditIconImageView;
+    @BindView(R.id.subreddit_name_text_view_exo_rpan_broadcast_playback_control_view)
+    TextView subredditNameTextView;
+    @BindView(R.id.username_text_view_exo_rpan_broadcast_playback_control_view)
+    TextView usernameTextView;
     @BindView(R.id.title_text_view_exo_rpan_broadcast_playback_control_view)
     TextView titleTextView;
     @BindView(R.id.recycler_view_exo_rpan_broadcast_playback_control_view)
@@ -229,6 +239,13 @@ public class ViewRPANBroadcastFragment extends Fragment {
             }
         });
 
+        Glide.with(mActivity).load(rpanBroadcast.rpanPost.subredditIconUrl)
+                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                .error(Glide.with(mActivity).load(R.drawable.subreddit_default_icon)
+                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                .into(subredditIconImageView);
+        subredditNameTextView.setText(rpanBroadcast.rpanPost.subredditName);
+        usernameTextView.setText(rpanBroadcast.rpanPost.username);
         titleTextView.setText(rpanBroadcast.rpanPost.title);
 
         recyclerView.setOnTouchListener(new View.OnTouchListener() {
