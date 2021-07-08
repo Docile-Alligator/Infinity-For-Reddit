@@ -75,14 +75,9 @@ public class RPANActivity extends AppCompatActivity {
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
-    @Named("current_account")
-    SharedPreferences mCurrentAccountSharedPreferences;
-    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private String mAccessToken;
-    private String mAccountName;
     @State
     ArrayList<RPANBroadcast> rpanBroadcasts;
     @State
@@ -118,9 +113,6 @@ public class RPANActivity extends AppCompatActivity {
         Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setHomeAsUpIndicator(upArrow);
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
-
-        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
 
         if (rpanBroadcasts == null) {
             loadRPANVideos();

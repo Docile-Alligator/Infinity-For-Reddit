@@ -779,7 +779,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.action_refresh_view_post_detail_fragment) {
+        if (itemId == R.id.action_search_view_post_detail_fragment) {
+            
+        } else if (itemId == R.id.action_refresh_view_post_detail_fragment) {
             refresh(true, true);
             return true;
         } else if (itemId == R.id.action_comment_view_post_detail_fragment) {
