@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -27,8 +28,11 @@ import com.evernote.android.state.State;
 import com.github.piasy.biv.BigImageViewer;
 import com.github.piasy.biv.loader.glide.GlideImageLoader;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.livefront.bridge.Bridge;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrInterface;
@@ -89,6 +93,18 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     ViewPager2 viewPager2;
     @BindView(R.id.fab_view_post_detail_activity)
     FloatingActionButton fab;
+    @BindView(R.id.search_panel_material_card_view_view_post_detail_activity)
+    MaterialCardView searchPanelMaterialCardView;
+    @BindView(R.id.search_text_input_layout_view_post_detail_activity)
+    TextInputLayout searchTextInputLayout;
+    @BindView(R.id.search_text_input_edit_text_view_post_detail_activity)
+    TextInputEditText searchTextInputEditText;
+    @BindView(R.id.previous_result_image_view_view_post_detail_activity)
+    ImageView previousResultImageView;
+    @BindView(R.id.next_result_image_view_view_post_detail_activity)
+    ImageView nextResultImageView;
+    @BindView(R.id.close_search_panel_image_view_view_post_detail_activity)
+    ImageView closeSearchPanelImageView;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -369,6 +385,14 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                     Toast.makeText(ViewPostDetailActivity.this, R.string.comment_saved_failed, Toast.LENGTH_SHORT).show();
                 }
             });
+        }
+    }
+
+    public void toggleSearchPanelVisibility() {
+        if (searchPanelMaterialCardView.getVisibility() == View.GONE) {
+            searchPanelMaterialCardView.setVisibility(View.VISIBLE);
+        } else {
+            searchPanelMaterialCardView.setVisibility(View.GONE);
         }
     }
 

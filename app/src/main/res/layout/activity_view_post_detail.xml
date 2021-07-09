@@ -47,4 +47,73 @@
         app:tint="@android:color/white"
         app:srcCompat="@drawable/ic_keyboard_arrow_down_24dp" />
 
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/search_panel_material_card_view_view_post_detail_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:backgroundTint="#FFFFFF"
+        android:visibility="gone"
+        app:cardElevation="16dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/search_text_input_layout_view_post_detail_activity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/search_text_input_edit_text_view_post_detail_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="?attr/font_family"
+                    android:textSize="?attr/font_default"
+                    android:hint="@string/post_filter_name_hint" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <ImageView
+                android:id="@+id/previous_result_image_view_view_post_detail_activity"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_arrow_upward_black_24dp"
+                android:background="?actionBarItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <ImageView
+                android:id="@+id/next_result_image_view_view_post_detail_activity"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_arrow_downward_black_24dp"
+                android:background="?actionBarItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+            <ImageView
+                android:id="@+id/close_search_panel_image_view_view_post_detail_activity"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/ic_close_black_24dp"
+                android:background="?actionBarItemBackground"
+                android:clickable="true"
+                android:focusable="true" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

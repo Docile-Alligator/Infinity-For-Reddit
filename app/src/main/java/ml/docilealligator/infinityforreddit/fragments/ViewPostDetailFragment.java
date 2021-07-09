@@ -780,7 +780,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.action_search_view_post_detail_fragment) {
-            
+            activity.toggleSearchPanelVisibility();
         } else if (itemId == R.id.action_refresh_view_post_detail_fragment) {
             refresh(true, true);
             return true;
