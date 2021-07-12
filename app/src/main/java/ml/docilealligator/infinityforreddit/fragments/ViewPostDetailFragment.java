@@ -766,6 +766,56 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         }
     }
 
+    public void searchComment(String query, boolean searchNextComment) {
+        if (mCommentsAdapter != null) {
+            ArrayList<Comment> visibleComments = mCommentsAdapter.getVisibleComments();
+            int currentSearchIndex = mCommentsAdapter.getSearchCommentIndex();
+            if (visibleComments != null) {
+                if (searchNextComment) {
+                    for (int i = currentSearchIndex + 1; i < visibleComments.size(); i++) {
+                        if (visibleComments.get(i).getCommentRawText() != null && visibleComments.get(i).getCommentRawText().contains(query)) {
+                            if (mCommentsAdapter != null) {
+                                if (mCommentsRecyclerView == null) {
+                                    mRecyclerView.smoothScrollToPosition(i + 1);
+                                } else {
+                                    mCommentsRecyclerView.smoothScrollToPosition(i);
+                                }
+                                mCommentsAdapter.highlightSearchResult(i);
+                                mCommentsAdapter.notifyItemChanged(i);
+                            }
+                            return;
+                        }
+                    }
+
+                    return;
+                } else {
+                    for (int i = currentSearchIndex - 1; i >= 0; i--) {
+                        if (visibleComments.get(i).getCommentRawText() !=null && visibleComments.get(i).getCommentRawText().contains(query)) {
+                            if (mCommentsAdapter != null) {
+                                if (mCommentsRecyclerView == null) {
+                                    mRecyclerView.smoothScrollToPosition(i + 1);
+                                } else {
+                                    mCommentsRecyclerView.smoothScrollToPosition(i);
+                                }
+                                mCommentsAdapter.highlightSearchResult(i);
+                                mCommentsAdapter.notifyItemChanged(i);
+                            }
+                            return;
+                        }
+                    }
+
+                    return;
+                }
+            }
+        }
+    }
+
+    public void resetSearchCommentIndex() {
+        if (mCommentsAdapter != null) {
+            mCommentsAdapter.resetCommentSearchIndex();
+        }
+    }
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.view_post_detail_fragment, menu);

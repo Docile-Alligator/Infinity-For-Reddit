@@ -139,6 +139,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     private Drawable mCommentIcon;
 
+    private int mSearchCommentIndex = -1;
+
     public CommentsRecyclerViewAdapter(AppCompatActivity activity, ViewPostDetailFragment fragment,
                                        CustomThemeWrapper customThemeWrapper,
                                        Executor executor, Retrofit retrofit, Retrofit oauthRetrofit,
@@ -396,6 +398,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         if (holder instanceof CommentViewHolder) {
             Comment comment = getCurrentComment(position);
             if (comment != null) {
+                if (position == mSearchCommentIndex) {
+                    holder.itemView.setBackgroundColor(Color.parseColor("#03A9F4"));
+                }
                 if (mIsSingleCommentThreadMode && comment.getId().equals(mSingleCommentId)) {
                     holder.itemView.setBackgroundColor(mSingleCommentThreadBackgroundColor);
                 } else if (comment.getAwards() != null && !comment.getAwards().equals("")) {
@@ -1034,6 +1039,18 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         if (comment != null) {
             comment.setSaved(isSaved);
         }
+    }
+
+    public int getSearchCommentIndex() {
+        return mSearchCommentIndex;
+    }
+
+    public void highlightSearchResult(int searchCommentIndex) {
+        mSearchCommentIndex = searchCommentIndex;
+    }
+
+    public void resetCommentSearchIndex() {
+        mSearchCommentIndex = -1;
     }
 
     @Override

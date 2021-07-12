@@ -300,6 +300,28 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         if (savedInstanceState == null) {
             viewPager2.setCurrentItem(getIntent().getIntExtra(EXTRA_POST_LIST_POSITION, 0), false);
         }
+        nextResultImageView.setOnClickListener(view -> {
+            ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
+            if (fragment != null) {
+                searchComment(fragment, true);
+            }
+        });
+
+        previousResultImageView.setOnClickListener(view -> {
+            ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
+            if (fragment != null) {
+                searchComment(fragment, false);
+            }
+        });
+
+        closeSearchPanelImageView.setOnClickListener(view -> {
+            ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
+            if (fragment != null) {
+                fragment.resetSearchCommentIndex();
+            }
+
+            searchPanelMaterialCardView.setVisibility(View.GONE);
+        });
     }
 
     public boolean isNsfwSubreddit() {
@@ -394,6 +416,10 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         } else {
             searchPanelMaterialCardView.setVisibility(View.GONE);
         }
+    }
+
+    public void searchComment(ViewPostDetailFragment fragment, boolean searchNextComment) {
+        fragment.searchComment(searchTextInputEditText.getText().toString(), searchNextComment);
     }
 
     @Subscribe
