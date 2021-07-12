@@ -397,11 +397,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         if (holder instanceof CommentViewHolder) {
             Comment comment = getCurrentComment(position);
             if (comment != null) {
-                if (position == mSearchCommentIndex) {
-                    holder.itemView.setBackgroundColor(Color.parseColor("#03A9F4"));
-                } else {
-                    holder.itemView.setBackgroundColor(mCommentBackgroundColor);
-                }
                 if (mIsSingleCommentThreadMode && comment.getId().equals(mSingleCommentId)) {
                     holder.itemView.setBackgroundColor(mSingleCommentThreadBackgroundColor);
                 } else if (comment.getAwards() != null && !comment.getAwards().equals("")) {
@@ -519,6 +514,10 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
                 } else {
                     ((CommentViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                }
+
+                if (position == mSearchCommentIndex) {
+                    holder.itemView.setBackgroundColor(Color.parseColor("#03A9F4"));
                 }
             }
         } else if (holder instanceof CommentFullyCollapsedViewHolder) {
