@@ -1133,4 +1133,6 @@
     <string name="parse_rpan_broadcasts_failed">Cannot parse RPAN broadcasts</string>
     <string name="parse_rpan_broadcast_failed">Cannot parse RPAN broadcast</string>
 
+    <string name="search_comments">Search Comments</string>
+
 </resources>

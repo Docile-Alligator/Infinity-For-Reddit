@@ -65,7 +65,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp"
                 android:paddingStart="16dp"
@@ -78,15 +77,16 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
-                    android:hint="@string/post_filter_name_hint" />
+                    android:hint="@string/search_comments" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
             <ImageView
                 android:id="@+id/previous_result_image_view_view_post_detail_activity"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:padding="8dp"
                 android:src="@drawable/ic_arrow_upward_black_24dp"
                 android:background="?actionBarItemBackground"
                 android:clickable="true"
@@ -94,9 +94,10 @@
 
             <ImageView
                 android:id="@+id/next_result_image_view_view_post_detail_activity"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:padding="8dp"
                 android:src="@drawable/ic_arrow_downward_black_24dp"
                 android:background="?actionBarItemBackground"
                 android:clickable="true"
@@ -104,9 +105,10 @@
 
             <ImageView
                 android:id="@+id/close_search_panel_image_view_view_post_detail_activity"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:padding="8dp"
                 android:src="@drawable/ic_close_black_24dp"
                 android:background="?actionBarItemBackground"
                 android:clickable="true"

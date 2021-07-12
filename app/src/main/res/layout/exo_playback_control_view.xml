@@ -58,7 +58,7 @@
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:includeFontPadding="false"
-            android:textColor="#FFBEBEBE"
+            android:textColor="#FFFFFF"
             android:fontFamily="?attr/font_family" />
 
         <com.google.android.exoplayer2.ui.DefaultTimeBar
@@ -78,7 +78,7 @@
             android:paddingLeft="4dp"
             android:paddingRight="4dp"
             android:includeFontPadding="false"
-            android:textColor="#FFBEBEBE"
+            android:textColor="#FFFFFF"
             android:fontFamily="?attr/font_family" />
 
     </LinearLayout>

@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.activities;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -176,6 +177,11 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                     CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
                     params.bottomMargin += navBarHeight;
                     fab.setLayoutParams(params);
+
+                    searchPanelMaterialCardView.setContentPadding(searchPanelMaterialCardView.getPaddingStart(),
+                            searchPanelMaterialCardView.getPaddingTop(),
+                            searchPanelMaterialCardView.getPaddingEnd(),
+                            searchPanelMaterialCardView.getPaddingBottom() + navBarHeight);
                 }
             }
         }
@@ -272,6 +278,14 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(mAppBarLayout, mToolbar);
         applyFABTheme(fab);
+        searchPanelMaterialCardView.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimary()));
+        int searchPanelTextAndIconColor = mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor();
+        searchTextInputLayout.setBoxStrokeColor(searchPanelTextAndIconColor);
+        searchTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(searchPanelTextAndIconColor));
+        searchTextInputEditText.setTextColor(searchPanelTextAndIconColor);
+        previousResultImageView.setColorFilter(searchPanelTextAndIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        nextResultImageView.setColorFilter(searchPanelTextAndIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        closeSearchPanelImageView.setColorFilter(searchPanelTextAndIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
     }
 
     private void checkNewAccountAndBindView(Bundle savedInstanceState) {
@@ -419,7 +433,9 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     }
 
     public void searchComment(ViewPostDetailFragment fragment, boolean searchNextComment) {
-        fragment.searchComment(searchTextInputEditText.getText().toString(), searchNextComment);
+        if (!searchTextInputEditText.getText().toString().isEmpty()) {
+            fragment.searchComment(searchTextInputEditText.getText().toString(), searchNextComment);
+        }
     }
 
     @Subscribe
