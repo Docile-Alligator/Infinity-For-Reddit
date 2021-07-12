@@ -13,6 +13,7 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.text.util.Linkify;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -314,14 +315,12 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     @Override
     public int getItemViewType(int position) {
         if (mVisibleComments.size() == 0) {
-            if (position == 0) {
-                if (isInitiallyLoading) {
-                    return VIEW_TYPE_FIRST_LOADING;
-                } else if (isInitiallyLoadingFailed) {
-                    return VIEW_TYPE_FIRST_LOADING_FAILED;
-                } else {
-                    return VIEW_TYPE_NO_COMMENT_PLACEHOLDER;
-                }
+            if (isInitiallyLoading) {
+                return VIEW_TYPE_FIRST_LOADING;
+            } else if (isInitiallyLoadingFailed) {
+                return VIEW_TYPE_FIRST_LOADING_FAILED;
+            } else {
+                return VIEW_TYPE_NO_COMMENT_PLACEHOLDER;
             }
         }
 
@@ -400,6 +399,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             if (comment != null) {
                 if (position == mSearchCommentIndex) {
                     holder.itemView.setBackgroundColor(Color.parseColor("#03A9F4"));
+                } else {
+                    holder.itemView.setBackgroundColor(mCommentBackgroundColor);
                 }
                 if (mIsSingleCommentThreadMode && comment.getId().equals(mSingleCommentId)) {
                     holder.itemView.setBackgroundColor(mSingleCommentThreadBackgroundColor);
@@ -900,13 +901,14 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public void initiallyLoading() {
+        resetCommentSearchIndex();
         if (mVisibleComments.size() != 0) {
             int previousSize = mVisibleComments.size();
             mVisibleComments.clear();
             if (mIsSingleCommentThreadMode) {
-                notifyItemRangeRemoved(0, previousSize + 1);
+                notifyItemRangeRemoved(0, previousSize + ((mHasMoreComments || loadMoreCommentsFailed) ? 1 : 0) + 1);
             } else {
-                notifyItemRangeRemoved(0, previousSize);
+                notifyItemRangeRemoved(0, previousSize + ((mHasMoreComments || loadMoreCommentsFailed) ? 1 : 0));
             }
         }
 
@@ -1056,6 +1058,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof CommentViewHolder) {
+            holder.itemView.setBackgroundColor(mCommentBackgroundColor);
             ((CommentViewHolder) holder).authorTextView.setTextColor(mUsernameColor);
             ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.GONE);
             ((CommentViewHolder) holder).authorTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
@@ -1067,13 +1070,13 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             ((CommentViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
             ((CommentViewHolder) holder).downvoteButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
             ((CommentViewHolder) holder).replyButton.setColorFilter(mCommentIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-            ((CommentViewHolder) holder).itemView.setBackgroundColor(mCommentBackgroundColor);
         }
     }
 
     @Override
     public int getItemCount() {
         if (isInitiallyLoading || isInitiallyLoadingFailed || mVisibleComments.size() == 0) {
+            Log.i("adfasdf", "sds");
             return 1;
         }
 

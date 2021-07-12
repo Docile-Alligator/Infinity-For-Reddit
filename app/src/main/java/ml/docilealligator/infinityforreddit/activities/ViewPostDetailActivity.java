@@ -424,11 +424,13 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         }
     }
 
-    public void toggleSearchPanelVisibility() {
+    public boolean toggleSearchPanelVisibility() {
         if (searchPanelMaterialCardView.getVisibility() == View.GONE) {
             searchPanelMaterialCardView.setVisibility(View.VISIBLE);
+            return false;
         } else {
             searchPanelMaterialCardView.setVisibility(View.GONE);
+            return true;
         }
     }
 

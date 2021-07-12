@@ -12,6 +12,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -770,18 +771,21 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (mCommentsAdapter != null) {
             ArrayList<Comment> visibleComments = mCommentsAdapter.getVisibleComments();
             int currentSearchIndex = mCommentsAdapter.getSearchCommentIndex();
+            if (currentSearchIndex >= 0) {
+                mCommentsAdapter.notifyItemChanged(currentSearchIndex);
+            }
             if (visibleComments != null) {
                 if (searchNextComment) {
                     for (int i = currentSearchIndex + 1; i < visibleComments.size(); i++) {
                         if (visibleComments.get(i).getCommentRawText() != null && visibleComments.get(i).getCommentRawText().contains(query)) {
                             if (mCommentsAdapter != null) {
+                                mCommentsAdapter.highlightSearchResult(i);
+                                mCommentsAdapter.notifyItemChanged(i);
                                 if (mCommentsRecyclerView == null) {
                                     mRecyclerView.smoothScrollToPosition(i + 1);
                                 } else {
                                     mCommentsRecyclerView.smoothScrollToPosition(i);
                                 }
-                                mCommentsAdapter.highlightSearchResult(i);
-                                mCommentsAdapter.notifyItemChanged(i);
                             }
                             return;
                         }
@@ -792,13 +796,13 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     for (int i = currentSearchIndex - 1; i >= 0; i--) {
                         if (visibleComments.get(i).getCommentRawText() !=null && visibleComments.get(i).getCommentRawText().contains(query)) {
                             if (mCommentsAdapter != null) {
+                                mCommentsAdapter.highlightSearchResult(i);
+                                mCommentsAdapter.notifyItemChanged(i);
                                 if (mCommentsRecyclerView == null) {
                                     mRecyclerView.smoothScrollToPosition(i + 1);
                                 } else {
                                     mCommentsRecyclerView.smoothScrollToPosition(i);
                                 }
-                                mCommentsAdapter.highlightSearchResult(i);
-                                mCommentsAdapter.notifyItemChanged(i);
                             }
                             return;
                         }
@@ -830,7 +834,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.action_search_view_post_detail_fragment) {
-            activity.toggleSearchPanelVisibility();
+            if (activity.toggleSearchPanelVisibility() && mCommentsAdapter != null) {
+                mCommentsAdapter.resetCommentSearchIndex();
+            }
         } else if (itemId == R.id.action_refresh_view_post_detail_fragment) {
             refresh(true, true);
             return true;
