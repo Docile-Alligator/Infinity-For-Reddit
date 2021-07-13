@@ -13,7 +13,6 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.text.util.Linkify;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -1075,7 +1074,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     @Override
     public int getItemCount() {
         if (isInitiallyLoading || isInitiallyLoadingFailed || mVisibleComments.size() == 0) {
-            Log.i("adfasdf", "sds");
             return 1;
         }
 

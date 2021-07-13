@@ -430,6 +430,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             return false;
         } else {
             searchPanelMaterialCardView.setVisibility(View.GONE);
+            searchTextInputEditText.setText("");
             return true;
         }
     }
