@@ -27,12 +27,14 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.evernote.android.state.State;
+import com.google.android.material.snackbar.Snackbar;
 import com.livefront.bridge.Bridge;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
@@ -53,6 +55,7 @@ import ml.docilealligator.infinityforreddit.font.TitleFontFamily;
 import ml.docilealligator.infinityforreddit.fragments.ViewRPANBroadcastFragment;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -131,8 +134,26 @@ public class RPANActivity extends AppCompatActivity {
                     if (response.isSuccessful()) {
                         parseRPANBroadcasts(response.body());
                     } else {
-                        Toast.makeText(RPANActivity.this,
-                                R.string.load_rpan_broadcasts_failed, Toast.LENGTH_SHORT).show();
+                        try {
+                            ResponseBody responseBody = response.errorBody();
+                            if (responseBody != null) {
+                                JSONObject errorObject = new JSONObject(responseBody.string());
+                                String errorMessage = errorObject.getString(JSONUtils.DATA_KEY);
+                                if (!errorMessage.isEmpty() && !errorMessage.equals("null")) {
+                                    Snackbar.make(coordinatorLayout, errorMessage, Snackbar.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(RPANActivity.this,
+                                            R.string.load_rpan_broadcasts_failed, Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(RPANActivity.this,
+                                        R.string.load_rpan_broadcasts_failed, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (IOException | JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(RPANActivity.this,
+                                    R.string.load_rpan_broadcasts_failed, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
 
@@ -162,8 +183,26 @@ public class RPANActivity extends AppCompatActivity {
                             }
                         });
                     } else {
-                        Toast.makeText(RPANActivity.this,
-                                R.string.load_rpan_broadcasts_failed, Toast.LENGTH_SHORT).show();
+                        try {
+                            ResponseBody responseBody = response.errorBody();
+                            if (responseBody != null) {
+                                JSONObject errorObject = new JSONObject(responseBody.string());
+                                String errorMessage = errorObject.getString(JSONUtils.DATA_KEY);
+                                if (!errorMessage.isEmpty() && !errorMessage.equals("null")) {
+                                    Snackbar.make(coordinatorLayout, errorMessage, Snackbar.LENGTH_LONG).show();
+                                } else {
+                                    Toast.makeText(RPANActivity.this,
+                                            R.string.load_rpan_broadcasts_failed, Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                Toast.makeText(RPANActivity.this,
+                                        R.string.load_rpan_broadcasts_failed, Toast.LENGTH_SHORT).show();
+                            }
+                        } catch (IOException | JSONException e) {
+                            e.printStackTrace();
+                            Toast.makeText(RPANActivity.this,
+                                    R.string.load_rpan_broadcasts_failed, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
 
