@@ -61,7 +61,7 @@
                     android:textSize="?attr/font_default"
                     android:fontFamily="?attr/font_family" />
 
-                <Button
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/rules_button_post_video_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

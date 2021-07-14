@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit.activities;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
@@ -14,7 +13,6 @@ import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -33,6 +31,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -104,7 +103,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
     @BindView(R.id.subreddit_name_text_view_post_text_activity)
     TextView subredditNameTextView;
     @BindView(R.id.rules_button_post_text_activity)
-    Button rulesButton;
+    MaterialButton rulesButton;
     @BindView(R.id.divider_1_post_text_activity)
     View divider1;
     @BindView(R.id.flair_custom_text_view_post_text_activity)
@@ -389,7 +388,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
         int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
         subredditNameTextView.setTextColor(secondaryTextColor);
         rulesButton.setTextColor(mCustomThemeWrapper.getButtonTextColor());
-        rulesButton.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimaryLightTheme()));
+        rulesButton.setBackgroundColor(mCustomThemeWrapper.getColorPrimaryLightTheme());
         primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         receivePostReplyNotificationsTextView.setTextColor(primaryTextColor);
         int dividerColor = mCustomThemeWrapper.getDividerColor();

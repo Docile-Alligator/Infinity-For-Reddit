@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
@@ -10,7 +9,6 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -91,7 +89,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
     @BindView(R.id.subreddit_name_text_view_post_link_activity)
     TextView subredditNameTextView;
     @BindView(R.id.rules_button_post_link_activity)
-    Button rulesButton;
+    MaterialButton rulesButton;
     @BindView(R.id.divider_1_post_link_activity)
     View divider1;
     @BindView(R.id.divider_2_post_link_activity)
@@ -368,7 +366,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
         int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
         subredditNameTextView.setTextColor(secondaryTextColor);
         rulesButton.setTextColor(mCustomThemeWrapper.getButtonTextColor());
-        rulesButton.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimaryLightTheme()));
+        rulesButton.setBackgroundColor(mCustomThemeWrapper.getColorPrimaryLightTheme());
         primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         receivePostReplyNotificationsTextView.setTextColor(primaryTextColor);
         int dividerColor = mCustomThemeWrapper.getDividerColor();
