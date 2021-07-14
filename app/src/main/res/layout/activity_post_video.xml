@@ -132,6 +132,43 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp" />
 
+            <LinearLayout
+                android:id="@+id/receive_post_reply_notifications_linear_layout_post_video_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:id="@+id/receive_post_reply_notifications_text_view_post_video_activity"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/receive_post_reply_notifications"
+                    android:textSize="?attr/font_default"
+                    android:fontFamily="?attr/font_family" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/receive_post_reply_notifications_switch_material_post_video_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:checked="true" />
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/divider_3_post_video_activity"
+                android:layout_width="match_parent"
+                android:layout_height="1dp" />
+
             <EditText
                 android:id="@+id/post_title_edit_text_post_video_activity"
                 android:layout_width="match_parent"
@@ -146,7 +183,7 @@
                 android:fontFamily="?attr/title_font_family" />
 
             <View
-                android:id="@+id/divider_3_post_video_activity"
+                android:id="@+id/divider_4_post_video_activity"
                 android:layout_width="match_parent"
                 android:layout_height="1dp" />
 

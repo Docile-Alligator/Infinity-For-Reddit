@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -38,6 +39,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.libRG.CustomTextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -106,10 +108,18 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     CustomTextView nsfwTextView;
     @BindView(R.id.divider_2_post_video_activity)
     View divider2;
-    @BindView(R.id.post_title_edit_text_post_video_activity)
-    EditText titleEditText;
+    @BindView(R.id.receive_post_reply_notifications_linear_layout_post_video_activity)
+    LinearLayout receivePostReplyNotificationsLinearLayout;
+    @BindView(R.id.receive_post_reply_notifications_text_view_post_video_activity)
+    TextView receivePostReplyNotificationsTextView;
+    @BindView(R.id.receive_post_reply_notifications_switch_material_post_video_activity)
+    SwitchMaterial receivePostReplyNotificationsSwitchMaterial;
     @BindView(R.id.divider_3_post_video_activity)
     View divider3;
+    @BindView(R.id.post_title_edit_text_post_video_activity)
+    EditText titleEditText;
+    @BindView(R.id.divider_4_post_video_activity)
+    View divider4;
     @BindView(R.id.select_video_constraint_layout_post_video_activity)
     ConstraintLayout constraintLayout;
     @BindView(R.id.capture_fab_post_video_activity)
@@ -345,6 +355,10 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
             }
         });
 
+        receivePostReplyNotificationsLinearLayout.setOnClickListener(view -> {
+            receivePostReplyNotificationsSwitchMaterial.performClick();
+        });
+
         captureFab.setOnClickListener(view -> {
             Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
             if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
@@ -387,11 +401,13 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
         subredditNameTextView.setTextColor(secondaryTextColor);
         rulesButton.setTextColor(mCustomThemeWrapper.getButtonTextColor());
         rulesButton.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimaryLightTheme()));
+        primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
+        receivePostReplyNotificationsTextView.setTextColor(primaryTextColor);
         int dividerColor = mCustomThemeWrapper.getDividerColor();
         divider1.setBackgroundColor(dividerColor);
         divider2.setBackgroundColor(dividerColor);
         divider3.setBackgroundColor(dividerColor);
-        primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
+        divider4.setBackgroundColor(dividerColor);
         flairBackgroundColor = mCustomThemeWrapper.getFlairBackgroundColor();
         flairTextColor = mCustomThemeWrapper.getFlairTextColor();
         spoilerBackgroundColor = mCustomThemeWrapper.getSpoilerBackgroundColor();
@@ -463,63 +479,64 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                if (isPosting) {
-                    promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
-                    return true;
-                } else {
-                    if (!titleEditText.getText().toString().equals("") || videoUri != null) {
-                        promptAlertDialog(R.string.discard, R.string.discard_detail);
-                        return true;
-                    }
-                }
-                finish();
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            if (isPosting) {
+                promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
                 return true;
-            case R.id.action_send_post_video_activity:
-                if (!subredditSelected) {
-                    Snackbar.make(coordinatorLayout, R.string.select_a_subreddit, Snackbar.LENGTH_SHORT).show();
+            } else {
+                if (!titleEditText.getText().toString().equals("") || videoUri != null) {
+                    promptAlertDialog(R.string.discard, R.string.discard_detail);
                     return true;
                 }
-
-                if (titleEditText.getText() == null || titleEditText.getText().toString().equals("")) {
-                    Snackbar.make(coordinatorLayout, R.string.title_required, Snackbar.LENGTH_SHORT).show();
-                    return true;
-                }
-
-                if (videoUri == null) {
-                    Snackbar.make(coordinatorLayout, R.string.select_an_image, Snackbar.LENGTH_SHORT).show();
-                    return true;
-                }
-
-                isPosting = true;
-
-                item.setEnabled(false);
-                item.getIcon().setAlpha(130);
-
-                mPostingSnackbar.show();
-
-                String subredditName;
-                if (subredditIsUser) {
-                    subredditName = "u_" + subredditNameTextView.getText().toString();
-                } else {
-                    subredditName = subredditNameTextView.getText().toString();
-                }
-
-                Intent intent = new Intent(this, SubmitPostService.class);
-                intent.setData(videoUri);
-                intent.putExtra(SubmitPostService.EXTRA_ACCESS_TOKEN, mAccessToken);
-                intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
-                intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
-                intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);
-                intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);
-                intent.putExtra(SubmitPostService.EXTRA_IS_NSFW, isNSFW);
-                intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_VIDEO);
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                ContextCompat.startForegroundService(this, intent);
-
+            }
+            finish();
+            return true;
+        } else if (itemId == R.id.action_send_post_video_activity) {
+            if (!subredditSelected) {
+                Snackbar.make(coordinatorLayout, R.string.select_a_subreddit, Snackbar.LENGTH_SHORT).show();
                 return true;
+            }
+
+            if (titleEditText.getText() == null || titleEditText.getText().toString().equals("")) {
+                Snackbar.make(coordinatorLayout, R.string.title_required, Snackbar.LENGTH_SHORT).show();
+                return true;
+            }
+
+            if (videoUri == null) {
+                Snackbar.make(coordinatorLayout, R.string.select_an_image, Snackbar.LENGTH_SHORT).show();
+                return true;
+            }
+
+            isPosting = true;
+
+            item.setEnabled(false);
+            item.getIcon().setAlpha(130);
+
+            mPostingSnackbar.show();
+
+            String subredditName;
+            if (subredditIsUser) {
+                subredditName = "u_" + subredditNameTextView.getText().toString();
+            } else {
+                subredditName = subredditNameTextView.getText().toString();
+            }
+
+            Intent intent = new Intent(this, SubmitPostService.class);
+            intent.setData(videoUri);
+            intent.putExtra(SubmitPostService.EXTRA_ACCESS_TOKEN, mAccessToken);
+            intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
+            intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
+            intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);
+            intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);
+            intent.putExtra(SubmitPostService.EXTRA_IS_NSFW, isNSFW);
+            intent.putExtra(SubmitPostService.EXTRA_RECEIVE_POST_REPLY_NOTIFICATIONS, receivePostReplyNotificationsSwitchMaterial.isChecked());
+            intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_VIDEO);
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+            ContextCompat.startForegroundService(this, intent);
+
+            return true;
         }
 
         return false;
