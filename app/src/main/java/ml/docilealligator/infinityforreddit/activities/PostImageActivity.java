@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -33,6 +34,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.libRG.CustomTextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -104,10 +106,18 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
     CustomTextView nsfwTextView;
     @BindView(R.id.divider_2_post_image_activity)
     View divider2;
-    @BindView(R.id.post_title_edit_text_post_image_activity)
-    EditText titleEditText;
+    @BindView(R.id.receive_post_reply_notifications_linear_layout_post_image_activity)
+    LinearLayout receivePostReplyNotificationsLinearLayout;
+    @BindView(R.id.receive_post_reply_notifications_text_view_post_image_activity)
+    TextView receivePostReplyNotificationsTextView;
+    @BindView(R.id.receive_post_reply_notifications_switch_material_post_image_activity)
+    SwitchMaterial receivePostReplyNotificationsSwitchMaterial;
     @BindView(R.id.divider_3_post_image_activity)
     View divider3;
+    @BindView(R.id.post_title_edit_text_post_image_activity)
+    EditText titleEditText;
+    @BindView(R.id.divider_4_post_image_activity)
+    View divider4;
     @BindView(R.id.select_image_constraint_layout_post_image_activity)
     ConstraintLayout constraintLayout;
     @BindView(R.id.capture_fab_post_image_activity)
@@ -331,6 +341,10 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
             }
         });
 
+        receivePostReplyNotificationsLinearLayout.setOnClickListener(view -> {
+            receivePostReplyNotificationsSwitchMaterial.performClick();
+        });
+
         captureFab.setOnClickListener(view -> {
             Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
             if (pictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -381,11 +395,13 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
         subredditNameTextView.setTextColor(secondaryTextColor);
         rulesButton.setTextColor(mCustomThemeWrapper.getButtonTextColor());
         rulesButton.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimaryLightTheme()));
+        primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
+        receivePostReplyNotificationsTextView.setTextColor(primaryTextColor);
         int dividerColor = mCustomThemeWrapper.getDividerColor();
         divider1.setBackgroundColor(dividerColor);
         divider2.setBackgroundColor(dividerColor);
         divider3.setBackgroundColor(dividerColor);
-        primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
+        divider4.setBackgroundColor(dividerColor);
         flairBackgroundColor = mCustomThemeWrapper.getFlairBackgroundColor();
         flairTextColor = mCustomThemeWrapper.getFlairTextColor();
         spoilerBackgroundColor = mCustomThemeWrapper.getSpoilerBackgroundColor();
@@ -506,6 +522,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
                 intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);
                 intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);
                 intent.putExtra(SubmitPostService.EXTRA_IS_NSFW, isNSFW);
+                intent.putExtra(SubmitPostService.EXTRA_RECEIVE_POST_REPLY_NOTIFICATIONS, receivePostReplyNotificationsSwitchMaterial.isChecked());
                 String mimeType = getContentResolver().getType(imageUri);
                 if (mimeType != null && mimeType.contains("gif")) {
                     intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_VIDEO);
