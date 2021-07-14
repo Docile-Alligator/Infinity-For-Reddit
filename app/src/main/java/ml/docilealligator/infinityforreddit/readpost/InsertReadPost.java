@@ -9,7 +9,7 @@ public class InsertReadPost {
                                       String username, String postId) {
         executor.execute(() -> {
             ReadPostDao readPostDao = redditDataRoomDatabase.readPostDao();
-            if (readPostDao.getReadPostsCount() > 500) {
+            if (readPostDao.getReadPostsCount() > 50000) {
                 readPostDao.deleteOldestReadPosts(username);
             }
             if (username != null && !username.equals("")) {
