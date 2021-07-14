@@ -25,7 +25,6 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -417,7 +416,7 @@ public class DownloadRedditVideoService extends Service {
                     Uri uri = null;
 
                     try {
-                        final Uri contentUri = MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL);
+                        final Uri contentUri = MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
                         uri = contentResolver.insert(contentUri, contentValues);
 
                         if (uri == null) {
