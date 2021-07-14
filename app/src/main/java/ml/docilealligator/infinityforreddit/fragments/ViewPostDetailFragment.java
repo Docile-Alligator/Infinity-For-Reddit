@@ -216,7 +216,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private boolean mSwipeUpToHideFab;
     private boolean mExpandChildren;
     private int mWindowWidth;
-    private LinearLayoutManager mLinearLayoutManager;
     private ConcatAdapter mConcatAdapter;
     private PostDetailRecyclerViewAdapter mPostAdapter;
     private CommentsRecyclerViewAdapter mCommentsAdapter;
@@ -261,13 +260,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         mUnsavedIcon = getMenuItemIcon(R.drawable.ic_bookmark_border_toolbar_24dp);
 
         if (getResources().getBoolean(R.bool.isTablet) || getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            mLinearLayoutManager = new LinearLayoutManager(activity);
             mCommentsRecyclerView = rootView.findViewById(R.id.comments_recycler_view_view_post_detail_fragment);
-            mCommentsRecyclerView.setLayoutManager(mLinearLayoutManager);
-            mRecyclerView.setLayoutManager(new LinearLayoutManager(activity));
-        } else {
-            mLinearLayoutManager = new LinearLayoutManager(activity);
-            mRecyclerView.setLayoutManager(mLinearLayoutManager);
         }
 
         if (activity != null && activity.isImmersiveInterface()) {
@@ -319,9 +312,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     }
 
                     if (!isLoadingMoreChildren && loadMoreChildrenSuccess) {
-                        int visibleItemCount = mLinearLayoutManager.getChildCount();
-                        int totalItemCount = mLinearLayoutManager.getItemCount();
-                        int firstVisibleItemPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
+                        int visibleItemCount = (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager().getChildCount();
+                        int totalItemCount = (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager().getItemCount();
+                        int firstVisibleItemPosition = ((LinearLayoutManager) (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager()).findFirstVisibleItemPosition();
 
                         if (mCommentsAdapter != null && mCommentsAdapter.getItemCount() >= 1 && (visibleItemCount + firstVisibleItemPosition >= totalItemCount) && firstVisibleItemPosition >= 0) {
                             fetchMoreComments();
@@ -755,8 +748,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     }
 
     public void goToTop() {
-        if (mLinearLayoutManager != null) {
-            mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
+        ((LinearLayoutManager) mRecyclerView.getLayoutManager()).scrollToPositionWithOffset(0, 0);
+        if (mCommentsRecyclerView != null) {
+            ((LinearLayoutManager) mCommentsRecyclerView.getLayoutManager()).scrollToPositionWithOffset(0, 0);
         }
     }
 
@@ -1244,9 +1238,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                                             }
 
                                                             if (!isLoadingMoreChildren && loadMoreChildrenSuccess) {
-                                                                int visibleItemCount = mLinearLayoutManager.getChildCount();
-                                                                int totalItemCount = mLinearLayoutManager.getItemCount();
-                                                                int firstVisibleItemPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
+                                                                int visibleItemCount = (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager().getChildCount();
+                                                                int totalItemCount = (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager().getItemCount();
+                                                                int firstVisibleItemPosition = ((LinearLayoutManager) (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager()).findFirstVisibleItemPosition();
 
                                                                 if ((visibleItemCount + firstVisibleItemPosition >= totalItemCount) && firstVisibleItemPosition >= 0) {
                                                                     fetchMoreComments();
@@ -1382,9 +1376,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                     }
 
                                     if (!isLoadingMoreChildren && loadMoreChildrenSuccess) {
-                                        int visibleItemCount = mLinearLayoutManager.getChildCount();
-                                        int totalItemCount = mLinearLayoutManager.getItemCount();
-                                        int firstVisibleItemPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
+                                        int visibleItemCount = (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager().getChildCount();
+                                        int totalItemCount = (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager().getItemCount();
+                                        int firstVisibleItemPosition = ((LinearLayoutManager) (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager()).findFirstVisibleItemPosition();
 
                                         if ((visibleItemCount + firstVisibleItemPosition >= totalItemCount) && firstVisibleItemPosition >= 0) {
                                             fetchMoreComments();
@@ -1714,36 +1708,28 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     }
 
     public void scrollToNextParentComment() {
-        if (mLinearLayoutManager != null) {
-            int currentPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
-            if (mCommentsAdapter != null) {
-                int nextParentPosition = mCommentsAdapter.getNextParentCommentPosition(mCommentsRecyclerView == null ? currentPosition - 1 : currentPosition);
-                if (nextParentPosition < 0) {
-                    return;
-                }
-                mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null ? nextParentPosition + 1 : nextParentPosition);
-                if (mLinearLayoutManager != null) {
-                    mIsSmoothScrolling = true;
-                    mLinearLayoutManager.startSmoothScroll(mSmoothScroller);
-                }
+        int currentPosition = ((LinearLayoutManager) (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager()).findFirstVisibleItemPosition();
+        if (mCommentsAdapter != null) {
+            int nextParentPosition = mCommentsAdapter.getNextParentCommentPosition(mCommentsRecyclerView == null ? currentPosition - 1 : currentPosition);
+            if (nextParentPosition < 0) {
+                return;
             }
+            mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null ? nextParentPosition + 1 : nextParentPosition);
+            mIsSmoothScrolling = true;
+            ((LinearLayoutManager) (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager()).startSmoothScroll(mSmoothScroller);
         }
     }
 
     public void scrollToPreviousParentComment() {
-        if (mLinearLayoutManager != null) {
-            int currentPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
-            if (mCommentsAdapter != null) {
-                int previousParentPosition = mCommentsAdapter.getPreviousParentCommentPosition(mCommentsRecyclerView == null ? currentPosition - 1 : currentPosition);
-                if (previousParentPosition < 0) {
-                    return;
-                }
-                mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null ? previousParentPosition + 1 : previousParentPosition);
-                if (mLinearLayoutManager != null) {
-                    mIsSmoothScrolling = true;
-                    mLinearLayoutManager.startSmoothScroll(mSmoothScroller);
-                }
+        int currentPosition = ((LinearLayoutManager) (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager()).findFirstVisibleItemPosition();
+        if (mCommentsAdapter != null) {
+            int previousParentPosition = mCommentsAdapter.getPreviousParentCommentPosition(mCommentsRecyclerView == null ? currentPosition - 1 : currentPosition);
+            if (previousParentPosition < 0) {
+                return;
             }
+            mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null ? previousParentPosition + 1 : previousParentPosition);
+            mIsSmoothScrolling = true;
+            ((LinearLayoutManager) (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager()).startSmoothScroll(mSmoothScroller);
         }
     }
 

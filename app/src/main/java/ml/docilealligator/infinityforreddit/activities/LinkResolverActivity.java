@@ -7,7 +7,6 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -190,7 +189,6 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 startActivity(intent);
                             } else if (path.matches(RPAN_BROADCAST_PATTERN)) {
                                 Intent intent = new Intent(this, RPANActivity.class);
-                                Log.i("asdfasdf", "sd " + path);
                                 intent.putExtra(RPANActivity.EXTRA_RPAN_BROADCAST_FULLNAME_OR_ID, path.substring(path.lastIndexOf('/') + 1));
                                 startActivity(intent);
                             } else if (authority.equals("redd.it") && path.matches(REDD_IT_POST_PATTERN)) {
