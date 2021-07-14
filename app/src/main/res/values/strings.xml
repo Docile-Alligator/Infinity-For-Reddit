@@ -205,6 +205,7 @@
     <string name="choose_a_subreddit">Choose a subreddit</string>
     <string name="rules">Rules</string>
     <string name="post_link_hint">URL</string>
+    <string name="receive_post_reply_notifications">Receive post reply notifications</string>
 
     <string name="subreddits">Subreddits</string>
     <string name="users">Users</string>

@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -34,6 +35,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.libRG.CustomTextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -97,9 +99,9 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_post_text_activity)
     Toolbar toolbar;
-    @BindView(R.id.subreddit_icon_gif_image_view_search_activity)
+    @BindView(R.id.subreddit_icon_gif_image_view_post_text_activity)
     GifImageView iconGifImageView;
-    @BindView(R.id.subreddit_name_text_view_search_activity)
+    @BindView(R.id.subreddit_name_text_view_post_text_activity)
     TextView subredditNameTextView;
     @BindView(R.id.rules_button_post_text_activity)
     Button rulesButton;
@@ -113,10 +115,18 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
     CustomTextView nsfwTextView;
     @BindView(R.id.divider_2_post_text_activity)
     View divider2;
-    @BindView(R.id.post_title_edit_text_post_text_activity)
-    EditText titleEditText;
+    @BindView(R.id.receive_post_reply_notifications_linear_layout_post_text_activity)
+    LinearLayout receivePostReplyNotificationsLinearLayout;
+    @BindView(R.id.receive_post_reply_notifications_text_view_post_text_activity)
+    TextView receivePostReplyNotificationsTextView;
+    @BindView(R.id.receive_post_reply_notifications_switch_material_post_text_activity)
+    SwitchMaterial receivePostReplyNotificationsSwitchMaterial;
     @BindView(R.id.divider_3_post_text_activity)
     View divider3;
+    @BindView(R.id.post_title_edit_text_post_text_activity)
+    EditText titleEditText;
+    @BindView(R.id.divider_4_post_text_activity)
+    View divider4;
     @BindView(R.id.post_text_content_edit_text_post_text_activity)
     EditText contentEditText;
     @BindView(R.id.markdown_bottom_bar_recycler_view_post_text_activity)
@@ -333,6 +343,10 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
             }
         });
 
+        receivePostReplyNotificationsLinearLayout.setOnClickListener(view -> {
+            receivePostReplyNotificationsSwitchMaterial.performClick();
+        });
+
         MarkdownBottomBarRecyclerViewAdapter adapter = new MarkdownBottomBarRecyclerViewAdapter(
                 mCustomThemeWrapper, new MarkdownBottomBarRecyclerViewAdapter.ItemClickListener() {
             @Override
@@ -376,11 +390,13 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
         subredditNameTextView.setTextColor(secondaryTextColor);
         rulesButton.setTextColor(mCustomThemeWrapper.getButtonTextColor());
         rulesButton.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimaryLightTheme()));
+        primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
+        receivePostReplyNotificationsTextView.setTextColor(primaryTextColor);
         int dividerColor = mCustomThemeWrapper.getDividerColor();
         divider1.setBackgroundColor(dividerColor);
         divider2.setBackgroundColor(dividerColor);
         divider3.setBackgroundColor(dividerColor);
-        primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
+        divider4.setBackgroundColor(dividerColor);
         flairBackgroundColor = mCustomThemeWrapper.getFlairBackgroundColor();
         flairTextColor = mCustomThemeWrapper.getFlairTextColor();
         spoilerBackgroundColor = mCustomThemeWrapper.getSpoilerBackgroundColor();
@@ -423,9 +439,9 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
         new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                 .setTitle(titleResId)
                 .setMessage(messageResId)
-                .setPositiveButton(R.string.yes, (dialogInterface, i)
+                .setPositiveButton(R.string.discard, (dialogInterface, i)
                         -> finish())
-                .setNegativeButton(R.string.no, null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -494,6 +510,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
             intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);
             intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);
             intent.putExtra(SubmitPostService.EXTRA_IS_NSFW, isNSFW);
+            intent.putExtra(SubmitPostService.EXTRA_RECEIVE_POST_REPLY_NOTIFICATIONS, receivePostReplyNotificationsSwitchMaterial.isChecked());
             intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TEXT_OR_LINK);
             ContextCompat.startForegroundService(this, intent);
 

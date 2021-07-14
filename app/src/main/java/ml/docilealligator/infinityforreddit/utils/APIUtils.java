@@ -73,6 +73,7 @@ public class APIUtils {
     public static final String SPOILER_KEY = "spoiler";
     public static final String NSFW_KEY = "nsfw";
     public static final String CROSSPOST_FULLNAME_KEY = "crosspost_fullname";
+    public static final String SEND_REPLIES_KEY = "sendreplies";
     public static final String KIND_KEY = "kind";
     public static final String KIND_SELF = "self";
     public static final String KIND_LINK = "link";
