@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
@@ -12,7 +11,6 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -33,6 +31,7 @@ import com.bumptech.glide.request.transition.Transition;
 import com.davemorrissey.labs.subscaleview.ImageSource;
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -93,7 +92,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
     @BindView(R.id.subreddit_name_text_view_submit_crosspost_activity)
     TextView subredditNameTextView;
     @BindView(R.id.rules_button_submit_crosspost_activity)
-    Button rulesButton;
+    MaterialButton rulesButton;
     @BindView(R.id.divider_1_submit_crosspost_activity)
     View divider1;
     @BindView(R.id.flair_custom_text_view_submit_crosspost_activity)
@@ -403,7 +402,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
         int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
         subredditNameTextView.setTextColor(secondaryTextColor);
         rulesButton.setTextColor(mCustomThemeWrapper.getButtonTextColor());
-        rulesButton.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimaryLightTheme()));
+        rulesButton.setBackgroundColor(mCustomThemeWrapper.getColorPrimaryLightTheme());
         primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         receivePostReplyNotificationsTextView.setTextColor(primaryTextColor);
         int dividerColor = mCustomThemeWrapper.getDividerColor();
