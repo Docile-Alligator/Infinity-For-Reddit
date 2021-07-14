@@ -770,14 +770,15 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             if (visibleComments != null) {
                 if (searchNextComment) {
                     for (int i = currentSearchIndex + 1; i < visibleComments.size(); i++) {
-                        if (visibleComments.get(i).getCommentRawText() != null && visibleComments.get(i).getCommentRawText().contains(query)) {
+                        if (visibleComments.get(i).getCommentRawText() != null &&
+                                visibleComments.get(i).getCommentRawText().toLowerCase().contains(query.toLowerCase())) {
                             if (mCommentsAdapter != null) {
                                 mCommentsAdapter.highlightSearchResult(i);
                                 mCommentsAdapter.notifyItemChanged(i);
                                 if (mCommentsRecyclerView == null) {
-                                    mRecyclerView.smoothScrollToPosition(i + 1);
+                                    mRecyclerView.scrollToPosition(i + 1);
                                 } else {
-                                    mCommentsRecyclerView.smoothScrollToPosition(i);
+                                    mCommentsRecyclerView.scrollToPosition(i);
                                 }
                             }
                             return;
@@ -787,14 +788,15 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     return;
                 } else {
                     for (int i = currentSearchIndex - 1; i >= 0; i--) {
-                        if (visibleComments.get(i).getCommentRawText() !=null && visibleComments.get(i).getCommentRawText().contains(query)) {
+                        if (visibleComments.get(i).getCommentRawText() !=null &&
+                                visibleComments.get(i).getCommentRawText().toLowerCase().contains(query.toLowerCase())) {
                             if (mCommentsAdapter != null) {
                                 mCommentsAdapter.highlightSearchResult(i);
                                 mCommentsAdapter.notifyItemChanged(i);
                                 if (mCommentsRecyclerView == null) {
-                                    mRecyclerView.smoothScrollToPosition(i + 1);
+                                    mRecyclerView.scrollToPosition(i + 1);
                                 } else {
-                                    mCommentsRecyclerView.smoothScrollToPosition(i);
+                                    mCommentsRecyclerView.scrollToPosition(i);
                                 }
                             }
                             return;

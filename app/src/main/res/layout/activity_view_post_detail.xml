@@ -78,7 +78,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
-                    android:hint="@string/search_comments" />
+                    android:hint="@string/search_comments"
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
