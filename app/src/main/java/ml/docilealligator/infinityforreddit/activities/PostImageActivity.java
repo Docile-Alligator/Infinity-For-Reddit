@@ -470,69 +470,69 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                if (isPosting) {
-                    promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
-                    return true;
-                } else {
-                    if (!titleEditText.getText().toString().equals("") || imageUri != null) {
-                        promptAlertDialog(R.string.discard, R.string.discard_detail);
-                        return true;
-                    }
-                }
-                finish();
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            if (isPosting) {
+                promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
                 return true;
-            case R.id.action_send_post_image_activity:
-                if (!subredditSelected) {
-                    Snackbar.make(coordinatorLayout, R.string.select_a_subreddit, Snackbar.LENGTH_SHORT).show();
+            } else {
+                if (!titleEditText.getText().toString().equals("") || imageUri != null) {
+                    promptAlertDialog(R.string.discard, R.string.discard_detail);
                     return true;
                 }
-
-                if (titleEditText.getText() == null || titleEditText.getText().toString().equals("")) {
-                    Snackbar.make(coordinatorLayout, R.string.title_required, Snackbar.LENGTH_SHORT).show();
-                    return true;
-                }
-
-                if (imageUri == null) {
-                    Snackbar.make(coordinatorLayout, R.string.select_an_image, Snackbar.LENGTH_SHORT).show();
-                    return true;
-                }
-
-                isPosting = true;
-
-                item.setEnabled(false);
-                item.getIcon().setAlpha(130);
-
-                mPostingSnackbar.show();
-
-                String subredditName;
-                if (subredditIsUser) {
-                    subredditName = "u_" + subredditNameTextView.getText().toString();
-                } else {
-                    subredditName = subredditNameTextView.getText().toString();
-                }
-
-                Intent intent = new Intent(this, SubmitPostService.class);
-                intent.setData(imageUri);
-                intent.putExtra(SubmitPostService.EXTRA_ACCESS_TOKEN, mAccessToken);
-                intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
-                intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
-                intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);
-                intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);
-                intent.putExtra(SubmitPostService.EXTRA_IS_NSFW, isNSFW);
-                intent.putExtra(SubmitPostService.EXTRA_RECEIVE_POST_REPLY_NOTIFICATIONS, receivePostReplyNotificationsSwitchMaterial.isChecked());
-                String mimeType = getContentResolver().getType(imageUri);
-                if (mimeType != null && mimeType.contains("gif")) {
-                    intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_VIDEO);
-                } else {
-                    intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_IMAGE);
-                }
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-
-                ContextCompat.startForegroundService(this, intent);
-
+            }
+            finish();
+            return true;
+        } else if (itemId == R.id.action_send_post_image_activity) {
+            if (!subredditSelected) {
+                Snackbar.make(coordinatorLayout, R.string.select_a_subreddit, Snackbar.LENGTH_SHORT).show();
                 return true;
+            }
+
+            if (titleEditText.getText() == null || titleEditText.getText().toString().equals("")) {
+                Snackbar.make(coordinatorLayout, R.string.title_required, Snackbar.LENGTH_SHORT).show();
+                return true;
+            }
+
+            if (imageUri == null) {
+                Snackbar.make(coordinatorLayout, R.string.select_an_image, Snackbar.LENGTH_SHORT).show();
+                return true;
+            }
+
+            isPosting = true;
+
+            item.setEnabled(false);
+            item.getIcon().setAlpha(130);
+
+            mPostingSnackbar.show();
+
+            String subredditName;
+            if (subredditIsUser) {
+                subredditName = "u_" + subredditNameTextView.getText().toString();
+            } else {
+                subredditName = subredditNameTextView.getText().toString();
+            }
+
+            Intent intent = new Intent(this, SubmitPostService.class);
+            intent.setData(imageUri);
+            intent.putExtra(SubmitPostService.EXTRA_ACCESS_TOKEN, mAccessToken);
+            intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
+            intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
+            intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);
+            intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);
+            intent.putExtra(SubmitPostService.EXTRA_IS_NSFW, isNSFW);
+            intent.putExtra(SubmitPostService.EXTRA_RECEIVE_POST_REPLY_NOTIFICATIONS, receivePostReplyNotificationsSwitchMaterial.isChecked());
+            String mimeType = getContentResolver().getType(imageUri);
+            if (mimeType != null && mimeType.contains("gif")) {
+                intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_VIDEO);
+            } else {
+                intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_IMAGE);
+            }
+            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+            ContextCompat.startForegroundService(this, intent);
+
+            return true;
         }
 
         return false;
@@ -647,7 +647,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
     }
 
     @Subscribe
-    public void onSubmitVideoOrGifPostEvent(SubmitVideoOrGifPostEvent submitVideoOrGifPostEvent) {
+    public void onSubmitGifPostEvent(SubmitVideoOrGifPostEvent submitVideoOrGifPostEvent) {
         isPosting = false;
         mPostingSnackbar.dismiss();
         mMemu.findItem(R.id.action_send_post_image_activity).setEnabled(true);

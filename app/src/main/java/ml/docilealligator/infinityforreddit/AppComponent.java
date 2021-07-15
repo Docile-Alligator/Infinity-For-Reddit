@@ -27,6 +27,7 @@ import ml.docilealligator.infinityforreddit.activities.MainActivity;
 import ml.docilealligator.infinityforreddit.activities.MultiredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.activities.PostFilterPreferenceActivity;
 import ml.docilealligator.infinityforreddit.activities.PostFilterUsageListingActivity;
+import ml.docilealligator.infinityforreddit.activities.PostGalleryActivity;
 import ml.docilealligator.infinityforreddit.activities.PostImageActivity;
 import ml.docilealligator.infinityforreddit.activities.PostLinkActivity;
 import ml.docilealligator.infinityforreddit.activities.PostTextActivity;
@@ -275,4 +276,6 @@ public interface AppComponent {
     void inject(RPANActivity rpanActivity);
 
     void inject(ViewRPANBroadcastFragment viewRPANBroadcastFragment);
+
+    void inject(PostGalleryActivity postGalleryActivity);
 }
