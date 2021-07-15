@@ -40,6 +40,7 @@
     <string name="search_users_result_activity_label">Users</string>
     <string name="multireddit_selection_activity_label">Select a Multireddit</string>
     <string name="rpan_activity_label">RPAN</string>
+    <string name="post_gallery_activity_label">Gallery Post</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -218,6 +219,7 @@
     <string name="bottom_sheet_post_link">Link</string>
     <string name="bottom_sheet_post_image">Image</string>
     <string name="bottom_sheet_post_video">Video</string>
+    <string name="bottom_sheet_post_gallery">Gallery</string>
     <string name="post_type_gif">Gif</string>
     <string name="post_type_gallery">Gallery</string>
 

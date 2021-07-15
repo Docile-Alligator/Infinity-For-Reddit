@@ -776,7 +776,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         } else if (post.getPostType() == Post.LINK_TYPE) {
                             ((PostWithPreviewTypeViewHolder) holder).noPreviewLinkImageView.setImageResource(R.drawable.ic_link);
                         } else if (post.getPostType() == Post.GALLERY_TYPE) {
-                            ((PostWithPreviewTypeViewHolder) holder).noPreviewLinkImageView.setImageResource(R.drawable.ic_gallery_24dp);
+                            ((PostWithPreviewTypeViewHolder) holder).noPreviewLinkImageView.setImageResource(R.drawable.ic_gallery_reverse_color_24dp);
                         }
                     } else if (mDataSavingMode && mOnlyDisablePreviewInVideoAndGifPosts && (post.getPostType() == Post.VIDEO_TYPE || post.getPostType() == Post.GIF_TYPE)) {
                         ((PostWithPreviewTypeViewHolder) holder).noPreviewLinkImageView.setVisibility(View.VISIBLE);
@@ -808,7 +808,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             } else if (post.getPostType() == Post.LINK_TYPE) {
                                 ((PostWithPreviewTypeViewHolder) holder).noPreviewLinkImageView.setImageResource(R.drawable.ic_link);
                             } else if (post.getPostType() == Post.GALLERY_TYPE) {
-                                ((PostWithPreviewTypeViewHolder) holder).noPreviewLinkImageView.setImageResource(R.drawable.ic_gallery_24dp);
+                                ((PostWithPreviewTypeViewHolder) holder).noPreviewLinkImageView.setImageResource(R.drawable.ic_gallery_reverse_color_24dp);
                             }
                         }
                     }
@@ -901,7 +901,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         } else if (post.getPostType() == Post.LINK_TYPE) {
                             ((PostCard2WithPreviewViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_link);
                         } else if (post.getPostType() == Post.GALLERY_TYPE) {
-                            ((PostCard2WithPreviewViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_gallery_24dp);
+                            ((PostCard2WithPreviewViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_gallery_reverse_color_24dp);
                         }
                     } else if (mDataSavingMode && mOnlyDisablePreviewInVideoAndGifPosts && (post.getPostType() == Post.VIDEO_TYPE || post.getPostType() == Post.GIF_TYPE)) {
                         ((PostCard2WithPreviewViewHolder) holder).progressBar.setVisibility(View.GONE);
@@ -935,7 +935,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             } else if (post.getPostType() == Post.LINK_TYPE) {
                                 ((PostCard2WithPreviewViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_link);
                             } else if (post.getPostType() == Post.GALLERY_TYPE) {
-                                ((PostCard2WithPreviewViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_gallery_24dp);
+                                ((PostCard2WithPreviewViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_gallery_reverse_color_24dp);
                             }
                         }
                     }
@@ -1170,7 +1170,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     ((PostCompactBaseViewHolder) holder).relativeLayout.setVisibility(View.VISIBLE);
                     if (post.getPostType() == Post.GALLERY_TYPE && post.getPreviews() != null && post.getPreviews().isEmpty()) {
                         ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.VISIBLE);
-                        ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_gallery_24dp);
+                        ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_gallery_reverse_color_24dp);
                     }
                     ArrayList<Post.Preview> previews = post.getPreviews();
                     if (previews != null && !previews.isEmpty()) {
@@ -1259,7 +1259,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         ((PostCompactBaseViewHolder) holder).typeTextView.setText(R.string.gallery);
                         if (mDataSavingMode && mDisableImagePreview) {
                             ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.VISIBLE);
-                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_gallery_24dp);
+                            ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_gallery_reverse_color_24dp);
                         }
                         break;
                     case Post.TEXT_TYPE:
@@ -1329,7 +1329,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             } else if (post.getPostType() == Post.LINK_TYPE) {
                                 ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_link);
                             } else if (post.getPostType() == Post.GALLERY_TYPE) {
-                                ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_gallery_24dp);
+                                ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_gallery_reverse_color_24dp);
                             }
                             ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_image_24dp);
                         }
@@ -1424,7 +1424,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         ((PostGalleryViewHolder) holder).imageView.setVisibility(View.VISIBLE);
                         ((PostGalleryViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
                         ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.VISIBLE);
-                        ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setImageDrawable(mActivity.getDrawable(R.drawable.ic_gallery_24dp));
+                        ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setImageDrawable(mActivity.getDrawable(R.drawable.ic_gallery_reverse_color_24dp));
 
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
                         if (preview != null) {
@@ -1441,7 +1441,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             loadImage(holder, post, preview);
                         } else {
                             ((PostGalleryViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
-                            ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_gallery_24dp);
+                            ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_gallery_reverse_color_24dp);
                         }
                         break;
                     }

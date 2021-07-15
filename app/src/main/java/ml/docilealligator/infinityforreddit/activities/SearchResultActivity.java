@@ -724,6 +724,10 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             case PostTypeBottomSheetFragment.TYPE_VIDEO:
                 intent = new Intent(this, PostVideoActivity.class);
                 startActivity(intent);
+                break;
+            case PostTypeBottomSheetFragment.TYPE_GALLERY:
+                intent = new Intent(this, PostGalleryActivity.class);
+                startActivity(intent);
         }
     }
 

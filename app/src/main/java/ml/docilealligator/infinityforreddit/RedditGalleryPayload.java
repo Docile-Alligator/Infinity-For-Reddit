@@ -1,5 +1,8 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
@@ -40,7 +43,7 @@ public class RedditGalleryPayload {
         this.items = items;
     }
 
-    public class Item {
+    public static class Item implements Parcelable {
         public String caption;
         @SerializedName("outbound_url")
         public String outboundUrl;
@@ -51,6 +54,36 @@ public class RedditGalleryPayload {
             this.caption = caption;
             this.outboundUrl = outboundUrl;
             this.mediaId = mediaId;
+        }
+
+        protected Item(Parcel in) {
+            caption = in.readString();
+            outboundUrl = in.readString();
+            mediaId = in.readString();
+        }
+
+        public static final Creator<Item> CREATOR = new Creator<Item>() {
+            @Override
+            public Item createFromParcel(Parcel in) {
+                return new Item(in);
+            }
+
+            @Override
+            public Item[] newArray(int size) {
+                return new Item[size];
+            }
+        };
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel parcel, int i) {
+            parcel.writeString(caption);
+            parcel.writeString(outboundUrl);
+            parcel.writeString(mediaId);
         }
     }
 }

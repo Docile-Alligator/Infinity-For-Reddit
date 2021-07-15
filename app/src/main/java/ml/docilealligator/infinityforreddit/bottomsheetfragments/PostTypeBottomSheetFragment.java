@@ -30,6 +30,7 @@ public class PostTypeBottomSheetFragment extends RoundedBottomSheetDialogFragmen
     public static final int TYPE_LINK = 1;
     public static final int TYPE_IMAGE = 2;
     public static final int TYPE_VIDEO = 3;
+    public static final int TYPE_GALLERY = 4;
     @BindView(R.id.text_type_linear_layout_post_type_bottom_sheet_fragment)
     TextView textTypeTextView;
     @BindView(R.id.link_type_linear_layout_post_type_bottom_sheet_fragment)
@@ -38,6 +39,8 @@ public class PostTypeBottomSheetFragment extends RoundedBottomSheetDialogFragmen
     TextView imageTypeTextView;
     @BindView(R.id.video_type_linear_layout_post_type_bottom_sheet_fragment)
     TextView videoTypeTextView;
+    @BindView(R.id.gallery_type_linear_layout_post_type_bottom_sheet_fragment)
+    TextView galleryTypeTextView;
     private Activity activity;
 
     public PostTypeBottomSheetFragment() {
@@ -72,6 +75,11 @@ public class PostTypeBottomSheetFragment extends RoundedBottomSheetDialogFragmen
 
         videoTypeTextView.setOnClickListener(view -> {
             ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_VIDEO);
+            dismiss();
+        });
+
+        galleryTypeTextView.setOnClickListener(view -> {
+            ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_GALLERY);
             dismiss();
         });
 

@@ -3,6 +3,8 @@ package ml.docilealligator.infinityforreddit.adapters;
 import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +23,7 @@ import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import java.util.List;
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +37,7 @@ public class RedditGallerySubmissionRecyclerViewAdapter extends RecyclerView.Ada
     private static final int VIEW_TYPE_IMAGE = 1;
     private static final int VIEW_TYPE_ADD_IMAGE = 2;
 
-    private List<RedditGalleryImageInfo> redditGalleryImageInfoList;
+    private ArrayList<RedditGalleryImageInfo> redditGalleryImageInfoList;
     private CustomThemeWrapper customThemeWrapper;
     private ItemClickListener itemClickListener;
     private RequestManager glide;
@@ -109,8 +111,18 @@ public class RedditGallerySubmissionRecyclerViewAdapter extends RecyclerView.Ada
         }
     }
 
-    public List<RedditGalleryImageInfo> getRedditGalleryImageInfoList() {
+    public ArrayList<RedditGalleryImageInfo> getRedditGalleryImageInfoList() {
         return redditGalleryImageInfoList;
+    }
+
+    public void setRedditGalleryImageInfoList(ArrayList<RedditGalleryImageInfo> redditGalleryImageInfoList) {
+        this.redditGalleryImageInfoList = redditGalleryImageInfoList;
+        notifyDataSetChanged();
+    }
+
+    public void addImage(String imageUrl) {
+        redditGalleryImageInfoList.add(new RedditGalleryImageInfo(imageUrl));
+        notifyItemInserted(redditGalleryImageInfoList.size() - 1);
     }
 
     class ImageViewHolder extends RecyclerView.ViewHolder {
@@ -147,12 +159,40 @@ public class RedditGallerySubmissionRecyclerViewAdapter extends RecyclerView.Ada
         }
     }
 
-    public static class RedditGalleryImageInfo {
+    public static class RedditGalleryImageInfo implements Parcelable {
         public String imageUrlString;
         public RedditGalleryPayload.Item payload;
 
         public RedditGalleryImageInfo(String imageUrlString) {
             this.imageUrlString = imageUrlString;
+        }
+
+        protected RedditGalleryImageInfo(Parcel in) {
+            imageUrlString = in.readString();
+            payload = in.readParcelable(RedditGalleryPayload.Item.class.getClassLoader());
+        }
+
+        public static final Creator<RedditGalleryImageInfo> CREATOR = new Creator<RedditGalleryImageInfo>() {
+            @Override
+            public RedditGalleryImageInfo createFromParcel(Parcel in) {
+                return new RedditGalleryImageInfo(in);
+            }
+
+            @Override
+            public RedditGalleryImageInfo[] newArray(int size) {
+                return new RedditGalleryImageInfo[size];
+            }
+        };
+
+        @Override
+        public int describeContents() {
+            return 0;
+        }
+
+        @Override
+        public void writeToParcel(Parcel parcel, int i) {
+            parcel.writeString(imageUrlString);
+            parcel.writeParcelable(payload, i);
         }
     }
 

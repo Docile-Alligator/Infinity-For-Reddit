@@ -57,6 +57,7 @@ public class SubmitPostService extends Service {
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     public static final String EXTRA_TITLE = "ET";
     public static final String EXTRA_CONTENT = "EC";
+    public static final String EXTRA_REDDIT_GALLERY_PAYLOAD = "ERGP";
     public static final String EXTRA_KIND = "EK";
     public static final String EXTRA_FLAIR = "EF";
     public static final String EXTRA_IS_SPOILER = "EIS";
@@ -67,6 +68,7 @@ public class SubmitPostService extends Service {
     public static final int EXTRA_POST_TYPE_IMAGE = 1;
     public static final int EXTRA_POST_TYPE_VIDEO = 2;
     public static final int EXTRA_POST_TYPE_CROSSPOST = 3;
+
     private static final String EXTRA_MEDIA_URI = "EU";
     @Inject
     @Named("oauth")

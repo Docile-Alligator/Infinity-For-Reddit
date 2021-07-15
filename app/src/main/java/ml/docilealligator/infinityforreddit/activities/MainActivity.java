@@ -1216,6 +1216,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             case PostTypeBottomSheetFragment.TYPE_VIDEO:
                 intent = new Intent(MainActivity.this, PostVideoActivity.class);
                 startActivity(intent);
+                break;
+            case PostTypeBottomSheetFragment.TYPE_GALLERY:
+                intent = new Intent(MainActivity.this, PostGalleryActivity.class);
+                startActivity(intent);
         }
     }
 

@@ -34,6 +34,7 @@ import com.libRG.CustomTextView;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -46,6 +47,7 @@ import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.adapters.RedditGallerySubmissionRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -68,6 +70,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
     private static final String FLAIR_STATE = "FS";
     private static final String IS_SPOILER_STATE = "ISS";
     private static final String IS_NSFW_STATE = "INS";
+    private static final String REDDIT_GALLERY_IMAGE_INFO_STATE = "RGIIS";
 
     private static final int SUBREDDIT_SELECTION_REQUEST_CODE = 0;
     private static final int PICK_IMAGE_REQUEST_CODE = 1;
@@ -130,6 +133,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
+    private ArrayList<RedditGallerySubmissionRecyclerViewAdapter.RedditGalleryImageInfo> redditGalleryImageInfoList;
     private String mAccessToken;
     private String mAccountName;
     private String iconUrl;
@@ -153,6 +157,8 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
     private RequestManager mGlide;
     private FlairBottomSheetFragment flairSelectionBottomSheetFragment;
     private Snackbar mPostingSnackbar;
+    private RedditGallerySubmissionRecyclerViewAdapter adapter;
+    private Uri captureImageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -185,6 +191,14 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
 
+        adapter = new RedditGallerySubmissionRecyclerViewAdapter(this, mCustomThemeWrapper, new RedditGallerySubmissionRecyclerViewAdapter.ItemClickListener() {
+            @Override
+            public void onAddImageClicked() {
+
+            }
+        });
+        imagesRecyclerView.setAdapter(adapter);
+
         if (savedInstanceState != null) {
             subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
             iconUrl = savedInstanceState.getString(SUBREDDIT_ICON_STATE);
@@ -195,11 +209,8 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
             flair = savedInstanceState.getParcelable(FLAIR_STATE);
             isSpoiler = savedInstanceState.getBoolean(IS_SPOILER_STATE);
             isNSFW = savedInstanceState.getBoolean(IS_NSFW_STATE);
-
-            if (savedInstanceState.getString(IMAGE_URI_STATE) != null) {
-                imageUri = Uri.parse(savedInstanceState.getString(IMAGE_URI_STATE));
-                loadImage();
-            }
+            redditGalleryImageInfoList = savedInstanceState.getParcelableArrayList(REDDIT_GALLERY_IMAGE_INFO_STATE);
+            adapter.setRedditGalleryImageInfoList(redditGalleryImageInfoList);
 
             if (subredditName != null) {
                 subredditNameTextView.setTextColor(primaryTextColor);
@@ -246,11 +257,6 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
                 mGlide.load(R.drawable.subreddit_default_icon)
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                         .into(iconGifImageView);
-            }
-
-            imageUri = getIntent().getData();
-            if (imageUri != null) {
-                loadImage();
             }
         }
 
@@ -415,7 +421,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
                 promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
                 return true;
             } else {
-                if (!titleEditText.getText().toString().equals("") || imageUri != null) {
+                if (!titleEditText.getText().toString().equals("") || redditGalleryImageInfoList != null) {
                     promptAlertDialog(R.string.discard, R.string.discard_detail);
                     return true;
                 }
@@ -433,7 +439,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
                 return true;
             }
 
-            if (imageUri == null) {
+            if (redditGalleryImageInfoList == null) {
                 Snackbar.make(coordinatorLayout, R.string.select_an_image, Snackbar.LENGTH_SHORT).show();
                 return true;
             }
@@ -453,7 +459,6 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
             }
 
             Intent intent = new Intent(this, SubmitPostService.class);
-            intent.setData(imageUri);
             intent.putExtra(SubmitPostService.EXTRA_ACCESS_TOKEN, mAccessToken);
             intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
             intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
@@ -461,13 +466,6 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
             intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);
             intent.putExtra(SubmitPostService.EXTRA_IS_NSFW, isNSFW);
             intent.putExtra(SubmitPostService.EXTRA_RECEIVE_POST_REPLY_NOTIFICATIONS, receivePostReplyNotificationsSwitchMaterial.isChecked());
-            String mimeType = getContentResolver().getType(imageUri);
-            if (mimeType != null && mimeType.contains("gif")) {
-                intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_VIDEO);
-            } else {
-                intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_IMAGE);
-            }
-            intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
             ContextCompat.startForegroundService(this, intent);
 
@@ -482,7 +480,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
         if (isPosting) {
             promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_submit_post_detail);
         } else {
-            if (!titleEditText.getText().toString().equals("") || imageUri != null) {
+            if (!titleEditText.getText().toString().equals("") || redditGalleryImageInfoList != null) {
                 promptAlertDialog(R.string.discard, R.string.discard_detail);
             } else {
                 finish();
@@ -502,6 +500,8 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
         outState.putParcelable(FLAIR_STATE, flair);
         outState.putBoolean(IS_SPOILER_STATE, isSpoiler);
         outState.putBoolean(IS_NSFW_STATE, isNSFW);
+        redditGalleryImageInfoList = adapter.getRedditGalleryImageInfoList();
+        outState.putParcelableArrayList(REDDIT_GALLERY_IMAGE_INFO_STATE, redditGalleryImageInfoList);
     }
 
     @Override
@@ -531,12 +531,11 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
                     return;
                 }
 
-                imageUri = data.getData();
-                loadImage();
+                adapter.addImage(data.getData().toString());
             }
         } else if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                loadImage();
+                adapter.addImage(captureImageUri.toString());
             }
         }
     }

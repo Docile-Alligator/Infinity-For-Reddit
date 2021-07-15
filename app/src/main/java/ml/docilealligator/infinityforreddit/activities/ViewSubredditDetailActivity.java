@@ -1228,6 +1228,11 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 intent = new Intent(this, PostVideoActivity.class);
                 intent.putExtra(PostVideoActivity.EXTRA_SUBREDDIT_NAME, subredditName);
                 startActivity(intent);
+                break;
+            case PostTypeBottomSheetFragment.TYPE_GALLERY:
+                intent = new Intent(this, PostGalleryActivity.class);
+                intent.putExtra(PostVideoActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                startActivity(intent);
         }
     }
 
