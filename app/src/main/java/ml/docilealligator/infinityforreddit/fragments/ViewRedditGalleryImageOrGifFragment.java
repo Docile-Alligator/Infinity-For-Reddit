@@ -225,50 +225,50 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_download_view_reddit_gallery_image_or_gif_fragment:
-                if (isDownloading) {
-                    return false;
-                }
+        int itemId = item.getItemId();
+        if (itemId == R.id.action_download_view_reddit_gallery_image_or_gif_fragment) {
+            if (isDownloading) {
+                return false;
+            }
 
-                isDownloading = true;
+            isDownloading = true;
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (ContextCompat.checkSelfPermission(activity,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                            != PackageManager.PERMISSION_GRANTED) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+                if (ContextCompat.checkSelfPermission(activity,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                        != PackageManager.PERMISSION_GRANTED) {
 
-                        // Permission is not granted
-                        // No explanation needed; request the permission
-                        requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                                PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
-                    } else {
-                        // Permission has already been granted
-                        download();
-                    }
+                    // Permission is not granted
+                    // No explanation needed; request the permission
+                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                            PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
                 } else {
+                    // Permission has already been granted
                     download();
                 }
+            } else {
+                download();
+            }
 
-                return true;
-            case R.id.action_share_view_reddit_gallery_image_or_gif_fragment:
-                if (media.mediaType == Post.Gallery.TYPE_GIF) {
-                    shareGif();
-                } else {
-                    shareImage();
-                }
-                return true;
-            case R.id.action_set_wallpaper_view_reddit_gallery_image_or_gif_fragment:
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    SetAsWallpaperBottomSheetFragment setAsWallpaperBottomSheetFragment = new SetAsWallpaperBottomSheetFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(SetAsWallpaperBottomSheetFragment.EXTRA_VIEW_PAGER_POSITION, activity.getCurrentPagePosition());
-                    setAsWallpaperBottomSheetFragment.setArguments(bundle);
-                    setAsWallpaperBottomSheetFragment.show(activity.getSupportFragmentManager(), setAsWallpaperBottomSheetFragment.getTag());
-                } else {
-                    ((SetAsWallpaperCallback) activity).setToBoth(activity.getCurrentPagePosition());
-                }
-                return true;
+            return true;
+        } else if (itemId == R.id.action_share_view_reddit_gallery_image_or_gif_fragment) {
+            if (media.mediaType == Post.Gallery.TYPE_GIF) {
+                shareGif();
+            } else {
+                shareImage();
+            }
+            return true;
+        } else if (itemId == R.id.action_set_wallpaper_view_reddit_gallery_image_or_gif_fragment) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                SetAsWallpaperBottomSheetFragment setAsWallpaperBottomSheetFragment = new SetAsWallpaperBottomSheetFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt(SetAsWallpaperBottomSheetFragment.EXTRA_VIEW_PAGER_POSITION, activity.getCurrentPagePosition());
+                setAsWallpaperBottomSheetFragment.setArguments(bundle);
+                setAsWallpaperBottomSheetFragment.show(activity.getSupportFragmentManager(), setAsWallpaperBottomSheetFragment.getTag());
+            } else {
+                ((SetAsWallpaperCallback) activity).setToBoth(activity.getCurrentPagePosition());
+            }
+            return true;
         }
 
         return false;
