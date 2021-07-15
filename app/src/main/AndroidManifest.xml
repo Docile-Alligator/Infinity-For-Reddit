@@ -18,7 +18,8 @@
         android:maxSdkVersion="22" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
-    <uses-permission-sdk-23 android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission-sdk-23
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -33,7 +34,9 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
-        <activity android:name=".activities.RPANActivity"
+        <activity android:name=".activities.PostGalleryActivity"></activity>
+        <activity
+            android:name=".activities.RPANActivity"
             android:configChanges="orientation|screenSize|layoutDirection"
             android:label="@string/rpan_activity_label"
             android:parentActivityName=".activities.MainActivity"

@@ -5,6 +5,7 @@ import java.util.Map;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
@@ -356,4 +357,7 @@ public interface RedditAPI {
     @GET("/api/subreddit_autocomplete_v2?typeahead_active=true&include_profiles=false&raw_json=1")
     Call<String> subredditAutocomplete(@HeaderMap Map<String ,String> headers, @Query("query") String query,
                                        @Query("include_over_18") boolean nsfw);
+
+    @POST("/api/submit_gallery_post.json?resubmit=true&raw_json=1")
+    Call<String> submitGalleryPost(@HeaderMap Map<String, String> headers, @Body String body);
 }
