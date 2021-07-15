@@ -497,9 +497,6 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
         outState.putString(SUBREDDIT_ICON_STATE, iconUrl);
         outState.putBoolean(SUBREDDIT_SELECTED_STATE, subredditSelected);
         outState.putBoolean(SUBREDDIT_IS_USER_STATE, subredditIsUser);
-        if (imageUri != null) {
-            outState.putString(IMAGE_URI_STATE, imageUri.toString());
-        }
         outState.putBoolean(LOAD_SUBREDDIT_ICON_STATE, loadSubredditIconSuccessful);
         outState.putBoolean(IS_POSTING_STATE, isPosting);
         outState.putParcelable(FLAIR_STATE, flair);

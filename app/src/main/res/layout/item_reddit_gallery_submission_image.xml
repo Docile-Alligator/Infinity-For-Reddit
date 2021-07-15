@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
+        android:id="@+id/aspect_ratio_gif_image_view_item_reddit_gallery_submission_image"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar_item_reddit_gallery_submission_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <ImageView
+        android:id="@+id/close_image_view_item_reddit_gallery_submission_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:layout_gravity="top|end"
+        android:background="@drawable/play_button_round_background"
+        android:src="@drawable/ic_play_circle_36dp"
+        android:visibility="gone" />
+
+</FrameLayout>
