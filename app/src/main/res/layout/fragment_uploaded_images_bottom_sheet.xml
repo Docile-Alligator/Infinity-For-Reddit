@@ -40,7 +40,7 @@
             android:layout_margin="16dp"
             android:backgroundTint="@color/colorPrimary"
             android:textColor="#FFFFFF"
-            android:text="@string/upload" />
+            android:text="@string/select_image" />
 
     </LinearLayout>
 

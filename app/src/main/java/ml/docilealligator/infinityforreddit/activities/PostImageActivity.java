@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -346,16 +347,14 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
 
         captureFab.setOnClickListener(view -> {
             Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            if (pictureIntent.resolveActivity(getPackageManager()) != null) {
-                try {
-                    imageUri = FileProvider.getUriForFile(this, "ml.docilealligator.infinityforreddit.provider",
-                            File.createTempFile("temp_img", ".jpg", getExternalFilesDir(Environment.DIRECTORY_PICTURES)));
-                    pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-                    startActivityForResult(pictureIntent, CAPTURE_IMAGE_REQUEST_CODE);
-                } catch (IOException ex) {
-                    Snackbar.make(coordinatorLayout, R.string.error_creating_temp_file, Snackbar.LENGTH_SHORT).show();
-                }
-            } else {
+            try {
+                imageUri = FileProvider.getUriForFile(this, "ml.docilealligator.infinityforreddit.provider",
+                        File.createTempFile("temp_img", ".jpg", getExternalFilesDir(Environment.DIRECTORY_PICTURES)));
+                pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                startActivityForResult(pictureIntent, CAPTURE_IMAGE_REQUEST_CODE);
+            } catch (IOException ex) {
+                Snackbar.make(coordinatorLayout, R.string.error_creating_temp_file, Snackbar.LENGTH_SHORT).show();
+            } catch (ActivityNotFoundException e) {
                 Snackbar.make(coordinatorLayout, R.string.no_camera_available, Snackbar.LENGTH_SHORT).show();
             }
         });

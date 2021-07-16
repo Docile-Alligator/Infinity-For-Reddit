@@ -1125,7 +1125,7 @@
     <string name="reply">Reply</string>
 
     <string name="uploaded_images">Uploaded Images</string>
-    <string name="upload">Upload</string>
+    <string name="select_image">Select an Image</string>
     <string name="capture">Capture</string>
     <string name="uploading_image">Uploading</string>
     <string name="upload_image_success">Upload image successfully. Click the image button again to see the uploaded images.</string>
