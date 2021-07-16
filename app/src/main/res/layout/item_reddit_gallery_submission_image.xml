@@ -6,7 +6,8 @@
     <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
         android:id="@+id/aspect_ratio_gif_image_view_item_reddit_gallery_submission_image"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:scaleType="centerCrop" />
 
     <ProgressBar
         android:id="@+id/progress_bar_item_reddit_gallery_submission_image"

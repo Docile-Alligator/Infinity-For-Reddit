@@ -155,8 +155,9 @@ public class RedditGallerySubmissionRecyclerViewAdapter extends RecyclerView.Ada
         public AddImageViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            itemView.setBackgroundTintList(ColorStateList.valueOf(customThemeWrapper.getColorPrimaryLightTheme()));
-            ((FloatingActionButton) itemView).setImageTintList(ColorStateList.valueOf(customThemeWrapper.getFABIconColor()));
+            FloatingActionButton fab = itemView.findViewById(R.id.fab_item_gallery_submission_add_image);
+            fab.setBackgroundTintList(ColorStateList.valueOf(customThemeWrapper.getColorPrimaryLightTheme()));
+            fab.setImageTintList(ColorStateList.valueOf(customThemeWrapper.getFABIconColor()));
 
             itemView.setOnClickListener(view -> itemClickListener.onAddImageClicked());
         }
