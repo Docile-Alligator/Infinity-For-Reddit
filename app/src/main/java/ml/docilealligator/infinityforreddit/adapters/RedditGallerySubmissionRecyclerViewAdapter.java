@@ -121,6 +121,9 @@ public class RedditGallerySubmissionRecyclerViewAdapter extends RecyclerView.Ada
     }
 
     public void addImage(String imageUrl) {
+        if (redditGalleryImageInfoList == null) {
+            redditGalleryImageInfoList = new ArrayList<>();
+        }
         redditGalleryImageInfoList.add(new RedditGalleryImageInfo(imageUrl));
         notifyItemInserted(redditGalleryImageInfoList.size() - 1);
     }

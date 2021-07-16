@@ -378,7 +378,10 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
     }
 
     public void selectImage() {
-
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, resources.getString(R.string.select_from_gallery)), PICK_IMAGE_REQUEST_CODE);
     }
 
     public void captureImage() {
