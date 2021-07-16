@@ -25,6 +25,9 @@ import androidx.core.app.NotificationManagerCompat;
 import com.bumptech.glide.Glide;
 
 import org.greenrobot.eventbus.EventBus;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -44,12 +47,14 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SubmitCrosspostEvent;
+import ml.docilealligator.infinityforreddit.events.SubmitGalleryPostEvent;
 import ml.docilealligator.infinityforreddit.events.SubmitImagePostEvent;
 import ml.docilealligator.infinityforreddit.events.SubmitTextOrLinkPostEvent;
 import ml.docilealligator.infinityforreddit.events.SubmitVideoOrGifPostEvent;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.SubmitPost;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
+import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.NotificationUtils;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -134,7 +139,7 @@ public class SubmitPostService extends Service {
                 submitVideoPost(accessToken, mediaUri, subredditName, title, flair, isSpoiler, isNSFW,
                         receivePostReplyNotifications);
             } else {
-
+                submitGalleryPost(accessToken, bundle.getString(EXTRA_REDDIT_GALLERY_PAYLOAD));
             }
         }
     }
@@ -338,8 +343,36 @@ public class SubmitPostService extends Service {
     private void submitGalleryPost(String accessToken, String payload) {
         try {
             Response<String> response = mOauthRetrofit.create(RedditAPI.class).submitGalleryPost(APIUtils.getOAuthHeader(accessToken), payload).execute();
-        } catch (IOException e) {
+            if (response.isSuccessful()) {
+                JSONObject responseObject = new JSONObject(response.body()).getJSONObject(JSONUtils.JSON_KEY);
+                if (responseObject.getJSONArray(JSONUtils.ERRORS_KEY).length() != 0) {
+                    JSONArray error = responseObject.getJSONArray(JSONUtils.ERRORS_KEY)
+                            .getJSONArray(responseObject.getJSONArray(JSONUtils.ERRORS_KEY).length() - 1);
+                    if (error.length() != 0) {
+                        String errorMessage;
+                        if (error.length() >= 2) {
+                            errorMessage = error.getString(1);
+                        } else {
+                            errorMessage = error.getString(0);
+                        }
+                        handler.post(() -> EventBus.getDefault().post(new SubmitGalleryPostEvent(false, null, errorMessage)));
+                    } else {
+                        handler.post(() -> EventBus.getDefault().post(new SubmitGalleryPostEvent(false, null, null)));
+                    }
+                } else {
+                    String postUrl = responseObject.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.URL_KEY);
+                    handler.post(() -> {
+                        EventBus.getDefault().post(new SubmitGalleryPostEvent(true, postUrl, null));
+                    });
+                }
+            } else {
+                handler.post(() -> EventBus.getDefault().post(new SubmitGalleryPostEvent(false, null, response.message())));
+            }
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
+            handler.post(() -> EventBus.getDefault().post(new SubmitGalleryPostEvent(false, null, e.getMessage())));
+        } finally {
+            stopService();
         }
     }
 

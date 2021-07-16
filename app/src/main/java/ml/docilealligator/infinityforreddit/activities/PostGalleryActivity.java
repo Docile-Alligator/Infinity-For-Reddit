@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -588,7 +589,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
                     flair, items);
             intent.putExtra(SubmitPostService.EXTRA_REDDIT_GALLERY_PAYLOAD, new Gson().toJson(payload));
 
-            //ContextCompat.startForegroundService(this, intent);
+            ContextCompat.startForegroundService(this, intent);
 
             return true;
         }

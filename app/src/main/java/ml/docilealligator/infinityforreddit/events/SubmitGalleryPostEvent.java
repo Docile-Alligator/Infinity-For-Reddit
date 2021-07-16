@@ -1,15 +1,13 @@
 package ml.docilealligator.infinityforreddit.events;
 
-import ml.docilealligator.infinityforreddit.post.Post;
-
 public class SubmitGalleryPostEvent {
     public boolean postSuccess;
-    public Post post;
+    public String postUrl;
     public String errorMessage;
 
-    public SubmitGalleryPostEvent(boolean postSuccess, Post post, String errorMessage) {
+    public SubmitGalleryPostEvent(boolean postSuccess, String postUrl, String errorMessage) {
         this.postSuccess = postSuccess;
-        this.post = post;
+        this.postUrl = postUrl;
         this.errorMessage = errorMessage;
     }
 }
