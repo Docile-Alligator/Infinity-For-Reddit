@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,14 +34,19 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.gson.Gson;
 import com.libRG.CustomTextView;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -53,6 +59,7 @@ import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.RedditGalleryPayload;
 import ml.docilealligator.infinityforreddit.adapters.RedditGallerySubmissionRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
@@ -60,7 +67,9 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.SelectOrCapture
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.services.SubmitPostService;
+import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.UploadImageUtils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
@@ -165,7 +174,8 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
     private FlairBottomSheetFragment flairSelectionBottomSheetFragment;
     private Snackbar mPostingSnackbar;
     private RedditGallerySubmissionRecyclerViewAdapter adapter;
-    private Uri captureImageUri;
+    private Uri imageUri;
+    private boolean isUploading;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -201,8 +211,12 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
         adapter = new RedditGallerySubmissionRecyclerViewAdapter(this, mCustomThemeWrapper, new RedditGallerySubmissionRecyclerViewAdapter.ItemClickListener() {
             @Override
             public void onAddImageClicked() {
-                SelectOrCaptureImageBottomSheetFragment fragment = new SelectOrCaptureImageBottomSheetFragment();
-                fragment.show(getSupportFragmentManager(), fragment.getTag());
+                if (!isUploading) {
+                    SelectOrCaptureImageBottomSheetFragment fragment = new SelectOrCaptureImageBottomSheetFragment();
+                    fragment.show(getSupportFragmentManager(), fragment.getTag());
+                } else {
+                    Snackbar.make(coordinatorLayout, R.string.please_wait_image_is_uploading, Snackbar.LENGTH_SHORT).show();
+                }
             }
         });
         imagesRecyclerView.setAdapter(adapter);
@@ -387,15 +401,43 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
     public void captureImage() {
         Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try {
-            captureImageUri = FileProvider.getUriForFile(this, "ml.docilealligator.infinityforreddit.provider",
+            imageUri = FileProvider.getUriForFile(this, "ml.docilealligator.infinityforreddit.provider",
                     File.createTempFile("temp_img", ".jpg", getExternalFilesDir(Environment.DIRECTORY_PICTURES)));
-            pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, captureImageUri);
+            pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
             startActivityForResult(pictureIntent, CAPTURE_IMAGE_REQUEST_CODE);
         } catch (IOException ex) {
             Snackbar.make(coordinatorLayout, R.string.error_creating_temp_file, Snackbar.LENGTH_SHORT).show();
         } catch (ActivityNotFoundException e) {
             Snackbar.make(coordinatorLayout, R.string.no_camera_available, Snackbar.LENGTH_SHORT).show();
         }
+    }
+
+    private void uploadImage() {
+        Handler handler = new Handler();
+        isUploading = true;
+        mExecutor.execute(() -> {
+            try {
+                Bitmap resource = Glide.with(PostGalleryActivity.this).asBitmap().load(imageUri).submit().get();
+                String response = UploadImageUtils.uploadImage(mOauthRetrofit, mUploadMediaRetrofit, mAccessToken, resource, true);
+                RedditGalleryPayload.Item item = new Gson().fromJson(new JSONObject(response).getJSONObject(JSONUtils.ASSET_KEY).toString(), RedditGalleryPayload.Item.class);
+                handler.post(() -> {
+                    adapter.setImageAsUploaded(item);
+                    isUploading = false;
+                });
+            } catch (ExecutionException | InterruptedException e) {
+                e.printStackTrace();
+                handler.post(() -> {
+                    Snackbar.make(coordinatorLayout, R.string.get_image_bitmap_failed, Snackbar.LENGTH_LONG).show();
+                    isUploading = false;
+                });
+            } catch (XmlPullParserException | JSONException | IOException e) {
+                e.printStackTrace();
+                handler.post(() -> {
+                    Snackbar.make(coordinatorLayout, R.string.error_processing_image, Snackbar.LENGTH_LONG).show();
+                    isUploading = false;
+                });
+            }
+        });
     }
 
     private void displaySubredditIcon() {
@@ -560,11 +602,14 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
                     return;
                 }
 
-                adapter.addImage(data.getData().toString());
+                imageUri = data.getData();
+                adapter.addImage(imageUri.toString());
+                uploadImage();
             }
         } else if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
-                adapter.addImage(captureImageUri.toString());
+                adapter.addImage(imageUri.toString());
+                uploadImage();
             }
         }
     }

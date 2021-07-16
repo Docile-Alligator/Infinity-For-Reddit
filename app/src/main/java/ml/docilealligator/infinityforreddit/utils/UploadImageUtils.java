@@ -28,7 +28,13 @@ import retrofit2.Retrofit;
 public class UploadImageUtils {
     @Nullable
     public static String uploadImage(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
-                                      String accessToken, Bitmap image) throws IOException, JSONException, XmlPullParserException {
+                                     String accessToken, Bitmap image) throws IOException, JSONException, XmlPullParserException {
+        return uploadImage(oauthRetrofit, uploadMediaRetrofit, accessToken, image, false);
+    }
+
+    @Nullable
+    public static String uploadImage(Retrofit oauthRetrofit, Retrofit uploadMediaRetrofit,
+                                      String accessToken, Bitmap image, boolean returnResponseForGallerySubmission) throws IOException, JSONException, XmlPullParserException {
         RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
         Map<String, String> uploadImageParams = new HashMap<>();
@@ -51,6 +57,9 @@ public class UploadImageUtils {
             Call<String> uploadMediaToAWS = uploadMediaToAWSApi.uploadMediaToAWS(nameValuePairsMap, fileToUpload);
             Response<String> uploadMediaToAWSResponse = uploadMediaToAWS.execute();
             if (uploadMediaToAWSResponse.isSuccessful()) {
+                if (returnResponseForGallerySubmission) {
+                    return uploadImageResponse.body();
+                }
                 return parseXMLResponseFromAWS(uploadMediaToAWSResponse.body());
             } else {
                 return "Error: " + uploadMediaToAWSResponse.code();

@@ -1138,4 +1138,6 @@
 
     <string name="search_comments">Search Comments</string>
 
+    <string name="please_wait_image_is_uploading">An image is still being uploaded. Please wait.</string>
+
 </resources>

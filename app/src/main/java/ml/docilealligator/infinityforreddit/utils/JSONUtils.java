@@ -164,4 +164,5 @@ public class JSONUtils {
     public static final String ESTIMATED_REMAINING_TIME_KEY = "estimated_remaining_time";
     public static final String PAYLOAD_KEY = "payload";
     public static final String AUTHOR_ICON_IMAGE = "author_icon_img";
+    public static final String ASSET_KEY = "asset";
 }

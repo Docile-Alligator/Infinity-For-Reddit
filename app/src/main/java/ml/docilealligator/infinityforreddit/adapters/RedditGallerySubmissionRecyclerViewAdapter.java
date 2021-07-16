@@ -5,6 +5,7 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -82,14 +83,13 @@ public class RedditGallerySubmissionRecyclerViewAdapter extends RecyclerView.Ada
 
                         @Override
                         public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                            ((ImageViewHolder) holder).progressBar.setVisibility(View.GONE);
-                            ((ImageViewHolder) holder).closeImageView.setVisibility(View.VISIBLE);
                             return false;
                         }
                     })
                     .into(((ImageViewHolder) holder).imageView);
 
             if (redditGalleryImageInfoList.get(position).payload != null) {
+                Log.i("asdfasdf", "asdf ");
                 ((ImageViewHolder) holder).progressBar.setVisibility(View.GONE);
                 ((ImageViewHolder) holder).closeImageView.setVisibility(View.VISIBLE);
             }
@@ -126,6 +126,11 @@ public class RedditGallerySubmissionRecyclerViewAdapter extends RecyclerView.Ada
         }
         redditGalleryImageInfoList.add(new RedditGalleryImageInfo(imageUrl));
         notifyItemInserted(redditGalleryImageInfoList.size() - 1);
+    }
+
+    public void setImageAsUploaded(RedditGalleryPayload.Item item) {
+        redditGalleryImageInfoList.get(redditGalleryImageInfoList.size() - 1).payload = item;
+        notifyItemChanged(redditGalleryImageInfoList.size() - 1);
     }
 
     class ImageViewHolder extends RecyclerView.ViewHolder {
