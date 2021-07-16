@@ -5,7 +5,6 @@ import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +20,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.bitmap.CenterCrop;
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
 import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -73,6 +75,7 @@ public class RedditGallerySubmissionRecyclerViewAdapter extends RecyclerView.Ada
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof ImageViewHolder) {
             glide.load(redditGalleryImageInfoList.get(position).imageUrlString)
+                    .apply(new RequestOptions().transform(new CenterCrop(), new RoundedCorners(48)))
                     .listener(new RequestListener<Drawable>() {
 
                         @Override
@@ -90,7 +93,6 @@ public class RedditGallerySubmissionRecyclerViewAdapter extends RecyclerView.Ada
                     .into(((ImageViewHolder) holder).imageView);
 
             if (redditGalleryImageInfoList.get(position).payload != null) {
-                Log.i("asdfasdf", "asdf ");
                 ((ImageViewHolder) holder).progressBar.setVisibility(View.GONE);
                 ((ImageViewHolder) holder).closeImageView.setVisibility(View.VISIBLE);
             }
