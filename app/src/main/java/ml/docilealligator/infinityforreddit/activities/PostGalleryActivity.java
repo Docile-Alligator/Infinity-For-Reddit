@@ -3,8 +3,10 @@ package ml.docilealligator.infinityforreddit.activities;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,6 +26,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -70,6 +73,7 @@ import ml.docilealligator.infinityforreddit.services.SubmitPostService;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.UploadImageUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
@@ -220,6 +224,36 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
             }
         });
         imagesRecyclerView.setAdapter(adapter);
+        Resources resources = getResources();
+        int nColumns = resources.getBoolean(R.bool.isTablet) || resources.getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE ? 3 : 2;
+        ((GridLayoutManager) imagesRecyclerView.getLayoutManager()).setSpanCount(nColumns);
+        imagesRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                GridLayoutManager.LayoutParams layoutParams = (GridLayoutManager.LayoutParams) view.getLayoutParams();
+
+                int spanIndex = layoutParams.getSpanIndex();
+
+                int offset = (int) (Utils.convertDpToPixel(16, PostGalleryActivity.this));
+                int halfOffset = offset / 2;
+
+                if (nColumns == 2) {
+                    if (spanIndex == 0) {
+                        outRect.set(halfOffset, 0, halfOffset, offset);
+                    } else {
+                        outRect.set(halfOffset, 0, halfOffset, offset);
+                    }
+                } else if (nColumns == 3) {
+                    if (spanIndex == 0) {
+                        outRect.set(halfOffset, 0, halfOffset, offset);
+                    } else if (spanIndex == 1) {
+                        outRect.set(halfOffset, 0, halfOffset, offset);
+                    } else {
+                        outRect.set(halfOffset, 0, halfOffset, offset);
+                    }
+                }
+            }
+        });
 
         if (savedInstanceState != null) {
             subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
