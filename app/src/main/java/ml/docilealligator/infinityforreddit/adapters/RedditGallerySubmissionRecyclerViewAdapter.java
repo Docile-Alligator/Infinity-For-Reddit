@@ -131,8 +131,8 @@ public class RedditGallerySubmissionRecyclerViewAdapter extends RecyclerView.Ada
         notifyItemInserted(redditGalleryImageInfoList.size() - 1);
     }
 
-    public void setImageAsUploaded(RedditGalleryPayload.Item item) {
-        redditGalleryImageInfoList.get(redditGalleryImageInfoList.size() - 1).payload = item;
+    public void setImageAsUploaded(String mediaId) {
+        redditGalleryImageInfoList.get(redditGalleryImageInfoList.size() - 1).payload = new RedditGalleryPayload.Item("", "", mediaId);
         notifyItemChanged(redditGalleryImageInfoList.size() - 1);
     }
 

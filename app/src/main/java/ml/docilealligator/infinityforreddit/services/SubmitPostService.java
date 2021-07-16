@@ -41,6 +41,7 @@ import javax.inject.Named;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SubmitCrosspostEvent;
 import ml.docilealligator.infinityforreddit.events.SubmitImagePostEvent;
@@ -50,6 +51,7 @@ import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.SubmitPost;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.NotificationUtils;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class SubmitPostService extends Service {
@@ -67,7 +69,8 @@ public class SubmitPostService extends Service {
     public static final int EXTRA_POST_TEXT_OR_LINK = 0;
     public static final int EXTRA_POST_TYPE_IMAGE = 1;
     public static final int EXTRA_POST_TYPE_VIDEO = 2;
-    public static final int EXTRA_POST_TYPE_CROSSPOST = 3;
+    public static final int EXTRA_POST_TYPE_GALLERY = 3;
+    public static final int EXTRA_POST_TYPE_CROSSPOST = 4;
 
     private static final String EXTRA_MEDIA_URI = "EU";
     @Inject
@@ -126,10 +129,12 @@ public class SubmitPostService extends Service {
                 Uri mediaUri = Uri.parse(bundle.getString(EXTRA_MEDIA_URI));
                 submitImagePost(accessToken, mediaUri, subredditName, title, flair, isSpoiler, isNSFW,
                         receivePostReplyNotifications);
-            } else {
+            } else if (postType == EXTRA_POST_TYPE_VIDEO) {
                 Uri mediaUri = Uri.parse(bundle.getString(EXTRA_MEDIA_URI));
                 submitVideoPost(accessToken, mediaUri, subredditName, title, flair, isSpoiler, isNSFW,
                         receivePostReplyNotifications);
+            } else {
+
             }
         }
     }
@@ -176,9 +181,11 @@ public class SubmitPostService extends Service {
         } else if (postType == EXTRA_POST_TYPE_IMAGE) {
             bundle.putString(EXTRA_MEDIA_URI, intent.getData().toString());
             startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset, createNotification(R.string.posting_image));
-        } else {
+        } else if (postType == EXTRA_POST_TYPE_VIDEO) {
             bundle.putString(EXTRA_MEDIA_URI, intent.getData().toString());
             startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset, createNotification(R.string.posting_video));
+        } else {
+            startForeground(NotificationUtils.SUBMIT_POST_SERVICE_NOTIFICATION_ID + randomNotificationIdOffset, createNotification(R.string.posting_gallery));
         }
 
         Message msg = serviceHandler.obtainMessage();
@@ -325,6 +332,14 @@ public class SubmitPostService extends Service {
             handler.post(() -> EventBus.getDefault().post(new SubmitVideoOrGifPostEvent(false, true, null)));
 
             stopService();
+        }
+    }
+
+    private void submitGalleryPost(String accessToken, String payload) {
+        try {
+            Response<String> response = mOauthRetrofit.create(RedditAPI.class).submitGalleryPost(APIUtils.getOAuthHeader(accessToken), payload).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

@@ -24,7 +24,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -459,9 +458,9 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
             try {
                 Bitmap resource = Glide.with(PostGalleryActivity.this).asBitmap().load(imageUri).submit().get();
                 String response = UploadImageUtils.uploadImage(mOauthRetrofit, mUploadMediaRetrofit, mAccessToken, resource, true);
-                RedditGalleryPayload.Item item = new Gson().fromJson(new JSONObject(response).getJSONObject(JSONUtils.ASSET_KEY).toString(), RedditGalleryPayload.Item.class);
+                String mediaId = new JSONObject(response).getJSONObject(JSONUtils.ASSET_KEY).getString(JSONUtils.ASSET_ID_KEY);
                 handler.post(() -> {
-                    adapter.setImageAsUploaded(item);
+                    adapter.setImageAsUploaded(mediaId);
                     isUploading = false;
                 });
             } catch (ExecutionException | InterruptedException e) {
@@ -475,7 +474,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
                 e.printStackTrace();
                 handler.post(() -> {
                     adapter.removeFailedToUploadImage();
-                    Snackbar.make(coordinatorLayout, R.string.error_processing_image, Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(coordinatorLayout, R.string.upload_image_failed, Snackbar.LENGTH_LONG).show();
                     isUploading = false;
                 });
             }
@@ -516,7 +515,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.post_image_activity, menu);
+        getMenuInflater().inflate(R.menu.post_gallery_activity, menu);
         applyMenuItemTheme(menu);
         mMemu = menu;
         if (isPosting) {
@@ -541,7 +540,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
             }
             finish();
             return true;
-        } else if (itemId == R.id.action_send_post_image_activity) {
+        } else if (itemId == R.id.action_send_post_gallery_activity) {
             if (!subredditSelected) {
                 Snackbar.make(coordinatorLayout, R.string.select_a_subreddit, Snackbar.LENGTH_SHORT).show();
                 return true;
@@ -552,8 +551,13 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
                 return true;
             }
 
-            if (redditGalleryImageInfoList == null) {
+            if (redditGalleryImageInfoList == null || redditGalleryImageInfoList.isEmpty()) {
                 Snackbar.make(coordinatorLayout, R.string.select_an_image, Snackbar.LENGTH_SHORT).show();
+                return true;
+            }
+
+            if (redditGalleryImageInfoList.get(redditGalleryImageInfoList.size() - 1).payload == null) {
+                Snackbar.make(coordinatorLayout, R.string.please_wait_image_is_uploading, Snackbar.LENGTH_LONG).show();
                 return true;
             }
 
@@ -574,13 +578,17 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
             Intent intent = new Intent(this, SubmitPostService.class);
             intent.putExtra(SubmitPostService.EXTRA_ACCESS_TOKEN, mAccessToken);
             intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
-            intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
-            intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);
-            intent.putExtra(SubmitPostService.EXTRA_IS_SPOILER, isSpoiler);
-            intent.putExtra(SubmitPostService.EXTRA_IS_NSFW, isNSFW);
-            intent.putExtra(SubmitPostService.EXTRA_RECEIVE_POST_REPLY_NOTIFICATIONS, receivePostReplyNotificationsSwitchMaterial.isChecked());
+            intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_GALLERY);
+            ArrayList<RedditGalleryPayload.Item> items = new ArrayList<>();
+            for (RedditGallerySubmissionRecyclerViewAdapter.RedditGalleryImageInfo i : redditGalleryImageInfoList) {
+                items.add(i.payload);
+            }
+            RedditGalleryPayload payload = new RedditGalleryPayload(subredditName, subredditIsUser ? "profile" : "subreddit",
+                    titleEditText.getText().toString(), isSpoiler, isNSFW, receivePostReplyNotificationsSwitchMaterial.isChecked(),
+                    flair, items);
+            intent.putExtra(SubmitPostService.EXTRA_REDDIT_GALLERY_PAYLOAD, new Gson().toJson(payload));
 
-            ContextCompat.startForegroundService(this, intent);
+            //ContextCompat.startForegroundService(this, intent);
 
             return true;
         }

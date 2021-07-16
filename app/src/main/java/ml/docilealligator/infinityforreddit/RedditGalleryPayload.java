@@ -5,7 +5,7 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.util.List;
+import java.util.ArrayList;
 
 public class RedditGalleryPayload {
     @SerializedName("sr")
@@ -29,17 +29,24 @@ public class RedditGalleryPayload {
     public boolean sendReplies;
     @SerializedName("validate_on_submit")
     public boolean validateOnSubmit = true;
-    public List<Item> items;
+    @SerializedName("flair_id")
+    public String flairId;
+    @SerializedName("flair_text")
+    public String flairText;
+    public ArrayList<Item> items;
 
-    public RedditGalleryPayload(String subredditName, String submitType, String kind, String title,
-                                boolean isSpoiler, boolean isNSFW, boolean sendReplies, List<Item> items) {
+    public RedditGalleryPayload(String subredditName, String submitType, String title,
+                                boolean isSpoiler, boolean isNSFW, boolean sendReplies, Flair flair, ArrayList<Item> items) {
         this.subredditName = subredditName;
         this.submitType = submitType;
         this.title = title;
         this.isSpoiler = isSpoiler;
         this.isNSFW = isNSFW;
-        this.kind = kind;
         this.sendReplies = sendReplies;
+        if (flair != null) {
+            flairId = flair.getId();
+            flairText = flair.getText();
+        }
         this.items = items;
     }
 

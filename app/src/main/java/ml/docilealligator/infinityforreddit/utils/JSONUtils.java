@@ -165,4 +165,5 @@ public class JSONUtils {
     public static final String PAYLOAD_KEY = "payload";
     public static final String AUTHOR_ICON_IMAGE = "author_icon_img";
     public static final String ASSET_KEY = "asset";
+    public static final String ASSET_ID_KEY = "asset_id";
 }
