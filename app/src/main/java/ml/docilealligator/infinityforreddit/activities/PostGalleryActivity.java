@@ -68,6 +68,7 @@ import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SelectOrCaptureImageBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.events.SubmitGalleryPostEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.services.SubmitPostService;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
@@ -683,5 +684,26 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
     @Subscribe
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
         finish();
+    }
+
+    @Subscribe
+    public void onSubmitGalleryPostEvent(SubmitGalleryPostEvent submitGalleryPostEvent) {
+        isPosting = false;
+        mPostingSnackbar.dismiss();
+        if (submitGalleryPostEvent.postSuccess) {
+            Intent intent = new Intent(this, LinkResolverActivity.class);
+            intent.setData(Uri.parse(submitGalleryPostEvent.postUrl));
+            startActivity(intent);
+            finish();
+        } else {
+            mMemu.findItem(R.id.action_send_post_gallery_activity).setEnabled(true);
+            mMemu.findItem(R.id.action_send_post_gallery_activity).getIcon().setAlpha(255);
+            if (submitGalleryPostEvent.errorMessage == null || submitGalleryPostEvent.errorMessage.equals("")) {
+                Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
+            } else {
+                Snackbar.make(coordinatorLayout, submitGalleryPostEvent.errorMessage.substring(0, 1).toUpperCase()
+                        + submitGalleryPostEvent.errorMessage.substring(1), Snackbar.LENGTH_SHORT).show();
+            }
+        }
     }
 }
