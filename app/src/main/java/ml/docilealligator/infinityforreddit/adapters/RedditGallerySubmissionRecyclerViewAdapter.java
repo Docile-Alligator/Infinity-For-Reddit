@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 
@@ -164,7 +165,19 @@ public class RedditGallerySubmissionRecyclerViewAdapter extends RecyclerView.Ada
             fab.setBackgroundTintList(ColorStateList.valueOf(customThemeWrapper.getColorPrimaryLightTheme()));
             fab.setImageTintList(ColorStateList.valueOf(customThemeWrapper.getFABIconColor()));
 
-            itemView.setOnClickListener(view -> itemClickListener.onAddImageClicked());
+            itemView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @Override
+                public void onGlobalLayout() {
+                    itemView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    int width = itemView.getMeasuredWidth();
+                    ViewGroup.LayoutParams params = itemView.getLayoutParams();
+                    params.height = width;
+                    itemView.setLayoutParams(params);
+                }
+            });
+
+            fab.setOnClickListener(view -> itemClickListener.onAddImageClicked());
+            itemView.setOnClickListener(view -> fab.performClick());
         }
     }
 

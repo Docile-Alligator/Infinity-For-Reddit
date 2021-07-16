@@ -191,6 +191,7 @@
                 android:id="@+id/images_recycler_view_post_gallery_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:padding="16dp"
                 app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
                 app:spanCount="2" />
 
