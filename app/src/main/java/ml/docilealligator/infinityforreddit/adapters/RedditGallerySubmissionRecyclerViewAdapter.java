@@ -136,6 +136,11 @@ public class RedditGallerySubmissionRecyclerViewAdapter extends RecyclerView.Ada
         notifyItemChanged(redditGalleryImageInfoList.size() - 1);
     }
 
+    public void removeFailedToUploadImage() {
+        redditGalleryImageInfoList.remove(redditGalleryImageInfoList.size() - 1);
+        notifyItemRemoved(redditGalleryImageInfoList.size());
+    }
+
     class ImageViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.aspect_ratio_gif_image_view_item_reddit_gallery_submission_image)
         AspectRatioGifImageView imageView;

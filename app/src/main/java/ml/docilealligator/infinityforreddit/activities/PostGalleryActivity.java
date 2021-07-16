@@ -266,6 +266,12 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
             isSpoiler = savedInstanceState.getBoolean(IS_SPOILER_STATE);
             isNSFW = savedInstanceState.getBoolean(IS_NSFW_STATE);
             redditGalleryImageInfoList = savedInstanceState.getParcelableArrayList(REDDIT_GALLERY_IMAGE_INFO_STATE);
+            if (redditGalleryImageInfoList != null && !redditGalleryImageInfoList.isEmpty()) {
+                if (redditGalleryImageInfoList.get(redditGalleryImageInfoList.size() - 1).payload == null) {
+                    imageUri = Uri.parse(redditGalleryImageInfoList.get(redditGalleryImageInfoList.size() - 1).imageUrlString);
+                    uploadImage();
+                }
+            }
             adapter.setRedditGalleryImageInfoList(redditGalleryImageInfoList);
 
             if (subredditName != null) {
@@ -461,12 +467,14 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
             } catch (ExecutionException | InterruptedException e) {
                 e.printStackTrace();
                 handler.post(() -> {
+                    adapter.removeFailedToUploadImage();
                     Snackbar.make(coordinatorLayout, R.string.get_image_bitmap_failed, Snackbar.LENGTH_LONG).show();
                     isUploading = false;
                 });
             } catch (XmlPullParserException | JSONException | IOException e) {
                 e.printStackTrace();
                 handler.post(() -> {
+                    adapter.removeFailedToUploadImage();
                     Snackbar.make(coordinatorLayout, R.string.error_processing_image, Snackbar.LENGTH_LONG).show();
                     isUploading = false;
                 });
