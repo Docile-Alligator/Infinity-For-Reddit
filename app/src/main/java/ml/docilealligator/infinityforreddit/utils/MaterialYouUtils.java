@@ -88,7 +88,10 @@ public class MaterialYouUtils {
                     lightTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator = colorPrimaryAppropriateTextColor;
                     lightTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = colorPrimaryAppropriateTextColor;
                     lightTheme.circularProgressBarBackground = colorPrimaryInt;
-                    lightTheme.isLightStatusBar = getAppropriateTextColor(colorPrimaryInt) == Color.toArgb(Color.BLACK);
+                    lightTheme.isLightStatusBar = colorPrimaryAppropriateTextColor == Color.BLACK;
+                    lightTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface =
+                            (lightTheme.isLightStatusBar && getAppropriateTextColor(cardViewBackgroundColor) == Color.WHITE)
+                                    || (!lightTheme.isLightStatusBar && getAppropriateTextColor(cardViewBackgroundColor) == Color.BLACK);
                     lightTheme.name = "Material You";
 
                     darkTheme.colorAccent = colorPrimaryInt;
