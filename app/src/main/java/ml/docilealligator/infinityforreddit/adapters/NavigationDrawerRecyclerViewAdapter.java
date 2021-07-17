@@ -439,6 +439,8 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                     } else if (collapseAccountSection && collapsePostSection) {
                         if (position > REDDIT_SECTION_ITEMS + 2) {
                             pseudoPosition += ACCOUNT_SECTION_ITEMS + POST_SECTION_ITEMS;
+                        } else {
+                            pseudoPosition += ACCOUNT_SECTION_ITEMS;
                         }
                     } else if (collapseRedditSection && collapsePostSection) {
                         if (position > ACCOUNT_SECTION_ITEMS + 1) {
