@@ -76,6 +76,7 @@ public class MaterialYouUtils {
                     lightTheme.bottomAppBarBackgroundColor = colorPrimaryInt;
                     lightTheme.navBarColor = colorPrimaryInt;
                     lightTheme.primaryTextColor = backgroundColorAppropriateTextColor;
+                    lightTheme.secondaryTextColor = backgroundColorAppropriateTextColor == Color.BLACK ? Color.parseColor("#8A000000") : Color.parseColor("#B3FFFFFF");
                     lightTheme.bottomAppBarIconColor = colorPrimaryAppropriateTextColor;
                     lightTheme.primaryIconColor = backgroundColorAppropriateTextColor;
                     lightTheme.fabIconColor = colorPrimaryAppropriateTextColor;
