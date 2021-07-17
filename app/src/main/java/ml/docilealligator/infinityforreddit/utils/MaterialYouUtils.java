@@ -55,12 +55,12 @@ public class MaterialYouUtils {
                     CustomTheme darkTheme = CustomThemeWrapper.getIndigoDark(context);
                     CustomTheme amoledTheme = CustomThemeWrapper.getIndigoAmoled(context);
 
-                    int colorPrimaryInt = shiftColorTo255(wallpaperColors.getPrimaryColor().toArgb(), 0.4);
-                    int colorPrimaryDarkInt = shiftColorTo0(colorPrimaryInt, 0.3);
-                    int backgroundColor = shiftColorTo255(colorPrimaryInt, 0.6);
-                    int cardViewBackgroundColor = shiftColorTo255(colorPrimaryInt, 0.9);
+                    int colorPrimaryInt = lightenColor(wallpaperColors.getPrimaryColor().toArgb(), 0.4);
+                    int colorPrimaryDarkInt = darkenColor(colorPrimaryInt, 0.3);
+                    int backgroundColor = lightenColor(colorPrimaryInt, 0.2);
+                    int cardViewBackgroundColor = lightenColor(colorPrimaryInt, 0.6);
                     Color colorAccent = wallpaperColors.getSecondaryColor();
-                    int colorAccentInt = shiftColorTo255(colorAccent == null ? customThemeWrapper.getColorAccent() : colorAccent.toArgb(), 0.4);
+                    int colorAccentInt = lightenColor(colorAccent == null ? customThemeWrapper.getColorAccent() : colorAccent.toArgb(), 0.4);
 
                     int colorPrimaryAppropriateTextColor = getAppropriateTextColor(colorPrimaryInt);
                     int backgroundColorAppropriateTextColor = getAppropriateTextColor(backgroundColor);
@@ -120,18 +120,16 @@ public class MaterialYouUtils {
         });
     }
 
-    private static int shiftColorTo255(int color, double ratio) {
-        int offset = (int) (Math.min(Math.min(255 - Color.red(color), 255 - Color.green(color)), 255 - Color.blue(color)) * ratio);
-        return Color.argb(Color.alpha(color), Color.red(color) + offset,
-                Color.green(color) + offset,
-                Color.blue(color) + offset);
+    private static int lightenColor(int color, double ratio) {
+        return Color.argb(Color.alpha(color), (int) (Color.red(color) + (255 - Color.red(color)) * ratio),
+                (int) (Color.green(color) + (255 - Color.green(color)) * ratio),
+                (int) (Color.blue(color) + (255 - Color.blue(color)) * ratio));
     }
 
-    private static int shiftColorTo0(int color, double ratio) {
-        int offset = (int) (Math.min(Math.min(Color.red(color), Color.green(color)), Color.blue(color)) * ratio);
-        return Color.argb(Color.alpha(color), Color.red(color) - offset,
-                Color.green(color) - offset,
-                Color.blue(color) - offset);
+    private static int darkenColor(int color, double ratio) {
+        return Color.argb(Color.alpha(color), (int) (Color.red(color) * (1 - ratio)),
+                (int) (Color.green(color) * (1 - ratio)),
+                (int) (Color.blue(color) * (1 - ratio)));
 
     }
 
