@@ -89,6 +89,7 @@ public class MaterialYouUtils {
                     lightTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator = colorPrimaryAppropriateTextColor;
                     lightTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = colorPrimaryAppropriateTextColor;
                     lightTheme.circularProgressBarBackground = colorPrimaryInt;
+                    lightTheme.dividerColor = backgroundColorAppropriateTextColor == Color.BLACK ? Color.parseColor("#E0E0E0") : Color.parseColor("69666C");
                     lightTheme.isLightStatusBar = colorPrimaryAppropriateTextColor == Color.BLACK;
                     lightTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface =
                             (lightTheme.isLightStatusBar && getAppropriateTextColor(cardViewBackgroundColor) == Color.WHITE)
