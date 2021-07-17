@@ -128,6 +128,8 @@
     <string name="multi_reddit">Multireddit</string>
     <string name="inbox">Inbox</string>
     <string name="inbox_with_count">Inbox (%1$d)</string>
+    <string name="rpan">RPAN</string>
+    <string name="trending">Trending</string>
     <string name="upvoted">Upvoted</string>
     <string name="downvoted">Downvoted</string>
     <string name="hidden">Hidden</string>
@@ -344,6 +346,7 @@
     <string name="notification_new_messages">%1$d New Messages</string>
 
     <string name="label_account">Account</string>
+    <string name="label_reddit">Reddit</string>
     <string name="label_post">Post</string>
     <string name="label_preferences">Preferences</string>
 
