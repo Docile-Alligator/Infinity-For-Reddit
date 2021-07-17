@@ -101,7 +101,7 @@ public class RedditGallerySubmissionRecyclerViewAdapter extends RecyclerView.Ada
 
     @Override
     public int getItemCount() {
-        return redditGalleryImageInfoList == null ? 1 : (redditGalleryImageInfoList.size() >= 9 ? 9 : redditGalleryImageInfoList.size() + 1);
+        return redditGalleryImageInfoList == null ? 1 : (redditGalleryImageInfoList.size() >= 20 ? 20 : redditGalleryImageInfoList.size() + 1);
     }
 
     @Override
