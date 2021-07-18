@@ -59,6 +59,8 @@ import retrofit2.Retrofit;
 
 public class TrendingActivity extends BaseActivity {
 
+    private static final String TRENDING_SEARCHES_STATE = "TSS";
+
     @BindView(R.id.coordinator_layout_trending_activity)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.collapsing_toolbar_layout_trending_activity)
@@ -170,7 +172,14 @@ public class TrendingActivity extends BaseActivity {
         swipeRefreshLayout.setEnabled(mSharedPreferences.getBoolean(SharedPreferencesUtils.PULL_TO_REFRESH, true));
         swipeRefreshLayout.setOnRefreshListener(this::loadTrendingSearches);
 
-        loadTrendingSearches();
+        if (savedInstanceState != null) {
+            trendingSearches = savedInstanceState.getParcelableArrayList(TRENDING_SEARCHES_STATE);
+        }
+        if (trendingSearches != null) {
+            adapter.setTrendingSearches(trendingSearches);
+        } else {
+            loadTrendingSearches();
+        }
     }
 
     private void loadTrendingSearches() {
@@ -244,6 +253,12 @@ public class TrendingActivity extends BaseActivity {
         errorLinearLayout.setVisibility(View.VISIBLE);
         Glide.with(this).load(R.drawable.error_image).into(errorImageView);
         errorTextView.setText(stringId);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList(TRENDING_SEARCHES_STATE, trendingSearches);
     }
 
     @Override
