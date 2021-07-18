@@ -180,8 +180,14 @@ public class TrendingSearchRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     }
 
     public void setTrendingSearches(ArrayList<TrendingSearch> trendingSearches) {
-        this.trendingSearches = trendingSearches;
-        notifyDataSetChanged();
+        if (trendingSearches != null) {
+            this.trendingSearches = trendingSearches;
+            notifyItemRangeInserted(0, trendingSearches.size());
+        } else {
+            int size = this.trendingSearches == null ? 0 : this.trendingSearches.size();
+            this.trendingSearches = null;
+            notifyItemRangeRemoved(0, size);
+        }
     }
 
     class TrendingSearchViewHolder extends RecyclerView.ViewHolder {

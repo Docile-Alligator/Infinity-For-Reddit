@@ -15,6 +15,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
@@ -62,6 +63,8 @@ public class TrendingActivity extends BaseActivity {
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_trending_activity)
     Toolbar toolbar;
+    @BindView(R.id.swipe_refresh_layout_trending_activity)
+    SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.recycler_view_trending_activity)
     RecyclerView recyclerView;
     @Inject
@@ -154,10 +157,16 @@ public class TrendingActivity extends BaseActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
+        swipeRefreshLayout.setEnabled(mSharedPreferences.getBoolean(SharedPreferencesUtils.PULL_TO_REFRESH, true));
+        swipeRefreshLayout.setOnRefreshListener(this::loadTrendingSearches);
+
         loadTrendingSearches();
     }
 
     private void loadTrendingSearches() {
+        swipeRefreshLayout.setRefreshing(true);
+        trendingSearches = null;
+        adapter.setTrendingSearches(null);
         Handler handler = new Handler();
         mOauthRetrofit.create(RedditAPI.class).getTrendingSearches(APIUtils.getOAuthHeader(mAccessToken)).enqueue(new Callback<String>() {
             @Override
@@ -190,20 +199,28 @@ public class TrendingActivity extends BaseActivity {
 
                             handler.post(() -> {
                                 trendingSearches = trendingSearchList;
+                                swipeRefreshLayout.setRefreshing(false);
                                 adapter.setTrendingSearches(trendingSearches);
                             });
                         } catch (JSONException e) {
                             e.printStackTrace();
+                            handler.post(() -> {
+                                swipeRefreshLayout.setRefreshing(false);
+                            });
                         }
                     });
                 } else {
-
+                    handler.post(() -> {
+                        swipeRefreshLayout.setRefreshing(false);
+                    });
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-
+                handler.post(() -> {
+                    swipeRefreshLayout.setRefreshing(false);
+                });
             }
         });
     }
@@ -222,6 +239,8 @@ public class TrendingActivity extends BaseActivity {
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
+        swipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
     }
 
     @Subscribe
