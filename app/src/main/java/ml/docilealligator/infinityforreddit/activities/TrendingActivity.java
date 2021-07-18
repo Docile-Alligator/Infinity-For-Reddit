@@ -6,6 +6,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -97,6 +99,7 @@ public class TrendingActivity extends BaseActivity {
     Executor mExecutor;
     private String mAccessToken;
     private String mAccountName;
+    private boolean isRefreshing = false;
     private ArrayList<TrendingSearch> trendingSearches;
     private TrendingSearchRecyclerViewAdapter adapter;
 
@@ -170,7 +173,7 @@ public class TrendingActivity extends BaseActivity {
         recyclerView.setAdapter(adapter);
 
         swipeRefreshLayout.setEnabled(mSharedPreferences.getBoolean(SharedPreferencesUtils.PULL_TO_REFRESH, true));
-        swipeRefreshLayout.setOnRefreshListener(this::loadTrendingSearches);
+        swipeRefreshLayout.setOnRefreshListener(this::fetchTrendingSearches);
 
         if (savedInstanceState != null) {
             trendingSearches = savedInstanceState.getParcelableArrayList(TRENDING_SEARCHES_STATE);
@@ -178,11 +181,16 @@ public class TrendingActivity extends BaseActivity {
         if (trendingSearches != null) {
             adapter.setTrendingSearches(trendingSearches);
         } else {
-            loadTrendingSearches();
+            fetchTrendingSearches();
         }
     }
 
-    private void loadTrendingSearches() {
+    private void fetchTrendingSearches() {
+        if (isRefreshing) {
+            return;
+        }
+        isRefreshing = true;
+
         errorLinearLayout.setVisibility(View.GONE);
         Glide.with(this).clear(errorImageView);
         swipeRefreshLayout.setRefreshing(true);
@@ -222,12 +230,14 @@ public class TrendingActivity extends BaseActivity {
                                 trendingSearches = trendingSearchList;
                                 swipeRefreshLayout.setRefreshing(false);
                                 adapter.setTrendingSearches(trendingSearches);
+                                isRefreshing = false;
                             });
                         } catch (JSONException e) {
                             e.printStackTrace();
                             handler.post(() -> {
                                 swipeRefreshLayout.setRefreshing(false);
                                 showErrorView(R.string.error_parse_trending_search);
+                                isRefreshing = false;
                             });
                         }
                     });
@@ -235,6 +245,7 @@ public class TrendingActivity extends BaseActivity {
                     handler.post(() -> {
                         swipeRefreshLayout.setRefreshing(false);
                         showErrorView(R.string.error_fetch_trending_search);
+                        isRefreshing = false;
                     });
                 }
             }
@@ -244,6 +255,7 @@ public class TrendingActivity extends BaseActivity {
                 handler.post(() -> {
                     swipeRefreshLayout.setRefreshing(false);
                     showErrorView(R.string.error_fetch_trending_search);
+                    isRefreshing = false;
                 });
             }
         });
@@ -253,6 +265,26 @@ public class TrendingActivity extends BaseActivity {
         errorLinearLayout.setVisibility(View.VISIBLE);
         Glide.with(this).load(R.drawable.error_image).into(errorImageView);
         errorTextView.setText(stringId);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.trending_activity, menu);
+        applyMenuItemTheme(menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        } else if (item.getItemId() == R.id.action_refresh_trending_activity) {
+            fetchTrendingSearches();
+            return true;
+        }
+
+        return false;
     }
 
     @Override
