@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp">
+
+    <RelativeLayout
+        android:id="@+id/image_wrapper_relative_layout_item_trending_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
+            android:id="@+id/image_view_item_trending_search"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true"
+            android:scaleType="fitStart" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar_item_trending_search"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+        <RelativeLayout
+            android:id="@+id/load_image_error_relative_layout_item_trending_search"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:visibility="gone">
+
+            <TextView
+                android:id="@+id/load_image_error_text_view_item_trending_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:drawableTop="@drawable/ic_error_outline_black_24dp"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="@string/error_loading_image_tap_to_retry"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/image_view_no_preview_gallery_item_trending_search"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:scaleType="center"
+        android:src="@drawable/ic_image_24dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/title_text_view_item_trending_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:maxLines="2"
+        android:textSize="?attr/title_font_18"
+        android:fontFamily="?attr/title_font_family" />
+
+</com.google.android.material.card.MaterialCardView>

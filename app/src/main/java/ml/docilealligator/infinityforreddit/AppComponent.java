@@ -48,6 +48,7 @@ import ml.docilealligator.infinityforreddit.activities.SubredditMultiselectionAc
 import ml.docilealligator.infinityforreddit.activities.SubredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingActivity;
 import ml.docilealligator.infinityforreddit.activities.SuicidePreventionActivity;
+import ml.docilealligator.infinityforreddit.activities.TrendingActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewImageOrGifActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewImgurMediaActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewMultiRedditDetailActivity;
@@ -278,4 +279,6 @@ public interface AppComponent {
     void inject(ViewRPANBroadcastFragment viewRPANBroadcastFragment);
 
     void inject(PostGalleryActivity postGalleryActivity);
+
+    void inject(TrendingActivity trendingActivity);
 }

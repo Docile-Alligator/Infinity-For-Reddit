@@ -41,6 +41,7 @@
     <string name="multireddit_selection_activity_label">Select a Multireddit</string>
     <string name="rpan_activity_label">RPAN</string>
     <string name="post_gallery_activity_label">Gallery Post</string>
+    <string name="trending_activity_label">Trending</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>

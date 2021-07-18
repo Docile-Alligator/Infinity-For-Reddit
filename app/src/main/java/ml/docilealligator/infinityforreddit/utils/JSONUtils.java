@@ -166,4 +166,8 @@ public class JSONUtils {
     public static final String AUTHOR_ICON_IMAGE = "author_icon_img";
     public static final String ASSET_KEY = "asset";
     public static final String ASSET_ID_KEY = "asset_id";
+    public static final String TRENDING_SEARCHES_KEY = "trending_searches";
+    public static final String QUERY_STRING_KEY = "query_string";
+    public static final String DISPLAY_STRING_KEY = "display_string";
+    public static final String RESULTS_KEY = "results";
 }

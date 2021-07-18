@@ -119,7 +119,7 @@ public class ParsePost {
         });
     }
 
-    private static Post parseBasicData(JSONObject data) throws JSONException {
+    public static Post parseBasicData(JSONObject data) throws JSONException {
         String id = data.getString(JSONUtils.ID_KEY);
         String fullName = data.getString(JSONUtils.NAME_KEY);
         String subredditName = data.getString(JSONUtils.SUBREDDIT_KEY);
