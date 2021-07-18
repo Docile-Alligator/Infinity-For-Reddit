@@ -7,7 +7,7 @@
     android:layout_marginBottom="8dp"
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
-    app:cardCornerRadius="24dp"
+    app:cardCornerRadius="16dp"
     app:cardElevation="2dp">
 
     <RelativeLayout
@@ -64,8 +64,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:padding="16dp"
+        android:background="@drawable/trending_search_title_background"
         android:maxLines="2"
-        android:textSize="?attr/title_font_18"
+        android:textColor="#FFFFFF"
+        android:textSize="?attr/title_font_20"
         android:fontFamily="?attr/title_font_family" />
 
 </com.google.android.material.card.MaterialCardView>

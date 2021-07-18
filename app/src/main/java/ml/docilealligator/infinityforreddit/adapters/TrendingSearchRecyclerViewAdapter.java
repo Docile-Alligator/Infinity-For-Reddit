@@ -86,6 +86,8 @@ public class TrendingSearchRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                     ((TrendingSearchViewHolder) holder).noPreviewLinkImageView.setVisibility(View.VISIBLE);
                 }
             }
+
+            ((TrendingSearchViewHolder) holder).titleTextView.setText(trendingSearch.displayString);
         }
     }
 
@@ -207,7 +209,6 @@ public class TrendingSearchRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             noPreviewLinkImageView.setColorFilter(customThemeWrapper.getNoPreviewPostTypeIconTint(), android.graphics.PorterDuff.Mode.SRC_IN);
             progressBar.setIndeterminateTintList(ColorStateList.valueOf(customThemeWrapper.getColorAccent()));
             errorTextView.setTextColor(customThemeWrapper.getPrimaryTextColor());
-            titleTextView.setTextColor(customThemeWrapper.getPostTitleColor());
 
             itemView.setOnClickListener(view -> {
                 itemClickListener.onClick(trendingSearches.get(getBindingAdapterPosition()));
