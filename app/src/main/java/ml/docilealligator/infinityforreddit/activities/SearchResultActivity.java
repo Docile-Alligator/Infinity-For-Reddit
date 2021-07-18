@@ -85,7 +85,9 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         PostLayoutBottomSheetFragment.PostLayoutSelectionCallback, ActivityToolbarInterface,
         FABMoreOptionsBottomSheetFragment.FABOptionSelectionCallback, RandomBottomSheetFragment.RandomOptionSelectionCallback,
         PostTypeBottomSheetFragment.PostTypeSelectionCallback, RecyclerViewContentScrollingInterface {
-    static final String EXTRA_QUERY = "QK";
+
+    static final String EXTRA_QUERY = "EQ";
+    static final String EXTRA_TRENDING_SOURCE = "ETS";
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
 
     private static final String INSERT_SEARCH_QUERY_SUCCESS_STATE = "ISQSS";
@@ -764,6 +766,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                     bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SEARCH);
                     bundle.putString(PostFragment.EXTRA_NAME, mSubredditName);
                     bundle.putString(PostFragment.EXTRA_QUERY, mQuery);
+                    bundle.putString(PostFragment.EXTRA_TRENDING_SOURCE, getIntent().getStringExtra(EXTRA_TRENDING_SOURCE));
                     bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                     bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                     mFragment.setArguments(bundle);

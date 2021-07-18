@@ -26,6 +26,7 @@ class PostDataSourceFactory extends DataSource.Factory {
     private SharedPreferences postFeedScrolledPositionSharedPreferences;
     private String name;
     private String query;
+    private String trendingSource;
     private int postType;
     private SortType sortType;
     private PostFilter postFilter;
@@ -94,8 +95,8 @@ class PostDataSourceFactory extends DataSource.Factory {
 
     PostDataSourceFactory(Executor executor, Handler handler, Retrofit retrofit, String accessToken, String accountName,
                           SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
-                          String name, String query, int postType, SortType sortType, PostFilter postFilter,
-                          List<ReadPost> readPostList) {
+                          String name, String query, String trendingSource, int postType, SortType sortType,
+                          PostFilter postFilter, List<ReadPost> readPostList) {
         this.executor = executor;
         this.handler = handler;
         this.retrofit = retrofit;
@@ -105,6 +106,7 @@ class PostDataSourceFactory extends DataSource.Factory {
         this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
         this.name = name;
         this.query = query;
+        this.trendingSource = trendingSource;
         postDataSourceLiveData = new MutableLiveData<>();
         this.postType = postType;
         this.sortType = sortType;
@@ -121,7 +123,7 @@ class PostDataSourceFactory extends DataSource.Factory {
                     postFilter, readPostList);
         } else if (postType == PostDataSource.TYPE_SEARCH) {
             postDataSource = new PostDataSource(executor, handler, retrofit, accessToken, accountName,
-                    sharedPreferences, postFeedScrolledPositionSharedPreferences, name, query,
+                    sharedPreferences, postFeedScrolledPositionSharedPreferences, name, query, trendingSource,
                     postType, sortType, postFilter, readPostList);
         } else if (postType == PostDataSource.TYPE_SUBREDDIT || postType == PostDataSource.TYPE_MULTI_REDDIT) {
             Log.i("asdasfd", "s5 " + (postFilter == null));

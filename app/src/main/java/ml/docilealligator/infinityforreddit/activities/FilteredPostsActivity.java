@@ -62,6 +62,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
 
     public static final String EXTRA_NAME = "ESN";
     public static final String EXTRA_QUERY = "EQ";
+    public static final String EXTRA_TRENDING_SOURCE = "ETS";
     public static final String EXTRA_FILTER = "EF";
     public static final String EXTRA_CONTAIN_FLAIR = "ECF";
     public static final String EXTRA_POST_TYPE = "EPT";
@@ -312,6 +313,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
             } else if (postType == PostDataSource.TYPE_SEARCH) {
                 bundle.putString(PostFragment.EXTRA_NAME, name);
                 bundle.putString(PostFragment.EXTRA_QUERY, getIntent().getStringExtra(EXTRA_QUERY));
+                bundle.putString(PostFragment.EXTRA_TRENDING_SOURCE, getIntent().getStringExtra(EXTRA_TRENDING_SOURCE));
             }
             mFragment.setArguments(bundle);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_filtered_posts_activity, mFragment).commit();

@@ -136,6 +136,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public static final String EXTRA_USER_NAME = "EUN";
     public static final String EXTRA_USER_WHERE = "EUW";
     public static final String EXTRA_QUERY = "EQ";
+    public static final String EXTRA_TRENDING_SOURCE = "ETS";
     public static final String EXTRA_POST_TYPE = "EPT";
     public static final String EXTRA_FILTER = "EF";
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
@@ -221,6 +222,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private String subredditName;
     private String username;
     private String query;
+    private String trendingSource;
     private String where;
     private String multiRedditPath;
     private String concatenatedSubredditNames;
@@ -423,6 +425,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if (postType == PostDataSource.TYPE_SEARCH) {
             subredditName = getArguments().getString(EXTRA_NAME);
             query = getArguments().getString(EXTRA_QUERY);
+            trendingSource = getArguments().getString(EXTRA_TRENDING_SOURCE);
             if (savedInstanceState == null) {
                 postFragmentId += query.hashCode();
             }
@@ -450,6 +453,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
                     intent.putExtra(FilteredPostsActivity.EXTRA_QUERY, query);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_TRENDING_SOURCE, trendingSource);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
                     startActivity(intent);
@@ -460,6 +464,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
                     intent.putExtra(FilteredPostsActivity.EXTRA_QUERY, query);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_TRENDING_SOURCE, trendingSource);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredPostsActivity.EXTRA_CONTAIN_FLAIR, flair);
                     startActivity(intent);
@@ -470,6 +475,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
                     intent.putExtra(FilteredPostsActivity.EXTRA_QUERY, query);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_TRENDING_SOURCE, trendingSource);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, Post.NSFW_TYPE);
                     startActivity(intent);
@@ -1096,8 +1102,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
                     new Handler(), accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
                     accountName, mSharedPreferences,
-                    mPostFeedScrolledPositionSharedPreferences, subredditName, query, postType, sortType,
-                    postFilter, readPosts)).get(PostViewModel.class);
+                    mPostFeedScrolledPositionSharedPreferences, subredditName, query, trendingSource,
+                    postType, sortType, postFilter, readPosts)).get(PostViewModel.class);
         } else if (postType == PostDataSource.TYPE_SUBREDDIT) {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
                     new Handler(), accessToken == null ? mRetrofit : mOauthRetrofit, accessToken,
@@ -1132,8 +1138,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mPostViewModel = new ViewModelProvider(PostFragment.this, new PostViewModel.Factory(mExecutor,
                     new Handler(), mRetrofit, null,
                     accountName, mSharedPreferences,
-                    mPostFeedScrolledPositionSharedPreferences, subredditName, query, postType, sortType,
-                    postFilter, readPosts)).get(PostViewModel.class);
+                    mPostFeedScrolledPositionSharedPreferences, subredditName, query, trendingSource,
+                    postType, sortType, postFilter, readPosts)).get(PostViewModel.class);
         } else if (postType == PostDataSource.TYPE_SUBREDDIT) {
             mPostViewModel = new ViewModelProvider(this, new PostViewModel.Factory(mExecutor,
                     new Handler(), mRetrofit, null,
@@ -1509,6 +1515,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             Intent intent = new Intent(activity, FilteredPostsActivity.class);
             intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
             intent.putExtra(FilteredPostsActivity.EXTRA_QUERY, query);
+            intent.putExtra(FilteredPostsActivity.EXTRA_TRENDING_SOURCE, trendingSource);
             intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
             startActivity(intent);
         } else if (postType == PostDataSource.TYPE_SUBREDDIT) {

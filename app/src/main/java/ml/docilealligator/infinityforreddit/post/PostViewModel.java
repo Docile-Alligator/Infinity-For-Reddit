@@ -137,9 +137,10 @@ public class PostViewModel extends ViewModel {
 
     public PostViewModel(Executor executor, Handler handler, Retrofit retrofit, String accessToken, String accountName,
                          SharedPreferences sharedPreferences, SharedPreferences cache, String subredditName,
-                         String query, int postType, SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
+                         String query, String trendingSource, int postType, SortType sortType,
+                         PostFilter postFilter, List<ReadPost> readPostList) {
         postDataSourceFactory = new PostDataSourceFactory(executor, handler, retrofit, accessToken, accountName,
-                sharedPreferences, cache, subredditName, query, postType, sortType, postFilter,
+                sharedPreferences, cache, subredditName, query, trendingSource, postType, sortType, postFilter,
                 readPostList);
 
         initialLoadingState = Transformations.switchMap(postDataSourceFactory.getPostDataSourceLiveData(),
@@ -211,6 +212,7 @@ public class PostViewModel extends ViewModel {
         private SharedPreferences postFeedScrolledPositionSharedPreferences;
         private String name;
         private String query;
+        private String trendingSource;
         private int postType;
         private SortType sortType;
         private PostFilter postFilter;
@@ -272,8 +274,8 @@ public class PostViewModel extends ViewModel {
 
         public Factory(Executor executor, Handler handler, Retrofit retrofit, String accessToken, String accountName,
                        SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
-                       String name, String query, int postType, SortType sortType, PostFilter postFilter,
-                       List<ReadPost> readPostList) {
+                       String name, String query, String trendingSource, int postType, SortType sortType,
+                       PostFilter postFilter, List<ReadPost> readPostList) {
             this.executor = executor;
             this.handler = handler;
             this.retrofit = retrofit;
@@ -283,6 +285,7 @@ public class PostViewModel extends ViewModel {
             this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
             this.name = name;
             this.query = query;
+            this.trendingSource = trendingSource;
             this.postType = postType;
             this.sortType = sortType;
             this.postFilter = postFilter;
@@ -310,7 +313,7 @@ public class PostViewModel extends ViewModel {
                         postFeedScrolledPositionSharedPreferences, postType, sortType, postFilter, readPostList);
             } else if (postType == PostDataSource.TYPE_SEARCH) {
                 return (T) new PostViewModel(executor, handler, retrofit, accessToken, accountName, sharedPreferences,
-                        postFeedScrolledPositionSharedPreferences, name, query, postType, sortType,
+                        postFeedScrolledPositionSharedPreferences, name, query, trendingSource, postType, sortType,
                         postFilter, readPostList);
             } else if (postType == PostDataSource.TYPE_SUBREDDIT || postType == PostDataSource.TYPE_MULTI_REDDIT) {
                 return (T) new PostViewModel(executor, handler, retrofit, accessToken, accountName, sharedPreferences,

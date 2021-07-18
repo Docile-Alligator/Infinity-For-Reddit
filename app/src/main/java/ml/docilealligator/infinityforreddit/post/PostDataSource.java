@@ -48,6 +48,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
     private SharedPreferences postFeedScrolledPositionSharedPreferences;
     private String subredditOrUserName;
     private String query;
+    private String trendingSource;
     private int postType;
     private SortType sortType;
     private PostFilter postFilter;
@@ -151,8 +152,8 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
 
     PostDataSource(Executor executor, Handler handler, Retrofit retrofit, String accessToken, String accountName,
                    SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
-                   String subredditOrUserName, String query, int postType, SortType sortType, PostFilter postFilter,
-                   List<ReadPost> readPostList) {
+                   String subredditOrUserName, String query, String trendingSource, int postType,
+                   SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
         this.executor = executor;
         this.handler = handler;
         this.retrofit = retrofit;
@@ -162,6 +163,7 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
         this.subredditOrUserName = subredditOrUserName;
         this.query = query;
+        this.trendingSource = trendingSource;
         paginationNetworkStateLiveData = new MutableLiveData<>();
         initialLoadStateLiveData = new MutableLiveData<>();
         hasPostLiveData = new MutableLiveData<>();
@@ -639,16 +641,17 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         if (subredditOrUserName == null) {
             if (accessToken == null) {
                 if (sortType.getTime() != null) {
-                    getPost = api.searchPosts(query, lastItem, sortType.getType().value, sortType.getTime().value);
+                    getPost = api.searchPosts(query, lastItem, sortType.getType().value, sortType.getTime().value,
+                            trendingSource);
                 } else {
-                    getPost = api.searchPosts(query, lastItem, sortType.getType().value);
+                    getPost = api.searchPosts(query, lastItem, sortType.getType().value, trendingSource);
                 }
             } else {
                 if(sortType.getTime() != null) {
                     getPost = api.searchPostsOauth(query, lastItem, sortType.getType().value,
-                            sortType.getTime().value, APIUtils.getOAuthHeader(accessToken));
+                            sortType.getTime().value, trendingSource, APIUtils.getOAuthHeader(accessToken));
                 } else {
-                    getPost = api.searchPostsOauth(query, lastItem, sortType.getType().value,
+                    getPost = api.searchPostsOauth(query, lastItem, sortType.getType().value, trendingSource,
                             APIUtils.getOAuthHeader(accessToken));
                 }
             }
@@ -732,16 +735,18 @@ public class PostDataSource extends PageKeyedDataSource<String, Post> {
         if (subredditOrUserName == null) {
             if (accessToken == null) {
                 if (sortType.getTime() != null) {
-                    getPost = api.searchPosts(query, after, sortType.getType().value, sortType.getTime().value);
+                    getPost = api.searchPosts(query, after, sortType.getType().value, sortType.getTime().value,
+                            trendingSource);
                 } else {
-                    getPost = api.searchPosts(query, after, sortType.getType().value);
+                    getPost = api.searchPosts(query, after, sortType.getType().value, trendingSource);
                 }
             } else {
                 if (sortType.getTime() != null) {
                     getPost = api.searchPostsOauth(query, after, sortType.getType().value,
-                            sortType.getTime().value, APIUtils.getOAuthHeader(accessToken));
+                            sortType.getTime().value, trendingSource, APIUtils.getOAuthHeader(accessToken));
                 } else {
-                    getPost = api.searchPostsOauth(query, after, sortType.getType().value, APIUtils.getOAuthHeader(accessToken));
+                    getPost = api.searchPostsOauth(query, after, sortType.getType().value, trendingSource,
+                            APIUtils.getOAuthHeader(accessToken));
                 }
             }
         } else {
