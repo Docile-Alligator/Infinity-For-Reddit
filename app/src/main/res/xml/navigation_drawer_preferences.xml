@@ -18,6 +18,11 @@
 
     <SwitchPreference
         app:defaultValue="false"
+        app:key="collapse_reddit_section"
+        app:title="@string/settings_collapse_reddit_section_title" />
+
+    <SwitchPreference
+        app:defaultValue="false"
         app:key="collapse_post_section"
         app:title="@string/settings_collapse_post_section_title" />
 
