@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
@@ -144,7 +145,10 @@ public class TrendingActivity extends BaseActivity {
                 dataSavingMode, disableImagePreview, new TrendingSearchRecyclerViewAdapter.ItemClickListener() {
             @Override
             public void onClick(TrendingSearch trendingSearch) {
-
+                Intent intent = new Intent(TrendingActivity.this, SearchResultActivity.class);
+                intent.putExtra(SearchResultActivity.EXTRA_QUERY, trendingSearch.queryString);
+                intent.putExtra(SearchResultActivity.EXTRA_TRENDING_SOURCE, "trending");
+                startActivity(intent);
             }
         });
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
