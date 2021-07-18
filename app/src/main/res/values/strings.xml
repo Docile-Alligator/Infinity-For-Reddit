@@ -1146,4 +1146,8 @@
 
     <string name="please_wait_image_is_uploading">An image is still being uploaded. Please wait.</string>
 
+    <string name="error_fetch_trending_search">Fetch trending searches failed.\nTap to retry.</string>
+    <string name="error_parse_trending_search">Parse trending searches failed.\nTap to retry.</string>
+    <string name="no_trending_search">No trending searches found.\nTap to retry.</string>
+
 </resources>

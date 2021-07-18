@@ -9,6 +9,9 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -17,6 +20,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.r0adkll.slidr.Slidr;
@@ -67,6 +71,12 @@ public class TrendingActivity extends BaseActivity {
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.recycler_view_trending_activity)
     RecyclerView recyclerView;
+    @BindView(R.id.fetch_trending_search_linear_layout_trending_activity)
+    LinearLayout errorLinearLayout;
+    @BindView(R.id.fetch_trending_search_image_view_trending_activity)
+    ImageView errorImageView;
+    @BindView(R.id.fetch_trending_search_text_view_trending_activity)
+    TextView errorTextView;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -164,6 +174,8 @@ public class TrendingActivity extends BaseActivity {
     }
 
     private void loadTrendingSearches() {
+        errorLinearLayout.setVisibility(View.GONE);
+        Glide.with(this).clear(errorImageView);
         swipeRefreshLayout.setRefreshing(true);
         trendingSearches = null;
         adapter.setTrendingSearches(null);
@@ -206,12 +218,14 @@ public class TrendingActivity extends BaseActivity {
                             e.printStackTrace();
                             handler.post(() -> {
                                 swipeRefreshLayout.setRefreshing(false);
+                                showErrorView(R.string.error_parse_trending_search);
                             });
                         }
                     });
                 } else {
                     handler.post(() -> {
                         swipeRefreshLayout.setRefreshing(false);
+                        showErrorView(R.string.error_fetch_trending_search);
                     });
                 }
             }
@@ -220,9 +234,16 @@ public class TrendingActivity extends BaseActivity {
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 handler.post(() -> {
                     swipeRefreshLayout.setRefreshing(false);
+                    showErrorView(R.string.error_fetch_trending_search);
                 });
             }
         });
+    }
+
+    private void showErrorView(int stringId) {
+        errorLinearLayout.setVisibility(View.VISIBLE);
+        Glide.with(this).load(R.drawable.error_image).into(errorImageView);
+        errorTextView.setText(stringId);
     }
 
     @Override
@@ -241,6 +262,7 @@ public class TrendingActivity extends BaseActivity {
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         swipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
         swipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
+        errorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
     }
 
     @Subscribe
