@@ -136,6 +136,11 @@ public class TrendingActivity extends BaseActivity {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
                 adjustToolbar(toolbar);
+
+                int navBarResourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+                if (navBarResourceId > 0) {
+                    recyclerView.setPadding(0, 0, 0, recyclerView.getPaddingBottom() + getResources().getDimensionPixelSize(navBarResourceId));
+                }
             }
         }
 
