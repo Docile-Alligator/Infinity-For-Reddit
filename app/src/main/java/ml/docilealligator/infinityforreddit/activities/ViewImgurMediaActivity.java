@@ -273,6 +273,7 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
             }
         });
         viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setOffscreenPageLimit(3);
     }
 
     private void setToolbarTitle(int position) {

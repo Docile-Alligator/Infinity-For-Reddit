@@ -385,8 +385,8 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onDestroyView() {
+        super.onDestroyView();
         BigImageViewer.imageLoader().cancelAll();
     }
 }

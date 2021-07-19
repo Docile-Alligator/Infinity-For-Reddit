@@ -269,4 +269,10 @@ public class ViewImgurImageFragment extends Fragment {
         super.onAttach(context);
         activity = (ViewImgurMediaActivity) context;
     }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        glide.clear(imageView);
+    }
 }

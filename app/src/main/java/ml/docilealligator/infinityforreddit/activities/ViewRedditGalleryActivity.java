@@ -128,6 +128,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
             }
         });
         viewPager.setAdapter(sectionsPagerAdapter);
+        viewPager.setOffscreenPageLimit(3);
     }
 
     private void setToolbarTitle(int position) {
