@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.Settings;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -235,23 +236,27 @@ public class ViewVideoActivity extends AppCompatActivity {
                 originalOrientation = resources.getConfiguration().orientation;
                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
 
-                OrientationEventListener orientationEventListener = new OrientationEventListener(this) {
-                    @Override
-                    public void onOrientationChanged(int orientation) {
-                        int epsilon = 10;
-                        int leftLandscape = 90;
-                        int rightLandscape = 270;
-                        if(epsilonCheck(orientation, leftLandscape, epsilon) ||
-                                epsilonCheck(orientation, rightLandscape, epsilon)){
-                            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                if (android.provider.Settings.System.getInt(getContentResolver(),
+                        Settings.System.ACCELEROMETER_ROTATION, 0) == 1) {
+                    OrientationEventListener orientationEventListener = new OrientationEventListener(this) {
+                        @Override
+                        public void onOrientationChanged(int orientation) {
+                            int epsilon = 10;
+                            int leftLandscape = 90;
+                            int rightLandscape = 270;
+                            if(epsilonCheck(orientation, leftLandscape, epsilon) ||
+                                    epsilonCheck(orientation, rightLandscape, epsilon)) {
+                                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+                                disable();
+                            }
                         }
-                    }
 
-                    private boolean epsilonCheck(int a, int b, int epsilon) {
-                        return a > b - epsilon && a < b + epsilon;
-                    }
-                };
-                orientationEventListener.enable();
+                        private boolean epsilonCheck(int a, int b, int epsilon) {
+                            return a > b - epsilon && a < b + epsilon;
+                        }
+                    };
+                    orientationEventListener.enable();
+                }
             }
         }
 
