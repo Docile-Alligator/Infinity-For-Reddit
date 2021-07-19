@@ -25,6 +25,11 @@
         app:title="@string/settings_video_player_ignore_nav_bar_title"
         app:summary="@string/settings_video_player_ignore_nav_bar_summary" />
 
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="video_player_automatic_landscape_orientation"
+        app:title="@string/settings_video_player_automatic_landscape_orientation" />
+
     <PreferenceCategory
         app:title="@string/settings_video_autoplay_title" />
 

@@ -3,8 +3,10 @@ package ml.docilealligator.infinityforreddit.activities;
 import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
@@ -15,6 +17,7 @@ import android.os.Handler;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
@@ -135,6 +138,7 @@ public class ViewVideoActivity extends AppCompatActivity {
     private int videoType;
     private boolean isDataSavingMode;
     private boolean isHd;
+    private Integer originalOrientation;
 
     @Inject
     @Named("no_oauth")
@@ -184,10 +188,12 @@ public class ViewVideoActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
+        Resources resources = getResources();
+
         ActionBar actionBar = getSupportActionBar();
-        Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
+        Drawable upArrow = resources.getDrawable(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setHomeAsUpIndicator(upArrow);
-        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
+        actionBar.setBackgroundDrawable(new ColorDrawable(resources.getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
 
         String dataSavingModeString = mSharedPreferences.getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
         int networkType = Utils.getConnectedNetwork(this);
@@ -199,18 +205,18 @@ public class ViewVideoActivity extends AppCompatActivity {
         isHd = !isDataSavingMode;
 
         if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.VIDEO_PLAYER_IGNORE_NAV_BAR, false)) {
-            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || getResources().getBoolean(R.bool.isTablet)) {
+            if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
                 //Set player controller bottom margin in order to display it above the navbar
-                int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+                int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
                 LinearLayout controllerLinearLayout = findViewById(R.id.linear_layout_exo_playback_control_view);
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
-                params.bottomMargin = getResources().getDimensionPixelSize(resourceId);
+                params.bottomMargin = resources.getDimensionPixelSize(resourceId);
             } else {
                 //Set player controller right margin in order to display it above the navbar
-                int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
+                int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
                 LinearLayout controllerLinearLayout = findViewById(R.id.linear_layout_exo_playback_control_view);
                 ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
-                params.rightMargin = getResources().getDimensionPixelSize(resourceId);
+                params.rightMargin = resources.getDimensionPixelSize(resourceId);
             }
         }
 
@@ -225,6 +231,28 @@ public class ViewVideoActivity extends AppCompatActivity {
         isNSFW = intent.getBooleanExtra(EXTRA_IS_NSFW, false);
         if (savedInstanceState == null) {
             resumePosition = intent.getLongExtra(EXTRA_PROGRESS_SECONDS, -1);
+            if (mSharedPreferences.getBoolean(SharedPreferencesUtils.VIDEO_PLAYER_AUTOMATIC_LANDSCAPE_ORIENTATION, false)) {
+                originalOrientation = resources.getConfiguration().orientation;
+                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+
+                OrientationEventListener orientationEventListener = new OrientationEventListener(this) {
+                    @Override
+                    public void onOrientationChanged(int orientation) {
+                        int epsilon = 10;
+                        int leftLandscape = 90;
+                        int rightLandscape = 270;
+                        if(epsilonCheck(orientation, leftLandscape, epsilon) ||
+                                epsilonCheck(orientation, rightLandscape, epsilon)){
+                            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED);
+                        }
+                    }
+
+                    private boolean epsilonCheck(int a, int b, int epsilon) {
+                        return a > b - epsilon && a < b + epsilon;
+                    }
+                };
+                orientationEventListener.enable();
+            }
         }
 
 
@@ -575,6 +603,9 @@ public class ViewVideoActivity extends AppCompatActivity {
         super.onStop();
         wasPlaying = player.getPlayWhenReady();
         player.setPlayWhenReady(false);
+        if (originalOrientation != null) {
+            setRequestedOrientation(originalOrientation);
+        }
     }
 
     @Override

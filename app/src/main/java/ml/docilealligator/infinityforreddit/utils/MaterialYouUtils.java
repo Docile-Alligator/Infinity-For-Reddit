@@ -51,10 +51,6 @@ public class MaterialYouUtils {
                 WallpaperColors wallpaperColors = wallpaperManager.getWallpaperColors(WallpaperManager.FLAG_SYSTEM);
 
                 if (wallpaperColors != null) {
-                    CustomTheme lightTheme = CustomThemeWrapper.getIndigo(context);
-                    CustomTheme darkTheme = CustomThemeWrapper.getIndigoDark(context);
-                    CustomTheme amoledTheme = CustomThemeWrapper.getIndigoAmoled(context);
-
                     int colorPrimaryInt = lightenColor(wallpaperColors.getPrimaryColor().toArgb(), 0.4);
                     int colorPrimaryDarkInt = darkenColor(colorPrimaryInt, 0.3);
                     int backgroundColor = lightenColor(colorPrimaryInt, 0.2);
@@ -64,6 +60,10 @@ public class MaterialYouUtils {
 
                     int colorPrimaryAppropriateTextColor = getAppropriateTextColor(colorPrimaryInt);
                     int backgroundColorAppropriateTextColor = getAppropriateTextColor(backgroundColor);
+
+                    CustomTheme lightTheme = CustomThemeWrapper.getIndigo(context);
+                    CustomTheme darkTheme = CustomThemeWrapper.getIndigoDark(context);
+                    CustomTheme amoledTheme = CustomThemeWrapper.getIndigoAmoled(context);
 
                     lightTheme.colorPrimary = colorPrimaryInt;
                     lightTheme.colorPrimaryDark = colorPrimaryDarkInt;
