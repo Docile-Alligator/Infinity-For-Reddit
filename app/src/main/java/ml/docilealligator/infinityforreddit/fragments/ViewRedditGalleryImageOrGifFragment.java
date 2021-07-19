@@ -385,8 +385,21 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        SubsamplingScaleImageView ssiv = imageView.getSSIV();
+        if (ssiv == null || !ssiv.hasImage()) {
+            imageView.showImage(Uri.parse(media.url));
+        }
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         BigImageViewer.imageLoader().cancelAll();
+        SubsamplingScaleImageView subsamplingScaleImageView = imageView.getSSIV();
+        if (subsamplingScaleImageView != null) {
+            subsamplingScaleImageView.recycle();
+        }
     }
 }
