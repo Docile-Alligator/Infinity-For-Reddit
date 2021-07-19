@@ -294,6 +294,12 @@ public class TrendingActivity extends BaseActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Override
     protected SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
     }

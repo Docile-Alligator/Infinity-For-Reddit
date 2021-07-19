@@ -30,6 +30,7 @@ import com.evernote.android.state.State;
 import com.google.android.material.snackbar.Snackbar;
 import com.livefront.bridge.Bridge;
 
+import org.greenrobot.eventbus.EventBus;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -348,6 +349,12 @@ public class RPANActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     private void shareLink(String link) {
