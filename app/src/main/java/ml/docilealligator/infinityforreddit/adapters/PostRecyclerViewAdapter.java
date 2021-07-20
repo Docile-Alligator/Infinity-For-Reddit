@@ -148,6 +148,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private boolean canStartActivity = true;
     private int mPostType;
     private int mPostLayout;
+    private int mDefaultLinkPostLayout;
     private int mColorPrimaryLightTheme;
     private int mColorAccent;
     private int mCardViewBackgroundColor;
@@ -295,6 +296,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             mHideTheNumberOfComments = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_COMMENTS, false);
 
             mPostLayout = postLayout;
+            mDefaultLinkPostLayout = Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.DEFAULT_LINK_POST_LAYOUT_KEY, "-1"));
 
             mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
             mColorAccent = customThemeWrapper.getColorAccent();
@@ -382,8 +384,24 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         case Post.IMAGE_TYPE:
                             return VIEW_TYPE_POST_CARD_IMAGE_AND_GIF_AUTOPLAY_TYPE;
                         case Post.LINK_TYPE:
+                            switch (mDefaultLinkPostLayout) {
+                                case SharedPreferencesUtils.POST_LAYOUT_COMPACT:
+                                    return VIEW_TYPE_POST_COMPACT;
+                                case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
+                                    return VIEW_TYPE_POST_GALLERY;
+                                case SharedPreferencesUtils.POST_LAYOUT_CARD_2:
+                                    return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW;
+                            }
                             return VIEW_TYPE_POST_CARD_LINK_TYPE;
                         case Post.NO_PREVIEW_LINK_TYPE:
+                            switch (mDefaultLinkPostLayout) {
+                                case SharedPreferencesUtils.POST_LAYOUT_COMPACT:
+                                    return VIEW_TYPE_POST_COMPACT;
+                                case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
+                                    return VIEW_TYPE_POST_GALLERY;
+                                case SharedPreferencesUtils.POST_LAYOUT_CARD_2:
+                                    return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW;
+                            }
                             return VIEW_TYPE_POST_CARD_NO_PREVIEW_LINK_TYPE;
                         case Post.GALLERY_TYPE:
                             return VIEW_TYPE_POST_CARD_GALLERY_TYPE;
@@ -393,6 +411,23 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
                 return VIEW_TYPE_POST_CARD_TEXT_TYPE;
             } else if (mPostLayout == SharedPreferencesUtils.POST_LAYOUT_COMPACT) {
+                Post post = getItem(position);
+                if (post != null) {
+                    if (post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
+                        switch (mDefaultLinkPostLayout) {
+                            case SharedPreferencesUtils.POST_LAYOUT_CARD:
+                                if (post.getPostType() == Post.LINK_TYPE) {
+                                    return VIEW_TYPE_POST_CARD_LINK_TYPE;
+                                } else {
+                                    return VIEW_TYPE_POST_CARD_NO_PREVIEW_LINK_TYPE;
+                                }
+                            case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
+                                return VIEW_TYPE_POST_GALLERY;
+                            case SharedPreferencesUtils.POST_LAYOUT_CARD_2:
+                                return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW;
+                        }
+                    }
+                }
                 return VIEW_TYPE_POST_COMPACT;
             } else if (mPostLayout == SharedPreferencesUtils.POST_LAYOUT_GALLERY) {
                 return VIEW_TYPE_POST_GALLERY;
@@ -410,10 +445,22 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW;
                         case Post.GIF_TYPE:
                         case Post.IMAGE_TYPE:
-                        case Post.LINK_TYPE:
-                        case Post.NO_PREVIEW_LINK_TYPE:
                         case Post.GALLERY_TYPE:
                             return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW;
+                        case Post.LINK_TYPE:
+                        case Post.NO_PREVIEW_LINK_TYPE:
+                            switch (mDefaultLinkPostLayout) {
+                                case SharedPreferencesUtils.POST_LAYOUT_CARD:
+                                    if (post.getPostType() == Post.LINK_TYPE) {
+                                        return VIEW_TYPE_POST_CARD_LINK_TYPE;
+                                    } else {
+                                        return VIEW_TYPE_POST_CARD_NO_PREVIEW_LINK_TYPE;
+                                    }
+                                case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
+                                    return VIEW_TYPE_POST_GALLERY;
+                                case SharedPreferencesUtils.POST_LAYOUT_COMPACT:
+                                    return VIEW_TYPE_POST_COMPACT;
+                            }
                         default:
                             return VIEW_TYPE_POST_CARD_2_TEXT_TYPE;
                     }
@@ -1844,6 +1891,10 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
     public void setHideTheNumberOfComments(boolean hideTheNumberOfComments) {
         mHideTheNumberOfComments = hideTheNumberOfComments;
+    }
+
+    public void setDefaultLinkPostLayout(int defaultLinkPostLayout) {
+        mDefaultLinkPostLayout = defaultLinkPostLayout;
     }
 
     @Override

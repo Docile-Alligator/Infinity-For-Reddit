@@ -10,6 +10,14 @@
         app:title="@string/settings_default_post_layout"
         app:useSimpleSummaryProvider="true" />
 
+    <ListPreference
+        app:defaultValue="-1"
+        android:entries="@array/settings_default_link_post_layout"
+        app:entryValues="@array/settings_default_link_post_layout_values"
+        app:key="default_link_post_layout"
+        app:title="@string/settings_default_link_post_layout"
+        app:useSimpleSummaryProvider="true" />
+
     <Preference
         app:title="@string/settings_number_of_columns_in_post_feed_title"
         app:fragment="ml.docilealligator.infinityforreddit.settings.NumberOfColumnsInPostFeedPreferenceFragment" />

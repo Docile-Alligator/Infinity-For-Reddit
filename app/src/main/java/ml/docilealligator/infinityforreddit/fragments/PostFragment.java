@@ -82,6 +82,7 @@ import ml.docilealligator.infinityforreddit.customviews.CustomToroContainer;
 import ml.docilealligator.infinityforreddit.events.ChangeAutoplayNsfwVideosEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeCompactLayoutToolbarHiddenByDefaultEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDataSavingModeEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeDefaultLinkPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDefaultPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDisableImagePreviewEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeEnableSwipeActionSwitchEvent;
@@ -1669,6 +1670,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     }
                     break;
             }
+        }
+    }
+
+    @Subscribe
+    public void onChangeDefaultLinkPostLayoutEvent(ChangeDefaultLinkPostLayoutEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setDefaultLinkPostLayout(event.defaultLinkPostLayout);
+            refreshAdapter();
         }
     }
 

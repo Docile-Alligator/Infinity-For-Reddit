@@ -184,6 +184,7 @@ public class SharedPreferencesUtils {
     public static final String APPLY_MATERIAL_YOU = "apply_material_you";
     public static final String VIDEO_PLAYER_AUTOMATIC_LANDSCAPE_ORIENTATION = "video_player_automatic_landscape_orientation";
     public static final String REMEMBER_MUTING_OPTION_IN_POST_FEED = "remember_muting_option_in_post_feed";
+    public static final String DEFAULT_LINK_POST_LAYOUT_KEY = "default_link_post_layout";
 
     public static final String DEFAULT_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit_preferences";
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";

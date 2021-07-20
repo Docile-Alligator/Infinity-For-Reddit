@@ -401,6 +401,7 @@
     <string name="settings_time_format_title">Time Format</string>
     <string name="settings_category_post_title">Post</string>
     <string name="settings_default_post_layout">Default Post Layout</string>
+    <string name="settings_default_link_post_layout">Default Link Post Layout</string>
     <string name="settings_show_divider_in_compact_layout">Show Divider</string>
     <string name="settings_show_thumbnail_on_the_left_in_compact_layout">Show Thumbnail on the Left</string>
     <string name="settings_number_of_columns_in_post_feed_title">The Number of Columns in Post Feed</string>
@@ -619,6 +620,7 @@
     <string name="favorites">Favorites</string>
     <string name="all">All</string>
 
+    <string name="link_post_layout_auto">Auto</string>
     <string name="post_layout_card">Card Layout</string>
     <string name="post_layout_compact">Compact Layout</string>
     <string name="post_layout_gallery">Gallery Layout</string>
