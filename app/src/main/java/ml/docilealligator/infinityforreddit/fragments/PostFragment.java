@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import androidx.annotation.DimenRes;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
@@ -97,6 +98,7 @@ import ml.docilealligator.infinityforreddit.events.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeOnlyDisablePreviewInVideoAndGifPostsEvent;
 import ml.docilealligator.infinityforreddit.events.ChangePostLayoutEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeRememberMutingOptionInPostFeedEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeSavePostFeedScrolledPositionEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeShowAbsoluteNumberOfVotesEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeShowElapsedTimeEvent;
@@ -211,6 +213,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private boolean hasPost = false;
     private boolean isShown = false;
     private boolean savePostFeedScrolledPosition;
+    private boolean rememberMutingOptionInPostFeed;
+    private Boolean masterMutingOption;
     private PostRecyclerViewAdapter mAdapter;
     private RecyclerView.SmoothScroller smoothScroller;
     private Window window;
@@ -417,6 +421,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
         int defaultPostLayout = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY, "0"));
         savePostFeedScrolledPosition = mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_FRONT_PAGE_SCROLLED_POSITION, false);
+        rememberMutingOptionInPostFeed = mSharedPreferences.getBoolean(SharedPreferencesUtils.REMEMBER_MUTING_OPTION_IN_POST_FEED, false);
         Locale locale = getResources().getConfiguration().locale;
 
         int usage;
@@ -1550,6 +1555,17 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
     }
 
+    @Nullable
+    public Boolean getMasterMutingOption() {
+        return masterMutingOption;
+    }
+
+    public void videoAutoplayChangeMutingOption(boolean isMute) {
+        if (rememberMutingOptionInPostFeed) {
+            masterMutingOption = isMute;
+        }
+    }
+
     @Subscribe
     public void onPostUpdateEvent(PostUpdateEventToPostList event) {
         PagedList<Post> posts = mAdapter.getCurrentList();
@@ -1875,6 +1891,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if (mAdapter != null) {
             mAdapter.setHideTheNumberOfComments(event.hideTheNumberOfComments);
             refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeRememberMutingOptionInPostFeedEvent(ChangeRememberMutingOptionInPostFeedEvent event) {
+        rememberMutingOptionInPostFeed = event.rememberMutingOptionInPostFeedEvent;
+        if (!event.rememberMutingOptionInPostFeedEvent) {
+            masterMutingOption = null;
         }
     }
 

@@ -709,7 +709,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     } else {
                         ((PostVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio(1);
                     }
-                    ((PostVideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (post.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
+                    if (mFragment.getMasterMutingOption() == null) {
+                        ((PostVideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (post.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
+                    } else {
+                        ((PostVideoAutoplayViewHolder) holder).setVolume(mFragment.getMasterMutingOption() ? 0f : 1f);
+                    }
 
                     if (post.isGfycat() || post.isRedgifs() && !post.isLoadGfyOrRedgifsVideoSuccess()) {
                         ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks = new FetchGfycatOrRedgifsVideoLinks(new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
@@ -833,7 +837,11 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     } else {
                         ((PostCard2VideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio(1);
                     }
-                    ((PostCard2VideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (post.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
+                    if (mFragment.getMasterMutingOption() == null) {
+                        ((PostCard2VideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (post.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
+                    } else {
+                        ((PostCard2VideoAutoplayViewHolder) holder).setVolume(mFragment.getMasterMutingOption() ? 0f : 1f);
+                    }
 
                     if (post.isGfycat() || post.isRedgifs() && !post.isLoadGfyOrRedgifsVideoSuccess()) {
                         ((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks = new FetchGfycatOrRedgifsVideoLinks(new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
@@ -2764,10 +2772,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_mute_white_rounded_18dp));
                         helper.setVolume(0f);
                         volume = 0f;
+                        mFragment.videoAutoplayChangeMutingOption(true);
                     } else {
                         muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_unmute_white_rounded_18dp));
                         helper.setVolume(1f);
                         volume = 1f;
+                        mFragment.videoAutoplayChangeMutingOption(false);
                     }
                 }
             });
@@ -2851,6 +2861,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             for (int i = 0; i < trackGroups.length; i++) {
                                 String mimeType = trackGroups.get(i).getFormat(0).sampleMimeType;
                                 if (mimeType != null && mimeType.contains("audio")) {
+                                    if (mFragment.getMasterMutingOption() != null) {
+                                        volume = mFragment.getMasterMutingOption() ? 0f : 1f;
+                                    }
                                     helper.setVolume(volume);
                                     muteButton.setVisibility(View.VISIBLE);
                                     if (volume != 0f) {
@@ -3978,10 +3991,12 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_mute_white_rounded_18dp));
                         helper.setVolume(0f);
                         volume = 0f;
+                        mFragment.videoAutoplayChangeMutingOption(true);
                     } else {
                         muteButton.setImageDrawable(mActivity.getDrawable(R.drawable.ic_unmute_white_rounded_18dp));
                         helper.setVolume(1f);
                         volume = 1f;
+                        mFragment.videoAutoplayChangeMutingOption(false);
                     }
                 }
             });
@@ -4065,6 +4080,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                             for (int i = 0; i < trackGroups.length; i++) {
                                 String mimeType = trackGroups.get(i).getFormat(0).sampleMimeType;
                                 if (mimeType != null && mimeType.contains("audio")) {
+                                    if (mFragment.getMasterMutingOption() != null) {
+                                        volume = mFragment.getMasterMutingOption() ? 0f : 1f;
+                                    }
                                     helper.setVolume(volume);
                                     muteButton.setVisibility(View.VISIBLE);
                                     if (volume != 0f) {
@@ -4103,6 +4121,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         @Override
         public void play() {
             if (helper != null && mediaUri != null) {
+                if (mFragment.getMasterMutingOption() != null) {
+                    helper.setVolume(mFragment.getMasterMutingOption() ? 0f : 1f);
+                }
                 helper.play();
             }
         }

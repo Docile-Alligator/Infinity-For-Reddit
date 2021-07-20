@@ -21,6 +21,11 @@
 
     <SwitchPreference
         app:defaultValue="false"
+        app:key="remember_mute_status_in_post_feed"
+        app:title="@string/settings_automatically_try_redgifs_title" />
+
+    <SwitchPreference
+        app:defaultValue="false"
         app:key="video_player_ignore_nav_bar"
         app:title="@string/settings_video_player_ignore_nav_bar_title"
         app:summary="@string/settings_video_player_ignore_nav_bar_summary" />
@@ -46,6 +51,11 @@
         app:key="mute_autoplaying_videos"
         app:icon="@drawable/ic_mute_preferences_24dp"
         app:title="@string/settings_mute_autoplaying_videos_title" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="remember_muting_option_in_post_feed"
+        app:title="@string/settings_remember_muting_option_in_post_feed" />
 
     <SwitchPreference
         app:defaultValue="true"
