@@ -1114,6 +1114,11 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             }
             Intent intent = new Intent(this, MultiredditSelectionActivity.class);
             startActivityForResult(intent, ADD_TO_MULTIREDDIT_REQUEST_CODE);
+        } else if (itemId == R.id.action_add_to_post_filter_view_subreddit_detail_activity) {
+            Intent intent = new Intent(this, PostFilterPreferenceActivity.class);
+            intent.putExtra(PostFilterPreferenceActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+            startActivity(intent);
+            return true;
         } else if (itemId == R.id.action_share_view_subreddit_detail_activity) {
             Intent shareIntent = new Intent(Intent.ACTION_SEND);
             shareIntent.setType("text/plain");

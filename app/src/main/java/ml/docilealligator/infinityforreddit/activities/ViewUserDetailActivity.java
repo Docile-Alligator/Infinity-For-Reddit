@@ -981,6 +981,11 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             }
             Intent intent = new Intent(this, MultiredditSelectionActivity.class);
             startActivityForResult(intent, ADD_TO_MULTIREDDIT_REQUEST_CODE);
+        } else if (itemId == R.id.action_add_to_post_filter_view_user_detail_activity) {
+            Intent intent = new Intent(this, PostFilterPreferenceActivity.class);
+            intent.putExtra(PostFilterPreferenceActivity.EXTRA_USER_NAME, username);
+            startActivity(intent);
+            return true;
         } else if (itemId == R.id.action_report_view_user_detail_activity) {
             Intent reportIntent = new Intent(this, LinkResolverActivity.class);
             reportIntent.setData(Uri.parse("https://www.reddithelp.com/en/categories/rules-reporting/account-and-community-restrictions/what-should-i-do-if-i-see-something-i"));
