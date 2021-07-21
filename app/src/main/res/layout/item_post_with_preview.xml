@@ -221,12 +221,12 @@
 
             <ImageView
                 android:id="@+id/video_or_gif_indicator_image_view_item_post_with_preview"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_margin="16dp"
                 android:layout_gravity="start"
+                android:scaleType="center"
                 android:background="@drawable/play_button_round_background"
-                android:src="@drawable/ic_play_circle_36dp"
                 android:visibility="gone" />
 
             <ProgressBar
