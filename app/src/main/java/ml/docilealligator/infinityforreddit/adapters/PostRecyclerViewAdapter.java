@@ -384,6 +384,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                 case SharedPreferencesUtils.POST_LAYOUT_COMPACT:
                                     return VIEW_TYPE_POST_COMPACT;
                             }
+                            return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
                         default:
                             return VIEW_TYPE_POST_CARD_TEXT_TYPE;
                     }
@@ -432,6 +433,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                                 case SharedPreferencesUtils.POST_LAYOUT_COMPACT:
                                     return VIEW_TYPE_POST_COMPACT;
                             }
+                            return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
                         default:
                             return VIEW_TYPE_POST_CARD_2_TEXT_TYPE;
                     }
