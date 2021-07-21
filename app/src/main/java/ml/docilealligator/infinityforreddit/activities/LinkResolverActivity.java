@@ -119,8 +119,16 @@ public class LinkResolverActivity extends AppCompatActivity {
 
                     if (authority != null) {
                         if (authority.equals("reddit-uploaded-media.s3-accelerate.amazonaws.com")) {
+                            String unescapedUrl = uri.toString().replace("%2F", "/");
+                            int lastSlashIndex = unescapedUrl.lastIndexOf("/");
+                            if (lastSlashIndex < 0 || lastSlashIndex == unescapedUrl.length() - 1) {
+                                deepLinkError(uri);
+                                return;
+                            }
+                            String id = unescapedUrl.substring(lastSlashIndex + 1);
                             Intent intent = new Intent(this, ViewImageOrGifActivity.class);
                             intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, uri.toString());
+                            intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, id + ".jpg");
                             startActivity(intent);
                         } else if (authority.equals("v.redd.it")) {
                             Intent intent = new Intent(this, ViewVideoActivity.class);
