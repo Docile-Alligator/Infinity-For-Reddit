@@ -118,7 +118,11 @@ public class LinkResolverActivity extends AppCompatActivity {
                     List<String> segments = uri.getPathSegments();
 
                     if (authority != null) {
-                        if (authority.equals("v.redd.it")) {
+                        if (authority.equals("reddit-uploaded-media.s3-accelerate.amazonaws.com")) {
+                            Intent intent = new Intent(this, ViewImageOrGifActivity.class);
+                            intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, uri.toString());
+                            startActivity(intent);
+                        } else if (authority.equals("v.redd.it")) {
                             Intent intent = new Intent(this, ViewVideoActivity.class);
                             intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_V_REDD_IT);
                             intent.putExtra(ViewVideoActivity.EXTRA_V_REDD_IT_URL, uri.toString());
