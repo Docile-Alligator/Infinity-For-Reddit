@@ -1523,7 +1523,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private void loadImage(final RecyclerView.ViewHolder holder, final Post post, @NonNull Post.Preview preview) {
         if (holder instanceof PostWithPreviewTypeViewHolder) {
             String url;
-            if (post.getPostType() == Post.GIF_TYPE && mAutoplay) {
+            boolean blurImage = (post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(post.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || post.isSpoiler() && mNeedBlurSpoiler;
+            if (post.getPostType() == Post.GIF_TYPE && mAutoplay && !blurImage) {
                 url = post.getUrl();
             } else {
                 url = preview.getPreviewUrl();
@@ -1549,7 +1550,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
             });
 
-            if ((post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(post.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || post.isSpoiler() && mNeedBlurSpoiler) {
+            if (blurImage) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                         .into(((PostWithPreviewTypeViewHolder) holder).imageView);
             } else {
@@ -1592,7 +1593,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             }
         } else if (holder instanceof PostGalleryViewHolder) {
             String url;
-            if (post.getPostType() == Post.GIF_TYPE && mAutoplay) {
+            boolean blurImage = (post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(post.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || post.isSpoiler() && mNeedBlurSpoiler;
+            if (post.getPostType() == Post.GIF_TYPE && mAutoplay && !blurImage) {
                 url = post.getUrl();
             } else {
                 url = preview.getPreviewUrl();
@@ -1618,7 +1620,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
             });
 
-            if ((post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(post.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || post.isSpoiler() && mNeedBlurSpoiler) {
+            if (blurImage) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                         .into(((PostGalleryViewHolder) holder).imageView);
             } else {
@@ -1630,7 +1632,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             }
         } else if (holder instanceof PostCard2WithPreviewViewHolder) {
             String url;
-            if (post.getPostType() == Post.GIF_TYPE && mAutoplay) {
+            boolean blurImage = (post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(post.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || post.isSpoiler() && mNeedBlurSpoiler;
+            if (post.getPostType() == Post.GIF_TYPE && mAutoplay && !blurImage) {
                 url = post.getUrl();
             } else {
                 url = preview.getPreviewUrl();
@@ -1656,7 +1659,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 }
             });
 
-            if ((post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(post.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || post.isSpoiler() && mNeedBlurSpoiler) {
+            if (blurImage) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                         .into(((PostCard2WithPreviewViewHolder) holder).imageView);
             } else {
