@@ -1460,6 +1460,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 break;
         }
 
+        int previousPosition = -1;
+        if (mLinearLayoutManager != null) {
+            previousPosition = mLinearLayoutManager.findFirstVisibleItemPosition();
+        } else if (mStaggeredGridLayoutManager != null) {
+            int[] into = new int[mStaggeredGridLayoutManager.getSpanCount()];
+            previousPosition = mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[0];
+        }
         int nColumns = getNColumns(getResources());
         if (nColumns == 1) {
             mLinearLayoutManager = new LinearLayoutManager(activity);
@@ -1478,6 +1485,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     new StaggeredGridLayoutManagerItemOffsetDecoration(activity, R.dimen.staggeredLayoutManagerItemOffset, nColumns);
             mPostRecyclerView.addItemDecoration(itemDecoration);
             mLinearLayoutManager = null;
+        }
+
+        if (previousPosition > 0) {
+            mPostRecyclerView.scrollToPosition(previousPosition);
         }
 
         if (mAdapter != null) {
@@ -1925,7 +1936,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         mPostRecyclerView.setLayoutManager(null);
         mPostRecyclerView.setAdapter(mAdapter);
         mPostRecyclerView.setLayoutManager(layoutManager);
-
         if (previousPosition > 0) {
             mPostRecyclerView.scrollToPosition(previousPosition);
         }

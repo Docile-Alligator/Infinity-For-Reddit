@@ -224,6 +224,7 @@
                 android:layout_height="36dp"
                 android:layout_margin="16dp"
                 android:layout_gravity="start"
+                android:scaleType="center"
                 android:background="@drawable/play_button_round_background"
                 android:src="@drawable/ic_gallery_reverse_color_24dp" />
 
