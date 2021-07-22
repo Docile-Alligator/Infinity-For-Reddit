@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -11,6 +12,7 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.text.util.Linkify;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -58,6 +60,7 @@ public class FullMarkdownActivity extends BaseActivity {
 
     public static final String EXTRA_COMMENT_MARKDOWN = "ECM";
     public static final String EXTRA_IS_NSFW = "EIN";
+    public static final String EXTRA_SUBMIT_POST = "ESP";
 
     @BindView(R.id.coordinator_layout_comment_full_markdown_activity)
     CoordinatorLayout coordinatorLayout;
@@ -234,8 +237,23 @@ public class FullMarkdownActivity extends BaseActivity {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if (getIntent().getBooleanExtra(EXTRA_SUBMIT_POST, false)) {
+            getMenuInflater().inflate(R.menu.full_markdown_activity, menu);
+            return true;
+        }
+
+        return false;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        } else if (item.getItemId() == R.id.action_send_full_markdown_activity) {
+            Intent returnIntent = new Intent();
+            setResult(Activity.RESULT_OK, returnIntent);
             finish();
             return true;
         }

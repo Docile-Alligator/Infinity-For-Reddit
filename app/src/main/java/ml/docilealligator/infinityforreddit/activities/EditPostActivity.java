@@ -218,6 +218,7 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
         if (item.getItemId() == R.id.action_preview_edit_post_activity) {
             Intent intent = new Intent(this, FullMarkdownActivity.class);
             intent.putExtra(FullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, contentEditText.getText().toString());
+            intent.putExtra(FullMarkdownActivity.EXTRA_SUBMIT_POST, true);
             startActivity(intent);
         } else if (item.getItemId() == R.id.action_send_edit_post_activity) {
             if (!isSubmitting) {

@@ -348,6 +348,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         } else if (itemId == R.id.action_preview_comment_activity) {
             Intent intent = new Intent(this, FullMarkdownActivity.class);
             intent.putExtra(FullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, commentEditText.getText().toString());
+            intent.putExtra(FullMarkdownActivity.EXTRA_SUBMIT_POST, true);
             startActivity(intent);
         } else if (itemId == R.id.action_send_comment_activity) {
             if (!isSubmitting) {
