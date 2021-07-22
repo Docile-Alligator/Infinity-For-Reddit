@@ -240,6 +240,7 @@ public class FullMarkdownActivity extends BaseActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         if (getIntent().getBooleanExtra(EXTRA_SUBMIT_POST, false)) {
             getMenuInflater().inflate(R.menu.full_markdown_activity, menu);
+            applyMenuItemTheme(menu);
             return true;
         }
 

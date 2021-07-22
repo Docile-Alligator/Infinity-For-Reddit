@@ -91,6 +91,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     public static final int WRITE_COMMENT_REQUEST_CODE = 1;
     private static final int PICK_IMAGE_REQUEST_CODE = 100;
     private static final int CAPTURE_IMAGE_REQUEST_CODE = 200;
+    private static final int MARKDOWN_PREVIEW_REQUEST_CODE = 300;
     private static final String UPLOADED_IMAGES_STATE = "UIS";
 
     @BindView(R.id.coordinator_layout_comment_activity)
@@ -134,6 +135,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     private int markdownColor;
     private Uri capturedImageUri;
     private ArrayList<UploadedImage> uploadedImages = new ArrayList<>();
+    private Menu mMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -335,6 +337,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.comment_activity, menu);
+        mMenu = menu;
         applyMenuItemTheme(menu);
         return true;
     }
@@ -349,59 +352,69 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             Intent intent = new Intent(this, FullMarkdownActivity.class);
             intent.putExtra(FullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, commentEditText.getText().toString());
             intent.putExtra(FullMarkdownActivity.EXTRA_SUBMIT_POST, true);
-            startActivity(intent);
+            startActivityForResult(intent, MARKDOWN_PREVIEW_REQUEST_CODE);
         } else if (itemId == R.id.action_send_comment_activity) {
-            if (!isSubmitting) {
-                isSubmitting = true;
-                if (commentEditText.getText() == null || commentEditText.getText().toString().equals("")) {
-                    isSubmitting = false;
-                    Snackbar.make(coordinatorLayout, R.string.comment_content_required, Snackbar.LENGTH_SHORT).show();
-                    return true;
-                }
-
-                item.setEnabled(false);
-                item.getIcon().setAlpha(130);
-                Snackbar sendingSnackbar = Snackbar.make(coordinatorLayout, R.string.sending_comment, Snackbar.LENGTH_INDEFINITE);
-                sendingSnackbar.show();
-
-                SendComment.sendComment(mExecutor, new Handler(), commentEditText.getText().toString(),
-                        parentFullname, parentDepth, mOauthRetrofit, mAccessToken,
-                        new SendComment.SendCommentListener() {
-                            @Override
-                            public void sendCommentSuccess(Comment comment) {
-                                isSubmitting = false;
-                                item.setEnabled(true);
-                                item.getIcon().setAlpha(255);
-                                Toast.makeText(CommentActivity.this, R.string.send_comment_success, Toast.LENGTH_SHORT).show();
-                                Intent returnIntent = new Intent();
-                                returnIntent.putExtra(RETURN_EXTRA_COMMENT_DATA_KEY, comment);
-                                returnIntent.putExtra(EXTRA_PARENT_FULLNAME_KEY, parentFullname);
-                                if (isReplying) {
-                                    returnIntent.putExtra(EXTRA_PARENT_POSITION_KEY, parentPosition);
-                                }
-                                setResult(RESULT_OK, returnIntent);
-                                finish();
-                            }
-
-                            @Override
-                            public void sendCommentFailed(@Nullable String errorMessage) {
-                                isSubmitting = false;
-                                sendingSnackbar.dismiss();
-                                item.setEnabled(true);
-                                item.getIcon().setAlpha(255);
-
-                                if (errorMessage == null || !errorMessage.equals("")) {
-                                    Snackbar.make(coordinatorLayout, R.string.send_comment_failed, Snackbar.LENGTH_SHORT).show();
-                                } else {
-                                    Snackbar.make(coordinatorLayout, errorMessage, Snackbar.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
-            }
+            sendComment(item);
             return true;
         }
 
         return false;
+    }
+
+    public void sendComment(@Nullable MenuItem item) {
+        if (!isSubmitting) {
+            isSubmitting = true;
+            if (commentEditText.getText() == null || commentEditText.getText().toString().equals("")) {
+                isSubmitting = false;
+                Snackbar.make(coordinatorLayout, R.string.comment_content_required, Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (item != null) {
+                item.setEnabled(false);
+                item.getIcon().setAlpha(130);
+            }
+            Snackbar sendingSnackbar = Snackbar.make(coordinatorLayout, R.string.sending_comment, Snackbar.LENGTH_INDEFINITE);
+            sendingSnackbar.show();
+
+            SendComment.sendComment(mExecutor, new Handler(), commentEditText.getText().toString(),
+                    parentFullname, parentDepth, mOauthRetrofit, mAccessToken,
+                    new SendComment.SendCommentListener() {
+                        @Override
+                        public void sendCommentSuccess(Comment comment) {
+                            isSubmitting = false;
+                            if (item != null) {
+                                item.setEnabled(true);
+                                item.getIcon().setAlpha(255);
+                            }
+                            Toast.makeText(CommentActivity.this, R.string.send_comment_success, Toast.LENGTH_SHORT).show();
+                            Intent returnIntent = new Intent();
+                            returnIntent.putExtra(RETURN_EXTRA_COMMENT_DATA_KEY, comment);
+                            returnIntent.putExtra(EXTRA_PARENT_FULLNAME_KEY, parentFullname);
+                            if (isReplying) {
+                                returnIntent.putExtra(EXTRA_PARENT_POSITION_KEY, parentPosition);
+                            }
+                            setResult(RESULT_OK, returnIntent);
+                            finish();
+                        }
+
+                        @Override
+                        public void sendCommentFailed(@Nullable String errorMessage) {
+                            isSubmitting = false;
+                            sendingSnackbar.dismiss();
+                            if (item != null) {
+                                item.setEnabled(true);
+                                item.getIcon().setAlpha(255);
+                            }
+
+                            if (errorMessage == null || !errorMessage.equals("")) {
+                                Snackbar.make(coordinatorLayout, R.string.send_comment_failed, Snackbar.LENGTH_SHORT).show();
+                            } else {
+                                Snackbar.make(coordinatorLayout, errorMessage, Snackbar.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+        }
     }
 
     private void promptAlertDialog(int titleResId, int messageResId) {
@@ -428,6 +441,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             } else if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
                 Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
                         mAccessToken, commentEditText, coordinatorLayout, capturedImageUri, uploadedImages);
+            } else if (requestCode == MARKDOWN_PREVIEW_REQUEST_CODE) {
+                sendComment(mMenu == null ? null : mMenu.findItem(R.id.action_send_comment_activity));
             }
         }
     }
