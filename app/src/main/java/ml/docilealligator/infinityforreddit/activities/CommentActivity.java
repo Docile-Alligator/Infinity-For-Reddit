@@ -4,7 +4,6 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,7 +28,6 @@ import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
@@ -37,13 +35,10 @@ import com.google.android.material.snackbar.Snackbar;
 import org.commonmark.ext.gfm.tables.TableBlock;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
-import org.json.JSONException;
-import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -73,7 +68,6 @@ import ml.docilealligator.infinityforreddit.comment.SendComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.utils.UploadImageUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
@@ -445,41 +439,6 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                 sendComment(mMenu == null ? null : mMenu.findItem(R.id.action_send_comment_activity));
             }
         }
-    }
-
-    private void uploadImageToReddit(Uri imageUri) {
-        Toast.makeText(this, R.string.uploading_image, Toast.LENGTH_SHORT).show();
-        Handler handler = new Handler();
-        mExecutor.execute(() -> {
-            try {
-                Bitmap bitmap = Glide.with(CommentActivity.this).asBitmap().load(imageUri).submit().get();
-                String imageUrlOrError = UploadImageUtils.uploadImage(mOauthRetrofit, mUploadMediaRetrofit, mAccessToken, bitmap);
-                handler.post(() -> {
-                    if (imageUrlOrError != null && !imageUrlOrError.startsWith("Error: ")) {
-                        String fileName = Utils.getFileName(this, imageUri);
-                        if (fileName == null) {
-                            fileName = imageUrlOrError;
-                        }
-                        uploadedImages.add(new UploadedImage(fileName, imageUrlOrError));
-
-                        int start = Math.max(commentEditText.getSelectionStart(), 0);
-                        int end = Math.max(commentEditText.getSelectionEnd(), 0);
-                        commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
-                                "[" + fileName + "](" + imageUrlOrError + ")",
-                                0, "[]()".length() + fileName.length() + imageUrlOrError.length());
-                        Snackbar.make(coordinatorLayout, R.string.upload_image_success, Snackbar.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(CommentActivity.this, R.string.upload_image_failed, Toast.LENGTH_LONG).show();
-                    }
-                });
-            } catch (ExecutionException | InterruptedException e) {
-                e.printStackTrace();
-                handler.post(() -> Toast.makeText(CommentActivity.this, R.string.get_image_bitmap_failed, Toast.LENGTH_LONG).show());
-            } catch (XmlPullParserException | JSONException | IOException e) {
-                e.printStackTrace();
-                handler.post(() -> Toast.makeText(CommentActivity.this, R.string.error_processing_image, Toast.LENGTH_LONG).show());
-            }
-        });
     }
 
     @Override
