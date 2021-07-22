@@ -649,7 +649,11 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                     subredditIntent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, thingEditText.getText().toString());
                     startActivity(subredditIntent);
                 })
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
+                    }
+                })
                 .setOnDismissListener(dialogInterface -> {
                     if (imm != null) {
                         imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
@@ -690,7 +694,11 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                     userIntent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, thingEditText.getText().toString());
                     startActivity(userIntent);
                 })
-                .setNegativeButton(R.string.cancel, null)
+                .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                    if (imm != null) {
+                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
+                    }
+                })
                 .setOnDismissListener(dialogInterface -> {
                     if (imm != null) {
                         imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
