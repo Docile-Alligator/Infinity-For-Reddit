@@ -69,6 +69,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
 
     private static final int PICK_IMAGE_REQUEST_CODE = 100;
     private static final int CAPTURE_IMAGE_REQUEST_CODE = 200;
+    private static final int MARKDOWN_PREVIEW_REQUEST_CODE = 300;
 
     private static final String UPLOADED_IMAGES_STATE = "UIS";
 
@@ -207,53 +208,57 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
             Intent intent = new Intent(this, FullMarkdownActivity.class);
             intent.putExtra(FullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, contentEditText.getText().toString());
             intent.putExtra(FullMarkdownActivity.EXTRA_SUBMIT_POST, true);
-            startActivity(intent);
+            startActivityForResult(intent, MARKDOWN_PREVIEW_REQUEST_CODE);
         } else if (item.getItemId() == R.id.action_send_edit_comment_activity) {
-            if (!isSubmitting) {
-                isSubmitting = true;
-
-                Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_SHORT).show();
-
-                String content = contentEditText.getText().toString();
-
-                Map<String, String> params = new HashMap<>();
-                params.put(APIUtils.THING_ID_KEY, mFullName);
-                params.put(APIUtils.TEXT_KEY, content);
-
-                mOauthRetrofit.create(RedditAPI.class)
-                        .editPostOrComment(APIUtils.getOAuthHeader(mAccessToken), params)
-                        .enqueue(new Callback<String>() {
-                            @Override
-                            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
-                                isSubmitting = false;
-                                if (response.isSuccessful()) {
-                                    Toast.makeText(EditCommentActivity.this, R.string.edit_success, Toast.LENGTH_SHORT).show();
-
-                                    Intent returnIntent = new Intent();
-                                    returnIntent.putExtra(EXTRA_EDITED_COMMENT_CONTENT, Utils.modifyMarkdown(content));
-                                    returnIntent.putExtra(EXTRA_EDITED_COMMENT_POSITION, getIntent().getExtras().getInt(EXTRA_POSITION));
-                                    setResult(RESULT_OK, returnIntent);
-
-                                    finish();
-                                } else {
-                                    Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
-                                }
-                            }
-
-                            @Override
-                            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                                isSubmitting = false;
-                                Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
-                            }
-                        });
-
-            }
+            editComment();
             return true;
         } else if (item.getItemId() == android.R.id.home) {
             onBackPressed();
             return true;
         }
         return false;
+    }
+
+    private void editComment() {
+        if (!isSubmitting) {
+            isSubmitting = true;
+
+            Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_SHORT).show();
+
+            String content = contentEditText.getText().toString();
+
+            Map<String, String> params = new HashMap<>();
+            params.put(APIUtils.THING_ID_KEY, mFullName);
+            params.put(APIUtils.TEXT_KEY, content);
+
+            mOauthRetrofit.create(RedditAPI.class)
+                    .editPostOrComment(APIUtils.getOAuthHeader(mAccessToken), params)
+                    .enqueue(new Callback<String>() {
+                        @Override
+                        public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                            isSubmitting = false;
+                            if (response.isSuccessful()) {
+                                Toast.makeText(EditCommentActivity.this, R.string.edit_success, Toast.LENGTH_SHORT).show();
+
+                                Intent returnIntent = new Intent();
+                                returnIntent.putExtra(EXTRA_EDITED_COMMENT_CONTENT, Utils.modifyMarkdown(content));
+                                returnIntent.putExtra(EXTRA_EDITED_COMMENT_POSITION, getIntent().getExtras().getInt(EXTRA_POSITION));
+                                setResult(RESULT_OK, returnIntent);
+
+                                finish();
+                            } else {
+                                Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+                            isSubmitting = false;
+                            Snackbar.make(coordinatorLayout, R.string.post_failed, Snackbar.LENGTH_SHORT).show();
+                        }
+                    });
+
+        }
     }
 
     private void promptAlertDialog(int titleResId, int messageResId) {
@@ -280,6 +285,8 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
             } else if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
                 Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
                         mAccessToken, contentEditText, coordinatorLayout, capturedImageUri, uploadedImages);
+            } else if (requestCode == MARKDOWN_PREVIEW_REQUEST_CODE) {
+                editComment();
             }
         }
     }
