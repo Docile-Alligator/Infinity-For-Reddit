@@ -7,7 +7,7 @@ android {
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 71
-        versionName "5.0.0"
+        versionName "5.0.0-beta1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
