@@ -69,6 +69,7 @@
         android:maxLines="2"
         android:textColor="#FFFFFF"
         android:textSize="?attr/title_font_20"
-        android:fontFamily="?attr/title_font_family" />
+        android:fontFamily="?attr/title_font_family"
+        android:textStyle="bold" />
 
 </com.google.android.material.card.MaterialCardView>

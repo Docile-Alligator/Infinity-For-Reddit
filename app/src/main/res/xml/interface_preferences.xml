@@ -54,6 +54,10 @@
         app:fragment="ml.docilealligator.infinityforreddit.settings.PostPreferenceFragment" />
 
     <Preference
+        app:title="@string/settings_post_details_title"
+        app:fragment="ml.docilealligator.infinityforreddit.settings.PostDetailsPreferenceFragment" />
+
+    <Preference
         app:title="@string/settings_category_comment_title"
         app:fragment="ml.docilealligator.infinityforreddit.settings.CommentPreferenceFragment" />
 

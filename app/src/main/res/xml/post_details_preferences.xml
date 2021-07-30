@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <!--<Preference
+        app:title="@string/settings_number_of_columns_in_post_feed_title"
+        app:fragment="ml.docilealligator.infinityforreddit.settings.NumberOfColumnsInPostFeedPreferenceFragment" />-->
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="hide_post_type"
+        app:title="@string/settings_hide_post_type" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="hide_post_flair"
+        app:title="@string/settings_hide_post_flair" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="hide_the_number_of_awards"
+        app:title="@string/settings_hide_the_number_of_awards" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="hide_subreddit_and_user_prefix"
+        app:title="@string/settings_hide_subreddit_and_user_prefix" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="hide_the_number_of_votes"
+        app:title="@string/settings_hide_the_number_of_votes" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="hide_the_number_of_comments"
+        app:title="@string/settings_hide_the_number_of_comments" />
+
+</PreferenceScreen>
