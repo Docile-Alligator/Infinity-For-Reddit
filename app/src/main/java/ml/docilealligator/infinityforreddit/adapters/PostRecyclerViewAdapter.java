@@ -1887,15 +1887,15 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                     ((PostBaseViewHolder) holder).markPostRead(post, false);
                 }
             }
-            ((PostBaseViewHolder) holder).itemView.setVisibility(View.VISIBLE);
+            holder.itemView.setVisibility(View.VISIBLE);
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
             params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
             if (holder instanceof PostCard2VideoAutoplayViewHolder || holder instanceof PostCard2WithPreviewViewHolder) {
                 int paddingPixel = (int) Utils.convertDpToPixel(16, mActivity);
-                ((PostBaseViewHolder) holder).itemView.setPadding(0, paddingPixel, 0, 0);
+                holder.itemView.setPadding(0, paddingPixel, 0, 0);
             } else if (holder instanceof PostCard2TextTypeViewHolder) {
                 int paddingPixel = (int) Utils.convertDpToPixel(12, mActivity);
-                ((PostBaseViewHolder) holder).itemView.setPadding(0, paddingPixel, 0, 0);
+                holder.itemView.setPadding(0, paddingPixel, 0, 0);
             } else {
                 int marginPixel = (int) Utils.convertDpToPixel(8, mActivity);
                 params.topMargin = marginPixel;
@@ -1903,9 +1903,9 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
             }
             holder.itemView.setLayoutParams(params);
             if (((PostBaseViewHolder) holder).itemViewIsNotCardView) {
-                ((PostBaseViewHolder) holder).itemView.setBackgroundColor(mCardViewBackgroundColor);
+                holder.itemView.setBackgroundColor(mCardViewBackgroundColor);
             } else {
-                ((PostBaseViewHolder) holder).itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
+                holder.itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
             }
             ((PostBaseViewHolder) holder).titleTextView.setTextColor(mPostTitleColor);
             if (holder instanceof PostVideoAutoplayViewHolder) {
@@ -1930,6 +1930,16 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 ((PostTextTypeViewHolder) holder).contentTextView.setText("");
                 ((PostTextTypeViewHolder) holder).contentTextView.setTextColor(mPostContentColor);
                 ((PostTextTypeViewHolder) holder).contentTextView.setVisibility(View.GONE);
+            } else if (holder instanceof PostCard2VideoAutoplayViewHolder) {
+                ((PostCard2VideoAutoplayViewHolder) holder).mediaUri = null;
+                if (((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks != null) {
+                    ((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks.cancel();
+                }
+                ((PostCard2VideoAutoplayViewHolder) holder).errorLoadingGfycatImageView.setVisibility(View.GONE);
+                ((PostCard2VideoAutoplayViewHolder) holder).muteButton.setVisibility(View.GONE);
+                ((PostCard2VideoAutoplayViewHolder) holder).resetVolume();
+                mGlide.clear(((PostCard2VideoAutoplayViewHolder) holder).previewImageView);
+                ((PostCard2VideoAutoplayViewHolder) holder).previewImageView.setVisibility(View.GONE);
             } else if (holder instanceof PostCard2WithPreviewViewHolder) {
                 mGlide.clear(((PostCard2WithPreviewViewHolder) holder).imageView);
                 ((PostCard2WithPreviewViewHolder) holder).imageView.setVisibility(View.GONE);
@@ -4151,9 +4161,6 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
         @Override
         public void play() {
             if (helper != null && mediaUri != null) {
-                if (mFragment.getMasterMutingOption() != null) {
-                    helper.setVolume(mFragment.getMasterMutingOption() ? 0f : 1f);
-                }
                 helper.play();
             }
         }
