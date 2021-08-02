@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinator_layout_comment_full_markdown_activity"
-    tools:context=".activities.FullMarkdownActivity">
+    android:id="@+id/coordinator_layout_comment_wiki_activity"
+    tools:context=".activities.WikiActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar_layout_comment_full_markdown_activity"
+        android:id="@+id/appbar_layout_comment_wiki_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
@@ -18,10 +18,10 @@
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|enterAlways"
             app:titleEnabled="false"
-            app:toolbarId="@+id/toolbar_comment_full_markdown_activity">
+            app:toolbarId="@+id/toolbar_comment_wiki_activity">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar_comment_full_markdown_activity"
+                android:id="@+id/toolbar_comment_wiki_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="?attr/actionBarSize"
@@ -33,7 +33,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/content_markdown_view_comment_full_markdown_activity"
+        android:id="@+id/content_markdown_view_comment_wiki_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingStart="16dp"

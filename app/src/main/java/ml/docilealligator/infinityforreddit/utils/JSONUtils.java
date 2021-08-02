@@ -170,4 +170,5 @@ public class JSONUtils {
     public static final String QUERY_STRING_KEY = "query_string";
     public static final String DISPLAY_STRING_KEY = "display_string";
     public static final String RESULTS_KEY = "results";
+    public static final String CONTENT_MD_KEY = "content_md";
 }

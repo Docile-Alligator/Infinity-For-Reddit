@@ -49,6 +49,7 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String IMGUR_ALBUM_PATTERN = "/(album|a)/\\w+/?";
     private static final String IMGUR_IMAGE_PATTERN = "/\\w+/?";
     private static final String RPAN_BROADCAST_PATTERN = "/rpan/r/[\\w-]+/\\w+/?\\w+/?";
+    private static final String WIKI_PATTERN = "/[rR]/[\\w-]+/wiki/?\\w+";
 
     @Inject
     @Named("default")
@@ -171,6 +172,10 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 } else {
                                     deepLinkError(uri);
                                 }
+                            } else if (path.matches(WIKI_PATTERN)) {
+                                Intent intent = new Intent(this, WikiActivity.class);
+                                intent.putExtra(WikiActivity.EXTRA_SUBREDDIT_NAME, segments.get(1));
+                                startActivity(intent);
                             } else if (path.matches(SUBREDDIT_PATTERN)) {
                                 Intent intent = new Intent(this, ViewSubredditDetailActivity.class);
                                 intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, path.substring(3));

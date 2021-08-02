@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.activities;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -12,7 +11,6 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.text.util.Linkify;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
@@ -32,6 +30,8 @@ import com.r0adkll.slidr.model.SlidrInterface;
 import org.commonmark.ext.gfm.tables.TableBlock;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -53,38 +53,49 @@ import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
 
-public class FullMarkdownActivity extends BaseActivity {
+public class WikiActivity extends BaseActivity {
 
-    public static final String EXTRA_COMMENT_MARKDOWN = "ECM";
-    public static final String EXTRA_IS_NSFW = "EIN";
-    public static final String EXTRA_SUBMIT_POST = "ESP";
+    public static final String EXTRA_SUBREDDIT_NAME = "ESN";
+    private static final String WIKI_MARKDOWN_STATE = "WMS";
 
-    @BindView(R.id.coordinator_layout_comment_full_markdown_activity)
+    @BindView(R.id.coordinator_layout_comment_wiki_activity)
     CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_comment_full_markdown_activity)
+    @BindView(R.id.appbar_layout_comment_wiki_activity)
     AppBarLayout appBarLayout;
-    @BindView(R.id.toolbar_comment_full_markdown_activity)
+    @BindView(R.id.toolbar_comment_wiki_activity)
     Toolbar toolbar;
-    @BindView(R.id.content_markdown_view_comment_full_markdown_activity)
+    @BindView(R.id.content_markdown_view_comment_wiki_activity)
     RecyclerView markdownRecyclerView;
+    @Inject
+    @Named("no_oauth")
+    Retrofit retrofit;
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private SlidrInterface mSlidrInterface;
+    private String wikiMarkdown;
+    private Markwon markwon;
+    private MarkwonAdapter markwonAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_comment_full_markdown);
+        setContentView(R.layout.activity_wiki);
 
         ButterKnife.bind(this);
 
@@ -94,8 +105,6 @@ public class FullMarkdownActivity extends BaseActivity {
 
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
-        setTitle(" ");
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
             mSlidrInterface = Slidr.attach(this);
@@ -121,12 +130,10 @@ public class FullMarkdownActivity extends BaseActivity {
             }
         }
 
-        String commentMarkdown = getIntent().getStringExtra(EXTRA_COMMENT_MARKDOWN);
-        boolean isNsfw = getIntent().getBooleanExtra(EXTRA_IS_NSFW, false);
-        int markdownColor = mCustomThemeWrapper.getCommentColor();
+        int markdownColor = mCustomThemeWrapper.getPrimaryTextColor();
         int spoilerBackgroundColor = markdownColor | 0xFF000000;
         int linkColor = mCustomThemeWrapper.getLinkColor();
-        Markwon markwon = Markwon.builder(this)
+        markwon = Markwon.builder(this)
                 .usePlugin(HtmlPlugin.create())
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @NonNull
@@ -194,10 +201,9 @@ public class FullMarkdownActivity extends BaseActivity {
                     @Override
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
                         builder.linkResolver((view, link) -> {
-                            Intent intent = new Intent(FullMarkdownActivity.this, LinkResolverActivity.class);
+                            Intent intent = new Intent(WikiActivity.this, LinkResolverActivity.class);
                             Uri uri = Uri.parse(link);
                             intent.setData(uri);
-                            intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, isNsfw);
                             startActivity(intent);
                         });
                     }
@@ -212,7 +218,7 @@ public class FullMarkdownActivity extends BaseActivity {
                 .usePlugin(TableEntryPlugin.create(this))
                 .build();
 
-        MarkwonAdapter markwonAdapter = MarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
+        markwonAdapter = MarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
                 .include(TableBlock.class, TableEntry.create(builder -> builder
                         .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
                         .textLayoutIsRoot(R.layout.view_table_entry_cell)))
@@ -234,19 +240,39 @@ public class FullMarkdownActivity extends BaseActivity {
         });
         markdownRecyclerView.setLayoutManager(linearLayoutManager);
         markdownRecyclerView.setAdapter(markwonAdapter);
-        markwonAdapter.setMarkdown(markwon, commentMarkdown);
-        markwonAdapter.notifyDataSetChanged();
-    }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        if (getIntent().getBooleanExtra(EXTRA_SUBMIT_POST, false)) {
-            getMenuInflater().inflate(R.menu.full_markdown_activity, menu);
-            applyMenuItemTheme(menu);
-            return true;
+        if (savedInstanceState != null) {
+            wikiMarkdown = savedInstanceState.getString(WIKI_MARKDOWN_STATE);
         }
 
-        return false;
+        if (wikiMarkdown == null) {
+            loadWiki();
+        } else {
+            markwonAdapter.setMarkdown(markwon, wikiMarkdown);
+            markwonAdapter.notifyDataSetChanged();
+        }
+    }
+
+    private void loadWiki() {
+        retrofit.create(RedditAPI.class).getWiki(getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME)).enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        markwonAdapter.setMarkdown(markwon, new JSONObject(response.body())
+                                .getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.CONTENT_MD_KEY));
+                        markwonAdapter.notifyDataSetChanged();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
+
+            }
+        });
     }
 
     @Override
@@ -254,14 +280,21 @@ public class FullMarkdownActivity extends BaseActivity {
         if (item.getItemId() == android.R.id.home) {
             finish();
             return true;
-        } else if (item.getItemId() == R.id.action_send_full_markdown_activity) {
-            Intent returnIntent = new Intent();
-            setResult(Activity.RESULT_OK, returnIntent);
-            finish();
-            return true;
         }
 
         return false;
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(WIKI_MARKDOWN_STATE, wikiMarkdown);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -278,12 +311,6 @@ public class FullMarkdownActivity extends BaseActivity {
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        EventBus.getDefault().unregister(this);
     }
 
     @Subscribe
