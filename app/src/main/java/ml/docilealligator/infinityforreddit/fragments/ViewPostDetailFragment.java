@@ -265,6 +265,14 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (getResources().getBoolean(R.bool.isTablet) || getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             mCommentsRecyclerView = rootView.findViewById(R.id.comments_recycler_view_view_post_detail_fragment);
         }
+        if (!((mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_LANDSCAPE_MODE, true)
+                && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
+                || (mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_PORTRAIT_MODE, false)))) {
+            if (mCommentsRecyclerView != null) {
+                mCommentsRecyclerView.setVisibility(View.GONE);
+                mCommentsRecyclerView = null;
+            }
+        }
 
         if (activity != null && activity.isImmersiveInterface()) {
             mRecyclerView.setPadding(0, 0, 0, activity.getNavBarHeight() + mRecyclerView.getPaddingBottom());

@@ -589,6 +589,8 @@
     <string name="settings_video_player_automatic_landscape_orientation">Switch to Landscape Orientation in Video Player Automatically</string>
     <string name="settings_remember_muting_option_in_post_feed">Remember Muting Option in Post Feed</string>
     <string name="settings_post_details_title">Post Details</string>
+    <string name="settings_separate_post_and_comments_in_portrait_mode">Separate Post And Comments in Portrait Mode</string>
+    <string name="settings_separate_post_and_comments_in_landscape_mode">Separate Post And Comments in Landscape Mode</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

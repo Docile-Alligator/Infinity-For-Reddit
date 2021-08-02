@@ -4,6 +4,11 @@
 
     <SwitchPreference
         app:defaultValue="true"
+        app:key="separate_post_and_comments_in_portrait_mode"
+        app:title="@string/settings_separate_post_and_comments_in_portrait_mode" />
+
+    <SwitchPreference
+        app:defaultValue="true"
         app:key="separate_post_and_comments_in_landscape_mode"
         app:title="@string/settings_separate_post_and_comments_in_landscape_mode" />
 
