@@ -1158,4 +1158,7 @@
     <string name="error_parse_trending_search">Parse trending searches failed.\nTap to retry.</string>
     <string name="no_trending_search">No trending searches found.\nTap to retry.</string>
 
+    <string name="error_loading_wiki">Error loading wiki</string>
+    <string name="no_wiki">This subreddit has no wiki page</string>
+
 </resources>

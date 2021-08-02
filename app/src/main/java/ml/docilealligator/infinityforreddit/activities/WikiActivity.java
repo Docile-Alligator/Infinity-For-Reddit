@@ -15,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -23,6 +25,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrInterface;
@@ -77,6 +80,13 @@ public class WikiActivity extends BaseActivity {
     Toolbar toolbar;
     @BindView(R.id.content_markdown_view_comment_wiki_activity)
     RecyclerView markdownRecyclerView;
+    @BindView(R.id.fetch_wiki_linear_layout_wiki_activity)
+    LinearLayout mFetchWikiInfoLinearLayout;
+    @BindView(R.id.fetch_wiki_image_view_wiki_activity)
+    ImageView mFetchWikiInfoImageView;
+    @BindView(R.id.fetch_wiki_text_view_wiki_activity)
+    TextView mFetchWikiInfoTextView;
+
     @Inject
     @Named("no_oauth")
     Retrofit retrofit;
@@ -254,6 +264,9 @@ public class WikiActivity extends BaseActivity {
     }
 
     private void loadWiki() {
+        Glide.with(this).clear(mFetchWikiInfoImageView);
+        mFetchWikiInfoLinearLayout.setVisibility(View.GONE);
+
         retrofit.create(RedditAPI.class).getWiki(getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME)).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -264,15 +277,28 @@ public class WikiActivity extends BaseActivity {
                         markwonAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        showErrorView(R.string.error_loading_wiki);
+                    }
+                } else {
+                    if (response.code() == 404 || response.code() == 403) {
+                        showErrorView(R.string.no_wiki);
+                    } else {
+                        showErrorView(R.string.error_loading_wiki);
                     }
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-
+                showErrorView(R.string.error_loading_wiki);
             }
         });
+    }
+
+    private void showErrorView(int stringResId) {
+        mFetchWikiInfoLinearLayout.setVisibility(View.VISIBLE);
+        mFetchWikiInfoTextView.setText(stringResId);
+        Glide.with(this).load(R.drawable.error_image).into(mFetchWikiInfoImageView);
     }
 
     @Override
@@ -311,6 +337,7 @@ public class WikiActivity extends BaseActivity {
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        mFetchWikiInfoTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
     }
 
     @Subscribe
