@@ -24,6 +24,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
@@ -78,6 +79,8 @@ public class WikiActivity extends BaseActivity {
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_comment_wiki_activity)
     Toolbar toolbar;
+    @BindView(R.id.swipe_refresh_layout_wiki_activity)
+    SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.content_markdown_view_comment_wiki_activity)
     RecyclerView markdownRecyclerView;
     @BindView(R.id.fetch_wiki_linear_layout_wiki_activity)
@@ -99,6 +102,7 @@ public class WikiActivity extends BaseActivity {
     private String wikiMarkdown;
     private Markwon markwon;
     private MarkwonAdapter markwonAdapter;
+    private boolean isRefreshing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -139,6 +143,9 @@ public class WikiActivity extends BaseActivity {
                 markdownRecyclerView.setPadding(markdownRecyclerView.getPaddingLeft(), 0, markdownRecyclerView.getPaddingRight(), getNavBarHeight());
             }
         }
+
+        swipeRefreshLayout.setEnabled(mSharedPreferences.getBoolean(SharedPreferencesUtils.PULL_TO_REFRESH, true));
+        swipeRefreshLayout.setOnRefreshListener(this::loadWiki);
 
         int markdownColor = mCustomThemeWrapper.getPrimaryTextColor();
         int spoilerBackgroundColor = markdownColor | 0xFF000000;
@@ -264,6 +271,13 @@ public class WikiActivity extends BaseActivity {
     }
 
     private void loadWiki() {
+        if (isRefreshing) {
+            return;
+        }
+        isRefreshing = true;
+
+        swipeRefreshLayout.setRefreshing(true);
+
         Glide.with(this).clear(mFetchWikiInfoImageView);
         mFetchWikiInfoLinearLayout.setVisibility(View.GONE);
 
@@ -286,16 +300,21 @@ public class WikiActivity extends BaseActivity {
                         showErrorView(R.string.error_loading_wiki);
                     }
                 }
+                isRefreshing = false;
+                swipeRefreshLayout.setRefreshing(false);
             }
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 showErrorView(R.string.error_loading_wiki);
+                isRefreshing = false;
+                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
 
     private void showErrorView(int stringResId) {
+        swipeRefreshLayout.setRefreshing(false);
         mFetchWikiInfoLinearLayout.setVisibility(View.VISIBLE);
         mFetchWikiInfoTextView.setText(stringResId);
         Glide.with(this).load(R.drawable.error_image).into(mFetchWikiInfoImageView);
@@ -337,6 +356,8 @@ public class WikiActivity extends BaseActivity {
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
+        swipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         mFetchWikiInfoTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
     }
 
