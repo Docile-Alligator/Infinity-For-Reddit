@@ -900,25 +900,11 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public void initiallyLoading() {
         resetCommentSearchIndex();
-        if (mVisibleComments.size() != 0) {
-            int previousSize = mVisibleComments.size();
-            mVisibleComments.clear();
-            if (mIsSingleCommentThreadMode) {
-                notifyItemRangeRemoved(0, previousSize + ((mHasMoreComments || loadMoreCommentsFailed) ? 1 : 0) + 1);
-            } else {
-                notifyItemRangeRemoved(0, previousSize + ((mHasMoreComments || loadMoreCommentsFailed) ? 1 : 0));
-            }
-        }
-
-        if (isInitiallyLoading || isInitiallyLoadingFailed) {
-            isInitiallyLoading = true;
-            isInitiallyLoadingFailed = false;
-            notifyItemChanged(0);
-        } else {
-            isInitiallyLoading = true;
-            isInitiallyLoadingFailed = false;
-            notifyItemInserted(0);
-        }
+        notifyItemRangeRemoved(0, getItemCount());
+        mVisibleComments.clear();
+        isInitiallyLoading = true;
+        isInitiallyLoadingFailed = false;
+        notifyItemInserted(0);
     }
 
     public void initiallyLoadCommentsFailed() {
