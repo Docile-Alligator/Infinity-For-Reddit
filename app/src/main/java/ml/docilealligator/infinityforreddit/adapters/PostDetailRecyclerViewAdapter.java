@@ -199,15 +199,16 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private float mScale;
     private ExoCreator mExoCreator;
 
-    public PostDetailRecyclerViewAdapter(AppCompatActivity activity, ViewPostDetailFragment fragment, Executor executor, CustomThemeWrapper customThemeWrapper,
+    public PostDetailRecyclerViewAdapter(AppCompatActivity activity, ViewPostDetailFragment fragment,
+                                         Executor executor, CustomThemeWrapper customThemeWrapper,
                                          Retrofit retrofit, Retrofit oauthRetrofit, Retrofit gfycatRetrofit,
-                                         Retrofit redgifsRetrofit,
-                                         RedditDataRoomDatabase redditDataRoomDatabase, RequestManager glide,
-                                         int imageViewWidth, String accessToken, String accountName,
-                                         Post post, Locale locale, String singleCommentId,
-                                         boolean isSingleCommentThreadMode,
+                                         Retrofit redgifsRetrofit, RedditDataRoomDatabase redditDataRoomDatabase,
+                                         RequestManager glide, int imageViewWidth, String accessToken,
+                                         String accountName, Post post, Locale locale,
                                          SharedPreferences sharedPreferences,
-                                         SharedPreferences nsfwAndSpoilerSharedPreferences, ExoCreator exoCreator,
+                                         SharedPreferences nsfwAndSpoilerSharedPreferences,
+                                         SharedPreferences postDetailsSharedPreferences,
+                                         ExoCreator exoCreator,
                                          PostDetailRecyclerViewAdapterCallback postDetailRecyclerViewAdapterCallback) {
         mActivity = activity;
         mFragment = fragment;
@@ -375,12 +376,12 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mDisableImagePreview = sharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_IMAGE_PREVIEW, false);
         mOnlyDisablePreviewInVideoAndGifPosts = sharedPreferences.getBoolean(SharedPreferencesUtils.ONLY_DISABLE_PREVIEW_IN_VIDEO_AND_GIF_POSTS, false);
 
-        mHidePostType = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_POST_TYPE, false);
-        mHidePostFlair = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_POST_FLAIR, false);
-        mHideTheNumberOfAwards = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_AWARDS, false);
-        mHideSubredditAndUserPrefix = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_SUBREDDIT_AND_USER_PREFIX, false);
-        mHideTheNumberOfVotes = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_VOTES, false);
-        mHideTheNumberOfComments = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_COMMENTS, false);
+        mHidePostType = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_POST_TYPE, false);
+        mHidePostFlair = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_POST_FLAIR, false);
+        mHideTheNumberOfAwards = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_AWARDS, false);
+        mHideSubredditAndUserPrefix = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_SUBREDDIT_AND_USER_PREFIX, false);
+        mHideTheNumberOfVotes = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_VOTES, false);
+        mHideTheNumberOfComments = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_COMMENTS, false);
 
         mPostDetailRecyclerViewAdapterCallback = postDetailRecyclerViewAdapterCallback;
         mScale = resources.getDisplayMetrics().density;
@@ -599,8 +600,13 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 ((PostDetailBaseViewHolder) holder).mCrosspostImageView.setVisibility(View.VISIBLE);
             }
 
-            ((PostDetailBaseViewHolder) holder).mSubredditTextView.setText(mPost.getSubredditNamePrefixed());
-            ((PostDetailBaseViewHolder) holder).mUserTextView.setText(mPost.getAuthorNamePrefixed());
+            if (!mHideSubredditAndUserPrefix) {
+                ((PostDetailBaseViewHolder) holder).mSubredditTextView.setText(mPost.getSubredditNamePrefixed());
+                ((PostDetailBaseViewHolder) holder).mUserTextView.setText(mPost.getAuthorNamePrefixed());
+            } else {
+                ((PostDetailBaseViewHolder) holder).mSubredditTextView.setText(mPost.getSubredditName());
+                ((PostDetailBaseViewHolder) holder).mUserTextView.setText(mPost.getAuthor());
+            }
 
             if (mShowElapsedTime) {
                 ((PostDetailBaseViewHolder) holder).mPostTimeTextView.setText(
@@ -621,12 +627,12 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 ((PostDetailBaseViewHolder) holder).mSpoilerTextView.setVisibility(View.VISIBLE);
             }
 
-            if (mPost.getFlair() != null && !mPost.getFlair().equals("")) {
+            if (!mHidePostFlair && mPost.getFlair() != null && !mPost.getFlair().equals("")) {
                 ((PostDetailBaseViewHolder) holder).mFlairTextView.setVisibility(View.VISIBLE);
                 Utils.setHTMLWithImageToTextView(((PostDetailBaseViewHolder) holder).mFlairTextView, mPost.getFlair(), false);
             }
 
-            if (mPost.getAwards() != null && !mPost.getAwards().equals("")) {
+            if (!mHideTheNumberOfAwards && mPost.getAwards() != null && !mPost.getAwards().equals("")) {
                 ((PostDetailBaseViewHolder) holder).mAwardsTextView.setVisibility(View.VISIBLE);
                 Utils.setHTMLWithImageToTextView(((PostDetailBaseViewHolder) holder).mAwardsTextView, mPost.getAwards(), true);
             }
@@ -639,7 +645,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 ((PostDetailBaseViewHolder) holder).mNSFWTextView.setVisibility(View.GONE);
             }
 
-            ((PostDetailBaseViewHolder) holder).mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, mPost.getScore() + mPost.getVoteType()));
+            if (!mHideTheNumberOfVotes) {
+                ((PostDetailBaseViewHolder) holder).mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, mPost.getScore() + mPost.getVoteType()));
+            } else {
+                ((PostDetailBaseViewHolder) holder).mScoreTextView.setText(mActivity.getString(R.string.vote));
+            }
 
             ((PostDetailBaseViewHolder) holder).commentsCountTextView.setText(Integer.toString(mPost.getNComments()));
 
@@ -687,10 +697,12 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     ((PostDetailVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(mPost.getVideoUrl()));
                 }
             } else if (holder instanceof PostDetailVideoAndGifPreviewHolder) {
-                if (mPost.getPostType() == Post.GIF_TYPE) {
-                    ((PostDetailVideoAndGifPreviewHolder) holder).mTypeTextView.setText(mActivity.getString(R.string.gif));
-                } else {
-                    ((PostDetailVideoAndGifPreviewHolder) holder).mTypeTextView.setText(mActivity.getString(R.string.video));
+                if (!mHidePostType) {
+                    if (mPost.getPostType() == Post.GIF_TYPE) {
+                        ((PostDetailVideoAndGifPreviewHolder) holder).mTypeTextView.setText(mActivity.getString(R.string.gif));
+                    } else {
+                        ((PostDetailVideoAndGifPreviewHolder) holder).mTypeTextView.setText(mActivity.getString(R.string.video));
+                    }
                 }
                 Post.Preview preview = getSuitablePreview(mPost.getPreviews());
                 if (preview != null) {
@@ -698,10 +710,12 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     loadImage((PostDetailVideoAndGifPreviewHolder) holder, preview);
                 }
             } else if (holder instanceof PostDetailImageAndGifAutoplayViewHolder) {
-                if (mPost.getPostType() == Post.IMAGE_TYPE) {
-                    ((PostDetailImageAndGifAutoplayViewHolder) holder).mTypeTextView.setText(R.string.image);
-                } else {
-                    ((PostDetailImageAndGifAutoplayViewHolder) holder).mTypeTextView.setText(R.string.gif);
+                if (!mHidePostType) {
+                    if (mPost.getPostType() == Post.IMAGE_TYPE) {
+                        ((PostDetailImageAndGifAutoplayViewHolder) holder).mTypeTextView.setText(R.string.image);
+                    } else {
+                        ((PostDetailImageAndGifAutoplayViewHolder) holder).mTypeTextView.setText(R.string.gif);
+                    }
                 }
 
                 Post.Preview preview = getSuitablePreview(mPost.getPreviews());
@@ -728,7 +742,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
             } else if (holder instanceof PostDetailNoPreviewViewHolder) {
                 if (mPost.getPostType() == Post.LINK_TYPE || mPost.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
-                    ((PostDetailNoPreviewViewHolder) holder).mTypeTextView.setText(R.string.link);
+                    if (!mHidePostType) {
+                        ((PostDetailNoPreviewViewHolder) holder).mTypeTextView.setText(R.string.link);
+                    }
                     String noPreviewLinkDomain = Uri.parse(mPost.getUrl()).getHost();
                     ((PostDetailNoPreviewViewHolder) holder).mLinkTextView.setVisibility(View.VISIBLE);
                     ((PostDetailNoPreviewViewHolder) holder).mLinkTextView.setText(noPreviewLinkDomain);
@@ -737,19 +753,27 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     ((PostDetailNoPreviewViewHolder) holder).mLinkTextView.setVisibility(View.GONE);
                     switch (mPost.getPostType()) {
                         case Post.VIDEO_TYPE:
-                            ((PostDetailNoPreviewViewHolder) holder).mTypeTextView.setText(R.string.video);
+                            if (!mHidePostType) {
+                                ((PostDetailNoPreviewViewHolder) holder).mTypeTextView.setText(R.string.video);
+                            }
                             ((PostDetailNoPreviewViewHolder) holder).mNoPreviewPostTypeImageView.setImageResource(R.drawable.ic_outline_video_24dp);
                             break;
                         case Post.IMAGE_TYPE:
-                            ((PostDetailNoPreviewViewHolder) holder).mTypeTextView.setText(R.string.image);
+                            if (!mHidePostType) {
+                                ((PostDetailNoPreviewViewHolder) holder).mTypeTextView.setText(R.string.image);
+                            }
                             ((PostDetailNoPreviewViewHolder) holder).mNoPreviewPostTypeImageView.setImageResource(R.drawable.ic_image_24dp);
                             break;
                         case Post.GIF_TYPE:
-                            ((PostDetailNoPreviewViewHolder) holder).mTypeTextView.setText(R.string.gif);
+                            if (!mHidePostType) {
+                                ((PostDetailNoPreviewViewHolder) holder).mTypeTextView.setText(R.string.gif);
+                            }
                             ((PostDetailNoPreviewViewHolder) holder).mNoPreviewPostTypeImageView.setImageResource(R.drawable.ic_image_24dp);
                             break;
                         case Post.GALLERY_TYPE:
-                            ((PostDetailNoPreviewViewHolder) holder).mTypeTextView.setText(R.string.gallery);
+                            if (!mHidePostType) {
+                                ((PostDetailNoPreviewViewHolder) holder).mTypeTextView.setText(R.string.gallery);
+                            }
                             ((PostDetailNoPreviewViewHolder) holder).mNoPreviewPostTypeImageView.setImageResource(R.drawable.ic_gallery_reverse_color_24dp);
                             break;
                     }
@@ -1181,21 +1205,29 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 mActivity.startActivity(crosspostIntent);
             });
 
-            mTypeTextView.setOnClickListener(view -> {
-                Intent intent = new Intent(mActivity, FilteredPostsActivity.class);
-                intent.putExtra(FilteredPostsActivity.EXTRA_NAME, mSubredditNamePrefixed.substring(2));
-                intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
-                intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, mPost.getPostType());
-                mActivity.startActivity(intent);
-            });
+            if (!mHidePostType) {
+                mTypeTextView.setOnClickListener(view -> {
+                    Intent intent = new Intent(mActivity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, mSubredditNamePrefixed.substring(2));
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, mPost.getPostType());
+                    mActivity.startActivity(intent);
+                });
+            } else {
+                mTypeTextView.setVisibility(View.GONE);
+            }
 
-            mFlairTextView.setOnClickListener(view -> {
-                Intent intent = new Intent(mActivity, FilteredPostsActivity.class);
-                intent.putExtra(FilteredPostsActivity.EXTRA_NAME, mSubredditNamePrefixed.substring(2));
-                intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
-                intent.putExtra(FilteredPostsActivity.EXTRA_CONTAIN_FLAIR, mPost.getFlair());
-                mActivity.startActivity(intent);
-            });
+            if (!mHidePostFlair) {
+                mFlairTextView.setOnClickListener(view -> {
+                    Intent intent = new Intent(mActivity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, mSubredditNamePrefixed.substring(2));
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_CONTAIN_FLAIR, mPost.getFlair());
+                    mActivity.startActivity(intent);
+                });
+            } else {
+                mFlairTextView.setVisibility(View.GONE);
+            }
 
             mNSFWTextView.setOnClickListener(view -> {
                 Intent intent = new Intent(mActivity, FilteredPostsActivity.class);
@@ -1239,8 +1271,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mScoreTextView.setTextColor(mPostIconAndInfoColor);
                 }
 
-                mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                        mPost.getScore() + mPost.getVoteType()));
+                if (!mHideTheNumberOfVotes) {
+                    mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                            mPost.getScore() + mPost.getVoteType()));
+                }
 
                 mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
 
@@ -1258,8 +1292,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         }
 
                         mDownvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                        mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                mPost.getScore() + mPost.getVoteType()));
+                        if (!mHideTheNumberOfVotes) {
+                            mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                    mPost.getScore() + mPost.getVoteType()));
+                        }
 
                         mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
                     }
@@ -1268,8 +1304,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     public void onVoteThingFail() {
                         Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                         mPost.setVoteType(previousVoteType);
-                        mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                mPost.getScore() + previousVoteType));
+                        if (!mHideTheNumberOfVotes) {
+                            mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                    mPost.getScore() + previousVoteType));
+                        }
                         mUpvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                         mDownvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
                         mScoreTextView.setTextColor(previousScoreTextViewColor);
@@ -1313,8 +1351,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mScoreTextView.setTextColor(mPostIconAndInfoColor);
                 }
 
-                mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                        mPost.getScore() + mPost.getVoteType()));
+                if (!mHideTheNumberOfVotes) {
+                    mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                            mPost.getScore() + mPost.getVoteType()));
+                }
 
                 mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
 
@@ -1332,8 +1372,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         }
 
                         mUpvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                        mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                mPost.getScore() + mPost.getVoteType()));
+                        if (!mHideTheNumberOfVotes) {
+                            mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                    mPost.getScore() + mPost.getVoteType()));
+                        }
 
                         mPostDetailRecyclerViewAdapterCallback.updatePost(mPost);
                     }
@@ -1342,8 +1384,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     public void onVoteThingFail() {
                         Toast.makeText(mActivity, R.string.vote_failed, Toast.LENGTH_SHORT).show();
                         mPost.setVoteType(previousVoteType);
-                        mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                mPost.getScore() + previousVoteType));
+                        if (!mHideTheNumberOfVotes) {
+                            mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                    mPost.getScore() + previousVoteType));
+                        }
                         mUpvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
                         mDownvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
                         mScoreTextView.setTextColor(previousScoreTextViewColor);
@@ -1353,31 +1397,35 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 }, mPost.getFullName(), newVoteType);
             });
 
-            commentsCountTextView.setOnClickListener(view -> {
-                if (mPost.isArchived()) {
-                    Toast.makeText(mActivity, R.string.archived_post_comment_unavailable, Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            if (!mHideTheNumberOfComments) {
+                commentsCountTextView.setOnClickListener(view -> {
+                    if (mPost.isArchived()) {
+                        Toast.makeText(mActivity, R.string.archived_post_comment_unavailable, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                if (mPost.isLocked()) {
-                    Toast.makeText(mActivity, R.string.locked_post_comment_unavailable, Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                    if (mPost.isLocked()) {
+                        Toast.makeText(mActivity, R.string.locked_post_comment_unavailable, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                if (mAccessToken == null) {
-                    Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                    if (mAccessToken == null) {
+                        Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                Intent intent = new Intent(mActivity, CommentActivity.class);
-                intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, mPost.getFullName());
-                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_MARKDOWN_KEY, mPost.getTitle());
-                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY, mPost.getSelfText());
-                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_KEY, mPost.getSelfTextPlain());
-                intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, false);
-                intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, 0);
-                mActivity.startActivityForResult(intent, WRITE_COMMENT_REQUEST_CODE);
-            });
+                    Intent intent = new Intent(mActivity, CommentActivity.class);
+                    intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, mPost.getFullName());
+                    intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_MARKDOWN_KEY, mPost.getTitle());
+                    intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY, mPost.getSelfText());
+                    intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_KEY, mPost.getSelfTextPlain());
+                    intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, false);
+                    intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, 0);
+                    mActivity.startActivityForResult(intent, WRITE_COMMENT_REQUEST_CODE);
+                });
+            } else {
+                commentsCountTextView.setVisibility(View.GONE);
+            }
 
             mSaveButton.setOnClickListener(view -> {
                 if (mAccessToken == null) {

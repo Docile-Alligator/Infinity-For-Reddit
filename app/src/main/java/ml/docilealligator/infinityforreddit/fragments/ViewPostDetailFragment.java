@@ -167,6 +167,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @Named("current_account")
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
+    @Named("post_details")
+    SharedPreferences mPostDetailsSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     ExoCreator mExoCreator;
@@ -530,13 +533,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             mPostAdapter = new PostDetailRecyclerViewAdapter(activity,
                     this, mExecutor, mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mRedditDataRoomDatabase, mGlide,
-                    mWindowWidth, mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId,
-                    isSingleCommentThreadMode, mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mExoCreator, new PostDetailRecyclerViewAdapter.PostDetailRecyclerViewAdapterCallback() {
-                @Override
-                public void updatePost(Post post) {
-                    EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                }
-            });
+                    mWindowWidth, mAccessToken, mAccountName, mPost, mLocale,
+                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
+                    mExoCreator, post -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
             mCommentsAdapter = new CommentsRecyclerViewAdapter(activity,
                     this, mCustomThemeWrapper, mExecutor, mRetrofit, mOauthRetrofit,
                     mAccessToken, mAccountName, mPost, mLocale, mSingleCommentId,
@@ -1170,9 +1169,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                     ViewPostDetailFragment.this, mExecutor, mCustomThemeWrapper,
                                     mRetrofit, mOauthRetrofit, mGfycatRetrofit, mRedgifsRetrofit,
                                     mRedditDataRoomDatabase, mGlide, mWindowWidth, mAccessToken,
-                                    mAccountName, mPost, mLocale, mSingleCommentId,
-                                    isSingleCommentThreadMode, mSharedPreferences,
-                                    mNsfwAndSpoilerSharedPreferences, mExoCreator,
+                                    mAccountName, mPost, mLocale, mSharedPreferences,
+                                    mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
+                                    mExoCreator,
                                     post1 -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
 
                             mCommentsAdapter = new CommentsRecyclerViewAdapter(activity,
