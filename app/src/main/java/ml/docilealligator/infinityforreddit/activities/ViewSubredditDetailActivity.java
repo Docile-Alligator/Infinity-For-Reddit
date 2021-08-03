@@ -90,6 +90,7 @@ import ml.docilealligator.infinityforreddit.asynctasks.AddSubredditOrUserToMulti
 import ml.docilealligator.infinityforreddit.asynctasks.CheckIsSubscribedToSubreddit;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubredditData;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostTypeBottomSheetFragment;
@@ -222,6 +223,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private String mAccessToken;
     private String mAccountName;
     private String subredditName;
+    private String description;
     private boolean mFetchSubredditInfoSuccess = false;
     private int mNCurrentOnlineSubscribers = 0;
     private boolean isNsfwSubreddit = false;
@@ -410,6 +412,17 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 })))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS)).build();
 
+        descriptionTextView.setOnLongClickListener(view -> {
+            if (description != null && !description.equals("") && descriptionTextView.getSelectionStart() == -1 && descriptionTextView.getSelectionEnd() == -1) {
+                Bundle bundle = new Bundle();
+                bundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, description);
+                CopyTextBottomSheetFragment copyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
+                copyTextBottomSheetFragment.setArguments(bundle);
+                copyTextBottomSheetFragment.show(getSupportFragmentManager(), copyTextBottomSheetFragment.getTag());
+            }
+            return true;
+        });
+
         mSubredditViewModel = new ViewModelProvider(this,
                 new SubredditViewModel.Factory(getApplication(), mRedditDataRoomDatabase, subredditName))
                 .get(SubredditViewModel.class);
@@ -461,11 +474,12 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 nSubscribersTextView.setText(nSubscribers);
                 creationTimeTextView.setText(new SimpleDateFormat("MMM d, yyyy",
                         locale).format(subredditData.getCreatedUTC()));
-                if (hideSubredditDescription || subredditData.getDescription().equals("")) {
+                description = subredditData.getDescription();
+                if (hideSubredditDescription || description.equals("")) {
                     descriptionTextView.setVisibility(View.GONE);
                 } else {
                     descriptionTextView.setVisibility(View.VISIBLE);
-                    markwon.setMarkdown(descriptionTextView, subredditData.getDescription());
+                    markwon.setMarkdown(descriptionTextView, description);
                 }
 
                 if (subredditData.isNSFW()) {
