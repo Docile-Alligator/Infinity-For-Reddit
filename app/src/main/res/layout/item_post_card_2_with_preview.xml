@@ -46,7 +46,6 @@
             android:id="@+id/load_image_error_relative_layout_item_post_card_2_with_preview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
             android:visibility="gone">
 
             <TextView
@@ -54,8 +53,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:drawableTop="@drawable/ic_error_outline_black_24dp"
-                android:layout_gravity="center"
-                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
                 android:text="@string/error_loading_image_tap_to_retry"
                 android:textSize="?attr/font_default"
                 android:fontFamily="?attr/font_family" />
