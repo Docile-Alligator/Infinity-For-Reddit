@@ -12,11 +12,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
+import android.text.Spanned;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,6 +45,7 @@ import com.github.piasy.biv.loader.ImageLoader;
 import com.github.piasy.biv.loader.glide.GlideImageLoader;
 import com.github.piasy.biv.view.BigImageView;
 import com.github.piasy.biv.view.GlideImageViewFactory;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrConfig;
 import com.r0adkll.slidr.model.SlidrPosition;
@@ -85,6 +89,16 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     BigImageView mImageView;
     @BindView(R.id.load_image_error_linear_layout_view_image_or_gif_activity)
     LinearLayout mLoadErrorLinearLayout;
+    @BindView(R.id.bottom_navigation_view_image_or_gif_activity)
+    BottomAppBar bottomAppBar;
+    @BindView(R.id.title_text_view_view_image_or_gif_activity)
+    TextView titleTextView;
+    @BindView(R.id.download_image_view_view_image_or_gif_activity)
+    ImageView downloadImageView;
+    @BindView(R.id.share_image_view_view_image_or_gif_activity)
+    ImageView shareImageView;
+    @BindView(R.id.wallpaper_image_view_view_image_or_gif_activity)
+    ImageView wallpaperImageView;
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
@@ -151,10 +165,40 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         String postTitle = intent.getStringExtra(EXTRA_POST_TITLE_KEY);
         mSubredditName = intent.getStringExtra(EXTRA_SUBREDDIT_OR_USERNAME_KEY);
 
+        boolean useBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.USE_BOTTOM_TOOLBAR_IN_MEDIA_VIEWER, false);
         if (postTitle != null) {
-            setTitle(Html.fromHtml(String.format("<small>%s</small>", postTitle)));
+            Spanned title = Html.fromHtml(String.format("<small>%s</small>", postTitle));
+            if (useBottomAppBar) {
+                titleTextView.setText(title);
+            } else {
+                setTitle(title);
+            }
         } else {
-            setTitle("");
+            if (!useBottomAppBar) {
+                setTitle("");
+            }
+        }
+
+        if (useBottomAppBar) {
+            getSupportActionBar().hide();
+            downloadImageView.setOnClickListener(view -> {
+                if (isDownloading) {
+                    return;
+                }
+                isDownloading = true;
+                requestPermissionAndDownload();
+            });
+            shareImageView.setOnClickListener(view -> {
+                if (isGif)
+                    shareGif();
+                else
+                    shareImage();
+            });
+            wallpaperImageView.setOnClickListener(view -> {
+                setWallpaper();
+            });
+        } else {
+            bottomAppBar.setVisibility(View.GONE);
         }
 
         mLoadErrorLinearLayout.setOnClickListener(view -> {
@@ -170,6 +214,9 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
                 isActionBarHidden = false;
+                if (useBottomAppBar) {
+                    bottomAppBar.setVisibility(View.VISIBLE);
+                }
             } else {
                 getWindow().getDecorView().setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -179,6 +226,9 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
                                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                                 | View.SYSTEM_UI_FLAG_IMMERSIVE);
                 isActionBarHidden = true;
+                if (useBottomAppBar) {
+                    bottomAppBar.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -287,26 +337,8 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
             if (isDownloading) {
                 return false;
             }
-
             isDownloading = true;
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-
-                    // Permission is not granted
-                    // No explanation needed; request the permission
-                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
-                } else {
-                    // Permission has already been granted
-                    download();
-                }
-            } else {
-                download();
-            }
-
+            requestPermissionAndDownload();
             return true;
         } else if (itemId == R.id.action_share_view_image_or_gif_activity) {
             if (isGif)
@@ -315,29 +347,30 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
                 shareImage();
             return true;
         } else if (itemId == R.id.action_set_wallpaper_view_image_or_gif_activity) {
-            if (!isGif) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    SetAsWallpaperBottomSheetFragment setAsWallpaperBottomSheetFragment = new SetAsWallpaperBottomSheetFragment();
-                    setAsWallpaperBottomSheetFragment.show(getSupportFragmentManager(), setAsWallpaperBottomSheetFragment.getTag());
-                } else {
-                    WallpaperSetter.set(mExecutor, new Handler(), mImageUrl, WallpaperSetter.BOTH_SCREENS, this,
-                            new WallpaperSetter.SetWallpaperListener() {
-                                @Override
-                                public void success() {
-                                    Toast.makeText(ViewImageOrGifActivity.this, R.string.wallpaper_set, Toast.LENGTH_SHORT).show();
-                                }
-
-                                @Override
-                                public void failed() {
-                                    Toast.makeText(ViewImageOrGifActivity.this, R.string.error_set_wallpaper, Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                }
-            }
+            setWallpaper();
             return true;
         }
 
         return false;
+    }
+
+    private void requestPermissionAndDownload() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                // Permission is not granted
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
+            } else {
+                // Permission has already been granted
+                download();
+            }
+        } else {
+            download();
+        }
     }
 
     private void download() {
@@ -431,6 +464,28 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
                 return false;
             }
         }).submit();
+    }
+
+    private void setWallpaper() {
+        if (!isGif) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                SetAsWallpaperBottomSheetFragment setAsWallpaperBottomSheetFragment = new SetAsWallpaperBottomSheetFragment();
+                setAsWallpaperBottomSheetFragment.show(getSupportFragmentManager(), setAsWallpaperBottomSheetFragment.getTag());
+            } else {
+                WallpaperSetter.set(mExecutor, new Handler(), mImageUrl, WallpaperSetter.BOTH_SCREENS, this,
+                        new WallpaperSetter.SetWallpaperListener() {
+                            @Override
+                            public void success() {
+                                Toast.makeText(ViewImageOrGifActivity.this, R.string.wallpaper_set, Toast.LENGTH_SHORT).show();
+                            }
+
+                            @Override
+                            public void failed() {
+                                Toast.makeText(ViewImageOrGifActivity.this, R.string.error_set_wallpaper, Toast.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+        }
     }
 
     @Override
