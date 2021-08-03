@@ -48,6 +48,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubredditData;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.subreddit.FetchSubredditData;
@@ -76,6 +77,7 @@ public class SidebarFragment extends Fragment {
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
+    private String sidebarDescription;
 
     public SidebarFragment() {
         // Required empty public constructor
@@ -107,6 +109,16 @@ public class SidebarFragment extends Fragment {
                     @Override
                     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
                         textView.setTextColor(markdownColor);
+                        textView.setOnLongClickListener(view -> {
+                            if (sidebarDescription != null && !sidebarDescription.equals("") && textView.getSelectionStart() == -1 && textView.getSelectionEnd() == -1) {
+                                Bundle bundle = new Bundle();
+                                bundle.putString(CopyTextBottomSheetFragment.EXTRA_MARKDOWN, sidebarDescription);
+                                CopyTextBottomSheetFragment copyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
+                                copyTextBottomSheetFragment.setArguments(bundle);
+                                copyTextBottomSheetFragment.show(getChildFragmentManager(), copyTextBottomSheetFragment.getTag());
+                            }
+                            return true;
+                        });
                     }
 
                     @Override
@@ -162,8 +174,9 @@ public class SidebarFragment extends Fragment {
                 .get(SubredditViewModel.class);
         mSubredditViewModel.getSubredditLiveData().observe(getViewLifecycleOwner(), subredditData -> {
             if (subredditData != null) {
-                if (subredditData.getSidebarDescription() != null && !subredditData.getSidebarDescription().equals("")) {
-                    markwonAdapter.setMarkdown(markwon, subredditData.getSidebarDescription());
+                sidebarDescription = subredditData.getSidebarDescription();
+                if (sidebarDescription != null && !sidebarDescription.equals("")) {
+                    markwonAdapter.setMarkdown(markwon, sidebarDescription);
                     markwonAdapter.notifyDataSetChanged();
                 }
             } else {

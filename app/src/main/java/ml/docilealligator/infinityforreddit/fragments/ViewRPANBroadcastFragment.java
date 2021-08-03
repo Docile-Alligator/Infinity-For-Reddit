@@ -395,7 +395,6 @@ public class ViewRPANBroadcastFragment extends Fragment {
 
         @Override
         public void onMessage(@NonNull WebSocket webSocket, @NonNull String text) {
-            Log.i("asfasdf", "s " + text);
             messageReceivedListener.onMessage(text);
         }
 

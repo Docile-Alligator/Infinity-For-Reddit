@@ -53,23 +53,26 @@ public class CopyTextBottomSheetFragment extends RoundedBottomSheetDialogFragmen
         View rootView = inflater.inflate(R.layout.fragment_copy_text_bottom_sheet, container, false);
         ButterKnife.bind(this, rootView);
 
-        String rawText = getArguments().getString(EXTRA_RAW_TEXT);
-        markdownText = getArguments().getString(EXTRA_MARKDOWN);
-        if (markdownText != null) {
-            markdownText = markdownText.replaceAll("<sup>", "^").replaceAll("</sup>", "");
+        String rawText = getArguments().getString(EXTRA_RAW_TEXT, null);
+        markdownText = getArguments().getString(EXTRA_MARKDOWN, null);
+
+        if (rawText != null) {
+            copyRawTextTextView.setOnClickListener(view -> {
+                showCopyDialog(rawText);
+                dismiss();
+            });
+
+            copyAllRawTextTextView.setOnClickListener(view -> {
+                copyText(rawText);
+                dismiss();
+            });
+        } else {
+            copyRawTextTextView.setVisibility(View.GONE);
+            copyAllRawTextTextView.setVisibility(View.GONE);
         }
 
-        copyRawTextTextView.setOnClickListener(view -> {
-            showCopyDialog(rawText);
-            dismiss();
-        });
-
-        copyAllRawTextTextView.setOnClickListener(view -> {
-            copyText(rawText);
-            dismiss();
-        });
-
         if (markdownText != null) {
+            markdownText = markdownText.replaceAll("<sup>", "^").replaceAll("</sup>", "");
             copyMarkdownTextView.setOnClickListener(view -> {
                 showCopyDialog(markdownText);
                 dismiss();
