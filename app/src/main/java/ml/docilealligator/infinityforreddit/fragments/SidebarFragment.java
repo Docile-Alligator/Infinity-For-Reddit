@@ -99,7 +99,7 @@ public class SidebarFragment extends Fragment {
 
         swipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
         swipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
-        markdownColor = mCustomThemeWrapper.getSecondaryTextColor();
+        markdownColor = mCustomThemeWrapper.getPrimaryTextColor();
 
         Markwon markwon = Markwon.builder(activity)
                 .usePlugin(HtmlPlugin.create())

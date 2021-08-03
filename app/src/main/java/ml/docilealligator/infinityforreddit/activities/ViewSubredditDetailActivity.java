@@ -4,11 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.util.Linkify;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -64,7 +66,14 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.noties.markwon.AbstractMarkwonPlugin;
+import io.noties.markwon.Markwon;
+import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.core.MarkwonTheme;
+import io.noties.markwon.linkify.LinkifyPlugin;
+import io.noties.markwon.movement.MovementMethodPlugin;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
@@ -87,6 +96,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostTypeBottomS
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.RandomBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTypeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.GoBackToMainPageEvent;
@@ -373,6 +383,33 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         glide = Glide.with(this);
         Locale locale = getResources().getConfiguration().locale;
 
+        Markwon markwon = Markwon.builder(this)
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                        builder.linkResolver((view, link) -> {
+                            Intent intent = new Intent(ViewSubredditDetailActivity.this, LinkResolverActivity.class);
+                            Uri uri = Uri.parse(link);
+                            intent.setData(uri);
+                            startActivity(intent);
+                        });
+                    }
+
+                    @Override
+                    public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                        builder.linkColor(mCustomThemeWrapper.getLinkColor());
+                    }
+                })
+                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, this).setOnLinkLongClickListener((textView, url) -> {
+                    UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
+                    urlMenuBottomSheetFragment.setArguments(bundle);
+                    urlMenuBottomSheetFragment.show(getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
+                    return true;
+                })))
+                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS)).build();
+
         mSubredditViewModel = new ViewModelProvider(this,
                 new SubredditViewModel.Factory(getApplication(), mRedditDataRoomDatabase, subredditName))
                 .get(SubredditViewModel.class);
@@ -428,7 +465,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     descriptionTextView.setVisibility(View.GONE);
                 } else {
                     descriptionTextView.setVisibility(View.VISIBLE);
-                    descriptionTextView.setText(subredditData.getDescription());
+                    markwon.setMarkdown(descriptionTextView, subredditData.getDescription());
                 }
 
                 if (subredditData.isNSFW()) {
