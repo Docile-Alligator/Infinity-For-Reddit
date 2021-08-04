@@ -104,8 +104,6 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
             getSupportActionBar().hide();
         }
 
-        setTitle(" ");
-
         gallery = getIntent().getParcelableArrayListExtra(EXTRA_REDDIT_GALLERY);
         if (gallery == null || gallery.isEmpty()) {
             finish();
@@ -131,14 +129,16 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     }
 
     private void setupViewPager() {
-        setToolbarTitle(0);
+        if (!useBottomAppBar) {
+            setToolbarTitle(0);
+            viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+                @Override
+                public void onPageSelected(int position) {
+                    setToolbarTitle(position);
+                }
+            });
+        }
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                setToolbarTitle(position);
-            }
-        });
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(3);
     }
@@ -243,6 +243,8 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(ViewRedditGalleryVideoFragment.EXTRA_REDDIT_GALLERY_VIDEO, media);
                 bundle.putString(ViewRedditGalleryVideoFragment.EXTRA_SUBREDDIT_NAME, subredditName);
+                bundle.putInt(ViewRedditGalleryVideoFragment.EXTRA_INDEX, position);
+                bundle.putInt(ViewRedditGalleryVideoFragment.EXTRA_MEDIA_COUNT, gallery.size());
                 fragment.setArguments(bundle);
                 return fragment;
             } else {
@@ -250,6 +252,8 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(ViewRedditGalleryImageOrGifFragment.EXTRA_REDDIT_GALLERY_MEDIA, media);
                 bundle.putString(ViewRedditGalleryImageOrGifFragment.EXTRA_SUBREDDIT_NAME, subredditName);
+                bundle.putInt(ViewRedditGalleryImageOrGifFragment.EXTRA_INDEX, position);
+                bundle.putInt(ViewRedditGalleryImageOrGifFragment.EXTRA_MEDIA_COUNT, gallery.size());
                 fragment.setArguments(bundle);
                 return fragment;
             }

@@ -60,6 +60,8 @@ import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 public class ViewImgurImageFragment extends Fragment {
 
     public static final String EXTRA_IMGUR_IMAGES = "EII";
+    public static final String EXTRA_INDEX = "EI";
+    public static final String EXTRA_MEDIA_COUNT = "EMC";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
 
     @BindView(R.id.progress_bar_view_imgur_image_fragment)
@@ -142,6 +144,8 @@ public class ViewImgurImageFragment extends Fragment {
 
         if (activity.isUseBottomAppBar()) {
             bottomAppBar.setVisibility(View.VISIBLE);
+            titleTextView.setText(getString(R.string.view_imgur_media_activity_image_label,
+                    getArguments().getInt(EXTRA_INDEX) + 1, getArguments().getInt(EXTRA_MEDIA_COUNT)));
             downloadImageView.setOnClickListener(view -> {
                 if (isDownloading) {
                     return;

@@ -274,14 +274,16 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
     }
 
     private void setupViewPager() {
-        setToolbarTitle(0);
+        if (!useBottomAppBar) {
+            setToolbarTitle(0);
+            viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+                @Override
+                public void onPageSelected(int position) {
+                    setToolbarTitle(position);
+                }
+            });
+        }
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageSelected(int position) {
-                setToolbarTitle(position);
-            }
-        });
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(3);
     }
@@ -389,12 +391,16 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
                 ViewImgurVideoFragment fragment = new ViewImgurVideoFragment();
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(ViewImgurVideoFragment.EXTRA_IMGUR_VIDEO, imgurMedia);
+                bundle.putInt(ViewImgurVideoFragment.EXTRA_INDEX, position);
+                bundle.putInt(ViewImgurVideoFragment.EXTRA_MEDIA_COUNT, images.size());
                 fragment.setArguments(bundle);
                 return fragment;
             } else {
                 ViewImgurImageFragment fragment = new ViewImgurImageFragment();
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(ViewImgurImageFragment.EXTRA_IMGUR_IMAGES, imgurMedia);
+                bundle.putInt(ViewImgurImageFragment.EXTRA_INDEX, position);
+                bundle.putInt(ViewImgurImageFragment.EXTRA_MEDIA_COUNT, images.size());
                 fragment.setArguments(bundle);
                 return fragment;
             }

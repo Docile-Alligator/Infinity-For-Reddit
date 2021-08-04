@@ -67,6 +67,8 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 
     public static final String EXTRA_REDDIT_GALLERY_MEDIA = "ERGM";
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
+    public static final String EXTRA_INDEX = "EI";
+    public static final String EXTRA_MEDIA_COUNT = "EMC";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
 
     @BindView(R.id.progress_bar_view_reddit_gallery_image_or_gif_fragment)
@@ -231,6 +233,13 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 
         if (activity.isUseBottomAppBar()) {
             bottomAppBar.setVisibility(View.VISIBLE);
+            if (media.mediaType == Post.Gallery.TYPE_GIF) {
+                titleTextView.setText(getString(R.string.view_reddit_gallery_activity_gif_label,
+                        getArguments().getInt(EXTRA_INDEX) + 1, getArguments().getInt(EXTRA_MEDIA_COUNT)));
+            } else {
+                titleTextView.setText(getString(R.string.view_reddit_gallery_activity_image_label,
+                        getArguments().getInt(EXTRA_INDEX) + 1, getArguments().getInt(EXTRA_MEDIA_COUNT)));
+            }
             downloadImageView.setOnClickListener(view -> {
                 if (isDownloading) {
                     return;

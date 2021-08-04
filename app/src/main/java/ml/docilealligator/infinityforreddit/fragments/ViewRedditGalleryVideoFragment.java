@@ -60,6 +60,8 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     private static final String IS_MUTE_STATE = "IMS";
     private static final String POSITION_STATE = "PS";
+    public static final String EXTRA_INDEX = "EI";
+    public static final String EXTRA_MEDIA_COUNT = "EMC";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
     @BindView(R.id.player_view_view_reddit_gallery_video_fragment)
     PlayerView videoPlayerView;
@@ -150,6 +152,8 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
 
         if (activity.isUseBottomAppBar()) {
             bottomAppBar.setVisibility(View.VISIBLE);
+            titleTextView.setText(getString(R.string.view_reddit_gallery_activity_video_label,
+                    getArguments().getInt(EXTRA_INDEX) + 1, getArguments().getInt(EXTRA_MEDIA_COUNT)));
             downloadImageView.setOnClickListener(view -> {
                 if (isDownloading) {
                     return;
