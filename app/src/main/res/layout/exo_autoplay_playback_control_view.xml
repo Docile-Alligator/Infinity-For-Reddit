@@ -22,7 +22,9 @@
         android:visibility="gone"
         tools:visibility="visible"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/fullscreen_exo_playback_control_view" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/frame_layout" />
 
     <ImageView
         android:id="@+id/fullscreen_exo_playback_control_view"
@@ -35,35 +37,40 @@
         android:clickable="true"
         android:focusable="true"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/frame_layout"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <ImageView android:id="@id/exo_play"
+    <FrameLayout
+        android:id="@+id/frame_layout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/ic_play_arrow_white_rounded_24dp"
-        android:background="?actionBarItemBackground"
-        android:clickable="true"
-        android:focusable="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
 
-    <ImageView android:id="@id/exo_pause"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:padding="16dp"
-        android:layout_centerInParent="true"
-        android:src="@drawable/ic_pause_white_rounded_24dp"
-        android:background="?actionBarItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        <ImageView android:id="@id/exo_play"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_play_arrow_white_rounded_24dp"
+            android:background="?actionBarItemBackground"
+            android:clickable="true"
+            android:focusable="true" />
+
+        <ImageView android:id="@id/exo_pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/ic_pause_white_rounded_24dp"
+            android:background="?actionBarItemBackground"
+            android:clickable="true"
+            android:focusable="true" />
+
+    </FrameLayout>
 
     <TextView
         android:id="@id/exo_position"
