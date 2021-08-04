@@ -302,9 +302,15 @@ public class ViewVideoActivity extends AppCompatActivity {
 
 
         if (postTitle != null) {
-            setTitle(Html.fromHtml(String.format("<small>%s</small>", postTitle)));
+            if (useBottomAppBar) {
+                titleTextView.setText(Html.fromHtml(String.format("<small>%s</small>", postTitle)));
+            } else {
+                setTitle(Html.fromHtml(String.format("<small>%s</small>", postTitle)));
+            }
         } else {
-            setTitle("");
+            if (!useBottomAppBar) {
+                setTitle("");
+            }
         }
 
         videoPlayerView.setControllerVisibilityListener(visibility -> {
