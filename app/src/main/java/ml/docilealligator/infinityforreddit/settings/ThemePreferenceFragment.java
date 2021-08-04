@@ -1,5 +1,10 @@
 package ml.docilealligator.infinityforreddit.settings;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -37,11 +42,6 @@ import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.MaterialYouUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -182,7 +182,7 @@ public class ThemePreferenceFragment extends PreferenceFragmentCompat {
                     MaterialYouUtils.changeTheme(activity, executor, new Handler(),
                             redditDataRoomDatabase, customThemeWrapper,
                             lightThemeSharedPreferences, darkThemeSharedPreferences,
-                            amoledThemeSharedPreferences);
+                            amoledThemeSharedPreferences, null);
                     applyMaterialYouPreference.setVisible(true);
                 } else {
                     applyMaterialYouPreference.setVisible(false);
@@ -194,7 +194,7 @@ public class ThemePreferenceFragment extends PreferenceFragmentCompat {
                 MaterialYouUtils.changeTheme(activity, executor, new Handler(),
                         redditDataRoomDatabase, customThemeWrapper,
                         lightThemeSharedPreferences, darkThemeSharedPreferences,
-                        amoledThemeSharedPreferences);
+                        amoledThemeSharedPreferences, null);
                 return true;
             });
         }

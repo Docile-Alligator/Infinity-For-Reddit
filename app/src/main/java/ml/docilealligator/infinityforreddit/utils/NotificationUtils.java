@@ -22,11 +22,14 @@ public class NotificationUtils {
     public static final String CHANNEL_DOWNLOAD_IMAGE = "Download Image";
     public static final String CHANNEL_ID_DOWNLOAD_GIF = "download_gif";
     public static final String CHANNEL_DOWNLOAD_GIF = "Download Gif";
+    public static final String CHANNEL_ID_MATERIAL_YOU = "material_you";
+    public static final String CHANNEL_MATERIAL_YOU = "Material You";
     public static final int SUBMIT_POST_SERVICE_NOTIFICATION_ID = 10000;
     public static final int DOWNLOAD_REDDIT_VIDEO_NOTIFICATION_ID = 20000;
     public static final int DOWNLOAD_VIDEO_NOTIFICATION_ID = 30000;
     public static final int DOWNLOAD_IMAGE_NOTIFICATION_ID = 40000;
     public static final int DOWNLOAD_GIF_NOTIFICATION_ID = 50000;
+    public static final int MATERIAL_YOU_NOTIFICATION_ID = 60000;
 
     private static final int SUMMARY_BASE_ID_UNREAD_MESSAGE = 0;
     private static final int NOTIFICATION_BASE_ID_UNREAD_MESSAGE = 1;

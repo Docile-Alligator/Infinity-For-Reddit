@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Handler;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.Nullable;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -44,7 +45,8 @@ public class MaterialYouUtils {
                                    CustomThemeWrapper customThemeWrapper,
                                    SharedPreferences lightThemeSharedPreferences,
                                    SharedPreferences darkThemeSharedPreferences,
-                                   SharedPreferences amoledThemeSharedPreferences) {
+                                   SharedPreferences amoledThemeSharedPreferences,
+                                   @Nullable MaterialYouListener materialYouListener) {
         executor.execute(() -> {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1) {
                 WallpaperManager wallpaperManager = WallpaperManager.getInstance(context);
@@ -116,7 +118,12 @@ public class MaterialYouUtils {
                     CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(darkTheme, darkThemeSharedPreferences);
                     CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(amoledTheme, amoledThemeSharedPreferences);
 
-                    handler.post(() -> EventBus.getDefault().post(new RecreateActivityEvent()));
+                    handler.post(() -> {
+                        if (materialYouListener != null) {
+                            materialYouListener.applied();
+                        }
+                        EventBus.getDefault().post(new RecreateActivityEvent());
+                    });
                 }
             }
         });
@@ -140,5 +147,9 @@ public class MaterialYouUtils {
         // Counting the perceptive luminance - human eye favors green color...
         double luminance = 1 - (0.299 * Color.red(color) + 0.587 * Color.green(color) + 0.114 * Color.blue(color)) / 255;
         return luminance < 0.5 ? Color.BLACK : Color.WHITE;
+    }
+
+    public interface MaterialYouListener {
+        void applied();
     }
 }

@@ -1162,4 +1162,6 @@
     <string name="error_loading_wiki">Error loading wiki</string>
     <string name="no_wiki">This subreddit has no wiki page</string>
 
+    <string name="material_you_notification_title">Applying Material You</string>
+
 </resources>
