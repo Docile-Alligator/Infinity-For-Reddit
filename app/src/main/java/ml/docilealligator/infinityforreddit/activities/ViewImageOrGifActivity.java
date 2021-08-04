@@ -144,11 +144,6 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
 
         ButterKnife.bind(this);
 
-        ActionBar actionBar = getSupportActionBar();
-        Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
-        actionBar.setHomeAsUpIndicator(upArrow);
-        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
-
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_VERTICALLY_TO_GO_BACK_FROM_MEDIA, true)) {
             Slidr.attach(this, new SlidrConfig.Builder().position(SlidrPosition.VERTICAL).distanceThreshold(0.125f).build());
         }
@@ -181,6 +176,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
 
         if (useBottomAppBar) {
             getSupportActionBar().hide();
+            bottomAppBar.setVisibility(View.VISIBLE);
             downloadImageView.setOnClickListener(view -> {
                 if (isDownloading) {
                     return;
@@ -198,7 +194,10 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
                 setWallpaper();
             });
         } else {
-            bottomAppBar.setVisibility(View.GONE);
+            ActionBar actionBar = getSupportActionBar();
+            Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
+            actionBar.setHomeAsUpIndicator(upArrow);
+            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
         }
 
         mLoadErrorLinearLayout.setOnClickListener(view -> {

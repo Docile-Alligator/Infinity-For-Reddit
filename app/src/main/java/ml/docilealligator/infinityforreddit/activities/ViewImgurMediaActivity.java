@@ -77,6 +77,7 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
     LinearLayout errorLinearLayout;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ArrayList<ImgurMedia> images;
+    private boolean useBottomAppBar;
     @Inject
     @Named("imgur")
     Retrofit imgurRetrofit;
@@ -116,12 +117,17 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
 
         ButterKnife.bind(this);
 
-        ActionBar actionBar = getSupportActionBar();
-        Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
-        actionBar.setHomeAsUpIndicator(upArrow);
-        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
+        useBottomAppBar = sharedPreferences.getBoolean(SharedPreferencesUtils.USE_BOTTOM_TOOLBAR_IN_MEDIA_VIEWER, false);
 
-        setTitle(" ");
+        if (!useBottomAppBar) {
+            ActionBar actionBar = getSupportActionBar();
+            Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
+            actionBar.setHomeAsUpIndicator(upArrow);
+            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
+            setTitle(" ");
+        } else {
+            getSupportActionBar().hide();
+        }
 
         String imgurId = getIntent().getStringExtra(EXTRA_IMGUR_ID);
         if (imgurId == null) {
@@ -151,6 +157,10 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
         }
 
         errorLinearLayout.setOnClickListener(view -> fetchImgurMedia(imgurId));
+    }
+
+    public boolean isUseBottomAppBar() {
+        return useBottomAppBar;
     }
 
     private void fetchImgurMedia(String imgurId) {

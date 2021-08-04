@@ -1,28 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/hauler_view_view_image_or_gif_activity"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
-    tools:application="ml.docilealligator.infinityforreddit.activities.ViewImageActivity">
+    tools:context=".fragments.ViewImgurImageFragment">
 
     <ProgressBar
-        android:id="@+id/progress_bar_view_image_or_gif_activity"
+        android:id="@+id/progress_bar_view_imgur_image_fragment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center" />
 
-    <com.github.piasy.biv.view.BigImageView
-        android:id="@+id/image_view_view_image_or_gif_activity"
+    <com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
+        android:id="@+id/image_view_view_imgur_image_fragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:optimizeDisplay="true"
-        app:tapToRetry="false" />
+        android:layout_height="match_parent" />
 
     <LinearLayout
-        android:id="@+id/load_image_error_linear_layout_view_image_or_gif_activity"
+        android:id="@+id/load_image_error_linear_layout_view_imgur_image_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone">
@@ -30,18 +27,18 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:drawableTop="@drawable/ic_error_outline_white_24dp"
-            android:fontFamily="?attr/font_family"
+            android:layout_gravity="center"
             android:gravity="center"
-            android:text="@string/error_loading_image_tap_to_retry"
             android:textColor="@android:color/white"
-            android:textSize="?attr/font_default" />
+            android:text="@string/error_loading_image_tap_to_retry"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
 
     </LinearLayout>
 
     <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottom_navigation_view_image_or_gif_activity"
+        android:id="@+id/bottom_navigation_view_imgur_image_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
@@ -54,7 +51,7 @@
             android:layout_height="wrap_content">
 
             <TextView
-                android:id="@+id/title_text_view_view_image_or_gif_activity"
+                android:id="@+id/title_text_view_view_imgur_image_fragment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -69,7 +66,7 @@
                 android:ellipsize="end" />
 
             <ImageView
-                android:id="@+id/download_image_view_view_image_or_gif_activity"
+                android:id="@+id/download_image_view_view_imgur_image_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
@@ -77,7 +74,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
             <ImageView
-                android:id="@+id/share_image_view_view_image_or_gif_activity"
+                android:id="@+id/share_image_view_view_imgur_image_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="16dp"
@@ -85,7 +82,7 @@
                 android:background="?attr/selectableItemBackgroundBorderless" />
 
             <ImageView
-                android:id="@+id/wallpaper_image_view_view_image_or_gif_activity"
+                android:id="@+id/wallpaper_image_view_view_imgur_image_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
