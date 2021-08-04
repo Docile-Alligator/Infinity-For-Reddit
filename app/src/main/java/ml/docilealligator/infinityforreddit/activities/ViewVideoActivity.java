@@ -22,8 +22,10 @@ import android.view.OrientationEventListener;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -51,6 +53,7 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.exoplayer2.util.Util;
+import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.snackbar.Snackbar;
 import com.thefuntasty.hauler.DragDirection;
 import com.thefuntasty.hauler.HaulerView;
@@ -123,6 +126,12 @@ public class ViewVideoActivity extends AppCompatActivity {
     ImageButton muteButton;
     @BindView(R.id.hd_exo_playback_control_view)
     ImageButton hdButton;
+    @BindView(R.id.bottom_navigation_exo_playback_control_view)
+    BottomAppBar bottomAppBar;
+    @BindView(R.id.title_text_view_exo_playback_control_view)
+    TextView titleTextView;
+    @BindView(R.id.download_image_view_exo_playback_control_view)
+    ImageView downloadImageView;
 
     private Uri mVideoUri;
     private SimpleExoPlayer player;
@@ -203,10 +212,29 @@ public class ViewVideoActivity extends AppCompatActivity {
 
         Resources resources = getResources();
 
-        ActionBar actionBar = getSupportActionBar();
-        Drawable upArrow = resources.getDrawable(R.drawable.ic_arrow_back_white_24dp);
-        actionBar.setHomeAsUpIndicator(upArrow);
-        actionBar.setBackgroundDrawable(new ColorDrawable(resources.getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
+        boolean useBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.USE_BOTTOM_TOOLBAR_IN_MEDIA_VIEWER, false);
+        if (useBottomAppBar) {
+            getSupportActionBar().hide();
+            bottomAppBar.setVisibility(View.VISIBLE);
+            downloadImageView.setOnClickListener(view -> {
+                if (isDownloading) {
+                    return;
+                }
+
+                if (videoDownloadUrl == null) {
+                    Toast.makeText(this, R.string.fetching_video_info_please_wait, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                isDownloading = true;
+                requestPermissionAndDownload();
+            });
+        } else {
+            ActionBar actionBar = getSupportActionBar();
+            Drawable upArrow = resources.getDrawable(R.drawable.ic_arrow_back_white_24dp);
+            actionBar.setHomeAsUpIndicator(upArrow);
+            actionBar.setBackgroundDrawable(new ColorDrawable(resources.getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
+        }
 
         String dataSavingModeString = mSharedPreferences.getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
         int networkType = Utils.getConnectedNetwork(this);
@@ -584,27 +612,31 @@ public class ViewVideoActivity extends AppCompatActivity {
             }
 
             isDownloading = true;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                if (ContextCompat.checkSelfPermission(this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-
-                    // Permission is not granted
-                    // No explanation needed; request the permission
-                    ActivityCompat.requestPermissions(this,
-                            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
-                } else {
-                    // Permission has already been granted
-                    download();
-                }
-            } else {
-                download();
-            }
+            requestPermissionAndDownload();
             return true;
         }
 
         return false;
+    }
+
+    private void requestPermissionAndDownload() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                // Permission is not granted
+                // No explanation needed; request the permission
+                ActivityCompat.requestPermissions(this,
+                        new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
+            } else {
+                // Permission has already been granted
+                download();
+            }
+        } else {
+            download();
+        }
     }
 
     @Override
