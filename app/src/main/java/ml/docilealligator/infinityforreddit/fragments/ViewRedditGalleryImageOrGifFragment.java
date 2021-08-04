@@ -16,8 +16,10 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,6 +43,7 @@ import com.github.piasy.biv.loader.ImageLoader;
 import com.github.piasy.biv.loader.glide.GlideImageLoader;
 import com.github.piasy.biv.view.BigImageView;
 import com.github.piasy.biv.view.GlideImageViewFactory;
+import com.google.android.material.bottomappbar.BottomAppBar;
 
 import java.io.File;
 import java.util.concurrent.Executor;
@@ -72,6 +75,16 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     BigImageView imageView;
     @BindView(R.id.load_image_error_linear_layout_view_reddit_gallery_image_or_gif_fragment)
     LinearLayout errorLinearLayout;
+    @BindView(R.id.bottom_navigation_view_reddit_gallery_image_or_gif_fragment)
+    BottomAppBar bottomAppBar;
+    @BindView(R.id.title_text_view_view_reddit_gallery_image_or_gif_fragment)
+    TextView titleTextView;
+    @BindView(R.id.download_image_view_view_reddit_gallery_image_or_gif_fragment)
+    ImageView downloadImageView;
+    @BindView(R.id.share_image_view_view_reddit_gallery_image_or_gif_fragment)
+    ImageView shareImageView;
+    @BindView(R.id.wallpaper_image_view_view_reddit_gallery_image_or_gif_fragment)
+    ImageView wallpaperImageView;
     @Inject
     Executor mExecutor;
 
@@ -192,6 +205,9 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
                 isActionBarHidden = false;
+                if (activity.isUseBottomAppBar()) {
+                    bottomAppBar.setVisibility(View.VISIBLE);
+                }
             } else {
                 activity.getWindow().getDecorView().setSystemUiVisibility(
                         View.SYSTEM_UI_FLAG_LAYOUT_STABLE
@@ -201,6 +217,9 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                                 | View.SYSTEM_UI_FLAG_IMMERSIVE);
                 isActionBarHidden = true;
+                if (activity.isUseBottomAppBar()) {
+                    bottomAppBar.setVisibility(View.GONE);
+                }
             }
         });
 
@@ -209,6 +228,27 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
             errorLinearLayout.setVisibility(View.GONE);
             loadImage();
         });
+
+        if (activity.isUseBottomAppBar()) {
+            bottomAppBar.setVisibility(View.VISIBLE);
+            downloadImageView.setOnClickListener(view -> {
+                if (isDownloading) {
+                    return;
+                }
+                isDownloading = true;
+                requestPermissionAndDownload();
+            });
+            shareImageView.setOnClickListener(view -> {
+                if (media.mediaType == Post.Gallery.TYPE_GIF) {
+                    shareGif();
+                } else {
+                    shareImage();
+                }
+            });
+            wallpaperImageView.setOnClickListener(view -> {
+                setWallpaper();
+            });
+        }
 
         return rootView;
     }
@@ -230,26 +270,8 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
             if (isDownloading) {
                 return false;
             }
-
             isDownloading = true;
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                if (ContextCompat.checkSelfPermission(activity,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-
-                    // Permission is not granted
-                    // No explanation needed; request the permission
-                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
-                } else {
-                    // Permission has already been granted
-                    download();
-                }
-            } else {
-                download();
-            }
-
+            requestPermissionAndDownload();
             return true;
         } else if (itemId == R.id.action_share_view_reddit_gallery_image_or_gif_fragment) {
             if (media.mediaType == Post.Gallery.TYPE_GIF) {
@@ -259,19 +281,30 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
             }
             return true;
         } else if (itemId == R.id.action_set_wallpaper_view_reddit_gallery_image_or_gif_fragment) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                SetAsWallpaperBottomSheetFragment setAsWallpaperBottomSheetFragment = new SetAsWallpaperBottomSheetFragment();
-                Bundle bundle = new Bundle();
-                bundle.putInt(SetAsWallpaperBottomSheetFragment.EXTRA_VIEW_PAGER_POSITION, activity.getCurrentPagePosition());
-                setAsWallpaperBottomSheetFragment.setArguments(bundle);
-                setAsWallpaperBottomSheetFragment.show(activity.getSupportFragmentManager(), setAsWallpaperBottomSheetFragment.getTag());
-            } else {
-                ((SetAsWallpaperCallback) activity).setToBoth(activity.getCurrentPagePosition());
-            }
+            setWallpaper();
             return true;
         }
 
         return false;
+    }
+
+    private void requestPermissionAndDownload() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(activity,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                // Permission is not granted
+                // No explanation needed; request the permission
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
+            } else {
+                // Permission has already been granted
+                download();
+            }
+        } else {
+            download();
+        }
     }
 
     private void download() {
@@ -364,6 +397,20 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                 return false;
             }
         }).submit();
+    }
+
+    private void setWallpaper() {
+        if (media.mediaType != Post.Gallery.TYPE_GIF) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                SetAsWallpaperBottomSheetFragment setAsWallpaperBottomSheetFragment = new SetAsWallpaperBottomSheetFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt(SetAsWallpaperBottomSheetFragment.EXTRA_VIEW_PAGER_POSITION, activity.getCurrentPagePosition());
+                setAsWallpaperBottomSheetFragment.setArguments(bundle);
+                setAsWallpaperBottomSheetFragment.show(activity.getSupportFragmentManager(), setAsWallpaperBottomSheetFragment.getTag());
+            } else {
+                ((SetAsWallpaperCallback) activity).setToBoth(activity.getCurrentPagePosition());
+            }
+        }
     }
 
     @Override

@@ -55,6 +55,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ArrayList<Post.Gallery> gallery;
     private String subredditName;
+    private boolean useBottomAppBar;
     @Inject
     @Named("default")
     SharedPreferences sharedPreferences;
@@ -91,10 +92,17 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
 
         ButterKnife.bind(this);
 
-        ActionBar actionBar = getSupportActionBar();
-        Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
-        actionBar.setHomeAsUpIndicator(upArrow);
-        actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
+        useBottomAppBar = sharedPreferences.getBoolean(SharedPreferencesUtils.USE_BOTTOM_TOOLBAR_IN_MEDIA_VIEWER, false);
+
+        if (!useBottomAppBar) {
+            ActionBar actionBar = getSupportActionBar();
+            Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
+            actionBar.setHomeAsUpIndicator(upArrow);
+            actionBar.setBackgroundDrawable(new ColorDrawable(getResources().getColor(R.color.transparentActionBarAndExoPlayerControllerColor)));
+            setTitle(" ");
+        } else {
+            getSupportActionBar().hide();
+        }
 
         setTitle(" ");
 
@@ -116,6 +124,10 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
         }
 
         setupViewPager();
+    }
+
+    public boolean isUseBottomAppBar() {
+        return useBottomAppBar;
     }
 
     private void setupViewPager() {
