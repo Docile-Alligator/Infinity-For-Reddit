@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -18,7 +17,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -39,6 +40,7 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
+import com.google.android.material.bottomappbar.BottomAppBar;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -48,6 +50,7 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ImgurMedia;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.ViewImgurMediaActivity;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
@@ -61,7 +64,13 @@ public class ViewImgurVideoFragment extends Fragment {
     PlayerView videoPlayerView;
     @BindView(R.id.mute_exo_playback_control_view)
     ImageButton muteButton;
-    private Activity activity;
+    @BindView(R.id.bottom_navigation_exo_playback_control_view)
+    BottomAppBar bottomAppBar;
+    @BindView(R.id.title_text_view_exo_playback_control_view)
+    TextView titleTextView;
+    @BindView(R.id.download_image_view_exo_playback_control_view)
+    ImageView downloadImageView;
+    private ViewImgurMediaActivity activity;
     private ImgurMedia imgurMedia;
     private SimpleExoPlayer player;
     private DataSource.Factory dataSourceFactory;
@@ -136,6 +145,17 @@ public class ViewImgurVideoFragment extends Fragment {
         player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(imgurMedia.getLink())));
         preparePlayer(savedInstanceState);
 
+        if (activity.isUseBottomAppBar()) {
+            bottomAppBar.setVisibility(View.VISIBLE);
+            downloadImageView.setOnClickListener(view -> {
+                if (isDownloading) {
+                    return;
+                }
+                isDownloading = true;
+                requestPermissionAndDownload();
+            });
+        }
+
         return rootView;
     }
 
@@ -149,25 +169,29 @@ public class ViewImgurVideoFragment extends Fragment {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_download_view_imgur_video_fragment) {
             isDownloading = true;
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                if (ContextCompat.checkSelfPermission(activity,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                        != PackageManager.PERMISSION_GRANTED) {
-
-                    // Permission is not granted
-                    // No explanation needed; request the permission
-                    requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
-                            PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
-                } else {
-                    // Permission has already been granted
-                    download();
-                }
-            } else {
-                download();
-            }
+            requestPermissionAndDownload();
             return true;
         }
         return false;
+    }
+
+    private void requestPermissionAndDownload() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            if (ContextCompat.checkSelfPermission(activity,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+                // Permission is not granted
+                // No explanation needed; request the permission
+                requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE);
+            } else {
+                // Permission has already been granted
+                download();
+            }
+        } else {
+            download();
+        }
     }
 
     @Override
@@ -282,6 +306,6 @@ public class ViewImgurVideoFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (Activity) context;
+        activity = (ViewImgurMediaActivity) context;
     }
 }
