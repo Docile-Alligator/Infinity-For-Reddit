@@ -116,6 +116,7 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
     private static final int VIEW_TYPE_POST_CARD_2_TEXT_TYPE = 8;
     private static final int VIEW_TYPE_ERROR = 9;
     private static final int VIEW_TYPE_LOADING = 10;
+    private static final int MAX_IMAGE_HEIGHT = 2000;
 
     private static final DiffUtil.ItemCallback<Post> DIFF_CALLBACK = new DiffUtil.ItemCallback<Post>() {
         @Override
@@ -810,8 +811,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
                         if (preview != null) {
                             ((PostWithPreviewTypeViewHolder) holder).imageWrapperRelativeLayout.setVisibility(View.VISIBLE);
-                            if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
-                                int height = (int) (400 * mScale);
+                            if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0 || preview.getPreviewHeight() > MAX_IMAGE_HEIGHT) {
+                                int height = preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0 ? (int) (400 * mScale) : (int) (MAX_IMAGE_HEIGHT * mScale);
                                 ((PostWithPreviewTypeViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                                 ((PostWithPreviewTypeViewHolder) holder).imageView.getLayoutParams().height = height;
                                 preview.setPreviewWidth(mImageViewWidth);
@@ -944,8 +945,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
                         if (preview != null) {
                             ((PostCard2WithPreviewViewHolder) holder).imageView.setVisibility(View.VISIBLE);
-                            if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
-                                int height = (int) (400 * mScale);
+                            if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0 || preview.getPreviewHeight() > MAX_IMAGE_HEIGHT) {
+                                int height = preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0 ? (int) (400 * mScale) : (int) (MAX_IMAGE_HEIGHT * mScale);
                                 ((PostCard2WithPreviewViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                                 ((PostCard2WithPreviewViewHolder) holder).imageView.getLayoutParams().height = height;
                                 preview.setPreviewWidth(mImageViewWidth);
@@ -1339,8 +1340,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
                         if (preview != null) {
-                            if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
-                                int height = (int) (400 * mScale);
+                            if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0 || preview.getPreviewHeight() > MAX_IMAGE_HEIGHT) {
+                                int height = preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0 ? (int) (400 * mScale) : (int) (MAX_IMAGE_HEIGHT * mScale);
                                 ((PostGalleryViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                                 ((PostGalleryViewHolder) holder).imageView.getLayoutParams().height = height;
                                 preview.setPreviewWidth(mImageViewWidth);
@@ -1374,8 +1375,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
                         if (preview != null) {
-                            if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
-                                int height = (int) (400 * mScale);
+                            if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0 || preview.getPreviewHeight() > MAX_IMAGE_HEIGHT) {
+                                int height = preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0 ? (int) (400 * mScale) : (int) (MAX_IMAGE_HEIGHT * mScale);
                                 ((PostGalleryViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                                 ((PostGalleryViewHolder) holder).imageView.getLayoutParams().height = height;
                                 preview.setPreviewWidth(mImageViewWidth);
@@ -1399,8 +1400,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
                         if (preview != null) {
-                            if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
-                                int height = (int) (400 * mScale);
+                            if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0 || preview.getPreviewHeight() > MAX_IMAGE_HEIGHT) {
+                                int height = preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0 ? (int) (400 * mScale) : (int) (MAX_IMAGE_HEIGHT * mScale);
                                 ((PostGalleryViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                                 ((PostGalleryViewHolder) holder).imageView.getLayoutParams().height = height;
                                 preview.setPreviewWidth(mImageViewWidth);
@@ -1424,8 +1425,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
                         if (preview != null) {
-                            if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
-                                int height = (int) (400 * mScale);
+                            if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0 || preview.getPreviewHeight() > MAX_IMAGE_HEIGHT) {
+                                int height = preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0 ? (int) (400 * mScale) : (int) (MAX_IMAGE_HEIGHT * mScale);
                                 ((PostGalleryViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                                 ((PostGalleryViewHolder) holder).imageView.getLayoutParams().height = height;
                                 preview.setPreviewWidth(mImageViewWidth);
@@ -1459,8 +1460,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
 
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
                         if (preview != null) {
-                            if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
-                                int height = (int) (400 * mScale);
+                            if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0 || preview.getPreviewHeight() > MAX_IMAGE_HEIGHT) {
+                                int height = preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0 ? (int) (400 * mScale) : (int) (MAX_IMAGE_HEIGHT * mScale);
                                 ((PostGalleryViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                                 ((PostGalleryViewHolder) holder).imageView.getLayoutParams().height = height;
                                 preview.setPreviewWidth(mImageViewWidth);

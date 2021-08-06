@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
+import static ml.docilealligator.infinityforreddit.activities.CommentActivity.WRITE_COMMENT_REQUEST_CODE;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -115,8 +117,6 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-import static ml.docilealligator.infinityforreddit.activities.CommentActivity.WRITE_COMMENT_REQUEST_CODE;
-
 public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements CacheManager {
     private static final int VIEW_TYPE_POST_DETAIL_VIDEO_AUTOPLAY = 1;
     private static final int VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW = 2;
@@ -126,6 +126,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private static final int VIEW_TYPE_POST_DETAIL_NO_PREVIEW_LINK = 6;
     private static final int VIEW_TYPE_POST_DETAIL_GALLERY = 7;
     private static final int VIEW_TYPE_POST_DETAIL_TEXT_TYPE = 8;
+    private static final int MAX_IMAGE_HEIGHT = 2000;
 
     private AppCompatActivity mActivity;
     private ViewPostDetailFragment mFragment;
@@ -720,8 +721,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
                 Post.Preview preview = getSuitablePreview(mPost.getPreviews());
                 if (preview != null) {
-                    if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
-                        int height = (int) (400 * mScale);
+                    if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0 || preview.getPreviewHeight() > MAX_IMAGE_HEIGHT) {
+                        int height = preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0 ? (int) (400 * mScale) : (int) (MAX_IMAGE_HEIGHT * mScale);
                         ((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                         ((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView.getLayoutParams().height = height;
                         preview.setPreviewWidth(mImageViewWidth);
