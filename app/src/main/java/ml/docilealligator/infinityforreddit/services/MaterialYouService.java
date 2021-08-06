@@ -82,11 +82,17 @@ public class MaterialYouService extends Service {
             MaterialYouUtils.changeTheme(this, executor, new Handler(), redditDataRoomDatabase,
                     customThemeWrapper, lightThemeSharedPreferences, darkThemeSharedPreferences,
                     amoledThemeSharedPreferences, () -> {
-                        stopForeground(true);
-                        stopSelf();
+                        stopService();
                     });
+        } else {
+            stopService();
         }
 
         return START_NOT_STICKY;
+    }
+
+    private void stopService() {
+        stopForeground(true);
+        stopSelf();
     }
 }
