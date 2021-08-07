@@ -126,7 +126,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private static final int VIEW_TYPE_POST_DETAIL_NO_PREVIEW_LINK = 6;
     private static final int VIEW_TYPE_POST_DETAIL_GALLERY = 7;
     private static final int VIEW_TYPE_POST_DETAIL_TEXT_TYPE = 8;
-    private static final int MAX_IMAGE_HEIGHT = 2000;
 
     private AppCompatActivity mActivity;
     private ViewPostDetailFragment mFragment;
@@ -721,8 +720,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
                 Post.Preview preview = getSuitablePreview(mPost.getPreviews());
                 if (preview != null) {
-                    if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0 || preview.getPreviewHeight() > MAX_IMAGE_HEIGHT) {
-                        int height = preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0 ? (int) (400 * mScale) : (int) (MAX_IMAGE_HEIGHT * mScale);
+                    if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
+                        int height = (int) (400 * mScale);
                         ((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                         ((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView.getLayoutParams().height = height;
                         preview.setPreviewWidth(mImageViewWidth);
