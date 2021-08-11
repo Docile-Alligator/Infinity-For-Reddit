@@ -211,7 +211,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         tabLayout.setupWithViewPager(viewPager);
 
         if (showMultiReddits) {
-            viewPager.setCurrentItem(2);
+            viewPager.setCurrentItem(2, false);
         }
 
         loadSubscriptions(false);

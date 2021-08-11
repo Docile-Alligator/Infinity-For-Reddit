@@ -3265,6 +3265,8 @@ public class PostRecyclerViewAdapter extends PagedListAdapter<Post, RecyclerView
                 constraintSet.applyTo(bottomConstraintLayout);
             }
 
+            ((ViewGroup) itemView).getLayoutTransition().setAnimateParentHierarchy(false);
+
             itemView.setBackgroundColor(mCardViewBackgroundColor);
             postTimeTextView.setTextColor(mSecondaryTextColor);
             titleTextView.setTextColor(mPostTitleColor);

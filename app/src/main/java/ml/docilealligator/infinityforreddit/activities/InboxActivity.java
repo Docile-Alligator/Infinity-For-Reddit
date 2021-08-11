@@ -291,7 +291,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
             }
         }).attach();
         if (savedInstanceState == null && getIntent().getBooleanExtra(EXTRA_VIEW_MESSAGE, false)) {
-            viewPager2.setCurrentItem(1);
+            viewPager2.setCurrentItem(1, false);
         }
 
         fixViewPager2Sensitivity(viewPager2);

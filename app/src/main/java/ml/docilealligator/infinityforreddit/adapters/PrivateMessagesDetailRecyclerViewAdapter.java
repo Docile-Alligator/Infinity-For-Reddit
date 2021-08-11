@@ -227,6 +227,7 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
             this.messageTextView = messageTextView;
             this.timeTextView = timeTextView;
 
+            ((ViewGroup) itemView).getLayoutTransition().setAnimateParentHierarchy(false);
             messageTextView.setTextColor(Color.WHITE);
             timeTextView.setTextColor(mSecondaryTextColor);
         }

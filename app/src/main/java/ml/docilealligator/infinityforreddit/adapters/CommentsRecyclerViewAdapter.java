@@ -1085,6 +1085,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public class CommentViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.linear_layout_item_comment)
+        LinearLayout linearLayout;
         @BindView(R.id.author_text_view_item_post_comment)
         TextView authorTextView;
         @BindView(R.id.author_flair_text_view_item_post_comment)
@@ -1142,6 +1144,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 constraintSet.setHorizontalBias(moreButton.getId(), 0);
                 constraintSet.applyTo(bottomConstraintLayout);
             }
+
+            linearLayout.getLayoutTransition().setAnimateParentHierarchy(false);
 
             if (mShowCommentDivider) {
                 commentDivider.setBackgroundColor(mDividerColor);

@@ -33,7 +33,7 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
 public class Infinity extends Application implements LifecycleObserver {
     private AppComponent mAppComponent;
     private NetworkWifiStatusReceiver mNetworkWifiStatusReceiver;
-    private boolean lock = false;
+    //private boolean lock = false;
     private boolean isSecureMode;
     @Inject
     @Named("default")
