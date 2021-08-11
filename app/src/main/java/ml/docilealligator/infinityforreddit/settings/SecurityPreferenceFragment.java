@@ -1,5 +1,8 @@
 package ml.docilealligator.infinityforreddit.settings;
 
+import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -18,13 +21,11 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.events.ChangeRequireAuthToAccountSectionEvent;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.events.ChangeRequireAuthToAccountSectionEvent;
+import ml.docilealligator.infinityforreddit.events.ToggleSecureModeEvent;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-
-import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
-import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
 
 public class SecurityPreferenceFragment extends PreferenceFragmentCompat {
 
@@ -40,10 +41,18 @@ public class SecurityPreferenceFragment extends PreferenceFragmentCompat {
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
         SwitchPreference requireAuthToAccountSectionSwitch = findPreference(SharedPreferencesUtils.REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER);
+        SwitchPreference secureModeSwitch = findPreference(SharedPreferencesUtils.SECURE_MODE);
 
         if (requireAuthToAccountSectionSwitch != null) {
             requireAuthToAccountSectionSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new ChangeRequireAuthToAccountSectionEvent((Boolean) newValue));
+                return true;
+            });
+        }
+
+        if (secureModeSwitch != null) {
+            secureModeSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+                EventBus.getDefault().post(new ToggleSecureModeEvent((Boolean) newValue));
                 return true;
             });
         }

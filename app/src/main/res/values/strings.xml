@@ -593,6 +593,8 @@
     <string name="settings_separate_post_and_comments_in_portrait_mode">Separate Post And Comments in Portrait Mode</string>
     <string name="settings_separate_post_and_comments_in_landscape_mode">Separate Post And Comments in Landscape Mode</string>
     <string name="settings_use_bottom_toolbar_in_media_viewer_title">Use Bottom Toolbar in Media Viewer</string>
+    <string name="settings_secure_mode_title">Secure Mode</string>
+    <string name="settings_secure_mode_summary">Screenshot and video recording are not allowed. No preview in recent app screen.</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

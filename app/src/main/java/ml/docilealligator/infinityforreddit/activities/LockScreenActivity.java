@@ -1,5 +1,8 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
+
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -16,9 +19,6 @@ import javax.inject.Named;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-
-import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
-import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
 
 public class LockScreenActivity extends BaseActivity {
 
@@ -79,7 +79,5 @@ public class LockScreenActivity extends BaseActivity {
     }
 
     @Override
-    public void onBackPressed() {
-        moveTaskToBack(true);
-    }
+    public void onBackPressed() { }
 }

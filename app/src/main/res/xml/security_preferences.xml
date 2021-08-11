@@ -5,4 +5,10 @@
         app:key="require_auth_to_account_section"
         app:title="@string/settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title" />
 
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="secure_mode"
+        app:title="@string/settings_secure_mode_title"
+        app:summary="@string/settings_secure_mode_summary" />
+
 </PreferenceScreen>

@@ -186,6 +186,7 @@ public class SharedPreferencesUtils {
     public static final String REMEMBER_MUTING_OPTION_IN_POST_FEED = "remember_muting_option_in_post_feed";
     public static final String DEFAULT_LINK_POST_LAYOUT_KEY = "default_link_post_layout";
     public static final String USE_BOTTOM_TOOLBAR_IN_MEDIA_VIEWER = "use_bottom_toolbar_in_media_viewer";
+    public static final String SECURE_MODE = "secure_mode";
 
     public static final String DEFAULT_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit_preferences";
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";

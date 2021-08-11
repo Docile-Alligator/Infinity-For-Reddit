@@ -284,4 +284,6 @@ public interface AppComponent {
     void inject(TrendingActivity trendingActivity);
 
     void inject(WikiActivity wikiActivity);
+
+    void inject(Infinity infinity);
 }
