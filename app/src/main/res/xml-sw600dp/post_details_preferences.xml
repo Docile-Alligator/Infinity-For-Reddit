@@ -5,12 +5,14 @@
     <SwitchPreference
         app:defaultValue="true"
         app:key="separate_post_and_comments_in_portrait_mode"
-        app:title="@string/settings_separate_post_and_comments_in_portrait_mode" />
+        app:title="@string/settings_separate_post_and_comments_in_portrait_mode_title"
+        app:summary="@string/settings_separate_post_and_comments_summary" />
 
     <SwitchPreference
         app:defaultValue="true"
         app:key="separate_post_and_comments_in_landscape_mode"
-        app:title="@string/settings_separate_post_and_comments_in_landscape_mode" />
+        app:title="@string/settings_separate_post_and_comments_in_landscape_mode_title"
+        app:summary="@string/settings_separate_post_and_comments_summary" />
 
     <SwitchPreference
         app:defaultValue="false"

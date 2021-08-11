@@ -1,5 +1,10 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
+import static im.ene.toro.media.PlaybackInfo.INDEX_UNSET;
+import static im.ene.toro.media.PlaybackInfo.TIME_UNSET;
+import static ml.docilealligator.infinityforreddit.activities.CommentActivity.RETURN_EXTRA_COMMENT_DATA_KEY;
+import static ml.docilealligator.infinityforreddit.activities.CommentActivity.WRITE_COMMENT_REQUEST_CODE;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
@@ -111,11 +116,6 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-import static im.ene.toro.media.PlaybackInfo.INDEX_UNSET;
-import static im.ene.toro.media.PlaybackInfo.TIME_UNSET;
-import static ml.docilealligator.infinityforreddit.activities.CommentActivity.RETURN_EXTRA_COMMENT_DATA_KEY;
-import static ml.docilealligator.infinityforreddit.activities.CommentActivity.WRITE_COMMENT_REQUEST_CODE;
-
 public class ViewPostDetailFragment extends Fragment implements FragmentCommunicator {
 
     public static final String EXTRA_POST_DATA = "EPD";
@@ -218,6 +218,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private boolean mLockFab;
     private boolean mSwipeUpToHideFab;
     private boolean mExpandChildren;
+    private boolean mSeparatePostAndComments = false;
     private int mWindowWidth;
     private ConcatAdapter mConcatAdapter;
     private PostDetailRecyclerViewAdapter mPostAdapter;
@@ -272,6 +273,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 mCommentsRecyclerView.setVisibility(View.GONE);
                 mCommentsRecyclerView = null;
             }
+        } else {
+            mSeparatePostAndComments = true;
         }
 
         if (activity != null && activity.isImmersiveInterface()) {
@@ -541,7 +544,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             mPostAdapter = new PostDetailRecyclerViewAdapter(activity,
                     this, mExecutor, mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mRedditDataRoomDatabase, mGlide,
-                    mWindowWidth, mAccessToken, mAccountName, mPost, mLocale,
+                    mWindowWidth, mSeparatePostAndComments, mAccessToken, mAccountName, mPost, mLocale,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
                     mExoCreator, post -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
             mCommentsAdapter = new CommentsRecyclerViewAdapter(activity,
@@ -1176,8 +1179,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             mPostAdapter = new PostDetailRecyclerViewAdapter(activity,
                                     ViewPostDetailFragment.this, mExecutor, mCustomThemeWrapper,
                                     mRetrofit, mOauthRetrofit, mGfycatRetrofit, mRedgifsRetrofit,
-                                    mRedditDataRoomDatabase, mGlide, mWindowWidth, mAccessToken,
-                                    mAccountName, mPost, mLocale, mSharedPreferences,
+                                    mRedditDataRoomDatabase, mGlide, mWindowWidth, mSeparatePostAndComments,
+                                    mAccessToken, mAccountName, mPost, mLocale, mSharedPreferences,
                                     mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
                                     mExoCreator,
                                     post1 -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
@@ -1725,7 +1728,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             }
             mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null ? nextParentPosition + 1 : nextParentPosition);
             mIsSmoothScrolling = true;
-            ((LinearLayoutManager) (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager()).startSmoothScroll(mSmoothScroller);
+            (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager().startSmoothScroll(mSmoothScroller);
         }
     }
 
@@ -1738,7 +1741,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             }
             mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null ? previousParentPosition + 1 : previousParentPosition);
             mIsSmoothScrolling = true;
-            ((LinearLayoutManager) (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager()).startSmoothScroll(mSmoothScroller);
+            (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager().startSmoothScroll(mSmoothScroller);
         }
     }
 

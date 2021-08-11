@@ -166,6 +166,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private boolean mHideSubredditAndUserPrefix;
     private boolean mHideTheNumberOfVotes;
     private boolean mHideTheNumberOfComments;
+    private boolean mSeparatePostAndComments;
     private PostDetailRecyclerViewAdapterCallback mPostDetailRecyclerViewAdapterCallback;
 
     private int mColorAccent;
@@ -203,7 +204,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                          Executor executor, CustomThemeWrapper customThemeWrapper,
                                          Retrofit retrofit, Retrofit oauthRetrofit, Retrofit gfycatRetrofit,
                                          Retrofit redgifsRetrofit, RedditDataRoomDatabase redditDataRoomDatabase,
-                                         RequestManager glide, int imageViewWidth, String accessToken,
+                                         RequestManager glide, int imageViewWidth,
+                                         boolean separatePostAndComments, String accessToken,
                                          String accountName, Post post, Locale locale,
                                          SharedPreferences sharedPreferences,
                                          SharedPreferences nsfwAndSpoilerSharedPreferences,
@@ -335,6 +337,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         .textLayoutIsRoot(R.layout.view_table_entry_cell)))
                 .build();
         mImageViewWidth = imageViewWidth;
+        mSeparatePostAndComments = separatePostAndComments;
         mAccessToken = accessToken;
         mAccountName = accountName;
         mPost = post;
@@ -424,7 +427,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     public int getItemViewType(int position) {
         switch (mPost.getPostType()) {
             case Post.VIDEO_TYPE:
-                if (mAutoplay) {
+                if (mAutoplay && !mSeparatePostAndComments) {
                     if (!mAutoplayNsfwVideos && mPost.isNSFW()) {
                         return VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW;
                     }
