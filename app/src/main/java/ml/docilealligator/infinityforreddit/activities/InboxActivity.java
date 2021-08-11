@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -21,15 +20,17 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.viewpager.widget.ViewPager;
+import androidx.viewpager2.adapter.FragmentStateAdapter;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.android.material.textfield.TextInputEditText;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrInterface;
@@ -81,7 +82,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     @BindView(R.id.tab_layout_inbox_activity)
     TabLayout tabLayout;
     @BindView(R.id.view_pager_inbox_activity)
-    ViewPager viewPager;
+    ViewPager2 viewPager2;
     @BindView(R.id.fab_inbox_activity)
     FloatingActionButton fab;
     @Inject
@@ -101,6 +102,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     Executor mExecutor;
     private SlidrInterface mSlidrInterface;
     private SectionsPagerAdapter sectionsPagerAdapter;
+    private FragmentManager fragmentManager;
     private String mAccessToken;
     private String mAccountName;
     private String mNewAccountName;
@@ -153,6 +155,8 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         setSupportActionBar(mToolbar);
         setToolbarGoToTop(mToolbar);
 
+        fragmentManager = getSupportFragmentManager();
+
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
 
@@ -163,7 +167,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         }
         getCurrentAccountAndFetchMessage(savedInstanceState);
 
-        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener(){
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 fab.show();
@@ -263,8 +267,8 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     }
 
     private void bindView(Bundle savedInstanceState) {
-        sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        sectionsPagerAdapter = new SectionsPagerAdapter(this);
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 if (position == 0) {
@@ -274,12 +278,23 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
                 }
             }
         });
-        viewPager.setAdapter(sectionsPagerAdapter);
-        viewPager.setOffscreenPageLimit(2);
-        tabLayout.setupWithViewPager(viewPager);
+        viewPager2.setAdapter(sectionsPagerAdapter);
+        viewPager2.setOffscreenPageLimit(2);
+        new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
+            switch (position) {
+                case 0:
+                    tab.setText(R.string.notifications);
+                    break;
+                case 1:
+                    tab.setText(R.string.messages);
+                    break;
+            }
+        }).attach();
         if (savedInstanceState == null && getIntent().getBooleanExtra(EXTRA_VIEW_MESSAGE, false)) {
-            viewPager.setCurrentItem(1);
+            viewPager2.setCurrentItem(1);
         }
+
+        fixViewPager2Sensitivity(viewPager2);
     }
 
     @Override
@@ -389,17 +404,44 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         fab.hide();
     }
 
-    private class SectionsPagerAdapter extends FragmentPagerAdapter {
-        private InboxFragment tab1;
-        private InboxFragment tab2;
+    private class SectionsPagerAdapter extends FragmentStateAdapter {
 
-        public SectionsPagerAdapter(@NonNull FragmentManager fm) {
-            super(fm, FragmentPagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT);
+        SectionsPagerAdapter(FragmentActivity fa) {
+            super(fa);
+        }
+
+        @Nullable
+        private Fragment getCurrentFragment() {
+            if (viewPager2 == null || fragmentManager == null) {
+                return null;
+            }
+            return fragmentManager.findFragmentByTag("f" + viewPager2.getCurrentItem());
+        }
+
+        void refresh() {
+            InboxFragment fragment = (InboxFragment) getCurrentFragment();
+            if (fragment != null) {
+                fragment.refresh();
+            }
+        }
+
+        void goBackToTop() {
+            InboxFragment fragment = (InboxFragment) getCurrentFragment();
+            if (fragment != null) {
+                fragment.goBackToTop();
+            }
+        }
+
+        void readAllMessages() {
+            InboxFragment fragment = (InboxFragment) getCurrentFragment();
+            if (fragment != null) {
+                fragment.markAllMessagesRead();
+            }
         }
 
         @NonNull
         @Override
-        public Fragment getItem(int position) {
+        public Fragment createFragment(int position) {
             if (position == 0) {
                 InboxFragment fragment = new InboxFragment();
                 Bundle bundle = new Bundle();
@@ -418,62 +460,8 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         }
 
         @Override
-        public int getCount() {
+        public int getItemCount() {
             return 2;
-        }
-
-        @Nullable
-        @Override
-        public CharSequence getPageTitle(int position) {
-            if (position == 0) {
-                return getString(R.string.notifications);
-            }
-
-            return getString(R.string.messages);
-        }
-
-        @NonNull
-        @Override
-        public Object instantiateItem(@NonNull ViewGroup container, int position) {
-            Fragment fragment = (Fragment) super.instantiateItem(container, position);
-            if (position == 0) {
-                tab1 = (InboxFragment) fragment;
-            } else if (position == 1) {
-                tab2 = (InboxFragment) fragment;
-            }
-
-            return fragment;
-        }
-
-        void refresh() {
-            if (viewPager.getCurrentItem() == 0) {
-                if (tab1 != null) {
-                    tab1.refresh();
-                }
-            } else if (viewPager.getCurrentItem() == 1 && tab2 != null) {
-                tab2.refresh();
-            }
-        }
-
-        void goBackToTop() {
-            if (viewPager.getCurrentItem() == 0) {
-                if (tab1 != null) {
-                    tab1.goBackToTop();
-                }
-            } else if (viewPager.getCurrentItem() == 1) {
-                if (tab2 != null) {
-                    tab2.goBackToTop();
-                }
-            }
-        }
-
-        void readAllMessages() {
-            if (tab1 != null) {
-                tab1.markAllMessagesRead();
-            }
-            if (tab2 != null) {
-                tab2.markAllMessagesRead();
-            }
         }
     }
 }
