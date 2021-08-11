@@ -31,7 +31,7 @@ public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<R
     public static final int CODE_BLOCK = 9;
     public static final int UPLOAD_IMAGE = 10;
 
-    private static final int ITEM_COUNT = 11;
+    private static final int ITEM_COUNT = 10;
 
     private CustomThemeWrapper customThemeWrapper;
     private ItemClickListener itemClickListener;
