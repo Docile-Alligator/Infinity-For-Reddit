@@ -449,7 +449,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
         new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                 .setTitle(titleResId)
                 .setMessage(messageResId)
-                .setPositiveButton(R.string.yes, (dialogInterface, i)
+                .setPositiveButton(R.string.discard_dialog_button, (dialogInterface, i)
                         -> finish())
                 .setNegativeButton(R.string.no, null)
                 .show();

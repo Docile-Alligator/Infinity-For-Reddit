@@ -361,81 +361,81 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            case R.id.action_sort_filtered_thing_activity:
-                switch (postType) {
-                    case PostDataSource.TYPE_FRONT_PAGE:
-                        SortTypeBottomSheetFragment bestSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-                        Bundle bestBundle = new Bundle();
-                        bestBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, false);
-                        bestSortTypeBottomSheetFragment.setArguments(bestBundle);
-                        bestSortTypeBottomSheetFragment.show(getSupportFragmentManager(), bestSortTypeBottomSheetFragment.getTag());
-                        break;
-                    case PostDataSource.TYPE_SEARCH:
-                        SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment = new SearchPostSortTypeBottomSheetFragment();
-                        Bundle searchBundle = new Bundle();
-                        searchPostSortTypeBottomSheetFragment.setArguments(searchBundle);
-                        searchPostSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchPostSortTypeBottomSheetFragment.getTag());
-                        break;
-                    case PostDataSource.TYPE_SUBREDDIT:
-                        if (name.equals("popular") || name.equals("all")) {
-                            SortTypeBottomSheetFragment popularAndAllSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-                            Bundle popularBundle = new Bundle();
-                            popularBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-                            popularAndAllSortTypeBottomSheetFragment.setArguments(popularBundle);
-                            popularAndAllSortTypeBottomSheetFragment.show(getSupportFragmentManager(), popularAndAllSortTypeBottomSheetFragment.getTag());
-                        } else {
-                            SortTypeBottomSheetFragment subredditSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-                            Bundle subredditSheetBundle = new Bundle();
-                            subredditSheetBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-                            subredditSortTypeBottomSheetFragment.setArguments(subredditSheetBundle);
-                            subredditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), subredditSortTypeBottomSheetFragment.getTag());
-                        }
-                        break;
-                    case PostDataSource.TYPE_MULTI_REDDIT:
-                        SortTypeBottomSheetFragment multiRedditSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-                        Bundle multiRedditBundle = new Bundle();
-                        multiRedditBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-                        multiRedditSortTypeBottomSheetFragment.setArguments(multiRedditBundle);
-                        multiRedditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), multiRedditSortTypeBottomSheetFragment.getTag());
-                        break;
-                    case PostDataSource.TYPE_USER:
-                        UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment = new UserThingSortTypeBottomSheetFragment();
-                        userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
-                }
-                return true;
-            case R.id.action_refresh_filtered_thing_activity:
-                if (mMenu != null) {
-                    mMenu.findItem(R.id.action_lazy_mode_filtered_thing_activity).setTitle(R.string.action_start_lazy_mode);
-                }
-                if (mFragment instanceof FragmentCommunicator) {
-                    ((FragmentCommunicator) mFragment).refresh();
-                }
-                return true;
-            case R.id.action_lazy_mode_filtered_thing_activity:
-                MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_filtered_thing_activity);
-                if (isInLazyMode) {
-                    ((FragmentCommunicator) mFragment).stopLazyMode();
-                    isInLazyMode = false;
-                    lazyModeItem.setTitle(R.string.action_start_lazy_mode);
-                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
-                    collapsingToolbarLayout.setLayoutParams(params);
-                } else {
-                    if (((FragmentCommunicator) mFragment).startLazyMode()) {
-                        isInLazyMode = true;
-                        lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
-                        collapsingToolbarLayout.setLayoutParams(params);
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            finish();
+            return true;
+        } else if (itemId == R.id.action_sort_filtered_thing_activity) {
+            switch (postType) {
+                case PostDataSource.TYPE_FRONT_PAGE:
+                    SortTypeBottomSheetFragment bestSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
+                    Bundle bestBundle = new Bundle();
+                    bestBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, false);
+                    bestSortTypeBottomSheetFragment.setArguments(bestBundle);
+                    bestSortTypeBottomSheetFragment.show(getSupportFragmentManager(), bestSortTypeBottomSheetFragment.getTag());
+                    break;
+                case PostDataSource.TYPE_SEARCH:
+                    SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment = new SearchPostSortTypeBottomSheetFragment();
+                    Bundle searchBundle = new Bundle();
+                    searchPostSortTypeBottomSheetFragment.setArguments(searchBundle);
+                    searchPostSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchPostSortTypeBottomSheetFragment.getTag());
+                    break;
+                case PostDataSource.TYPE_SUBREDDIT:
+                    if (name.equals("popular") || name.equals("all")) {
+                        SortTypeBottomSheetFragment popularAndAllSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
+                        Bundle popularBundle = new Bundle();
+                        popularBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
+                        popularAndAllSortTypeBottomSheetFragment.setArguments(popularBundle);
+                        popularAndAllSortTypeBottomSheetFragment.show(getSupportFragmentManager(), popularAndAllSortTypeBottomSheetFragment.getTag());
+                    } else {
+                        SortTypeBottomSheetFragment subredditSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
+                        Bundle subredditSheetBundle = new Bundle();
+                        subredditSheetBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
+                        subredditSortTypeBottomSheetFragment.setArguments(subredditSheetBundle);
+                        subredditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), subredditSortTypeBottomSheetFragment.getTag());
                     }
+                    break;
+                case PostDataSource.TYPE_MULTI_REDDIT:
+                    SortTypeBottomSheetFragment multiRedditSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
+                    Bundle multiRedditBundle = new Bundle();
+                    multiRedditBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
+                    multiRedditSortTypeBottomSheetFragment.setArguments(multiRedditBundle);
+                    multiRedditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), multiRedditSortTypeBottomSheetFragment.getTag());
+                    break;
+                case PostDataSource.TYPE_USER:
+                    UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment = new UserThingSortTypeBottomSheetFragment();
+                    userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
+            }
+            return true;
+        } else if (itemId == R.id.action_refresh_filtered_thing_activity) {
+            if (mMenu != null) {
+                mMenu.findItem(R.id.action_lazy_mode_filtered_thing_activity).setTitle(R.string.action_start_lazy_mode);
+            }
+            if (mFragment != null) {
+                ((FragmentCommunicator) mFragment).refresh();
+            }
+            return true;
+        } else if (itemId == R.id.action_lazy_mode_filtered_thing_activity) {
+            MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_filtered_thing_activity);
+            if (isInLazyMode) {
+                ((FragmentCommunicator) mFragment).stopLazyMode();
+                isInLazyMode = false;
+                lazyModeItem.setTitle(R.string.action_start_lazy_mode);
+                params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
+                collapsingToolbarLayout.setLayoutParams(params);
+            } else {
+                if (((FragmentCommunicator) mFragment).startLazyMode()) {
+                    isInLazyMode = true;
+                    lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
+                    collapsingToolbarLayout.setLayoutParams(params);
                 }
-                return true;
-            case R.id.action_change_post_layout_filtered_post_activity:
-                PostLayoutBottomSheetFragment postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
-                postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
-                return true;
+            }
+            return true;
+        } else if (itemId == R.id.action_change_post_layout_filtered_post_activity) {
+            PostLayoutBottomSheetFragment postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
+            postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+            return true;
         }
         return false;
     }

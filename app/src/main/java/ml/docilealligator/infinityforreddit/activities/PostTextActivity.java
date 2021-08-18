@@ -439,7 +439,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
         new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                 .setTitle(titleResId)
                 .setMessage(messageResId)
-                .setPositiveButton(R.string.discard, (dialogInterface, i)
+                .setPositiveButton(R.string.discard_dialog_button, (dialogInterface, i)
                         -> finish())
                 .setNegativeButton(R.string.cancel, null)
                 .show();

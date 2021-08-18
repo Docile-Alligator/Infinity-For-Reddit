@@ -607,6 +607,7 @@
     <string name="discard_detail">All the draft will NOT be saved.</string>
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="discard_dialog_button">Discard</string>
 
     <string name="no_data_received">No data received</string>
     <string name="no_image_path_received">No image path received</string>

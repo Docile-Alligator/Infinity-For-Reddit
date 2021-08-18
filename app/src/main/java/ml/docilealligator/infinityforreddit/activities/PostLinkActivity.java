@@ -418,7 +418,7 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
         new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                 .setTitle(titleResId)
                 .setMessage(messageResId)
-                .setPositiveButton(R.string.yes, (dialogInterface, i) -> finish())
+                .setPositiveButton(R.string.discard_dialog_button, (dialogInterface, i) -> finish())
                 .setNegativeButton(R.string.no, null)
                 .show();
     }
