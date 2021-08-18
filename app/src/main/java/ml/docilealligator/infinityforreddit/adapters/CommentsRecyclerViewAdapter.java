@@ -1145,7 +1145,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 constraintSet.applyTo(bottomConstraintLayout);
             }
 
-            linearLayout.getLayoutTransition().setAnimateParentHierarchy(false);
+            if (linearLayout.getLayoutTransition() != null) {
+                linearLayout.getLayoutTransition().setAnimateParentHierarchy(false);
+            }
 
             if (mShowCommentDivider) {
                 commentDivider.setBackgroundColor(mDividerColor);
