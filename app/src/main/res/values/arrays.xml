@@ -366,8 +366,10 @@
         <item>Italiana</item>
         <item>日本語</item>
         <item>Polskie</item>
+        <item>Português</item>
         <item>Português (BR)</item>
         <item>русский</item>
+        <item>Soomaali</item>
         <item>Español</item>
         <item>Türkçe</item>
         <item>Tiếng Việt</item>
@@ -386,8 +388,10 @@
         <item>it</item>
         <item>ja</item>
         <item>pl</item>
+        <item>pt</item>
         <item>pt-rBR</item>
         <item>ru</item>
+        <item>so</item>
         <item>es</item>
         <item>tr-rTR</item>
         <item>vi</item>

@@ -36,9 +36,6 @@
     <string name="action_refresh">"Osvježi"</string>
     <string name="action_add_comment">"Komentiraj"</string>
     <string name="action_save_post">"Spremi objavu"</string>
-
-    <!-- Fuzzy -->
-    <string name="action_view_crosspost_parent">"Roditeljska objava crossposta"</string>
     <string name="action_search">"Pretraži"</string>
 
     <!-- Would you like Lazy mode to be translated or should it be kept in English to emphasize it is a special feature? -->
@@ -227,7 +224,6 @@
     <string name="search">"Pretraživanje"</string>
     <string name="posting_video">"Objavljivanje videozapisa"</string>
     <string name="posting_image">"Objavljivanje slike"</string>
-    <string name="please_wait">"Molim pričekajte."</string>
     <string name="add_account">"Dodajte račun"</string>
     <string name="anonymous_account">"Anonimno"</string>
     <string name="log_out">"Odjava"</string>
@@ -255,30 +251,12 @@
     <string name="show_removed_post_failed">"Nismo uspjeli pronaći uklonjenu objavu"</string>
     <string name="cancel">"Otkaži"</string>
     <string name="ok">"U redu"</string>
-
-    <!-- Fuzzy -->
-    <string name="edit_success">"Uspješno uređeno"</string>
     <string name="delete_post_success">"Uspješno obrisano"</string>
     <string name="delete_post_failed">"Brisanje nije uspjelo"</string>
-
-    <!-- Fuzzy -->
-    <string name="mark_nsfw_success">"Uspješno označeno kao NSFW"</string>
     <string name="mark_nsfw_failed">"Označavanje kao NSFW nije uspjelo"</string>
-
-    <!-- Fuzzy -->
-    <string name="unmark_nsfw_success">"Uspješno odznačeno kao NSFW"</string>
     <string name="unmark_nsfw_failed">"Odznačavanje kao NSFW nije uspjelo"</string>
-
-    <!-- Fuzzy -->
-    <string name="mark_spoiler_success">"Uspješno označeno kao Spojler"</string>
     <string name="mark_spoiler_failed">"Označavanje kao Spojler nije uspjelo"</string>
-
-    <!-- Fuzzy -->
-    <string name="unmark_spoiler_success">"Uspješno odznačeno kao Spojler"</string>
     <string name="unmark_spoiler_failed">"Odznačavanje kao Spojler nije uspjelo"</string>
-
-    <!-- Fuzzy -->
-    <string name="update_flair_success">"Flair uspješno ažuriran"</string>
     <string name="update_flair_failed">"Flair nije ažuriran"</string>
     <string name="edit_flair">"Uredi Flair"</string>
     <string name="only_allow_64_chars">"Dopusti manje od 64 znaka"</string>
@@ -311,10 +289,6 @@
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">"Pomak vidljivog područja kod automatski pokrenutog videozapisa (Pejzažno)"</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Započni automatski pokretati videozapise kada ih je %1$d%% vidljivo"</string>
     <string name="settings_immersive_interface_title">"Imerzivno sučelje"</string>
-
-    <!-- Fuzzy -->
-    <string name="settings_immersive_interface_summary">"Ne odnosi se na sve stranice
-Možda ne radi na Androidu 11"</string>
     <string name="settings_immersive_interface_ignore_nav_bar_title">"Ignoriraj navigacijsku traku u imerzivnom sučelju"</string>
     <string name="settings_immersive_interface_ignore_nav_bar_summary">"Onemogući dodatnu podlogu na donjoj navigacijskoj traci"</string>
     <string name="settings_customize_tabs_in_main_page_title">"Uredi kartice na Glavnoj stranici"</string>
@@ -326,7 +300,6 @@ Možda ne radi na Androidu 11"</string>
     <string name="settings_volume_keys_navigate_posts_title">"Koristi tipke za glasnoću pri navigaciji objava"</string>
     <string name="settings_mute_video_title">"Isključi ton na videozapisima"</string>
     <string name="settings_mute_nsfw_video_title">"Isključi ton na NSFW videozapisima"</string>
-    <string name="settings_automatically_try_redgifs_title">"Automatski pokušaj pristupiti Redgifs ako su videozapisi na Gfycat-u uklonjeni."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Ignoriraj navigacijsku traku u video playeru"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Onemogući dodatnu marginu na video kontroleru"</string>
     <string name="settings_confirm_to_exit">"Potvrdi izlaz"</string>
@@ -341,12 +314,6 @@ Možda ne radi na Androidu 11"</string>
     <string name="settings_time_format_title">"Vremenski format"</string>
     <string name="settings_category_post_title">"Objava"</string>
     <string name="settings_default_post_layout">"Zadani raspored objave"</string>
-
-    <!-- Fuzzy -->
-    <string name="settings_show_divider_in_compact_layout">"Prikaži razdjelnik u Kompaktnom rasporedu"</string>
-
-    <!-- Fuzzy -->
-    <string name="settings_show_thumbnail_on_the_left_in_compact_layout">"Prikaži sličicu na lijevoj strani u Kompaktnom rasporedu"</string>
     <string name="settings_swap_tap_and_long_title">"Zamijeni kratki i dugi dodir u komentarima"</string>
     <string name="settings_swipe_to_go_back_title">"Prelazak prstom u desno za natrag"</string>
     <string name="settings_swipe_to_go_back_summary">"Ne primjenjuje se na sve stranice"</string>
@@ -689,9 +656,6 @@ Baziraj na Indigo Amoled temi"</string>
     <string name="cannot_find_theme">"Nije moguće pronaći tu temu"</string>
     <string name="import_theme">"Uvezi temu"</string>
     <string name="no_data_in_clipboard">"Nije moguće pronaći podatke u međuspremniku"</string>
-
-    <!-- Fuzzy -->
-    <string name="import_theme_success">"Uvoz teme uspješan"</string>
     <string name="parse_theme_failed">"Rasčlana teme nije uspjela"</string>
     <string name="duplicate_theme_name_dialog_title">"Pronađen je duplikat teme"</string>
     <string name="duplicate_theme_name_dialog_message">"U bazi podataka već postoji tema pod imenom %1$s. Želite li promijeniti ime uvezene teme?"</string>
@@ -699,27 +663,6 @@ Baziraj na Indigo Amoled temi"</string>
     <string name="override">"Nadglasati"</string>
     <string name="color_picker">"Birać boja"</string>
     <string name="invalid_color">"Neispravna boja"</string>
-
-    <!-- Fuzzy -->
-    <string name="delete_all_subreddits_success">"Brisanje svih podreddita uspješno"</string>
-
-    <!-- Fuzzy -->
-    <string name="delete_all_users_success">"Brisanje svih korisnika uspješno"</string>
-
-    <!-- Fuzzy -->
-    <string name="delete_all_sort_types_success">"Brisanje svih vrsti sortiranja uspješno"</string>
-
-    <!-- Fuzzy -->
-    <string name="delete_all_post_layouts_success">"Brisanje svih rasporeda objava uspješno"</string>
-
-    <!-- Fuzzy -->
-    <string name="delete_all_themes_success">"Brisanje svih tema uspješno"</string>
-
-    <!-- Fuzzy -->
-    <string name="delete_all_front_page_scrolled_positions_success">"Brisanje svih pozicija na početnoj strani uspješno"</string>
-
-    <!-- Fuzzy -->
-    <string name="reset_all_settings_success">"Resertiranje svih postavki uspješno"</string>
     <string name="username_preview">"u/Hostilenemy"</string>
     <string name="subreddit_preview">"r/Infinity_For_Reddit"</string>
     <string name="primary_text_preview">"Primarni tekst"</string>
@@ -758,9 +701,6 @@ Baziraj na Indigo Amoled temi"</string>
     <string name="downloading_reddit_video_muxing">"Multipleksiranje videa i audija"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"Spremanje videa"</string>
     <string name="downloading_reddit_video_finished">"Preuzeto"</string>
-
-    <!-- Fuzzy -->
-    <string name="downloading_reddit_video_failed_cannot_get_cache_directory">"Preuzimanje nije uspjelo: nije moguće pristupiti predmemoriji"</string>
     <string name="downloading_reddit_video_failed_cannot_download_video">"Preuzimanje nije uspjelo: nije moguće preuzeti videozapis"</string>
     <string name="downloading_reddit_video_failed_cannot_save_video">"Preuzimanje nije uspjelo: nije moguće spremiti videozapis u predmemoriju"</string>
     <string name="downloading_reddit_video_failed_cannot_save_audio">"Preuzimanje nije uspjelo: nije moguće spremiti audio zapis u predmemoriju"</string>
@@ -810,12 +750,6 @@ Baziraj na Indigo Amoled temi"</string>
     <string name="settings_pull_to_refresh_title">"Povuci za ovježavanje"</string>
     <string name="settings_security_title">"Sigurnost"</string>
     <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Zatraži autentikaciju pri ulasku u Račun u navigacijskoj ladici"</string>
-
-    <!-- Fuzzy -->
-    <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Dugo pritisni za skrivanje alatne trake u Kompaktnom rasporedu"</string>
-
-    <!-- Fuzzy -->
-    <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"Alatna traka u Kompaktnom rasporedu je zadano skrivena"</string>
     <string name="settings_customize_bottom_app_bar_title">"Uredi donju navigacijsku traku"</string>
     <string name="settings_main_activity_bottom_app_bar_group_summary">"Glavna stranica"</string>
     <string name="settings_other_activities_bottom_app_bar_group_summary">"Druge stranice"</string>
@@ -826,11 +760,6 @@ Baziraj na Indigo Amoled temi"</string>
     <string name="settings_bottom_app_bar_option_4">"Opcija 4"</string>
     <string name="settings_bottom_app_bar_fab">"Plutajući akcijski gumb"</string>
     <string name="settings_data_saving_mode">"Način uštede podataka"</string>
-
-    <!-- Fuzzy -->
-    <string name="settings_data_saving_mode_info_summary">"U načinu uštede podataka:
-Slike predpregleda su niže rezolucije.
-Reddit videi su niže rezolucije."</string>
     <string name="settings_translation_title">"Prijevod"</string>
     <string name="settings_translation_summary">"Prevedi ovu aplikaciju na POEditor-u. Hvala svim prinosnicima."</string>
     <string name="settings_credits_national_flags">"Zastave država"</string>
@@ -858,10 +787,6 @@ Reddit videi su niže rezolucije."</string>
     <string name="change_post_layout">"Promjeni raspored objava"</string>
     <string name="give_award_dialog_title">"Nagraditi?"</string>
     <string name="anonymous">"Anonimno"</string>
-
-    <!-- Fuzzy -->
-    <string name="give_award_error_message">"Kod: %1$d/
-Poruka: %2$s"</string>
     <string name="give_award_success">"Nagrađeno"</string>
     <string name="give_award_failed">"Nagrađivanje nije uspjelo"</string>
     <string name="warning">"Upozorenje"</string>
@@ -869,12 +794,6 @@ Poruka: %2$s"</string>
     <string name="this_user_has_nsfw_content">"Ovaj korisnik ima NSFW sadržaj"</string>
     <string name="dismiss">"Odbaci"</string>
     <string name="leave">"Napusti"</string>
-
-    <!-- Fuzzy -->
-    <string name="go_to_subreddit">"Idi na podreddit"</string>
-
-    <!-- Fuzzy -->
-    <string name="go_to_user">"Idi na profil korisnika"</string>
     <string name="go_to_thing_hint">"Ime"</string>
     <string name="random">"Nasumično"</string>
     <string name="random_subreddit">"Nasumični podreddit"</string>
@@ -896,9 +815,6 @@ Poruka: %2$s"</string>
     <string name="settings_disable_image_preview_title">"Onemogući predpregled slike u "</string>
     <string name="settings_swipe_action_swipe_left_title">"Povuci lijevo"</string>
     <string name="settings_swipe_action_swipe_right_title">"Prelazak prstom u desno"</string>
-
-    <!-- Fuzzy -->
-    <string name="settings_swipe_action_info_summary">"Nije primjenjivo na feed sa više od 1 stupca ili pojedinosti o objavi"</string>
     <string name="theme_item_no_preview_post_type_icon_tint">"Boja ikone objave bez predpregleda"</string>
     <string name="theme_item_no_preview_post_type_icon_tint_detail">"Primjenjeno na: Ikonu koja ukazuje vrstu objave kada nema predpregleda"</string>
     <string name="theme_item_no_preview_post_type_background_color">"Boja pozadine objave bez predpregleda"</string>
@@ -925,36 +841,193 @@ Poruka: %2$s"</string>
     <string name="settings_post_history_title">"Povijest objava"</string>
     <string name="settings_mark_posts_as_read_title">"Označi objave kao pročitano"</string>
     <string name="settings_mark_posts_as_read_after_voting_title">"Označi objave kao pročitano nakon glasanja"</string>
+    <string name="settings_mark_posts_as_read_on_scroll_title"></string>
     <string name="settings_hide_read_posts_automatically_title">"Sakrij pročitane objave automatski"</string>
     <string name="settings_sort_type_title">"Vrsta sortiranja"</string>
     <string name="settings_save_sort_type_title">"Spremi vrstu sortiranja"</string>
     <string name="settings_subreddit_default_sort_type_title">"Zadana vrsta sortiranja subreddit-a"</string>
     <string name="settings_subreddit_default_sort_time_title">"Zadano vrijeme sortiranja subreddit-a"</string>
-
-    <!-- Fuzzy -->
-    <string name="settings_user_default_sort_type_title">"Zadana tip sortiranja korisnika"</string>
     <string name="settings_user_default_sort_time_title">"Zadano vrijeme sortiranja korisnika"</string>
     <string name="open_link">"Otvori link"</string>
+    <string name="select_subreddits_and_users"></string>
+    <string name="theme_item_read_post_title_color"></string>
+    <string name="theme_item_read_post_title_color_detail"></string>
+    <string name="theme_item_read_post_content_color"></string>
+    <string name="theme_item_read_post_content_color_detail"></string>
+    <string name="theme_item_read_post_card_view_background_color"></string>
+    <string name="theme_item_read_post_card_view_background_color_detail"></string>
+    <string name="delete_all_read_posts_success"></string>
+    <string name="hide_read_posts"></string>
+    <string name="filter_posts"></string>
+    <string name="only_nsfw"></string>
+    <string name="only_spoiler"></string>
+    <string name="title_excludes_strings_hint"></string>
+    <string name="title_excludes_regex_hint"></string>
+    <string name="exclude_subreddits_hint"></string>
+    <string name="exclude_users_hint"></string>
+    <string name="exclude_flairs_hint"></string>
+    <string name="contain_flairs_hint"></string>
+    <string name="min_vote_hint"></string>
+    <string name="max_vote_hint"></string>
+    <string name="min_comments_hint"></string>
+    <string name="max_comments_hint"></string>
+    <string name="min_awards_hint"></string>
+    <string name="max_awards_hint"></string>
+    <string name="post_filter_name_hint"></string>
     <string name="post_filter_requires_a_name">"Koje je ime filtera objave"</string>
+    <string name="duplicate_post_filter_dialog_title"></string>
     <string name="duplicate_post_filter_dialog_message">"Poništi?"</string>
+    <string name="apply_post_filter_to"></string>
     <string name="post_filter_usage_home">"Home"</string>
+    <string name="post_filter_usage_subreddit"></string>
     <string name="post_filter_usage_subreddit_all">"Subreddit"</string>
+    <string name="post_filter_usage_user"></string>
+    <string name="post_filter_usage_user_all"></string>
+    <string name="post_filter_usage_multireddit"></string>
+    <string name="post_filter_usage_multireddit_all"></string>
+    <string name="post_filter_usage_search"></string>
     <string name="subreddit">"Subreddit"</string>
     <string name="user">"Korisnik"</string>
+    <string name="edit_post_filter_name_of_usage_info"></string>
+    <string name="read_all_messages_time_limit"></string>
+    <string name="read_all_messages_success"></string>
+    <string name="read_all_messages_failed"></string>
+    <string name="add_subreddit_or_user_to_multireddit_success"></string>
+    <string name="add_subreddit_or_user_to_multireddit_failed"></string>
     <string name="choose_a_user">"Odaberi korisnika"</string>
     <string name="settings_click_to_show_media_in_gallery_layout">"Klikni da prikažeš medij u obliku galerije"</string>
     <string name="settings_hide_post_type">"Sakrij vrstu objave"</string>
     <string name="settings_hide_the_number_of_awards">"Sakrij broj nagrada"</string>
+    <string name="settings_hide_subreddit_and_user_prefix"></string>
     <string name="settings_hide_the_number_of_votes">"Sakrij broj glasanja"</string>
     <string name="settings_hide_the_number_of_comments">"Sakrij broj komentara"</string>
     <string name="post_layout_gallery">"Izgled galerije"</string>
     <string name="post_layout_card_2">"Izgled karte 2"</string>
+    <string name="have_trouble_login_title"></string>
     <string name="have_trouble_login_message">"Želite li se prijaviti na drugi način?"</string>
     <string name="vote">"Glasaj"</string>
     <string name="action_share_link">"Podjeli link"</string>
     <string name="action_copy_link">"Kopiraj link"</string>
     <string name="action_add_to_post_filter">"Dodaj u vrstu objave"</string>
     <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Nemoj blurati NSFW slike u NSFW Subredditima"</string>
-    <string name="settings_show_avatar_on_the_right">"Prikazi sliku Avatara sa lijeve strane"</string>
+    <string name="settings_backup_settings_title"></string>
     <string name="settings_restore_settings_title">"Vrati postavke"</string>
+    <string name="settings_credits_love_animation_title"></string>
+    <string name="settings_swipe_between_posts_title"></string>
+    <string name="settings_navigation_drawer_title"></string>
+    <string name="settings_collapse_account_section_title"></string>
+    <string name="settings_collapse_post_section_title"></string>
+    <string name="settings_collapse_preferences_section_title"></string>
+    <string name="settings_collapse_favorite_subreddits_section_title"></string>
+    <string name="settings_collapse_subscribed_subreddits_section_title"></string>
+    <string name="settings_hide_favorite_subreddits_sections_title"></string>
+    <string name="settings_hide_subscribed_subreddits_sections_title"></string>
+    <string name="settings_default_search_result_tab"></string>
+    <string name="device_default"></string>
+    <string name="set_by_battery_saver"></string>
+    <string name="theme_item_upvote_ratio_icon_tint"></string>
+    <string name="theme_item_upvote_ratio_icon_tint_detail"></string>
+    <string name="theme_item_current_user_color"></string>
+    <string name="theme_item_current_user_color_detail"></string>
+    <string name="exclude_domains_hint"></string>
+    <string name="anonymous_front_page_no_subscriptions"></string>
+    <string name="backup_settings_success"></string>
+    <string name="create_zip_in_destination_directory_failed"></string>
+    <string name="backup_some_settings_failed"></string>
+    <string name="restore_settings_success"></string>
+    <string name="restore_settings_partially_failed"></string>
+    <string name="restore_settings_failed_file_corrupted"></string>
+    <string name="restore_settings_failed_cannot_get_file"></string>
+    <string name="suicide_prevention_quote"></string>
+    <string name="do_not_show_this_again"></string>
+    <string name="continue_suicide_prevention_activity"></string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_redirect_url"></string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_post"></string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_post_id"></string>
+    <string name="always_on"></string>
+    <string name="only_on_wifi"></string>
+    <string name="never"></string>
+    <string name="normal"></string>
+    <string name="extra_large"></string>
+    <string name="enormously_large"></string>
+    <string name="default_in_array"></string>
+    <string name="off"></string>
+    <string name="only_on_cellular_data"></string>
+    <string name="upvote"></string>
+    <string name="downvote"></string>
+    <string name="select"></string>
+    <string name="exclude_subreddit"></string>
+    <string name="exclude_user"></string>
+    <string name="exclude_flair"></string>
+    <string name="contain_flair"></string>
+    <string name="exclude_domain"></string>
+    <string name="suggest_title"></string>
+    <string name="suggest_title_failed"></string>
+    <string name="action_delete_logs"></string>
+    <string name="inbox_with_count"></string>
+    <string name="comment_continue_thread"></string>
+    <string name="settings_swipe_vertically_to_go_back_from_media_title"></string>
+    <string name="settings_hide_post_flair"></string>
+    <string name="settings_crash_reports_title"></string>
+    <string name="settings_nsfw_and_spoiler_dangerous_group_title"></string>
+    <string name="settings_disable_nsfw_forever_title"></string>
+    <string name="settings_show_only_one_comment_level_indicator"></string>
+    <string name="save_comment"></string>
+    <string name="unsave_comment"></string>
+    <string name="copy_multi_reddit_path"></string>
+    <string name="copy_multi_reddit_path_failed"></string>
+    <string name="crash_reports_deleted"></string>
+    <string name="disable_nsfw_forever_message"></string>
+    <string name="reply"></string>
+    <string name="rpan_activity_label"></string>
+    <string name="post_gallery_activity_label"></string>
+    <string name="trending_activity_label"></string>
+    <string name="action_share_rpan_link"></string>
+    <string name="action_share_post_link"></string>
+    <string name="rpan"></string>
+    <string name="trending"></string>
+    <string name="receive_post_reply_notifications"></string>
+    <string name="bottom_sheet_post_gallery"></string>
+    <string name="posting_gallery"></string>
+    <string name="label_reddit"></string>
+    <string name="settings_default_link_post_layout"></string>
+    <string name="settings_category_material_you_title"></string>
+    <string name="settings_enable_material_you_warning_summary"></string>
+    <string name="settings_enable_material_you_title"></string>
+    <string name="settings_enable_material_you_summary"></string>
+    <string name="settings_apply_material_you_title"></string>
+    <string name="settings_apply_material_you_summary"></string>
+    <string name="settings_more_tabs_show_favorite_multireddits_title"></string>
+    <string name="settings_more_tabs_show_multireddits_title"></string>
+    <string name="settings_collapse_reddit_section_title"></string>
+    <string name="settings_video_player_automatic_landscape_orientation"></string>
+    <string name="settings_remember_muting_option_in_post_feed"></string>
+    <string name="link_post_layout_auto"></string>
+    <string name="uploaded_images"></string>
+    <string name="select_image"></string>
+    <string name="capture"></string>
+    <string name="uploading_image"></string>
+    <string name="upload_image_success"></string>
+    <string name="get_image_bitmap_failed"></string>
+    <string name="upload_image_failed"></string>
+    <string name="load_rpan_broadcasts_failed"></string>
+    <string name="parse_rpan_broadcasts_failed"></string>
+    <string name="parse_rpan_broadcast_failed"></string>
+    <string name="search_comments"></string>
+    <string name="please_wait_image_is_uploading"></string>
+    <string name="error_fetch_trending_search"></string>
+    <string name="error_parse_trending_search"></string>
+    <string name="no_trending_search"></string>
+    <string name="wiki_activity_label"></string>
+    <string name="settings_post_details_title"></string>
+    <string name="settings_separate_post_and_comments_in_portrait_mode_title"></string>
+    <string name="settings_separate_post_and_comments_in_landscape_mode_title"></string>
+    <string name="settings_separate_post_and_comments_summary"></string>
+    <string name="settings_use_bottom_toolbar_in_media_viewer_title"></string>
+    <string name="settings_secure_mode_title"></string>
+    <string name="settings_secure_mode_summary"></string>
+    <string name="discard_dialog_button"></string>
+    <string name="error_loading_wiki"></string>
+    <string name="no_wiki"></string>
+    <string name="material_you_notification_title"></string>
 </resources>

@@ -223,6 +223,8 @@
     <string name="search">"Keresés"</string>
     <string name="posting_video">"Videó posztolása"</string>
     <string name="posting_image">"Kép posztolása"</string>
+
+    <!-- Fuzzy -->
     <string name="please_wait">"Kérlek várj."</string>
     <string name="add_account">"Fiók hozzáadása"</string>
     <string name="anonymous_account">"Anoním"</string>
@@ -309,6 +311,8 @@
     <string name="settings_volume_keys_navigate_posts_title">"Hangerőgombok használata posztok navigálására"</string>
     <string name="settings_mute_video_title">"Videók némítása"</string>
     <string name="settings_mute_nsfw_video_title">"NSFW videók némítása"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_automatically_try_redgifs_title">"Próbálja autómatikusan elérni a Redgifeket, ha a videók Gfycat-en el vannak távolítva."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Navigációs sáv ignorálása videó lejátszóban"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Annak megelőzése, hogy a videó kontrollernek extra szegélye legyen"</string>

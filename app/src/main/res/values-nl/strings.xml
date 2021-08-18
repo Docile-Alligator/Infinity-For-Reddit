@@ -232,6 +232,8 @@ Tik om opnieuw te proberen."</string>
     <string name="search">"Zoeken"</string>
     <string name="posting_video">"Video is aan het posten"</string>
     <string name="posting_image">"Afbeelding is aan het posten"</string>
+
+    <!-- Fuzzy -->
     <string name="please_wait">"Even geduld aub."</string>
     <string name="add_account">"Account toevoegen"</string>
     <string name="anonymous_account">"Anoniem"</string>
@@ -292,7 +294,7 @@ Tik om opnieuw te proberen."</string>
     <string name="settings_amoled_dark_title">"Amoled Donker"</string>
     <string name="settings_interface_title">"Interface"</string>
     <string name="settings_gestures_and_buttons_title">"Gebaren &amp; Knoppen"</string>
-    <string name="settings_save_front_page_scrolled_position_title">"Bewaar de schuifpositie in HOME"</string>
+    <string name="settings_save_front_page_scrolled_position_title">"Bewaar de scrollpositie in HOME"</string>
     <string name="settings_save_front_page_scrolled_position_summary">"Blader door nieuwe posts na het vernieuwen in HOME (voorpagina, sorteertype: Beste)"</string>
     <string name="settings_open_link_in_app_title">"Open Link In App"</string>
     <string name="settigns_video_title">"Video"</string>
@@ -316,6 +318,8 @@ Tik om opnieuw te proberen."</string>
     <string name="settings_volume_keys_navigate_posts_title">"Gebruik Volumetoetsen om door Posts te Navigeren"</string>
     <string name="settings_mute_video_title">"Video's Dempen"</string>
     <string name="settings_mute_nsfw_video_title">"NSFW Video's Dempen"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_automatically_try_redgifs_title">"Probeer Automatisch Redgifs te Openen als Video's op Gfycat zijn Verwijderd."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Negeer de Navigatiebalk in de Videospeler"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Voorkom dat de Videocontroller een Extra Marge Heeft"</string>
@@ -876,4 +880,14 @@ Bericht: %2$s"</string>
     <string name="theme_item_no_preview_post_type_background_color">"Geen Voorbeeld Posttype Achtergrondkleur"</string>
     <string name="theme_item_no_preview_post_type_background_color_detail">"Toegepast op: tijdelijke aanduiding die het type post aangeeft wanneer er geen voorbeeld beschikbaar is"</string>
     <string name="settings_language_title">"Taal"</string>
+    <string name="customize_post_filter_activity_label">"Berichtenfilter aanpassen"</string>
+    <string name="filtered_posts_activity_subtitle">"Gefilterde Posts"</string>
+    <string name="search_users_result_activity_label">"Gebruikers"</string>
+    <string name="multireddit_selection_activity_label">"Selecteer een Multireddit"</string>
+    <string name="action_save_to_database">"Opslaan naar Database"</string>
+    <string name="action_read_all_messages">"Lees Alle Berichten"</string>
+    <string name="settings_mark_posts_as_read_on_scroll_title">"Markeer berichten als gelezen bij scroll"</string>
+    <string name="settings_sort_type_title">"Sorteertype"</string>
+    <string name="post_filter_usage_multireddit">"Multireddit: %1$s"</string>
+    <string name="post_filter_usage_multireddit_all">"Multireddit"</string>
 </resources>

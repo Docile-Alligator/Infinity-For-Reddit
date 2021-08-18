@@ -252,6 +252,8 @@ Behavior -->
     <string name="search">"खोज "</string>
     <string name="posting_video">"वीडियो पोस्ट हो रही है "</string>
     <string name="posting_image">"चित्र पोस्ट हो रहा है "</string>
+
+    <!-- Fuzzy -->
     <string name="please_wait">"कृपया इंतजार करें "</string>
     <string name="add_account">"खाता जोड़ें "</string>
     <string name="anonymous_account">"अज्ञात "</string>
@@ -354,6 +356,8 @@ Behavior -->
 
     <!-- Are those commands or a state? Like 'search' is a state in 'search opration' but is a command in 'search something'. Hindi has different appraoch for these two. -->
     <string name="settings_mute_nsfw_video_title">"मौन NSFW वीडियोज"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_automatically_try_redgifs_title">"स्वतः ही Redgifs खोलने का प्रयास यदि Gfycat पर वीडियोज हटा दी गयी  हों "</string>
     <string name="settings_video_player_ignore_nav_bar_title">"वीडियो प्लेयर में नेवीगेशन बार का छिपना"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"वीडियो कंट्रोलर द्वारा अतिरिक्त हाशिया लेने पर रोक "</string>

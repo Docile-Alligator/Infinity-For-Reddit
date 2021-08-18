@@ -225,6 +225,8 @@
     <string name="search">"Szukaj"</string>
     <string name="posting_video">"Tworzenie postu z wideo"</string>
     <string name="posting_image">"Tworzenie postu z obrazem"</string>
+
+    <!-- Fuzzy -->
     <string name="please_wait">"Proszę czekać"</string>
     <string name="add_account">"Dodaj konto"</string>
     <string name="anonymous_account">"Anonim"</string>
@@ -309,6 +311,8 @@
     <string name="settings_volume_keys_navigate_posts_title">"Używaj przycisków głośności, aby nawigować posty"</string>
     <string name="settings_mute_video_title">"Wycisz filmy"</string>
     <string name="settings_mute_nsfw_video_title">"Wycisz wideo NSFW"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_automatically_try_redgifs_title">"Automatycznie próbuj uzyskać filmy z Redgifs, gdy są usunięte z Gfycat"</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Ignoruj pasek nawigacji w odtwarzaczu wideo"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Zapobiegaj posiadaniu dodatkowego marginesu przez kontroler wideo"</string>
@@ -907,15 +911,21 @@ Wiadomość: %2$s"</string>
     <string name="settings_user_default_sort_time_title">"Domyślny typ sortowania czasu użytkowników"</string>
     <string name="open_link">"Otwórz link"</string>
     <string name="select_subreddits_and_users">"Wybierz subreddity i użytkowników"</string>
+    <string name="theme_item_read_post_title_color">"Kolor tytułu przeczytanego postu"</string>
+    <string name="theme_item_read_post_title_color_detail">"Używane do: tytuł przeczytanego postu"</string>
+    <string name="theme_item_read_post_content_color">"Kolor treści przeczytanego postu"</string>
+    <string name="theme_item_read_post_content_color_detail">"Używane do: treść przeczytanego postu"</string>
     <string name="hide_read_posts">"Ukryj przeczytane posty"</string>
     <string name="filter_posts">"Filtruj posty"</string>
     <string name="only_nsfw">"Tylko NSFW"</string>
     <string name="only_spoiler">"Tylko spoilery"</string>
+    <string name="title_excludes_regex_hint">"Tytuł: wyklucza regex"</string>
     <string name="exclude_subreddits_hint">"Bez subredditów (np. funny,AskReddit)"</string>
     <string name="exclude_users_hint">"Bez użytkowników"</string>
     <string name="post_filter_requires_a_name">"Jaka jest nazwa filtru tego posta?"</string>
     <string name="duplicate_post_filter_dialog_title">"'%1$s' już istnieje"</string>
     <string name="duplicate_post_filter_dialog_message">"Nadpisać?"</string>
+    <string name="apply_post_filter_to">"Zastosuj do"</string>
     <string name="post_filter_usage_home">"Strona główna"</string>
     <string name="post_filter_usage_subreddit_all">"Subreddit"</string>
     <string name="post_filter_usage_user">"Użytkownik: %1$s"</string>
@@ -927,6 +937,7 @@ Wiadomość: %2$s"</string>
     <string name="user">"Użytkownik"</string>
     <string name="edit_post_filter_name_of_usage_info">"Zostaw puste aby zastosować ten filtr postów dla każdego subbredita /
 użytkownika / multireddita"</string>
+    <string name="read_all_messages_time_limit">"Zbyt często to robisz. Spróbuj później. To limit przesyłu API Reddita."</string>
     <string name="read_all_messages_success">"Odczytano wszystkie wiadomości pomyślnie"</string>
     <string name="read_all_messages_failed">"Nie można odczytać wiadomości"</string>
     <string name="add_subreddit_or_user_to_multireddit_success">"%1$s został dodany multireddita %2$s"</string>
@@ -943,7 +954,10 @@ użytkownika / multireddita"</string>
     <string name="vote">"Zagłosuj"</string>
     <string name="action_share_link">"Zapisz link"</string>
     <string name="action_copy_link">"Skopiuj link"</string>
+    <string name="action_add_to_post_filter">"Dodaj do filtra postów"</string>
     <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Nie bluruj obrazków NSFW w NSFW subredditach"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_avatar_on_the_right">"Pokazuj awatary z lewej strony"</string>
     <string name="settings_backup_settings_title">"Opcje backupu"</string>
     <string name="settings_restore_settings_title">"Przywróć ustawienia"</string>
@@ -980,4 +994,10 @@ użytkownika / multireddita"</string>
 
 Nadal chcesz ją włączyć?"</string>
     <string name="reply">"Odpowiedz"</string>
+    <string name="uploaded_images">"Przesłane obrazy"</string>
+    <string name="select_image">"Wybierz obraz"</string>
+    <string name="uploading_image">"Przesyłanie"</string>
+    <string name="upload_image_failed">"Błąd przesyłania obrazu"</string>
+    <string name="search_comments">"Szukaj w komentarzach"</string>
+    <string name="please_wait_image_is_uploading">"Obraz jest wciąż przesyłany. Proszę czekać."</string>
 </resources>

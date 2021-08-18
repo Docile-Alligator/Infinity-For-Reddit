@@ -243,6 +243,8 @@ Appuyez pour réessayer."</string>
     <string name="search">"Rechercher"</string>
     <string name="posting_video">"Publication de la vidéo"</string>
     <string name="posting_image">"Publication de l'image"</string>
+
+    <!-- Fuzzy -->
     <string name="please_wait">"Veuillez patienter."</string>
     <string name="add_account">"Ajouter un compte"</string>
     <string name="anonymous_account">"Anonyme"</string>
@@ -360,6 +362,8 @@ peut ne pas fonctionner sur Android 11"</string>
     <string name="settings_volume_keys_navigate_posts_title">"Utiliser les Boutons de Volume pour Naviguer dans les Publications"</string>
     <string name="settings_mute_video_title">"Couper le Son des Vidéos"</string>
     <string name="settings_mute_nsfw_video_title">"Couper le Son des Vidéos NSFW"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_automatically_try_redgifs_title">"Essayez d'Accéder Automatiquement aux Redgifs si les Vidéos sur Gfycat sont Supprimées."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Ignorer la Barre de Navigation dans le Lecteur Vidéo"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Empêcher le Contrôleur Vidéo de créer une Marge Supplémentaire"</string>
@@ -950,13 +954,24 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="filtered_posts_activity_subtitle">"Posts filtrés"</string>
     <string name="post_filter_preference_activity_label">"Filtre des posts"</string>
     <string name="search_users_result_activity_label">"Utilisateurs"</string>
+    <string name="action_save_to_database">"Sauvegarder dans la base de données"</string>
+    <string name="action_read_all_messages">"Lire tous les messages"</string>
+    <string name="search_only_subreddits_hint">"Chercher des subreddits"</string>
+    <string name="search_only_users_hint">"Chercher des utilisateurs"</string>
+    <string name="post_type_gif">"Gif"</string>
     <string name="post_type_gallery">"Gallerie"</string>
     <string name="settings_privacy_policy_title">"Politique de confidentialité"</string>
+    <string name="settings_delete_read_posts_in_database_title">"Supprimer tous les messages lus de la base de données"</string>
     <string name="settings_post_history_title">"Historique des posts"</string>
     <string name="settings_mark_posts_as_read_after_voting_title">"Marquer les posts comme lus après avoir voté"</string>
     <string name="settings_hide_read_posts_automatically_title">"Cacher les posts lus automatiquement"</string>
     <string name="open_link">"Ouvrir le lien"</string>
+    <string name="theme_item_read_post_title_color_detail">"Lire le Titre du Post"</string>
+    <string name="theme_item_read_post_content_color">"Lire la couleur du contenu du post"</string>
+    <string name="theme_item_read_post_content_color_detail">"Appliqué à: Lire le contenu du post"</string>
+    <string name="delete_all_read_posts_success">"Suppression de tous les post lus avec succès"</string>
     <string name="hide_read_posts">"Cacher les posts lus"</string>
+    <string name="filter_posts">"Filtrer les posts"</string>
     <string name="only_nsfw">"Seulement NSFW"</string>
     <string name="only_spoiler">"Seulement Spoiler"</string>
     <string name="exclude_subreddits_hint">"Exclure des subreddits (e.g. funny, AskReddit)"</string>
@@ -968,4 +983,34 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="post_filter_usage_user_all">"Utilisateur"</string>
     <string name="read_all_messages_time_limit">"You faites cela trop fréquemment. Essayez plus tard. C'est le taux limite de l'Api Reddit."</string>
     <string name="choose_a_user">"Choisir un utilisateur"</string>
+    <string name="settings_hide_the_number_of_votes">"Cacher le Nombre de Votes"</string>
+    <string name="settings_hide_the_number_of_comments">"Cacher le Nombre de Commentaires"</string>
+    <string name="have_trouble_login_message">"Voulez vous essayer un autre moyen d'identification ?"</string>
+    <string name="vote">"Vote"</string>
+    <string name="action_share_link">"Partager le Lien"</string>
+    <string name="action_copy_link">"Copier le Lien"</string>
+    <string name="action_add_to_post_filter">"Ajouter aux Filtres de Post"</string>
+    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Ne pas cacher les images NSFW dans les Subreddits"</string>
+    <string name="settings_show_avatar_on_the_right">"Voir l'avatar à droite"</string>
+    <string name="settings_backup_settings_title">"Paramètres de Sauvegarde"</string>
+    <string name="settings_restore_settings_title">"Restaurer les Paramètres"</string>
+    <string name="settings_navigation_drawer_title">"Onglet de Navigation"</string>
+    <string name="settings_hide_favorite_subreddits_sections_title">"Cacher la section de subreddits favoris"</string>
+    <string name="device_default">"Appareil par defaut"</string>
+    <string name="theme_item_current_user_color">"Utilisateur actuel"</string>
+    <string name="theme_item_current_user_color_detail">"Appliqué à : Utilisateurs en commentaires"</string>
+    <string name="anonymous_front_page_no_subscriptions">"Commence en rejoignant un subreddit !"</string>
+    <string name="create_zip_in_destination_directory_failed">"Impossible de créer un zip de sauvegarde dans ce dossier"</string>
+    <string name="restore_settings_success">"Paramètres restaurés avec succès. Redémarre l'application pour voir les changements"</string>
+    <string name="do_not_show_this_again">"Ne plus voir ça"</string>
+    <string name="continue_suicide_prevention_activity">"Continuer"</string>
+    <string name="inbox_with_count">"Boîte de Réception (%1$d)"</string>
+    <string name="reply">"Répondre"</string>
+    <string name="uploaded_images">"Image uploadée"</string>
+    <string name="select_image">"Sélectionner une image"</string>
+    <string name="uploading_image">"En train d'uploader"</string>
+    <string name="upload_image_success">"Image uploadée avec succès. Clique sur le bouton image de nouveau pour voir les images uploadées."</string>
+    <string name="upload_image_failed">"Impossible d'uploader l'image"</string>
+    <string name="search_comments">"Chercher des commentaires"</string>
+    <string name="please_wait_image_is_uploading">"Une image est toujours sn train d'être uploadée. Merci d'attendre"</string>
 </resources>

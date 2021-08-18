@@ -4,9 +4,9 @@
     <string name="comment_activity_label">"Invia commento"</string>
     <string name="comment_activity_label_is_replying">"Rispondi"</string>
     <string name="post_text_activity_label">"Post testuale"</string>
-    <string name="subreddit_selection_activity_label">"Seleziona Subreddit"</string>
-    <string name="post_link_activity_label">"Post Link"</string>
-    <string name="post_image_activity_label">"Post di Immagine"</string>
+    <string name="subreddit_selection_activity_label">"Seleziona subreddit"</string>
+    <string name="post_link_activity_label">"Post link"</string>
+    <string name="post_image_activity_label">"Post immagine"</string>
     <string name="post_video_activity_label">"Post video"</string>
     <string name="rules_activity_label">"Regole"</string>
     <string name="search_subreddits_activity_label">"Subreddit"</string>
@@ -14,10 +14,10 @@
     <string name="edit_comment_activity_label">"Modifica commento"</string>
     <string name="view_message_activity_label">"Posta"</string>
     <string name="settings_activity_label">"Impostazioni"</string>
-    <string name="account_saved_thing_activity_label">"Salvato"</string>
+    <string name="account_saved_thing_activity_label">"Post salvati"</string>
     <string name="create_multi_reddit_activity_label">"Crea Multireddit"</string>
     <string name="subreddit_multiselection_activity_label">"Seleziona Subreddit"</string>
-    <string name="custom_theme_listing_activity_label">"Tema personalizzato"</string>
+    <string name="custom_theme_listing_activity_label">"Temi personalizzati"</string>
     <string name="customize_theme_activity_label">"Personalizza tema"</string>
     <string name="customize_theme_activity_create_theme_label">"Crea tema"</string>
     <string name="theme_preview_activity_label">"Anteprima tema"</string>
@@ -26,7 +26,7 @@
     <string name="report_activity_label">"Segnala"</string>
     <string name="view_imgur_media_activity_image_label">"Immagine %1$d/%2$d"</string>
     <string name="view_imgur_media_activity_video_label">"Video %1$d/%2$d"</string>
-    <string name="send_private_message_activity_label">"Invia PM"</string>
+    <string name="send_private_message_activity_label">"Invia messaggio privato"</string>
     <string name="view_reddit_gallery_activity_image_label">"Immagine %1$d/%2$d"</string>
     <string name="view_reddit_gallery_activity_gif_label">"Gif %1$d/%2$d"</string>
     <string name="view_reddit_gallery_activity_video_label">"Video %1$d/%2$d"</string>
@@ -38,17 +38,17 @@
     <string name="action_save_post">"Salva post"</string>
     <string name="action_view_crosspost_parent">"Mostra origine del crosspost"</string>
     <string name="action_search">"Cerca"</string>
-    <string name="action_start_lazy_mode">"Inizia Modalità pigra"</string>
-    <string name="action_stop_lazy_mode">"Ferma Modalità pigra"</string>
+    <string name="action_start_lazy_mode">"Attiva la modalità pigra"</string>
+    <string name="action_stop_lazy_mode">"Disattiva la modalità pigra"</string>
     <string name="action_send">"Invia"</string>
     <string name="action_sort">"Ordina"</string>
-    <string name="action_hide_post">"Nascondi Post"</string>
-    <string name="action_unhide_post">"Visualizza Post"</string>
+    <string name="action_hide_post">"Nascondi"</string>
+    <string name="action_unhide_post">"Rimuovi dai nascosti"</string>
     <string name="action_edit_post">"Modifica Post"</string>
     <string name="action_delete_post">"Elimina Post"</string>
-    <string name="action_mark_nsfw">"Seleziona NSFW"</string>
+    <string name="action_mark_nsfw">"Contrassegna NSFW"</string>
     <string name="action_unmark_nsfw">"Deseleziona NSFW"</string>
-    <string name="action_mark_spoiler">"Seleziona Spoiler"</string>
+    <string name="action_mark_spoiler">"Contrassegna Spoiler"</string>
     <string name="action_unmark_spoiler">"Deseleziona Spoiler"</string>
     <string name="action_edit_flair">"Modifica flair"</string>
     <string name="action_change_post_layout">"Cambia disposizione post"</string>
@@ -60,7 +60,7 @@
     <string name="action_report">"Segnala"</string>
     <string name="action_see_removed">"Visualizza Rimosso"</string>
     <string name="action_set_wallpaper">"Imposta come Sfondo"</string>
-    <string name="action_send_private_message">"Invia Messaggio Privato"</string>
+    <string name="action_send_private_message">"Invia Messaggio privato"</string>
     <string name="action_block_user">"Blocca utente"</string>
     <string name="parse_json_response_error">"Si è verificato un errore durante l'analisi della risposta JSON"</string>
     <string name="retrieve_token_error">"Errore durante il recupero del token"</string>
@@ -68,38 +68,38 @@
     <string name="access_denied">"Accesso negato"</string>
     <string name="parse_user_info_error">"Si è verificato un errore durante l'analisi delle informazioni dell'utente"</string>
     <string name="no_system_webview_error">"Errore apertura di System WebView"</string>
-    <string name="error_loading_image_tap_to_retry">"Errore durante il caricamento dell'immagine. Clicca per riprovare."</string>
-    <string name="load_posts_error">"Errore durante il caricamento dei post. Clicca per riprovare."</string>
-    <string name="load_more_posts_error">"Errore nel caricamento dei post."</string>
+    <string name="error_loading_image_tap_to_retry">"Errore durante il caricamento dell'immagine. Tocca per riprovare."</string>
+    <string name="load_posts_error">"Errore durante il caricamento dei post. Tocca per riprovare."</string>
+    <string name="load_more_posts_error">"Errore durante il caricamento dei post."</string>
     <string name="load_post_error">"Errore durante il caricamento di questo post. Clicca per riprovare."</string>
     <string name="search_subreddits_error">"Errore durante la ricerca dei subreddit.
-Clicca per riprovare."</string>
+Tocca per riprovare."</string>
     <string name="search_users_error">"Errore durante la ricerca degli utenti.
-Clicca per riprovare."</string>
+Tocca per riprovare."</string>
     <string name="no_posts">"Nessun post trovato"</string>
     <string name="no_comments">"Nessun commento trovato"</string>
     <string name="no_subreddits">"Nessun subreddit trovato"</string>
     <string name="no_users">"Nessun utente trovato"</string>
     <string name="no_multi_reddits">"Nessun Multireddit trovato"</string>
-    <string name="no_storage_permission">"Nessuna autorizzazione di archiviazione per salvare questo file"</string>
-    <string name="load_comments_failed">"Errore caricamento dei commenti.
-Clicca per riprovare."</string>
+    <string name="no_storage_permission">"Autorizzazione allo spazio di archiviazione non consentita. Attivala per salvare questo file"</string>
+    <string name="load_comments_failed">"Errore nel caricamento dei commenti.
+Tocca per riprovare."</string>
     <string name="retry">"Riprova"</string>
     <string name="comments">"Commenti"</string>
-    <string name="no_comments_yet">"Ancora nessun commento. Vuoi scriverne uno?"</string>
-    <string name="vote_failed">"Voto fallito"</string>
+    <string name="no_comments_yet">"Nessun commento presente. Vuoi scriverne uno tu?"</string>
+    <string name="vote_failed">"Voto non assegnato"</string>
     <string name="refresh_post_failed">"Errore nel ricaricamento del post"</string>
-    <string name="load_messages_failed">"Errore caricamento messaggi. Clicca per riprovare."</string>
+    <string name="load_messages_failed">"Errore durante il caricamento messaggi. Tocca per riprovare."</string>
     <string name="no_messages">"Vuoto"</string>
     <string name="nsfw">"NSFW"</string>
     <string name="karma_info">"Karma: %1$d"</string>
     <string name="karma_info_user_detail">"Karma:
 %1$d (%2$d + %3$d)"</string>
-    <string name="cakeday_info">"Compleanno:
+    <string name="cakeday_info">"Compleanno account:
 %1$s"</string>
     <string name="since">"Da:"</string>
     <string name="profile">"Profilo"</string>
-    <string name="subscriptions">"Sottoscrizioni"</string>
+    <string name="subscriptions">"Iscrizioni"</string>
     <string name="multi_reddit">"Multireddit"</string>
     <string name="inbox">"Posta"</string>
     <string name="upvoted">"Voto Positivo"</string>
@@ -113,32 +113,32 @@ Clicca per riprovare."</string>
     <string name="subscribers_number_detail">"Iscritti: %1$d"</string>
     <string name="online_subscribers_number_detail">"Online: %1$d"</string>
     <string name="cannot_fetch_subreddit_info">"Impossibile recuperare le informazioni del subreddit"</string>
-    <string name="cannot_fetch_user_info">"Impossibile recuperare le informazioni utente"</string>
-    <string name="cannot_fetch_sidebar">"Impossibile recuperare la barra laterale"</string>
+    <string name="cannot_fetch_user_info">"Impossibile recuperare le informazioni dell'utente"</string>
+    <string name="cannot_fetch_sidebar">"Impossibile mostrare barra laterale"</string>
     <string name="cannot_fetch_multireddit">"Impossibile recuperare le informazioni multireddit"</string>
     <string name="subscribe">"Iscriviti"</string>
     <string name="unsubscribe">"Disiscriviti"</string>
-    <string name="subscribed">"Sottoscritto"</string>
-    <string name="subscribe_failed">"Sottoscrizione fallita"</string>
+    <string name="subscribed">"Iscritto"</string>
+    <string name="subscribe_failed">"Iscrizione non riuscita"</string>
     <string name="unsubscribed">"Disiscritto"</string>
-    <string name="unsubscribe_failed">"Disiscrizione fallita"</string>
+    <string name="unsubscribe_failed">"Disiscrizione non riuscita"</string>
     <string name="follow">"Segui"</string>
     <string name="unfollow">"Non seguire più"</string>
     <string name="followed">"Seguiti"</string>
-    <string name="follow_failed">"Errore nel seguire"</string>
+    <string name="follow_failed">"Errore nel seguire. Riprova"</string>
     <string name="unfollowed">"Smesso di seguire"</string>
-    <string name="unfollow_failed">"Disiscrizione Fallita"</string>
-    <string name="content_description_banner_imageview">"Immagine banner subreddit"</string>
+    <string name="unfollow_failed">"Disiscrizione non riuscita"</string>
+    <string name="content_description_banner_imageview">"Banner subreddit"</string>
     <string name="app_label">"Infinity"</string>
-    <string name="search_hint">"Cerca qualcosa"</string>
+    <string name="search_hint">"Cerca"</string>
     <string name="no_posts_no_lazy_mode">"Nessun post disponibile"</string>
-    <string name="lazy_mode_start">"Modalità Pigra parte in %1$.1fs"</string>
-    <string name="lazy_mode_stop">"Modalità Pigra fermata"</string>
-    <string name="write_comment_hint">"I tuoi pensieri interessanti qui"</string>
+    <string name="lazy_mode_start">"Modalità Pigra partirà tra %1$.1fs"</string>
+    <string name="lazy_mode_stop">"Modalità Pigra disattivata"</string>
+    <string name="write_comment_hint">"Commenta"</string>
     <string name="comment_content_required">"Dove sono i tuoi pensieri interessanti?"</string>
-    <string name="sending_comment">"Invio in corso"</string>
+    <string name="sending_comment">"Invio"</string>
     <string name="send_comment_success">"Commento inviato"</string>
-    <string name="send_comment_failed">"Impossibile inviare questo commento"</string>
+    <string name="send_comment_failed">"Impossibile inviare commento"</string>
     <string name="send_message_username_hint">"Utente"</string>
     <string name="send_message_subject_hint">"Oggetto (massimo 100 caratteri)"</string>
     <string name="send_message_content_hint">"Messaggio"</string>
@@ -149,17 +149,17 @@ Clicca per riprovare."</string>
     <string name="message_content_required">"Devi dire qualcosa al destinatario"</string>
     <string name="sending_message">"Invio"</string>
     <string name="send_message_success">"Messaggio inviato"</string>
-    <string name="send_message_failed">"Impossibile inviare questo messaggio"</string>
-    <string name="select_a_subreddit">"Per favore prima seleziona un subreddit"</string>
-    <string name="title_required">"Il post ha bisogno di un buon titolo"</string>
+    <string name="send_message_failed">"Impossibile inviare messaggio"</string>
+    <string name="select_a_subreddit">"Seleziona un subreddit"</string>
+    <string name="title_required">"Al post manca il titolo"</string>
     <string name="link_required">"Hey dov'è il link?"</string>
-    <string name="select_an_image">"Per favore prima seleziona un'immagine"</string>
+    <string name="select_an_image">"Selezionare un'immagine"</string>
     <string name="posting">"Pubblicazione"</string>
-    <string name="post_failed">"Impossibile postare"</string>
+    <string name="post_failed">"Pubblicazione non riuscita"</string>
     <string name="error_processing_image">"Errore durante l'elaborazione dell'immagine"</string>
     <string name="error_processing_video">"Errore durante l'elaborazione del video"</string>
-    <string name="download_started">"Download avviato. Controlla la notifica per i progressi."</string>
-    <string name="comment_load_more_comments">"Carica più commenti"</string>
+    <string name="download_started">"Download avviato. Ulteriori dettagli nella notifica. "</string>
+    <string name="comment_load_more_comments">"Carica altri commenti"</string>
     <string name="comment_load_more_comments_failed">"Caricamento fallito. Tocca per riprovare."</string>
     <string name="loading">"Caricamento"</string>
     <string name="post_title_hint">"Titolo"</string>
@@ -180,15 +180,15 @@ Clicca per riprovare."</string>
     <string name="error_getting_video">"Errore durante l'acquisizione del video"</string>
     <string name="no_camera_available">"Nessuna app disponibile per la fotocamera"</string>
     <string name="error_creating_temp_file">"Errore creazione file temp"</string>
-    <string name="video_is_processing">"Il video è in elaborazione. Attendere prego."</string>
-    <string name="image_is_processing">"L'immagine è in elaborazione. Attendere prego."</string>
-    <string name="gif_is_processing">"La gif è in elaborazione. Attendere prego."</string>
+    <string name="video_is_processing">"Video in elaborazione. Attendere."</string>
+    <string name="image_is_processing">"Immagine in elaborazione. Attendere. "</string>
+    <string name="gif_is_processing">"Gif in elaborazione. Attendere."</string>
     <string name="flair">"Flair"</string>
     <string name="spoiler">"Spoiler"</string>
-    <string name="no_flair">"Flair assente"</string>
-    <string name="error_loading_flairs">"Errore nel caricamento dei flair. Clicca per riprovare."</string>
+    <string name="no_flair">"Nessun flair"</string>
+    <string name="error_loading_flairs">"Errore nel caricamento dei flair. Tocca per riprovare."</string>
     <string name="no_rule">"Nessuna regola"</string>
-    <string name="error_loading_rules">"Errore caricamento regole. Clicca per riprovare."</string>
+    <string name="error_loading_rules">"Errore caricamento regole. Tocca per riprovare."</string>
     <string name="error_loading_rules_without_retry">"Errore caricamento regole"</string>
     <string name="search_in">"Cerca in"</string>
     <string name="all_subreddits">"Tutti i subreddit"</string>
@@ -214,12 +214,12 @@ Clicca per riprovare."</string>
     <string name="sort_time_month">"Mese"</string>
     <string name="sort_time_year">"Anno"</string>
     <string name="sort_time_all_time">"Sempre"</string>
-    <string name="no_activity_found_for_share">"Non esiste un'app in grado di gestire l'azione di condivisione"</string>
-    <string name="archived_post_vote_unavailable">"Post archiviato. Non è possibile votare."</string>
-    <string name="archived_post_comment_unavailable">"Post archiviato. Non è possibile commentare."</string>
-    <string name="archived_post_reply_unavailable">"Post archiviato. Non è possibile rispondere."</string>
-    <string name="locked_post_comment_unavailable">"Post bloccato. Non è possibile commentare."</string>
-    <string name="locked_post_reply_unavailable">"Post bloccato. Non è possibile rispondere."</string>
+    <string name="no_activity_found_for_share">"Nessun'app  in grado di condividere"</string>
+    <string name="archived_post_vote_unavailable">"Impossibile votare, il post è archiviato. "</string>
+    <string name="archived_post_comment_unavailable">"Impossibile commentare, il post è archiviato. "</string>
+    <string name="archived_post_reply_unavailable">"Impossibile rispondere, il post è archiviato."</string>
+    <string name="locked_post_comment_unavailable">"Impossibile commentare, il post è bloccato."</string>
+    <string name="locked_post_reply_unavailable">"Impossibile rispondere, il post è bloccato. "</string>
     <string name="text">"TESTO"</string>
     <string name="link">"LINK"</string>
     <string name="image">"IMMAGINE"</string>
@@ -230,6 +230,8 @@ Clicca per riprovare."</string>
     <string name="search">"Cerca"</string>
     <string name="posting_video">"Pubblicazione del video"</string>
     <string name="posting_image">"Pubblicazione dell'immagine"</string>
+
+    <!-- Fuzzy -->
     <string name="please_wait">"Attendere prego."</string>
     <string name="add_account">"Aggiungi account"</string>
     <string name="anonymous_account">"Anonimo"</string>
@@ -263,27 +265,27 @@ Clicca per riprovare."</string>
     <string name="delete_post_failed">"Cancellazione fallita"</string>
 
     <!-- Fuzzy -->
-    <string name="mark_nsfw_success">"Seleziona come NSFW riuscito"</string>
-    <string name="mark_nsfw_failed">"Seleziona come NSFW non riuscito"</string>
+    <string name="mark_nsfw_success">"Contrassegnato come NSFW"</string>
+    <string name="mark_nsfw_failed">"Contrassegna come NSFW non riuscito"</string>
 
     <!-- Fuzzy -->
-    <string name="unmark_nsfw_success">"Deseleziona NSFW riuscito"</string>
+    <string name="unmark_nsfw_success">"Decontrassegnato come NSFW "</string>
     <string name="unmark_nsfw_failed">"Deselezionamento NSFW fallito"</string>
-    <string name="mark_spoiler_success">"Seleziona come spoiler riuscito"</string>
+    <string name="mark_spoiler_success">"Contrassegna come spoiler riuscito"</string>
     <string name="mark_spoiler_failed">"Seleziona come spoiler non riuscito"</string>
 
     <!-- Fuzzy -->
-    <string name="unmark_spoiler_success">"Deseleziona come spoiler riuscito"</string>
+    <string name="unmark_spoiler_success">"Spoiler decontrassegnato"</string>
     <string name="unmark_spoiler_failed">"Deselezionamento spoiler fallito"</string>
 
     <!-- Fuzzy -->
-    <string name="update_flair_success">"Aggiorna flair eseguito con successo"</string>
+    <string name="update_flair_success">"Flair aggiornato"</string>
     <string name="update_flair_failed">"Aggiorna flair fallito"</string>
     <string name="edit_flair">"Modifica flair"</string>
     <string name="only_allow_64_chars">"Consentire solo meno di 64 caratteri"</string>
     <string name="view_all_comments">"Clicca qui per sfogliare tutti i commenti"</string>
     <string name="notification_summary_account">"Account"</string>
-    <string name="notification_summary_message">"Nuovo Messaggio"</string>
+    <string name="notification_summary_message">"Nuovo messaggio"</string>
     <string name="notification_summary_subreddit">"Subreddit"</string>
     <string name="notification_summary_award">"Premio"</string>
     <string name="notification_new_messages">"%1$d Nuovi Messaggi"</string>
@@ -292,8 +294,8 @@ Clicca per riprovare."</string>
     <string name="label_preferences">"Preferenze"</string>
     <string name="account_switched">"Account cambiato. Tutte le altre pagine non sono più disponibili."</string>
     <string name="settings_notification_master_title">"Notifiche"</string>
-    <string name="settings_notification_enable_notification_title">"Abilita Notifiche"</string>
-    <string name="settings_notification_interval_title">"Controlla Intervallo Notifiche"</string>
+    <string name="settings_notification_enable_notification_title">"Abilita notifiche"</string>
+    <string name="settings_notification_interval_title">"Controlla intervallo notifiche"</string>
     <string name="settings_theme_title">"Tema"</string>
     <string name="settings_amoled_dark_title">"Amoled (Scuro)"</string>
     <string name="settings_interface_title">"Interfaccia"</string>
@@ -302,9 +304,9 @@ Clicca per riprovare."</string>
     <string name="settings_save_front_page_scrolled_position_summary">"Sfoglia i nuovi post dopo l'aggiornamento in HOME (pagina iniziale, tipo di ordinamento: migliore)"</string>
     <string name="settings_open_link_in_app_title">"Apri Link nell'App"</string>
     <string name="settigns_video_title">"Video"</string>
-    <string name="settings_video_autoplay_title">"Autoriproduzione Video"</string>
-    <string name="settings_mute_autoplaying_videos_title">"Muta Video Autoriprodotti"</string>
-    <string name="settings_autoplay_nsfw_videos_title">"Autoriproduzione Video NSFW"</string>
+    <string name="settings_video_autoplay_title">"Autoriproduzione video"</string>
+    <string name="settings_mute_autoplaying_videos_title">"Muta video autoriprodotti"</string>
+    <string name="settings_autoplay_nsfw_videos_title">"Autoriproduzione video NSFW"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Offset area visibile video a riproduzione automatica (Verticale)"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"Inizia autoriproduzione video quando %1$d%% di essi è visibile"</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">"Offset area visibile video a riproduzione automatica (Orizzontale)"</string>
@@ -322,6 +324,8 @@ Clicca per riprovare."</string>
     <string name="settings_volume_keys_navigate_posts_title">"Usa i Tasti del Volume per Navigare i Post"</string>
     <string name="settings_mute_video_title">"Muta i video"</string>
     <string name="settings_mute_nsfw_video_title">"Metti in muto i video NSFW"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_automatically_try_redgifs_title">"Prova Automaticamente ad Accedere a Redgifs se i Video su Gfycat Vengono Rimossi."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Ignora la Barra di Navigazione nel Lettore Video"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Impedisci ai controlli video di avere margine aggiuntivo"</string>
@@ -480,7 +484,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="copy_all_raw_text">"Copia tutto il testo non formattato"</string>
     <string name="exit_app">"Uscire?"</string>
     <string name="light_theme">"Tema chiaro"</string>
-    <string name="dark_theme">"Tema Scuro"</string>
+    <string name="dark_theme">"Tema scuro"</string>
     <string name="multi_reddit_name_hint">"Nome (massimo 50 caratteri)"</string>
     <string name="multi_reddit_description_hint">"Descrizione"</string>
     <string name="private_multi_reddit">"Privato"</string>
@@ -675,7 +679,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_theme_info">"Se vuoi creare un tema basato su un altro tema, clicca il pulsante \"+\" su un tema."</string>
     <string name="edit_theme_name">"Modifica il nome del tema"</string>
     <string name="edit_theme">"Modifica tema"</string>
-    <string name="delete_theme">"Cancella Tema"</string>
+    <string name="delete_theme">"Cancella tema"</string>
     <string name="delete_theme_dialog_message">"Vuoi veramente cancellare %1$s?"</string>
     <string name="share_theme">"Condividi il tema"</string>
     <string name="change_theme_name">"Cambia Nome"</string>
@@ -686,13 +690,13 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="no_data_in_clipboard">"Non sono stato trovato dati copiati nella clipboard"</string>
 
     <!-- Fuzzy -->
-    <string name="import_theme_success">"Importazione del tema riuscita"</string>
+    <string name="import_theme_success">"Tema importato"</string>
     <string name="parse_theme_failed">"Analisi del tema non riuscita"</string>
     <string name="duplicate_theme_name_dialog_title">"È stato trovato un tema duplicato"</string>
     <string name="duplicate_theme_name_dialog_message">"Un tema nel database è già chiamato %1$s. Vuoi cambiare il nome del tema importato?"</string>
     <string name="rename">"Rinomina"</string>
     <string name="override">"Annullare"</string>
-    <string name="color_picker">"Selettore Colore"</string>
+    <string name="color_picker">"Selettore colore"</string>
     <string name="invalid_color">"Colore Non Valido"</string>
     <string name="delete_all_subreddits_success">"Tutti i subreddit eliminati con successo"</string>
     <string name="delete_all_users_success">"Tutti gli utenti eliminati con successo"</string>
@@ -714,15 +718,16 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="primary_text_preview">"Testo Principale"</string>
     <string name="secondary_text_preview">"Testo Secondario"</string>
     <string name="post_title_preview">"Questo è un post"</string>
-    <string name="post_content_preview">"Questa battuta sulla gravità sta diventando un po' vecchia, ma mi innamoro ogni volta."</string>
+
+    <!-- Fuzzy -->
+    <string name="post_content_preview">"Ci sono 10 tipi di persone al mondo: quelli che capiscono il codice binario, e quelli che non lo capiscono."</string>
     <string name="post_type_preview">"POST"</string>
     <string name="flair_preview">"Flair"</string>
     <string name="awards_preview">"4 Premi"</string>
     <string name="author_flair_preview">"Flair dell'autore"</string>
 
     <!-- Fuzzy -->
-    <string name="comment_content_preview">"Ho dato una cartolina alla mia ragazza con scritto \"Rimettiti presto\".
-Non è malata o altro, ma potrebbe sicuramente stare meglio."</string>
+    <string name="comment_content_preview">"Non mi fido molto delle statistiche, perché un uomo con la testa nel forno acceso e i piedi nel congelatore statisticamente ha una temperatura media."</string>
     <string name="edit_multi_reddit">"Modifica multireddit"</string>
     <string name="delete_multi_reddit">"Cancella Multireddit"</string>
     <string name="n_awards">"%1$d premi"</string>
@@ -768,7 +773,7 @@ Non è malata o altro, ma potrebbe sicuramente stare meglio."</string>
     <string name="top_score">"%1$s pts"</string>
     <string name="login_activity_2fa_prompt">"Se hai attivato l'autenticazione a due fattori, per favore inserisci la password come segue: &lt;password&gt;:&lt;codice per l'autenticazione a due fattori&gt;.
 Esempio: latuapassword:123456"</string>
-    <string name="block_user">"Blocca Utente"</string>
+    <string name="block_user">"Blocca utente"</string>
     <string name="block_user_success">"Bloccato"</string>
     <string name="block_user_failed">"Blocco utente fallito"</string>
     <string name="submit_crosspost_activity_label">"Crosspost"</string>
@@ -992,26 +997,28 @@ La riproduzione automatica video è disabilitata"</string>
     <string name="action_copy_link">"Copia Link"</string>
     <string name="action_add_to_post_filter">"Aggiungi al filtro dei post"</string>
     <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Non oscurare immagini NSFW nei Subbreddits NSFW"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_avatar_on_the_right">"Mostra l'avatar a sinistra"</string>
     <string name="settings_backup_settings_title">"Impostazioni Backup"</string>
     <string name="settings_restore_settings_title">"Reimposta le impostazioni"</string>
-    <string name="settings_credits_love_animation_title">"Animazione d'amore"</string>
+    <string name="settings_credits_love_animation_title">"Animazione amore"</string>
     <string name="settings_swipe_between_posts_title">"Scorri tra i post"</string>
 
     <!-- I don't know how to translate this term, being a technical term I suppose it can be left as is -->
     <!-- Fuzzy -->
     <string name="settings_navigation_drawer_title">"Drawer Navigazione"</string>
-    <string name="settings_collapse_account_section_title">"Comprimi Sezione Account"</string>
-    <string name="settings_collapse_post_section_title">"Comprimi Sezione Post"</string>
-    <string name="settings_collapse_preferences_section_title">"Comprimi la Sezione Preferenze"</string>
+    <string name="settings_collapse_account_section_title">"Comprimi sezione Account"</string>
+    <string name="settings_collapse_post_section_title">"Comprimi sezione Post"</string>
+    <string name="settings_collapse_preferences_section_title">"Comprimi la sezione Preferenze"</string>
     <string name="settings_collapse_favorite_subreddits_section_title">"Comprimi la sezione Subreddit preferiti"</string>
     <string name="settings_collapse_subscribed_subreddits_section_title">"Comprimi la sezione Subreddit sottoscritti"</string>
-    <string name="settings_hide_favorite_subreddits_sections_title">"Nascondi Sezione Subreddit Favoriti"</string>
+    <string name="settings_hide_favorite_subreddits_sections_title">"Nascondi sezione Subreddit preferiti"</string>
     <string name="settings_hide_subscribed_subreddits_sections_title">"Nascondi la sezione Subreddit a cui sei iscritto"</string>
     <string name="settings_default_search_result_tab">"Scheda predefinita dei risultati di ricerca"</string>
-    <string name="device_default">"Dispositivo Predefinito"</string>
+    <string name="device_default">"Dispositivo predefinito"</string>
     <string name="set_by_battery_saver">"Impostato dal risparmio batteria"</string>
-    <string name="theme_item_upvote_ratio_icon_tint">"Colore Icona Rapporto Voti Positivi"</string>
+    <string name="theme_item_upvote_ratio_icon_tint">"Colore icona rapporto voti positivi"</string>
     <string name="theme_item_upvote_ratio_icon_tint_detail">"Applicato a: icona rapporto voti positivi"</string>
     <string name="theme_item_current_user_color">"Utente corrente"</string>
     <string name="theme_item_current_user_color_detail">"Applicato a: Utente corrente nei commenti"</string>
@@ -1026,7 +1033,7 @@ La riproduzione automatica video è disabilitata"</string>
     <string name="restore_settings_partially_failed">"Alcune impostazioni non sono state ripristinate correttamente. Riavvia l'app per vedere i cambiamenti."</string>
     <string name="restore_settings_failed_file_corrupted">"Impossibile ripristinare le impostazioni. Potrebbero essere corrotte."</string>
     <string name="restore_settings_failed_cannot_get_file">"Impossibile accedere al file"</string>
-    <string name="suicide_prevention_quote">"Se stai cercando un segno per non ucciderti, eccolo.\u2764"</string>
+    <string name="suicide_prevention_quote">"Se stai cercando un segnale per non ucciderti, eccolo.\u2764"</string>
     <string name="do_not_show_this_again">"Non mostrare di nuovo"</string>
     <string name="continue_suicide_prevention_activity">"Continua"</string>
     <string name="error_fetching_v_redd_it_video_cannot_get_redirect_url">"Errore durante il recupero del video di v.redd.it: impossibile ottenere l'url di reindirizzamento"</string>
@@ -1035,6 +1042,8 @@ La riproduzione automatica video è disabilitata"</string>
     <string name="always_on">"Sempre acceso"</string>
     <string name="only_on_wifi">"Solo su Wifi"</string>
     <string name="never">"Mai"</string>
+
+    <!-- Fuzzy -->
     <string name="normal">"Normal"</string>
     <string name="extra_large">"Extra Grande"</string>
     <string name="enormously_large">"Enormemente Grande"</string>
@@ -1046,9 +1055,75 @@ La riproduzione automatica video è disabilitata"</string>
     <string name="select">"Seleziona"</string>
     <string name="exclude_subreddit">"Escludi questo subreddit"</string>
     <string name="exclude_user">"Escludi questo utente"</string>
-    <string name="exclude_flair">"Escludi questa flair"</string>
+    <string name="exclude_flair">"Escludi questo flair"</string>
     <string name="contain_flair">"Contiene questa flair"</string>
     <string name="exclude_domain">"Escludi dominio"</string>
     <string name="suggest_title">"Suggerisci titolo"</string>
     <string name="suggest_title_failed">"Impossibile suggerire un titolo"</string>
+    <string name="action_delete_logs">"Cancella i log"</string>
+    <string name="inbox_with_count">"Posta (%1$d)"</string>
+    <string name="comment_continue_thread">"Continua thread"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_swipe_vertically_to_go_back_from_media_title">"Scorri verticalmente per tornare indietro dai media"</string>
+    <string name="settings_hide_post_flair">"Nascondi i flair dei post"</string>
+    <string name="settings_crash_reports_title">"Rapporti sui crash"</string>
+    <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Pericoloso"</string>
+    <string name="settings_disable_nsfw_forever_title">"Disabilita permanentemente NSFW"</string>
+    <string name="settings_show_only_one_comment_level_indicator">"Mastra indicatori di un solo livello di commenti"</string>
+    <string name="save_comment">"Salva"</string>
+    <string name="unsave_comment">"Non salvare"</string>
+    <string name="copy_multi_reddit_path">"Copia il percorso del Multireddit"</string>
+    <string name="copy_multi_reddit_path_failed">"Impossibile copiare il percorso del Multireddit"</string>
+    <string name="crash_reports_deleted">"Rapporti sui crash cancellati"</string>
+    <string name="disable_nsfw_forever_message">"Una volta abilitata l'opzione, i contenuti NSFW saranno permanentemente disabilitati, indipendentemente dal fatto che l'impostazione NSFW sia abilitata o meno. Questa opzione è irreversibile, l'unico modo per riabilitare i contenuti NSFW è cancellare i dati dell'app.
+
+Vuoi comunque abilitare l'opzione?"</string>
+    <string name="reply">"Rispondi"</string>
+    <string name="rpan_activity_label">"RPAN"</string>
+    <string name="post_gallery_activity_label">"Galleria post"</string>
+    <string name="trending_activity_label">"Popolari"</string>
+    <string name="action_share_rpan_link">"Condividi link RPAN"</string>
+    <string name="action_share_post_link">"Condividi post link"</string>
+    <string name="rpan">"RPAN"</string>
+    <string name="trending">"Popolari"</string>
+    <string name="receive_post_reply_notifications">"Ricevi notifiche per le risposte"</string>
+    <string name="bottom_sheet_post_gallery">"Galleria"</string>
+    <string name="posting_gallery">"Galleria dei post"</string>
+    <string name="label_reddit">"Reddit"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_default_link_post_layout">"Link Post Layout Predefinito"</string>
+    <string name="settings_category_material_you_title">"Personalizzazione automatica"</string>
+    <string name="settings_enable_material_you_warning_summary">"Per il corretto funzionamento assicurarsi che i tuoi temi non siano chiamati:
+\"Materiale you\"
+\"Materiale you Dark\"
+\"Materiale you Amoled\"
+Se hai dei temi con questi nomi devi cambiarli prima di attivare la Personalizzazione automatica"</string>
+    <string name="settings_enable_material_you_title">"Attiva personalizzazione automatica"</string>
+    <string name="settings_enable_material_you_summary">"Personalizza Infinity in base al tuo sfondo"</string>
+    <string name="settings_apply_material_you_title">"Applica personalizzazione"</string>
+    <string name="settings_apply_material_you_summary">"Nel caso Infinity non abbia cambiato il tema"</string>
+    <string name="settings_more_tabs_show_favorite_multireddits_title">"Mostra Multireddit preferiti"</string>
+    <string name="settings_more_tabs_show_multireddits_title">"Mostra Multireddit"</string>
+    <string name="settings_collapse_reddit_section_title">"Riduci sezione Reddit"</string>
+    <string name="settings_video_player_automatic_landscape_orientation">"Passa automaticamente all'orientamento orizzontale nel Player Video"</string>
+    <string name="settings_remember_muting_option_in_post_feed">"Ricorda l'opzione di disattivazione dell'audio nel feed dei post"</string>
+    <string name="link_post_layout_auto">"Auto"</string>
+    <string name="uploaded_images">"Immagini caricate"</string>
+    <string name="select_image">"Seleziona un'immagine"</string>
+    <string name="capture">"Cattura"</string>
+    <string name="uploading_image">"Caricamento"</string>
+    <string name="upload_image_success">"Immagine caricata. Clicca sul pulsante delle immagini per vedere le altre immagini caricate"</string>
+    <string name="get_image_bitmap_failed">"Impossibile prendere il bitmap dell'immagine"</string>
+    <string name="upload_image_failed">"Impossibile caricare l'immagine"</string>
+    <string name="load_rpan_broadcasts_failed">"Impossibile caricare RPAN"</string>
+    <string name="parse_rpan_broadcasts_failed">"Impossibile analizzare i broadcast RPAN"</string>
+    <string name="parse_rpan_broadcast_failed">"Impossibile analizzare il broadcast RPAN"</string>
+    <string name="search_comments">"Cerca tra i commenti"</string>
+    <string name="please_wait_image_is_uploading">"Attendere prego. Immagine in caricamento"</string>
+    <string name="error_fetch_trending_search">"Pagina non caricata. Tocca per riprovare"</string>
+    <string name="error_parse_trending_search">"Pagina non caricata. Tocca per riprovare"</string>
+    <string name="no_trending_search">"Nessuna ricerca di tendenza trovata.
+Premi per riprovare."</string>
 </resources>

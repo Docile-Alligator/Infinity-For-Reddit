@@ -153,7 +153,7 @@
     <string name="title_required">"帖子需要有标题"</string>
     <string name="link_required">"嘿！链接在哪呢？"</string>
     <string name="select_an_image">"请先选择一张图片"</string>
-    <string name="posting">"发表中"</string>
+    <string name="posting">"发布中"</string>
     <string name="post_failed">"无法发表"</string>
     <string name="error_processing_image">"处理图片错误"</string>
     <string name="error_processing_video">"处理视频错误"</string>
@@ -227,8 +227,10 @@
     <string name="gallery">"相册"</string>
     <string name="best">"精选"</string>
     <string name="search">"搜索"</string>
-    <string name="posting_video">"视频发送中"</string>
-    <string name="posting_image">"图片发送中"</string>
+    <string name="posting_video">"视频发布中"</string>
+    <string name="posting_image">"图片发布中"</string>
+
+    <!-- Fuzzy -->
     <string name="please_wait">"请稍等。"</string>
     <string name="add_account">"添加帐户"</string>
     <string name="anonymous_account">"匿名"</string>
@@ -315,6 +317,8 @@
     <string name="settings_volume_keys_navigate_posts_title">"使用音量键浏览帖子"</string>
     <string name="settings_mute_video_title">"静音视频"</string>
     <string name="settings_mute_nsfw_video_title">"静音 NSFW 视频"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_automatically_try_redgifs_title">"如果 Gfycat 上的视频已被删除，则自动尝试访问 Redgifs。"</string>
     <string name="settings_video_player_ignore_nav_bar_title">"视频播放器中忽略导航栏"</string>
 
@@ -1023,6 +1027,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="action_copy_link">"复制链接"</string>
     <string name="action_add_to_post_filter">"添加到帖子过滤器"</string>
     <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"在 NSFW 版块中不模糊 NSFW 图片"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_avatar_on_the_right">"在左侧显示头像"</string>
     <string name="settings_backup_settings_title">"备份设置"</string>
     <string name="settings_restore_settings_title">"恢复设置"</string>
@@ -1082,6 +1088,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="action_delete_logs">"删除日志"</string>
     <string name="inbox_with_count">"收件箱 (%1$d)"</string>
     <string name="comment_continue_thread">"继续帖子"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_swipe_vertically_to_go_back_from_media_title">"垂直滑动离开媒体界面"</string>
     <string name="settings_hide_post_flair">"隐藏帖子头衔"</string>
     <string name="settings_crash_reports_title">"崩溃报告"</string>
@@ -1097,4 +1105,50 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 
 仍然要继续吗？"</string>
     <string name="reply">"回复"</string>
+    <string name="rpan_activity_label">"直播"</string>
+    <string name="post_gallery_activity_label">"相册帖"</string>
+    <string name="trending_activity_label">"热门"</string>
+    <string name="action_share_rpan_link">"分享直播链接"</string>
+    <string name="action_share_post_link">"分享帖子链接"</string>
+    <string name="rpan">"直播"</string>
+    <string name="trending">"热门"</string>
+    <string name="receive_post_reply_notifications">"接收帖子回复提醒"</string>
+    <string name="bottom_sheet_post_gallery">"相册"</string>
+    <string name="posting_gallery">"相册发布中"</string>
+    <string name="label_reddit">"Reddit"</string>
+    <string name="settings_default_link_post_layout">"默认链接帖布局"</string>
+    <string name="settings_category_material_you_title">"Material You"</string>
+    <string name="settings_enable_material_you_warning_summary">"请确保您没有以下名称的主题：
+“Material You”、
+“Material You Dark”、
+“Material You Amoled”。
+否则，您需要在启用 Material You 之前先为它们重命名。"</string>
+    <string name="settings_enable_material_you_title">"启用 Material You"</string>
+    <string name="settings_enable_material_you_summary">"根据 Your Wallpaper 个性化 Infinity"</string>
+    <string name="settings_apply_material_you_title">"应用 Material You"</string>
+    <string name="settings_apply_material_you_summary">"如果 Infinity 未更改主题"</string>
+    <string name="settings_more_tabs_show_favorite_multireddits_title">"显示收藏的聚合版块"</string>
+    <string name="settings_more_tabs_show_multireddits_title">"显示聚合版块"</string>
+    <string name="settings_collapse_reddit_section_title">"折叠 Reddit 区域"</string>
+    <string name="settings_video_player_automatic_landscape_orientation">"播放视频时自动切换到横屏"</string>
+    <string name="settings_remember_muting_option_in_post_feed">"在帖子列表中记住静音"</string>
+    <string name="link_post_layout_auto">"自动"</string>
+    <string name="uploaded_images">"已上传图片"</string>
+    <string name="select_image">"选择一张图片"</string>
+    <string name="capture">"拍摄"</string>
+    <string name="uploading_image">"正在上传"</string>
+    <string name="upload_image_success">"上传图片成功。再次点击图片按钮查看已上传的图片。"</string>
+    <string name="get_image_bitmap_failed">"无法获取图片位图"</string>
+    <string name="upload_image_failed">"无法上传图片"</string>
+    <string name="load_rpan_broadcasts_failed">"无法加载 RPAN 直播"</string>
+    <string name="parse_rpan_broadcasts_failed">"无法解析 RPAN 直播"</string>
+    <string name="parse_rpan_broadcast_failed">"无法解析 RPAN 直播"</string>
+    <string name="search_comments">"搜索评论"</string>
+    <string name="please_wait_image_is_uploading">"仍有图片正在上传，请稍候。"</string>
+    <string name="error_fetch_trending_search">"获取热搜失败。
+点击重试。"</string>
+    <string name="error_parse_trending_search">"解析热搜失败。
+点击重试。"</string>
+    <string name="no_trending_search">"未找到热搜。
+点击重试。"</string>
 </resources>

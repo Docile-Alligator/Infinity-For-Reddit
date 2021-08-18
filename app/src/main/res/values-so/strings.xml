@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="login_activity_label">"Gal"</string>
+    <string name="comment_activity_label">"Dir Faallada"</string>
+    <string name="comment_activity_label_is_replying">"Ujawaab"</string>
+    <string name="post_text_activity_label">"Bandhig Qoraal"</string>
+    <string name="subreddit_selection_activity_label">"Dooro Bulsho"</string>
+    <string name="post_link_activity_label">"Bandhig Tixraac"</string>
+    <string name="post_image_activity_label">"Bandhig Sawir"</string>
+    <string name="post_video_activity_label">"Bandhig Muuqaal"</string>
+    <string name="rules_activity_label">"Sharciyada"</string>
+    <string name="search_subreddits_activity_label">"Bulshooyin"</string>
+    <string name="edit_post_activity_label">"Tifatir Bandhiga"</string>
+    <string name="edit_comment_activity_label">"Tifatir Faallada"</string>
+    <string name="view_message_activity_label">"Fariimaha"</string>
+    <string name="settings_activity_label">"Fadhiga"</string>
+    <string name="account_saved_thing_activity_label">"Lakaydiyay"</string>
+    <string name="create_multi_reddit_activity_label">"Samee Reddit-badane"</string>
+    <string name="subreddit_multiselection_activity_label">"Dooro Qaybaha"</string>
+    <string name="custom_theme_listing_activity_label">"Nashqado Gaar ah"</string>
+    <string name="customize_theme_activity_label">"Nashqadee"</string>
+    <string name="customize_theme_activity_create_theme_label">"Samee Nashqad"</string>
+    <string name="edit_multi_reddit_activity_label">"Tifatir Reddit-badane"</string>
+    <string name="selected_subeddits_activity_label">"Qaybaha Ladoortay"</string>
+    <string name="report_activity_label">"Wari"</string>
+    <string name="view_imgur_media_activity_image_label">"Sawirka %1$d/%2$d"</string>
+    <string name="view_imgur_media_activity_video_label">"Muuqaalka %1$d/%2$d"</string>
+    <string name="send_private_message_activity_label">"Dir farriin gaar ah"</string>
+    <string name="view_reddit_gallery_activity_image_label">"Sawirka %1$d/%2$d"</string>
+    <string name="view_reddit_gallery_activity_gif_label">"Gif %1$d/%2$d"</string>
+    <string name="view_reddit_gallery_activity_video_label">"Muuqaalka %1$d/%2$d"</string>
+    <string name="navigation_drawer_open">"Fur khaanada dhexsocodka"</string>
+    <string name="navigation_drawer_close">"Xidh khaanada dhexsocodka"</string>
+    <string name="action_download">"Daji"</string>
+    <string name="action_refresh">"Cusboonaysii"</string>
+    <string name="action_add_comment">"Ku dar faallo"</string>
+</resources>

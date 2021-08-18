@@ -236,6 +236,8 @@ Tekrar denemek için tıklayın."</string>
     <string name="search">"Arama"</string>
     <string name="posting_video">"Video Paylaşılıyor"</string>
     <string name="posting_image">"Fotoğraf Paylaşılıyor"</string>
+
+    <!-- Fuzzy -->
     <string name="please_wait">"Lütfen bekleyin."</string>
     <string name="add_account">"Hesap ekle"</string>
     <string name="anonymous_account">"Anonim"</string>
@@ -320,6 +322,8 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_volume_keys_navigate_posts_title">"Gönderilerde Gezinmek İçin Ses Tuşlarını Kullan"</string>
     <string name="settings_mute_video_title">"Videoları Sessize Al"</string>
     <string name="settings_mute_nsfw_video_title">"NSFW Videolarını Sessize Al"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_automatically_try_redgifs_title">"Gfycat'taki Videolar Kaldırılırsa Redgif'lere Erişmeyi Otomatik Olarak Dene"</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Video Oynatıcısındaki Navigasyon Çubuğunu Yoksay"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Video Denetleyicisinde Fazladan Kenar Olmasını Önle"</string>
@@ -670,11 +674,11 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_name_dracula">"Drakula"</string>
     <string name="theme_name_calm_pastel">"Pastel Rengi"</string>
     <string name="create_light_theme">"Çivit Mavisi Renginde
-Açık Tema Tabanı Oluştur"</string>
+Açık Tema Şablonu Oluştur"</string>
     <string name="create_dark_theme">"Çivit Mavisi Renginde
-Koyu Tema Tabanı Oluştur"</string>
+Koyu Tema Şablonu Oluştur"</string>
     <string name="create_amoled_theme">"Çivit Mavisi Renginde
-Amoled Tema Tabanı Oluştur"</string>
+Amoled Tema Şablonu Oluştur"</string>
     <string name="create_theme_info">"Başka bir temaya dayalı tema oluşturmak istiyorsanız, bunun yerine bir temadaki \"+\" düğmesine tıklayın."</string>
     <string name="edit_theme_name">"Tema Adını Düzenle"</string>
     <string name="edit_theme">"Temayı Düzenle"</string>
@@ -863,7 +867,7 @@ Sekmeler, diğerlerine geçtikten sonra tüm içeriği kaybedebilir. Bu, sayfay�
     <string name="random_subreddit">"Rastgele Subreddit"</string>
     <string name="random_nsfw_subreddit">"Rastgele NSFW Subreddit'i"</string>
     <string name="random_post">"Rastgele Gönderi"</string>
-    <string name="random_nsfw_post">"Rastgele NSFW gönderisi"</string>
+    <string name="random_nsfw_post">"Rastgele NSFW Gönderisi"</string>
     <string name="fetch_random_thing_failed">"Daha sonra tekrar deneyin"</string>
     <string name="downloading">"İndiriliyor"</string>
     <string name="subreddit_filter_popular_and_all_activity_label">"r/all ve r/popular"</string>
@@ -980,6 +984,8 @@ Sekmeler, diğerlerine geçtikten sonra tüm içeriği kaybedebilir. Bu, sayfay�
     <string name="action_copy_link">"Bağlantıyı Kopyala"</string>
     <string name="action_add_to_post_filter">"Gönderi Filtresine Ekle"</string>
     <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"NSFW Subredditlerindeki NSFW Görüntülerini bulanıklaştırma"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_show_avatar_on_the_right">"Avatarı Solda Göster"</string>
     <string name="settings_backup_settings_title">"Yedekleme Ayarları"</string>
     <string name="settings_restore_settings_title">"Ayarları Eski Haline Getir"</string>
@@ -1039,6 +1045,8 @@ Sekmeler, diğerlerine geçtikten sonra tüm içeriği kaybedebilir. Bu, sayfay�
     <string name="action_delete_logs">"Seyir Defterini Sil"</string>
     <string name="inbox_with_count">"Gelen Kutusu (%1$d)"</string>
     <string name="comment_continue_thread">"Konuya devam et"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_swipe_vertically_to_go_back_from_media_title">"Medyadan Geri Dönmek İçin Dikey Kaydır"</string>
     <string name="settings_hide_post_flair">"Gönderi Etiketini Gizle"</string>
     <string name="settings_crash_reports_title">"Kilitlenme Raporları"</string>
@@ -1054,4 +1062,52 @@ Sekmeler, diğerlerine geçtikten sonra tüm içeriği kaybedebilir. Bu, sayfay�
 
 Yine de etkinleştirmek istiyor musunuz?"</string>
     <string name="reply">"Yanıtla"</string>
+
+    <!-- What is RPAN? -->
+    <string name="rpan_activity_label">"Canlı Yayın"</string>
+    <string name="post_gallery_activity_label">"Galeri Gönderisi"</string>
+    <string name="trending_activity_label">"Trendler"</string>
+    <string name="action_share_rpan_link">"Canlı Yayın Bağlantısını Paylaş"</string>
+    <string name="action_share_post_link">"Gönderi Bağlantısını Paylaş"</string>
+    <string name="rpan">"Canlı Yayın"</string>
+    <string name="trending">"Trendler"</string>
+    <string name="receive_post_reply_notifications">"Gönderi yanıtlanınca bildirimlerini al"</string>
+    <string name="bottom_sheet_post_gallery">"Galeri"</string>
+    <string name="posting_gallery">"Galeri Paylaşma"</string>
+    <string name="label_reddit">"Reddit"</string>
+    <string name="settings_default_link_post_layout">"Varsayılan Bağlantı Gönderisi Düzeni"</string>
+    <string name="settings_category_material_you_title">"Material You"</string>
+    <string name="settings_enable_material_you_warning_summary">"Şu adda temalarınız olmadığından emin olun;
+\"Material You\",
+\"Material You Dark\" veya
+\"Material You Amoled\".
+Yoksa, Material You'u etkinleştirmeden önce bunları yeniden adlandırın."</string>
+    <string name="settings_enable_material_you_title">"Material You'u Etkinleştir"</string>
+    <string name="settings_enable_material_you_summary">"Infinity'yi Duvar Kağıdına Göre Kişiselleştir"</string>
+    <string name="settings_apply_material_you_title">"Material You'u Uygula"</string>
+    <string name="settings_apply_material_you_summary">"Infinity'nin temayı değiştirmemesi durumunda"</string>
+    <string name="settings_more_tabs_show_favorite_multireddits_title">"Favori Multiredditleri Göster"</string>
+    <string name="settings_more_tabs_show_multireddits_title">"Multiredditleri Göster"</string>
+    <string name="settings_collapse_reddit_section_title">"Reddit Bölümünü Daralt"</string>
+    <string name="settings_video_player_automatic_landscape_orientation">"Video Oynatırken Otomatik Olarak Yatay Ekrana Geç"</string>
+    <string name="settings_remember_muting_option_in_post_feed">"Gönderi Akışında Sessize Alma Seçeneğini Hatırla"</string>
+    <string name="link_post_layout_auto">"Otomatik"</string>
+    <string name="uploaded_images">"Foroğraf Yüklemesi"</string>
+    <string name="select_image">"Bir Fotoğraf Seç"</string>
+    <string name="capture">"Bir Fotoğraf Çek"</string>
+    <string name="uploading_image">"Yükleniyor"</string>
+    <string name="upload_image_success">"Fotoğraf başarıyla yüklendi. Yüklenen fotoğrafları görmek için fotoğraf düğmesine tekrar tıklayın."</string>
+    <string name="get_image_bitmap_failed">"Fotoğrafın bitmap'i alınamıyor"</string>
+    <string name="upload_image_failed">"Fotoğraf yüklenemiyor"</string>
+    <string name="load_rpan_broadcasts_failed">"Canlı Yayınlar yüklenemiyor"</string>
+    <string name="parse_rpan_broadcasts_failed">"Canlı Yayınlar ayrıştırılamıyor"</string>
+    <string name="parse_rpan_broadcast_failed">"Canlı Yayın ayrıştırılamıyor"</string>
+    <string name="search_comments">"Yorumları Ara"</string>
+    <string name="please_wait_image_is_uploading">"Hâlâ bir fotoğraf yükleniyor. Lütfen bekleyin."</string>
+    <string name="error_fetch_trending_search">"Trend aramalar getirilemedi.
+Tekrar denemek için tıklayın."</string>
+    <string name="error_parse_trending_search">"Trend aramalar ayrıştırılamadı.
+Tekrar denemek için tıklayın."</string>
+    <string name="no_trending_search">"Trend aramalar bulunamadı.
+Tekrar denemek için tıklayın."</string>
 </resources>
