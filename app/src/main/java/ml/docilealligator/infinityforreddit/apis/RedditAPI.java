@@ -348,12 +348,12 @@ public interface RedditAPI {
 
 
     @FormUrlEncoded
-    @PUT("/api/multi{multipath}r/{subredditName}")
+    @PUT("/api/multi{multipath}/r/{subredditName}")
     Call<String> addSubredditToMultiReddit(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params,
                                            @Path(value = "multipath", encoded = true) String multipath, @Path("subredditName") String subredditName);
 
     @FormUrlEncoded
-    @POST("/api/quarantine_optin?raw_json=1")
+    @POST("/api/quarantine_option?raw_json=1")
     Call<String> optInQuarantinedSubreddit(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
     @GET("/api/subreddit_autocomplete_v2?typeahead_active=true&include_profiles=false&raw_json=1")
