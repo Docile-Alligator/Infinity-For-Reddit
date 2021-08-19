@@ -220,15 +220,17 @@ public class Utils {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 Network nw = connMgr.getActiveNetwork();
                 if (nw == null) return NETWORK_TYPE_OTHER;
-                NetworkCapabilities actNw = connMgr.getNetworkCapabilities(nw);
-                if (actNw != null) {
-                    if (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
-                        return NETWORK_TYPE_WIFI;
+                try {
+                    NetworkCapabilities actNw = connMgr.getNetworkCapabilities(nw);
+                    if (actNw != null) {
+                        if (actNw.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)) {
+                            return NETWORK_TYPE_WIFI;
+                        }
+                        if (actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
+                            return NETWORK_TYPE_CELLULAR;
+                        }
                     }
-                    if (actNw.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)) {
-                        return NETWORK_TYPE_CELLULAR;
-                    }
-                }
+                } catch (SecurityException ignore) {}
                 return NETWORK_TYPE_OTHER;
             } else {
                 boolean isWifi = false;
