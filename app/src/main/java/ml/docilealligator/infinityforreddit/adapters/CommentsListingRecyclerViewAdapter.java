@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -400,6 +401,8 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     public class CommentViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.vertical_block_indentation_item_comment)
         CommentIndentationView commentIndentationView;
+        @BindView(R.id.linear_layout_item_comment)
+        LinearLayout linearLayout;
         @BindView(R.id.author_text_view_item_post_comment)
         TextView authorTextView;
         @BindView(R.id.author_flair_text_view_item_post_comment)
@@ -454,6 +457,8 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 constraintSet.setHorizontalBias(moreButton.getId(), 0);
                 constraintSet.applyTo(bottomConstraintLayout);
             }
+
+            linearLayout.getLayoutTransition().setAnimateParentHierarchy(false);
 
             commentIndentationView.setVisibility(View.GONE);
 
