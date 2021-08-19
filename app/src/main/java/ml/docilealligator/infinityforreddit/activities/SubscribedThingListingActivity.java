@@ -47,6 +47,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertMultireddit;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubscribedThings;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.ViewPagerBugFixed;
 import ml.docilealligator.infinityforreddit.events.GoBackToMainPageEvent;
 import ml.docilealligator.infinityforreddit.events.RefreshMultiRedditsEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -77,7 +78,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     @BindView(R.id.tab_layout_subscribed_thing_listing_activity)
     TabLayout tabLayout;
     @BindView(R.id.view_pager_subscribed_thing_listing_activity)
-    ViewPager viewPager;
+    ViewPagerBugFixed viewPager;
     @BindView(R.id.fab_subscribed_thing_listing_activity)
     FloatingActionButton fab;
     @Inject

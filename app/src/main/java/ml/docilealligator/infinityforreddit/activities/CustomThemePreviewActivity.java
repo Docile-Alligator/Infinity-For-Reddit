@@ -1,5 +1,10 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
@@ -43,21 +48,17 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeSettingsItem;
+import ml.docilealligator.infinityforreddit.customviews.ViewPagerBugFixed;
 import ml.docilealligator.infinityforreddit.font.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.font.FontStyle;
 import ml.docilealligator.infinityforreddit.font.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.fragments.ThemePreviewCommentsFragment;
 import ml.docilealligator.infinityforreddit.fragments.ThemePreviewPostsFragment;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public class CustomThemePreviewActivity extends AppCompatActivity {
 
@@ -66,7 +67,7 @@ public class CustomThemePreviewActivity extends AppCompatActivity {
     @BindView(R.id.coordinator_layout_theme_preview_activity)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.view_pager_theme_preview_activity)
-    ViewPager viewPager;
+    ViewPagerBugFixed viewPager;
     @BindView(R.id.appbar_layout_theme_preview_activity)
     AppBarLayout appBarLayout;
     @BindView(R.id.collapsing_toolbar_layout_theme_preview_activity)

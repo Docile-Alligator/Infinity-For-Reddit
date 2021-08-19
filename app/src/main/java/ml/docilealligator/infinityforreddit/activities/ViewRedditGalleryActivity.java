@@ -28,6 +28,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.customviews.ViewPagerBugFixed;
 import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.font.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.font.FontFamily;
@@ -51,7 +52,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     @BindView(R.id.hauler_view_view_reddit_gallery_activity)
     HaulerView haulerView;
     @BindView(R.id.view_pager_view_reddit_gallery_activity)
-    ViewPager viewPager;
+    ViewPagerBugFixed viewPager;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ArrayList<Post.Gallery> gallery;
     private String subredditName;

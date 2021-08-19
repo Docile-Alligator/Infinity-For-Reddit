@@ -36,7 +36,13 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.ImgurMedia;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
+import ml.docilealligator.infinityforreddit.WallpaperSetter;
 import ml.docilealligator.infinityforreddit.apis.ImgurAPI;
+import ml.docilealligator.infinityforreddit.customviews.ViewPagerBugFixed;
 import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.font.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.font.FontFamily;
@@ -45,14 +51,9 @@ import ml.docilealligator.infinityforreddit.font.TitleFontFamily;
 import ml.docilealligator.infinityforreddit.font.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.fragments.ViewImgurImageFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewImgurVideoFragment;
-import ml.docilealligator.infinityforreddit.ImgurMedia;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.WallpaperSetter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -72,7 +73,7 @@ public class ViewImgurMediaActivity extends AppCompatActivity implements SetAsWa
     @BindView(R.id.progress_bar_view_imgur_media_activity)
     ProgressBar progressBar;
     @BindView(R.id.view_pager_view_imgur_media_activity)
-    ViewPager viewPager;
+    ViewPagerBugFixed viewPager;
     @BindView(R.id.load_image_error_linear_layout_view_imgur_media_activity)
     LinearLayout errorLinearLayout;
     private SectionsPagerAdapter sectionsPagerAdapter;

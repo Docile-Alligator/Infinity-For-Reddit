@@ -23,10 +23,10 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true" />
 
-            <androidx.viewpager.widget.ViewPager
+            <ml.docilealligator.infinityforreddit.customviews.ViewPagerBugFixed
+                android:id="@+id/view_pager_view_imgur_media_activity"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:id="@+id/view_pager_view_imgur_media_activity" />
+                android:layout_height="match_parent" />
 
             <LinearLayout
                 android:id="@+id/load_image_error_linear_layout_view_imgur_media_activity"
