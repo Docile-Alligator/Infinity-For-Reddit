@@ -206,8 +206,7 @@
                 android:id="@+id/player_view_item_post_video_type_autoplay"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:controller_layout_id="@layout/exo_autoplay_playback_control_view"
-                android:animateLayoutChanges="true" />
+                app:controller_layout_id="@layout/exo_autoplay_playback_control_view" />
 
             <pl.droidsonroids.gif.GifImageView
                 android:id="@+id/preview_image_view_item_post_video_type_autoplay"
