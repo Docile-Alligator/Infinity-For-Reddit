@@ -696,8 +696,10 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                                                     }
                                                 }
 
-                                                mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
-                                                mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(true);
+                                                if (placeholderPosition >= mVisibleComments.size() || placeholderPosition < 0) {
+                                                    mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
+                                                    mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(true);
+                                                }
                                                 ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.comment_load_more_comments_failed);
                                             }
 
