@@ -25,7 +25,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.FileProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -66,6 +65,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.UploadedImagesB
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.comment.SendComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -241,7 +241,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                             .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
                             .textLayoutIsRoot(R.layout.view_table_entry_cell)))
                     .build();
-            contentMarkdownRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            contentMarkdownRecyclerView.setLayoutManager(new LinearLayoutManagerBugFixed(this));
             contentMarkdownRecyclerView.setAdapter(markwonAdapter);
             markwonAdapter.setMarkdown(postBodyMarkwon, parentBodyMarkdown);
             markwonAdapter.notifyDataSetChanged();
@@ -280,8 +280,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             }
         });
 
-        markdownBottomBarRecyclerView.setLayoutManager(new LinearLayoutManager(this,
-                LinearLayoutManager.HORIZONTAL, false));
+        markdownBottomBarRecyclerView.setLayoutManager(new LinearLayoutManagerBugFixed(this,
+                LinearLayoutManagerBugFixed.HORIZONTAL, false));
         markdownBottomBarRecyclerView.setAdapter(adapter);
 
         commentEditText.requestFocus();

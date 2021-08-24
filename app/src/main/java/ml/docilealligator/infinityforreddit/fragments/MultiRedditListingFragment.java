@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -43,6 +42,7 @@ import ml.docilealligator.infinityforreddit.activities.ViewMultiRedditDetailActi
 import ml.docilealligator.infinityforreddit.adapters.MultiRedditListingRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.MultiRedditOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.multireddit.MultiRedditViewModel;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -80,7 +80,7 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
     public MultiRedditViewModel mMultiRedditViewModel;
     private AppCompatActivity mActivity;
     private RequestManager mGlide;
-    private LinearLayoutManager mLinearLayoutManager;
+    private LinearLayoutManagerBugFixed mLinearLayoutManager;
 
     public MultiRedditListingFragment() {
         // Required empty public constructor
@@ -114,7 +114,7 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
 
         mGlide = Glide.with(this);
 
-        mLinearLayoutManager = new LinearLayoutManager(mActivity);
+        mLinearLayoutManager = new LinearLayoutManagerBugFixed(mActivity);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         MultiRedditListingRecyclerViewAdapter adapter = new MultiRedditListingRecyclerViewAdapter(mActivity,
                 mExecutor, mOauthRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, accessToken,

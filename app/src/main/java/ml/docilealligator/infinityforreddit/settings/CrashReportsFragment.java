@@ -17,7 +17,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.view.menu.MenuItemImpl;
 import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.crazylegend.crashyreporter.CrashyReporter;
@@ -49,7 +48,6 @@ public class CrashReportsFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(activity));
         recyclerView.setAdapter(new CrashReportsRecyclerViewAdapter(CrashyReporter.INSTANCE.getLogsAsStrings()));
 
         return recyclerView;

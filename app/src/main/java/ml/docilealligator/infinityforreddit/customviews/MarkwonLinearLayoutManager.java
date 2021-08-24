@@ -5,9 +5,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.HorizontalScrollView;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-
-public class MarkwonLinearLayoutManager extends LinearLayoutManager {
+public class MarkwonLinearLayoutManager extends LinearLayoutManagerBugFixed {
     public interface HorizontalScrollViewScrolledListener {
         void onScrolledLeft();
         void onScrolledRight();

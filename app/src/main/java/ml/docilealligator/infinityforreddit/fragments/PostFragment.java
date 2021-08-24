@@ -1,6 +1,9 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
 
+import static im.ene.toro.media.PlaybackInfo.INDEX_UNSET;
+import static im.ene.toro.media.PlaybackInfo.TIME_UNSET;
+
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,7 +39,6 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
@@ -79,6 +81,7 @@ import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivi
 import ml.docilealligator.infinityforreddit.adapters.PostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.CustomToroContainer;
+import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.events.ChangeAutoplayNsfwVideosEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeCompactLayoutToolbarHiddenByDefaultEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDataSavingModeEvent;
@@ -125,9 +128,6 @@ import ml.docilealligator.infinityforreddit.readpost.ReadPost;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
-
-import static im.ene.toro.media.PlaybackInfo.INDEX_UNSET;
-import static im.ene.toro.media.PlaybackInfo.TIME_UNSET;
 
 
 /**
@@ -205,7 +205,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     Executor mExecutor;
     private RequestManager mGlide;
     private AppCompatActivity activity;
-    private LinearLayoutManager mLinearLayoutManager;
+    private LinearLayoutManagerBugFixed mLinearLayoutManager;
     private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
     private long postFragmentId;
     private int postType;
@@ -847,7 +847,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         int nColumns = getNColumns(resources);
         if (nColumns == 1) {
-            mLinearLayoutManager = new LinearLayoutManager(activity);
+            mLinearLayoutManager = new LinearLayoutManagerBugFixed(activity);
             mPostRecyclerView.setLayoutManager(mLinearLayoutManager);
         } else {
             mStaggeredGridLayoutManager = new StaggeredGridLayoutManager(nColumns, StaggeredGridLayoutManager.VERTICAL);
@@ -1469,7 +1469,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
         int nColumns = getNColumns(getResources());
         if (nColumns == 1) {
-            mLinearLayoutManager = new LinearLayoutManager(activity);
+            mLinearLayoutManager = new LinearLayoutManagerBugFixed(activity);
             if (mPostRecyclerView.getItemDecorationCount() > 0) {
                 mPostRecyclerView.removeItemDecorationAt(0);
             }

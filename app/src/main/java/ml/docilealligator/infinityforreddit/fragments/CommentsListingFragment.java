@@ -25,7 +25,6 @@ import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.ItemTouchHelper;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -50,6 +49,7 @@ import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.adapters.CommentsListingRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.comment.CommentViewModel;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
@@ -105,7 +105,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     private String mAccessToken;
     private RequestManager mGlide;
     private AppCompatActivity mActivity;
-    private LinearLayoutManager mLinearLayoutManager;
+    private LinearLayoutManagerBugFixed mLinearLayoutManager;
     private CommentsListingRecyclerViewAdapter mAdapter;
     private SortType sortType;
     private ColorDrawable backgroundSwipeRight;
@@ -255,7 +255,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
     private void bindView(Resources resources) {
         if (mActivity != null && !mActivity.isFinishing() && !mActivity.isDestroyed()) {
-            mLinearLayoutManager = new LinearLayoutManager(mActivity);
+            mLinearLayoutManager = new LinearLayoutManagerBugFixed(mActivity);
             mCommentRecyclerView.setLayoutManager(mLinearLayoutManager);
 
             mAdapter = new CommentsListingRecyclerViewAdapter(mActivity, mOauthRetrofit, customThemeWrapper,

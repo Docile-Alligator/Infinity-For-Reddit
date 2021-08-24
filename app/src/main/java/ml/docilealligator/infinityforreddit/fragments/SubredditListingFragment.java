@@ -19,7 +19,6 @@ import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -46,6 +45,7 @@ import ml.docilealligator.infinityforreddit.activities.SearchSubredditsResultAct
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.adapters.SubredditListingRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditListingViewModel;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -97,7 +97,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private LinearLayoutManager mLinearLayoutManager;
+    private LinearLayoutManagerBugFixed mLinearLayoutManager;
     private SubredditListingRecyclerViewAdapter mAdapter;
     private Activity mActivity;
     private SortType sortType;
@@ -131,7 +131,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
             }
         }
 
-        mLinearLayoutManager = new LinearLayoutManager(getActivity());
+        mLinearLayoutManager = new LinearLayoutManagerBugFixed(getActivity());
         mSubredditListingRecyclerView.setLayoutManager(mLinearLayoutManager);
 
         String query = getArguments().getString(EXTRA_QUERY);

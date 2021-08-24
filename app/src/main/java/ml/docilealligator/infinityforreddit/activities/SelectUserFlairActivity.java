@@ -13,7 +13,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -36,6 +35,7 @@ import ml.docilealligator.infinityforreddit.SelectUserFlair;
 import ml.docilealligator.infinityforreddit.UserFlair;
 import ml.docilealligator.infinityforreddit.adapters.UserFlairRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
@@ -63,7 +63,7 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
-    private LinearLayoutManager mLinearLayoutManager;
+    private LinearLayoutManagerBugFixed mLinearLayoutManager;
     private boolean mNullAccessToken = false;
     private String mAccessToken;
     private String mAccountName;
@@ -170,7 +170,7 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
                         .show();
             }
         });
-        mLinearLayoutManager = new LinearLayoutManager(SelectUserFlairActivity.this);
+        mLinearLayoutManager = new LinearLayoutManagerBugFixed(SelectUserFlairActivity.this);
         recyclerView.setLayoutManager(mLinearLayoutManager);
         recyclerView.setAdapter(mAdapter);
     }

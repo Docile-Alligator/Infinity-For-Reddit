@@ -11,7 +11,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -117,7 +116,6 @@ public class ReportActivity extends BaseActivity {
         } else {
             mAdapter = new ReportReasonRecyclerViewAdapter(mCustomThemeWrapper, ReportReason.getGeneralReasons(this));
         }
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(mAdapter);
 
         if (rulesReasons == null) {

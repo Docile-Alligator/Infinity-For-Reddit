@@ -18,7 +18,7 @@
             android:layout_height="match_parent"
             android:paddingBottom="144dp"
             android:clipToPadding="false"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+            app:layoutManager=".customviews.LinearLayoutManagerBugFixed" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

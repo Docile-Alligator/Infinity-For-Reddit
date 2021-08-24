@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -87,7 +86,6 @@ public class FlairBottomSheetFragment extends BottomSheetDialogFragment {
             dismiss();
         });
 
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         recyclerView.setAdapter(mAdapter);
 
         mAccessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);

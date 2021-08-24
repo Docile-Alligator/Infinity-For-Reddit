@@ -18,7 +18,6 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -57,6 +56,7 @@ import ml.docilealligator.infinityforreddit.RPANBroadcast;
 import ml.docilealligator.infinityforreddit.RPANComment;
 import ml.docilealligator.infinityforreddit.adapters.RPANCommentStreamRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import okhttp3.OkHttpClient;
@@ -309,7 +309,7 @@ public class ViewRPANBroadcastFragment extends Fragment {
                             payload.getLong(JSONUtils.CREATED_UTC_KEY));
 
                     handler.post(() -> {
-                        LinearLayoutManager manager = ((LinearLayoutManager) recyclerView.getLayoutManager());
+                        LinearLayoutManagerBugFixed manager = ((LinearLayoutManagerBugFixed) recyclerView.getLayoutManager());
                         boolean shouldScrollToBottom = false;
                         if (manager != null) {
                             int lastPosition = manager.findLastCompletelyVisibleItemPosition();

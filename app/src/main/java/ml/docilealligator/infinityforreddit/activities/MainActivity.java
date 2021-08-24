@@ -1,5 +1,8 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -38,7 +41,6 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
@@ -95,6 +97,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.RandomBottomShe
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.events.ChangeConfirmToExitEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDisableSwipingBetweenTabsEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeLockBottomAppBarEvent;
@@ -125,9 +128,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public class MainActivity extends BaseActivity implements SortTypeSelectionCallback,
         PostTypeBottomSheetFragment.PostTypeSelectionCallback, PostLayoutBottomSheetFragment.PostLayoutSelectionCallback,
@@ -847,7 +847,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     }
                 });
         adapter.setInboxCount(inboxCount);
-        navDrawerRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        navDrawerRecyclerView.setLayoutManager(new LinearLayoutManagerBugFixed(this));
         navDrawerRecyclerView.setAdapter(adapter);
 
         int tabCount = mMainActivityTabsSharedPreferences.getInt((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_COUNT, 3);
@@ -1309,7 +1309,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             adapter.setShowAvatarOnTheRightInTheNavigationDrawer(event.showAvatarOnTheRightInTheNavigationDrawer);
             int previousPosition = -1;
             if (navDrawerRecyclerView.getLayoutManager() != null) {
-                previousPosition = ((LinearLayoutManager) navDrawerRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
+                previousPosition = ((LinearLayoutManagerBugFixed) navDrawerRecyclerView.getLayoutManager()).findFirstVisibleItemPosition();
             }
 
             RecyclerView.LayoutManager layoutManager = navDrawerRecyclerView.getLayoutManager();

@@ -17,7 +17,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -51,6 +50,7 @@ import ml.docilealligator.infinityforreddit.asynctasks.InsertSubredditData;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.subreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditViewModel;
@@ -66,7 +66,7 @@ public class SidebarFragment extends Fragment {
     private Activity activity;
     private String subredditName;
     public SubredditViewModel mSubredditViewModel;
-    private LinearLayoutManager linearLayoutManager;
+    private LinearLayoutManagerBugFixed linearLayoutManager;
     private int markdownColor;
     @Inject
     @Named("no_oauth")
@@ -154,7 +154,7 @@ public class SidebarFragment extends Fragment {
                         .textLayoutIsRoot(R.layout.view_table_entry_cell)))
                 .build();
 
-        linearLayoutManager = new LinearLayoutManager(activity);
+        linearLayoutManager = new LinearLayoutManagerBugFixed(activity);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(markwonAdapter);
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {

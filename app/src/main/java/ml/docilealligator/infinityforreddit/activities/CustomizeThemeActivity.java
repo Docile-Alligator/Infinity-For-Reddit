@@ -12,7 +12,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
@@ -103,8 +102,6 @@ public class CustomizeThemeActivity extends BaseActivity {
         if (getIntent().getBooleanExtra(EXTRA_CREATE_THEME, false)) {
             setTitle(R.string.customize_theme_activity_create_theme_label);
         }
-
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         if (savedInstanceState != null) {
             customThemeSettingsItems = savedInstanceState.getParcelableArrayList(CUSTOM_THEME_SETTINGS_ITEMS_STATE);

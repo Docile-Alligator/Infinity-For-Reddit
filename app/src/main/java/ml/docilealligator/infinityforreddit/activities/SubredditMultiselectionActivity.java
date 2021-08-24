@@ -19,7 +19,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
@@ -41,6 +40,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.adapters.SubredditMultiselectionRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditViewModel;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
@@ -83,7 +83,7 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
     public SubscribedSubredditViewModel mSubscribedSubredditViewModel;
     private String mAccessToken;
     private String mAccountName;
-    private LinearLayoutManager mLinearLayoutManager;
+    private LinearLayoutManagerBugFixed mLinearLayoutManager;
     private SubredditMultiselectionRecyclerViewAdapter mAdapter;
     private RequestManager mGlide;
 
@@ -142,7 +142,7 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
     }
 
     private void bindView() {
-        mLinearLayoutManager = new LinearLayoutManager(this);
+        mLinearLayoutManager = new LinearLayoutManagerBugFixed(this);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mAdapter = new SubredditMultiselectionRecyclerViewAdapter(this, mCustomThemeWrapper);
         mRecyclerView.setAdapter(mAdapter);
