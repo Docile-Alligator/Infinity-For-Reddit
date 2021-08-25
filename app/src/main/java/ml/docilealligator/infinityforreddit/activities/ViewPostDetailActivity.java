@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import static ml.docilealligator.infinityforreddit.activities.CommentActivity.RETURN_EXTRA_COMMENT_DATA_KEY;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -66,8 +68,6 @@ import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
-
-import static ml.docilealligator.infinityforreddit.activities.CommentActivity.RETURN_EXTRA_COMMENT_DATA_KEY;
 
 public class ViewPostDetailActivity extends BaseActivity implements SortTypeSelectionCallback, ActivityToolbarInterface {
 
@@ -314,6 +314,9 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         if (savedInstanceState == null) {
             viewPager2.setCurrentItem(getIntent().getIntExtra(EXTRA_POST_LIST_POSITION, 0), false);
         }
+
+        searchPanelMaterialCardView.setOnClickListener(null);
+        
         nextResultImageView.setOnClickListener(view -> {
             ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
             if (fragment != null) {
