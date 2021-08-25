@@ -41,7 +41,6 @@ import ml.docilealligator.infinityforreddit.adapters.SearchActivityRecyclerViewA
 import ml.docilealligator.infinityforreddit.adapters.SubredditAutocompleteRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.recentsearchquery.DeleteRecentSearchQuery;
 import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQuery;
@@ -183,11 +182,24 @@ public class SearchActivity extends BaseActivity {
 
         subredditAutocompleteRecyclerViewAdapter = new SubredditAutocompleteRecyclerViewAdapter(this,
                 mCustomThemeWrapper, subredditData -> {
-                    Intent intent = new Intent(SearchActivity.this, ViewSubredditDetailActivity.class);
-                    intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditData.getName());
-                    startActivity(intent);
-                    finish();
-                });
+            if (searchOnlySubreddits) {
+                Intent returnIntent = new Intent();
+                if (getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false)) {
+                    ArrayList<String> subredditNameList = new ArrayList<>();
+                    subredditNameList.add(subredditData.getName());
+                    returnIntent.putStringArrayListExtra(RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES, subredditNameList);
+                } else {
+                    returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_NAME, subredditData.getName());
+                    returnIntent.putExtra(EXTRA_RETURN_SUBREDDIT_ICON_URL, subredditData.getIconUrl());
+                }
+                setResult(Activity.RESULT_OK, returnIntent);
+            } else {
+                Intent intent = new Intent(SearchActivity.this, ViewSubredditDetailActivity.class);
+                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditData.getName());
+                startActivity(intent);
+            }
+            finish();
+        });
 
         simpleSearchView.setOnQueryTextListener(new SimpleSearchView.OnQueryTextListener() {
             @Override
@@ -287,7 +299,6 @@ public class SearchActivity extends BaseActivity {
             });
             recyclerView.setVisibility(View.VISIBLE);
             recyclerView.setNestedScrollingEnabled(false);
-            recyclerView.setLayoutManager(new LinearLayoutManagerBugFixed(this));
             recyclerView.setAdapter(adapter);
 
             if (mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SEARCH_HISTORY, true)) {

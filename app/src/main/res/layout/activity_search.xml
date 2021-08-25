@@ -95,7 +95,8 @@
                 android:id="@+id/recycler_view_search_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone" />
+                android:visibility="gone"
+                app:layoutManager=".customviews.LinearLayoutManagerBugFixed" />
 
         </LinearLayout>
 
