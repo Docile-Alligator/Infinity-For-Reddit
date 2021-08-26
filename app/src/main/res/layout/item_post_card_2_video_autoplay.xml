@@ -29,6 +29,7 @@
                 android:id="@+id/player_view_item_post_card_2_video_autoplay"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:show_timeout="1000"
                 app:controller_layout_id="@layout/exo_autoplay_playback_control_view" />
 
             <pl.droidsonroids.gif.GifImageView
