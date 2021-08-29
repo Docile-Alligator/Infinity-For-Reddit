@@ -553,20 +553,24 @@ public class ViewVideoActivity extends AppCompatActivity {
                                         loadGfycatOrRedgifsVideo(redgifsRetrofit, gfycatId, savedInstanceState, false);
                                     } else {
                                         progressBar.setVisibility(View.INVISIBLE);
-                                        mVideoUri = Uri.parse(post.getVideoUrl());
-                                        subredditName = post.getSubredditName();
-                                        id = post.getId();
-                                        videoDownloadUrl = post.getVideoDownloadUrl();
+                                        if (post.getVideoUrl() != null) {
+                                            mVideoUri = Uri.parse(post.getVideoUrl());
+                                            subredditName = post.getSubredditName();
+                                            id = post.getId();
+                                            videoDownloadUrl = post.getVideoDownloadUrl();
 
-                                        videoFileName = subredditName + "-" + id + ".mp4";
-                                        // Produces DataSource instances through which media data is loaded.
-                                        dataSourceFactory = new CacheDataSourceFactory(mSimpleCache,
-                                                new DefaultHttpDataSourceFactory(
-                                                        Util.getUserAgent(ViewVideoActivity.this,
-                                                                "Infinity")));
-                                        // Prepare the player with the source.
-                                        player.prepare(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
-                                        preparePlayer(savedInstanceState);
+                                            videoFileName = subredditName + "-" + id + ".mp4";
+                                            // Produces DataSource instances through which media data is loaded.
+                                            dataSourceFactory = new CacheDataSourceFactory(mSimpleCache,
+                                                    new DefaultHttpDataSourceFactory(
+                                                            Util.getUserAgent(ViewVideoActivity.this,
+                                                                    "Infinity")));
+                                            // Prepare the player with the source.
+                                            player.prepare(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
+                                            preparePlayer(savedInstanceState);
+                                        } else {
+                                            Toast.makeText(ViewVideoActivity.this, R.string.error_fetching_v_redd_it_video_cannot_get_video_url, Toast.LENGTH_LONG).show();
+                                        }
                                     }
                                 }
 

@@ -1114,6 +1114,7 @@
     <string name="error_fetching_v_redd_it_video_cannot_get_redirect_url">Error fetching v.redd.it video: Cannot get the redirect url</string>
     <string name="error_fetching_v_redd_it_video_cannot_get_post">Error fetching v.redd.it video: Cannot get the post</string>
     <string name="error_fetching_v_redd_it_video_cannot_get_post_id">Error fetching v.redd.it video: Cannot get the post id</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_video_url">Error fetching v.redd.it video: Cannot get the video url</string>
 
     <string name="always_on">Always On</string>
     <string name="only_on_wifi">Only on Wifi</string>
