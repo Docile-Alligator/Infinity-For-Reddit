@@ -62,7 +62,7 @@ dependencies {
     implementation "androidx.viewpager2:viewpager2:1.1.0-alpha01"
 
 /** ExoPlayer **/
-    def exoplayerVersion = "2.10.8"
+    def exoplayerVersion = "2.15.0"
     implementation "com.google.android.exoplayer:exoplayer-core:$exoplayerVersion"
     implementation "com.google.android.exoplayer:exoplayer-dash:$exoplayerVersion"
     implementation "com.google.android.exoplayer:exoplayer-hls:$exoplayerVersion"
