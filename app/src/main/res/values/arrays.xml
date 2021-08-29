@@ -196,28 +196,29 @@
     </string-array>
 
     <string-array name="settings_time_format">
-        <item>Jan 2, 2020, 01:00</item>
-        <item>Jan 2, 2020, 01:00 PM</item>
-        <item>2 Jan, 2020, 01:00</item>
-        <item>2 Jan, 2020, 01:00 PM</item>
-        <item>1/2/2020 01:00 (Month first)</item>
-        <item>1/2/2020 01:00 PM (Month first)</item>
-        <item>2/1/2020 01:00 (Day first)</item>
-        <item>2/1/2020 01:00 PM (Day first)</item>
-        <item>2020/1/2 01:00 (Month first)</item>
-        <item>2020/1/2 01:00 PM (Month first)</item>
-        <item>1-2-2020 01:00 (Month first)</item>
-        <item>1-2-2020 01:00 PM (Month first)</item>
-        <item>2-1-2020 01:00 (Day first)</item>
-        <item>2-1-2020 01:00 PM (Day first)</item>
-        <item>2020-1-2 01:00 (Month first)</item>
-        <item>2020-1-2 01:00 PM (Month first)</item>
-        <item>1.2.2020 01:00 (Month first)</item>
-        <item>1.2.2020 01:00 PM (Month first)</item>
-        <item>2.1.2020 01:00 (Day first)</item>
-        <item>2.1.2020 01:00 PM (Day first)</item>
-        <item>2020.1.2 01:00 (Month first)</item>
-        <item>2020.1.2 01:00 PM (Month first)</item>
+        <!-- 2020/01/23 23:45 -->
+        <item>Jan 23, 2020, 23:45</item>
+        <item>Jan 23, 2020, 11:45 PM</item>
+        <item>23 Jan, 2020, 23:45</item>
+        <item>23 Jan, 2020, 11:45 PM</item>
+        <item>1/23/2020 23:45</item>
+        <item>1/23/2020 11:45 PM</item>
+        <item>23/1/2020 23:45</item>
+        <item>23/1/2020 11:45 PM</item>
+        <item>2020/1/23 23:45</item>
+        <item>2020/1/23 11:45 PM</item>
+        <item>1-23-2020 23:45</item>
+        <item>1-23-2020 11:45 PM</item>
+        <item>23-1-2020 23:45</item>
+        <item>23-1-2020 11:45 PM</item>
+        <item>2020-1-23 23:45</item>
+        <item>2020-1-23 11:45 PM</item>
+        <item>1.23.2020 23:45</item>
+        <item>1.23.2020 11:45 PM</item>
+        <item>23.1.2020 23:45</item>
+        <item>23.1.2020 11:45 PM</item>
+        <item>2020.1.23 23:45</item>
+        <item>2020.1.23 11:45 PM</item>
     </string-array>
 
     <string-array name="settings_time_format_values">
