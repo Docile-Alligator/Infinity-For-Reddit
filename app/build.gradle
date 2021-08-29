@@ -88,7 +88,7 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
 
     // Dependency injection
-    def daggerVersion = "2.34"
+    def daggerVersion = "2.38.1"
     implementation "com.google.dagger:dagger:$daggerVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$daggerVersion"
 
