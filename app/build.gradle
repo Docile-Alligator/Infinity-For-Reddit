@@ -126,7 +126,7 @@ dependencies {
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
     implementation 'com.github.santalu:aspect-ratio-imageview:1.0.9'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.21'
-    def bivVersion = "1.7.0"
+    def bivVersion = "v1.7.1"
     implementation "com.github.Piasy.BigImageViewer:BigImageViewer:$bivVersion"
     implementation "com.github.Piasy.BigImageViewer:GlideImageLoader:$bivVersion"
     implementation "com.github.Piasy.BigImageViewer:GlideImageViewFactory:$bivVersion"
