@@ -167,7 +167,7 @@ dependencies {
     // RecyclerView fast scrolling
     implementation 'me.zhanghai.android.fastscroll:library:1.1.5'
 
-    implementation 'net.lingala.zip4j:zip4j:2.7.0'
+    implementation 'net.lingala.zip4j:zip4j:2.9.0'
     implementation 'org.apache.commons:commons-io:1.3.2'
 
     implementation "androidx.startup:startup-runtime:1.0.0"
