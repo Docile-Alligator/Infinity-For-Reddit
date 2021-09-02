@@ -53,7 +53,9 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.Executor;
 
@@ -79,6 +81,8 @@ import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.adapters.PostRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
+import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.CustomToroContainer;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
@@ -246,6 +250,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private ItemTouchHelper touchHelper;
     private ArrayList<ReadPost> readPosts;
     private Unbinder unbinder;
+    private Map<String, String> subredditOrUserIcons = new HashMap<>();
 
     public PostFragment() {
         // Required empty public constructor
@@ -444,8 +449,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, defaultPostLayout);
 
-            mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, locale,
+            mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
+                    mRedgifsRetrofit, mCustomThemeWrapper, locale,
                     windowWidth, accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -526,8 +531,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 sortType = new SortType(SortType.Type.valueOf(sort));
             }
 
-            mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, locale,
+            mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
+                    mRedgifsRetrofit, mCustomThemeWrapper, locale,
                     windowWidth, accessToken, accountName, postType, postLayout, displaySubredditName,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -602,8 +607,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 sortType = new SortType(SortType.Type.valueOf(sort));
             }
 
-            mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, locale,
+            mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
+                    mRedgifsRetrofit, mCustomThemeWrapper, locale,
                     windowWidth, accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -672,8 +677,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, defaultPostLayout);
 
-            mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, locale,
+            mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
+                    mRedgifsRetrofit, mCustomThemeWrapper, locale,
                     windowWidth, accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -738,8 +743,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, defaultPostLayout);
 
-            mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, locale,
+            mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
+                    mRedgifsRetrofit, mCustomThemeWrapper, locale,
                     windowWidth, accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -797,8 +802,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, defaultPostLayout);
 
-            mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, locale,
+            mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
+                    mRedgifsRetrofit, mCustomThemeWrapper, locale,
                     windowWidth, accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -1578,6 +1583,27 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
     }
 
+    public void loadIcon(String subredditOrUserName, boolean isSubreddit, LoadIconListener loadIconListener) {
+        if (subredditOrUserIcons.containsKey(subredditOrUserName)) {
+            loadIconListener.loadIconSuccess(subredditOrUserName, subredditOrUserIcons.get(subredditOrUserName));
+        } else {
+            if (isSubreddit) {
+                LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase,
+                        subredditOrUserName, mRetrofit,
+                        iconImageUrl -> {
+                            subredditOrUserIcons.put(subredditOrUserName, iconImageUrl);
+                            loadIconListener.loadIconSuccess(subredditOrUserName, iconImageUrl);
+                        });
+            } else {
+                LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditOrUserName,
+                        mRetrofit, iconImageUrl -> {
+                            subredditOrUserIcons.put(subredditOrUserName, iconImageUrl);
+                            loadIconListener.loadIconSuccess(subredditOrUserName, iconImageUrl);
+                        });
+            }
+        }
+    }
+
     @Subscribe
     public void onPostUpdateEvent(PostUpdateEventToPostList event) {
         PagedList<Post> posts = mAdapter.getCurrentList();
@@ -2047,5 +2073,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 }
             }
         }
+    }
+
+    public interface LoadIconListener {
+        void loadIconSuccess(String subredditOrUserName, String iconUrl);
     }
 }
