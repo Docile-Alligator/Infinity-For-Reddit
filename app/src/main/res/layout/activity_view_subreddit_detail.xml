@@ -7,12 +7,6 @@
     android:id="@+id/coordinator_layout_view_subreddit_detail_activity"
     tools:application=".Activity.ViewSubredditDetailActivity">
 
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/view_pager_view_subreddit_detail_activity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_view_subreddit_detail_activity"
         android:layout_width="match_parent"
@@ -171,6 +165,12 @@
             app:tabUnboundedRipple="false" />
 
     </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager_view_subreddit_detail_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <include
         layout="@layout/bottom_app_bar"
