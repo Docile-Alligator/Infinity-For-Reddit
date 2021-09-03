@@ -24,7 +24,6 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class LockScreenActivity extends BaseActivity {
 
@@ -35,9 +34,6 @@ public class LockScreenActivity extends BaseActivity {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
-    @Inject
-    @Named("security")
-    SharedPreferences mSecurityPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
 
@@ -71,7 +67,6 @@ public class LockScreenActivity extends BaseActivity {
                 public void onAuthenticationSucceeded(
                         @NonNull BiometricPrompt.AuthenticationResult result) {
                     super.onAuthenticationSucceeded(result);
-                    saveUnlockTime();
                     finish();
                 }
             });
@@ -83,13 +78,8 @@ public class LockScreenActivity extends BaseActivity {
 
             biometricPrompt.authenticate(promptInfo);
         } else {
-            saveUnlockTime();
             finish();
         }
-    }
-
-    private void saveUnlockTime() {
-        mSecurityPreferences.edit().putLong(SharedPreferencesUtils.LAST_UNLOCK_TIME, System.currentTimeMillis()).apply();
     }
 
 

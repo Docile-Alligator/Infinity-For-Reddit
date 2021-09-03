@@ -329,7 +329,7 @@ public class SharedPreferencesUtils {
     public static final String SECURE_MODE = "secure_mode";
     public static final String APP_LOCK = "app_lock";
     public static final String APP_LOCK_TIMEOUT = "app_lock_timeout";
-    public static final String LAST_UNLOCK_TIME = "last_unlock_time";
+    public static final String LAST_FOREGROUND_TIME = "last_foreground_time";
 
     //Legacy Settings
     public static final String MAIN_PAGE_TAB_1_TITLE_LEGACY = "main_page_tab_1_title";

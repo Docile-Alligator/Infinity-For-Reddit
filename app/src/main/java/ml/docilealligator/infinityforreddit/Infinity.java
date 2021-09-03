@@ -76,7 +76,7 @@ public class Infinity extends Application implements LifecycleObserver {
             @Override
             public void onActivityResumed(@NonNull Activity activity) {
                 if (canStartLockScreenActivity && appLock
-                        && System.currentTimeMillis() - mSecuritySharedPreferences.getLong(SharedPreferencesUtils.LAST_UNLOCK_TIME, 0) >= appLockTimeout
+                        && System.currentTimeMillis() - mSecuritySharedPreferences.getLong(SharedPreferencesUtils.LAST_FOREGROUND_TIME, 0) >= appLockTimeout
                         && !(activity instanceof LockScreenActivity)) {
                     Intent intent = new Intent(activity, LockScreenActivity.class);
                     activity.startActivity(intent);
@@ -137,7 +137,9 @@ public class Infinity extends Application implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     public void appInBackground() {
-
+        if (appLock) {
+            mSecuritySharedPreferences.edit().putLong(SharedPreferencesUtils.LAST_FOREGROUND_TIME, System.currentTimeMillis()).apply();
+        }
     }
 
     public AppComponent getAppComponent() {
