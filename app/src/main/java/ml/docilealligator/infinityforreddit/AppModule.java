@@ -283,6 +283,13 @@ class AppModule {
     }
 
     @Provides
+    @Named("security")
+    @Singleton
+    SharedPreferences provideSecuritySharedPreferences() {
+        return mApplication.getSharedPreferences(SharedPreferencesUtils.SECURITY_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+    }
+
+    @Provides
     @Singleton
     CustomThemeWrapper provideCustomThemeWrapper(@Named("light_theme") SharedPreferences lightThemeSharedPreferences,
                                                  @Named("dark_theme") SharedPreferences darkThemeSharedPreferences,

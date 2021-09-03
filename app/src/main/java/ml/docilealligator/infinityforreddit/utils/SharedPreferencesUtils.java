@@ -132,7 +132,6 @@ public class SharedPreferencesUtils {
     public static final String ENABLE_SWIPE_ACTION = "enable_swipe_action";
     public static final String SWIPE_ACTION_THRESHOLD = "swipe_action_threshold";
     public static final String PULL_TO_REFRESH = "pull_to_refresh";
-    public static final String REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER = "require_auth_to_account_section";
     public static final String LONG_PRESS_TO_HIDE_TOOLBAR_IN_COMPACT_LAYOUT = "long_press_to_hide_toolbar_in_compact_layout";
     public static final String POST_COMPACT_LAYOUT_TOOLBAR_HIDDEN_BY_DEFAULT = "post_compact_layout_toolbar_hidden_by_default";
     public static final String SECURITY = "security";
@@ -186,7 +185,6 @@ public class SharedPreferencesUtils {
     public static final String REMEMBER_MUTING_OPTION_IN_POST_FEED = "remember_muting_option_in_post_feed";
     public static final String DEFAULT_LINK_POST_LAYOUT_KEY = "default_link_post_layout";
     public static final String USE_BOTTOM_TOOLBAR_IN_MEDIA_VIEWER = "use_bottom_toolbar_in_media_viewer";
-    public static final String SECURE_MODE = "secure_mode";
     public static final String LOCK_SCREEN_ANIMATION = "lock_screen_animation";
 
     public static final String DEFAULT_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit_preferences";
@@ -325,6 +323,13 @@ public class SharedPreferencesUtils {
     public static final String POST_DETAILS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.post_details";
     public static final String SEPARATE_POST_AND_COMMENTS_IN_PORTRAIT_MODE = "separate_post_and_comments_in_portrait_mode";
     public static final String SEPARATE_POST_AND_COMMENTS_IN_LANDSCAPE_MODE = "separate_post_and_comments_in_landscape_mode";
+
+    public static final String SECURITY_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.security";
+    public static final String REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER = "require_auth_to_account_section";
+    public static final String SECURE_MODE = "secure_mode";
+    public static final String APP_LOCK = "app_lock";
+    public static final String APP_LOCK_TIMEOUT = "app_lock_timeout";
+    public static final String LAST_UNLOCK_TIME = "last_unlock_time";
 
     //Legacy Settings
     public static final String MAIN_PAGE_TAB_1_TITLE_LEGACY = "main_page_tab_1_title";

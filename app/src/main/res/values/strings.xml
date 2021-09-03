@@ -597,6 +597,9 @@
     <string name="settings_secure_mode_title">Secure Mode</string>
     <string name="settings_secure_mode_summary">Screenshot and video recording are not allowed. No preview in recent app screen.</string>
     <string name="settings_credits_lock_screen_animation_title">Lock Screen Animation</string>
+    <string name="settings_app_lock_title">App Lock</string>
+    <string name="settings_app_lock_summary">Require authentication before using the app</string>
+    <string name="settings_app_lock_timeout_title">App Lock Timeout</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -1171,5 +1174,21 @@
     <string name="material_you_notification_title">Applying Material You</string>
 
     <string name="lock_screen_text">Whoa there!!!</string>
+    <string name="app_lock_timeout_immediately">Immediately</string>
+    <string name="app_lock_timeout_1_min">1 minute</string>
+    <string name="app_lock_timeout_2_mins">2 minutes</string>
+    <string name="app_lock_timeout_5_mins">5 minutes</string>
+    <string name="app_lock_timeout_10_mins">10 minutes</string>
+    <string name="app_lock_timeout_15_mins">15 minutes</string>
+    <string name="app_lock_timeout_20_mins">20 minutes</string>
+    <string name="app_lock_timeout_30_mins">30 minutes</string>
+    <string name="app_lock_timeout_1_hour">1 hour</string>
+    <string name="app_lock_timeout_2_hours">2 hours</string>
+    <string name="app_lock_timeout_3_hours">3 hours</string>
+    <string name="app_lock_timeout_4_hours">4 hours</string>
+    <string name="app_lock_timeout_5_hours">5 hours</string>
+    <string name="app_lock_timeout_6_hours">6 hours</string>
+    <string name="app_lock_timeout_12_hours">12 hours</string>
+    <string name="app_lock_timeout_24_hours">24 hours</string>
 
 </resources>

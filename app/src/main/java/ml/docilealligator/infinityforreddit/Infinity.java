@@ -29,6 +29,7 @@ import javax.inject.Named;
 import ml.docilealligator.infinityforreddit.activities.LockScreenActivity;
 import ml.docilealligator.infinityforreddit.broadcastreceivers.NetworkWifiStatusReceiver;
 import ml.docilealligator.infinityforreddit.broadcastreceivers.WallpaperChangeReceiver;
+import ml.docilealligator.infinityforreddit.events.ChangeAppLockEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.events.ToggleSecureModeEvent;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -37,11 +38,13 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
 public class Infinity extends Application implements LifecycleObserver {
     private AppComponent mAppComponent;
     private NetworkWifiStatusReceiver mNetworkWifiStatusReceiver;
-    private boolean lock = false;
+    private boolean appLock;
+    private long appLockTimeout;
+    private boolean canStartLockScreenActivity = false;
     private boolean isSecureMode;
     @Inject
-    @Named("default")
-    SharedPreferences mSharedPreferences;
+    @Named("security")
+    SharedPreferences mSecuritySharedPreferences;
 
     @Override
     public void onCreate() {
@@ -53,7 +56,9 @@ public class Infinity extends Application implements LifecycleObserver {
 
         mAppComponent.inject(this);
 
-        isSecureMode = mSharedPreferences.getBoolean(SharedPreferencesUtils.SECURE_MODE, false);
+        appLock = mSecuritySharedPreferences.getBoolean(SharedPreferencesUtils.APP_LOCK, false);
+        appLockTimeout = Long.parseLong(mSecuritySharedPreferences.getString(SharedPreferencesUtils.APP_LOCK_TIMEOUT, "600000"));
+        isSecureMode = mSecuritySharedPreferences.getBoolean(SharedPreferencesUtils.SECURE_MODE, false);
 
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
@@ -70,11 +75,13 @@ public class Infinity extends Application implements LifecycleObserver {
 
             @Override
             public void onActivityResumed(@NonNull Activity activity) {
-                if (lock && !(activity instanceof LockScreenActivity)) {
-                    lock = false;
+                if (canStartLockScreenActivity && appLock
+                        && System.currentTimeMillis() - mSecuritySharedPreferences.getLong(SharedPreferencesUtils.LAST_UNLOCK_TIME, 0) >= appLockTimeout
+                        && !(activity instanceof LockScreenActivity)) {
                     Intent intent = new Intent(activity, LockScreenActivity.class);
                     activity.startActivity(intent);
                 }
+                canStartLockScreenActivity = false;
             }
 
             @Override
@@ -125,11 +132,11 @@ public class Infinity extends Application implements LifecycleObserver {
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void appInForeground() {
-        lock = true;
+        canStartLockScreenActivity = true;
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
-    public void appInBackground(){
+    public void appInBackground() {
 
     }
 
@@ -140,5 +147,11 @@ public class Infinity extends Application implements LifecycleObserver {
     @Subscribe
     public void onToggleSecureModeEvent(ToggleSecureModeEvent secureModeEvent) {
         isSecureMode = secureModeEvent.isSecureMode;
+    }
+
+    @Subscribe
+    public void onChangeAppLockEvent(ChangeAppLockEvent changeAppLockEvent) {
+        appLock = changeAppLockEvent.appLock;
+        appLockTimeout = changeAppLockEvent.appLockTimeout;
     }
 }

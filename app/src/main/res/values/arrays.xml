@@ -466,4 +466,42 @@
         <item>@string/exclude_domain</item>
     </string-array>
 
+    <string-array name="settings_app_lock_timeout">
+        <item>@string/app_lock_timeout_immediately</item>
+        <item>@string/app_lock_timeout_1_min</item>
+        <item>@string/app_lock_timeout_2_mins</item>
+        <item>@string/app_lock_timeout_5_mins</item>
+        <item>@string/app_lock_timeout_10_mins</item>
+        <item>@string/app_lock_timeout_15_mins</item>
+        <item>@string/app_lock_timeout_20_mins</item>
+        <item>@string/app_lock_timeout_30_mins</item>
+        <item>@string/app_lock_timeout_1_hour</item>
+        <item>@string/app_lock_timeout_2_hours</item>
+        <item>@string/app_lock_timeout_3_hours</item>
+        <item>@string/app_lock_timeout_4_hours</item>
+        <item>@string/app_lock_timeout_5_hours</item>
+        <item>@string/app_lock_timeout_6_hours</item>
+        <item>@string/app_lock_timeout_12_hours</item>
+        <item>@string/app_lock_timeout_24_hours</item>
+    </string-array>
+
+    <string-array name="settings_app_lock_timeout_values">
+        <item>0</item>
+        <item>60000</item>
+        <item>120000</item>
+        <item>300000</item>
+        <item>600000</item>
+        <item>900000</item>
+        <item>1200000</item>
+        <item>1800000</item>
+        <item>3600000</item>
+        <item>7200000</item>
+        <item>10800000</item>
+        <item>14400000</item>
+        <item>18000000</item>
+        <item>21600000</item>
+        <item>43200000</item>
+        <item>86400000</item>
+    </string-array>
+
 </resources>
