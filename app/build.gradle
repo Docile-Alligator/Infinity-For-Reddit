@@ -173,8 +173,8 @@ dependencies {
     implementation "androidx.startup:startup-runtime:1.0.0"
     implementation 'com.github.FunkyMuse:Crashy:1.1.0'
 
-    //implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    //annotationProcessor "androidx.lifecycle:compiler:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-process:2.3.1"
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.3.1"
 
     implementation 'androidx.palette:palette:1.0.0'
 

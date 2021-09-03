@@ -11,7 +11,10 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
+import androidx.lifecycle.ProcessLifecycleOwner;
 
 import com.evernote.android.state.StateSaver;
 import com.livefront.bridge.Bridge;
@@ -23,6 +26,7 @@ import org.greenrobot.eventbus.Subscribe;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import ml.docilealligator.infinityforreddit.activities.LockScreenActivity;
 import ml.docilealligator.infinityforreddit.broadcastreceivers.NetworkWifiStatusReceiver;
 import ml.docilealligator.infinityforreddit.broadcastreceivers.WallpaperChangeReceiver;
 import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
@@ -33,7 +37,7 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
 public class Infinity extends Application implements LifecycleObserver {
     private AppComponent mAppComponent;
     private NetworkWifiStatusReceiver mNetworkWifiStatusReceiver;
-    //private boolean lock = false;
+    private boolean lock = false;
     private boolean isSecureMode;
     @Inject
     @Named("default")
@@ -66,11 +70,11 @@ public class Infinity extends Application implements LifecycleObserver {
 
             @Override
             public void onActivityResumed(@NonNull Activity activity) {
-                /*if (lock && !(activity instanceof LockScreenActivity)) {
+                if (lock && !(activity instanceof LockScreenActivity)) {
                     lock = false;
                     Intent intent = new Intent(activity, LockScreenActivity.class);
                     activity.startActivity(intent);
-                }*/
+                }
             }
 
             @Override
@@ -94,7 +98,7 @@ public class Infinity extends Application implements LifecycleObserver {
             }
         });
 
-        //ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
+        ProcessLifecycleOwner.get().getLifecycle().addObserver(this);
 
         Bridge.initialize(getApplicationContext(), new SavedStateHandler() {
             @Override
@@ -119,7 +123,7 @@ public class Infinity extends Application implements LifecycleObserver {
         registerReceiver(new WallpaperChangeReceiver(), new IntentFilter(Intent.ACTION_WALLPAPER_CHANGED));
     }
 
-    /*@OnLifecycleEvent(Lifecycle.Event.ON_START)
+    @OnLifecycleEvent(Lifecycle.Event.ON_START)
     public void appInForeground() {
         lock = true;
     }
@@ -127,7 +131,7 @@ public class Infinity extends Application implements LifecycleObserver {
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     public void appInBackground(){
 
-    }*/
+    }
 
     public AppComponent getAppComponent() {
         return mAppComponent;
