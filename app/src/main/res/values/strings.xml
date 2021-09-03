@@ -596,6 +596,7 @@
     <string name="settings_use_bottom_toolbar_in_media_viewer_title">Use Bottom Toolbar in Media Viewer</string>
     <string name="settings_secure_mode_title">Secure Mode</string>
     <string name="settings_secure_mode_summary">Screenshot and video recording are not allowed. No preview in recent app screen.</string>
+    <string name="settings_credits_lock_screen_animation_title">Lock Screen Animation</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -1168,5 +1169,7 @@
     <string name="no_wiki">This subreddit has no wiki page</string>
 
     <string name="material_you_notification_title">Applying Material You</string>
+
+    <string name="lock_screen_text">Whoa there!!!</string>
 
 </resources>

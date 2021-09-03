@@ -56,4 +56,9 @@
         app:title="@string/settings_credits_love_animation_title"
         android:summary="https://lottiefiles.com/52103-love" />
 
+    <Preference
+        app:key="lock_screen_animation"
+        app:title="@string/settings_credits_lock_screen_animation_title"
+        android:summary="https://lottiefiles.com/69178-cool" />
+
 </PreferenceScreen>

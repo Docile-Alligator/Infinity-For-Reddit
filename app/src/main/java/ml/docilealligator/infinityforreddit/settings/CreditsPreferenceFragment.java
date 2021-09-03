@@ -37,6 +37,7 @@ public class CreditsPreferenceFragment extends PreferenceFragmentCompat {
         Preference nationalFlagsPreference = findPreference(SharedPreferencesUtils.NATIONAL_FLAGS);
         Preference ufoAndCowPreference = findPreference(SharedPreferencesUtils.UFO_CAPTURING_ANIMATION);
         Preference loveAnimationPreference = findPreference(SharedPreferencesUtils.LOVE_ANIMATION);
+        Preference lockScreenPreference = findPreference(SharedPreferencesUtils.LOCK_SCREEN_ANIMATION);
 
         if (iconForegroundPreference != null) {
             iconForegroundPreference.setOnPreferenceClickListener(preference -> {
@@ -132,6 +133,15 @@ public class CreditsPreferenceFragment extends PreferenceFragmentCompat {
             loveAnimationPreference.setOnPreferenceClickListener(preference -> {
                 Intent intent = new Intent(activity, LinkResolverActivity.class);
                 intent.setData(Uri.parse("https://lottiefiles.com/52103-love"));
+                startActivity(intent);
+                return true;
+            });
+        }
+
+        if (lockScreenPreference != null) {
+            lockScreenPreference.setOnPreferenceClickListener(preference -> {
+                Intent intent = new Intent(activity, LinkResolverActivity.class);
+                intent.setData(Uri.parse("https://lottiefiles.com/69178-cool"));
                 startActivity(intent);
                 return true;
             });
