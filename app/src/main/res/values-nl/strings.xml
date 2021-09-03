@@ -763,7 +763,6 @@ Voorbeeld: yourpass: 123456"</string>
     <string name="action_select_user_flair">"Selecteer Gebruikersflair"</string>
     <string name="action_give_award">"Geef Award"</string>
     <string name="posts">"Posts"</string>
-    <string name="sidebar">"Zijbalk"</string>
     <string name="only_for_logged_in_user">"Alleen voor ingelogde gebruikers"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Het Aantal Kolommen in de Postfeed"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Portret"</string>

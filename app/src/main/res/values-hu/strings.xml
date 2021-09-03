@@ -760,7 +760,6 @@ Az alap az indigó amoled téma"</string>
     <string name="action_select_user_flair">"Felhasználó flair kiválasztása"</string>
     <string name="action_give_award">"Adj kitüntetést"</string>
     <string name="posts">"Poszt"</string>
-    <string name="sidebar">"Oldalsáv"</string>
     <string name="only_for_logged_in_user">"Csak bejelentkezett felhasználóknak"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Az oszlopok száma a poszt feedben"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Portré"</string>

@@ -807,7 +807,6 @@ Beispiel: DeinPasswort:123456"</string>
     <string name="action_select_user_flair">"Benutzerflair auswählen"</string>
     <string name="action_give_award">"Auszeichnung verleihen"</string>
     <string name="posts">"Beiträge"</string>
-    <string name="sidebar">"Seitenleiste"</string>
     <string name="only_for_logged_in_user">"Nur für angemeldete Benutzer"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Anzahl an Spalten im Beitragsfeed"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Hochformat"</string>

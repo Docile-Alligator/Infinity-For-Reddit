@@ -750,7 +750,6 @@ Exemplo: asuapasse:123456"</string>
     <string name="action_select_user_flair">"Selecionar Flair de Utilizador"</string>
     <string name="action_give_award">"Premiar"</string>
     <string name="posts">"Publicações"</string>
-    <string name="sidebar">"Barra Lateral"</string>
     <string name="only_for_logged_in_user">"Apenas para Utilizadores com Sessão Iniciada"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Número de Colunas no Feed de Publicações"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Retrato"</string>

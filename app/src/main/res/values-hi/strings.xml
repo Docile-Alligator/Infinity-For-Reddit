@@ -822,7 +822,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="action_select_user_flair">"उपयोगकर्ता का फ्लेयर चुनें "</string>
     <string name="action_give_award">"पुरस्कार दें␣"</string>
     <string name="posts">"पोस्ट्स"</string>
-    <string name="sidebar">"साइडबार "</string>
     <string name="only_for_logged_in_user">"केवल लाॅग्ड-इन उपयोगकर्ता के लिए "</string>
     <string name="settings_number_of_columns_in_post_feed_title">"पोस्ट फीड में स्तम्भों की संख्या "</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"ऊर्ध्वाधर"</string>

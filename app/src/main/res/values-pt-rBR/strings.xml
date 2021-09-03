@@ -769,7 +769,6 @@ Exemplo: suasenha:123456"</string>
     <string name="action_select_user_flair">"Selecionar etiqueta de usuário"</string>
     <string name="action_give_award">"Dar prêmio"</string>
     <string name="posts">"Posts"</string>
-    <string name="sidebar">"Descrição"</string>
     <string name="only_for_logged_in_user">"Apenas para usuários logados"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"O número de colunas no feed de posts"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Retrato"</string>

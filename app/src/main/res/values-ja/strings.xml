@@ -836,7 +836,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="action_select_user_flair">"ユーザーフレアーを選択"</string>
     <string name="action_give_award">"アワードを贈る"</string>
     <string name="posts">"投稿"</string>
-    <string name="sidebar">"サイドバー"</string>
     <string name="only_for_logged_in_user">"ログイン済みユーザー用"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"投稿フィードの表示列数"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"縦画面時"</string>

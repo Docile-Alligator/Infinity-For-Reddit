@@ -844,7 +844,6 @@ Exemple: motdepasse: 123456"</string>
     <string name="action_select_user_flair">"Sélectionner un flair d'utilisateur"</string>
     <string name="action_give_award">"Récompenser"</string>
     <string name="posts">"Posts"</string>
-    <string name="sidebar">"Barre latérale"</string>
     <string name="only_for_logged_in_user">"Seulement pour Les utilisateurs connectés"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Nombre de colonnes dans le flux"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Portrait"</string>

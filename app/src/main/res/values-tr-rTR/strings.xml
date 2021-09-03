@@ -771,7 +771,6 @@ Amoled Tema Şablonu Oluştur"</string>
     <string name="action_select_user_flair">"Kullanıcı Rozetini Seç"</string>
     <string name="action_give_award">"Ödül Ver"</string>
     <string name="posts">"Gönderiler"</string>
-    <string name="sidebar">"Hakkında"</string>
     <string name="only_for_logged_in_user">"Sadece Oturum Açmış Kullanıcılar için"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Gönderi Akışındaki Sütun Sayısı"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Portre"</string>

@@ -812,7 +812,6 @@ Ejemplo: contraseña:123456"</string>
     <string name="action_select_user_flair">"Seleccione categoría de usuario"</string>
     <string name="action_give_award">"Premiar"</string>
     <string name="posts">"Publicaciones"</string>
-    <string name="sidebar">"Barra lateral"</string>
     <string name="only_for_logged_in_user">"Solo para usuarios registrados"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"El número de columnas en el feed de publicaciones"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Vertical"</string>

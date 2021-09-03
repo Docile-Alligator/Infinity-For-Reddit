@@ -1060,7 +1060,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     tab.setText(R.string.posts);
                     break;
                 case 1:
-                    tab.setText(R.string.sidebar);
+                    tab.setText(R.string.about);
             }
         }).attach();
         fixViewPager2Sensitivity(viewPager2);
