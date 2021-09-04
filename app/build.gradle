@@ -51,8 +51,10 @@ dependencies {
     def lifecycleVersion = "2.2.0"
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
     annotationProcessor "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
-    implementation 'androidx.paging:paging-runtime:3.0.0'
+    implementation 'androidx.paging:paging-runtime:3.0.1'
+    implementation "androidx.paging:paging-guava:3.0.1"
     implementation 'androidx.preference:preference:1.1.1'
     def roomVersion = "2.3.0"
     implementation "androidx.room:room-runtime:$roomVersion"
@@ -85,6 +87,7 @@ dependencies {
     def retrofitVersion = "2.9.0"
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-scalars:$retrofitVersion"
+    implementation "com.squareup.retrofit2:adapter-guava:$retrofitVersion"
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
 
     // Dependency injection

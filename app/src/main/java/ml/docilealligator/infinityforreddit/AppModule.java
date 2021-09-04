@@ -31,6 +31,7 @@ import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
+import retrofit2.adapter.guava.GuavaCallAdapterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 @Module
@@ -49,6 +50,18 @@ class AppModule {
                 .baseUrl(APIUtils.OAUTH_API_BASE_URI)
                 .client(okHttpClient)
                 .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+    }
+
+    @Provides
+    @Named("paging_3_test")
+    @Singleton
+    Retrofit providePaging3TestRetrofit(@Named("default") OkHttpClient okHttpClient) {
+        return new Retrofit.Builder()
+                .baseUrl(APIUtils.OAUTH_API_BASE_URI)
+                .client(okHttpClient)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .addCallAdapterFactory(GuavaCallAdapterFactory.create())
                 .build();
     }
 

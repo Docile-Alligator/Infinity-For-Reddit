@@ -73,6 +73,58 @@ public class ParsePost {
         });
     }
 
+    public static LinkedHashSet<Post> parsePostsSync(String response, int nPosts, PostFilter postFilter, List<ReadPost> readPostList) {
+        LinkedHashSet<Post> newPosts = new LinkedHashSet<>();
+        try {
+            JSONObject jsonResponse = new JSONObject(response);
+            JSONArray allData = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
+
+            //Posts listing
+            int size;
+            if (nPosts < 0 || nPosts > allData.length()) {
+                size = allData.length();
+            } else {
+                size = nPosts;
+            }
+
+            HashSet<ReadPost> readPostHashSet = null;
+            if (readPostList != null) {
+                readPostHashSet = new HashSet<>(readPostList);
+            }
+            for (int i = 0; i < size; i++) {
+                try {
+                    if (allData.getJSONObject(i).getString(JSONUtils.KIND_KEY).equals("t3")) {
+                        JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
+                        Post post = parseBasicData(data);
+                        if (readPostHashSet != null && readPostHashSet.contains(ReadPost.convertPost(post))) {
+                            post.markAsRead(false);
+                        }
+                        if (PostFilter.isPostAllowed(post, postFilter)) {
+                            newPosts.add(post);
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            return newPosts;
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public static String getLastItem(String response) {
+        try {
+            return new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
     public static void parsePost(Executor executor, Handler handler, String response, ParsePostListener parsePostListener) {
         PostFilter postFilter = new PostFilter();
         postFilter.allowNSFW = true;

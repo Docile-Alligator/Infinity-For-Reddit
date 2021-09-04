@@ -1,10 +1,13 @@
 package ml.docilealligator.infinityforreddit.apis;
 
+import com.google.common.util.concurrent.ListenableFuture;
+
 import java.util.Map;
 
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.FieldMap;
@@ -368,4 +371,11 @@ public interface RedditAPI {
 
     @GET("/r/{subredditName}/wiki/index.json?raw_json=1")
     Call<String> getWiki(@Path("subredditName") String subredditName);
+
+    @GET("{sortType}?raw_json=1")
+    ListenableFuture<Response<String>> getBestPostsListenableFuture(@Path("sortType") String sortType, @Query("after") String lastItem, @HeaderMap Map<String, String> headers);
+
+    @GET("{sortType}?raw_json=1")
+    ListenableFuture<Response<String>> getBestPostsListenableFuture(@Path("sortType") String sortType, @Query("t") String sortTime,
+                                                                   @Query("after") String lastItem, @HeaderMap Map<String, String> headers);
 }
