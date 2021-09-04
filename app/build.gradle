@@ -48,7 +48,7 @@ dependencies {
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.0-beta02'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    def lifecycleVersion = "2.2.0"
+    def lifecycleVersion = "2.3.1"
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
