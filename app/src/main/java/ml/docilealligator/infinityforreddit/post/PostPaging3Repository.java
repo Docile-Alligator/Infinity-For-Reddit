@@ -34,6 +34,7 @@ public class PostPaging3Repository {
     private String userWhere;
     private String multiRedditPath;
     private LinkedHashSet<Post> postLinkedHashSet;
+    private PostPaging3PagingSource paging3PagingSource;
 
     public PostPaging3Repository(Executor executor, Retrofit retrofit, String accessToken, String accountName,
                                  SharedPreferences sharedPreferences,
@@ -57,15 +58,16 @@ public class PostPaging3Repository {
         this.userWhere = userWhere;
         this.multiRedditPath = multiRedditPath;
         this.postLinkedHashSet = postLinkedHashSet;
+        paging3PagingSource = new PostPaging3PagingSource(executor, retrofit, accessToken, accountName, sharedPreferences,
+                postFeedScrolledPositionSharedPreferences, postType, sortType, postFilter, readPostList);
     }
 
     public LiveData<PagingData<Post>> getPostsLiveData() {
-        return PagingLiveData.getLiveData(new Pager<>(new PagingConfig(25, 50, false),
-                this::returnPagingSoruce));
+        Pager<String, Post> pager = new Pager<>(new PagingConfig(25, 25, false), this::returnPagingSoruce);
+        return PagingLiveData.getLiveData(pager);
     }
 
-    private PostPaging3PagingSource returnPagingSoruce() {
-        return new PostPaging3PagingSource(executor, retrofit, accessToken, accountName, sharedPreferences,
-                postFeedScrolledPositionSharedPreferences, postType, sortType, postFilter, readPostList);
+    public PostPaging3PagingSource returnPagingSoruce() {
+        return paging3PagingSource;
     }
 }

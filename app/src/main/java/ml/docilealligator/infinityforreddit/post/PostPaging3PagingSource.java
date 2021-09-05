@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.post;
 
 import android.content.SharedPreferences;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
@@ -76,47 +77,10 @@ public class PostPaging3PagingSource extends ListenableFuturePagingSource<String
         return null;
     }
 
-    /*@Nullable
-    @Override
-    public Object load(@NonNull LoadParams<String> loadParams, @NonNull Continuation<? super LoadResult<String, Post>> continuation) {
-        RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> bestPost;
-        if(sortType.getTime() != null) {
-            bestPost = api.getBestPosts(sortType.getType().value, sortType.getTime().value, loadParams.getKey(),
-                    APIUtils.getOAuthHeader(accessToken));
-        } else {
-            bestPost = api.getBestPosts(sortType.getType().value, loadParams.getKey(), APIUtils.getOAuthHeader(accessToken));
-        }
-
-        try {
-            Response<String> response = bestPost.execute();
-            if (response.isSuccessful()) {
-                String responseString = response.body();
-                LinkedHashSet<Post> newPosts = ParsePost.parsePostsSync(responseString, -1, postFilter, readPostList);
-                String lastItem = ParsePost.getLastItem(responseString);
-                if (newPosts == null) {
-                    return new LoadResult.Error<>(new Exception("Error parsing more posts"));
-                } else {
-                    int currentPostsSize = postLinkedHashSet.size();
-                    postLinkedHashSet.addAll(newPosts);
-                    if (currentPostsSize == postLinkedHashSet.size()) {
-                        return new LoadResult.Page<>(new ArrayList<>(), null, lastItem);
-                    } else {
-                        return new LoadResult.Page<>(new ArrayList<>(postLinkedHashSet).subList(currentPostsSize, postLinkedHashSet.size()), null, lastItem);
-                    }
-                }
-            } else {
-                return new LoadResult.Error<>(new Exception("Response failed"));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return new LoadResult.Error<>(e);
-        }
-    }*/
-
     @NonNull
     @Override
     public ListenableFuture<LoadResult<String, Post>> loadFuture(@NonNull LoadParams<String> loadParams) {
+        Log.i("asfsaf", "s" + loadParams.getKey());
         RedditAPI api = retrofit.create(RedditAPI.class);
         ListenableFuture<Response<String>> bestPost;
         if(sortType.getTime() != null) {

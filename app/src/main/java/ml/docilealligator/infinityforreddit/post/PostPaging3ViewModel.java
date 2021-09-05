@@ -3,10 +3,13 @@ package ml.docilealligator.infinityforreddit.post;
 import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelKt;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.paging.Pager;
+import androidx.paging.PagingConfig;
 import androidx.paging.PagingData;
 import androidx.paging.PagingLiveData;
 
@@ -23,8 +26,10 @@ public class PostPaging3ViewModel extends ViewModel {
 
     private PostPaging3Repository repository;
     private LiveData<PagingData<Post>> posts;
+    private PostPaging3PagingSource paging3PagingSource;
+    private Lifecycle lifecycle;
 
-    public PostPaging3ViewModel(Executor executor, Retrofit retrofit, String accessToken, String accountName,
+    public PostPaging3ViewModel(Lifecycle lifecycle, Executor executor, Retrofit retrofit, String accessToken, String accountName,
                                 SharedPreferences sharedPreferences,
                                 SharedPreferences postFeedScrolledPositionSharedPreferences,
                                 String subredditOrUserName, String query, String trendingSource, int postType,
@@ -32,14 +37,24 @@ public class PostPaging3ViewModel extends ViewModel {
                                 String userWhere, String multiRedditPath, LinkedHashSet<Post> postLinkedHashSet) {
         repository = new PostPaging3Repository(executor, retrofit, accessToken, accountName, sharedPreferences, postFeedScrolledPositionSharedPreferences,
                 subredditOrUserName, query, trendingSource, postType, sortType, postFilter, readPostList, userWhere, multiRedditPath, postLinkedHashSet);
+        paging3PagingSource = repository.returnPagingSoruce();
+        Pager<String, Post> pager = new Pager<>(new PagingConfig(25, 25, false), this::returnPagingSoruce);
+        posts = PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
     }
 
     public LiveData<PagingData<Post>> getPosts() {
-        posts = PagingLiveData.cachedIn(repository.getPostsLiveData(), ViewModelKt.getViewModelScope(this));
+        /*Pager<String, Post> pager = new Pager<>(new PagingConfig(25, 25, false), this::returnPagingSoruce);
+        posts = PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
+        posts = PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), lifecycle);*/
         return posts;
     }
 
+    private PostPaging3PagingSource returnPagingSoruce() {
+        return paging3PagingSource;
+    }
+
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
+        private Lifecycle lifecycle;
         private Executor executor;
         private Retrofit retrofit;
         private String accessToken;
@@ -57,11 +72,12 @@ public class PostPaging3ViewModel extends ViewModel {
         private String multiRedditPath;
         private LinkedHashSet<Post> postLinkedHashSet;
 
-        public Factory(Executor executor, Retrofit retrofit, String accessToken, String accountName, SharedPreferences sharedPreferences,
+        public Factory(Lifecycle lifecycle, Executor executor, Retrofit retrofit, String accessToken, String accountName, SharedPreferences sharedPreferences,
                        SharedPreferences postFeedScrolledPositionSharedPreferences, String subredditOrUserName,
                        String query, String trendingSource, int postType, SortType sortType, PostFilter postFilter,
                        List<ReadPost> readPostList, String userWhere, String multiRedditPath,
                        LinkedHashSet<Post> postLinkedHashSet) {
+            this.lifecycle = lifecycle;
             this.executor = executor;
             this.retrofit = retrofit;
             this.accessToken = accessToken;
@@ -83,7 +99,7 @@ public class PostPaging3ViewModel extends ViewModel {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new PostPaging3ViewModel(executor, retrofit, accessToken, accountName, sharedPreferences,
+            return (T) new PostPaging3ViewModel(lifecycle, executor, retrofit, accessToken, accountName, sharedPreferences,
                     postFeedScrolledPositionSharedPreferences, subredditOrUserName, query, trendingSource,
                     postType, sortType, postFilter, readPostList, userWhere, multiRedditPath, postLinkedHashSet);
         }

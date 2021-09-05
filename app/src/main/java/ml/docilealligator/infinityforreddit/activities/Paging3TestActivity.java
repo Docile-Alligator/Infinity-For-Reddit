@@ -75,6 +75,7 @@ public class Paging3TestActivity extends BaseActivity {
     @Inject
     Executor mExecutor;
     public PostPaging3ViewModel viewModel;
+    private Paging3TestAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -103,7 +104,7 @@ public class Paging3TestActivity extends BaseActivity {
         }
 
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        Paging3TestAdapter adapter = new Paging3TestAdapter(this, new PostFragment(), mExecutor,
+        adapter = new Paging3TestAdapter(this, new PostFragment(), mExecutor,
                 mOauthRetrofit, mGfycatRetrofit,
                 mRedgifsRetrofit, mCustomThemeWrapper, locale,
                 windowWidth, accessToken, accountName, postType, postLayout, true,
@@ -141,12 +142,14 @@ public class Paging3TestActivity extends BaseActivity {
         });
         recyclerView.setAdapter(adapter);
 
-        viewModel = new ViewModelProvider(this, new PostPaging3ViewModel.Factory(mExecutor, mPaging3Retrofit,
+        viewModel = new ViewModelProvider(this, new PostPaging3ViewModel.Factory(getLifecycle(), mExecutor, mPaging3Retrofit,
                 accessToken, accountName, mSharedPreferences, mPostFeedScrolledPositionSharedPreferences,
                 null, null, null, postType, sortType, null, null,
                 null, null, null)).get(PostPaging3ViewModel.class);
 
-        viewModel.getPosts().observe(this, postPagingData -> adapter.submitData(getLifecycle(), postPagingData));
+        viewModel.getPosts().observe(this, postPagingData -> {
+            adapter.submitData(getLifecycle(), postPagingData);
+        });
     }
 
     @Override

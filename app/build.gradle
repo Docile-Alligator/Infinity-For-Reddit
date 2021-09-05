@@ -51,6 +51,8 @@ dependencies {
     def lifecycleVersion = "2.2.0"
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
     annotationProcessor "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
     implementation 'androidx.paging:paging-runtime:3.0.1'
