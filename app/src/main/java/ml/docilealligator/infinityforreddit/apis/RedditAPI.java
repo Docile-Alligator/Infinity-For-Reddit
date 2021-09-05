@@ -378,4 +378,97 @@ public interface RedditAPI {
     @GET("{sortType}?raw_json=1")
     ListenableFuture<Response<String>> getBestPostsListenableFuture(@Path("sortType") String sortType, @Query("t") String sortTime,
                                                                    @Query("after") String lastItem, @HeaderMap Map<String, String> headers);
+
+    @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=25")
+    ListenableFuture<Response<String>> getSubredditBestPostsOauthListenableFuture(@Path("subredditName") String subredditName, @Path("sortType") String sortType,
+                                            @Query("after") String lastItem, @HeaderMap Map<String, String> headers);
+
+    @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=25")
+    ListenableFuture<Response<String>> getSubredditBestPostsOauthListenableFuture(@Path("subredditName") String subredditName, @Path("sortType") String sortType,
+                                            @Query("t") String sortTime, @Query("after") String lastItem,
+                                            @HeaderMap Map<String, String> headers);
+
+    @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=25")
+    ListenableFuture<Response<String>> getSubredditBestPostsListenableFuture(@Path("subredditName") String subredditName, @Path("sortType") String sortType,
+                                       @Query("after") String lastItem);
+
+    @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=25")
+    ListenableFuture<Response<String>> getSubredditBestPostsListenableFuture(@Path("subredditName") String subredditName, @Path("sortType") String sortType,
+                                       @Query("t") String sortTime, @Query("after") String lastItem);
+
+    @GET("user/{username}/{where}.json?&type=links&raw_json=1&limit=25")
+    ListenableFuture<Response<String>> getUserPostsOauthListenableFuture(@Path("username") String username, @Path("where") String where,
+                                   @Query("after") String lastItem, @Query("sort") String sortType, @HeaderMap Map<String, String> headers);
+
+    @GET("user/{username}/{where}.json?&type=links&raw_json=1&limit=25")
+    ListenableFuture<Response<String>> getUserPostsOauthListenableFuture(@Path("username") String username, @Path("where") String where,
+                                   @Query("after") String lastItem, @Query("sort") String sortType,
+                                   @Query("t") String sortTime, @HeaderMap Map<String, String> headers);
+
+    @GET("user/{username}/submitted.json?raw_json=1&limit=25")
+    ListenableFuture<Response<String>> getUserPostsListenableFuture(@Path("username") String username, @Query("after") String lastItem,
+                              @Query("sort") String sortType);
+
+    @GET("user/{username}/submitted.json?raw_json=1&limit=25")
+    ListenableFuture<Response<String>> getUserPostsListenableFuture(@Path("username") String username, @Query("after") String lastItem,
+                              @Query("sort") String sortType, @Query("t") String sortTime);
+
+    @GET("search.json?include_over_18=1&raw_json=1&type=link")
+    ListenableFuture<Response<String>> searchPostsOauthListenableFuture(@Query("q") String query, @Query("after") String after,
+                                  @Query("sort") String sort, @Query("source") String source,
+                                  @HeaderMap Map<String, String> headers);
+
+    @GET("search.json?include_over_18=1&raw_json=1&type=link")
+    ListenableFuture<Response<String>> searchPostsOauthListenableFuture(@Query("q") String query, @Query("after") String after,
+                                  @Query("sort") String sort, @Query("t") String sortTime,
+                                  @Query("source") String source,
+                                  @HeaderMap Map<String, String> headers);
+
+    @GET("search.json?include_over_18=1&raw_json=1&type=link")
+    ListenableFuture<Response<String>> searchPostsListenableFuture(@Query("q") String query, @Query("after") String after,
+                             @Query("sort") String sort, @Query("source") String source);
+
+    @GET("search.json?include_over_18=1&raw_json=1&type=link")
+    ListenableFuture<Response<String>> searchPostsListenableFuture(@Query("q") String query, @Query("after") String after,
+                             @Query("sort") String sort, @Query("t") String sortTime,
+                             @Query("source") String source);
+
+    @GET("r/{subredditName}/search.json?include_over_18=1&raw_json=1&type=link&restrict_sr=true")
+    ListenableFuture<Response<String>> searchPostsInSpecificSubredditOauthListenableFuture(@Path("subredditName") String subredditName,
+                                                     @Query("q") String query, @Query("sort") String sort,
+                                                     @Query("after") String after,
+                                                     @HeaderMap Map<String, String> headers);
+
+    @GET("r/{subredditName}/search.json?include_over_18=1&raw_json=1&type=link&restrict_sr=true")
+    ListenableFuture<Response<String>> searchPostsInSpecificSubredditOauthListenableFuture(@Path("subredditName") String subredditName,
+                                                     @Query("q") String query, @Query("sort") String sort,
+                                                     @Query("t") String sortTime, @Query("after") String after,
+                                                     @HeaderMap Map<String, String> headers);
+
+    @GET("r/{subredditName}/search.json?include_over_18=1&raw_json=1&type=link&restrict_sr=true")
+    ListenableFuture<Response<String>> searchPostsInSpecificSubredditListenableFuture(@Path("subredditName") String subredditName,
+                                                @Query("q") String query, @Query("sort") String sort,
+                                                @Query("after") String after);
+
+    @GET("r/{subredditName}/search.json?include_over_18=1&raw_json=1&type=link&restrict_sr=true")
+    ListenableFuture<Response<String>> searchPostsInSpecificSubredditListenableFuture(@Path("subredditName") String subredditName,
+                                                @Query("q") String query, @Query("sort") String sort,
+                                                @Query("t") String sortTime, @Query("after") String after);
+
+    @GET("{multipath}?raw_json=1")
+    ListenableFuture<Response<String>> getMultiRedditPostsListenableFuture(@Path(value = "multipath", encoded = true) String multiPath,
+                                     @Query("after") String after);
+
+    @GET("{multipath}?raw_json=1")
+    ListenableFuture<Response<String>> getMultiRedditPostsListenableFuture(@Path(value = "multipath", encoded = true) String multiPath,
+                                     @Query("after") String after, @Query("t") String sortTime);
+
+    @GET("{multipath}.json?raw_json=1")
+    ListenableFuture<Response<String>> getMultiRedditPostsOauthListenableFuture(@Path(value = "multipath", encoded = true) String multiPath,
+                                          @Query("after") String after, @Query("t") String sortTime,
+                                          @HeaderMap Map<String, String> headers);
+
+    @GET("{multipath}.json?raw_json=1")
+    ListenableFuture<Response<String>> getMultiRedditPostsOauthListenableFuture(@Path(value = "multipath", encoded = true) String multiPath,
+                                          @Query("after") String after, @HeaderMap Map<String, String> headers);
 }

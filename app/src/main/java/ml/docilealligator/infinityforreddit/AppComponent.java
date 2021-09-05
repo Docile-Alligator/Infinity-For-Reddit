@@ -25,7 +25,6 @@ import ml.docilealligator.infinityforreddit.activities.LockScreenActivity;
 import ml.docilealligator.infinityforreddit.activities.LoginActivity;
 import ml.docilealligator.infinityforreddit.activities.MainActivity;
 import ml.docilealligator.infinityforreddit.activities.MultiredditSelectionActivity;
-import ml.docilealligator.infinityforreddit.activities.Paging3TestActivity;
 import ml.docilealligator.infinityforreddit.activities.PostFilterPreferenceActivity;
 import ml.docilealligator.infinityforreddit.activities.PostFilterUsageListingActivity;
 import ml.docilealligator.infinityforreddit.activities.PostGalleryActivity;
@@ -287,6 +286,4 @@ public interface AppComponent {
     void inject(WikiActivity wikiActivity);
 
     void inject(Infinity infinity);
-
-    void inject(Paging3TestActivity paging3TestActivity);
 }

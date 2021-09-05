@@ -35,9 +35,6 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
         <activity
-            android:name=".activities.Paging3TestActivity"
-            android:exported="true" />
-        <activity
             android:name=".activities.WikiActivity"
             android:label="@string/wiki_activity_label"
             android:parentActivityName=".activities.MainActivity"

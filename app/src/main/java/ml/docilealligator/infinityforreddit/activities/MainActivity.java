@@ -729,10 +729,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     }
                     break;
                 default:
-                    Intent intent = new Intent(this, Paging3TestActivity.class);
-                    startActivity(intent);
-                    /*PostTypeBottomSheetFragment postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
-                    postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());*/
+                    PostTypeBottomSheetFragment postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
+                    postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
                     break;
             }
         });

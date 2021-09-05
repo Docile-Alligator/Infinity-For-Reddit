@@ -50,17 +50,6 @@ class AppModule {
                 .baseUrl(APIUtils.OAUTH_API_BASE_URI)
                 .client(okHttpClient)
                 .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-    }
-
-    @Provides
-    @Named("paging_3_test")
-    @Singleton
-    Retrofit providePaging3TestRetrofit(@Named("default") OkHttpClient okHttpClient) {
-        return new Retrofit.Builder()
-                .baseUrl(APIUtils.OAUTH_API_BASE_URI)
-                .client(okHttpClient)
-                .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(GuavaCallAdapterFactory.create())
                 .build();
     }
@@ -82,6 +71,7 @@ class AppModule {
         return new Retrofit.Builder()
                 .baseUrl(APIUtils.API_BASE_URI)
                 .addConverterFactory(ScalarsConverterFactory.create())
+                .addCallAdapterFactory(GuavaCallAdapterFactory.create())
                 .build();
     }
 
