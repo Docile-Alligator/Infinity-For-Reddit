@@ -72,7 +72,7 @@ public class LockScreenActivity extends BaseActivity {
             });
 
             BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
-                    .setTitle(getString(R.string.unlock_account_section))
+                    .setTitle(getString(R.string.unlock))
                     .setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)
                     .build();
 
