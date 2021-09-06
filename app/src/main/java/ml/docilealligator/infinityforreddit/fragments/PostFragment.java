@@ -37,6 +37,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.paging.LoadState;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
@@ -78,6 +79,7 @@ import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
+import ml.docilealligator.infinityforreddit.adapters.Paging3LoadingStateAdapter;
 import ml.docilealligator.infinityforreddit.adapters.PostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
@@ -214,6 +216,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private boolean isLazyModePaused = false;
     private boolean hasPost = false;
     private boolean isShown = false;
+    private boolean isInitialRefreshingStarted = false;
     private boolean savePostFeedScrolledPosition;
     private boolean rememberMutingOptionInPostFeed;
     private Boolean masterMutingOption;
@@ -257,8 +260,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void onResume() {
         super.onResume();
         isShown = true;
-        if (mPostRecyclerView.getAdapter() != null) {
-            ((PostRecyclerViewAdapter) mPostRecyclerView.getAdapter()).setCanStartActivity(true);
+        if (mAdapter != null) {
+            mAdapter.setCanStartActivity(true);
         }
         if (isInLazyMode) {
             resumeLazyMode(false);
@@ -1178,6 +1181,30 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     private void bindPostViewModel() {
         mPostViewModel.getPosts().observe(getViewLifecycleOwner(), posts -> mAdapter.submitData(getViewLifecycleOwner().getLifecycle(), posts));
+
+        mAdapter.addLoadStateListener(combinedLoadStates -> {
+            LoadState refreshLoadState = combinedLoadStates.getRefresh();
+            LoadState appendLoadState = combinedLoadStates.getAppend();
+
+            mSwipeRefreshLayout.setRefreshing(refreshLoadState instanceof LoadState.Loading);
+            if (refreshLoadState instanceof LoadState.NotLoading) {
+                if (refreshLoadState.getEndOfPaginationReached() && mAdapter.getItemCount() < 1) {
+                    if (isInLazyMode) {
+                        stopLazyMode();
+                    }
+
+                    mFetchPostInfoLinearLayout.setOnClickListener(null);
+                    showErrorView(R.string.no_posts);
+                }
+            } else if (refreshLoadState instanceof LoadState.Error) {
+                mFetchPostInfoLinearLayout.setOnClickListener(view -> refresh());
+                showErrorView(R.string.load_posts_error);
+            }
+            return null;
+        });
+
+        mPostRecyclerView.setAdapter(mAdapter.withLoadStateFooter(new Paging3LoadingStateAdapter(mCustomThemeWrapper, R.string.load_more_posts_error,
+                view -> mAdapter.retry())));
 
         /*mPostViewModel.hasPost().observe(getViewLifecycleOwner(), hasPost -> {
             this.hasPost = hasPost;
