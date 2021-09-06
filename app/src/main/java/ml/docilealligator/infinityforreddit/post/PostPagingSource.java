@@ -28,7 +28,7 @@ import retrofit2.HttpException;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class PostPaging3PagingSource extends ListenableFuturePagingSource<String, Post> {
+public class PostPagingSource extends ListenableFuturePagingSource<String, Post> {
     public static final int TYPE_FRONT_PAGE = 0;
     public static final int TYPE_SUBREDDIT = 1;
     public static final int TYPE_USER = 2;
@@ -60,10 +60,10 @@ public class PostPaging3PagingSource extends ListenableFuturePagingSource<String
     private String multiRedditPath;
     private LinkedHashSet<Post> postLinkedHashSet;
 
-    PostPaging3PagingSource(Executor executor, Retrofit retrofit, String accessToken, String accountName,
-                   SharedPreferences sharedPreferences,
-                   SharedPreferences postFeedScrolledPositionSharedPreferences, int postType,
-                   SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
+    PostPagingSource(Executor executor, Retrofit retrofit, String accessToken, String accountName,
+                     SharedPreferences sharedPreferences,
+                     SharedPreferences postFeedScrolledPositionSharedPreferences, int postType,
+                     SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
         this.executor = executor;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
@@ -77,10 +77,10 @@ public class PostPaging3PagingSource extends ListenableFuturePagingSource<String
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
-    PostPaging3PagingSource(Executor executor, Retrofit retrofit, String accessToken, String accountName,
-                   SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
-                   String path, int postType, SortType sortType, PostFilter postFilter,
-                   List<ReadPost> readPostList) {
+    PostPagingSource(Executor executor, Retrofit retrofit, String accessToken, String accountName,
+                     SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
+                     String path, int postType, SortType sortType, PostFilter postFilter,
+                     List<ReadPost> readPostList) {
         this.executor = executor;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
@@ -115,10 +115,10 @@ public class PostPaging3PagingSource extends ListenableFuturePagingSource<String
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
-    PostPaging3PagingSource(Executor executor, Retrofit retrofit, String accessToken, String accountName,
-                   SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
-                   String subredditOrUserName, int postType, SortType sortType, PostFilter postFilter,
-                   String where, List<ReadPost> readPostList) {
+    PostPagingSource(Executor executor, Retrofit retrofit, String accessToken, String accountName,
+                     SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
+                     String subredditOrUserName, int postType, SortType sortType, PostFilter postFilter,
+                     String where, List<ReadPost> readPostList) {
         this.executor = executor;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
@@ -134,10 +134,10 @@ public class PostPaging3PagingSource extends ListenableFuturePagingSource<String
         postLinkedHashSet = new LinkedHashSet<>();
     }
 
-    PostPaging3PagingSource(Executor executor, Retrofit retrofit, String accessToken, String accountName,
-                   SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
-                   String subredditOrUserName, String query, String trendingSource, int postType,
-                   SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
+    PostPagingSource(Executor executor, Retrofit retrofit, String accessToken, String accountName,
+                     SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
+                     String subredditOrUserName, String query, String trendingSource, int postType,
+                     SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
         this.executor = executor;
         this.retrofit = retrofit;
         this.accessToken = accessToken;

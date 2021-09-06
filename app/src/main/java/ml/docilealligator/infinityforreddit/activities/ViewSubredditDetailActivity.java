@@ -107,7 +107,7 @@ import ml.docilealligator.infinityforreddit.fragments.SidebarFragment;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.post.Post;
-import ml.docilealligator.infinityforreddit.post.PostDataSource;
+import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
 import ml.docilealligator.infinityforreddit.subreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData;
@@ -666,35 +666,35 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_UPVOTED: {
                 Intent intent = new Intent(this, AccountPostsActivity.class);
                 intent = new Intent(this, AccountPostsActivity.class);
-                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_UPVOTED);
+                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_UPVOTED);
                 startActivity(intent);
                 break;
             }
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_DOWNVOTED: {
                 Intent intent = new Intent(this, AccountPostsActivity.class);
                 intent = new Intent(this, AccountPostsActivity.class);
-                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_DOWNVOTED);
+                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_DOWNVOTED);
                 startActivity(intent);
                 break;
             }
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HIDDEN: {
                 Intent intent = new Intent(this, AccountPostsActivity.class);
                 intent = new Intent(this, AccountPostsActivity.class);
-                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_HIDDEN);
+                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_HIDDEN);
                 startActivity(intent);
                 break;
             }
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SAVED: {
                 Intent intent = new Intent(this, AccountPostsActivity.class);
                 intent = new Intent(this, AccountPostsActivity.class);
-                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_SAVED);
+                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_SAVED);
                 startActivity(intent);
                 break;
             }
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GILDED: {
                 Intent intent = new Intent(this, AccountPostsActivity.class);
                 intent = new Intent(this, AccountPostsActivity.class);
-                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_GILDED);
+                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_GILDED);
                 startActivity(intent);
                 break;
             }
@@ -1583,7 +1583,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(PostFragment.EXTRA_NAME, subredditName);
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_SUBREDDIT);
                 bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                 fragment.setArguments(bundle);

@@ -48,7 +48,7 @@ import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.multireddit.DeleteMultiReddit;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.post.Post;
-import ml.docilealligator.infinityforreddit.post.PostDataSource;
+import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -186,7 +186,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
         mFragment = new PostFragment();
         Bundle bundle = new Bundle();
         bundle.putString(PostFragment.EXTRA_NAME, multiPath);
-        bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_MULTI_REDDIT);
+        bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_MULTI_REDDIT);
         bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
         bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
         mFragment.setArguments(bundle);

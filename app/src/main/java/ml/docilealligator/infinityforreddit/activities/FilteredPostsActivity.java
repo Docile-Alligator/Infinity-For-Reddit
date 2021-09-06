@@ -50,7 +50,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
-import ml.docilealligator.infinityforreddit.post.PostDataSource;
+import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -158,7 +158,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
         params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
         name = getIntent().getStringExtra(EXTRA_NAME);
-        postType = getIntent().getIntExtra(EXTRA_POST_TYPE, PostDataSource.TYPE_FRONT_PAGE);
+        postType = getIntent().getIntExtra(EXTRA_POST_TYPE, PostPagingSource.TYPE_FRONT_PAGE);
         int filter = getIntent().getIntExtra(EXTRA_FILTER, -1000);
         PostFilter postFilter = new PostFilter();
         switch (filter) {
@@ -220,9 +220,9 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
             postFilter.containFlairs = flair;
         }
 
-        if (postType == PostDataSource.TYPE_USER) {
+        if (postType == PostPagingSource.TYPE_USER) {
             userWhere = getIntent().getStringExtra(EXTRA_USER_WHERE);
-            if (userWhere != null && !PostDataSource.USER_WHERE_SUBMITTED.equals(userWhere) && mMenu != null) {
+            if (userWhere != null && !PostPagingSource.USER_WHERE_SUBMITTED.equals(userWhere) && mMenu != null) {
                 mMenu.findItem(R.id.action_sort_filtered_thing_activity).setVisible(false);
             }
         }
@@ -268,13 +268,13 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
 
     private void bindView(PostFilter postFilter, boolean initializeFragment) {
         switch (postType) {
-            case PostDataSource.TYPE_FRONT_PAGE:
+            case PostPagingSource.TYPE_FRONT_PAGE:
                 getSupportActionBar().setTitle(R.string.home);
                 break;
-            case PostDataSource.TYPE_SEARCH:
+            case PostPagingSource.TYPE_SEARCH:
                 getSupportActionBar().setTitle(R.string.search);
                 break;
-            case PostDataSource.TYPE_SUBREDDIT:
+            case PostPagingSource.TYPE_SUBREDDIT:
                 if (name.equals("popular") || name.equals("all")) {
                     getSupportActionBar().setTitle(name.substring(0, 1).toUpperCase() + name.substring(1));
                 } else {
@@ -282,7 +282,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
                     getSupportActionBar().setTitle(subredditNamePrefixed);
                 }
                 break;
-            case PostDataSource.TYPE_MULTI_REDDIT:
+            case PostPagingSource.TYPE_MULTI_REDDIT:
                 String multiRedditName;
                 if (name.endsWith("/")) {
                     multiRedditName = name.substring(0, name.length() - 1);
@@ -292,7 +292,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
                 }
                 getSupportActionBar().setTitle(multiRedditName);
                 break;
-            case PostDataSource.TYPE_USER:
+            case PostPagingSource.TYPE_USER:
                 String usernamePrefixed = "u/" + name;
                 getSupportActionBar().setTitle(usernamePrefixed);
                 break;
@@ -305,12 +305,12 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
             bundle.putParcelable(PostFragment.EXTRA_FILTER, postFilter);
             bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
             bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
-            if (postType == PostDataSource.TYPE_USER) {
+            if (postType == PostPagingSource.TYPE_USER) {
                 bundle.putString(PostFragment.EXTRA_USER_NAME, name);
                 bundle.putString(PostFragment.EXTRA_USER_WHERE, userWhere);
-            } else if (postType == PostDataSource.TYPE_SUBREDDIT || postType == PostDataSource.TYPE_MULTI_REDDIT) {
+            } else if (postType == PostPagingSource.TYPE_SUBREDDIT || postType == PostPagingSource.TYPE_MULTI_REDDIT) {
                 bundle.putString(PostFragment.EXTRA_NAME, name);
-            } else if (postType == PostDataSource.TYPE_SEARCH) {
+            } else if (postType == PostPagingSource.TYPE_SEARCH) {
                 bundle.putString(PostFragment.EXTRA_NAME, name);
                 bundle.putString(PostFragment.EXTRA_QUERY, getIntent().getStringExtra(EXTRA_QUERY));
                 bundle.putString(PostFragment.EXTRA_TRENDING_SOURCE, getIntent().getStringExtra(EXTRA_TRENDING_SOURCE));
@@ -353,7 +353,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
             collapsingToolbarLayout.setLayoutParams(params);
         }
 
-        if (userWhere != null && !PostDataSource.USER_WHERE_SUBMITTED.equals(userWhere)) {
+        if (userWhere != null && !PostPagingSource.USER_WHERE_SUBMITTED.equals(userWhere)) {
             mMenu.findItem(R.id.action_sort_filtered_thing_activity).setVisible(false);
         }
         return true;
@@ -367,20 +367,20 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
             return true;
         } else if (itemId == R.id.action_sort_filtered_thing_activity) {
             switch (postType) {
-                case PostDataSource.TYPE_FRONT_PAGE:
+                case PostPagingSource.TYPE_FRONT_PAGE:
                     SortTypeBottomSheetFragment bestSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
                     Bundle bestBundle = new Bundle();
                     bestBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, false);
                     bestSortTypeBottomSheetFragment.setArguments(bestBundle);
                     bestSortTypeBottomSheetFragment.show(getSupportFragmentManager(), bestSortTypeBottomSheetFragment.getTag());
                     break;
-                case PostDataSource.TYPE_SEARCH:
+                case PostPagingSource.TYPE_SEARCH:
                     SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment = new SearchPostSortTypeBottomSheetFragment();
                     Bundle searchBundle = new Bundle();
                     searchPostSortTypeBottomSheetFragment.setArguments(searchBundle);
                     searchPostSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchPostSortTypeBottomSheetFragment.getTag());
                     break;
-                case PostDataSource.TYPE_SUBREDDIT:
+                case PostPagingSource.TYPE_SUBREDDIT:
                     if (name.equals("popular") || name.equals("all")) {
                         SortTypeBottomSheetFragment popularAndAllSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
                         Bundle popularBundle = new Bundle();
@@ -395,14 +395,14 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
                         subredditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), subredditSortTypeBottomSheetFragment.getTag());
                     }
                     break;
-                case PostDataSource.TYPE_MULTI_REDDIT:
+                case PostPagingSource.TYPE_MULTI_REDDIT:
                     SortTypeBottomSheetFragment multiRedditSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
                     Bundle multiRedditBundle = new Bundle();
                     multiRedditBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
                     multiRedditSortTypeBottomSheetFragment.setArguments(multiRedditBundle);
                     multiRedditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), multiRedditSortTypeBottomSheetFragment.getTag());
                     break;
-                case PostDataSource.TYPE_USER:
+                case PostPagingSource.TYPE_USER:
                     UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment = new UserThingSortTypeBottomSheetFragment();
                     userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
             }
@@ -472,16 +472,16 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     public void postLayoutSelected(int postLayout) {
         if (mFragment != null) {
             switch (postType) {
-                case PostDataSource.TYPE_FRONT_PAGE:
+                case PostPagingSource.TYPE_FRONT_PAGE:
                     mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, postLayout).apply();
                     break;
-                case PostDataSource.TYPE_SUBREDDIT:
+                case PostPagingSource.TYPE_SUBREDDIT:
                     mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + name, postLayout).apply();
                     break;
-                case PostDataSource.TYPE_USER:
+                case PostPagingSource.TYPE_USER:
                     mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + name, postLayout).apply();
                     break;
-                case PostDataSource.TYPE_SEARCH:
+                case PostPagingSource.TYPE_SEARCH:
                     mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, postLayout).apply();
             }
             ((FragmentCommunicator) mFragment).changePostLayout(postLayout);

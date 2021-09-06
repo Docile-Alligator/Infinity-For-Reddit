@@ -38,7 +38,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
-import ml.docilealligator.infinityforreddit.post.PostDataSource;
+import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class AccountPostsActivity extends BaseActivity implements SortTypeSelectionCallback,
@@ -115,13 +115,13 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
         }
 
         mUserWhere = getIntent().getExtras().getString(EXTRA_USER_WHERE);
-        if (mUserWhere.equals(PostDataSource.USER_WHERE_UPVOTED)) {
+        if (mUserWhere.equals(PostPagingSource.USER_WHERE_UPVOTED)) {
             toolbar.setTitle(R.string.upvoted);
-        } else if (mUserWhere.equals(PostDataSource.USER_WHERE_DOWNVOTED)) {
+        } else if (mUserWhere.equals(PostPagingSource.USER_WHERE_DOWNVOTED)) {
             toolbar.setTitle(R.string.downvoted);
-        } else if (mUserWhere.equals(PostDataSource.USER_WHERE_HIDDEN)) {
+        } else if (mUserWhere.equals(PostPagingSource.USER_WHERE_HIDDEN)) {
             toolbar.setTitle(R.string.hidden);
-        } else if (mUserWhere.equals(PostDataSource.USER_WHERE_GILDED)) {
+        } else if (mUserWhere.equals(PostPagingSource.USER_WHERE_GILDED)) {
             toolbar.setTitle(R.string.gilded);
         }
 
@@ -174,7 +174,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     private void initializeFragment() {
         mFragment = new PostFragment();
         Bundle bundle = new Bundle();
-        bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_USER);
+        bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_USER);
         bundle.putString(PostFragment.EXTRA_USER_NAME, mAccountName);
         bundle.putString(PostFragment.EXTRA_USER_WHERE, mUserWhere);
         bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);

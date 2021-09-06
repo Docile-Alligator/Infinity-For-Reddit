@@ -111,7 +111,7 @@ import ml.docilealligator.infinityforreddit.message.ReadMessage;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.multireddit.MultiRedditViewModel;
 import ml.docilealligator.infinityforreddit.post.Post;
-import ml.docilealligator.infinityforreddit.post.PostDataSource;
+import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
 import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
@@ -492,36 +492,34 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 break;
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_UPVOTED: {
                 Intent intent = new Intent(this, AccountPostsActivity.class);
-                intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_UPVOTED);
+                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_UPVOTED);
                 startActivity(intent);
                 break;
             }
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_DOWNVOTED: {
                 Intent intent = new Intent(this, AccountPostsActivity.class);
-                intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_DOWNVOTED);
+                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_DOWNVOTED);
                 startActivity(intent);
                 break;
             }
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_HIDDEN: {
                 Intent intent = new Intent(this, AccountPostsActivity.class);
                 intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_HIDDEN);
+                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_HIDDEN);
                 startActivity(intent);
                 break;
             }
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_SAVED: {
                 Intent intent = new Intent(this, AccountPostsActivity.class);
                 intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_SAVED);
+                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_SAVED);
                 startActivity(intent);
                 break;
             }
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_GILDED: {
                 Intent intent = new Intent(this, AccountPostsActivity.class);
                 intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_GILDED);
+                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_GILDED);
                 startActivity(intent);
                 break;
             }
@@ -768,18 +766,18 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                             intent = new Intent(MainActivity.this, TrendingActivity.class);
                         } else if (stringId == R.string.upvoted) {
                             intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-                            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_UPVOTED);
+                            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_UPVOTED);
                         } else if (stringId == R.string.downvoted) {
                             intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-                            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_DOWNVOTED);
+                            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_DOWNVOTED);
                         } else if (stringId == R.string.hidden) {
                             intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-                            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_HIDDEN);
+                            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_HIDDEN);
                         } else if (stringId == R.string.account_saved_thing_activity_label) {
                             intent = new Intent(MainActivity.this, AccountSavedThingActivity.class);
                         } else if (stringId == R.string.gilded) {
                             intent = new Intent(MainActivity.this, AccountPostsActivity.class);
-                            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_GILDED);
+                            intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_GILDED);
                         } else if (stringId == R.string.light_theme) {
                             mSharedPreferences.edit().putString(SharedPreferencesUtils.THEME_KEY, "0").apply();
                             AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
@@ -1099,7 +1097,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private void changeSortType() {
         int currentPostType = sectionsPagerAdapter.getCurrentPostType();
         Bundle bundle = new Bundle();
-        bundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, currentPostType != PostDataSource.TYPE_FRONT_PAGE);
+        bundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, currentPostType != PostPagingSource.TYPE_FRONT_PAGE);
         SortTypeBottomSheetFragment sortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
         sortTypeBottomSheetFragment.setArguments(bundle);
         sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
@@ -1588,13 +1586,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 if (position == 0) {
                     PostFragment fragment = new PostFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_ANONYMOUS_FRONT_PAGE);
+                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE);
                     fragment.setArguments(bundle);
                     return fragment;
                 } else if (position == 1) {
                     PostFragment fragment = new PostFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
+                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_SUBREDDIT);
                     bundle.putString(PostFragment.EXTRA_NAME, "popular");
                     bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                     bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
@@ -1603,7 +1601,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 } else {
                     PostFragment fragment = new PostFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
+                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_SUBREDDIT);
                     bundle.putString(PostFragment.EXTRA_NAME, "all");
                     bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                     bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
@@ -1690,7 +1688,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HOME) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_FRONT_PAGE);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_FRONT_PAGE);
                 bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                 fragment.setArguments(bundle);
@@ -1698,7 +1696,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             } else if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_ALL) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_SUBREDDIT);
                 bundle.putString(PostFragment.EXTRA_NAME, "all");
                 bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
@@ -1707,7 +1705,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             } else if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_SUBREDDIT) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_SUBREDDIT);
                 bundle.putString(PostFragment.EXTRA_NAME, name);
                 bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
@@ -1717,7 +1715,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString(PostFragment.EXTRA_NAME, name);
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_MULTI_REDDIT);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_MULTI_REDDIT);
                 bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                 fragment.setArguments(bundle);
@@ -1725,9 +1723,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             } else if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_USER) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_USER);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_USER);
                 bundle.putString(PostFragment.EXTRA_USER_NAME, name);
-                bundle.putString(PostFragment.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_SUBMITTED);
+                bundle.putString(PostFragment.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_SUBMITTED);
                 bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                 fragment.setArguments(bundle);
@@ -1739,22 +1737,22 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     || postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_GILDED) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_USER);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_USER);
                 bundle.putString(PostFragment.EXTRA_USER_NAME, mAccountName);
                 bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                 bundle.putBoolean(PostFragment.EXTRA_DISABLE_READ_POSTS, true);
 
                 if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_UPVOTED) {
-                    bundle.putString(PostFragment.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_UPVOTED);
+                    bundle.putString(PostFragment.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_UPVOTED);
                 } else if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_DOWNVOTED) {
-                    bundle.putString(PostFragment.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_DOWNVOTED);
+                    bundle.putString(PostFragment.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_DOWNVOTED);
                 } else if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HIDDEN) {
-                    bundle.putString(PostFragment.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_HIDDEN);
+                    bundle.putString(PostFragment.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_HIDDEN);
                 } else if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_SAVED) {
-                    bundle.putString(PostFragment.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_SAVED);
+                    bundle.putString(PostFragment.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_SAVED);
                 } else {
-                    bundle.putString(PostFragment.EXTRA_USER_WHERE, PostDataSource.USER_WHERE_GILDED);
+                    bundle.putString(PostFragment.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_GILDED);
                 }
 
                 fragment.setArguments(bundle);
@@ -1762,7 +1760,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             } else {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SUBREDDIT);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_SUBREDDIT);
                 bundle.putString(PostFragment.EXTRA_NAME, "popular");
                 bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
@@ -1823,7 +1821,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (currentFragment != null) {
                 return currentFragment.getPostType();
             }
-            return PostDataSource.TYPE_SUBREDDIT;
+            return PostPagingSource.TYPE_SUBREDDIT;
         }
 
         void changeSortType(SortType sortType) {

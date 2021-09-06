@@ -14,12 +14,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.NetworkState;
-import ml.docilealligator.infinityforreddit.post.PostDataSource;
 import ml.docilealligator.infinityforreddit.SortType;
-import ml.docilealligator.infinityforreddit.utils.JSONUtils;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
+import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -79,11 +79,11 @@ public class CommentDataSource extends PageKeyedDataSource<String, Comment> {
         Call<String> commentsCall;
         if (areSavedComments) {
             if (sortType.getTime() != null) {
-                commentsCall = api.getUserSavedCommentsOauth(username, PostDataSource.USER_WHERE_SAVED,
+                commentsCall = api.getUserSavedCommentsOauth(username, PostPagingSource.USER_WHERE_SAVED,
                         null, sortType.getType().value, sortType.getTime().value,
                         APIUtils.getOAuthHeader(accessToken));
             } else {
-                commentsCall = api.getUserSavedCommentsOauth(username, PostDataSource.USER_WHERE_SAVED,
+                commentsCall = api.getUserSavedCommentsOauth(username, PostPagingSource.USER_WHERE_SAVED,
                         null, sortType.getType().value, APIUtils.getOAuthHeader(accessToken));
             }
         } else {
@@ -158,10 +158,10 @@ public class CommentDataSource extends PageKeyedDataSource<String, Comment> {
         Call<String> commentsCall;
         if (areSavedComments) {
             if (sortType.getTime() != null) {
-                commentsCall = api.getUserSavedCommentsOauth(username, PostDataSource.USER_WHERE_SAVED, params.key,
+                commentsCall = api.getUserSavedCommentsOauth(username, PostPagingSource.USER_WHERE_SAVED, params.key,
                         sortType.getType().value, sortType.getTime().value, APIUtils.getOAuthHeader(accessToken));
             } else {
-                commentsCall = api.getUserSavedCommentsOauth(username, PostDataSource.USER_WHERE_SAVED, params.key,
+                commentsCall = api.getUserSavedCommentsOauth(username, PostPagingSource.USER_WHERE_SAVED, params.key,
                         sortType.getType().value, APIUtils.getOAuthHeader(accessToken));
             }
         } else {

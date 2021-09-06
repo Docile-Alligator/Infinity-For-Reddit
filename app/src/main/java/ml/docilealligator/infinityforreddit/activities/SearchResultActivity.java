@@ -69,7 +69,7 @@ import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.fragments.SubredditListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.UserListingFragment;
-import ml.docilealligator.infinityforreddit.post.PostDataSource;
+import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.recentsearchquery.InsertRecentSearchQuery;
 import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
@@ -771,7 +771,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 case 0: {
                     PostFragment mFragment = new PostFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostDataSource.TYPE_SEARCH);
+                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_SEARCH);
                     bundle.putString(PostFragment.EXTRA_NAME, mSubredditName);
                     bundle.putString(PostFragment.EXTRA_QUERY, mQuery);
                     bundle.putString(PostFragment.EXTRA_TRENDING_SOURCE, getIntent().getStringExtra(EXTRA_TRENDING_SOURCE));
