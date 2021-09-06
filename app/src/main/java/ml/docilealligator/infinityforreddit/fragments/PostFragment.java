@@ -454,11 +454,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
-                public void retryLoadingMore() {
-                    mPostViewModel.retryLoadingMore();
-                }
-
-                @Override
                 public void typeChipClicked(int filter) {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
@@ -536,11 +531,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
-                public void retryLoadingMore() {
-                    mPostViewModel.retryLoadingMore();
-                }
-
-                @Override
                 public void typeChipClicked(int filter) {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
@@ -612,11 +602,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
-                public void retryLoadingMore() {
-                    mPostViewModel.retryLoadingMore();
-                }
-
-                @Override
                 public void typeChipClicked(int filter) {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, multiRedditPath);
@@ -682,11 +667,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
-                public void retryLoadingMore() {
-                    mPostViewModel.retryLoadingMore();
-                }
-
-                @Override
                 public void typeChipClicked(int filter) {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
                     intent.putExtra(FilteredPostsActivity.EXTRA_NAME, username);
@@ -748,11 +728,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
-                public void retryLoadingMore() {
-                    mPostViewModel.retryLoadingMore();
-                }
-
-                @Override
                 public void typeChipClicked(int filter) {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
@@ -806,11 +781,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     windowWidth, accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
-                @Override
-                public void retryLoadingMore() {
-                    mPostViewModel.retryLoadingMore();
-                }
-
                 @Override
                 public void typeChipClicked(int filter) {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);

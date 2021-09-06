@@ -2014,8 +2014,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     }
 
     public interface Callback {
-        void retryLoadingMore();
-
         void typeChipClicked(int filter);
 
         void flairChipClicked(String flair);

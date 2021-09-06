@@ -199,6 +199,7 @@ public class NewPostViewModel extends ViewModel {
                 paging3PagingSource = new PostPaging3PagingSource(executor, retrofit, accessToken, accountName,
                         sharedPreferences, postFeedScrolledPositionSharedPreferences, name, query, trendingSource,
                         postType, sortType, postFilter, readPostList);
+                break;
             default:
                 //User
                 paging3PagingSource = new PostPaging3PagingSource(executor, retrofit, accessToken, accountName,
@@ -220,10 +221,6 @@ public class NewPostViewModel extends ViewModel {
 
     public void changePostFilter(PostFilter postFilter) {
         postFilterLiveData.postValue(postFilter);
-    }
-
-    public void retryLoadingMore() {
-
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
