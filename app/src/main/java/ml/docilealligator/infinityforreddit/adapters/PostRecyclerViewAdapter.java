@@ -73,7 +73,6 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.FetchGfycatOrRedgifsVideoLinks;
 import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
-import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.VoteThing;
@@ -111,8 +110,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private static final int VIEW_TYPE_POST_CARD_2_VIDEO_AUTOPLAY_TYPE = 6;
     private static final int VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE = 7;
     private static final int VIEW_TYPE_POST_CARD_2_TEXT_TYPE = 8;
-    private static final int VIEW_TYPE_ERROR = 9;
-    private static final int VIEW_TYPE_LOADING = 10;
 
     private static final DiffUtil.ItemCallback<Post> DIFF_CALLBACK = new DiffUtil.ItemCallback<Post>() {
         @Override
@@ -209,7 +206,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private boolean mHideTheNumberOfVotes;
     private boolean mHideTheNumberOfComments;
     private Drawable mCommentIcon;
-    private NetworkState networkState;
     private ExoCreator mExoCreator;
     private Callback mCallback;
 
@@ -342,96 +338,87 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
     @Override
     public int getItemViewType(int position) {
-        // Reached at the end
-        if (hasExtraRow() && position == getItemCount() - 1) {
-            if (networkState.getStatus() == NetworkState.Status.LOADING) {
-                return VIEW_TYPE_LOADING;
-            } else {
-                return VIEW_TYPE_ERROR;
+        if (mPostLayout == SharedPreferencesUtils.POST_LAYOUT_CARD) {
+            Post post = getItem(position);
+            if (post != null) {
+                switch (post.getPostType()) {
+                    case Post.VIDEO_TYPE:
+                        if (mAutoplay) {
+                            if (!mAutoplayNsfwVideos && post.isNSFW()) {
+                                return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
+                            }
+                            return VIEW_TYPE_POST_CARD_VIDEO_AUTOPLAY_TYPE;
+                        }
+                        return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
+                    case Post.GIF_TYPE:
+                    case Post.IMAGE_TYPE:
+                    case Post.GALLERY_TYPE:
+                        return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
+                    case Post.LINK_TYPE:
+                    case Post.NO_PREVIEW_LINK_TYPE:
+                        switch (mDefaultLinkPostLayout) {
+                            case SharedPreferencesUtils.POST_LAYOUT_CARD_2:
+                                return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
+                            case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
+                                return VIEW_TYPE_POST_GALLERY;
+                            case SharedPreferencesUtils.POST_LAYOUT_COMPACT:
+                                return VIEW_TYPE_POST_COMPACT;
+                        }
+                        return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
+                    default:
+                        return VIEW_TYPE_POST_CARD_TEXT_TYPE;
+                }
             }
-        } else {
-            if (mPostLayout == SharedPreferencesUtils.POST_LAYOUT_CARD) {
-                Post post = getItem(position);
-                if (post != null) {
-                    switch (post.getPostType()) {
-                        case Post.VIDEO_TYPE:
-                            if (mAutoplay) {
-                                if (!mAutoplayNsfwVideos && post.isNSFW()) {
-                                    return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
-                                }
-                                return VIEW_TYPE_POST_CARD_VIDEO_AUTOPLAY_TYPE;
-                            }
+            return VIEW_TYPE_POST_CARD_TEXT_TYPE;
+        } else if (mPostLayout == SharedPreferencesUtils.POST_LAYOUT_COMPACT) {
+            Post post = getItem(position);
+            if (post != null) {
+                if (post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
+                    switch (mDefaultLinkPostLayout) {
+                        case SharedPreferencesUtils.POST_LAYOUT_CARD:
                             return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
-                        case Post.GIF_TYPE:
-                        case Post.IMAGE_TYPE:
-                        case Post.GALLERY_TYPE:
-                            return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
-                        case Post.LINK_TYPE:
-                        case Post.NO_PREVIEW_LINK_TYPE:
-                            switch (mDefaultLinkPostLayout) {
-                                case SharedPreferencesUtils.POST_LAYOUT_CARD_2:
-                                    return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
-                                case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
-                                    return VIEW_TYPE_POST_GALLERY;
-                                case SharedPreferencesUtils.POST_LAYOUT_COMPACT:
-                                    return VIEW_TYPE_POST_COMPACT;
-                            }
-                            return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
-                        default:
-                            return VIEW_TYPE_POST_CARD_TEXT_TYPE;
+                        case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
+                            return VIEW_TYPE_POST_GALLERY;
+                        case SharedPreferencesUtils.POST_LAYOUT_CARD_2:
+                            return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
                     }
                 }
-                return VIEW_TYPE_POST_CARD_TEXT_TYPE;
-            } else if (mPostLayout == SharedPreferencesUtils.POST_LAYOUT_COMPACT) {
-                Post post = getItem(position);
-                if (post != null) {
-                    if (post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
+            }
+            return VIEW_TYPE_POST_COMPACT;
+        } else if (mPostLayout == SharedPreferencesUtils.POST_LAYOUT_GALLERY) {
+            return VIEW_TYPE_POST_GALLERY;
+        } else {
+            Post post = getItem(position);
+            if (post != null) {
+                switch (post.getPostType()) {
+                    case Post.VIDEO_TYPE:
+                        if (mAutoplay) {
+                            if (!mAutoplayNsfwVideos && post.isNSFW()) {
+                                return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
+                            }
+                            return VIEW_TYPE_POST_CARD_2_VIDEO_AUTOPLAY_TYPE;
+                        }
+                        return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
+                    case Post.GIF_TYPE:
+                    case Post.IMAGE_TYPE:
+                    case Post.GALLERY_TYPE:
+                        return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
+                    case Post.LINK_TYPE:
+                    case Post.NO_PREVIEW_LINK_TYPE:
                         switch (mDefaultLinkPostLayout) {
                             case SharedPreferencesUtils.POST_LAYOUT_CARD:
                                 return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
                             case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
                                 return VIEW_TYPE_POST_GALLERY;
-                            case SharedPreferencesUtils.POST_LAYOUT_CARD_2:
-                                return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
+                            case SharedPreferencesUtils.POST_LAYOUT_COMPACT:
+                                return VIEW_TYPE_POST_COMPACT;
                         }
-                    }
+                        return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
+                    default:
+                        return VIEW_TYPE_POST_CARD_2_TEXT_TYPE;
                 }
-                return VIEW_TYPE_POST_COMPACT;
-            } else if (mPostLayout == SharedPreferencesUtils.POST_LAYOUT_GALLERY) {
-                return VIEW_TYPE_POST_GALLERY;
-            } else {
-                Post post = getItem(position);
-                if (post != null) {
-                    switch (post.getPostType()) {
-                        case Post.VIDEO_TYPE:
-                            if (mAutoplay) {
-                                if (!mAutoplayNsfwVideos && post.isNSFW()) {
-                                    return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
-                                }
-                                return VIEW_TYPE_POST_CARD_2_VIDEO_AUTOPLAY_TYPE;
-                            }
-                            return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
-                        case Post.GIF_TYPE:
-                        case Post.IMAGE_TYPE:
-                        case Post.GALLERY_TYPE:
-                            return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
-                        case Post.LINK_TYPE:
-                        case Post.NO_PREVIEW_LINK_TYPE:
-                            switch (mDefaultLinkPostLayout) {
-                                case SharedPreferencesUtils.POST_LAYOUT_CARD:
-                                    return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
-                                case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
-                                    return VIEW_TYPE_POST_GALLERY;
-                                case SharedPreferencesUtils.POST_LAYOUT_COMPACT:
-                                    return VIEW_TYPE_POST_COMPACT;
-                            }
-                            return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
-                        default:
-                            return VIEW_TYPE_POST_CARD_2_TEXT_TYPE;
-                    }
-                }
-                return VIEW_TYPE_POST_CARD_2_TEXT_TYPE;
             }
+            return VIEW_TYPE_POST_CARD_2_TEXT_TYPE;
         }
     }
 
@@ -459,12 +446,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             return new PostCard2VideoAutoplayViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_card_2_video_autoplay, parent, false));
         } else if (viewType == VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE) {
             return new PostCard2WithPreviewViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_card_2_with_preview, parent, false));
-        } else if (viewType == VIEW_TYPE_POST_CARD_2_TEXT_TYPE) {
-            return new PostCard2TextTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_card_2_text, parent, false));
-        } else if (viewType == VIEW_TYPE_ERROR) {
-            return new ErrorViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_error, parent, false));
         } else {
-            return new LoadingViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_footer_loading, parent, false));
+            //VIEW_TYPE_POST_CARD_2_TEXT_TYPE
+            return new PostCard2TextTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_card_2_text, parent, false));
         }
     }
 
@@ -1679,14 +1663,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         shareLinkBottomSheetFragment.show(mActivity.getSupportFragmentManager(), shareLinkBottomSheetFragment.getTag());
     }
 
-    @Override
-    public int getItemCount() {
-        if (hasExtraRow()) {
-            return super.getItemCount() + 1;
-        }
-        return super.getItemCount();
-    }
-
     @Nullable
     public Post getItemByPosition(int position) {
         if (position >= 0 && super.getItemCount() > position) {
@@ -1753,34 +1729,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
 
         return temp;
-    }
-
-    private boolean hasExtraRow() {
-        return networkState != null && networkState.getStatus() != NetworkState.Status.SUCCESS;
-    }
-
-    public void setNetworkState(NetworkState newNetworkState) {
-        NetworkState previousState = this.networkState;
-        boolean previousExtraRow = hasExtraRow();
-        this.networkState = newNetworkState;
-        boolean newExtraRow = hasExtraRow();
-        if (previousExtraRow != newExtraRow) {
-            if (previousExtraRow) {
-                notifyItemRemoved(getItemCount() - 1);
-            } else {
-                notifyItemInserted(super.getItemCount());
-            }
-        } else if (newExtraRow && !previousState.equals(newNetworkState)) {
-            notifyItemChanged(getItemCount() - 1);
-        }
-    }
-
-    public void removeFooter() {
-        if (hasExtraRow()) {
-            notifyItemRemoved(getItemCount() - 1);
-        }
-
-        networkState = null;
     }
 
     public void setAutoplay(boolean autoplay) {
@@ -4370,35 +4318,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
             contentTextView.setTextColor(mPostContentColor);
             divider.setBackgroundColor(mDividerColor);
-        }
-    }
-
-    class ErrorViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.error_text_view_item_footer_error)
-        TextView errorTextView;
-        @BindView(R.id.retry_button_item_footer_error)
-        Button retryButton;
-
-        ErrorViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            errorTextView.setText(R.string.load_more_posts_error);
-            errorTextView.setTextColor(mSecondaryTextColor);
-            retryButton.setOnClickListener(view -> mCallback.retryLoadingMore());
-            retryButton.setBackgroundTintList(ColorStateList.valueOf(mColorPrimaryLightTheme));
-            retryButton.setTextColor(mButtonTextColor);
-            itemView.setOnClickListener(view -> retryButton.performClick());
-        }
-    }
-
-    class LoadingViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.progress_bar_item_footer_loading)
-        ProgressBar progressBar;
-
-        LoadingViewHolder(@NonNull View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-            progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
         }
     }
 }

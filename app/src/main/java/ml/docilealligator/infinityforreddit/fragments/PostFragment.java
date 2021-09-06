@@ -216,7 +216,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private boolean isLazyModePaused = false;
     private boolean hasPost = false;
     private boolean isShown = false;
-    private boolean isInitialRefreshingStarted = false;
     private boolean savePostFeedScrolledPosition;
     private boolean rememberMutingOptionInPostFeed;
     private Boolean masterMutingOption;
@@ -1184,7 +1183,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         mAdapter.addLoadStateListener(combinedLoadStates -> {
             LoadState refreshLoadState = combinedLoadStates.getRefresh();
-            LoadState appendLoadState = combinedLoadStates.getAppend();
 
             mSwipeRefreshLayout.setRefreshing(refreshLoadState instanceof LoadState.Loading);
             if (refreshLoadState instanceof LoadState.NotLoading) {
@@ -1205,35 +1203,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         mPostRecyclerView.setAdapter(mAdapter.withLoadStateFooter(new Paging3LoadingStateAdapter(mCustomThemeWrapper, R.string.load_more_posts_error,
                 view -> mAdapter.retry())));
-
-        /*mPostViewModel.hasPost().observe(getViewLifecycleOwner(), hasPost -> {
-            this.hasPost = hasPost;
-            mSwipeRefreshLayout.setRefreshing(false);
-            if (hasPost) {
-                mFetchPostInfoLinearLayout.setVisibility(View.GONE);
-            } else {
-                if (isInLazyMode) {
-                    stopLazyMode();
-                }
-
-                mFetchPostInfoLinearLayout.setOnClickListener(null);
-                showErrorView(R.string.no_posts);
-            }
-        });
-
-        mPostViewModel.getInitialLoadingState().observe(getViewLifecycleOwner(), networkState -> {
-            if (networkState.getStatus().equals(NetworkState.Status.SUCCESS)) {
-                mSwipeRefreshLayout.setRefreshing(false);
-            } else if (networkState.getStatus().equals(NetworkState.Status.FAILED)) {
-                mSwipeRefreshLayout.setRefreshing(false);
-                mFetchPostInfoLinearLayout.setOnClickListener(view -> refresh());
-                showErrorView(R.string.load_posts_error);
-            } else {
-                mSwipeRefreshLayout.setRefreshing(true);
-            }
-        });
-
-        mPostViewModel.getPaginationNetworkState().observe(getViewLifecycleOwner(), networkState -> mAdapter.setNetworkState(networkState));*/
     }
 
     public void changeSortType(SortType sortType) {
@@ -1278,7 +1247,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 mFetchPostInfoLinearLayout.setVisibility(View.GONE);
                 mGlide.clear(mFetchPostInfoImageView);
             }
-            mAdapter.removeFooter();
             hasPost = false;
             if (isInLazyMode) {
                 stopLazyMode();
@@ -1356,7 +1324,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void refresh() {
-        mAdapter.removeFooter();
         mFetchPostInfoLinearLayout.setVisibility(View.GONE);
         hasPost = false;
         if (isInLazyMode) {
