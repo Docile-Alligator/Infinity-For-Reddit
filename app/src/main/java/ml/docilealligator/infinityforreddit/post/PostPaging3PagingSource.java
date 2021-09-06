@@ -157,6 +157,7 @@ public class PostPaging3PagingSource extends ListenableFuturePagingSource<String
     @Nullable
     @Override
     public String getRefreshKey(@NonNull PagingState<String, Post> pagingState) {
+        Log.i("asdfad", "asdf " + sortType.getType().value);
         return null;
     }
 
@@ -384,11 +385,5 @@ public class PostPaging3PagingSource extends ListenableFuturePagingSource<String
 
         return Futures.catching(partialLoadResultFuture,
                 IOException.class, LoadResult.Error::new, executor);
-    }
-
-    void changeSortTypeAndPostFilter(SortType sortType, PostFilter postFilter) {
-        Log.i("asdasfd", "s6 " + (postFilter == null));
-        this.sortType = sortType;
-        this.postFilter = postFilter;
     }
 }

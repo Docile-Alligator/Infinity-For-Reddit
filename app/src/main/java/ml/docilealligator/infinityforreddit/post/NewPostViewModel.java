@@ -49,10 +49,11 @@ public class NewPostViewModel extends ViewModel {
         Pager<String, Post> pager = new Pager<>(new PagingConfig(25, 25, false), this::returnPagingSoruce);
 
         posts = Transformations.switchMap(sortTypeAndPostFilterLiveData, sortAndPostFilter -> {
-            paging3PagingSource.changeSortTypeAndPostFilter(
+            repository.changeSortTypeAndPostFilter(
                     sortTypeLiveData.getValue(), postFilterLiveData.getValue());
             return PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
         });
+        //posts = PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
     }
 
     public NewPostViewModel(Executor executor, Retrofit retrofit, String accessToken, String accountName,
@@ -72,10 +73,11 @@ public class NewPostViewModel extends ViewModel {
         Pager<String, Post> pager = new Pager<>(new PagingConfig(25, 25, false), this::returnPagingSoruce);
 
         posts = Transformations.switchMap(sortTypeAndPostFilterLiveData, sortAndPostFilter -> {
-            paging3PagingSource.changeSortTypeAndPostFilter(
+            repository.changeSortTypeAndPostFilter(
                     sortTypeLiveData.getValue(), postFilterLiveData.getValue());
             return PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
         });
+        //posts = PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
     }
 
     public NewPostViewModel(Executor executor, Retrofit retrofit, String accessToken, String accountName,
@@ -95,10 +97,11 @@ public class NewPostViewModel extends ViewModel {
         Pager<String, Post> pager = new Pager<>(new PagingConfig(25, 25, false), this::returnPagingSoruce);
 
         posts = Transformations.switchMap(sortTypeAndPostFilterLiveData, sortAndPostFilter -> {
-            paging3PagingSource.changeSortTypeAndPostFilter(
+            repository.changeSortTypeAndPostFilter(
                     sortTypeLiveData.getValue(), postFilterLiveData.getValue());
             return PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
         });
+        //posts = PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
     }
 
     public NewPostViewModel(Executor executor, Retrofit retrofit, String accessToken, String accountName,
@@ -119,10 +122,11 @@ public class NewPostViewModel extends ViewModel {
         Pager<String, Post> pager = new Pager<>(new PagingConfig(25, 25, false), this::returnPagingSoruce);
 
         posts = Transformations.switchMap(sortTypeAndPostFilterLiveData, sortAndPostFilter -> {
-            paging3PagingSource.changeSortTypeAndPostFilter(
+            repository.changeSortTypeAndPostFilter(
                     sortTypeLiveData.getValue(), postFilterLiveData.getValue());
             return PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
         });
+        //posts = PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
     }
 
     public LiveData<PagingData<Post>> getPosts() {

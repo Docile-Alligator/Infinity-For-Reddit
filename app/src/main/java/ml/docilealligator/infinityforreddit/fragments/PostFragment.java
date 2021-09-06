@@ -1329,18 +1329,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void refresh() {
-        if (mPostViewModel != null) {
-            mAdapter.removeFooter();
-            mFetchPostInfoLinearLayout.setVisibility(View.GONE);
-            hasPost = false;
-            if (isInLazyMode) {
-                stopLazyMode();
-            }
-            saveCache();
-            mPostViewModel.refresh();
-        } else {
-            mSwipeRefreshLayout.setRefreshing(false);
+        mAdapter.removeFooter();
+        mFetchPostInfoLinearLayout.setVisibility(View.GONE);
+        hasPost = false;
+        if (isInLazyMode) {
+            stopLazyMode();
         }
+        saveCache();
+        mAdapter.refresh();
     }
 
     private void showErrorView(int stringResId) {
