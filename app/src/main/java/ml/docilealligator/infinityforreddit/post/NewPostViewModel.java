@@ -25,17 +25,41 @@ import ml.docilealligator.infinityforreddit.readpost.ReadPost;
 import retrofit2.Retrofit;
 
 public class NewPostViewModel extends ViewModel {
-    private PostPaging3Repository repository;
+    private Executor executor;
+    private Retrofit retrofit;
+    private String accessToken;
+    private String accountName;
+    private SharedPreferences sharedPreferences;
+    private SharedPreferences postFeedScrolledPositionSharedPreferences;
+    private String name;
+    private String query;
+    private String trendingSource;
+    private int postType;
+    private SortType sortType;
+    private PostFilter postFilter;
+    private String userWhere;
+    private List<ReadPost> readPostList;
+
     private LiveData<PagingData<Post>> posts;
-    private PostPaging3PagingSource paging3PagingSource;
 
     private MutableLiveData<SortType> sortTypeLiveData;
     private MutableLiveData<PostFilter> postFilterLiveData;
     private SortTypeAndPostFilterLiveData sortTypeAndPostFilterLiveData;
 
     public NewPostViewModel(Executor executor, Retrofit retrofit, String accessToken, String accountName,
-                         SharedPreferences sharedPreferences, SharedPreferences cache, int postType,
+                         SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences, int postType,
                          SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
+        this.executor = executor;
+        this.retrofit = retrofit;
+        this.accessToken = accessToken;
+        this.accountName = accountName;
+        this.sharedPreferences = sharedPreferences;
+        this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
+        this.postType = postType;
+        this.sortType = sortType;
+        this.postFilter = postFilter;
+        this.readPostList = readPostList;
+
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
         postFilterLiveData = new MutableLiveData<>();
@@ -43,23 +67,31 @@ public class NewPostViewModel extends ViewModel {
 
         sortTypeAndPostFilterLiveData = new SortTypeAndPostFilterLiveData(sortTypeLiveData, postFilterLiveData);
 
-        repository = new PostPaging3Repository(executor, retrofit, accessToken, accountName,
-                sharedPreferences, cache, postType, sortType, postFilter, readPostList);
-        paging3PagingSource = repository.returnPagingSoruce();
         Pager<String, Post> pager = new Pager<>(new PagingConfig(25, 25, false), this::returnPagingSoruce);
 
         posts = Transformations.switchMap(sortTypeAndPostFilterLiveData, sortAndPostFilter -> {
-            repository.changeSortTypeAndPostFilter(
+            changeSortTypeAndPostFilter(
                     sortTypeLiveData.getValue(), postFilterLiveData.getValue());
             return PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
         });
-        //posts = PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
     }
 
     public NewPostViewModel(Executor executor, Retrofit retrofit, String accessToken, String accountName,
-                         SharedPreferences sharedPreferences, SharedPreferences cache, String subredditName,
-                         int postType, SortType sortType, PostFilter postFilter,
-                         List<ReadPost> readPostList) {
+                            SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
+                            String subredditName, int postType, SortType sortType, PostFilter postFilter,
+                            List<ReadPost> readPostList) {
+        this.executor = executor;
+        this.retrofit = retrofit;
+        this.accessToken = accessToken;
+        this.accountName = accountName;
+        this.sharedPreferences = sharedPreferences;
+        this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
+        this.postType = postType;
+        this.sortType = sortType;
+        this.postFilter = postFilter;
+        this.readPostList = readPostList;
+        this.name = subredditName;
+
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
         postFilterLiveData = new MutableLiveData<>();
@@ -67,23 +99,33 @@ public class NewPostViewModel extends ViewModel {
 
         sortTypeAndPostFilterLiveData = new SortTypeAndPostFilterLiveData(sortTypeLiveData, postFilterLiveData);
 
-        repository = new PostPaging3Repository(executor, retrofit, accessToken, accountName,
-                sharedPreferences, cache, subredditName, postType, sortType, postFilter, readPostList);
-        paging3PagingSource = repository.returnPagingSoruce();
         Pager<String, Post> pager = new Pager<>(new PagingConfig(25, 25, false), this::returnPagingSoruce);
 
         posts = Transformations.switchMap(sortTypeAndPostFilterLiveData, sortAndPostFilter -> {
-            repository.changeSortTypeAndPostFilter(
+            changeSortTypeAndPostFilter(
                     sortTypeLiveData.getValue(), postFilterLiveData.getValue());
             return PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
         });
-        //posts = PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
     }
 
     public NewPostViewModel(Executor executor, Retrofit retrofit, String accessToken, String accountName,
-                         SharedPreferences sharedPreferences, SharedPreferences cache, String username,
-                         int postType, SortType sortType, PostFilter postFilter, String where,
-                         List<ReadPost> readPostList) {
+                            SharedPreferences sharedPreferences,
+                            SharedPreferences postFeedScrolledPositionSharedPreferences, String username,
+                            int postType, SortType sortType, PostFilter postFilter, String userWhere,
+                            List<ReadPost> readPostList) {
+        this.executor = executor;
+        this.retrofit = retrofit;
+        this.accessToken = accessToken;
+        this.accountName = accountName;
+        this.sharedPreferences = sharedPreferences;
+        this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
+        this.postType = postType;
+        this.sortType = sortType;
+        this.postFilter = postFilter;
+        this.readPostList = readPostList;
+        this.name = username;
+        this.userWhere = userWhere;
+
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
         postFilterLiveData = new MutableLiveData<>();
@@ -91,23 +133,33 @@ public class NewPostViewModel extends ViewModel {
 
         sortTypeAndPostFilterLiveData = new SortTypeAndPostFilterLiveData(sortTypeLiveData, postFilterLiveData);
 
-        repository = new PostPaging3Repository(executor, retrofit, accessToken, accountName,
-                sharedPreferences, cache, username, postType, sortType, postFilter, where, readPostList);
-        paging3PagingSource = repository.returnPagingSoruce();
         Pager<String, Post> pager = new Pager<>(new PagingConfig(25, 25, false), this::returnPagingSoruce);
 
         posts = Transformations.switchMap(sortTypeAndPostFilterLiveData, sortAndPostFilter -> {
-            repository.changeSortTypeAndPostFilter(
+            changeSortTypeAndPostFilter(
                     sortTypeLiveData.getValue(), postFilterLiveData.getValue());
             return PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
         });
-        //posts = PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
     }
 
     public NewPostViewModel(Executor executor, Retrofit retrofit, String accessToken, String accountName,
-                         SharedPreferences sharedPreferences, SharedPreferences cache, String subredditName,
-                         String query, String trendingSource, int postType, SortType sortType,
-                         PostFilter postFilter, List<ReadPost> readPostList) {
+                            SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
+                            String subredditName, String query, String trendingSource, int postType, SortType sortType,
+                            PostFilter postFilter, List<ReadPost> readPostList) {
+        this.executor = executor;
+        this.retrofit = retrofit;
+        this.accessToken = accessToken;
+        this.accountName = accountName;
+        this.sharedPreferences = sharedPreferences;
+        this.postFeedScrolledPositionSharedPreferences = postFeedScrolledPositionSharedPreferences;
+        this.postType = postType;
+        this.sortType = sortType;
+        this.postFilter = postFilter;
+        this.readPostList = readPostList;
+        this.name = subredditName;
+        this.query = query;
+        this.trendingSource = trendingSource;
+
         sortTypeLiveData = new MutableLiveData<>();
         sortTypeLiveData.postValue(sortType);
         postFilterLiveData = new MutableLiveData<>();
@@ -115,26 +167,51 @@ public class NewPostViewModel extends ViewModel {
 
         sortTypeAndPostFilterLiveData = new SortTypeAndPostFilterLiveData(sortTypeLiveData, postFilterLiveData);
 
-        repository = new PostPaging3Repository(executor, retrofit, accessToken, accountName,
-                sharedPreferences, cache, subredditName, query, trendingSource, postType, sortType, postFilter,
-                readPostList);
-        paging3PagingSource = repository.returnPagingSoruce();
         Pager<String, Post> pager = new Pager<>(new PagingConfig(25, 25, false), this::returnPagingSoruce);
 
         posts = Transformations.switchMap(sortTypeAndPostFilterLiveData, sortAndPostFilter -> {
-            repository.changeSortTypeAndPostFilter(
+            changeSortTypeAndPostFilter(
                     sortTypeLiveData.getValue(), postFilterLiveData.getValue());
             return PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
         });
-        //posts = PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
     }
 
     public LiveData<PagingData<Post>> getPosts() {
         return posts;
     }
 
-    private PostPaging3PagingSource returnPagingSoruce() {
-        return repository.returnPagingSoruce();
+    public PostPaging3PagingSource returnPagingSoruce() {
+        PostPaging3PagingSource paging3PagingSource;
+        switch (postType) {
+            case PostDataSource.TYPE_FRONT_PAGE:
+                paging3PagingSource = new PostPaging3PagingSource(executor, retrofit, accessToken, accountName,
+                        sharedPreferences, postFeedScrolledPositionSharedPreferences, postType, sortType,
+                        postFilter, readPostList);
+                break;
+            case PostDataSource.TYPE_SUBREDDIT:
+            case PostDataSource.TYPE_MULTI_REDDIT:
+            case PostDataSource.TYPE_ANONYMOUS_FRONT_PAGE:
+                paging3PagingSource = new PostPaging3PagingSource(executor, retrofit, accessToken, accountName,
+                        sharedPreferences, postFeedScrolledPositionSharedPreferences, name, postType,
+                        sortType, postFilter, readPostList);
+                break;
+            case PostDataSource.TYPE_SEARCH:
+                paging3PagingSource = new PostPaging3PagingSource(executor, retrofit, accessToken, accountName,
+                        sharedPreferences, postFeedScrolledPositionSharedPreferences, name, query, trendingSource,
+                        postType, sortType, postFilter, readPostList);
+            default:
+                //User
+                paging3PagingSource = new PostPaging3PagingSource(executor, retrofit, accessToken, accountName,
+                        sharedPreferences, postFeedScrolledPositionSharedPreferences, name, postType,
+                        sortType, postFilter, userWhere, readPostList);
+                break;
+        }
+        return paging3PagingSource;
+    }
+
+    private void changeSortTypeAndPostFilter(SortType sortType, PostFilter postFilter) {
+        this.sortType = sortType;
+        this.postFilter = postFilter;
     }
 
     public void changeSortType(SortType sortType) {
@@ -143,10 +220,6 @@ public class NewPostViewModel extends ViewModel {
 
     public void changePostFilter(PostFilter postFilter) {
         postFilterLiveData.postValue(postFilter);
-    }
-
-    public void refresh() {
-
     }
 
     public void retryLoadingMore() {
