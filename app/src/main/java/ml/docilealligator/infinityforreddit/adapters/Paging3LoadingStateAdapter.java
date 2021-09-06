@@ -4,7 +4,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -13,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.paging.LoadState;
 import androidx.paging.LoadStateAdapter;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.button.MaterialButton;
 
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -43,7 +44,7 @@ public class Paging3LoadingStateAdapter extends LoadStateAdapter<Paging3LoadingS
         private ProgressBar mProgressBar;
         private RelativeLayout mErrorView;
         private TextView mErrorMsg;
-        private Button mRetry;
+        private MaterialButton mRetry;
 
         LoadStateViewHolder(@NonNull View itemView, @NonNull View.OnClickListener retryCallback) {
             super(itemView);
@@ -55,6 +56,8 @@ public class Paging3LoadingStateAdapter extends LoadStateAdapter<Paging3LoadingS
 
             mErrorMsg.setText(mErrorStringId);
             mErrorMsg.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+            mRetry.setBackgroundColor(mCustomThemeWrapper.getColorPrimaryLightTheme());
+            mRetry.setTextColor(mCustomThemeWrapper.getButtonTextColor());
             mRetry.setOnClickListener(retryCallback);
             mErrorView.setOnClickListener(retryCallback);
 

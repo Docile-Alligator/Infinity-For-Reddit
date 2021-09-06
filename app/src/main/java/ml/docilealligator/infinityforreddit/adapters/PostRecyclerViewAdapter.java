@@ -14,7 +14,6 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -138,7 +137,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private int mPostType;
     private int mPostLayout;
     private int mDefaultLinkPostLayout;
-    private int mColorPrimaryLightTheme;
     private int mColorAccent;
     private int mCardViewBackgroundColor;
     private int mReadPostCardViewBackgroundColor;
@@ -169,7 +167,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private int mUpvotedColor;
     private int mDownvotedColor;
     private int mVoteAndReplyUnavailableVoteButtonColor;
-    private int mButtonTextColor;
     private int mPostIconAndInfoColor;
     private int mDividerColor;
     private int mHideReadPostsIndex = 0;
@@ -284,7 +281,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mPostLayout = postLayout;
             mDefaultLinkPostLayout = Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.DEFAULT_LINK_POST_LAYOUT_KEY, "-1"));
 
-            mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
             mColorAccent = customThemeWrapper.getColorAccent();
             mCardViewBackgroundColor = customThemeWrapper.getCardViewBackgroundColor();
             mReadPostCardViewBackgroundColor = customThemeWrapper.getReadPostCardViewBackgroundColor();
@@ -315,7 +311,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mUpvotedColor = customThemeWrapper.getUpvoted();
             mDownvotedColor = customThemeWrapper.getDownvoted();
             mVoteAndReplyUnavailableVoteButtonColor = customThemeWrapper.getVoteAndReplyUnavailableButtonColor();
-            mButtonTextColor = customThemeWrapper.getButtonTextColor();
             mPostIconAndInfoColor = customThemeWrapper.getPostIconAndInfoColor();
             mDividerColor = customThemeWrapper.getDividerColor();
 

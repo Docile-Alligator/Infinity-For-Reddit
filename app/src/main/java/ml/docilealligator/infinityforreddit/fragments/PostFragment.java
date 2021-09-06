@@ -1157,12 +1157,15 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mSwipeRefreshLayout.setRefreshing(refreshLoadState instanceof LoadState.Loading);
             if (refreshLoadState instanceof LoadState.NotLoading) {
                 if (refreshLoadState.getEndOfPaginationReached() && mAdapter.getItemCount() < 1) {
+                    hasPost = false;
                     if (isInLazyMode) {
                         stopLazyMode();
                     }
 
                     mFetchPostInfoLinearLayout.setOnClickListener(null);
                     showErrorView(R.string.no_posts);
+                } else {
+                    hasPost = true;
                 }
             } else if (refreshLoadState instanceof LoadState.Error) {
                 mFetchPostInfoLinearLayout.setOnClickListener(view -> refresh());

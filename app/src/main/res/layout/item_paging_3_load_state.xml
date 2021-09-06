@@ -30,7 +30,7 @@
             android:textSize="?attr/font_18"
             android:fontFamily="?attr/font_family" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/retry_button_item_paging_3_load_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
