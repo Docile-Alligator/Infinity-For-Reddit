@@ -37,6 +37,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.paging.ItemSnapshotList;
 import androidx.paging.LoadState;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearSmoothScroller;
@@ -120,6 +121,7 @@ import ml.docilealligator.infinityforreddit.events.ChangeVideoAutoplayEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeVoteButtonsPositionEvent;
 import ml.docilealligator.infinityforreddit.events.NeedForPostListFromPostFragmentEvent;
 import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostList;
+import ml.docilealligator.infinityforreddit.events.ProvidePostListToViewPostDetailActivityEvent;
 import ml.docilealligator.infinityforreddit.events.ShowDividerInCompactLayoutPreferenceEvent;
 import ml.docilealligator.infinityforreddit.events.ShowThumbnailOnTheRightInCompactLayoutEvent;
 import ml.docilealligator.infinityforreddit.post.Post;
@@ -1566,9 +1568,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Subscribe
     public void onPostUpdateEvent(PostUpdateEventToPostList event) {
-        //TODO: fix this
-        /*PagedList<Post> posts = mAdapter.getCurrentList();
-        if (posts != null && event.positionInList >= 0 && event.positionInList < posts.size()) {
+        ItemSnapshotList<Post> posts = mAdapter.snapshot();
+        if (event.positionInList >= 0 && event.positionInList < posts.size()) {
             Post post = posts.get(event.positionInList);
             if (post != null && post.getFullName().equals(event.post.getFullName())) {
                 post.setTitle(event.post.getTitle());
@@ -1581,7 +1582,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 post.setSaved(event.post.isSaved());
                 mAdapter.notifyItemChanged(event.positionInList);
             }
-        }*/
+        }
     }
 
     @Subscribe
@@ -1848,10 +1849,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Subscribe
     public void onNeedForPostListFromPostRecyclerViewAdapterEvent(NeedForPostListFromPostFragmentEvent event) {
-        //TODO: fix this
-        /*if (postFragmentId == event.postFragmentTimeId) {
-            EventBus.getDefault().post(new ProvidePostListToViewPostDetailActivityEvent(postFragmentId, new ArrayList<>(mPostViewModel.getPosts().getValue())));
-        }*/
+        if (postFragmentId == event.postFragmentTimeId && mAdapter != null) {
+            EventBus.getDefault().post(new ProvidePostListToViewPostDetailActivityEvent(postFragmentId, new ArrayList<>(mAdapter.snapshot())));
+        }
     }
 
     @Subscribe
