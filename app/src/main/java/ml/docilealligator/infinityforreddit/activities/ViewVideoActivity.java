@@ -354,6 +354,8 @@ public class ViewVideoActivity extends AppCompatActivity {
         } else if (videoType == VIDEO_TYPE_GFYCAT || videoType == VIDEO_TYPE_REDGIFS) {
             if (savedInstanceState != null) {
                 videoDownloadUrl = savedInstanceState.getString(VIDEO_DOWNLOAD_URL_STATE);
+            } else {
+                videoDownloadUrl = intent.getStringExtra(EXTRA_VIDEO_DOWNLOAD_URL);
             }
 
             String gfycatId = intent.getStringExtra(EXTRA_GFYCAT_ID);
