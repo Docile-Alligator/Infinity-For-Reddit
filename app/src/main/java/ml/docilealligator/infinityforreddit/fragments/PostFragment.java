@@ -55,9 +55,11 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -250,6 +252,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private float swipeActionThreshold;
     private ItemTouchHelper touchHelper;
     private ArrayList<ReadPost> readPosts;
+    private Set<String> currentlyReadPostIds = new HashSet<>();
     private Unbinder unbinder;
     private Map<String, String> subredditOrUserIcons = new HashMap<>();
 
@@ -1317,6 +1320,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
     }
 
+    public void addCurrentlyReadPostId(String id) {
+        currentlyReadPostIds.add(id);
+    }
+
     @Override
     public void changeNSFW(boolean nsfw) {
         postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && nsfw;
@@ -1473,10 +1480,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void hideReadPosts() {
-        if (mAdapter != null) {
+        /*if (mAdapter != null) {
             mAdapter.prepareToHideReadPosts();
             refreshAdapter();
-        }
+        }*/
+        mPostViewModel.setCurrentlyReadPostIds(currentlyReadPostIds);
     }
 
     @Override

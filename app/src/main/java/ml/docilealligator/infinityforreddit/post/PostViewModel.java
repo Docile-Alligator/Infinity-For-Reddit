@@ -14,9 +14,12 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.Pager;
 import androidx.paging.PagingConfig;
 import androidx.paging.PagingData;
+import androidx.paging.PagingDataTransforms;
 import androidx.paging.PagingLiveData;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.SortType;
@@ -39,8 +42,10 @@ public class PostViewModel extends ViewModel {
     private PostFilter postFilter;
     private String userWhere;
     private List<ReadPost> readPostList;
+    private MutableLiveData<Set<String>> currentlyReadPostIdsLiveData = new MutableLiveData<>();
 
     private LiveData<PagingData<Post>> posts;
+    private LiveData<PagingData<Post>> postsWithReadPostsHidden;
 
     private MutableLiveData<SortType> sortTypeLiveData;
     private MutableLiveData<PostFilter> postFilterLiveData;
@@ -74,6 +79,15 @@ public class PostViewModel extends ViewModel {
                     sortTypeLiveData.getValue(), postFilterLiveData.getValue());
             return PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
         });
+
+        postsWithReadPostsHidden = PagingLiveData.cachedIn(Transformations.switchMap(currentlyReadPostIdsLiveData,
+                currentlyReadPostIds -> Transformations.map(
+                        posts,
+                        postPagingData -> PagingDataTransforms.filter(
+                                postPagingData, executor,
+                                post -> !currentlyReadPostIds.contains(post.getId())))), ViewModelKt.getViewModelScope(this));
+
+        currentlyReadPostIdsLiveData.setValue(new HashSet<>());
     }
 
     public PostViewModel(Executor executor, Retrofit retrofit, String accessToken, String accountName,
@@ -106,6 +120,15 @@ public class PostViewModel extends ViewModel {
                     sortTypeLiveData.getValue(), postFilterLiveData.getValue());
             return PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
         });
+
+        postsWithReadPostsHidden = PagingLiveData.cachedIn(Transformations.switchMap(currentlyReadPostIdsLiveData,
+                currentlyReadPostIds -> Transformations.map(
+                        posts,
+                        postPagingData -> PagingDataTransforms.filter(
+                                postPagingData, executor,
+                                post -> !currentlyReadPostIds.contains(post.getId())))), ViewModelKt.getViewModelScope(this));
+
+        currentlyReadPostIdsLiveData.setValue(new HashSet<>());
     }
 
     public PostViewModel(Executor executor, Retrofit retrofit, String accessToken, String accountName,
@@ -140,6 +163,15 @@ public class PostViewModel extends ViewModel {
                     sortTypeLiveData.getValue(), postFilterLiveData.getValue());
             return PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
         });
+
+        postsWithReadPostsHidden = PagingLiveData.cachedIn(Transformations.switchMap(currentlyReadPostIdsLiveData,
+                currentlyReadPostIds -> Transformations.map(
+                        posts,
+                        postPagingData -> PagingDataTransforms.filter(
+                                postPagingData, executor,
+                                post -> !currentlyReadPostIds.contains(post.getId())))), ViewModelKt.getViewModelScope(this));
+
+        currentlyReadPostIdsLiveData.setValue(new HashSet<>());
     }
 
     public PostViewModel(Executor executor, Retrofit retrofit, String accessToken, String accountName,
@@ -174,10 +206,23 @@ public class PostViewModel extends ViewModel {
                     sortTypeLiveData.getValue(), postFilterLiveData.getValue());
             return PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this));
         });
+
+        postsWithReadPostsHidden = PagingLiveData.cachedIn(Transformations.switchMap(currentlyReadPostIdsLiveData,
+                currentlyReadPostIds -> Transformations.map(
+                        posts,
+                        postPagingData -> PagingDataTransforms.filter(
+                                postPagingData, executor,
+                                post -> !currentlyReadPostIds.contains(post.getId())))), ViewModelKt.getViewModelScope(this));
+
+        currentlyReadPostIdsLiveData.setValue(new HashSet<>());
     }
 
     public LiveData<PagingData<Post>> getPosts() {
-        return posts;
+        return postsWithReadPostsHidden;
+    }
+
+    public void setCurrentlyReadPostIds(Set<String> currentlyReadPostIds) {
+        currentlyReadPostIdsLiveData.setValue(currentlyReadPostIds);
     }
 
     public PostPagingSource returnPagingSoruce() {

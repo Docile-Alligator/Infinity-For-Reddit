@@ -2636,6 +2636,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 if (mActivity != null && mActivity instanceof MarkPostAsReadInterface) {
                     ((MarkPostAsReadInterface) mActivity).markPostAsRead(post);
                 }
+                mFragment.addCurrentlyReadPostId(post.getId());
             }
         }
     }
@@ -3620,6 +3621,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 if (mActivity != null && mActivity instanceof MarkPostAsReadInterface) {
                     ((MarkPostAsReadInterface) mActivity).markPostAsRead(post);
                 }
+                mFragment.addCurrentlyReadPostId(post.getId());
             }
         }
     }
@@ -3854,6 +3856,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 if (mActivity != null && mActivity instanceof MarkPostAsReadInterface) {
                     ((MarkPostAsReadInterface) mActivity).markPostAsRead(post);
                 }
+                mFragment.addCurrentlyReadPostId(post.getId());
             }
         }
     }
