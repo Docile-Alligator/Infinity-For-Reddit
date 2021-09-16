@@ -117,7 +117,8 @@ public class ParsePost {
 
     public static String getLastItem(String response) {
         try {
-            return new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
+            JSONObject object = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY);
+            return object.isNull(JSONUtils.AFTER_KEY) ? null : object.getString(JSONUtils.AFTER_KEY);
         } catch (JSONException e) {
             e.printStackTrace();
             return null;

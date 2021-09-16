@@ -1158,17 +1158,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         mAdapter.addLoadStateListener(combinedLoadStates -> {
             LoadState refreshLoadState = combinedLoadStates.getRefresh();
+            LoadState appendLoadState = combinedLoadStates.getAppend();
 
             mSwipeRefreshLayout.setRefreshing(refreshLoadState instanceof LoadState.Loading);
             if (refreshLoadState instanceof LoadState.NotLoading) {
                 if (refreshLoadState.getEndOfPaginationReached() && mAdapter.getItemCount() < 1) {
-                    hasPost = false;
-                    if (isInLazyMode) {
-                        stopLazyMode();
-                    }
-
-                    mFetchPostInfoLinearLayout.setOnClickListener(null);
-                    showErrorView(R.string.no_posts);
+                    noPostFound();
                 } else {
                     hasPost = true;
                 }
@@ -1176,11 +1171,26 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 mFetchPostInfoLinearLayout.setOnClickListener(view -> refresh());
                 showErrorView(R.string.load_posts_error);
             }
+            if (appendLoadState instanceof LoadState.NotLoading) {
+                if (appendLoadState.getEndOfPaginationReached() && mAdapter.getItemCount() < 1) {
+                    noPostFound();
+                }
+            }
             return null;
         });
 
         mPostRecyclerView.setAdapter(mAdapter.withLoadStateFooter(new Paging3LoadingStateAdapter(mCustomThemeWrapper, R.string.load_more_posts_error,
                 view -> mAdapter.retry())));
+    }
+
+    private void noPostFound() {
+        hasPost = false;
+        if (isInLazyMode) {
+            stopLazyMode();
+        }
+
+        mFetchPostInfoLinearLayout.setOnClickListener(null);
+        showErrorView(R.string.no_posts);
     }
 
     public void changeSortType(SortType sortType) {

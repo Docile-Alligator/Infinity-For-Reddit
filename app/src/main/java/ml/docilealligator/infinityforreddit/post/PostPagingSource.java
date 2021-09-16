@@ -190,7 +190,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
                 int currentPostsSize = postLinkedHashSet.size();
                 postLinkedHashSet.addAll(newPosts);
                 if (currentPostsSize == postLinkedHashSet.size()) {
-                    return new LoadResult.Page<>(new ArrayList<>(), null, null);
+                    return new LoadResult.Page<>(new ArrayList<>(), null, lastItem);
                 } else {
                     return new LoadResult.Page<>(new ArrayList<>(postLinkedHashSet).subList(currentPostsSize, postLinkedHashSet.size()), null, lastItem);
                 }
