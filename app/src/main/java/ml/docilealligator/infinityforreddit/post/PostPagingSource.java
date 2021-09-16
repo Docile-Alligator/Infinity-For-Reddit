@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.post;
 
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.paging.ListenableFuturePagingSource;
@@ -157,7 +156,6 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     @Nullable
     @Override
     public String getRefreshKey(@NonNull PagingState<String, Post> pagingState) {
-        Log.i("asdfad", "asdf " + sortType.getType().value);
         return null;
     }
 
@@ -192,7 +190,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
                 int currentPostsSize = postLinkedHashSet.size();
                 postLinkedHashSet.addAll(newPosts);
                 if (currentPostsSize == postLinkedHashSet.size()) {
-                    return new LoadResult.Page<>(new ArrayList<>(), null, lastItem);
+                    return new LoadResult.Page<>(new ArrayList<>(), null, null);
                 } else {
                     return new LoadResult.Page<>(new ArrayList<>(postLinkedHashSet).subList(currentPostsSize, postLinkedHashSet.size()), null, lastItem);
                 }
