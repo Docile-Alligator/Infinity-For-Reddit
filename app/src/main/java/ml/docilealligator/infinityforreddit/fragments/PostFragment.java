@@ -49,6 +49,7 @@ import androidx.transition.TransitionManager;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
+import com.google.common.collect.Lists;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -871,6 +872,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                                         postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(accountName + SharedPreferencesUtils.NSFW_BASE, false);
                                     }
                                     this.readPosts = readPostList;
+                                    currentlyReadPostIds.addAll(Lists.transform(readPosts, ReadPost::getId));
                                     initializeAndBindPostViewModel(accessToken);
                                 }
                             });
@@ -1494,7 +1496,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter.prepareToHideReadPosts();
             refreshAdapter();
         }*/
-        mPostViewModel.setCurrentlyReadPostIds(currentlyReadPostIds);
+        mPostViewModel.hideReadPosts();
     }
 
     @Override

@@ -17,7 +17,6 @@ import androidx.paging.PagingData;
 import androidx.paging.PagingDataTransforms;
 import androidx.paging.PagingLiveData;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Executor;
@@ -42,7 +41,7 @@ public class PostViewModel extends ViewModel {
     private PostFilter postFilter;
     private String userWhere;
     private List<ReadPost> readPostList;
-    private MutableLiveData<Set<String>> currentlyReadPostIdsLiveData = new MutableLiveData<>();
+    private MutableLiveData<Boolean> currentlyReadPostIdsLiveData = new MutableLiveData<>();
 
     private LiveData<PagingData<Post>> posts;
     private LiveData<PagingData<Post>> postsWithReadPostsHidden;
@@ -85,9 +84,9 @@ public class PostViewModel extends ViewModel {
                         posts,
                         postPagingData -> PagingDataTransforms.filter(
                                 postPagingData, executor,
-                                post -> !currentlyReadPostIds.contains(post.getId())))), ViewModelKt.getViewModelScope(this));
+                                post -> !post.isRead() || !currentlyReadPostIdsLiveData.getValue()))), ViewModelKt.getViewModelScope(this));
 
-        currentlyReadPostIdsLiveData.setValue(new HashSet<>());
+        currentlyReadPostIdsLiveData.setValue(false);
     }
 
     public PostViewModel(Executor executor, Retrofit retrofit, String accessToken, String accountName,
@@ -126,9 +125,9 @@ public class PostViewModel extends ViewModel {
                         posts,
                         postPagingData -> PagingDataTransforms.filter(
                                 postPagingData, executor,
-                                post -> !currentlyReadPostIds.contains(post.getId())))), ViewModelKt.getViewModelScope(this));
+                                post -> !post.isRead() || !currentlyReadPostIdsLiveData.getValue()))), ViewModelKt.getViewModelScope(this));
 
-        currentlyReadPostIdsLiveData.setValue(new HashSet<>());
+        currentlyReadPostIdsLiveData.setValue(false);
     }
 
     public PostViewModel(Executor executor, Retrofit retrofit, String accessToken, String accountName,
@@ -169,9 +168,9 @@ public class PostViewModel extends ViewModel {
                         posts,
                         postPagingData -> PagingDataTransforms.filter(
                                 postPagingData, executor,
-                                post -> !currentlyReadPostIds.contains(post.getId())))), ViewModelKt.getViewModelScope(this));
+                                post -> !post.isRead() || !currentlyReadPostIdsLiveData.getValue()))), ViewModelKt.getViewModelScope(this));
 
-        currentlyReadPostIdsLiveData.setValue(new HashSet<>());
+        currentlyReadPostIdsLiveData.setValue(false);
     }
 
     public PostViewModel(Executor executor, Retrofit retrofit, String accessToken, String accountName,
@@ -212,17 +211,17 @@ public class PostViewModel extends ViewModel {
                         posts,
                         postPagingData -> PagingDataTransforms.filter(
                                 postPagingData, executor,
-                                post -> !currentlyReadPostIds.contains(post.getId())))), ViewModelKt.getViewModelScope(this));
+                                post -> !post.isRead() || !currentlyReadPostIdsLiveData.getValue()))), ViewModelKt.getViewModelScope(this));
 
-        currentlyReadPostIdsLiveData.setValue(new HashSet<>());
+        currentlyReadPostIdsLiveData.setValue(false);
     }
 
     public LiveData<PagingData<Post>> getPosts() {
         return postsWithReadPostsHidden;
     }
 
-    public void setCurrentlyReadPostIds(Set<String> currentlyReadPostIds) {
-        currentlyReadPostIdsLiveData.setValue(currentlyReadPostIds);
+    public void hideReadPosts() {
+        currentlyReadPostIdsLiveData.setValue(true);
     }
 
     public PostPagingSource returnPagingSoruce() {
