@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -449,6 +450,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         if (holder instanceof PostBaseViewHolder) {
             Post post = getItem(position);
             if (post != null) {
+                ((PostBaseViewHolder) holder).currentPosition = position;
                 if (post.isRead()) {
                     if (((PostBaseViewHolder) holder).itemViewIsNotCardView) {
                         holder.itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
@@ -936,6 +938,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         } else if (holder instanceof PostCompactBaseViewHolder) {
             Post post = getItem(position);
             if (post != null) {
+                ((PostCompactBaseViewHolder) holder).currentPosition = position;
                 if (post.isRead()) {
                     holder.itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
                     ((PostCompactBaseViewHolder) holder).titleTextView.setTextColor(mReadPostTitleColor);
@@ -1258,6 +1261,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         } else if (holder instanceof PostGalleryViewHolder) {
             Post post = getItem(position);
             if (post != null) {
+                ((PostGalleryViewHolder) holder).currentPosition = position;
                 if (post.isRead()) {
                     holder.itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
                     ((PostGalleryViewHolder) holder).titleTextView.setTextColor(mReadPostTitleColor);
@@ -1764,8 +1768,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         super.onViewRecycled(holder);
         if (holder instanceof PostBaseViewHolder) {
             if (mMarkPostsAsReadOnScroll) {
-                int position = holder.getBindingAdapterPosition();
-                if (position < super.getItemCount() && position >= 0) {
+                int position = ((PostBaseViewHolder) holder).currentPosition;
+                if (position < getItemCount() && position >= 0) {
                     Post post = getItem(position);
                     ((PostBaseViewHolder) holder).markPostRead(post, false);
                 }
@@ -1838,8 +1842,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             ((PostBaseViewHolder) holder).downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
         } else if (holder instanceof PostCompactBaseViewHolder) {
             if (mMarkPostsAsReadOnScroll) {
-                int position = holder.getBindingAdapterPosition();
-                if (position < super.getItemCount() && position >= 0) {
+                int position = ((PostCompactBaseViewHolder) holder).currentPosition;
+                if (position < getItemCount() && position >= 0) {
                     Post post = getItem(position);
                     ((PostCompactBaseViewHolder) holder).markPostRead(post, false);
                 }
@@ -1869,7 +1873,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             ((PostCompactBaseViewHolder) holder).downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
         } else if (holder instanceof PostGalleryViewHolder) {
             if (mMarkPostsAsReadOnScroll) {
-                int position = holder.getBindingAdapterPosition();
+                int position = ((PostGalleryViewHolder) holder).currentPosition;
                 if (position < super.getItemCount() && position >= 0) {
                     Post post = getItem(position);
                     ((PostGalleryViewHolder) holder).markPostRead(post, false);
@@ -2035,6 +2039,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         ImageView shareButton;
 
         boolean itemViewIsNotCardView = false;
+        int currentPosition;
 
         PostBaseViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -3051,6 +3056,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         ImageView shareButton;
         View divider;
 
+        int currentPosition;
+
         PostCompactBaseViewHolder(View itemView) {
             super(itemView);
         }
@@ -3725,6 +3732,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         ImageView noPreviewImageView;
         @BindView(R.id.title_text_view_item_post_gallery)
         TextView titleTextView;
+
+        int currentPosition;
 
         public PostGalleryViewHolder(@NonNull View itemView) {
             super(itemView);
