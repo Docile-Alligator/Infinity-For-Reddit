@@ -157,7 +157,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
     private static final String RECYCLER_VIEW_POSITION_STATE = "RVPS";
     private static final String READ_POST_LIST_STATE = "RPLS";
-    private static final String HIDE_READ_POSTS_INDEX_STATE = "HRPIS";
     private static final String POST_FILTER_STATE = "PFS";
     private static final String CONCATENATED_SUBREDDIT_NAMES_STATE = "CSNS";
     private static final String POST_FRAGMENT_ID_STATE = "PFIS";
@@ -253,7 +252,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private float swipeActionThreshold;
     private ItemTouchHelper touchHelper;
     private ArrayList<ReadPost> readPosts;
-    private Set<String> currentlyReadPostIds = new HashSet<>();
     private Unbinder unbinder;
     private Map<String, String> subredditOrUserIcons = new HashMap<>();
 
@@ -391,13 +389,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         mSwipeRefreshLayout.setOnRefreshListener(this::refresh);
 
         int recyclerViewPosition = 0;
-        int hideReadPostsIndex = 0;
         if (savedInstanceState != null) {
             recyclerViewPosition = savedInstanceState.getInt(RECYCLER_VIEW_POSITION_STATE);
 
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             readPosts = savedInstanceState.getParcelableArrayList(READ_POST_LIST_STATE);
-            hideReadPostsIndex = savedInstanceState.getInt(HIDE_READ_POSTS_INDEX_STATE, 0);
             postFilter = savedInstanceState.getParcelable(POST_FILTER_STATE);
             concatenatedSubredditNames = savedInstanceState.getString(CONCATENATED_SUBREDDIT_NAMES_STATE);
             postFragmentId = savedInstanceState.getLong(POST_FRAGMENT_ID_STATE);
@@ -842,8 +838,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mPostRecyclerView.scrollToPosition(recyclerViewPosition);
         }
 
-        mAdapter.setHideReadPostsIndex(hideReadPostsIndex);
-
         if (activity instanceof ActivityToolbarInterface) {
             ((ActivityToolbarInterface) activity).displaySortType();
         }
@@ -872,7 +866,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                                         postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(accountName + SharedPreferencesUtils.NSFW_BASE, false);
                                     }
                                     this.readPosts = readPostList;
-                                    currentlyReadPostIds.addAll(Lists.transform(readPosts, ReadPost::getId));
                                     initializeAndBindPostViewModel(accessToken);
                                 }
                             });
@@ -1279,9 +1272,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         super.onSaveInstanceState(outState);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
         outState.putParcelableArrayList(READ_POST_LIST_STATE, readPosts);
-        if (mAdapter != null) {
-            outState.putInt(HIDE_READ_POSTS_INDEX_STATE, mAdapter.getHideReadPostsIndex());
-        }
         if (mLinearLayoutManager != null) {
             outState.putInt(RECYCLER_VIEW_POSITION_STATE, mLinearLayoutManager.findFirstVisibleItemPosition());
         } else if (mStaggeredGridLayoutManager != null) {
@@ -1330,10 +1320,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mFetchPostInfoTextView.setText(stringResId);
             mGlide.load(R.drawable.error_image).into(mFetchPostInfoImageView);
         }
-    }
-
-    public void addCurrentlyReadPostId(String id) {
-        currentlyReadPostIds.add(id);
     }
 
     @Override
@@ -1492,10 +1478,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void hideReadPosts() {
-        /*if (mAdapter != null) {
-            mAdapter.prepareToHideReadPosts();
-            refreshAdapter();
-        }*/
         mPostViewModel.hideReadPosts();
     }
 

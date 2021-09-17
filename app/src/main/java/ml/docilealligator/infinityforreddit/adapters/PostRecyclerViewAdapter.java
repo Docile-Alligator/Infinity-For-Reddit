@@ -169,7 +169,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private int mVoteAndReplyUnavailableVoteButtonColor;
     private int mPostIconAndInfoColor;
     private int mDividerColor;
-    private int mHideReadPostsIndex = 0;
     private float mScale;
     private boolean mDisplaySubredditName;
     private boolean mVoteButtonsOnTheRight;
@@ -453,16 +452,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             Post post = getItem(position);
             if (post != null) {
                 if (post.isRead()) {
-                    if ((mHideReadPostsAutomatically && !post.isHiddenManuallyByUser()) || position < mHideReadPostsIndex) {
-                        post.hidePostInRecyclerView();
-                        holder.itemView.setVisibility(View.GONE);
-                        RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
-                        params.height = 0;
-                        params.topMargin = 0;
-                        params.bottomMargin = 0;
-                        holder.itemView.setLayoutParams(params);
-                        return;
-                    }
                     if (((PostBaseViewHolder) holder).itemViewIsNotCardView) {
                         holder.itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
                     } else {
@@ -950,14 +939,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             Post post = getItem(position);
             if (post != null) {
                 if (post.isRead()) {
-                    if ((mHideReadPostsAutomatically && !post.isHiddenManuallyByUser()) || position < mHideReadPostsIndex) {
-                        post.hidePostInRecyclerView();
-                        holder.itemView.setVisibility(View.GONE);
-                        ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
-                        params.height = 0;
-                        holder.itemView.setLayoutParams(params);
-                        return;
-                    }
                     holder.itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
                     ((PostCompactBaseViewHolder) holder).titleTextView.setTextColor(mReadPostTitleColor);
                 }
@@ -1280,16 +1261,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             Post post = getItem(position);
             if (post != null) {
                 if (post.isRead()) {
-                    if ((mHideReadPostsAutomatically && !post.isHiddenManuallyByUser()) || position < mHideReadPostsIndex) {
-                        post.hidePostInRecyclerView();
-                        holder.itemView.setVisibility(View.GONE);
-                        RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
-                        params.height = 0;
-                        params.topMargin = 0;
-                        params.bottomMargin = 0;
-                        holder.itemView.setLayoutParams(params);
-                        return;
-                    }
                     holder.itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
                     ((PostGalleryViewHolder) holder).titleTextView.setTextColor(mReadPostTitleColor);
                 }
@@ -1700,18 +1671,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         mShowAbsoluteNumberOfVotes = showAbsoluteNumberOfVotes;
     }
 
-    public int getHideReadPostsIndex() {
-        return mHideReadPostsIndex;
-    }
-
-    public void setHideReadPostsIndex(int hideReadPostsIndex) {
-        mHideReadPostsIndex = hideReadPostsIndex;
-    }
-
-    public void prepareToHideReadPosts() {
-        mHideReadPostsIndex = getItemCount();
-    }
-
     public int getNextItemPositionWithoutBeingHidden(int fromPosition) {
         int temp = fromPosition;
         while (temp >= 0 && temp < super.getItemCount()) {
@@ -1813,21 +1772,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     ((PostBaseViewHolder) holder).markPostRead(post, false);
                 }
             }
-            holder.itemView.setVisibility(View.VISIBLE);
-            RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
-            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            if (holder instanceof PostCard2VideoAutoplayViewHolder || holder instanceof PostCard2WithPreviewViewHolder) {
-                int paddingPixel = (int) Utils.convertDpToPixel(16, mActivity);
-                holder.itemView.setPadding(0, paddingPixel, 0, 0);
-            } else if (holder instanceof PostCard2TextTypeViewHolder) {
-                int paddingPixel = (int) Utils.convertDpToPixel(12, mActivity);
-                holder.itemView.setPadding(0, paddingPixel, 0, 0);
-            } else {
-                int marginPixel = (int) Utils.convertDpToPixel(8, mActivity);
-                params.topMargin = marginPixel;
-                params.bottomMargin = marginPixel;
-            }
-            holder.itemView.setLayoutParams(params);
             if (((PostBaseViewHolder) holder).itemViewIsNotCardView) {
                 holder.itemView.setBackgroundColor(mCardViewBackgroundColor);
             } else {
@@ -1902,11 +1846,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     ((PostCompactBaseViewHolder) holder).markPostRead(post, false);
                 }
             }
-            ((PostCompactBaseViewHolder) holder).itemView.setVisibility(View.VISIBLE);
-            ViewGroup.LayoutParams params = holder.itemView.getLayoutParams();
-            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            holder.itemView.setLayoutParams(params);
-            ((PostCompactBaseViewHolder) holder).itemView.setBackgroundColor(mCardViewBackgroundColor);
+            holder.itemView.setBackgroundColor(mCardViewBackgroundColor);
             ((PostCompactBaseViewHolder) holder).titleTextView.setTextColor(mPostTitleColor);
             mGlide.clear(((PostCompactBaseViewHolder) holder).imageView);
             mGlide.clear(((PostCompactBaseViewHolder) holder).iconGifImageView);
@@ -1937,14 +1877,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     ((PostGalleryViewHolder) holder).markPostRead(post, false);
                 }
             }
-            ((PostGalleryViewHolder) holder).itemView.setVisibility(View.VISIBLE);
-            RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
-            params.height = ViewGroup.LayoutParams.WRAP_CONTENT;
-            int marginPixel = (int) Utils.convertDpToPixel(8, mActivity);
-            params.topMargin = marginPixel;
-            params.bottomMargin = marginPixel;
-            holder.itemView.setLayoutParams(params);
-            ((PostGalleryViewHolder) holder).itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
+            holder.itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
 
             ((PostGalleryViewHolder) holder).titleTextView.setText("");
             ((PostGalleryViewHolder) holder).titleTextView.setVisibility(View.GONE);
@@ -2636,7 +2569,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 if (mActivity != null && mActivity instanceof MarkPostAsReadInterface) {
                     ((MarkPostAsReadInterface) mActivity).markPostAsRead(post);
                 }
-                mFragment.addCurrentlyReadPostId(post.getId());
             }
         }
     }
@@ -3249,7 +3181,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             itemView.setOnLongClickListener(view -> {
                 if (mLongPressToHideToolbarInCompactLayout) {
                     if (bottomConstraintLayout.getLayoutParams().height == 0) {
-                        ViewGroup.LayoutParams params = (LinearLayout.LayoutParams) bottomConstraintLayout.getLayoutParams();
+                        ViewGroup.LayoutParams params = bottomConstraintLayout.getLayoutParams();
                         params.height = LinearLayout.LayoutParams.WRAP_CONTENT;
                         bottomConstraintLayout.setLayoutParams(params);
                         mCallback.delayTransition();
@@ -3621,7 +3553,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 if (mActivity != null && mActivity instanceof MarkPostAsReadInterface) {
                     ((MarkPostAsReadInterface) mActivity).markPostAsRead(post);
                 }
-                mFragment.addCurrentlyReadPostId(post.getId());
             }
         }
     }
@@ -3856,7 +3787,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 if (mActivity != null && mActivity instanceof MarkPostAsReadInterface) {
                     ((MarkPostAsReadInterface) mActivity).markPostAsRead(post);
                 }
-                mFragment.addCurrentlyReadPostId(post.getId());
             }
         }
     }
