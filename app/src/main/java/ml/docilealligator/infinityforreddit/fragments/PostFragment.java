@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -1578,6 +1579,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 post.setSpoiler(event.post.isSpoiler());
                 post.setFlair(event.post.getFlair());
                 post.setSaved(event.post.isSaved());
+                if (event.post.isRead()) {
+                    post.markAsRead(true);
+                }
                 mAdapter.notifyItemChanged(event.positionInList);
             }
         }

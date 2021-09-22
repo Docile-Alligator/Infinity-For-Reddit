@@ -106,6 +106,7 @@ import ml.docilealligator.infinityforreddit.post.FetchRemovedPost;
 import ml.docilealligator.infinityforreddit.post.HidePost;
 import ml.docilealligator.infinityforreddit.post.ParsePost;
 import ml.docilealligator.infinityforreddit.post.Post;
+import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
 import ml.docilealligator.infinityforreddit.subreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -170,6 +171,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @Named("post_details")
     SharedPreferences mPostDetailsSharedPreferences;
     @Inject
+    @Named("post_history")
+    SharedPreferences mPostHistorySharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     ExoCreator mExoCreator;
@@ -219,6 +223,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private boolean mSwipeUpToHideFab;
     private boolean mExpandChildren;
     private boolean mSeparatePostAndComments = false;
+    private boolean mMarkPostsAsRead;
     private int mWindowWidth;
     private ConcatAdapter mConcatAdapter;
     private PostDetailRecyclerViewAdapter mPostAdapter;
@@ -292,6 +297,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         mLockFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
         mSwipeUpToHideFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
         mExpandChildren = !mSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_TOP_LEVEL_COMMENTS_FIRST, false);
+        mMarkPostsAsRead = mPostHistorySharedPreferences.getBoolean(mAccountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false);
         if (savedInstanceState == null) {
             mRespectSubredditRecommendedSortType = mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false);
             viewPostDetailFragmentId = System.currentTimeMillis();
@@ -1087,12 +1093,21 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         }
     }
 
+    private void tryMarkingPostAsRead() {
+        if (mMarkPostsAsRead && !mPost.isRead()) {
+            mPost.markAsRead(true);
+            InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, mPost.getId());
+            EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+        }
+    }
+
     @Override
     public void onResume() {
         super.onResume();
         if (mRecyclerView != null) {
             mRecyclerView.onWindowVisibilityChanged(View.VISIBLE);
         }
+        tryMarkingPostAsRead();
     }
 
     @Override
@@ -1173,6 +1188,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                         @Override
                         public void onParsePostSuccess(Post post) {
                             mPost = post;
+                            tryMarkingPostAsRead();
 
                             setupMenu();
 
@@ -1758,6 +1774,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     @Override
                     public void fetchSuccess(Post post) {
                         mPost = post;
+                        tryMarkingPostAsRead();
                         if (mPostAdapter != null) {
                             mPostAdapter.updatePost(post);
                         }
