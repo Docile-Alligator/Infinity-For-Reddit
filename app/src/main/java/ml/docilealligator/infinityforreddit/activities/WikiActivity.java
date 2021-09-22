@@ -71,6 +71,7 @@ import retrofit2.Retrofit;
 public class WikiActivity extends BaseActivity {
 
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
+    public static final String WIKI_PATH = "WP";
     private static final String WIKI_MARKDOWN_STATE = "WMS";
 
     @BindView(R.id.coordinator_layout_comment_wiki_activity)
