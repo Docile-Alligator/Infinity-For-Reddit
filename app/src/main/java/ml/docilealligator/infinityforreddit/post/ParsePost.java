@@ -17,7 +17,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
-import ml.docilealligator.infinityforreddit.readpost.ReadPost;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
@@ -26,54 +25,7 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
  */
 
 public class ParsePost {
-    public static void parsePosts(Executor executor, Handler handler, String response, int nPosts,
-                                  PostFilter postFilter, List<ReadPost> readPostList,
-                                  ParsePostsListingListener parsePostsListingListener) {
-        executor.execute(() -> {
-            LinkedHashSet<Post> newPosts = new LinkedHashSet<>();
-            try {
-                JSONObject jsonResponse = new JSONObject(response);
-                JSONArray allData = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
-                String lastItem = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
-
-                //Posts listing
-                int size;
-                if (nPosts < 0 || nPosts > allData.length()) {
-                    size = allData.length();
-                } else {
-                    size = nPosts;
-                }
-
-                HashSet<ReadPost> readPostHashSet = null;
-                if (readPostList != null) {
-                    readPostHashSet = new HashSet<>(readPostList);
-                }
-                for (int i = 0; i < size; i++) {
-                    try {
-                        if (allData.getJSONObject(i).getString(JSONUtils.KIND_KEY).equals("t3")) {
-                            JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
-                            Post post = parseBasicData(data);
-                            if (readPostHashSet != null && readPostHashSet.contains(ReadPost.convertPost(post))) {
-                                post.markAsRead(false);
-                            }
-                            if (PostFilter.isPostAllowed(post, postFilter)) {
-                                newPosts.add(post);
-                            }
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                handler.post(() -> parsePostsListingListener.onParsePostsListingSuccess(newPosts, lastItem));
-            } catch (JSONException e) {
-                e.printStackTrace();
-                handler.post(parsePostsListingListener::onParsePostsListingFail);
-            }
-        });
-    }
-
-    public static LinkedHashSet<Post> parsePostsSync(String response, int nPosts, PostFilter postFilter, List<ReadPost> readPostList) {
+    public static LinkedHashSet<Post> parsePostsSync(String response, int nPosts, PostFilter postFilter, List<String> readPostList) {
         LinkedHashSet<Post> newPosts = new LinkedHashSet<>();
         try {
             JSONObject jsonResponse = new JSONObject(response);
@@ -87,7 +39,7 @@ public class ParsePost {
                 size = nPosts;
             }
 
-            HashSet<ReadPost> readPostHashSet = null;
+            HashSet<String> readPostHashSet = null;
             if (readPostList != null) {
                 readPostHashSet = new HashSet<>(readPostList);
             }
@@ -96,7 +48,7 @@ public class ParsePost {
                     if (allData.getJSONObject(i).getString(JSONUtils.KIND_KEY).equals("t3")) {
                         JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
                         Post post = parseBasicData(data);
-                        if (readPostHashSet != null && readPostHashSet.contains(ReadPost.convertPost(post))) {
+                        if (readPostHashSet != null && readPostHashSet.contains(post.getId())) {
                             post.markAsRead(false);
                         }
                         if (PostFilter.isPostAllowed(post, postFilter)) {

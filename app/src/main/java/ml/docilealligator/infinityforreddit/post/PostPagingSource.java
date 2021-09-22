@@ -54,7 +54,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     private int postType;
     private SortType sortType;
     private PostFilter postFilter;
-    private List<ReadPost> readPostList;
+    private List<String> readPostList;
     private String userWhere;
     private String multiRedditPath;
     private LinkedHashSet<Post> postLinkedHashSet;
@@ -62,7 +62,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     PostPagingSource(Executor executor, Retrofit retrofit, String accessToken, String accountName,
                      SharedPreferences sharedPreferences,
                      SharedPreferences postFeedScrolledPositionSharedPreferences, int postType,
-                     SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
+                     SortType sortType, PostFilter postFilter, List<String> readPostList) {
         this.executor = executor;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
@@ -79,7 +79,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     PostPagingSource(Executor executor, Retrofit retrofit, String accessToken, String accountName,
                      SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                      String path, int postType, SortType sortType, PostFilter postFilter,
-                     List<ReadPost> readPostList) {
+                     List<String> readPostList) {
         this.executor = executor;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
@@ -117,7 +117,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     PostPagingSource(Executor executor, Retrofit retrofit, String accessToken, String accountName,
                      SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                      String subredditOrUserName, int postType, SortType sortType, PostFilter postFilter,
-                     String where, List<ReadPost> readPostList) {
+                     String where, List<String> readPostList) {
         this.executor = executor;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
@@ -136,7 +136,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     PostPagingSource(Executor executor, Retrofit retrofit, String accessToken, String accountName,
                      SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                      String subredditOrUserName, String query, String trendingSource, int postType,
-                     SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
+                     SortType sortType, PostFilter postFilter, List<String> readPostList) {
         this.executor = executor;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
