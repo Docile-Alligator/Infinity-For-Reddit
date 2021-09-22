@@ -277,6 +277,13 @@
                     android:host="reddit.com"
                     android:scheme="https" />
                 <data
+                    android:host="www.google.com"
+                    android:scheme="https"
+                    android:pathPattern="/amp/s/amp.reddit.com/.*"/>
+                <data
+                    android:host="v.redd.it"
+                    android:scheme="https" />
+                <data
                     android:host="amp.reddit.com"
                     android:scheme="https" />
                 <data
