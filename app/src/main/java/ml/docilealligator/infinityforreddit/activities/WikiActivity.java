@@ -71,7 +71,7 @@ import retrofit2.Retrofit;
 public class WikiActivity extends BaseActivity {
 
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
-    public static final String WIKI_PATH = "WP";
+    public static final String EXTRA_WIKI_PATH = "EWP";
     private static final String WIKI_MARKDOWN_STATE = "WMS";
 
     @BindView(R.id.coordinator_layout_comment_wiki_activity)
@@ -282,7 +282,7 @@ public class WikiActivity extends BaseActivity {
         Glide.with(this).clear(mFetchWikiInfoImageView);
         mFetchWikiInfoLinearLayout.setVisibility(View.GONE);
 
-        retrofit.create(RedditAPI.class).getWiki(getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME)).enqueue(new Callback<String>() {
+        retrofit.create(RedditAPI.class).getWikiPage(getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME), getIntent().getStringExtra(EXTRA_WIKI_PATH)).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
