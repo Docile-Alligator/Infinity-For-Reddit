@@ -752,7 +752,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GILDED:
                 return R.drawable.ic_star_border_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_TOP:
-                return R.drawable.ic_home_black_24dp;
+                return R.drawable.ic_keyboard_double_arrow_up_24;
             default:
                 return R.drawable.ic_account_circle_24dp;
         }

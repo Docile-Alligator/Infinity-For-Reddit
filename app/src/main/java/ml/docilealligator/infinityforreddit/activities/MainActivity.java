@@ -576,7 +576,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_GILDED:
                 return R.drawable.ic_star_border_24dp;
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_GO_TO_TOP:
-                return R.drawable.ic_home_black_24dp;
+                return R.drawable.ic_keyboard_double_arrow_up_24;
             default:
                 return R.drawable.ic_account_circle_24dp;
         }
