@@ -523,6 +523,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 startActivity(intent);
                 break;
             }
+            case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_GO_TO_TOP: {
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.goBackToTop();
+                }
+                break;
+            }
             default:
                 PostTypeBottomSheetFragment postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
                 postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
@@ -569,6 +575,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 return R.drawable.ic_outline_bookmarks_24dp;
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_GILDED:
                 return R.drawable.ic_star_border_24dp;
+            case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_GO_TO_TOP:
+                return R.drawable.ic_home_black_24dp;
             default:
                 return R.drawable.ic_account_circle_24dp;
         }
