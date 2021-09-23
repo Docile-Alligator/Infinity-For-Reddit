@@ -12,7 +12,7 @@ import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubred
 
 public class FetchPostFilterReadPostsAndConcatenatedSubredditNames {
     public interface FetchPostFilterAndReadPostsListener {
-        void success(PostFilter postFilter, ArrayList<ReadPost> readPostList);
+        void success(PostFilter postFilter, ArrayList<String> readPostList);
     }
 
     public interface FetchPostFilterAndConcatenatecSubredditNamesListener {
@@ -26,8 +26,12 @@ public class FetchPostFilterReadPostsAndConcatenatedSubredditNames {
             List<PostFilter> postFilters = redditDataRoomDatabase.postFilterDao().getValidPostFilters(postFilterUsage, nameOfUsage);
             PostFilter mergedPostFilter = PostFilter.mergePostFilter(postFilters);
             if (accountName != null) {
-                ArrayList<ReadPost> readPosts = (ArrayList<ReadPost>) redditDataRoomDatabase.readPostDao().getAllReadPosts(accountName);
-                handler.post(() -> fetchPostFilterAndReadPostsListener.success(mergedPostFilter, readPosts));
+                List<ReadPost> readPosts = redditDataRoomDatabase.readPostDao().getAllReadPosts(accountName);
+                ArrayList<String> readPostStrings = new ArrayList<>();
+                for (ReadPost readPost : readPosts) {
+                    readPostStrings.add(readPost.getId());
+                }
+                handler.post(() -> fetchPostFilterAndReadPostsListener.success(mergedPostFilter, readPostStrings));
             } else {
                 handler.post(() -> fetchPostFilterAndReadPostsListener.success(mergedPostFilter, null));
             }

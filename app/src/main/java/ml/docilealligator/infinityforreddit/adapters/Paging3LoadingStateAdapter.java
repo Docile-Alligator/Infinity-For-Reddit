@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,12 +59,9 @@ public class Paging3LoadingStateAdapter extends LoadStateAdapter<Paging3LoadingS
             mRetry.setTextColor(mCustomThemeWrapper.getButtonTextColor());
             mRetry.setOnClickListener(retryCallback);
             mErrorView.setOnClickListener(retryCallback);
-
-            Log.i("asfasdf", "asdf ");
         }
 
         public void bind(LoadState loadState) {
-            Log.i("asfasdf", "asdf bind");
             mProgressBar.setVisibility(loadState instanceof LoadState.Loading
                     ? View.VISIBLE : View.GONE);
             mErrorView.setVisibility(loadState instanceof LoadState.Error
