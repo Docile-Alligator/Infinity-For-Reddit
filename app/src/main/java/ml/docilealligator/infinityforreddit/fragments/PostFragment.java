@@ -18,6 +18,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -129,7 +130,6 @@ import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.post.PostViewModel;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
-import ml.docilealligator.infinityforreddit.readpost.ReadPost;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
@@ -248,7 +248,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private boolean vibrateWhenActionTriggered;
     private float swipeActionThreshold;
     private ItemTouchHelper touchHelper;
-    private ArrayList<ReadPost> readPosts;
+    private ArrayList<String> readPosts;
     private Unbinder unbinder;
     private Map<String, String> subredditOrUserIcons = new HashMap<>();
 
@@ -390,7 +390,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             recyclerViewPosition = savedInstanceState.getInt(RECYCLER_VIEW_POSITION_STATE);
 
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
-            readPosts = savedInstanceState.getParcelableArrayList(READ_POST_LIST_STATE);
+            readPosts = savedInstanceState.getStringArrayList(READ_POST_LIST_STATE);
             postFilter = savedInstanceState.getParcelable(POST_FILTER_STATE);
             concatenatedSubredditNames = savedInstanceState.getString(CONCATENATED_SUBREDDIT_NAMES_STATE);
             postFragmentId = savedInstanceState.getLong(POST_FRAGMENT_ID_STATE);
@@ -1264,7 +1264,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
-        outState.putParcelableArrayList(READ_POST_LIST_STATE, readPosts);
+        outState.putStringArrayList(READ_POST_LIST_STATE, readPosts);
         if (mLinearLayoutManager != null) {
             outState.putInt(RECYCLER_VIEW_POSITION_STATE, mLinearLayoutManager.findFirstVisibleItemPosition());
         } else if (mStaggeredGridLayoutManager != null) {
@@ -1561,6 +1561,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
     }
 
+    public void markPostAsRead(Post post) {
+        readPosts.add(post.getId());
+    }
+
     @Subscribe
     public void onPostUpdateEvent(PostUpdateEventToPostList event) {
         ItemSnapshotList<Post> posts = mAdapter.snapshot();
@@ -1575,6 +1579,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 post.setSpoiler(event.post.isSpoiler());
                 post.setFlair(event.post.getFlair());
                 post.setSaved(event.post.isSaved());
+                if (event.post.isRead()) {
+                    post.markAsRead(true);
+                }
                 mAdapter.notifyItemChanged(event.positionInList);
             }
         }

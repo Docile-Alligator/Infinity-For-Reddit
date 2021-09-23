@@ -294,8 +294,12 @@ public interface RedditAPI {
     @GET("/api/trending_searches_v1.json?withAds=0&raw_json=1&gilding_detail=1")
     Call<String> getTrendingSearches(@HeaderMap Map<String, String> headers);
 
-    @GET("/r/{subredditName}/wiki/index.json?raw_json=1")
-    Call<String> getWiki(@Path("subredditName") String subredditName);
+    default Call<String> getWiki(@Path("subredditName") String subredditName) {
+        return getWikiPage(subredditName, "index");
+    };
+
+    @GET("/r/{subredditName}/wiki/{wikiPage}.json?raw_json=1")
+    Call<String> getWikiPage(@Path("subredditName") String subredditName, @Path("wikiPage") String wikiPage);
 
     @GET("{sortType}?raw_json=1")
     ListenableFuture<Response<String>> getBestPostsListenableFuture(@Path("sortType") String sortType, @Query("after") String lastItem, @HeaderMap Map<String, String> headers);

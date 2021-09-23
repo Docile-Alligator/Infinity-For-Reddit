@@ -23,7 +23,6 @@ import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
-import ml.docilealligator.infinityforreddit.readpost.ReadPost;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
@@ -41,7 +40,7 @@ public class PostViewModel extends ViewModel {
     private SortType sortType;
     private PostFilter postFilter;
     private String userWhere;
-    private List<ReadPost> readPostList;
+    private List<String> readPostList;
     private MutableLiveData<Boolean> currentlyReadPostIdsLiveData = new MutableLiveData<>();
 
     private LiveData<PagingData<Post>> posts;
@@ -54,7 +53,7 @@ public class PostViewModel extends ViewModel {
     public PostViewModel(Executor executor, Retrofit retrofit, String accessToken, String accountName,
                          SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                          @Nullable SharedPreferences postHistorySharedPreferences, int postType,
-                         SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
+                         SortType sortType, PostFilter postFilter, List<String> readPostList) {
         this.executor = executor;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
@@ -95,7 +94,7 @@ public class PostViewModel extends ViewModel {
     public PostViewModel(Executor executor, Retrofit retrofit, String accessToken, String accountName,
                          SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                          @Nullable SharedPreferences postHistorySharedPreferences, String subredditName, int postType,
-                         SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
+                         SortType sortType, PostFilter postFilter, List<String> readPostList) {
         this.executor = executor;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
@@ -139,7 +138,7 @@ public class PostViewModel extends ViewModel {
                          SharedPreferences postFeedScrolledPositionSharedPreferences,
                          @Nullable SharedPreferences postHistorySharedPreferences, String username,
                          int postType, SortType sortType, PostFilter postFilter, String userWhere,
-                         List<ReadPost> readPostList) {
+                         List<String> readPostList) {
         this.executor = executor;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
@@ -183,7 +182,7 @@ public class PostViewModel extends ViewModel {
                          SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                          @Nullable SharedPreferences postHistorySharedPreferences, String subredditName, String query,
                          String trendingSource, int postType, SortType sortType, PostFilter postFilter,
-                         List<ReadPost> readPostList) {
+                         List<String> readPostList) {
         this.executor = executor;
         this.retrofit = retrofit;
         this.accessToken = accessToken;
@@ -290,12 +289,12 @@ public class PostViewModel extends ViewModel {
         private SortType sortType;
         private PostFilter postFilter;
         private String userWhere;
-        private List<ReadPost> readPostList;
+        private List<String> readPostList;
 
         public Factory(Executor executor, Retrofit retrofit, String accessToken, String accountName,
                        SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                        SharedPreferences postHistorySharedPreferences, int postType, SortType sortType,
-                       PostFilter postFilter, List<ReadPost> readPostList) {
+                       PostFilter postFilter, List<String> readPostList) {
             this.executor = executor;
             this.retrofit = retrofit;
             this.accessToken = accessToken;
@@ -312,7 +311,7 @@ public class PostViewModel extends ViewModel {
         public Factory(Executor executor, Retrofit retrofit, String accessToken, String accountName,
                        SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                        SharedPreferences postHistorySharedPreferences, String name, int postType, SortType sortType,
-                       PostFilter postFilter, List<ReadPost> readPostList) {
+                       PostFilter postFilter, List<String> readPostList) {
             this.executor = executor;
             this.retrofit = retrofit;
             this.accessToken = accessToken;
@@ -331,7 +330,7 @@ public class PostViewModel extends ViewModel {
         public Factory(Executor executor, Retrofit retrofit, String accessToken, String accountName,
                        SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                        SharedPreferences postHistorySharedPreferences, String username, int postType,
-                       SortType sortType, PostFilter postFilter, String where, List<ReadPost> readPostList) {
+                       SortType sortType, PostFilter postFilter, String where, List<String> readPostList) {
             this.executor = executor;
             this.retrofit = retrofit;
             this.accessToken = accessToken;
@@ -350,7 +349,7 @@ public class PostViewModel extends ViewModel {
         public Factory(Executor executor, Retrofit retrofit, String accessToken, String accountName,
                        SharedPreferences sharedPreferences, SharedPreferences postFeedScrolledPositionSharedPreferences,
                        SharedPreferences postHistorySharedPreferences, String name, String query, String trendingSource,
-                       int postType, SortType sortType, PostFilter postFilter, List<ReadPost> readPostList) {
+                       int postType, SortType sortType, PostFilter postFilter, List<String> readPostList) {
             this.executor = executor;
             this.retrofit = retrofit;
             this.accessToken = accessToken;
