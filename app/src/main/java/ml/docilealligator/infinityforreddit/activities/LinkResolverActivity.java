@@ -49,7 +49,8 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String IMGUR_ALBUM_PATTERN = "/(album|a)/\\w+/?";
     private static final String IMGUR_IMAGE_PATTERN = "/\\w+/?";
     private static final String RPAN_BROADCAST_PATTERN = "/rpan/r/[\\w-]+/\\w+/?\\w+/?";
-    private static final String WIKI_PATTERN = "/[rR]/[\\w-]+/(wiki|w)/?\\w+";
+    private static final String WIKI_PATTERN = "/[rR]/[\\w-]+/(wiki|w)?(?:/\\w+)+";
+    private static final String GOOGLE_AMP_PATTERN = "/amp/s/amp.reddit.com/.*";
 
     @Inject
     @Named("default")
@@ -173,8 +174,10 @@ public class LinkResolverActivity extends AppCompatActivity {
                                     deepLinkError(uri);
                                 }
                             } else if (path.matches(WIKI_PATTERN)) {
+                                final String wikiPage = path.substring(path.lastIndexOf("/wiki/") + 6);
                                 Intent intent = new Intent(this, WikiActivity.class);
                                 intent.putExtra(WikiActivity.EXTRA_SUBREDDIT_NAME, segments.get(1));
+                                intent.putExtra(WikiActivity.EXTRA_WIKI_PATH, wikiPage);
                                 startActivity(intent);
                             } else if (path.matches(SUBREDDIT_PATTERN)) {
                                 Intent intent = new Intent(this, ViewSubredditDetailActivity.class);
@@ -263,6 +266,13 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, getIntent().getBooleanExtra(EXTRA_IS_NSFW, false));
                                 intent.setData(Uri.parse(url));
                                 startActivity(intent);
+                            } else {
+                                deepLinkError(uri);
+                            }
+                        } else if (authority.contains("google.com") ){
+                            if ( path.matches(GOOGLE_AMP_PATTERN) ) {
+                                String url = path.substring(11, path.length()); // skipping past amp straight to reddit
+                                handleUri(Uri.parse("https://" + url));
                             } else {
                                 deepLinkError(uri);
                             }

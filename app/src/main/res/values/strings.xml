@@ -1191,4 +1191,7 @@
     <string name="app_lock_timeout_12_hours">12 hours</string>
     <string name="app_lock_timeout_24_hours">24 hours</string>
 
+    <string name="go_to_top">Go To Top</string>
+    <string name="action_go_to_wiki">Go to Wiki</string>
+
 </resources>

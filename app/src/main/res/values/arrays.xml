@@ -283,6 +283,7 @@
         <item>@string/hidden</item>
         <item>@string/saved</item>
         <item>@string/gilded</item>
+        <item>@string/go_to_top</item>
     </string-array>
 
     <string-array name="settings_other_activities_bottom_app_bar_options">
@@ -306,6 +307,7 @@
         <item>@string/hidden</item>
         <item>@string/saved</item>
         <item>@string/gilded</item>
+        <item>@string/go_to_top</item>
     </string-array>
 
     <string-array name="settings_bottom_app_bar_fab_options">
