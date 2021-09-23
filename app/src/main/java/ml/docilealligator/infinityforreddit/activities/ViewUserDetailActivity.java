@@ -413,47 +413,79 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 if (userData.isCanBeFollowed()) {
                     subscribeUserChip.setVisibility(View.VISIBLE);
                     subscribeUserChip.setOnClickListener(view -> {
-                        if (mAccessToken == null) {
-                            Toast.makeText(ViewUserDetailActivity.this, R.string.login_first, Toast.LENGTH_SHORT).show();
-                            return;
-                        }
-
                         if (subscriptionReady) {
                             subscriptionReady = false;
                             if (resources.getString(R.string.follow).contentEquals(subscribeUserChip.getText())) {
-                                UserFollowing.followUser(mOauthRetrofit, mRetrofit, mAccessToken,
-                                        username, mAccountName, mRedditDataRoomDatabase, new UserFollowing.UserFollowingListener() {
-                                            @Override
-                                            public void onUserFollowingSuccess() {
-                                                subscribeUserChip.setText(R.string.unfollow);
-                                                subscribeUserChip.setChipBackgroundColor(ColorStateList.valueOf(subscribedColor));
-                                                showMessage(R.string.followed, false);
-                                                subscriptionReady = true;
-                                            }
+                                if (mAccessToken == null) {
+                                    UserFollowing.anonymousFollowUser(mExecutor, new Handler(), mRetrofit,
+                                            username, mRedditDataRoomDatabase, new UserFollowing.UserFollowingListener() {
+                                                @Override
+                                                public void onUserFollowingSuccess() {
+                                                    subscribeUserChip.setText(R.string.unfollow);
+                                                    subscribeUserChip.setChipBackgroundColor(ColorStateList.valueOf(subscribedColor));
+                                                    showMessage(R.string.followed, false);
+                                                    subscriptionReady = true;
+                                                }
 
-                                            @Override
-                                            public void onUserFollowingFail() {
-                                                showMessage(R.string.follow_failed, false);
-                                                subscriptionReady = true;
-                                            }
-                                        });
+                                                @Override
+                                                public void onUserFollowingFail() {
+                                                    showMessage(R.string.follow_failed, false);
+                                                    subscriptionReady = true;
+                                                }
+                                            });
+                                } else {
+                                    UserFollowing.followUser(mOauthRetrofit, mRetrofit, mAccessToken,
+                                            username, mAccountName, mRedditDataRoomDatabase, new UserFollowing.UserFollowingListener() {
+                                                @Override
+                                                public void onUserFollowingSuccess() {
+                                                    subscribeUserChip.setText(R.string.unfollow);
+                                                    subscribeUserChip.setChipBackgroundColor(ColorStateList.valueOf(subscribedColor));
+                                                    showMessage(R.string.followed, false);
+                                                    subscriptionReady = true;
+                                                }
+
+                                                @Override
+                                                public void onUserFollowingFail() {
+                                                    showMessage(R.string.follow_failed, false);
+                                                    subscriptionReady = true;
+                                                }
+                                            });
+                                }
                             } else {
-                                UserFollowing.unfollowUser(mOauthRetrofit, mRetrofit, mAccessToken,
-                                        username, mAccountName, mRedditDataRoomDatabase, new UserFollowing.UserFollowingListener() {
-                                            @Override
-                                            public void onUserFollowingSuccess() {
-                                                subscribeUserChip.setText(R.string.follow);
-                                                subscribeUserChip.setChipBackgroundColor(ColorStateList.valueOf(unsubscribedColor));
-                                                showMessage(R.string.unfollowed, false);
-                                                subscriptionReady = true;
-                                            }
+                                if (mAccessToken == null) {
+                                    UserFollowing.anonymousUnfollowUser(mExecutor, new Handler(), username,
+                                            mRedditDataRoomDatabase, new UserFollowing.UserFollowingListener() {
+                                                @Override
+                                                public void onUserFollowingSuccess() {
+                                                    subscribeUserChip.setText(R.string.follow);
+                                                    subscribeUserChip.setChipBackgroundColor(ColorStateList.valueOf(unsubscribedColor));
+                                                    showMessage(R.string.unfollowed, false);
+                                                    subscriptionReady = true;
+                                                }
 
-                                            @Override
-                                            public void onUserFollowingFail() {
-                                                showMessage(R.string.unfollow_failed, false);
-                                                subscriptionReady = true;
-                                            }
-                                        });
+                                                @Override
+                                                public void onUserFollowingFail() {
+                                                    //Will not be called
+                                                }
+                                            });
+                                } else {
+                                    UserFollowing.unfollowUser(mOauthRetrofit, mRetrofit, mAccessToken,
+                                            username, mAccountName, mRedditDataRoomDatabase, new UserFollowing.UserFollowingListener() {
+                                                @Override
+                                                public void onUserFollowingSuccess() {
+                                                    subscribeUserChip.setText(R.string.follow);
+                                                    subscribeUserChip.setChipBackgroundColor(ColorStateList.valueOf(unsubscribedColor));
+                                                    showMessage(R.string.unfollowed, false);
+                                                    subscriptionReady = true;
+                                                }
+
+                                                @Override
+                                                public void onUserFollowingFail() {
+                                                    showMessage(R.string.unfollow_failed, false);
+                                                    subscriptionReady = true;
+                                                }
+                                            });
+                                }
                             }
                         }
                     });

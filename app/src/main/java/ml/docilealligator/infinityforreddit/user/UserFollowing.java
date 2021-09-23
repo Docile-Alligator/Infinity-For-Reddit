@@ -1,13 +1,16 @@
 package ml.docilealligator.infinityforreddit.user;
 
 import android.os.AsyncTask;
+import android.os.Handler;
 
 import androidx.annotation.NonNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserDao;
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
@@ -25,12 +28,46 @@ public class UserFollowing {
                 redditDataRoomDatabase.subscribedUserDao(), userFollowingListener);
     }
 
+    public static void anonymousFollowUser(Executor executor, Handler handler, Retrofit retrofit, String username,
+                                           RedditDataRoomDatabase redditDataRoomDatabase,
+                                           UserFollowingListener userFollowingListener) {
+        FetchUserData.fetchUserData(retrofit, username, new FetchUserData.FetchUserDataListener() {
+            @Override
+            public void onFetchUserDataSuccess(UserData userData, int inboxCount) {
+                executor.execute(() -> {
+                    if (!redditDataRoomDatabase.accountDao().isAnonymousAccountInserted()) {
+                        redditDataRoomDatabase.accountDao().insert(Account.getAnonymousAccount());
+                    }
+                    redditDataRoomDatabase.subscribedUserDao().insert(new SubscribedUserData(userData.getName(), userData.getIconUrl(),
+                            "-", false));
+
+                    handler.post(userFollowingListener::onUserFollowingSuccess);
+                });
+            }
+
+            @Override
+            public void onFetchUserDataFailed() {
+                userFollowingListener.onUserFollowingFail();
+            }
+        });
+    }
+
     public static void unfollowUser(Retrofit oauthRetrofit, Retrofit retrofit,
                                     String accessToken, String username, String accountName,
                                     RedditDataRoomDatabase redditDataRoomDatabase,
                                     UserFollowingListener userFollowingListener) {
         userFollowing(oauthRetrofit, retrofit, accessToken, username, accountName, "unsub",
                 redditDataRoomDatabase.subscribedUserDao(), userFollowingListener);
+    }
+
+    public static void anonymousUnfollowUser(Executor executor, Handler handler, String username,
+                                    RedditDataRoomDatabase redditDataRoomDatabase,
+                                    UserFollowingListener userFollowingListener) {
+        executor.execute(() -> {
+            redditDataRoomDatabase.subscribedUserDao().deleteSubscribedUser(username, "-");
+
+            handler.post(userFollowingListener::onUserFollowingSuccess);
+        });
     }
 
     private static void userFollowing(Retrofit oauthRetrofit, Retrofit retrofit, String accessToken,
