@@ -58,4 +58,10 @@
         android:orderInCategory="9"
         android:title="@string/action_share"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_go_to_wiki_activity"
+        android:orderInCategory="10"
+        android:title="@string/action_go_to_wiki"
+        app:showAsAction="never" />
 </menu>

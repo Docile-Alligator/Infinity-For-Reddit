@@ -1190,5 +1190,6 @@
     <string name="app_lock_timeout_6_hours">6 hours</string>
     <string name="app_lock_timeout_12_hours">12 hours</string>
     <string name="app_lock_timeout_24_hours">24 hours</string>
+    <string name="action_go_to_wiki">Go to Wiki</string>
 
 </resources>
