@@ -14,6 +14,8 @@ import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.account.AccountDao;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeDao;
+import ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubreddit;
+import ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubredditDao;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.multireddit.MultiRedditDao;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
@@ -35,7 +37,7 @@ import ml.docilealligator.infinityforreddit.user.UserData;
 
 @Database(entities = {Account.class, SubredditData.class, SubscribedSubredditData.class, UserData.class,
         SubscribedUserData.class, MultiReddit.class, CustomTheme.class, RecentSearchQuery.class,
-        ReadPost.class, PostFilter.class, PostFilterUsage.class}, version = 20)
+        ReadPost.class, PostFilter.class, PostFilterUsage.class, AnonymousMultiredditSubreddit.class}, version = 21)
 public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static RedditDataRoomDatabase INSTANCE;
 
@@ -49,7 +51,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                                     MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9,
                                     MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13,
                                     MIGRATION_13_14, MIGRATION_14_15, MIGRATION_15_16, MIGRATION_16_17,
-                                    MIGRATION_17_18, MIGRATION_18_19, MIGRATION_19_20)
+                                    MIGRATION_17_18, MIGRATION_18_19, MIGRATION_19_20, MIGRATION_20_21)
                             .build();
                 }
             }
@@ -78,6 +80,8 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
     public abstract PostFilterDao postFilterDao();
 
     public abstract PostFilterUsageDao postFilterUsageDao();
+
+    public abstract AnonymousMultiredditSubredditDao anonymousMultiredditSubredditDao();
 
     private static final Migration MIGRATION_1_2 = new Migration(1, 2) {
         @Override
@@ -337,6 +341,15 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE post_filter ADD COLUMN exclude_domains TEXT");
+        }
+    };
+
+    private static final Migration MIGRATION_20_21 = new Migration(20, 21) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("CREATE TABLE anonymous_multireddit_subreddits (path TEXT NOT NULL, username TEXT NOT NULL, subreddit_name TEXT NOT NULL, " +
+                    "PRIMARY KEY(path, username, subreddit_name), FOREIGN KEY(path) REFERENCES multi_reddits(path) ON DELETE CASCADE ON UPDATE CASCADE, " +
+                    "FOREIGN KEY(username) REFERENCES multi_reddits(username) ON DELETE CASCADE ON UPDATE CASCADE)");
         }
     };
 }
