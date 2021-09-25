@@ -1,8 +1,6 @@
 package ml.docilealligator.infinityforreddit.services;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.ContentResolver;
@@ -26,6 +24,7 @@ import android.os.Message;
 import android.os.Process;
 import android.provider.MediaStore;
 
+import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.documentfile.provider.DocumentFile;
@@ -501,16 +500,13 @@ public class DownloadRedditVideoService extends Service {
         String subredditName = intent.getStringExtra(EXTRA_SUBREDDIT);
         String fileNameWithoutExtension = subredditName + "-" + intent.getStringExtra(EXTRA_POST_ID);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel serviceChannel;
-            serviceChannel = new NotificationChannel(
-                    NotificationUtils.CHANNEL_ID_DOWNLOAD_REDDIT_VIDEO,
-                    NotificationUtils.CHANNEL_DOWNLOAD_REDDIT_VIDEO,
-                    NotificationManager.IMPORTANCE_LOW
-            );
-
-            notificationManager.createNotificationChannel(serviceChannel);
-        }
+        NotificationChannelCompat serviceChannel =
+                new NotificationChannelCompat.Builder(
+                NotificationUtils.CHANNEL_ID_DOWNLOAD_REDDIT_VIDEO,
+                NotificationManagerCompat.IMPORTANCE_LOW)
+                        .setName(NotificationUtils.CHANNEL_DOWNLOAD_REDDIT_VIDEO)
+                        .build();
+        notificationManager.createNotificationChannel(serviceChannel);
 
         int randomNotificationIdOffset = new Random().nextInt(10000);
         startForeground(
