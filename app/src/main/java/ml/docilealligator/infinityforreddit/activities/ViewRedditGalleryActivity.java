@@ -17,8 +17,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import com.thefuntasty.hauler.DragDirection;
-import com.thefuntasty.hauler.HaulerView;
+import app.futured.hauler.DragDirection;
+import app.futured.hauler.HaulerView;
 
 import java.util.ArrayList;
 import java.util.concurrent.Executor;

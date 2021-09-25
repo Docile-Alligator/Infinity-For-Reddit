@@ -55,8 +55,8 @@ import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.snackbar.Snackbar;
-import com.thefuntasty.hauler.DragDirection;
-import com.thefuntasty.hauler.HaulerView;
+import app.futured.hauler.DragDirection;
+import app.futured.hauler.HaulerView;
 
 import org.apache.commons.io.FilenameUtils;
 

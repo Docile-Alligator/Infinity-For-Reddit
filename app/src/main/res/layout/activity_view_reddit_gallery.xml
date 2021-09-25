@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.thefuntasty.hauler.HaulerView xmlns:android="http://schemas.android.com/apk/res/android"
+<app.futured.hauler.HaulerView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/hauler_view_view_reddit_gallery_activity"
@@ -20,4 +20,4 @@
 
     </androidx.core.widget.NestedScrollView>
 
-</com.thefuntasty.hauler.HaulerView>
+</app.futured.hauler.HaulerView>
