@@ -117,10 +117,10 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Message message;
-        if (holder.getAdapterPosition() == 0) {
+        if (holder.getBindingAdapterPosition() == 0) {
             message = mMessage;
         } else {
-            message = mMessage.getReplies().get(holder.getAdapterPosition() - 1);
+            message = mMessage.getReplies().get(holder.getBindingAdapterPosition() - 1);
         }
         if (message != null) {
             if (holder instanceof MessageViewHolder) {

@@ -82,12 +82,12 @@ public class SearchActivityRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
             itemView.setOnClickListener(view -> {
                 if (recentSearchQueries != null && !recentSearchQueries.isEmpty()) {
-                    itemOnClickListener.onClick(recentSearchQueries.get(getAdapterPosition()).getSearchQuery());
+                    itemOnClickListener.onClick(recentSearchQueries.get(getBindingAdapterPosition()).getSearchQuery());
                 }
             });
 
             deleteImageView.setOnClickListener(view -> {
-                itemOnClickListener.onDelete(recentSearchQueries.get(getAdapterPosition()));
+                itemOnClickListener.onDelete(recentSearchQueries.get(getBindingAdapterPosition()));
             });
         }
     }

@@ -39,10 +39,10 @@ public class SelectedSubredditsRecyclerViewAdapter extends RecyclerView.Adapter<
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof SubredditViewHolder) {
-            ((SubredditViewHolder) holder).subredditNameTextView.setText(subreddits.get(holder.getAdapterPosition()));
+            ((SubredditViewHolder) holder).subredditNameTextView.setText(subreddits.get(holder.getBindingAdapterPosition()));
             ((SubredditViewHolder) holder).deleteButton.setOnClickListener(view -> {
-                subreddits.remove(holder.getAdapterPosition());
-                notifyItemRemoved(holder.getAdapterPosition());
+                subreddits.remove(holder.getBindingAdapterPosition());
+                notifyItemRemoved(holder.getBindingAdapterPosition());
             });
         }
     }

@@ -91,7 +91,7 @@ public class AwardRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.
             coinTextView.setTextColor(primaryTextColor);
 
             itemView.setOnClickListener(view -> {
-                itemOnClickListener.onClick(awards.get(getAdapterPosition()));
+                itemOnClickListener.onClick(awards.get(getBindingAdapterPosition()));
             });
         }
     }

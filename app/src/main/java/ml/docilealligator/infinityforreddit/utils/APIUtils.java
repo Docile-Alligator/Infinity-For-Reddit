@@ -120,6 +120,6 @@ public class APIUtils {
     }
 
     public static RequestBody getRequestBody(String s) {
-        return RequestBody.create(MediaType.parse("text/plain"), s);
+        return RequestBody.create(s, MediaType.parse("text/plain"));
     }
 }

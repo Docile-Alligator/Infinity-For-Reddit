@@ -86,7 +86,7 @@ public class PostFilterUsageRecyclerViewAdapter extends RecyclerView.Adapter<Rec
             usageTextView = (TextView) itemView;
 
             usageTextView.setOnClickListener(view -> {
-                onItemClickListener.onClick(postFilterUsages.get(getAdapterPosition()));
+                onItemClickListener.onClick(postFilterUsages.get(getBindingAdapterPosition()));
             });
         }
     }

@@ -44,7 +44,7 @@ public class FlairBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter<Fl
 
     @Override
     public void onBindViewHolder(@NonNull FlairViewHolder holder, int position) {
-        if (flairs.get(holder.getAdapterPosition()).isEditable()) {
+        if (flairs.get(holder.getBindingAdapterPosition()).isEditable()) {
             holder.editFlairImageView.setVisibility(View.VISIBLE);
             holder.editFlairImageView.setOnClickListener(view -> {
                 View dialogView = ((Activity) context).getLayoutInflater().inflate(R.layout.dialog_edit_flair, null);
@@ -59,7 +59,7 @@ public class FlairBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter<Fl
                         .setView(dialogView)
                         .setPositiveButton(R.string.ok, (dialogInterface, i)
                                 -> {
-                            Flair flair = flairs.get(holder.getAdapterPosition());
+                            Flair flair = flairs.get(holder.getBindingAdapterPosition());
                             flair.setText(flairEditText.getText().toString());
                             itemClickListener.onClick(flair);
                         })
@@ -68,13 +68,13 @@ public class FlairBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter<Fl
             });
         }
 
-        if (flairs.get(holder.getAdapterPosition()).isEditable() && flairs.get(holder.getAdapterPosition()).getText().equals("")) {
+        if (flairs.get(holder.getBindingAdapterPosition()).isEditable() && flairs.get(holder.getBindingAdapterPosition()).getText().equals("")) {
             holder.itemView.setOnClickListener(view -> holder.editFlairImageView.performClick());
         } else {
-            holder.itemView.setOnClickListener(view -> itemClickListener.onClick(flairs.get(holder.getAdapterPosition())));
+            holder.itemView.setOnClickListener(view -> itemClickListener.onClick(flairs.get(holder.getBindingAdapterPosition())));
         }
 
-        holder.flairTextView.setText(flairs.get(holder.getAdapterPosition()).getText());
+        holder.flairTextView.setText(flairs.get(holder.getBindingAdapterPosition()).getText());
     }
 
     @Override
