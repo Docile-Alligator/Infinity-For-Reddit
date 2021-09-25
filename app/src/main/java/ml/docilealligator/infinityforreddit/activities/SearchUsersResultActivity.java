@@ -119,11 +119,12 @@ public class SearchUsersResultActivity extends BaseActivity implements ActivityT
             bundle.putString(UserListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
             bundle.putBoolean(UserListingFragment.EXTRA_IS_MULTI_SELECTION, getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false));
             mFragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_search_users_result_activity, mFragment).commit();
         } else {
             mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_search_users_result_activity, mFragment).commit();
         }
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame_layout_search_users_result_activity, mFragment)
+                .commit();
     }
 
     @Override
