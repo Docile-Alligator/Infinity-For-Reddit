@@ -203,13 +203,13 @@ public class SearchActivity extends BaseActivity {
 
         simpleSearchView.setOnQueryTextListener(new SimpleSearchView.OnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
+            public boolean onQueryTextSubmit(@NonNull String query) {
                 search(query);
                 return true;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public boolean onQueryTextChange(@NonNull String newText) {
                 if (!newText.isEmpty()) {
                     if (subredditAutocompleteCall != null) {
                         subredditAutocompleteCall.cancel();
@@ -384,11 +384,10 @@ public class SearchActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         simpleSearchView.showSearch(false);
-        simpleSearchView.getSearchEditText().requestFocus();
+        simpleSearchView.requestFocus();
 
         if (query != null) {
-            simpleSearchView.getSearchEditText().setText(query);
-            simpleSearchView.getSearchEditText().setSelection(query.length());
+            simpleSearchView.setQuery(query, false);
             query = null;
         }
 
@@ -403,13 +402,13 @@ public class SearchActivity extends BaseActivity {
         super.onPause();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
-            imm.hideSoftInputFromWindow(simpleSearchView.getSearchEditText().getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(simpleSearchView.getWindowToken(), 0);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (simpleSearchView.onActivityResult(requestCode, resultCode, data)) {
+        if (data != null && simpleSearchView.onActivityResult(requestCode, resultCode, data)) {
             return;
         }
 
