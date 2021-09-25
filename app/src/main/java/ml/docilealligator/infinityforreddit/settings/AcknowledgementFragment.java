@@ -50,12 +50,6 @@ public class AcknowledgementFragment extends Fragment {
         acknowledgements.add(new Acknowledgement("Glide",
                 "A fast and efficient open source media management and image loading framework for Android",
                 Uri.parse("https://github.com/bumptech/glide")));
-        acknowledgements.add(new Acknowledgement("RxAndroid",
-                "Android specific bindings for RxJava 2",
-                Uri.parse("https://github.com/ReactiveX/RxAndroid")));
-        acknowledgements.add(new Acknowledgement("RxJava",
-                "Reactive extensions for the JVM",
-                Uri.parse("https://github.com/ReactiveX/RxJava")));
         acknowledgements.add(new Acknowledgement("Retrofit",
                 "Type-safe HTTP client for Android and Java by Square, Inc.",
                 Uri.parse("https://github.com/square/retrofit")));

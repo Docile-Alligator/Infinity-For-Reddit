@@ -47,23 +47,23 @@ dependencies {
     implementation 'androidx.browser:browser:1.3.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.0-beta02'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     def lifecycleVersion = "2.2.0"
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.3.1"
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-process:2.3.1"
     implementation "androidx.lifecycle:lifecycle-runtime:$lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
-    annotationProcessor "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
-    implementation 'androidx.paging:paging-runtime:3.0.1'
-    implementation "androidx.paging:paging-guava:3.0.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycleVersion"
+    def pagingVersion = "3.0.1"
+    implementation "androidx.paging:paging-runtime:$pagingVersion"
+    implementation "androidx.paging:paging-guava:$pagingVersion"
     implementation 'androidx.preference:preference:1.1.1'
     def roomVersion = "2.3.0"
     implementation "androidx.room:room-runtime:$roomVersion"
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
+    implementation 'androidx.startup:startup-runtime:1.0.0'
+    implementation 'androidx.viewpager2:viewpager2:1.1.0-alpha01'
     implementation 'androidx.work:work-runtime:2.5.0'
     implementation 'com.google.android.material:material:1.3.0-rc01'
-    implementation "androidx.viewpager2:viewpager2:1.1.0-alpha01"
 
 /** ExoPlayer **/
     def exoplayerVersion = "2.10.8"
@@ -80,10 +80,6 @@ dependencies {
 /** Third-party **/
 
 /**** Backend logic ****/
-
-    // Reactive stuff for event and async related
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
 
     // HTTP clients
     def retrofitVersion = "2.9.0"
@@ -120,6 +116,15 @@ dependencies {
     // Object to JSON
     // NOTE: Replace with Squareup's Moshi?
     implementation 'com.google.code.gson:gson:2.8.6'
+
+    // Java library for zip files and streams
+    implementation 'net.lingala.zip4j:zip4j:2.7.0'
+
+    // IO functionality
+    implementation 'org.apache.commons:commons-io:1.3.2'
+
+    // Crash reporting
+    implementation 'com.github.FunkyMuse:Crashy:1.1.0'
 
 
 /**** User Interface (frontend) ****/
@@ -172,19 +177,8 @@ dependencies {
     // RecyclerView fast scrolling
     implementation 'me.zhanghai.android.fastscroll:library:1.1.5'
 
-    implementation 'net.lingala.zip4j:zip4j:2.7.0'
-    implementation 'org.apache.commons:commons-io:1.3.2'
-
-    implementation "androidx.startup:startup-runtime:1.0.0"
-    implementation 'com.github.FunkyMuse:Crashy:1.1.0'
-
-    implementation "androidx.lifecycle:lifecycle-process:2.3.1"
-    implementation "androidx.lifecycle:lifecycle-common-java8:2.3.1"
-
-    implementation 'androidx.palette:palette:1.0.0'
-
 
 /**** Builds and flavors ****/
     // debugImplementation because LeakCanary should only run in debug builds.
-    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
+    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:x.y'
 }
