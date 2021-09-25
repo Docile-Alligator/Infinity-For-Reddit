@@ -20,7 +20,9 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ferfalk.simplesearchview.SimpleOnQueryTextListener;
 import com.ferfalk.simplesearchview.SimpleSearchView;
+import com.ferfalk.simplesearchview.SimpleSearchViewListener;
 import com.google.android.material.appbar.AppBarLayout;
 import com.r0adkll.slidr.Slidr;
 
@@ -154,25 +156,10 @@ public class SearchActivity extends BaseActivity {
             simpleSearchView.setHint(getText(R.string.search_only_users_hint));
         }
 
-        simpleSearchView.setOnSearchViewListener(new SimpleSearchView.SearchViewListener() {
-            @Override
-            public void onSearchViewShown() {
-
-            }
-
+        simpleSearchView.setOnSearchViewListener(new SimpleSearchViewListener() {
             @Override
             public void onSearchViewClosed() {
                 finish();
-            }
-
-            @Override
-            public void onSearchViewShownAnimation() {
-
-            }
-
-            @Override
-            public void onSearchViewClosedAnimation() {
-
             }
         });
 
@@ -201,7 +188,7 @@ public class SearchActivity extends BaseActivity {
             finish();
         });
 
-        simpleSearchView.setOnQueryTextListener(new SimpleSearchView.OnQueryTextListener() {
+        simpleSearchView.setOnQueryTextListener(new SimpleOnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(@NonNull String query) {
                 search(query);
@@ -242,11 +229,6 @@ public class SearchActivity extends BaseActivity {
                     });
                     return true;
                 }
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextCleared() {
                 return false;
             }
         });

@@ -1727,7 +1727,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             }
             if (helper == null) {
                 helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
-                helper.addEventListener(new Playable.EventListener() {
+                helper.addEventListener(new Playable.DefaultEventListener() {
                     @Override
                     public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
                         if (!trackGroups.isEmpty()) {
@@ -1747,16 +1747,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         } else {
                             muteButton.setVisibility(View.GONE);
                         }
-                    }
-
-                    @Override
-                    public void onMetadata(Metadata metadata) {
-
-                    }
-
-                    @Override
-                    public void onCues(List<Cue> cues) {
-
                     }
 
                     @Override
