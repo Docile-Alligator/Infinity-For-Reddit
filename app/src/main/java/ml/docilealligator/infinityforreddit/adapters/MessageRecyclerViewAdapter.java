@@ -201,7 +201,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof DataViewHolder) {
-            Message message = getItem(holder.getAdapterPosition());
+            Message message = getItem(holder.getBindingAdapterPosition());
             if (message != null) {
                 ArrayList<Message> replies = message.getReplies();
                 Message displayedMessage;
@@ -240,7 +240,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                     } else if (mMessageType == FetchMessage.MESSAGE_TYPE_PRIVATE_MESSAGE) {
                         Intent intent = new Intent(mContext, ViewPrivateMessagesActivity.class);
                         intent.putExtra(ViewPrivateMessagesActivity.EXTRA_PRIVATE_MESSAGE, message);
-                        intent.putExtra(ViewPrivateMessagesActivity.EXTRA_MESSAGE_POSITION, holder.getAdapterPosition());
+                        intent.putExtra(ViewPrivateMessagesActivity.EXTRA_MESSAGE_POSITION, holder.getBindingAdapterPosition());
                         mContext.startActivity(intent);
                     }
 

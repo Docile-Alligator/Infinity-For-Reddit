@@ -116,7 +116,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
             int offset = (mFavoriteMultiReddits != null && mFavoriteMultiReddits.size() > 0) ?
                     mFavoriteMultiReddits.size() + 2 : 0;
 
-            MultiReddit multiReddit = mMultiReddits.get(holder.getAdapterPosition() - offset);
+            MultiReddit multiReddit = mMultiReddits.get(holder.getBindingAdapterPosition() - offset);
             name = multiReddit.getDisplayName();
             iconUrl = multiReddit.getIconUrl();
             if(multiReddit.isFavorite()) {
@@ -134,7 +134,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                             new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                 @Override
                                 public void success() {
-                                    int position = holder.getAdapterPosition() - offset;
+                                    int position = holder.getBindingAdapterPosition() - offset;
                                     if(position >= 0 && mMultiReddits.size() > position) {
                                         mMultiReddits.get(position).setFavorite(false);
                                     }
@@ -144,7 +144,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                                 @Override
                                 public void failed() {
                                     Toast.makeText(mActivity, R.string.thing_unfavorite_failed, Toast.LENGTH_SHORT).show();
-                                    int position = holder.getAdapterPosition() - offset;
+                                    int position = holder.getBindingAdapterPosition() - offset;
                                     if(position >= 0 && mMultiReddits.size() > position) {
                                         mMultiReddits.get(position).setFavorite(true);
                                     }
@@ -160,7 +160,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                             new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                 @Override
                                 public void success() {
-                                    int position = holder.getAdapterPosition() - offset;
+                                    int position = holder.getBindingAdapterPosition() - offset;
                                     if(position >= 0 && mMultiReddits.size() > position) {
                                         mMultiReddits.get(position).setFavorite(true);
                                     }
@@ -170,7 +170,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                                 @Override
                                 public void failed() {
                                     Toast.makeText(mActivity, R.string.thing_favorite_failed, Toast.LENGTH_SHORT).show();
-                                    int position = holder.getAdapterPosition() - offset;
+                                    int position = holder.getBindingAdapterPosition() - offset;
                                     if(position >= 0 && mMultiReddits.size() > position) {
                                         mMultiReddits.get(position).setFavorite(false);
                                     }
@@ -202,7 +202,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
             }
             ((MultiRedditViewHolder) holder).multiRedditNameTextView.setText(name);
         } else if (holder instanceof FavoriteMultiRedditViewHolder) {
-            MultiReddit multiReddit = mFavoriteMultiReddits.get(holder.getAdapterPosition() - 1);
+            MultiReddit multiReddit = mFavoriteMultiReddits.get(holder.getBindingAdapterPosition() - 1);
             String name = multiReddit.getDisplayName();
             String iconUrl = multiReddit.getIconUrl();
             if(multiReddit.isFavorite()) {
@@ -220,7 +220,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                             new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                 @Override
                                 public void success() {
-                                    int position = holder.getAdapterPosition() - 1;
+                                    int position = holder.getBindingAdapterPosition() - 1;
                                     if(position >= 0 && mFavoriteMultiReddits.size() > position) {
                                         mFavoriteMultiReddits.get(position).setFavorite(false);
                                     }
@@ -230,7 +230,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                                 @Override
                                 public void failed() {
                                     Toast.makeText(mActivity, R.string.thing_unfavorite_failed, Toast.LENGTH_SHORT).show();
-                                    int position = holder.getAdapterPosition() - 1;
+                                    int position = holder.getBindingAdapterPosition() - 1;
                                     if(position >= 0 && mFavoriteMultiReddits.size() > position) {
                                         mFavoriteMultiReddits.get(position).setFavorite(true);
                                     }
@@ -246,7 +246,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                             new FavoriteMultiReddit.FavoriteMultiRedditListener() {
                                 @Override
                                 public void success() {
-                                    int position = holder.getAdapterPosition() - 1;
+                                    int position = holder.getBindingAdapterPosition() - 1;
                                     if(position >= 0 && mFavoriteMultiReddits.size() > position) {
                                         mFavoriteMultiReddits.get(position).setFavorite(true);
                                     }
@@ -256,7 +256,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
                                 @Override
                                 public void failed() {
                                     Toast.makeText(mActivity, R.string.thing_favorite_failed, Toast.LENGTH_SHORT).show();
-                                    int position = holder.getAdapterPosition() - 1;
+                                    int position = holder.getBindingAdapterPosition() - 1;
                                     if(position >= 0 && mFavoriteMultiReddits.size() > position) {
                                         mFavoriteMultiReddits.get(position).setFavorite(false);
                                     }

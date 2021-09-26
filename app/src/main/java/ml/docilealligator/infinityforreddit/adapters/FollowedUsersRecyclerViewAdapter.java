@@ -106,8 +106,8 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             int offset = (mFavoriteSubscribedUserData != null && mFavoriteSubscribedUserData.size() > 0) ?
                     mFavoriteSubscribedUserData.size() + 2 : 0;
 
-            if (!mSubscribedUserData.get(viewHolder.getAdapterPosition() - offset).getIconUrl().equals("")) {
-                glide.load(mSubscribedUserData.get(viewHolder.getAdapterPosition() - offset).getIconUrl())
+            if (!mSubscribedUserData.get(viewHolder.getBindingAdapterPosition() - offset).getIconUrl().equals("")) {
+                glide.load(mSubscribedUserData.get(viewHolder.getBindingAdapterPosition() - offset).getIconUrl())
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                         .error(glide.load(R.drawable.subreddit_default_icon)
                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
@@ -117,16 +117,16 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                         .into(((UserViewHolder) viewHolder).iconGifImageView);
             }
-            ((UserViewHolder) viewHolder).userNameTextView.setText(mSubscribedUserData.get(viewHolder.getAdapterPosition() - offset).getName());
+            ((UserViewHolder) viewHolder).userNameTextView.setText(mSubscribedUserData.get(viewHolder.getBindingAdapterPosition() - offset).getName());
 
-            if(mSubscribedUserData.get(viewHolder.getAdapterPosition() - offset).isFavorite()) {
+            if(mSubscribedUserData.get(viewHolder.getBindingAdapterPosition() - offset).isFavorite()) {
                 ((UserViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
             } else {
                 ((UserViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
             }
         } else if (viewHolder instanceof FavoriteUserViewHolder) {
-            if (!mFavoriteSubscribedUserData.get(viewHolder.getAdapterPosition() - 1).getIconUrl().equals("")) {
-                glide.load(mFavoriteSubscribedUserData.get(viewHolder.getAdapterPosition() - 1).getIconUrl())
+            if (!mFavoriteSubscribedUserData.get(viewHolder.getBindingAdapterPosition() - 1).getIconUrl().equals("")) {
+                glide.load(mFavoriteSubscribedUserData.get(viewHolder.getBindingAdapterPosition() - 1).getIconUrl())
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                         .error(glide.load(R.drawable.subreddit_default_icon)
                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
@@ -136,9 +136,9 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                         .into(((FavoriteUserViewHolder) viewHolder).iconGifImageView);
             }
-            ((FavoriteUserViewHolder) viewHolder).userNameTextView.setText(mFavoriteSubscribedUserData.get(viewHolder.getAdapterPosition() - 1).getName());
+            ((FavoriteUserViewHolder) viewHolder).userNameTextView.setText(mFavoriteSubscribedUserData.get(viewHolder.getBindingAdapterPosition() - 1).getName());
 
-            if(mFavoriteSubscribedUserData.get(viewHolder.getAdapterPosition() - 1).isFavorite()) {
+            if(mFavoriteSubscribedUserData.get(viewHolder.getBindingAdapterPosition() - 1).isFavorite()) {
                 ((FavoriteUserViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_24dp);
             } else {
                 ((FavoriteUserViewHolder) viewHolder).favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
@@ -205,7 +205,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             userNameTextView.setTextColor(mPrimaryTextColor);
 
             itemView.setOnClickListener(view -> {
-                int position = getAdapterPosition() - 1;
+                int position = getBindingAdapterPosition() - 1;
                 if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
                     Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
                     intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mFavoriteSubscribedUserData.get(position).getName());
@@ -214,7 +214,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             });
 
             favoriteImageView.setOnClickListener(view -> {
-                int position = getAdapterPosition() - 1;
+                int position = getBindingAdapterPosition() - 1;
                 if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
                     if(mFavoriteSubscribedUserData.get(position).isFavorite()) {
                         favoriteImageView.setImageResource(R.drawable.ic_favorite_border_24dp);
@@ -225,7 +225,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                                 new FavoriteThing.FavoriteThingListener() {
                                     @Override
                                     public void success() {
-                                        int position = getAdapterPosition() - 1;
+                                        int position = getBindingAdapterPosition() - 1;
                                         if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
                                             mFavoriteSubscribedUserData.get(position).setFavorite(false);
                                         }
@@ -235,7 +235,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                                     @Override
                                     public void failed() {
                                         Toast.makeText(mContext, R.string.thing_unfavorite_failed, Toast.LENGTH_SHORT).show();
-                                        int position = getAdapterPosition() - 1;
+                                        int position = getBindingAdapterPosition() - 1;
                                         if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
                                             mFavoriteSubscribedUserData.get(position).setFavorite(true);
                                         }
@@ -251,7 +251,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                                 new FavoriteThing.FavoriteThingListener() {
                                     @Override
                                     public void success() {
-                                        int position = getAdapterPosition() - 1;
+                                        int position = getBindingAdapterPosition() - 1;
                                         if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
                                             mFavoriteSubscribedUserData.get(position).setFavorite(true);
                                         }
@@ -261,7 +261,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                                     @Override
                                     public void failed() {
                                         Toast.makeText(mContext, R.string.thing_favorite_failed, Toast.LENGTH_SHORT).show();
-                                        int position = getAdapterPosition() - 1;
+                                        int position = getBindingAdapterPosition() - 1;
                                         if(position >= 0 && mFavoriteSubscribedUserData.size() > position) {
                                             mFavoriteSubscribedUserData.get(position).setFavorite(false);
                                         }
@@ -290,7 +290,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             itemView.setOnClickListener(view -> {
                 int offset = (mFavoriteSubscribedUserData != null && mFavoriteSubscribedUserData.size() > 0) ?
                         mFavoriteSubscribedUserData.size() + 2 : 0;
-                int position = getAdapterPosition() - offset;
+                int position = getBindingAdapterPosition() - offset;
                 if(position >= 0 && mSubscribedUserData.size() > position) {
                     Intent intent = new Intent(mContext, ViewUserDetailActivity.class);
                     intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mSubscribedUserData.get(position).getName());
@@ -301,7 +301,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             favoriteImageView.setOnClickListener(view -> {
                 int offset = (mFavoriteSubscribedUserData != null && mFavoriteSubscribedUserData.size() > 0) ?
                         mFavoriteSubscribedUserData.size() + 2 : 0;
-                int position = getAdapterPosition() - offset;
+                int position = getBindingAdapterPosition() - offset;
 
                 if(position >= 0 && mSubscribedUserData.size() > position) {
                     if(mSubscribedUserData.get(position).isFavorite()) {
@@ -313,7 +313,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                                 new FavoriteThing.FavoriteThingListener() {
                                     @Override
                                     public void success() {
-                                        int position = getAdapterPosition() - offset;
+                                        int position = getBindingAdapterPosition() - offset;
                                         if(position >= 0 && mSubscribedUserData.size() > position) {
                                             mSubscribedUserData.get(position).setFavorite(false);
                                         }
@@ -323,7 +323,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                                     @Override
                                     public void failed() {
                                         Toast.makeText(mContext, R.string.thing_unfavorite_failed, Toast.LENGTH_SHORT).show();
-                                        int position = getAdapterPosition() - offset;
+                                        int position = getBindingAdapterPosition() - offset;
                                         if(position >= 0 && mSubscribedUserData.size() > position) {
                                             mSubscribedUserData.get(position).setFavorite(true);
                                         }
@@ -339,7 +339,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                                 new FavoriteThing.FavoriteThingListener() {
                                     @Override
                                     public void success() {
-                                        int position = getAdapterPosition() - offset;
+                                        int position = getBindingAdapterPosition() - offset;
                                         if(position >= 0 && mSubscribedUserData.size() > position) {
                                             mSubscribedUserData.get(position).setFavorite(true);
                                         }
@@ -349,7 +349,7 @@ public class FollowedUsersRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                                     @Override
                                     public void failed() {
                                         Toast.makeText(mContext, R.string.thing_favorite_failed, Toast.LENGTH_SHORT).show();
-                                        int position = getAdapterPosition() - offset;
+                                        int position = getBindingAdapterPosition() - offset;
                                         if(position >= 0 && mSubscribedUserData.size() > position) {
                                             mSubscribedUserData.get(position).setFavorite(false);
                                         }

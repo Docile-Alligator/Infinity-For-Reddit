@@ -20,7 +20,9 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.ferfalk.simplesearchview.SimpleOnQueryTextListener;
 import com.ferfalk.simplesearchview.SimpleSearchView;
+import com.ferfalk.simplesearchview.SimpleSearchViewListener;
 import com.google.android.material.appbar.AppBarLayout;
 import com.r0adkll.slidr.Slidr;
 
@@ -154,25 +156,10 @@ public class SearchActivity extends BaseActivity {
             simpleSearchView.setHint(getText(R.string.search_only_users_hint));
         }
 
-        simpleSearchView.setOnSearchViewListener(new SimpleSearchView.SearchViewListener() {
-            @Override
-            public void onSearchViewShown() {
-
-            }
-
+        simpleSearchView.setOnSearchViewListener(new SimpleSearchViewListener() {
             @Override
             public void onSearchViewClosed() {
                 finish();
-            }
-
-            @Override
-            public void onSearchViewShownAnimation() {
-
-            }
-
-            @Override
-            public void onSearchViewClosedAnimation() {
-
             }
         });
 
@@ -201,15 +188,15 @@ public class SearchActivity extends BaseActivity {
             finish();
         });
 
-        simpleSearchView.setOnQueryTextListener(new SimpleSearchView.OnQueryTextListener() {
+        simpleSearchView.setOnQueryTextListener(new SimpleOnQueryTextListener() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
+            public boolean onQueryTextSubmit(@NonNull String query) {
                 search(query);
                 return true;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public boolean onQueryTextChange(@NonNull String newText) {
                 if (!newText.isEmpty()) {
                     if (subredditAutocompleteCall != null) {
                         subredditAutocompleteCall.cancel();
@@ -242,11 +229,6 @@ public class SearchActivity extends BaseActivity {
                     });
                     return true;
                 }
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextCleared() {
                 return false;
             }
         });
@@ -384,11 +366,10 @@ public class SearchActivity extends BaseActivity {
     protected void onStart() {
         super.onStart();
         simpleSearchView.showSearch(false);
-        simpleSearchView.getSearchEditText().requestFocus();
+        simpleSearchView.requestFocus();
 
         if (query != null) {
-            simpleSearchView.getSearchEditText().setText(query);
-            simpleSearchView.getSearchEditText().setSelection(query.length());
+            simpleSearchView.setQuery(query, false);
             query = null;
         }
 
@@ -403,13 +384,13 @@ public class SearchActivity extends BaseActivity {
         super.onPause();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
-            imm.hideSoftInputFromWindow(simpleSearchView.getSearchEditText().getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(simpleSearchView.getWindowToken(), 0);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (simpleSearchView.onActivityResult(requestCode, resultCode, data)) {
+        if (data != null && simpleSearchView.onActivityResult(requestCode, resultCode, data)) {
             return;
         }
 

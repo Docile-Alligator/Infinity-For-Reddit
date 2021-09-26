@@ -82,11 +82,11 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
 
     @Override
     public void onBindViewHolder(@NonNull RuleViewHolder holder, int position) {
-        holder.shortNameTextView.setText(rules.get(holder.getAdapterPosition()).getShortName());
-        if (rules.get(holder.getAdapterPosition()).getDescriptionHtml() == null) {
+        holder.shortNameTextView.setText(rules.get(holder.getBindingAdapterPosition()).getShortName());
+        if (rules.get(holder.getBindingAdapterPosition()).getDescriptionHtml() == null) {
             holder.descriptionMarkwonView.setVisibility(View.GONE);
         } else {
-            markwon.setMarkdown(holder.descriptionMarkwonView, rules.get(holder.getAdapterPosition()).getDescriptionHtml());
+            markwon.setMarkdown(holder.descriptionMarkwonView, rules.get(holder.getBindingAdapterPosition()).getDescriptionHtml());
         }
     }
 

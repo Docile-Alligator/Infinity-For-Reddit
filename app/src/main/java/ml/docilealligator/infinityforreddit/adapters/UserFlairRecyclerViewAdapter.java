@@ -43,7 +43,7 @@ public class UserFlairRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof UserFlairViewHolder) {
-            UserFlair userFlair = userFlairs.get(holder.getAdapterPosition());
+            UserFlair userFlair = userFlairs.get(holder.getBindingAdapterPosition());
             if (userFlair.getHtmlText() == null || userFlair.getHtmlText().equals("")) {
                 ((UserFlairViewHolder) holder).userFlairHtmlTextView.setText(userFlair.getText());
             } else {
@@ -77,11 +77,11 @@ public class UserFlairRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
             editUserFlairImageView.setColorFilter(customThemeWrapper.getPrimaryTextColor(), android.graphics.PorterDuff.Mode.SRC_IN);
 
             itemView.setOnClickListener(view -> {
-                itemClickListener.onClick(userFlairs.get(getAdapterPosition()), false);
+                itemClickListener.onClick(userFlairs.get(getBindingAdapterPosition()), false);
             });
 
             editUserFlairImageView.setOnClickListener(view -> {
-                itemClickListener.onClick(userFlairs.get(getAdapterPosition()), true);
+                itemClickListener.onClick(userFlairs.get(getBindingAdapterPosition()), true);
             });
         }
     }

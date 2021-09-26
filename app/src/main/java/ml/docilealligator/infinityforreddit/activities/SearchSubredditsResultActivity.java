@@ -122,11 +122,12 @@ public class SearchSubredditsResultActivity extends BaseActivity implements Acti
             bundle.putString(SubredditListingFragment.EXTRA_ACCOUNT_NAME, mAccountName);
             bundle.putBoolean(SubredditListingFragment.EXTRA_IS_MULTI_SELECTION, getIntent().getBooleanExtra(EXTRA_IS_MULTI_SELECTION, false));
             mFragment.setArguments(bundle);
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_search_subreddits_result_activity, mFragment).commit();
         } else {
             mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
-            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_search_subreddits_result_activity, mFragment).commit();
         }
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.frame_layout_search_subreddits_result_activity, mFragment)
+                .commit();
     }
 
     @Override

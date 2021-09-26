@@ -1,16 +1,14 @@
 package ml.docilealligator.infinityforreddit.services;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -60,16 +58,17 @@ public class MaterialYouService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel serviceChannel = new NotificationChannel(
-                    NotificationUtils.CHANNEL_ID_MATERIAL_YOU,
-                    NotificationUtils.CHANNEL_MATERIAL_YOU,
-                    NotificationManager.IMPORTANCE_LOW
-            );
 
-            NotificationManagerCompat manager = NotificationManagerCompat.from(this);
-            manager.createNotificationChannel(serviceChannel);
-        }
+        NotificationChannelCompat serviceChannel =
+                new NotificationChannelCompat.Builder(
+                        NotificationUtils.CHANNEL_ID_MATERIAL_YOU,
+                        NotificationManagerCompat.IMPORTANCE_LOW)
+                        .setName(NotificationUtils.CHANNEL_MATERIAL_YOU)
+                        .build();
+
+        NotificationManagerCompat manager = NotificationManagerCompat.from(this);
+        manager.createNotificationChannel(serviceChannel);
+
         Notification notification = new NotificationCompat.Builder(this, NotificationUtils.CHANNEL_ID_MATERIAL_YOU)
                 .setContentTitle(getString(R.string.material_you_notification_title))
                 .setContentText(getString(R.string.please_wait))

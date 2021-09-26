@@ -1,10 +1,8 @@
 package ml.docilealligator.infinityforreddit.utils;
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.content.Context;
-import android.os.Build;
 
+import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -40,10 +38,11 @@ public class NotificationUtils {
                                                                Context context, String title, String content,
                                                                String summary, String channelId, String channelName,
                                                                String group, int color) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(channel);
-        }
+        NotificationChannelCompat channel =
+                new NotificationChannelCompat.Builder(channelId, NotificationManagerCompat.IMPORTANCE_DEFAULT)
+                        .setName(channelName)
+                        .build();
+        notificationManager.createNotificationChannel(channel);
 
         return new NotificationCompat.Builder(context.getApplicationContext(), channelId)
                 .setContentTitle(title)
@@ -60,10 +59,11 @@ public class NotificationUtils {
     public static NotificationCompat.Builder buildSummaryNotification(Context context, NotificationManagerCompat notificationManager,
                                                                       String title, String content, String channelId,
                                                                       String channelName, String group, int color) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(channelId, channelName, NotificationManager.IMPORTANCE_DEFAULT);
-            notificationManager.createNotificationChannel(channel);
-        }
+        NotificationChannelCompat channel =
+                new NotificationChannelCompat.Builder(channelId, NotificationManagerCompat.IMPORTANCE_DEFAULT)
+                        .setName(channelName)
+                        .build();
+        notificationManager.createNotificationChannel(channel);
 
         return new NotificationCompat.Builder(context, channelId)
                 .setContentTitle(title)

@@ -1,13 +1,10 @@
 package ml.docilealligator.infinityforreddit.services;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.HandlerThread;
@@ -19,6 +16,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -164,16 +162,15 @@ public class SubmitPostService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel serviceChannel = new NotificationChannel(
-                    NotificationUtils.CHANNEL_SUBMIT_POST,
-                    NotificationUtils.CHANNEL_SUBMIT_POST,
-                    NotificationManager.IMPORTANCE_LOW
-            );
+        NotificationChannelCompat serviceChannel =
+                new NotificationChannelCompat.Builder(
+                        NotificationUtils.CHANNEL_SUBMIT_POST,
+                        NotificationManagerCompat.IMPORTANCE_LOW)
+                .setName(NotificationUtils.CHANNEL_SUBMIT_POST)
+                .build();
 
-            NotificationManagerCompat manager = NotificationManagerCompat.from(this);
-            manager.createNotificationChannel(serviceChannel);
-        }
+        NotificationManagerCompat manager = NotificationManagerCompat.from(this);
+        manager.createNotificationChannel(serviceChannel);
 
         int randomNotificationIdOffset = new Random().nextInt(10000);
         int postType = intent.getIntExtra(EXTRA_POST_TYPE, EXTRA_POST_TEXT_OR_LINK);

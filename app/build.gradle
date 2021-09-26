@@ -29,8 +29,12 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
+    lintOptions {
+        disable 'MissingTranslation'
     }
 
     bundle {
@@ -42,28 +46,28 @@ android {
 
 dependencies {
 /** AndroidX **/
-    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'androidx.biometric:biometric:1.2.0-alpha03'
     implementation 'androidx.browser:browser:1.3.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.0-beta02'
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    def lifecycleVersion = "2.2.0"
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
+    def lifecycleVersion = "2.3.1"
+    implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-process:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-runtime:$lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycleVersion"
-    implementation "androidx.lifecycle:lifecycle-livedata-ktx:$lifecycleVersion"
-    annotationProcessor "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
-    implementation 'androidx.paging:paging-runtime:3.0.1'
-    implementation "androidx.paging:paging-guava:3.0.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycleVersion"
+    def pagingVersion = "3.0.1"
+    implementation "androidx.paging:paging-runtime:$pagingVersion"
+    implementation "androidx.paging:paging-guava:$pagingVersion"
     implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
     def roomVersion = "2.3.0"
     implementation "androidx.room:room-runtime:$roomVersion"
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
+    implementation 'androidx.viewpager2:viewpager2:1.1.0-beta01'
     implementation 'androidx.work:work-runtime:2.5.0'
-    implementation 'com.google.android.material:material:1.3.0-rc01'
-    implementation "androidx.viewpager2:viewpager2:1.1.0-alpha01"
+    implementation 'com.google.android.material:material:1.3.0'
 
 /** ExoPlayer **/
     def exoplayerVersion = "2.10.8"
@@ -80,10 +84,6 @@ dependencies {
 /** Third-party **/
 
 /**** Backend logic ****/
-
-    // Reactive stuff for event and async related
-    implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
 
     // HTTP clients
     def retrofitVersion = "2.9.0"
@@ -109,7 +109,7 @@ dependencies {
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:$eventbusVersion"
 
     // TransactionTooLargeException avoidance
-    implementation 'com.github.livefront:bridge:v1.3.0'
+    implementation 'com.github.livefront:bridge:v2.0.2'
 
     // Bundle-saving without boilerplate
     // NOTE: Deprecated
@@ -119,7 +119,16 @@ dependencies {
 
     // Object to JSON
     // NOTE: Replace with Squareup's Moshi?
-    implementation 'com.google.code.gson:gson:2.8.6'
+    implementation 'com.google.code.gson:gson:2.8.8'
+
+    // Java library for zip files and streams
+    implementation 'net.lingala.zip4j:zip4j:2.9.0'
+
+    // IO functionality
+    implementation 'commons-io:commons-io:2.5'
+
+    // Crash reporting
+    implementation 'com.github.FunkyMuse:Crashy:1.2.0'
 
 
 /**** User Interface (frontend) ****/
@@ -130,11 +139,11 @@ dependencies {
     annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
     implementation 'com.github.santalu:aspect-ratio-imageview:1.0.9'
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.21'
-    def bivVersion = "1.7.0"
-    implementation "com.github.Piasy.BigImageViewer:BigImageViewer:$bivVersion"
-    implementation "com.github.Piasy.BigImageViewer:GlideImageLoader:$bivVersion"
-    implementation "com.github.Piasy.BigImageViewer:GlideImageViewFactory:$bivVersion"
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.23'
+    def bivVersion = "1.8.1"
+    implementation "com.github.piasy:BigImageViewer:$bivVersion"
+    implementation "com.github.piasy:GlideImageLoader:$bivVersion"
+    implementation "com.github.piasy:GlideImageViewFactory:$bivVersion"
 
     // Markdown
     def markwonVersion = "4.6.2"
@@ -148,20 +157,20 @@ dependencies {
     implementation 'me.saket:better-link-movement-method:2.2.0'
 
     // Animations
-    implementation 'com.airbnb.android:lottie:3.4.4'
+    implementation 'com.airbnb.android:lottie:4.1.0'
 
     // Loading ProgressBar
     implementation 'com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE'
 
     // SearchView
-    implementation 'com.github.Ferfalk:SimpleSearchView:0.1.4'
+    implementation 'com.github.Ferfalk:SimpleSearchView:0.2.0'
 
     // Customizable TextView
     implementation 'com.libRG:customtextview:2.4'
 
     // Dismiss gesturing
     implementation 'com.r0adkll:slidableactivity:2.1.0'
-    implementation 'com.thefuntasty.hauler:core:3.1.0'
+    implementation 'app.futured.hauler:hauler:5.0.0'
 
     // Bottom sheet with rounded corners
     implementation 'com.github.Deishelon:RoundedBottomSheet:1.0.1'
@@ -170,21 +179,10 @@ dependencies {
     implementation 'com.nex3z:flow-layout:1.3.3'
 
     // RecyclerView fast scrolling
-    implementation 'me.zhanghai.android.fastscroll:library:1.1.5'
-
-    implementation 'net.lingala.zip4j:zip4j:2.7.0'
-    implementation 'org.apache.commons:commons-io:1.3.2'
-
-    implementation "androidx.startup:startup-runtime:1.0.0"
-    implementation 'com.github.FunkyMuse:Crashy:1.1.0'
-
-    implementation "androidx.lifecycle:lifecycle-process:2.3.1"
-    implementation "androidx.lifecycle:lifecycle-common-java8:2.3.1"
-
-    implementation 'androidx.palette:palette:1.0.0'
+    implementation 'me.zhanghai.android.fastscroll:library:1.1.7'
 
 
 /**** Builds and flavors ****/
     // debugImplementation because LeakCanary should only run in debug builds.
-    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.5'
+    //debugImplementation 'com.squareup.leakcanary:leakcanary-android:x.y'
 }

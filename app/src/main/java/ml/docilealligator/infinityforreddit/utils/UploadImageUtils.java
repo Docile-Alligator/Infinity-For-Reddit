@@ -50,7 +50,7 @@ public class UploadImageUtils {
             image.compress(Bitmap.CompressFormat.JPEG, 100, stream);
             byte[] byteArray = stream.toByteArray();
 
-            RequestBody fileBody = RequestBody.create(MediaType.parse("application/octet-stream"), byteArray);
+            RequestBody fileBody = RequestBody.create(byteArray, MediaType.parse("application/octet-stream"));
             MultipartBody.Part fileToUpload = MultipartBody.Part.createFormData("file", "post_image.jpg", fileBody);
 
             RedditAPI uploadMediaToAWSApi = uploadMediaRetrofit.create(RedditAPI.class);

@@ -35,7 +35,7 @@ public class AcknowledgementRecyclerViewAdapter extends RecyclerView.Adapter<Ack
 
     @Override
     public void onBindViewHolder(@NonNull AcknowledgementViewHolder holder, int position) {
-        Acknowledgement acknowledgement = acknowledgements.get(holder.getAdapterPosition());
+        Acknowledgement acknowledgement = acknowledgements.get(holder.getBindingAdapterPosition());
         if (acknowledgement != null) {
             holder.nameTextView.setText(acknowledgement.getName());
             holder.introductionTextView.setText(acknowledgement.getIntroduction());

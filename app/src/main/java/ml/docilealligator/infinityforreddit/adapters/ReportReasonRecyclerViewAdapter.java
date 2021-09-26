@@ -42,9 +42,9 @@ public class ReportReasonRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         if (holder instanceof ReasonViewHolder) {
             ReportReason reportReason;
             if (position >= generalReasons.size()) {
-                reportReason = rules.get(holder.getAdapterPosition() - generalReasons.size());
+                reportReason = rules.get(holder.getBindingAdapterPosition() - generalReasons.size());
             } else {
-                reportReason = generalReasons.get(holder.getAdapterPosition());
+                reportReason = generalReasons.get(holder.getBindingAdapterPosition());
             }
             ((ReasonViewHolder) holder).reasonTextView.setText(reportReason.getReportReason());
             ((ReasonViewHolder) holder).checkBox.setChecked(reportReason.isSelected());
@@ -119,10 +119,10 @@ public class ReportReasonRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
                     }
                 }
 
-                if (getAdapterPosition() >= generalReasons.size()) {
-                    rules.get(getAdapterPosition() - generalReasons.size()).setSelected(checkBox.isChecked());
+                if (getBindingAdapterPosition() >= generalReasons.size()) {
+                    rules.get(getBindingAdapterPosition() - generalReasons.size()).setSelected(checkBox.isChecked());
                 } else {
-                    generalReasons.get(getAdapterPosition()).setSelected(checkBox.isChecked());
+                    generalReasons.get(getBindingAdapterPosition()).setSelected(checkBox.isChecked());
                 }
             });
 
