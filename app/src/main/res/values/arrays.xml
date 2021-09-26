@@ -375,6 +375,7 @@
         <item>Soomaali</item>
         <item>Español</item>
         <item>Türkçe</item>
+        <item>Українська</item>
         <item>Tiếng Việt</item>
     </string-array>
 
@@ -397,6 +398,7 @@
         <item>so</item>
         <item>es</item>
         <item>tr-rTR</item>
+        <item>uk</item>
         <item>vi</item>
     </string-array>
 
