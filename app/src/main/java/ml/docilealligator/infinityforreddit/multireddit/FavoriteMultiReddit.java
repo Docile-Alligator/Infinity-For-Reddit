@@ -50,4 +50,12 @@ public class FavoriteMultiReddit {
             }
         });
     }
+
+    public static void anonymousFavoriteMultiReddit(Executor executor, Handler handler,
+                                                    RedditDataRoomDatabase redditDataRoomDatabase,
+                                                    MultiReddit multiReddit,
+                                                    FavoriteMultiRedditListener favoriteMultiRedditListener) {
+        InsertMultireddit.insertMultireddit(executor, handler, redditDataRoomDatabase, multiReddit,
+                favoriteMultiRedditListener::success);
+    }
 }
