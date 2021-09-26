@@ -168,7 +168,7 @@ public class CreateMultiRedditActivity extends BaseActivity {
                         });
             } else {
                 CreateMultiReddit.anonymousCreateMultiReddit(mExecutor, new Handler(), mRedditDataRoomDatabase,
-                        "/user/" + mAccountName + "/m/" + nameEditText.getText().toString(),
+                        "/user/-/m/" + nameEditText.getText().toString(),
                         nameEditText.getText().toString(), descriptionEditText.getText().toString(),
                         mSubreddits, new CreateMultiReddit.CreateMultiRedditListener() {
                             @Override
