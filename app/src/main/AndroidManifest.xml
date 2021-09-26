@@ -266,107 +266,35 @@
         <activity android:name=".activities.LinkResolverActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
 
-                <data
-                    android:host="www.reddit.com"
-                    android:scheme="https"
-                    android:pathPattern=".*"/>
-                <data
-                    android:host="reddit.com"
-                    android:scheme="https"
-                    android:pathPattern=".*" />
+                <data android:scheme="https"/>
+                <data android:scheme="http"/>
+
+                <data android:host="www.reddit.com"/>
+                <data android:host="reddit.com"/>
+                <data android:host="v.redd.it"/>
+                <data android:host="amp.reddit.com"/>
+                <data android:host="m.reddit.com"/>
+                <data android:host="old.reddit.com"/>
+                <data android:host="new.reddit.com"/>
+                <data android:host="np.reddit.com"/>
+                <data android:host="reddit.app.link"/>
+                <data android:host="redd.it"/>
+                <data android:host="s.reddit.com"/>
+                <data android:host="click.redditmail.com"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
                 <data
                     android:host="www.google.com"
                     android:scheme="https"
                     android:pathPattern="/amp/s/amp.reddit.com/.*" />
-                <data
-                    android:host="v.redd.it"
-                    android:scheme="https"
-                    android:pathPattern=".*" />
-                <data
-                    android:host="amp.reddit.com"
-                    android:scheme="https"
-                    android:pathPattern=".*" />
-                <data
-                    android:host="m.reddit.com"
-                    android:scheme="https"
-                    android:pathPattern=".*" />
-                <data
-                    android:host="old.reddit.com"
-                    android:scheme="https"
-                    android:pathPattern=".*" />
-                <data
-                    android:host="new.reddit.com"
-                    android:scheme="https"
-                    android:pathPattern=".*" />
-                <data
-                    android:host="np.reddit.com"
-                    android:scheme="https"
-                    android:pathPattern=".*" />
-                <data
-                    android:host="reddit.app.link"
-                    android:scheme="https"
-                    android:pathPattern=".*" />
-                <data
-                    android:host="redd.it"
-                    android:scheme="https"
-                    android:pathPattern=".*" />
-                <data
-                    android:host="s.reddit.com"
-                    android:scheme="https"
-                    android:pathPattern=".*" />
-                <data
-                    android:host="click.redditmail.com"
-                    android:scheme="https"
-                    android:pathPattern=".*" />
-                <data
-                    android:host="www.reddit.com"
-                    android:scheme="http"
-                    android:pathPattern=".*" />
-                <data
-                    android:host="reddit.com"
-                    android:scheme="http"
-                    android:pathPattern=".*" />
-                <data
-                    android:host="amp.reddit.com"
-                    android:scheme="http"
-                    android:pathPattern=".*" />
-                <data
-                    android:host="m.reddit.com"
-                    android:scheme="http"
-                    android:pathPattern=".*" />
-                <data
-                    android:host="old.reddit.com"
-                    android:scheme="http"
-                    android:pathPattern=".*" />
-                <data
-                    android:host="new.reddit.com"
-                    android:scheme="http"
-                    android:pathPattern=".*" />
-                <data
-                    android:host="np.reddit.com"
-                    android:scheme="http"
-                    android:pathPattern=".*" />
-                <data
-                    android:host="reddit.app.link"
-                    android:scheme="http"
-                    android:pathPattern=".*" />
-                <data
-                    android:host="redd.it"
-                    android:scheme="http"
-                    android:pathPattern=".*" />
-                <data
-                    android:host="s.reddit.com"
-                    android:scheme="http"
-                    android:pathPattern=".*" />
-                <data
-                    android:host="click.redditmail.com"
-                    android:scheme="http"
-                    android:pathPattern=".*" />
             </intent-filter>
+
         </activity>
         <activity
             android:name=".activities.SearchActivity"
