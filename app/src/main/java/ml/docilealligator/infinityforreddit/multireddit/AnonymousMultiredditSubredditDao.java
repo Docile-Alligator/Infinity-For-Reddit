@@ -13,6 +13,9 @@ public interface AnonymousMultiredditSubredditDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(AnonymousMultiredditSubreddit anonymousMultiredditSubreddit);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAll(List<AnonymousMultiredditSubreddit> anonymousMultiredditSubreddits);
+
     @Query("SELECT * FROM anonymous_multireddit_subreddits WHERE path = :path ORDER BY subreddit_name COLLATE NOCASE ASC")
     LiveData<List<AnonymousMultiredditSubreddit>> getAllAnonymousMultiRedditSubreddits(String path);
 }

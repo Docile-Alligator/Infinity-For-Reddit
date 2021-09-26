@@ -347,7 +347,8 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static final Migration MIGRATION_20_21 = new Migration(20, 21) {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
-            database.execSQL("CREATE TABLE anonymous_multireddit_subreddits (path TEXT NOT NULL, username TEXT NOT NULL, subreddit_name TEXT NOT NULL, " +
+            database.execSQL("CREATE TABLE anonymous_multireddit_subreddits (path TEXT NOT NULL, " +
+                    "username TEXT NOT NULL, subreddit_name TEXT NOT NULL, " +
                     "PRIMARY KEY(path, username, subreddit_name), FOREIGN KEY(path) REFERENCES multi_reddits(path) ON DELETE CASCADE ON UPDATE CASCADE, " +
                     "FOREIGN KEY(username) REFERENCES multi_reddits(username) ON DELETE CASCADE ON UPDATE CASCADE)");
         }

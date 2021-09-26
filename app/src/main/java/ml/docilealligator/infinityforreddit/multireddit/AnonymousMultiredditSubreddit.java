@@ -14,7 +14,7 @@ public class AnonymousMultiredditSubreddit {
     private String path;
     @NonNull
     @ColumnInfo(name = "username")
-    private String username = "-";
+    public String username = "-";
     @NonNull
     @ColumnInfo(name = "subreddit_name")
     private String subredditName;
@@ -31,15 +31,6 @@ public class AnonymousMultiredditSubreddit {
 
     public void setPath(@NonNull String path) {
         this.path = path;
-    }
-
-    @NonNull
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(@NonNull String username) {
-        this.username = username;
     }
 
     @NonNull

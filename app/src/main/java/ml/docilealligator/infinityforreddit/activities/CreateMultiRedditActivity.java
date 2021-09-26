@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -11,7 +12,6 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +23,7 @@ import com.google.android.material.snackbar.Snackbar;
 import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -77,6 +78,8 @@ public class CreateMultiRedditActivity extends BaseActivity {
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private String mAccessToken;
     private String mAccountName;
     private ArrayList<String> mSubreddits;
@@ -106,13 +109,7 @@ public class CreateMultiRedditActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
-
-        if (mAccessToken == null) {
-            Toast.makeText(this, R.string.logged_out, Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, "-");
 
         if (savedInstanceState != null) {
             mSubreddits = savedInstanceState.getStringArrayList(SELECTED_SUBREDDITS_STATE);
@@ -139,20 +136,17 @@ public class CreateMultiRedditActivity extends BaseActivity {
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            finish();
+            return true;
+        } else if (itemId == R.id.action_save_create_multi_reddit_activity) {
+            if (nameEditText.getText() == null || nameEditText.getText().toString().equals("")) {
+                Snackbar.make(coordinatorLayout, R.string.no_multi_reddit_name, Snackbar.LENGTH_SHORT).show();
                 return true;
-            case R.id.action_save_create_multi_reddit_activity:
-                if (mAccountName == null || mAccessToken == null) {
-                    Snackbar.make(coordinatorLayout, R.string.something_went_wrong, Snackbar.LENGTH_SHORT).show();
-                    return true;
-                }
-                if (nameEditText.getText() == null || nameEditText.getText().toString().equals("")) {
-                    Snackbar.make(coordinatorLayout, R.string.no_multi_reddit_name, Snackbar.LENGTH_SHORT).show();
-                    return true;
-                }
+            }
 
+            if (mAccessToken != null) {
                 String jsonModel = new MultiRedditJSONModel(nameEditText.getText().toString(), descriptionEditText.getText().toString(),
                         visibilitySwitch.isChecked(), mSubreddits).createJSONModel();
                 CreateMultiReddit.createMultiReddit(mOauthRetrofit, mRedditDataRoomDatabase, mAccessToken,
@@ -172,6 +166,22 @@ public class CreateMultiRedditActivity extends BaseActivity {
                                 }
                             }
                         });
+            } else {
+                CreateMultiReddit.anonymousCreateMultiReddit(mExecutor, new Handler(), mRedditDataRoomDatabase,
+                        "/user/" + mAccountName + "/m/" + nameEditText.getText().toString(),
+                        nameEditText.getText().toString(), descriptionEditText.getText().toString(),
+                        mSubreddits, new CreateMultiReddit.CreateMultiRedditListener() {
+                            @Override
+                            public void success() {
+                                finish();
+                            }
+
+                            @Override
+                            public void failed(int errorType) {
+                                //Will not be called
+                            }
+                        });
+            }
         }
         return false;
     }
