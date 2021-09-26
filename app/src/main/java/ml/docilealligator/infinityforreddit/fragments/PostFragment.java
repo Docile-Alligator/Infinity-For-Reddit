@@ -762,6 +762,66 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     TransitionManager.beginDelayedTransition(mPostRecyclerView, new AutoTransition());
                 }
             });
+        } else if (postType == PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT) {
+            multiRedditPath = getArguments().getString(EXTRA_NAME);
+            if (savedInstanceState == null) {
+                postFragmentId += multiRedditPath.hashCode();
+            }
+
+            usage = PostFilterUsage.HOME_TYPE;
+            nameOfUsage = PostFilterUsage.NO_USAGE;
+
+            String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE + multiRedditPath, SortType.Type.BEST.name());
+            if (sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
+                String sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_MULTI_REDDIT_POST_BASE + multiRedditPath, SortType.Time.ALL.name());
+                sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
+            } else {
+                sortType = new SortType(SortType.Type.valueOf(sort));
+            }
+
+            postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, defaultPostLayout);
+
+            mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
+                    mRedgifsRetrofit, mCustomThemeWrapper, locale,
+                    windowWidth, accessToken, accountName, postType, postLayout, true,
+                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
+                    mExoCreator, new PostRecyclerViewAdapter.Callback() {
+                @Override
+                public void typeChipClicked(int filter) {
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void flairChipClicked(String flair) {
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_CONTAIN_FLAIR, flair);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void nsfwChipClicked() {
+                    Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, Post.NSFW_TYPE);
+                    startActivity(intent);
+                }
+
+                @Override
+                public void currentlyBindItem(int position) {
+                    if (maxPosition < position) {
+                        maxPosition = position;
+                    }
+                }
+
+                @Override
+                public void delayTransition() {
+                    TransitionManager.beginDelayedTransition(mPostRecyclerView, new AutoTransition());
+                }
+            });
         } else {
             usage = PostFilterUsage.HOME_TYPE;
             nameOfUsage = PostFilterUsage.NO_USAGE;
@@ -901,6 +961,24 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     } else {
                         initializeAndBindPostViewModelForAnonymous(concatenatedSubredditNames);
                     }
+                } else if (postType == PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT) {
+                    if (concatenatedSubredditNames == null) {
+                        FetchPostFilterReadPostsAndConcatenatedSubredditNames.fetchPostFilterAndConcatenatedSubredditNames(mRedditDataRoomDatabase, mExecutor, new Handler(), multiRedditPath, usage, nameOfUsage,
+                                (postFilter, concatenatedSubredditNames) -> {
+                                    if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
+                                        this.postFilter = postFilter;
+                                        postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_BASE, false);
+                                        this.concatenatedSubredditNames = concatenatedSubredditNames;
+                                        if (concatenatedSubredditNames == null) {
+                                            showErrorView(R.string.anonymous_multireddit_no_subreddit);
+                                        } else {
+                                            initializeAndBindPostViewModelForAnonymous(concatenatedSubredditNames);
+                                        }
+                                    }
+                                });
+                    } else {
+                        initializeAndBindPostViewModelForAnonymous(concatenatedSubredditNames);
+                    }
                 } else {
                     FetchPostFilterReadPostsAndConcatenatedSubredditNames.fetchPostFilterAndReadPosts(mRedditDataRoomDatabase, mExecutor,
                             new Handler(), null, usage, nameOfUsage, (postFilter, readPostList) -> {
@@ -922,6 +1000,24 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                                         this.concatenatedSubredditNames = concatenatedSubredditNames;
                                         if (concatenatedSubredditNames == null) {
                                             showErrorView(R.string.anonymous_front_page_no_subscriptions);
+                                        } else {
+                                            initializeAndBindPostViewModelForAnonymous(concatenatedSubredditNames);
+                                        }
+                                    }
+                                });
+                    } else {
+                        initializeAndBindPostViewModelForAnonymous(concatenatedSubredditNames);
+                    }
+                } else if (postType == PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT) {
+                    if (concatenatedSubredditNames == null) {
+                        FetchPostFilterReadPostsAndConcatenatedSubredditNames.fetchPostFilterAndConcatenatedSubredditNames(mRedditDataRoomDatabase, mExecutor, new Handler(), multiRedditPath, usage, nameOfUsage,
+                                (postFilter, concatenatedSubredditNames) -> {
+                                    if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
+                                        this.postFilter = postFilter;
+                                        postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_BASE, false);
+                                        this.concatenatedSubredditNames = concatenatedSubredditNames;
+                                        if (concatenatedSubredditNames == null) {
+                                            showErrorView(R.string.anonymous_multireddit_no_subreddit);
                                         } else {
                                             initializeAndBindPostViewModelForAnonymous(concatenatedSubredditNames);
                                         }

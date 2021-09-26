@@ -1102,6 +1102,7 @@
     <string name="vote">Vote</string>
 
     <string name="anonymous_front_page_no_subscriptions">Start by joining a subreddit!</string>
+    <string name="anonymous_multireddit_no_subreddit">This multireddit does not have a subreddit!</string>
 
     <string name="backup_settings_success">Successfully exported settings to the destination directory. The password of the generated zip file is 123321. Please don\'t modify the zip file.</string>
     <string name="create_zip_in_destination_directory_failed">Could not create backup zip in the destination directory</string>

@@ -20,7 +20,6 @@ import java.util.concurrent.Executor;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
-import ml.docilealligator.infinityforreddit.readpost.ReadPost;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.HttpException;
@@ -34,6 +33,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     public static final int TYPE_SEARCH = 3;
     public static final int TYPE_MULTI_REDDIT = 4;
     public static final int TYPE_ANONYMOUS_FRONT_PAGE = 5;
+    public static final int TYPE_ANONYMOUS_MULTIREDDIT = 6;
 
     public static final String USER_WHERE_SUBMITTED = "submitted";
     public static final String USER_WHERE_UPVOTED = "upvoted";
