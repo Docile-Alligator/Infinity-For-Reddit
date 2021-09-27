@@ -44,6 +44,7 @@ import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.asynctasks.DeleteMultiredditInDatabase;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertMultireddit;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubscribedThings;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -153,7 +154,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         setToolbarGoToTop(toolbar);
 
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, "-");
 
         if (savedInstanceState != null) {
             mInsertSuccess = savedInstanceState.getBoolean(INSERT_SUBSCRIBED_SUBREDDIT_STATE);
@@ -242,7 +243,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     }
 
     public void loadSubscriptions(boolean forceLoad) {
-        if (!(!forceLoad && mInsertSuccess)) {
+        if (mAccessToken != null && !(!forceLoad && mInsertSuccess)) {
             FetchSubscribedThing.fetchSubscribedThing(mOauthRetrofit, mAccessToken, mAccountName, null,
                     new ArrayList<>(), new ArrayList<>(),
                     new ArrayList<>(),
@@ -293,22 +294,24 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     }
 
     private void loadMultiReddits() {
-        FetchMyMultiReddits.fetchMyMultiReddits(mOauthRetrofit, mAccessToken, new FetchMyMultiReddits.FetchMyMultiRedditsListener() {
-            @Override
-            public void success(ArrayList<MultiReddit> multiReddits) {
-                InsertMultireddit.insertMultireddit(mExecutor, new Handler(), mRedditDataRoomDatabase, multiReddits, mAccountName, () -> {
-                    mInsertMultiredditSuccess = true;
-                    sectionsPagerAdapter.stopMultiRedditRefreshProgressbar();
-                });
-            }
+        if (mAccessToken != null) {
+            FetchMyMultiReddits.fetchMyMultiReddits(mOauthRetrofit, mAccessToken, new FetchMyMultiReddits.FetchMyMultiRedditsListener() {
+                @Override
+                public void success(ArrayList<MultiReddit> multiReddits) {
+                    InsertMultireddit.insertMultireddit(mExecutor, new Handler(), mRedditDataRoomDatabase, multiReddits, mAccountName, () -> {
+                        mInsertMultiredditSuccess = true;
+                        sectionsPagerAdapter.stopMultiRedditRefreshProgressbar();
+                    });
+                }
 
-            @Override
-            public void failed() {
-                mInsertMultiredditSuccess = false;
-                sectionsPagerAdapter.stopMultiRedditRefreshProgressbar();
-                Toast.makeText(SubscribedThingListingActivity.this, R.string.error_loading_multi_reddit_list, Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public void failed() {
+                    mInsertMultiredditSuccess = false;
+                    sectionsPagerAdapter.stopMultiRedditRefreshProgressbar();
+                    Toast.makeText(SubscribedThingListingActivity.this, R.string.error_loading_multi_reddit_list, Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
     }
 
     public void deleteMultiReddit(MultiReddit multiReddit) {
@@ -316,21 +319,29 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                 .setTitle(R.string.delete)
                 .setMessage(R.string.delete_multi_reddit_dialog_message)
                 .setPositiveButton(R.string.delete, (dialogInterface, i)
-                        -> DeleteMultiReddit.deleteMultiReddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase,
-                        mAccessToken, mAccountName, multiReddit.getPath(), new DeleteMultiReddit.DeleteMultiRedditListener() {
-                            @Override
-                            public void success() {
-                                Toast.makeText(SubscribedThingListingActivity.this,
-                                        R.string.delete_multi_reddit_success, Toast.LENGTH_SHORT).show();
-                                loadMultiReddits();
-                            }
+                        -> {
+                    if (mAccessToken == null) {
+                        DeleteMultiredditInDatabase.deleteMultiredditInDatabase(mExecutor, new Handler(), mRedditDataRoomDatabase, mAccountName, multiReddit.getPath(),
+                                () -> Toast.makeText(SubscribedThingListingActivity.this,
+                                        R.string.delete_multi_reddit_success, Toast.LENGTH_SHORT).show());
+                    } else {
+                        DeleteMultiReddit.deleteMultiReddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase,
+                                mAccessToken, mAccountName, multiReddit.getPath(), new DeleteMultiReddit.DeleteMultiRedditListener() {
+                                    @Override
+                                    public void success() {
+                                        Toast.makeText(SubscribedThingListingActivity.this,
+                                                R.string.delete_multi_reddit_success, Toast.LENGTH_SHORT).show();
+                                        loadMultiReddits();
+                                    }
 
-                            @Override
-                            public void failed() {
-                                Toast.makeText(SubscribedThingListingActivity.this,
-                                        R.string.delete_multi_reddit_failed, Toast.LENGTH_SHORT).show();
-                            }
-                        }))
+                                    @Override
+                                    public void failed() {
+                                        Toast.makeText(SubscribedThingListingActivity.this,
+                                                R.string.delete_multi_reddit_failed, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
+                })
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }

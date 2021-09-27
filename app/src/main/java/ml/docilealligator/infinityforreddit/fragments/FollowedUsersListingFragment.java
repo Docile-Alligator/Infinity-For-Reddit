@@ -109,11 +109,14 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
 
         mGlide = Glide.with(this);
 
+        String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
+        if (accessToken == null) {
+            mSwipeRefreshLayout.setEnabled(false);
+        }
         mLinearLayoutManager = new LinearLayoutManagerBugFixed(mActivity);
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         FollowedUsersRecyclerViewAdapter adapter = new FollowedUsersRecyclerViewAdapter(mActivity,
-                mExecutor, mOauthRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper,
-                getArguments().getString(EXTRA_ACCESS_TOKEN));
+                mExecutor, mOauthRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, accessToken);
         mRecyclerView.setAdapter(adapter);
         new FastScrollerBuilder(mRecyclerView).build();
 

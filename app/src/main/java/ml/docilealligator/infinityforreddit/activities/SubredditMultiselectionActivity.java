@@ -131,7 +131,7 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
         mSwipeRefreshLayout.setEnabled(false);
 
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, "-");
-        
+
         bindView();
     }
 

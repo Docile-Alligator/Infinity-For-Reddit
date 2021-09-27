@@ -112,6 +112,10 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         boolean isGettingMultiredditInfo = getArguments().getBoolean(EXTRA_IS_GETTING_MULTIREDDIT_INFO, false);
 
+        if (accessToken == null) {
+            mSwipeRefreshLayout.setEnabled(false);
+        }
+
         mGlide = Glide.with(this);
 
         mLinearLayoutManager = new LinearLayoutManagerBugFixed(mActivity);
