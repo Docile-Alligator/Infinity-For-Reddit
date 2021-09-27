@@ -1142,6 +1142,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     }
 
     private int getNColumns(Resources resources) {
+        final boolean foldEnabled = mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_FOLD_SUPPORT, false);
         if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
             switch (postLayout) {
                 case SharedPreferencesUtils.POST_LAYOUT_CARD_2:
@@ -1152,7 +1153,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT_GALLERY_LAYOUT, "2"));
                 default:
                     if (getResources().getBoolean(R.bool.isTablet)) {
-                        return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT, "2"));
+                        if (foldEnabled) {
+                            return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT_UNFOLDED, "2"));
+                        } else {
+                            return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT, "2"));
+                        }
                     }
                     return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT, "1"));
             }
@@ -1165,6 +1170,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
                     return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE_GALLERY_LAYOUT, "2"));
                 default:
+                    if (getResources().getBoolean(R.bool.isTablet) && foldEnabled) {
+                        return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE_UNFOLDED, "2"));
+                    }
                     return Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE, "2"));
             }
         }

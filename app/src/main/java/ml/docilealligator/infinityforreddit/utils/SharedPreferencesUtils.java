@@ -82,6 +82,8 @@ public class SharedPreferencesUtils {
     public static final String SHOW_THUMBNAIL_ON_THE_LEFT_IN_COMPACT_LAYOUT = "show_thumbnail_on_the_left_in_compact_layout";
     public static final String NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT = "number_of_columns_in_post_feed_portrait";
     public static final String NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE = "number_of_columns_in_post_feed_landscape";
+    public static final String NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT_UNFOLDED = "number_of_columns_in_post_feed_portrait_unfolded";
+    public static final String NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE_UNFOLDED = "number_of_columns_in_post_feed_landscape_unfolded";
     public static final String NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT_COMPACT_LAYOUT = "number_of_columns_in_post_feed_portrait_compact_layout";
     public static final String NUMBER_OF_COLUMNS_IN_POST_FEED_LANDSCAPE_COMPACT_LAYOUT = "number_of_columns_in_post_feed_landscape_compact_layout";
     public static final String NUMBER_OF_COLUMNS_IN_POST_FEED_PORTRAIT_GALLERY_LAYOUT = "number_of_columns_in_post_feed_portrait_gallery_layout";
@@ -186,6 +188,7 @@ public class SharedPreferencesUtils {
     public static final String DEFAULT_LINK_POST_LAYOUT_KEY = "default_link_post_layout";
     public static final String USE_BOTTOM_TOOLBAR_IN_MEDIA_VIEWER = "use_bottom_toolbar_in_media_viewer";
     public static final String LOCK_SCREEN_ANIMATION = "lock_screen_animation";
+    public static final String ENABLE_FOLD_SUPPORT = "enable_fold_support";
 
     public static final String DEFAULT_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit_preferences";
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";
