@@ -89,6 +89,7 @@
     <string name="action_delete_logs">Delete Logs</string>
     <string name="action_share_rpan_link">Share RPAN Link</string>
     <string name="action_share_post_link">Share Post Link</string>
+    <string name="action_go_to_wiki">Go to Wiki</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -408,6 +409,8 @@
     <string name="settings_number_of_columns_in_post_feed_title">The Number of Columns in Post Feed</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">Portrait</string>
     <string name="settings_number_of_columns_in_post_feed_landscape_title">Landscape</string>
+    <string name="settings_number_of_columns_in_post_feed_unfolded_portrait_title">Portrait (Unfolded)</string>
+    <string name="settings_number_of_columns_in_post_feed_unfolded_landscape_title">Landscape (Unfolded)</string>
     <string name="settings_swap_tap_and_long_title">Swap Tap and Long Press in Comments</string>
     <string name="settings_swipe_to_go_back_title">Swipe Right to Go Back</string>
     <string name="settings_swipe_to_go_back_summary">Does Not Apply to All Pages</string>
@@ -600,6 +603,7 @@
     <string name="settings_app_lock_title">App Lock</string>
     <string name="settings_app_lock_summary">Require authentication before using the app</string>
     <string name="settings_app_lock_timeout_title">App Lock Timeout</string>
+    <string name="settings_enable_fold_support">Enable folding phone support</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -1043,6 +1047,7 @@
     <string name="go_to_subreddit">Go to Subreddit</string>
     <string name="go_to_user">Go to User</string>
     <string name="go_to_thing_hint">Name</string>
+    <string name="go_to_top">Go To Top</string>
     <string name="random">Random</string>
     <string name="random_subreddit">Random Subreddit</string>
     <string name="random_nsfw_subreddit">Random NSFW Subreddit</string>
@@ -1191,8 +1196,5 @@
     <string name="app_lock_timeout_6_hours">6 hours</string>
     <string name="app_lock_timeout_12_hours">12 hours</string>
     <string name="app_lock_timeout_24_hours">24 hours</string>
-
-    <string name="go_to_top">Go To Top</string>
-    <string name="action_go_to_wiki">Go to Wiki</string>
 
 </resources>
