@@ -603,6 +603,7 @@
     <string name="settings_app_lock_title">App Lock</string>
     <string name="settings_app_lock_summary">Require authentication before using the app</string>
     <string name="settings_app_lock_timeout_title">App Lock Timeout</string>
+    <string name="settings_enable_fold_support">Enable folding phone support</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

@@ -8,7 +8,7 @@
     <SwitchPreference
         app:defaultValue="false"
         app:key="enable_fold_support"
-        app:title="Enable folding phone support" />
+        app:title="@string/settings_enable_fold_support" />
 
     <PreferenceCategory
         app:title="@string/post_layout_card" />
