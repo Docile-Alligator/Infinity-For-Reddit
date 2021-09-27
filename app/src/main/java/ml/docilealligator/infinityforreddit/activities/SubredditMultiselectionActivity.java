@@ -12,7 +12,6 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -81,7 +80,6 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     public SubscribedSubredditViewModel mSubscribedSubredditViewModel;
-    private String mAccessToken;
     private String mAccountName;
     private LinearLayoutManagerBugFixed mLinearLayoutManager;
     private SubredditMultiselectionRecyclerViewAdapter mAdapter;
@@ -132,12 +130,8 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
 
         mSwipeRefreshLayout.setEnabled(false);
 
-        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
-        if (mAccessToken == null) {
-            Toast.makeText(this, R.string.logged_out, Toast.LENGTH_SHORT).show();
-            finish();
-        }
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, "-");
+        
         bindView();
     }
 
