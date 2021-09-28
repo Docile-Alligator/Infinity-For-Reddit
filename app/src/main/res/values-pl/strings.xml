@@ -484,7 +484,6 @@ Nie można zsynchronizować subskrypcji"</string>
     <string name="create_multi_reddit_failed">"Nie można stworzyć tego multireddita"</string>
     <string name="duplicate_multi_reddit">"Ten multireddit już istnieje"</string>
     <string name="edit_multi_reddit_failed">"Nie można edytować tego multireddita"</string>
-    <string name="logged_out">"Jesteś wylogowany"</string>
     <string name="delete_multi_reddit_success">"Usunięto pomyślnie"</string>
     <string name="delete_multi_reddit_failed">"Nie udało się usunąć"</string>
     <string name="delete_multi_reddit_dialog_message">"Jesteś pewny?"</string>

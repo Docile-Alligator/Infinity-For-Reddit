@@ -483,7 +483,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_multi_reddit_failed">"Nem lehet létrehozni ezt a multiredditet"</string>
     <string name="duplicate_multi_reddit">"Ez a multireddit már létezik"</string>
     <string name="edit_multi_reddit_failed">"Nem lehet szerkeszteni ezt a multiredditet"</string>
-    <string name="logged_out">"Kijelentkeztél"</string>
     <string name="delete_multi_reddit_success">"Törlés sikeres"</string>
     <string name="delete_multi_reddit_failed">"Törlés nem sikerült"</string>
     <string name="delete_multi_reddit_dialog_message">"Biztos vagy benne?"</string>

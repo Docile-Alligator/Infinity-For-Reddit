@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -13,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +23,8 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
 import com.r0adkll.slidr.Slidr;
+
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -84,6 +86,8 @@ public class EditMultiRedditActivity extends BaseActivity {
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
     private String mAccessToken;
     private String mAccountName;
     private MultiReddit multiReddit;
@@ -114,12 +118,7 @@ public class EditMultiRedditActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
-
-        if (mAccessToken == null) {
-            Toast.makeText(this, R.string.logged_out, Toast.LENGTH_SHORT).show();
-            finish();
-        }
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, "-");
 
         if (savedInstanceState != null) {
             multiReddit = savedInstanceState.getParcelable(MULTI_REDDIT_STATE);
@@ -133,22 +132,41 @@ public class EditMultiRedditActivity extends BaseActivity {
 
     private void bindView() {
         if (multiReddit == null) {
-            FetchMultiRedditInfo.fetchMultiRedditInfo(mRetrofit, mAccessToken, multipath, new FetchMultiRedditInfo.FetchMultiRedditInfoListener() {
-                @Override
-                public void success(MultiReddit multiReddit) {
-                    EditMultiRedditActivity.this.multiReddit = multiReddit;
-                    progressBar.setVisibility(View.GONE);
-                    linearLayout.setVisibility(View.VISIBLE);
-                    nameEditText.setText(multiReddit.getDisplayName());
-                    descriptionEditText.setText(multiReddit.getDescription());
-                    visibilitySwitch.setChecked(!multiReddit.getVisibility().equals("public"));
-                }
+            if (mAccessToken == null) {
+                FetchMultiRedditInfo.anonymousFetchMultiRedditInfo(mExecutor, new Handler(),
+                        mRedditDataRoomDatabase, multipath, new FetchMultiRedditInfo.FetchMultiRedditInfoListener() {
+                            @Override
+                            public void success(MultiReddit multiReddit) {
+                                EditMultiRedditActivity.this.multiReddit = multiReddit;
+                                progressBar.setVisibility(View.GONE);
+                                linearLayout.setVisibility(View.VISIBLE);
+                                nameEditText.setText(multiReddit.getDisplayName());
+                                descriptionEditText.setText(multiReddit.getDescription());
+                            }
 
-                @Override
-                public void failed() {
-                    Snackbar.make(coordinatorLayout, R.string.cannot_fetch_multireddit, Snackbar.LENGTH_SHORT).show();
-                }
-            });
+                            @Override
+                            public void failed() {
+                                //Will not be called
+                            }
+                        });
+            } else {
+                FetchMultiRedditInfo.fetchMultiRedditInfo(mRetrofit, mAccessToken, multipath, new FetchMultiRedditInfo.FetchMultiRedditInfoListener() {
+                    @Override
+                    public void success(MultiReddit multiReddit) {
+                        EditMultiRedditActivity.this.multiReddit = multiReddit;
+                        progressBar.setVisibility(View.GONE);
+                        linearLayout.setVisibility(View.VISIBLE);
+                        nameEditText.setText(multiReddit.getDisplayName());
+                        descriptionEditText.setText(multiReddit.getDescription());
+                        visibilitySwitch.setChecked(!multiReddit.getVisibility().equals("public"));
+                    }
+
+                    @Override
+                    public void failed() {
+                        Snackbar.make(coordinatorLayout, R.string.cannot_fetch_multireddit, Snackbar.LENGTH_SHORT).show();
+                    }
+                });
+            }
         } else {
             progressBar.setVisibility(View.GONE);
             linearLayout.setVisibility(View.VISIBLE);
@@ -180,29 +198,41 @@ public class EditMultiRedditActivity extends BaseActivity {
             finish();
             return true;
         } else if (itemId == R.id.action_save_edit_multi_reddit_activity) {
-            if (mAccountName == null || mAccessToken == null) {
-                Snackbar.make(coordinatorLayout, R.string.something_went_wrong, Snackbar.LENGTH_SHORT).show();
-                return true;
-            }
             if (nameEditText.getText() == null || nameEditText.getText().toString().equals("")) {
                 Snackbar.make(coordinatorLayout, R.string.no_multi_reddit_name, Snackbar.LENGTH_SHORT).show();
                 return true;
             }
 
-            String jsonModel = new MultiRedditJSONModel(nameEditText.getText().toString(), descriptionEditText.getText().toString(),
-                    visibilitySwitch.isChecked(), multiReddit.getSubreddits()).createJSONModel();
-            EditMultiReddit.editMultiReddit(mRetrofit, mAccessToken, multiReddit.getPath(),
-                    jsonModel, new EditMultiReddit.EditMultiRedditListener() {
-                        @Override
-                        public void success() {
-                            finish();
-                        }
+            if (mAccessToken == null) {
+                EditMultiReddit.anonymousEditMultiReddit(mExecutor, new Handler(), mRedditDataRoomDatabase,
+                        multiReddit, new EditMultiReddit.EditMultiRedditListener() {
+                            @Override
+                            public void success() {
+                                finish();
+                            }
 
-                        @Override
-                        public void failed() {
-                            Snackbar.make(coordinatorLayout, R.string.edit_multi_reddit_failed, Snackbar.LENGTH_SHORT).show();
-                        }
-                    });
+                            @Override
+                            public void failed() {
+                                //Will not be called
+                            }
+                        });
+            } else {
+                String jsonModel = new MultiRedditJSONModel(nameEditText.getText().toString(), descriptionEditText.getText().toString(),
+                        visibilitySwitch.isChecked(), multiReddit.getSubreddits()).createJSONModel();
+                EditMultiReddit.editMultiReddit(mRetrofit, mAccessToken, multiReddit.getPath(),
+                        jsonModel, new EditMultiReddit.EditMultiRedditListener() {
+                            @Override
+                            public void success() {
+                                finish();
+                            }
+
+                            @Override
+                            public void failed() {
+                                Snackbar.make(coordinatorLayout, R.string.edit_multi_reddit_failed, Snackbar.LENGTH_SHORT).show();
+                            }
+                        });
+            }
+            return true;
         }
         return false;
     }

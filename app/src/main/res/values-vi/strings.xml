@@ -486,7 +486,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_multi_reddit_failed">"Không thể tạo multireddit này"</string>
     <string name="duplicate_multi_reddit">"Multireddit này đã tồn tại"</string>
     <string name="edit_multi_reddit_failed">"Không thể chỉnh sửa multireddit này"</string>
-    <string name="logged_out">"Bạn đã đăng xuất"</string>
     <string name="delete_multi_reddit_success">"Xoá thành công"</string>
     <string name="delete_multi_reddit_failed">"Xoá thất bại"</string>
     <string name="delete_multi_reddit_dialog_message">"Bạn có chắc không?"</string>

@@ -696,7 +696,6 @@
     <string name="create_multi_reddit_failed">Не можливо створити цей мультиредит</string>
     <string name="duplicate_multi_reddit">Такий мультиредит уже існує</string>
     <string name="edit_multi_reddit_failed">Не можливо змінити цей мультиредит</string>
-    <string name="logged_out">You are logged out</string>
     <string name="delete_multi_reddit_success">Успішно видалено</string>
     <string name="delete_multi_reddit_failed">Не вдалося видалити</string>
     <string name="delete_multi_reddit_dialog_message">Ви впевнені?</string>

@@ -491,7 +491,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_multi_reddit_failed">"无法创建此聚合版块"</string>
     <string name="duplicate_multi_reddit">"此聚合版块已存在"</string>
     <string name="edit_multi_reddit_failed">"无法编辑此聚合版块"</string>
-    <string name="logged_out">"您已退出"</string>
     <string name="delete_multi_reddit_success">"删除成功"</string>
     <string name="delete_multi_reddit_failed">"删除失败"</string>
     <string name="delete_multi_reddit_dialog_message">"您确定吗？"</string>

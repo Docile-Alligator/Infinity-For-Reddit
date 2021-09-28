@@ -459,7 +459,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_multi_reddit_failed">"Nije moguće stvoriti ovaj multireddit"</string>
     <string name="duplicate_multi_reddit">"Ovaj multireddit već postoji"</string>
     <string name="edit_multi_reddit_failed">"Nije moguće urediti ovaj multireddit"</string>
-    <string name="logged_out">"Odjavljeni ste"</string>
     <string name="delete_multi_reddit_success">"Brisanje uspješno"</string>
     <string name="delete_multi_reddit_failed">"Brisanje nije uspjelo"</string>
     <string name="delete_multi_reddit_dialog_message">"Jeste li sigurni?"</string>

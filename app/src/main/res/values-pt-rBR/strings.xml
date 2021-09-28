@@ -491,7 +491,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_multi_reddit_failed">"Não foi possível criar este multireddit"</string>
     <string name="duplicate_multi_reddit">"Este multireddit já existe"</string>
     <string name="edit_multi_reddit_failed">"Não foi possível editar este multireddit"</string>
-    <string name="logged_out">"Você está deslogado"</string>
     <string name="delete_multi_reddit_success">"Excluído com sucesso"</string>
     <string name="delete_multi_reddit_failed">"Falha ao excluir"</string>
     <string name="delete_multi_reddit_dialog_message">"Tem certeza?"</string>

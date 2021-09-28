@@ -528,7 +528,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_multi_reddit_failed">"इस मल्टीरैडिट का  निर्माण असफल "</string>
     <string name="duplicate_multi_reddit">"यह मल्टीरैडिट पहले से उपलब्ध है "</string>
     <string name="edit_multi_reddit_failed">"इस मल्टीरैडिट का संपादन असफल "</string>
-    <string name="logged_out">"आप लाॅग्ड आउट हैं"</string>
     <string name="delete_multi_reddit_success">"सफलतापूर्वक मिटाई गई "</string>
     <string name="delete_multi_reddit_failed">"मिटाना असफल "</string>
     <string name="delete_multi_reddit_dialog_message">"क्या आप निश्चित हैं? "</string>

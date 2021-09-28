@@ -487,7 +487,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_multi_reddit_failed">"Невозможно создать мультиреддит"</string>
     <string name="duplicate_multi_reddit">"Мультиреддит уже существует"</string>
     <string name="edit_multi_reddit_failed">"Не удалось изменить мультиреддит"</string>
-    <string name="logged_out">"Вы вышли из системы"</string>
     <string name="delete_multi_reddit_success">"Успешно удалено"</string>
     <string name="delete_multi_reddit_failed">"Ошибка удаления"</string>
     <string name="delete_multi_reddit_dialog_message">"Вы уверены?"</string>

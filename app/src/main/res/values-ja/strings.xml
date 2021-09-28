@@ -530,7 +530,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_multi_reddit_failed">"このカスタムフィードを作成できませんでした"</string>
     <string name="duplicate_multi_reddit">"このカスタムフィードは既に存在しています"</string>
     <string name="edit_multi_reddit_failed">"このカスタムフィードを編集できませんでした"</string>
-    <string name="logged_out">"ログアウト状態です"</string>
     <string name="delete_multi_reddit_success">"削除が完了しました"</string>
     <string name="delete_multi_reddit_failed">"削除できませんでした"</string>
     <string name="delete_multi_reddit_dialog_message">"よろしいですか？"</string>

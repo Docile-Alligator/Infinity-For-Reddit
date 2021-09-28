@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit.multireddit;
 
 import android.os.AsyncTask;
+import android.os.Handler;
 
 import androidx.annotation.NonNull;
 
@@ -9,7 +10,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -41,6 +44,23 @@ public class FetchMultiRedditInfo {
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 fetchMultiRedditInfoListener.failed();
             }
+        });
+    }
+
+    public static void anonymousFetchMultiRedditInfo(Executor executor, Handler handler,
+                                                     RedditDataRoomDatabase redditDataRoomDatabase,
+                                                     String multipath,
+                                                     FetchMultiRedditInfoListener fetchMultiRedditInfoListener) {
+        executor.execute(() -> {
+            MultiReddit multiReddit = redditDataRoomDatabase.multiRedditDao().getMultiReddit(multipath, "-");
+            ArrayList<AnonymousMultiredditSubreddit> anonymousMultiredditSubreddits =
+                    (ArrayList<AnonymousMultiredditSubreddit>) redditDataRoomDatabase.anonymousMultiredditSubredditDao().getAllAnonymousMultiRedditSubreddits(multipath);
+            ArrayList<String> subredditNames = new ArrayList<>();
+            for (AnonymousMultiredditSubreddit a : anonymousMultiredditSubreddits) {
+                subredditNames.add(a.getSubredditName());
+            }
+            multiReddit.setSubreddits(subredditNames);
+            handler.post(() -> fetchMultiRedditInfoListener.success(multiReddit));
         });
     }
 

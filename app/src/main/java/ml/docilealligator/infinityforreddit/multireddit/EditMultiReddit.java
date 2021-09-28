@@ -1,10 +1,15 @@
 package ml.docilealligator.infinityforreddit.multireddit;
 
+import android.os.Handler;
+
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Executor;
 
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import retrofit2.Call;
@@ -38,6 +43,21 @@ public class EditMultiReddit {
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
                 editMultiRedditListener.failed();
             }
+        });
+    }
+
+    public static void anonymousEditMultiReddit(Executor executor, Handler handler,
+                                                RedditDataRoomDatabase redditDataRoomDatabase,
+                                                MultiReddit multiReddit,
+                                                EditMultiRedditListener editMultiRedditListener) {
+        executor.execute(() -> {
+            redditDataRoomDatabase.multiRedditDao().insert(multiReddit);
+            ArrayList<AnonymousMultiredditSubreddit> anonymousMultiredditSubreddits = new ArrayList<>();
+            for (String s : multiReddit.getSubreddits()) {
+                anonymousMultiredditSubreddits.add(new AnonymousMultiredditSubreddit(multiReddit.getPath(), s));
+            }
+            redditDataRoomDatabase.anonymousMultiredditSubredditDao().insertAll(anonymousMultiredditSubreddits);
+            handler.post(editMultiRedditListener::success);
         });
     }
 }

@@ -492,7 +492,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_multi_reddit_failed">"Bu multireddit oluşturulamıyor"</string>
     <string name="duplicate_multi_reddit">"Bu multireddit zaten var"</string>
     <string name="edit_multi_reddit_failed">"Bu multireddit düzenlenemez"</string>
-    <string name="logged_out">"Çıkış yaptınız"</string>
     <string name="delete_multi_reddit_success">"Başarıyla silindi"</string>
     <string name="delete_multi_reddit_failed">"Silinemedi"</string>
     <string name="delete_multi_reddit_dialog_message">"Emin misiniz?"</string>

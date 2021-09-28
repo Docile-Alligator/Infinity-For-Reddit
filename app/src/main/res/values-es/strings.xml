@@ -516,7 +516,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="create_multi_reddit_failed">"Ocurrió un error creando este multireddit"</string>
     <string name="duplicate_multi_reddit">"Este multireddit ya existe"</string>
     <string name="edit_multi_reddit_failed">"Ocurrió un error al editar el multireddit"</string>
-    <string name="logged_out">"Sesión cerrada"</string>
     <string name="delete_multi_reddit_success">"Borrado satisfactoriamente"</string>
     <string name="delete_multi_reddit_failed">"Borrado fallido"</string>
     <string name="delete_multi_reddit_dialog_message">"¿Seguro?"</string>
