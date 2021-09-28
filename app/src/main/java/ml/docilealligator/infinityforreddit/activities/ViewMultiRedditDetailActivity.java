@@ -39,6 +39,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
+import ml.docilealligator.infinityforreddit.asynctasks.DeleteMultiredditInDatabase;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTypeBottomSheetFragment;
@@ -159,7 +160,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
         setToolbarGoToTop(toolbar);
 
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, "-");
 
         if (savedInstanceState != null) {
             isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
@@ -265,22 +266,32 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                     .setTitle(R.string.delete)
                     .setMessage(R.string.delete_multi_reddit_dialog_message)
                     .setPositiveButton(R.string.delete, (dialogInterface, i)
-                            -> DeleteMultiReddit.deleteMultiReddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase,
-                            mAccessToken, mAccountName, multiPath, new DeleteMultiReddit.DeleteMultiRedditListener() {
-                                @Override
-                                public void success() {
-                                    Toast.makeText(ViewMultiRedditDetailActivity.this,
-                                            R.string.delete_multi_reddit_success, Toast.LENGTH_SHORT).show();
-                                    EventBus.getDefault().post(new RefreshMultiRedditsEvent());
-                                    finish();
-                                }
+                            -> {
+                        if (mAccessToken == null) {
+                            DeleteMultiredditInDatabase.deleteMultiredditInDatabase(mExecutor, new Handler(), mRedditDataRoomDatabase, mAccountName, multiPath,
+                                    () -> {
+                                        Toast.makeText(this, R.string.delete_multi_reddit_success, Toast.LENGTH_SHORT).show();
+                                        finish();
+                                    });
+                        } else {
+                            DeleteMultiReddit.deleteMultiReddit(mExecutor, new Handler(), mOauthRetrofit, mRedditDataRoomDatabase,
+                                    mAccessToken, mAccountName, multiPath, new DeleteMultiReddit.DeleteMultiRedditListener() {
+                                        @Override
+                                        public void success() {
+                                            Toast.makeText(ViewMultiRedditDetailActivity.this,
+                                                    R.string.delete_multi_reddit_success, Toast.LENGTH_SHORT).show();
+                                            EventBus.getDefault().post(new RefreshMultiRedditsEvent());
+                                            finish();
+                                        }
 
-                                @Override
-                                public void failed() {
-                                    Toast.makeText(ViewMultiRedditDetailActivity.this,
-                                            R.string.delete_multi_reddit_failed, Toast.LENGTH_SHORT).show();
-                                }
-                            }))
+                                        @Override
+                                        public void failed() {
+                                            Toast.makeText(ViewMultiRedditDetailActivity.this,
+                                                    R.string.delete_multi_reddit_failed, Toast.LENGTH_SHORT).show();
+                                        }
+                                    });
+                        }
+                    })
                     .setNegativeButton(R.string.cancel, null)
                     .show();
             return true;
