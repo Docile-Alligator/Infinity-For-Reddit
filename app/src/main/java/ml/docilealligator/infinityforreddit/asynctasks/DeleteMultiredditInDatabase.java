@@ -13,7 +13,11 @@ public class DeleteMultiredditInDatabase {
                                                    String accountName, String multipath,
                                                    DeleteMultiredditInDatabaseListener deleteMultiredditInDatabaseListener) {
         executor.execute(() -> {
-            redditDataRoomDatabase.multiRedditDao().deleteMultiReddit(multipath, accountName);
+            if (accountName.equals("-")) {
+                redditDataRoomDatabase.multiRedditDao().anonymousDeleteMultiReddit(multipath);
+            } else {
+                redditDataRoomDatabase.multiRedditDao().deleteMultiReddit(multipath, accountName);
+            }
             handler.post(deleteMultiredditInDatabaseListener::success);
         });
     }

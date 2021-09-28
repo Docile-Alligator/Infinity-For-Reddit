@@ -28,6 +28,9 @@ public interface MultiRedditDao {
     @Query("DELETE FROM multi_reddits WHERE name = :name AND username = :username")
     void deleteMultiReddit(String name, String username);
 
+    @Query("DELETE FROM multi_reddits WHERE path = :path")
+    void anonymousDeleteMultiReddit(String path);
+
     @Query("DELETE FROM multi_reddits WHERE username = :username")
     void deleteAllUserMultiReddits(String username);
 }

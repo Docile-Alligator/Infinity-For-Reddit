@@ -27,7 +27,7 @@ public class DeleteMultiReddit {
                                          String accessToken, String accountName, String multipath,
                                          DeleteMultiRedditListener deleteMultiRedditListener) {
         oauthRetrofit.create(RedditAPI.class).deleteMultiReddit(APIUtils.getOAuthHeader(accessToken),
-                multipath).enqueue(new Callback<String>() {
+                multipath).enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
