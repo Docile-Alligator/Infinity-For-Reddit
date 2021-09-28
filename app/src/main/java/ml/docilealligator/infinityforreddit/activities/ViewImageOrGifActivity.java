@@ -16,6 +16,7 @@ import android.text.Spanned;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -287,6 +288,11 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         });
 
         loadImage();
+
+        // Fixes #383
+        // Not having a background will cause visual glitches on some devices.
+        FrameLayout slidablePanel = findViewById(R.id.slidable_panel);
+        slidablePanel.setBackgroundColor(getResources().getColor(android.R.color.black));
     }
 
     private void loadImage() {
