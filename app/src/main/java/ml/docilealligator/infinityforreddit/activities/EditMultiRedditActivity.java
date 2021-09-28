@@ -120,6 +120,10 @@ public class EditMultiRedditActivity extends BaseActivity {
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, "-");
 
+        if (mAccessToken == null) {
+            visibilityLinearLayout.setVisibility(View.GONE);
+        }
+
         if (savedInstanceState != null) {
             multiReddit = savedInstanceState.getParcelable(MULTI_REDDIT_STATE);
             multipath = savedInstanceState.getString(MULTI_PATH_STATE);

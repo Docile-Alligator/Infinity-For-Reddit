@@ -111,6 +111,10 @@ public class CreateMultiRedditActivity extends BaseActivity {
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, "-");
 
+        if (mAccessToken == null) {
+            visibilityLinearLayout.setVisibility(View.GONE);
+        }
+
         if (savedInstanceState != null) {
             mSubreddits = savedInstanceState.getStringArrayList(SELECTED_SUBREDDITS_STATE);
         } else {
