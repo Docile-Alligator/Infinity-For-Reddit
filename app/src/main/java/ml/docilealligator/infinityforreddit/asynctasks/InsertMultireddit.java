@@ -7,15 +7,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubreddit;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.multireddit.MultiRedditDao;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class InsertMultireddit {
 
-    public static void insertMultireddit(Executor executor, Handler handler, RedditDataRoomDatabase redditDataRoomDatabase,
-                                         ArrayList<MultiReddit> multiReddits, String accountName,
-                                         InsertMultiRedditListener insertMultiRedditListener) {
+    public static void insertMultireddits(Executor executor, Handler handler, RedditDataRoomDatabase redditDataRoomDatabase,
+                                          ArrayList<MultiReddit> multiReddits, String accountName,
+                                          InsertMultiRedditListener insertMultiRedditListener) {
         executor.execute(() -> {
             MultiRedditDao multiRedditDao = redditDataRoomDatabase.multiRedditDao();
             List<MultiReddit> existingMultiReddits = multiRedditDao.getAllMultiRedditsList(accountName);
@@ -39,7 +40,16 @@ public class InsertMultireddit {
                                          MultiReddit multiReddit,
                                          InsertMultiRedditListener insertMultiRedditListener) {
         executor.execute(() -> {
-            redditDataRoomDatabase.multiRedditDao().insert(multiReddit);
+            if (multiReddit.getOwner().equals("-")) {
+                ArrayList<AnonymousMultiredditSubreddit> allAnonymousMultiRedditSubreddits =
+                        (ArrayList<AnonymousMultiredditSubreddit>) redditDataRoomDatabase.anonymousMultiredditSubredditDao().getAllAnonymousMultiRedditSubreddits(multiReddit.getPath());
+                redditDataRoomDatabase.multiRedditDao().insert(multiReddit);
+                if (allAnonymousMultiRedditSubreddits != null) {
+                    redditDataRoomDatabase.anonymousMultiredditSubredditDao().insertAll(allAnonymousMultiRedditSubreddits);
+                }
+            } else {
+                redditDataRoomDatabase.multiRedditDao().insert(multiReddit);
+            }
             handler.post(insertMultiRedditListener::success);
         });
     }

@@ -168,7 +168,7 @@ public class MultiredditSelectionActivity extends BaseActivity implements Activi
             FetchMyMultiReddits.fetchMyMultiReddits(mOauthRetrofit, mAccessToken, new FetchMyMultiReddits.FetchMyMultiRedditsListener() {
                 @Override
                 public void success(ArrayList<MultiReddit> multiReddits) {
-                    InsertMultireddit.insertMultireddit(mExecutor, new Handler(), mRedditDataRoomDatabase,
+                    InsertMultireddit.insertMultireddits(mExecutor, new Handler(), mRedditDataRoomDatabase,
                             multiReddits, mAccountName, () -> {
                         mInsertSuccess = true;
                         ((MultiRedditListingFragment) mFragment).stopRefreshProgressbar();

@@ -298,7 +298,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
             FetchMyMultiReddits.fetchMyMultiReddits(mOauthRetrofit, mAccessToken, new FetchMyMultiReddits.FetchMyMultiRedditsListener() {
                 @Override
                 public void success(ArrayList<MultiReddit> multiReddits) {
-                    InsertMultireddit.insertMultireddit(mExecutor, new Handler(), mRedditDataRoomDatabase, multiReddits, mAccountName, () -> {
+                    InsertMultireddit.insertMultireddits(mExecutor, new Handler(), mRedditDataRoomDatabase, multiReddits, mAccountName, () -> {
                         mInsertMultiredditSuccess = true;
                         sectionsPagerAdapter.stopMultiRedditRefreshProgressbar();
                     });

@@ -51,9 +51,10 @@ public class EditMultiReddit {
                                                 MultiReddit multiReddit,
                                                 EditMultiRedditListener editMultiRedditListener) {
         executor.execute(() -> {
-            redditDataRoomDatabase.multiRedditDao().insert(multiReddit);
             ArrayList<AnonymousMultiredditSubreddit> anonymousMultiredditSubreddits = new ArrayList<>();
-            for (String s : multiReddit.getSubreddits()) {
+            ArrayList<String> subreddits = multiReddit.getSubreddits();
+            redditDataRoomDatabase.multiRedditDao().insert(multiReddit);
+            for (String s : subreddits) {
                 anonymousMultiredditSubreddits.add(new AnonymousMultiredditSubreddit(multiReddit.getPath(), s));
             }
             redditDataRoomDatabase.anonymousMultiredditSubredditDao().insertAll(anonymousMultiredditSubreddits);

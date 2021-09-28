@@ -32,7 +32,7 @@ public class FavoriteMultiReddit {
         params.put(APIUtils.MAKE_FAVORITE_KEY, String.valueOf(makeFavorite));
         params.put(APIUtils.API_TYPE_KEY, APIUtils.API_TYPE_JSON);
         oauthRetrofit.create(RedditAPI.class).favoriteMultiReddit(APIUtils.getOAuthHeader(accessToken),
-                params).enqueue(new Callback<String>() {
+                params).enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
