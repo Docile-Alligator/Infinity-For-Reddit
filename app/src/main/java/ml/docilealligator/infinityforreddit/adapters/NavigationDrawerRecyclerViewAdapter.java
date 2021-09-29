@@ -555,6 +555,14 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                             drawableId = R.drawable.ic_subscritptions_bottom_app_bar_24dp;
                             break;
                         case 2:
+                            stringId = R.string.rpan;
+                            drawableId = R.drawable.ic_rpan_24dp;
+                            break;
+                        case 3:
+                            stringId = R.string.trending;
+                            drawableId = R.drawable.ic_trending_24dp;
+                            break;
+                        case 4:
                             if ((resources.getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
                                 stringId = R.string.dark_theme;
                                 drawableId = R.drawable.ic_dark_theme_24dp;
@@ -563,7 +571,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                                 drawableId = R.drawable.ic_light_theme_24dp;
                             }
                             break;
-                        case 3:
+                        case 5:
                             setOnClickListener = false;
                             if (isNSFWEnabled) {
                                 stringId = R.string.disable_nsfw;
@@ -587,7 +595,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                                 }
                             });
                             break;
-                        case 4:
+                        case 6:
                             stringId = R.string.settings;
                             drawableId = R.drawable.ic_settings_24dp;
                     }
@@ -761,7 +769,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                         - (collapsePostSection ? POST_SECTION_ITEMS : 0)
                         - (collapsePreferencesSection ? PREFERENCES_SECTION_ITEMS : 0);
             } else {
-                return 5;
+                return 7;
             }
         } else {
             if (isLoggedIn) {

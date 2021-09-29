@@ -81,6 +81,9 @@ public class TrendingActivity extends BaseActivity {
     @BindView(R.id.fetch_trending_search_text_view_trending_activity)
     TextView errorTextView;
     @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
@@ -178,6 +181,8 @@ public class TrendingActivity extends BaseActivity {
         swipeRefreshLayout.setEnabled(mSharedPreferences.getBoolean(SharedPreferencesUtils.PULL_TO_REFRESH, true));
         swipeRefreshLayout.setOnRefreshListener(this::fetchTrendingSearches);
 
+        errorLinearLayout.setOnClickListener(view -> fetchTrendingSearches());
+
         if (savedInstanceState != null) {
             trendingSearches = savedInstanceState.getParcelableArrayList(TRENDING_SEARCHES_STATE);
         }
@@ -200,7 +205,13 @@ public class TrendingActivity extends BaseActivity {
         trendingSearches = null;
         adapter.setTrendingSearches(null);
         Handler handler = new Handler();
-        mOauthRetrofit.create(RedditAPI.class).getTrendingSearches(APIUtils.getOAuthHeader(mAccessToken)).enqueue(new Callback<String>() {
+        Call<String> trendingCall;
+        if (mAccessToken == null) {
+            trendingCall = mRetrofit.create(RedditAPI.class).getTrendingSearches();
+        } else {
+            trendingCall = mOauthRetrofit.create(RedditAPI.class).getTrendingSearchesOauth(APIUtils.getOAuthHeader(mAccessToken));
+        }
+        trendingCall.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {

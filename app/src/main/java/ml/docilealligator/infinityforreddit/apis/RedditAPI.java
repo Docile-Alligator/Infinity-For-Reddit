@@ -292,7 +292,10 @@ public interface RedditAPI {
     Call<String> submitGalleryPost(@HeaderMap Map<String, String> headers, @Body String body);
 
     @GET("/api/trending_searches_v1.json?withAds=0&raw_json=1&gilding_detail=1")
-    Call<String> getTrendingSearches(@HeaderMap Map<String, String> headers);
+    Call<String> getTrendingSearches();
+
+    @GET("/api/trending_searches_v1.json?withAds=0&raw_json=1&gilding_detail=1")
+    Call<String> getTrendingSearchesOauth(@HeaderMap Map<String, String> headers);
 
     default Call<String> getWiki(@Path("subredditName") String subredditName) {
         return getWikiPage(subredditName, "index");
