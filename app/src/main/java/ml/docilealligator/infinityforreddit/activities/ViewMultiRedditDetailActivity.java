@@ -62,7 +62,6 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     public static final String EXTRA_MULTIREDDIT_PATH = "EMP";
 
     private static final String FRAGMENT_OUT_STATE_KEY = "FOSK";
-    private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
     @BindView(R.id.coordinator_layout_view_multi_reddit_detail_activity)
     CoordinatorLayout coordinatorLayout;
@@ -99,10 +98,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     private String mAccessToken;
     private String mAccountName;
     private String multiPath;
-    private boolean isInLazyMode = false;
     private Fragment mFragment;
-    private Menu mMenu;
-    private AppBarLayout.LayoutParams params;
     private SortTypeBottomSheetFragment sortTypeBottomSheetFragment;
     private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
     private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
@@ -163,8 +159,6 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, "-");
 
         if (savedInstanceState != null) {
-            isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
-
             mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE_KEY);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_view_multi_reddit_detail_activity, mFragment).commit();
         } else {
@@ -179,8 +173,6 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
         sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
 
         postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
-
-        params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
     }
 
     private void initializeFragment() {
@@ -198,17 +190,6 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_multi_reddit_detail_activity, menu);
         applyMenuItemTheme(menu);
-        mMenu = menu;
-        MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_multi_reddit_detail_activity);
-        if (isInLazyMode) {
-            lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
-            collapsingToolbarLayout.setLayoutParams(params);
-        } else {
-            lazyModeItem.setTitle(R.string.action_start_lazy_mode);
-            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
-            collapsingToolbarLayout.setLayoutParams(params);
-        }
         return true;
     }
 
@@ -226,31 +207,8 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
             startActivity(intent);
             return true;
         } else if (itemId == R.id.action_refresh_view_multi_reddit_detail_activity) {
-            if (mMenu != null) {
-                mMenu.findItem(R.id.action_lazy_mode_view_multi_reddit_detail_activity).setTitle(R.string.action_start_lazy_mode);
-            }
             if (mFragment instanceof FragmentCommunicator) {
                 ((FragmentCommunicator) mFragment).refresh();
-            }
-            return true;
-        } else if (itemId == R.id.action_lazy_mode_view_multi_reddit_detail_activity) {
-            MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_multi_reddit_detail_activity);
-            if (isInLazyMode) {
-                isInLazyMode = false;
-                ((FragmentCommunicator) mFragment).stopLazyMode();
-                lazyModeItem.setTitle(R.string.action_start_lazy_mode);
-                params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
-                collapsingToolbarLayout.setLayoutParams(params);
-            } else {
-                isInLazyMode = true;
-                if (((FragmentCommunicator) mFragment).startLazyMode()) {
-                    lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-                    appBarLayout.setExpanded(false);
-                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
-                    collapsingToolbarLayout.setLayoutParams(params);
-                } else {
-                    isInLazyMode = false;
-                }
             }
             return true;
         } else if (itemId == R.id.action_change_post_layout_view_multi_reddit_detail_activity) {
@@ -302,7 +260,6 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
         getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE_KEY, mFragment);
     }
 

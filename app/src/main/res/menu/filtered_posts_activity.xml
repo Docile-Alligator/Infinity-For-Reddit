@@ -16,14 +16,8 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_lazy_mode_filtered_thing_activity"
-        android:orderInCategory="3"
-        android:title="@string/action_start_lazy_mode"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/action_change_post_layout_filtered_post_activity"
-        android:orderInCategory="4"
+        android:orderInCategory="3"
         android:title="@string/action_change_post_layout"
         app:showAsAction="never" />
 </menu>

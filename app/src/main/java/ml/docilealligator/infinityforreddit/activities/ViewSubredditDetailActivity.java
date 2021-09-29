@@ -135,7 +135,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     private static final String FETCH_SUBREDDIT_INFO_STATE = "FSIS";
     private static final String CURRENT_ONLINE_SUBSCRIBERS_STATE = "COSS";
-    private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
     private static final String MESSAGE_FULLNAME_STATE = "MFS";
     private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
     private static final int ADD_TO_MULTIREDDIT_REQUEST_CODE = 1;
@@ -228,15 +227,12 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private int mNCurrentOnlineSubscribers = 0;
     private boolean isNsfwSubreddit = false;
     private boolean subscriptionReady = false;
-    private boolean isInLazyMode = false;
     private boolean showToast = false;
     private boolean showBottomAppBar;
     private boolean lockBottomAppBar;
     private String mMessageFullname;
     private String mNewAccountName;
     private RequestManager glide;
-    private Menu mMenu;
-    private AppBarLayout.LayoutParams params;
     private int expandedTabTextColor;
     private int expandedTabBackgroundColor;
     private int expandedTabIndicatorColor;
@@ -359,7 +355,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         } else {
             mFetchSubredditInfoSuccess = savedInstanceState.getBoolean(FETCH_SUBREDDIT_INFO_STATE);
             mNCurrentOnlineSubscribers = savedInstanceState.getInt(CURRENT_ONLINE_SUBSCRIBERS_STATE);
-            isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             mMessageFullname = savedInstanceState.getString(MESSAGE_FULLNAME_STATE);
             mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
 
@@ -371,8 +366,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         checkNewAccountAndBindView();
 
         fetchSubredditData();
-
-        params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
         String title = "r/" + subredditName;
         subredditNameTextView.setText(title);
@@ -1091,18 +1084,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_subreddit_detail_activity, menu);
         applyMenuItemTheme(menu);
-        mMenu = menu;
-        MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_subreddit_detail_activity);
-        if (isInLazyMode) {
-            lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
-            collapsingToolbarLayout.setLayoutParams(params);
-        } else {
-            lazyModeItem.setTitle(R.string.action_start_lazy_mode);
-            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
-                    AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
-            collapsingToolbarLayout.setLayoutParams(params);
-        }
         return true;
     }
 
@@ -1121,36 +1102,10 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             startActivity(intent);
             return true;
         } else if (itemId == R.id.action_refresh_view_subreddit_detail_activity) {
-            if (mMenu != null) {
-                mMenu.findItem(R.id.action_lazy_mode_view_subreddit_detail_activity).setTitle(R.string.action_start_lazy_mode);
-            }
             if (sectionsPagerAdapter != null) {
                 sectionsPagerAdapter.refresh();
                 mFetchSubredditInfoSuccess = false;
                 fetchSubredditData();
-            }
-            return true;
-        } else if (itemId == R.id.action_lazy_mode_view_subreddit_detail_activity) {
-            if (sectionsPagerAdapter != null) {
-                MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_subreddit_detail_activity);
-                if (isInLazyMode) {
-                    isInLazyMode = false;
-                    sectionsPagerAdapter.stopLazyMode();
-                    lazyModeItem.setTitle(R.string.action_start_lazy_mode);
-                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
-                            AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
-                    collapsingToolbarLayout.setLayoutParams(params);
-                } else {
-                    isInLazyMode = true;
-                    if (sectionsPagerAdapter.startLazyMode()) {
-                        lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-                        appBarLayout.setExpanded(false);
-                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
-                        collapsingToolbarLayout.setLayoutParams(params);
-                    } else {
-                        isInLazyMode = false;
-                    }
-                }
             }
             return true;
         } else if (itemId == R.id.action_change_post_layout_view_subreddit_detail_activity) {
@@ -1231,7 +1186,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         super.onSaveInstanceState(outState);
         outState.putBoolean(FETCH_SUBREDDIT_INFO_STATE, mFetchSubredditInfoSuccess);
         outState.putInt(CURRENT_ONLINE_SUBSCRIBERS_STATE, mNCurrentOnlineSubscribers);
-        outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
         outState.putString(MESSAGE_FULLNAME_STATE, mMessageFullname);
         outState.putString(NEW_ACCOUNT_NAME_STATE, mNewAccountName);
     }
@@ -1634,21 +1588,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 ((PostFragment) fragment).refresh();
             } else if (fragment instanceof SidebarFragment) {
                 ((SidebarFragment) fragment).fetchSubredditData();
-            }
-        }
-
-        boolean startLazyMode() {
-            Fragment fragment = getCurrentFragment();
-            if (fragment instanceof FragmentCommunicator) {
-                return ((FragmentCommunicator) fragment).startLazyMode();
-            }
-            return false;
-        }
-
-        void stopLazyMode() {
-            Fragment fragment = getCurrentFragment();
-            if (fragment instanceof FragmentCommunicator) {
-                ((FragmentCommunicator) fragment).stopLazyMode();
             }
         }
 

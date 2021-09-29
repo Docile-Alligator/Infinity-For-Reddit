@@ -18,10 +18,12 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -211,12 +213,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private AppCompatActivity activity;
     private LinearLayoutManagerBugFixed mLinearLayoutManager;
     private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
+    private MenuItem lazyModeItem;
     private long postFragmentId;
     private int postType;
     private boolean isInLazyMode = false;
     private boolean isLazyModePaused = false;
     private boolean hasPost = false;
-    private boolean isShown = false;
     private boolean savePostFeedScrolledPosition;
     private boolean rememberMutingOptionInPostFeed;
     private Boolean masterMutingOption;
@@ -259,7 +261,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Override
     public void onResume() {
         super.onResume();
-        isShown = true;
         if (mAdapter != null) {
             mAdapter.setCanStartActivity(true);
         }
@@ -305,6 +306,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
         unbinder = ButterKnife.bind(this, rootView);
+
+        setHasOptionsMenu(true);
 
         EventBus.getDefault().register(this);
 
@@ -1275,6 +1278,31 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 view -> mAdapter.retry())));
     }
 
+    @Override
+    public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
+        inflater.inflate(R.menu.post_fragment, menu);
+        lazyModeItem = menu.findItem(R.id.action_lazy_mode_post_fragment);
+
+        if (isInLazyMode) {
+            lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+        } else {
+            lazyModeItem.setTitle(R.string.action_start_lazy_mode);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.action_lazy_mode_post_fragment) {
+            if (isInLazyMode) {
+                stopLazyMode();
+            } else {
+                startLazyMode();
+            }
+            return true;
+        }
+        return false;
+    }
+
     private void noPostFound() {
         hasPost = false;
         if (isInLazyMode) {
@@ -1434,6 +1462,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             return false;
         }
 
+        lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+
         if (mAdapter != null && mAdapter.isAutoplay()) {
             mAdapter.setAutoplay(false);
             refreshAdapter();
@@ -1453,6 +1483,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void stopLazyMode() {
+        lazyModeItem.setTitle(R.string.action_start_lazy_mode);
         if (mAdapter != null) {
             String autoplayString = mSharedPreferences.getString(SharedPreferencesUtils.VIDEO_AUTOPLAY, SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_NEVER);
             if (autoplayString.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ALWAYS_ON) ||

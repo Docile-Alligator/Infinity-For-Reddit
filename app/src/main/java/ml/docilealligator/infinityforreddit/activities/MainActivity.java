@@ -140,7 +140,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private static final String FETCH_USER_INFO_STATE = "FUIS";
     private static final String FETCH_SUBSCRIPTIONS_STATE = "FSS";
     private static final String DRAWER_ON_ACCOUNT_SWITCH_STATE = "DOASS";
-    private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
     private static final String ACCESS_TOKEN_STATE = "ATS";
     private static final String ACCOUNT_NAME_STATE = "ANS";
     private static final String MESSAGE_FULLNAME_STATE = "MFS";
@@ -222,7 +221,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     Executor mExecutor;
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
-    private AppBarLayout.LayoutParams params;
     private NavigationDrawerRecyclerViewAdapter adapter;
     private Call<String> subredditAutocompleteCall;
     private String mAccessToken;
@@ -232,8 +230,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private boolean mDrawerOnAccountSwitch = false;
     private String mMessageFullname;
     private String mNewAccountName;
-    private Menu mMenu;
-    private boolean isInLazyMode = false;
     private boolean showBottomAppBar;
     private boolean mConfirmToExit;
     private boolean mLockBottomAppBar;
@@ -315,8 +311,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         });
         toggle.syncState();
 
-        params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
-
         showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, true);
         mConfirmToExit = mSharedPreferences.getBoolean(SharedPreferencesUtils.CONFIRM_TO_EXIT, false);
         mLockBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_BOTTOM_APP_BAR, false);
@@ -331,7 +325,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
             mFetchSubscriptionsSuccess = savedInstanceState.getBoolean(FETCH_SUBSCRIPTIONS_STATE);
             mDrawerOnAccountSwitch = savedInstanceState.getBoolean(DRAWER_ON_ACCOUNT_SWITCH_STATE);
-            isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             mMessageFullname = savedInstanceState.getString(MESSAGE_FULLNAME_STATE);
             mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
             inboxCount = savedInstanceState.getInt(INBOX_COUNT_STATE);
@@ -1086,19 +1079,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.main_activity, menu);
         applyMenuItemTheme(menu);
-        mMenu = menu;
-        MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_main_activity);
-
-        if (isInLazyMode) {
-            lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
-            collapsingToolbarLayout.setLayoutParams(params);
-        } else {
-            lazyModeItem.setTitle(R.string.action_start_lazy_mode);
-            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
-            collapsingToolbarLayout.setLayoutParams(params);
-        }
-
         return true;
     }
 
@@ -1122,29 +1102,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             changeSortType();
             return true;
         } else if (itemId == R.id.action_refresh_main_activity) {
-            if (mMenu != null) {
-                mMenu.findItem(R.id.action_lazy_mode_main_activity).setTitle(R.string.action_start_lazy_mode);
-            }
             sectionsPagerAdapter.refresh();
             mFetchUserInfoSuccess = false;
             loadUserData();
-            return true;
-        } else if (itemId == R.id.action_lazy_mode_main_activity) {
-            MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_main_activity);
-            if (isInLazyMode) {
-                sectionsPagerAdapter.stopLazyMode();
-                isInLazyMode = false;
-                lazyModeItem.setTitle(R.string.action_start_lazy_mode);
-                params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
-                collapsingToolbarLayout.setLayoutParams(params);
-            } else {
-                if (sectionsPagerAdapter.startLazyMode()) {
-                    isInLazyMode = true;
-                    lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
-                    collapsingToolbarLayout.setLayoutParams(params);
-                }
-            }
             return true;
         } else if (itemId == R.id.action_change_post_layout_main_activity) {
             PostLayoutBottomSheetFragment postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
@@ -1187,7 +1147,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         outState.putBoolean(FETCH_USER_INFO_STATE, mFetchUserInfoSuccess);
         outState.putBoolean(FETCH_SUBSCRIPTIONS_STATE, mFetchSubscriptionsSuccess);
         outState.putBoolean(DRAWER_ON_ACCOUNT_SWITCH_STATE, mDrawerOnAccountSwitch);
-        outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
         outState.putString(ACCESS_TOKEN_STATE, mAccessToken);
         outState.putString(ACCOUNT_NAME_STATE, mAccountName);
         outState.putString(MESSAGE_FULLNAME_STATE, mMessageFullname);
@@ -1804,24 +1763,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 return currentFragment.handleKeyDown(keyCode);
             }
             return false;
-        }
-
-        boolean startLazyMode() {
-            PostFragment currentFragment = getCurrentFragment();
-            if (currentFragment != null) {
-                return currentFragment.startLazyMode();
-            }
-
-            return false;
-        }
-
-        void stopLazyMode() {
-            for (int i = 0; i < getItemCount(); i++) {
-                Fragment fragment = fragmentManager.findFragmentByTag("f" + i);
-                if (fragment instanceof PostFragment && ((PostFragment) fragment).isInLazyMode()) {
-                    ((PostFragment) fragment).stopLazyMode();
-                }
-            }
         }
 
         int getCurrentPostType() {

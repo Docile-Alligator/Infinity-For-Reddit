@@ -38,7 +38,6 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
-import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.R;
@@ -57,8 +56,6 @@ import retrofit2.Retrofit;
 
 public class AccountSavedThingActivity extends BaseActivity implements ActivityToolbarInterface,
         PostLayoutBottomSheetFragment.PostLayoutSelectionCallback, MarkPostAsReadInterface {
-
-    private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
 
     @BindView(R.id.coordinator_layout_account_saved_thing_activity)
     CoordinatorLayout coordinatorLayout;
@@ -93,11 +90,8 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private SlidrInterface mSlidrInterface;
-    private Menu mMenu;
-    private AppBarLayout.LayoutParams params;
     private String mAccessToken;
     private String mAccountName;
-    private boolean isInLazyMode = false;
     private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
 
     @Override
@@ -141,8 +135,6 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setToolbarGoToTop(toolbar);
 
-        params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
-
         postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
 
         fragmentManager = getSupportFragmentManager();
@@ -150,9 +142,6 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
 
-        if (savedInstanceState != null) {
-            isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
-        }
         initializeViewPager();
     }
 
@@ -216,64 +205,23 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.account_saved_thing_activity, menu);
         applyMenuItemTheme(menu);
-        mMenu = menu;
-        MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_account_saved_thing_activity);
-        if (isInLazyMode) {
-            lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
-            collapsingToolbarLayout.setLayoutParams(params);
-        } else {
-            lazyModeItem.setTitle(R.string.action_start_lazy_mode);
-            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
-            collapsingToolbarLayout.setLayoutParams(params);
-        }
-
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                finish();
-                return true;
-            case R.id.action_refresh_account_saved_thing_activity:
-                if (mMenu != null) {
-                    mMenu.findItem(R.id.action_lazy_mode_account_saved_thing_activity).setTitle(R.string.action_start_lazy_mode);
-                }
-                sectionsPagerAdapter.refresh();
-                return true;
-            case R.id.action_lazy_mode_account_saved_thing_activity:
-                MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_account_saved_thing_activity);
-                if (isInLazyMode) {
-                    isInLazyMode = false;
-                    sectionsPagerAdapter.stopLazyMode();
-                    lazyModeItem.setTitle(R.string.action_start_lazy_mode);
-                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
-                    collapsingToolbarLayout.setLayoutParams(params);
-                } else {
-                    isInLazyMode = true;
-                    if (sectionsPagerAdapter.startLazyMode()) {
-                        lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-                        appBarLayout.setExpanded(false);
-                        params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
-                        collapsingToolbarLayout.setLayoutParams(params);
-                    } else {
-                        isInLazyMode = false;
-                    }
-                }
-                return true;
-            case R.id.action_change_post_layout_account_saved_thing_activity:
-                postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
-                return true;
+        int itemId = item.getItemId();
+        if (itemId == android.R.id.home) {
+            finish();
+            return true;
+        } else if (itemId == R.id.action_refresh_account_saved_thing_activity) {
+            sectionsPagerAdapter.refresh();
+            return true;
+        } else if (itemId == R.id.action_change_post_layout_account_saved_thing_activity) {
+            postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+            return true;
         }
         return false;
-    }
-
-    @Override
-    protected void onSaveInstanceState(@NonNull Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
     }
 
     @Override
@@ -379,21 +327,6 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
                 ((PostFragment) fragment).refresh();
             } else if (fragment instanceof CommentsListingFragment) {
                 ((CommentsListingFragment) fragment).refresh();
-            }
-        }
-
-        boolean startLazyMode() {
-            Fragment fragment = getCurrentFragment();
-            if (fragment instanceof FragmentCommunicator) {
-                return ((FragmentCommunicator) fragment).startLazyMode();
-            }
-            return false;
-        }
-
-        void stopLazyMode() {
-            Fragment fragment = getCurrentFragment();
-            if (fragment instanceof FragmentCommunicator) {
-                ((FragmentCommunicator) fragment).stopLazyMode();
             }
         }
 

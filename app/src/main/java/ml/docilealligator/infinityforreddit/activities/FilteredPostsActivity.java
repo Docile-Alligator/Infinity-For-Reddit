@@ -68,7 +68,6 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     public static final String EXTRA_POST_TYPE = "EPT";
     public static final String EXTRA_USER_WHERE = "EUW";
 
-    private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
     private static final String FRAGMENT_OUT_STATE = "FOS";
     private static final int CUSTOMIZE_POST_FILTER_ACTIVITY_REQUEST_CODE = 1000;
 
@@ -97,7 +96,6 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private boolean isInLazyMode = false;
     private String mAccessToken;
     private String mAccountName;
     private String name;
@@ -105,7 +103,6 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     private int postType;
     private PostFragment mFragment;
     private Menu mMenu;
-    private AppBarLayout.LayoutParams params;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -154,8 +151,6 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setToolbarGoToTop(toolbar);
-
-        params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
         name = getIntent().getStringExtra(EXTRA_NAME);
         postType = getIntent().getIntExtra(EXTRA_POST_TYPE, PostPagingSource.TYPE_FRONT_PAGE);
@@ -231,7 +226,6 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
 
         if (savedInstanceState != null) {
-            isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             mFragment = (PostFragment) getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
             getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_filtered_posts_activity, mFragment).commit();
             bindView(postFilter, false);
@@ -342,17 +336,6 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
         getMenuInflater().inflate(R.menu.filtered_posts_activity, menu);
         applyMenuItemTheme(menu);
         mMenu = menu;
-        MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_filtered_thing_activity);
-        if (isInLazyMode) {
-            lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
-            collapsingToolbarLayout.setLayoutParams(params);
-        } else {
-            lazyModeItem.setTitle(R.string.action_start_lazy_mode);
-            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
-            collapsingToolbarLayout.setLayoutParams(params);
-        }
-
         if (userWhere != null && !PostPagingSource.USER_WHERE_SUBMITTED.equals(userWhere)) {
             mMenu.findItem(R.id.action_sort_filtered_thing_activity).setVisible(false);
         }
@@ -408,28 +391,8 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
             }
             return true;
         } else if (itemId == R.id.action_refresh_filtered_thing_activity) {
-            if (mMenu != null) {
-                mMenu.findItem(R.id.action_lazy_mode_filtered_thing_activity).setTitle(R.string.action_start_lazy_mode);
-            }
             if (mFragment != null) {
                 ((FragmentCommunicator) mFragment).refresh();
-            }
-            return true;
-        } else if (itemId == R.id.action_lazy_mode_filtered_thing_activity) {
-            MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_filtered_thing_activity);
-            if (isInLazyMode) {
-                ((FragmentCommunicator) mFragment).stopLazyMode();
-                isInLazyMode = false;
-                lazyModeItem.setTitle(R.string.action_start_lazy_mode);
-                params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS);
-                collapsingToolbarLayout.setLayoutParams(params);
-            } else {
-                if (((FragmentCommunicator) mFragment).startLazyMode()) {
-                    isInLazyMode = true;
-                    lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_NO_SCROLL);
-                    collapsingToolbarLayout.setLayoutParams(params);
-                }
             }
             return true;
         } else if (itemId == R.id.action_change_post_layout_filtered_post_activity) {
@@ -454,7 +417,6 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         getSupportFragmentManager().putFragment(outState, FRAGMENT_OUT_STATE, mFragment);
-        outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
     }
 
     @Override

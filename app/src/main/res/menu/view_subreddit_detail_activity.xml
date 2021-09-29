@@ -24,44 +24,38 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_lazy_mode_view_subreddit_detail_activity"
-        android:orderInCategory="4"
-        android:title="@string/action_start_lazy_mode"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/action_change_post_layout_view_subreddit_detail_activity"
-        android:orderInCategory="5"
+        android:orderInCategory="4"
         android:title="@string/action_change_post_layout"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_select_user_flair_view_subreddit_detail_activity"
-        android:orderInCategory="6"
+        android:orderInCategory="5"
         android:title="@string/action_select_user_flair"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_add_to_multireddit_view_subreddit_detail_activity"
-        android:orderInCategory="7"
+        android:orderInCategory="6"
         android:title="@string/action_add_to_multireddit"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_add_to_post_filter_view_subreddit_detail_activity"
-        android:orderInCategory="8"
+        android:orderInCategory="7"
         android:title="@string/action_add_to_post_filter"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_share_view_subreddit_detail_activity"
-        android:orderInCategory="9"
+        android:orderInCategory="8"
         android:title="@string/action_share"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_go_to_wiki_activity"
-        android:orderInCategory="10"
+        android:orderInCategory="9"
         android:title="@string/action_go_to_wiki"
         app:showAsAction="never" />
 </menu>

@@ -131,7 +131,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     public static final int ADD_TO_MULTIREDDIT_REQUEST_CODE = 400;
 
     private static final String FETCH_USER_INFO_STATE = "FSIS";
-    private static final String IS_IN_LAZY_MODE_STATE = "IILMS";
     private static final String MESSAGE_FULLNAME_STATE = "MFS";
     private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
 
@@ -211,8 +210,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private RequestManager glide;
-    private Menu mMenu;
-    private AppBarLayout.LayoutParams params;
     private UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment;
     private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
     private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
@@ -222,7 +219,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     private String username;
     private boolean subscriptionReady = false;
     private boolean mFetchUserInfoSuccess = false;
-    private boolean isInLazyMode = false;
     private int expandedTabTextColor;
     private int expandedTabBackgroundColor;
     private int expandedTabIndicatorColor;
@@ -271,7 +267,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
         } else {
             mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
-            isInLazyMode = savedInstanceState.getBoolean(IS_IN_LAZY_MODE_STATE);
             mMessageFullname = savedInstanceState.getString(MESSAGE_FULLNAME_STATE);
             mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
         }
@@ -279,8 +274,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         checkNewAccountAndInitializeViewPager();
 
         fetchUserInfo();
-
-        params = (AppBarLayout.LayoutParams) collapsingToolbarLayout.getLayoutParams();
 
         Resources resources = getResources();
 
@@ -923,19 +916,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_user_detail_activity, menu);
         applyMenuItemTheme(menu);
-        mMenu = menu;
-        MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity);
-        if (isInLazyMode) {
-            lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
-            collapsingToolbarLayout.setLayoutParams(params);
-        } else {
-            lazyModeItem.setTitle(R.string.action_start_lazy_mode);
-            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
-                    AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
-            collapsingToolbarLayout.setLayoutParams(params);
-        }
-
         return true;
     }
 
@@ -955,33 +935,9 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             startActivity(intent);
             return true;
         } else if (itemId == R.id.action_refresh_view_user_detail_activity) {
-            if (mMenu != null) {
-                mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity).setTitle(R.string.action_start_lazy_mode);
-            }
             sectionsPagerAdapter.refresh();
             mFetchUserInfoSuccess = false;
             fetchUserInfo();
-            return true;
-        } else if (itemId == R.id.action_lazy_mode_view_user_detail_activity) {
-            MenuItem lazyModeItem = mMenu.findItem(R.id.action_lazy_mode_view_user_detail_activity);
-            if (isInLazyMode) {
-                isInLazyMode = false;
-                sectionsPagerAdapter.stopLazyMode();
-                lazyModeItem.setTitle(R.string.action_start_lazy_mode);
-                params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS |
-                        AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS_COLLAPSED);
-                collapsingToolbarLayout.setLayoutParams(params);
-            } else {
-                isInLazyMode = true;
-                if (sectionsPagerAdapter.startLazyMode()) {
-                    lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
-                    appBarLayout.setExpanded(false);
-                    params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL | AppBarLayout.LayoutParams.SCROLL_FLAG_EXIT_UNTIL_COLLAPSED);
-                    collapsingToolbarLayout.setLayoutParams(params);
-                } else {
-                    isInLazyMode = false;
-                }
-            }
             return true;
         } else if (itemId == R.id.action_change_post_layout_view_user_detail_activity) {
             postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
@@ -1100,7 +1056,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(FETCH_USER_INFO_STATE, mFetchUserInfoSuccess);
-        outState.putBoolean(IS_IN_LAZY_MODE_STATE, isInLazyMode);
         outState.putString(MESSAGE_FULLNAME_STATE, mMessageFullname);
         outState.putString(NEW_ACCOUNT_NAME_STATE, mNewAccountName);
     }
@@ -1525,21 +1480,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 ((PostFragment) fragment).refresh();
             } else if (fragment instanceof CommentsListingFragment) {
                 ((CommentsListingFragment) fragment).refresh();
-            }
-        }
-
-        boolean startLazyMode() {
-            Fragment fragment = getCurrentFragment();
-            if (fragment instanceof FragmentCommunicator) {
-                return ((FragmentCommunicator) fragment).startLazyMode();
-            }
-            return false;
-        }
-
-        void stopLazyMode() {
-            Fragment fragment = getCurrentFragment();
-            if (fragment instanceof FragmentCommunicator) {
-                ((FragmentCommunicator) fragment).stopLazyMode();
             }
         }
 
