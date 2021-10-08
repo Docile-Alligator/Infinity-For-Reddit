@@ -15,6 +15,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
@@ -27,6 +28,9 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.adapters.CustomizeThemeRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.asynctasks.GetCustomTheme;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertCustomTheme;
@@ -34,9 +38,6 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeSettingsItem;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 
 public class CustomizeThemeActivity extends BaseActivity {
@@ -228,6 +229,16 @@ public class CustomizeThemeActivity extends BaseActivity {
             outState.putParcelableArrayList(CUSTOM_THEME_SETTINGS_ITEMS_STATE, customThemeSettingsItems);
             outState.putString(THEME_NAME_STATE, adapter.getThemeName());
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                .setTitle(R.string.discard)
+                .setPositiveButton(R.string.discard_dialog_button, (dialogInterface, i)
+                        -> super.onBackPressed())
+                .setNegativeButton(R.string.no, null)
+                .show();
     }
 
     @Override
