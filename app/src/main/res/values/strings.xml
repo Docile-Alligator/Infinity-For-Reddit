@@ -190,7 +190,7 @@
     <string name="send_message_failed">Could not send this message</string>
 
     <string name="select_a_subreddit">Please select a subreddit first</string>
-    <string name="title_required">The post need a good title</string>
+    <string name="title_required">The post needs a good title</string>
     <string name="link_required">Hey where is the link?</string>
     <string name="select_an_image">Please select an image first</string>
     <string name="posting">Posting</string>
@@ -391,7 +391,9 @@
     <string name="settings_automatically_try_redgifs_title">Automatically Try Accessing Redgifs if Videos on Gfycat are Removed.</string>
     <string name="settings_video_player_ignore_nav_bar_title">Ignore Navigation Bar in Video Player</string>
     <string name="settings_video_player_ignore_nav_bar_summary">Prevent the Video Controller Having Extra Margin</string>
+    <string name="settings_main_page_back_button_action">Main Page Back Button Action</string>
     <string name="settings_confirm_to_exit">Confirm to Exit</string>
+    <string name="settings_open_navigation_drawer">Open Navigation Drawer</string>
     <string name="settings_category_comment_title">Comment</string>
     <string name="settings_show_top_level_comments_first_title">Show Top-level Comments First</string>
     <string name="settings_show_comment_divider_title">Show Comment Divider</string>

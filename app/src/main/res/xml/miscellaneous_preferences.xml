@@ -13,11 +13,14 @@
         app:key="open_link_in_app"
         app:title="@string/settings_open_link_in_app_title" />
 
-    <SwitchPreference
-        app:defaultValue="false"
-        app:key="confirm_to_exit"
+    <ListPreference
+        app:defaultValue="0"
+        app:entries="@array/main_page_back_button_action"
+        app:entryValues="@array/main_page_back_button_action_values"
+        app:key="main_page_back_button_action"
         app:icon="@drawable/ic_exit_24dp"
-        app:title="@string/settings_confirm_to_exit" />
+        app:title="@string/settings_main_page_back_button_action"
+        app:useSimpleSummaryProvider="true" />
 
     <SwitchPreference
         app:defaultValue="true"

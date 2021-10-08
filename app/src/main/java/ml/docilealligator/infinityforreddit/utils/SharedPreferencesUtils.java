@@ -105,7 +105,9 @@ public class SharedPreferencesUtils {
     public static final String SWAP_TAP_AND_LONG_COMMENTS = "swap_tap_and_long_in_comments";
     public static final String SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON = "swipe_up_to_hide_jump_to_next_top_level_comments_button";
     public static final String SHOW_TOP_LEVEL_COMMENTS_FIRST = "show_top_level_comments_first";
-    public static final String CONFIRM_TO_EXIT = "confirm_to_exit";
+    public static final String MAIN_PAGE_BACK_BUTTON_ACTION = "main_page_back_button_action";
+    public static final int MAIN_PAGE_BACK_BUTTON_ACTION_CONFIRM_EXIT = 1;
+    public static final int MAIN_PAGE_BACK_BUTTON_ACTION_OPEN_NAVIGATION_DRAWER = 2;
     public static final String LOCK_BOTTOM_APP_BAR = "lock_bottom_app_bar";
     public static final String COMMENT_TOOLBAR_HIDDEN = "comment_toolbar_hidden";
     public static final String COMMENT_TOOLBAR_HIDE_ON_CLICK = "comment_toolbar_hide_on_click";
@@ -358,4 +360,5 @@ public class SharedPreferencesUtils {
     public static final String NSFW_KEY_LEGACY = "nsfw";
     public static final String BLUR_NSFW_KEY_LEGACY = "blur_nsfw";
     public static final String BLUR_SPOILER_KEY_LEGACY = "blur_spoiler";
+    public static final String CONFIRM_TO_EXIT_LEGACY = "confirm_to_exit";
 }

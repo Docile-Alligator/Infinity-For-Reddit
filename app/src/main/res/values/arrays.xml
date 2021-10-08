@@ -508,4 +508,16 @@
         <item>86400000</item>
     </string-array>
 
+    <string-array name="main_page_back_button_action">
+        <item>@string/default_in_array</item>
+        <item>@string/settings_confirm_to_exit</item>
+        <item>@string/settings_open_navigation_drawer</item>
+    </string-array>
+
+    <string-array name="main_page_back_button_action_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
 </resources>

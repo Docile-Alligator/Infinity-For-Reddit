@@ -39,12 +39,12 @@ public class MiscellaneousPreferenceFragment extends PreferenceFragmentCompat {
 
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
-        SwitchPreference confirmToExitSwitch = findPreference(SharedPreferencesUtils.CONFIRM_TO_EXIT);
+        ListPreference mainPageBackButtonActionListPreference = findPreference(SharedPreferencesUtils.MAIN_PAGE_BACK_BUTTON_ACTION);
         SwitchPreference savePostFeedScrolledPositionSwitch = findPreference(SharedPreferencesUtils.SAVE_FRONT_PAGE_SCROLLED_POSITION);
         ListPreference languageListPreference = findPreference(SharedPreferencesUtils.LANGUAGE);
 
-        if (confirmToExitSwitch != null) {
-            confirmToExitSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
+        if (mainPageBackButtonActionListPreference != null) {
+            mainPageBackButtonActionListPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new RecreateActivityEvent());
                 return true;
             });

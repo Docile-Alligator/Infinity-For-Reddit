@@ -98,7 +98,6 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTimeBottomS
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
-import ml.docilealligator.infinityforreddit.events.ChangeConfirmToExitEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDisableSwipingBetweenTabsEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeLockBottomAppBarEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
@@ -231,7 +230,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private String mMessageFullname;
     private String mNewAccountName;
     private boolean showBottomAppBar;
-    private boolean mConfirmToExit;
+    private int mBackButtonAction;
     private boolean mLockBottomAppBar;
     private boolean mDisableSwipingBetweenTabs;
     private boolean mShowFavoriteMultiReddits;
@@ -312,7 +311,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         toggle.syncState();
 
         showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, true);
-        mConfirmToExit = mSharedPreferences.getBoolean(SharedPreferencesUtils.CONFIRM_TO_EXIT, false);
+        mBackButtonAction = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_BACK_BUTTON_ACTION, "0"));
         mLockBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_BOTTOM_APP_BAR, false);
         mDisableSwipingBetweenTabs = mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false);
 
@@ -1119,13 +1118,15 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            if (mConfirmToExit) {
+            if (mBackButtonAction == SharedPreferencesUtils.MAIN_PAGE_BACK_BUTTON_ACTION_CONFIRM_EXIT) {
                 new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                         .setTitle(R.string.exit_app)
                         .setPositiveButton(R.string.yes, (dialogInterface, i)
                                 -> finish())
                         .setNegativeButton(R.string.no, null)
                         .show();
+            } else if (mBackButtonAction == SharedPreferencesUtils.MAIN_PAGE_BACK_BUTTON_ACTION_OPEN_NAVIGATION_DRAWER) {
+                drawer.openDrawer(GravityCompat.START);
             } else {
                 super.onBackPressed();
             }
@@ -1243,11 +1244,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Subscribe
     public void onRecreateActivityEvent(RecreateActivityEvent recreateActivityEvent) {
         ActivityCompat.recreate(this);
-    }
-
-    @Subscribe
-    public void onChangeConfirmToExitEvent(ChangeConfirmToExitEvent changeConfirmToExitEvent) {
-        mConfirmToExit = changeConfirmToExitEvent.confirmToExit;
     }
 
     @Subscribe
