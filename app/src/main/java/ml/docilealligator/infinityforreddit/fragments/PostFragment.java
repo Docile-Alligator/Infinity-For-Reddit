@@ -1288,6 +1288,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         } else {
             lazyModeItem.setTitle(R.string.action_start_lazy_mode);
         }
+
+        if (activity instanceof FilteredPostsActivity) {
+            menu.findItem(R.id.action_filter_posts_post_fragment).setVisible(false);
+        }
     }
 
     @Override
@@ -1298,6 +1302,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             } else {
                 startLazyMode();
             }
+            return true;
+        } else if (item.getItemId() == R.id.action_filter_posts_post_fragment) {
+            filterPosts();
             return true;
         }
         return false;

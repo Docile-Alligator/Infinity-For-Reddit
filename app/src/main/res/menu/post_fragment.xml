@@ -5,4 +5,10 @@
         android:id="@+id/action_lazy_mode_post_fragment"
         android:orderInCategory="100"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_filter_posts_post_fragment"
+        android:orderInCategory="101"
+        android:title="@string/filter_posts"
+        app:showAsAction="never" />
 </menu>
