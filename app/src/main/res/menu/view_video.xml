@@ -7,4 +7,11 @@
         android:title="@string/action_download"
         android:icon="@drawable/ic_file_download_toolbar_white_24dp"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_playback_speed_view_video_activity"
+        android:orderInCategory="2"
+        android:title="@string/action_playback_speed"
+        android:icon="@drawable/ic_playback_speed_toolbar_24dp"
+        app:showAsAction="ifRoom" />
 </menu>

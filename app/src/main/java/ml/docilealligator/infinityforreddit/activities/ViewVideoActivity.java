@@ -36,6 +36,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
@@ -55,8 +56,6 @@ import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.exoplayer2.util.Util;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.snackbar.Snackbar;
-import app.futured.hauler.DragDirection;
-import app.futured.hauler.HaulerView;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -66,12 +65,15 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import app.futured.hauler.DragDirection;
+import app.futured.hauler.HaulerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.FetchGfycatOrRedgifsVideoLinks;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.apis.VReddIt;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.PlaybackSpeedBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.font.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.font.FontFamily;
@@ -91,6 +93,14 @@ import retrofit2.Retrofit;
 
 public class ViewVideoActivity extends AppCompatActivity {
 
+    public static final int PLAYBACK_SPEED_25 = 25;
+    public static final int PLAYBACK_SPEED_50 = 50;
+    public static final int PLAYBACK_SPEED_75 = 75;
+    public static final int PLAYBACK_SPEED_NORMAL = 100;
+    public static final int PLAYBACK_SPEED_125 = 125;
+    public static final int PLAYBACK_SPEED_150 = 150;
+    public static final int PLAYBACK_SPEED_175 = 175;
+    public static final int PLAYBACK_SPEED_200 = 200;
     public static final String EXTRA_VIDEO_DOWNLOAD_URL = "EVDU";
     public static final String EXTRA_SUBREDDIT = "ES";
     public static final String EXTRA_ID = "EI";
@@ -113,6 +123,7 @@ public class ViewVideoActivity extends AppCompatActivity {
     private static final String VIDEO_TYPE_STATE = "VTS";
     private static final String SUBREDDIT_NAME_STATE = "SNS";
     private static final String ID_STATE=  "IS";
+    private static final String PLAYBACK_SPEED_STATE = "PSS";
 
     @BindView(R.id.hauler_view_view_video_activity)
     HaulerView haulerView;
@@ -152,6 +163,7 @@ public class ViewVideoActivity extends AppCompatActivity {
     private boolean isDataSavingMode;
     private boolean isHd;
     private Integer originalOrientation;
+    private int playbackSpeed = 100;
 
     @Inject
     @Named("no_oauth")
@@ -347,7 +359,9 @@ public class ViewVideoActivity extends AppCompatActivity {
             videoType = savedInstanceState.getInt(VIDEO_TYPE_STATE);
             subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
             id = savedInstanceState.getString(ID_STATE);
+            playbackSpeed = savedInstanceState.getInt(PLAYBACK_SPEED_STATE);
         }
+        setPlaybackSpeed(playbackSpeed);
 
         if (videoType == VIDEO_TYPE_V_REDD_IT) {
             loadVReddItVideo(savedInstanceState);
@@ -626,9 +640,21 @@ public class ViewVideoActivity extends AppCompatActivity {
             isDownloading = true;
             requestPermissionAndDownload();
             return true;
+        } else if (itemId == R.id.action_playback_speed_view_video_activity) {
+            PlaybackSpeedBottomSheetFragment playbackSpeedBottomSheetFragment = new PlaybackSpeedBottomSheetFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt(PlaybackSpeedBottomSheetFragment.EXTRA_PLAYBACK_SPEED, playbackSpeed);
+            playbackSpeedBottomSheetFragment.setArguments(bundle);
+            playbackSpeedBottomSheetFragment.show(getSupportFragmentManager(), playbackSpeedBottomSheetFragment.getTag());
+            return true;
         }
 
         return false;
+    }
+
+    public void setPlaybackSpeed(int speed100X) {
+        this.playbackSpeed = speed100X;
+        player.setPlaybackParameters(new PlaybackParameters((float) (speed100X / 100.0)));
     }
 
     private void requestPermissionAndDownload() {
@@ -712,5 +738,6 @@ public class ViewVideoActivity extends AppCompatActivity {
             outState.putString(SUBREDDIT_NAME_STATE, subredditName);
             outState.putString(ID_STATE, id);
         }
+        outState.putInt(PLAYBACK_SPEED_STATE, playbackSpeed);
     }
 }
