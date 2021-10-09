@@ -33,7 +33,8 @@
     <SwitchPreference
         app:defaultValue="true"
         app:key="loop_video"
-        app:title="@string/settings_loop_video_title" />
+        app:title="@string/settings_loop_video_title"
+        app:summary="@string/settings_loop_video_summary" />
 
     <PreferenceCategory
         app:title="@string/settings_video_autoplay_title" />

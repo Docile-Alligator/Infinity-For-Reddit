@@ -25,6 +25,7 @@ import im.ene.toro.exoplayer.ExoCreator;
 import im.ene.toro.exoplayer.MediaSourceBuilder;
 import im.ene.toro.exoplayer.ToroExo;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.LoopAvailableExoCreator;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -309,10 +310,10 @@ class AppModule {
 
     @Provides
     @Singleton
-    ExoCreator provideExoCreator(SimpleCache simpleCache) {
-        Config config = new Config.Builder(mApplication).setMediaSourceBuilder(MediaSourceBuilder.LOOPING).setCache(simpleCache)
+    ExoCreator provideExoCreator(SimpleCache simpleCache, @Named("default") SharedPreferences sharedPreferences) {
+        Config config = new Config.Builder(mApplication).setMediaSourceBuilder(MediaSourceBuilder.DEFAULT).setCache(simpleCache)
                 .build();
-        return ToroExo.with(mApplication).getCreator(config);
+        return new LoopAvailableExoCreator(ToroExo.with(mApplication), config, sharedPreferences);
     }
 
     @Provides
