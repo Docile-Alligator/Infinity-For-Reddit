@@ -29,19 +29,25 @@
         android:orientation="vertical"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <EditText
-            android:id="@+id/comment_edit_text_edit_comment_activity"
+        <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="1"
-            android:background="#00000000"
-            android:gravity="top"
-            android:hint="@string/post_text_content_hint"
-            android:inputType="textCapSentences|textMultiLine"
-            android:padding="16dp"
-            android:textColor="?attr/primaryTextColor"
-            android:textSize="?attr/content_font_18"
-            android:fontFamily="?attr/content_font_family" />
+            android:layout_weight="1">
+
+            <EditText
+                android:id="@+id/comment_edit_text_edit_comment_activity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#00000000"
+                android:gravity="top"
+                android:hint="@string/post_text_content_hint"
+                android:inputType="textCapSentences|textMultiLine"
+                android:padding="16dp"
+                android:textColor="?attr/primaryTextColor"
+                android:textSize="?attr/content_font_18"
+                android:fontFamily="?attr/content_font_family" />
+
+        </androidx.core.widget.NestedScrollView>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/markdown_bottom_bar_recycler_view_edit_comment_activity"
@@ -51,6 +57,5 @@
             android:layout_gravity="bottom" />
 
     </LinearLayout>
-
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
