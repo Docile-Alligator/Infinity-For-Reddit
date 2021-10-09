@@ -15,17 +15,17 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CopyTextBottomSheetFragment extends RoundedBottomSheetDialogFragment {
+public class CopyTextBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
     public static final String EXTRA_RAW_TEXT = "ERT";
     public static final String EXTRA_MARKDOWN = "EM";
 

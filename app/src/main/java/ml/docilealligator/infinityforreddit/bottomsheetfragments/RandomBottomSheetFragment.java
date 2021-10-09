@@ -9,13 +9,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 
-public class RandomBottomSheetFragment extends RoundedBottomSheetDialogFragment {
+public class RandomBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
     public static final String EXTRA_IS_NSFW = "EIN";
     public static final int RANDOM_SUBREDDIT = 0;

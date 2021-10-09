@@ -9,13 +9,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 
-public class FABMoreOptionsBottomSheetFragment extends RoundedBottomSheetDialogFragment {
+public class FABMoreOptionsBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
     public static final String EXTRA_ANONYMOUS_MODE = "EAM";
     public static final int FAB_OPTION_SUBMIT_POST = 0;

@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 
 import org.greenrobot.eventbus.EventBus;
@@ -25,12 +26,12 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.adapters.FlairBottomSheetRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FetchFlairs;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.adapters.FlairBottomSheetRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.FlairSelectedEvent;
 import retrofit2.Retrofit;
 
@@ -121,13 +122,21 @@ public class FlairBottomSheetFragment extends BottomSheetDialogFragment {
                 });
     }
 
-    public interface FlairSelectionCallback {
-        void flairSelected(Flair flair);
+    @Override
+    public void onStart() {
+        super.onStart();
+        View parentView = (View) requireView().getParent();
+        BottomSheetBehavior.from(parentView).setState(BottomSheetBehavior.STATE_EXPANDED);
+        BottomSheetBehavior.from(parentView).setSkipCollapsed(true);
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mActivity = (Activity) context;
+    }
+
+    public interface FlairSelectionCallback {
+        void flairSelected(Flair flair);
     }
 }

@@ -14,19 +14,18 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
+import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SortTypeBottomSheetFragment extends RoundedBottomSheetDialogFragment {
+public class SortTypeBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
     public static final String EXTRA_NO_BEST_TYPE = "ENBT";
     @BindView(R.id.best_type_text_view_sort_type_bottom_sheet_fragment)

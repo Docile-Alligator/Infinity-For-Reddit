@@ -9,14 +9,13 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.SelectedSubredditsAndUsersActivity;
+import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 
-public class SelectSubredditsOrUsersOptionsBottomSheetFragment extends RoundedBottomSheetDialogFragment {
+public class SelectSubredditsOrUsersOptionsBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
     @BindView(R.id.select_subreddits_text_view_search_user_and_subreddit_sort_type_bottom_sheet_fragment)
     TextView selectSubredditsTextView;

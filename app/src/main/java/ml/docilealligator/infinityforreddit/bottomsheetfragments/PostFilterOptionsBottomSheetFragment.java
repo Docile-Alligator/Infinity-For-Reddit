@@ -9,15 +9,14 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.PostFilterPreferenceActivity;
+import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 
-public class PostFilterOptionsBottomSheetFragment extends RoundedBottomSheetDialogFragment {
+public class PostFilterOptionsBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
     @BindView(R.id.edit_text_view_post_filter_options_bottom_sheet_fragment)
     TextView editTextView;

@@ -12,17 +12,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PostLayoutBottomSheetFragment extends RoundedBottomSheetDialogFragment {
+public class PostLayoutBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
     @BindView(R.id.card_layout_text_view_post_layout_bottom_sheet_fragment)
     TextView cardLayoutTextView;

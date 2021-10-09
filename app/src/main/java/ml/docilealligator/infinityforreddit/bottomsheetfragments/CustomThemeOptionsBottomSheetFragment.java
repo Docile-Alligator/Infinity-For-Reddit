@@ -13,17 +13,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.activities.CustomizeThemeActivity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.CustomizeThemeActivity;
+import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CustomThemeOptionsBottomSheetFragment extends RoundedBottomSheetDialogFragment {
+public class CustomThemeOptionsBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
     public static final String EXTRA_THEME_NAME = "ETN";
     @BindView(R.id.theme_name_text_view_custom_theme_options_bottom_sheet_fragment)

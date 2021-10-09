@@ -9,14 +9,14 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
 import com.google.android.material.button.MaterialButton;
 
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.UploadImageEnabledActivity;
 import ml.docilealligator.infinityforreddit.adapters.UploadedImagesRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 
-public class UploadedImagesBottomSheetFragment extends RoundedBottomSheetDialogFragment {
+public class UploadedImagesBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
     public static final String EXTRA_UPLOADED_IMAGES = "EUI";
 

@@ -18,17 +18,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
-import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.post.Post;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ShareLinkBottomSheetFragment extends RoundedBottomSheetDialogFragment {
+public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
     public static final String EXTRA_POST_LINK = "EPL";
     public static final String EXTRA_MEDIA_LINK = "EML";
     public static final String EXTRA_MEDIA_TYPE = "EMT";

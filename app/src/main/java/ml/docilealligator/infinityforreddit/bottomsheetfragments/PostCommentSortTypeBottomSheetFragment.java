@@ -14,18 +14,17 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
+import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class PostCommentSortTypeBottomSheetFragment extends RoundedBottomSheetDialogFragment {
+public class PostCommentSortTypeBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
     @BindView(R.id.best_type_text_view_post_comment_sort_type_bottom_sheet_fragment)
     TextView bestTypeTextView;
