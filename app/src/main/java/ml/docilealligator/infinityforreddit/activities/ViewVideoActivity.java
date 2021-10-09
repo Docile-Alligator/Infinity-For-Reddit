@@ -419,7 +419,11 @@ public class ViewVideoActivity extends AppCompatActivity {
     }
 
     private void preparePlayer(Bundle savedInstanceState) {
-        player.setRepeatMode(Player.REPEAT_MODE_ALL);
+        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.LOOP_VIDEO, true)) {
+            player.setRepeatMode(Player.REPEAT_MODE_ALL);
+        } else {
+            player.setRepeatMode(Player.REPEAT_MODE_OFF);
+        }
         if (resumePosition > 0) {
             player.seekTo(resumePosition);
         }

@@ -30,6 +30,11 @@
         app:key="video_player_automatic_landscape_orientation"
         app:title="@string/settings_video_player_automatic_landscape_orientation" />
 
+    <SwitchPreference
+        app:defaultValue="true"
+        app:key="loop_video"
+        app:title="@string/settings_loop_video_title" />
+
     <PreferenceCategory
         app:title="@string/settings_video_autoplay_title" />
 

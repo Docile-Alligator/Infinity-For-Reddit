@@ -343,7 +343,11 @@ public class ViewRPANBroadcastFragment extends Fragment {
             dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(mActivity, "Infinity"));
             // Prepare the player with the source.
             player.prepare(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(rpanBroadcast.rpanStream.hlsUrl)));
-            player.setRepeatMode(Player.REPEAT_MODE_ALL);
+            if (mSharedPreferences.getBoolean(SharedPreferencesUtils.LOOP_VIDEO, true)) {
+                player.setRepeatMode(Player.REPEAT_MODE_ALL);
+            } else {
+                player.setRepeatMode(Player.REPEAT_MODE_OFF);
+            }
             if (resumePosition > 0) {
                 player.seekTo(resumePosition);
             }

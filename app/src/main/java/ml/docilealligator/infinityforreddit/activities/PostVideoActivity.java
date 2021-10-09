@@ -210,7 +210,11 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
         videoPlayerView.setPlayer(player);
         dataSourceFactory = new DefaultDataSourceFactory(this,
                 Util.getUserAgent(this, "Infinity"));
-        player.setRepeatMode(Player.REPEAT_MODE_ALL);
+        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.LOOP_VIDEO, true)) {
+            player.setRepeatMode(Player.REPEAT_MODE_ALL);
+        } else {
+            player.setRepeatMode(Player.REPEAT_MODE_OFF);
+        }
 
         mPostingSnackbar = Snackbar.make(coordinatorLayout, R.string.posting, Snackbar.LENGTH_INDEFINITE);
 
