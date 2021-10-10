@@ -22,7 +22,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
 import com.google.android.material.appbar.AppBarLayout;
-import com.r0adkll.slidr.Slidr;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -33,7 +32,6 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LollipopBugFixedWebView;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class WebViewActivity extends BaseActivity {
@@ -73,10 +71,6 @@ public class WebViewActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         applyCustomTheme();
-
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            Slidr.attach(this);
-        }
 
         setSupportActionBar(toolbar);
 
@@ -130,6 +124,9 @@ public class WebViewActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
             finish();
+            return true;
+        } else if (item.getItemId() == R.id.action_refresh_web_view_activity) {
+            webView.reload();
             return true;
         } else if (item.getItemId() == R.id.action_share_link_web_view_activity) {
             try {
