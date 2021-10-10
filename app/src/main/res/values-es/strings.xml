@@ -318,7 +318,6 @@ Premio means prize, so it's better suited the first word instead of the second o
     <string name="settings_gestures_and_buttons_title">"Gestos y Botones"</string>
     <string name="settings_save_front_page_scrolled_position_title">"Guardar Posición en INICIO"</string>
     <string name="settings_save_front_page_scrolled_position_summary">"Ver nuevas publicaciones después de actualizar la página de INICIO (Página inicial, ordenar por: Lo mejor)"</string>
-    <string name="settings_open_link_in_app_title">"Abrir enlaces dentro de la App"</string>
     <string name="settigns_video_title">"Vídeo"</string>
     <string name="settings_video_autoplay_title">"Reproducción automática de Vídeo"</string>
     <string name="settings_mute_autoplaying_videos_title">"Silenciar Videos reproducidos automáticamente"</string>

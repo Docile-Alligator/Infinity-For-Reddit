@@ -330,7 +330,6 @@ Behavior -->
     <string name="settings_gestures_and_buttons_title">"जैस्चर्स एवं बटन्स"</string>
     <string name="settings_save_front_page_scrolled_position_title">"होम पर स्क्रौल की स्थिति स्थिर करें "</string>
     <string name="settings_save_front_page_scrolled_position_summary">"होम में ताजा करने पर नई पोस्ट्स देखें (मुख पृष्ट, क्रम: श्रेष्ठ)"</string>
-    <string name="settings_open_link_in_app_title">"लिंक एप में खोलें "</string>
     <string name="settigns_video_title">"वीडियो "</string>
     <string name="settings_video_autoplay_title">"वीडियो स्वचालन"</string>
     <string name="settings_mute_autoplaying_videos_title">"स्वचालित वीडियोज को मौन करें "</string>

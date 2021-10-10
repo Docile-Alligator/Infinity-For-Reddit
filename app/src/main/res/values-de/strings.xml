@@ -311,7 +311,6 @@ Tippen für Neuversuch."</string>
     <string name="settings_gestures_and_buttons_title">"Gesten &amp; Knöpfe"</string>
     <string name="settings_save_front_page_scrolled_position_title">"Scrollposition in HOME speichern"</string>
     <string name="settings_save_front_page_scrolled_position_summary">"Neue Beitrage nach dem Aktualisieren von HOME anzeigen (Frontseite, Sortierung: Beste)"</string>
-    <string name="settings_open_link_in_app_title">"Link in App öffnen"</string>
     <string name="settigns_video_title">"Video"</string>
     <string name="settings_video_autoplay_title">"Videos automatisch abspielen"</string>
     <string name="settings_mute_autoplaying_videos_title">"Automatisch abgespielte Videos stummschalten"</string>

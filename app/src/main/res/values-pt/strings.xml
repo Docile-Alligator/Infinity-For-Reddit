@@ -299,7 +299,6 @@ Toque para tentar novamente."</string>
     <string name="settings_gestures_and_buttons_title">"Gestos e Botões"</string>
     <string name="settings_save_front_page_scrolled_position_title">"Guardar Posição de Deslizamento em INÍCIO"</string>
     <string name="settings_save_front_page_scrolled_position_summary">"Explorar novas publicações após recarregar INÍCIO (Página Principal, ordenado por: Melhor)"</string>
-    <string name="settings_open_link_in_app_title">"Abrir Ligação na Aplicação"</string>
     <string name="settigns_video_title">"Vídeo"</string>
     <string name="settings_video_autoplay_title">"Reprodução Automática de Vídeos"</string>
     <string name="settings_mute_autoplaying_videos_title">"Vídeos em auto-reprodução Sem Som"</string>

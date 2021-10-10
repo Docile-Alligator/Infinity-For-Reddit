@@ -298,10 +298,13 @@ public class LinkResolverActivity extends AppCompatActivity {
             return;
         }
 
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.OPEN_LINK_IN_APP, false)) {
+        int linkHandler = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.LINK_HANDLER, "0"));
+        if (linkHandler == 0) {
+            openInBrowser(uri, pm, true);
+        } else if (linkHandler == 1) {
             openInCustomTabs(uri, pm, true);
         } else {
-            openInBrowser(uri, pm, true);
+            openInWebView(uri);
         }
     }
 

@@ -7,11 +7,14 @@
         app:title="@string/settings_save_front_page_scrolled_position_title"
         app:summary="@string/settings_save_front_page_scrolled_position_summary" />
 
-    <SwitchPreference
-        app:defaultValue="false"
+    <ListPreference
+        app:defaultValue="0"
+        app:entries="@array/link_handler"
+        app:entryValues="@array/link_handler_values"
         app:icon="@drawable/ic_link"
-        app:key="open_link_in_app"
-        app:title="@string/settings_open_link_in_app_title" />
+        app:key="link_handler"
+        app:title="@string/settings_link_handler_title"
+        app:useSimpleSummaryProvider="true" />
 
     <ListPreference
         app:defaultValue="0"

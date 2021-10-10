@@ -300,7 +300,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_gestures_and_buttons_title">"İşaretler ve Düğmeler"</string>
     <string name="settings_save_front_page_scrolled_position_title">"Ana Sayfada Kaydırma Konumunu Kaydet"</string>
     <string name="settings_save_front_page_scrolled_position_summary">"Ana Sayfa yenilendikten sonra yeni gönderilere göz atın (Ön Sayfa, sıralama türü: En iyi)"</string>
-    <string name="settings_open_link_in_app_title">"Bağlantıları Uygulamada Aç"</string>
     <string name="settigns_video_title">"Video"</string>
     <string name="settings_video_autoplay_title">"Otomatik Video Oynatma"</string>
     <string name="settings_mute_autoplaying_videos_title">"Otomatik Oynatılan Videoları Sessize Al"</string>

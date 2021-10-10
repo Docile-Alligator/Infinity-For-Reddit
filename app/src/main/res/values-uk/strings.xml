@@ -363,7 +363,6 @@
     <string name="settings_gestures_and_buttons_title">Жести і кнопки</string>
     <string name="settings_save_front_page_scrolled_position_title">Зберігати позицію прокрутки в ДОМІВЦІ</string>
     <string name="settings_save_front_page_scrolled_position_summary">Оглядати нові дописи після оновлення ДОМІВКИ (Перша сторінка, тип сортування: Кращі)</string>
-    <string name="settings_open_link_in_app_title">Відкривати посилання в програмі</string>
     <string name="settigns_video_title">Відеозаписи</string>
     <string name="settings_video_autoplay_title">Автовідтворення відео</string>
     <string name="settings_mute_autoplaying_videos_title">Глушити автовідтворювані відео</string>

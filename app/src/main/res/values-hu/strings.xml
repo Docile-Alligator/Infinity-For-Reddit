@@ -287,7 +287,6 @@
     <string name="settings_gestures_and_buttons_title">"Gesztusok és gombok"</string>
     <string name="settings_save_front_page_scrolled_position_title">"Görgetés pozíciójának mentése a Kezdőlapon"</string>
     <string name="settings_save_front_page_scrolled_position_summary">"Böngéssz új posztokat a Kezdőlap frissítése után (Kezdőlap, rendezés típusa: Legjobb)"</string>
-    <string name="settings_open_link_in_app_title">"Nyisd meg a linket appon belül"</string>
     <string name="settigns_video_title">"Videó"</string>
     <string name="settings_video_autoplay_title">"Videó autómatikus lejátszása"</string>
     <string name="settings_mute_autoplaying_videos_title">"Autómatikusan lejátszó videók némítása"</string>

@@ -289,7 +289,6 @@
     <string name="settings_gestures_and_buttons_title">"Gesty i przyciski"</string>
     <string name="settings_save_front_page_scrolled_position_title">"Zapisz pozycję na stronie głównej"</string>
     <string name="settings_save_front_page_scrolled_position_summary">"Przeglądaj nowe posty po odświeżeniu strony głównej"</string>
-    <string name="settings_open_link_in_app_title">"Otwórz link w aplikacji"</string>
     <string name="settigns_video_title">"Wideo"</string>
     <string name="settings_video_autoplay_title">"Autoodtwarzanie wideo"</string>
     <string name="settings_mute_autoplaying_videos_title">"Wycisz automatycznie odtwarzane wideo"</string>

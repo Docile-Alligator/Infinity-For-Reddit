@@ -325,7 +325,6 @@ Appuyez pour réessayer."</string>
     <string name="settings_gestures_and_buttons_title">"Gestes &amp; Boutons"</string>
     <string name="settings_save_front_page_scrolled_position_title">"Sauvegarder la position défilée dans l'accueil"</string>
     <string name="settings_save_front_page_scrolled_position_summary">"Parcourir les nouveaux messages après actualisation dans l'accueil (Front Page, type de tri : Meilleur)"</string>
-    <string name="settings_open_link_in_app_title">"Ouvrir les lien dans l'application"</string>
     <string name="settigns_video_title">"Vidéo"</string>
 
     <!-- Fuzzy -->

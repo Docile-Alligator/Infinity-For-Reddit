@@ -301,7 +301,6 @@ Toque para tentar novamente."</string>
     <string name="settings_gestures_and_buttons_title">"Gestos e Botões"</string>
     <string name="settings_save_front_page_scrolled_position_title">"Posição de rolagem salva na tela inicial"</string>
     <string name="settings_save_front_page_scrolled_position_summary">"Navegue por posts novos depois de atualizar a tela inicial ( Primeira Página, modo de classificação: Melhores)"</string>
-    <string name="settings_open_link_in_app_title">"Abrir Link no App"</string>
     <string name="settigns_video_title">"Vídeo"</string>
     <string name="settings_video_autoplay_title">"Reprodução Automática de Vídeo"</string>
     <string name="settings_mute_autoplaying_videos_title">"Silenciar Vídeos Reproduzidos Automaticamente"</string>

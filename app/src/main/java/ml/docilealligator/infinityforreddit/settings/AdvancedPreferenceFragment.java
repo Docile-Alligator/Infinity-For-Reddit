@@ -1,5 +1,8 @@
 package ml.docilealligator.infinityforreddit.settings;
 
+import static android.app.Activity.RESULT_OK;
+import static android.content.Intent.ACTION_OPEN_DOCUMENT_TREE;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -38,9 +41,6 @@ import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllUsers;
 import ml.docilealligator.infinityforreddit.asynctasks.RestoreSettings;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-
-import static android.app.Activity.RESULT_OK;
-import static android.content.Intent.ACTION_OPEN_DOCUMENT_TREE;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -230,6 +230,8 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
                             editor.remove(SharedPreferencesUtils.NSFW_KEY_LEGACY);
                             editor.remove(SharedPreferencesUtils.BLUR_NSFW_KEY_LEGACY);
                             editor.remove(SharedPreferencesUtils.BLUR_SPOILER_KEY_LEGACY);
+                            editor.remove(SharedPreferencesUtils.CONFIRM_TO_EXIT_LEGACY);
+                            editor.remove(SharedPreferencesUtils.OPEN_LINK_IN_APP_LEGACY);
 
                             SharedPreferences.Editor sortTypeEditor = mSortTypeSharedPreferences.edit();
                             sortTypeEditor.remove(SharedPreferencesUtils.SORT_TYPE_ALL_POST_LEGACY);

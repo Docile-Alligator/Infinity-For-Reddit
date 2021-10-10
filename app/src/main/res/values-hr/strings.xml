@@ -279,7 +279,6 @@
     <string name="settings_gestures_and_buttons_title">"Geste i tipke"</string>
     <string name="settings_save_front_page_scrolled_position_title">"Spremi poziciju na NASLOVNICA"</string>
     <string name="settings_save_front_page_scrolled_position_summary">"Pregledavaj nove objave nakon osvježivanja u NASLOVNICA (Početna stranica, vrsta sortiranja: Najbolje)"</string>
-    <string name="settings_open_link_in_app_title">"Otvori poveznicu unutar aplikacije"</string>
     <string name="settigns_video_title">"Video"</string>
     <string name="settings_video_autoplay_title">"Automatsko pokretanje videozapisa"</string>
     <string name="settings_mute_autoplaying_videos_title">"Automatski pokrenuti videozapisi bez zvuka"</string>

@@ -302,7 +302,6 @@ Tocca per riprovare."</string>
     <string name="settings_gestures_and_buttons_title">"Gesti e pulsanti"</string>
     <string name="settings_save_front_page_scrolled_position_title">"Salva posizione di scorrimento nella HOME"</string>
     <string name="settings_save_front_page_scrolled_position_summary">"Sfoglia i nuovi post dopo l'aggiornamento in HOME (pagina iniziale, tipo di ordinamento: migliore)"</string>
-    <string name="settings_open_link_in_app_title">"Apri Link nell'App"</string>
     <string name="settigns_video_title">"Video"</string>
     <string name="settings_video_autoplay_title">"Autoriproduzione video"</string>
     <string name="settings_mute_autoplaying_videos_title">"Muta video autoriprodotti"</string>

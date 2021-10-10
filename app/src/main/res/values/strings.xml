@@ -365,7 +365,7 @@
     <string name="settings_gestures_and_buttons_title">Gestures &amp; Buttons</string>
     <string name="settings_save_front_page_scrolled_position_title">Save Scrolled Position in HOME</string>
     <string name="settings_save_front_page_scrolled_position_summary">Browse new posts after refreshing in HOME (Front Page, sort type: Best)</string>
-    <string name="settings_open_link_in_app_title">Open Link In App</string>
+    <string name="settings_link_handler_title">Link Handler</string>
     <string name="settigns_video_title">Video</string>
     <string name="settings_video_autoplay_title">Video Autoplay</string>
     <string name="settings_mute_autoplaying_videos_title">Mute Autoplaying Videos</string>
@@ -610,6 +610,9 @@
     <string name="settings_app_lock_timeout_title">App Lock Timeout</string>
     <string name="settings_enable_fold_support_title">Enable folding phone support</string>
     <string name="settings_default_playback_speed_title">Default Playback Speed</string>
+    <string name="settings_link_handler_value_external_browser">External Browser</string>
+    <string name="settings_link_handler_value_custom_tab">Custom Tab</string>
+    <string name="settings_link_handler_value_internal_browser">Internal Browser</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -1148,7 +1151,7 @@
     <string name="exclude_user">Exclude this user</string>
     <string name="exclude_flair">Exclude this flair</string>
     <string name="contain_flair">Contain this flair</string>
-    <string name="exclude_domain">Exclude Domain</string>
+    <string name="exclude_domain">Exclude this domain</string>
 
     <string name="suggest_title">Suggest Title</string>
     <string name="suggest_title_failed">Failed to suggest a title</string>

@@ -93,7 +93,7 @@ public class SharedPreferencesUtils {
     public static final String VOLUME_KEYS_NAVIGATE_COMMENTS = "volume_keys_navigate_comments";
     public static final String VOLUME_KEYS_NAVIGATE_POSTS = "volume_keys_navigate_posts";
     public static final String MUTE_VIDEO = "mute_video";
-    public static final String OPEN_LINK_IN_APP = "open_link_in_app";
+    public static final String LINK_HANDLER = "link_handler";
     public static final String VIDEO_AUTOPLAY = "video_autoplay";
     public static final String VIDEO_AUTOPLAY_VALUE_ALWAYS_ON = "2";
     public static final String VIDEO_AUTOPLAY_VALUE_ON_WIFI = "1";
@@ -363,4 +363,5 @@ public class SharedPreferencesUtils {
     public static final String BLUR_NSFW_KEY_LEGACY = "blur_nsfw";
     public static final String BLUR_SPOILER_KEY_LEGACY = "blur_spoiler";
     public static final String CONFIRM_TO_EXIT_LEGACY = "confirm_to_exit";
+    public static final String OPEN_LINK_IN_APP_LEGACY = "open_link_in_app";
 }

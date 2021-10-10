@@ -300,7 +300,6 @@ Nhấn để thử lại."</string>
     <string name="settings_gestures_and_buttons_title">"Cử chỉ &amp; Nút"</string>
     <string name="settings_save_front_page_scrolled_position_title">"Giữ vị trí cuộn trong Trang chủ"</string>
     <string name="settings_save_front_page_scrolled_position_summary">"Duyệt các bài viết mới sau khi làm mới trong TRANG CHỦ (Trang chính, loại sắp xếp: Hay nhất)"</string>
-    <string name="settings_open_link_in_app_title">"Mở liên kết trong ứng dụng"</string>
     <string name="settigns_video_title">"VIDEO"</string>
     <string name="settings_video_autoplay_title">"Tự động phát Video"</string>
     <string name="settings_mute_autoplaying_videos_title">"Tắt tiếng những Video tự động phát"</string>

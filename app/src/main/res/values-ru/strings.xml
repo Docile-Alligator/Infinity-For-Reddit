@@ -299,7 +299,6 @@
     <string name="settings_gestures_and_buttons_title">"Жесты и кнопки"</string>
     <string name="settings_save_front_page_scrolled_position_title">"Сохранять прокрученную позицию на «Главной»"</string>
     <string name="settings_save_front_page_scrolled_position_summary">"Просмотр новых постов после обновления на «Главной» (Заглавная страница, сортировка: лучшее)"</string>
-    <string name="settings_open_link_in_app_title">"Открыть ссылку в приложении"</string>
     <string name="settigns_video_title">"Видео"</string>
     <string name="settings_video_autoplay_title">"Автовоспроизведение видео"</string>
     <string name="settings_mute_autoplaying_videos_title">"Отключать звук у автовоспроизводящихся видео"</string>

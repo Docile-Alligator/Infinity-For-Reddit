@@ -293,7 +293,6 @@
     <string name="settings_gestures_and_buttons_title">"手势和按钮"</string>
     <string name="settings_save_front_page_scrolled_position_title">"在首页记住浏览的位置"</string>
     <string name="settings_save_front_page_scrolled_position_summary">"刷新首页浏览新帖（排序为精选）"</string>
-    <string name="settings_open_link_in_app_title">"在应用内打开网页"</string>
     <string name="settigns_video_title">"视频"</string>
     <string name="settings_video_autoplay_title">"自动播放视频"</string>
     <string name="settings_mute_autoplaying_videos_title">"静音自动播放的视频"</string>

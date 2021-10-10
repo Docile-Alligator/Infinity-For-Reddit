@@ -328,7 +328,6 @@
     <string name="settings_gestures_and_buttons_title">"ジェスチャーとボタン"</string>
     <string name="settings_save_front_page_scrolled_position_title">"ホーム画面のスクロール位置を保存"</string>
     <string name="settings_save_front_page_scrolled_position_summary">"ホームを更新後は新しい投稿を表示 (フロントページ、並べ替え: ベスト)"</string>
-    <string name="settings_open_link_in_app_title">"リンクをアプリ内で開く"</string>
     <string name="settigns_video_title">"動画"</string>
     <string name="settings_video_autoplay_title">"動画を自動再生"</string>
     <string name="settings_mute_autoplaying_videos_title">"自動再生の動画をミュート"</string>

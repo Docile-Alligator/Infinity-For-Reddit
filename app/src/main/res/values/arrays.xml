@@ -542,4 +542,16 @@
         <item>200</item>
     </string-array>
 
+    <string-array name="link_handler">
+        <item>@string/settings_link_handler_value_external_browser</item>
+        <item>@string/settings_link_handler_value_custom_tab</item>
+        <item>@string/settings_link_handler_value_internal_browser</item>
+    </string-array>
+
+    <string-array name="link_handler_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+
 </resources>
