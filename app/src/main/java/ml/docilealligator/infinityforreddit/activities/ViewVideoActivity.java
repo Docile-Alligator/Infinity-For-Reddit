@@ -361,7 +361,7 @@ public class ViewVideoActivity extends AppCompatActivity {
             id = savedInstanceState.getString(ID_STATE);
             playbackSpeed = savedInstanceState.getInt(PLAYBACK_SPEED_STATE);
         }
-        setPlaybackSpeed(playbackSpeed);
+        setPlaybackSpeed(Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_PLAYBACK_SPEED, "100")));
 
         if (videoType == VIDEO_TYPE_V_REDD_IT) {
             loadVReddItVideo(savedInstanceState);
@@ -701,6 +701,7 @@ public class ViewVideoActivity extends AppCompatActivity {
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE && grantResults.length > 0) {
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
                 Toast.makeText(this, R.string.no_storage_permission, Toast.LENGTH_SHORT).show();

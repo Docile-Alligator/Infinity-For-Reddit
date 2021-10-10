@@ -156,7 +156,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
         if (savedInstanceState != null) {
             playbackSpeed = savedInstanceState.getInt(PLAYBACK_SPEED_STATE);
         }
-        setPlaybackSpeed(playbackSpeed);
+        Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_PLAYBACK_SPEED, "100"));
         preparePlayer(savedInstanceState);
 
         if (activity.isUseBottomAppBar()) {

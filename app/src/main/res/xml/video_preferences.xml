@@ -36,6 +36,14 @@
         app:title="@string/settings_loop_video_title"
         app:summary="@string/settings_loop_video_summary" />
 
+    <ListPreference
+        app:defaultValue="100"
+        android:entries="@array/default_playback_speed"
+        app:entryValues="@array/default_playback_speed_values"
+        app:key="default_playback_speed"
+        app:title="@string/settings_default_playback_speed_title"
+        app:useSimpleSummaryProvider="true" />
+
     <PreferenceCategory
         app:title="@string/settings_video_autoplay_title" />
 
