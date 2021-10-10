@@ -613,7 +613,7 @@ public class ViewVideoActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.view_video, menu);
+        getMenuInflater().inflate(R.menu.view_video_activity, menu);
         return true;
     }
 

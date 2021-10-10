@@ -27,6 +27,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
@@ -50,6 +51,7 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.ViewRedditGalleryActivity;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.PlaybackSpeedBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -58,11 +60,12 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
 
     public static final String EXTRA_REDDIT_GALLERY_VIDEO = "EIV";
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
-    private static final String IS_MUTE_STATE = "IMS";
-    private static final String POSITION_STATE = "PS";
     public static final String EXTRA_INDEX = "EI";
     public static final String EXTRA_MEDIA_COUNT = "EMC";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
+    private static final String IS_MUTE_STATE = "IMS";
+    private static final String POSITION_STATE = "PS";
+    private static final String PLAYBACK_SPEED_STATE = "PSS";
     @BindView(R.id.player_view_view_reddit_gallery_video_fragment)
     PlayerView videoPlayerView;
     @BindView(R.id.mute_exo_playback_control_view)
@@ -81,6 +84,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
     private boolean wasPlaying = false;
     private boolean isMute = false;
     private boolean isDownloading = false;
+    private int playbackSpeed = 100;
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
@@ -148,6 +152,11 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
         dataSourceFactory = new DefaultDataSourceFactory(activity,
                 Util.getUserAgent(activity, "Infinity"));
         player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(galleryVideo.url)));
+
+        if (savedInstanceState != null) {
+            playbackSpeed = savedInstanceState.getInt(PLAYBACK_SPEED_STATE);
+        }
+        setPlaybackSpeed(playbackSpeed);
         preparePlayer(savedInstanceState);
 
         if (activity.isUseBottomAppBar()) {
@@ -178,8 +187,20 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
             isDownloading = true;
             requestPermissionAndDownload();
             return true;
+        } else if (item.getItemId() == R.id.action_playback_speed_view_reddit_gallery_video_fragment) {
+            PlaybackSpeedBottomSheetFragment playbackSpeedBottomSheetFragment = new PlaybackSpeedBottomSheetFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt(PlaybackSpeedBottomSheetFragment.EXTRA_PLAYBACK_SPEED, playbackSpeed);
+            playbackSpeedBottomSheetFragment.setArguments(bundle);
+            playbackSpeedBottomSheetFragment.show(getChildFragmentManager(), playbackSpeedBottomSheetFragment.getTag());
+            return true;
         }
         return false;
+    }
+
+    public void setPlaybackSpeed(int speed100X) {
+        this.playbackSpeed = speed100X;
+        player.setPlaybackParameters(new PlaybackParameters((float) (speed100X / 100.0)));
     }
 
     private void requestPermissionAndDownload() {
@@ -305,6 +326,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putBoolean(IS_MUTE_STATE, isMute);
         outState.putLong(POSITION_STATE, player.getCurrentPosition());
+        outState.putInt(PLAYBACK_SPEED_STATE, playbackSpeed);
     }
 
     @Override

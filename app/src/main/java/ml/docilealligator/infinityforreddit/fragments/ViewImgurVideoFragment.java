@@ -27,6 +27,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
@@ -51,17 +52,19 @@ import ml.docilealligator.infinityforreddit.ImgurMedia;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.ViewImgurMediaActivity;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.PlaybackSpeedBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class ViewImgurVideoFragment extends Fragment {
 
     public static final String EXTRA_IMGUR_VIDEO = "EIV";
-    private static final String IS_MUTE_STATE = "IMS";
-    private static final String POSITION_STATE = "PS";
     public static final String EXTRA_INDEX = "EI";
     public static final String EXTRA_MEDIA_COUNT = "EMC";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
+    private static final String IS_MUTE_STATE = "IMS";
+    private static final String POSITION_STATE = "PS";
+    private static final String PLAYBACK_SPEED_STATE = "PSS";
     @BindView(R.id.player_view_view_imgur_video_fragment)
     PlayerView videoPlayerView;
     @BindView(R.id.mute_exo_playback_control_view)
@@ -79,6 +82,7 @@ public class ViewImgurVideoFragment extends Fragment {
     private boolean wasPlaying = false;
     private boolean isMute = false;
     private boolean isDownloading = false;
+    private int playbackSpeed = 100;
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
@@ -145,6 +149,11 @@ public class ViewImgurVideoFragment extends Fragment {
         dataSourceFactory = new DefaultDataSourceFactory(activity,
                 Util.getUserAgent(activity, "Infinity"));
         player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(imgurMedia.getLink())));
+
+        if (savedInstanceState != null) {
+            playbackSpeed = savedInstanceState.getInt(PLAYBACK_SPEED_STATE);
+        }
+        setPlaybackSpeed(playbackSpeed);
         preparePlayer(savedInstanceState);
 
         if (activity.isUseBottomAppBar()) {
@@ -175,8 +184,20 @@ public class ViewImgurVideoFragment extends Fragment {
             isDownloading = true;
             requestPermissionAndDownload();
             return true;
+        } else if (item.getItemId() == R.id.action_playback_speed_view_imgur_video_fragment) {
+            PlaybackSpeedBottomSheetFragment playbackSpeedBottomSheetFragment = new PlaybackSpeedBottomSheetFragment();
+            Bundle bundle = new Bundle();
+            bundle.putInt(PlaybackSpeedBottomSheetFragment.EXTRA_PLAYBACK_SPEED, playbackSpeed);
+            playbackSpeedBottomSheetFragment.setArguments(bundle);
+            playbackSpeedBottomSheetFragment.show(getChildFragmentManager(), playbackSpeedBottomSheetFragment.getTag());
+            return true;
         }
         return false;
+    }
+
+    public void setPlaybackSpeed(int speed100X) {
+        this.playbackSpeed = speed100X;
+        player.setPlaybackParameters(new PlaybackParameters((float) (speed100X / 100.0)));
     }
 
     private void requestPermissionAndDownload() {
@@ -301,6 +322,7 @@ public class ViewImgurVideoFragment extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putBoolean(IS_MUTE_STATE, isMute);
         outState.putLong(POSITION_STATE, player.getCurrentPosition());
+        outState.putInt(PLAYBACK_SPEED_STATE, playbackSpeed);
     }
 
     @Override

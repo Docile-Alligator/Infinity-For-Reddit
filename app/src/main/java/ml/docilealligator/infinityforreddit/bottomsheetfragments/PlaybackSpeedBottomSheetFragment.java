@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,12 +9,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.fragments.ViewImgurVideoFragment;
+import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryVideoFragment;
 
 public class PlaybackSpeedBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
@@ -35,7 +39,7 @@ public class PlaybackSpeedBottomSheetFragment extends LandscapeExpandedRoundedBo
     TextView playbackSpeed175TextView;
     @BindView(R.id.playback_speed_200_text_view_playback_speed_bottom_sheet_fragment)
     TextView playbackSpeed200TextView;
-    private ViewVideoActivity viewVideoActivity;
+    private Activity activity;
 
     public PlaybackSpeedBottomSheetFragment() {
         // Required empty public constructor
@@ -77,50 +81,63 @@ public class PlaybackSpeedBottomSheetFragment extends LandscapeExpandedRoundedBo
         }
 
         playbackSpeed025TextView.setOnClickListener(view -> {
-            viewVideoActivity.setPlaybackSpeed(ViewVideoActivity.PLAYBACK_SPEED_25);
+            setPlaybackSpeed(ViewVideoActivity.PLAYBACK_SPEED_25);
             dismiss();
         });
 
         playbackSpeed050TextView.setOnClickListener(view -> {
-            viewVideoActivity.setPlaybackSpeed(ViewVideoActivity.PLAYBACK_SPEED_50);
+            setPlaybackSpeed(ViewVideoActivity.PLAYBACK_SPEED_50);
             dismiss();
         });
 
         playbackSpeed075TextView.setOnClickListener(view -> {
-            viewVideoActivity.setPlaybackSpeed(ViewVideoActivity.PLAYBACK_SPEED_75);
+            setPlaybackSpeed(ViewVideoActivity.PLAYBACK_SPEED_75);
             dismiss();
         });
 
         playbackSpeedNormalTextView.setOnClickListener(view -> {
-            viewVideoActivity.setPlaybackSpeed(ViewVideoActivity.PLAYBACK_SPEED_NORMAL);
+            setPlaybackSpeed(ViewVideoActivity.PLAYBACK_SPEED_NORMAL);
             dismiss();
         });
 
         playbackSpeed125TextView.setOnClickListener(view -> {
-            viewVideoActivity.setPlaybackSpeed(ViewVideoActivity.PLAYBACK_SPEED_125);
+            setPlaybackSpeed(ViewVideoActivity.PLAYBACK_SPEED_125);
             dismiss();
         });
 
         playbackSpeed150TextView.setOnClickListener(view -> {
-            viewVideoActivity.setPlaybackSpeed(ViewVideoActivity.PLAYBACK_SPEED_150);
+            setPlaybackSpeed(ViewVideoActivity.PLAYBACK_SPEED_150);
             dismiss();
         });
 
         playbackSpeed175TextView.setOnClickListener(view -> {
-            viewVideoActivity.setPlaybackSpeed(ViewVideoActivity.PLAYBACK_SPEED_175);
+            setPlaybackSpeed(ViewVideoActivity.PLAYBACK_SPEED_175);
             dismiss();
         });
 
         playbackSpeed200TextView.setOnClickListener(view -> {
-            viewVideoActivity.setPlaybackSpeed(ViewVideoActivity.PLAYBACK_SPEED_200);
+            setPlaybackSpeed(ViewVideoActivity.PLAYBACK_SPEED_200);
             dismiss();
         });
         return rootView;
     }
 
+    private void setPlaybackSpeed(int playbackSpeed) {
+        if (activity instanceof ViewVideoActivity) {
+            ((ViewVideoActivity) activity).setPlaybackSpeed(playbackSpeed);
+        } else {
+            Fragment parentFragment = getParentFragment();
+            if (parentFragment instanceof ViewImgurVideoFragment) {
+                ((ViewImgurVideoFragment) parentFragment).setPlaybackSpeed(playbackSpeed);
+            } else if (parentFragment instanceof ViewRedditGalleryVideoFragment) {
+                ((ViewRedditGalleryVideoFragment) parentFragment).setPlaybackSpeed(playbackSpeed);
+            }
+        }
+    }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        viewVideoActivity = (ViewVideoActivity) context;
+        activity = (Activity) context;
     }
 }
