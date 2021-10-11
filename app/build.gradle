@@ -15,6 +15,20 @@ android {
             }
         }
     }
+    signingConfigs {
+        nightly {
+            def signingPropsFile = rootProject.file('nightly.properties')
+            def properties = null
+            if (signingPropsFile.exists()) {
+                properties = new Properties()
+                signingPropsFile.withInputStream { properties.load it }
+                storeFile properties?.get('secretKeyFile')?.with(rootProject.&file)
+                storePassword properties?.get('secretStorePassword')
+                keyAlias properties?.get('secretKeyAlias')
+                keyPassword properties?.get('secretKeyPassword')
+            }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -26,6 +40,18 @@ android {
             minifyEnabled true
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        nightlyRelease {
+            initWith buildTypes.minifiedRelease
+            signingConfig = signingConfigs.nightly
+        }
+    }
+    applicationVariants.all { variants ->
+        if (variants.buildType.name == 'nightlyRelease') {
+            variants.outputs.all { output ->
+                output.versionCodeOverride = defaultConfig.versionCode + 10000
+                output.versionNameOverride = defaultConfig.versionName + '-Nightly'
+            }
         }
     }
     compileOptions {
