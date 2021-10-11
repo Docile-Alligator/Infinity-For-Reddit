@@ -119,27 +119,6 @@ public class CustomizeBottomAppBarFragment extends Fragment {
 
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
 
-        if (accountName == null) {
-            infoTextView.setText(R.string.only_for_logged_in_user);
-            mainActivityGroupSummaryTextView.setVisibility(View.GONE);
-            mainActivityOptionCountLinearLayout.setVisibility(View.GONE);
-            mainActivityOption1LinearLayout.setVisibility(View.GONE);
-            mainActivityOption2LinearLayout.setVisibility(View.GONE);
-            mainActivityOption3LinearLayout.setVisibility(View.GONE);
-            mainActivityOption4LinearLayout.setVisibility(View.GONE);
-            mainActivityFABLinearLayout.setVisibility(View.GONE);
-            divider2.setVisibility(View.GONE);
-            otherActivitiesGroupSummaryTextView.setVisibility(View.GONE);
-            otherActivitiesOptionCountLinearLayout.setVisibility(View.GONE);
-            otherActivitiesOption1LinearLayout.setVisibility(View.GONE);
-            otherActivitiesOption2LinearLayout.setVisibility(View.GONE);
-            otherActivitiesOption3LinearLayout.setVisibility(View.GONE);
-            otherActivitiesOption4LinearLayout.setVisibility(View.GONE);
-            otherActivitiesFABLinearLayout.setVisibility(View.GONE);
-
-            return rootView;
-        }
-
         Resources resources = activity.getResources();
         String[] mainActivityOptions = resources.getStringArray(R.array.settings_main_activity_bottom_app_bar_options);
         String[] fabOptions = resources.getStringArray(R.array.settings_bottom_app_bar_fab_options);

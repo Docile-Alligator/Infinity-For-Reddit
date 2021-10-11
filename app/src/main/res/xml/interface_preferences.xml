@@ -18,12 +18,10 @@
 
     <Preference
         app:title="@string/settings_customize_tabs_in_main_page_title"
-        app:summary="@string/only_for_logged_in_user"
         app:fragment="ml.docilealligator.infinityforreddit.settings.CustomizeMainPageTabsFragment" />
 
     <Preference
         app:title="@string/settings_customize_bottom_app_bar_title"
-        app:summary="@string/only_for_logged_in_user"
         app:fragment="ml.docilealligator.infinityforreddit.settings.CustomizeBottomAppBarFragment" />
 
     <SwitchPreference

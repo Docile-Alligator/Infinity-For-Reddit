@@ -195,6 +195,15 @@
         <item>@string/gilded</item>
     </string-array>
 
+    <string-array name="settings_tab_post_type_anonymous">
+        <item>@string/home</item>
+        <item>@string/popular</item>
+        <item>@string/all</item>
+        <item>@string/subreddit</item>
+        <item>@string/multi_reddit</item>
+        <item>@string/user</item>
+    </string-array>
+
     <string-array name="settings_time_format">
         <!-- 2020/01/23 23:45 -->
         <item>Jan 23, 2020, 23:45</item>

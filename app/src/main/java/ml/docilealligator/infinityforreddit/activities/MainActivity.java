@@ -1545,34 +1545,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         @NonNull
         @Override
         public Fragment createFragment(int position) {
-            if (mAccessToken == null) {
-                if (position == 0) {
-                    PostFragment fragment = new PostFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE);
-                    fragment.setArguments(bundle);
-                    return fragment;
-                } else if (position == 1) {
-                    PostFragment fragment = new PostFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_SUBREDDIT);
-                    bundle.putString(PostFragment.EXTRA_NAME, "popular");
-                    bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
-                    bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
-                    fragment.setArguments(bundle);
-                    return fragment;
-                } else {
-                    PostFragment fragment = new PostFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_SUBREDDIT);
-                    bundle.putString(PostFragment.EXTRA_NAME, "all");
-                    bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
-                    bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
-                    fragment.setArguments(bundle);
-                    return fragment;
-                }
-            }
-
             if (position == 0) {
                 int postType = mMainActivityTabsSharedPreferences.getInt((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HOME);
                 String name = mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, "");
@@ -1619,6 +1591,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 if (position == 1) {
                      postType = mMainActivityTabsSharedPreferences.getInt((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_POPULAR);
                      name = mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, "");
+                     Toast.makeText(MainActivity.this, postType + " s", Toast.LENGTH_SHORT).show();
                 } else {
                     postType = mMainActivityTabsSharedPreferences.getInt((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_POST_TYPE, SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_ALL);
                     name = mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, "");
@@ -1651,7 +1624,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (postType == SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_HOME) {
                 PostFragment fragment = new PostFragment();
                 Bundle bundle = new Bundle();
-                bundle.putInt(PostFragment.EXTRA_POST_TYPE, PostPagingSource.TYPE_FRONT_PAGE);
+                bundle.putInt(PostFragment.EXTRA_POST_TYPE, mAccountName == null ? PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE : PostPagingSource.TYPE_FRONT_PAGE);
                 bundle.putString(PostFragment.EXTRA_ACCESS_TOKEN, mAccessToken);
                 bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
                 fragment.setArguments(bundle);
