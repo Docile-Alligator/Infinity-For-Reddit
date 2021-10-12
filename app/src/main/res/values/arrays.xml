@@ -332,6 +332,17 @@
         <item>@string/filter_posts</item>
     </string-array>
 
+    <string-array name="settings_bottom_app_bar_fab_options_anonymous">
+        <item>@string/refresh</item>
+        <item>@string/change_sort_type</item>
+        <item>@string/change_post_layout</item>
+        <item>@string/search</item>
+        <item>@string/go_to_subreddit</item>
+        <item>@string/go_to_user</item>
+        <item>@string/random</item>
+        <item>@string/filter_posts</item>
+    </string-array>
+
     <string-array name="settings_swipe_action_threshold">
         <item>0.1</item>
         <item>0.2</item>

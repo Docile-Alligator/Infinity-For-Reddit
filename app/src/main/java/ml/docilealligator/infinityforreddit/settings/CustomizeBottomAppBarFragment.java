@@ -121,13 +121,18 @@ public class CustomizeBottomAppBarFragment extends Fragment {
 
         Resources resources = activity.getResources();
         String[] mainActivityOptions = resources.getStringArray(R.array.settings_main_activity_bottom_app_bar_options);
-        String[] fabOptions = resources.getStringArray(R.array.settings_bottom_app_bar_fab_options);
+        String[] fabOptions;
+        if (accountName == null) {
+            fabOptions = resources.getStringArray(R.array.settings_bottom_app_bar_fab_options_anonymous);
+        } else {
+            fabOptions = resources.getStringArray(R.array.settings_bottom_app_bar_fab_options);
+        }
         mainActivityOptionCount = sharedPreferences.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_COUNT, 4);
         mainActivityOption1 = sharedPreferences.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_1, 0);
         mainActivityOption2 = sharedPreferences.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_2, 1);
         mainActivityOption3 = sharedPreferences.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_3, 2);
         mainActivityOption4 = sharedPreferences.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_4, 3);
-        mainActivityFAB = sharedPreferences.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB, 0);
+        mainActivityFAB = sharedPreferences.getInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB, accountName == null ? 7: 0);
 
         mainActivityOptionCountTextView.setText(Integer.toString(mainActivityOptionCount));
         mainActivityOption1TextView.setText(mainActivityOptions[mainActivityOption1]);
@@ -200,7 +205,15 @@ public class CustomizeBottomAppBarFragment extends Fragment {
             new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                     .setTitle(R.string.settings_bottom_app_bar_fab)
                     .setSingleChoiceItems(fabOptions, mainActivityFAB, (dialogInterface, i) -> {
-                        mainActivityFAB = i;
+                        if (accountName == null) {
+                            if (i == 7) {
+                                mainActivityFAB = 9;
+                            } else {
+                                mainActivityFAB = i + 1;
+                            }
+                        } else {
+                            mainActivityFAB = i;
+                        }
                         sharedPreferences.edit().putInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB, mainActivityFAB).apply();
                         mainActivityFABTextView.setText(fabOptions[mainActivityFAB]);
                         dialogInterface.dismiss();
@@ -214,7 +227,7 @@ public class CustomizeBottomAppBarFragment extends Fragment {
         otherActivitiesOption2 = sharedPreferences.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_2, 1);
         otherActivitiesOption3 = sharedPreferences.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_3, 2);
         otherActivitiesOption4 = sharedPreferences.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_4, 3);
-        otherActivitiesFAB = sharedPreferences.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, 0);
+        otherActivitiesFAB = sharedPreferences.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, accountName == null ? 7: 0);
 
         otherActivitiesOptionCountTextView.setText(Integer.toString(otherActivitiesOptionCount));
         otherActivitiesOption1TextView.setText(otherActivitiesOptions[otherActivitiesOption1]);
@@ -287,7 +300,15 @@ public class CustomizeBottomAppBarFragment extends Fragment {
             new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                     .setTitle(R.string.settings_bottom_app_bar_fab)
                     .setSingleChoiceItems(fabOptions, otherActivitiesFAB, (dialogInterface, i) -> {
-                        otherActivitiesFAB = i;
+                        if (accountName == null) {
+                            if (i == 7) {
+                                otherActivitiesFAB = 9;
+                            } else {
+                                otherActivitiesFAB = i + 1;
+                            }
+                        } else {
+                            otherActivitiesFAB = i;
+                        }
                         sharedPreferences.edit().putInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, otherActivitiesFAB).apply();
                         otherActivitiesFABTextView.setText(fabOptions[otherActivitiesFAB]);
                         dialogInterface.dismiss();
