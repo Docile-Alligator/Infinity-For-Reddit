@@ -346,7 +346,6 @@ Behavior -->
     <string name="settings_immersive_interface_ignore_nav_bar_summary">"निचले नेवीगेशन बार को अतिरिक्त स्थान लेने से रोकें "</string>
     <string name="settings_customize_tabs_in_main_page_title">"मुख्य पृष्ट पर टैब्स अनुकूलित करें "</string>
     <string name="settings_enable_bottom_app_bar_title">"निचला नेवीगेशन शुरू करें "</string>
-    <string name="settings_enable_bottom_app_bar_summary">"अज्ञात प्रणाली में इसका कोई असर नहीं "</string>
     <string name="settings_category_post_and_comment_title">"पोस्ट एवं टिप्पणी "</string>
     <string name="settings_vote_buttons_on_the_right_title">"वोट बटन दाईं तरफ "</string>
     <string name="settings_volume_keys_navigate_comments_title">"पोस्ट्स में टिप्पणी नेवीगेशन के लिए वॉल्यूम कुंजियों का प्रयोग "</string>

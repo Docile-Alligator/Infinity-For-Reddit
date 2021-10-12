@@ -295,6 +295,34 @@
         <item>@string/go_to_top</item>
     </string-array>
 
+    <string-array name="settings_main_activity_bottom_app_bar_options_anonymous">
+        <item>@string/subscriptions</item>
+        <item>@string/multi_reddits</item>
+        <item>@string/refresh</item>
+        <item>@string/change_sort_type</item>
+        <item>@string/change_post_layout</item>
+        <item>@string/search</item>
+        <item>@string/go_to_subreddit</item>
+        <item>@string/go_to_user</item>
+        <item>@string/random</item>
+        <item>@string/filter_posts</item>
+        <item>@string/go_to_top</item>
+    </string-array>
+
+    <string-array name="settings_main_activity_bottom_app_bar_options_anonymous_values">
+        <item>0</item>
+        <item>1</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>13</item>
+        <item>19</item>
+    </string-array>
+
     <string-array name="settings_other_activities_bottom_app_bar_options">
         <item>@string/home</item>
         <item>@string/subscriptions</item>
@@ -317,6 +345,36 @@
         <item>@string/saved</item>
         <item>@string/gilded</item>
         <item>@string/go_to_top</item>
+    </string-array>
+
+    <string-array name="settings_other_activities_bottom_app_bar_options_anonymous">
+        <item>@string/home</item>
+        <item>@string/subscriptions</item>
+        <item>@string/multi_reddits</item>
+        <item>@string/refresh</item>
+        <item>@string/change_sort_type</item>
+        <item>@string/change_post_layout</item>
+        <item>@string/search</item>
+        <item>@string/go_to_subreddit</item>
+        <item>@string/go_to_user</item>
+        <item>@string/random</item>
+        <item>@string/filter_posts</item>
+        <item>@string/go_to_top</item>
+    </string-array>
+
+    <string-array name="settings_other_activities_bottom_app_bar_options_anonymous_values">
+        <item>0</item>
+        <item>1</item>
+        <item>4</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10</item>
+        <item>11</item>
+        <item>12</item>
+        <item>14</item>
+        <item>20</item>
     </string-array>
 
     <string-array name="settings_bottom_app_bar_fab_options">

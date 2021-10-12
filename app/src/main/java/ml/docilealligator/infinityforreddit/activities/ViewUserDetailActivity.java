@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.net.Uri;
+import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -71,7 +72,6 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.DeleteThing;
-import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.R;
@@ -261,6 +261,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+        showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false);
+        lockBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_BOTTOM_APP_BAR, false);
 
         if (savedInstanceState == null) {
             mMessageFullname = getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME);
@@ -358,9 +360,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 }
             });
         }
-
-        showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, true);
-        lockBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_BOTTOM_APP_BAR, false);
 
         glide = Glide.with(this);
         Locale locale = getResources().getConfiguration().locale;
@@ -639,10 +638,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                     lockSwipeRightToGoBack();
                 }
 
-                if (mAccessToken != null) {
-                    if (showBottomAppBar) {
-                        bottomNavigationView.performShow();
-                    }
+                if (showBottomAppBar) {
+                    bottomNavigationView.performShow();
                 }
                 fab.show();
 
@@ -652,81 +649,74 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
         fixViewPager2Sensitivity(viewPager2);
 
-        if (mAccessToken != null) {
-            if (mMessageFullname != null) {
-                ReadMessage.readMessage(mOauthRetrofit, mAccessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
-                    @Override
-                    public void readSuccess() {
-                        mMessageFullname = null;
-                    }
-
-                    @Override
-                    public void readFailed() {
-
-                    }
-                });
-            }
-
-            if (showBottomAppBar) {
-                int optionCount = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_COUNT, 4);
-                int option1 = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_1, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HOME);
-                int option2 = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_2, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS);
-
-                bottomNavigationView.setVisibility(View.VISIBLE);
-
-                if (optionCount == 2) {
-                    linearLayoutBottomAppBar.setWeightSum(3);
-                    option1BottomAppBar.setVisibility(View.GONE);
-                    option3BottomAppBar.setVisibility(View.GONE);
-
-                    option2BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option1));
-                    option4BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option2));
-
-                    option2BottomAppBar.setOnClickListener(view -> {
-                        bottomAppBarOptionAction(option1);
-                    });
-
-                    option4BottomAppBar.setOnClickListener(view -> {
-                        bottomAppBarOptionAction(option2);
-                    });
-                } else {
-                    int option3 = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_3, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX);
-                    int option4 = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_4, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_PROFILE);
-
-                    option1BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option1));
-                    option2BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option2));
-                    option3BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option3));
-                    option4BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option4));
-
-                    option1BottomAppBar.setOnClickListener(view -> {
-                        bottomAppBarOptionAction(option1);
-                    });
-
-                    option2BottomAppBar.setOnClickListener(view -> {
-                        bottomAppBarOptionAction(option2);
-                    });
-
-                    option3BottomAppBar.setOnClickListener(view -> {
-                        bottomAppBarOptionAction(option3);
-                    });
-
-                    option4BottomAppBar.setOnClickListener(view -> {
-                        bottomAppBarOptionAction(option4);
-                    });
+        if (mMessageFullname != null) {
+            ReadMessage.readMessage(mOauthRetrofit, mAccessToken, mMessageFullname, new ReadMessage.ReadMessageListener() {
+                @Override
+                public void readSuccess() {
+                    mMessageFullname = null;
                 }
+
+                @Override
+                public void readFailed() {
+
+                }
+            });
+        }
+
+        if (showBottomAppBar) {
+            int optionCount = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_COUNT, 4);
+            int option1 = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_1, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HOME);
+            int option2 = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_2, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS);
+
+            bottomNavigationView.setVisibility(View.VISIBLE);
+
+            if (optionCount == 2) {
+                linearLayoutBottomAppBar.setWeightSum(3);
+                option1BottomAppBar.setVisibility(View.GONE);
+                option3BottomAppBar.setVisibility(View.GONE);
+
+                option2BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option1));
+                option4BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option2));
+
+                option2BottomAppBar.setOnClickListener(view -> {
+                    bottomAppBarOptionAction(option1);
+                });
+
+                option4BottomAppBar.setOnClickListener(view -> {
+                    bottomAppBarOptionAction(option2);
+                });
             } else {
-                CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
-                lp.setAnchorId(View.NO_ID);
-                lp.gravity = Gravity.END | Gravity.BOTTOM;
-                fab.setLayoutParams(lp);
+                int option3 = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_3, mAccessToken == null ? SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_MULTIREDDITS : SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_INBOX);
+                int option4 = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_4, mAccessToken == null ? SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_REFRESH : SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_PROFILE);
+
+                option1BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option1));
+                option2BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option2));
+                option3BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option3));
+                option4BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option4));
+
+                option1BottomAppBar.setOnClickListener(view -> {
+                    bottomAppBarOptionAction(option1);
+                });
+
+                option2BottomAppBar.setOnClickListener(view -> {
+                    bottomAppBarOptionAction(option2);
+                });
+
+                option3BottomAppBar.setOnClickListener(view -> {
+                    bottomAppBarOptionAction(option3);
+                });
+
+                option4BottomAppBar.setOnClickListener(view -> {
+                    bottomAppBarOptionAction(option4);
+                });
             }
         } else {
             CoordinatorLayout.LayoutParams lp = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
             lp.setAnchorId(View.NO_ID);
             lp.gravity = Gravity.END | Gravity.BOTTOM;
             fab.setLayoutParams(lp);
-            bottomNavigationView.setVisibility(View.GONE);
         }
+
         fabOption = mBottomAppBarSharedPreference.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SUBMIT_POSTS);
         switch (fabOption) {
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH:
@@ -856,6 +846,85 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 startActivity(intent);
                 break;
             }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_REFRESH: {
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.refresh();
+                }
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_CHANGE_SORT_TYPE: {
+                userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_CHANGE_POST_LAYOUT: {
+                PostLayoutBottomSheetFragment postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
+                postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SEARCH: {
+                Intent intent = new Intent(this, SearchActivity.class);
+                startActivity(intent);
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_SUBREDDIT:
+                goToSubreddit();
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_USER:
+                goToUser();
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_RANDOM:
+                random();
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HIDE_READ_POSTS:
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.hideReadPosts();
+                }
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_FILTER_POSTS:
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.filterPosts();
+                }
+                break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_UPVOTED: {
+                Intent intent = new Intent(this, AccountPostsActivity.class);
+                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_UPVOTED);
+                startActivity(intent);
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_DOWNVOTED: {
+                Intent intent = new Intent(this, AccountPostsActivity.class);
+                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_DOWNVOTED);
+                startActivity(intent);
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HIDDEN: {
+                Intent intent = new Intent(this, AccountPostsActivity.class);
+                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_HIDDEN);
+                startActivity(intent);
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SAVED: {
+                Intent intent = new Intent(this, AccountPostsActivity.class);
+                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_SAVED);
+                startActivity(intent);
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GILDED: {
+                Intent intent = new Intent(this, AccountPostsActivity.class);
+                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_GILDED);
+                startActivity(intent);
+                break;
+            }
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_TOP: {
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.goBackToTop();
+                }
+                break;
+            }
+            default:
+                PostTypeBottomSheetFragment postTypeBottomSheetFragment = new PostTypeBottomSheetFragment();
+                postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
+                break;
         }
     }
 
@@ -869,6 +938,38 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 return R.drawable.ic_inbox_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_MULTIREDDITS:
                 return R.drawable.ic_multi_reddit_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBMIT_POSTS:
+                return R.drawable.ic_add_day_night_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_REFRESH:
+                return R.drawable.ic_refresh_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_CHANGE_SORT_TYPE:
+                return R.drawable.ic_sort_toolbar_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_CHANGE_POST_LAYOUT:
+                return R.drawable.ic_post_layout_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SEARCH:
+                return R.drawable.ic_search_black_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_SUBREDDIT:
+                return R.drawable.ic_subreddit_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_USER:
+                return R.drawable.ic_user_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_RANDOM:
+                return R.drawable.ic_random_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HIDE_READ_POSTS:
+                return R.drawable.ic_hide_read_posts_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_FILTER_POSTS:
+                return R.drawable.ic_filter_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_UPVOTED:
+                return R.drawable.ic_arrow_upward_black_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_DOWNVOTED:
+                return R.drawable.ic_arrow_downward_black_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HIDDEN:
+                return R.drawable.ic_outline_lock_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SAVED:
+                return R.drawable.ic_outline_bookmarks_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GILDED:
+                return R.drawable.ic_star_border_24dp;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_TOP:
+                return R.drawable.ic_keyboard_double_arrow_up_24;
             default:
                 return R.drawable.ic_account_circle_24dp;
         }
@@ -1309,25 +1410,21 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
     @Override
     public void contentScrollUp() {
-        if (mAccessToken != null) {
-            if (showBottomAppBar && !lockBottomAppBar) {
-                bottomNavigationView.performShow();
-            }
-            if (!(showBottomAppBar && lockBottomAppBar)) {
-                fab.show();
-            }
+        if (showBottomAppBar && !lockBottomAppBar) {
+            bottomNavigationView.performShow();
+        }
+        if (!(showBottomAppBar && lockBottomAppBar)) {
+            fab.show();
         }
     }
 
     @Override
     public void contentScrollDown() {
-        if (mAccessToken != null) {
-            if (!(showBottomAppBar && lockBottomAppBar)) {
-                fab.hide();
-            }
-            if (showBottomAppBar && !lockBottomAppBar) {
-                bottomNavigationView.performHide();
-            }
+        if (!(showBottomAppBar && lockBottomAppBar)) {
+            fab.hide();
+        }
+        if (showBottomAppBar && !lockBottomAppBar) {
+            bottomNavigationView.performHide();
         }
     }
 

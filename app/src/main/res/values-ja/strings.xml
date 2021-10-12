@@ -346,7 +346,6 @@
     <string name="settings_immersive_interface_ignore_nav_bar_summary">"下部ナビゲーションバーがオフセットされることを防止します"</string>
     <string name="settings_customize_tabs_in_main_page_title">"メインページのタブをカスタマイズ"</string>
     <string name="settings_enable_bottom_app_bar_title">"下部ナビゲーションを有効化"</string>
-    <string name="settings_enable_bottom_app_bar_summary">"匿名モードでは効果がありません"</string>
     <string name="settings_category_post_and_comment_title">"投稿とコメント"</string>
     <string name="settings_vote_buttons_on_the_right_title">"評価ボタンを右側に表示"</string>
     <string name="settings_volume_keys_navigate_comments_title">"音量ボタンで投稿画面のコメントをナビゲート"</string>

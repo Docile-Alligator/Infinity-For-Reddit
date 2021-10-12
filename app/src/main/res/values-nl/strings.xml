@@ -310,7 +310,6 @@ Tik om opnieuw te proberen."</string>
     <string name="settings_immersive_interface_ignore_nav_bar_summary">"Voorkom dat de Onderste Navigatiebalk Extra Opvulling Heeft"</string>
     <string name="settings_customize_tabs_in_main_page_title">"Pas Tabbladen op de Hoofdpagina aan"</string>
     <string name="settings_enable_bottom_app_bar_title">"Onderste Navigatiebalk Inschakelen"</string>
-    <string name="settings_enable_bottom_app_bar_summary">"Heeft Geen Effect in de Anonieme Modus"</string>
     <string name="settings_category_post_and_comment_title">"Post en Reageer"</string>
     <string name="settings_vote_buttons_on_the_right_title">"Stemknoppen aan de Rechterkant"</string>
     <string name="settings_volume_keys_navigate_comments_title">"Gebruik Volumetoetsen om door Opmerkingen in Posts te Navigeren"</string>

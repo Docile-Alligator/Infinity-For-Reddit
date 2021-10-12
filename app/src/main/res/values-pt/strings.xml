@@ -313,7 +313,6 @@ Toque para tentar novamente."</string>
     <string name="settings_immersive_interface_ignore_nav_bar_summary">"Impede que Barra de Navegação Inferior tenha Preenchimento Extra"</string>
     <string name="settings_customize_tabs_in_main_page_title">"Personalizar Separadores da Página Principal"</string>
     <string name="settings_enable_bottom_app_bar_title">"Ativar Barra Navegação Inferior"</string>
-    <string name="settings_enable_bottom_app_bar_summary">"Não aplicável no Modo Anónimo"</string>
     <string name="settings_category_post_and_comment_title">"Publicação e Comentário"</string>
     <string name="settings_vote_buttons_on_the_right_title">"Botões de Voto à Direita"</string>
     <string name="settings_volume_keys_navigate_comments_title">"Usar Teclas de Volume para Navegar pelos Comentários"</string>

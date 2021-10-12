@@ -303,7 +303,6 @@
     <string name="settings_immersive_interface_ignore_nav_bar_summary">"Zapobiegaj sytuacji, w której dolny pasek nawigacyjny posiada dodatkowy margines"</string>
     <string name="settings_customize_tabs_in_main_page_title">"Dostosuj zakładki na stronie głównej"</string>
     <string name="settings_enable_bottom_app_bar_title">"Włącz dolny pasek nawigacyjny"</string>
-    <string name="settings_enable_bottom_app_bar_summary">"Nie ma żadnego efektu w trybie anonima"</string>
     <string name="settings_category_post_and_comment_title">"Post i komentarz"</string>
     <string name="settings_vote_buttons_on_the_right_title">"Przyciski do głosowania po prawej"</string>
     <string name="settings_volume_keys_navigate_comments_title">"Używaj przycisków głośności, aby nawigować komentarze"</string>

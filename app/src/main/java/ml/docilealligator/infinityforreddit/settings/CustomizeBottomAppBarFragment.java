@@ -121,6 +121,8 @@ public class CustomizeBottomAppBarFragment extends Fragment {
 
         Resources resources = activity.getResources();
         String[] mainActivityOptions = resources.getStringArray(R.array.settings_main_activity_bottom_app_bar_options);
+        String[] mainActivityOptionAnonymous = resources.getStringArray(R.array.settings_main_activity_bottom_app_bar_options_anonymous);
+        String[] mainActivityOptionAnonymousValues = resources.getStringArray(R.array.settings_main_activity_bottom_app_bar_options_anonymous_values);
         String[] fabOptions;
         if (accountName == null) {
             fabOptions = resources.getStringArray(R.array.settings_bottom_app_bar_fab_options_anonymous);
@@ -156,10 +158,11 @@ public class CustomizeBottomAppBarFragment extends Fragment {
         mainActivityOption1LinearLayout.setOnClickListener(view -> {
             new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                     .setTitle(R.string.settings_bottom_app_bar_option_1)
-                    .setSingleChoiceItems(mainActivityOptions, mainActivityOption1, (dialogInterface, i) -> {
+                    .setSingleChoiceItems(accountName == null ? mainActivityOptionAnonymous : mainActivityOptions, mainActivityOption1, (dialogInterface, i) -> {
                         mainActivityOption1 = i;
-                        sharedPreferences.edit().putInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_1, mainActivityOption1).apply();
-                        mainActivityOption1TextView.setText(mainActivityOptions[mainActivityOption1]);
+                        int optionToSaveToPreference = accountName == null ? Integer.parseInt(mainActivityOptionAnonymousValues[i]) : mainActivityOption1;
+                        sharedPreferences.edit().putInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_1, optionToSaveToPreference).apply();
+                        mainActivityOption1TextView.setText(mainActivityOptions[optionToSaveToPreference]);
                         dialogInterface.dismiss();
                     })
                     .show();
@@ -168,10 +171,11 @@ public class CustomizeBottomAppBarFragment extends Fragment {
         mainActivityOption2LinearLayout.setOnClickListener(view -> {
             new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                     .setTitle(R.string.settings_bottom_app_bar_option_2)
-                    .setSingleChoiceItems(mainActivityOptions, mainActivityOption2, (dialogInterface, i) -> {
+                    .setSingleChoiceItems(accountName == null ? mainActivityOptionAnonymous : mainActivityOptions, mainActivityOption2, (dialogInterface, i) -> {
                         mainActivityOption2 = i;
-                        sharedPreferences.edit().putInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_2, mainActivityOption2).apply();
-                        mainActivityOption2TextView.setText(mainActivityOptions[mainActivityOption2]);
+                        int optionToSaveToPreference = accountName == null ? Integer.parseInt(mainActivityOptionAnonymousValues[i]) : mainActivityOption2;
+                        sharedPreferences.edit().putInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_2, optionToSaveToPreference).apply();
+                        mainActivityOption2TextView.setText(mainActivityOptions[optionToSaveToPreference]);
                         dialogInterface.dismiss();
                     })
                     .show();
@@ -180,10 +184,11 @@ public class CustomizeBottomAppBarFragment extends Fragment {
         mainActivityOption3LinearLayout.setOnClickListener(view -> {
             new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                     .setTitle(R.string.settings_bottom_app_bar_option_3)
-                    .setSingleChoiceItems(mainActivityOptions, mainActivityOption3, (dialogInterface, i) -> {
+                    .setSingleChoiceItems(accountName == null ? mainActivityOptionAnonymous : mainActivityOptions, mainActivityOption3, (dialogInterface, i) -> {
                         mainActivityOption3 = i;
-                        sharedPreferences.edit().putInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_3, mainActivityOption3).apply();
-                        mainActivityOption3TextView.setText(mainActivityOptions[mainActivityOption3]);
+                        int optionToSaveToPreference = accountName == null ? Integer.parseInt(mainActivityOptionAnonymousValues[i]) : mainActivityOption3;
+                        sharedPreferences.edit().putInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_3, optionToSaveToPreference).apply();
+                        mainActivityOption3TextView.setText(mainActivityOptions[optionToSaveToPreference]);
                         dialogInterface.dismiss();
                     })
                     .show();
@@ -192,10 +197,11 @@ public class CustomizeBottomAppBarFragment extends Fragment {
         mainActivityOption4LinearLayout.setOnClickListener(view -> {
             new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                     .setTitle(R.string.settings_bottom_app_bar_option_4)
-                    .setSingleChoiceItems(mainActivityOptions, mainActivityOption4, (dialogInterface, i) -> {
+                    .setSingleChoiceItems(accountName == null ? mainActivityOptionAnonymous : mainActivityOptions, mainActivityOption4, (dialogInterface, i) -> {
                         mainActivityOption4 = i;
-                        sharedPreferences.edit().putInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_4, mainActivityOption4).apply();
-                        mainActivityOption4TextView.setText(mainActivityOptions[mainActivityOption4]);
+                        int optionToSaveToPreference = accountName == null ? Integer.parseInt(mainActivityOptionAnonymousValues[i]) : mainActivityOption4;
+                        sharedPreferences.edit().putInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_4, optionToSaveToPreference).apply();
+                        mainActivityOption4TextView.setText(mainActivityOptions[optionToSaveToPreference]);
                         dialogInterface.dismiss();
                     })
                     .show();
@@ -205,16 +211,18 @@ public class CustomizeBottomAppBarFragment extends Fragment {
             new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                     .setTitle(R.string.settings_bottom_app_bar_fab)
                     .setSingleChoiceItems(fabOptions, mainActivityFAB, (dialogInterface, i) -> {
+                        mainActivityFAB = i;
+                        int optionToSaveInPreference;
                         if (accountName == null) {
                             if (i == 7) {
-                                mainActivityFAB = 9;
+                                optionToSaveInPreference = 9;
                             } else {
-                                mainActivityFAB = i + 1;
+                                optionToSaveInPreference = i + 1;
                             }
                         } else {
-                            mainActivityFAB = i;
+                            optionToSaveInPreference = i;
                         }
-                        sharedPreferences.edit().putInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB, mainActivityFAB).apply();
+                        sharedPreferences.edit().putInt(SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB, optionToSaveInPreference).apply();
                         mainActivityFABTextView.setText(fabOptions[mainActivityFAB]);
                         dialogInterface.dismiss();
                     })
@@ -222,6 +230,8 @@ public class CustomizeBottomAppBarFragment extends Fragment {
         });
 
         String[] otherActivitiesOptions = resources.getStringArray(R.array.settings_other_activities_bottom_app_bar_options);
+        String[] otherActivitiesOptionAnonymous = resources.getStringArray(R.array.settings_other_activities_bottom_app_bar_options_anonymous);
+        String[] otherActivitiesOptionAnonymousValues = resources.getStringArray(R.array.settings_other_activities_bottom_app_bar_options_anonymous_values);
         otherActivitiesOptionCount = sharedPreferences.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_COUNT, 4);
         otherActivitiesOption1 = sharedPreferences.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_1, 0);
         otherActivitiesOption2 = sharedPreferences.getInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_2, 1);
@@ -251,10 +261,11 @@ public class CustomizeBottomAppBarFragment extends Fragment {
         otherActivitiesOption1LinearLayout.setOnClickListener(view -> {
             new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                     .setTitle(R.string.settings_bottom_app_bar_option_1)
-                    .setSingleChoiceItems(otherActivitiesOptions, otherActivitiesOption1, (dialogInterface, i) -> {
+                    .setSingleChoiceItems(accountName == null ? otherActivitiesOptionAnonymous : otherActivitiesOptions, otherActivitiesOption1, (dialogInterface, i) -> {
                         otherActivitiesOption1 = i;
-                        sharedPreferences.edit().putInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_1, otherActivitiesOption1).apply();
-                        otherActivitiesOption1TextView.setText(otherActivitiesOptions[otherActivitiesOption1]);
+                        int optionToSaveToPreference = accountName == null ? Integer.parseInt(otherActivitiesOptionAnonymousValues[i]) : otherActivitiesOption1;
+                        sharedPreferences.edit().putInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_1, optionToSaveToPreference).apply();
+                        otherActivitiesOption1TextView.setText(otherActivitiesOptions[optionToSaveToPreference]);
                         dialogInterface.dismiss();
                     })
                     .show();
@@ -263,10 +274,11 @@ public class CustomizeBottomAppBarFragment extends Fragment {
         otherActivitiesOption2LinearLayout.setOnClickListener(view -> {
             new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                     .setTitle(R.string.settings_bottom_app_bar_option_2)
-                    .setSingleChoiceItems(otherActivitiesOptions, otherActivitiesOption2, (dialogInterface, i) -> {
+                    .setSingleChoiceItems(accountName == null ? otherActivitiesOptionAnonymous : otherActivitiesOptions, otherActivitiesOption2, (dialogInterface, i) -> {
                         otherActivitiesOption2 = i;
-                        sharedPreferences.edit().putInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_2, otherActivitiesOption2).apply();
-                        otherActivitiesOption2TextView.setText(otherActivitiesOptions[otherActivitiesOption2]);
+                        int optionToSaveToPreference = accountName == null ? Integer.parseInt(otherActivitiesOptionAnonymousValues[i]) : otherActivitiesOption2;
+                        sharedPreferences.edit().putInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_2, optionToSaveToPreference).apply();
+                        otherActivitiesOption2TextView.setText(otherActivitiesOptions[optionToSaveToPreference]);
                         dialogInterface.dismiss();
                     })
                     .show();
@@ -275,10 +287,11 @@ public class CustomizeBottomAppBarFragment extends Fragment {
         otherActivitiesOption3LinearLayout.setOnClickListener(view -> {
             new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                     .setTitle(R.string.settings_bottom_app_bar_option_3)
-                    .setSingleChoiceItems(otherActivitiesOptions, otherActivitiesOption3, (dialogInterface, i) -> {
+                    .setSingleChoiceItems(accountName == null ? otherActivitiesOptionAnonymous : otherActivitiesOptions, otherActivitiesOption3, (dialogInterface, i) -> {
                         otherActivitiesOption3 = i;
-                        sharedPreferences.edit().putInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_3, otherActivitiesOption3).apply();
-                        otherActivitiesOption3TextView.setText(otherActivitiesOptions[otherActivitiesOption3]);
+                        int optionToSaveToPreference = accountName == null ? Integer.parseInt(otherActivitiesOptionAnonymousValues[i]) : otherActivitiesOption3;
+                        sharedPreferences.edit().putInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_3, optionToSaveToPreference).apply();
+                        otherActivitiesOption3TextView.setText(otherActivitiesOptions[optionToSaveToPreference]);
                         dialogInterface.dismiss();
                     })
                     .show();
@@ -287,10 +300,11 @@ public class CustomizeBottomAppBarFragment extends Fragment {
         otherActivitiesOption4LinearLayout.setOnClickListener(view -> {
             new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                     .setTitle(R.string.settings_bottom_app_bar_option_4)
-                    .setSingleChoiceItems(otherActivitiesOptions, otherActivitiesOption4, (dialogInterface, i) -> {
+                    .setSingleChoiceItems(accountName == null ? otherActivitiesOptionAnonymous : otherActivitiesOptions, otherActivitiesOption4, (dialogInterface, i) -> {
                         otherActivitiesOption4 = i;
-                        sharedPreferences.edit().putInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_4, otherActivitiesOption4).apply();
-                        otherActivitiesOption4TextView.setText(otherActivitiesOptions[otherActivitiesOption4]);
+                        int optionToSaveToPreference = accountName == null ? Integer.parseInt(otherActivitiesOptionAnonymousValues[i]) : otherActivitiesOption4;
+                        sharedPreferences.edit().putInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_4, optionToSaveToPreference).apply();
+                        otherActivitiesOption4TextView.setText(otherActivitiesOptions[optionToSaveToPreference]);
                         dialogInterface.dismiss();
                     })
                     .show();
@@ -300,16 +314,18 @@ public class CustomizeBottomAppBarFragment extends Fragment {
             new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                     .setTitle(R.string.settings_bottom_app_bar_fab)
                     .setSingleChoiceItems(fabOptions, otherActivitiesFAB, (dialogInterface, i) -> {
+                        otherActivitiesFAB = i;
+                        int optionToSaveInPreference;
                         if (accountName == null) {
                             if (i == 7) {
-                                otherActivitiesFAB = 9;
+                                optionToSaveInPreference = 9;
                             } else {
-                                otherActivitiesFAB = i + 1;
+                                optionToSaveInPreference = i + 1;
                             }
                         } else {
-                            otherActivitiesFAB = i;
+                            optionToSaveInPreference = i;
                         }
-                        sharedPreferences.edit().putInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, otherActivitiesFAB).apply();
+                        sharedPreferences.edit().putInt(SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB, optionToSaveInPreference).apply();
                         otherActivitiesFABTextView.setText(fabOptions[otherActivitiesFAB]);
                         dialogInterface.dismiss();
                     })

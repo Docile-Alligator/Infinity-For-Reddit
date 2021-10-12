@@ -334,7 +334,6 @@ Premio means prize, so it's better suited the first word instead of the second o
     <string name="settings_immersive_interface_ignore_nav_bar_summary">"Bloquear la Barra de Navegación de Tener Margen Extra"</string>
     <string name="settings_customize_tabs_in_main_page_title">"Personalizar las Pestañas de la Página Principal"</string>
     <string name="settings_enable_bottom_app_bar_title">"Activar Barra de Navegación Inferior"</string>
-    <string name="settings_enable_bottom_app_bar_summary">"No Tiene Efecto en Modo Anónimo"</string>
     <string name="settings_category_post_and_comment_title">"Publicar y Comentar"</string>
     <string name="settings_vote_buttons_on_the_right_title">"Botones para Votar del Lado Derecho"</string>
     <string name="settings_volume_keys_navigate_comments_title">"Usar las Teclas de Volumen para Navegar Comentarios en Publicaciones"</string>

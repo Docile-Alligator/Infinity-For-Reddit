@@ -309,7 +309,6 @@
     <string name="settings_immersive_interface_ignore_nav_bar_summary">"防止底部导航栏有多余的内边距"</string>
     <string name="settings_customize_tabs_in_main_page_title">"自定义主界面标签页"</string>
     <string name="settings_enable_bottom_app_bar_title">"开启底部导航栏"</string>
-    <string name="settings_enable_bottom_app_bar_summary">"在匿名模式下无效"</string>
     <string name="settings_category_post_and_comment_title">"帖子和评论"</string>
     <string name="settings_vote_buttons_on_the_right_title">"顶踩按钮放置在右侧"</string>
     <string name="settings_volume_keys_navigate_comments_title">"在帖子内使用音量键浏览评论"</string>
