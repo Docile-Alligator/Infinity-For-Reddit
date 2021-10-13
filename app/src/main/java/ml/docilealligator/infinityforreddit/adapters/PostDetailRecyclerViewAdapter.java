@@ -44,9 +44,7 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.google.android.exoplayer2.metadata.Metadata;
 import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.text.Cue;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlayerView;
@@ -55,7 +53,6 @@ import com.libRG.CustomTextView;
 import org.commonmark.ext.gfm.tables.TableBlock;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
@@ -167,6 +164,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private boolean mHideTheNumberOfVotes;
     private boolean mHideTheNumberOfComments;
     private boolean mSeparatePostAndComments;
+    private boolean mLegacyAutoplayVideoControllerUI;
     private PostDetailRecyclerViewAdapterCallback mPostDetailRecyclerViewAdapterCallback;
 
     private int mColorAccent;
@@ -338,6 +336,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 .build();
         mImageViewWidth = imageViewWidth;
         mSeparatePostAndComments = separatePostAndComments;
+        mLegacyAutoplayVideoControllerUI = sharedPreferences.getBoolean(SharedPreferencesUtils.LEGACY_AUTOPLAY_VIDEO_CONTROLLER_UI, false);
         mAccessToken = accessToken;
         mAccountName = accountName;
         mPost = post;
@@ -468,7 +467,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     }
                     return new PostDetailVideoAndGifPreviewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_video_and_gif_preview, parent, false));
                 }
-                return new PostDetailVideoAutoplayViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_video_autoplay, parent, false));
+                return new PostDetailVideoAutoplayViewHolder(LayoutInflater.from(parent.getContext()).inflate(mLegacyAutoplayVideoControllerUI ? R.layout.item_post_detail_video_autoplay_legacy_controller : R.layout.item_post_detail_video_autoplay, parent, false));
             case VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW:
                 if (mDataSavingMode && (mDisableImagePreview || mOnlyDisablePreviewInVideoAndGifPosts)) {
                     return new PostDetailNoPreviewViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_detail_no_preview, parent, false));

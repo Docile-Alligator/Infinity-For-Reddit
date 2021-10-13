@@ -193,6 +193,7 @@ public class SharedPreferencesUtils {
     public static final String ENABLE_FOLD_SUPPORT = "enable_fold_support";
     public static final String LOOP_VIDEO = "loop_video";
     public static final String DEFAULT_PLAYBACK_SPEED = "default_playback_speed";
+    public static final String LEGACY_AUTOPLAY_VIDEO_CONTROLLER_UI = "legacy_autoplay_video_controller_ui";
 
     public static final String DEFAULT_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit_preferences";
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";

@@ -56,6 +56,12 @@
         app:useSimpleSummaryProvider="true" />
 
     <SwitchPreference
+        app:defaultValue="false"
+        app:key="legacy_autoplay_video_controller_ui"
+        app:title="@string/settings_legacy_autoplay_video_controller_ui_title"
+        app:summary="@string/restart_app_see_changes" />
+
+    <SwitchPreference
         app:defaultValue="true"
         app:key="mute_autoplaying_videos"
         app:icon="@drawable/ic_mute_preferences_24dp"
