@@ -16,6 +16,9 @@ import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -124,11 +127,6 @@ public class CustomizeBottomAppBarFragment extends Fragment {
         String[] mainActivityOptionAnonymous = resources.getStringArray(R.array.settings_main_activity_bottom_app_bar_options_anonymous);
         String[] mainActivityOptionAnonymousValues = resources.getStringArray(R.array.settings_main_activity_bottom_app_bar_options_anonymous_values);
         String[] fabOptions;
-        if (accountName == null) {
-            fabOptions = resources.getStringArray(R.array.settings_bottom_app_bar_fab_options_anonymous);
-        } else {
-            fabOptions = resources.getStringArray(R.array.settings_bottom_app_bar_fab_options);
-        }
         mainActivityOptionCount = sharedPreferences.getInt((accountName == null ? "-" : "") + SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_COUNT, 4);
         mainActivityOption1 = sharedPreferences.getInt((accountName == null ? "-" : "") + SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_1, 0);
         mainActivityOption2 = sharedPreferences.getInt((accountName == null ? "-" : "") + SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_2, 1);
@@ -141,6 +139,18 @@ public class CustomizeBottomAppBarFragment extends Fragment {
         mainActivityOption2TextView.setText(mainActivityOptions[mainActivityOption2]);
         mainActivityOption3TextView.setText(mainActivityOptions[mainActivityOption3]);
         mainActivityOption4TextView.setText(mainActivityOptions[mainActivityOption4]);
+
+        if (accountName == null) {
+            fabOptions = resources.getStringArray(R.array.settings_bottom_app_bar_fab_options_anonymous);
+            ArrayList<String> mainActivityOptionAnonymousValuesList = new ArrayList<>(Arrays.asList(mainActivityOptionAnonymousValues));
+            mainActivityOption1 = mainActivityOptionAnonymousValuesList.indexOf(Integer.toString(mainActivityOption1));
+            mainActivityOption2 = mainActivityOptionAnonymousValuesList.indexOf(Integer.toString(mainActivityOption2));
+            mainActivityOption3 = mainActivityOptionAnonymousValuesList.indexOf(Integer.toString(mainActivityOption3));
+            mainActivityOption4 = mainActivityOptionAnonymousValuesList.indexOf(Integer.toString(mainActivityOption4));
+        } else {
+            fabOptions = resources.getStringArray(R.array.settings_bottom_app_bar_fab_options);
+        }
+
         mainActivityFABTextView.setText(fabOptions[mainActivityFAB]);
 
         mainActivityOptionCountLinearLayout.setOnClickListener(view -> {
@@ -244,6 +254,15 @@ public class CustomizeBottomAppBarFragment extends Fragment {
         otherActivitiesOption2TextView.setText(otherActivitiesOptions[otherActivitiesOption2]);
         otherActivitiesOption3TextView.setText(otherActivitiesOptions[otherActivitiesOption3]);
         otherActivitiesOption4TextView.setText(otherActivitiesOptions[otherActivitiesOption4]);
+
+        if (accountName == null) {
+            ArrayList<String> otherActivitiesOptionAnonymousValuesList = new ArrayList<>(Arrays.asList(otherActivitiesOptionAnonymousValues));
+            otherActivitiesOption1 = otherActivitiesOptionAnonymousValuesList.indexOf(Integer.toString(otherActivitiesOption1));
+            otherActivitiesOption2 = otherActivitiesOptionAnonymousValuesList.indexOf(Integer.toString(otherActivitiesOption2));
+            otherActivitiesOption3 = otherActivitiesOptionAnonymousValuesList.indexOf(Integer.toString(otherActivitiesOption3));
+            otherActivitiesOption4 = otherActivitiesOptionAnonymousValuesList.indexOf(Integer.toString(otherActivitiesOption4));
+        }
+
         otherActivitiesFABTextView.setText(fabOptions[otherActivitiesFAB]);
 
         otherActivitiesOptionCountLinearLayout.setOnClickListener(view -> {
