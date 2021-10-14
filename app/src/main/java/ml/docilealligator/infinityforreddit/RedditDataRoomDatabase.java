@@ -351,6 +351,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                     "username TEXT NOT NULL, subreddit_name TEXT NOT NULL, " +
                     "PRIMARY KEY(path, username, subreddit_name), FOREIGN KEY(path) REFERENCES multi_reddits(path) ON DELETE CASCADE ON UPDATE CASCADE, " +
                     "FOREIGN KEY(username) REFERENCES multi_reddits(username) ON DELETE CASCADE ON UPDATE CASCADE)");
+            database.execSQL("ALTER TABLE recent_search_queries ADD COLUMN time INTEGER DEFAULT 0 NOT NULL");
         }
     };
 }

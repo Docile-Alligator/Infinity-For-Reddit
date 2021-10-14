@@ -17,10 +17,13 @@ public class RecentSearchQuery {
     @NonNull
     @ColumnInfo(name = "search_query")
     private String searchQuery;
+    @ColumnInfo(name = "time")
+    private long time;
 
     public RecentSearchQuery(@NonNull String username, @NonNull String searchQuery) {
         this.username = username;
         this.searchQuery = searchQuery;
+        this.time = System.currentTimeMillis();
     }
 
     @NonNull
@@ -39,5 +42,13 @@ public class RecentSearchQuery {
 
     public void setSearchQuery(@NonNull String searchQuery) {
         this.searchQuery = searchQuery;
+    }
+
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
     }
 }
