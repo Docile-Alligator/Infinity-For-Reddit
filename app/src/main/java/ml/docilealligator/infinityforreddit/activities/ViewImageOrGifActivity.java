@@ -292,7 +292,9 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         // Fixes #383
         // Not having a background will cause visual glitches on some devices.
         FrameLayout slidablePanel = findViewById(R.id.slidable_panel);
-        slidablePanel.setBackgroundColor(getResources().getColor(android.R.color.black));
+        if (slidablePanel != null) {
+            slidablePanel.setBackgroundColor(getResources().getColor(android.R.color.black));
+        }
     }
 
     private void loadImage() {

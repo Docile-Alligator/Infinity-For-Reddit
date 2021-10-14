@@ -10,7 +10,8 @@
     app:dragUpEnabled="true"
     tools:application="ml.docilealligator.infinityforreddit.activities.ViewVideoActivity">
 
-    <androidx.core.widget.NestedScrollView
+    <app.futured.hauler.LockableNestedScrollView
+        android:id="@+id/lockable_nested_scroll_view_view_video_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
@@ -45,6 +46,6 @@
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-    </androidx.core.widget.NestedScrollView>
+    </app.futured.hauler.LockableNestedScrollView>
 
 </app.futured.hauler.HaulerView>

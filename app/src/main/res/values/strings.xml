@@ -613,6 +613,8 @@
     <string name="settings_link_handler_value_custom_tab">Custom Tab</string>
     <string name="settings_link_handler_value_internal_browser">Internal Browser</string>
     <string name="settings_legacy_autoplay_video_controller_ui_title">Legacy Video Controller UI</string>
+    <string name="settings_pinch_to_zoom_video_title">Pinch to Zoom Video</string>
+    <string name="settings_experimental_feature">Experimental feature</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

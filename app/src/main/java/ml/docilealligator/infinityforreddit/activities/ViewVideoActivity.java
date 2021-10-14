@@ -7,6 +7,7 @@ import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Matrix;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
@@ -57,6 +58,7 @@ import com.google.android.exoplayer2.util.Util;
 import com.google.android.exoplayer2.video.VideoListener;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.otaliastudios.zoom.ZoomEngine;
 import com.otaliastudios.zoom.ZoomSurfaceView;
 
 import org.apache.commons.io.FilenameUtils;
@@ -69,6 +71,7 @@ import javax.inject.Named;
 
 import app.futured.hauler.DragDirection;
 import app.futured.hauler.HaulerView;
+import app.futured.hauler.LockableNestedScrollView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.FetchGfycatOrRedgifsVideoLinks;
@@ -147,6 +150,8 @@ public class ViewVideoActivity extends AppCompatActivity {
     TextView titleTextView;
     @BindView(R.id.download_image_view_exo_playback_control_view)
     ImageView downloadImageView;
+    @BindView(R.id.lockable_nested_scroll_view_view_video_activity)
+    LockableNestedScrollView nestedScrollView;
 
     private Uri mVideoUri;
     private SimpleExoPlayer player;
@@ -371,7 +376,27 @@ public class ViewVideoActivity extends AppCompatActivity {
 
             }
         });
+        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.PINCH_TO_ZOOM_VIDEO, false)) {
+            zoomSurfaceView.getEngine().addListener(new ZoomEngine.Listener() {
+                @Override
+                public void onUpdate(@NonNull ZoomEngine zoomEngine, @NonNull Matrix matrix) {
+                    if (zoomEngine.getZoom() < 1.00001) {
+                        haulerView.setDragEnabled(true);
+                        nestedScrollView.setScrollEnabled(true);
+                    } else {
+                        haulerView.setDragEnabled(false);
+                        nestedScrollView.setScrollEnabled(false);
+                    }
+                }
 
+                @Override
+                public void onIdle(@NonNull ZoomEngine zoomEngine) {
+
+                }
+            });
+        } else {
+            zoomSurfaceView.setZoomEnabled(false);
+        }
         zoomSurfaceView.setOnClickListener(view -> {
             if (playerControlView.isVisible()) {
                 playerControlView.hide();
