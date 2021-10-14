@@ -46,7 +46,7 @@ import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.PlayerControlView;
 import com.google.android.exoplayer2.ui.TrackSelectionDialogBuilder;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -54,8 +54,10 @@ import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.CacheDataSourceFactory;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.exoplayer2.util.Util;
+import com.google.android.exoplayer2.video.VideoListener;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.snackbar.Snackbar;
+import com.otaliastudios.zoom.ZoomSurfaceView;
 
 import org.apache.commons.io.FilenameUtils;
 
@@ -131,8 +133,10 @@ public class ViewVideoActivity extends AppCompatActivity {
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.progress_bar_view_video_activity)
     ProgressBar progressBar;
-    @BindView(R.id.player_view_view_video_activity)
-    PlayerView videoPlayerView;
+    @BindView(R.id.zoom_surface_view_view_video_activity)
+    ZoomSurfaceView zoomSurfaceView;
+    @BindView(R.id.player_control_view_view_video_activity)
+    PlayerControlView playerControlView;
     @BindView(R.id.mute_exo_playback_control_view)
     ImageButton muteButton;
     @BindView(R.id.hd_exo_playback_control_view)
@@ -325,7 +329,7 @@ public class ViewVideoActivity extends AppCompatActivity {
             }
         }
 
-        videoPlayerView.setControllerVisibilityListener(visibility -> {
+        playerControlView.setVisibilityListener(visibility -> {
             switch (visibility) {
                 case View.GONE:
                     getWindow().getDecorView().setSystemUiVisibility(
@@ -347,7 +351,35 @@ public class ViewVideoActivity extends AppCompatActivity {
         TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory();
         trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
         player = ExoPlayerFactory.newSimpleInstance(this, trackSelector);
-        videoPlayerView.setPlayer(player);
+
+        playerControlView.setPlayer(player);
+
+        player.addVideoListener(new VideoListener() {
+            @Override
+            public void onVideoSizeChanged(int width, int height, int unappliedRotationDegrees, float pixelWidthHeightRatio) {
+                zoomSurfaceView.setContentSize(width, height);
+            }
+        });
+        zoomSurfaceView.addCallback(new ZoomSurfaceView.Callback() {
+            @Override
+            public void onZoomSurfaceCreated(@NonNull ZoomSurfaceView zoomSurfaceView) {
+                player.setVideoSurface(zoomSurfaceView.getSurface());
+            }
+
+            @Override
+            public void onZoomSurfaceDestroyed(@NonNull ZoomSurfaceView zoomSurfaceView) {
+
+            }
+        });
+
+        zoomSurfaceView.setOnClickListener(view -> {
+            if (playerControlView.isVisible()) {
+                playerControlView.hide();
+            } else {
+                playerControlView.show();
+            }
+        });
+
         if (savedInstanceState == null) {
             mVideoUri = intent.getData();
             videoType = getIntent().getIntExtra(EXTRA_VIDEO_TYPE, VIDEO_TYPE_NORMAL);
@@ -507,8 +539,8 @@ public class ViewVideoActivity extends AppCompatActivity {
                         dataSourceFactory = new CacheDataSourceFactory(mSimpleCache,
                                 new DefaultDataSourceFactory(ViewVideoActivity.this,
                                 Util.getUserAgent(ViewVideoActivity.this, "Infinity")));
-                        player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
                         preparePlayer(savedInstanceState);
+                        player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
                     }
 
                     @Override
@@ -586,8 +618,8 @@ public class ViewVideoActivity extends AppCompatActivity {
                                                             Util.getUserAgent(ViewVideoActivity.this,
                                                                     "Infinity")));
                                             // Prepare the player with the source.
-                                            player.prepare(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
                                             preparePlayer(savedInstanceState);
+                                            player.prepare(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
                                         } else {
                                             Toast.makeText(ViewVideoActivity.this, R.string.error_fetching_v_redd_it_video_cannot_get_video_url, Toast.LENGTH_LONG).show();
                                         }

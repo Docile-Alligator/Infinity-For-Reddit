@@ -182,6 +182,8 @@ dependencies {
     // RecyclerView fast scrolling
     implementation 'me.zhanghai.android.fastscroll:library:1.1.7'
 
+    implementation 'com.otaliastudios:zoomlayout:1.8.0'
+
 
 /**** Builds and flavors ****/
     // debugImplementation because LeakCanary should only run in debug builds.
