@@ -796,6 +796,10 @@
     <string name="theme_item_toolbar_secondary_text_color_detail">Applied to: Secondary texts in toolbars</string>
     <string name="theme_item_circular_progress_bar_background_color">Circular Progress Bar Background Color</string>
     <string name="theme_item_circular_progress_bar_background_color_detail">Applied to: Background of Circular progress bar</string>
+    <string name="theme_item_media_indicator_icon_color">Media Indicator Icon Color</string>
+    <string name="theme_item_media_indicator_icon_color_detail">Applied to: Video or gallery icon on post preview</string>
+    <string name="theme_item_media_indicator_background_color">Media Indicator Background Color</string>
+    <string name="theme_item_media_indicator_background_color_detail">Applied to: Background of video or gallery icon on post preview</string>
     <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_background">Background Color of Tab Layout in Expanded Toolbar</string>
     <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_tab_background_detail">Applied to: Tab layout background (expanded toolbar)</string>
     <string name="theme_item_tab_layout_with_expanded_collapsing_toolbar_text_color">Text Color of Tab Layout in Expanded Toolbar</string>

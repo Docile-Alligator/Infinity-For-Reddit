@@ -1,5 +1,8 @@
 package ml.docilealligator.infinityforreddit.customtheme;
 
+import static ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils.AMOLED;
+import static ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils.DARK;
+
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -8,9 +11,6 @@ import java.util.ArrayList;
 
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
-
-import static ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils.AMOLED;
-import static ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils.DARK;
 
 public class CustomThemeWrapper {
     private SharedPreferences lightThemeSharedPreferences;
@@ -170,6 +170,16 @@ public class CustomThemeWrapper {
     public int getCircularProgressBarBackground() {
         return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.CIRCULAR_PROGRESS_BAR_BACKGROUND,
                 getDefaultColor("#FFFFFF", "#242424", "#000000"));
+    }
+
+    public int getMediaIndicatorIconColor() {
+        return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.MEDIA_INDICATOR_ICON_COLOR,
+                getDefaultColor("#FFFFFF", "#000000", "#000000"));
+    }
+
+    public int getMediaIndicatorBackgroundColor() {
+        return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.MEDIA_INDICATOR_BACKGROUND_COLOR,
+                getDefaultColor("#000000", "#FFFFFF", "#FFFFFF"));
     }
 
     public int getTabLayoutWithExpandedCollapsingToolbarTabBackground() {
@@ -533,6 +543,8 @@ public class CustomThemeWrapper {
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
         customTheme.toolbarSecondaryTextColor = Color.parseColor("#FFFFFF");
         customTheme.circularProgressBarBackground = Color.parseColor("#FFFFFF");
+        customTheme.mediaIndicatorIconColor = Color.parseColor("#FFFFFF");
+        customTheme.mediaIndicatorBackgroundColor = Color.parseColor("#000000");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground = Color.parseColor("#FFFFFF");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = Color.parseColor("#0336FF");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator = Color.parseColor("#0336FF");
@@ -624,6 +636,8 @@ public class CustomThemeWrapper {
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
         customTheme.toolbarSecondaryTextColor = Color.parseColor("#FFFFFF");
         customTheme.circularProgressBarBackground = Color.parseColor("#242424");
+        customTheme.mediaIndicatorIconColor = Color.parseColor("#000000");
+        customTheme.mediaIndicatorBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground = Color.parseColor("#242424");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = Color.parseColor("#FFFFFF");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator = Color.parseColor("#FFFFFF");
@@ -715,6 +729,8 @@ public class CustomThemeWrapper {
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
         customTheme.toolbarSecondaryTextColor = Color.parseColor("#FFFFFF");
         customTheme.circularProgressBarBackground = Color.parseColor("#000000");
+        customTheme.mediaIndicatorIconColor = Color.parseColor("#000000");
+        customTheme.mediaIndicatorBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground = Color.parseColor("#000000");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = Color.parseColor("#FFFFFF");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator = Color.parseColor("#FFFFFF");
@@ -806,6 +822,8 @@ public class CustomThemeWrapper {
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#3C4043");
         customTheme.toolbarSecondaryTextColor = Color.parseColor("#3C4043");
         customTheme.circularProgressBarBackground = Color.parseColor("#FFFFFF");
+        customTheme.mediaIndicatorIconColor = Color.parseColor("#FFFFFF");
+        customTheme.mediaIndicatorBackgroundColor = Color.parseColor("#000000");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground = Color.parseColor("#FFFFFF");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = Color.parseColor("#3C4043");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator = Color.parseColor("#3C4043");
@@ -897,6 +915,8 @@ public class CustomThemeWrapper {
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
         customTheme.toolbarSecondaryTextColor = Color.parseColor("#FFFFFF");
         customTheme.circularProgressBarBackground = Color.parseColor("#242424");
+        customTheme.mediaIndicatorIconColor = Color.parseColor("#000000");
+        customTheme.mediaIndicatorBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground = Color.parseColor("#242424");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = Color.parseColor("#FFFFFF");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator = Color.parseColor("#FFFFFF");
@@ -988,6 +1008,8 @@ public class CustomThemeWrapper {
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
         customTheme.toolbarSecondaryTextColor = Color.parseColor("#FFFFFF");
         customTheme.circularProgressBarBackground = Color.parseColor("#000000");
+        customTheme.mediaIndicatorIconColor = Color.parseColor("#000000");
+        customTheme.mediaIndicatorBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground = Color.parseColor("#000000");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = Color.parseColor("#FFFFFF");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator = Color.parseColor("#FFFFFF");
@@ -1079,6 +1101,8 @@ public class CustomThemeWrapper {
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
         customTheme.toolbarSecondaryTextColor = Color.parseColor("#FFFFFF");
         customTheme.circularProgressBarBackground = Color.parseColor("#FFFFFF");
+        customTheme.mediaIndicatorIconColor = Color.parseColor("#FFFFFF");
+        customTheme.mediaIndicatorBackgroundColor = Color.parseColor("#000000");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground = Color.parseColor("#FFFFFF");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = Color.parseColor("#EE0270");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator = Color.parseColor("#EE0270");
@@ -1170,6 +1194,8 @@ public class CustomThemeWrapper {
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
         customTheme.toolbarSecondaryTextColor = Color.parseColor("#FFFFFF");
         customTheme.circularProgressBarBackground = Color.parseColor("#242424");
+        customTheme.mediaIndicatorIconColor = Color.parseColor("#000000");
+        customTheme.mediaIndicatorBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground = Color.parseColor("#242424");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = Color.parseColor("#FFFFFF");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator = Color.parseColor("#FFFFFF");
@@ -1261,6 +1287,8 @@ public class CustomThemeWrapper {
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
         customTheme.toolbarSecondaryTextColor = Color.parseColor("#FFFFFF");
         customTheme.circularProgressBarBackground = Color.parseColor("#000000");
+        customTheme.mediaIndicatorIconColor = Color.parseColor("#000000");
+        customTheme.mediaIndicatorBackgroundColor = Color.parseColor("#FFFFFF");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground = Color.parseColor("#000000");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = Color.parseColor("#FFFFFF");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator = Color.parseColor("#FFFFFF");
@@ -1352,6 +1380,8 @@ public class CustomThemeWrapper {
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#FFFFFF");
         customTheme.toolbarSecondaryTextColor = Color.parseColor("#FFFFFF");
         customTheme.circularProgressBarBackground = Color.parseColor("#393A59");
+        customTheme.mediaIndicatorIconColor = Color.parseColor("#FFFFFF");
+        customTheme.mediaIndicatorBackgroundColor = Color.parseColor("#000000");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground = Color.parseColor("#393A59");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = Color.parseColor("#FFFFFF");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator = Color.parseColor("#FFFFFF");
@@ -1443,6 +1473,8 @@ public class CustomThemeWrapper {
         customTheme.toolbarPrimaryTextAndIconColor = Color.parseColor("#3C4043");
         customTheme.toolbarSecondaryTextColor = Color.parseColor("#3C4043");
         customTheme.circularProgressBarBackground = Color.parseColor("#D48AE0");
+        customTheme.mediaIndicatorIconColor = Color.parseColor("#FFFFFF");
+        customTheme.mediaIndicatorBackgroundColor = Color.parseColor("#000000");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground = Color.parseColor("#FFFFFF");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = Color.parseColor("#D48AE0");
         customTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator = Color.parseColor("#D48AE0");

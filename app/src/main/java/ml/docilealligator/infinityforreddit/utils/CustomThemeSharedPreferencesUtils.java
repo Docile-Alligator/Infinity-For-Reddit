@@ -38,6 +38,8 @@ public class CustomThemeSharedPreferencesUtils {
     public static final String TOOLBAR_PRIMARY_TEXT_AND_ICON_COLOR = "toolbarPrimaryTextAndIconColor";
     public static final String TOOLBAR_SECONDARY_TEXT_COLOR = "toolbarSecondaryTextColor";
     public static final String CIRCULAR_PROGRESS_BAR_BACKGROUND = "circularProgressBarBackground";
+    public static final String MEDIA_INDICATOR_ICON_COLOR = "mediaIndicatorIconColor";
+    public static final String MEDIA_INDICATOR_BACKGROUND_COLOR = "mediaIndicatorBackgroundColor";
     public static final String TAB_LAYOUT_WITH_EXPANDED_COLLAPSING_TOOLBAR_TAB_BACKGROUND = "tabLayoutWithExpandedCollapsingToolbarTabBackground";
     public static final String TAB_LAYOUT_WITH_EXPANDED_COLLAPSING_TOOLBAR_TEXT_COLOR = "tabLayoutWithExpandedCollapsingToolbarTextColor";
     public static final String TAB_LAYOUT_WITH_EXPANDED_COLLAPSING_TOOLBAR_TAB_INDICATOR = "tabLayoutWithExpandedCollapsingToolbarTabIndicator";
@@ -120,6 +122,8 @@ public class CustomThemeSharedPreferencesUtils {
         editor.putInt(TOOLBAR_PRIMARY_TEXT_AND_ICON_COLOR, customTheme.toolbarPrimaryTextAndIconColor);
         editor.putInt(TOOLBAR_SECONDARY_TEXT_COLOR, customTheme.toolbarSecondaryTextColor);
         editor.putInt(CIRCULAR_PROGRESS_BAR_BACKGROUND, customTheme.circularProgressBarBackground);
+        editor.putInt(MEDIA_INDICATOR_ICON_COLOR, customTheme.mediaIndicatorIconColor);
+        editor.putInt(MEDIA_INDICATOR_BACKGROUND_COLOR, customTheme.mediaIndicatorBackgroundColor);
         editor.putInt(TAB_LAYOUT_WITH_EXPANDED_COLLAPSING_TOOLBAR_TAB_BACKGROUND, customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground);
         editor.putInt(TAB_LAYOUT_WITH_EXPANDED_COLLAPSING_TOOLBAR_TEXT_COLOR, customTheme.tabLayoutWithExpandedCollapsingToolbarTextColor);
         editor.putInt(TAB_LAYOUT_WITH_EXPANDED_COLLAPSING_TOOLBAR_TAB_INDICATOR, customTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator);
