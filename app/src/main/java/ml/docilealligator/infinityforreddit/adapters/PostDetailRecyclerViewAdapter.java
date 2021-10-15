@@ -186,6 +186,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private int mArchivedTintColor;
     private int mLockedTintColor;
     private int mCrosspostTintColor;
+    private int mMediaIndicatorIconTint;
+    private int mMediaIndicatorBackgroundColor;
     private int mUpvoteRatioTintColor;
     private int mNoPreviewPostTypeBackgroundColor;
     private int mNoPreviewPostTypeIconTint;
@@ -402,6 +404,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mArchivedTintColor = customThemeWrapper.getArchivedIconTint();
         mLockedTintColor = customThemeWrapper.getLockedIconTint();
         mCrosspostTintColor = customThemeWrapper.getCrosspostIconTint();
+        mMediaIndicatorIconTint = customThemeWrapper.getMediaIndicatorIconColor();
+        mMediaIndicatorBackgroundColor = customThemeWrapper.getMediaIndicatorBackgroundColor();
         mUpvoteRatioTintColor = customThemeWrapper.getUpvoteRatioIconTint();
         mNoPreviewPostTypeBackgroundColor = customThemeWrapper.getNoPreviewPostTypeBackgroundColor();
         mNoPreviewPostTypeIconTint = customThemeWrapper.getNoPreviewPostTypeIconTint();
@@ -1829,6 +1833,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         ProgressBar mLoadImageProgressBar;
         @BindView(R.id.load_image_error_text_view_item_post_detail_video_and_gif_preview)
         TextView mLoadImageErrorTextView;
+        @BindView(R.id.video_or_gif_indicator_image_view_item_post_detail)
+        ImageView videoOrGifIndicatorImageView;
         @BindView(R.id.image_view_item_post_detail_video_and_gif_preview)
         AspectRatioGifImageView mImageView;
         @BindView(R.id.bottom_constraint_layout_item_post_detail_video_and_gif_preview)
@@ -1872,6 +1878,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mSaveButton,
                     mShareButton);
 
+            videoOrGifIndicatorImageView.setColorFilter(mMediaIndicatorIconTint, PorterDuff.Mode.SRC_IN);
+            videoOrGifIndicatorImageView.setBackgroundTintList(ColorStateList.valueOf(mMediaIndicatorBackgroundColor));
             mLoadImageProgressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
             mLoadImageErrorTextView.setTextColor(mPrimaryTextColor);
 
@@ -2284,6 +2292,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         ProgressBar mLoadImageProgressBar;
         @BindView(R.id.load_image_error_text_view_item_post_detail_gallery)
         TextView mLoadImageErrorTextView;
+        @BindView(R.id.video_or_gif_indicator_image_view_item_post_detail)
+        ImageView videoOrGifIndicatorImageView;
         @BindView(R.id.image_view_item_post_detail_gallery)
         AspectRatioGifImageView mImageView;
         @BindView(R.id.image_view_no_preview_link_item_post_detail_gallery)
@@ -2329,6 +2339,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mSaveButton,
                     mShareButton);
 
+            videoOrGifIndicatorImageView.setColorFilter(mMediaIndicatorIconTint, PorterDuff.Mode.SRC_IN);
+            videoOrGifIndicatorImageView.setBackgroundTintList(ColorStateList.valueOf(mMediaIndicatorBackgroundColor));
             mLoadImageProgressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
             mLoadImageErrorTextView.setTextColor(mPrimaryTextColor);
             mNoPreviewPostTypeImageView.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);

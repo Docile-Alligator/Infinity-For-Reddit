@@ -217,6 +217,7 @@
                 android:scaleType="fitStart" />
 
             <ImageView
+                android:id="@+id/video_or_gif_indicator_image_view_item_post_detail"
                 android:layout_width="36dp"
                 android:layout_height="36dp"
                 android:layout_margin="16dp"

@@ -163,6 +163,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private int mArchivedIconTint;
     private int mLockedIconTint;
     private int mCrosspostIconTint;
+    private int mMediaIndicatorIconTint;
+    private int mMediaIndicatorBackgroundColor;
     private int mNoPreviewPostTypeBackgroundColor;
     private int mNoPreviewPostTypeIconTint;
     private int mUpvotedColor;
@@ -306,6 +308,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mArchivedIconTint = customThemeWrapper.getArchivedIconTint();
             mLockedIconTint = customThemeWrapper.getLockedIconTint();
             mCrosspostIconTint = customThemeWrapper.getCrosspostIconTint();
+            mMediaIndicatorIconTint = customThemeWrapper.getMediaIndicatorIconColor();
+            mMediaIndicatorBackgroundColor = customThemeWrapper.getMediaIndicatorBackgroundColor();
             mNoPreviewPostTypeBackgroundColor = customThemeWrapper.getNoPreviewPostTypeBackgroundColor();
             mNoPreviewPostTypeIconTint = customThemeWrapper.getNoPreviewPostTypeIconTint();
             mUpvotedColor = customThemeWrapper.getUpvoted();
@@ -2924,6 +2928,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             noPreviewLinkImageView.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
             noPreviewLinkImageView.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
             progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
+            videoOrGifIndicatorImageView.setColorFilter(mMediaIndicatorIconTint, PorterDuff.Mode.SRC_IN);
+            videoOrGifIndicatorImageView.setBackgroundTintList(ColorStateList.valueOf(mMediaIndicatorBackgroundColor));
             errorTextView.setTextColor(mPrimaryTextColor);
 
             imageView.setOnClickListener(view -> {
@@ -3741,6 +3747,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
             noPreviewImageView.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
             noPreviewImageView.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
+            videoOrGifIndicatorImageView.setColorFilter(mMediaIndicatorIconTint, PorterDuff.Mode.SRC_IN);
+            videoOrGifIndicatorImageView.setBackgroundTintList(ColorStateList.valueOf(mMediaIndicatorBackgroundColor));
             errorTextView.setTextColor(mPrimaryTextColor);
 
             itemView.setOnClickListener(view -> {
@@ -4144,6 +4152,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             noPreviewImageView.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
             noPreviewImageView.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
             progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
+            videoOrGifIndicatorImageView.setColorFilter(mMediaIndicatorIconTint, PorterDuff.Mode.SRC_IN);
+            videoOrGifIndicatorImageView.setBackgroundTintList(ColorStateList.valueOf(mMediaIndicatorBackgroundColor));
             errorTextView.setTextColor(mPrimaryTextColor);
             divider.setBackgroundColor(mDividerColor);
 
