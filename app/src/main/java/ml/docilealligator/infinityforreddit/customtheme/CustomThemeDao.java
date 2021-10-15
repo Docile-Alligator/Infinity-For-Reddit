@@ -16,6 +16,9 @@ public interface CustomThemeDao {
     @Query("SELECT * FROM custom_themes")
     LiveData<List<CustomTheme>> getAllCustomThemes();
 
+    @Query("SELECT * FROM custom_themes")
+    List<CustomTheme> getAllCustomThemesList();
+
     @Query("SELECT * FROM custom_themes WHERE is_light_theme = 1 LIMIT 1")
     CustomTheme getLightCustomTheme();
 

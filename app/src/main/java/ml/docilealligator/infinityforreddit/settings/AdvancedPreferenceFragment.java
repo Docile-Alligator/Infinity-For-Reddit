@@ -304,7 +304,7 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
             if (requestCode == SELECT_BACKUP_SETTINGS_DIRECTORY_REQUEST_CODE) {
                 Uri uri = data.getData();
                 BackupSettings.backupSettings(activity, executor, new Handler(), activity.getContentResolver(), uri,
-                        mSharedPreferences, lightThemeSharedPreferences, darkThemeSharedPreferences,
+                        mRedditDataRoomDatabase, mSharedPreferences, lightThemeSharedPreferences, darkThemeSharedPreferences,
                         amoledThemeSharedPreferences, mSortTypeSharedPreferences, mPostLayoutSharedPreferences,
                         postFeedScrolledPositionSharedPreferences, mainActivityTabsSharedPreferences,
                         nsfwAndBlurringSharedPreferences, bottomAppBarSharedPreferences, postHistorySharedPreferences,

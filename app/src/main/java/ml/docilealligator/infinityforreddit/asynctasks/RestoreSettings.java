@@ -126,7 +126,7 @@ public class RestoreSettings {
         ObjectInputStream input = null;
 
         try {
-            input = new ObjectInputStream(new FileInputStream(new File(uriString)));
+            input = new ObjectInputStream(new FileInputStream(uriString));
             Object object = input.readObject();
             if (object instanceof Map) {
                 Map<String, Object> map = (Map<String, Object>) object;

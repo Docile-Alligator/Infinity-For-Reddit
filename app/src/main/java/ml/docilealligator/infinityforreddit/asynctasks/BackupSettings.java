@@ -8,6 +8,8 @@ import android.os.Handler;
 
 import androidx.documentfile.provider.DocumentFile;
 
+import com.google.gson.Gson;
+
 import net.lingala.zip4j.ZipFile;
 import net.lingala.zip4j.model.ZipParameters;
 import net.lingala.zip4j.model.enums.EncryptionMethod;
@@ -20,18 +22,24 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
+import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class BackupSettings {
     public static void backupSettings(Context context, Executor executor, Handler handler,
                                       ContentResolver contentResolver, Uri destinationDirUri,
+                                      RedditDataRoomDatabase redditDataRoomDatabase,
                                       SharedPreferences defaultSharedPreferences,
                                       SharedPreferences lightThemeSharedPreferences,
                                       SharedPreferences darkThemeSharedPreferences,
@@ -56,28 +64,39 @@ public class BackupSettings {
             }
             backupDirFile.mkdirs();
 
-            boolean res = saveSharedPreferencesToFile(context, defaultSharedPreferences, backupDir,
+            File databaseDirFile = new File(backupDir + "/database");
+            databaseDirFile.mkdirs();
+
+            boolean res = saveSharedPreferencesToFile(defaultSharedPreferences, backupDir,
                     SharedPreferencesUtils.DEFAULT_PREFERENCES_FILE);
-            boolean res1 = saveSharedPreferencesToFile(context, lightThemeSharedPreferences, backupDir,
+            boolean res1 = saveSharedPreferencesToFile(lightThemeSharedPreferences, backupDir,
                     CustomThemeSharedPreferencesUtils.LIGHT_THEME_SHARED_PREFERENCES_FILE);
-            boolean res2 = saveSharedPreferencesToFile(context, darkThemeSharedPreferences, backupDir,
+            boolean res2 = saveSharedPreferencesToFile(darkThemeSharedPreferences, backupDir,
                     CustomThemeSharedPreferencesUtils.DARK_THEME_SHARED_PREFERENCES_FILE);
-            boolean res3 = saveSharedPreferencesToFile(context, amoledThemeSharedPreferences, backupDir,
+            boolean res3 = saveSharedPreferencesToFile(amoledThemeSharedPreferences, backupDir,
                     CustomThemeSharedPreferencesUtils.AMOLED_THEME_SHARED_PREFERENCES_FILE);
-            boolean res4 = saveSharedPreferencesToFile(context, sortTypeSharedPreferences, backupDir,
+            boolean res4 = saveSharedPreferencesToFile(sortTypeSharedPreferences, backupDir,
                     SharedPreferencesUtils.SORT_TYPE_SHARED_PREFERENCES_FILE);
-            boolean res5 = saveSharedPreferencesToFile(context, postLayoutSharedPreferences, backupDir,
+            boolean res5 = saveSharedPreferencesToFile(postLayoutSharedPreferences, backupDir,
                     SharedPreferencesUtils.POST_LAYOUT_SHARED_PREFERENCES_FILE);
-            boolean res6 = saveSharedPreferencesToFile(context, postFeedScrolledPositionSharedPreferences, backupDir,
+            boolean res6 = saveSharedPreferencesToFile(postFeedScrolledPositionSharedPreferences, backupDir,
                     SharedPreferencesUtils.FRONT_PAGE_SCROLLED_POSITION_SHARED_PREFERENCES_FILE);
-            boolean res7 = saveSharedPreferencesToFile(context, mainActivityTabsSharedPreferences, backupDir,
+            boolean res7 = saveSharedPreferencesToFile(mainActivityTabsSharedPreferences, backupDir,
                     SharedPreferencesUtils.MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE);
-            boolean res8 = saveSharedPreferencesToFile(context, nsfwAndSpoilerSharedPreferencs, backupDir,
+            boolean res8 = saveSharedPreferencesToFile(nsfwAndSpoilerSharedPreferencs, backupDir,
                     SharedPreferencesUtils.NSFW_AND_SPOILER_SHARED_PREFERENCES_FILE);
-            boolean res9 = saveSharedPreferencesToFile(context, bottomAppBarSharedPreferences, backupDir,
+            boolean res9 = saveSharedPreferencesToFile(bottomAppBarSharedPreferences, backupDir,
                     SharedPreferencesUtils.BOTTOM_APP_BAR_SHARED_PREFERENCES_FILE);
-            boolean res10 = saveSharedPreferencesToFile(context, postHistorySharedPreferences, backupDir,
+            boolean res10 = saveSharedPreferencesToFile(postHistorySharedPreferences, backupDir,
                     SharedPreferencesUtils.POST_HISTORY_SHARED_PREFERENCES_FILE);
+
+            List<SubscribedSubredditData> anonymousSubscribedSubredditsData = redditDataRoomDatabase.subscribedSubredditDao().getAllSubscribedSubredditsList("-");
+            String anonymousSubscribedSubredditsDataJson = new Gson().toJson(anonymousSubscribedSubredditsData);
+            boolean res11 = saveDatabaseTableToFile(anonymousSubscribedSubredditsDataJson, databaseDirFile.getAbsolutePath(), "/anonymous_subscribed_subreddits.json");
+
+            List<CustomTheme> customThemes = redditDataRoomDatabase.customThemeDao().getAllCustomThemesList();
+            String customThemesJson = new Gson().toJson(customThemes);
+            boolean res12 = saveDatabaseTableToFile(customThemesJson, databaseDirFile.getAbsolutePath(), "/custom_themes.json");
 
             boolean zipRes = zipAndMoveToDestinationDir(context, contentResolver, destinationDirUri);
 
@@ -88,7 +107,7 @@ public class BackupSettings {
             }
 
             handler.post(() -> {
-                boolean finalResult = res && res1 && res2 && res3 && res4 && res5 && res6 && res7 && res8 && res9 && res10 && zipRes;
+                boolean finalResult = res && res1 && res2 && res3 && res4 && res5 && res6 && res7 && res8 && res9 && res10 && res11 && res12 && zipRes;
                 if (finalResult) {
                     backupSettingsListener.success();
                 } else {
@@ -102,14 +121,13 @@ public class BackupSettings {
         });
     }
 
-    private static boolean saveSharedPreferencesToFile(Context context, SharedPreferences sharedPreferences,
+    private static boolean saveSharedPreferencesToFile(SharedPreferences sharedPreferences,
                                                        String backupDir, String fileName) {
-
         boolean result = false;
 
         ObjectOutputStream output = null;
         try {
-            output = new ObjectOutputStream(new FileOutputStream(new File(backupDir + "/" + fileName + ".txt")));
+            output = new ObjectOutputStream(new FileOutputStream(backupDir + "/" + fileName + ".txt"));
             output.writeObject(sharedPreferences.getAll());
 
             result = true;
@@ -125,6 +143,21 @@ public class BackupSettings {
             }
         }
         return result;
+    }
+
+    private static boolean saveDatabaseTableToFile(String dataJson, String backupDir, String fileName) {
+        File anonymousSubscribedSubredditsFile = new File(backupDir + fileName);
+        try {
+            anonymousSubscribedSubredditsFile.createNewFile();
+            try (PrintWriter out = new PrintWriter(anonymousSubscribedSubredditsFile.getAbsolutePath())) {
+                out.println(dataJson);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
 
     private static boolean zipAndMoveToDestinationDir(Context context, ContentResolver contentResolver, Uri destinationDirUri) {
