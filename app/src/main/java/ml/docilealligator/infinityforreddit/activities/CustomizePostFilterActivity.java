@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -29,6 +32,7 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.r0adkll.slidr.Slidr;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
@@ -371,6 +375,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
         int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         int primaryIconColor = mCustomThemeWrapper.getPrimaryIconColor();
+        Drawable cursorDrawable = Utils.getTintedDrawable(this, R.drawable.edit_text_cursor, primaryTextColor);
         nameTextInputLayout.setBoxStrokeColor(primaryTextColor);
         nameTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         nameTextInputEditText.setTextColor(primaryTextColor);
@@ -423,6 +428,58 @@ public class CustomizePostFilterActivity extends BaseActivity {
         maxAwardsTextInputLayout.setBoxStrokeColor(primaryTextColor);
         maxAwardsTextInputLayout.setDefaultHintTextColor(ColorStateList.valueOf(primaryTextColor));
         maxAwardsTextInputEditText.setTextColor(primaryTextColor);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            nameTextInputEditText.setTextCursorDrawable(cursorDrawable);
+            titleExcludesStringsTextInputEditText.setTextCursorDrawable(cursorDrawable);
+            titleExcludesRegexTextInputEditText.setTextCursorDrawable(cursorDrawable);
+            excludesSubredditsTextInputEditText.setTextCursorDrawable(cursorDrawable);
+            excludesUsersTextInputEditText.setTextCursorDrawable(cursorDrawable);
+            excludesFlairsTextInputEditText.setTextCursorDrawable(cursorDrawable);
+            containsFlairsTextInputEditText.setTextCursorDrawable(cursorDrawable);
+            excludesDomainsTextInputEditText.setTextCursorDrawable(cursorDrawable);
+            minVoteTextInputEditText.setTextCursorDrawable(cursorDrawable);
+            maxVoteTextInputEditText.setTextCursorDrawable(cursorDrawable);
+            minCommentsTextInputEditText.setTextCursorDrawable(cursorDrawable);
+            maxCommentsTextInputEditText.setTextCursorDrawable(cursorDrawable);
+            minAwardsTextInputEditText.setTextCursorDrawable(cursorDrawable);
+            maxAwardsTextInputEditText.setTextCursorDrawable(cursorDrawable);
+        } else {
+            setCursorDrawableColor(nameTextInputEditText, primaryTextColor);
+            setCursorDrawableColor(titleExcludesStringsTextInputEditText, primaryTextColor);
+            setCursorDrawableColor(titleExcludesRegexTextInputEditText, primaryTextColor);
+            setCursorDrawableColor(excludesSubredditsTextInputEditText, primaryTextColor);
+            setCursorDrawableColor(excludesUsersTextInputEditText, primaryTextColor);
+            setCursorDrawableColor(excludesFlairsTextInputEditText, primaryTextColor);
+            setCursorDrawableColor(containsFlairsTextInputEditText, primaryTextColor);
+            setCursorDrawableColor(excludesDomainsTextInputEditText, primaryTextColor);
+            setCursorDrawableColor(minVoteTextInputEditText, primaryTextColor);
+            setCursorDrawableColor(maxVoteTextInputEditText, primaryTextColor);
+            setCursorDrawableColor(minCommentsTextInputEditText, primaryTextColor);
+            setCursorDrawableColor(maxCommentsTextInputEditText, primaryTextColor);
+            setCursorDrawableColor(minAwardsTextInputEditText, primaryTextColor);
+            setCursorDrawableColor(maxAwardsTextInputEditText, primaryTextColor);
+        }
+    }
+
+    public static void setCursorDrawableColor(EditText editText, int color) {
+        try {
+            Field fCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
+            fCursorDrawableRes.setAccessible(true);
+            int mCursorDrawableRes = fCursorDrawableRes.getInt(editText);
+            Field fEditor = TextView.class.getDeclaredField("mEditor");
+            fEditor.setAccessible(true);
+            Object editor = fEditor.get(editText);
+            Class<?> clazz = editor.getClass();
+            Field fCursorDrawable = clazz.getDeclaredField("mCursorDrawable");
+            fCursorDrawable.setAccessible(true);
+            Drawable[] drawables = new Drawable[2];
+            drawables[0] = editText.getContext().getResources().getDrawable(mCursorDrawableRes);
+            drawables[1] = editText.getContext().getResources().getDrawable(mCursorDrawableRes);
+            drawables[0].setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            drawables[1].setColorFilter(color, PorterDuff.Mode.SRC_IN);
+            fCursorDrawable.set(editor, drawables);
+        } catch (Throwable ignored) { }
     }
 
     @Override
