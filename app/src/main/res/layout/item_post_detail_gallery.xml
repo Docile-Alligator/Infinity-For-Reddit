@@ -227,7 +227,7 @@
                 android:layout_gravity="start"
                 android:scaleType="center"
                 android:background="@drawable/play_button_round_background"
-                android:src="@drawable/ic_gallery_reverse_color_24dp" />
+                android:src="@drawable/ic_gallery_24dp" />
 
         </FrameLayout>
 

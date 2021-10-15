@@ -780,7 +780,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                             if (!mHidePostType) {
                                 ((PostDetailNoPreviewViewHolder) holder).mTypeTextView.setText(R.string.gallery);
                             }
-                            ((PostDetailNoPreviewViewHolder) holder).mNoPreviewPostTypeImageView.setImageResource(R.drawable.ic_gallery_reverse_color_24dp);
+                            ((PostDetailNoPreviewViewHolder) holder).mNoPreviewPostTypeImageView.setImageResource(R.drawable.ic_gallery_24dp);
                             break;
                     }
                 }

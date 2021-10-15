@@ -2,8 +2,10 @@ package ml.docilealligator.infinityforreddit.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -265,7 +267,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
         } else if (post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
             contentTextView.setVisibility(View.VISIBLE);
             contentTextView.setText(post.getUrl());
-        } else if (post.getPostType() == Post.GIF_TYPE || post.getPostType() == Post.GALLERY_TYPE || post.getPostType() == Post.IMAGE_TYPE) {
+        } else {
             Post.Preview preview = getPreview(post);
             if (preview != null) {
                 frameLayout.setVisibility(View.VISIBLE);
@@ -280,23 +282,14 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
 
                     }
                 });
-            }
-        } else if (post.getPostType() == Post.VIDEO_TYPE) {
-            Post.Preview preview = getPreview(post);
-            if (preview != null) {
-                frameLayout.setVisibility(View.VISIBLE);
-                mGlide.asBitmap().load(preview.getPreviewUrl()).into(new CustomTarget<Bitmap>() {
-                    @Override
-                    public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                        imageView.setImage(ImageSource.bitmap(resource));
-                    }
 
-                    @Override
-                    public void onLoadCleared(@Nullable Drawable placeholder) {
-
-                    }
-                });
-                playButton.setVisibility(View.VISIBLE);
+                if (post.getPostType() == Post.VIDEO_TYPE || post.getPostType() == Post.GIF_TYPE) {
+                    playButton.setVisibility(View.VISIBLE);
+                    playButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_play_circle_36dp));
+                } else if (post.getPostType() == Post.GALLERY_TYPE) {
+                    playButton.setVisibility(View.VISIBLE);
+                    playButton.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_gallery_24dp));
+                }
             }
         }
 
@@ -423,6 +416,8 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
         titleEditText.setHintTextColor(secondaryTextColor);
         contentTextView.setTextColor(primaryTextColor);
         contentTextView.setHintTextColor(secondaryTextColor);
+        playButton.setColorFilter(mCustomThemeWrapper.getMediaIndicatorIconColor(), PorterDuff.Mode.SRC_IN);
+        playButton.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getMediaIndicatorBackgroundColor()));
     }
 
     private void displaySubredditIcon() {

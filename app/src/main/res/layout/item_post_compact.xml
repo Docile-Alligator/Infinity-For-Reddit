@@ -234,7 +234,6 @@
                     android:layout_gravity="center"
                     android:layout_margin="0dp"
                     android:background="@drawable/play_button_round_background"
-                    android:src="@drawable/ic_play_circle_36dp"
                     android:visibility="gone" />
 
             </FrameLayout>
