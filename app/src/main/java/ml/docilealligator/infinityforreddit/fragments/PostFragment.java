@@ -771,8 +771,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 postFragmentId += multiRedditPath.hashCode();
             }
 
-            usage = PostFilterUsage.HOME_TYPE;
-            nameOfUsage = PostFilterUsage.NO_USAGE;
+            usage = PostFilterUsage.MULTIREDDIT_TYPE;
+            nameOfUsage = multiRedditPath;
 
             String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE + multiRedditPath, SortType.Type.BEST.name());
             if (sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
