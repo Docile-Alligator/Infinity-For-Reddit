@@ -46,7 +46,7 @@ import retrofit2.Retrofit;
 
 public class MultiredditSelectionActivity extends BaseActivity implements ActivityToolbarInterface {
 
-    static final String EXTRA_RETURN_MULTIREDDIT = "ERM";
+    public static final String EXTRA_RETURN_MULTIREDDIT = "ERM";
 
     private static final String INSERT_SUBSCRIBED_MULTIREDDIT_STATE = "ISSS";
     private static final String FRAGMENT_OUT_STATE = "FOS";

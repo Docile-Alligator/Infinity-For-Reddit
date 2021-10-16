@@ -58,19 +58,19 @@ import retrofit2.Retrofit;
 
 public class SearchActivity extends BaseActivity {
 
-    static final String EXTRA_QUERY = "EQ";
-    static final String EXTRA_SUBREDDIT_NAME = "ESN";
-    static final String EXTRA_SUBREDDIT_IS_USER = "ESIU";
-    static final String EXTRA_SEARCH_ONLY_SUBREDDITS = "ESOS";
-    static final String EXTRA_SEARCH_ONLY_USERS = "ESOU";
-    static final String EXTRA_RETURN_SUBREDDIT_NAME = "ERSN";
-    static final String EXTRA_RETURN_SUBREDDIT_ICON_URL = "ERSIU";
-    static final String RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES = "RESSN";
-    static final String RETURN_EXTRA_SELECTED_USERNAMES = "RESU";
-    static final String EXTRA_RETURN_USER_NAME = "ERUN";
-    static final String EXTRA_RETURN_USER_ICON_URL = "ERUIU";
-    static final String EXTRA_IS_MULTI_SELECTION = "EIMS";
-    static final int SUICIDE_PREVENTION_ACTIVITY_REQUEST_CODE = 101;
+    public static final String EXTRA_QUERY = "EQ";
+    public static final String EXTRA_SUBREDDIT_NAME = "ESN";
+    public static final String EXTRA_SUBREDDIT_IS_USER = "ESIU";
+    public static final String EXTRA_SEARCH_ONLY_SUBREDDITS = "ESOS";
+    public static final String EXTRA_SEARCH_ONLY_USERS = "ESOU";
+    public static final String EXTRA_RETURN_SUBREDDIT_NAME = "ERSN";
+    public static final String EXTRA_RETURN_SUBREDDIT_ICON_URL = "ERSIU";
+    public static final String RETURN_EXTRA_SELECTED_SUBREDDIT_NAMES = "RESSN";
+    public static final String RETURN_EXTRA_SELECTED_USERNAMES = "RESU";
+    public static final String EXTRA_RETURN_USER_NAME = "ERUN";
+    public static final String EXTRA_RETURN_USER_ICON_URL = "ERUIU";
+    public static final String EXTRA_IS_MULTI_SELECTION = "EIMS";
+    public static final int SUICIDE_PREVENTION_ACTIVITY_REQUEST_CODE = 101;
 
     private static final String SUBREDDIT_NAME_STATE = "SNS";
     private static final String SUBREDDIT_IS_USER_STATE = "SIUS";

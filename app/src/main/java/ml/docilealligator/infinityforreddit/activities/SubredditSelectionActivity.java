@@ -49,10 +49,10 @@ import retrofit2.Retrofit;
 
 public class SubredditSelectionActivity extends BaseActivity implements ActivityToolbarInterface {
 
-    static final String EXTRA_EXTRA_CLEAR_SELECTION = "EECS";
-    static final String EXTRA_RETURN_SUBREDDIT_NAME = "ERSN";
-    static final String EXTRA_RETURN_SUBREDDIT_ICON_URL = "ERSIURL";
-    static final String EXTRA_RETURN_SUBREDDIT_IS_USER = "ERSIU";
+    public static final String EXTRA_EXTRA_CLEAR_SELECTION = "EECS";
+    public static final String EXTRA_RETURN_SUBREDDIT_NAME = "ERSN";
+    public static final String EXTRA_RETURN_SUBREDDIT_ICON_URL = "ERSIURL";
+    public static final String EXTRA_RETURN_SUBREDDIT_IS_USER = "ERSIU";
 
     private static final int SUBREDDIT_SEARCH_REQUEST_CODE = 0;
     private static final String INSERT_SUBSCRIBED_SUBREDDIT_STATE = "ISSS";

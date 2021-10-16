@@ -175,37 +175,57 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/tab_1_name_linear_layout_customize_main_page_tabs_fragment"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tab_1_name_constraint_layout_customize_main_page_tabs_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingTop="16dp"
-            android:paddingBottom="16dp"
-            android:paddingStart="72dp"
-            android:paddingEnd="16dp"
+            android:background="?attr/selectableItemBackground"
             android:clickable="true"
             android:focusable="true"
-            android:background="?attr/selectableItemBackground"
+            android:orientation="vertical"
+            android:paddingStart="72dp"
+            android:paddingTop="16dp"
+            android:paddingEnd="16dp"
+            android:paddingBottom="16dp"
             android:visibility="gone">
 
             <TextView
                 android:id="@+id/tab_1_name_title_text_view_customize_main_page_tabs_fragment"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:fontFamily="?attr/font_family"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="?attr/font_16"
-                android:fontFamily="?attr/font_family" />
+                app:layout_constraintEnd_toStartOf="@id/tab_1_name_add_image_view_customize_main_page_tabs_fragment"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/tab_1_name_summary_text_view_customize_main_page_tabs_fragment"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:fontFamily="?attr/font_family"
                 android:textColor="?attr/secondaryTextColor"
                 android:textSize="?attr/font_default"
-                android:fontFamily="?attr/font_family" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tab_1_name_add_image_view_customize_main_page_tabs_fragment"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tab_1_name_title_text_view_customize_main_page_tabs_fragment" />
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/tab_1_name_add_image_view_customize_main_page_tabs_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:background="?actionBarItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:src="@drawable/ic_add_day_night_24dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
             android:id="@+id/divider_2_customize_main_page_tabs_fragment"
@@ -287,8 +307,8 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/tab_2_name_linear_layout_customize_main_page_tabs_fragment"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tab_2_name_constraint_layout_customize_main_page_tabs_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -303,21 +323,41 @@
 
             <TextView
                 android:id="@+id/tab_2_name_title_text_view_customize_main_page_tabs_fragment"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="?attr/font_16"
-                android:fontFamily="?attr/font_family" />
+                android:fontFamily="?attr/font_family"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tab_2_name_add_image_view_customize_main_page_tabs_fragment" />
 
             <TextView
                 android:id="@+id/tab_2_name_summary_text_view_customize_main_page_tabs_fragment"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textColor="?attr/secondaryTextColor"
                 android:textSize="?attr/font_default"
-                android:fontFamily="?attr/font_family" />
+                android:fontFamily="?attr/font_family"
+                app:layout_constraintTop_toBottomOf="@id/tab_2_name_title_text_view_customize_main_page_tabs_fragment"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tab_2_name_add_image_view_customize_main_page_tabs_fragment" />
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/tab_2_name_add_image_view_customize_main_page_tabs_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:src="@drawable/ic_add_day_night_24dp"
+                android:background="?actionBarItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
             android:id="@+id/divider_3_customize_main_page_tabs_fragment"
@@ -399,8 +439,8 @@
 
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/tab_3_name_linear_layout_customize_main_page_tabs_fragment"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/tab_3_name_constraint_layout_customize_main_page_tabs_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -415,21 +455,41 @@
 
             <TextView
                 android:id="@+id/tab_3_name_title_text_view_customize_main_page_tabs_fragment"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textColor="@color/primaryTextColor"
                 android:textSize="?attr/font_16"
-                android:fontFamily="?attr/font_family" />
+                android:fontFamily="?attr/font_family"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tab_3_name_add_image_view_customize_main_page_tabs_fragment" />
 
             <TextView
                 android:id="@+id/tab_3_name_summary_text_view_customize_main_page_tabs_fragment"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:textColor="?attr/secondaryTextColor"
                 android:textSize="?attr/font_default"
-                android:fontFamily="?attr/font_family" />
+                android:fontFamily="?attr/font_family"
+                app:layout_constraintTop_toBottomOf="@id/tab_3_name_title_text_view_customize_main_page_tabs_fragment"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/tab_3_name_add_image_view_customize_main_page_tabs_fragment" />
 
-        </LinearLayout>
+            <ImageView
+                android:id="@+id/tab_3_name_add_image_view_customize_main_page_tabs_fragment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="8dp"
+                android:src="@drawable/ic_add_day_night_24dp"
+                android:background="?actionBarItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <View
             android:id="@+id/divider_4_customize_main_page_tabs_fragment"

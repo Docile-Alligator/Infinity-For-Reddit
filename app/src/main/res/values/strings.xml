@@ -507,7 +507,7 @@
     <string name="settings_tab_title">Title</string>
     <string name="settings_tab_post_type">Type</string>
     <string name="settings_tab_subreddit_name">Subreddit Name (Without r/ prefix)</string>
-    <string name="settings_tab_multi_reddit_name">MultiReddit Name (/user/yourusername/m/yourmultiredditname)</string>
+    <string name="settings_tab_multi_reddit_name">MultiReddit Path (/user/yourusername/m/yourmultiredditname)</string>
     <string name="settings_tab_username">Username (Without u/ prefix)</string>
     <string name="no_developer_easter_egg">There\'s no developer options here</string>
     <string name="settings_download_location_title">Download Location</string>
