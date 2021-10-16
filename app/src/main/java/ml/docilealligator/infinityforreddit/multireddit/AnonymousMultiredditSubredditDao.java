@@ -17,4 +17,7 @@ public interface AnonymousMultiredditSubredditDao {
 
     @Query("SELECT * FROM anonymous_multireddit_subreddits WHERE path = :path ORDER BY subreddit_name COLLATE NOCASE ASC")
     List<AnonymousMultiredditSubreddit> getAllAnonymousMultiRedditSubreddits(String path);
+
+    @Query("SELECT * FROM anonymous_multireddit_subreddits")
+    List<AnonymousMultiredditSubreddit> getAllSubreddits();
 }

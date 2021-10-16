@@ -32,7 +32,12 @@ import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
+import ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubreddit;
+import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
+import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
@@ -94,9 +99,29 @@ public class BackupSettings {
             String anonymousSubscribedSubredditsDataJson = new Gson().toJson(anonymousSubscribedSubredditsData);
             boolean res11 = saveDatabaseTableToFile(anonymousSubscribedSubredditsDataJson, databaseDirFile.getAbsolutePath(), "/anonymous_subscribed_subreddits.json");
 
+            List<SubscribedUserData> anonymousSubscribedUsersData = redditDataRoomDatabase.subscribedUserDao().getAllSubscribedUsersList("-");
+            String anonymousSubscribedUsersDataJson = new Gson().toJson(anonymousSubscribedUsersData);
+            boolean res12 = saveDatabaseTableToFile(anonymousSubscribedUsersDataJson, databaseDirFile.getAbsolutePath(), "/anonymous_subscribed_users.json");
+
+            List<MultiReddit> anonymousMultireddits = redditDataRoomDatabase.multiRedditDao().getAllMultiRedditsList("-");
+            String anonymousMultiredditsJson = new Gson().toJson(anonymousMultireddits);
+            boolean res13 = saveDatabaseTableToFile(anonymousMultiredditsJson, databaseDirFile.getAbsolutePath(), "/anonymous_multireddits.json");
+
+            List<AnonymousMultiredditSubreddit> anonymousMultiredditSubreddits = redditDataRoomDatabase.anonymousMultiredditSubredditDao().getAllSubreddits();
+            String anonymousMultiredditSubredditsJson = new Gson().toJson(anonymousMultiredditSubreddits);
+            boolean res14 = saveDatabaseTableToFile(anonymousMultiredditSubredditsJson, databaseDirFile.getAbsolutePath(), "/anonymous_multireddit_subreddits.json");
+
             List<CustomTheme> customThemes = redditDataRoomDatabase.customThemeDao().getAllCustomThemesList();
             String customThemesJson = new Gson().toJson(customThemes);
-            boolean res12 = saveDatabaseTableToFile(customThemesJson, databaseDirFile.getAbsolutePath(), "/custom_themes.json");
+            boolean res15 = saveDatabaseTableToFile(customThemesJson, databaseDirFile.getAbsolutePath(), "/custom_themes.json");
+
+            List<PostFilter> postFilters = redditDataRoomDatabase.postFilterDao().getAllPostFilters();
+            String postFiltersJson = new Gson().toJson(postFilters);
+            boolean res16 = saveDatabaseTableToFile(postFiltersJson, databaseDirFile.getAbsolutePath(), "/post_filters.json");
+
+            List<PostFilterUsage> postFilterUsage = redditDataRoomDatabase.postFilterUsageDao().getAllPostFilterUsageForBackup();
+            String postFilterUsageJson = new Gson().toJson(postFilterUsage);
+            boolean res17 = saveDatabaseTableToFile(postFilterUsageJson, databaseDirFile.getAbsolutePath(), "/post_filter_usage.json");
 
             boolean zipRes = zipAndMoveToDestinationDir(context, contentResolver, destinationDirUri);
 
@@ -107,7 +132,8 @@ public class BackupSettings {
             }
 
             handler.post(() -> {
-                boolean finalResult = res && res1 && res2 && res3 && res4 && res5 && res6 && res7 && res8 && res9 && res10 && res11 && res12 && zipRes;
+                boolean finalResult = res && res1 && res2 && res3 && res4 && res5 && res6 && res7 && res8
+                        && res9 && res10 && res11 && res12 && res13 && res14 && res15 && res16 && res17 && zipRes;
                 if (finalResult) {
                     backupSettingsListener.success();
                 } else {
