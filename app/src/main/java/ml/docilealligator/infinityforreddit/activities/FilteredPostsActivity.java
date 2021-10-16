@@ -277,6 +277,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
                 }
                 break;
             case PostPagingSource.TYPE_MULTI_REDDIT:
+            case PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT:
                 String multiRedditName;
                 if (name.endsWith("/")) {
                     multiRedditName = name.substring(0, name.length() - 1);
@@ -302,7 +303,8 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
             if (postType == PostPagingSource.TYPE_USER) {
                 bundle.putString(PostFragment.EXTRA_USER_NAME, name);
                 bundle.putString(PostFragment.EXTRA_USER_WHERE, userWhere);
-            } else if (postType == PostPagingSource.TYPE_SUBREDDIT || postType == PostPagingSource.TYPE_MULTI_REDDIT) {
+            } else if (postType == PostPagingSource.TYPE_SUBREDDIT || postType == PostPagingSource.TYPE_MULTI_REDDIT
+                    || postType == PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT) {
                 bundle.putString(PostFragment.EXTRA_NAME, name);
             } else if (postType == PostPagingSource.TYPE_SEARCH) {
                 bundle.putString(PostFragment.EXTRA_NAME, name);

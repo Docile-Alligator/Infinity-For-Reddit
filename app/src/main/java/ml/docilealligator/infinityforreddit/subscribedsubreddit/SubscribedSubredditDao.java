@@ -13,6 +13,9 @@ public interface SubscribedSubredditDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(SubscribedSubredditData subscribedSubredditData);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAll(List<SubscribedSubredditData> subscribedSubredditDataList);
+
     @Query("DELETE FROM subscribed_subreddits")
     void deleteAllSubscribedSubreddits();
 

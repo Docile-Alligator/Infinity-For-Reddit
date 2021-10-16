@@ -14,6 +14,9 @@ public interface PostFilterDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(PostFilter postFilter);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAll(List<PostFilter> postFilters);
+
     @Query("DELETE FROM post_filter")
     void deleteAllPostFilters();
 

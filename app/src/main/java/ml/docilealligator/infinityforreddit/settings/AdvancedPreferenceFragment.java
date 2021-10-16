@@ -322,7 +322,7 @@ public class AdvancedPreferenceFragment extends PreferenceFragmentCompat {
             } else if (requestCode == SELECT_RESTORE_SETTINGS_DIRECTORY_REQUEST_CODE) {
                 Uri uri = data.getData();
                 RestoreSettings.restoreSettings(activity, executor, new Handler(), activity.getContentResolver(), uri,
-                        mSharedPreferences, lightThemeSharedPreferences, darkThemeSharedPreferences,
+                        mRedditDataRoomDatabase, mSharedPreferences, lightThemeSharedPreferences, darkThemeSharedPreferences,
                         amoledThemeSharedPreferences, mSortTypeSharedPreferences, mPostLayoutSharedPreferences,
                         postFeedScrolledPositionSharedPreferences, mainActivityTabsSharedPreferences,
                         nsfwAndBlurringSharedPreferences, bottomAppBarSharedPreferences, postHistorySharedPreferences,

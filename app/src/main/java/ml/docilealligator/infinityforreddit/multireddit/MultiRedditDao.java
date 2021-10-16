@@ -11,7 +11,10 @@ import java.util.List;
 @Dao
 public interface MultiRedditDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(MultiReddit MultiReddit);
+    void insert(MultiReddit multiReddit);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAll(List<MultiReddit> multiReddits);
 
     @Query("SELECT * FROM multi_reddits WHERE username = :username ORDER BY name COLLATE NOCASE ASC")
     LiveData<List<MultiReddit>> getAllMultiReddits(String username);

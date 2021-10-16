@@ -27,7 +27,7 @@ public class SavePostFilter {
                 redditDataRoomDatabase.postFilterDao().insert(postFilter);
                 for (PostFilterUsage postFilterUsage : postFilterUsages) {
                     postFilterUsage.name = postFilter.name;
-                    redditDataRoomDatabase.postFilterUsageDao().insertPostFilterUsage(postFilterUsage);
+                    redditDataRoomDatabase.postFilterUsageDao().insert(postFilterUsage);
                 }
                 handler.post(savePostFilterListener::success);
             }

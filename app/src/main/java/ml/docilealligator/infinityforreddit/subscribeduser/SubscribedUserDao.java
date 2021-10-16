@@ -13,6 +13,9 @@ public interface SubscribedUserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(SubscribedUserData subscribedUserData);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAll(List<SubscribedUserData> subscribedUserDataList);
+
     @Query("SELECT * FROM subscribed_users WHERE username = :accountName COLLATE NOCASE ORDER BY name COLLATE NOCASE ASC")
     LiveData<List<SubscribedUserData>> getAllSubscribedUsers(String accountName);
 

@@ -21,7 +21,10 @@ public interface PostFilterUsageDao {
     List<PostFilterUsage> getAllPostFilterUsageForBackup();
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insertPostFilterUsage(PostFilterUsage postFilterUsage);
+    void insert(PostFilterUsage postFilterUsage);
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    void insertAll(List<PostFilterUsage> postFilterUsageList);
 
     @Delete
     void deletePostFilterUsage(PostFilterUsage postFilterUsage);
