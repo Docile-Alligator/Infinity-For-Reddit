@@ -1644,7 +1644,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             intent.putExtra(FilteredPostsActivity.EXTRA_NAME, subredditName);
             intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
             startActivity(intent);
-        } else if (postType == PostPagingSource.TYPE_MULTI_REDDIT) {
+        } else if (postType == PostPagingSource.TYPE_MULTI_REDDIT || postType == PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT) {
             Intent intent = new Intent(activity, FilteredPostsActivity.class);
             intent.putExtra(FilteredPostsActivity.EXTRA_NAME, multiRedditPath);
             intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);

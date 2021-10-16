@@ -263,6 +263,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     private void bindView(PostFilter postFilter, boolean initializeFragment) {
         switch (postType) {
             case PostPagingSource.TYPE_FRONT_PAGE:
+            case PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE:
                 getSupportActionBar().setTitle(R.string.home);
                 break;
             case PostPagingSource.TYPE_SEARCH:
