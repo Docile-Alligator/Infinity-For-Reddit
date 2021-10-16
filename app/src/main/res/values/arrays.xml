@@ -546,6 +546,7 @@
         <item>@string/exclude_flair</item>
         <item>@string/contain_flair</item>
         <item>@string/exclude_domain</item>
+        <item>@string/contain_domain</item>
     </string-array>
 
     <string-array name="settings_app_lock_timeout">

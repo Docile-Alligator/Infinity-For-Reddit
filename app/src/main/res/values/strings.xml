@@ -1077,12 +1077,15 @@
     <string name="only_nsfw">Only NSFW</string>
     <string name="only_spoiler">Only Spoiler</string>
     <string name="title_excludes_strings_hint">Title: excludes keywords (key1,key2)</string>
+    <string name="title_contains_strings_hint">Title: contains keywords (key1,key2)</string>
     <string name="title_excludes_regex_hint">Title: excludes regex</string>
+    <string name="title_contains_regex_hint">Title: contains regex</string>
     <string name="exclude_subreddits_hint">Exclude subreddits (e.g. funny,AskReddit)</string>
     <string name="exclude_users_hint">Exclude users (e.g. Hostilenemy,random)</string>
     <string name="exclude_flairs_hint">Exclude flairs (e.g. flair1,flair2)</string>
     <string name="contain_flairs_hint">Contain flairs (e.g. flair1,flair2)</string>
     <string name="exclude_domains_hint">Exclude domains</string>
+    <string name="contain_domains_hint">Contain domains</string>
     <string name="min_vote_hint">Min vote (-1: no restriction)</string>
     <string name="max_vote_hint">Max vote (-1: no restriction)</string>
     <string name="min_comments_hint">Min comments (-1: no restriction)</string>
@@ -1158,6 +1161,7 @@
     <string name="exclude_flair">Exclude this flair</string>
     <string name="contain_flair">Contain this flair</string>
     <string name="exclude_domain">Exclude this domain</string>
+    <string name="contain_domain">Contain this domain</string>
 
     <string name="suggest_title">Suggest Title</string>
     <string name="suggest_title_failed">Failed to suggest a title</string>

@@ -41,8 +41,12 @@ public class PostFilter implements Parcelable {
     public boolean onlySpoiler;
     @ColumnInfo(name = "post_title_excludes_regex")
     public String postTitleExcludesRegex;
+    @ColumnInfo(name = "post_title_contains_regex")
+    public String postTitleContainsRegex;
     @ColumnInfo(name = "post_title_excludes_strings")
     public String postTitleExcludesStrings;
+    @ColumnInfo(name = "post_title_contains_strings")
+    public String postTitleContainsStrings;
     @ColumnInfo(name = "exclude_subreddits")
     public String excludeSubreddits;
     @ColumnInfo(name = "exclude_users")
@@ -53,6 +57,8 @@ public class PostFilter implements Parcelable {
     public String excludeFlairs;
     @ColumnInfo(name =  "exclude_domains")
     public String excludeDomains;
+    @ColumnInfo(name =  "contain_domains")
+    public String containDomains;
     @ColumnInfo(name = "contain_text_type")
     public boolean containTextType = true;
     @ColumnInfo(name = "contain_link_type")
@@ -82,12 +88,15 @@ public class PostFilter implements Parcelable {
         onlyNSFW = in.readByte() != 0;
         onlySpoiler = in.readByte() != 0;
         postTitleExcludesRegex = in.readString();
+        postTitleContainsRegex = in.readString();
         postTitleExcludesStrings = in.readString();
+        postTitleContainsStrings = in.readString();
         excludeSubreddits = in.readString();
         excludeUsers = in.readString();
         containFlairs = in.readString();
         excludeFlairs = in.readString();
         excludeDomains = in.readString();
+        containDomains = in.readString();
         containTextType = in.readByte() != 0;
         containLinkType = in.readByte() != 0;
         containImageType = in.readByte() != 0;
@@ -170,12 +179,32 @@ public class PostFilter implements Parcelable {
                 return false;
             }
         }
+        if (postFilter.postTitleContainsRegex != null && !postFilter.postTitleContainsRegex.equals("")) {
+            Pattern pattern = Pattern.compile(postFilter.postTitleContainsRegex);
+            Matcher matcher = pattern.matcher(post.getTitle());
+            if (!matcher.find()) {
+                return false;
+            }
+        }
         if (postFilter.postTitleExcludesStrings != null && !postFilter.postTitleExcludesStrings.equals("")) {
             String[] titles = postFilter.postTitleExcludesStrings.split(",", 0);
             for (String t : titles) {
                 if (!t.trim().equals("") && post.getTitle().toLowerCase().contains(t.toLowerCase().trim())) {
                     return false;
                 }
+            }
+        }
+        if (postFilter.postTitleContainsStrings != null && !postFilter.postTitleContainsStrings.equals("")) {
+            String[] titles = postFilter.postTitleContainsStrings.split(",", 0);
+            boolean hasRequiredString = false;
+            for (String t : titles) {
+                if (post.getTitle().toLowerCase().contains(t.toLowerCase().trim())) {
+                    hasRequiredString = true;
+                    break;
+                }
+            }
+            if (!hasRequiredString) {
+                return false;
             }
         }
         if (postFilter.excludeSubreddits != null && !postFilter.excludeSubreddits.equals("")) {
@@ -209,6 +238,20 @@ public class PostFilter implements Parcelable {
                 if (!f.trim().equals("") && url.contains(f.trim().toLowerCase())) {
                     return false;
                 }
+            }
+        }
+        if (post.getUrl() != null && postFilter.containDomains != null && !postFilter.containDomains.equals("")) {
+            String[] domains = postFilter.containDomains.split(",", 0);
+            String url = post.getUrl().toLowerCase();
+            boolean hasRequiredDomain = false;
+            for (String f : domains) {
+                if (url.contains(f.trim().toLowerCase())) {
+                    hasRequiredDomain = true;
+                    break;
+                }
+            }
+            if (!hasRequiredDomain) {
+                return false;
             }
         }
         if (postFilter.containFlairs != null && !postFilter.containFlairs.equals("")) {
@@ -255,10 +298,20 @@ public class PostFilter implements Parcelable {
                 postFilter.postTitleExcludesRegex = p.postTitleExcludesRegex;
             }
 
+            if (p.postTitleContainsRegex != null && !p.postTitleContainsRegex.equals("")) {
+                postFilter.postTitleContainsRegex = p.postTitleContainsRegex;
+            }
+
             if (p.postTitleExcludesStrings != null && !p.postTitleExcludesStrings.equals("")) {
                 stringBuilder = new StringBuilder(postFilter.postTitleExcludesStrings == null ? "" : postFilter.postTitleExcludesStrings);
                 stringBuilder.append(",").append(p.postTitleExcludesStrings);
                 postFilter.postTitleExcludesStrings = stringBuilder.toString();
+            }
+
+            if (p.postTitleContainsStrings != null && !p.postTitleContainsStrings.equals("")) {
+                stringBuilder = new StringBuilder(postFilter.postTitleContainsStrings == null ? "" : postFilter.postTitleContainsStrings);
+                stringBuilder.append(",").append(p.postTitleContainsStrings);
+                postFilter.postTitleContainsStrings = stringBuilder.toString();
             }
 
             if (p.excludeSubreddits != null && !p.excludeSubreddits.equals("")) {
@@ -291,6 +344,12 @@ public class PostFilter implements Parcelable {
                 postFilter.excludeDomains = stringBuilder.toString();
             }
 
+            if (p.containDomains != null && !p.containDomains.equals("")) {
+                stringBuilder = new StringBuilder(postFilter.containDomains == null ? "" : postFilter.containDomains);
+                stringBuilder.append(",").append(p.containDomains);
+                postFilter.containDomains = stringBuilder.toString();
+            }
+
             postFilter.containTextType = p.containTextType || postFilter.containTextType;
             postFilter.containLinkType = p.containLinkType || postFilter.containLinkType;
             postFilter.containImageType = p.containImageType || postFilter.containImageType;
@@ -320,12 +379,15 @@ public class PostFilter implements Parcelable {
         parcel.writeByte((byte) (onlyNSFW ? 1 : 0));
         parcel.writeByte((byte) (onlySpoiler ? 1 : 0));
         parcel.writeString(postTitleExcludesRegex);
+        parcel.writeString(postTitleContainsRegex);
         parcel.writeString(postTitleExcludesStrings);
+        parcel.writeString(postTitleContainsStrings);
         parcel.writeString(excludeSubreddits);
         parcel.writeString(excludeUsers);
         parcel.writeString(containFlairs);
         parcel.writeString(excludeFlairs);
         parcel.writeString(excludeDomains);
+        parcel.writeString(containDomains);
         parcel.writeByte((byte) (containTextType ? 1 : 0));
         parcel.writeByte((byte) (containLinkType ? 1 : 0));
         parcel.writeByte((byte) (containImageType ? 1 : 0));
