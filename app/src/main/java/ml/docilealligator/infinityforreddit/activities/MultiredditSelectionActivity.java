@@ -150,7 +150,9 @@ public class MultiredditSelectionActivity extends BaseActivity implements Activi
             return;
         }
 
-        loadMultiReddits();
+        if (mAccessToken != null) {
+            loadMultiReddits();
+        }
 
         if (initializeFragment) {
             mFragment = new MultiRedditListingFragment();

@@ -108,7 +108,7 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
             }
         }
 
-        String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
+        String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME, "-");
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         boolean isGettingMultiredditInfo = getArguments().getBoolean(EXTRA_IS_GETTING_MULTIREDDIT_INFO, false);
 
