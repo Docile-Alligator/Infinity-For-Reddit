@@ -99,7 +99,7 @@
     <string name="subscriptions">"Mục đã đăng kí"</string>
     <string name="multi_reddit">"Multireddit"</string>
     <string name="inbox">"Hộp thư"</string>
-    <string name="upvoted">"Thich"</string>
+    <string name="upvoted">"Đã thích"</string>
     <string name="downvoted">"Không thích"</string>
     <string name="hidden">"Ẩn"</string>
     <string name="saved">"Lưu"</string>
@@ -877,7 +877,7 @@ Thông báo: %2$s"</string>
     <string name="search_only_subreddits_hint">"Tìm kiếm subreddit"</string>
     <string name="search_only_users_hint">"Tìm kiếm người dùng"</string>
     <string name="post_type_gif">"Gif"</string>
-    <string name="post_type_gallery">"Thư viện"</string>
+    <string name="post_type_gallery">"Bộ sưu tập"</string>
     <string name="settings_disable_immersive_interface_in_landscape_mode">"Tắt giao diện đắm mình trong chế độ xoay ngang"</string>
     <string name="settings_privacy_policy_title">"Chính sách riêng tư"</string>
     <string name="settings_delete_read_posts_in_database_title">"Xoá tất cả bài đăng đã đọc trong cơ sở dữ liệu"</string>
@@ -948,7 +948,7 @@ Thông báo: %2$s"</string>
     <string name="settings_hide_subreddit_and_user_prefix">"Ẩn subreddit và tiền tố người dùng"</string>
     <string name="settings_hide_the_number_of_votes">"Ẩn số lượng vote"</string>
     <string name="settings_hide_the_number_of_comments">"Ẩn số lượng bình luận"</string>
-    <string name="post_layout_gallery">"Bố cục thư viện"</string>
+    <string name="post_layout_gallery">"Bố cục bộ sưu tập"</string>
     <string name="post_layout_card_2">"Bố cục thẻ 2"</string>
     <string name="have_trouble_login_title">"Đang gặp rắc rối khi đăng nhập"</string>
     <string name="have_trouble_login_message">"Bạn có muốn thử một cách khác để đăng nhập không?"</string>
@@ -1033,4 +1033,62 @@ Thông báo: %2$s"</string>
 
 Bạn có vẫn muốn bật tuỳ chọn này không?"</string>
     <string name="reply">"Trả lời"</string>
+    <string name="rpan_activity_label">"RPAN"</string>
+    <string name="post_gallery_activity_label">"Bài đăng bộ sưu tập"</string>
+    <string name="trending_activity_label">"Trending"</string>
+    <string name="action_share_rpan_link">"Chia sẻ đường link RPAN"</string>
+    <string name="action_share_post_link">"Chia sẻ đường link bài đăng"</string>
+    <string name="rpan">"RPAN"</string>
+    <string name="trending">"Trending"</string>
+    <string name="receive_post_reply_notifications">"Nhận thông báo trả lời trong bài đăng"</string>
+    <string name="bottom_sheet_post_gallery">"Bộ sưu tập"</string>
+    <string name="posting_gallery">"Đăng bộ sưu tập"</string>
+    <string name="label_reddit">"Reddit"</string>
+    <string name="settings_default_link_post_layout">"Bố cục liên kết bài đăng mặc định"</string>
+    <string name="settings_category_material_you_title">"Material You"</string>
+    <string name="settings_enable_material_you_warning_summary">"Đảm bảo bạn không đặt tên chủ đề là
+\"Material You\",
+\"Material You Dark\" hoặc
+\"Material You Amoled\".
+Nếu không thì thay tên chúng trước khi Bật Material You."</string>
+    <string name="settings_enable_material_you_title">"Bật Material You"</string>
+    <string name="settings_enable_material_you_summary">"Cá nhân hóa Infinity dựa vào hình nền của bạn"</string>
+    <string name="settings_apply_material_you_title">"Áp dụng Material You"</string>
+    <string name="settings_apply_material_you_summary">"Trong trường hợp Infinity không thay đổi chủ đề"</string>
+    <string name="settings_more_tabs_show_favorite_multireddits_title">"Hiện Multireddits yêu thích"</string>
+    <string name="settings_more_tabs_show_multireddits_title">"Show Multireddits"</string>
+    <string name="settings_collapse_reddit_section_title">"Thu gọn khu vực Reddit"</string>
+    <string name="settings_video_player_automatic_landscape_orientation">"Tự động chuyển sang màn hình ngang trong trình phát video"</string>
+    <string name="settings_remember_muting_option_in_post_feed">"Ghi nhớ tuỳ chọn tắt tiếng trong nguồn dữ liệu bài đăng"</string>
+    <string name="link_post_layout_auto">"Tự động"</string>
+    <string name="uploaded_images">"Đã tải hình ảnh"</string>
+    <string name="select_image">"Chọn một hình ảnh"</string>
+    <string name="capture">"Chụp"</string>
+    <string name="uploading_image">"Đang tải"</string>
+    <string name="upload_image_success">"Tải hình ảnh thành công. Ấn vào nút hình ảnh lần nữa để thấy hình ảnh vửa tải lên."</string>
+    <string name="get_image_bitmap_failed">"Không thể lấy bitmap của hình ảnh"</string>
+    <string name="upload_image_failed">"Không thể tải hình ảnh lên"</string>
+    <string name="load_rpan_broadcasts_failed">"Không thể tải broadcast RPAN"</string>
+    <string name="parse_rpan_broadcasts_failed">"Không thể xử lý broadcast RPAN"</string>
+    <string name="parse_rpan_broadcast_failed">"Không thể xử lý broadcast RPAN"</string>
+    <string name="search_comments">"Tìm kiếm bình luận"</string>
+    <string name="please_wait_image_is_uploading">"Hình ảnh vẫn đang tải. Vui lòng đợi."</string>
+    <string name="error_fetch_trending_search">"Lấy mục tìm kiếm thịnh hành thất bại.
+Nhấn để thử lại."</string>
+    <string name="error_parse_trending_search">"Xử lý mục tìm kiếm thịnh hành thất bại.
+Nhấn để thử lại."</string>
+    <string name="no_trending_search">"Không tìm thấy mục tìm kiếm thịnh hành nào.
+Nhấn để thử lại."</string>
+    <string name="wiki_activity_label">"Wiki"</string>
+    <string name="settings_post_details_title">"Chi tiết bài đăng"</string>
+    <string name="settings_separate_post_and_comments_in_portrait_mode_title">"Chia tách bài đăng và bình luận ở chế độ xoay dọc"</string>
+    <string name="settings_separate_post_and_comments_in_landscape_mode_title">"Chia tách bài đăng và bình luận ở chế độ xoay ngang"</string>
+    <string name="settings_separate_post_and_comments_summary">"Tự động phát video sẽ bị tắt trong trang chi tiết bài đăng"</string>
+    <string name="settings_use_bottom_toolbar_in_media_viewer_title">"Sử dụng thanh công cụ ở dưới trong trình xem phương tiện"</string>
+    <string name="settings_secure_mode_title">"Chế độ bảo mật"</string>
+    <string name="settings_secure_mode_summary">"Không cho phép chụp màn hình và quay video. Không có mục xem trước trong màn hình gần đây."</string>
+    <string name="discard_dialog_button">"Bỏ"</string>
+    <string name="error_loading_wiki">"Lỗi khi tải wiki"</string>
+    <string name="no_wiki">"Subreddit này không có trang wiki"</string>
+    <string name="material_you_notification_title">"Đang áp dụng Material You"</string>
 </resources>

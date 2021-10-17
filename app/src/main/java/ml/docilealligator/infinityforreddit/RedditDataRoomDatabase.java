@@ -349,8 +349,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("CREATE TABLE anonymous_multireddit_subreddits (path TEXT NOT NULL, " +
                     "username TEXT NOT NULL, subreddit_name TEXT NOT NULL, " +
-                    "PRIMARY KEY(path, username, subreddit_name), FOREIGN KEY(path) REFERENCES multi_reddits(path) ON DELETE CASCADE ON UPDATE CASCADE, " +
-                    "FOREIGN KEY(username) REFERENCES multi_reddits(username) ON DELETE CASCADE ON UPDATE CASCADE)");
+                    "PRIMARY KEY(path, username, subreddit_name), FOREIGN KEY(path, username) REFERENCES multi_reddits(path, username) ON DELETE CASCADE ON UPDATE CASCADE)");
             database.execSQL("ALTER TABLE recent_search_queries ADD COLUMN time INTEGER DEFAULT 0 NOT NULL");
             database.execSQL("ALTER TABLE custom_themes ADD COLUMN media_indicator_icon_color INTEGER DEFAULT " + Color.parseColor("#FFFFFF") + " NOT NULL");
             database.execSQL("ALTER TABLE custom_themes ADD COLUMN media_indicator_background_color INTEGER DEFAULT " + Color.parseColor("#000000") + " NOT NULL");

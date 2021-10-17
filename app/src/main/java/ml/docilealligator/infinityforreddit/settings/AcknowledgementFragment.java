@@ -119,6 +119,9 @@ public class AcknowledgementFragment extends Fragment {
         acknowledgements.add(new Acknowledgement("BetterLinkMovementMethod",
                 "Attempts to improve how clickable links are detected, highlighted and handled in TextView.",
                 Uri.parse("https://github.com/saket/Better-Link-Movement-Method")));
+        acknowledgements.add(new Acknowledgement("ZoomLayout",
+                "2D zoom and pan behavior for View hierarchies, images, video streams, and much more, written in Kotlin for Android.",
+                Uri.parse("https://github.com/natario1/ZoomLayout")));
 
         AcknowledgementRecyclerViewAdapter adapter = new AcknowledgementRecyclerViewAdapter(activity, acknowledgements);
         recyclerView.setLayoutManager(new LinearLayoutManagerBugFixed(activity));

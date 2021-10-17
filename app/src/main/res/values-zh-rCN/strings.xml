@@ -1147,4 +1147,16 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 点击重试。"</string>
     <string name="no_trending_search">"未找到热搜。
 点击重试。"</string>
+    <string name="wiki_activity_label">"Wiki"</string>
+    <string name="settings_post_details_title">"帖子详情"</string>
+    <string name="settings_separate_post_and_comments_in_portrait_mode_title">"竖屏模式下分隔帖子与评论"</string>
+    <string name="settings_separate_post_and_comments_in_landscape_mode_title">"横屏模式下分隔帖子与评论"</string>
+    <string name="settings_separate_post_and_comments_summary">"视频自动播放将在帖子详情页面禁用"</string>
+    <string name="settings_use_bottom_toolbar_in_media_viewer_title">"在媒体查看器中使用底部工具栏"</string>
+    <string name="settings_secure_mode_title">"安全模式"</string>
+    <string name="settings_secure_mode_summary">"不允许屏幕截图或录屏。在最近应用界面没有预览图。"</string>
+    <string name="discard_dialog_button">"放弃"</string>
+    <string name="error_loading_wiki">"加载 Wiki 错误"</string>
+    <string name="no_wiki">"此版块没有 Wiki 页面"</string>
+    <string name="material_you_notification_title">"应用 Material You"</string>
 </resources>

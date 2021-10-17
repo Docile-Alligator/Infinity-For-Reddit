@@ -24,11 +24,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.zhanghai.android.fastscroll.PopupTextProvider;
-import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.FavoriteThing;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
@@ -172,10 +172,10 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                 if (itemClickListener != null) {
                     if (hasClearSelectionRow) {
                         offset = (mFavoriteSubscribedSubredditData != null && mFavoriteSubscribedSubredditData.size() > 0) ?
-                                mFavoriteSubscribedSubredditData.size() + 4 : 0;
+                                mFavoriteSubscribedSubredditData.size() + 4 : 2;
                     } else {
                         offset = (mFavoriteSubscribedSubredditData != null && mFavoriteSubscribedSubredditData.size() > 0) ?
-                                mFavoriteSubscribedSubredditData.size() + 3 : 0;
+                                mFavoriteSubscribedSubredditData.size() + 3 : 1;
                     }
                 } else {
                     offset = (mFavoriteSubscribedSubredditData != null && mFavoriteSubscribedSubredditData.size() > 0) ?
@@ -383,6 +383,14 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
                 }
                 return mSubscribedSubredditData.size() > 0 ?
                         mFavoriteSubscribedSubredditData.size() + mSubscribedSubredditData.size() + 2 : 0;
+            }
+
+            if (itemClickListener != null) {
+                if (hasClearSelectionRow) {
+                    return mSubscribedSubredditData.size() > 0 ? mSubscribedSubredditData.size() + 2 : 0;
+                } else {
+                    return mSubscribedSubredditData.size() > 0 ? mSubscribedSubredditData.size() + 1 : 0;
+                }
             }
 
             return mSubscribedSubredditData.size();

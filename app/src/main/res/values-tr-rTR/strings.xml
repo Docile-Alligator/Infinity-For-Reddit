@@ -238,7 +238,7 @@ Tekrar denemek için tıklayın."</string>
     <string name="posting_image">"Fotoğraf Paylaşılıyor"</string>
 
     <!-- Fuzzy -->
-    <string name="please_wait">"Lütfen bekleyin."</string>
+    <string name="please_wait">"Lütfen bekleyin"</string>
     <string name="add_account">"Hesap ekle"</string>
     <string name="anonymous_account">"Anonim"</string>
     <string name="log_out">"Çıkış yap"</string>
@@ -322,7 +322,7 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_mute_nsfw_video_title">"NSFW Videolarını Sessize Al"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_automatically_try_redgifs_title">"Gfycat'taki Videolar Kaldırılırsa Redgif'lere Erişmeyi Otomatik Olarak Dene"</string>
+    <string name="settings_automatically_try_redgifs_title">"Gfycat'teki Videolar Kaldırılmışsa Otomatik Olarak Redgif'lere Erişmeyi Dene."</string>
     <string name="settings_video_player_ignore_nav_bar_title">"Video Oynatıcısındaki Navigasyon Çubuğunu Yoksay"</string>
     <string name="settings_video_player_ignore_nav_bar_summary">"Video Denetleyicisinde Fazladan Kenar Olmasını Önle"</string>
     <string name="settings_confirm_to_exit">"Çıkışı Doğrula"</string>
@@ -339,10 +339,10 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_default_post_layout">"Varsayılan Gönderi Düzeni"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_show_divider_in_compact_layout">"Bölücüyü Kompakt Düzende Göster"</string>
+    <string name="settings_show_divider_in_compact_layout">"Bölücüyü Göster"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_show_thumbnail_on_the_left_in_compact_layout">"Kompakt Düzende Soldaki Küçük Resmi Göster"</string>
+    <string name="settings_show_thumbnail_on_the_left_in_compact_layout">"Küçük Resmi Solda Göster"</string>
     <string name="settings_swap_tap_and_long_title">"Yorumlarda Dokunmayı ve Uzun Dokunmayı Değiştirme"</string>
     <string name="settings_swipe_to_go_back_title">"Geri Dönmek İçin Sağa Kaydır"</string>
     <string name="settings_swipe_to_go_back_summary">"Tüm Sayfalara Uygulanamaz"</string>
@@ -743,7 +743,7 @@ Amoled Tema Şablonu Oluştur"</string>
     <string name="downloading_reddit_video_finished">"İndirme Tamamlandı"</string>
 
     <!-- Fuzzy -->
-    <string name="downloading_reddit_video_failed_cannot_get_cache_directory">"İndirme başarısız: Önbellek dizine erişilemiyor"</string>
+    <string name="downloading_reddit_video_failed_cannot_get_cache_directory">"İndirme başarısız: Önbellek dizinine erişilemiyor"</string>
     <string name="downloading_reddit_video_failed_cannot_download_video">"İndirme başarısız: Video indirilemedi"</string>
     <string name="downloading_reddit_video_failed_cannot_save_video">"İndirme başarısız: Video önbellek dizine kaydedilemedi"</string>
     <string name="downloading_reddit_video_failed_cannot_save_audio">"İndirme başarısız: Ses önbellek dizine kaydedilemedi"</string>
@@ -796,10 +796,10 @@ Sekmeler, diğerlerine geçtikten sonra tüm içeriği kaybedebilir. Bu, sayfay�
     <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Gezinme Çekmecesinde Hesap Bölümüne Gitmek İçin Kimlik Doğrulaması İste"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Araç Çubuğunu Kompakt Düzende Gizlemek İçin Uzun Dokun"</string>
+    <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Araç Çubuğunu Gizlemek İçin Uzun Bas"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"Varsayılan Gizli Düzende Araç Çubuğu"</string>
+    <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"Varsayılan Olarak Araç Çubuğunu Gizle"</string>
     <string name="settings_customize_bottom_app_bar_title">"Alt Navigasyon Çubuğunu Özelleştir"</string>
     <string name="settings_main_activity_bottom_app_bar_group_summary">"Ana Sayfa"</string>
     <string name="settings_other_activities_bottom_app_bar_group_summary">"Diğer Sayfalar"</string>
@@ -813,7 +813,9 @@ Sekmeler, diğerlerine geçtikten sonra tüm içeriği kaybedebilir. Bu, sayfay�
 
     <!-- Fuzzy -->
     <string name="settings_data_saving_mode_info_summary">"Veri tasarrufu modunda:
-Önizleme görüntüleri ve Reddit videoları daha düşük çözünürlükte olur."</string>
+Resim önizlemelerinin çözünürlüğü düşer.
+Reddit videolarının çözünürlüğü düşer.
+Otomatik video oynatma kapatılır."</string>
     <string name="settings_translation_title">"Çeviri"</string>
     <string name="settings_translation_summary">"POEditor'da bu uygulamayı çevirin. Tüm katkıda bulunanlara teşekkürler."</string>
     <string name="settings_credits_national_flags">"Ulusal Bayraklar"</string>
@@ -844,7 +846,7 @@ Sekmeler, diğerlerine geçtikten sonra tüm içeriği kaybedebilir. Bu, sayfay�
 
     <!-- Fuzzy -->
     <string name="give_award_error_message">"Kod: %1$d/
- Mesaj: %2$s"</string>
+Mesaj: %2$s"</string>
     <string name="give_award_success">"Ödül verildi"</string>
     <string name="give_award_failed">"İşlem Başarısız Oldu"</string>
     <string name="warning">"Uyarı"</string>
@@ -854,10 +856,10 @@ Sekmeler, diğerlerine geçtikten sonra tüm içeriği kaybedebilir. Bu, sayfay�
     <string name="leave">"Ayrıl"</string>
 
     <!-- Fuzzy -->
-    <string name="go_to_subreddit">"Subreddit'e git"</string>
+    <string name="go_to_subreddit">"Subreddit'e Git"</string>
 
     <!-- Fuzzy -->
-    <string name="go_to_user">"Kullanıcıya git"</string>
+    <string name="go_to_user">"Kullanıcıya Git"</string>
     <string name="go_to_thing_hint">"İsim"</string>
     <string name="random">"Rastgele"</string>
     <string name="random_subreddit">"Rastgele Subreddit"</string>
@@ -1006,7 +1008,7 @@ Sekmeler, diğerlerine geçtikten sonra tüm içeriği kaybedebilir. Bu, sayfay�
     <string name="anonymous_front_page_no_subscriptions">"Bir subreddit'e katılarak başla!"</string>
 
     <!-- Fuzzy -->
-    <string name="backup_settings_success">"Ayarlar hedef dizine başarıyla aktarıldı"</string>
+    <string name="backup_settings_success">"Ayarlar hedef dizine başarıyla aktarıldı. Oluşturulan zip dosyasının şifresi 123321. Lütfen zip dosyasında değişiklik yapmayın."</string>
     <string name="create_zip_in_destination_directory_failed">"Hedef dizinde yedek zip oluşturulamadı"</string>
     <string name="backup_some_settings_failed">"Bazı ayarlar yedeklenemedi, ancak diğerleri başarıyla hedef dizine aktarıldı"</string>
     <string name="restore_settings_success">"Ayarlar başarıyla geri yüklendi. Değişiklikleri görmek için uygulamayı yeniden başlatın."</string>
@@ -1043,7 +1045,7 @@ Sekmeler, diğerlerine geçtikten sonra tüm içeriği kaybedebilir. Bu, sayfay�
     <string name="comment_continue_thread">"Konuya devam et"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_swipe_vertically_to_go_back_from_media_title">"Medyadan Geri Dönmek İçin Dikey Kaydır"</string>
+    <string name="settings_swipe_vertically_to_go_back_from_media_title">"Resim ve GIF'ten Geri Dönmek İçin Dikey Kaydır"</string>
     <string name="settings_hide_post_flair">"Gönderi Etiketini Gizle"</string>
     <string name="settings_crash_reports_title">"Kilitlenme Raporları"</string>
     <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Sakıncalı"</string>
@@ -1106,4 +1108,16 @@ Tekrar denemek için tıklayın."</string>
 Tekrar denemek için tıklayın."</string>
     <string name="no_trending_search">"Trend aramalar bulunamadı.
 Tekrar denemek için tıklayın."</string>
+    <string name="wiki_activity_label">"Viki"</string>
+    <string name="settings_post_details_title">"Gönderi Ayrıntıları"</string>
+    <string name="settings_separate_post_and_comments_in_portrait_mode_title">"Portre Modunda Gönderi ve Yorumları Ayır"</string>
+    <string name="settings_separate_post_and_comments_in_landscape_mode_title">"Manzara Modunda Gönderi ve Yorumları Ayır"</string>
+    <string name="settings_separate_post_and_comments_summary">"Otomatik video oynatmayı gönderi ayrıntısı sayfasında devre dışı bırak"</string>
+    <string name="settings_use_bottom_toolbar_in_media_viewer_title">"Medya Görüntüleyicide Alt Araç Çubuğunu Kullan"</string>
+    <string name="settings_secure_mode_title">"Güvenli Mod"</string>
+    <string name="settings_secure_mode_summary">"Ekran görüntüsü ve video kaydına izin verilmez. Son uygulama ekranında önizleme yok."</string>
+    <string name="discard_dialog_button">"Kaldır"</string>
+    <string name="error_loading_wiki">"Viki yüklenirken hata oluştu"</string>
+    <string name="no_wiki">"Bu subreddit'in viki sayfası yok"</string>
+    <string name="material_you_notification_title">"Material You'u Yap"</string>
 </resources>

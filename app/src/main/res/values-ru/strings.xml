@@ -47,7 +47,7 @@
     <string name="action_start_lazy_mode">"Включить ленивый режим"</string>
     <string name="action_stop_lazy_mode">"Остановить ленивый режим"</string>
     <string name="action_send">"Отправить"</string>
-    <string name="action_sort">"Сортировать"</string>
+    <string name="action_sort">"Сортировка"</string>
     <string name="action_hide_post">"Скрыть пост"</string>
     <string name="action_unhide_post">"Показать пост"</string>
     <string name="action_edit_post">"Изменить пост"</string>
@@ -56,7 +56,7 @@
     <string name="action_unmark_nsfw">"Убрать отметку NSFW"</string>
     <string name="action_mark_spoiler">"Отметить как спойлер"</string>
     <string name="action_unmark_spoiler">"Убрать отметку спойлер"</string>
-    <string name="action_edit_flair">"Изменить флайр"</string>
+    <string name="action_edit_flair">"Изменить флейр"</string>
     <string name="action_change_post_layout">"Выбрать вид поста"</string>
     <string name="action_save">"Сохранить"</string>
     <string name="action_edit_multi_reddit">"Изменить мультиреддит"</string>
@@ -64,7 +64,7 @@
     <string name="action_share">"Поделиться"</string>
     <string name="action_preview">"Предпросмотр"</string>
     <string name="action_report">"Пожаловаться"</string>
-    <string name="action_see_removed">"Увидеть удалённое"</string>
+    <string name="action_see_removed">"Просмотр удалённого"</string>
     <string name="action_set_wallpaper">"Установить как обои"</string>
     <string name="action_send_private_message">"Отправить личное сообщение"</string>
     <string name="action_block_user">"Заблокировать пользователя"</string>
@@ -132,7 +132,7 @@
     <string name="followed">"Вы следите"</string>
     <string name="follow_failed">"Не удалось начать следить"</string>
     <string name="unfollowed">"Вы не следите"</string>
-    <string name="unfollow_failed">"Не удалось перестать следить"</string>
+    <string name="unfollow_failed">"Невозможно отписаться"</string>
     <string name="content_description_banner_imageview">"Изображение банера сабреддита"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Ищите что угодно"</string>
@@ -222,7 +222,7 @@
     <string name="no_activity_found_for_share">"Нечем обработать действие «Поделиться»."</string>
     <string name="archived_post_vote_unavailable">"Архивный пост. Голосование недоступно."</string>
     <string name="archived_post_comment_unavailable">"Архивный пост. Комментирование недоступно."</string>
-    <string name="archived_post_reply_unavailable">"Архивный пост."</string>
+    <string name="archived_post_reply_unavailable">"Архивный пост"</string>
     <string name="locked_post_comment_unavailable">"Заблокированный пост. Коммент недоступен."</string>
     <string name="locked_post_reply_unavailable">"Заблокированный пост. Ответ недоступен."</string>
     <string name="text">"ТЕКСТ"</string>
@@ -305,7 +305,7 @@
     <string name="settings_autoplay_nsfw_videos_title">"Автовоспроизведение NSFW-видео"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">"Автоматическое воспроизведение видео (портрет)"</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_summary">"Начать автовоспроизведение, когда станет доступно %1$d%% видео"</string>
-    <string name="settings_start_autoplay_visible_area_offset_landscape_title">"Автоматическое воспроизведение видео (пейзаж)"</string>
+    <string name="settings_start_autoplay_visible_area_offset_landscape_title">"Автоматическое воспроизведение видео (альбом)"</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_summary">"Начать автовоспроизведение, когда станет доступно %1$d%% видео"</string>
     <string name="settings_immersive_interface_title">"Режим погружения"</string>
     <string name="settings_immersive_interface_summary">"Применимо не ко всем страницам"</string>
@@ -377,8 +377,8 @@
     <string name="settings_credits_best_rocket_icon_title">"Значок ракеты"</string>
     <string name="settings_credits_best_rocket_icon_summary">"Значок создан Freepik из from www.flaticon.com"</string>
     <string name="settings_credits_material_icons_title">"Значки Material"</string>
-    <string name="settings_open_source_title">"Открытый источник"</string>
-    <string name="settings_open_source_summary">"Посетите его на Github, если вам нравится это приложение"</string>
+    <string name="settings_open_source_title">"Открытый исходный код"</string>
+    <string name="settings_open_source_summary">"Оцените его на Github, если вам нравится это приложение"</string>
     <string name="settings_rate_title">"Оцените на Google Play"</string>
     <string name="settings_rate_summary">"Поставьте мне оценку 5 звёзд, и я буду очень счастлив"</string>
     <string name="settings_email_title">"Эл. почта"</string>
@@ -664,11 +664,11 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_name_dracula">"Дракула"</string>
     <string name="theme_name_calm_pastel">"Спокойная пастель"</string>
     <string name="create_light_theme">"Создать светлую тему
-На основе темы «Индиго»"</string>
+На основе «Индиго»"</string>
     <string name="create_dark_theme">"Создать тёмную тему
-На основе темы «Тёмный индиго»"</string>
-    <string name="create_amoled_theme">"Создать тему AMOLED
-На основе темы «Индиго AMOLED»"</string>
+На основе «Тёмный индиго»"</string>
+    <string name="create_amoled_theme">"Создать AMOLED-тему
+На основе «Индиго AMOLED»"</string>
     <string name="create_theme_info">"Если вы хотите создать тему на основе другой темы, нажмите на той теме «+»."</string>
     <string name="edit_theme_name">"Изменить название темы"</string>
     <string name="edit_theme">"Изменить тему"</string>
@@ -742,7 +742,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="downloading_reddit_video_failed_cannot_mux">"Ошибка загрузки: не удалось смикшировать видео и аудио"</string>
     <string name="downloading_reddit_video_failed_cannot_save_mux_video">"Ошибка загрузки: не удалось сохранить видео в общую папку"</string>
     <string name="wallpaper_set">"Установить обои"</string>
-    <string name="error_set_wallpaper">"Установить как обои"</string>
+    <string name="error_set_wallpaper">"Невозможно установить обои"</string>
     <string name="set_to_home_screen">"Закрепить на домашнем экране"</string>
     <string name="set_to_lock_screen">"Установить на экран блокировки"</string>
     <string name="set_to_both">"Установить на оба экрана"</string>
@@ -757,13 +757,13 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="submit_crosspost_activity_label">"Кросспост"</string>
     <string name="give_award_activity_label">"Наградить"</string>
     <string name="action_crosspost">"Кросспост"</string>
-    <string name="action_select_user_flair">"Установить флaйр пользователя"</string>
+    <string name="action_select_user_flair">"Установить флейр пользователя"</string>
     <string name="action_give_award">"Выдать награду"</string>
     <string name="posts">"Посты"</string>
     <string name="only_for_logged_in_user">"Для авторизовавшихся пользователей"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Количество столбцов в ленте постов"</string>
     <string name="settings_number_of_columns_in_post_feed_portrait_title">"Портрет"</string>
-    <string name="settings_number_of_columns_in_post_feed_landscape_title">"Ландшафт"</string>
+    <string name="settings_number_of_columns_in_post_feed_landscape_title">"Альбом"</string>
     <string name="settings_nsfw_and_spoiler_title">"NSFW и спойлеры"</string>
     <string name="settings_delete_all_legacy_settings_title">"Удалить все устаревшие настройки"</string>
     <string name="restart_app_see_changes">"Перезапустите приложение, чтобы увидеть изменения."</string>
@@ -873,13 +873,13 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="search_users_result_activity_label">"Пользователи"</string>
     <string name="multireddit_selection_activity_label">"Выберите мультиреддит"</string>
     <string name="action_save_to_database">"Сохранить в базе данных"</string>
-    <string name="action_read_all_messages">"Читать все сообщения"</string>
+    <string name="action_read_all_messages">"Прочитать все сообщения"</string>
     <string name="action_add_to_multireddit">"Добавить в мультиреддит"</string>
     <string name="search_only_subreddits_hint">"Искать сабреддиты"</string>
     <string name="search_only_users_hint">"Искать пользователя"</string>
     <string name="post_type_gif">"GIF"</string>
     <string name="post_type_gallery">"Галерея"</string>
-    <string name="settings_disable_immersive_interface_in_landscape_mode">"Отключить режим погружения в ландшафтном режиме"</string>
+    <string name="settings_disable_immersive_interface_in_landscape_mode">"Отключить режим погружения в альбомном режиме"</string>
     <string name="settings_privacy_policy_title">"Политика конфиденциальности"</string>
     <string name="settings_delete_read_posts_in_database_title">"Удалить все прочтённые посты из базы данных"</string>
     <string name="settings_post_filter_title">"Фильтр постов"</string>
@@ -958,9 +958,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="action_copy_link">"Копировать ссылку"</string>
     <string name="action_add_to_post_filter">"Добавить пост в фильтр"</string>
     <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"NSFW-посты в NSFW-сабреддитах без размытия"</string>
-
-    <!-- Fuzzy -->
-    <string name="settings_show_avatar_on_the_right">"Показывать аватар слева"</string>
+    <string name="settings_show_avatar_on_the_right">"Показывать аватар справа"</string>
     <string name="settings_backup_settings_title">"Резервное копирование настроек"</string>
     <string name="settings_restore_settings_title">"Восстановить настройки"</string>
     <string name="settings_credits_love_animation_title">"Анимация любви"</string>
@@ -982,7 +980,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_current_user_color_detail">"Применяется к: текущий пользователь в комментариях"</string>
     <string name="exclude_domains_hint">"Исключить домены"</string>
     <string name="anonymous_front_page_no_subscriptions">"Начните с присоединения к сабреддиту!"</string>
-    <string name="backup_settings_success">"Настройки успешно экспортированы в выбранную папку. Пароль созданного zip-файла – 123321. Пожалуйста, не изменяйте zip-файл."</string>
+    <string name="backup_settings_success">"Настройки успешно экспортированы в выбранную папку. Пароль созданного zip-архива – 123321. Пожалуйста, не изменяйте zip-файл."</string>
     <string name="create_zip_in_destination_directory_failed">"Не удалось создать zip-архив с резервной копией настроек в выбранной папке."</string>
     <string name="backup_some_settings_failed">"Не удалось создать резервную копию некоторых настроек, но другие были успешно экспортированы в выбранную папку."</string>
     <string name="restore_settings_success">"Настройки успешно восстановлены. Перезапустите приложение, чтобы увидеть изменения."</string>
@@ -1080,4 +1078,16 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 Нажмите, чтобы повторить попытку."</string>
     <string name="no_trending_search">"Не удалось найти популярные поисковые запросы.
 Нажмите, чтобы повторить попытку."</string>
+    <string name="wiki_activity_label">"Вики"</string>
+    <string name="settings_post_details_title">"Детали поста"</string>
+    <string name="settings_separate_post_and_comments_in_portrait_mode_title">"Разделять пост и комментарии в портретном режиме"</string>
+    <string name="settings_separate_post_and_comments_in_landscape_mode_title">"Разделять пост и комментарии в альбомном режиме"</string>
+    <string name="settings_separate_post_and_comments_summary">"Автовоспроизведение видео будет отключено на странице подробной информации о посте"</string>
+    <string name="settings_use_bottom_toolbar_in_media_viewer_title">"Нижняя панель инструментов при просмотре медиа"</string>
+    <string name="settings_secure_mode_title">"Безопасный режим"</string>
+    <string name="settings_secure_mode_summary">"Снимки и запись экрана запрещены. Infinity не отображается в списке недавних приложений."</string>
+    <string name="discard_dialog_button">"Отмена"</string>
+    <string name="error_loading_wiki">"Ошибка загрузки вики"</string>
+    <string name="no_wiki">"У сабреддита нет вики-страницы"</string>
+    <string name="material_you_notification_title">"Применение «Material You»"</string>
 </resources>

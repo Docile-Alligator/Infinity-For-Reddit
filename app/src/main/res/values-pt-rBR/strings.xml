@@ -1052,4 +1052,30 @@ Mensagem: %2$s"</string>
 
 Ainda deseja ativá-lo?"</string>
     <string name="reply">"Responder"</string>
+    <string name="bottom_sheet_post_gallery">"Galeria"</string>
+    <string name="label_reddit">"Reddit"</string>
+    <string name="settings_category_material_you_title">"Material You"</string>
+    <string name="settings_enable_material_you_warning_summary">"Tenha certeza que você não tem temas com os nomes
+\"Material You\",
+\"Material You Dark\" ou
+\"Material You Amoled\".
+Se você tiver, os renomeie antes de ativar o Material You."</string>
+    <string name="settings_enable_material_you_title">"Ativar Material You"</string>
+    <string name="settings_enable_material_you_summary">"Personalizar o Infinity com base no Seu Papel de Parede"</string>
+    <string name="settings_apply_material_you_title">"Aplicar Material You"</string>
+    <string name="settings_apply_material_you_summary">"Caso o Infinity não tenha mudado o tema"</string>
+    <string name="settings_more_tabs_show_favorite_multireddits_title">"Mostrar Multireddits Favoritos"</string>
+    <string name="settings_more_tabs_show_multireddits_title">"Mostrar Multireddits"</string>
+    <string name="link_post_layout_auto">"Automático"</string>
+    <string name="uploaded_images">"Imagens Enviadas"</string>
+    <string name="select_image">"Selecione uma Imagem"</string>
+    <string name="uploading_image">"Enviando"</string>
+    <string name="upload_image_success">"Imagem enviada com sucesso. Clique novamente no botão de imagem para ver as imagem enviadas."</string>
+    <string name="get_image_bitmap_failed">"Falha ao receber o bitmap da imagem"</string>
+    <string name="upload_image_failed">"Falha ao enviar a imagem"</string>
+    <string name="search_comments">"Procurar Comentários"</string>
+    <string name="please_wait_image_is_uploading">"Uma imagem ainda está sendo enviada. Por favor, aguarde."</string>
+    <string name="settings_post_details_title">"Detalhes do Post"</string>
+    <string name="settings_separate_post_and_comments_in_portrait_mode_title">"Separar o Post dos Comentários no Modo Retrato."</string>
+    <string name="settings_separate_post_and_comments_in_landscape_mode_title">"Separar o Post dos Comentários no Modo Paisagem."</string>
 </resources>

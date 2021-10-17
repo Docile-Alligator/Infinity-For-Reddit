@@ -16,7 +16,9 @@
     <string name="edit_comment_activity_label">"Éditer le commentaire"</string>
     <string name="view_message_activity_label">"Boîte de réception"</string>
     <string name="settings_activity_label">"Paramètres"</string>
-    <string name="account_saved_thing_activity_label">"Sauvegardé"</string>
+
+    <!-- Fuzzy -->
+    <string name="account_saved_thing_activity_label">"Sauvegarder"</string>
     <string name="create_multi_reddit_activity_label">"Créer un multireddit"</string>
     <string name="subreddit_multiselection_activity_label">"Sélectionner les subreddits"</string>
     <string name="custom_theme_listing_activity_label">"Thèmes personnalisés"</string>
@@ -328,10 +330,10 @@ Appuyez pour réessayer."</string>
     <string name="settigns_video_title">"Vidéo"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_video_autoplay_title">"Lire les Vidéos Automatiquement"</string>
+    <string name="settings_video_autoplay_title">"Lire les vidéos automatiquement"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_mute_autoplaying_videos_title">"Couper le Son des Vidéos se lisant automatiquement"</string>
+    <string name="settings_mute_autoplaying_videos_title">"Couper le son des vidéos se lisant automatiquement"</string>
 
     <!-- Fuzzy -->
     <string name="settings_autoplay_nsfw_videos_title">"Lire Automatiquement les Vidéos NSFW"</string>
@@ -945,22 +947,42 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="settings_subreddit_filter_popular_and_all">"Dans r/popular et r/all"</string>
     <string name="settings_credits_ufo_capturing_animation_title">"Animation de capture de l'OVNI"</string>
     <string name="select_video_quality">"Sélectionner la qualité vidéo"</string>
+    <string name="settings_swipe_action_haptic_feedback_title">"Retour haptique"</string>
     <string name="settings_hide_subreddit_description_title">"Cacher la description des subreddits"</string>
+    <string name="settings_disable_image_preview_title">"Désactiver l'aperçu de l'image en mode économie de données"</string>
+    <string name="settings_swipe_action_swipe_left_title">"Swipe à gauche"</string>
+    <string name="settings_swipe_action_swipe_right_title">"Swipe à droite"</string>
+    <string name="settings_swipe_action_info_summary">"Ne s'applique pas au flux de publication avec plus d'une colonne ou un détail de publication."</string>
+    <string name="theme_item_no_preview_post_type_icon_tint">"Couleur de l'icône du type de publication sans prévisualisation"</string>
+    <string name="theme_item_no_preview_post_type_icon_tint_detail">"Appliqué à : Icône indiquant le type de publication lorsqu'il n'y a pas d'aperçu disponible"</string>
+    <string name="theme_item_no_preview_post_type_background_color">"Couleur d'arrière-plan du type de publication sans prévisualisation"</string>
+    <string name="theme_item_no_preview_post_type_background_color_detail">"Appliqué à : Espace réservé indiquant le type de publication lorsqu'aucun aperçu n'est disponible"</string>
     <string name="settings_language_title">"Langage"</string>
+    <string name="customize_post_filter_activity_label">"Personnaliser le filtre de publication"</string>
     <string name="filtered_posts_activity_subtitle">"Posts filtrés"</string>
     <string name="post_filter_preference_activity_label">"Filtre des posts"</string>
     <string name="search_users_result_activity_label">"Utilisateurs"</string>
+    <string name="multireddit_selection_activity_label">"Sélectionnez un Multireddit"</string>
     <string name="action_save_to_database">"Sauvegarder dans la base de données"</string>
     <string name="action_read_all_messages">"Lire tous les messages"</string>
+    <string name="action_add_to_multireddit">"Ajouter au Multireddit"</string>
     <string name="search_only_subreddits_hint">"Chercher des subreddits"</string>
     <string name="search_only_users_hint">"Chercher des utilisateurs"</string>
     <string name="post_type_gif">"Gif"</string>
     <string name="post_type_gallery">"Gallerie"</string>
+    <string name="settings_disable_immersive_interface_in_landscape_mode">"Désactiver l'interface immersive en mode paysage"</string>
     <string name="settings_privacy_policy_title">"Politique de confidentialité"</string>
     <string name="settings_delete_read_posts_in_database_title">"Supprimer tous les messages lus de la base de données"</string>
+    <string name="settings_post_filter_title">"Filtre de post"</string>
+    <string name="settings_only_disable_preview_in_video_and_gif_posts_title">"Désactiver uniquement l'aperçu dans les publications vidéo et gif"</string>
+    <string name="settings_enable_search_history_title">"Activer l'historique de recherche"</string>
     <string name="settings_post_history_title">"Historique des posts"</string>
+    <string name="settings_mark_posts_as_read_title">"Marquer les posts comme lus"</string>
     <string name="settings_mark_posts_as_read_after_voting_title">"Marquer les posts comme lus après avoir voté"</string>
+    <string name="settings_mark_posts_as_read_on_scroll_title">"Marquer les publications comme lues lors du défilement"</string>
     <string name="settings_hide_read_posts_automatically_title">"Cacher les posts lus automatiquement"</string>
+    <string name="settings_sort_type_title">"Type de tri"</string>
+    <string name="settings_save_sort_type_title">"Enregistrer le type de tri"</string>
     <string name="open_link">"Ouvrir le lien"</string>
     <string name="theme_item_read_post_title_color_detail">"Lire le Titre du Post"</string>
     <string name="theme_item_read_post_content_color">"Lire la couleur du contenu du post"</string>
@@ -972,15 +994,35 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="only_spoiler">"Seulement Spoiler"</string>
     <string name="exclude_subreddits_hint">"Exclure des subreddits (e.g. funny, AskReddit)"</string>
     <string name="exclude_users_hint">"Exclure des utilisateurs (e.g. Hostilenemy, random)"</string>
+    <string name="post_filter_requires_a_name">"Quel est le nom de ce filtre de publication ?"</string>
     <string name="duplicate_post_filter_dialog_title">"'%1$s' Éxiste déjà"</string>
+    <string name="duplicate_post_filter_dialog_message">"Le remplacer ?"</string>
     <string name="apply_post_filter_to">"Appliquer à"</string>
     <string name="post_filter_usage_home">"Acceuil"</string>
+    <string name="post_filter_usage_subreddit">"Subreddit: %1$s"</string>
+    <string name="post_filter_usage_subreddit_all">"Subreddit"</string>
     <string name="post_filter_usage_user">"Utilisateur: %1$s"</string>
     <string name="post_filter_usage_user_all">"Utilisateur"</string>
+    <string name="post_filter_usage_multireddit">"MultiReddit: %1$s"</string>
+    <string name="post_filter_usage_multireddit_all">"Multireddit"</string>
+    <string name="post_filter_usage_search">"Rechercher"</string>
+    <string name="subreddit">"Subredit"</string>
+    <string name="user">"Utilisateur"</string>
+    <string name="edit_post_filter_name_of_usage_info">"Laissez-le vide pour appliquer ce filtre de publication à tous les subreddits / utilisateurs / multireddits"</string>
     <string name="read_all_messages_time_limit">"You faites cela trop fréquemment. Essayez plus tard. C'est le taux limite de l'Api Reddit."</string>
+    <string name="read_all_messages_success">"Lecture de tous les messages avec succès"</string>
+    <string name="read_all_messages_failed">"Impossible de lire tous les messages"</string>
+    <string name="add_subreddit_or_user_to_multireddit_success">"%1$s est ajouté au multireddit %2$s"</string>
+    <string name="add_subreddit_or_user_to_multireddit_failed">"Impossible d'ajouter %1$s au multireddit %2$s"</string>
     <string name="choose_a_user">"Choisir un utilisateur"</string>
+    <string name="settings_click_to_show_media_in_gallery_layout">"Cliquez pour afficher les médias dans la disposition de la galerie"</string>
+    <string name="settings_hide_post_type">"Masquer le type de publication"</string>
+    <string name="settings_hide_the_number_of_awards">"Masquer le nombre de récompenses"</string>
+    <string name="settings_hide_subreddit_and_user_prefix">"Masquer Subreddit et préfixe utilisateur"</string>
     <string name="settings_hide_the_number_of_votes">"Cacher le Nombre de Votes"</string>
     <string name="settings_hide_the_number_of_comments">"Cacher le Nombre de Commentaires"</string>
+    <string name="post_layout_gallery">"Disposition de la galerie"</string>
+    <string name="have_trouble_login_title">"Problème de connexion"</string>
     <string name="have_trouble_login_message">"Voulez vous essayer un autre moyen d'identification ?"</string>
     <string name="vote">"Vote"</string>
     <string name="action_share_link">"Partager le Lien"</string>
@@ -990,23 +1032,114 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="settings_show_avatar_on_the_right">"Voir l'avatar à droite"</string>
     <string name="settings_backup_settings_title">"Paramètres de Sauvegarde"</string>
     <string name="settings_restore_settings_title">"Restaurer les Paramètres"</string>
+    <string name="settings_swipe_between_posts_title">"Swip entre les publications"</string>
     <string name="settings_navigation_drawer_title">"Onglet de Navigation"</string>
+    <string name="settings_collapse_account_section_title">"Réduire la section du compte"</string>
+    <string name="settings_collapse_preferences_section_title">"Réduire la section des préférences"</string>
     <string name="settings_hide_favorite_subreddits_sections_title">"Cacher la section de subreddits favoris"</string>
+    <string name="settings_default_search_result_tab">"Onglet Résultat de la recherche par défaut"</string>
     <string name="device_default">"Appareil par defaut"</string>
+    <string name="set_by_battery_saver">"Défini par l'économiseur de batterie"</string>
     <string name="theme_item_current_user_color">"Utilisateur actuel"</string>
     <string name="theme_item_current_user_color_detail">"Appliqué à : Utilisateurs en commentaires"</string>
+    <string name="exclude_domains_hint">"Exclure des domaines"</string>
     <string name="anonymous_front_page_no_subscriptions">"Commence en rejoignant un subreddit !"</string>
+    <string name="backup_settings_success">"Paramètres exportés avec succès vers le répertoire de destination. Le mot de passe du fichier zip généré est 123321. Veuillez ne pas modifier le fichier zip."</string>
     <string name="create_zip_in_destination_directory_failed">"Impossible de créer un zip de sauvegarde dans ce dossier"</string>
+    <string name="backup_some_settings_failed">"Impossible de sauvegarder certains paramètres mais d'autres ont été exportés avec succès vers le répertoire de destination"</string>
     <string name="restore_settings_success">"Paramètres restaurés avec succès. Redémarre l'application pour voir les changements"</string>
+    <string name="restore_settings_partially_failed">"Certains paramètres peuvent ne pas être restaurés avec succès. Redémarrez l'application pour voir les changements."</string>
+    <string name="restore_settings_failed_file_corrupted">"Impossible de restaurer les paramètres. Le fichier est peut-être corrompu."</string>
+    <string name="restore_settings_failed_cannot_get_file">"Impossible d'accéder au fichier"</string>
+    <string name="suicide_prevention_quote">"Si vous cherchez un signe pour ne pas vous suicider, c'est celui-ci.\u2764"</string>
     <string name="do_not_show_this_again">"Ne plus voir ça"</string>
     <string name="continue_suicide_prevention_activity">"Continuer"</string>
+    <string name="always_on">"Toujours activé"</string>
+    <string name="only_on_wifi">"Uniquement en Wifi"</string>
+    <string name="never">"Jamais"</string>
+    <string name="normal">"Normal"</string>
+    <string name="extra_large">"Extra Grand"</string>
+    <string name="enormously_large">"Énormement grand"</string>
+    <string name="default_in_array">"Défaut"</string>
+    <string name="off">"désactivé"</string>
+    <string name="only_on_cellular_data">"Seulement en donnés mobiles"</string>
+    <string name="upvote">"Upvote"</string>
+    <string name="downvote">"Downvote"</string>
+    <string name="select">"Sélectionner"</string>
+    <string name="exclude_subreddit">"Exclure ce subreddit"</string>
+    <string name="exclude_user">"Exclure cet utilisateur"</string>
+    <string name="exclude_flair">"Exclure ce flair"</string>
+    <string name="exclude_domain">"Exclure le domaine"</string>
+    <string name="suggest_title">"Suggérer un titre"</string>
+    <string name="suggest_title_failed">"Échec de la suggestion de titre"</string>
+    <string name="action_delete_logs">"Supprimer les logs"</string>
     <string name="inbox_with_count">"Boîte de Réception (%1$d)"</string>
+    <string name="comment_continue_thread">"Continuer le fil"</string>
+    <string name="settings_swipe_vertically_to_go_back_from_media_title">"Balayez verticalement pour revenir à l'image et au gif"</string>
+    <string name="settings_hide_post_flair">"Cacher le Flair du Post"</string>
+    <string name="settings_crash_reports_title">"Rapports de Crash"</string>
+    <string name="settings_nsfw_and_spoiler_dangerous_group_title">"Dangereux"</string>
+    <string name="settings_disable_nsfw_forever_title">"Désactiver NSFW pour toujours"</string>
+    <string name="settings_show_only_one_comment_level_indicator">"Afficher un seul indicateur de niveau de commentaire"</string>
+    <string name="save_comment">"Sauvegarder"</string>
+    <string name="unsave_comment">"Ne pas enregistrer"</string>
+    <string name="crash_reports_deleted">"Les rapports de crash sont supprimés"</string>
+    <string name="disable_nsfw_forever_message">"Une fois activé, NSFW sera définitivement désactivé, que le paramètre NSFW soit activé ou non. Et cette option est irréversible, le seul moyen de réactiver NSFW est d'effacer les données de l'application.
+
+Vous voulez toujours l'activer ?"</string>
     <string name="reply">"Répondre"</string>
+    <string name="rpan_activity_label">"RPAN"</string>
+    <string name="trending_activity_label">"Tendance"</string>
+    <string name="action_share_rpan_link">"Partager le lien RPAN"</string>
+    <string name="action_share_post_link">"Partager le lien du Post"</string>
+    <string name="rpan">"RPAN"</string>
+    <string name="trending">"Tendance"</string>
+    <string name="receive_post_reply_notifications">"Recevoir des notifications de réponse de publication"</string>
+    <string name="bottom_sheet_post_gallery">"Gallerie"</string>
+    <string name="posting_gallery">"Galerie de publication"</string>
+    <string name="label_reddit">"Reddit"</string>
+    <string name="settings_default_link_post_layout">"Disposition de publication de lien par défaut"</string>
+    <string name="settings_category_material_you_title">"Material You"</string>
+    <string name="settings_enable_material_you_warning_summary">"Assurez-vous que vous n'avez pas de thèmes nommés
+\"Material You\",
+\"Material You Dark\" ou
+\"Materiel You Amoled\".
+Sinon, renommez-les avant d'activer Material You."</string>
+    <string name="settings_enable_material_you_title">"Activer Material You"</string>
+    <string name="settings_enable_material_you_summary">"Personnalisez Infinity en fonction de votre fond d'écran"</string>
+    <string name="settings_apply_material_you_title">"Appliquer Material You"</string>
+    <string name="settings_apply_material_you_summary">"Au cas où Infinity n'aurait pas changé le thème"</string>
+    <string name="settings_more_tabs_show_favorite_multireddits_title">"Afficher les Multireddits favoris"</string>
+    <string name="settings_more_tabs_show_multireddits_title">"Montrer les Multireddits"</string>
+    <string name="settings_video_player_automatic_landscape_orientation">"Basculer automatiquement vers l'orientation paysage dans le lecteur vidéo"</string>
+    <string name="settings_remember_muting_option_in_post_feed">"N'oubliez pas l'option de mise en sourdine dans le flux de publication"</string>
+    <string name="link_post_layout_auto">"Auto"</string>
     <string name="uploaded_images">"Image uploadée"</string>
     <string name="select_image">"Sélectionner une image"</string>
+    <string name="capture">"Capturer"</string>
     <string name="uploading_image">"En train d'uploader"</string>
     <string name="upload_image_success">"Image uploadée avec succès. Clique sur le bouton image de nouveau pour voir les images uploadées."</string>
+    <string name="get_image_bitmap_failed">"Impossible d'obtenir le bitmap de l'image"</string>
     <string name="upload_image_failed">"Impossible d'uploader l'image"</string>
+    <string name="load_rpan_broadcasts_failed">"Impossible de charger les diffusions RPAN"</string>
+    <string name="parse_rpan_broadcasts_failed">"Impossible d'analyser les diffusions RPAN"</string>
+    <string name="parse_rpan_broadcast_failed">"Impossible d'analyser la diffusion RPAN"</string>
     <string name="search_comments">"Chercher des commentaires"</string>
     <string name="please_wait_image_is_uploading">"Une image est toujours sn train d'être uploadée. Merci d'attendre"</string>
+    <string name="error_fetch_trending_search">"Échec de la récupération des recherches de tendance.
+Cliquer pour réessayer."</string>
+    <string name="error_parse_trending_search">"Échec de l'analyse des recherches de tendance.
+Cliquer pour réessayer."</string>
+    <string name="no_trending_search">"Aucune recherche de tendance trouvée.
+Cliquer pour réessayer."</string>
+    <string name="wiki_activity_label">"Wiki"</string>
+    <string name="settings_post_details_title">"Détails du post"</string>
+    <string name="settings_separate_post_and_comments_in_portrait_mode_title">"Séparez la publication et les commentaires en mode portrait"</string>
+    <string name="settings_separate_post_and_comments_in_landscape_mode_title">"Séparez la publication et les commentaires en mode paysage"</string>
+    <string name="settings_separate_post_and_comments_summary">"La lecture automatique de la vidéo sera désactivée dans la page de détail de la publication"</string>
+    <string name="settings_secure_mode_title">"Mode sécursé"</string>
+    <string name="settings_secure_mode_summary">"Les captures d'écran et les enregistrements vidéo ne sont pas autorisés. Aucun aperçu dans l'écran de l'application récente."</string>
+    <string name="error_loading_wiki">"Erreur de chargement du wiki"</string>
+    <string name="no_wiki">"Ce subreddit n'a pas de page wiki"</string>
+    <string name="material_you_notification_title">"Application de Material You"</string>
 </resources>

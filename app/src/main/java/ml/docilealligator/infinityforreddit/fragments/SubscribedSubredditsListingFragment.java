@@ -110,7 +110,7 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
             }
         }
 
-        String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
+        String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME, "-");
         String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
 
         if (accessToken == null) {

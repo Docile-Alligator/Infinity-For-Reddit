@@ -958,4 +958,12 @@ Videó autómatikus lejátszása le van tiltva."</string>
     <string name="have_trouble_login_title">"Probléma a bejelentkezésnél"</string>
     <string name="have_trouble_login_message">"Megpróbálsz máshogy bejelentkezni?"</string>
     <string name="vote">"Szavazás"</string>
+    <string name="action_share_link">"Link megosztása"</string>
+    <string name="action_copy_link">"Link másolása"</string>
+    <string name="action_add_to_post_filter">"Hozzáadás poszt filterhez"</string>
+    <string name="settings_do_not_blur_nsfw_in_nsfw_subreddits_title">"Ne homályosítson el NSFW képeket NSFW subredditeken"</string>
+    <string name="settings_show_avatar_on_the_right">"Avatár megjelenítése a jobb oldalon"</string>
+    <string name="settings_backup_settings_title">"Beállítások biztonsági mentése"</string>
+    <string name="settings_restore_settings_title">"Beállítások visszaállítása"</string>
+    <string name="settings_credits_love_animation_title">"Love animáció"</string>
 </resources>

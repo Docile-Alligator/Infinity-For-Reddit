@@ -193,11 +193,11 @@ Tocca per riprovare."</string>
     <string name="search_in">"Cerca in"</string>
     <string name="all_subreddits">"Tutti i subreddit"</string>
     <string name="sort_best">"Migliori"</string>
-    <string name="sort_hot">"Hot"</string>
+    <string name="sort_hot">"Popolari"</string>
     <string name="sort_new">"Nuovi"</string>
     <string name="sort_random">"Casuali"</string>
     <string name="sort_rising">"In crescita"</string>
-    <string name="sort_top">"Top"</string>
+    <string name="sort_top">"Più votati"</string>
     <string name="sort_controversial">"Controversi"</string>
     <string name="sort_relevance">"Rilevanza"</string>
     <string name="sort_comments">"Commenti"</string>
@@ -780,7 +780,6 @@ Esempio: latuapassword:123456"</string>
     <string name="action_give_award">"Assegna Premio"</string>
     <string name="posts">"Post"</string>
 
-    <!-- Fuzzy -->
     <string name="only_for_logged_in_user">"Solo per utenti connessi"</string>
     <string name="settings_number_of_columns_in_post_feed_title">"Il numero di colonne nel Feed dei post"</string>
 
@@ -1089,7 +1088,7 @@ Vuoi comunque abilitare l'opzione?"</string>
     <string name="label_reddit">"Reddit"</string>
 
     <!-- Fuzzy -->
-    <string name="settings_default_link_post_layout">"Link Post Layout Predefinito"</string>
+    <string name="settings_default_link_post_layout">"Layout predefinito per link postati"</string>
     <string name="settings_category_material_you_title">"Personalizzazione automatica"</string>
     <string name="settings_enable_material_you_warning_summary">"Per il corretto funzionamento assicurarsi che i tuoi temi non siano chiamati:
 \"Materiale you\"
@@ -1122,4 +1121,20 @@ Se hai dei temi con questi nomi devi cambiarli prima di attivare la Personalizza
     <string name="error_parse_trending_search">"Pagina non caricata. Tocca per riprovare"</string>
     <string name="no_trending_search">"Nessuna ricerca di tendenza trovata.
 Premi per riprovare."</string>
+    <string name="wiki_activity_label">"Wiki"</string>
+    <string name="settings_post_details_title">"Dettagli post"</string>
+    <string name="settings_separate_post_and_comments_in_portrait_mode_title">"Dividi il post dai commenti in vista verticale"</string>
+    <string name="settings_separate_post_and_comments_in_landscape_mode_title">"Dividi il post dai commenti in vista orizzontale"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_separate_post_and_comments_summary">"l'Autoriproduzione video sarà disattivata quando i post sono aperti"</string>
+    <string name="settings_use_bottom_toolbar_in_media_viewer_title">"Usa la barra degli strumenti inferiore nel visualizzatore multimediale"</string>
+
+    <!-- Fuzzy -->
+    <string name="settings_secure_mode_title">"Modalità Privacy"</string>
+    <string name="settings_secure_mode_summary">"Screenshot e registrazione schermo non sono permessi. Nessuna anteprima nella schermata delle app recenti."</string>
+    <string name="discard_dialog_button">"Elimina"</string>
+    <string name="error_loading_wiki">"Errore nel caricare la Wiki"</string>
+    <string name="no_wiki">"Questo subreddit non ha una Wiki"</string>
+    <string name="material_you_notification_title">"Applicazione Material You..."</string>
 </resources>
