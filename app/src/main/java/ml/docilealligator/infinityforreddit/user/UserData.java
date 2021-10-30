@@ -38,12 +38,14 @@ public class UserData {
     private boolean isNSFW;
     @ColumnInfo(name = "description")
     private String description;
+    @ColumnInfo(name = "title")
+    private String title;
     @Ignore
     private boolean isSelected;
 
     public UserData(@NonNull String name, String iconUrl, String banner, int linkKarma, int commentKarma,
                     int awarderKarma, int awardeeKarma, int totalKarma, long cakeday, boolean isGold,
-                    boolean isFriend, boolean canBeFollowed, boolean isNSFW, String description) {
+                    boolean isFriend, boolean canBeFollowed, boolean isNSFW, String description, String title) {
         this.name = name;
         this.iconUrl = iconUrl;
         this.banner = banner;
@@ -58,6 +60,7 @@ public class UserData {
         this.canBeFollowed = canBeFollowed;
         this.isNSFW = isNSFW;
         this.description = description;
+        this.title = title;
         this.isSelected = false;
     }
 
@@ -116,6 +119,10 @@ public class UserData {
 
     public String getDescription() {
         return description;
+    }
+
+    public String getTitle() {
+        return title;
     }
 
     public boolean isSelected() {

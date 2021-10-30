@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.net.Uri;
-import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -1016,6 +1015,13 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_user_detail_activity, menu);
+        if(mAccountName.equals(username)){ // Hide some menus
+            menu.findItem(R.id.action_send_private_message_view_user_detail_activity).setVisible(false);
+            menu.findItem(R.id.action_report_view_user_detail_activity).setVisible(false);
+            menu.findItem(R.id.action_block_user_view_user_detail_activity).setVisible(false);
+        }else { // Hide Edit Profile menu
+            menu.findItem(R.id.action_edit_profile_view_user_detail_activity).setVisible(false);
+        }
         applyMenuItemTheme(menu);
         return true;
     }
@@ -1103,6 +1109,9 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                     }))
                     .setNegativeButton(R.string.no, null)
                     .show();
+            return true;
+        } else if(itemId == R.id.action_edit_profile_view_user_detail_activity){
+            startActivity(new Intent(this, EditProfileActivity.class));
             return true;
         }
         return false;

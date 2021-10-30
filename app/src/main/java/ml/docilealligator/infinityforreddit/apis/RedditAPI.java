@@ -403,4 +403,24 @@ public interface RedditAPI {
     @GET("{multipath}.json?raw_json=1")
     ListenableFuture<Response<String>> getMultiRedditPostsOauthListenableFuture(@Path(value = "multipath", encoded = true) String multiPath,
                                           @Query("after") String after, @HeaderMap Map<String, String> headers);
+
+    @POST("r/{subredditName}/api/delete_sr_icon")
+    Call<String> deleteSrIcon(@HeaderMap Map<String, String> headers, @Path("subredditName") String subredditName);
+
+    @POST("r/{subredditName}/api/delete_sr_banner")
+    Call<String> deleteSrBanner(@HeaderMap Map<String, String> headers, @Path("subredditName") String subredditName);
+
+    @Multipart
+    @POST("r/{subredditName}/api/upload_sr_img")
+    Call<String> uploadSrImg(@HeaderMap Map<String, String> headers,
+            @Path("subredditName") String subredditName,
+            @PartMap Map<String, RequestBody> params,
+            @Part MultipartBody.Part file);
+
+    @GET("r/{subredditName}/about/edit?raw_json=1")
+    Call<String> getSubredditSetting(@HeaderMap Map<String, String> headers, @Path("subredditName") String subredditName);
+
+    @FormUrlEncoded
+    @POST("/api/site_admin")
+    Call<String> postSiteAdmin(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 }
