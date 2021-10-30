@@ -563,7 +563,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        collapsingToolbarLayout.setContentScrimColor(mCustomThemeWrapper.getColorPrimary());
         appBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
@@ -571,7 +570,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 appBarLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             }
         });
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar, false);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar, false);
         expandedTabTextColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTextColor();
         expandedTabIndicatorColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTabIndicator();
         expandedTabBackgroundColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTabBackground();

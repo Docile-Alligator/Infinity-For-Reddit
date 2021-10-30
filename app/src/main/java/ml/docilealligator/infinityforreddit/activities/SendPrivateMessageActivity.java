@@ -174,7 +174,7 @@ public class SendPrivateMessageActivity extends BaseActivity {
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
         int primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         usernameEditText.setTextColor(primaryTextColor);
         subjectEditText.setTextColor(primaryTextColor);

@@ -109,7 +109,7 @@ public class WebViewActivity extends BaseActivity {
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
         Drawable closeIcon = Utils.getTintedDrawable(this, R.drawable.ic_close_black_24dp, mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
         toolbar.setNavigationIcon(closeIcon);
     }

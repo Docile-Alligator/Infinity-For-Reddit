@@ -290,7 +290,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     @Override
     protected void applyCustomTheme() {
         mLinearLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndToolbarTheme(mAppBarLayout, mToolbar);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(mAppBarLayout, null, mToolbar);
         mDivider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
         mEditText.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
         mSecondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();

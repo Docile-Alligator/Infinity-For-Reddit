@@ -59,10 +59,10 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
 
     @BindView(R.id.coordinator_layout_account_saved_thing_activity)
     CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.collapsing_toolbar_layout_account_saved_thing_activity)
-    CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.appbar_layout_account_saved_thing_activity)
     AppBarLayout appBarLayout;
+    @BindView(R.id.collapsing_toolbar_layout_account_saved_thing_activity)
+    CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.toolbar_account_saved_thing_activity)
     Toolbar toolbar;
     @BindView(R.id.tab_layout_tab_layout_account_saved_thing_activity_activity)
@@ -167,7 +167,7 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
         applyTabLayoutTheme(tabLayout);
     }
 

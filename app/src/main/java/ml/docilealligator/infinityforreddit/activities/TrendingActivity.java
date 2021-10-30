@@ -64,10 +64,10 @@ public class TrendingActivity extends BaseActivity {
 
     @BindView(R.id.coordinator_layout_trending_activity)
     CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.collapsing_toolbar_layout_trending_activity)
-    CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.appbar_layout_trending_activity)
     AppBarLayout appBarLayout;
+    @BindView(R.id.collapsing_toolbar_layout_trending_activity)
+    CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.toolbar_trending_activity)
     Toolbar toolbar;
     @BindView(R.id.swipe_refresh_layout_trending_activity)
@@ -326,7 +326,7 @@ public class TrendingActivity extends BaseActivity {
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
         swipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
         swipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         errorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());

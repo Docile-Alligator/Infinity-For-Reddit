@@ -192,7 +192,7 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
         titleTextView.setTextColor(mCustomThemeWrapper.getPostTitleColor());
         divider.setBackgroundColor(mCustomThemeWrapper.getPostTitleColor());
         contentEditText.setTextColor(mCustomThemeWrapper.getPostContentColor());

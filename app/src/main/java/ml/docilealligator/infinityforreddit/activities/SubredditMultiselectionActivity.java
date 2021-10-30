@@ -24,6 +24,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
@@ -54,6 +55,8 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
     CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.appbar_layout_subreddits_multiselection_activity)
     AppBarLayout mAppBarLayout;
+    @BindView(R.id.collapsing_toolbar_layout_subscribed_subreddits_multiselection_activity)
+    CollapsingToolbarLayout mCollapsingToolbarLayout;
     @BindView(R.id.toolbar_subscribed_subreddits_multiselection_activity)
     Toolbar mToolbar;
     @BindView(R.id.swipe_refresh_layout_subscribed_subscribed_subreddits_multiselection_activity)
@@ -226,7 +229,7 @@ public class SubredditMultiselectionActivity extends BaseActivity implements Act
     @Override
     protected void applyCustomTheme() {
         mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndToolbarTheme(mAppBarLayout, mToolbar);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(mAppBarLayout, mCollapsingToolbarLayout, mToolbar);
         mErrorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
     }
 

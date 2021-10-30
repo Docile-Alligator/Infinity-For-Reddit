@@ -50,10 +50,10 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
 
     @BindView(R.id.coordinator_layout_account_posts_activity)
     CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.collapsing_toolbar_layout_account_posts_activity)
-    CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.appbar_layout_account_posts_activity)
     AppBarLayout appBarLayout;
+    @BindView(R.id.collapsing_toolbar_layout_account_posts_activity)
+    CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.toolbar_account_posts_activity)
     Toolbar toolbar;
     @Inject
@@ -160,7 +160,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
     }
 
     private void initializeFragment() {

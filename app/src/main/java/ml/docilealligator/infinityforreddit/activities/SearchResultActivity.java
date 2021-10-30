@@ -28,6 +28,7 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -95,6 +96,8 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_search_result_activity)
     AppBarLayout appBarLayout;
+    @BindView(R.id.collapsing_toolbar_layout_search_result_activity)
+    CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.toolbar_search_result_activity)
     Toolbar toolbar;
     @BindView(R.id.tab_layout_search_result_activity)
@@ -230,7 +233,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
         applyTabLayoutTheme(tabLayout);
         applyFABTheme(fab);
     }

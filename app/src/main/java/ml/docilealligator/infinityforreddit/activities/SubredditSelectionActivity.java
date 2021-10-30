@@ -19,6 +19,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.r0adkll.slidr.Slidr;
 
 import org.greenrobot.eventbus.EventBus;
@@ -62,6 +63,8 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_subreddit_selection_activity)
     AppBarLayout appBarLayout;
+    @BindView(R.id.collapsing_toolbar_layout_subreddit_selection_activity)
+    CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.toolbar_subreddit_selection_activity)
     Toolbar toolbar;
     @Inject
@@ -153,7 +156,7 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
     }
 
     private void bindView(boolean initializeFragment) {

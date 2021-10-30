@@ -310,7 +310,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
         commentParentMarkwonView.setTextColor(mCustomThemeWrapper.getCommentColor());
         divider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
         commentEditText.setTextColor(mCustomThemeWrapper.getCommentColor());

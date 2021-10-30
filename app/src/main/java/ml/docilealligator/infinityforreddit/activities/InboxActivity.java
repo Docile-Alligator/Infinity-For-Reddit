@@ -73,10 +73,10 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
 
     @BindView(R.id.coordinator_layout_inbox_activity)
     CoordinatorLayout mCoordinatorLayout;
-    @BindView(R.id.collapsing_toolbar_layout_inbox_activity)
-    CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.appbar_layout_inbox_activity)
     AppBarLayout mAppBarLayout;
+    @BindView(R.id.collapsing_toolbar_layout_inbox_activity)
+    CollapsingToolbarLayout mCollapsingToolbarLayout;
     @BindView(R.id.toolbar_inbox_activity)
     Toolbar mToolbar;
     @BindView(R.id.tab_layout_inbox_activity)
@@ -238,7 +238,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     @Override
     protected void applyCustomTheme() {
         mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndToolbarTheme(mAppBarLayout, mToolbar);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(mAppBarLayout, mCollapsingToolbarLayout, mToolbar);
         applyTabLayoutTheme(tabLayout);
         applyFABTheme(fab);
     }

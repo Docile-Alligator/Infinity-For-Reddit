@@ -140,7 +140,7 @@ public class SearchUsersResultActivity extends BaseActivity implements ActivityT
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
     }
 
     public void getSelectedUser(String name, String iconUrl) {

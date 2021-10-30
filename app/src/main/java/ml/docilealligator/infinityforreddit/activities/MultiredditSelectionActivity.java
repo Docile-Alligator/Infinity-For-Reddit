@@ -18,6 +18,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.r0adkll.slidr.Slidr;
 
 import org.greenrobot.eventbus.EventBus;
@@ -55,6 +56,8 @@ public class MultiredditSelectionActivity extends BaseActivity implements Activi
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_multireddit_selection_activity)
     AppBarLayout appBarLayout;
+    @BindView(R.id.collapsing_toolbar_layout_multireddit_selection_activity)
+    CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.toolbar_multireddit_selection_activity)
     Toolbar toolbar;
     @Inject
@@ -142,7 +145,7 @@ public class MultiredditSelectionActivity extends BaseActivity implements Activi
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
     }
 
     private void bindView(boolean initializeFragment) {

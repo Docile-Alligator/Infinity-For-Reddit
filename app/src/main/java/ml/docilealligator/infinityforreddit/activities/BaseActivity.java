@@ -30,6 +30,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 
@@ -296,12 +297,15 @@ public abstract class BaseActivity extends AppCompatActivity {
         isImmersiveInterfaceApplicable = false;
     }
 
-    protected void applyAppBarLayoutAndToolbarTheme(AppBarLayout appBarLayout, Toolbar toolbar) {
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar, true);
+    protected void applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(AppBarLayout appBarLayout, @Nullable CollapsingToolbarLayout collapsingToolbarLayout, Toolbar toolbar) {
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar, true);
     }
 
-    protected void applyAppBarLayoutAndToolbarTheme(AppBarLayout appBarLayout, Toolbar toolbar, boolean setToolbarBackgroundColor) {
+    protected void applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(AppBarLayout appBarLayout, @Nullable CollapsingToolbarLayout collapsingToolbarLayout, Toolbar toolbar, boolean setToolbarBackgroundColor) {
         appBarLayout.setBackgroundColor(customThemeWrapper.getColorPrimary());
+        if (collapsingToolbarLayout != null) {
+            collapsingToolbarLayout.setContentScrimColor(customThemeWrapper.getColorPrimary());
+        }
         if (setToolbarBackgroundColor) {
             toolbar.setBackgroundColor(customThemeWrapper.getColorPrimary());
         }

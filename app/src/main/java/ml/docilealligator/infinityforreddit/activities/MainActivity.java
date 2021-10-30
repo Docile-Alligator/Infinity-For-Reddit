@@ -356,8 +356,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         option3BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         option4BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         navigationView.setBackgroundColor(backgroundColor);
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
-        collapsingToolbarLayout.setContentScrimColor(mCustomThemeWrapper.getColorPrimary());
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
         applyTabLayoutTheme(tabLayout);
         bottomAppBar.setBackgroundTint(ColorStateList.valueOf(mCustomThemeWrapper.getBottomAppBarBackgroundColor()));
         applyFABTheme(fab);

@@ -183,7 +183,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
         contentEditText.setTextColor(mCustomThemeWrapper.getCommentColor());
     }
 

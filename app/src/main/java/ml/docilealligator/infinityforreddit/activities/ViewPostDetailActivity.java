@@ -31,6 +31,7 @@ import com.evernote.android.state.State;
 import com.github.piasy.biv.BigImageViewer;
 import com.github.piasy.biv.loader.glide.GlideImageLoader;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -88,6 +89,8 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.appbar_layout_view_post_detail_activity)
     AppBarLayout mAppBarLayout;
+    @BindView(R.id.collapsing_toolbar_layout_view_post_detail_activity)
+    CollapsingToolbarLayout mCollapsingToolbarLayout;
     @BindView(R.id.toolbar_view_post_detail_activity)
     Toolbar mToolbar;
     @BindView(R.id.view_pager_2_view_post_detail_activity)
@@ -276,7 +279,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @Override
     protected void applyCustomTheme() {
         mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndToolbarTheme(mAppBarLayout, mToolbar);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(mAppBarLayout, mCollapsingToolbarLayout, mToolbar);
         applyFABTheme(fab);
         searchPanelMaterialCardView.setBackgroundTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorPrimary()));
         int searchPanelTextAndIconColor = mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor();

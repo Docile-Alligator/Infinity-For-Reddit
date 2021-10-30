@@ -21,6 +21,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -74,6 +75,8 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_subscribed_thing_listing_activity)
     AppBarLayout appBarLayout;
+    @BindView(R.id.collapsing_toolbar_layout_subscribed_thing_listing_activity)
+    CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.toolbar_subscribed_thing_listing_activity)
     Toolbar toolbar;
     @BindView(R.id.tab_layout_subscribed_thing_listing_activity)
@@ -178,7 +181,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     @Override
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
         applyTabLayoutTheme(tabLayout);
         applyFABTheme(fab);
     }

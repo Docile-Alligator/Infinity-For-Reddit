@@ -22,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -62,6 +63,8 @@ public class CustomThemeListingActivity extends BaseActivity implements
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.appbar_layout_customize_theme_listing_activity)
     AppBarLayout appBarLayout;
+    @BindView(R.id.collapsing_toolbar_layout_customize_theme_listing_activity)
+    CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.toolbar_customize_theme_listing_activity)
     Toolbar toolbar;
     @BindView(R.id.recycler_view_customize_theme_listing_activity)
@@ -152,7 +155,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
 
     @Override
     protected void applyCustomTheme() {
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
     }
 
     @Override
