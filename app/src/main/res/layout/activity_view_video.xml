@@ -6,6 +6,7 @@
     android:id="@+id/hauler_view_view_video_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#000000"
     android:keepScreenOn="true"
     app:dragUpEnabled="true"
     tools:application="ml.docilealligator.infinityforreddit.activities.ViewVideoActivity">

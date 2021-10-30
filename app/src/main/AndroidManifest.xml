@@ -205,7 +205,8 @@
             android:label="@string/account_saved_thing_activity_label"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
-        <activity android:name=".activities.ShareDataResolverActivity">
+        <activity android:name=".activities.ShareDataResolverActivity"
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -263,7 +264,8 @@
             android:label="@string/search_subreddits_activity_label"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
-        <activity android:name=".activities.LinkResolverActivity">
+        <activity android:name=".activities.LinkResolverActivity"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
@@ -356,7 +358,8 @@
             android:name=".activities.MainActivity"
             android:label="@string/application_name"
             android:theme="@style/AppTheme.Launcher"
-            android:windowSoftInputMode="adjustPan">
+            android:windowSoftInputMode="adjustPan"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

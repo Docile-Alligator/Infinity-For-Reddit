@@ -1,5 +1,10 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
 import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -43,11 +48,6 @@ import ml.docilealligator.infinityforreddit.font.TitleFontFamily;
 import ml.docilealligator.infinityforreddit.font.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
-import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 public abstract class BaseActivity extends AppCompatActivity {
     private boolean immersiveInterface;
@@ -275,6 +275,15 @@ public abstract class BaseActivity extends AppCompatActivity {
         return 0;
     }
 
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
     protected void setTransparentStatusBarAfterToolbarCollapsed() {
         this.transparentStatusBarAfterToolbarCollapsed = true;
     }
@@ -288,7 +297,14 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
     protected void applyAppBarLayoutAndToolbarTheme(AppBarLayout appBarLayout, Toolbar toolbar) {
+        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar, true);
+    }
+
+    protected void applyAppBarLayoutAndToolbarTheme(AppBarLayout appBarLayout, Toolbar toolbar, boolean setToolbarBackgroundColor) {
         appBarLayout.setBackgroundColor(customThemeWrapper.getColorPrimary());
+        if (setToolbarBackgroundColor) {
+            toolbar.setBackgroundColor(customThemeWrapper.getColorPrimary());
+        }
         toolbar.setTitleTextColor(customThemeWrapper.getToolbarPrimaryTextAndIconColor());
         toolbar.setSubtitleTextColor(customThemeWrapper.getToolbarSecondaryTextColor());
         if (toolbar.getNavigationIcon() != null) {

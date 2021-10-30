@@ -337,7 +337,7 @@ public class Post implements Parcelable {
         this.isRedgifs = isRedgifs;
     }
 
-    public boolean isLoadGfyOrRedgifsVideoSuccess() {
+    public boolean isLoadGfycatOrRedgifsVideoSuccess() {
         return loadGfyOrRedgifsVideoSuccess;
     }
 

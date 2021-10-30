@@ -455,6 +455,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         if (holder instanceof PostBaseViewHolder) {
             Post post = getItem(position);
             if (post != null) {
+                ((PostBaseViewHolder) holder).post = post;
                 ((PostBaseViewHolder) holder).currentPosition = position;
                 if (post.isRead()) {
                     if (((PostBaseViewHolder) holder).itemViewIsNotCardView) {
@@ -689,7 +690,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostVideoAutoplayViewHolder) holder).setVolume(mFragment.getMasterMutingOption() ? 0f : 1f);
                     }
 
-                    if (post.isGfycat() || post.isRedgifs() && !post.isLoadGfyOrRedgifsVideoSuccess()) {
+                    if ((post.isGfycat() || post.isRedgifs()) && !post.isLoadGfycatOrRedgifsVideoSuccess()) {
                         ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks = new FetchGfycatOrRedgifsVideoLinks(new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
                             @Override
                             public void success(String webm, String mp4) {
@@ -766,6 +767,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.GONE);
                     } else {
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
+                        ((PostWithPreviewTypeViewHolder) holder).preview = preview;
                         if (preview != null) {
                             ((PostWithPreviewTypeViewHolder) holder).imageWrapperRelativeLayout.setVisibility(View.VISIBLE);
                             if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
@@ -778,7 +780,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 ((PostWithPreviewTypeViewHolder) holder).imageView
                                         .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
                             }
-                            loadImage(holder, post, preview);
+                            loadImage(holder);
                         } else {
                             ((PostWithPreviewTypeViewHolder) holder).noPreviewLinkImageView.setVisibility(View.VISIBLE);
                             if (post.getPostType() == Post.VIDEO_TYPE) {
@@ -821,7 +823,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostCard2VideoAutoplayViewHolder) holder).setVolume(mFragment.getMasterMutingOption() ? 0f : 1f);
                     }
 
-                    if (post.isGfycat() || post.isRedgifs() && !post.isLoadGfyOrRedgifsVideoSuccess()) {
+                    if ((post.isGfycat() || post.isRedgifs()) && !post.isLoadGfycatOrRedgifsVideoSuccess()) {
                         ((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks = new FetchGfycatOrRedgifsVideoLinks(new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
                             @Override
                             public void success(String webm, String mp4) {
@@ -900,6 +902,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostCard2WithPreviewViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.GONE);
                     } else {
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
+                        ((PostCard2WithPreviewViewHolder) holder).preview = preview;
                         if (preview != null) {
                             ((PostCard2WithPreviewViewHolder) holder).imageView.setVisibility(View.VISIBLE);
                             if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
@@ -912,7 +915,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 ((PostCard2WithPreviewViewHolder) holder).imageView
                                         .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
                             }
-                            loadImage(holder, post, preview);
+                            loadImage(holder);
                         } else {
                             ((PostCard2WithPreviewViewHolder) holder).progressBar.setVisibility(View.GONE);
                             ((PostCard2WithPreviewViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
@@ -943,6 +946,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         } else if (holder instanceof PostCompactBaseViewHolder) {
             Post post = getItem(position);
             if (post != null) {
+                ((PostCompactBaseViewHolder) holder).post = post;
                 ((PostCompactBaseViewHolder) holder).currentPosition = position;
                 if (post.isRead()) {
                     holder.itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
@@ -1153,13 +1157,12 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.VISIBLE);
                         ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_gallery_24dp);
                     }
-                    ArrayList<Post.Preview> previews = post.getPreviews();
-                    if (previews != null && !previews.isEmpty()) {
+                    if (post.getPreviews() != null && !post.getPreviews().isEmpty()) {
                         if (post.getPostType() != Post.GIF_TYPE && post.getPostType() != Post.VIDEO_TYPE) {
                             ((PostCompactBaseViewHolder) holder).imageView.setVisibility(View.VISIBLE);
                             ((PostCompactBaseViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
                         }
-                        loadImage(holder, post, previews.get(0));
+                        loadImage(holder);
                     }
                 }
 
@@ -1269,6 +1272,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         } else if (holder instanceof PostGalleryViewHolder) {
             Post post = getItem(position);
             if (post != null) {
+                ((PostGalleryViewHolder) holder).post = post;
                 ((PostGalleryViewHolder) holder).currentPosition = position;
                 if (post.isRead()) {
                     holder.itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
@@ -1281,6 +1285,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostGalleryViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
 
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
+                        ((PostGalleryViewHolder) holder).preview = preview;
                         if (preview != null) {
                             if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
                                 int height = (int) (400 * mScale);
@@ -1292,7 +1297,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 ((PostGalleryViewHolder) holder).imageView
                                         .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
                             }
-                            loadImage(holder, post, preview);
+                            loadImage(holder);
                         } else {
                             ((PostGalleryViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
                             if (post.getPostType() == Post.VIDEO_TYPE) {
@@ -1316,6 +1321,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_play_circle_36dp));
 
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
+                        ((PostGalleryViewHolder) holder).preview = preview;
                         if (preview != null) {
                             if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
                                 int height = (int) (400 * mScale);
@@ -1327,7 +1333,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 ((PostGalleryViewHolder) holder).imageView
                                         .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
                             }
-                            loadImage(holder, post, preview);
+                            loadImage(holder);
                         } else {
                             ((PostGalleryViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
                             ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_image_24dp);
@@ -1341,6 +1347,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_play_circle_36dp));
 
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
+                        ((PostGalleryViewHolder) holder).preview = preview;
                         if (preview != null) {
                             if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
                                 int height = (int) (400 * mScale);
@@ -1352,7 +1359,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 ((PostGalleryViewHolder) holder).imageView
                                         .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
                             }
-                            loadImage(holder, post, preview);
+                            loadImage(holder);
                         } else {
                             ((PostGalleryViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
                             ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_outline_video_24dp);
@@ -1366,6 +1373,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_link_post_type_indicator));
 
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
+                        ((PostGalleryViewHolder) holder).preview = preview;
                         if (preview != null) {
                             if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
                                 int height = (int) (400 * mScale);
@@ -1377,7 +1385,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 ((PostGalleryViewHolder) holder).imageView
                                         .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
                             }
-                            loadImage(holder, post, preview);
+                            loadImage(holder);
                         } else {
                             ((PostGalleryViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
                             ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_link);
@@ -1401,6 +1409,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_gallery_24dp));
 
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
+                        ((PostGalleryViewHolder) holder).preview = preview;
                         if (preview != null) {
                             if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
                                 int height = (int) (400 * mScale);
@@ -1412,7 +1421,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 ((PostGalleryViewHolder) holder).imageView
                                         .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
                             }
-                            loadImage(holder, post, preview);
+                            loadImage(holder);
                         } else {
                             ((PostGalleryViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
                             ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_gallery_24dp);
@@ -1465,70 +1474,44 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         return null;
     }
 
-    private void loadImage(final RecyclerView.ViewHolder holder, final Post post, @NonNull Post.Preview preview) {
+    private void loadImage(final RecyclerView.ViewHolder holder) {
         if (holder instanceof PostWithPreviewTypeViewHolder) {
-            String url;
-            boolean blurImage = (post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(post.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || post.isSpoiler() && mNeedBlurSpoiler;
-            if (post.getPostType() == Post.GIF_TYPE && mAutoplay && !blurImage) {
-                url = post.getUrl();
-            } else {
-                url = preview.getPreviewUrl();
-            }
-            RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(url).listener(new RequestListener<Drawable>() {
-                @Override
-                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                    ((PostWithPreviewTypeViewHolder) holder).progressBar.setVisibility(View.GONE);
-                    ((PostWithPreviewTypeViewHolder) holder).errorRelativeLayout.setVisibility(View.VISIBLE);
-                    ((PostWithPreviewTypeViewHolder) holder).errorRelativeLayout.setOnClickListener(view -> {
-                        ((PostWithPreviewTypeViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
-                        ((PostWithPreviewTypeViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
-                        loadImage(holder, post, preview);
-                    });
-                    return false;
-                }
-
-                @Override
-                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                    ((PostWithPreviewTypeViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
-                    ((PostWithPreviewTypeViewHolder) holder).progressBar.setVisibility(View.GONE);
-                    return false;
-                }
-            });
-
-            if (blurImage) {
-                imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
-                        .into(((PostWithPreviewTypeViewHolder) holder).imageView);
-            } else {
-                if (mImageViewWidth > preview.getPreviewWidth()) {
-                    imageRequestBuilder.override(preview.getPreviewWidth(), preview.getPreviewHeight()).into(((PostWithPreviewTypeViewHolder) holder).imageView);
+            Post post = ((PostWithPreviewTypeViewHolder) holder).post;
+            Post.Preview preview = ((PostWithPreviewTypeViewHolder) holder).preview;
+            if (preview != null) {
+                String url;
+                boolean blurImage = (post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(post.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || post.isSpoiler() && mNeedBlurSpoiler;
+                if (post.getPostType() == Post.GIF_TYPE && mAutoplay && !blurImage) {
+                    url = post.getUrl();
                 } else {
-                    imageRequestBuilder.into(((PostWithPreviewTypeViewHolder) holder).imageView);
+                    url = preview.getPreviewUrl();
+                }
+                RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(url).listener(((PostWithPreviewTypeViewHolder) holder).glideRequestListener);
+
+                if (blurImage) {
+                    imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
+                            .into(((PostWithPreviewTypeViewHolder) holder).imageView);
+                } else {
+                    if (mImageViewWidth > preview.getPreviewWidth()) {
+                        imageRequestBuilder.override(preview.getPreviewWidth(), preview.getPreviewHeight()).into(((PostWithPreviewTypeViewHolder) holder).imageView);
+                    } else {
+                        imageRequestBuilder.into(((PostWithPreviewTypeViewHolder) holder).imageView);
+                    }
                 }
             }
         } else if (holder instanceof PostCompactBaseViewHolder) {
+            Post post = ((PostCompactBaseViewHolder) holder).post;
             String postCompactThumbnailPreviewUrl;
             ArrayList<Post.Preview> previews = post.getPreviews();
             if (previews != null && !previews.isEmpty()) {
                 if (previews.size() >= 2) {
                     postCompactThumbnailPreviewUrl = previews.get(1).getPreviewUrl();
                 } else {
-                    postCompactThumbnailPreviewUrl = preview.getPreviewUrl();
+                    postCompactThumbnailPreviewUrl = previews.get(0).getPreviewUrl();
                 }
 
                 RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(postCompactThumbnailPreviewUrl)
-                        .error(R.drawable.ic_error_outline_black_24dp).listener(new RequestListener<Drawable>() {
-                            @Override
-                            public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                                ((PostCompactBaseViewHolder) holder).progressBar.setVisibility(View.GONE);
-                                return false;
-                            }
-
-                            @Override
-                            public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                                ((PostCompactBaseViewHolder) holder).progressBar.setVisibility(View.GONE);
-                                return false;
-                            }
-                        });
+                        .error(R.drawable.ic_error_outline_black_24dp).listener(((PostCompactBaseViewHolder) holder).requestListener);
                 if ((post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit())) || post.isSpoiler() && mNeedBlurSpoiler) {
                     imageRequestBuilder
                             .transform(new BlurTransformation(50, 2)).into(((PostCompactBaseViewHolder) holder).imageView);
@@ -1537,81 +1520,51 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
             }
         } else if (holder instanceof PostGalleryViewHolder) {
-            String url;
-            boolean blurImage = (post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(post.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || post.isSpoiler() && mNeedBlurSpoiler;
-            if (post.getPostType() == Post.GIF_TYPE && mAutoplay && !blurImage) {
-                url = post.getUrl();
-            } else {
-                url = preview.getPreviewUrl();
-            }
-            RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(url).listener(new RequestListener<Drawable>() {
-                @Override
-                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                    ((PostGalleryViewHolder) holder).progressBar.setVisibility(View.GONE);
-                    ((PostGalleryViewHolder) holder).errorRelativeLayout.setVisibility(View.VISIBLE);
-                    ((PostGalleryViewHolder) holder).errorRelativeLayout.setOnClickListener(view -> {
-                        ((PostGalleryViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
-                        ((PostGalleryViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
-                        loadImage(holder, post, preview);
-                    });
-                    return false;
-                }
-
-                @Override
-                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                    ((PostGalleryViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
-                    ((PostGalleryViewHolder) holder).progressBar.setVisibility(View.GONE);
-                    return false;
-                }
-            });
-
-            if (blurImage) {
-                imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
-                        .into(((PostGalleryViewHolder) holder).imageView);
-            } else {
-                if (mImageViewWidth > preview.getPreviewWidth()) {
-                    imageRequestBuilder.override(preview.getPreviewWidth(), preview.getPreviewHeight()).into(((PostGalleryViewHolder) holder).imageView);
+            Post post = ((PostGalleryViewHolder) holder).post;
+            Post.Preview preview = ((PostGalleryViewHolder) holder).preview;
+            if (preview != null) {
+                String url;
+                boolean blurImage = (post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(post.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || post.isSpoiler() && mNeedBlurSpoiler;
+                if (post.getPostType() == Post.GIF_TYPE && mAutoplay && !blurImage) {
+                    url = post.getUrl();
                 } else {
-                    imageRequestBuilder.into(((PostGalleryViewHolder) holder).imageView);
+                    url = preview.getPreviewUrl();
+                }
+                RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(url).listener(((PostGalleryViewHolder) holder).requestListener);
+
+                if (blurImage) {
+                    imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
+                            .into(((PostGalleryViewHolder) holder).imageView);
+                } else {
+                    if (mImageViewWidth > preview.getPreviewWidth()) {
+                        imageRequestBuilder.override(preview.getPreviewWidth(), preview.getPreviewHeight()).into(((PostGalleryViewHolder) holder).imageView);
+                    } else {
+                        imageRequestBuilder.into(((PostGalleryViewHolder) holder).imageView);
+                    }
                 }
             }
         } else if (holder instanceof PostCard2WithPreviewViewHolder) {
-            String url;
-            boolean blurImage = (post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(post.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || post.isSpoiler() && mNeedBlurSpoiler;
-            if (post.getPostType() == Post.GIF_TYPE && mAutoplay && !blurImage) {
-                url = post.getUrl();
-            } else {
-                url = preview.getPreviewUrl();
-            }
-            RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(url).listener(new RequestListener<Drawable>() {
-                @Override
-                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                    ((PostCard2WithPreviewViewHolder) holder).progressBar.setVisibility(View.GONE);
-                    ((PostCard2WithPreviewViewHolder) holder).errorRelativeLayout.setVisibility(View.VISIBLE);
-                    ((PostCard2WithPreviewViewHolder) holder).errorRelativeLayout.setOnClickListener(view -> {
-                        ((PostCard2WithPreviewViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
-                        ((PostCard2WithPreviewViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
-                        loadImage(holder, post, preview);
-                    });
-                    return false;
-                }
-
-                @Override
-                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                    ((PostCard2WithPreviewViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
-                    ((PostCard2WithPreviewViewHolder) holder).progressBar.setVisibility(View.GONE);
-                    return false;
-                }
-            });
-
-            if (blurImage) {
-                imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
-                        .into(((PostCard2WithPreviewViewHolder) holder).imageView);
-            } else {
-                if (mImageViewWidth > preview.getPreviewWidth()) {
-                    imageRequestBuilder.override(preview.getPreviewWidth(), preview.getPreviewHeight()).into(((PostCard2WithPreviewViewHolder) holder).imageView);
+            Post post = ((PostCard2WithPreviewViewHolder) holder).post;
+            Post.Preview preview = ((PostCard2WithPreviewViewHolder) holder).preview;
+            if (preview != null) {
+                String url;
+                boolean blurImage = (post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(post.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || post.isSpoiler() && mNeedBlurSpoiler;
+                if (post.getPostType() == Post.GIF_TYPE && mAutoplay && !blurImage) {
+                    url = post.getUrl();
                 } else {
-                    imageRequestBuilder.into(((PostCard2WithPreviewViewHolder) holder).imageView);
+                    url = preview.getPreviewUrl();
+                }
+                RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(url).listener(((PostCard2WithPreviewViewHolder) holder).requestListener);
+
+                if (blurImage) {
+                    imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
+                            .into(((PostCard2WithPreviewViewHolder) holder).imageView);
+                } else {
+                    if (mImageViewWidth > preview.getPreviewWidth()) {
+                        imageRequestBuilder.override(preview.getPreviewWidth(), preview.getPreviewHeight()).into(((PostCard2WithPreviewViewHolder) holder).imageView);
+                    } else {
+                        imageRequestBuilder.into(((PostCard2WithPreviewViewHolder) holder).imageView);
+                    }
                 }
             }
         }
@@ -1801,7 +1754,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             } else if (holder instanceof PostWithPreviewTypeViewHolder) {
                 mGlide.clear(((PostWithPreviewTypeViewHolder) holder).imageView);
                 ((PostWithPreviewTypeViewHolder) holder).imageWrapperRelativeLayout.setVisibility(View.GONE);
-                ((PostWithPreviewTypeViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
+                ((PostWithPreviewTypeViewHolder) holder).errorTextView.setVisibility(View.GONE);
                 ((PostWithPreviewTypeViewHolder) holder).noPreviewLinkImageView.setVisibility(View.GONE);
                 ((PostWithPreviewTypeViewHolder) holder).progressBar.setVisibility(View.GONE);
                 ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.GONE);
@@ -2045,6 +1998,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         TextView commentsCountTextView;
         ImageView saveButton;
         ImageView shareButton;
+        Post post;
+        Post.Preview preview;
 
         boolean itemViewIsNotCardView = false;
         int currentPosition;
@@ -2706,14 +2661,14 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     if (post.isGfycat()) {
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
                         intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, post.getGfycatId());
-                        if (post.isLoadGfyOrRedgifsVideoSuccess()) {
+                        if (post.isLoadGfycatOrRedgifsVideoSuccess()) {
                             intent.setData(Uri.parse(post.getVideoUrl()));
                             intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
                         }
                     } else if (post.isRedgifs()) {
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_REDGIFS);
                         intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, post.getGfycatId());
-                        if (post.isLoadGfyOrRedgifsVideoSuccess()) {
+                        if (post.isLoadGfycatOrRedgifsVideoSuccess()) {
                             intent.setData(Uri.parse(post.getVideoUrl()));
                             intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
                         }
@@ -2871,13 +2826,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         @BindView(R.id.video_or_gif_indicator_image_view_item_post_with_preview)
         ImageView videoOrGifIndicatorImageView;
         @BindView(R.id.image_wrapper_relative_layout_item_post_with_preview)
-        RelativeLayout imageWrapperRelativeLayout;
+        FrameLayout imageWrapperRelativeLayout;
         @BindView(R.id.progress_bar_item_post_with_preview)
         ProgressBar progressBar;
         @BindView(R.id.image_view_item_post_with_preview)
         AspectRatioGifImageView imageView;
-        @BindView(R.id.load_image_error_relative_layout_item_post_with_preview)
-        RelativeLayout errorRelativeLayout;
         @BindView(R.id.load_image_error_text_view_item_post_with_preview)
         TextView errorTextView;
         @BindView(R.id.image_view_no_preview_gallery_item_post_with_preview)
@@ -2896,6 +2849,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         ImageView saveButton;
         @BindView(R.id.share_button_item_post_with_preview)
         ImageView shareButton;
+        RequestListener<Drawable> glideRequestListener;
 
         PostWithPreviewTypeViewHolder(View itemView) {
             super(itemView);
@@ -2943,9 +2897,31 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
             });
 
+            errorTextView.setOnClickListener(view -> {
+                progressBar.setVisibility(View.VISIBLE);
+                errorTextView.setVisibility(View.GONE);
+                loadImage(this);
+            });
+
             noPreviewLinkImageView.setOnClickListener(view -> {
                 imageView.performClick();
             });
+
+            glideRequestListener = new RequestListener<>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                    progressBar.setVisibility(View.GONE);
+                    errorTextView.setVisibility(View.VISIBLE);
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    errorTextView.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
+                    return false;
+                }
+            };
         }
     }
 
@@ -3056,6 +3032,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         ImageView saveButton;
         ImageView shareButton;
         View divider;
+        RequestListener<Drawable> requestListener;
+        Post post;
 
         int currentPosition;
 
@@ -3552,6 +3530,20 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     shareLink(post);
                 }
             });
+
+            requestListener = new RequestListener<>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                    progressBar.setVisibility(View.GONE);
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    progressBar.setVisibility(View.GONE);
+                    return false;
+                }
+            };
         }
 
         void markPostRead(Post post, boolean changePostItemColor) {
@@ -3736,6 +3728,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         ImageView noPreviewImageView;
         @BindView(R.id.title_text_view_item_post_gallery)
         TextView titleTextView;
+        RequestListener<Drawable> requestListener;
+        Post post;
+        Post.Preview preview;
 
         int currentPosition;
 
@@ -3788,9 +3783,31 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 return true;
             });
 
+            errorRelativeLayout.setOnClickListener(view -> {
+                progressBar.setVisibility(View.VISIBLE);
+                errorRelativeLayout.setVisibility(View.GONE);
+                loadImage(this);
+            });
+
             noPreviewImageView.setOnClickListener(view -> {
                 itemView.performClick();
             });
+
+            requestListener = new RequestListener<>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                    progressBar.setVisibility(View.GONE);
+                    errorRelativeLayout.setVisibility(View.VISIBLE);
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    errorRelativeLayout.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
+                    return false;
+                }
+            };
         }
 
         void markPostRead(Post post, boolean changePostItemColor) {
@@ -3931,14 +3948,14 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     if (post.isGfycat()) {
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
                         intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, post.getGfycatId());
-                        if (post.isLoadGfyOrRedgifsVideoSuccess()) {
+                        if (post.isLoadGfycatOrRedgifsVideoSuccess()) {
                             intent.setData(Uri.parse(post.getVideoUrl()));
                             intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
                         }
                     } else if (post.isRedgifs()) {
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_REDGIFS);
                         intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, post.getGfycatId());
-                        if (post.isLoadGfyOrRedgifsVideoSuccess()) {
+                        if (post.isLoadGfycatOrRedgifsVideoSuccess()) {
                             intent.setData(Uri.parse(post.getVideoUrl()));
                             intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
                         }
@@ -4121,6 +4138,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         ImageView shareButton;
         @BindView(R.id.divider_item_post_card_2_with_preview)
         View divider;
+        RequestListener<Drawable> requestListener;
 
         PostCard2WithPreviewViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -4170,9 +4188,31 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
             });
 
+            errorRelativeLayout.setOnClickListener(view -> {
+                progressBar.setVisibility(View.VISIBLE);
+                errorRelativeLayout.setVisibility(View.GONE);
+                loadImage(this);
+            });
+
             noPreviewImageView.setOnClickListener(view -> {
                 imageView.performClick();
             });
+
+            requestListener = new RequestListener<>() {
+                @Override
+                public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                    progressBar.setVisibility(View.GONE);
+                    errorRelativeLayout.setVisibility(View.VISIBLE);
+                    return false;
+                }
+
+                @Override
+                public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                    errorRelativeLayout.setVisibility(View.GONE);
+                    progressBar.setVisibility(View.GONE);
+                    return false;
+                }
+            };
         }
     }
 

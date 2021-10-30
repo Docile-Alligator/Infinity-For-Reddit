@@ -1,7 +1,7 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
+    <style name="AppTheme" parent="Theme.Material3.DayNight">
         <item name="colorPrimary">?attr/colorPrimary</item>
         <item name="colorPrimaryDark">?attr/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
@@ -58,7 +58,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.DayNight" />
 
-    <style name="MaterialAlertDialogTheme" parent="ThemeOverlay.MaterialComponents.MaterialAlertDialog">
+    <style name="MaterialAlertDialogTheme" parent="ThemeOverlay.Material3.MaterialAlertDialog">
         <item name="android:textSize">?attr/font_default</item>
         <item name="android:background">?attr/cardViewBackgroundColor</item>
         <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialogTitleTextStyle
@@ -78,15 +78,15 @@
         </item>
     </style>
 
-    <style name="MaterialAlertDialogPositiveButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+    <style name="MaterialAlertDialogPositiveButtonStyle" parent="Widget.Material3.Button.TextButton.Dialog">
         <item name="android:textColor">@color/colorAccent</item>
     </style>
 
-    <style name="MaterialAlertDialogNegativeButtonStyle" parent="Widget.MaterialComponents.Button.TextButton.Dialog">
+    <style name="MaterialAlertDialogNegativeButtonStyle" parent="Widget.Material3.Button.TextButton.Dialog">
         <item name="android:textColor">?attr/primaryTextColor</item>
     </style>
 
-    <style name="MaterialAlertDialogTitleTextStyle" parent="MaterialAlertDialog.MaterialComponents.Title.Text">
+    <style name="MaterialAlertDialogTitleTextStyle" parent="MaterialAlertDialog.Material3.Title.Text">
         <item name="android:textSize">?attr/font_20</item>
     </style>
 

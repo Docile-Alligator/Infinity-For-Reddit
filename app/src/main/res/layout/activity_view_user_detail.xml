@@ -107,7 +107,7 @@
 
             </RelativeLayout>
 
-            <androidx.appcompat.widget.Toolbar
+            <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/toolbar_view_user_detail_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

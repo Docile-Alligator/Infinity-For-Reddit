@@ -16,6 +16,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -27,7 +28,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -42,6 +42,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -149,7 +150,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     @BindView(R.id.toolbar_linear_layout_view_subreddit_detail_activity)
     LinearLayout linearLayout;
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    MaterialToolbar toolbar;
     @BindView(R.id.tab_layout_view_subreddit_detail_activity)
     TabLayout tabLayout;
     @BindView(R.id.banner_image_view_view_subreddit_detail_activity)
@@ -268,9 +269,10 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             if (isImmersiveInterface()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                    coordinatorLayout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                    /*coordinatorLayout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
                             View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+                            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);*/
+                    getWindow().setDecorFitsSystemWindows(false);
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
@@ -515,7 +517,14 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         collapsingToolbarLayout.setContentScrimColor(mCustomThemeWrapper.getColorPrimary());
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        appBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                collapsingToolbarLayout.setScrimVisibleHeightTrigger(toolbar.getHeight() + tabLayout.getHeight() + getStatusBarHeight() * 2);
+                appBarLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar, false);
         expandedTabTextColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTextColor();
         expandedTabIndicatorColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTabIndicator();
         expandedTabBackgroundColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTabBackground();
@@ -793,6 +802,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
                 option1BottomAppBar.setOnClickListener(view -> {
                     bottomAppBarOptionAction(option1);
+                    //Toast.makeText(this, "s " + collapsingToolbarLayout.getScrimVisibleHeightTrigger(), Toast.LENGTH_SHORT).show();
                 });
 
                 option2BottomAppBar.setOnClickListener(view -> {

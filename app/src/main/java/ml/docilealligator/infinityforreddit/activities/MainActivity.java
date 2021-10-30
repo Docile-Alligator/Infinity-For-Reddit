@@ -31,7 +31,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.view.GravityCompat;
@@ -52,6 +51,7 @@ import androidx.work.WorkManager;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -160,7 +160,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @BindView(R.id.collapsing_toolbar_layout_main_activity)
     CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.toolbar)
-    Toolbar toolbar;
+    MaterialToolbar toolbar;
     @BindView(R.id.nav_drawer_recycler_view_main_activity)
     RecyclerView navDrawerRecyclerView;
     @BindView(R.id.tab_layout_main_activity)
@@ -269,9 +269,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 drawer.setStatusBarBackgroundColor(Color.TRANSPARENT);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     drawer.setFitsSystemWindows(false);
-                    drawer.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                    getWindow().setDecorFitsSystemWindows(false);
+                    /*drawer.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
                             View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+                            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);*/
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
@@ -356,6 +357,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         option4BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         navigationView.setBackgroundColor(backgroundColor);
         applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        collapsingToolbarLayout.setContentScrimColor(mCustomThemeWrapper.getColorPrimary());
         applyTabLayoutTheme(tabLayout);
         bottomAppBar.setBackgroundTint(ColorStateList.valueOf(mCustomThemeWrapper.getBottomAppBarBackgroundColor()));
         applyFABTheme(fab);

@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Resources;
 import android.net.Uri;
-import android.opengl.Visibility;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,6 +17,7 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
@@ -29,7 +29,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -44,6 +43,7 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -141,7 +141,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @BindView(R.id.appbar_layout_view_user_detail)
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_view_user_detail_activity)
-    Toolbar toolbar;
+    MaterialToolbar toolbar;
     @BindView(R.id.toolbar_linear_layout_view_user_detail_activity)
     LinearLayout linearLayout;
     @BindView(R.id.tab_layout_view_user_detail_activity)
@@ -564,7 +564,14 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         collapsingToolbarLayout.setContentScrimColor(mCustomThemeWrapper.getColorPrimary());
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+        appBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                collapsingToolbarLayout.setScrimVisibleHeightTrigger(toolbar.getHeight() + tabLayout.getHeight() + getStatusBarHeight() * 2);
+                appBarLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            }
+        });
+        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar, false);
         expandedTabTextColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTextColor();
         expandedTabIndicatorColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTabIndicator();
         expandedTabBackgroundColor = mCustomThemeWrapper.getTabLayoutWithExpandedCollapsingToolbarTabBackground();

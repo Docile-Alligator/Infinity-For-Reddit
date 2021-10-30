@@ -680,7 +680,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 }
                 ((PostDetailVideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (mPost.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
 
-                if (mPost.isGfycat() || mPost.isRedgifs() && !mPost.isLoadGfyOrRedgifsVideoSuccess()) {
+                if (mPost.isGfycat() || mPost.isRedgifs() && !mPost.isLoadGfycatOrRedgifsVideoSuccess()) {
                     ((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks = new FetchGfycatOrRedgifsVideoLinks(new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
                         @Override
                         public void success(String webm, String mp4) {
@@ -1670,14 +1670,14 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 if (mPost.isGfycat()) {
                     intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
                     intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, mPost.getGfycatId());
-                    if (mPost.isLoadGfyOrRedgifsVideoSuccess()) {
+                    if (mPost.isLoadGfycatOrRedgifsVideoSuccess()) {
                         intent.setData(Uri.parse(mPost.getVideoUrl()));
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
                     }
                 } else if (mPost.isRedgifs()) {
                     intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_REDGIFS);
                     intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, mPost.getGfycatId());
-                    if (mPost.isLoadGfyOrRedgifsVideoSuccess()) {
+                    if (mPost.isLoadGfycatOrRedgifsVideoSuccess()) {
                         intent.setData(Uri.parse(mPost.getVideoUrl()));
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
                     }
