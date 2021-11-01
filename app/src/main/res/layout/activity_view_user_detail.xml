@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/coordinator_layout_view_user_detail_activity"
-    tools:application=".ViewUserDetailActivity">
+    tools:application="ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_view_user_detail"
@@ -113,25 +113,25 @@
                 android:layout_height="wrap_content"
                 android:minHeight="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
+                app:layout_scrollFlags="scroll|enterAlways"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:navigationIcon="?attr/homeAsUpIndicator"/>
+                app:navigationIcon="?attr/homeAsUpIndicator" />
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
-    </com.google.android.material.appbar.AppBarLayout>
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout_view_user_detail_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:tabGravity="fill"
+            app:tabMode="fixed"
+            app:tabIndicatorHeight="3dp"
+            app:tabRippleColor="?attr/colorControlHighlight"
+            app:tabUnboundedRipple="false" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_layout_view_user_detail_activity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:layout_scrollFlags="scroll|enterAlways"
-        app:tabGravity="fill"
-        app:tabMode="fixed"
-        app:tabIndicatorHeight="3dp"
-        app:tabRippleColor="?attr/colorControlHighlight"
-        app:tabUnboundedRipple="false" />
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager_view_user_detail_activity"

@@ -16,7 +16,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         app:cardElevation="2dp"
-        app:cardCornerRadius="8dp">
+        app:cardCornerRadius="8dp"
+        style="?attr/materialCardViewElevatedStyle">
 
         <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
             android:id="@+id/image_view_item_post_card_2_with_preview"
@@ -42,25 +43,18 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center" />
 
-        <RelativeLayout
-            android:id="@+id/load_image_error_relative_layout_item_post_card_2_with_preview"
+        <TextView
+            android:id="@+id/load_image_error_text_view_item_post_card_2_with_preview"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:visibility="gone">
-
-            <TextView
-                android:id="@+id/load_image_error_text_view_item_post_card_2_with_preview"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:drawableTop="@drawable/ic_error_outline_black_24dp"
-                android:layout_centerInParent="true"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp"
-                android:text="@string/error_loading_image_tap_to_retry"
-                android:textSize="?attr/font_default"
-                android:fontFamily="?attr/font_family" />
-
-        </RelativeLayout>
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_error_outline_black_24dp"
+            android:layout_gravity="center"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:text="@string/error_loading_image_tap_to_retry"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/image_view_no_preview_gallery_item_post_card_2_with_preview"

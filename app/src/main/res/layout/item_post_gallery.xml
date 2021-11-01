@@ -7,7 +7,8 @@
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
     app:cardElevation="2dp"
-    app:cardCornerRadius="8dp">
+    app:cardCornerRadius="8dp"
+    style="?attr/materialCardViewElevatedStyle">
 
     <ProgressBar
         android:id="@+id/progress_bar_item_post_gallery"
@@ -40,26 +41,19 @@
         android:background="@drawable/play_button_round_background"
         android:visibility="gone" />
 
-    <RelativeLayout
-        android:id="@+id/load_image_error_relative_layout_item_post_gallery"
+    <TextView
+        android:id="@+id/load_image_error_text_view_item_gallery"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        tools:visibility="visible">
-
-        <TextView
-            android:id="@+id/load_image_error_text_view_item_gallery"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            app:drawableTopCompat="@drawable/ic_error_outline_black_24dp"
-            android:layout_centerInParent="true"
-            android:text="@string/error_loading_image_tap_to_retry"
-            android:textSize="?attr/font_default"
-            android:fontFamily="?attr/font_family" />
-
-    </RelativeLayout>
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:drawableTopCompat="@drawable/ic_error_outline_black_24dp"
+        android:layout_centerInParent="true"
+        android:text="@string/error_loading_image_tap_to_retry"
+        android:textSize="?attr/font_default"
+        android:fontFamily="?attr/font_family"
+        android:visibility="gone" />
 
     <TextView
         android:id="@+id/title_text_view_item_post_gallery"

@@ -54,7 +54,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:visibility="gone"
-        app:cardElevation="16dp">
+        app:cardElevation="16dp"
+        style="?attr/materialCardViewElevatedStyle">
 
         <LinearLayout
             android:layout_width="match_parent"

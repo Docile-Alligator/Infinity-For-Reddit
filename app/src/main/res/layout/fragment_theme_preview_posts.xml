@@ -11,7 +11,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         app:cardCornerRadius="16dp"
-        app:cardElevation="2dp">
+        app:cardElevation="2dp"
+        style="?attr/materialCardViewElevatedStyle">
 
         <LinearLayout
             android:layout_width="match_parent"

@@ -8,7 +8,8 @@
     android:layout_marginStart="16dp"
     android:layout_marginEnd="16dp"
     app:cardCornerRadius="16dp"
-    app:cardElevation="2dp">
+    app:cardElevation="2dp"
+    style="?attr/materialCardViewElevatedStyle">
 
     <RelativeLayout
         android:id="@+id/image_wrapper_relative_layout_item_trending_search"

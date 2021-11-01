@@ -1776,7 +1776,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             } else if (holder instanceof PostCard2WithPreviewViewHolder) {
                 mGlide.clear(((PostCard2WithPreviewViewHolder) holder).imageView);
                 ((PostCard2WithPreviewViewHolder) holder).imageView.setVisibility(View.GONE);
-                ((PostCard2WithPreviewViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
+                ((PostCard2WithPreviewViewHolder) holder).errorTextView.setVisibility(View.GONE);
                 ((PostCard2WithPreviewViewHolder) holder).noPreviewImageView.setVisibility(View.GONE);
                 ((PostCard2WithPreviewViewHolder) holder).progressBar.setVisibility(View.GONE);
                 ((PostCard2WithPreviewViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.GONE);
@@ -1847,7 +1847,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mGlide.clear(((PostGalleryViewHolder) holder).imageView);
             ((PostGalleryViewHolder) holder).imageView.setVisibility(View.GONE);
             ((PostGalleryViewHolder) holder).progressBar.setVisibility(View.GONE);
-            ((PostGalleryViewHolder) holder).errorRelativeLayout.setVisibility(View.GONE);
+            ((PostGalleryViewHolder) holder).errorTextView.setVisibility(View.GONE);
             ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.GONE);
             ((PostGalleryViewHolder) holder).noPreviewImageView.setVisibility(View.GONE);
         }
@@ -3720,8 +3720,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         ImageView videoOrGifIndicatorImageView;
         @BindView(R.id.image_view_item_post_gallery)
         AspectRatioGifImageView imageView;
-        @BindView(R.id.load_image_error_relative_layout_item_post_gallery)
-        RelativeLayout errorRelativeLayout;
         @BindView(R.id.load_image_error_text_view_item_gallery)
         TextView errorTextView;
         @BindView(R.id.image_view_no_preview_item_post_gallery)
@@ -3783,9 +3781,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 return true;
             });
 
-            errorRelativeLayout.setOnClickListener(view -> {
+            errorTextView.setOnClickListener(view -> {
                 progressBar.setVisibility(View.VISIBLE);
-                errorRelativeLayout.setVisibility(View.GONE);
+                errorTextView.setVisibility(View.GONE);
                 loadImage(this);
             });
 
@@ -3797,13 +3795,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                     progressBar.setVisibility(View.GONE);
-                    errorRelativeLayout.setVisibility(View.VISIBLE);
+                    errorTextView.setVisibility(View.VISIBLE);
                     return false;
                 }
 
                 @Override
                 public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                    errorRelativeLayout.setVisibility(View.GONE);
+                    errorTextView.setVisibility(View.GONE);
                     progressBar.setVisibility(View.GONE);
                     return false;
                 }
@@ -4116,8 +4114,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         ProgressBar progressBar;
         @BindView(R.id.image_view_item_post_card_2_with_preview)
         AspectRatioGifImageView imageView;
-        @BindView(R.id.load_image_error_relative_layout_item_post_card_2_with_preview)
-        RelativeLayout errorRelativeLayout;
         @BindView(R.id.load_image_error_text_view_item_post_card_2_with_preview)
         TextView errorTextView;
         @BindView(R.id.image_view_no_preview_gallery_item_post_card_2_with_preview)
@@ -4188,9 +4184,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
             });
 
-            errorRelativeLayout.setOnClickListener(view -> {
+            errorTextView.setOnClickListener(view -> {
                 progressBar.setVisibility(View.VISIBLE);
-                errorRelativeLayout.setVisibility(View.GONE);
+                errorTextView.setVisibility(View.GONE);
                 loadImage(this);
             });
 
@@ -4202,13 +4198,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 @Override
                 public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                     progressBar.setVisibility(View.GONE);
-                    errorRelativeLayout.setVisibility(View.VISIBLE);
+                    errorTextView.setVisibility(View.VISIBLE);
                     return false;
                 }
 
                 @Override
                 public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                    errorRelativeLayout.setVisibility(View.GONE);
+                    errorTextView.setVisibility(View.GONE);
                     progressBar.setVisibility(View.GONE);
                     return false;
                 }

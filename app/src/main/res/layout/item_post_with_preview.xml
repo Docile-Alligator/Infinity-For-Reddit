@@ -7,7 +7,8 @@
     android:layout_marginTop="8dp"
     android:layout_marginBottom="8dp"
     app:cardElevation="2dp"
-    app:cardCornerRadius="16dp">
+    app:cardCornerRadius="16dp"
+    style="?attr/materialCardViewElevatedStyle">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -113,10 +114,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="4dp"
-                android:text="@string/gallery"
                 android:textSize="?attr/font_12"
                 android:fontFamily="?attr/font_family"
-                app:lib_setRadius="3dp"
+                app:lib_setRadius="6dp"
                 app:lib_setRoundedView="true"
                 app:lib_setShape="rectangle" />
 
@@ -130,7 +130,7 @@
                 android:fontFamily="?attr/font_family"
                 android:padding="4dp"
                 android:visibility="gone"
-                app:lib_setRadius="3dp"
+                app:lib_setRadius="6dp"
                 app:lib_setRoundedView="true"
                 app:lib_setShape="rectangle" />
 
@@ -143,7 +143,7 @@
                 android:textSize="?attr/font_12"
                 android:fontFamily="?attr/font_family"
                 android:visibility="gone"
-                app:lib_setRadius="3dp"
+                app:lib_setRadius="6dp"
                 app:lib_setRoundedView="true"
                 app:lib_setShape="rectangle" />
 
@@ -156,7 +156,7 @@
                 android:fontFamily="?attr/font_family"
                 android:padding="4dp"
                 android:visibility="gone"
-                app:lib_setRadius="3dp"
+                app:lib_setRadius="6dp"
                 app:lib_setRoundedView="true"
                 app:lib_setShape="rectangle" />
 
@@ -168,7 +168,7 @@
                 android:textSize="?attr/font_12"
                 android:fontFamily="?attr/font_family"
                 android:visibility="gone"
-                app:lib_setRadius="3dp"
+                app:lib_setRadius="6dp"
                 app:lib_setRoundedView="true"
                 app:lib_setShape="rectangle" />
 
@@ -243,7 +243,8 @@
                 android:gravity="center"
                 android:text="@string/error_loading_image_tap_to_retry"
                 android:textSize="?attr/font_default"
-                android:fontFamily="?attr/font_family" />
+                android:fontFamily="?attr/font_family"
+                android:visibility="gone" />
 
         </FrameLayout>
 
