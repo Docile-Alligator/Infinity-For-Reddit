@@ -15,7 +15,6 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -24,7 +23,6 @@ import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 public class MaterialYouUtils {
     public interface CheckThemeNameListener {
         void themeNotExists();
-
         void themeExists();
     }
 
