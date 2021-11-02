@@ -1,0 +1,11 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:application="ml.docilealligator.infinityforreddit.activities.EditProfileActivity">
+    <item
+        android:id="@+id/action_save_edit_profile_activity"
+        android:orderInCategory="1"
+        android:title="@string/action_save"
+        android:icon="@drawable/ic_save_to_database_24dp"
+        app:showAsAction="ifRoom" />
+</menu>
