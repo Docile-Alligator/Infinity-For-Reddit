@@ -39,6 +39,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestBuilder;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.load.DataSource;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
@@ -1444,29 +1445,31 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 previewIndex = 0;
             }
             preview = previews.get(previewIndex);
-            if (preview.getPreviewWidth() * preview.getPreviewHeight() > 10_000_000) {
+            if (preview.getPreviewWidth() * preview.getPreviewHeight() > 5_000_000) {
                 for (int i = previews.size() - 1; i >= 1; i--) {
                     preview = previews.get(i);
                     if (mImageViewWidth >= preview.getPreviewWidth()) {
-                        if (preview.getPreviewWidth() * preview.getPreviewHeight() <= 10_000_000) {
+                        if (preview.getPreviewWidth() * preview.getPreviewHeight() <= 5_000_000) {
                             return preview;
                         }
                     } else {
                         int height = mImageViewWidth / preview.getPreviewWidth() * preview.getPreviewHeight();
-                        if (mImageViewWidth * height <= 10_000_000) {
+                        if (mImageViewWidth * height <= 5_000_000) {
+                            preview.setPreviewWidth(mImageViewWidth);
+                            preview.setPreviewHeight(height);
                             return preview;
                         }
                     }
                 }
             }
 
-            if (preview.getPreviewWidth() * preview.getPreviewHeight() > 10_000_000) {
+            if (preview.getPreviewWidth() * preview.getPreviewHeight() > 5_000_000) {
                 int divisor = 2;
                 do {
                     preview.setPreviewWidth(preview.getPreviewWidth() / divisor);
                     preview.setPreviewHeight(preview.getPreviewHeight() / divisor);
                     divisor *= 2;
-                } while (preview.getPreviewWidth() * preview.getPreviewHeight() > 10_000_000);
+                } while (preview.getPreviewWidth() * preview.getPreviewHeight() > 5_000_000);
             }
             return preview;
         }
@@ -1492,11 +1495,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                             .into(((PostWithPreviewTypeViewHolder) holder).imageView);
                 } else {
-                    if (mImageViewWidth > preview.getPreviewWidth()) {
-                        imageRequestBuilder.override(preview.getPreviewWidth(), preview.getPreviewHeight()).into(((PostWithPreviewTypeViewHolder) holder).imageView);
-                    } else {
-                        imageRequestBuilder.into(((PostWithPreviewTypeViewHolder) holder).imageView);
-                    }
+                    imageRequestBuilder.diskCacheStrategy(DiskCacheStrategy.NONE).override(preview.getPreviewWidth(), preview.getPreviewHeight()).into(((PostWithPreviewTypeViewHolder) holder).imageView);
                 }
             }
         } else if (holder instanceof PostCompactBaseViewHolder) {
@@ -1740,6 +1739,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             } else {
                 holder.itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
             }
+            mGlide.clear(((PostBaseViewHolder) holder).iconGifImageView);
             ((PostBaseViewHolder) holder).titleTextView.setTextColor(mPostTitleColor);
             if (holder instanceof PostVideoAutoplayViewHolder) {
                 ((PostVideoAutoplayViewHolder) holder).mediaUri = null;
