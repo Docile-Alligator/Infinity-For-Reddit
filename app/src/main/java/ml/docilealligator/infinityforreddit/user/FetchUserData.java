@@ -26,7 +26,7 @@ public class FetchUserData {
         } else {
             userInfo = api.getUserDataOauth(APIUtils.getOAuthHeader(accessToken), userName);
         }
-        userInfo.enqueue(new Callback<String>() {
+        userInfo.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {

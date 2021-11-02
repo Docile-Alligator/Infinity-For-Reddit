@@ -14,13 +14,14 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
@@ -28,6 +29,15 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrInterface;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+
+import javax.inject.Inject;
+import javax.inject.Named;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
@@ -40,12 +50,7 @@ import ml.docilealligator.infinityforreddit.services.EditProfileService;
 import ml.docilealligator.infinityforreddit.user.UserViewModel;
 import ml.docilealligator.infinityforreddit.utils.EditProfileUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
 import retrofit2.Retrofit;
-
-import javax.inject.Inject;
-import javax.inject.Named;
 
 public class EditProfileActivity extends BaseActivity {
 
@@ -53,13 +58,13 @@ public class EditProfileActivity extends BaseActivity {
     private static final int PICK_IMAGE_AVATAR_REQUEST_CODE = 0x402;
 
     @BindView(R.id.root_layout_view_edit_profile_activity)
-    LinearLayout root;
+    CoordinatorLayout root;
     @BindView(R.id.content_view_edit_profile_activity)
     LinearLayout content;
-    @BindView(R.id.toolbar_view_edit_profile_activity)
-    Toolbar toolbar;
     @BindView(R.id.appbar_layout_view_edit_profile_activity)
     AppBarLayout appBarLayout;
+    @BindView(R.id.toolbar_view_edit_profile_activity)
+    Toolbar toolbar;
     @BindView(R.id.image_view_banner_edit_profile_activity)
     ImageView bannerImageView;
     @BindView(R.id.image_view_avatar_edit_profile_activity)
@@ -322,8 +327,8 @@ public class EditProfileActivity extends BaseActivity {
     }
 
     @Override
-    protected void applyCustomTheme() { //
-        applyAppBarLayoutAndToolbarTheme(appBarLayout, toolbar);
+    protected void applyCustomTheme() {
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
         root.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         changeColorTextView(content, mCustomThemeWrapper.getPrimaryTextColor());
     }

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root_layout_view_edit_profile_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     tools:context=".activities.EditProfileActivity">
 
     <com.google.android.material.appbar.AppBarLayout
@@ -22,11 +21,13 @@
             app:navigationIcon="?attr/homeAsUpIndicator"
             app:popupTheme="@style/AppTheme.PopupOverlay"
             app:title="@string/action_edit_profile" />
+
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
             android:id="@+id/content_view_edit_profile_activity"
@@ -62,6 +63,7 @@
                         android:contentDescription="@null"
                         android:padding="4dp"
                         app:srcCompat="@drawable/ic_outline_add_a_photo_day_night_24dp" />
+
                 </FrameLayout>
 
                 <FrameLayout
@@ -89,7 +91,9 @@
                         android:contentDescription="@null"
                         android:padding="4dp"
                         app:srcCompat="@drawable/ic_outline_add_a_photo_day_night_24dp" />
+
                 </FrameLayout>
+
             </FrameLayout>
 
             <View
@@ -131,6 +135,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/display_name_description" />
+
             </LinearLayout>
 
             <LinearLayout
@@ -163,7 +168,9 @@
                     android:paddingBottom="16dp" />
 
             </LinearLayout>
-        </LinearLayout>
-    </ScrollView>
 
-</LinearLayout>
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
