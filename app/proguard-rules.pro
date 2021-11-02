@@ -10,6 +10,7 @@
 -keep class * extends androidx.preference.PreferenceFragmentCompat
 
 -keep class ml.docilealligator.infinityforreddit.settings.FontPreviewFragment { *; }
+-keep class ml.docilealligator.infinityforreddit.settings.CrashReportsFragment { *; }
 
 ## EventBus Rules
 -keepattributes *Annotation*
