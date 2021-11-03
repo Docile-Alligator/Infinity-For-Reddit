@@ -107,12 +107,12 @@ public class MaterialYouUtils {
                 darkTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = darkTheme.bottomAppBarIconColor;
                 darkTheme.circularProgressBarBackground = context.getColor(android.R.color.system_accent1_900);
                 darkTheme.dividerColor = context.getColor(android.R.color.system_neutral1_600);
-                darkTheme.isLightStatusBar = false;
                 darkTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface = true;
                 darkTheme.name = "Material You Dark";
 
                 amoledTheme.colorAccent = context.getColor(android.R.color.system_accent1_100);
-                amoledTheme.colorPrimaryLightTheme = context.getColor(android.R.color.system_accent3_100);
+                amoledTheme.colorPrimaryLightTheme = context.getColor(android.R.color.system_accent1_300);
+                amoledTheme.fabIconColor = context.getColor(android.R.color.system_neutral1_900);
                 amoledTheme.name = "Material You Amoled";
 
                 redditDataRoomDatabase.customThemeDao().unsetLightTheme();
