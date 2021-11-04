@@ -48,6 +48,9 @@ public class MaterialYouUtils {
                                    SharedPreferences amoledThemeSharedPreferences,
                                    @Nullable MaterialYouListener materialYouListener) {
         executor.execute(() -> {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException ignored) { }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 CustomTheme lightTheme = CustomThemeWrapper.getIndigo(context);
                 CustomTheme darkTheme = CustomThemeWrapper.getIndigoDark(context);
