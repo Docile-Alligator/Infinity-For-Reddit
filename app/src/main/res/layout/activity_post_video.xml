@@ -36,9 +36,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="16dp"
                 android:paddingTop="8dp"
-                android:paddingEnd="16dp"
                 android:paddingBottom="8dp">
 
                 <pl.droidsonroids.gif.GifImageView
@@ -46,7 +44,8 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_alignParentStart="true"
-                    android:layout_centerVertical="true" />
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="16dp" />
 
                 <TextView
                     android:id="@+id/subreddit_name_text_view_post_video_activity"
@@ -54,7 +53,6 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="32dp"
-                    android:layout_marginEnd="16dp"
                     android:layout_toStartOf="@id/rules_button_post_video_activity"
                     android:layout_toEndOf="@id/subreddit_icon_gif_image_view_post_video_activity"
                     android:text="@string/choose_a_subreddit"
@@ -67,6 +65,8 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
                     android:text="@string/rules"
                     android:textSize="?attr/font_default"
                     android:fontFamily="?attr/font_family" />

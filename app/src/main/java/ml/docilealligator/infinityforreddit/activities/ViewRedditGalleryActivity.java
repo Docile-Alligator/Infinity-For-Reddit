@@ -5,6 +5,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -17,17 +18,20 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
-import app.futured.hauler.DragDirection;
-import app.futured.hauler.HaulerView;
-
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import app.futured.hauler.DragDirection;
+import app.futured.hauler.HaulerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
+import ml.docilealligator.infinityforreddit.WallpaperSetter;
 import ml.docilealligator.infinityforreddit.customviews.ViewPagerBugFixed;
 import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.font.ContentFontStyle;
@@ -37,12 +41,8 @@ import ml.docilealligator.infinityforreddit.font.TitleFontFamily;
 import ml.docilealligator.infinityforreddit.font.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryImageOrGifFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryVideoFragment;
-import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.post.Post;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.WallpaperSetter;
 
 public class ViewRedditGalleryActivity extends AppCompatActivity implements SetAsWallpaperCallback {
 
@@ -147,11 +147,11 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     private void setToolbarTitle(int position) {
         if (gallery != null && position >= 0 && position < gallery.size()) {
             if (gallery.get(position).mediaType == Post.Gallery.TYPE_IMAGE) {
-                setTitle(getString(R.string.view_reddit_gallery_activity_image_label, position + 1, gallery.size()));
+                setTitle(Html.fromHtml("<font color=\"#FFFFFF\">" + getString(R.string.view_reddit_gallery_activity_image_label, position + 1, gallery.size()) + "</font>"));
             } else if (gallery.get(position).mediaType == Post.Gallery.TYPE_GIF) {
-                setTitle(getString(R.string.view_reddit_gallery_activity_gif_label, position + 1, gallery.size()));
+                setTitle(Html.fromHtml("<font color=\"#FFFFFF\">" + getString(R.string.view_reddit_gallery_activity_gif_label, position + 1, gallery.size()) + "</font>"));
             } else {
-                setTitle(getString(R.string.view_reddit_gallery_activity_video_label, position + 1, gallery.size()));
+                setTitle(Html.fromHtml("<font color=\"#FFFFFF\">" + getString(R.string.view_reddit_gallery_activity_video_label, position + 1, gallery.size()) + "</font>"));
             }
         }
     }

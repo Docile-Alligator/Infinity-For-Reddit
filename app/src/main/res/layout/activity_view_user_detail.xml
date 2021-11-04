@@ -67,7 +67,8 @@
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="16dp"
                         android:layout_gravity="center_horizontal"
-                        android:visibility="gone"/>
+                        android:visibility="gone"
+                        app:chipStrokeColor="#00000000" />
 
                     <RelativeLayout
                         android:layout_width="match_parent"

@@ -54,7 +54,7 @@ public class MaterialYouUtils {
                 CustomTheme amoledTheme = CustomThemeWrapper.getIndigoAmoled(context);
 
                 lightTheme.colorPrimary = context.getColor(android.R.color.system_accent1_100);
-                lightTheme.colorPrimaryDark = context.getColor(android.R.color.system_accent1_200);
+                lightTheme.colorPrimaryDark = lightTheme.colorPrimary;
                 lightTheme.colorAccent = context.getColor(android.R.color.system_accent3_300);
                 lightTheme.colorPrimaryLightTheme = lightTheme.colorPrimary;
                 lightTheme.backgroundColor = context.getColor(android.R.color.system_neutral1_100);
@@ -65,17 +65,18 @@ public class MaterialYouUtils {
                 lightTheme.navBarColor = lightTheme.colorPrimary;
                 lightTheme.primaryTextColor = context.getColor(android.R.color.system_neutral1_900);
                 lightTheme.secondaryTextColor = context.getColor(android.R.color.system_neutral1_700);
-                lightTheme.bottomAppBarIconColor = context.getColor(android.R.color.system_accent1_800);
+                lightTheme.buttonTextColor = context.getColor(android.R.color.system_accent1_800);
+                lightTheme.bottomAppBarIconColor = lightTheme.buttonTextColor;
                 lightTheme.primaryIconColor = context.getColor(android.R.color.system_accent1_400);
-                lightTheme.fabIconColor = lightTheme.bottomAppBarIconColor;
-                lightTheme.toolbarPrimaryTextAndIconColor = lightTheme.bottomAppBarIconColor;
-                lightTheme.toolbarSecondaryTextColor = lightTheme.bottomAppBarIconColor;
-                lightTheme.tabLayoutWithCollapsedCollapsingToolbarTabIndicator = lightTheme.bottomAppBarIconColor;
-                lightTheme.tabLayoutWithCollapsedCollapsingToolbarTextColor = lightTheme.bottomAppBarIconColor;
+                lightTheme.fabIconColor = lightTheme.buttonTextColor;
+                lightTheme.toolbarPrimaryTextAndIconColor = lightTheme.buttonTextColor;
+                lightTheme.toolbarSecondaryTextColor = lightTheme.buttonTextColor;
+                lightTheme.tabLayoutWithCollapsedCollapsingToolbarTabIndicator = lightTheme.buttonTextColor;
+                lightTheme.tabLayoutWithCollapsedCollapsingToolbarTextColor = lightTheme.buttonTextColor;
                 lightTheme.tabLayoutWithCollapsedCollapsingToolbarTabBackground = lightTheme.colorPrimary;
                 lightTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground = lightTheme.backgroundColor;
-                lightTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator = lightTheme.bottomAppBarIconColor;
-                lightTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = lightTheme.bottomAppBarIconColor;
+                lightTheme.tabLayoutWithExpandedCollapsingToolbarTabIndicator = lightTheme.buttonTextColor;
+                lightTheme.tabLayoutWithExpandedCollapsingToolbarTextColor = lightTheme.buttonTextColor;
                 lightTheme.circularProgressBarBackground = context.getColor(android.R.color.system_accent1_10);
                 lightTheme.dividerColor = context.getColor(android.R.color.system_neutral1_400);
                 lightTheme.isLightStatusBar = true;
@@ -83,7 +84,7 @@ public class MaterialYouUtils {
                 lightTheme.name = "Material You";
 
                 darkTheme.colorPrimary = context.getColor(android.R.color.system_accent2_800);
-                darkTheme.colorPrimaryDark = context.getColor(android.R.color.system_accent2_900);
+                darkTheme.colorPrimaryDark = darkTheme.colorPrimary;
                 darkTheme.colorAccent = context.getColor(android.R.color.system_accent3_100);
                 darkTheme.colorPrimaryLightTheme = context.getColor(android.R.color.system_accent1_300);
                 darkTheme.backgroundColor = context.getColor(android.R.color.system_neutral1_900);

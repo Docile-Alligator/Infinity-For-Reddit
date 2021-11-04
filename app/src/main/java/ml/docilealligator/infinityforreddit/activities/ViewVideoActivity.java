@@ -324,9 +324,9 @@ public class ViewVideoActivity extends AppCompatActivity {
 
         if (postTitle != null) {
             if (useBottomAppBar) {
-                titleTextView.setText(Html.fromHtml(String.format("<small>%s</small>", postTitle)));
+                titleTextView.setText(Html.fromHtml(String.format("<font color=\"#FFFFFF\"><small>%s</small></font>", postTitle)));
             } else {
-                setTitle(Html.fromHtml(String.format("<small>%s</small>", postTitle)));
+                setTitle(Html.fromHtml(String.format("<font color=\"#FFFFFF\"><small>%s</small></font>", postTitle)));
             }
         } else {
             if (!useBottomAppBar) {

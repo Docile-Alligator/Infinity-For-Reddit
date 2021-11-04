@@ -163,7 +163,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
 
         boolean useBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.USE_BOTTOM_TOOLBAR_IN_MEDIA_VIEWER, false);
         if (postTitle != null) {
-            Spanned title = Html.fromHtml(String.format("<small>%s</small>", postTitle));
+            Spanned title = Html.fromHtml(String.format("<font color=\"#FFFFFF\"><small>%s</small></font>", postTitle));
             if (useBottomAppBar) {
                 titleTextView.setText(title);
             } else {

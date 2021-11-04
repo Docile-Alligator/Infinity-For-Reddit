@@ -65,7 +65,8 @@
                         android:id="@+id/subscribe_subreddit_chip_view_subreddit_detail_activity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"/>
+                        android:layout_gravity="center_horizontal"
+                        app:chipStrokeColor="#00000000"  />
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:layout_width="match_parent"
