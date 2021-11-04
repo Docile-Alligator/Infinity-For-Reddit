@@ -98,7 +98,7 @@
                         android:textSize="?attr/font_default"
                         android:fontFamily="?attr/font_family"
                         android:visibility="gone"
-                        app:lib_setRadius="3dp"
+                        app:lib_setRadius="6dp"
                         app:lib_setRoundedView="true"
                         app:lib_setShape="rectangle" />
 
@@ -111,7 +111,7 @@
                         android:text="@string/spoiler"
                         android:textSize="?attr/font_default"
                         android:fontFamily="?attr/font_family"
-                        app:lib_setRadius="3dp"
+                        app:lib_setRadius="6dp"
                         app:lib_setRoundedView="true"
                         app:lib_setShape="rectangle" />
 
@@ -124,7 +124,7 @@
                         android:text="@string/nsfw"
                         android:textSize="?attr/font_default"
                         android:fontFamily="?attr/font_family"
-                        app:lib_setRadius="3dp"
+                        app:lib_setRadius="6dp"
                         app:lib_setRoundedView="true"
                         app:lib_setShape="rectangle" />
 

@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -129,6 +130,7 @@ public class RPANActivity extends AppCompatActivity {
         Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setHomeAsUpIndicator(upArrow);
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
+        actionBar.setTitle(Html.fromHtml("<font color=\"#FFFFFF\">" + getString(R.string.rpan_activity_label) + "</font>"));
 
         if (rpanBroadcasts == null) {
             loadRPANVideos();

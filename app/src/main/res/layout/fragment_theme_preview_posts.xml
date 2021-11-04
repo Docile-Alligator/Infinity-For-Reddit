@@ -136,7 +136,7 @@
                     android:text="@string/post_type_preview"
                     android:textSize="?attr/font_12"
                     android:fontFamily="?attr/font_family"
-                    app:lib_setRadius="3dp"
+                    app:lib_setRadius="6dp"
                     app:lib_setRoundedView="true"
                     app:lib_setShape="rectangle" />
 
@@ -149,7 +149,7 @@
                     android:text="@string/spoiler"
                     android:textSize="?attr/font_12"
                     android:fontFamily="?attr/font_family"
-                    app:lib_setRadius="3dp"
+                    app:lib_setRadius="6dp"
                     app:lib_setRoundedView="true"
                     app:lib_setShape="rectangle" />
 
@@ -161,7 +161,7 @@
                     android:text="@string/nsfw"
                     android:textSize="?attr/font_12"
                     android:fontFamily="?attr/font_family"
-                    app:lib_setRadius="3dp"
+                    app:lib_setRadius="6dp"
                     app:lib_setRoundedView="true"
                     app:lib_setShape="rectangle" />
 
@@ -174,7 +174,7 @@
                     android:text="@string/flair_preview"
                     android:textSize="?attr/font_12"
                     android:fontFamily="?attr/font_family"
-                    app:lib_setRadius="3dp"
+                    app:lib_setRadius="6dp"
                     app:lib_setRoundedView="true"
                     app:lib_setShape="rectangle" />
 
@@ -186,7 +186,7 @@
                     android:text="@string/awards_preview"
                     android:textSize="?attr/font_12"
                     android:fontFamily="?attr/font_family"
-                    app:lib_setRadius="3dp"
+                    app:lib_setRadius="6dp"
                     app:lib_setRoundedView="true"
                     app:lib_setShape="rectangle" />
 
