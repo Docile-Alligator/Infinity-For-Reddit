@@ -1704,6 +1704,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     }
 
     public void markPostAsRead(Post post) {
+        if (readPosts == null) {
+            readPosts = new ArrayList<>();
+        }
         readPosts.add(post.getId());
     }
 
