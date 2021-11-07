@@ -1022,11 +1022,11 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_user_detail_activity, menu);
-        if(mAccountName.equals(username)){ // Hide some menus
+        if (username.equals(mAccountName)) {
             menu.findItem(R.id.action_send_private_message_view_user_detail_activity).setVisible(false);
             menu.findItem(R.id.action_report_view_user_detail_activity).setVisible(false);
             menu.findItem(R.id.action_block_user_view_user_detail_activity).setVisible(false);
-        }else { // Hide Edit Profile menu
+        } else {
             menu.findItem(R.id.action_edit_profile_view_user_detail_activity).setVisible(false);
         }
         applyMenuItemTheme(menu);

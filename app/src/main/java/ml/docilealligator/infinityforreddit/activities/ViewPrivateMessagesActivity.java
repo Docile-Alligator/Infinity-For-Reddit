@@ -137,14 +137,14 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     private void bindView() {
         if (privateMessage != null) {
             if (privateMessage.getAuthor().equals(mAccountName)) {
-                mToolbar.setTitle(privateMessage.getDestination());
+                setTitle(privateMessage.getDestination());
                 mToolbar.setOnClickListener(view -> {
                     Intent intent = new Intent(this, ViewUserDetailActivity.class);
                     intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, privateMessage.getDestination());
                     startActivity(intent);
                 });
             } else {
-                mToolbar.setTitle(privateMessage.getAuthor());
+                setTitle(privateMessage.getAuthor());
                 mToolbar.setOnClickListener(view -> {
                     Intent intent = new Intent(this, ViewUserDetailActivity.class);
                     intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, privateMessage.getAuthor());

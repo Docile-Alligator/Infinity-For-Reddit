@@ -1494,7 +1494,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                             .into(((PostWithPreviewTypeViewHolder) holder).imageView);
                 } else {
-                    imageRequestBuilder.override(preview.getPreviewWidth(), preview.getPreviewHeight()).into(((PostWithPreviewTypeViewHolder) holder).imageView);
+                    imageRequestBuilder.override(preview.getPreviewWidth(), preview.getPreviewHeight()).centerInside().into(((PostWithPreviewTypeViewHolder) holder).imageView);
                 }
             }
         } else if (holder instanceof PostCompactBaseViewHolder) {
