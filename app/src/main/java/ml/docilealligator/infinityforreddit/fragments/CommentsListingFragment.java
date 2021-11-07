@@ -307,9 +307,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
                 if (hasComment) {
                     mFetchCommentInfoLinearLayout.setVisibility(View.GONE);
                 } else {
-                    mFetchCommentInfoLinearLayout.setOnClickListener(view -> {
-                        //Do nothing
-                    });
+                    mFetchCommentInfoLinearLayout.setOnClickListener(null);
                     showErrorView(R.string.no_comments);
                 }
             });
