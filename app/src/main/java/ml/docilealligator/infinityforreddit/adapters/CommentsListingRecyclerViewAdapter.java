@@ -57,6 +57,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSh
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.CommentIndentationView;
+import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -163,6 +164,9 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
                                 @Override
                                 public void onClick(@NonNull View view) {
+                                    if (textView instanceof SpoilerOnClickTextView) {
+                                        ((SpoilerOnClickTextView) textView).setSpoilerOnClick(true);
+                                    }
                                     isShowing = !isShowing;
                                     view.invalidate();
                                 }
@@ -401,7 +405,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         @BindView(R.id.awards_text_view_item_comment)
         TextView awardsTextView;
         @BindView(R.id.comment_markdown_view_item_post_comment)
-        TextView commentMarkdownView;
+        SpoilerOnClickTextView commentMarkdownView;
         @BindView(R.id.bottom_constraint_layout_item_post_comment)
         ConstraintLayout bottomConstraintLayout;
         @BindView(R.id.up_vote_button_item_post_comment)
@@ -525,12 +529,14 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             });
 
             commentMarkdownView.setOnClickListener(view -> {
-                if (commentMarkdownView.getSelectionStart() == -1 && commentMarkdownView.getSelectionEnd() == -1) {
-                    itemView.callOnClick();
+                if (commentMarkdownView.isSpoilerOnClick()) {
+                    commentMarkdownView.setSpoilerOnClick(false);
+                    return;
                 }
+                itemView.callOnClick();
             });
 
-            commentMarkdownView.setMovementMethod(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, commentMarkdownView).setOnLinkLongClickListener((textView, url) -> {
+            commentMarkdownView.setMovementMethod(BetterLinkMovementMethod.newInstance().setOnLinkLongClickListener((textView, url) -> {
                 if (mActivity != null && !mActivity.isDestroyed() && !mActivity.isFinishing()) {
                     UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
                     Bundle bundle = new Bundle();

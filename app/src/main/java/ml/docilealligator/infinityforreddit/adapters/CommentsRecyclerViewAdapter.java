@@ -64,6 +64,7 @@ import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.comment.FetchComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.CommentIndentationView;
+import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -195,16 +196,18 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                                 public void updateDrawState(@NonNull TextPaint ds) {
                                     if (isShowing) {
                                         super.updateDrawState(ds);
-                                        ds.setColor(mCommentTextColor);
                                     } else {
                                         ds.bgColor = commentSpoilerBackgroundColor;
-                                        ds.setColor(mCommentTextColor);
                                     }
+                                    ds.setColor(mCommentTextColor);
                                     ds.setUnderlineText(false);
                                 }
 
                                 @Override
                                 public void onClick(@NonNull View view) {
+                                    if (textView instanceof SpoilerOnClickTextView) {
+                                        ((SpoilerOnClickTextView) textView).setSpoilerOnClick(true);
+                                    }
                                     isShowing = !isShowing;
                                     view.invalidate();
                                 }
@@ -234,7 +237,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     }
                 })
                 .usePlugin(StrikethroughPlugin.create())
-                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, activity).setOnLinkLongClickListener((textView, url) -> {
+                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.newInstance().setOnLinkLongClickListener((textView, url) -> {
                     if (!activity.isDestroyed() && !activity.isFinishing()) {
                         UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
                         Bundle bundle = new Bundle();
@@ -1100,7 +1103,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         @BindView(R.id.awards_text_view_item_comment)
         TextView awardsTextView;
         @BindView(R.id.comment_markdown_view_item_post_comment)
-        TextView commentMarkdownView;
+        SpoilerOnClickTextView commentMarkdownView;
         @BindView(R.id.bottom_constraint_layout_item_post_comment)
         ConstraintLayout bottomConstraintLayout;
         @BindView(R.id.up_vote_button_item_post_comment)
@@ -1477,6 +1480,16 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 }
             });
 
+            /*commentMarkdownView.setMovementMethod(BetterLinkMovementMethod.newInstance().setOnLinkLongClickListener((textView, url) -> {
+                if (!mActivity.isDestroyed() && !mActivity.isFinishing()) {
+                    UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
+                    urlMenuBottomSheetFragment.setArguments(bundle);
+                    urlMenuBottomSheetFragment.show(mActivity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
+                }
+                return true;
+            }));*/
             if (mSwapTapAndLong) {
                 if (mCommentToolbarHideOnClick) {
                     View.OnLongClickListener hideToolbarOnLongClickListener = view -> hideToolbar();
@@ -1485,17 +1498,21 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     commentTimeTextView.setOnLongClickListener(hideToolbarOnLongClickListener);
                 }
                 commentMarkdownView.setOnClickListener(view -> {
-                    if (commentMarkdownView.getSelectionStart() == -1 && commentMarkdownView.getSelectionEnd() == -1) {
-                        expandComments();
+                    if (commentMarkdownView.isSpoilerOnClick()) {
+                        commentMarkdownView.setSpoilerOnClick(false);
+                        return;
                     }
+                    expandComments();
                 });
                 itemView.setOnClickListener(view -> expandComments());
             } else {
                 if (mCommentToolbarHideOnClick) {
                     commentMarkdownView.setOnClickListener(view -> {
-                        if (commentMarkdownView.getSelectionStart() == -1 && commentMarkdownView.getSelectionEnd() == -1) {
-                            hideToolbar();
+                        if (commentMarkdownView.isSpoilerOnClick()) {
+                            commentMarkdownView.setSpoilerOnClick(false);
+                            return;
                         }
+                        hideToolbar();
                     });
                     View.OnClickListener hideToolbarOnClickListener = view -> hideToolbar();
                     itemView.setOnClickListener(hideToolbarOnClickListener);

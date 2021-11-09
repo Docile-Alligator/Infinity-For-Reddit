@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.util.Linkify;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -68,7 +69,14 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.noties.markwon.AbstractMarkwonPlugin;
+import io.noties.markwon.Markwon;
+import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.core.MarkwonTheme;
+import io.noties.markwon.linkify.LinkifyPlugin;
+import io.noties.markwon.movement.MovementMethodPlugin;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.DeleteThing;
@@ -84,11 +92,13 @@ import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.AddSubredditOrUserToMultiReddit;
 import ml.docilealligator.infinityforreddit.asynctasks.CheckIsFollowingUser;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.RandomBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTimeBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UserThingSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
@@ -217,6 +227,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     private String mAccessToken;
     private String mAccountName;
     private String username;
+    private String description;
     private boolean subscriptionReady = false;
     private boolean mFetchUserInfoSuccess = false;
     private int expandedTabTextColor;
@@ -363,6 +374,44 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
         glide = Glide.with(this);
         Locale locale = getResources().getConfiguration().locale;
+
+        Markwon markwon = Markwon.builder(this)
+                .usePlugin(new AbstractMarkwonPlugin() {
+                    @Override
+                    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                        builder.linkResolver((view, link) -> {
+                            Intent intent = new Intent(ViewUserDetailActivity.this, LinkResolverActivity.class);
+                            Uri uri = Uri.parse(link);
+                            intent.setData(uri);
+                            startActivity(intent);
+                        });
+                    }
+
+                    @Override
+                    public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                        builder.linkColor(mCustomThemeWrapper.getLinkColor());
+                    }
+                })
+                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, descriptionTextView).setOnLinkLongClickListener((textView, url) -> {
+                    UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
+                    urlMenuBottomSheetFragment.setArguments(bundle);
+                    urlMenuBottomSheetFragment.show(getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
+                    return true;
+                })))
+                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS)).build();
+
+        descriptionTextView.setOnLongClickListener(view -> {
+            if (description != null && !description.equals("") && descriptionTextView.getSelectionStart() == -1 && descriptionTextView.getSelectionEnd() == -1) {
+                Bundle bundle = new Bundle();
+                bundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, description);
+                CopyTextBottomSheetFragment copyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
+                copyTextBottomSheetFragment.setArguments(bundle);
+                copyTextBottomSheetFragment.show(getSupportFragmentManager(), copyTextBottomSheetFragment.getTag());
+            }
+            return true;
+        });
 
         userViewModel = new ViewModelProvider(this, new UserViewModel.Factory(getApplication(), mRedditDataRoomDatabase, username))
                 .get(UserViewModel.class);
@@ -516,7 +565,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                     descriptionTextView.setVisibility(View.GONE);
                 } else {
                     descriptionTextView.setVisibility(View.VISIBLE);
-                    descriptionTextView.setText(userData.getDescription());
+                    description = userData.getDescription();
+                    markwon.setMarkdown(descriptionTextView, description);
                 }
 
                 /*if (userData.isNSFW()) {

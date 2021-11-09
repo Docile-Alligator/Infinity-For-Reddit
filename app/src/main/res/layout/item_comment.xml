@@ -99,7 +99,7 @@
             android:fontFamily="?attr/font_family"
             tools:visibility="visible" />
 
-        <TextView
+        <ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView
             android:id="@+id/comment_markdown_view_item_post_comment"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
