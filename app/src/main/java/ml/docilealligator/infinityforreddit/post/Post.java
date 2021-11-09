@@ -582,8 +582,10 @@ public class Post implements Parcelable {
         public String url;
         public String fileName;
         public int mediaType;
+        public String caption;
+        public String captionUrl;
 
-        public Gallery(String mimeType, String url, String fileName) {
+        public Gallery(String mimeType, String url, String fileName, String caption, String captionUrl) {
             this.mimeType = mimeType;
             this.url = url;
             this.fileName = fileName;
@@ -594,6 +596,8 @@ public class Post implements Parcelable {
             } else {
                 mediaType = TYPE_VIDEO;
             }
+            this.caption = caption;
+            this.captionUrl = captionUrl;
         }
 
         protected Gallery(Parcel in) {
@@ -601,6 +605,8 @@ public class Post implements Parcelable {
             url = in.readString();
             fileName = in.readString();
             mediaType = in.readInt();
+            caption = in.readString();
+            captionUrl = in.readString();
         }
 
         public static final Creator<Gallery> CREATOR = new Creator<Gallery>() {
@@ -626,6 +632,8 @@ public class Post implements Parcelable {
             parcel.writeString(url);
             parcel.writeString(fileName);
             parcel.writeInt(mediaType);
+            parcel.writeString(caption);
+            parcel.writeString(captionUrl);
         }
     }
 
@@ -633,17 +641,23 @@ public class Post implements Parcelable {
         private String previewUrl;
         private int previewWidth;
         private int previewHeight;
+        private String previewCaption;
+        private String previewCaptionUrl;
 
-        public Preview(String previewUrl, int previewWidth, int previewHeight) {
+        public Preview(String previewUrl, int previewWidth, int previewHeight, String previewCaption, String previewCaptionUrl) {
             this.previewUrl = previewUrl;
             this.previewWidth = previewWidth;
             this.previewHeight = previewHeight;
+            this.previewCaption = previewCaption;
+            this.previewCaptionUrl = previewCaptionUrl;
         }
 
         protected Preview(Parcel in) {
             previewUrl = in.readString();
             previewWidth = in.readInt();
             previewHeight = in.readInt();
+            previewCaption = in.readString();
+            previewCaptionUrl = in.readString();
         }
 
         public static final Creator<Preview> CREATOR = new Creator<Preview>() {
@@ -682,6 +696,18 @@ public class Post implements Parcelable {
             this.previewHeight = previewHeight;
         }
 
+        public String getPreviewCaption() {
+            return previewCaption;
+        }
+
+        public void setPreviewCaption(String previewCaption) { this.previewCaption = previewCaption; }
+
+        public String getPreviewCaptionUrl() {
+            return previewCaptionUrl;
+        }
+
+        public void setPreviewCaptionUrl(String previewCaptionUrl) { this.previewCaptionUrl = previewCaptionUrl; }
+
         @Override
         public int describeContents() {
             return 0;
@@ -692,6 +718,8 @@ public class Post implements Parcelable {
             parcel.writeString(previewUrl);
             parcel.writeInt(previewWidth);
             parcel.writeInt(previewHeight);
+            parcel.writeString(previewCaption);
+            parcel.writeString(previewCaptionUrl);
         }
     }
 }

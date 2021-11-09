@@ -50,47 +50,90 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/title_text_view_view_reddit_gallery_image_or_gif_fragment"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/caption_layout_view_reddit_gallery_image_or_gif_fragment"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:textColor="#FFFFFF"
-                android:textSize="?attr/font_20"
-                android:fontFamily="?attr/font_family"
-                android:maxLines="1"
-                android:ellipsize="end" />
+                android:orientation="vertical"
+                android:visibility="gone">
 
-            <ImageView
-                android:id="@+id/download_image_view_view_reddit_gallery_image_or_gif_fragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:src="@drawable/ic_file_download_toolbar_white_24dp"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                <TextView
+                    android:id="@+id/caption_text_view_view_reddit_gallery_image_or_gif_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:fontFamily="?attr/content_font_family"
+                    android:gravity="center_vertical"
+                    android:textColor="#FFFFFF"
+                    android:textSize="?attr/content_font_default"
+                    android:visibility="gone" />
 
-            <ImageView
-                android:id="@+id/share_image_view_view_reddit_gallery_image_or_gif_fragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:src="@drawable/ic_share_toolbar_white_24dp"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                <TextView
+                    android:id="@+id/caption_url_text_view_view_reddit_gallery_image_or_gif_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:autoLink="web"
+                    android:ellipsize="end"
+                    android:fontFamily="?attr/content_font_family"
+                    android:gravity="center_vertical"
+                    android:nestedScrollingEnabled="false"
+                    android:textColor="#FFFFFF"
+                    android:textColorLink="#FFFFFF"
+                    android:textSize="?attr/content_font_default"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </LinearLayout>
 
-            <ImageView
-                android:id="@+id/wallpaper_image_view_view_reddit_gallery_image_or_gif_fragment"
+            <LinearLayout
+                android:id="@+id/bottom_app_bar_menu_view_reddit_gallery_image_or_gif_fragment"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:padding="16dp"
-                android:src="@drawable/ic_wallpaper_white_24dp"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/title_text_view_view_reddit_gallery_image_or_gif_fragment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center_vertical"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="#FFFFFF"
+                    android:textSize="?attr/font_20"
+                    android:fontFamily="?attr/font_family"
+                    android:maxLines="1"
+                    android:ellipsize="end" />
+
+                <ImageView
+                    android:id="@+id/download_image_view_view_reddit_gallery_image_or_gif_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_file_download_toolbar_white_24dp"
+                    android:background="?attr/selectableItemBackgroundBorderless" />
+
+                <ImageView
+                    android:id="@+id/share_image_view_view_reddit_gallery_image_or_gif_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_share_toolbar_white_24dp"
+                    android:background="?attr/selectableItemBackgroundBorderless" />
+
+                <ImageView
+                    android:id="@+id/wallpaper_image_view_view_reddit_gallery_image_or_gif_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_wallpaper_white_24dp"
+                    android:background="?attr/selectableItemBackgroundBorderless" />
+            </LinearLayout>
 
         </LinearLayout>
 

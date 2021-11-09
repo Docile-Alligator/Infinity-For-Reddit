@@ -268,6 +268,60 @@
         android:visibility="gone" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/caption_constraint_layout_item_post_detail_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorBackgroundFloating"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/caption_text_view_item_post_detail_gallery"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:fontFamily="?attr/content_font_family"
+            android:gravity="start"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:singleLine="true"
+            android:scrollHorizontally="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/content_font_default"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/guideline4"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/caption_url_text_view_item_post_detail_gallery"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="?attr/content_font_family"
+            android:gravity="end"
+            android:maxLines="1"
+            android:paddingEnd="8dp"
+            android:scrollHorizontally="false"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/content_font_default"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/guideline4"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.50" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/bottom_constraint_layout_item_post_detail_gallery">

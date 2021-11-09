@@ -810,6 +810,24 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     ((PostDetailGalleryViewHolder) holder).mImageView
                             .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
 
+                    String previewCaption = preview.getPreviewCaption();
+                    String previewCaptionUrl = preview.getPreviewCaptionUrl();
+                    boolean previewCaptionIsEmpty = android.text.TextUtils.isEmpty(previewCaption);
+                    boolean previewCaptionUrlIsEmpty = android.text.TextUtils.isEmpty(previewCaptionUrl);
+                    if(!previewCaptionIsEmpty || !previewCaptionUrlIsEmpty){
+                        ((PostDetailGalleryViewHolder) holder).mCaptionConstraintLayout.setVisibility(View.VISIBLE);
+                    }
+                    if(!previewCaptionIsEmpty) {
+                        ((PostDetailGalleryViewHolder) holder).mCaption.setText(previewCaption);
+                        ((PostDetailGalleryViewHolder) holder).mCaption.setSelected(true);
+                    }
+                    if(!previewCaptionUrlIsEmpty)
+                    {
+                        String domain = Uri.parse(previewCaptionUrl).getHost();
+                        domain = domain.startsWith("www.") ? domain.substring(4) : domain;
+                        mPostDetailMarkwon.setMarkdown(((PostDetailGalleryViewHolder) holder).mCaptionUrl, String.format("[%s](%s)", domain, previewCaptionUrl));
+                    }
+
                     loadImage((PostDetailGalleryViewHolder) holder, preview);
                 } else {
                     ((PostDetailGalleryViewHolder) holder).mNoPreviewPostTypeImageView.setVisibility(View.VISIBLE);
@@ -2296,6 +2314,12 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         ImageView videoOrGifIndicatorImageView;
         @BindView(R.id.image_view_item_post_detail_gallery)
         AspectRatioGifImageView mImageView;
+        @BindView(R.id.caption_constraint_layout_item_post_detail_gallery)
+        ConstraintLayout mCaptionConstraintLayout;
+        @BindView(R.id.caption_text_view_item_post_detail_gallery)
+        TextView mCaption;
+        @BindView(R.id.caption_url_text_view_item_post_detail_gallery)
+        TextView mCaptionUrl;
         @BindView(R.id.image_view_no_preview_link_item_post_detail_gallery)
         ImageView mNoPreviewPostTypeImageView;
         @BindView(R.id.bottom_constraint_layout_item_post_detail_gallery)

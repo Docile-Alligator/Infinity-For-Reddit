@@ -60,6 +60,7 @@ import ml.docilealligator.infinityforreddit.activities.ViewRedditGalleryActivity
 import ml.docilealligator.infinityforreddit.asynctasks.SaveBitmapImageToFile;
 import ml.docilealligator.infinityforreddit.asynctasks.SaveGIFToFile;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SetAsWallpaperBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 
@@ -79,6 +80,14 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     LinearLayout errorLinearLayout;
     @BindView(R.id.bottom_navigation_view_reddit_gallery_image_or_gif_fragment)
     BottomAppBar bottomAppBar;
+    @BindView(R.id.caption_layout_view_reddit_gallery_image_or_gif_fragment)
+    LinearLayout captionLayout;
+    @BindView(R.id.caption_text_view_view_reddit_gallery_image_or_gif_fragment)
+    TextView captionTextView;
+    @BindView(R.id.caption_url_text_view_view_reddit_gallery_image_or_gif_fragment)
+    TextView captionUrlTextView;
+    @BindView(R.id.bottom_app_bar_menu_view_reddit_gallery_image_or_gif_fragment)
+    LinearLayout bottomAppBarMenu;
     @BindView(R.id.title_text_view_view_reddit_gallery_image_or_gif_fragment)
     TextView titleTextView;
     @BindView(R.id.download_image_view_view_reddit_gallery_image_or_gif_fragment)
@@ -96,6 +105,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     private String subredditName;
     private boolean isDownloading = false;
     private boolean isActionBarHidden = false;
+    private boolean isUseBottomCaption = false;
 
     public ViewRedditGalleryImageOrGifFragment() {
         // Required empty public constructor
@@ -182,7 +192,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                                 | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                                 | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
                 isActionBarHidden = false;
-                if (activity.isUseBottomAppBar()) {
+                if (activity.isUseBottomAppBar() || isUseBottomCaption) {
                     bottomAppBar.setVisibility(View.VISIBLE);
                 }
             } else {
@@ -194,7 +204,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                                 | View.SYSTEM_UI_FLAG_IMMERSIVE);
                 isActionBarHidden = true;
-                if (activity.isUseBottomAppBar()) {
+                if (activity.isUseBottomAppBar() || isUseBottomCaption) {
                     bottomAppBar.setVisibility(View.GONE);
                 }
             }
@@ -232,6 +242,44 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
             wallpaperImageView.setOnClickListener(view -> {
                 setWallpaper();
             });
+        }
+
+        String caption = media.caption;
+        String captionUrl = media.captionUrl;
+        boolean captionIsEmpty = android.text.TextUtils.isEmpty(caption);
+        boolean captionUrlIsEmpty = android.text.TextUtils.isEmpty(captionUrl);
+        if(!captionIsEmpty || !captionUrlIsEmpty){
+            isUseBottomCaption = true;
+
+            if (!activity.isUseBottomAppBar()) {
+                bottomAppBar.setVisibility(View.VISIBLE);
+                bottomAppBarMenu.setVisibility(View.GONE);
+                //Add bottom margin so that caption doesn't disappear to the bottom in some screens with rounded corners
+                //I couldn't get binding expressions to work so I did it here
+                LinearLayout.LayoutParams  layoutParams = (LinearLayout.LayoutParams)captionLayout.getLayoutParams();
+                layoutParams.setMargins(0, 0, 0, (int) (16 * getResources().getDisplayMetrics().density));
+            }
+
+            captionLayout.setVisibility(View.VISIBLE);
+
+            if(!captionIsEmpty) {
+                captionTextView.setVisibility(View.VISIBLE);
+                captionTextView.setText(caption);
+            }
+            if(!captionUrlIsEmpty)
+            {
+                captionUrlTextView.setOnLongClickListener(view -> {
+                    UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, captionUrl);
+                    urlMenuBottomSheetFragment.setArguments(bundle);
+                    urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
+                    return true;
+                });
+
+                captionUrlTextView.setVisibility(View.VISIBLE);
+                captionUrlTextView.setText(captionUrl);
+            }
         }
 
         return rootView;
