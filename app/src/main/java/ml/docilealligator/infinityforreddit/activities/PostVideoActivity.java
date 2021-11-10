@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,6 +38,7 @@ import com.google.android.exoplayer2.util.Util;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.divider.MaterialDivider;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -98,27 +101,23 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     @BindView(R.id.rules_button_post_video_activity)
     MaterialButton rulesButton;
     @BindView(R.id.divider_1_post_video_activity)
-    View divider1;
+    MaterialDivider divider1;
     @BindView(R.id.flair_custom_text_view_post_video_activity)
     CustomTextView flairTextView;
     @BindView(R.id.spoiler_custom_text_view_post_video_activity)
     CustomTextView spoilerTextView;
     @BindView(R.id.nsfw_custom_text_view_post_video_activity)
     CustomTextView nsfwTextView;
-    @BindView(R.id.divider_2_post_video_activity)
-    View divider2;
     @BindView(R.id.receive_post_reply_notifications_linear_layout_post_video_activity)
     LinearLayout receivePostReplyNotificationsLinearLayout;
     @BindView(R.id.receive_post_reply_notifications_text_view_post_video_activity)
     TextView receivePostReplyNotificationsTextView;
     @BindView(R.id.receive_post_reply_notifications_switch_material_post_video_activity)
     SwitchMaterial receivePostReplyNotificationsSwitchMaterial;
-    @BindView(R.id.divider_3_post_video_activity)
-    View divider3;
+    @BindView(R.id.divider_2_post_video_activity)
+    MaterialDivider divider2;
     @BindView(R.id.post_title_edit_text_post_video_activity)
     EditText titleEditText;
-    @BindView(R.id.divider_4_post_video_activity)
-    View divider4;
     @BindView(R.id.select_video_constraint_layout_post_video_activity)
     ConstraintLayout constraintLayout;
     @BindView(R.id.capture_fab_post_video_activity)
@@ -364,8 +363,10 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
 
         captureFab.setOnClickListener(view -> {
             Intent takeVideoIntent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-            if (takeVideoIntent.resolveActivity(getPackageManager()) != null) {
+            try {
                 startActivityForResult(takeVideoIntent, CAPTURE_VIDEO_REQUEST_CODE);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(this, R.string.no_camera_available, Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -407,10 +408,8 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
         primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         receivePostReplyNotificationsTextView.setTextColor(primaryTextColor);
         int dividerColor = mCustomThemeWrapper.getDividerColor();
-        divider1.setBackgroundColor(dividerColor);
-        divider2.setBackgroundColor(dividerColor);
-        divider3.setBackgroundColor(dividerColor);
-        divider4.setBackgroundColor(dividerColor);
+        divider1.setDividerColor(dividerColor);
+        divider2.setDividerColor(dividerColor);
         flairBackgroundColor = mCustomThemeWrapper.getFlairBackgroundColor();
         flairTextColor = mCustomThemeWrapper.getFlairTextColor();
         spoilerBackgroundColor = mCustomThemeWrapper.getSpoilerBackgroundColor();

@@ -394,8 +394,9 @@
             android:theme="@style/AppTheme.SlidableWithTranslucentWindow" />
 
         <activity android:name=".activities.EditProfileActivity"
+            android:label="@string/edit_profile_activity_label"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.SlidableWithTranslucentWindow"
+            android:theme="@style/AppTheme.Slidable"
             android:windowSoftInputMode="adjustPan" />
 
         <provider

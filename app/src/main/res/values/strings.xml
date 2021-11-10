@@ -43,6 +43,7 @@
     <string name="post_gallery_activity_label">Gallery Post</string>
     <string name="trending_activity_label">Trending</string>
     <string name="wiki_activity_label">Wiki</string>
+    <string name="edit_profile_activity_label">Edit Profile</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -1226,9 +1227,9 @@
     <string name="remove_banner">Remove Banner</string>
     <string name="display_name_text">Display Name</string>
     <string name="display_name_hint">Show on your profile page</string>
-    <string name="display_name_description">This will be displayed to viewer of your profile page and does not change your username</string>
+    <string name="display_name_description">This will be displayed to viewers of your profile page and does not change your username.</string>
     <string name="about_you_text">About You</string>
-    <string name="about_you_hint">A little description of your self</string>
+    <string name="about_you_hint">A little description of yourself</string>
     <string name="message_remove_avatar_success">Success remove Avatar</string>
     <string name="message_remove_avatar_failed_fmt">Failed remove Avatar %s</string>
     <string name="message_remove_banner_success">Success remove Banner</string>

@@ -79,10 +79,10 @@
 
                 </RelativeLayout>
 
-                <View
+                <com.google.android.material.divider.MaterialDivider
                     android:id="@+id/divider_1_post_text_activity"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="wrap_content" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -130,17 +130,10 @@
 
                 </LinearLayout>
 
-                <View
-                    android:id="@+id/divider_2_post_text_activity"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp" />
-
                 <LinearLayout
                     android:id="@+id/receive_post_reply_notifications_linear_layout_post_text_activity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="8dp"
-                    android:paddingBottom="8dp"
                     android:paddingStart="16dp"
                     android:paddingEnd="16dp"
                     android:clickable="true"
@@ -167,10 +160,10 @@
 
                 </LinearLayout>
 
-                <View
-                    android:id="@+id/divider_3_post_text_activity"
+                <com.google.android.material.divider.MaterialDivider
+                    android:id="@+id/divider_2_post_text_activity"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp" />
+                    android:layout_height="wrap_content" />
 
                 <EditText
                     android:id="@+id/post_title_edit_text_post_text_activity"
@@ -183,11 +176,6 @@
                     android:padding="16dp"
                     android:textSize="?attr/title_font_18"
                     android:fontFamily="?attr/title_font_family" />
-
-                <View
-                    android:id="@+id/divider_4_post_text_activity"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp" />
 
                 <EditText
                     android:id="@+id/post_text_content_edit_text_post_text_activity"
