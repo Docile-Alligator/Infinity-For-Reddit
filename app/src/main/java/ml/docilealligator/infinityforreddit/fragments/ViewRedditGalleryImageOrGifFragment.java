@@ -4,12 +4,14 @@ import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -52,6 +54,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
@@ -268,17 +271,18 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
             }
             if(!captionUrlIsEmpty)
             {
-                captionUrlTextView.setOnLongClickListener(view -> {
-                    UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, captionUrl);
-                    urlMenuBottomSheetFragment.setArguments(bundle);
-                    urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
-                    return true;
-                });
-
-                captionUrlTextView.setVisibility(View.VISIBLE);
                 captionUrlTextView.setText(captionUrl);
+                if (!activity.isDestroyed() && !activity.isFinishing()) {
+                    BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, captionUrlTextView).setOnLinkLongClickListener((textView, url) -> {
+                        UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
+                        urlMenuBottomSheetFragment.setArguments(bundle);
+                        urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
+                        return true;
+                    });
+                }
+                captionUrlTextView.setVisibility(View.VISIBLE);
             }
         }
 

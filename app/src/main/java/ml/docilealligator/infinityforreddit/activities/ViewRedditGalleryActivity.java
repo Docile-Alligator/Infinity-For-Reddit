@@ -48,6 +48,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
 
     public static final String EXTRA_REDDIT_GALLERY = "ERG";
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
+    public static final String EXTRA_APPLIED_THEME = "EAS";
 
     @BindView(R.id.hauler_view_view_reddit_gallery_activity)
     HaulerView haulerView;
@@ -69,7 +70,8 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
-        getTheme().applyStyle(R.style.Theme_Normal, true);
+        int theme = getIntent().getIntExtra(EXTRA_APPLIED_THEME, R.style.Theme_Normal);
+        getTheme().applyStyle(theme <= 0 ? R.style.Theme_Normal : theme, true);
 
         getTheme().applyStyle(FontStyle.valueOf(sharedPreferences
                 .getString(SharedPreferencesUtils.FONT_SIZE_KEY, FontStyle.Normal.name())).getResId(), true);

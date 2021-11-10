@@ -87,6 +87,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.VoteThing;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
@@ -2268,6 +2269,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
                         intent.putParcelableArrayListExtra(ViewRedditGalleryActivity.EXTRA_REDDIT_GALLERY, mPost.getGallery());
                         intent.putExtra(ViewRedditGalleryActivity.EXTRA_SUBREDDIT_NAME, mPost.getSubredditName());
+                        intent.putExtra(ViewRedditGalleryActivity.EXTRA_APPLIED_THEME, ((BaseActivity)mActivity).getAppliedTheme());
                         mActivity.startActivity(intent);
                     }
                 }
@@ -2378,6 +2380,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
                 intent.putParcelableArrayListExtra(ViewRedditGalleryActivity.EXTRA_REDDIT_GALLERY, mPost.getGallery());
                 intent.putExtra(ViewRedditGalleryActivity.EXTRA_SUBREDDIT_NAME, mPost.getSubredditName());
+                intent.putExtra(ViewRedditGalleryActivity.EXTRA_APPLIED_THEME, ((BaseActivity)mActivity).getAppliedTheme());
                 mActivity.startActivity(intent);
             });
 
