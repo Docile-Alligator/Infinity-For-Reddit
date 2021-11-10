@@ -166,10 +166,14 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     @Override
                     public String processMarkdown(@NonNull String markdown) {
                         StringBuilder markdownStringBuilder = new StringBuilder(markdown);
-                        Pattern spoilerPattern = Pattern.compile(">![\\S\\s]*?!<");
+                        Pattern spoilerPattern = Pattern.compile(">![\\S\\s]+?!<");
                         Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
+                        ArrayList<Integer> matched = new ArrayList<>();
                         while (matcher.find()) {
-                            markdownStringBuilder.replace(matcher.start(), matcher.start() + 1, "&gt;");
+                            matched.add(matcher.start());
+                        }
+                        for (int i = matched.size() - 1; i >= 0; i--) {
+                            markdownStringBuilder.replace(matched.get(i), matched.get(i) + 1, "&gt;");
                         }
                         return super.processMarkdown(markdownStringBuilder.toString());
                     }
@@ -177,7 +181,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     @Override
                     public void afterSetText(@NonNull TextView textView) {
                         SpannableStringBuilder markdownStringBuilder = new SpannableStringBuilder(textView.getText().toString());
-                        Pattern spoilerPattern = Pattern.compile(">![\\S\\s]*?!<");
+                        Pattern spoilerPattern = Pattern.compile(">![\\S\\s]+?!<");
                         Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
                         int start = 0;
                         boolean find = false;

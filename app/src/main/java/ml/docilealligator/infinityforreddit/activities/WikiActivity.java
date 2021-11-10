@@ -37,6 +37,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -161,10 +162,14 @@ public class WikiActivity extends BaseActivity {
                     @Override
                     public String processMarkdown(@NonNull String markdown) {
                         StringBuilder markdownStringBuilder = new StringBuilder(markdown);
-                        Pattern spoilerPattern = Pattern.compile(">![\\S\\s]*?!<");
+                        Pattern spoilerPattern = Pattern.compile(">![\\S\\s]+?!<");
                         Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
+                        ArrayList<Integer> matched = new ArrayList<>();
                         while (matcher.find()) {
-                            markdownStringBuilder.replace(matcher.start(), matcher.start() + 1, "&gt;");
+                            matched.add(matcher.start());
+                        }
+                        for (int i = matched.size() - 1; i >= 0; i--) {
+                            markdownStringBuilder.replace(matched.get(i), matched.get(i) + 1, "&gt;");
                         }
                         return super.processMarkdown(markdownStringBuilder.toString());
                     }
@@ -173,7 +178,7 @@ public class WikiActivity extends BaseActivity {
                     public void afterSetText(@NonNull TextView textView) {
                         textView.setHighlightColor(Color.TRANSPARENT);
                         SpannableStringBuilder markdownStringBuilder = new SpannableStringBuilder(textView.getText().toString());
-                        Pattern spoilerPattern = Pattern.compile(">![\\S\\s]*?!<");
+                        Pattern spoilerPattern = Pattern.compile(">![\\S\\s]+?!<");
                         Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
                         int start = 0;
                         boolean find = false;
