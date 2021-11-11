@@ -143,22 +143,26 @@ public class EditProfileActivity extends BaseActivity {
                 new ViewModelProvider(this, userViewModelFactory).get(UserViewModel.class);
 
         userViewModel.getUserLiveData().observe(this, userData -> {
-            if (userData == null) return;//
+            if (userData == null) {
+                return;
+            }
             // BANNER
             final String userBanner = userData.getBanner();
             LayoutParams cBannerLp = (LayoutParams) changeBanner.getLayoutParams();
             if (userBanner == null || userBanner.isEmpty()) {
                 changeBanner.setLongClickable(false);
-                changeBanner.setImageResource(R.drawable.ic_add_day_night_24dp);
-                changeBanner.setLayoutParams(new LayoutParams(cBannerLp.width, cBannerLp.height, Gravity.CENTER));
+                cBannerLp.gravity = Gravity.CENTER;
+                changeBanner.setLayoutParams(cBannerLp);
                 changeBanner.setOnLongClickListener(v -> false);
             } else {
                 changeBanner.setLongClickable(true);
-                changeBanner.setImageResource(R.drawable.ic_outline_add_a_photo_day_night_24dp);
-                changeBanner.setLayoutParams(new LayoutParams(cBannerLp.width, cBannerLp.height, Gravity.END | Gravity.BOTTOM));
+                cBannerLp.gravity = Gravity.END | Gravity.BOTTOM;
+                changeBanner.setLayoutParams(cBannerLp);
                 glide.load(userBanner).into(bannerImageView);
                 changeBanner.setOnLongClickListener(view -> {
-                    if (mAccessToken == null) return false;
+                    if (mAccessToken == null) {
+                        return false;
+                    }
                     new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                             .setTitle(R.string.remove_banner)
                             .setMessage(R.string.are_you_sure)
@@ -195,15 +199,13 @@ public class EditProfileActivity extends BaseActivity {
             LayoutParams cAvatarLp = (LayoutParams) changeAvatar.getLayoutParams();
             if (userAvatar.contains("avatar_default_")) {
                 changeAvatar.setLongClickable(false);
-                changeAvatar.setImageResource(R.drawable.ic_add_day_night_24dp);
-                changeAvatar.setLayoutParams(new LayoutParams(cAvatarLp.width, cAvatarLp.height, Gravity.CENTER));
                 changeAvatar.setOnLongClickListener(v -> false);
             } else {
                 changeAvatar.setLongClickable(true);
-                changeAvatar.setImageResource(R.drawable.ic_outline_add_a_photo_day_night_24dp);
-                changeAvatar.setLayoutParams(new LayoutParams(cAvatarLp.width, cAvatarLp.height, Gravity.END | Gravity.BOTTOM));
                 changeAvatar.setOnLongClickListener(view -> {
-                    if (mAccessToken == null) return false;
+                    if (mAccessToken == null) {
+                        return false;
+                    }
                     new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                             .setTitle(R.string.remove_avatar)
                             .setMessage(R.string.are_you_sure)

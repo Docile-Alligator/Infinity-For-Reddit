@@ -1230,15 +1230,15 @@
     <string name="display_name_description">This will be displayed to viewers of your profile page and does not change your username.</string>
     <string name="about_you_text">About You</string>
     <string name="about_you_hint">A little description of yourself</string>
-    <string name="message_remove_avatar_success">Success remove Avatar</string>
-    <string name="message_remove_avatar_failed_fmt">Failed remove Avatar %s</string>
-    <string name="message_remove_banner_success">Success remove Banner</string>
-    <string name="message_remove_banner_failed_fmt">Failed remove Banner %s</string>
-    <string name="message_change_avatar_success">Success changing Avatar</string>
-    <string name="message_change_avatar_failed_fmt">Failed changing Avatar %s</string>
-    <string name="message_change_banner_success">Success changing Banner</string>
-    <string name="message_change_banner_failed_fmt">Failed changing Banner %s</string>
-    <string name="message_save_profile_success">Success save profile</string>
-    <string name="message_save_profile_failed_fmt">Failed save profile %s</string>
+    <string name="message_remove_avatar_success">Remove avatar successfully</string>
+    <string name="message_remove_avatar_failed_fmt">Failed to remove avatar %s</string>
+    <string name="message_remove_banner_success">Remove banner successfully</string>
+    <string name="message_remove_banner_failed_fmt">Failed to remove banner %s</string>
+    <string name="message_change_avatar_success">Change avatar successfully</string>
+    <string name="message_change_avatar_failed_fmt">Failed to change avatar %s</string>
+    <string name="message_change_banner_success">Changing banner successfully</string>
+    <string name="message_change_banner_failed_fmt">Failed to change banner %s</string>
+    <string name="message_save_profile_success">Save profile successfully</string>
+    <string name="message_save_profile_failed_fmt">Failed to save profile %s</string>
 
 </resources>
