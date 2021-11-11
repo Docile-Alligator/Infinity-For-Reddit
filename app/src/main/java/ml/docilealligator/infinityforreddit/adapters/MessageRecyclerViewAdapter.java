@@ -34,6 +34,8 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
+import io.noties.markwon.html.HtmlPlugin;
+import io.noties.markwon.html.tag.SuperScriptHandler;
 import io.noties.markwon.inlineparser.HtmlInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
@@ -46,6 +48,8 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.message.FetchMessage;
 import ml.docilealligator.infinityforreddit.message.Message;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
+import ml.docilealligator.infinityforreddit.utils.ProcessRedditSuperscript;
+import ml.docilealligator.infinityforreddit.utils.SuperscriptInlineProcessor;
 import retrofit2.Retrofit;
 
 public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, RecyclerView.ViewHolder> {
@@ -102,8 +106,14 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
         mMarkwon = Markwon.builder(mContext)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                     plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
+                    plugin.addInlineProcessor(new SuperscriptInlineProcessor());
                 }))
+                .usePlugin(HtmlPlugin.create(plugin -> {
+                    plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
+                }))
+                .usePlugin(new ProcessRedditSuperscript())
                 .usePlugin(new AbstractMarkwonPlugin() {
+                    /*
                     @NonNull
                     @Override
                     public String processMarkdown(@NonNull String markdown) {
@@ -119,6 +129,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                         }
                         return super.processMarkdown(markdownStringBuilder.toString());
                     }
+                    */
 
                     @Override
                     public void afterSetText(@NonNull TextView textView) {

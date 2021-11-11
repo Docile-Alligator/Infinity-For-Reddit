@@ -65,6 +65,8 @@ public class Utils {
                 .replaceAll("((?<=[\\s])|^)/[rRuU]/[\\w-]+/{0,1}", "[$0](https://www.reddit.com$0)")
                 .replaceAll("((?<=[\\s])|^)[rRuU]/[\\w-]+/{0,1}", "[$0](https://www.reddit.com/$0)")
                 .replaceAll("\\^{2,}", "^")
+                .replaceAll("(</?sup)>", "$1&gt;")
+                .replaceAll(">!", "&gt;!")
                 .replaceAll("(^|^ *|\\n *)#(?!($|\\s|#))", "$0 ")
                 .replaceAll("(^|^ *|\\n *)##(?!($|\\s|#))", "$0 ")
                 .replaceAll("(^|^ *|\\n *)###(?!($|\\s|#))", "$0 ")
@@ -72,7 +74,8 @@ public class Utils {
                 .replaceAll("(^|^ *|\\n *)#####(?!($|\\s|#))", "$0 ")
                 .replaceAll("(^|^ *|\\n *)######(?!($|\\s|#))", "$0 "));
 
-        return fixSuperScript(regexed);
+        //return fixSuperScript(regexed);
+        return regexed.toString();
     }
 
     private static String fixSuperScript(StringBuilder regexed) {
