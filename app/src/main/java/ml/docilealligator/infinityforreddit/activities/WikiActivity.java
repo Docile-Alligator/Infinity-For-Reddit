@@ -51,7 +51,8 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
-import io.noties.markwon.html.HtmlPlugin;
+import io.noties.markwon.inlineparser.HtmlInlineProcessor;
+import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.recycler.table.TableEntry;
@@ -156,7 +157,9 @@ public class WikiActivity extends BaseActivity {
         int spoilerBackgroundColor = markdownColor | 0xFF000000;
         int linkColor = mCustomThemeWrapper.getLinkColor();
         markwon = Markwon.builder(this)
-                .usePlugin(HtmlPlugin.create())
+                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
+                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
+                }))
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @NonNull
                     @Override
@@ -177,7 +180,7 @@ public class WikiActivity extends BaseActivity {
                     @Override
                     public void afterSetText(@NonNull TextView textView) {
                         textView.setHighlightColor(Color.TRANSPARENT);
-                        SpannableStringBuilder markdownStringBuilder = new SpannableStringBuilder(textView.getText().toString());
+                        SpannableStringBuilder markdownStringBuilder = new SpannableStringBuilder(textView.getText());
                         Pattern spoilerPattern = Pattern.compile(">![\\S\\s]+?!<");
                         Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
                         int start = 0;

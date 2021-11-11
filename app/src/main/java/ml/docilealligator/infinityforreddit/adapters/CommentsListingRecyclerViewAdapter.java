@@ -42,7 +42,8 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
-import io.noties.markwon.html.HtmlPlugin;
+import io.noties.markwon.inlineparser.HtmlInlineProcessor;
+import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.NetworkState;
@@ -116,7 +117,9 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         mCommentColor = customThemeWrapper.getCommentColor();
         int commentSpoilerBackgroundColor = mCommentColor | 0xFF000000;
         mMarkwon = Markwon.builder(mActivity)
-                .usePlugin(HtmlPlugin.create())
+                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
+                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
+                }))
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @NonNull
                     @Override

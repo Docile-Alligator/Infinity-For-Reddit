@@ -71,6 +71,8 @@ import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.core.MarkwonTheme;
+import io.noties.markwon.inlineparser.HtmlInlineProcessor;
+import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.movement.MovementMethodPlugin;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
@@ -380,6 +382,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         Locale locale = getResources().getConfiguration().locale;
 
         Markwon markwon = Markwon.builder(this)
+                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
+                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
+                }))
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {

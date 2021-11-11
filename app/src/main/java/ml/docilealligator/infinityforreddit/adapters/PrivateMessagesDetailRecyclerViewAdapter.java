@@ -27,7 +27,8 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
-import io.noties.markwon.html.HtmlPlugin;
+import io.noties.markwon.inlineparser.HtmlInlineProcessor;
+import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.R;
@@ -66,7 +67,9 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
         mLocale = locale;
         mAccountName = accountName;
         mMarkwon = Markwon.builder(viewPrivateMessagesActivity)
-                .usePlugin(HtmlPlugin.create())
+                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
+                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
+                }))
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {

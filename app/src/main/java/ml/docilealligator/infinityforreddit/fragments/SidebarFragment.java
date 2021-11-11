@@ -34,7 +34,8 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
-import io.noties.markwon.html.HtmlPlugin;
+import io.noties.markwon.inlineparser.HtmlInlineProcessor;
+import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.movement.MovementMethodPlugin;
 import io.noties.markwon.recycler.MarkwonAdapter;
@@ -104,7 +105,9 @@ public class SidebarFragment extends Fragment {
         markdownColor = mCustomThemeWrapper.getPrimaryTextColor();
 
         Markwon markwon = Markwon.builder(activity)
-                .usePlugin(HtmlPlugin.create())
+                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
+                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
+                }))
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
                     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {

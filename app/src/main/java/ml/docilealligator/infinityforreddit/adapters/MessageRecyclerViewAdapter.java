@@ -34,7 +34,8 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
-import io.noties.markwon.html.HtmlPlugin;
+import io.noties.markwon.inlineparser.HtmlInlineProcessor;
+import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
@@ -99,7 +100,9 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
         mButtonTextColor = customThemeWrapper.getButtonTextColor();
 
         mMarkwon = Markwon.builder(mContext)
-                .usePlugin(HtmlPlugin.create())
+                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
+                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
+                }))
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @NonNull
                     @Override
@@ -120,7 +123,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                     @Override
                     public void afterSetText(@NonNull TextView textView) {
                         textView.setHighlightColor(Color.TRANSPARENT);
-                        SpannableStringBuilder markdownStringBuilder = new SpannableStringBuilder(textView.getText().toString());
+                        SpannableStringBuilder markdownStringBuilder = new SpannableStringBuilder(textView.getText());
                         Pattern spoilerPattern = Pattern.compile(">![\\S\\s]+?!<");
                         Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
                         int start = 0;

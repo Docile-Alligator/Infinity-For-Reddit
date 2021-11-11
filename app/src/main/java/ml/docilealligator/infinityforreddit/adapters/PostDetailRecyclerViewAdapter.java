@@ -73,7 +73,8 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
-import io.noties.markwon.html.HtmlPlugin;
+import io.noties.markwon.inlineparser.HtmlInlineProcessor;
+import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.movement.MovementMethodPlugin;
 import io.noties.markwon.recycler.MarkwonAdapter;
@@ -226,7 +227,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         int postSpoilerBackgroundColor = markdownColor | 0xFF000000;
         int linkColor = customThemeWrapper.getLinkColor();
         mPostDetailMarkwon = Markwon.builder(mActivity)
-                .usePlugin(HtmlPlugin.create())
+                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
+                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
+                }))
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @NonNull
                     @Override
@@ -247,7 +250,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     @Override
                     public void afterSetText(@NonNull TextView textView) {
                         textView.setHighlightColor(Color.TRANSPARENT);
-                        SpannableStringBuilder markdownStringBuilder = new SpannableStringBuilder(textView.getText().toString());
+                        SpannableStringBuilder markdownStringBuilder = new SpannableStringBuilder(textView.getText());
                         Pattern spoilerPattern = Pattern.compile(">![\\S\\s]+?!<");
                         Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
                         int start = 0;
