@@ -92,6 +92,7 @@
     <string name="action_share_post_link">Share Post Link</string>
     <string name="action_go_to_wiki">Go to Wiki</string>
     <string name="action_playback_speed">Playback Speed</string>
+    <string name="action_contact_mods">Contact Mods</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>

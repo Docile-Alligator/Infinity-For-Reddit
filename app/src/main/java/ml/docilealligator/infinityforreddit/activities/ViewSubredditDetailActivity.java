@@ -1137,11 +1137,16 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 Toast.makeText(this, R.string.no_app, Toast.LENGTH_SHORT).show();
             }
             return true;
-        } else if (itemId == R.id.action_go_to_wiki_activity ) {
+        } else if (itemId == R.id.action_go_to_wiki_view_subreddit_detail_activity) {
             Intent wikiIntent = new Intent(this, WikiActivity.class);
             wikiIntent.putExtra(WikiActivity.EXTRA_SUBREDDIT_NAME, subredditName);
             wikiIntent.putExtra(WikiActivity.EXTRA_WIKI_PATH, "index");
             startActivity(wikiIntent);
+            return true;
+        } else if (itemId == R.id.action_contact_mods_view_subreddit_detail_activity) {
+            Intent intent = new Intent(this, SendPrivateMessageActivity.class);
+            intent.putExtra(SendPrivateMessageActivity.EXTRA_RECIPIENT_USERNAME, "r/" + subredditName);
+            startActivity(intent);
             return true;
         }
         return false;
