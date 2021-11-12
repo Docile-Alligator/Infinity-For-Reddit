@@ -47,10 +47,7 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
-import io.noties.markwon.html.HtmlEmptyTagReplacement;
 import io.noties.markwon.html.HtmlPlugin;
-import io.noties.markwon.html.tag.ImageHandler;
-import io.noties.markwon.html.tag.LinkHandler;
 import io.noties.markwon.html.tag.SuperScriptHandler;
 import io.noties.markwon.inlineparser.HtmlInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
@@ -74,7 +71,6 @@ import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
-import ml.docilealligator.infinityforreddit.utils.ProcessRedditSuperscript;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -175,25 +171,13 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 .usePlugin(HtmlPlugin.create(plugin -> {
                     plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
                 }))
-                .usePlugin(new ProcessRedditSuperscript())
                 .usePlugin(new AbstractMarkwonPlugin() {
-                    /*
                     @NonNull
                     @Override
                     public String processMarkdown(@NonNull String markdown) {
-                        StringBuilder markdownStringBuilder = new StringBuilder(markdown);
-                        Pattern spoilerPattern = Pattern.compile(">![\\S\\s]+?!<");
-                        Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
-                        ArrayList<Integer> matched = new ArrayList<>();
-                        while (matcher.find()) {
-                            matched.add(matcher.start());
-                        }
-                        for (int i = matched.size() - 1; i >= 0; i--) {
-                            markdownStringBuilder.replace(matched.get(i), matched.get(i) + 1, "&gt;");
-                        }
-                        return super.processMarkdown(markdownStringBuilder.toString());
+                        return super.processMarkdown(Utils.fixSuperScript(new StringBuilder(markdown)));
                     }
-                    */
+
                     @Override
                     public void afterSetText(@NonNull TextView textView) {
                         SpannableStringBuilder markdownStringBuilder = new SpannableStringBuilder(textView.getText());

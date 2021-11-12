@@ -34,8 +34,8 @@ import ml.docilealligator.infinityforreddit.Rule;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.utils.ProcessRedditSuperscript;
 import ml.docilealligator.infinityforreddit.utils.SuperscriptInlineProcessor;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecyclerViewAdapter.RuleViewHolder> {
     private Markwon markwon;
@@ -52,8 +52,13 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
                 .usePlugin(HtmlPlugin.create(plugin -> {
                     plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
                 }))
-                .usePlugin(new ProcessRedditSuperscript())
                 .usePlugin(new AbstractMarkwonPlugin() {
+                    @NonNull
+                    @Override
+                    public String processMarkdown(@NonNull String markdown) {
+                        return super.processMarkdown(Utils.fixSuperScript(new StringBuilder(markdown)));
+                    }
+
                     @Override
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
                         builder.linkResolver((view, link) -> {

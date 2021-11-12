@@ -70,7 +70,6 @@ import ml.docilealligator.infinityforreddit.comment.SendComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.utils.ProcessRedditSuperscript;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -172,8 +171,13 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                 .usePlugin(HtmlPlugin.create(plugin -> {
                     plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
                 }))
-                .usePlugin(new ProcessRedditSuperscript())
                 .usePlugin(new AbstractMarkwonPlugin() {
+                    @NonNull
+                    @Override
+                    public String processMarkdown(@NonNull String markdown) {
+                        return super.processMarkdown(Utils.fixSuperScript(new StringBuilder(markdown)));
+                    }
+
                     @Override
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
                         builder.linkResolver((view, link) -> {
@@ -220,8 +224,13 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     .usePlugin(HtmlPlugin.create(plugin -> {
                         plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
                     }))
-                    .usePlugin(new ProcessRedditSuperscript())
                     .usePlugin(new AbstractMarkwonPlugin() {
+                        @NonNull
+                        @Override
+                        public String processMarkdown(@NonNull String markdown) {
+                            return super.processMarkdown(Utils.fixSuperScript(new StringBuilder(markdown)));
+                        }
+
                         @Override
                         public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
                             textView.setTextColor(markdownColor);

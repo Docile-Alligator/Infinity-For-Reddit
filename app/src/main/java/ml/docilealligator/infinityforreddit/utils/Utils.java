@@ -61,12 +61,11 @@ public class Utils {
     private static final long YEAR_MILLIS = 12 * MONTH_MILLIS;
 
     public static String modifyMarkdown(String markdown) {
-        StringBuilder regexed = new StringBuilder(markdown
+        StringBuilder regexed = new StringBuilder(trimAndEscapeSpaceInLinks(markdown)
                 .replaceAll("((?<=[\\s])|^)/[rRuU]/[\\w-]+/{0,1}", "[$0](https://www.reddit.com$0)")
                 .replaceAll("((?<=[\\s])|^)[rRuU]/[\\w-]+/{0,1}", "[$0](https://www.reddit.com/$0)")
                 .replaceAll("\\^{2,}", "^")
-                .replaceAll("(</?sup)>", "$1&gt;")
-                .replaceAll(">!", "&gt;!")
+                .replaceAll(">!", "&gt;!") // If it's in a code black, html entity remains escaped
                 .replaceAll("(^|^ *|\\n *)#(?!($|\\s|#))", "$0 ")
                 .replaceAll("(^|^ *|\\n *)##(?!($|\\s|#))", "$0 ")
                 .replaceAll("(^|^ *|\\n *)###(?!($|\\s|#))", "$0 ")
@@ -78,7 +77,53 @@ public class Utils {
         return regexed.toString();
     }
 
-    private static String fixSuperScript(StringBuilder regexed) {
+    // Also matches links inside code blocks as a side effect
+    private static String trimAndEscapeSpaceInLinks(String markdown){
+        String TEXT = "\\[([^\\[]\\n?[\\S\\h]+?\\n?[\\S\\h]*?)]";
+        String LINK = "(\\n?[\\h]*?\\n?https?:\\/\\/[\\S\\h]+?\n?)";
+        String TITLE = "(?:\\s\"(\\n?[\\S\\h]+?\\n?[\\S\\h]*?)?\")?";
+        Pattern pattern = Pattern.compile(TEXT + "\\(" + LINK + TITLE + "\\n?\\h*?\\)");
+        Matcher matcher = pattern.matcher(markdown);
+        StringBuilder builder = new StringBuilder();
+        int start = 0;
+        while (matcher.find()) try {
+            String match1;
+            String match2;
+            String match3;
+            if ((match1 = matcher.group(1)) != null && (match2 = matcher.group(2)) != null) {
+                match1 = match1.trim().replaceAll("\\s+", " ");
+                match2 = match2.trim().replaceAll(" ", "%20");
+                match3 = matcher.group(3);
+                builder.append(markdown.substring(start, matcher.start()))
+                        .append("[")
+                        .append(match1)
+                        .append("]")
+                        .append("(")
+                        .append(match2);
+                if (match3 != null) {
+                    builder.append(" \"")
+                            .append(match3)
+                            .append("\"");
+                }
+                builder.append(")");
+                start = matcher.end();
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        }
+
+        if (start < markdown.length()) {
+            builder.append(markdown.substring(start));
+        }
+
+        if(builder.length() > 0) {
+            return builder.toString(); }
+        else {
+            return markdown;
+        }
+    }
+
+    public static String fixSuperScript(StringBuilder regexed) {
         boolean hasBracket = false;
         int nCarets = 0;
         for (int i = 0; i < regexed.length(); i++) {
