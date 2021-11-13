@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -71,6 +72,7 @@ import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.core.MarkwonTheme;
+import io.noties.markwon.inlineparser.BangInlineProcessor;
 import io.noties.markwon.inlineparser.HtmlInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
@@ -384,6 +386,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         Markwon markwon = Markwon.builder(this)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                     plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
+                    plugin.excludeInlineProcessor(BangInlineProcessor.class);
                 }))
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @Override
@@ -546,10 +549,10 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         descriptionTextView.setTextColor(primaryTextColor);
         bottomNavigationView.setBackgroundTint(ColorStateList.valueOf(mCustomThemeWrapper.getBottomAppBarBackgroundColor()));
         int bottomAppBarIconColor = mCustomThemeWrapper.getBottomAppBarIconColor();
-        option2BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        option1BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        option3BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        option4BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        option2BottomAppBar.setColorFilter(bottomAppBarIconColor, PorterDuff.Mode.SRC_IN);
+        option1BottomAppBar.setColorFilter(bottomAppBarIconColor, PorterDuff.Mode.SRC_IN);
+        option3BottomAppBar.setColorFilter(bottomAppBarIconColor, PorterDuff.Mode.SRC_IN);
+        option4BottomAppBar.setColorFilter(bottomAppBarIconColor, PorterDuff.Mode.SRC_IN);
         applyTabLayoutTheme(tabLayout);
         applyFABTheme(fab);
         unsubscribedColor = mCustomThemeWrapper.getUnsubscribed();

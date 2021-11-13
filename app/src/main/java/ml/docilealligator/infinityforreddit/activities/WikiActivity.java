@@ -52,6 +52,7 @@ import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.html.HtmlPlugin;
 import io.noties.markwon.html.tag.SuperScriptHandler;
+import io.noties.markwon.inlineparser.BangInlineProcessor;
 import io.noties.markwon.inlineparser.HtmlInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
@@ -162,6 +163,7 @@ public class WikiActivity extends BaseActivity {
         markwon = Markwon.builder(this)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                     plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
+                    plugin.excludeInlineProcessor(BangInlineProcessor.class);
                     plugin.addInlineProcessor(new SuperscriptInlineProcessor());
                 }))
                 .usePlugin(HtmlPlugin.create(plugin -> {
