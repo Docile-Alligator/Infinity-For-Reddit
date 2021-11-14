@@ -73,11 +73,10 @@ public class Utils {
                 .replaceAll("(^|^ *|\\n *)#####(?!($|\\s|#))", "$0 ")
                 .replaceAll("(^|^ *|\\n *)######(?!($|\\s|#))", "$0 "));
 
-        //return fixSuperScript(regexed);
-        return regexed.toString();
+        return fixSuperScript(regexed);
     }
 
-    public static String fixSuperScript(StringBuilder regexed) {
+    private static String fixSuperScript(StringBuilder regexed) {
         boolean hasBracket = false;
         int nCarets = 0;
         for (int i = 0; i < regexed.length(); i++) {

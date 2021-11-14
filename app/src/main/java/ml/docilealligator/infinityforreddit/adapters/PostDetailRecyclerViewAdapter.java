@@ -243,7 +243,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     @NonNull
                     @Override
                     public String processMarkdown(@NonNull String markdown) {
-                        return super.processMarkdown(Utils.fixSuperScript(new StringBuilder(markdown)));
+                        return super.processMarkdown(markdown);
                     }
 
                     @Override
