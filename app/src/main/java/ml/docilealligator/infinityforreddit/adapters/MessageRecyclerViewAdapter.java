@@ -117,7 +117,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                     @NonNull
                     @Override
                     public String processMarkdown(@NonNull String markdown) {
-                        return super.processMarkdown(markdown);
+                        return super.processMarkdown(Utils.fixSuperScript(markdown));
                     }
 
                     @Override

@@ -122,7 +122,7 @@ public class SidebarFragment extends Fragment {
                     @NonNull
                     @Override
                     public String processMarkdown(@NonNull String markdown) {
-                        return super.processMarkdown(markdown);
+                        return super.processMarkdown(Utils.fixSuperScript(markdown));
                     }
 
                     @Override
