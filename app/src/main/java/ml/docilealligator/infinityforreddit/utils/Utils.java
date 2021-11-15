@@ -65,6 +65,7 @@ public class Utils {
                 .replaceAll("((?<=[\\s])|^)/[rRuU]/[\\w-]+/{0,1}", "[$0](https://www.reddit.com$0)")
                 .replaceAll("((?<=[\\s])|^)[rRuU]/[\\w-]+/{0,1}", "[$0](https://www.reddit.com/$0)")
                 .replaceAll("\\^{2,}", "^")
+                .replaceAll("(?:>!)(\\n?[\\S\\h]+?\\n?[\\S\\h]+\\n?!<)", "&gt;!$1") // html entity remains escaped inside an inline block
                 .replaceAll("(^|^ *|\\n *)#(?!($|\\s|#))", "$0 ")
                 .replaceAll("(^|^ *|\\n *)##(?!($|\\s|#))", "$0 ")
                 .replaceAll("(^|^ *|\\n *)###(?!($|\\s|#))", "$0 ")
@@ -72,10 +73,13 @@ public class Utils {
                 .replaceAll("(^|^ *|\\n *)#####(?!($|\\s|#))", "$0 ")
                 .replaceAll("(^|^ *|\\n *)######(?!($|\\s|#))", "$0 "));
 
-        return fixSuperScript(regexed);
+        //return fixSuperScript(regexed);
+        // We don't want to fix super scripts here because we need the original markdown later for editing posts
+        return regexed.toString();
     }
 
-    private static String fixSuperScript(StringBuilder regexed) {
+    public static String fixSuperScript(String regexedMarkdown) {
+        StringBuilder regexed = new StringBuilder(regexedMarkdown);
         boolean hasBracket = false;
         int nCarets = 0;
         for (int i = 0; i < regexed.length(); i++) {

@@ -74,6 +74,10 @@ import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.html.HtmlPlugin;
+import io.noties.markwon.html.tag.SuperScriptHandler;
+import io.noties.markwon.inlineparser.BangInlineProcessor;
+import io.noties.markwon.inlineparser.HtmlInlineProcessor;
+import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.movement.MovementMethodPlugin;
 import io.noties.markwon.recycler.MarkwonAdapter;
@@ -110,6 +114,7 @@ import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
@@ -226,28 +231,25 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         int postSpoilerBackgroundColor = markdownColor | 0xFF000000;
         int linkColor = customThemeWrapper.getLinkColor();
         mPostDetailMarkwon = Markwon.builder(mActivity)
-                .usePlugin(HtmlPlugin.create())
+                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
+                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
+                    plugin.excludeInlineProcessor(BangInlineProcessor.class);
+                    plugin.addInlineProcessor(new SuperscriptInlineProcessor());
+                }))
+                .usePlugin(HtmlPlugin.create(plugin -> {
+                    plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
+                }))
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @NonNull
                     @Override
                     public String processMarkdown(@NonNull String markdown) {
-                        StringBuilder markdownStringBuilder = new StringBuilder(markdown);
-                        Pattern spoilerPattern = Pattern.compile(">![\\S\\s]+?!<");
-                        Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
-                        ArrayList<Integer> matched = new ArrayList<>();
-                        while (matcher.find()) {
-                            matched.add(matcher.start());
-                        }
-                        for (int i = matched.size() - 1; i >= 0; i--) {
-                            markdownStringBuilder.replace(matched.get(i), matched.get(i) + 1, "&gt;");
-                        }
-                        return super.processMarkdown(markdownStringBuilder.toString());
+                        return super.processMarkdown(Utils.fixSuperScript(markdown));
                     }
 
                     @Override
                     public void afterSetText(@NonNull TextView textView) {
                         textView.setHighlightColor(Color.TRANSPARENT);
-                        SpannableStringBuilder markdownStringBuilder = new SpannableStringBuilder(textView.getText().toString());
+                        SpannableStringBuilder markdownStringBuilder = new SpannableStringBuilder(textView.getText());
                         Pattern spoilerPattern = Pattern.compile(">![\\S\\s]+?!<");
                         Matcher matcher = spoilerPattern.matcher(markdownStringBuilder);
                         int start = 0;
@@ -594,16 +596,16 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     ((PostDetailBaseViewHolder) holder).mScoreTextView.setTextColor(mDownvotedColor);
                     break;
                 case 0:
-                    ((PostDetailBaseViewHolder) holder).mUpvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                    ((PostDetailBaseViewHolder) holder).mDownvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                    ((PostDetailBaseViewHolder) holder).mUpvoteButton.setColorFilter(mPostIconAndInfoColor, PorterDuff.Mode.SRC_IN);
+                    ((PostDetailBaseViewHolder) holder).mDownvoteButton.setColorFilter(mPostIconAndInfoColor, PorterDuff.Mode.SRC_IN);
                     ((PostDetailBaseViewHolder) holder).mScoreTextView.setTextColor(mPostIconAndInfoColor);
             }
 
             if (mPost.isArchived()) {
                 ((PostDetailBaseViewHolder) holder).mUpvoteButton
-                        .setColorFilter(mVoteAndReplyUnavailableVoteButtonColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                        .setColorFilter(mVoteAndReplyUnavailableVoteButtonColor, PorterDuff.Mode.SRC_IN);
                 ((PostDetailBaseViewHolder) holder).mDownvoteButton
-                        .setColorFilter(mVoteAndReplyUnavailableVoteButtonColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                        .setColorFilter(mVoteAndReplyUnavailableVoteButtonColor, PorterDuff.Mode.SRC_IN);
             }
 
             if (mPost.isCrosspost()) {
@@ -1066,9 +1068,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof PostDetailBaseViewHolder) {
-            ((PostDetailBaseViewHolder) holder).mUpvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            ((PostDetailBaseViewHolder) holder).mUpvoteButton.setColorFilter(mPostIconAndInfoColor, PorterDuff.Mode.SRC_IN);
             ((PostDetailBaseViewHolder) holder).mScoreTextView.setTextColor(mPostIconAndInfoColor);
-            ((PostDetailBaseViewHolder) holder).mDownvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            ((PostDetailBaseViewHolder) holder).mDownvoteButton.setColorFilter(mPostIconAndInfoColor, PorterDuff.Mode.SRC_IN);
             ((PostDetailBaseViewHolder) holder).mFlairTextView.setVisibility(View.GONE);
             ((PostDetailBaseViewHolder) holder).mSpoilerTextView.setVisibility(View.GONE);
             ((PostDetailBaseViewHolder) holder).mNSFWTextView.setVisibility(View.GONE);
@@ -1265,19 +1267,19 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 int previousVoteType = mPost.getVoteType();
                 String newVoteType;
 
-                mDownvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                mDownvoteButton.setColorFilter(mPostIconAndInfoColor, PorterDuff.Mode.SRC_IN);
 
                 if (previousVoteType != 1) {
                     //Not upvoted before
                     mPost.setVoteType(1);
                     newVoteType = APIUtils.DIR_UPVOTE;
-                    mUpvoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                    mUpvoteButton.setColorFilter(mUpvotedColor, PorterDuff.Mode.SRC_IN);
                     mScoreTextView.setTextColor(mUpvotedColor);
                 } else {
                     //Upvoted before
                     mPost.setVoteType(0);
                     newVoteType = APIUtils.DIR_UNVOTE;
-                    mUpvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                    mUpvoteButton.setColorFilter(mPostIconAndInfoColor, PorterDuff.Mode.SRC_IN);
                     mScoreTextView.setTextColor(mPostIconAndInfoColor);
                 }
 
@@ -1293,15 +1295,15 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     public void onVoteThingSuccess() {
                         if (newVoteType.equals(APIUtils.DIR_UPVOTE)) {
                             mPost.setVoteType(1);
-                            mUpvoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                            mUpvoteButton.setColorFilter(mUpvotedColor, PorterDuff.Mode.SRC_IN);
                             mScoreTextView.setTextColor(mUpvotedColor);
                         } else {
                             mPost.setVoteType(0);
-                            mUpvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                            mUpvoteButton.setColorFilter(mPostIconAndInfoColor, PorterDuff.Mode.SRC_IN);
                             mScoreTextView.setTextColor(mPostIconAndInfoColor);
                         }
 
-                        mDownvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                        mDownvoteButton.setColorFilter(mPostIconAndInfoColor, PorterDuff.Mode.SRC_IN);
                         if (!mHideTheNumberOfVotes) {
                             mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                     mPost.getScore() + mPost.getVoteType()));
@@ -1345,19 +1347,19 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 int previousVoteType = mPost.getVoteType();
                 String newVoteType;
 
-                mUpvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                mUpvoteButton.setColorFilter(mPostIconAndInfoColor, PorterDuff.Mode.SRC_IN);
 
                 if (previousVoteType != -1) {
                     //Not upvoted before
                     mPost.setVoteType(-1);
                     newVoteType = APIUtils.DIR_DOWNVOTE;
-                    mDownvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                    mDownvoteButton.setColorFilter(mDownvotedColor, PorterDuff.Mode.SRC_IN);
                     mScoreTextView.setTextColor(mDownvotedColor);
                 } else {
                     //Upvoted before
                     mPost.setVoteType(0);
                     newVoteType = APIUtils.DIR_UNVOTE;
-                    mDownvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                    mDownvoteButton.setColorFilter(mPostIconAndInfoColor, PorterDuff.Mode.SRC_IN);
                     mScoreTextView.setTextColor(mPostIconAndInfoColor);
                 }
 
@@ -1373,15 +1375,15 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     public void onVoteThingSuccess() {
                         if (newVoteType.equals(APIUtils.DIR_DOWNVOTE)) {
                             mPost.setVoteType(-1);
-                            mDownvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                            mDownvoteButton.setColorFilter(mDownvotedColor, PorterDuff.Mode.SRC_IN);
                             mScoreTextView.setTextColor(mDownvotedColor);
                         } else {
                             mPost.setVoteType(0);
-                            mDownvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                            mDownvoteButton.setColorFilter(mPostIconAndInfoColor, PorterDuff.Mode.SRC_IN);
                             mScoreTextView.setTextColor(mPostIconAndInfoColor);
                         }
 
-                        mUpvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                        mUpvoteButton.setColorFilter(mPostIconAndInfoColor, PorterDuff.Mode.SRC_IN);
                         if (!mHideTheNumberOfVotes) {
                             mScoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                     mPost.getScore() + mPost.getVoteType()));
@@ -1553,13 +1555,13 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             mUpvoteRatioTextView.setCompoundDrawablesWithIntrinsicBounds(
                     upvoteRatioDrawable, null, null, null);
             mUpvoteRatioTextView.setTextColor(mSecondaryTextColor);
-            mUpvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            mUpvoteButton.setColorFilter(mPostIconAndInfoColor, PorterDuff.Mode.SRC_IN);
             mScoreTextView.setTextColor(mPostIconAndInfoColor);
-            mDownvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            mDownvoteButton.setColorFilter(mPostIconAndInfoColor, PorterDuff.Mode.SRC_IN);
             commentsCountTextView.setTextColor(mPostIconAndInfoColor);
             commentsCountTextView.setCompoundDrawablesWithIntrinsicBounds(mCommentIcon, null, null, null);
-            mSaveButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-            mShareButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            mSaveButton.setColorFilter(mPostIconAndInfoColor, PorterDuff.Mode.SRC_IN);
+            mShareButton.setColorFilter(mPostIconAndInfoColor, PorterDuff.Mode.SRC_IN);
         }
     }
 
@@ -2203,7 +2205,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
             mLinkTextView.setTextColor(mSecondaryTextColor);
             mNoPreviewPostTypeImageView.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
-            mNoPreviewPostTypeImageView.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
+            mNoPreviewPostTypeImageView.setColorFilter(mNoPreviewPostTypeIconTint, PorterDuff.Mode.SRC_IN);
 
             mNoPreviewPostTypeImageView.setOnClickListener(view -> {
                 if (mPost != null) {
@@ -2348,7 +2350,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             mLoadImageProgressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
             mLoadImageErrorTextView.setTextColor(mPrimaryTextColor);
             mNoPreviewPostTypeImageView.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
-            mNoPreviewPostTypeImageView.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
+            mNoPreviewPostTypeImageView.setColorFilter(mNoPreviewPostTypeIconTint, PorterDuff.Mode.SRC_IN);
 
             mImageView.setOnClickListener(view -> {
                 Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
