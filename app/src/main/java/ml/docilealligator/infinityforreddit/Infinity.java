@@ -43,6 +43,9 @@ public class Infinity extends Application implements LifecycleObserver {
     private boolean canStartLockScreenActivity = false;
     private boolean isSecureMode;
     @Inject
+    @Named("default")
+    SharedPreferences mSharedPreferences;
+    @Inject
     @Named("security")
     SharedPreferences mSecuritySharedPreferences;
 
@@ -127,7 +130,7 @@ public class Infinity extends Application implements LifecycleObserver {
                 new NetworkWifiStatusReceiver(() -> EventBus.getDefault().post(new ChangeNetworkStatusEvent(Utils.getConnectedNetwork(getApplicationContext()))));
         registerReceiver(mNetworkWifiStatusReceiver, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
-        registerReceiver(new WallpaperChangeReceiver(), new IntentFilter(Intent.ACTION_WALLPAPER_CHANGED));
+        registerReceiver(new WallpaperChangeReceiver(mSharedPreferences), new IntentFilter(Intent.ACTION_WALLPAPER_CHANGED));
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
