@@ -65,7 +65,7 @@ public class Utils {
                 .replaceAll("((?<=[\\s])|^)/[rRuU]/[\\w-]+/{0,1}", "[$0](https://www.reddit.com$0)")
                 .replaceAll("((?<=[\\s])|^)[rRuU]/[\\w-]+/{0,1}", "[$0](https://www.reddit.com/$0)")
                 .replaceAll("\\^{2,}", "^")
-                .replaceAll(">!(\\n?(?:[\\S\\h]+?(?:\\n?[\\S\\h]+?)?)\\n?)!<", "&gt;!$1!<") // html entity remains escaped inside an inline block
+                .replaceAll(">!(\\n?(?:.+?(?:\\n?.+?)?)\\n?)!<", "&gt;!$1!<") // html entity remains escaped inside an inline block
                 .replaceAll("(^|^ *|\\n *)#(?!($|\\s|#))", "$0 ")
                 .replaceAll("(^|^ *|\\n *)##(?!($|\\s|#))", "$0 ")
                 .replaceAll("(^|^ *|\\n *)###(?!($|\\s|#))", "$0 ")
