@@ -67,6 +67,7 @@ import butterknife.ButterKnife;
 import im.ene.toro.exoplayer.ExoCreator;
 import im.ene.toro.media.PlaybackInfo;
 import im.ene.toro.media.VolumeInfo;
+import im.ene.toro.widget.Container;
 import ml.docilealligator.infinityforreddit.DeleteThing;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
@@ -1736,28 +1737,32 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     }
 
     public void scrollToNextParentComment() {
-        int currentPosition = ((LinearLayoutManagerBugFixed) (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager()).findFirstVisibleItemPosition();
-        if (mCommentsAdapter != null) {
-            int nextParentPosition = mCommentsAdapter.getNextParentCommentPosition(mCommentsRecyclerView == null ? currentPosition - 1 : currentPosition);
+        RecyclerView chooseYourView = mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView;
+        if (mCommentsAdapter != null && chooseYourView != null) {
+            int currentPosition = ((LinearLayoutManagerBugFixed) chooseYourView.getLayoutManager()).findFirstVisibleItemPosition();
+            //int nextParentPosition = mCommentsAdapter.getNextParentCommentPosition(mCommentsRecyclerView == null ? currentPosition - 1 : currentPosition);
+            int nextParentPosition = mCommentsAdapter.getNextParentCommentPosition(mCommentsRecyclerView == null && !isSingleCommentThreadMode ? currentPosition - 1 : currentPosition);
             if (nextParentPosition < 0) {
                 return;
             }
-            mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null ? nextParentPosition + 1 : nextParentPosition);
+            mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null && !isSingleCommentThreadMode ? nextParentPosition + 1 : nextParentPosition);
             mIsSmoothScrolling = true;
-            (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager().startSmoothScroll(mSmoothScroller);
+            chooseYourView.getLayoutManager().startSmoothScroll(mSmoothScroller);
         }
     }
 
     public void scrollToPreviousParentComment() {
-        int currentPosition = ((LinearLayoutManagerBugFixed) (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager()).findFirstVisibleItemPosition();
-        if (mCommentsAdapter != null) {
-            int previousParentPosition = mCommentsAdapter.getPreviousParentCommentPosition(mCommentsRecyclerView == null ? currentPosition - 1 : currentPosition);
+        RecyclerView chooseYourView = mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView;
+        if (mCommentsAdapter != null && chooseYourView != null) {
+            int currentPosition = ((LinearLayoutManagerBugFixed) chooseYourView.getLayoutManager()).findFirstVisibleItemPosition();
+            //int previousParentPosition = mCommentsAdapter.getPreviousParentCommentPosition(mCommentsRecyclerView == null ? currentPosition - 1 : currentPosition);
+            int previousParentPosition = mCommentsAdapter.getPreviousParentCommentPosition(mCommentsRecyclerView == null && !isSingleCommentThreadMode  ? currentPosition - 1 : currentPosition);
             if (previousParentPosition < 0) {
                 return;
             }
-            mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null ? previousParentPosition + 1 : previousParentPosition);
+            mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null && !isSingleCommentThreadMode  ? previousParentPosition + 1 : previousParentPosition);
             mIsSmoothScrolling = true;
-            (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager().startSmoothScroll(mSmoothScroller);
+            chooseYourView.getLayoutManager().startSmoothScroll(mSmoothScroller);
         }
     }
 
