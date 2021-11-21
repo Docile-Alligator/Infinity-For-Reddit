@@ -1916,12 +1916,15 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     }
 
     private void openViewPostDetailActivity(Post post, int position) {
-        Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
-        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, post);
-        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, position);
-        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_FRAGMENT_ID, mFragment.getPostFragmentId());
-        intent.putExtra(ViewPostDetailActivity.EXTRA_IS_NSFW_SUBREDDIT, mFragment.getIsNsfwSubreddit());
-        mActivity.startActivity(intent);
+        if (canStartActivity) {
+            canStartActivity = false;
+            Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
+            intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, post);
+            intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, position);
+            intent.putExtra(ViewPostDetailActivity.EXTRA_POST_FRAGMENT_ID, mFragment.getPostFragmentId());
+            intent.putExtra(ViewPostDetailActivity.EXTRA_IS_NSFW_SUBREDDIT, mFragment.getIsNsfwSubreddit());
+            mActivity.startActivity(intent);
+        }
     }
 
     private void openMedia(Post post) {
@@ -2113,7 +2116,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     Post post = getItem(position);
                     if (post != null) {
                         markPostRead(post, true);
-                        canStartActivity = false;
 
                         openViewPostDetailActivity(post, getBindingAdapterPosition());
                     }
@@ -3160,8 +3162,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 Post post = getItem(position);
                 if (post != null && canStartActivity) {
                     markPostRead(post, true);
-                    canStartActivity = false;
-
                     openViewPostDetailActivity(post, getBindingAdapterPosition());
                 }
             });
@@ -3750,7 +3750,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     Post post = getItem(position);
                     if (post != null) {
                         markPostRead(post, true);
-                        canStartActivity = false;
 
                         if (post.getPostType() == Post.TEXT_TYPE || !mSharedPreferences.getBoolean(SharedPreferencesUtils.CLICK_TO_SHOW_MEDIA_IN_GALLERY_LAYOUT, false)) {
                             openViewPostDetailActivity(post, getBindingAdapterPosition());
@@ -3767,7 +3766,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     Post post = getItem(position);
                     if (post != null) {
                         markPostRead(post, true);
-                        canStartActivity = false;
 
                         if (post.getPostType() == Post.TEXT_TYPE || mSharedPreferences.getBoolean(SharedPreferencesUtils.CLICK_TO_SHOW_MEDIA_IN_GALLERY_LAYOUT, false)) {
                             openViewPostDetailActivity(post, getBindingAdapterPosition());
