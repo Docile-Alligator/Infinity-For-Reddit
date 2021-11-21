@@ -17,7 +17,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.util.DisplayMetrics;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -338,10 +337,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
         }
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        int windowWidth = displayMetrics.widthPixels;
-
         mGlide = Glide.with(activity);
 
         lazyModeRunnable = new LazyModeRunnable() {
@@ -452,7 +447,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mCustomThemeWrapper, locale,
-                    windowWidth, accessToken, accountName, postType, postLayout, true,
+                    accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
@@ -529,7 +524,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mCustomThemeWrapper, locale,
-                    windowWidth, accessToken, accountName, postType, postLayout, displaySubredditName,
+                    accessToken, accountName, postType, postLayout, displaySubredditName,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
@@ -600,7 +595,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mCustomThemeWrapper, locale,
-                    windowWidth, accessToken, accountName, postType, postLayout, true,
+                    accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
@@ -665,7 +660,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mCustomThemeWrapper, locale,
-                    windowWidth, accessToken, accountName, postType, postLayout, true,
+                    accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
@@ -726,7 +721,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mCustomThemeWrapper, locale,
-                    windowWidth, accessToken, accountName, postType, postLayout, true,
+                    accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
@@ -786,7 +781,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mCustomThemeWrapper, locale,
-                    windowWidth, accessToken, accountName, postType, postLayout, true,
+                    accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
@@ -840,7 +835,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mCustomThemeWrapper, locale,
-                    windowWidth, accessToken, accountName, postType, postLayout, true,
+                    accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
@@ -891,7 +886,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             StaggeredGridLayoutManagerItemOffsetDecoration itemDecoration =
                     new StaggeredGridLayoutManagerItemOffsetDecoration(activity, R.dimen.staggeredLayoutManagerItemOffset, nColumns);
             mPostRecyclerView.addItemDecoration(itemDecoration);
-            windowWidth /= 2;
         }
 
         if (recyclerViewPosition > 0) {
