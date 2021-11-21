@@ -270,9 +270,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     drawer.setFitsSystemWindows(false);
                     getWindow().setDecorFitsSystemWindows(false);
-                    /*drawer.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);*/
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }

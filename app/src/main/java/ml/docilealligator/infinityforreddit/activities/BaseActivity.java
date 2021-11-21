@@ -129,10 +129,10 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }
         }
 
-        boolean userDefinedChangeSatusBarIconColorInImmersiveInterface =
+        boolean userDefinedChangeStatusBarIconColorInImmersiveInterface =
                 customThemeWrapper.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface();
         if (immersiveInterface && isImmersiveInterfaceApplicable) {
-            changeStatusBarIconColor = userDefinedChangeSatusBarIconColorInImmersiveInterface;
+            changeStatusBarIconColor = userDefinedChangeStatusBarIconColorInImmersiveInterface;
         } else {
             changeStatusBarIconColor = false;
         }
