@@ -6,6 +6,7 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -85,6 +86,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.apis.VReddIt;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PlaybackSpeedBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.font.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.font.FontFamily;
@@ -201,6 +203,9 @@ public class ViewVideoActivity extends AppCompatActivity {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
 
     @Inject
     Executor mExecutor;
@@ -566,10 +571,13 @@ public class ViewVideoActivity extends AppCompatActivity {
 
                         hdButton.setVisibility(View.VISIBLE);
                         hdButton.setOnClickListener(view -> {
-                            TrackSelectionDialogBuilder build = new TrackSelectionDialogBuilder(ViewVideoActivity.this, getString(R.string.select_video_quality), trackSelector, 0);
-                            build.setShowDisableOption(true);
-                            build.setAllowAdaptiveSelections(false);
-                            build.build().show();
+                            TrackSelectionDialogBuilder builder = new TrackSelectionDialogBuilder(ViewVideoActivity.this, getString(R.string.select_video_quality), trackSelector, 0);
+                            builder.setShowDisableOption(true);
+                            builder.setAllowAdaptiveSelections(false);
+                            AlertDialog alertDialog = builder.build();
+                            alertDialog.show();
+                            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+                            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
                         });
                     }
 

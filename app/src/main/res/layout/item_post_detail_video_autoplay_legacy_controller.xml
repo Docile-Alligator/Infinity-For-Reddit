@@ -214,6 +214,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:show_timeout="1500"
+            app:auto_show="false"
             app:controller_layout_id="@layout/exo_autoplay_playback_control_view_legacy" />
 
         <pl.droidsonroids.gif.GifImageView
