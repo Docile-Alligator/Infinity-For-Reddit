@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.r0adkll.slidr.Slidr;
@@ -115,6 +116,7 @@ public class WikiActivity extends BaseActivity {
     private Markwon markwon;
     private MarkwonAdapter markwonAdapter;
     private boolean isRefreshing = false;
+    private RequestManager mGlide;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,6 +157,8 @@ public class WikiActivity extends BaseActivity {
                 markdownRecyclerView.setPadding(markdownRecyclerView.getPaddingLeft(), 0, markdownRecyclerView.getPaddingRight(), getNavBarHeight());
             }
         }
+
+        mGlide = Glide.with(this);
 
         swipeRefreshLayout.setEnabled(mSharedPreferences.getBoolean(SharedPreferencesUtils.PULL_TO_REFRESH, true));
         swipeRefreshLayout.setOnRefreshListener(this::loadWiki);
@@ -286,7 +290,7 @@ public class WikiActivity extends BaseActivity {
         swipeRefreshLayout.setRefreshing(false);
         mFetchWikiInfoLinearLayout.setVisibility(View.VISIBLE);
         mFetchWikiInfoTextView.setText(stringResId);
-        Glide.with(this).load(R.drawable.error_image).into(mFetchWikiInfoImageView);
+        mGlide.load(R.drawable.error_image).into(mFetchWikiInfoImageView);
     }
 
     @Override

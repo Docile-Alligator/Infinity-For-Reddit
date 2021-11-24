@@ -16,7 +16,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.DisplayMetrics;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -224,7 +223,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private boolean mExpandChildren;
     private boolean mSeparatePostAndComments = false;
     private boolean mMarkPostsAsRead;
-    private int mWindowWidth;
     private ConcatAdapter mConcatAdapter;
     private PostDetailRecyclerViewAdapter mPostAdapter;
     private CommentsRecyclerViewAdapter mCommentsAdapter;
@@ -289,10 +287,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             }
             showToast = true;
         }
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        mWindowWidth = displayMetrics.widthPixels;
 
         mLockFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
         mSwipeUpToHideFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
@@ -550,7 +544,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             mPostAdapter = new PostDetailRecyclerViewAdapter(activity,
                     this, mExecutor, mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mRedditDataRoomDatabase, mGlide,
-                    mWindowWidth, mSeparatePostAndComments, mAccessToken, mAccountName, mPost, mLocale,
+                    mSeparatePostAndComments, mAccessToken, mAccountName, mPost, mLocale,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
                     mExoCreator, post -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
             mCommentsAdapter = new CommentsRecyclerViewAdapter(activity,
@@ -1195,7 +1189,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             mPostAdapter = new PostDetailRecyclerViewAdapter(activity,
                                     ViewPostDetailFragment.this, mExecutor, mCustomThemeWrapper,
                                     mRetrofit, mOauthRetrofit, mGfycatRetrofit, mRedgifsRetrofit,
-                                    mRedditDataRoomDatabase, mGlide, mWindowWidth, mSeparatePostAndComments,
+                                    mRedditDataRoomDatabase, mGlide, mSeparatePostAndComments,
                                     mAccessToken, mAccountName, mPost, mLocale, mSharedPreferences,
                                     mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
                                     mExoCreator,
