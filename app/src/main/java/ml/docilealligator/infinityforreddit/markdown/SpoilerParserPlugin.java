@@ -69,7 +69,7 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
                 markdownStringBuilder.setSpan(spoilerSpan, spoilerStart, spoilerEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 offset += 4;
             }
-            s
+            
             for (CodeSpan codeSpan : codeSpans) {
                 int spanBeginning = markdownStringBuilder.getSpanStart(codeSpan);
                 int spanEnd = markdownStringBuilder.getSpanEnd(codeSpan);
