@@ -14,6 +14,7 @@ import org.commonmark.node.HtmlInline;
 import org.commonmark.parser.Parser;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
 
@@ -55,7 +56,7 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
         LinkedHashMap<Integer, Integer> spoilers = parse(markdownStringBuilder);
         int offset = 2;
 
-        for (var entry : spoilers.entrySet()) {
+        for (Map.Entry<Integer, Integer> entry : spoilers.entrySet()) {
             int spoilerStart = entry.getKey() - offset;
             int spoilerEnd = entry.getValue() - offset;
 
@@ -69,7 +70,7 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
                 markdownStringBuilder.setSpan(spoilerSpan, spoilerStart, spoilerEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 offset += 4;
             }
-            
+
             for (CodeSpan codeSpan : codeSpans) {
                 int spanBeginning = markdownStringBuilder.getSpanStart(codeSpan);
                 int spanEnd = markdownStringBuilder.getSpanEnd(codeSpan);
@@ -98,8 +99,9 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
                 }
             }
         }
-
-        textView.setText(markdownStringBuilder);
+        if(offset > 2) {
+            textView.setText(markdownStringBuilder);
+        }
     }
 
     // Very naive implementation, needs to be improved for efficiency and edge cases
