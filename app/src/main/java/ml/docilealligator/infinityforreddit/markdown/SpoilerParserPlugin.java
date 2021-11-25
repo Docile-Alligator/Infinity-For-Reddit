@@ -83,7 +83,7 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
             for (CodeSpan codeSpan : codeSpans) {
                 int spanBeginning = markdownStringBuilder.getSpanStart(codeSpan);
                 int spanEnd = markdownStringBuilder.getSpanEnd(codeSpan);
-                if (spoilerStart < spanBeginning && spanEnd < spoilerEnd) {
+                if (spoilerStart + 2 <= spanBeginning && spanEnd <= spoilerEnd + 2) {
                     markdownStringBuilder.delete(spoilerStart, spoilerStart + 2);
                     markdownStringBuilder.delete(spoilerEnd, spoilerEnd + 2);
                     SpoilerSpan spoilerSpan = new SpoilerSpan(textColor, backgroundColor);
@@ -97,7 +97,7 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
             for (CodeBlockSpan codeBlockSpan : codeBlockSpans) {
                 int spanBeginning = markdownStringBuilder.getSpanStart(codeBlockSpan);
                 int spanEnd = markdownStringBuilder.getSpanEnd(codeBlockSpan);
-                if (spoilerStart < spanBeginning && spanEnd < spoilerEnd) {
+                if (spoilerStart + 2 <= spanBeginning && spanEnd <= spoilerEnd + 2) {
                     markdownStringBuilder.delete(spoilerStart, spoilerStart + 2);
                     markdownStringBuilder.delete(spoilerEnd, spoilerEnd + 2);
                     SpoilerSpan spoilerSpan = new SpoilerSpan(textColor, backgroundColor);
