@@ -51,15 +51,24 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
     @Override
     public void afterSetText(@NonNull TextView textView) {
         textView.setHighlightColor(Color.TRANSPARENT);
+
+        if(textView.getText().length() < 5) {
+            return;
+        }
+
         SpannableStringBuilder markdownStringBuilder = new SpannableStringBuilder(textView.getText());
 
         LinkedHashMap<Integer, Integer> spoilers = parse(markdownStringBuilder);
+        if(spoilers.size() == 0) {
+            return;
+        }
         int offset = 2;
 
         for (Map.Entry<Integer, Integer> entry : spoilers.entrySet()) {
             int spoilerStart = entry.getKey() - offset;
             int spoilerEnd = entry.getValue() - offset;
 
+            // Try not to set a spoiler span if it's inside a CodeSpan
             CodeSpan[] codeSpans = markdownStringBuilder.getSpans(spoilerStart, spoilerEnd, CodeSpan.class);
             CodeBlockSpan[] codeBlockSpans = markdownStringBuilder.getSpans(spoilerStart, spoilerEnd, CodeBlockSpan.class);
 
@@ -108,7 +117,6 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
     // Don't allow more than one new line after every non-blank line
     // Try not to care about recursing spoilers, we just want the outermost spoiler because
     // spoiler revealing-hiding breaks with recursing spoilers
-    // Try not to set a spoiler span if it's inside a CodeSpan
     private LinkedHashMap<Integer, Integer> parse(SpannableStringBuilder markdown) {
         final int MAX_NEW_LINE = 1;
         var openSpoilerStack = new Stack<Integer>();
