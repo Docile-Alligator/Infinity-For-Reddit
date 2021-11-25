@@ -132,7 +132,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
 
         mFullName = getIntent().getStringExtra(EXTRA_FULLNAME);
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mCommentContent = getIntent().getStringExtra(EXTRA_CONTENT).replaceAll("&gt;!",">!");
+        mCommentContent = getIntent().getStringExtra(EXTRA_CONTENT);
         contentEditText.setText(mCommentContent);
 
         if (savedInstanceState != null) {

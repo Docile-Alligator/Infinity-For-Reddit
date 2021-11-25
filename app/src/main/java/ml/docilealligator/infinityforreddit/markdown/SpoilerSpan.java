@@ -53,6 +53,7 @@ public class SpoilerSpan extends ClickableSpan {
     @Override
     public void updateDrawState(@NonNull TextPaint ds) {
         if (isShowing) {
+            ds.bgColor = backgroundColor & 0x0D000000; //Slightly darker background color for revealed spoiler
             super.updateDrawState(ds);
         } else {
             ds.bgColor = backgroundColor;

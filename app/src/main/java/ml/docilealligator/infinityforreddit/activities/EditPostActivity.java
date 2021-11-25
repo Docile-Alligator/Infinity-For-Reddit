@@ -141,7 +141,7 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
         mFullName = getIntent().getStringExtra(EXTRA_FULLNAME);
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         titleTextView.setText(getIntent().getStringExtra(EXTRA_TITLE));
-        mPostContent = getIntent().getStringExtra(EXTRA_CONTENT).replaceAll("&gt;!",">!");;
+        mPostContent = getIntent().getStringExtra(EXTRA_CONTENT);
         contentEditText.setText(mPostContent);
 
         if (savedInstanceState != null) {
