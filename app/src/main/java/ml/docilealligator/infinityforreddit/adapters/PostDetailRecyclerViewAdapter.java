@@ -131,7 +131,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private static final int VIEW_TYPE_POST_DETAIL_NO_PREVIEW_LINK = 6;
     private static final int VIEW_TYPE_POST_DETAIL_GALLERY = 7;
     private static final int VIEW_TYPE_POST_DETAIL_TEXT_TYPE = 8;
-    private final MarkwonAdapter mMarkwonAdapter;
     private AppCompatActivity mActivity;
     private ViewPostDetailFragment mFragment;
     private Executor mExecutor;
