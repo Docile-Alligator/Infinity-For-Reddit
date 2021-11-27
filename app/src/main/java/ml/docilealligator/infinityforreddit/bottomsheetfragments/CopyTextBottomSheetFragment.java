@@ -74,7 +74,6 @@ public class CopyTextBottomSheetFragment extends LandscapeExpandedRoundedBottomS
 
         if (markdownText != null) {
             //markdownText = markdownText.replaceAll("<sup>", "^").replaceAll("</sup>", "");
-            markdownText = markdownText.replaceAll("&gt;", ">");
             copyMarkdownTextView.setOnClickListener(view -> {
                 showCopyDialog(markdownText);
                 dismiss();

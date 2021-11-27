@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.utils;
+package ml.docilealligator.infinityforreddit.markdown;
 
 import androidx.annotation.Nullable;
 
