@@ -13,14 +13,23 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_view_edit_profile_activity"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar_layout_edit_profile_activity"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:minHeight="?attr/actionBarSize"
-            app:navigationIcon="?attr/homeAsUpIndicator"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="@string/action_edit_profile" />
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:titleEnabled="false"
+            app:toolbarId="@+id/toolbar_post_text_activity">
+
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolbar_view_edit_profile_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="?attr/actionBarSize"
+                app:navigationIcon="?attr/homeAsUpIndicator"
+                app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -42,130 +51,121 @@
                 <FrameLayout
                     android:id="@+id/frame_layout_view_banner_edit_profile_activity"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="8dp">
+                    android:layout_height="wrap_content">
 
-                    <ImageView
+                    <pl.droidsonroids.gif.GifImageView
                         android:id="@+id/image_view_banner_edit_profile_activity"
                         android:layout_width="match_parent"
                         android:layout_height="180dp"
-                        android:contentDescription="@null"
                         android:scaleType="centerCrop"
                         tools:src="@tools:sample/backgrounds/scenic" />
 
                     <ImageView
                         android:id="@+id/image_view_change_banner_edit_profile_activity"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="end|bottom"
-                        android:layout_margin="4dp"
+                        android:layout_margin="8dp"
+                        android:padding="8dp"
                         android:background="@drawable/ic_dot_outline"
-                        android:contentDescription="@null"
-                        android:padding="4dp"
                         app:srcCompat="@drawable/ic_outline_add_a_photo_day_night_24dp" />
 
                 </FrameLayout>
 
                 <FrameLayout
                     android:id="@+id/frame_layout_view_avatar_edit_profile_activity"
-                    android:layout_width="74dp"
-                    android:layout_height="74dp"
-                    android:layout_marginStart="24dp"
-                    android:layout_marginTop="143dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="144dp"
                     android:elevation="4dp">
 
-                    <ImageView
+                    <pl.droidsonroids.gif.GifImageView
                         android:id="@+id/image_view_avatar_edit_profile_activity"
-                        android:layout_width="74dp"
-                        android:layout_height="74dp"
-                        android:contentDescription="@null"
+                        android:layout_width="72dp"
+                        android:layout_height="72dp"
                         tools:src="@tools:sample/avatars" />
 
                     <ImageView
                         android:id="@+id/image_view_change_avatar_edit_profile_activity"
-                        android:layout_width="32dp"
-                        android:layout_height="32dp"
-                        android:layout_gravity="end|bottom"
-                        android:layout_margin="4dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:padding="8dp"
                         android:background="@drawable/ic_dot_outline"
-                        android:contentDescription="@null"
-                        android:padding="4dp"
                         app:srcCompat="@drawable/ic_outline_add_a_photo_day_night_24dp" />
 
                 </FrameLayout>
 
             </FrameLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:layout_margin="8dp"
-                android:background="?dividerVertical" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:orientation="vertical"
-                android:padding="8dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="?attr/font_family"
+                    android:paddingTop="48dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
                     android:text="@string/display_name_text"
-                    android:textSize="?attr/font_18" />
+                    android:textSize="?attr/font_18"
+                    android:fontFamily="?attr/font_family" />
 
                 <EditText
                     android:id="@+id/edit_text_display_name_edit_profile_activity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="top"
+                    android:padding="16dp"
+                    android:background="#00000000"
+                    android:textSize="?attr/font_16"
+                    android:fontFamily="?attr/font_family"
                     android:hint="@string/display_name_hint"
                     android:importantForAutofill="no"
                     android:inputType="textCapSentences"
-                    android:lines="1"
-                    android:maxLength="30"
-                    android:maxLines="1"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="16dp" />
+                    android:maxLength="30" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/display_name_description" />
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
+                    android:text="@string/display_name_description"
+                    android:textSize="?attr/font_12"
+                    android:fontFamily="?attr/font_family" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:orientation="vertical"
-                android:padding="8dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="?attr/font_family"
+                    android:paddingTop="48dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp"
                     android:text="@string/about_you_text"
-                    android:textSize="?attr/font_18" />
+                    android:textSize="?attr/font_18"
+                    android:fontFamily="?attr/font_family" />
 
                 <EditText
                     android:id="@+id/edit_text_about_you_edit_profile_activity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:padding="16dp"
                     android:gravity="top"
+                    android:background="#00000000"
+                    android:textSize="?attr/font_16"
+                    android:fontFamily="?attr/font_family"
                     android:hint="@string/about_you_hint"
                     android:importantForAutofill="no"
                     android:inputType="textCapSentences|textMultiLine"
-                    android:lines="4"
-                    android:maxLength="200"
-                    android:maxLines="4"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="16dp" />
+                    android:maxLength="200" />
 
             </LinearLayout>
 

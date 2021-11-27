@@ -69,6 +69,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.FetchGfycatOrRedgifsVideoLinks;
 import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
+import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.VoteThing;
@@ -128,7 +129,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private Retrofit mOauthRetrofit;
     private Retrofit mGfycatRetrofit;
     private Retrofit mRedgifsRetrofit;
-    private int mImageViewWidth;
     private String mAccessToken;
     private RequestManager mGlide;
     private Locale mLocale;
@@ -208,7 +208,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
     public PostRecyclerViewAdapter(AppCompatActivity activity, PostFragment fragment, Executor executor, Retrofit oauthRetrofit,
                                    Retrofit gfycatRetrofit, Retrofit redgifsRetrofit,
-                                   CustomThemeWrapper customThemeWrapper, Locale locale, int imageViewWidth,
+                                   CustomThemeWrapper customThemeWrapper, Locale locale,
                                    String accessToken, String accountName, int postType, int postLayout, boolean displaySubredditName,
                                    SharedPreferences sharedPreferences, SharedPreferences nsfwAndSpoilerSharedPreferences,
                                    SharedPreferences postHistorySharedPreferences,
@@ -222,7 +222,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mOauthRetrofit = oauthRetrofit;
             mGfycatRetrofit = gfycatRetrofit;
             mRedgifsRetrofit = redgifsRetrofit;
-            mImageViewWidth = imageViewWidth;
             mAccessToken = accessToken;
             mPostType = postType;
             mDisplaySubredditName = displaySubredditName;
@@ -678,11 +677,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     Post.Preview preview = getSuitablePreview(post.getPreviews());
                     if (preview != null) {
                         ((PostVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio((float) preview.getPreviewWidth() / preview.getPreviewHeight());
-                        if (mImageViewWidth > preview.getPreviewWidth()) {
-                            mGlide.load(preview.getPreviewUrl()).override(Target.SIZE_ORIGINAL).into(((PostVideoAutoplayViewHolder) holder).previewImageView);
-                        } else {
-                            mGlide.load(preview.getPreviewUrl()).into(((PostVideoAutoplayViewHolder) holder).previewImageView);
-                        }
+                        mGlide.load(preview.getPreviewUrl()).centerInside().downsample(new SaveMemoryCenterInisdeDownsampleStrategy()).into(((PostVideoAutoplayViewHolder) holder).previewImageView);
                     } else {
                         ((PostVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio(1);
                     }
@@ -776,8 +771,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 int height = (int) (400 * mScale);
                                 ((PostWithPreviewTypeViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                                 ((PostWithPreviewTypeViewHolder) holder).imageView.getLayoutParams().height = height;
-                                preview.setPreviewWidth(mImageViewWidth);
-                                preview.setPreviewHeight(height);
                             } else {
                                 ((PostWithPreviewTypeViewHolder) holder).imageView
                                         .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
@@ -811,11 +804,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     Post.Preview preview = getSuitablePreview(post.getPreviews());
                     if (preview != null) {
                         ((PostCard2VideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio((float) preview.getPreviewWidth() / preview.getPreviewHeight());
-                        if (mImageViewWidth > preview.getPreviewWidth()) {
-                            mGlide.load(preview.getPreviewUrl()).override(Target.SIZE_ORIGINAL).into(((PostCard2VideoAutoplayViewHolder) holder).previewImageView);
-                        } else {
-                            mGlide.load(preview.getPreviewUrl()).into(((PostCard2VideoAutoplayViewHolder) holder).previewImageView);
-                        }
+                        mGlide.load(preview.getPreviewUrl()).centerInside().downsample(new SaveMemoryCenterInisdeDownsampleStrategy()).into(((PostCard2VideoAutoplayViewHolder) holder).previewImageView);
                     } else {
                         ((PostCard2VideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio(1);
                     }
@@ -911,8 +900,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 int height = (int) (400 * mScale);
                                 ((PostCard2WithPreviewViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                                 ((PostCard2WithPreviewViewHolder) holder).imageView.getLayoutParams().height = height;
-                                preview.setPreviewWidth(mImageViewWidth);
-                                preview.setPreviewHeight(height);
                             } else {
                                 ((PostCard2WithPreviewViewHolder) holder).imageView
                                         .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
@@ -1293,8 +1280,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 int height = (int) (400 * mScale);
                                 ((PostGalleryViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                                 ((PostGalleryViewHolder) holder).imageView.getLayoutParams().height = height;
-                                preview.setPreviewWidth(mImageViewWidth);
-                                preview.setPreviewHeight(height);
                             } else {
                                 ((PostGalleryViewHolder) holder).imageView
                                         .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
@@ -1329,8 +1314,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 int height = (int) (400 * mScale);
                                 ((PostGalleryViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                                 ((PostGalleryViewHolder) holder).imageView.getLayoutParams().height = height;
-                                preview.setPreviewWidth(mImageViewWidth);
-                                preview.setPreviewHeight(height);
                             } else {
                                 ((PostGalleryViewHolder) holder).imageView
                                         .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
@@ -1355,8 +1338,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 int height = (int) (400 * mScale);
                                 ((PostGalleryViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                                 ((PostGalleryViewHolder) holder).imageView.getLayoutParams().height = height;
-                                preview.setPreviewWidth(mImageViewWidth);
-                                preview.setPreviewHeight(height);
                             } else {
                                 ((PostGalleryViewHolder) holder).imageView
                                         .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
@@ -1381,8 +1362,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 int height = (int) (400 * mScale);
                                 ((PostGalleryViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                                 ((PostGalleryViewHolder) holder).imageView.getLayoutParams().height = height;
-                                preview.setPreviewWidth(mImageViewWidth);
-                                preview.setPreviewHeight(height);
                             } else {
                                 ((PostGalleryViewHolder) holder).imageView
                                         .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
@@ -1417,8 +1396,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 int height = (int) (400 * mScale);
                                 ((PostGalleryViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
                                 ((PostGalleryViewHolder) holder).imageView.getLayoutParams().height = height;
-                                preview.setPreviewWidth(mImageViewWidth);
-                                preview.setPreviewHeight(height);
                             } else {
                                 ((PostGalleryViewHolder) holder).imageView
                                         .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
@@ -1449,28 +1426,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             if (preview.getPreviewWidth() * preview.getPreviewHeight() > 5_000_000) {
                 for (int i = previews.size() - 1; i >= 1; i--) {
                     preview = previews.get(i);
-                    if (mImageViewWidth >= preview.getPreviewWidth()) {
-                        if (preview.getPreviewWidth() * preview.getPreviewHeight() <= 5_000_000) {
-                            return preview;
-                        }
-                    } else {
-                        int height = mImageViewWidth / preview.getPreviewWidth() * preview.getPreviewHeight();
-                        if (mImageViewWidth * height <= 5_000_000) {
-                            preview.setPreviewWidth(mImageViewWidth);
-                            preview.setPreviewHeight(height);
-                            return preview;
-                        }
+                    if (preview.getPreviewWidth() * preview.getPreviewHeight() <= 5_000_000) {
+                        return preview;
                     }
                 }
-            }
-
-            if (preview.getPreviewWidth() * preview.getPreviewHeight() > 5_000_000) {
-                int divisor = 2;
-                do {
-                    preview.setPreviewWidth(preview.getPreviewWidth() / divisor);
-                    preview.setPreviewHeight(preview.getPreviewHeight() / divisor);
-                    divisor *= 2;
-                } while (preview.getPreviewWidth() * preview.getPreviewHeight() > 5_000_000);
             }
             return preview;
         }
@@ -1496,7 +1455,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                             .into(((PostWithPreviewTypeViewHolder) holder).imageView);
                 } else {
-                    imageRequestBuilder.override(preview.getPreviewWidth(), preview.getPreviewHeight()).centerInside().into(((PostWithPreviewTypeViewHolder) holder).imageView);
+                    imageRequestBuilder.centerInside().downsample(new SaveMemoryCenterInisdeDownsampleStrategy()).into(((PostWithPreviewTypeViewHolder) holder).imageView);
                 }
             }
         } else if (holder instanceof PostCompactBaseViewHolder) {
@@ -1536,11 +1495,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                             .into(((PostGalleryViewHolder) holder).imageView);
                 } else {
-                    if (mImageViewWidth > preview.getPreviewWidth()) {
-                        imageRequestBuilder.override(preview.getPreviewWidth(), preview.getPreviewHeight()).into(((PostGalleryViewHolder) holder).imageView);
-                    } else {
-                        imageRequestBuilder.into(((PostGalleryViewHolder) holder).imageView);
-                    }
+                    imageRequestBuilder.centerInside().downsample(new SaveMemoryCenterInisdeDownsampleStrategy()).into(((PostGalleryViewHolder) holder).imageView);
                 }
             }
         } else if (holder instanceof PostCard2WithPreviewViewHolder) {
@@ -1560,11 +1515,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                             .into(((PostCard2WithPreviewViewHolder) holder).imageView);
                 } else {
-                    if (mImageViewWidth > preview.getPreviewWidth()) {
-                        imageRequestBuilder.override(preview.getPreviewWidth(), preview.getPreviewHeight()).into(((PostCard2WithPreviewViewHolder) holder).imageView);
-                    } else {
-                        imageRequestBuilder.into(((PostCard2WithPreviewViewHolder) holder).imageView);
-                    }
+                    imageRequestBuilder.centerInside().downsample(new SaveMemoryCenterInisdeDownsampleStrategy()).into(((PostCard2WithPreviewViewHolder) holder).imageView);
                 }
             }
         }
@@ -1918,12 +1869,15 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     }
 
     private void openViewPostDetailActivity(Post post, int position) {
-        Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
-        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, post);
-        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, position);
-        intent.putExtra(ViewPostDetailActivity.EXTRA_POST_FRAGMENT_ID, mFragment.getPostFragmentId());
-        intent.putExtra(ViewPostDetailActivity.EXTRA_IS_NSFW_SUBREDDIT, mFragment.getIsNsfwSubreddit());
-        mActivity.startActivity(intent);
+        if (canStartActivity) {
+            canStartActivity = false;
+            Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
+            intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, post);
+            intent.putExtra(ViewPostDetailActivity.EXTRA_POST_LIST_POSITION, position);
+            intent.putExtra(ViewPostDetailActivity.EXTRA_POST_FRAGMENT_ID, mFragment.getPostFragmentId());
+            intent.putExtra(ViewPostDetailActivity.EXTRA_IS_NSFW_SUBREDDIT, mFragment.getIsNsfwSubreddit());
+            mActivity.startActivity(intent);
+        }
     }
 
     private void openMedia(Post post) {
@@ -2115,7 +2069,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     Post post = getItem(position);
                     if (post != null) {
                         markPostRead(post, true);
-                        canStartActivity = false;
 
                         openViewPostDetailActivity(post, getBindingAdapterPosition());
                     }
@@ -3162,8 +3115,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 Post post = getItem(position);
                 if (post != null && canStartActivity) {
                     markPostRead(post, true);
-                    canStartActivity = false;
-
                     openViewPostDetailActivity(post, getBindingAdapterPosition());
                 }
             });
@@ -3752,7 +3703,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     Post post = getItem(position);
                     if (post != null) {
                         markPostRead(post, true);
-                        canStartActivity = false;
 
                         if (post.getPostType() == Post.TEXT_TYPE || !mSharedPreferences.getBoolean(SharedPreferencesUtils.CLICK_TO_SHOW_MEDIA_IN_GALLERY_LAYOUT, false)) {
                             openViewPostDetailActivity(post, getBindingAdapterPosition());
@@ -3769,7 +3719,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     Post post = getItem(position);
                     if (post != null) {
                         markPostRead(post, true);
-                        canStartActivity = false;
 
                         if (post.getPostType() == Post.TEXT_TYPE || mSharedPreferences.getBoolean(SharedPreferencesUtils.CLICK_TO_SHOW_MEDIA_IN_GALLERY_LAYOUT, false)) {
                             openViewPostDetailActivity(post, getBindingAdapterPosition());

@@ -1,27 +1,29 @@
 package ml.docilealligator.infinityforreddit.utils;
 
 import android.graphics.Bitmap;
+
 import androidx.annotation.NonNull;
+
 import com.google.gson.Gson;
-import ml.docilealligator.infinityforreddit.apis.RedditAPI;
-import ml.docilealligator.infinityforreddit.subreddit.SubredditSettingData;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
+
 import org.json.JSONException;
 import org.json.JSONObject;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
 
 import java.io.ByteArrayOutputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.subreddit.SubredditSettingData;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+
 public final class EditProfileUtils {
-
-
 
     public static void updateProfile(Retrofit oauthRetrofit,
                                      String accessToken,

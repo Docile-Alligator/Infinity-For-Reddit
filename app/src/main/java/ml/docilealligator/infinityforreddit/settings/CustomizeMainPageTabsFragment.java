@@ -492,26 +492,26 @@ public class CustomizeMainPageTabsFragment extends Fragment {
 
         tab3AddImageView.setOnClickListener(view -> selectName(2));
 
-        showMultiredditsSwitchMaterial.setChecked(mainActivityTabsSharedPreferences.getBoolean(accountName + SharedPreferencesUtils.MAIN_PAGE_SHOW_MULTIREDDITS, false));
-        showMultiredditsSwitchMaterial.setOnCheckedChangeListener((compoundButton, b) -> mainActivityTabsSharedPreferences.edit().putBoolean(accountName + SharedPreferencesUtils.MAIN_PAGE_SHOW_MULTIREDDITS, b).apply());
+        showMultiredditsSwitchMaterial.setChecked(mainActivityTabsSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_MULTIREDDITS, false));
+        showMultiredditsSwitchMaterial.setOnCheckedChangeListener((compoundButton, b) -> mainActivityTabsSharedPreferences.edit().putBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_MULTIREDDITS, b).apply());
         showMultiredditsLinearLayout.setOnClickListener(view -> {
             showMultiredditsSwitchMaterial.performClick();
         });
 
-        showFavoriteMultiredditsSwitchMaterial.setChecked(mainActivityTabsSharedPreferences.getBoolean(accountName + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_MULTIREDDITS, false));
-        showFavoriteMultiredditsSwitchMaterial.setOnCheckedChangeListener((compoundButton, b) -> mainActivityTabsSharedPreferences.edit().putBoolean(accountName + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_MULTIREDDITS, b).apply());
+        showFavoriteMultiredditsSwitchMaterial.setChecked(mainActivityTabsSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_MULTIREDDITS, false));
+        showFavoriteMultiredditsSwitchMaterial.setOnCheckedChangeListener((compoundButton, b) -> mainActivityTabsSharedPreferences.edit().putBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_MULTIREDDITS, b).apply());
         showFavoriteMultiredditsLinearLayout.setOnClickListener(view -> {
             showFavoriteMultiredditsSwitchMaterial.performClick();
         });
 
-        showSubscribedSubredditsSwitchMaterial.setChecked(mainActivityTabsSharedPreferences.getBoolean(accountName + SharedPreferencesUtils.MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS, false));
-        showSubscribedSubredditsSwitchMaterial.setOnCheckedChangeListener((compoundButton, b) -> mainActivityTabsSharedPreferences.edit().putBoolean(accountName + SharedPreferencesUtils.MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS, b).apply());
+        showSubscribedSubredditsSwitchMaterial.setChecked(mainActivityTabsSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS, false));
+        showSubscribedSubredditsSwitchMaterial.setOnCheckedChangeListener((compoundButton, b) -> mainActivityTabsSharedPreferences.edit().putBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS, b).apply());
         showSubscribedSubredditsLinearLayout.setOnClickListener(view -> {
             showSubscribedSubredditsSwitchMaterial.performClick();
         });
 
-        showFavoriteSubscribedSubredditsSwitchMaterial.setChecked(mainActivityTabsSharedPreferences.getBoolean(accountName + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_SUBSCRIBED_SUBREDDITS, false));
-        showFavoriteSubscribedSubredditsSwitchMaterial.setOnCheckedChangeListener((compoundButton, b) -> mainActivityTabsSharedPreferences.edit().putBoolean(accountName + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_SUBSCRIBED_SUBREDDITS, b).apply());
+        showFavoriteSubscribedSubredditsSwitchMaterial.setChecked(mainActivityTabsSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_SUBSCRIBED_SUBREDDITS, false));
+        showFavoriteSubscribedSubredditsSwitchMaterial.setOnCheckedChangeListener((compoundButton, b) -> mainActivityTabsSharedPreferences.edit().putBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_SUBSCRIBED_SUBREDDITS, b).apply());
         showFavoriteSubscribedSubredditsLinearLayout.setOnClickListener(view -> {
             showFavoriteSubscribedSubredditsSwitchMaterial.performClick();
         });

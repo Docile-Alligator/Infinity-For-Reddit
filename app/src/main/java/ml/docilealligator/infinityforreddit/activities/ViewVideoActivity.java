@@ -1,6 +1,12 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
 import android.Manifest;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
@@ -32,6 +38,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -79,6 +86,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.apis.VReddIt;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PlaybackSpeedBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.font.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.font.FontFamily;
@@ -150,6 +158,8 @@ public class ViewVideoActivity extends AppCompatActivity {
     TextView titleTextView;
     @BindView(R.id.download_image_view_exo_playback_control_view)
     ImageView downloadImageView;
+    @BindView(R.id.playback_speed_image_view_exo_playback_control_view)
+    ImageView playbackSpeedImageView;
     @BindView(R.id.lockable_nested_scroll_view_view_video_activity)
     LockableNestedScrollView nestedScrollView;
 
@@ -195,6 +205,9 @@ public class ViewVideoActivity extends AppCompatActivity {
     SharedPreferences mSharedPreferences;
 
     @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
+
+    @Inject
     Executor mExecutor;
 
     @Inject
@@ -206,7 +219,37 @@ public class ViewVideoActivity extends AppCompatActivity {
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
-        getTheme().applyStyle(R.style.Theme_Normal, true);
+        boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
+        int systemThemeType = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.THEME_KEY, "2"));
+        switch (systemThemeType) {
+            case 0:
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                getTheme().applyStyle(R.style.Theme_Normal, true);
+                break;
+            case 1:
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
+                    getTheme().applyStyle(R.style.Theme_Normal_AmoledDark, true);
+                } else {
+                    getTheme().applyStyle(R.style.Theme_Normal_NormalDark, true);
+                }
+                break;
+            case 2:
+                if (systemDefault) {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
+                }
+                if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO) {
+                    getTheme().applyStyle(R.style.Theme_Normal, true);
+                } else {
+                    if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
+                        getTheme().applyStyle(R.style.Theme_Normal_AmoledDark, true);
+                    } else {
+                        getTheme().applyStyle(R.style.Theme_Normal_NormalDark, true);
+                    }
+                }
+        }
 
         getTheme().applyStyle(FontStyle.valueOf(mSharedPreferences
                 .getString(SharedPreferencesUtils.FONT_SIZE_KEY, FontStyle.Normal.name())).getResId(), true);
@@ -249,6 +292,14 @@ public class ViewVideoActivity extends AppCompatActivity {
 
                 isDownloading = true;
                 requestPermissionAndDownload();
+            });
+
+            playbackSpeedImageView.setOnClickListener(view -> {
+                PlaybackSpeedBottomSheetFragment playbackSpeedBottomSheetFragment = new PlaybackSpeedBottomSheetFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt(PlaybackSpeedBottomSheetFragment.EXTRA_PLAYBACK_SPEED, playbackSpeed);
+                playbackSpeedBottomSheetFragment.setArguments(bundle);
+                playbackSpeedBottomSheetFragment.show(getSupportFragmentManager(), playbackSpeedBottomSheetFragment.getTag());
             });
         } else {
             ActionBar actionBar = getSupportActionBar();
@@ -520,10 +571,13 @@ public class ViewVideoActivity extends AppCompatActivity {
 
                         hdButton.setVisibility(View.VISIBLE);
                         hdButton.setOnClickListener(view -> {
-                            TrackSelectionDialogBuilder build = new TrackSelectionDialogBuilder(ViewVideoActivity.this, getString(R.string.select_video_quality), trackSelector, 0);
-                            build.setShowDisableOption(true);
-                            build.setAllowAdaptiveSelections(false);
-                            build.build().show();
+                            TrackSelectionDialogBuilder builder = new TrackSelectionDialogBuilder(ViewVideoActivity.this, getString(R.string.select_video_quality), trackSelector, 0);
+                            builder.setShowDisableOption(true);
+                            builder.setAllowAdaptiveSelections(false);
+                            AlertDialog alertDialog = builder.build();
+                            alertDialog.show();
+                            alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+                            alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
                         });
                     }
 

@@ -33,6 +33,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.divider.MaterialDivider;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.libRG.CustomTextView;
@@ -107,27 +108,23 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
     @BindView(R.id.rules_button_post_text_activity)
     MaterialButton rulesButton;
     @BindView(R.id.divider_1_post_text_activity)
-    View divider1;
+    MaterialDivider divider1;
     @BindView(R.id.flair_custom_text_view_post_text_activity)
     CustomTextView flairTextView;
     @BindView(R.id.spoiler_custom_text_view_post_text_activity)
     CustomTextView spoilerTextView;
     @BindView(R.id.nsfw_custom_text_view_post_text_activity)
     CustomTextView nsfwTextView;
-    @BindView(R.id.divider_2_post_text_activity)
-    View divider2;
     @BindView(R.id.receive_post_reply_notifications_linear_layout_post_text_activity)
     LinearLayout receivePostReplyNotificationsLinearLayout;
     @BindView(R.id.receive_post_reply_notifications_text_view_post_text_activity)
     TextView receivePostReplyNotificationsTextView;
     @BindView(R.id.receive_post_reply_notifications_switch_material_post_text_activity)
     SwitchMaterial receivePostReplyNotificationsSwitchMaterial;
-    @BindView(R.id.divider_3_post_text_activity)
-    View divider3;
+    @BindView(R.id.divider_2_post_text_activity)
+    MaterialDivider divider2;
     @BindView(R.id.post_title_edit_text_post_text_activity)
     EditText titleEditText;
-    @BindView(R.id.divider_4_post_text_activity)
-    View divider4;
     @BindView(R.id.post_text_content_edit_text_post_text_activity)
     EditText contentEditText;
     @BindView(R.id.markdown_bottom_bar_recycler_view_post_text_activity)
@@ -394,10 +391,8 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
         primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         receivePostReplyNotificationsTextView.setTextColor(primaryTextColor);
         int dividerColor = mCustomThemeWrapper.getDividerColor();
-        divider1.setBackgroundColor(dividerColor);
-        divider2.setBackgroundColor(dividerColor);
-        divider3.setBackgroundColor(dividerColor);
-        divider4.setBackgroundColor(dividerColor);
+        divider1.setDividerColor(dividerColor);
+        divider2.setDividerColor(dividerColor);
         flairBackgroundColor = mCustomThemeWrapper.getFlairBackgroundColor();
         flairTextColor = mCustomThemeWrapper.getFlairTextColor();
         spoilerBackgroundColor = mCustomThemeWrapper.getSpoilerBackgroundColor();

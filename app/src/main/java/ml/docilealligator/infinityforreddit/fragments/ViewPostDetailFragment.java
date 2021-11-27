@@ -16,7 +16,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.DisplayMetrics;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -67,6 +66,7 @@ import butterknife.ButterKnife;
 import im.ene.toro.exoplayer.ExoCreator;
 import im.ene.toro.media.PlaybackInfo;
 import im.ene.toro.media.VolumeInfo;
+import im.ene.toro.widget.Container;
 import ml.docilealligator.infinityforreddit.DeleteThing;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
@@ -224,7 +224,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private boolean mExpandChildren;
     private boolean mSeparatePostAndComments = false;
     private boolean mMarkPostsAsRead;
-    private int mWindowWidth;
     private ConcatAdapter mConcatAdapter;
     private PostDetailRecyclerViewAdapter mPostAdapter;
     private CommentsRecyclerViewAdapter mCommentsAdapter;
@@ -289,10 +288,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             }
             showToast = true;
         }
-
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        activity.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        mWindowWidth = displayMetrics.widthPixels;
 
         mLockFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
         mSwipeUpToHideFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_UP_TO_HIDE_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON, false);
@@ -550,7 +545,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             mPostAdapter = new PostDetailRecyclerViewAdapter(activity,
                     this, mExecutor, mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mRedditDataRoomDatabase, mGlide,
-                    mWindowWidth, mSeparatePostAndComments, mAccessToken, mAccountName, mPost, mLocale,
+                    mSeparatePostAndComments, mAccessToken, mAccountName, mPost, mLocale,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
                     mExoCreator, post -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
             mCommentsAdapter = new CommentsRecyclerViewAdapter(activity,
@@ -1195,7 +1190,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             mPostAdapter = new PostDetailRecyclerViewAdapter(activity,
                                     ViewPostDetailFragment.this, mExecutor, mCustomThemeWrapper,
                                     mRetrofit, mOauthRetrofit, mGfycatRetrofit, mRedgifsRetrofit,
-                                    mRedditDataRoomDatabase, mGlide, mWindowWidth, mSeparatePostAndComments,
+                                    mRedditDataRoomDatabase, mGlide, mSeparatePostAndComments,
                                     mAccessToken, mAccountName, mPost, mLocale, mSharedPreferences,
                                     mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
                                     mExoCreator,
@@ -1736,28 +1731,32 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     }
 
     public void scrollToNextParentComment() {
-        int currentPosition = ((LinearLayoutManagerBugFixed) (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager()).findFirstVisibleItemPosition();
-        if (mCommentsAdapter != null) {
-            int nextParentPosition = mCommentsAdapter.getNextParentCommentPosition(mCommentsRecyclerView == null ? currentPosition - 1 : currentPosition);
+        RecyclerView chooseYourView = mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView;
+        if (mCommentsAdapter != null && chooseYourView != null) {
+            int currentPosition = ((LinearLayoutManagerBugFixed) chooseYourView.getLayoutManager()).findFirstVisibleItemPosition();
+            //int nextParentPosition = mCommentsAdapter.getNextParentCommentPosition(mCommentsRecyclerView == null ? currentPosition - 1 : currentPosition);
+            int nextParentPosition = mCommentsAdapter.getNextParentCommentPosition(mCommentsRecyclerView == null && !isSingleCommentThreadMode ? currentPosition - 1 : currentPosition);
             if (nextParentPosition < 0) {
                 return;
             }
-            mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null ? nextParentPosition + 1 : nextParentPosition);
+            mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null && !isSingleCommentThreadMode ? nextParentPosition + 1 : nextParentPosition);
             mIsSmoothScrolling = true;
-            (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager().startSmoothScroll(mSmoothScroller);
+            chooseYourView.getLayoutManager().startSmoothScroll(mSmoothScroller);
         }
     }
 
     public void scrollToPreviousParentComment() {
-        int currentPosition = ((LinearLayoutManagerBugFixed) (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager()).findFirstVisibleItemPosition();
-        if (mCommentsAdapter != null) {
-            int previousParentPosition = mCommentsAdapter.getPreviousParentCommentPosition(mCommentsRecyclerView == null ? currentPosition - 1 : currentPosition);
+        RecyclerView chooseYourView = mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView;
+        if (mCommentsAdapter != null && chooseYourView != null) {
+            int currentPosition = ((LinearLayoutManagerBugFixed) chooseYourView.getLayoutManager()).findFirstVisibleItemPosition();
+            //int previousParentPosition = mCommentsAdapter.getPreviousParentCommentPosition(mCommentsRecyclerView == null ? currentPosition - 1 : currentPosition);
+            int previousParentPosition = mCommentsAdapter.getPreviousParentCommentPosition(mCommentsRecyclerView == null && !isSingleCommentThreadMode  ? currentPosition - 1 : currentPosition);
             if (previousParentPosition < 0) {
                 return;
             }
-            mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null ? previousParentPosition + 1 : previousParentPosition);
+            mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null && !isSingleCommentThreadMode  ? previousParentPosition + 1 : previousParentPosition);
             mIsSmoothScrolling = true;
-            (mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView).getLayoutManager().startSmoothScroll(mSmoothScroller);
+            chooseYourView.getLayoutManager().startSmoothScroll(mSmoothScroller);
         }
     }
 

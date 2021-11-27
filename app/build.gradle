@@ -6,8 +6,8 @@ android {
         applicationId "ml.docilealligator.infinityforreddit"
         minSdkVersion 21
         targetSdkVersion 30
-        versionCode 82
-        versionName "5.1.0-beta2"
+        versionCode 86
+        versionName "5.1.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -154,6 +154,7 @@ dependencies {
     implementation "io.noties.markwon:recycler-table:$markwonVersion"
     implementation "io.noties.markwon:simple-ext:$markwonVersion"
     implementation "io.noties.markwon:html:$markwonVersion"
+    implementation "io.noties.markwon:inline-parser:$markwonVersion"
     implementation 'com.atlassian.commonmark:commonmark-ext-gfm-tables:0.14.0'
     implementation 'me.saket:better-link-movement-method:2.2.0'
 

@@ -216,8 +216,7 @@
                 android:id="@+id/image_view_item_post_with_preview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:scaleType="fitStart" />
+                android:adjustViewBounds="true" />
 
             <ImageView
                 android:id="@+id/video_or_gif_indicator_image_view_item_post_with_preview"

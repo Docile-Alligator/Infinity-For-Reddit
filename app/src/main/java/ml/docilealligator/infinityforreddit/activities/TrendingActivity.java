@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.r0adkll.slidr.Slidr;
@@ -100,10 +101,10 @@ public class TrendingActivity extends BaseActivity {
     @Inject
     Executor mExecutor;
     private String mAccessToken;
-    private String mAccountName;
     private boolean isRefreshing = false;
     private ArrayList<TrendingSearch> trendingSearches;
     private TrendingSearchRecyclerViewAdapter adapter;
+    private RequestManager mGlide;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -151,7 +152,8 @@ public class TrendingActivity extends BaseActivity {
         setToolbarGoToTop(toolbar);
 
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+
+        mGlide = Glide.with(this);
 
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
@@ -277,7 +279,7 @@ public class TrendingActivity extends BaseActivity {
 
     private void showErrorView(int stringId) {
         errorLinearLayout.setVisibility(View.VISIBLE);
-        Glide.with(this).load(R.drawable.error_image).into(errorImageView);
+        mGlide.load(R.drawable.error_image).into(errorImageView);
         errorTextView.setText(stringId);
     }
 

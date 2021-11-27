@@ -43,6 +43,7 @@
     <string name="post_gallery_activity_label">Gallery Post</string>
     <string name="trending_activity_label">Trending</string>
     <string name="wiki_activity_label">Wiki</string>
+    <string name="edit_profile_activity_label">Edit Profile</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -91,6 +92,7 @@
     <string name="action_share_post_link">Share Post Link</string>
     <string name="action_go_to_wiki">Go to Wiki</string>
     <string name="action_playback_speed">Playback Speed</string>
+    <string name="action_contact_mods">Contact Mods</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -1226,18 +1228,18 @@
     <string name="remove_banner">Remove Banner</string>
     <string name="display_name_text">Display Name</string>
     <string name="display_name_hint">Show on your profile page</string>
-    <string name="display_name_description">This will be displayed to viewer of your profile page and does not change your username</string>
+    <string name="display_name_description">This will be displayed to viewers of your profile page and does not change your username.</string>
     <string name="about_you_text">About You</string>
-    <string name="about_you_hint">A little description of your self</string>
-    <string name="message_remove_avatar_success">Success remove Avatar</string>
-    <string name="message_remove_avatar_failed_fmt">Failed remove Avatar %s</string>
-    <string name="message_remove_banner_success">Success remove Banner</string>
-    <string name="message_remove_banner_failed_fmt">Failed remove Banner %s</string>
-    <string name="message_change_avatar_success">Success changing Avatar</string>
-    <string name="message_change_avatar_failed_fmt">Failed changing Avatar %s</string>
-    <string name="message_change_banner_success">Success changing Banner</string>
-    <string name="message_change_banner_failed_fmt">Failed changing Banner %s</string>
-    <string name="message_save_profile_success">Success save profile</string>
-    <string name="message_save_profile_failed_fmt">Failed save profile %s</string>
+    <string name="about_you_hint">A little description of yourself</string>
+    <string name="message_remove_avatar_success">Remove avatar successfully</string>
+    <string name="message_remove_avatar_failed_fmt">Failed to remove avatar %s</string>
+    <string name="message_remove_banner_success">Remove banner successfully</string>
+    <string name="message_remove_banner_failed_fmt">Failed to remove banner %s</string>
+    <string name="message_change_avatar_success">Change avatar successfully</string>
+    <string name="message_change_avatar_failed_fmt">Failed to change avatar %s</string>
+    <string name="message_change_banner_success">Changing banner successfully</string>
+    <string name="message_change_banner_failed_fmt">Failed to change banner %s</string>
+    <string name="message_save_profile_success">Save profile successfully</string>
+    <string name="message_save_profile_failed_fmt">Failed to save profile %s</string>
 
 </resources>

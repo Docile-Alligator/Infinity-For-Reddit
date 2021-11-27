@@ -25,7 +25,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
-        android:name=".Infinity"
+        android:name="ml.docilealligator.infinityforreddit.Infinity"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/application_name"
@@ -34,6 +34,11 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
+        <activity android:name=".activities.EditProfileActivity"
+            android:label="@string/edit_profile_activity_label"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.Slidable"
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activities.WikiActivity"
             android:label="@string/wiki_activity_label"
@@ -392,11 +397,6 @@
             android:name=".activities.ViewUserDetailActivity"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.SlidableWithTranslucentWindow" />
-
-        <activity android:name=".activities.EditProfileActivity"
-            android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.SlidableWithTranslucentWindow"
-            android:windowSoftInputMode="adjustPan" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

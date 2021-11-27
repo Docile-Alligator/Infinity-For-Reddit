@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
@@ -17,7 +18,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.ContextCompat;
 import androidx.lifecycle.ViewModelProvider;
@@ -26,6 +26,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrInterface;
@@ -50,6 +52,7 @@ import ml.docilealligator.infinityforreddit.services.EditProfileService;
 import ml.docilealligator.infinityforreddit.user.UserViewModel;
 import ml.docilealligator.infinityforreddit.utils.EditProfileUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
 public class EditProfileActivity extends BaseActivity {
@@ -61,14 +64,16 @@ public class EditProfileActivity extends BaseActivity {
     CoordinatorLayout root;
     @BindView(R.id.content_view_edit_profile_activity)
     LinearLayout content;
+    @BindView(R.id.collapsing_toolbar_layout_edit_profile_activity)
+    CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.appbar_layout_view_edit_profile_activity)
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_view_edit_profile_activity)
-    Toolbar toolbar;
+    MaterialToolbar toolbar;
     @BindView(R.id.image_view_banner_edit_profile_activity)
-    ImageView bannerImageView;
+    GifImageView bannerImageView;
     @BindView(R.id.image_view_avatar_edit_profile_activity)
-    ImageView avatarImageView;
+    GifImageView avatarImageView;
     @BindView(R.id.image_view_change_banner_edit_profile_activity)
     ImageView changeBanner;
     @BindView(R.id.image_view_change_avatar_edit_profile_activity)
@@ -92,20 +97,28 @@ public class EditProfileActivity extends BaseActivity {
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
 
-    //
     private String mAccountName;
     private String mAccessToken;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
-        setTransparentStatusBarAfterToolbarCollapsed();
+
+        setImmersiveModeNotApplicable();
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit_profile);
+
         ButterKnife.bind(this);
+
         EventBus.getDefault().register(this);
+
         applyCustomTheme();
-        adjustToolbar(toolbar);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
+            addOnOffsetChangedListener(appBarLayout);
+        }
+
         setSupportActionBar(toolbar);
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
@@ -130,22 +143,26 @@ public class EditProfileActivity extends BaseActivity {
                 new ViewModelProvider(this, userViewModelFactory).get(UserViewModel.class);
 
         userViewModel.getUserLiveData().observe(this, userData -> {
-            if (userData == null) return;//
+            if (userData == null) {
+                return;
+            }
             // BANNER
             final String userBanner = userData.getBanner();
             LayoutParams cBannerLp = (LayoutParams) changeBanner.getLayoutParams();
             if (userBanner == null || userBanner.isEmpty()) {
                 changeBanner.setLongClickable(false);
-                changeBanner.setImageResource(R.drawable.ic_add_day_night_24dp);
-                changeBanner.setLayoutParams(new LayoutParams(cBannerLp.width, cBannerLp.height, Gravity.CENTER));
+                cBannerLp.gravity = Gravity.CENTER;
+                changeBanner.setLayoutParams(cBannerLp);
                 changeBanner.setOnLongClickListener(v -> false);
             } else {
                 changeBanner.setLongClickable(true);
-                changeBanner.setImageResource(R.drawable.ic_outline_add_a_photo_day_night_24dp);
-                changeBanner.setLayoutParams(new LayoutParams(cBannerLp.width, cBannerLp.height, Gravity.END | Gravity.BOTTOM));
+                cBannerLp.gravity = Gravity.END | Gravity.BOTTOM;
+                changeBanner.setLayoutParams(cBannerLp);
                 glide.load(userBanner).into(bannerImageView);
                 changeBanner.setOnLongClickListener(view -> {
-                    if (mAccessToken == null) return false;
+                    if (mAccessToken == null) {
+                        return false;
+                    }
                     new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                             .setTitle(R.string.remove_banner)
                             .setMessage(R.string.are_you_sure)
@@ -182,15 +199,13 @@ public class EditProfileActivity extends BaseActivity {
             LayoutParams cAvatarLp = (LayoutParams) changeAvatar.getLayoutParams();
             if (userAvatar.contains("avatar_default_")) {
                 changeAvatar.setLongClickable(false);
-                changeAvatar.setImageResource(R.drawable.ic_add_day_night_24dp);
-                changeAvatar.setLayoutParams(new LayoutParams(cAvatarLp.width, cAvatarLp.height, Gravity.CENTER));
                 changeAvatar.setOnLongClickListener(v -> false);
             } else {
                 changeAvatar.setLongClickable(true);
-                changeAvatar.setImageResource(R.drawable.ic_outline_add_a_photo_day_night_24dp);
-                changeAvatar.setLayoutParams(new LayoutParams(cAvatarLp.width, cAvatarLp.height, Gravity.END | Gravity.BOTTOM));
                 changeAvatar.setOnLongClickListener(view -> {
-                    if (mAccessToken == null) return false;
+                    if (mAccessToken == null) {
+                        return false;
+                    }
                     new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                             .setTitle(R.string.remove_avatar)
                             .setMessage(R.string.are_you_sure)
@@ -328,8 +343,9 @@ public class EditProfileActivity extends BaseActivity {
 
     @Override
     protected void applyCustomTheme() {
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
         root.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+
         changeColorTextView(content, mCustomThemeWrapper.getPrimaryTextColor());
     }
 

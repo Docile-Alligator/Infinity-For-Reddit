@@ -73,10 +73,10 @@
 
             </RelativeLayout>
 
-            <View
+            <com.google.android.material.divider.MaterialDivider
                 android:id="@+id/divider_1_post_video_activity"
                 android:layout_width="match_parent"
-                android:layout_height="1dp" />
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -127,17 +127,10 @@
 
             </LinearLayout>
 
-            <View
-                android:id="@+id/divider_2_post_video_activity"
-                android:layout_width="match_parent"
-                android:layout_height="1dp" />
-
             <LinearLayout
                 android:id="@+id/receive_post_reply_notifications_linear_layout_post_video_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:paddingBottom="8dp"
                 android:paddingStart="16dp"
                 android:paddingEnd="16dp"
                 android:clickable="true"
@@ -164,10 +157,10 @@
 
             </LinearLayout>
 
-            <View
-                android:id="@+id/divider_3_post_video_activity"
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider_2_post_video_activity"
                 android:layout_width="match_parent"
-                android:layout_height="1dp" />
+                android:layout_height="wrap_content" />
 
             <EditText
                 android:id="@+id/post_title_edit_text_post_video_activity"
@@ -182,11 +175,6 @@
                 android:textSize="?attr/title_font_18"
                 android:fontFamily="?attr/title_font_family" />
 
-            <View
-                android:id="@+id/divider_4_post_video_activity"
-                android:layout_width="match_parent"
-                android:layout_height="1dp" />
-
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/select_video_constraint_layout_post_video_activity"
                 android:layout_width="match_parent"
@@ -197,25 +185,27 @@
                     android:id="@+id/capture_fab_post_video_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="16dp"
                     android:src="@drawable/ic_outline_add_a_photo_24dp"
+                    app:useCompatPadding="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/select_from_library_fab_post_video_activity"
                     app:layout_constraintHorizontal_chainStyle="spread"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@android:color/white" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <com.google.android.material.floatingactionbutton.FloatingActionButton
                     android:id="@+id/select_from_library_fab_post_video_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:padding="16dp"
                     android:src="@drawable/ic_outline_select_photo_24dp"
+                    app:useCompatPadding="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_chainStyle="spread"
                     app:layout_constraintStart_toEndOf="@+id/capture_fab_post_video_activity"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@android:color/white" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

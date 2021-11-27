@@ -54,8 +54,14 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_go_to_wiki_activity"
+        android:id="@+id/action_go_to_wiki_view_subreddit_detail_activity"
         android:orderInCategory="9"
         android:title="@string/action_go_to_wiki"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_contact_mods_view_subreddit_detail_activity"
+        android:orderInCategory="10"
+        android:title="@string/action_contact_mods"
         app:showAsAction="never" />
 </menu>

@@ -492,7 +492,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        BigImageViewer.imageLoader().cancelAll();
+        imageView.cancel();
         SubsamplingScaleImageView subsamplingScaleImageView = imageView.getSSIV();
         if (subsamplingScaleImageView != null) {
             subsamplingScaleImageView.recycle();
