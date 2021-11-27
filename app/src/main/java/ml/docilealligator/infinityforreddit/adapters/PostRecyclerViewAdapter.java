@@ -1972,7 +1972,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
                 intent.putParcelableArrayListExtra(ViewRedditGalleryActivity.EXTRA_REDDIT_GALLERY, post.getGallery());
                 intent.putExtra(ViewRedditGalleryActivity.EXTRA_SUBREDDIT_NAME, post.getSubredditName());
-                intent.putExtra(ViewRedditGalleryActivity.EXTRA_APPLIED_THEME, ((BaseActivity)mActivity).getAppliedTheme());
                 mActivity.startActivity(intent);
             }
         }

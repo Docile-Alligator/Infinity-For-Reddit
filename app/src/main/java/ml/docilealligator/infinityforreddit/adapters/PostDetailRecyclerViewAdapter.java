@@ -87,7 +87,6 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.VoteThing;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
@@ -124,7 +123,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private static final int VIEW_TYPE_POST_DETAIL_NO_PREVIEW_LINK = 6;
     private static final int VIEW_TYPE_POST_DETAIL_GALLERY = 7;
     private static final int VIEW_TYPE_POST_DETAIL_TEXT_TYPE = 8;
-
+    private final MarkwonAdapter mMarkwonAdapter;
     private AppCompatActivity mActivity;
     private ViewPostDetailFragment mFragment;
     private Executor mExecutor;
@@ -135,7 +134,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
     private RequestManager mGlide;
     private Markwon mPostDetailMarkwon;
-    private final MarkwonAdapter mMarkwonAdapter;
     private int mImageViewWidth;
     private String mAccessToken;
     private String mAccountName;
@@ -196,6 +194,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private int mDownvotedColor;
     private int mVoteAndReplyUnavailableVoteButtonColor;
     private int mPostIconAndInfoColor;
+    private int mCommentColor;
 
     private Drawable mCommentIcon;
     private float mScale;
@@ -264,6 +263,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                             markdownStringBuilder.delete(matcher.start(), matcher.start() + 2);
                             ClickableSpan clickableSpan = new ClickableSpan() {
                                 private boolean isShowing = false;
+
                                 @Override
                                 public void updateDrawState(@NonNull TextPaint ds) {
                                     if (isShowing) {
@@ -422,6 +422,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mDownvotedColor = customThemeWrapper.getDownvoted();
         mVoteAndReplyUnavailableVoteButtonColor = customThemeWrapper.getVoteAndReplyUnavailableButtonColor();
         mPostIconAndInfoColor = customThemeWrapper.getPostIconAndInfoColor();
+        mCommentColor = customThemeWrapper.getCommentColor();
 
         mCommentIcon = activity.getDrawable(R.drawable.ic_comment_grey_24dp);
         if (mCommentIcon != null) {
@@ -819,15 +820,16 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     String previewCaptionUrl = preview.getPreviewCaptionUrl();
                     boolean previewCaptionIsEmpty = android.text.TextUtils.isEmpty(previewCaption);
                     boolean previewCaptionUrlIsEmpty = android.text.TextUtils.isEmpty(previewCaptionUrl);
-                    if(!previewCaptionIsEmpty || !previewCaptionUrlIsEmpty){
+                    if (!previewCaptionIsEmpty || !previewCaptionUrlIsEmpty) {
+                        ((PostDetailGalleryViewHolder) holder).mCaptionConstraintLayout.setBackgroundColor(mCardViewColor & 0x0D000000); // Make 10% darker than CardViewColor
                         ((PostDetailGalleryViewHolder) holder).mCaptionConstraintLayout.setVisibility(View.VISIBLE);
                     }
-                    if(!previewCaptionIsEmpty) {
+                    if (!previewCaptionIsEmpty) {
+                        ((PostDetailGalleryViewHolder) holder).mCaption.setTextColor(mCommentColor);
                         ((PostDetailGalleryViewHolder) holder).mCaption.setText(previewCaption);
                         ((PostDetailGalleryViewHolder) holder).mCaption.setSelected(true);
                     }
-                    if(!previewCaptionUrlIsEmpty)
-                    {
+                    if (!previewCaptionUrlIsEmpty) {
                         String domain = Uri.parse(previewCaptionUrl).getHost();
                         domain = domain.startsWith("www.") ? domain.substring(4) : domain;
                         mPostDetailMarkwon.setMarkdown(((PostDetailGalleryViewHolder) holder).mCaptionUrl, String.format("[%s](%s)", domain, previewCaptionUrl));
@@ -1583,6 +1585,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     }
 
     class PostDetailVideoAutoplayViewHolder extends PostDetailBaseViewHolder implements ToroPlayer {
+        public FetchGfycatOrRedgifsVideoLinks fetchGfycatOrRedgifsVideoLinks;
         @BindView(R.id.icon_gif_image_view_item_post_detail_video_autoplay)
         AspectRatioGifImageView mIconGifImageView;
         @BindView(R.id.subreddit_text_view_item_post_detail_video_autoplay)
@@ -1639,12 +1642,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         ImageView mSaveButton;
         @BindView(R.id.share_button_item_post_detail_video_autoplay)
         ImageView mShareButton;
-
         @Nullable
         ExoPlayerViewHelper helper;
         private Uri mediaUri;
         private float volume;
-        public FetchGfycatOrRedgifsVideoLinks fetchGfycatOrRedgifsVideoLinks;
 
         public PostDetailVideoAutoplayViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -2251,7 +2252,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, mPost.getTitle());
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, mPost.getSubredditName());
                         mActivity.startActivity(intent);
-                    } else if (mPost.getPostType() == Post.GIF_TYPE){
+                    } else if (mPost.getPostType() == Post.GIF_TYPE) {
                         Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mPost.getSubredditName()
                                 + "-" + mPost.getId() + ".gif");
@@ -2269,7 +2270,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
                         intent.putParcelableArrayListExtra(ViewRedditGalleryActivity.EXTRA_REDDIT_GALLERY, mPost.getGallery());
                         intent.putExtra(ViewRedditGalleryActivity.EXTRA_SUBREDDIT_NAME, mPost.getSubredditName());
-                        intent.putExtra(ViewRedditGalleryActivity.EXTRA_APPLIED_THEME, ((BaseActivity)mActivity).getAppliedTheme());
                         mActivity.startActivity(intent);
                     }
                 }
@@ -2380,7 +2380,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
                 intent.putParcelableArrayListExtra(ViewRedditGalleryActivity.EXTRA_REDDIT_GALLERY, mPost.getGallery());
                 intent.putExtra(ViewRedditGalleryActivity.EXTRA_SUBREDDIT_NAME, mPost.getSubredditName());
-                intent.putExtra(ViewRedditGalleryActivity.EXTRA_APPLIED_THEME, ((BaseActivity)mActivity).getAppliedTheme());
                 mActivity.startActivity(intent);
             });
 

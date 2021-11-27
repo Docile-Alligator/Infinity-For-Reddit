@@ -59,7 +59,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     private int systemVisibilityToolbarExpanded = 0;
     private int systemVisibilityToolbarCollapsed = 0;
     private CustomThemeWrapper customThemeWrapper;
-    private int appliedTheme;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -99,18 +98,15 @@ public abstract class BaseActivity extends AppCompatActivity {
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
                 getTheme().applyStyle(R.style.Theme_Normal, true);
                 customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.LIGHT);
-                setAppliedTheme(R.style.Theme_Normal);
                 break;
             case 1:
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
                 if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
                     getTheme().applyStyle(R.style.Theme_Normal_AmoledDark, true);
                     customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.AMOLED);
-                    setAppliedTheme(R.style.Theme_Normal_AmoledDark);
                 } else {
                     getTheme().applyStyle(R.style.Theme_Normal_NormalDark, true);
                     customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.DARK);
-                    setAppliedTheme(R.style.Theme_Normal_NormalDark);
                 }
                 break;
             case 2:
@@ -121,17 +117,14 @@ public abstract class BaseActivity extends AppCompatActivity {
                 }
                 if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO) {
                     getTheme().applyStyle(R.style.Theme_Normal, true);
-                    setAppliedTheme(R.style.Theme_Normal);
                     customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.LIGHT);
                 } else {
                     if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
                         getTheme().applyStyle(R.style.Theme_Normal_AmoledDark, true);
                         customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.AMOLED);
-                        setAppliedTheme(R.style.Theme_Normal_AmoledDark);
                     } else {
                         getTheme().applyStyle(R.style.Theme_Normal_NormalDark, true);
                         customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.DARK);
-                        setAppliedTheme(R.style.Theme_Normal_NormalDark);
                     }
                 }
         }
@@ -234,8 +227,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         return systemVisibilityToolbarCollapsed;
     }
 
-    public int getAppliedTheme() { return appliedTheme; }
-
     public boolean isImmersiveInterface() {
         return immersiveInterface;
     }
@@ -305,8 +296,6 @@ public abstract class BaseActivity extends AppCompatActivity {
     public void setImmersiveModeNotApplicable() {
         isImmersiveInterfaceApplicable = false;
     }
-
-    public void setAppliedTheme(int appliedStyle) { this.appliedTheme = appliedStyle; }
 
     protected void applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(AppBarLayout appBarLayout, @Nullable CollapsingToolbarLayout collapsingToolbarLayout, Toolbar toolbar) {
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar, true);

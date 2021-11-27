@@ -59,7 +59,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
                 android:orientation="vertical"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:paddingTop="8dp">
 
                 <TextView
                     android:id="@+id/caption_text_view_view_reddit_gallery_image_or_gif_fragment"
