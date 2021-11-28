@@ -768,26 +768,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     ((PostDetailGalleryViewHolder) holder).mImageView
                             .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
 
-                    String previewCaption = preview.getPreviewCaption();
-                    String previewCaptionUrl = preview.getPreviewCaptionUrl();
-                    boolean previewCaptionIsEmpty = android.text.TextUtils.isEmpty(previewCaption);
-                    boolean previewCaptionUrlIsEmpty = android.text.TextUtils.isEmpty(previewCaptionUrl);
-                    if (!previewCaptionIsEmpty || !previewCaptionUrlIsEmpty) {
-                        ((PostDetailGalleryViewHolder) holder).mCaptionConstraintLayout.setBackgroundColor(mCardViewColor & 0x0D000000); // Make 10% darker than CardViewColor
-                        ((PostDetailGalleryViewHolder) holder).mCaptionConstraintLayout.setVisibility(View.VISIBLE);
-                    }
-                    if (!previewCaptionIsEmpty) {
-                        ((PostDetailGalleryViewHolder) holder).mCaption.setTextColor(mCommentColor);
-                        ((PostDetailGalleryViewHolder) holder).mCaption.setText(previewCaption);
-                        ((PostDetailGalleryViewHolder) holder).mCaption.setSelected(true);
-                    }
-                    if (!previewCaptionUrlIsEmpty) {
-                        String domain = Uri.parse(previewCaptionUrl).getHost();
-                        domain = domain.startsWith("www.") ? domain.substring(4) : domain;
-                        mPostDetailMarkwon.setMarkdown(((PostDetailGalleryViewHolder) holder).mCaptionUrl, String.format("[%s](%s)", domain, previewCaptionUrl));
-                    }
-
                     loadImage((PostDetailGalleryViewHolder) holder, preview);
+
+                    loadCaptionPreview((PostDetailGalleryViewHolder) holder, preview);
                 } else {
                     ((PostDetailGalleryViewHolder) holder).mNoPreviewPostTypeImageView.setVisibility(View.VISIBLE);
                 }
@@ -810,6 +793,29 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mMarkwonAdapter.setMarkdown(mPostDetailMarkwon, mPost.getSelfText());
                     mMarkwonAdapter.notifyDataSetChanged();
                 }
+            }
+        }
+    }
+
+    private void loadCaptionPreview(PostDetailBaseViewHolder holder, Post.Preview preview) {
+        if (holder instanceof PostDetailGalleryViewHolder) {
+            String previewCaption = preview.getPreviewCaption();
+            String previewCaptionUrl = preview.getPreviewCaptionUrl();
+            boolean previewCaptionIsEmpty = android.text.TextUtils.isEmpty(previewCaption);
+            boolean previewCaptionUrlIsEmpty = android.text.TextUtils.isEmpty(previewCaptionUrl);
+            if (!previewCaptionIsEmpty || !previewCaptionUrlIsEmpty) {
+                ((PostDetailGalleryViewHolder) holder).mCaptionConstraintLayout.setBackgroundColor(mCardViewColor & 0x0D000000); // Make 10% darker than CardViewColor
+                ((PostDetailGalleryViewHolder) holder).mCaptionConstraintLayout.setVisibility(View.VISIBLE);
+            }
+            if (!previewCaptionIsEmpty) {
+                ((PostDetailGalleryViewHolder) holder).mCaption.setTextColor(mCommentColor);
+                ((PostDetailGalleryViewHolder) holder).mCaption.setText(previewCaption);
+                ((PostDetailGalleryViewHolder) holder).mCaption.setSelected(true);
+            }
+            if (!previewCaptionUrlIsEmpty) {
+                String domain = Uri.parse(previewCaptionUrl).getHost();
+                domain = domain.startsWith("www.") ? domain.substring(4) : domain;
+                mPostDetailMarkwon.setMarkdown(((PostDetailGalleryViewHolder) holder).mCaptionUrl, String.format("[%s](%s)", domain, previewCaptionUrl));
             }
         }
     }

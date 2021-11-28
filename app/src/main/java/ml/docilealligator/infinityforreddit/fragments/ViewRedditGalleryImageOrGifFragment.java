@@ -201,19 +201,11 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                     bottomAppBar.setVisibility(View.VISIBLE);
                 }
             } else {
-                activity.getWindow().getDecorView().setSystemUiVisibility(
-                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                                | View.SYSTEM_UI_FLAG_IMMERSIVE);
-                isActionBarHidden = true;
-                if (activity.isUseBottomAppBar() || isUseBottomCaption) {
-                    bottomAppBar.setVisibility(View.GONE);
-                }
+                hideAppBar();
             }
         });
+
+        captionLayout.setOnClickListener(view -> hideAppBar());
 
         errorLinearLayout.setOnClickListener(view -> {
             progressBar.setVisibility(View.VISIBLE);
@@ -268,6 +260,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
             if (!captionIsEmpty) {
                 captionTextView.setVisibility(View.VISIBLE);
                 captionTextView.setText(caption);
+                captionTextView.setOnClickListener(view -> hideAppBar());
                 captionTextView.setOnLongClickListener(view -> {
                     if (activity != null
                             && !activity.isDestroyed()
@@ -284,12 +277,19 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                 });
             }
             if (!captionUrlIsEmpty) {
-                captionUrlTextView.setText(captionUrl);
+                String scheme = Uri.parse(captionUrl).getScheme();
+                String urlWithoutScheme = "";
+                if(!TextUtils.isEmpty(scheme)){
+                    urlWithoutScheme = captionUrl.substring(scheme.length() + 3);
+                }
+
+                captionUrlTextView.setText(TextUtils.isEmpty(urlWithoutScheme) ? captionUrl : urlWithoutScheme);
+
                 BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, captionUrlTextView).setOnLinkLongClickListener((textView, url) -> {
                     if (activity != null && !activity.isDestroyed() && !activity.isFinishing()) {
                         UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
                         Bundle bundle = new Bundle();
-                        bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
+                        bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, captionUrl);
                         urlMenuBottomSheetFragment.setArguments(bundle);
                         urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
                     }
@@ -300,6 +300,20 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
         }
 
         return rootView;
+    }
+
+    private void hideAppBar() {
+        activity.getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+        isActionBarHidden = true;
+        if (activity.isUseBottomAppBar() || isUseBottomCaption) {
+            bottomAppBar.setVisibility(View.GONE);
+        }
     }
 
     private void loadImage() {
