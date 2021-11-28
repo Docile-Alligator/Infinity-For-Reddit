@@ -400,7 +400,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                         builder.linkColor(mCustomThemeWrapper.getLinkColor());
                     }
                 })
-                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, descriptionTextView).setOnLinkLongClickListener((textView, url) -> {
+                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS).setOnLinkLongClickListener((textView, url) -> {
                     UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
