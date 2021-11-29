@@ -157,7 +157,7 @@ public class SidebarFragment extends Fragment {
                 })
                 .usePlugin(StrikethroughPlugin.create())
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
-                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, recyclerView).setOnLinkLongClickListener((textView, url) -> {
+                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS).setOnLinkLongClickListener((textView, url) -> {
                     UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
