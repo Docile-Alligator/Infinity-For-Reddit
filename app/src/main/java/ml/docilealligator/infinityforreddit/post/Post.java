@@ -580,17 +580,14 @@ public class Post implements Parcelable {
 
         public String mimeType;
         public String url;
-        public String fallbackUrl;
-        private boolean hasFallback;
         public String fileName;
         public int mediaType;
         public String caption;
         public String captionUrl;
 
-        public Gallery(String mimeType, String url, String fallbackUrl, String fileName, String caption, String captionUrl) {
+        public Gallery(String mimeType, String url, String fileName, String caption, String captionUrl) {
             this.mimeType = mimeType;
             this.url = url;
-            this.fallbackUrl = fallbackUrl;
             this.fileName = fileName;
             if (mimeType.contains("gif")) {
                 mediaType = TYPE_GIF;
@@ -606,8 +603,6 @@ public class Post implements Parcelable {
         protected Gallery(Parcel in) {
             mimeType = in.readString();
             url = in.readString();
-            fallbackUrl = in.readString();
-            hasFallback = in.readByte() != 0;
             fileName = in.readString();
             mediaType = in.readInt();
             caption = in.readString();
@@ -635,19 +630,11 @@ public class Post implements Parcelable {
         public void writeToParcel(Parcel parcel, int i) {
             parcel.writeString(mimeType);
             parcel.writeString(url);
-            parcel.writeString(fallbackUrl);
-            parcel.writeByte((byte) (hasFallback ? 1 : 0));
             parcel.writeString(fileName);
             parcel.writeInt(mediaType);
             parcel.writeString(caption);
             parcel.writeString(captionUrl);
         }
-
-        public void setFallbackUrl(String fallbackUrl) { this.fallbackUrl = fallbackUrl; }
-
-        public void setHasFallback(boolean hasFallback) { this.hasFallback = hasFallback; }
-
-        public boolean hasFallback() { return this.hasFallback; }
     }
 
     public static class Preview implements Parcelable {
