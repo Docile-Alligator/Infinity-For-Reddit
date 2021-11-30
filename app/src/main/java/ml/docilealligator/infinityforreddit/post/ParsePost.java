@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.post;
 import android.net.Uri;
 import android.os.Handler;
 import android.text.Html;
+import android.text.TextUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -563,7 +564,17 @@ public class ParsePost {
                         previews.add(new Post.Preview(galleryItemUrl, singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getInt(JSONUtils.X_KEY),
                                 singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getInt(JSONUtils.Y_KEY)));
                     }
-                    gallery.add(new Post.Gallery(mimeType, galleryItemUrl, subredditName + "-" + galleryId + "." + mimeType.substring(mimeType.lastIndexOf("/") + 1)));
+                    
+                    Post.Gallery postGalleryItem = new Post.Gallery(mimeType, galleryItemUrl, "", subredditName + "-" + galleryId + "." + mimeType.substring(mimeType.lastIndexOf("/") + 1));
+
+                    // For issue #558
+                    // Construct a fallback image url
+                    if(!TextUtils.isEmpty(galleryItemUrl) && !TextUtils.isEmpty(mimeType) && (mimeType.contains("jpg") || mimeType.contains("png"))) {
+                        postGalleryItem.setFallbackUrl("https://i.redd.it/" + galleryId + "." +  mimeType.substring(mimeType.lastIndexOf("/") + 1));
+                        postGalleryItem.setHasFallback(true);
+                    }
+
+                    gallery.add(postGalleryItem);
                 }
 
                 if (!gallery.isEmpty()) {
