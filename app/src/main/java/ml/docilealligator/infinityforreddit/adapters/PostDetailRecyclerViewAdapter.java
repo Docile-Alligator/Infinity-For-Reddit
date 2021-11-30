@@ -805,6 +805,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 previewIndex = 0;
             }
             preview = previews.get(previewIndex);
+            if (!mDataSavingMode) {
+                return preview
+            }
             if (preview.getPreviewWidth() * preview.getPreviewHeight() > 5_000_000) {
                 for (int i = previews.size() - 1; i >= 1; i--) {
                     preview = previews.get(i);
