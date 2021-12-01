@@ -210,7 +210,7 @@ public class ParsePost {
             String previewUrl = images.getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY);
             int previewWidth = images.getJSONObject(JSONUtils.SOURCE_KEY).getInt(JSONUtils.WIDTH_KEY);
             int previewHeight = images.getJSONObject(JSONUtils.SOURCE_KEY).getInt(JSONUtils.HEIGHT_KEY);
-            previews.add(new Post.Preview(previewUrl, previewWidth, previewHeight));
+            previews.add(new Post.Preview(previewUrl, previewWidth, previewHeight, "", ""));
 
             JSONArray thumbnailPreviews = images.getJSONArray(JSONUtils.RESOLUTIONS_KEY);
             for (int i = 0; i < thumbnailPreviews.length(); i++) {
@@ -219,7 +219,7 @@ public class ParsePost {
                 int thumbnailPreviewWidth = thumbnailPreview.getInt(JSONUtils.WIDTH_KEY);
                 int thumbnailPreviewHeight = thumbnailPreview.getInt(JSONUtils.HEIGHT_KEY);
 
-                previews.add(new Post.Preview(thumbnailPreviewUrl, thumbnailPreviewWidth, thumbnailPreviewHeight));
+                previews.add(new Post.Preview(thumbnailPreviewUrl, thumbnailPreviewWidth, thumbnailPreviewHeight, "", ""));
             }
         }
         if (data.has(JSONUtils.CROSSPOST_PARENT_LIST)) {
@@ -302,7 +302,7 @@ public class ParsePost {
                             spoiler, nsfw, stickied, archived, locked, saved, isCrosspost);
 
                     if (previews.isEmpty()) {
-                        previews.add(new Post.Preview(url, 0, 0));
+                        previews.add(new Post.Preview(url, 0, 0, "", ""));
                     }
                     post.setPreviews(previews);
                 } else {
@@ -342,7 +342,7 @@ public class ParsePost {
                     String previewUrl = images.getJSONObject(JSONUtils.SOURCE_KEY).getString(JSONUtils.URL_KEY);
                     int previewWidth = images.getJSONObject(JSONUtils.SOURCE_KEY).getInt(JSONUtils.WIDTH_KEY);
                     int previewHeight = images.getJSONObject(JSONUtils.SOURCE_KEY).getInt(JSONUtils.HEIGHT_KEY);
-                    previews.add(new Post.Preview(previewUrl, previewWidth, previewHeight));
+                    previews.add(new Post.Preview(previewUrl, previewWidth, previewHeight, "", ""));
 
                     JSONArray thumbnailPreviews = images.getJSONArray(JSONUtils.RESOLUTIONS_KEY);
                     for (int i = 0; i < thumbnailPreviews.length(); i++) {
@@ -351,7 +351,7 @@ public class ParsePost {
                         int thumbnailPreviewWidth = thumbnailPreview.getInt(JSONUtils.WIDTH_KEY);
                         int thumbnailPreviewHeight = thumbnailPreview.getInt(JSONUtils.HEIGHT_KEY);
 
-                        previews.add(new Post.Preview(thumbnailPreviewUrl, thumbnailPreviewWidth, thumbnailPreviewHeight));
+                        previews.add(new Post.Preview(thumbnailPreviewUrl, thumbnailPreviewWidth, thumbnailPreviewHeight, "", ""));
                     }
                 }
             }
@@ -398,7 +398,7 @@ public class ParsePost {
                                 hidden, spoiler, nsfw, stickied, archived, locked, saved, isCrosspost);
 
                         if (previews.isEmpty()) {
-                            previews.add(new Post.Preview(url, 0, 0));
+                            previews.add(new Post.Preview(url, 0, 0, "", ""));
                         }
                         post.setPreviews(previews);
                     } else if (url.endsWith("gif")){
@@ -491,7 +491,7 @@ public class ParsePost {
                             spoiler, nsfw, stickied, archived, locked, saved, isCrosspost);
 
                     if (previews.isEmpty()) {
-                        previews.add(new Post.Preview(url, 0, 0));
+                        previews.add(new Post.Preview(url, 0, 0, "", ""));
                     }
                     post.setPreviews(previews);
                 } else if (url.endsWith("mp4")) {
@@ -560,12 +560,24 @@ public class ParsePost {
                             galleryItemUrl = sourceObject.getString(JSONUtils.MP4_KEY);
                         }
                     }
+
+                    JSONObject galleryItem = galleryIdsArray.getJSONObject(i);
+                    String galleryItemCaption = "";
+                    String galleryItemCaptionUrl = "";
+                    if(galleryItem.has(JSONUtils.CAPTION_KEY)){
+                        galleryItemCaption = galleryItem.getString(JSONUtils.CAPTION_KEY).trim();
+                    }
+
+                    if(galleryItem.has(JSONUtils.CAPTION_URL_KEY)){
+                        galleryItemCaptionUrl = galleryItem.getString(JSONUtils.CAPTION_URL_KEY).trim();
+                    }
+
                     if ((previews.isEmpty()) && mimeType.contains("jpg") || mimeType.contains("png")) {
                         previews.add(new Post.Preview(galleryItemUrl, singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getInt(JSONUtils.X_KEY),
-                                singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getInt(JSONUtils.Y_KEY)));
+                                singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getInt(JSONUtils.Y_KEY), galleryItemCaption, galleryItemCaptionUrl));
                     }
                     
-                    Post.Gallery postGalleryItem = new Post.Gallery(mimeType, galleryItemUrl, "", subredditName + "-" + galleryId + "." + mimeType.substring(mimeType.lastIndexOf("/") + 1));
+                    Post.Gallery postGalleryItem = new Post.Gallery(mimeType, galleryItemUrl, "", subredditName + "-" + galleryId + "." + mimeType.substring(mimeType.lastIndexOf("/") + 1), galleryItemCaption, galleryItemCaptionUrl);
 
                     // For issue #558
                     // Construct a fallback image url

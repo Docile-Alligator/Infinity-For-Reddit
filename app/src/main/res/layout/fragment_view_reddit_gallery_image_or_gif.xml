@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -29,68 +29,110 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:drawableTop="@drawable/ic_error_outline_white_24dp"
             android:layout_gravity="center"
+            android:drawableTop="@drawable/ic_error_outline_white_24dp"
+            android:fontFamily="?attr/font_family"
             android:gravity="center"
-            android:textColor="@android:color/white"
             android:text="@string/error_loading_image_tap_to_retry"
-            android:textSize="?attr/font_default"
-            android:fontFamily="?attr/font_family" />
+            android:textColor="@android:color/white"
+            android:textSize="?attr/font_default" />
 
     </LinearLayout>
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottom_navigation_view_reddit_gallery_image_or_gif_fragment"
+        style="@style/Widget.MaterialComponents.BottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
         android:backgroundTint="#80000000"
-        android:visibility="gone"
-        style="@style/Widget.MaterialComponents.BottomAppBar">
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/title_text_view_view_reddit_gallery_image_or_gif_fragment"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:id="@+id/caption_layout_view_reddit_gallery_image_or_gif_fragment"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_gravity="center_vertical"
                 android:gravity="center_vertical"
+                android:orientation="vertical"
                 android:paddingTop="8dp"
-                android:paddingBottom="8dp"
-                android:textColor="#FFFFFF"
-                android:textSize="?attr/font_20"
-                android:fontFamily="?attr/font_family"
-                android:maxLines="1"
-                android:ellipsize="end" />
+                android:visibility="gone">
 
-            <ImageView
-                android:id="@+id/download_image_view_view_reddit_gallery_image_or_gif_fragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:src="@drawable/ic_file_download_toolbar_white_24dp"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                <TextView
+                    android:id="@+id/caption_text_view_view_reddit_gallery_image_or_gif_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:fontFamily="?attr/content_font_family"
+                    android:maxLength="180"
+                    android:textColor="#FFFFFF"
+                    android:textSize="?attr/content_font_default"
+                    android:visibility="gone" />
 
-            <ImageView
-                android:id="@+id/share_image_view_view_reddit_gallery_image_or_gif_fragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:src="@drawable/ic_share_toolbar_white_24dp"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                <TextView
+                    android:id="@+id/caption_url_text_view_view_reddit_gallery_image_or_gif_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:fontFamily="?attr/content_font_family"
+                    android:maxLength="180"
+                    android:textColor="#FFFFFF"
+                    android:textColorLink="#FFFFFF"
+                    android:textSize="?attr/content_font_default"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+            </LinearLayout>
 
-            <ImageView
-                android:id="@+id/wallpaper_image_view_view_reddit_gallery_image_or_gif_fragment"
+            <LinearLayout
+                android:id="@+id/bottom_app_bar_menu_view_reddit_gallery_image_or_gif_fragment"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="16dp"
-                android:padding="16dp"
-                android:src="@drawable/ic_wallpaper_white_24dp"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/title_text_view_view_reddit_gallery_image_or_gif_fragment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:fontFamily="?attr/font_family"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:paddingTop="8dp"
+                    android:paddingBottom="8dp"
+                    android:textColor="#FFFFFF"
+                    android:textSize="?attr/font_20" />
+
+                <ImageView
+                    android:id="@+id/download_image_view_view_reddit_gallery_image_or_gif_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_file_download_toolbar_white_24dp" />
+
+                <ImageView
+                    android:id="@+id/share_image_view_view_reddit_gallery_image_or_gif_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_share_toolbar_white_24dp" />
+
+                <ImageView
+                    android:id="@+id/wallpaper_image_view_view_reddit_gallery_image_or_gif_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="16dp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:padding="16dp"
+                    android:src="@drawable/ic_wallpaper_white_24dp" />
+            </LinearLayout>
 
         </LinearLayout>
 

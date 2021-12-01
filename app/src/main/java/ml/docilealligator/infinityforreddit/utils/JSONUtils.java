@@ -171,4 +171,6 @@ public class JSONUtils {
     public static final String DISPLAY_STRING_KEY = "display_string";
     public static final String RESULTS_KEY = "results";
     public static final String CONTENT_MD_KEY = "content_md";
+    public static final String CAPTION_KEY = "caption";
+    public static final String CAPTION_URL_KEY = "outbound_url";
 }

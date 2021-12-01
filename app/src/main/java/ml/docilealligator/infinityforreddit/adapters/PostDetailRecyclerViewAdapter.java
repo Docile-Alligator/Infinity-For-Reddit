@@ -131,7 +131,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private static final int VIEW_TYPE_POST_DETAIL_NO_PREVIEW_LINK = 6;
     private static final int VIEW_TYPE_POST_DETAIL_GALLERY = 7;
     private static final int VIEW_TYPE_POST_DETAIL_TEXT_TYPE = 8;
-
     private AppCompatActivity mActivity;
     private ViewPostDetailFragment mFragment;
     private Executor mExecutor;
@@ -202,6 +201,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private int mDownvotedColor;
     private int mVoteAndReplyUnavailableVoteButtonColor;
     private int mPostIconAndInfoColor;
+    private int mCommentColor;
 
     private Drawable mCommentIcon;
     private float mScale;
@@ -380,6 +380,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mDownvotedColor = customThemeWrapper.getDownvoted();
         mVoteAndReplyUnavailableVoteButtonColor = customThemeWrapper.getVoteAndReplyUnavailableButtonColor();
         mPostIconAndInfoColor = customThemeWrapper.getPostIconAndInfoColor();
+        mCommentColor = customThemeWrapper.getCommentColor();
 
         mCommentIcon = activity.getDrawable(R.drawable.ic_comment_grey_24dp);
         if (mCommentIcon != null) {
@@ -768,6 +769,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                             .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
 
                     loadImage((PostDetailGalleryViewHolder) holder, preview);
+
+                    loadCaptionPreview((PostDetailGalleryViewHolder) holder, preview);
                 } else {
                     ((PostDetailGalleryViewHolder) holder).mNoPreviewPostTypeImageView.setVisibility(View.VISIBLE);
                 }
@@ -790,6 +793,29 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mMarkwonAdapter.setMarkdown(mPostDetailMarkwon, mPost.getSelfText());
                     mMarkwonAdapter.notifyDataSetChanged();
                 }
+            }
+        }
+    }
+
+    private void loadCaptionPreview(PostDetailBaseViewHolder holder, Post.Preview preview) {
+        if (holder instanceof PostDetailGalleryViewHolder) {
+            String previewCaption = preview.getPreviewCaption();
+            String previewCaptionUrl = preview.getPreviewCaptionUrl();
+            boolean previewCaptionIsEmpty = android.text.TextUtils.isEmpty(previewCaption);
+            boolean previewCaptionUrlIsEmpty = android.text.TextUtils.isEmpty(previewCaptionUrl);
+            if (!previewCaptionIsEmpty || !previewCaptionUrlIsEmpty) {
+                ((PostDetailGalleryViewHolder) holder).mCaptionConstraintLayout.setBackgroundColor(mCardViewColor & 0x0D000000); // Make 10% darker than CardViewColor
+                ((PostDetailGalleryViewHolder) holder).mCaptionConstraintLayout.setVisibility(View.VISIBLE);
+            }
+            if (!previewCaptionIsEmpty) {
+                ((PostDetailGalleryViewHolder) holder).mCaption.setTextColor(mCommentColor);
+                ((PostDetailGalleryViewHolder) holder).mCaption.setText(previewCaption);
+                ((PostDetailGalleryViewHolder) holder).mCaption.setSelected(true);
+            }
+            if (!previewCaptionUrlIsEmpty) {
+                String domain = Uri.parse(previewCaptionUrl).getHost();
+                domain = domain.startsWith("www.") ? domain.substring(4) : domain;
+                mPostDetailMarkwon.setMarkdown(((PostDetailGalleryViewHolder) holder).mCaptionUrl, String.format("[%s](%s)", domain, previewCaptionUrl));
             }
         }
     }
@@ -1485,6 +1511,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     }
 
     class PostDetailVideoAutoplayViewHolder extends PostDetailBaseViewHolder implements ToroPlayer {
+        public FetchGfycatOrRedgifsVideoLinks fetchGfycatOrRedgifsVideoLinks;
         @BindView(R.id.icon_gif_image_view_item_post_detail_video_autoplay)
         AspectRatioGifImageView mIconGifImageView;
         @BindView(R.id.subreddit_text_view_item_post_detail_video_autoplay)
@@ -1541,12 +1568,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         ImageView mSaveButton;
         @BindView(R.id.share_button_item_post_detail_video_autoplay)
         ImageView mShareButton;
-
         @Nullable
         ExoPlayerViewHelper helper;
         private Uri mediaUri;
         private float volume;
-        public FetchGfycatOrRedgifsVideoLinks fetchGfycatOrRedgifsVideoLinks;
 
         public PostDetailVideoAutoplayViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -2153,7 +2178,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, mPost.getTitle());
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, mPost.getSubredditName());
                         mActivity.startActivity(intent);
-                    } else if (mPost.getPostType() == Post.GIF_TYPE){
+                    } else if (mPost.getPostType() == Post.GIF_TYPE) {
                         Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, mPost.getSubredditName()
                                 + "-" + mPost.getId() + ".gif");
@@ -2221,6 +2246,12 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         ImageView videoOrGifIndicatorImageView;
         @BindView(R.id.image_view_item_post_detail_gallery)
         AspectRatioGifImageView mImageView;
+        @BindView(R.id.caption_constraint_layout_item_post_detail_gallery)
+        ConstraintLayout mCaptionConstraintLayout;
+        @BindView(R.id.caption_text_view_item_post_detail_gallery)
+        TextView mCaption;
+        @BindView(R.id.caption_url_text_view_item_post_detail_gallery)
+        TextView mCaptionUrl;
         @BindView(R.id.image_view_no_preview_link_item_post_detail_gallery)
         ImageView mNoPreviewPostTypeImageView;
         @BindView(R.id.bottom_constraint_layout_item_post_detail_gallery)

@@ -98,7 +98,7 @@ public class FetchRemovedPost {
                         previews.set(0, preview);
                     }
                 } else {
-                    Post.Preview preview = new Post.Preview(result.getString("thumbnail"), 1, 1);
+                    Post.Preview preview = new Post.Preview(result.getString("thumbnail"), 1, 1, "", "");
                     preview.setPreviewUrl(result.getString("thumbnail"));
                     ArrayList<Post.Preview> newPreviews = new ArrayList<>();
                     newPreviews.add(preview);

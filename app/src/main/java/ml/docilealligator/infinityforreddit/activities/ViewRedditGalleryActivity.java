@@ -1,8 +1,15 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
+import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
+
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
@@ -13,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentStatePagerAdapter;
@@ -32,6 +40,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
 import ml.docilealligator.infinityforreddit.WallpaperSetter;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.ViewPagerBugFixed;
 import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.font.ContentFontStyle;
@@ -53,15 +62,15 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     HaulerView haulerView;
     @BindView(R.id.view_pager_view_reddit_gallery_activity)
     ViewPagerBugFixed viewPager;
-    private SectionsPagerAdapter sectionsPagerAdapter;
-    private ArrayList<Post.Gallery> gallery;
-    private String subredditName;
-    private boolean useBottomAppBar;
     @Inject
     @Named("default")
     SharedPreferences sharedPreferences;
     @Inject
     Executor executor;
+    private SectionsPagerAdapter sectionsPagerAdapter;
+    private ArrayList<Post.Gallery> gallery;
+    private String subredditName;
+    private boolean useBottomAppBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +78,37 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
 
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
-        getTheme().applyStyle(R.style.Theme_Normal, true);
+        boolean systemDefault = Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q;
+        int systemThemeType = Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.THEME_KEY, "2"));
+        switch (systemThemeType) {
+            case 0:
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_NO);
+                getTheme().applyStyle(R.style.Theme_Normal, true);
+                break;
+            case 1:
+                AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
+                if (sharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
+                    getTheme().applyStyle(R.style.Theme_Normal_AmoledDark, true);
+                } else {
+                    getTheme().applyStyle(R.style.Theme_Normal_NormalDark, true);
+                }
+                break;
+            case 2:
+                if (systemDefault) {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_FOLLOW_SYSTEM);
+                } else {
+                    AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
+                }
+                if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO) {
+                    getTheme().applyStyle(R.style.Theme_Normal, true);
+                } else {
+                    if (sharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
+                        getTheme().applyStyle(R.style.Theme_Normal_AmoledDark, true);
+                    } else {
+                        getTheme().applyStyle(R.style.Theme_Normal_NormalDark, true);
+                    }
+                }
+        }
 
         getTheme().applyStyle(FontStyle.valueOf(sharedPreferences
                 .getString(SharedPreferencesUtils.FONT_SIZE_KEY, FontStyle.Normal.name())).getResId(), true);
