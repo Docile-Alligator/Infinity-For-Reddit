@@ -1260,7 +1260,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 mFetchPostInfoLinearLayout.setOnClickListener(view -> refresh());
                 showErrorView(R.string.load_posts_error);
             }
-            if (appendLoadState instanceof LoadState.NotLoading) {
+            if (!(refreshLoadState instanceof LoadState.Loading) // #563
+                    && appendLoadState instanceof LoadState.NotLoading) {
                 if (appendLoadState.getEndOfPaginationReached() && mAdapter.getItemCount() < 1) {
                     noPostFound();
                 }
