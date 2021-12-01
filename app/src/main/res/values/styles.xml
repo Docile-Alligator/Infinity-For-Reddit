@@ -120,7 +120,25 @@
     <style name="ListPreferenceStyle" parent="ThemeOverlay.AppCompat.Dialog.Alert">
         <item name="android:background">?attr/cardViewBackgroundColor</item>
     </style>
+    
+    <style name="Widget.App.CheckBox.Dark" parent="Widget.Material3.CompoundButton.CheckBox">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.CheckBox.Dark</item>
+    </style>
 
+    <style name="ThemeOverlay.App.CheckBox.Dark" parent="">
+        <item name="colorOnSurface">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/primaryTextColor</item>
+    </style>
+
+    <style name="Widget.App.Switch.Dark" parent="Widget.Material3.CompoundButton.Switch">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.Switch.Dark</item>
+    </style>
+
+    <style name="ThemeOverlay.App.Switch.Dark" parent="">
+        <item name="colorOnSurface">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/primaryTextColor</item>
+    </style>
+    
     <style name="FontStyle" />
 
     <style name="FontStyle.Small">
@@ -431,6 +449,8 @@
         <item name="secondaryTextColor">#B3FFFFFF</item>
         <item name="backgroundColor">@color/backgroundColor</item>
         <item name="cardViewBackgroundColor">#242424</item>
+        <item name="checkboxStyle">@style/Widget.App.CheckBox.Dark</item>
+        <item name="switchStyle">@style/Widget.App.Switch.Dark</item>        
     </style>
 
     <style name="Theme.Normal.AmoledDark">
@@ -442,6 +462,8 @@
         <item name="secondaryTextColor">#B3FFFFFF</item>
         <item name="backgroundColor">#000000</item>
         <item name="cardViewBackgroundColor">#000000</item>
+        <item name="checkboxStyle">@style/Widget.App.CheckBox.Dark</item>
+        <item name="switchStyle">@style/Widget.App.Switch.Dark</item>        
     </style>
 
 </resources>
