@@ -67,7 +67,6 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.SetAsWallpaperB
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
-import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 
@@ -251,8 +250,6 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
             if (!activity.isUseBottomAppBar()) {
                 bottomAppBar.setVisibility(View.VISIBLE);
                 bottomAppBarMenu.setVisibility(View.GONE);
-
-                captionLayout.setPadding(0, captionLayout.getPaddingTop(), 0, (int) Utils.convertDpToPixel(16, activity));
             }
 
             captionLayout.setVisibility(View.VISIBLE);

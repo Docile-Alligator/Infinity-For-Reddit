@@ -51,41 +51,43 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:animateLayoutChanges="true">
 
             <LinearLayout
                 android:id="@+id/caption_layout_view_reddit_gallery_image_or_gif_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_vertical"
                 android:orientation="vertical"
-                android:paddingTop="8dp"
+                android:layout_marginBottom="16dp"
+                android:layout_marginEnd="16dp"
                 android:visibility="gone">
 
                 <TextView
                     android:id="@+id/caption_text_view_view_reddit_gallery_image_or_gif_fragment"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ellipsize="end"
-                    android:fontFamily="?attr/content_font_family"
                     android:maxLength="180"
+                    android:fontFamily="?attr/content_font_family"
                     android:textColor="#FFFFFF"
                     android:textSize="?attr/content_font_default"
                     android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/caption_url_text_view_view_reddit_gallery_image_or_gif_fragment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
                     android:ellipsize="end"
-                    android:fontFamily="?attr/content_font_family"
                     android:maxLength="180"
+                    android:fontFamily="?attr/content_font_family"
                     android:textColor="#FFFFFF"
                     android:textColorLink="#FFFFFF"
                     android:textSize="?attr/content_font_default"
                     android:textStyle="bold"
                     android:visibility="gone" />
+
             </LinearLayout>
 
             <LinearLayout
