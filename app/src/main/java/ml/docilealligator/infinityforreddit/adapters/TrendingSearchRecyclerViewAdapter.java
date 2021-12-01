@@ -119,7 +119,7 @@ public class TrendingSearchRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 previewIndex = 0;
             }
             preview = previews.get(previewIndex);
-            if (!mDataSavingMode) {
+            if (!dataSavingMode) {
                 return preview;
             }
             if (preview.getPreviewWidth() * preview.getPreviewHeight() > 10_000_000) {
