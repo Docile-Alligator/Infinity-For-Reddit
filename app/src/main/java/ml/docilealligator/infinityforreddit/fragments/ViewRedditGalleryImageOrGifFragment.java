@@ -110,6 +110,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     private boolean isDownloading = false;
     private boolean isActionBarHidden = false;
     private boolean isUseBottomCaption = false;
+    private boolean isFallback = false;
 
     public ViewRedditGalleryImageOrGifFragment() {
         // Required empty public constructor
@@ -175,6 +176,21 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                             view.setDoubleTapZoomStyle(SubsamplingScaleImageView.ZOOM_FOCUS_FIXED);
                             view.setQuickScaleEnabled(true);
                             view.resetScaleAndCenter();
+                        }
+
+                        @Override
+                        public void onImageLoadError(Exception e) {
+                            e.printStackTrace();
+                            // For issue #558
+                            // Make sure it's not stuck in a loop if it comes to that
+                            // Fallback url should be empty if it's not an album item
+                            if (!isFallback && media.hasFallback()) {
+                                imageView.cancel();
+                                isFallback = true;
+                                loadImage();
+                            } else {
+                                isFallback = false;
+                            }
                         }
                     });
                 }
@@ -314,7 +330,12 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     }
 
     private void loadImage() {
-        imageView.showImage(Uri.parse(media.url));
+        if(isFallback) {
+            imageView.showImage(Uri.parse(media.fallbackUrl));
+        }
+        else{
+            imageView.showImage(Uri.parse(media.url));
+        }
     }
 
     @Override
@@ -371,16 +392,18 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
         isDownloading = false;
 
         Intent intent = new Intent(activity, DownloadMediaService.class);
-        intent.putExtra(DownloadMediaService.EXTRA_URL, media.url);
-        intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, media.mediaType == Post.Gallery.TYPE_GIF ? DownloadMediaService.EXTRA_MEDIA_TYPE_GIF : DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
+        intent.putExtra(DownloadMediaService.EXTRA_URL, media.hasFallback() ? media.fallbackUrl : media.url); // Retrieve original instead of the one additionally compressed by reddit
+        intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, media.mediaType == Post.Gallery.TYPE_GIF ? DownloadMediaService.EXTRA_MEDIA_TYPE_GIF: DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
         intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, media.fileName);
         intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
         ContextCompat.startForegroundService(activity, intent);
         Toast.makeText(activity, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
 
+    //TODO: Find a way to share original image, Glide messes with the size and quality,
+    // compression should be up to the app being shared with (WhatsApp for example)
     private void shareImage() {
-        glide.asBitmap().load(media.url).into(new CustomTarget<Bitmap>() {
+        glide.asBitmap().load(media.hasFallback() ? media.fallbackUrl : media.url).into(new CustomTarget<Bitmap>() {
             @Override
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                 if (activity.getExternalCacheDir() != null) {
@@ -496,7 +519,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
         super.onResume();
         SubsamplingScaleImageView ssiv = imageView.getSSIV();
         if (ssiv == null || !ssiv.hasImage()) {
-            imageView.showImage(Uri.parse(media.url));
+            loadImage();
         }
     }
 
@@ -504,6 +527,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         imageView.cancel();
+        isFallback = false;
         SubsamplingScaleImageView subsamplingScaleImageView = imageView.getSSIV();
         if (subsamplingScaleImageView != null) {
             subsamplingScaleImageView.recycle();
