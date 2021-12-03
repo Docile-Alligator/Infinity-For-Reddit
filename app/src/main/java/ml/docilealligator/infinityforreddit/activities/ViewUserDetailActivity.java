@@ -1175,7 +1175,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                     .setNegativeButton(R.string.no, null)
                     .show();
             return true;
-        } else if(itemId == R.id.action_edit_profile_view_user_detail_activity){
+        } else if (itemId == R.id.action_edit_profile_view_user_detail_activity) {
             startActivity(new Intent(this, EditProfileActivity.class));
             return true;
         }

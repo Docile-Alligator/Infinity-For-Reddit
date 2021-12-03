@@ -214,7 +214,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         } else {
             afterKey = loadParams.getKey();
         }
-        if(sortType.getTime() != null) {
+        if (sortType.getTime() != null) {
             bestPost = api.getBestPostsListenableFuture(sortType.getType().value, sortType.getTime().value, afterKey,
                     APIUtils.getOAuthHeader(accessToken));
         } else {
@@ -299,7 +299,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
                     searchPosts = api.searchPostsListenableFuture(query, loadParams.getKey(), sortType.getType().value, trendingSource);
                 }
             } else {
-                if(sortType.getTime() != null) {
+                if (sortType.getTime() != null) {
                     searchPosts = api.searchPostsOauthListenableFuture(query, loadParams.getKey(), sortType.getType().value,
                             sortType.getTime().value, trendingSource, APIUtils.getOAuthHeader(accessToken));
                 } else {

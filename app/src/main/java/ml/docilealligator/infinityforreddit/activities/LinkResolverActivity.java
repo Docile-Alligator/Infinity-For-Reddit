@@ -269,7 +269,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                             } else {
                                 deepLinkError(uri);
                             }
-                        } else if (authority.contains("google.com") ){
+                        } else if (authority.contains("google.com")) {
                             if ( path.matches(GOOGLE_AMP_PATTERN) ) {
                                 String url = path.substring(11, path.length()); // skipping past amp straight to reddit
                                 handleUri(Uri.parse("https://" + url));

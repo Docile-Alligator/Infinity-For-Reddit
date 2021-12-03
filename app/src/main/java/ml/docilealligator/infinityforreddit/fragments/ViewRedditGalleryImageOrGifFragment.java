@@ -292,7 +292,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
             if (!captionUrlIsEmpty) {
                 String scheme = Uri.parse(captionUrl).getScheme();
                 String urlWithoutScheme = "";
-                if(!TextUtils.isEmpty(scheme)){
+                if (!TextUtils.isEmpty(scheme)) {
                     urlWithoutScheme = captionUrl.substring(scheme.length() + 3);
                 }
 
@@ -330,7 +330,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     }
 
     private void loadImage() {
-        if(isFallback) {
+        if (isFallback) {
             imageView.showImage(Uri.parse(media.fallbackUrl));
         }
         else{

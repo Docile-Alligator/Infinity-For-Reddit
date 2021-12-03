@@ -99,7 +99,7 @@ public class GlideImageGetter implements Html.ImageGetter {
 
         @Override
         public void onLoadStarted(@Nullable Drawable placeholderDrawable) {
-            if(placeholderDrawable != null) {
+            if (placeholderDrawable != null) {
                 setDrawable(placeholderDrawable);
             }
         }
@@ -126,7 +126,7 @@ public class GlideImageGetter implements Html.ImageGetter {
 
         @Override
         public void onLoadCleared(@Nullable Drawable placeholderDrawable) {
-            if(placeholderDrawable != null) {
+            if (placeholderDrawable != null) {
                 setDrawable(placeholderDrawable);
             }
         }

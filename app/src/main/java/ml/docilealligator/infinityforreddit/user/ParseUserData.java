@@ -22,7 +22,7 @@ public class ParseUserData {
     }
 
     private static UserData parseUserDataBase(JSONObject userDataJson, boolean parseFullKarma) throws JSONException {
-        if(userDataJson == null) {
+        if (userDataJson == null) {
             return null;
         }
 

@@ -114,7 +114,7 @@ public class ThemePreferenceFragment extends PreferenceFragmentCompat {
                             AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
                         }
 
-                        if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO) {
+                        if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO) {
                             customThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.LIGHT);
                         } else {
                             if (amoledDarkSwitch.isChecked()) {

@@ -59,7 +59,7 @@ public class SortTimeBottomSheetFragment extends LandscapeExpandedRoundedBottomS
         }
 
         String sortType = getArguments() != null ? getArguments().getString(EXTRA_SORT_TYPE) : null;
-        if(sortType == null) {
+        if (sortType == null) {
             dismiss();
             return rootView;
         }

@@ -150,8 +150,9 @@ public class Utils {
 
     public static CharSequence trimTrailingWhitespace(CharSequence source) {
 
-        if(source == null)
+        if (source == null) {
             return "";
+        }
 
         int i = source.length();
 
@@ -329,7 +330,7 @@ public class Utils {
         }
     }
 
-    public static float convertDpToPixel(float dp, Context context){
+    public static float convertDpToPixel(float dp, Context context) {
         return dp * ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT);
     }
 
@@ -392,7 +393,7 @@ public class Utils {
                 int nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME);
                 cursor.moveToFirst();
                 String fileName = cursor.getString(nameIndex);
-                if(fileName != null && fileName.contains(".")) {
+                if (fileName != null && fileName.contains(".")) {
                     fileName = fileName.substring(0, fileName.lastIndexOf('.'));
                 }
                 return fileName;

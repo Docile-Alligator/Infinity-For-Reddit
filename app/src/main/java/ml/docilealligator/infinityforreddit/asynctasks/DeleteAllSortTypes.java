@@ -17,7 +17,7 @@ public class DeleteAllSortTypes {
             Map<String,?> keys = defaultSharedPreferences.getAll();
             SharedPreferences.Editor editor = defaultSharedPreferences.edit();
 
-            for(Map.Entry<String,?> entry : keys.entrySet()){
+            for (Map.Entry<String,?> entry : keys.entrySet()) {
                 String key = entry.getKey();
                 if (key.contains(SharedPreferencesUtils.SORT_TYPE_BEST_POST) || key.contains(SharedPreferencesUtils.SORT_TIME_BEST_POST)
                         || key.contains(SharedPreferencesUtils.SORT_TYPE_ALL_POST_LEGACY) || key.contains(SharedPreferencesUtils.SORT_TIME_ALL_POST_LEGACY)

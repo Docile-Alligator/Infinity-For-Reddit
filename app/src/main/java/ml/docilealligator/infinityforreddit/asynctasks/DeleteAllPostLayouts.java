@@ -17,7 +17,7 @@ public class DeleteAllPostLayouts {
             Map<String,?> keys = defaultSharedPreferences.getAll();
             SharedPreferences.Editor editor = defaultSharedPreferences.edit();
 
-            for(Map.Entry<String,?> entry : keys.entrySet()){
+            for (Map.Entry<String,?> entry : keys.entrySet()) {
                 String key = entry.getKey();
                 if (key.startsWith(SharedPreferencesUtils.POST_LAYOUT_SHARED_PREFERENCES_FILE)
                         || key.startsWith(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST)
