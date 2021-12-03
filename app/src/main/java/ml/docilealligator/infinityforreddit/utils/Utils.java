@@ -124,14 +124,14 @@ public class Utils {
         Pattern inlineGifPattern = Pattern.compile("!\\[gif]\\(giphy\\|\\w+\\)");
         Matcher matcher = inlineGifPattern.matcher(markdownStringBuilder);
         while (matcher.find()) {
-            markdownStringBuilder.replace(matcher.start(), matcher.end(), "[gif](https://media3.giphy.com/media/" + markdownStringBuilder.substring(matcher.start() + "![gif](giphy|".length(), matcher.end() - 1) + "/giphy.mp4)");
+            markdownStringBuilder.replace(matcher.start(), matcher.end(), "[gif](https://i.giphy.com/media/" + markdownStringBuilder.substring(matcher.start() + "![gif](giphy|".length(), matcher.end() - 1) + "/giphy.mp4)");
             matcher = inlineGifPattern.matcher(markdownStringBuilder);
         }
 
         Pattern inlineGifPattern2 = Pattern.compile("!\\[gif]\\(giphy\\|\\w+\\|downsized\\)");
         Matcher matcher2 = inlineGifPattern2.matcher(markdownStringBuilder);
         while (matcher2.find()) {
-            markdownStringBuilder.replace(matcher2.start(), matcher2.end(), "[gif](https://media3.giphy.com/media/" + markdownStringBuilder.substring(matcher2.start() + "![gif](giphy|".length(), matcher2.end() - "|downsized\\)".length()) + "/giphy.mp4)");
+            markdownStringBuilder.replace(matcher2.start(), matcher2.end(), "[gif](https://i.giphy.com/media/" + markdownStringBuilder.substring(matcher2.start() + "![gif](giphy|".length(), matcher2.end() - "|downsized\\)".length() + 1) + "/giphy.mp4)");
             matcher2 = inlineGifPattern2.matcher(markdownStringBuilder);
         }
 
