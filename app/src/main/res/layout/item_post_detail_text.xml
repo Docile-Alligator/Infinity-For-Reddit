@@ -110,7 +110,8 @@
         android:layout_marginTop="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:visibility="gone" />
+        android:visibility="gone"
+        android:nestedScrollingEnabled="false" />
 
     <com.nex3z.flowlayout.FlowLayout
         android:layout_width="match_parent"
