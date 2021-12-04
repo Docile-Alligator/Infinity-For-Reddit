@@ -49,7 +49,7 @@ import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.UploadedImage;
 import retrofit2.Retrofit;
 
-public class Utils {
+public final class Utils {
     public static final int NETWORK_TYPE_OTHER = -1;
     public static final int NETWORK_TYPE_WIFI = 0;
     public static final int NETWORK_TYPE_CELLULAR = 1;
@@ -60,21 +60,36 @@ public class Utils {
     private static final long MONTH_MILLIS = 30 * DAY_MILLIS;
     private static final long YEAR_MILLIS = 12 * MONTH_MILLIS;
 
+    public static final Pattern[] REGEX_PATTERN = {
+            Pattern.compile("((?<=[\\s])|^)/[rRuU]/[\\w-]+/{0,1}"),
+            Pattern.compile("((?<=[\\s])|^)[rRuU]/[\\w-]+/{0,1}"),
+            Pattern.compile("\\^{2,}"),
+            Pattern.compile("(^|^ *|\\n *)#(?!($|\\s|#))"),
+            Pattern.compile("(^|^ *|\\n *)##(?!($|\\s|#))"),
+            Pattern.compile("(^|^ *|\\n *)###(?!($|\\s|#))"),
+            Pattern.compile("(^|^ *|\\n *)####(?!($|\\s|#))"),
+            Pattern.compile("(^|^ *|\\n *)#####(?!($|\\s|#))"),
+            Pattern.compile("(^|^ *|\\n *)######(?!($|\\s|#))"),
+            Pattern.compile("!\\[gif]\\(giphy\\|\\w+\\)"),
+            Pattern.compile("!\\[gif]\\(giphy\\|\\w+\\|downsized\\)"),
+            Pattern.compile("!\\[gif]\\(emote\\|\\w+\\|\\w+\\)"),
+            Pattern.compile("!\\[img]\\(emote\\|\\w+\\|\\w+\\)")
+    };
+
     public static String modifyMarkdown(String markdown) {
-        StringBuilder regexed = new StringBuilder(markdown
-                .replaceAll("((?<=[\\s])|^)/[rRuU]/[\\w-]+/{0,1}", "[$0](https://www.reddit.com$0)")
-                .replaceAll("((?<=[\\s])|^)[rRuU]/[\\w-]+/{0,1}", "[$0](https://www.reddit.com/$0)")
-                .replaceAll("\\^{2,}", "^")
-                .replaceAll("(^|^ *|\\n *)#(?!($|\\s|#))", "$0 ")
-                .replaceAll("(^|^ *|\\n *)##(?!($|\\s|#))", "$0 ")
-                .replaceAll("(^|^ *|\\n *)###(?!($|\\s|#))", "$0 ")
-                .replaceAll("(^|^ *|\\n *)####(?!($|\\s|#))", "$0 ")
-                .replaceAll("(^|^ *|\\n *)#####(?!($|\\s|#))", "$0 ")
-                .replaceAll("(^|^ *|\\n *)######(?!($|\\s|#))", "$0 "));
+        String regexed = REGEX_PATTERN[0].matcher(markdown).replaceAll("[$0](https://www.reddit.com$0)");
+        regexed = REGEX_PATTERN[1].matcher(regexed).replaceAll("[$0](https://www.reddit.com/$0)");
+        regexed = REGEX_PATTERN[2].matcher(regexed).replaceAll("^");
+        regexed = REGEX_PATTERN[3].matcher(regexed).replaceAll("$0");
+        regexed = REGEX_PATTERN[4].matcher(regexed).replaceAll("$0");
+        regexed = REGEX_PATTERN[5].matcher(regexed).replaceAll("$0");
+        regexed = REGEX_PATTERN[6].matcher(regexed).replaceAll("$0");
+        regexed = REGEX_PATTERN[7].matcher(regexed).replaceAll("$0");
+        regexed = REGEX_PATTERN[8].matcher(regexed).replaceAll("$0");
 
         //return fixSuperScript(regexed);
         // We don't want to fix super scripts here because we need the original markdown later for editing posts
-        return regexed.toString();
+        return regexed;
     }
 
     public static String fixSuperScript(String regexedMarkdown) {
@@ -121,21 +136,21 @@ public class Utils {
 
     public static String parseInlineGifInComments(String markdown) {
         StringBuilder markdownStringBuilder = new StringBuilder(markdown);
-        Pattern inlineGifPattern = Pattern.compile("!\\[gif]\\(giphy\\|\\w+\\)");
+        Pattern inlineGifPattern = REGEX_PATTERN[9];
         Matcher matcher = inlineGifPattern.matcher(markdownStringBuilder);
         while (matcher.find()) {
             markdownStringBuilder.replace(matcher.start(), matcher.end(), "[gif](https://i.giphy.com/media/" + markdownStringBuilder.substring(matcher.start() + "![gif](giphy|".length(), matcher.end() - 1) + "/giphy.mp4)");
             matcher = inlineGifPattern.matcher(markdownStringBuilder);
         }
 
-        Pattern inlineGifPattern2 = Pattern.compile("!\\[gif]\\(giphy\\|\\w+\\|downsized\\)");
+        Pattern inlineGifPattern2 = REGEX_PATTERN[10];
         Matcher matcher2 = inlineGifPattern2.matcher(markdownStringBuilder);
         while (matcher2.find()) {
             markdownStringBuilder.replace(matcher2.start(), matcher2.end(), "[gif](https://i.giphy.com/media/" + markdownStringBuilder.substring(matcher2.start() + "![gif](giphy|".length(), matcher2.end() - "|downsized\\)".length() + 1) + "/giphy.mp4)");
             matcher2 = inlineGifPattern2.matcher(markdownStringBuilder);
         }
 
-        Pattern inlineGifPattern3 = Pattern.compile("!\\[gif]\\(emote\\|\\w+\\|\\w+\\)");
+        Pattern inlineGifPattern3 = REGEX_PATTERN[11];
         Matcher matcher3 = inlineGifPattern3.matcher(markdownStringBuilder);
         while (matcher3.find()) {
             markdownStringBuilder.replace(matcher3.start(), matcher3.end(),
