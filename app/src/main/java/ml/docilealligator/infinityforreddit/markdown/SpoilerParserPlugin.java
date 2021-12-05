@@ -127,22 +127,19 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
         for (int i = 0; i < length; i++) {
             if (markdown.charAt(i) == '\n') {
                 new_lines++;
-                if (openSpoilerStack.size() >= 1 && new_lines > MAX_NEW_LINE) {
+                if (new_lines > MAX_NEW_LINE) {
                     openSpoilerStack.clear();
                     new_lines = 0;
                 }
-                continue;
-            }
-            if ((markdown.charAt(i) != '>') && (markdown.charAt(i) != '<') && (markdown.charAt(i) != '!')) {
-                continue;
-            }
-            if ((i + 1 < length)
+            } else if ((markdown.charAt(i) != '>')
+                    && (markdown.charAt(i) != '<')
+                    && (markdown.charAt(i) != '!')) {
+                new_lines = 0;
+            } else if ((i + 1 < length)
                     && markdown.charAt(i) == '>'
                     && markdown.charAt(i + 1) == '!') {
                 openSpoilerStack.push(i + 2);
-                continue;
-            }
-            if ((i + 1 < length) && (i - 1 >= 0)
+            } else if ((i + 1 < length) && (i - 1 >= 0)
                     && openSpoilerStack.size() > 0
                     && markdown.charAt(i - 1) != '>'
                     && markdown.charAt(i) == '!'
@@ -153,7 +150,11 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
                         && closedSpoilers.get(closedSpoilers.size() - 1).second < i) {
                     closedSpoilers.remove(closedSpoilers.size() - 1);
                 }
-                closedSpoilers.add(Pair.create(pos, i));
+                if (pos != i) {
+                    closedSpoilers.add(Pair.create(pos, i));
+                }
+            } else {
+                new_lines = 0;
             }
         }
         return closedSpoilers;
