@@ -142,7 +142,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private static final String MESSAGE_FULLNAME_STATE = "MFS";
     private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
     private static final int ADD_TO_MULTIREDDIT_REQUEST_CODE = 1;
-
+    public SubredditViewModel mSubredditViewModel;
     @BindView(R.id.coordinator_layout_view_subreddit_detail_activity)
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.view_pager_view_subreddit_detail_activity)
@@ -219,7 +219,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    public SubredditViewModel mSubredditViewModel;
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private Call<String> subredditAutocompleteCall;
@@ -248,6 +247,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private int fabOption;
     private SlidrInterface mSlidrInterface;
     private MaterialAlertDialogBuilder nsfwWarningBuilder;
+    private boolean isOnCreateActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -370,6 +370,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
         checkNewAccountAndBindView();
 
+        isOnCreateActivity = true;
         fetchSubredditData();
 
         String title = "r/" + subredditName;
@@ -590,8 +591,13 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
                     mNCurrentOnlineSubscribers = nCurrentOnlineSubscribers;
                     nOnlineSubscribersTextView.setText(getString(R.string.online_subscribers_number_detail, nCurrentOnlineSubscribers));
-                    InsertSubredditData.insertSubredditData(mExecutor, new Handler(), mRedditDataRoomDatabase,
-                            subredditData, () -> mFetchSubredditInfoSuccess = true);
+                    if (isOnCreateActivity) {
+                        mFetchSubredditInfoSuccess = true;
+                        isOnCreateActivity = false;
+                    } else {
+                        InsertSubredditData.insertSubredditData(mExecutor, new Handler(), mRedditDataRoomDatabase,
+                                subredditData, () -> mFetchSubredditInfoSuccess = true);
+                    }
                 }
 
                 @Override
@@ -633,7 +639,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             }
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_REFRESH: {
                 if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.refresh();
+                    sectionsPagerAdapter.refresh(false);
                 }
                 break;
             }
@@ -878,7 +884,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             switch (fabOption) {
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH: {
                     if (sectionsPagerAdapter != null) {
-                        sectionsPagerAdapter.refresh();
+                        sectionsPagerAdapter.refresh(false);
                     }
                     break;
                 }
@@ -1105,9 +1111,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             return true;
         } else if (itemId == R.id.action_refresh_view_subreddit_detail_activity) {
             if (sectionsPagerAdapter != null) {
-                sectionsPagerAdapter.refresh();
-                mFetchSubredditInfoSuccess = false;
-                fetchSubredditData();
+                sectionsPagerAdapter.refresh(true);
             }
             return true;
         } else if (itemId == R.id.action_change_post_layout_view_subreddit_detail_activity) {
@@ -1333,7 +1337,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_REFRESH:
                 if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.refresh();
+                    sectionsPagerAdapter.refresh(false);
                 }
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_CHANGE_SORT_TYPE:
@@ -1541,6 +1545,18 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId());
     }
 
+    private void lockSwipeRightToGoBack() {
+        if (mSlidrInterface != null) {
+            mSlidrInterface.lock();
+        }
+    }
+
+    private void unlockSwipeRightToGoBack() {
+        if (mSlidrInterface != null) {
+            mSlidrInterface.unlock();
+        }
+    }
+
     private class SectionsPagerAdapter extends FragmentStateAdapter {
 
         SectionsPagerAdapter(FragmentActivity fa) {
@@ -1585,10 +1601,14 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             return false;
         }
 
-        public void refresh() {
+        public void refresh(boolean refreshSubredditData) {
             Fragment fragment = getCurrentFragment();
             if (fragment instanceof PostFragment) {
                 ((PostFragment) fragment).refresh();
+                if (refreshSubredditData) {
+                    mFetchSubredditInfoSuccess = false;
+                    fetchSubredditData();
+                }
             } else if (fragment instanceof SidebarFragment) {
                 ((SidebarFragment) fragment).fetchSubredditData();
             }
@@ -1656,18 +1676,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         @Override
         public int getItemCount() {
             return 2;
-        }
-    }
-
-    private void lockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.lock();
-        }
-    }
-
-    private void unlockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.unlock();
         }
     }
 }
