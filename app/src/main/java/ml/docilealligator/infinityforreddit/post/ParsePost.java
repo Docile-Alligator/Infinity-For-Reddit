@@ -541,7 +541,7 @@ public class ParsePost {
                 }
             } catch (IllegalArgumentException ignore) { }
         } else if (post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
-            if (data.has(JSONUtils.GALLERY_DATA_KEY)) {
+            if (!data.isNull(JSONUtils.GALLERY_DATA_KEY)) {
                 JSONArray galleryIdsArray = data.getJSONObject(JSONUtils.GALLERY_DATA_KEY).getJSONArray(JSONUtils.ITEMS_KEY);
                 JSONObject galleryObject = data.getJSONObject(JSONUtils.MEDIA_METADATA_KEY);
                 ArrayList<Post.Gallery> gallery = new ArrayList<>();
