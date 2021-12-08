@@ -80,12 +80,12 @@ public final class Utils {
         String regexed = REGEX_PATTERN[0].matcher(markdown).replaceAll("[$0](https://www.reddit.com$0)");
         regexed = REGEX_PATTERN[1].matcher(regexed).replaceAll("[$0](https://www.reddit.com/$0)");
         regexed = REGEX_PATTERN[2].matcher(regexed).replaceAll("^");
-        regexed = REGEX_PATTERN[3].matcher(regexed).replaceAll("$0");
-        regexed = REGEX_PATTERN[4].matcher(regexed).replaceAll("$0");
-        regexed = REGEX_PATTERN[5].matcher(regexed).replaceAll("$0");
-        regexed = REGEX_PATTERN[6].matcher(regexed).replaceAll("$0");
-        regexed = REGEX_PATTERN[7].matcher(regexed).replaceAll("$0");
-        regexed = REGEX_PATTERN[8].matcher(regexed).replaceAll("$0");
+        regexed = REGEX_PATTERN[3].matcher(regexed).replaceAll("$0 ");
+        regexed = REGEX_PATTERN[4].matcher(regexed).replaceAll("$0 ");
+        regexed = REGEX_PATTERN[5].matcher(regexed).replaceAll("$0 ");
+        regexed = REGEX_PATTERN[6].matcher(regexed).replaceAll("$0 ");
+        regexed = REGEX_PATTERN[7].matcher(regexed).replaceAll("$0 ");
+        regexed = REGEX_PATTERN[8].matcher(regexed).replaceAll("$0 ");
 
         //return fixSuperScript(regexed);
         // We don't want to fix super scripts here because we need the original markdown later for editing posts
