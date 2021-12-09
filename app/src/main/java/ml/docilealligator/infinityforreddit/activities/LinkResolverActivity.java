@@ -51,6 +51,7 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String RPAN_BROADCAST_PATTERN = "/rpan/r/[\\w-]+/\\w+/?\\w+/?";
     private static final String WIKI_PATTERN = "/[rR]/[\\w-]+/(wiki|w)?(?:/\\w+)+";
     private static final String GOOGLE_AMP_PATTERN = "/amp/s/amp.reddit.com/.*";
+    private static final String STREAMABLE_PATTERN = "/\\w+/?";
 
     @Inject
     @Named("default")
@@ -270,9 +271,19 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 deepLinkError(uri);
                             }
                         } else if (authority.contains("google.com")) {
-                            if ( path.matches(GOOGLE_AMP_PATTERN) ) {
-                                String url = path.substring(11, path.length()); // skipping past amp straight to reddit
+                            if (path.matches(GOOGLE_AMP_PATTERN)) {
+                                String url = path.substring(11);
                                 handleUri(Uri.parse("https://" + url));
+                            } else {
+                                deepLinkError(uri);
+                            }
+                        } else if (authority.equals("streamable.com")) {
+                            if (path.matches(STREAMABLE_PATTERN)) {
+                                String shortCode = segments.get(0);
+                                Intent intent = new Intent(this, ViewVideoActivity.class);
+                                intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_STREAMABLE);
+                                intent.putExtra(ViewVideoActivity.EXTRA_STREAMABLE_SHORT_CODE, shortCode);
+                                startActivity(intent);
                             } else {
                                 deepLinkError(uri);
                             }

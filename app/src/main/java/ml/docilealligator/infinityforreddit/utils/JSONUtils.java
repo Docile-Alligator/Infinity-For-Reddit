@@ -173,4 +173,6 @@ public class JSONUtils {
     public static final String CONTENT_MD_KEY = "content_md";
     public static final String CAPTION_KEY = "caption";
     public static final String CAPTION_URL_KEY = "outbound_url";
+    public static final String FILES_KEY = "files";
+    public static final String MP4_MOBILE_KEY = "mp4-mobile";
 }

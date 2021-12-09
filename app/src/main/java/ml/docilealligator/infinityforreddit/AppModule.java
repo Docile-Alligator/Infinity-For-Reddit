@@ -168,6 +168,16 @@ class AppModule {
     }
 
     @Provides
+    @Named("streamable")
+    @Singleton
+    Retrofit provideStreamableRetrofit(@Named("default") OkHttpClient okHttpClient) {
+        return new Retrofit.Builder()
+                .baseUrl(APIUtils.STREAMABLE_API_BASE_URI)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+    }
+
+    @Provides
     @Named("default")
     @Singleton
     OkHttpClient provideOkHttpClient(@Named("no_oauth") Retrofit retrofit, RedditDataRoomDatabase accountRoomDatabase,

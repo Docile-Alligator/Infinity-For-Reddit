@@ -988,6 +988,7 @@
     <string name="fetch_gfycat_video_failed">Fetch Gfycat video failed</string>
     <string name="fetch_redgifs_video_failed">Fetch Redgifs video failed</string>
     <string name="fetching_video_info_please_wait">Fetching video info. Please wait.</string>
+    <string name="fetch_streamable_video_failed">Fetch Streamable video failed</string>
 
     <string name="error_fetching_imgur_media">Cannot load images</string>
 
