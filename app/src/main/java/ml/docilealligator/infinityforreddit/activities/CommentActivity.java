@@ -70,6 +70,7 @@ import ml.docilealligator.infinityforreddit.comment.SendComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SuperscriptPlugin;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -134,6 +135,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     private Uri capturedImageUri;
     private ArrayList<UploadedImage> uploadedImages = new ArrayList<>();
     private Menu mMenu;
+    private int commentColor;
+    private int commentSpoilerBackgroundColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,6 +195,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                         builder.linkColor(linkColor);
                     }
                 })
+                .usePlugin(SpoilerParserPlugin.create(commentColor, commentSpoilerBackgroundColor))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .build();
         if (parentTextMarkdown != null) {
@@ -337,7 +341,9 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
-        commentParentMarkwonView.setTextColor(mCustomThemeWrapper.getCommentColor());
+        commentColor = mCustomThemeWrapper.getCommentColor();
+        commentSpoilerBackgroundColor = commentColor | 0xFF000000;
+        commentParentMarkwonView.setTextColor(commentColor);
         divider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
         commentEditText.setTextColor(mCustomThemeWrapper.getCommentColor());
         int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();

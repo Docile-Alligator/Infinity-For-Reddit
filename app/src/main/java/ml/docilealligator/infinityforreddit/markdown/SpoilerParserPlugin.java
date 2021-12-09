@@ -11,7 +11,6 @@ import androidx.annotation.NonNull;
 import org.commonmark.node.Block;
 import org.commonmark.node.BlockQuote;
 import org.commonmark.node.HtmlBlock;
-import org.commonmark.node.HtmlInline;
 import org.commonmark.parser.Parser;
 
 import java.util.ArrayList;
@@ -19,13 +18,17 @@ import java.util.Set;
 import java.util.Stack;
 
 import io.noties.markwon.AbstractMarkwonPlugin;
+import io.noties.markwon.MarkwonVisitor;
 import io.noties.markwon.core.CorePlugin;
 import io.noties.markwon.core.spans.CodeBlockSpan;
 import io.noties.markwon.core.spans.CodeSpan;
+import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 
 public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
     private final int textColor;
     private final int backgroundColor;
+    private boolean textHasSpoiler = false;
+    private int firstSpoilerStart = -1;
 
     SpoilerParserPlugin(int textColor, int backgroundColor) {
         this.textColor = textColor;
@@ -37,12 +40,29 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
     }
 
     @Override
+    public void configureVisitor(@NonNull MarkwonVisitor.Builder builder) {
+        builder.on(SpoilerOpening.class, (visitor, opening) -> {
+            textHasSpoiler = true;
+            if (firstSpoilerStart == -1) {
+                firstSpoilerStart = visitor.length();
+            }
+            visitor.builder().append(opening.getLiteral());
+        });
+    }
+
+    @Override
+    public void configure(@NonNull Registry registry) {
+        registry.require(MarkwonInlineParserPlugin.class, plugin ->
+                plugin.factoryBuilder().addInlineProcessor(new SpoilerOpeningParser())
+        );
+    }
+
+    @Override
     public void configureParser(@NonNull Parser.Builder builder) {
         builder.customBlockParserFactory(new BlockQuoteWithExceptionParser.Factory());
 
         Set<Class<? extends Block>> blocks = CorePlugin.enabledBlockTypes();
         blocks.remove(HtmlBlock.class);
-        blocks.remove(HtmlInline.class);
         blocks.remove(BlockQuote.class);
 
         builder.enabledBlockTypes(blocks);
@@ -50,16 +70,19 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
 
     @Override
     public void afterSetText(@NonNull TextView textView) {
-        textView.setHighlightColor(Color.TRANSPARENT);
-
-        if (textView.getText().length() < 5) {
+        if (!textHasSpoiler || textView.getText().length() < 5) {
+            firstSpoilerStart = 0;
             return;
         }
 
+        textView.setHighlightColor(Color.TRANSPARENT);
+
         SpannableStringBuilder markdownStringBuilder = new SpannableStringBuilder(textView.getText());
 
-        ArrayList<Pair<Integer, Integer>> spoilers = parse(markdownStringBuilder);
+        ArrayList<Pair<Integer, Integer>> spoilers = parse(markdownStringBuilder, firstSpoilerStart);
+        firstSpoilerStart = 0;
         if (spoilers.size() == 0) {
+            textHasSpoiler = false;
             return;
         }
 
@@ -118,31 +141,32 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
     // Don't allow more than one new line after every non-blank line
     // Try not to care about recursing spoilers, we just want the outermost spoiler because
     // spoiler revealing-hiding breaks with recursing spoilers
-    private ArrayList<Pair<Integer, Integer>> parse(SpannableStringBuilder markdown) {
+    private ArrayList<Pair<Integer, Integer>> parse(SpannableStringBuilder markdown, int start) {
         final int MAX_NEW_LINE = 1;
         int length = markdown.length();
         Stack<Integer> openSpoilerStack = new Stack<>();
         ArrayList<Pair<Integer, Integer>> closedSpoilers = new ArrayList<>();
         int new_lines = 0;
-        for (int i = 0; i < length; i++) {
-            if (markdown.charAt(i) == '\n') {
+        for (int i = start; i < length; i++) {
+            char currentChar = markdown.charAt(i);
+            if (currentChar == '\n') {
                 new_lines++;
                 if (new_lines > MAX_NEW_LINE) {
                     openSpoilerStack.clear();
                     new_lines = 0;
                 }
-            } else if ((markdown.charAt(i) != '>')
-                    && (markdown.charAt(i) != '<')
-                    && (markdown.charAt(i) != '!')) {
+            } else if ((currentChar != '>')
+                    && (currentChar != '<')
+                    && (currentChar != '!')) {
                 new_lines = 0;
             } else if ((i + 1 < length)
-                    && markdown.charAt(i) == '>'
+                    && currentChar == '>'
                     && markdown.charAt(i + 1) == '!') {
                 openSpoilerStack.push(i + 2);
             } else if ((i + 1 < length) && (i - 1 >= 0)
                     && openSpoilerStack.size() > 0
                     && markdown.charAt(i - 1) != '>'
-                    && markdown.charAt(i) == '!'
+                    && currentChar == '!'
                     && markdown.charAt(i + 1) == '<') {
                 var pos = openSpoilerStack.pop();
                 if (!closedSpoilers.isEmpty()
