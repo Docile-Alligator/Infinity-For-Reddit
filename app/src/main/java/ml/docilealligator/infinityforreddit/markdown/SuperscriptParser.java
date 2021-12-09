@@ -106,7 +106,6 @@ public class SuperscriptParser extends InlineProcessor {
                     Superscript node = new Superscript();
                     node.setLiteral(input.substring(caret_pos + 1, i));
                     node.setLevel(level);
-                    node.setLevel(level);
                     return node;
                 }
             }
