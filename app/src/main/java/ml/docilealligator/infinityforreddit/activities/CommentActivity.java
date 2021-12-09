@@ -50,8 +50,7 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
-import io.noties.markwon.html.HtmlPlugin;
-import io.noties.markwon.html.tag.SuperScriptHandler;
+import io.noties.markwon.inlineparser.AutolinkInlineProcessor;
 import io.noties.markwon.inlineparser.BangInlineProcessor;
 import io.noties.markwon.inlineparser.HtmlInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
@@ -71,8 +70,9 @@ import ml.docilealligator.infinityforreddit.comment.SendComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SuperscriptPlugin;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
@@ -135,6 +135,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     private Uri capturedImageUri;
     private ArrayList<UploadedImage> uploadedImages = new ArrayList<>();
     private Menu mMenu;
+    private int commentColor;
+    private int commentSpoilerBackgroundColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,18 +168,16 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         int linkColor = mCustomThemeWrapper.getLinkColor();
         Markwon markwon = Markwon.builder(this)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
+                    plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
                     plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
                     plugin.excludeInlineProcessor(BangInlineProcessor.class);
-                    plugin.addInlineProcessor(new SuperscriptInlineProcessor());
                 }))
-                .usePlugin(HtmlPlugin.create(plugin -> {
-                    plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
-                }))
+                .usePlugin(SuperscriptPlugin.create())
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @NonNull
                     @Override
                     public String processMarkdown(@NonNull String markdown) {
-                        return super.processMarkdown(Utils.fixSuperScript(markdown));
+                        return super.processMarkdown(markdown);
                     }
 
                     @Override
@@ -195,6 +195,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                         builder.linkColor(linkColor);
                     }
                 })
+                .usePlugin(SpoilerParserPlugin.create(commentColor, commentSpoilerBackgroundColor))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .build();
         if (parentTextMarkdown != null) {
@@ -220,18 +221,16 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             contentMarkdownRecyclerView.setNestedScrollingEnabled(false);
             Markwon postBodyMarkwon = Markwon.builder(this)
                     .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
+                        plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
                         plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
                         plugin.excludeInlineProcessor(BangInlineProcessor.class);
-                        plugin.addInlineProcessor(new SuperscriptInlineProcessor());
                     }))
-                    .usePlugin(HtmlPlugin.create(plugin -> {
-                        plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
-                    }))
+                    .usePlugin(SuperscriptPlugin.create())
                     .usePlugin(new AbstractMarkwonPlugin() {
                         @NonNull
                         @Override
                         public String processMarkdown(@NonNull String markdown) {
-                            return super.processMarkdown(Utils.fixSuperScript(markdown));
+                            return super.processMarkdown(markdown);
                         }
 
                         @Override
@@ -342,7 +341,9 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
-        commentParentMarkwonView.setTextColor(mCustomThemeWrapper.getCommentColor());
+        commentColor = mCustomThemeWrapper.getCommentColor();
+        commentSpoilerBackgroundColor = commentColor | 0xFF000000;
+        commentParentMarkwonView.setTextColor(commentColor);
         divider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
         commentEditText.setTextColor(mCustomThemeWrapper.getCommentColor());
         int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
