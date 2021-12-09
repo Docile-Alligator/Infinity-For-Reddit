@@ -50,6 +50,8 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
+import io.noties.markwon.html.HtmlPlugin;
+import io.noties.markwon.html.tag.SuperScriptHandler;
 import io.noties.markwon.inlineparser.AutolinkInlineProcessor;
 import io.noties.markwon.inlineparser.BangInlineProcessor;
 import io.noties.markwon.inlineparser.HtmlInlineProcessor;
@@ -71,7 +73,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
-import ml.docilealligator.infinityforreddit.markdown.SuperscriptPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
@@ -171,13 +173,16 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
                     plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
                     plugin.excludeInlineProcessor(BangInlineProcessor.class);
+                    plugin.addInlineProcessor(new SuperscriptInlineProcessor());
                 }))
-                .usePlugin(SuperscriptPlugin.create())
+                .usePlugin(HtmlPlugin.create(plugin -> {
+                    plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
+                }))
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @NonNull
                     @Override
                     public String processMarkdown(@NonNull String markdown) {
-                        return super.processMarkdown(markdown);
+                        return Utils.fixSuperScript(markdown);
                     }
 
                     @Override
@@ -224,13 +229,16 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                         plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
                         plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
                         plugin.excludeInlineProcessor(BangInlineProcessor.class);
+                        plugin.addInlineProcessor(new SuperscriptInlineProcessor());
                     }))
-                    .usePlugin(SuperscriptPlugin.create())
+                    .usePlugin(HtmlPlugin.create(plugin -> {
+                        plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
+                    }))
                     .usePlugin(new AbstractMarkwonPlugin() {
                         @NonNull
                         @Override
                         public String processMarkdown(@NonNull String markdown) {
-                            return super.processMarkdown(markdown);
+                            return Utils.fixSuperScript(markdown);
                         }
 
                         @Override
