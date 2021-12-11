@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 import io.noties.markwon.inlineparser.InlineProcessor;
 
 public class SuperscriptInlineProcessor extends InlineProcessor {
-    private static final Pattern HTML_TAG = Pattern.compile("</?sup>", Pattern.CASE_INSENSITIVE);
+    private static final Pattern HTML_TAG = Pattern.compile("^</?sup>", Pattern.CASE_INSENSITIVE);
 
     @Override
     public char specialCharacter() {

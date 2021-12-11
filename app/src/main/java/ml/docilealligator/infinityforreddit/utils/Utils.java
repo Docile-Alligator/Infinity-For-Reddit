@@ -59,8 +59,7 @@ public final class Utils {
     private static final long DAY_MILLIS = 24 * HOUR_MILLIS;
     private static final long MONTH_MILLIS = 30 * DAY_MILLIS;
     private static final long YEAR_MILLIS = 12 * MONTH_MILLIS;
-
-    public static final Pattern[] REGEX_PATTERN = {
+    private static final Pattern[] REGEX_PATTERNS = {
             Pattern.compile("((?<=[\\s])|^)/[rRuU]/[\\w-]+/{0,1}"),
             Pattern.compile("((?<=[\\s])|^)[rRuU]/[\\w-]+/{0,1}"),
             Pattern.compile("\\^{2,}"),
@@ -77,15 +76,15 @@ public final class Utils {
     };
 
     public static String modifyMarkdown(String markdown) {
-        String regexed = REGEX_PATTERN[0].matcher(markdown).replaceAll("[$0](https://www.reddit.com$0)");
-        regexed = REGEX_PATTERN[1].matcher(regexed).replaceAll("[$0](https://www.reddit.com/$0)");
-        regexed = REGEX_PATTERN[2].matcher(regexed).replaceAll("^");
-        regexed = REGEX_PATTERN[3].matcher(regexed).replaceAll("$0 ");
-        regexed = REGEX_PATTERN[4].matcher(regexed).replaceAll("$0 ");
-        regexed = REGEX_PATTERN[5].matcher(regexed).replaceAll("$0 ");
-        regexed = REGEX_PATTERN[6].matcher(regexed).replaceAll("$0 ");
-        regexed = REGEX_PATTERN[7].matcher(regexed).replaceAll("$0 ");
-        regexed = REGEX_PATTERN[8].matcher(regexed).replaceAll("$0 ");
+        String regexed = REGEX_PATTERNS[0].matcher(markdown).replaceAll("[$0](https://www.reddit.com$0)");
+        regexed = REGEX_PATTERNS[1].matcher(regexed).replaceAll("[$0](https://www.reddit.com/$0)");
+        regexed = REGEX_PATTERNS[2].matcher(regexed).replaceAll("^");
+        regexed = REGEX_PATTERNS[3].matcher(regexed).replaceAll("$0 ");
+        regexed = REGEX_PATTERNS[4].matcher(regexed).replaceAll("$0 ");
+        regexed = REGEX_PATTERNS[5].matcher(regexed).replaceAll("$0 ");
+        regexed = REGEX_PATTERNS[6].matcher(regexed).replaceAll("$0 ");
+        regexed = REGEX_PATTERNS[7].matcher(regexed).replaceAll("$0 ");
+        regexed = REGEX_PATTERNS[8].matcher(regexed).replaceAll("$0 ");
 
         //return fixSuperScript(regexed);
         // We don't want to fix super scripts here because we need the original markdown later for editing posts
@@ -96,11 +95,19 @@ public final class Utils {
         StringBuilder regexed = new StringBuilder(regexedMarkdown);
         boolean hasBracket = false;
         int nCarets = 0;
+        int new_lines = 0;
         for (int i = 0; i < regexed.length(); i++) {
             char currentChar = regexed.charAt(i);
-            if (currentChar == '^') {
+            if (hasBracket && currentChar == '\n') {
+                new_lines++;
+                if (new_lines > 1) {
+                    hasBracket = false;
+                    nCarets = 0;
+                    new_lines = 0;
+                }
+            } else if (currentChar == '^') {
                 if (!(i > 0 && regexed.charAt(i - 1) == '\\')) {
-                    if (i < regexed.length() - 1 && regexed.charAt(i + 1) == '(') {
+                    if (nCarets == 0 && i < regexed.length() - 1 && regexed.charAt(i + 1) == '(') {
                         regexed.replace(i, i + 2, "<sup>");
                         hasBracket = true;
                     } else {
@@ -108,27 +115,35 @@ public final class Utils {
                     }
                     nCarets++;
                 }
-            } else if (currentChar == ')' && hasBracket) {
+            } else if (hasBracket && currentChar == ')') {
+                if (i > 0 && regexed.charAt(i - 1) == '\\') {
+                    hasBracket = false;
+                    nCarets--;
+                    continue;
+                }
                 hasBracket = false;
                 regexed.replace(i, i + 1, "</sup>");
                 nCarets--;
-            } else if (currentChar == '\n') {
-                hasBracket = false;
+            } else if (!hasBracket && currentChar == '\n') {
                 for (int j = 0; j < nCarets; j++) {
                     regexed.insert(i, "</sup>");
                     i += 6;
                 }
                 nCarets = 0;
-            } else if (currentChar == ' ' && !hasBracket) {
+            } else if (!hasBracket && Character.isWhitespace(currentChar)) {
                 for (int j = 0; j < nCarets; j++) {
                     regexed.insert(i, "</sup>");
                     i += 6;
                 }
                 nCarets = 0;
+            } else {
+                new_lines = 0;
             }
         }
-        for (int j = 0; j < nCarets; j++) {
-            regexed.append("</sup>");
+        if (!hasBracket) {
+            for (int j = 0; j < nCarets; j++) {
+                regexed.append("</sup>");
+            }
         }
 
         return regexed.toString();
@@ -136,27 +151,27 @@ public final class Utils {
 
     public static String parseInlineGifInComments(String markdown) {
         StringBuilder markdownStringBuilder = new StringBuilder(markdown);
-        Pattern inlineGifPattern = REGEX_PATTERN[9];
+        Pattern inlineGifPattern = REGEX_PATTERNS[9];
         Matcher matcher = inlineGifPattern.matcher(markdownStringBuilder);
         while (matcher.find()) {
             markdownStringBuilder.replace(matcher.start(), matcher.end(), "[gif](https://i.giphy.com/media/" + markdownStringBuilder.substring(matcher.start() + "![gif](giphy|".length(), matcher.end() - 1) + "/giphy.mp4)");
             matcher = inlineGifPattern.matcher(markdownStringBuilder);
         }
 
-        Pattern inlineGifPattern2 = REGEX_PATTERN[10];
+        Pattern inlineGifPattern2 = REGEX_PATTERNS[10];
         Matcher matcher2 = inlineGifPattern2.matcher(markdownStringBuilder);
         while (matcher2.find()) {
             markdownStringBuilder.replace(matcher2.start(), matcher2.end(), "[gif](https://i.giphy.com/media/" + markdownStringBuilder.substring(matcher2.start() + "![gif](giphy|".length(), matcher2.end() - "|downsized\\)".length() + 1) + "/giphy.mp4)");
             matcher2 = inlineGifPattern2.matcher(markdownStringBuilder);
         }
 
-        Pattern inlineGifPattern3 = REGEX_PATTERN[11];
+        Pattern inlineGifPattern3 = REGEX_PATTERNS[11];
         Matcher matcher3 = inlineGifPattern3.matcher(markdownStringBuilder);
         while (matcher3.find()) {
             markdownStringBuilder.replace(matcher3.start(), matcher3.end(),
                     "[gif](https://reddit-meta-production.s3.amazonaws.com/public/fortnitebr/emotes/snoomoji_emotes/"
                             + markdownStringBuilder.substring(
-                                    matcher3.start() + "![gif](emote|".length(), matcher3.end() - 1).replace('|', '/') + ".gif)");
+                            matcher3.start() + "![gif](emote|".length(), matcher3.end() - 1).replace('|', '/') + ".gif)");
             matcher3 = inlineGifPattern3.matcher(markdownStringBuilder);
         }
 
@@ -176,7 +191,7 @@ public final class Utils {
             i--;
         } while (i >= 0 && Character.isWhitespace(source.charAt(i)));
 
-        return source.subSequence(0, i+1);
+        return source.subSequence(0, i + 1);
     }
 
     public static String getFormattedTime(Locale locale, long time, String pattern) {
@@ -185,7 +200,7 @@ public final class Utils {
         return new SimpleDateFormat(pattern, locale).format(postTimeCalendar.getTime());
     }
 
-    public static String getElapsedTime(Context context,  long time) {
+    public static String getElapsedTime(Context context, long time) {
         long now = System.currentTimeMillis();
         long diff = now - time;
 
@@ -249,7 +264,8 @@ public final class Utils {
                             return NETWORK_TYPE_CELLULAR;
                         }
                     }
-                } catch (SecurityException ignore) {}
+                } catch (SecurityException ignore) {
+                }
                 return NETWORK_TYPE_OTHER;
             } else {
                 boolean isWifi = false;
@@ -364,7 +380,7 @@ public final class Utils {
     public static void uploadImageToReddit(Context context, Executor executor, Retrofit oauthRetrofit,
                                            Retrofit uploadMediaRetrofit, String accessToken, EditText editText,
                                            CoordinatorLayout coordinatorLayout, Uri imageUri,
-                                           ArrayList<UploadedImage>uploadedImages) {
+                                           ArrayList<UploadedImage> uploadedImages) {
         Toast.makeText(context, R.string.uploading_image, Toast.LENGTH_SHORT).show();
         Handler handler = new Handler();
         executor.execute(() -> {
