@@ -255,6 +255,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private ArrayList<String> readPosts;
     private Unbinder unbinder;
     private Map<String, String> subredditOrUserIcons = new HashMap<>();
+    private CustomToroContainer.OnWindowFocusChangedListener onWindowFocusChangedListener;
 
     public PostFragment() {
         // Required empty public constructor
@@ -314,6 +315,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         EventBus.getDefault().register(this);
 
         applyTheme();
+
+        mPostRecyclerView.addOnWindowFocusChangedListener(this::onWindowFocusChanged);
 
         lazyModeHandler = new Handler();
 
@@ -2115,7 +2118,16 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
+        if (mPostRecyclerView != null) {
+            mPostRecyclerView.addOnWindowFocusChangedListener(null);
+        }
         super.onDestroy();
+    }
+
+    private void onWindowFocusChanged(boolean hasWindowsFocus) {
+        if (mAdapter != null) {
+            mAdapter.setCanPlayVideo(hasWindowsFocus);
+        }
     }
 
     private static abstract class LazyModeRunnable implements Runnable {

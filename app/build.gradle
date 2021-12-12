@@ -105,7 +105,7 @@ dependencies {
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
 
     // Events
-    def eventbusVersion = "3.2.0"
+    def eventbusVersion = "3.3.1"
     implementation "org.greenrobot:eventbus:$eventbusVersion"
     annotationProcessor "org.greenrobot:eventbus-annotation-processor:$eventbusVersion"
 
