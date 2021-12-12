@@ -183,6 +183,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Named("redgifs")
     Retrofit mRedgifsRetrofit;
     @Inject
+    @Named("streamable")
+    Retrofit mStreamableRetrofit;
+    @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
     @Named("default")
@@ -446,7 +449,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mCustomThemeWrapper, locale,
+                    mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -523,7 +526,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mCustomThemeWrapper, locale,
+                    mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, displaySubredditName,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -594,7 +597,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mCustomThemeWrapper, locale,
+                    mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -659,7 +662,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mCustomThemeWrapper, locale,
+                    mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -720,7 +723,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mCustomThemeWrapper, locale,
+                    mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -780,7 +783,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mCustomThemeWrapper, locale,
+                    mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -834,7 +837,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mCustomThemeWrapper, locale,
+                    mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {

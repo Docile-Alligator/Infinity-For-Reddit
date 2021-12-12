@@ -68,10 +68,12 @@ import im.ene.toro.widget.Container;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.FetchGfycatOrRedgifsVideoLinks;
+import ml.docilealligator.infinityforreddit.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy;
 import ml.docilealligator.infinityforreddit.SaveThing;
+import ml.docilealligator.infinityforreddit.StreamableVideo;
 import ml.docilealligator.infinityforreddit.VoteThing;
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
@@ -81,6 +83,8 @@ import ml.docilealligator.infinityforreddit.activities.ViewRedditGalleryActivity
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity;
+import ml.docilealligator.infinityforreddit.apis.GfycatAPI;
+import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.ShareLinkBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
@@ -92,6 +96,7 @@ import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import pl.droidsonroids.gif.GifImageView;
+import retrofit2.Call;
 import retrofit2.Retrofit;
 
 /**
@@ -127,6 +132,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private Retrofit mOauthRetrofit;
     private Retrofit mGfycatRetrofit;
     private Retrofit mRedgifsRetrofit;
+    private Retrofit mStreamableRetrofit;
     private String mAccessToken;
     private RequestManager mGlide;
     private Locale mLocale;
@@ -205,7 +211,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private Callback mCallback;
 
     public PostRecyclerViewAdapter(AppCompatActivity activity, PostFragment fragment, Executor executor, Retrofit oauthRetrofit,
-                                   Retrofit gfycatRetrofit, Retrofit redgifsRetrofit,
+                                   Retrofit gfycatRetrofit, Retrofit redgifsRetrofit, Retrofit streambleRetrofit,
                                    CustomThemeWrapper customThemeWrapper, Locale locale,
                                    String accessToken, String accountName, int postType, int postLayout, boolean displaySubredditName,
                                    SharedPreferences sharedPreferences, SharedPreferences nsfwAndSpoilerSharedPreferences,
@@ -220,6 +226,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mOauthRetrofit = oauthRetrofit;
             mGfycatRetrofit = gfycatRetrofit;
             mRedgifsRetrofit = redgifsRetrofit;
+            mStreamableRetrofit = streambleRetrofit;
             mAccessToken = accessToken;
             mPostType = postType;
             mDisplaySubredditName = displaySubredditName;
@@ -685,29 +692,54 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostVideoAutoplayViewHolder) holder).setVolume(mFragment.getMasterMutingOption() ? 0f : 1f);
                     }
 
-                    if ((post.isGfycat() || post.isRedgifs()) && !post.isLoadGfycatOrRedgifsVideoSuccess()) {
-                        ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks = new FetchGfycatOrRedgifsVideoLinks(new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
-                            @Override
-                            public void success(String webm, String mp4) {
-                                post.setVideoDownloadUrl(mp4);
-                                post.setVideoUrl(webm);
-                                post.setLoadGfyOrRedgifsVideoSuccess(true);
-                                if (position == holder.getBindingAdapterPosition()) {
-                                    ((PostVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
-                                }
-                            }
+                    if ((post.isGfycat() || post.isRedgifs()) && !post.isLoadGfycatOrStreamableVideoSuccess()) {
+                        ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall =
+                                (post.isGfycat() ? mGfycatRetrofit : mRedgifsRetrofit).create(GfycatAPI.class).getGfycatData(post.getGfycatId());
+                        FetchGfycatOrRedgifsVideoLinks.fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
+                                ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall, post.getGfycatId(),
+                                post.isGfycat(), mAutomaticallyTryRedgifs,
+                                new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
+                                    @Override
+                                    public void success(String webm, String mp4) {
+                                        post.setVideoDownloadUrl(mp4);
+                                        post.setVideoUrl(mp4);
+                                        post.setLoadGfyOrStreamableVideoSuccess(true);
+                                        if (position == holder.getBindingAdapterPosition()) {
+                                            ((PostVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
+                                        }
+                                    }
 
-                            @Override
-                            public void failed(int errorCode) {
-                                if (position == holder.getBindingAdapterPosition()) {
-                                    ((PostVideoAutoplayViewHolder) holder).errorLoadingGfycatImageView.setVisibility(View.VISIBLE);
-                                }
-                            }
-                        });
-                        ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks
-                                .fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
-                                        mGfycatRetrofit, mRedgifsRetrofit, post.getGfycatId(),
-                                        post.isGfycat(), mAutomaticallyTryRedgifs);
+                                    @Override
+                                    public void failed(int errorCode) {
+                                        if (position == holder.getBindingAdapterPosition()) {
+                                            ((PostVideoAutoplayViewHolder) holder).errorLoadingGfycatImageView.setVisibility(View.VISIBLE);
+                                        }
+                                    }
+                                });
+                    } else if(post.isStreamable() && !post.isLoadGfycatOrStreamableVideoSuccess()) {
+                        ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall =
+                                mStreamableRetrofit.create(StreamableAPI.class).getStreamableData(post.getStreamableShortCode());
+                        FetchStreamableVideo.fetchStreamableVideoInRecyclerViewAdapter(mExecutor, new Handler(),
+                                ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall,
+                                new FetchStreamableVideo.FetchStreamableVideoListener() {
+                                    @Override
+                                    public void success(StreamableVideo streamableVideo) {
+                                        StreamableVideo.Media media = streamableVideo.mp4 == null ? streamableVideo.mp4Mobile : streamableVideo.mp4;
+                                        post.setVideoDownloadUrl(media.url);
+                                        post.setVideoUrl(media.url);
+                                        post.setLoadGfyOrStreamableVideoSuccess(true);
+                                        if (position == holder.getBindingAdapterPosition()) {
+                                            ((PostVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
+                                        }
+                                    }
+
+                                    @Override
+                                    public void failed() {
+                                        if (position == holder.getBindingAdapterPosition()) {
+                                            ((PostVideoAutoplayViewHolder) holder).errorLoadingGfycatImageView.setVisibility(View.VISIBLE);
+                                        }
+                                    }
+                                });
                     } else {
                         ((PostVideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
                     }
@@ -812,29 +844,54 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostCard2VideoAutoplayViewHolder) holder).setVolume(mFragment.getMasterMutingOption() ? 0f : 1f);
                     }
 
-                    if ((post.isGfycat() || post.isRedgifs()) && !post.isLoadGfycatOrRedgifsVideoSuccess()) {
-                        ((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks = new FetchGfycatOrRedgifsVideoLinks(new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
-                            @Override
-                            public void success(String webm, String mp4) {
-                                post.setVideoDownloadUrl(mp4);
-                                post.setVideoUrl(webm);
-                                post.setLoadGfyOrRedgifsVideoSuccess(true);
-                                if (position == holder.getBindingAdapterPosition()) {
-                                    ((PostCard2VideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
-                                }
-                            }
+                    if ((post.isGfycat() || post.isRedgifs()) && !post.isLoadGfycatOrStreamableVideoSuccess()) {
+                        ((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall =
+                                (post.isGfycat() ? mGfycatRetrofit : mRedgifsRetrofit).create(GfycatAPI.class).getGfycatData(post.getGfycatId());
+                        FetchGfycatOrRedgifsVideoLinks.fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
+                                ((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall, post.getGfycatId(),
+                                post.isGfycat(), mAutomaticallyTryRedgifs,
+                                new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
+                                    @Override
+                                    public void success(String webm, String mp4) {
+                                        post.setVideoDownloadUrl(mp4);
+                                        post.setVideoUrl(mp4);
+                                        post.setLoadGfyOrStreamableVideoSuccess(true);
+                                        if (position == holder.getBindingAdapterPosition()) {
+                                            ((PostCard2VideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
+                                        }
+                                    }
 
-                            @Override
-                            public void failed(int errorCode) {
-                                if (position == holder.getBindingAdapterPosition()) {
-                                    ((PostCard2VideoAutoplayViewHolder) holder).errorLoadingGfycatImageView.setVisibility(View.VISIBLE);
-                                }
-                            }
-                        });
-                        ((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks
-                                .fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
-                                        mGfycatRetrofit, mRedgifsRetrofit, post.getGfycatId(), post.isGfycat(),
-                                        mAutomaticallyTryRedgifs);
+                                    @Override
+                                    public void failed(int errorCode) {
+                                        if (position == holder.getBindingAdapterPosition()) {
+                                            ((PostCard2VideoAutoplayViewHolder) holder).errorLoadingGfycatImageView.setVisibility(View.VISIBLE);
+                                        }
+                                    }
+                                });
+                    } else if(post.isStreamable() && !post.isLoadGfycatOrStreamableVideoSuccess()) {
+                        ((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall =
+                                mStreamableRetrofit.create(StreamableAPI.class).getStreamableData(post.getStreamableShortCode());
+                        FetchStreamableVideo.fetchStreamableVideoInRecyclerViewAdapter(mExecutor, new Handler(),
+                                ((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall,
+                                new FetchStreamableVideo.FetchStreamableVideoListener() {
+                                    @Override
+                                    public void success(StreamableVideo streamableVideo) {
+                                        StreamableVideo.Media media = streamableVideo.mp4 == null ? streamableVideo.mp4Mobile : streamableVideo.mp4;
+                                        post.setVideoDownloadUrl(media.url);
+                                        post.setVideoUrl(media.url);
+                                        post.setLoadGfyOrStreamableVideoSuccess(true);
+                                        if (position == holder.getBindingAdapterPosition()) {
+                                            ((PostCard2VideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
+                                        }
+                                    }
+
+                                    @Override
+                                    public void failed() {
+                                        if (position == holder.getBindingAdapterPosition()) {
+                                            ((PostCard2VideoAutoplayViewHolder) holder).errorLoadingGfycatImageView.setVisibility(View.VISIBLE);
+                                        }
+                                    }
+                                });
                     } else {
                         ((PostCard2VideoAutoplayViewHolder) holder).bindVideoUri(Uri.parse(post.getVideoUrl()));
                     }
@@ -1693,8 +1750,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             ((PostBaseViewHolder) holder).titleTextView.setTextColor(mPostTitleColor);
             if (holder instanceof PostVideoAutoplayViewHolder) {
                 ((PostVideoAutoplayViewHolder) holder).mediaUri = null;
-                if (((PostVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks != null) {
-                    ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks.cancel();
+                if (((PostVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall != null && !((PostVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall.isCanceled()) {
+                    ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall.cancel();
+                    ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall = null;
                 }
                 ((PostVideoAutoplayViewHolder) holder).errorLoadingGfycatImageView.setVisibility(View.GONE);
                 ((PostVideoAutoplayViewHolder) holder).muteButton.setVisibility(View.GONE);
@@ -1715,8 +1773,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 ((PostTextTypeViewHolder) holder).contentTextView.setVisibility(View.GONE);
             } else if (holder instanceof PostCard2VideoAutoplayViewHolder) {
                 ((PostCard2VideoAutoplayViewHolder) holder).mediaUri = null;
-                if (((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks != null) {
-                    ((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrRedgifsVideoLinks.cancel();
+                if (((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall != null && !((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall.isCanceled()) {
+                    ((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall.cancel();
+                    ((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall = null;
                 }
                 ((PostCard2VideoAutoplayViewHolder) holder).errorLoadingGfycatImageView.setVisibility(View.GONE);
                 ((PostCard2VideoAutoplayViewHolder) holder).muteButton.setVisibility(View.GONE);
@@ -2558,7 +2617,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         ExoPlayerViewHelper helper;
         private Uri mediaUri;
         private float volume;
-        public FetchGfycatOrRedgifsVideoLinks fetchGfycatOrRedgifsVideoLinks;
+        public Call<String> fetchGfycatOrStreamableVideoCall;
+        //public FetchGfycatOrRedgifsVideoLinks fetchGfycatOrRedgifsVideoLinks;
 
         PostVideoAutoplayViewHolder(View itemView) {
             super(itemView);
@@ -2616,14 +2676,14 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     if (post.isGfycat()) {
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
                         intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, post.getGfycatId());
-                        if (post.isLoadGfycatOrRedgifsVideoSuccess()) {
+                        if (post.isLoadGfycatOrStreamableVideoSuccess()) {
                             intent.setData(Uri.parse(post.getVideoUrl()));
                             intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
                         }
                     } else if (post.isRedgifs()) {
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_REDGIFS);
                         intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, post.getGfycatId());
-                        if (post.isLoadGfycatOrRedgifsVideoSuccess()) {
+                        if (post.isLoadGfycatOrStreamableVideoSuccess()) {
                             intent.setData(Uri.parse(post.getVideoUrl()));
                             intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
                         }
@@ -3839,7 +3899,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         ExoPlayerViewHelper helper;
         private Uri mediaUri;
         private float volume;
-        public FetchGfycatOrRedgifsVideoLinks fetchGfycatOrRedgifsVideoLinks;
+        public Call<String> fetchGfycatOrStreamableVideoCall;
 
         PostCard2VideoAutoplayViewHolder(View itemView) {
             super(itemView);
@@ -3900,14 +3960,14 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     if (post.isGfycat()) {
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
                         intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, post.getGfycatId());
-                        if (post.isLoadGfycatOrRedgifsVideoSuccess()) {
+                        if (post.isLoadGfycatOrStreamableVideoSuccess()) {
                             intent.setData(Uri.parse(post.getVideoUrl()));
                             intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
                         }
                     } else if (post.isRedgifs()) {
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_REDGIFS);
                         intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, post.getGfycatId());
-                        if (post.isLoadGfycatOrRedgifsVideoSuccess()) {
+                        if (post.isLoadGfycatOrStreamableVideoSuccess()) {
                             intent.setData(Uri.parse(post.getVideoUrl()));
                             intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
                         }

@@ -66,7 +66,6 @@ import butterknife.ButterKnife;
 import im.ene.toro.exoplayer.ExoCreator;
 import im.ene.toro.media.PlaybackInfo;
 import im.ene.toro.media.VolumeInfo;
-import im.ene.toro.widget.Container;
 import ml.docilealligator.infinityforreddit.DeleteThing;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
@@ -153,6 +152,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @Inject
     @Named("redgifs")
     Retrofit mRedgifsRetrofit;
+    @Inject
+    @Named("streamable")
+    Retrofit mStreamableRetrofit;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -544,7 +546,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
             mPostAdapter = new PostDetailRecyclerViewAdapter(activity,
                     this, mExecutor, mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mRedditDataRoomDatabase, mGlide,
+                    mRedgifsRetrofit, mStreamableRetrofit, mRedditDataRoomDatabase, mGlide,
                     mSeparatePostAndComments, mAccessToken, mAccountName, mPost, mLocale,
                     mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
                     mExoCreator, post -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
@@ -1190,7 +1192,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             mPostAdapter = new PostDetailRecyclerViewAdapter(activity,
                                     ViewPostDetailFragment.this, mExecutor, mCustomThemeWrapper,
                                     mRetrofit, mOauthRetrofit, mGfycatRetrofit, mRedgifsRetrofit,
-                                    mRedditDataRoomDatabase, mGlide, mSeparatePostAndComments,
+                                    mStreamableRetrofit, mRedditDataRoomDatabase, mGlide, mSeparatePostAndComments,
                                     mAccessToken, mAccountName, mPost, mLocale, mSharedPreferences,
                                     mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
                                     mExoCreator,

@@ -55,7 +55,7 @@ public class Post implements Parcelable {
     private boolean isGfycat;
     private boolean isRedgifs;
     private boolean isStreamable;
-    private boolean loadGfyOrRedgifsVideoSuccess;
+    private boolean loadGfyOrStreamableVideoSuccess;
     private String permalink;
     private String flair;
     private String awards;
@@ -178,7 +178,7 @@ public class Post implements Parcelable {
         isGfycat = in.readByte() != 0;
         isRedgifs = in.readByte() != 0;
         isStreamable = in.readByte() != 0;
-        loadGfyOrRedgifsVideoSuccess = in.readByte() != 0;
+        loadGfyOrStreamableVideoSuccess = in.readByte() != 0;
         permalink = in.readString();
         flair = in.readString();
         awards = in.readString();
@@ -357,12 +357,12 @@ public class Post implements Parcelable {
         this.isStreamable = isStreamable;
     }
 
-    public boolean isLoadGfycatOrRedgifsVideoSuccess() {
-        return loadGfyOrRedgifsVideoSuccess;
+    public boolean isLoadGfycatOrStreamableVideoSuccess() {
+        return loadGfyOrStreamableVideoSuccess;
     }
 
-    public void setLoadGfyOrRedgifsVideoSuccess(boolean loadGfyOrRedgifsVideoSuccess) {
-        this.loadGfyOrRedgifsVideoSuccess = loadGfyOrRedgifsVideoSuccess;
+    public void setLoadGfyOrStreamableVideoSuccess(boolean loadGfyOrStreamableVideoSuccess) {
+        this.loadGfyOrStreamableVideoSuccess = loadGfyOrStreamableVideoSuccess;
     }
 
     public String getPermalink() {
@@ -556,7 +556,7 @@ public class Post implements Parcelable {
         parcel.writeByte((byte) (isGfycat ? 1 : 0));
         parcel.writeByte((byte) (isRedgifs ? 1 : 0));
         parcel.writeByte((byte) (isStreamable ? 1 : 0));
-        parcel.writeByte((byte) (loadGfyOrRedgifsVideoSuccess ? 1 : 0));
+        parcel.writeByte((byte) (loadGfyOrStreamableVideoSuccess ? 1 : 0));
         parcel.writeString(permalink);
         parcel.writeString(flair);
         parcel.writeString(awards);
