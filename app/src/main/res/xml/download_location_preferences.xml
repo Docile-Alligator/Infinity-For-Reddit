@@ -11,6 +11,16 @@
         app:key="video_download_location"
         app:title="@string/settings_video_download_location_title" />
 
+    <Preference
+        app:key="nsfw_download_location"
+        app:title="@string/settings_nsfw_download_location_title"
+        app:isPreferenceVisible="false"/>
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="separate_nsfw_location"
+        app:title="@string/settings_nsfw_separate_folder" />
+
     <SwitchPreference
         app:defaultValue="false"
         app:key="separate_folder_for_each_subreddit"

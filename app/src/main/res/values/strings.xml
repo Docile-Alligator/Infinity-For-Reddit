@@ -1,4 +1,4 @@
-<resources>
+ <resources>
     <string name="application_name" translatable="false">Infinity</string>
     <string name="login_activity_label">Login</string>
     <string name="search_activity_label" translatable="false"> </string>
@@ -516,6 +516,8 @@
     <string name="settings_image_download_location_title">Image Download Location</string>
     <string name="settings_gif_download_location_title">Gif Download Location</string>
     <string name="settings_video_download_location_title">Video Download Location</string>
+     <string name="settings_nsfw_download_location_title">NSFW Download Location</string>
+     <string name="settings_nsfw_separate_folder">Separate Folder for NSFW Posts</string>
     <string name="settings_separate_folder_for_each_subreddit">Separate Folder for Each Subreddit</string>
     <string name="settings_swipe_action_title">Swipe Action</string>
     <string name="settings_swipe_action_haptic_feedback_title">Haptic Feedback</string>
