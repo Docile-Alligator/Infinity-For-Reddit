@@ -70,19 +70,19 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
 
     @Override
     public void afterSetText(@NonNull TextView textView) {
+        textView.setHighlightColor(Color.TRANSPARENT);
+
         if (!textHasSpoiler || textView.getText().length() < 5) {
             firstSpoilerStart = 0;
             return;
         }
 
-        textView.setHighlightColor(Color.TRANSPARENT);
-
         SpannableStringBuilder markdownStringBuilder = new SpannableStringBuilder(textView.getText());
 
         ArrayList<Pair<Integer, Integer>> spoilers = parse(markdownStringBuilder, firstSpoilerStart);
         firstSpoilerStart = 0;
+        textHasSpoiler = false; // Since PostDetail can contain multiple TextViews, we do this here
         if (spoilers.size() == 0) {
-            textHasSpoiler = false;
             return;
         }
 

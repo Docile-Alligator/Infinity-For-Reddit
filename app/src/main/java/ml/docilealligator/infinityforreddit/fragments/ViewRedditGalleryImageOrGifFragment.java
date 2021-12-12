@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
@@ -309,6 +310,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                     return true;
                 });
                 captionUrlTextView.setVisibility(View.VISIBLE);
+                captionUrlTextView.setHighlightColor(Color.TRANSPARENT);
             }
         }
 

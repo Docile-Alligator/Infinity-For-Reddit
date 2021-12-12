@@ -74,6 +74,8 @@
         <item name="android:textSize">?attr/font_default</item>
         <item name="materialAlertDialogTitleTextStyle">@style/MaterialAlertDialogTitleTextStyle
         </item>
+        <item name="buttonBarPositiveButtonStyle">@style/MaterialAlertDialogPositiveButtonStyle
+        </item>
         <item name="buttonBarNegativeButtonStyle">@style/MaterialAlertDialogNegativeButtonStyle
         </item>
     </style>
