@@ -598,20 +598,26 @@ public class ParsePost {
                 Uri uri = Uri.parse(url);
                 String authority = uri.getAuthority();
 
-                // Gyfcat ids must be lowercase to resolve to a video through the api, we are not
-                // guaranteed to get an id that is all lowercase.
-                String gfycatId = url.substring(url.lastIndexOf("/") + 1).toLowerCase();
-
-                if (authority != null && (authority.contains("gfycat.com"))) {
-                    post.setPostType(Post.VIDEO_TYPE);
-                    post.setIsGfycat(true);
-                    post.setVideoUrl(url);
-                    post.setGfycatId(gfycatId);
-                } else if (authority != null && authority.contains("redgifs.com")) {
-                    post.setPostType(Post.VIDEO_TYPE);
-                    post.setIsRedgifs(true);
-                    post.setVideoUrl(url);
-                    post.setGfycatId(gfycatId);
+                if (authority != null) {
+                    if (authority.contains("gfycat.com")) {
+                        String gfycatId = url.substring(url.lastIndexOf("/") + 1).toLowerCase();
+                        post.setPostType(Post.VIDEO_TYPE);
+                        post.setIsGfycat(true);
+                        post.setVideoUrl(url);
+                        post.setGfycatId(gfycatId);
+                    } else if (authority.contains("redgifs.com")) {
+                        String gfycatId = url.substring(url.lastIndexOf("/") + 1).toLowerCase();
+                        post.setPostType(Post.VIDEO_TYPE);
+                        post.setIsRedgifs(true);
+                        post.setVideoUrl(url);
+                        post.setGfycatId(gfycatId);
+                    } else if (authority.equals("streamable.com")) {
+                        String shortCode = url.substring(url.lastIndexOf("/") + 1);
+                        post.setPostType(Post.VIDEO_TYPE);
+                        post.setIsStreamable(true);
+                        post.setVideoUrl(url);
+                        post.setStreamableShortCode(shortCode);
+                    }
                 }
             }
         }

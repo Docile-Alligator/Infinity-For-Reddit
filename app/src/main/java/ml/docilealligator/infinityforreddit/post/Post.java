@@ -51,8 +51,10 @@ public class Post implements Parcelable {
     private String videoUrl;
     private String videoDownloadUrl;
     private String gfycatId;
+    private String streamableShortCode;
     private boolean isGfycat;
     private boolean isRedgifs;
+    private boolean isStreamable;
     private boolean loadGfyOrRedgifsVideoSuccess;
     private String permalink;
     private String flair;
@@ -172,8 +174,10 @@ public class Post implements Parcelable {
         videoUrl = in.readString();
         videoDownloadUrl = in.readString();
         gfycatId = in.readString();
+        streamableShortCode = in.readString();
         isGfycat = in.readByte() != 0;
         isRedgifs = in.readByte() != 0;
+        isStreamable = in.readByte() != 0;
         loadGfyOrRedgifsVideoSuccess = in.readByte() != 0;
         permalink = in.readString();
         flair = in.readString();
@@ -321,6 +325,14 @@ public class Post implements Parcelable {
         this.gfycatId = gfycatId;
     }
 
+    public String getStreamableShortCode() {
+        return streamableShortCode;
+    }
+
+    public void setStreamableShortCode(String shortCode) {
+        this.streamableShortCode = shortCode;
+    }
+
     public boolean isGfycat() {
         return isGfycat;
     }
@@ -335,6 +347,14 @@ public class Post implements Parcelable {
 
     public void setIsRedgifs(boolean isRedgifs) {
         this.isRedgifs = isRedgifs;
+    }
+
+    public boolean isStreamable() {
+        return isStreamable;
+    }
+
+    public void setIsStreamable(boolean isStreamable) {
+        this.isStreamable = isStreamable;
     }
 
     public boolean isLoadGfycatOrRedgifsVideoSuccess() {
@@ -532,8 +552,10 @@ public class Post implements Parcelable {
         parcel.writeString(videoUrl);
         parcel.writeString(videoDownloadUrl);
         parcel.writeString(gfycatId);
+        parcel.writeString(streamableShortCode);
         parcel.writeByte((byte) (isGfycat ? 1 : 0));
         parcel.writeByte((byte) (isRedgifs ? 1 : 0));
+        parcel.writeByte((byte) (isStreamable ? 1 : 0));
         parcel.writeByte((byte) (loadGfyOrRedgifsVideoSuccess ? 1 : 0));
         parcel.writeString(permalink);
         parcel.writeString(flair);
