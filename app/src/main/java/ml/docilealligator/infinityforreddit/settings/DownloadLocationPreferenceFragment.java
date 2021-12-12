@@ -24,10 +24,12 @@ public class DownloadLocationPreferenceFragment extends PreferenceFragmentCompat
     private static final int IMAGE_DOWNLOAD_LOCATION_REQUEST_CODE = 10;
     private static final int GIF_DOWNLOAD_LOCATION_REQUEST_CODE = 11;
     private static final int VIDEO_DOWNLOAD_LOCATION_REQUEST_CODE = 12;
+    private static final int NSFW_DOWNLOAD_LOCATION_REQUEST_CODE = 13;
 
     Preference imageDownloadLocationPreference;
     Preference gifDownloadLocationPreference;
     Preference videoDownloadLocationPreference;
+    Preference nsfwDownloadLocationPreference;
     private Activity activity;
     @Inject
     @Named("default")
@@ -40,7 +42,21 @@ public class DownloadLocationPreferenceFragment extends PreferenceFragmentCompat
         imageDownloadLocationPreference = findPreference(SharedPreferencesUtils.IMAGE_DOWNLOAD_LOCATION);
         gifDownloadLocationPreference = findPreference(SharedPreferencesUtils.GIF_DOWNLOAD_LOCATION);
         videoDownloadLocationPreference = findPreference(SharedPreferencesUtils.VIDEO_DOWNLOAD_LOCATION);
+        nsfwDownloadLocationPreference = findPreference(SharedPreferencesUtils.NSFW_DOWNLOAD_LOCATION);
 
+        if (nsfwDownloadLocationPreference != null) {
+            String downloadLocation = sharedPreferences.getString(SharedPreferencesUtils.NSFW_DOWNLOAD_LOCATION, "");
+            if (!downloadLocation.equals("")) {
+                nsfwDownloadLocationPreference.setSummary(downloadLocation);
+            }
+
+            nsfwDownloadLocationPreference.setOnPreferenceClickListener(preference -> {
+                Intent intent = new Intent(ACTION_OPEN_DOCUMENT_TREE);
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                startActivityForResult(intent, NSFW_DOWNLOAD_LOCATION_REQUEST_CODE);
+                return true;
+            });
+        }
         if (imageDownloadLocationPreference != null) {
             String downloadLocation = sharedPreferences.getString(SharedPreferencesUtils.IMAGE_DOWNLOAD_LOCATION, "");
             if (!downloadLocation.equals("")) {
