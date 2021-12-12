@@ -1654,36 +1654,39 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             });
 
             fullscreenButton.setOnClickListener(view -> {
-                Intent intent = new Intent(mActivity, ViewVideoActivity.class);
-                if (mPost.isGfycat()) {
-                    intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
-                    intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, mPost.getGfycatId());
-                    if (mPost.isLoadGfycatOrStreamableVideoSuccess()) {
+                if (canStartActivity) {
+                    canStartActivity = false;
+                    Intent intent = new Intent(mActivity, ViewVideoActivity.class);
+                    if (mPost.isGfycat()) {
+                        intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
+                        intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, mPost.getGfycatId());
+                        if (mPost.isLoadGfycatOrStreamableVideoSuccess()) {
+                            intent.setData(Uri.parse(mPost.getVideoUrl()));
+                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
+                        }
+                    } else if (mPost.isRedgifs()) {
+                        intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_REDGIFS);
+                        intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, mPost.getGfycatId());
+                        if (mPost.isLoadGfycatOrStreamableVideoSuccess()) {
+                            intent.setData(Uri.parse(mPost.getVideoUrl()));
+                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
+                        }
+                    } else if (mPost.isStreamable()) {
+                        intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_STREAMABLE);
+                        intent.putExtra(ViewVideoActivity.EXTRA_STREAMABLE_SHORT_CODE, mPost.getStreamableShortCode());
+                    } else {
                         intent.setData(Uri.parse(mPost.getVideoUrl()));
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
+                        intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, mPost.getSubredditName());
+                        intent.putExtra(ViewVideoActivity.EXTRA_ID, mPost.getId());
                     }
-                } else if (mPost.isRedgifs()) {
-                    intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_REDGIFS);
-                    intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, mPost.getGfycatId());
-                    if (mPost.isLoadGfycatOrStreamableVideoSuccess()) {
-                        intent.setData(Uri.parse(mPost.getVideoUrl()));
-                        intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
+                    intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, mPost.getTitle());
+                    if (helper != null) {
+                        intent.putExtra(ViewVideoActivity.EXTRA_PROGRESS_SECONDS, helper.getLatestPlaybackInfo().getResumePosition());
                     }
-                } else if (mPost.isStreamable()) {
-                    intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_STREAMABLE);
-                    intent.putExtra(ViewVideoActivity.EXTRA_STREAMABLE_SHORT_CODE, mPost.getStreamableShortCode());
-                } else {
-                    intent.setData(Uri.parse(mPost.getVideoUrl()));
-                    intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
-                    intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, mPost.getSubredditName());
-                    intent.putExtra(ViewVideoActivity.EXTRA_ID, mPost.getId());
+                    intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, mPost.isNSFW());
+                    mActivity.startActivity(intent);
                 }
-                intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, mPost.getTitle());
-                if (helper != null) {
-                    intent.putExtra(ViewVideoActivity.EXTRA_PROGRESS_SECONDS, helper.getLatestPlaybackInfo().getResumePosition());
-                }
-                intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, mPost.isNSFW());
-                mActivity.startActivity(intent);
             });
 
             previewImageView.setOnLongClickListener(view -> fullscreenButton.performClick());
