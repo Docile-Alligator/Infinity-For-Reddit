@@ -255,7 +255,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private ArrayList<String> readPosts;
     private Unbinder unbinder;
     private Map<String, String> subredditOrUserIcons = new HashMap<>();
-    private CustomToroContainer.OnWindowFocusChangedListener onWindowFocusChangedListener;
 
     public PostFragment() {
         // Required empty public constructor

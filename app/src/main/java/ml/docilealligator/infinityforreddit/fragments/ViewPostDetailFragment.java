@@ -240,7 +240,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private int swipeRightAction;
     private float swipeActionThreshold;
     private ItemTouchHelper touchHelper;
-    private CustomToroContainer.OnWindowFocusChangedListener onWindowFocusChangedListener;
 
     public ViewPostDetailFragment() {
         // Required empty public constructor
