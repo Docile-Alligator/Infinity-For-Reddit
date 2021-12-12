@@ -63,6 +63,7 @@ public class DownloadRedditVideoService extends Service {
     public static final String EXTRA_VIDEO_URL = "EVU";
     public static final String EXTRA_SUBREDDIT = "ES";
     public static final String EXTRA_POST_ID = "EPI";
+    public static final String EXTRA_IS_NSFW = "EIN";
 
     private static final int NO_ERROR = -1;
     private static final int ERROR_CANNOT_GET_CACHE_DIRECTORY = 0;
@@ -99,6 +100,7 @@ public class DownloadRedditVideoService extends Service {
             String audioUrl = videoUrl.substring(0, videoUrl.lastIndexOf('/')) + "/DASH_audio.mp4";
             String subredditName = intent.getString(EXTRA_SUBREDDIT);
             String fileNameWithoutExtension = subredditName + "-" + intent.getString(EXTRA_POST_ID);
+            boolean isNsfw = intent.getBoolean(EXTRA_IS_NSFW, false);
             int randomNotificationIdOffset = msg.arg1;
 
             final DownloadProgressResponseBody.ProgressListener progressListener = new DownloadProgressResponseBody.ProgressListener() {
@@ -141,7 +143,12 @@ public class DownloadRedditVideoService extends Service {
                     Response<ResponseBody> videoResponse = downloadFile.downloadFile(videoUrl).execute();
                     if (videoResponse.isSuccessful() && videoResponse.body() != null) {
                         String externalCacheDirectoryPath = externalCacheDirectory.getAbsolutePath() + "/";
-                        String destinationFileDirectory = sharedPreferences.getString(SharedPreferencesUtils.VIDEO_DOWNLOAD_LOCATION, "");
+                        String destinationFileDirectory;
+                        if (isNsfw) {
+                            destinationFileDirectory = sharedPreferences.getString(SharedPreferencesUtils.NSFW_DOWNLOAD_LOCATION, "");
+                        } else {
+                            destinationFileDirectory = sharedPreferences.getString(SharedPreferencesUtils.VIDEO_DOWNLOAD_LOCATION, "");
+                        }
                         String destinationFileUriString;
                         boolean isDefaultDestination;
                         if (destinationFileDirectory.equals("")) {
