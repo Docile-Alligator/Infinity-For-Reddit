@@ -332,6 +332,31 @@ public class ParsePost {
                         } else {
                             post.setSelfText(Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
                         }
+
+                        Uri uri = Uri.parse(url);
+                        String authority = uri.getAuthority();
+
+                        if (authority != null) {
+                            if (authority.contains("gfycat.com")) {
+                                String gfycatId = url.substring(url.lastIndexOf("/") + 1).toLowerCase();
+                                post.setPostType(Post.VIDEO_TYPE);
+                                post.setIsGfycat(true);
+                                post.setVideoUrl(url);
+                                post.setGfycatId(gfycatId);
+                            } else if (authority.contains("redgifs.com")) {
+                                String gfycatId = url.substring(url.lastIndexOf("/") + 1).toLowerCase();
+                                post.setPostType(Post.VIDEO_TYPE);
+                                post.setIsRedgifs(true);
+                                post.setVideoUrl(url);
+                                post.setGfycatId(gfycatId);
+                            } else if (authority.equals("streamable.com")) {
+                                String shortCode = url.substring(url.lastIndexOf("/") + 1);
+                                post.setPostType(Post.VIDEO_TYPE);
+                                post.setIsStreamable(true);
+                                post.setVideoUrl(url);
+                                post.setStreamableShortCode(shortCode);
+                            }
+                        }
                     }
                 }
             }
@@ -477,6 +502,31 @@ public class ParsePost {
                             }
 
                             post.setPreviews(previews);
+
+                            Uri uri = Uri.parse(url);
+                            String authority = uri.getAuthority();
+
+                            if (authority != null) {
+                                if (authority.contains("gfycat.com")) {
+                                    String gfycatId = url.substring(url.lastIndexOf("/") + 1).toLowerCase();
+                                    post.setPostType(Post.VIDEO_TYPE);
+                                    post.setIsGfycat(true);
+                                    post.setVideoUrl(url);
+                                    post.setGfycatId(gfycatId);
+                                } else if (authority.contains("redgifs.com")) {
+                                    String gfycatId = url.substring(url.lastIndexOf("/") + 1).toLowerCase();
+                                    post.setPostType(Post.VIDEO_TYPE);
+                                    post.setIsRedgifs(true);
+                                    post.setVideoUrl(url);
+                                    post.setGfycatId(gfycatId);
+                                } else if (authority.equals("streamable.com")) {
+                                    String shortCode = url.substring(url.lastIndexOf("/") + 1);
+                                    post.setPostType(Post.VIDEO_TYPE);
+                                    post.setIsStreamable(true);
+                                    post.setVideoUrl(url);
+                                    post.setStreamableShortCode(shortCode);
+                                }
+                            }
                         }
                     }
                 }
@@ -514,6 +564,36 @@ public class ParsePost {
                             postType, voteType, nComments, upvoteRatio, flair, awards, nAwards, hidden,
                             spoiler, nsfw, stickied, archived, locked, saved, isCrosspost);
                     //Need attention
+                    if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
+                        post.setSelfText("");
+                    } else {
+                        post.setSelfText(Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
+                    }
+
+                    Uri uri = Uri.parse(url);
+                    String authority = uri.getAuthority();
+
+                    if (authority != null) {
+                        if (authority.contains("gfycat.com")) {
+                            String gfycatId = url.substring(url.lastIndexOf("/") + 1).toLowerCase();
+                            post.setPostType(Post.VIDEO_TYPE);
+                            post.setIsGfycat(true);
+                            post.setVideoUrl(url);
+                            post.setGfycatId(gfycatId);
+                        } else if (authority.contains("redgifs.com")) {
+                            String gfycatId = url.substring(url.lastIndexOf("/") + 1).toLowerCase();
+                            post.setPostType(Post.VIDEO_TYPE);
+                            post.setIsRedgifs(true);
+                            post.setVideoUrl(url);
+                            post.setGfycatId(gfycatId);
+                        } else if (authority.equals("streamable.com")) {
+                            String shortCode = url.substring(url.lastIndexOf("/") + 1);
+                            post.setPostType(Post.VIDEO_TYPE);
+                            post.setIsStreamable(true);
+                            post.setVideoUrl(url);
+                            post.setStreamableShortCode(shortCode);
+                        }
+                    }
                 }
             }
         }
@@ -522,22 +602,30 @@ public class ParsePost {
             try {
                 Uri uri = Uri.parse(url);
                 String authority = uri.getAuthority();
-                if (authority != null && (authority.contains("gfycat.com"))) {
-                    post.setIsGfycat(true);
-                    post.setVideoUrl(url);
-                    String gfycatId = url.substring(url.lastIndexOf("/") + 1);
-                    if (gfycatId.contains("-")) {
-                        gfycatId = gfycatId.substring(0, gfycatId.indexOf('-'));
+                if (authority != null) {
+                    if (authority.contains("gfycat.com")) {
+                        post.setIsGfycat(true);
+                        post.setVideoUrl(url);
+                        String gfycatId = url.substring(url.lastIndexOf("/") + 1);
+                        if (gfycatId.contains("-")) {
+                            gfycatId = gfycatId.substring(0, gfycatId.indexOf('-'));
+                        }
+                        post.setGfycatId(gfycatId.toLowerCase());
+                    } else if (authority.contains("redgifs.com")) {
+                        String gfycatId = url.substring(url.lastIndexOf("/") + 1);
+                        if (gfycatId.contains("-")) {
+                            gfycatId = gfycatId.substring(0, gfycatId.indexOf('-'));
+                        }
+                        post.setIsRedgifs(true);
+                        post.setVideoUrl(url);
+                        post.setGfycatId(gfycatId.toLowerCase());
+                    } else if (authority.equals("streamable.com")) {
+                        String shortCode = url.substring(url.lastIndexOf("/") + 1);
+                        post.setPostType(Post.VIDEO_TYPE);
+                        post.setIsStreamable(true);
+                        post.setVideoUrl(url);
+                        post.setStreamableShortCode(shortCode);
                     }
-                    post.setGfycatId(gfycatId.toLowerCase());
-                } else if (authority != null && authority.contains("redgifs.com")) {
-                    String gfycatId = url.substring(url.lastIndexOf("/") + 1);
-                    if (gfycatId.contains("-")) {
-                        gfycatId = gfycatId.substring(0, gfycatId.indexOf('-'));
-                    }
-                    post.setIsRedgifs(true);
-                    post.setVideoUrl(url);
-                    post.setGfycatId(gfycatId.toLowerCase());
                 }
             } catch (IllegalArgumentException ignore) { }
         } else if (post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
