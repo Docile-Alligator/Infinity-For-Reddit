@@ -18,7 +18,7 @@
 
     <SwitchPreference
         app:defaultValue="false"
-        app:key="separate_nsfw_location"
+        app:key="separate_nsfw_folder"
         app:title="@string/settings_nsfw_separate_folder" />
 
     <SwitchPreference
