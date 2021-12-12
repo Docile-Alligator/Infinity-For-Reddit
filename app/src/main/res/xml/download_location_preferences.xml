@@ -13,8 +13,7 @@
 
     <Preference
         app:key="nsfw_download_location"
-        app:title="@string/settings_nsfw_download_location_title"
-        app:isPreferenceVisible="false"/>
+        app:title="@string/settings_nsfw_download_location_title" />
 
     <SwitchPreference
         app:defaultValue="false"
