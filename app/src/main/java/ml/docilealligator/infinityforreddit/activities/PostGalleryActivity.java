@@ -493,7 +493,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
     }
 
     private void loadSubredditIcon() {
-        LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditName, mRetrofit, iconImageUrl -> {
+        LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditName, mAccessToken, mOauthRetrofit, mRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();
             loadSubredditIconSuccessful = true;

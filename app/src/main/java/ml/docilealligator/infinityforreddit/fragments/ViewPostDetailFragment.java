@@ -801,7 +801,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     return;
                 } else {
                     for (int i = currentSearchIndex - 1; i >= 0; i--) {
-                        if (visibleComments.get(i).getCommentRawText() !=null &&
+                        if (visibleComments.get(i).getCommentRawText() != null &&
                                 visibleComments.get(i).getCommentRawText().toLowerCase().contains(query.toLowerCase())) {
                             if (mCommentsAdapter != null) {
                                 mCommentsAdapter.highlightSearchResult(i);
@@ -1310,7 +1310,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
     private void fetchCommentsRespectRecommendedSort(boolean changeRefreshState, boolean checkSortState, String sortType) {
         if (mRespectSubredditRecommendedSortType && mPost != null) {
-            FetchSubredditData.fetchSubredditData(mRetrofit, mPost.getSubredditName(),
+            FetchSubredditData.fetchSubredditData(mOauthRetrofit, mRetrofit, mPost.getSubredditName(), mAccessToken,
                     new FetchSubredditData.FetchSubredditDataListener() {
                         @Override
                         public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
@@ -1752,11 +1752,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (mCommentsAdapter != null && chooseYourView != null) {
             int currentPosition = ((LinearLayoutManagerBugFixed) chooseYourView.getLayoutManager()).findFirstVisibleItemPosition();
             //int previousParentPosition = mCommentsAdapter.getPreviousParentCommentPosition(mCommentsRecyclerView == null ? currentPosition - 1 : currentPosition);
-            int previousParentPosition = mCommentsAdapter.getPreviousParentCommentPosition(mCommentsRecyclerView == null && !isSingleCommentThreadMode  ? currentPosition - 1 : currentPosition);
+            int previousParentPosition = mCommentsAdapter.getPreviousParentCommentPosition(mCommentsRecyclerView == null && !isSingleCommentThreadMode ? currentPosition - 1 : currentPosition);
             if (previousParentPosition < 0) {
                 return;
             }
-            mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null && !isSingleCommentThreadMode  ? previousParentPosition + 1 : previousParentPosition);
+            mSmoothScroller.setTargetPosition(mCommentsRecyclerView == null && !isSingleCommentThreadMode ? previousParentPosition + 1 : previousParentPosition);
             mIsSmoothScrolling = true;
             chooseYourView.getLayoutManager().startSmoothScroll(mSmoothScroller);
         }

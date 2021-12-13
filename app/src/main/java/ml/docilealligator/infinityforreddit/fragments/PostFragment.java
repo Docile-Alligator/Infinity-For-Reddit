@@ -255,6 +255,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private ArrayList<String> readPosts;
     private Unbinder unbinder;
     private Map<String, String> subredditOrUserIcons = new HashMap<>();
+    private String accessToken;
 
     public PostFragment() {
         // Required empty public constructor
@@ -422,7 +423,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         postType = getArguments().getInt(EXTRA_POST_TYPE);
 
-        String accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
+        accessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
         int defaultPostLayout = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY, "0"));
         savePostFeedScrolledPosition = mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_FRONT_PAGE_SCROLLED_POSITION, false);
@@ -1685,7 +1686,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         } else {
             if (isSubreddit) {
                 LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase,
-                        subredditOrUserName, mRetrofit,
+                        subredditOrUserName, accessToken, mOauthRetrofit, mRetrofit,
                         iconImageUrl -> {
                             subredditOrUserIcons.put(subredditOrUserName, iconImageUrl);
                             loadIconListener.loadIconSuccess(subredditOrUserName, iconImageUrl);

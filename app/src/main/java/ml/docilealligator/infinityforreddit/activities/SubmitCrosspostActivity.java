@@ -436,7 +436,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
 
     private void loadSubredditIcon() {
         LoadSubredditIcon.loadSubredditIcon(mExecutor, new Handler(), mRedditDataRoomDatabase, subredditName,
-                mRetrofit, iconImageUrl -> {
+                mAccessToken, mOauthRetrofit, mRetrofit, iconImageUrl -> {
             iconUrl = iconImageUrl;
             displaySubredditIcon();
             loadSubredditIconSuccessful = true;

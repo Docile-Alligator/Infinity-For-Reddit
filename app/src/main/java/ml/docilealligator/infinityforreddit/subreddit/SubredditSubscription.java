@@ -30,7 +30,7 @@ public class SubredditSubscription {
                                                      RedditDataRoomDatabase redditDataRoomDatabase,
                                                      String subredditName,
                                                      SubredditSubscriptionListener subredditSubscriptionListener) {
-        FetchSubredditData.fetchSubredditData(retrofit, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
+        FetchSubredditData.fetchSubredditData(null, retrofit, subredditName, "", new FetchSubredditData.FetchSubredditDataListener() {
             @Override
             public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
                 insertSubscription(executor, handler, redditDataRoomDatabase,
@@ -76,7 +76,7 @@ public class SubredditSubscription {
             public void onResponse(@NonNull Call<String> call, @NonNull retrofit2.Response<String> response) {
                 if (response.isSuccessful()) {
                     if (action.equals("sub")) {
-                        FetchSubredditData.fetchSubredditData(retrofit, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
+                        FetchSubredditData.fetchSubredditData(oauthRetrofit, retrofit, subredditName, accessToken, new FetchSubredditData.FetchSubredditDataListener() {
                             @Override
                             public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
                                 insertSubscription(executor, handler, redditDataRoomDatabase,

@@ -56,34 +56,39 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomS
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.subreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditViewModel;
-import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 public class SidebarFragment extends Fragment {
 
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
+    public static final String EXTRA_ACCESS_TOKEN = "EAT";
+    public SubredditViewModel mSubredditViewModel;
     @BindView(R.id.swipe_refresh_layout_sidebar_fragment)
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.markdown_recycler_view_sidebar_fragment)
     RecyclerView recyclerView;
-    private Activity activity;
-    private String subredditName;
-    public SubredditViewModel mSubredditViewModel;
-    private LinearLayoutManagerBugFixed linearLayoutManager;
-    private int markdownColor;
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
+    @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
+    private Activity activity;
+    private String mAccessToken;
+    private String subredditName;
+    private LinearLayoutManagerBugFixed linearLayoutManager;
+    private int markdownColor;
     private String sidebarDescription;
 
     public SidebarFragment() {
@@ -100,6 +105,7 @@ public class SidebarFragment extends Fragment {
 
         ButterKnife.bind(this, rootView);
 
+        mAccessToken = getArguments().getString(EXTRA_ACCESS_TOKEN);
         subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
         if (subredditName == null) {
             Toast.makeText(activity, R.string.error_getting_subreddit_name, Toast.LENGTH_SHORT).show();
@@ -218,7 +224,7 @@ public class SidebarFragment extends Fragment {
 
     public void fetchSubredditData() {
         swipeRefreshLayout.setRefreshing(true);
-        FetchSubredditData.fetchSubredditData(mRetrofit, subredditName, new FetchSubredditData.FetchSubredditDataListener() {
+        FetchSubredditData.fetchSubredditData(mOauthRetrofit, mRetrofit, subredditName, mAccessToken, new FetchSubredditData.FetchSubredditDataListener() {
             @Override
             public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
                 swipeRefreshLayout.setRefreshing(false);
