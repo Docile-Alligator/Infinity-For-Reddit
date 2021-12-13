@@ -311,20 +311,20 @@ public interface RedditAPI {
     ListenableFuture<Response<String>> getBestPostsListenableFuture(@Path("sortType") String sortType, @Query("t") String sortTime,
                                                                    @Query("after") String lastItem, @HeaderMap Map<String, String> headers);
 
-    @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=25")
+    @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=25&always_show_media=1")
     ListenableFuture<Response<String>> getSubredditBestPostsOauthListenableFuture(@Path("subredditName") String subredditName, @Path("sortType") String sortType,
                                             @Query("after") String lastItem, @HeaderMap Map<String, String> headers);
 
-    @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=25")
+    @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=25&always_show_media=1")
     ListenableFuture<Response<String>> getSubredditBestPostsOauthListenableFuture(@Path("subredditName") String subredditName, @Path("sortType") String sortType,
                                             @Query("t") String sortTime, @Query("after") String lastItem,
                                             @HeaderMap Map<String, String> headers);
 
-    @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=25")
+    @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=25&always_show_media=1")
     ListenableFuture<Response<String>> getSubredditBestPostsListenableFuture(@Path("subredditName") String subredditName, @Path("sortType") String sortType,
                                        @Query("after") String lastItem);
 
-    @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=25")
+    @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=25&always_show_media=1")
     ListenableFuture<Response<String>> getSubredditBestPostsListenableFuture(@Path("subredditName") String subredditName, @Path("sortType") String sortType,
                                        @Query("t") String sortTime, @Query("after") String lastItem);
 
