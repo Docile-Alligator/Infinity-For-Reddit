@@ -30,6 +30,9 @@ public interface RedditAPI {
     @GET("r/{subredditName}/about.json?raw_json=1")
     Call<String> getSubredditData(@Path("subredditName") String subredditName);
 
+    @GET("r/{subredditName}/about.json?raw_json=1")
+    Call<String> getSubredditDataOauth(@Path("subredditName") String subredditName, @HeaderMap Map<String, String> headers);
+
     @GET("subreddits/mine/subscriber?raw_json=1")
     Call<String> getSubscribedThing(@Query("after") String lastItem, @HeaderMap Map<String, String> headers);
 
