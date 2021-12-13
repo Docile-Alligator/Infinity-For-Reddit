@@ -263,6 +263,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
         applyTheme();
 
+        mRecyclerView.addOnWindowFocusChangedListener(this::onWindowFocusChanged);
+
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
 
@@ -1101,6 +1103,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @Override
     public void onResume() {
         super.onResume();
+        if (mPostAdapter != null) {
+            mPostAdapter.setCanStartActivity(true);
+        }
         if (mRecyclerView != null) {
             mRecyclerView.onWindowVisibilityChanged(View.VISIBLE);
         }
@@ -1131,6 +1136,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
+        if (mRecyclerView != null) {
+            mRecyclerView.addOnWindowFocusChangedListener(null);
+        }
         super.onDestroy();
     }
 
@@ -1898,5 +1906,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
         mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         mFetchPostInfoTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
+    }
+
+    private void onWindowFocusChanged(boolean hasWindowsFocus) {
+        if (mPostAdapter != null) {
+            mPostAdapter.setCanPlayVideo(hasWindowsFocus);
+        }
     }
 }

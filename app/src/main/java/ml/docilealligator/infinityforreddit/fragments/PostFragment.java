@@ -315,6 +315,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         applyTheme();
 
+        mPostRecyclerView.addOnWindowFocusChangedListener(this::onWindowFocusChanged);
+
         lazyModeHandler = new Handler();
 
         lazyModeInterval = Float.parseFloat(mSharedPreferences.getString(SharedPreferencesUtils.LAZY_MODE_INTERVAL_KEY, "2.5"));
@@ -2115,7 +2117,16 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Override
     public void onDestroy() {
         EventBus.getDefault().unregister(this);
+        if (mPostRecyclerView != null) {
+            mPostRecyclerView.addOnWindowFocusChangedListener(null);
+        }
         super.onDestroy();
+    }
+
+    private void onWindowFocusChanged(boolean hasWindowsFocus) {
+        if (mAdapter != null) {
+            mAdapter.setCanPlayVideo(hasWindowsFocus);
+        }
     }
 
     private static abstract class LazyModeRunnable implements Runnable {
