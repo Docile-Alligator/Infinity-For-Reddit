@@ -204,7 +204,7 @@ public final class Utils {
                 }
                 String emote_url = s_key.getString(JSONUtils.U_KEY);
 
-                markdown = markdown.replace("![img](" + emote_id + ")", "[[" + emote_type + "]](" + emote_url + ") ");
+                markdown = markdown.replace("![img](" + emote_id + ")", "[" + emote_type + "](" + emote_url + ") ");
             }
         }
         return markdown;

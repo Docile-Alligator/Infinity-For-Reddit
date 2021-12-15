@@ -1722,8 +1722,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     public void showRemovedComment(Comment comment, int position) {
         Toast.makeText(activity, R.string.fetching_removed_comment, Toast.LENGTH_SHORT).show();
         FetchRemovedComment.searchRemovedComment(
-                pushshiftRetrofit,
-                comment,
+                mExecutor, new Handler(), pushshiftRetrofit, comment,
                 new FetchRemovedComment.FetchRemovedCommentListener() {
                     @Override
                     public void fetchSuccess(Comment comment) {
@@ -1733,17 +1732,19 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     @Override
                     public void fetchFailed() {
                         // Reveddit fallback
-                        FetchRemovedCommentReveddit.fetchRemovedComment(revedditRetrofit, comment, mPost.getPostTimeMillis(), mPost.getNComments(), new FetchRemovedCommentReveddit.FetchRemovedCommentListener() {
-                            @Override
-                            public void fetchSuccess(Comment comment) {
-                                mCommentsAdapter.editComment(comment.getAuthor(), comment.getCommentMarkdown(), position);
-                            }
+                        FetchRemovedCommentReveddit.fetchRemovedComment(mExecutor, new Handler(), revedditRetrofit,
+                                comment, mPost.getPostTimeMillis(), mPost.getNComments(),
+                                new FetchRemovedCommentReveddit.FetchRemovedCommentListener() {
+                                    @Override
+                                    public void fetchSuccess(Comment comment) {
+                                        mCommentsAdapter.editComment(comment.getAuthor(), comment.getCommentMarkdown(), position);
+                                    }
 
-                            @Override
-                            public void fetchFailed() {
-                                Toast.makeText(activity, R.string.show_removed_comment_failed, Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                                    @Override
+                                    public void fetchFailed() {
+                                        Toast.makeText(activity, R.string.show_removed_comment_failed, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                     }
                 });
     }
