@@ -97,7 +97,7 @@ class ParseSubscribedThing {
                     } else {
                         String subredditFullName = data.getString(JSONUtils.DISPLAY_NAME_KEY);
                         String description = data.getString(JSONUtils.PUBLIC_DESCRIPTION_KEY).trim();
-                        String sidebarDescription = data.getString(JSONUtils.DESCRIPTION_KEY);
+                        String sidebarDescription = Utils.modifyMarkdown(data.getString(JSONUtils.DESCRIPTION_KEY).trim());
                         int nSubscribers = data.getInt(JSONUtils.SUBSCRIBERS_KEY);
                         long createdUTC = data.getLong(JSONUtils.CREATED_UTC_KEY) * 1000;
                         String suggestedCommentSort = data.getString(JSONUtils.SUGGESTED_COMMENT_SORT_KEY);
