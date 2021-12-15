@@ -22,6 +22,7 @@ public class APIUtils {
     public static final String REDGIFS_API_BASE_URI = "https://api.redgifs.com/v1/gfycats/";
     public static final String IMGUR_API_BASE_URI = "https://api.imgur.com/3/";
     public static final String PUSHSHIFT_API_BASE_URI = "https://api.pushshift.io/";
+    public static final String REVEDDIT_API_BASE_URI = "https://api.reveddit.com/";
     public static final String STRAPI_BASE_URI = "https://strapi.reddit.com";
     public static final String STREAMABLE_API_BASE_URI = "https://api.streamable.com";
 
@@ -105,6 +106,11 @@ public class APIUtils {
     public static final String GILD_TYPE = "gild_type";
     public static final String IS_ANONYMOUS = "is_anonymous";
 
+    public static final String ORIGIN_KEY = "Origin";
+    public static final String REVEDDIT_ORIGIN = "https://www.reveddit.com";
+    public static final String REFERER_KEY = "Referer";
+    public static final String REVEDDIT_REFERER = "https://www.reveddit.com/";
+
     public static Map<String, String> getHttpBasicAuthHeader() {
         Map<String, String> params = new HashMap<>();
         String credentials = String.format("%s:%s", APIUtils.CLIENT_ID, "");
@@ -122,5 +128,13 @@ public class APIUtils {
 
     public static RequestBody getRequestBody(String s) {
         return RequestBody.create(s, MediaType.parse("text/plain"));
+    }
+
+    public static Map<String, String> getRevedditHeader() {
+        Map<String, String> params = new HashMap<>();
+        params.put(APIUtils.ORIGIN_KEY, APIUtils.REVEDDIT_ORIGIN);
+        params.put(APIUtils.REFERER_KEY, APIUtils.REVEDDIT_REFERER);
+        params.put(APIUtils.USER_AGENT_KEY, APIUtils.USER_AGENT);
+        return params;
     }
 }

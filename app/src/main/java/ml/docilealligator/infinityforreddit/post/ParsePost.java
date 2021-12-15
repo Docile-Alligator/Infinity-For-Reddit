@@ -156,8 +156,10 @@ public class ParsePost {
         boolean nsfw = data.getBoolean(JSONUtils.NSFW_KEY);
         boolean stickied = data.getBoolean(JSONUtils.STICKIED_KEY);
         boolean archived = data.getBoolean(JSONUtils.ARCHIVED_KEY);
-        boolean locked = data.getBoolean(JSONUtils.LOCKEC_KEY);
+        boolean locked = data.getBoolean(JSONUtils.LOCKED_KEY);
         boolean saved = data.getBoolean(JSONUtils.SAVED_KEY);
+        boolean deleted = !data.isNull(JSONUtils.REMOVED_BY_CATEGORY_KEY) && data.getString(JSONUtils.REMOVED_BY_CATEGORY_KEY).equals("deleted");
+        boolean removed = !data.isNull(JSONUtils.REMOVED_BY_CATEGORY_KEY) && data.getString(JSONUtils.REMOVED_BY_CATEGORY_KEY).equals("moderator");
         StringBuilder postFlairHTMLBuilder = new StringBuilder();
         String flair = "";
         if (data.has(JSONUtils.LINK_FLAIR_RICHTEXT_KEY)) {
@@ -231,7 +233,7 @@ public class ParsePost {
                     author, authorFlair, authorFlairHTMLBuilder.toString(),
                     postTime, title, previews,
                     score, voteType, nComments, upvoteRatio, flair, awardingsBuilder.toString(), nAwards, hidden,
-                    spoiler, nsfw, stickied, archived, locked, saved, true);
+                    spoiler, nsfw, stickied, archived, locked, saved, deleted, removed, true);
             post.setCrosspostParentId(crosspostParent.getId());
             return post;
         } else {
@@ -239,7 +241,7 @@ public class ParsePost {
                     author, authorFlair, authorFlairHTMLBuilder.toString(),
                     postTime, title, previews,
                     score, voteType, nComments, upvoteRatio, flair, awardingsBuilder.toString(), nAwards, hidden,
-                    spoiler, nsfw, stickied, archived, locked, saved, false);
+                    spoiler, nsfw, stickied, archived, locked, saved, deleted, removed, false);
         }
     }
 
@@ -250,7 +252,7 @@ public class ParsePost {
                                   int score, int voteType, int nComments, int upvoteRatio, String flair,
                                   String awards, int nAwards, boolean hidden, boolean spoiler,
                                   boolean nsfw, boolean stickied, boolean archived, boolean locked,
-                                  boolean saved, boolean isCrosspost) throws JSONException {
+                                  boolean saved, boolean deleted, boolean removed, boolean isCrosspost) throws JSONException {
         Post post;
 
         boolean isVideo = data.getBoolean(JSONUtils.IS_VIDEO_KEY);

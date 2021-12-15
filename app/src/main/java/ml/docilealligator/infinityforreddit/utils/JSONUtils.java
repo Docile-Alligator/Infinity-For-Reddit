@@ -85,8 +85,10 @@ public class JSONUtils {
     public static final String DESCRIPTION_HTML_KEY = "description_html";
     public static final String DESCRIPTION_MD_KEY = "description_md";
     public static final String ARCHIVED_KEY = "archived";
-    public static final String LOCKEC_KEY = "locked";
+    public static final String LOCKED_KEY = "locked";
     public static final String SAVED_KEY = "saved";
+    public static final String REMOVED_KEY = "removed";
+    public static final String REMOVED_BY_CATEGORY_KEY = "removed_by_category";
     public static final String TEXT_EDITABLE_KEY = "text_editable";
     public static final String SUBJECT_KEY = "subject";
     public static final String CONTEXT_KEY = "context";

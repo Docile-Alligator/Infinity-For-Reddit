@@ -89,6 +89,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostCommentSort
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.comment.FetchComment;
 import ml.docilealligator.infinityforreddit.comment.FetchRemovedComment;
+import ml.docilealligator.infinityforreddit.comment.FetchRemovedCommentReveddit;
 import ml.docilealligator.infinityforreddit.comment.ParseComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.CustomToroContainer;
@@ -143,6 +144,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @Inject
     @Named("pushshift")
     Retrofit pushshiftRetrofit;
+    @Inject
+    @Named("reveddit")
+    Retrofit revedditRetrofit;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -1717,7 +1721,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
     public void showRemovedComment(Comment comment, int position) {
         Toast.makeText(activity, R.string.fetching_removed_comment, Toast.LENGTH_SHORT).show();
-        FetchRemovedComment.fetchRemovedComment(
+        FetchRemovedComment.searchRemovedComment(
                 pushshiftRetrofit,
                 comment,
                 new FetchRemovedComment.FetchRemovedCommentListener() {
@@ -1728,7 +1732,18 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
                     @Override
                     public void fetchFailed() {
-                        Toast.makeText(activity, R.string.show_removed_comment_failed, Toast.LENGTH_SHORT).show();
+                        // Reveddit fallback
+                        FetchRemovedCommentReveddit.fetchRemovedComment(revedditRetrofit, comment, mPost.getPostTimeMillis(), mPost.getNComments(), new FetchRemovedCommentReveddit.FetchRemovedCommentListener() {
+                            @Override
+                            public void fetchSuccess(Comment comment) {
+                                mCommentsAdapter.editComment(comment.getAuthor(), comment.getCommentMarkdown(), position);
+                            }
+
+                            @Override
+                            public void fetchFailed() {
+                                Toast.makeText(activity, R.string.show_removed_comment_failed, Toast.LENGTH_SHORT).show();
+                            }
+                        });
                     }
                 });
     }
