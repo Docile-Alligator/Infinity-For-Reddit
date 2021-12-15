@@ -147,6 +147,16 @@ class AppModule {
     }
 
     @Provides
+    @Named("reveddit")
+    @Singleton
+    Retrofit provideRevedditRetrofit() {
+        return new Retrofit.Builder()
+                .baseUrl(APIUtils.REVEDDIT_API_BASE_URI)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+    }
+
+    @Provides
     @Named("vReddIt")
     @Singleton
     Retrofit provideVReddItRetrofit() {
