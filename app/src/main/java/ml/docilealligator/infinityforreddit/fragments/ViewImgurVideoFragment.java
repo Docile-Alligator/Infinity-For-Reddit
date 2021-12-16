@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.ActionMenuView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
@@ -73,8 +74,8 @@ public class ViewImgurVideoFragment extends Fragment {
     BottomAppBar bottomAppBar;
     @BindView(R.id.title_text_view_exo_playback_control_view)
     TextView titleTextView;
-    @BindView(R.id.download_image_view_exo_playback_control_view)
-    ImageView downloadImageView;
+    @BindView(R.id.bottom_action_menu_view_exo_playback_control_view)
+    ActionMenuView bottomActionMenu;
     private ViewImgurMediaActivity activity;
     private ImgurMedia imgurMedia;
     private SimpleExoPlayer player;
@@ -157,16 +158,11 @@ public class ViewImgurVideoFragment extends Fragment {
         preparePlayer(savedInstanceState);
 
         if (activity.isUseBottomAppBar()) {
+            onCreateOptionsMenu(bottomActionMenu.getMenu(), activity.getMenuInflater());
+            bottomActionMenu.setOnMenuItemClickListener(this::onOptionsItemSelected);
             bottomAppBar.setVisibility(View.VISIBLE);
             titleTextView.setText(getString(R.string.view_imgur_media_activity_video_label,
                     getArguments().getInt(EXTRA_INDEX) + 1, getArguments().getInt(EXTRA_MEDIA_COUNT)));
-            downloadImageView.setOnClickListener(view -> {
-                if (isDownloading) {
-                    return;
-                }
-                isDownloading = true;
-                requestPermissionAndDownload();
-            });
         }
 
         return rootView;

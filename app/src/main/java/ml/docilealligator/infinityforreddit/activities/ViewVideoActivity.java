@@ -165,10 +165,6 @@ public class ViewVideoActivity extends AppCompatActivity {
     BottomAppBar bottomAppBar;
     @BindView(R.id.title_text_view_exo_playback_control_view)
     TextView titleTextView;
-    @BindView(R.id.download_image_view_exo_playback_control_view)
-    ImageView downloadImageView;
-    @BindView(R.id.playback_speed_image_view_exo_playback_control_view)
-    ImageView playbackSpeedImageView;
     @BindView(R.id.lockable_nested_scroll_view_view_video_activity)
     LockableNestedScrollView nestedScrollView;
     @BindView(R.id.bottom_action_menu_view_exo_playback_control_view)
@@ -293,9 +289,9 @@ public class ViewVideoActivity extends AppCompatActivity {
         useBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.USE_BOTTOM_TOOLBAR_IN_MEDIA_VIEWER, false);
         if (useBottomAppBar) {
             getSupportActionBar().hide();
-            bottomAppBar.setVisibility(View.VISIBLE);
             onCreateOptionsMenu(bottomActionMenu.getMenu());
             bottomActionMenu.setOnMenuItemClickListener(this::onOptionsItemSelected);
+            bottomAppBar.setVisibility(View.VISIBLE);
         } else {
             ActionBar actionBar = getSupportActionBar();
             Drawable upArrow = resources.getDrawable(R.drawable.ic_arrow_back_white_24dp);
