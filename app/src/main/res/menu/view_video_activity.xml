@@ -14,4 +14,12 @@
         android:title="@string/action_playback_speed"
         android:icon="@drawable/ic_playback_speed_toolbar_24dp"
         app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/action_download_gif_variant_original_view_video_activity"
+        android:orderInCategory="3"
+        android:title="@string/action_download_gif"
+        android:visible="false"
+        android:icon="@drawable/ic_file_download_toolbar_white_24dp"
+        app:showAsAction="never" />
 </menu>

@@ -2,21 +2,21 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_download_view_reddit_gallery_video_fragment"
+        android:id="@+id/action_download_video_view_reddit_gallery_gif_variant_fragment"
         android:icon="@drawable/ic_file_download_toolbar_white_24dp"
         android:orderInCategory="1"
         android:title="@string/action_download"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_playback_speed_view_reddit_gallery_video_fragment"
+        android:id="@+id/action_playback_speed_view_reddit_gallery_gif_variant_fragment"
         android:icon="@drawable/ic_playback_speed_toolbar_24dp"
         android:orderInCategory="2"
         android:title="@string/action_playback_speed"
         app:showAsAction="ifRoom" />
 
     <item
-        android:id="@+id/action_download_gif_variant_original_view_reddit_gallery_video_fragment"
+        android:id="@+id/action_download_gif_variant_original_view_reddit_gallery_gif_variant_fragment"
         android:icon="@drawable/ic_file_download_toolbar_white_24dp"
         android:orderInCategory="3"
         android:title="@string/action_download_gif"

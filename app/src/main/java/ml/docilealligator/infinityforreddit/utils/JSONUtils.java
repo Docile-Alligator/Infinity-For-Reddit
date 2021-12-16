@@ -99,6 +99,7 @@ public class JSONUtils {
     public static final String HIDDEN_KEY = "hidden";
     public static final String USER_HAS_FAVORITED_KEY = "user_has_favorited";
     public static final String RESOLUTIONS_KEY = "resolutions";
+    public static final String VARIANTS_KEY = "variants";
     public static final String NUM_SUBSCRIBERS_KEY = "num_subscribers";
     public static final String COPIED_FROM_KEY = "copied_from";
     public static final String VISIBILITY_KEY = "visibility";

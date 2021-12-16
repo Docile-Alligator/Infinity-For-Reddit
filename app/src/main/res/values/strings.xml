@@ -1242,5 +1242,6 @@
     <string name="message_change_banner_failed_fmt">Failed to change banner %s</string>
     <string name="message_save_profile_success">Save profile successfully</string>
     <string name="message_save_profile_failed_fmt">Failed to save profile %s</string>
+    <string name="action_download_gif">GIF</string>
 
 </resources>

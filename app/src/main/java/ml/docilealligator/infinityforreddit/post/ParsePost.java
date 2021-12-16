@@ -179,7 +179,7 @@ public class ParsePost {
         if (flair.equals("") && data.has(JSONUtils.LINK_FLAIR_TEXT_KEY) && !data.isNull(JSONUtils.LINK_FLAIR_TEXT_KEY)) {
             flair = data.getString(JSONUtils.LINK_FLAIR_TEXT_KEY);
         }
-        
+
         StringBuilder awardingsBuilder = new StringBuilder();
         JSONArray awardingsArray = data.getJSONArray(JSONUtils.ALL_AWARDINGS_KEY);
         int nAwards = 0;
@@ -431,13 +431,38 @@ public class ParsePost {
                     } else if (url.endsWith("gif")) {
                         //Gif post
                         int postType = Post.GIF_TYPE;
+
+                        //Handle mp4 variant of gif
+                        String videoUrl = "";
+                        boolean hasVideoVariant = false;
+                        JSONObject images = data.getJSONObject(JSONUtils.PREVIEW_KEY).getJSONArray(JSONUtils.IMAGES_KEY).getJSONObject(0);
+                        if (!images.isNull(JSONUtils.VARIANTS_KEY)) {
+                            JSONObject variants = images.getJSONObject(JSONUtils.VARIANTS_KEY);
+                            if (!variants.isNull(JSONUtils.GIF_KEY) && !variants.isNull(JSONUtils.MP4_KEY)) {
+                                JSONObject mp4 = variants.getJSONObject(JSONUtils.MP4_KEY);
+                                if (!mp4.isNull(JSONUtils.SOURCE_KEY)) {
+                                   JSONObject s_key =  mp4.getJSONObject(JSONUtils.SOURCE_KEY);
+                                   if (!s_key.isNull(JSONUtils.URL_KEY)) {
+                                       videoUrl = s_key.getString(JSONUtils.URL_KEY);
+                                       hasVideoVariant = true;
+                                       postType = Post.VIDEO_TYPE;
+                                   }
+                                }
+                            }
+                        }
+
                         post = new Post(id, fullName, subredditName, subredditNamePrefixed, author,
-                                authorFlair, authorFlairHTML, postTimeMillis, title, url, permalink, score,
+                                authorFlair, authorFlairHTML, postTimeMillis, title, hasVideoVariant ? videoUrl : url, permalink, score,
                                 postType, voteType, nComments, upvoteRatio, flair, awards, nAwards,
                                 hidden, spoiler, nsfw, stickied, archived, locked, saved, isCrosspost);
 
                         post.setPreviews(previews);
-                        post.setVideoUrl(url);
+                        post.setVideoUrl(hasVideoVariant ? videoUrl : url);
+                        if (hasVideoVariant) {
+                            post.setGifVariantOriginalUrl(url);
+                            post.setVideoDownloadUrl(videoUrl);
+                            post.setIsGifVariant(true);
+                        }
                     } else if (url.endsWith("mp4")) {
                         //Video post
                         int postType = Post.VIDEO_TYPE;
@@ -636,6 +661,8 @@ public class ParsePost {
                 JSONObject galleryObject = data.getJSONObject(JSONUtils.MEDIA_METADATA_KEY);
                 ArrayList<Post.Gallery> gallery = new ArrayList<>();
                 for (int i = 0; i < galleryIdsArray.length(); i++) {
+                    boolean hasVideoVariant = false;
+                    String gifVariantOriginalUrl = "";
                     String galleryId = galleryIdsArray.getJSONObject(i).getString(JSONUtils.MEDIA_ID_KEY);
                     JSONObject singleGalleryObject = galleryObject.getJSONObject(galleryId);
                     String mimeType = singleGalleryObject.getString(JSONUtils.M_KEY);
@@ -646,6 +673,14 @@ public class ParsePost {
                         JSONObject sourceObject = singleGalleryObject.getJSONObject(JSONUtils.S_KEY);
                         if (mimeType.contains("gif")) {
                             galleryItemUrl = sourceObject.getString(JSONUtils.GIF_KEY);
+
+                            // Handle mp4 variant of gif
+                            if (!sourceObject.isNull(JSONUtils.MP4_KEY)) {
+                                gifVariantOriginalUrl = galleryItemUrl;
+                                galleryItemUrl = sourceObject.getString(JSONUtils.MP4_KEY);
+                                mimeType = "video/mp4";
+                                hasVideoVariant = true;
+                            }
                         } else {
                             galleryItemUrl = sourceObject.getString(JSONUtils.MP4_KEY);
                         }
@@ -674,6 +709,11 @@ public class ParsePost {
                     if (!TextUtils.isEmpty(galleryItemUrl) && !TextUtils.isEmpty(mimeType) && (mimeType.contains("jpg") || mimeType.contains("png"))) {
                         postGalleryItem.setFallbackUrl("https://i.redd.it/" + galleryId + "." +  mimeType.substring(mimeType.lastIndexOf("/") + 1));
                         postGalleryItem.setHasFallback(true);
+                    }
+
+                    if (hasVideoVariant) {
+                        postGalleryItem.setIsGifVariant(true);
+                        postGalleryItem.setGifVariantOriginalUrl(gifVariantOriginalUrl);
                     }
 
                     gallery.add(postGalleryItem);
