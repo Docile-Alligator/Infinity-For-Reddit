@@ -529,7 +529,7 @@ public class ViewVideoActivity extends AppCompatActivity {
             if (videoType == VIDEO_TYPE_DIRECT) {
                 videoFileName = FilenameUtils.getName(videoDownloadUrl);
             } else {
-                videoFileName = "Imgur-" + FilenameUtils.getName(videoDownloadUrl);
+                videoFileName = "imgur-" + FilenameUtils.getName(videoDownloadUrl);
             }
             // Produces DataSource instances through which media data is loaded.
             dataSourceFactory = new CacheDataSourceFactory(mSimpleCache,
