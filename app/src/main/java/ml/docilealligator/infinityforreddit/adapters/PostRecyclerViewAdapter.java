@@ -1943,7 +1943,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             canStartActivity = false;
             if (post.getPostType() == Post.VIDEO_TYPE) {
                 Intent intent = new Intent(mActivity, ViewVideoActivity.class);
-                if (post.isGfycat()) {
+                if (post.isImgur()) {
+                    intent.setData(Uri.parse(post.getVideoUrl()));
+                    intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_IMGUR);
+                } else if (post.isGfycat()) {
                     intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
                     intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, post.getGfycatId());
                 } else if (post.isRedgifs()) {
@@ -2680,7 +2683,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     if (post != null) {
                         markPostRead(post, true);
                         Intent intent = new Intent(mActivity, ViewVideoActivity.class);
-                        if (post.isGfycat()) {
+                        if (post.isImgur()) {
+                            intent.setData(Uri.parse(post.getVideoUrl()));
+                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_IMGUR);
+                        } else if (post.isGfycat()) {
                             intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
                             intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, post.getGfycatId());
                             if (post.isLoadGfycatOrStreamableVideoSuccess()) {
@@ -3965,7 +3971,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 if (post != null) {
                     markPostRead(post, true);
                     Intent intent = new Intent(mActivity, ViewVideoActivity.class);
-                    if (post.isGfycat()) {
+                    if (post.isImgur()) {
+                        intent.setData(Uri.parse(post.getVideoUrl()));
+                        intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_IMGUR);
+                    } else if (post.isGfycat()) {
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
                         intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, post.getGfycatId());
                         if (post.isLoadGfycatOrStreamableVideoSuccess()) {

@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -400,20 +401,38 @@ public class ParsePost {
                 post.setVideoDownloadUrl(videoDownloadUrl);
             } else if (data.has(JSONUtils.PREVIEW_KEY)) {
                 if (data.getJSONObject(JSONUtils.PREVIEW_KEY).has(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY)) {
-                    //Gif video post (HLS)
                     int postType = Post.VIDEO_TYPE;
-                    String videoUrl = Html.fromHtml(data.getJSONObject(JSONUtils.PREVIEW_KEY)
-                            .getJSONObject(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY).getString(JSONUtils.HLS_URL_KEY)).toString();
-                    String videoDownloadUrl = data.getJSONObject(JSONUtils.PREVIEW_KEY)
-                            .getJSONObject(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY).getString(JSONUtils.FALLBACK_URL_KEY);
+                    Uri uri = Uri.parse(url);
+                    String authority = uri.getAuthority();
+                    // The hls stream inside REDDIT_VIDEO_PREVIEW_KEY can sometimes lack an audio track
+                    // This happens with imgur gifv that are actually mp4, even the official Reddit app has this bug
+                    if (authority.contains("imgur.com") && url.endsWith(".gifv")) {
+                        url = url.substring(0, url.length() - 5) + ".mp4";
 
-                    post = new Post(id, fullName, subredditName, subredditNamePrefixed, author, authorFlair,
-                            authorFlairHTML, postTimeMillis, title, permalink, score, postType, voteType,
-                            nComments, upvoteRatio, flair, awards, nAwards, hidden, spoiler, nsfw, stickied,
-                            archived, locked, saved, isCrosspost);
-                    post.setPreviews(previews);
-                    post.setVideoUrl(videoUrl);
-                    post.setVideoDownloadUrl(videoDownloadUrl);
+                        post = new Post(id, fullName, subredditName, subredditNamePrefixed, author, authorFlair,
+                                authorFlairHTML, postTimeMillis, title, permalink, score, postType, voteType,
+                                nComments, upvoteRatio, flair, awards, nAwards, hidden, spoiler, nsfw, stickied,
+                                archived, locked, saved, isCrosspost);
+                        post.setPreviews(previews);
+                        post.setVideoUrl(url);
+                        post.setVideoDownloadUrl(url);
+                        post.setIsImgur(true);
+                    } else {
+                        //Gif video post (HLS)
+
+                        String videoUrl = Html.fromHtml(data.getJSONObject(JSONUtils.PREVIEW_KEY)
+                                .getJSONObject(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY).getString(JSONUtils.HLS_URL_KEY)).toString();
+                        String videoDownloadUrl = data.getJSONObject(JSONUtils.PREVIEW_KEY)
+                                .getJSONObject(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY).getString(JSONUtils.FALLBACK_URL_KEY);
+
+                        post = new Post(id, fullName, subredditName, subredditNamePrefixed, author, authorFlair,
+                                authorFlairHTML, postTimeMillis, title, permalink, score, postType, voteType,
+                                nComments, upvoteRatio, flair, awards, nAwards, hidden, spoiler, nsfw, stickied,
+                                archived, locked, saved, isCrosspost);
+                        post.setPreviews(previews);
+                        post.setVideoUrl(videoUrl);
+                        post.setVideoDownloadUrl(videoDownloadUrl);
+                    }
                 } else {
                     if (url.endsWith("jpg") || url.endsWith("png")) {
                         //Image post
@@ -449,6 +468,22 @@ public class ParsePost {
                         post.setPreviews(previews);
                         post.setVideoUrl(url);
                         post.setVideoDownloadUrl(url);
+                    } else if (url.endsWith("gifv") && Objects.equals(Uri.parse(url).getAuthority(), "i.imgur.com")) {
+                        // Imgur gifv/mp4
+                        int postType = Post.VIDEO_TYPE;
+
+                        // Insecure imgur links won't load
+                        url = url.replaceFirst("http://" , "https://");
+                        url = url.substring(0, url.length() - 5) + ".mp4";
+
+                        post = new Post(id, fullName, subredditName, subredditNamePrefixed, author,
+                                authorFlair, authorFlairHTML, postTimeMillis, title, url, permalink, score,
+                                postType, voteType, nComments, upvoteRatio, flair, awards, nAwards,
+                                hidden, spoiler, nsfw, stickied, archived, locked, saved, isCrosspost);
+                        post.setPreviews(previews);
+                        post.setVideoUrl(url);
+                        post.setVideoDownloadUrl(url);
+                        post.setIsImgur(true);
                     } else {
                         if (url.contains(permalink)) {
                             //Text post but with a preview

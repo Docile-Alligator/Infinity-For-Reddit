@@ -126,6 +126,7 @@ public class ViewVideoActivity extends AppCompatActivity {
     public static final String EXTRA_V_REDD_IT_URL = "EVRIU";
     public static final String EXTRA_STREAMABLE_SHORT_CODE = "ESSC";
     public static final String EXTRA_IS_NSFW = "EIN";
+    public static final int VIDEO_TYPE_IMGUR = 7;
     public static final int VIDEO_TYPE_STREAMABLE = 5;
     public static final int VIDEO_TYPE_V_REDD_IT = 4;
     public static final int VIDEO_TYPE_DIRECT = 3;
@@ -523,9 +524,13 @@ public class ViewVideoActivity extends AppCompatActivity {
                 player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
                 preparePlayer(savedInstanceState);
             }
-        } else if (videoType == VIDEO_TYPE_DIRECT) {
+        } else if (videoType == VIDEO_TYPE_DIRECT || videoType == VIDEO_TYPE_IMGUR) {
             videoDownloadUrl = mVideoUri.toString();
-            videoFileName = FilenameUtils.getName(videoDownloadUrl);
+            if (videoType == VIDEO_TYPE_DIRECT) {
+                videoFileName = FilenameUtils.getName(videoDownloadUrl);
+            } else {
+                videoFileName = "Imgur-" + FilenameUtils.getName(videoDownloadUrl);
+            }
             // Produces DataSource instances through which media data is loaded.
             dataSourceFactory = new CacheDataSourceFactory(mSimpleCache,
                     new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "Infinity")));
