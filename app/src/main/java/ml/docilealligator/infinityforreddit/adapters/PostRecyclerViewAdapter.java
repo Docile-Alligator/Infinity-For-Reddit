@@ -1591,6 +1591,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     break;
                 case Post.VIDEO_TYPE:
                     bundle.putString(ShareLinkBottomSheetFragment.EXTRA_MEDIA_LINK, post.getVideoDownloadUrl());
+                    if (post.isGifVariant()) {
+                        bundle.putString(ShareLinkBottomSheetFragment.EXTRA_GIF_VARIANT_LINK, post.getGifVariantOriginalUrl());
+                    }
                     break;
             }
         }

@@ -700,6 +700,13 @@ public class ParsePost {
                     if (previews.isEmpty() && (mimeType.contains("jpg") || mimeType.contains("png"))) {
                         previews.add(new Post.Preview(galleryItemUrl, singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getInt(JSONUtils.X_KEY),
                                 singleGalleryObject.getJSONObject(JSONUtils.S_KEY).getInt(JSONUtils.Y_KEY), galleryItemCaption, galleryItemCaptionUrl));
+                    } else if (hasVideoVariant && previews.isEmpty() && singleGalleryObject.has(JSONUtils.P_KEY)) {
+                        JSONArray gifPreviews = singleGalleryObject.optJSONArray(JSONUtils.P_KEY);
+                        if (gifPreviews != null) {
+                            JSONObject largestPreview = gifPreviews.getJSONObject(gifPreviews.length() - 1);
+                            previews.add(new Post.Preview(largestPreview.getString(JSONUtils.U_KEY), largestPreview.getInt(JSONUtils.X_KEY),
+                                    largestPreview.getInt(JSONUtils.Y_KEY), galleryItemCaption, galleryItemCaptionUrl));
+                        }
                     }
                     
                     Post.Gallery postGalleryItem = new Post.Gallery(mimeType, galleryItemUrl, "", subredditName + "-" + galleryId + "." + mimeType.substring(mimeType.lastIndexOf("/") + 1), galleryItemCaption, galleryItemCaptionUrl);

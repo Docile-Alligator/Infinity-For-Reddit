@@ -31,15 +31,20 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
     public static final String EXTRA_POST_LINK = "EPL";
     public static final String EXTRA_MEDIA_LINK = "EML";
     public static final String EXTRA_MEDIA_TYPE = "EMT";
+    public static final String EXTRA_GIF_VARIANT_LINK = "EGVL";
 
     @BindView(R.id.share_post_link_text_view_share_link_bottom_sheet_fragment)
     TextView sharePostLinkTextView;
     @BindView(R.id.share_media_link_text_view_share_link_bottom_sheet_fragment)
     TextView shareMediaLinkTextView;
+    @BindView(R.id.share_media_link_extra_text_view_share_link_bottom_sheet_fragment)
+    TextView shareMediaLinkExtraTextView;
     @BindView(R.id.copy_post_link_text_view_share_link_bottom_sheet_fragment)
     TextView copyPostLinkTextView;
     @BindView(R.id.copy_media_link_text_view_share_link_bottom_sheet_fragment)
     TextView copyMediaLinkTextView;
+    @BindView(R.id.copy_media_link_extra_text_view_share_link_bottom_sheet_fragment)
+    TextView copyMediaLinkExtraTextView;
 
     private Activity activity;
 
@@ -58,10 +63,15 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
 
         String postLink = getArguments().getString(EXTRA_POST_LINK);
         String mediaLink = getArguments().containsKey(EXTRA_MEDIA_LINK) ? getArguments().getString(EXTRA_MEDIA_LINK) : null;
+        String gifVariantLink = getArguments().containsKey(EXTRA_GIF_VARIANT_LINK) ? getArguments().getString(EXTRA_GIF_VARIANT_LINK) : null;
 
         if (mediaLink != null) {
             shareMediaLinkTextView.setVisibility(View.VISIBLE);
             copyMediaLinkTextView.setVisibility(View.VISIBLE);
+            if (gifVariantLink != null) {
+                shareMediaLinkExtraTextView.setVisibility(View.VISIBLE);
+                copyMediaLinkExtraTextView.setVisibility(View.VISIBLE);
+            }
 
             int mediaType = getArguments().getInt(EXTRA_MEDIA_TYPE);
             switch (mediaType) {
@@ -80,6 +90,12 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
                 case Post.VIDEO_TYPE:
                     shareMediaLinkTextView.setText(R.string.share_video_link);
                     copyMediaLinkTextView.setText(R.string.copy_video_link);
+                    if (gifVariantLink != null) {
+                        shareMediaLinkExtraTextView.setText(R.string.share_gif_link);
+                        copyMediaLinkExtraTextView.setText(R.string.copy_gif_link);
+                        shareMediaLinkExtraTextView.setCompoundDrawablesWithIntrinsicBounds(
+                                activity.getDrawable(R.drawable.ic_image_24dp), null, null, null);
+                    }
                     shareMediaLinkTextView.setCompoundDrawablesWithIntrinsicBounds(
                             activity.getDrawable(R.drawable.ic_outline_video_24dp), null, null, null);
                     break;
@@ -98,6 +114,18 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
                 copyLink(mediaLink);
                 dismiss();
             });
+
+            if (gifVariantLink != null) {
+                shareMediaLinkExtraTextView.setOnClickListener(view -> {
+                    shareLink(gifVariantLink);
+                    dismiss();
+                });
+
+                copyMediaLinkExtraTextView.setOnClickListener(view -> {
+                    copyLink(gifVariantLink);
+                    dismiss();
+                });
+            }
         }
 
         sharePostLinkTextView.setOnClickListener(view -> {

@@ -1485,6 +1485,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                             break;
                         case Post.VIDEO_TYPE:
                             bundle.putString(ShareLinkBottomSheetFragment.EXTRA_MEDIA_LINK, mPost.getVideoDownloadUrl());
+                            if (mPost.isGifVariant()) {
+                                bundle.putString(ShareLinkBottomSheetFragment.EXTRA_GIF_VARIANT_LINK, mPost.getGifVariantOriginalUrl());
+                            }
                             break;
                     }
                 }
