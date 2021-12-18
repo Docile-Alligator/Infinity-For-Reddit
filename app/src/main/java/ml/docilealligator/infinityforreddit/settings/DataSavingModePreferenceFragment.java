@@ -34,6 +34,12 @@ public class DataSavingModePreferenceFragment extends PreferenceFragmentCompat {
         if (disableImagePreviewPreference != null) {
             disableImagePreviewPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new ChangeDisableImagePreviewEvent((Boolean) newValue));
+                if ((Boolean) newValue) {
+                    EventBus.getDefault().post(new ChangeOnlyDisablePreviewInVideoAndGifPostsEvent(false));
+                    if (onlyDisablePreviewInVideoAndGifPostsPreference != null) {
+                        onlyDisablePreviewInVideoAndGifPostsPreference.setChecked(false);
+                    }
+                }
                 return true;
             });
         }
@@ -41,6 +47,12 @@ public class DataSavingModePreferenceFragment extends PreferenceFragmentCompat {
         if (onlyDisablePreviewInVideoAndGifPostsPreference != null) {
             onlyDisablePreviewInVideoAndGifPostsPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new ChangeOnlyDisablePreviewInVideoAndGifPostsEvent((Boolean) newValue));
+                if ((Boolean) newValue) {
+                    EventBus.getDefault().post(new ChangeDisableImagePreviewEvent(false));
+                    if (disableImagePreviewPreference != null) {
+                        disableImagePreviewPreference.setChecked(false);
+                    }
+                }
                 return true;
             });
         }
