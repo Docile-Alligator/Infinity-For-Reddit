@@ -179,4 +179,8 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
             mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
         }
     }
+
+    public void changeSearchQuery(String searchQuery) {
+        mSubscribedUserViewModel.setSearchQuery(searchQuery);
+    }
 }

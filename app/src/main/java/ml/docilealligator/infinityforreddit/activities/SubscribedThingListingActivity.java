@@ -563,10 +563,10 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                 subscribedSubredditsListingFragment.changeSearchQuery(searchQuery);
             }
             if (followedUsersListingFragment != null) {
-
+                followedUsersListingFragment.changeSearchQuery(searchQuery);
             }
             if (multiRedditListingFragment != null) {
-
+                multiRedditListingFragment.changeSearchQuery(searchQuery);
             }
         }
     }

@@ -10,21 +10,19 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class SubscribedUserRepository {
     private SubscribedUserDao mSubscribedUserDao;
-    private LiveData<List<SubscribedUserData>> mAllSubscribedUsers;
-    private LiveData<List<SubscribedUserData>> mAllFavoriteSubscribedUsers;
+    private String mAccountName;
 
     SubscribedUserRepository(RedditDataRoomDatabase redditDataRoomDatabase, String accountName) {
         mSubscribedUserDao = redditDataRoomDatabase.subscribedUserDao();
-        mAllSubscribedUsers = mSubscribedUserDao.getAllSubscribedUsers(accountName);
-        mAllFavoriteSubscribedUsers = mSubscribedUserDao.getAllFavoriteSubscribedUsers(accountName);
+        mAccountName = accountName;
     }
 
-    LiveData<List<SubscribedUserData>> getAllSubscribedSubreddits() {
-        return mAllSubscribedUsers;
+    LiveData<List<SubscribedUserData>> getAllSubscribedUsersWithSearchQuery(String searchQuery) {
+        return mSubscribedUserDao.getAllSubscribedUsersWithSearchQuery(mAccountName, searchQuery);
     }
 
-    LiveData<List<SubscribedUserData>> getAllFavoriteSubscribedSubreddits() {
-        return mAllFavoriteSubscribedUsers;
+    LiveData<List<SubscribedUserData>> getAllFavoriteSubscribedUsersWithSearchQuery(String searchQuery) {
+        return mSubscribedUserDao.getAllFavoriteSubscribedUsersWithSearchQuery(mAccountName, searchQuery);
     }
 
     public void insert(SubscribedUserData subscribedUserData) {

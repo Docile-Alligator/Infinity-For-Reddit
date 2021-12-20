@@ -5,6 +5,8 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -16,12 +18,16 @@ public class MultiRedditViewModel extends AndroidViewModel {
     private MultiRedditRepository mMultiRedditRepository;
     private LiveData<List<MultiReddit>> mAllMultiReddits;
     private LiveData<List<MultiReddit>> mAllFavoriteMultiReddits;
+    private MutableLiveData<String> searchQueryLiveData;
 
     public MultiRedditViewModel(Application application, RedditDataRoomDatabase redditDataRoomDatabase, String accountName) {
         super(application);
         mMultiRedditRepository = new MultiRedditRepository(redditDataRoomDatabase, accountName);
-        mAllMultiReddits = mMultiRedditRepository.getAllMultiReddits();
-        mAllFavoriteMultiReddits = mMultiRedditRepository.getAllFavoriteMultiReddits();
+        searchQueryLiveData = new MutableLiveData<>();
+        searchQueryLiveData.postValue("");
+
+        mAllMultiReddits = Transformations.switchMap(searchQueryLiveData, searchQuery -> mMultiRedditRepository.getAllMultiRedditsWithSearchQuery(searchQuery));
+        mAllFavoriteMultiReddits = Transformations.switchMap(searchQueryLiveData, searchQuery -> mMultiRedditRepository.getAllFavoriteMultiRedditsWithSearchQuery(searchQuery));
     }
 
     public LiveData<List<MultiReddit>> getAllMultiReddits() {
@@ -30,6 +36,10 @@ public class MultiRedditViewModel extends AndroidViewModel {
 
     public LiveData<List<MultiReddit>> getAllFavoriteMultiReddits() {
         return mAllFavoriteMultiReddits;
+    }
+
+    public void setSearchQuery(String searchQuery) {
+        searchQueryLiveData.postValue(searchQuery);
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {

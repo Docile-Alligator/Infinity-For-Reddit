@@ -19,17 +19,11 @@ public interface SubscribedSubredditDao {
     @Query("DELETE FROM subscribed_subreddits")
     void deleteAllSubscribedSubreddits();
 
-    @Query("SELECT * from subscribed_subreddits WHERE username = :accountName ORDER BY name COLLATE NOCASE ASC")
-    LiveData<List<SubscribedSubredditData>> getAllSubscribedSubreddits(String accountName);
-
     @Query("SELECT * from subscribed_subreddits WHERE username = :accountName AND name LIKE '%' || :searchQuery || '%' ORDER BY name COLLATE NOCASE ASC")
     LiveData<List<SubscribedSubredditData>> getAllSubscribedSubredditsWithSearchQuery(String accountName, String searchQuery);
 
     @Query("SELECT * from subscribed_subreddits WHERE username = :accountName COLLATE NOCASE ORDER BY name COLLATE NOCASE ASC")
     List<SubscribedSubredditData> getAllSubscribedSubredditsList(String accountName);
-
-    @Query("SELECT * from subscribed_subreddits WHERE username = :accountName COLLATE NOCASE AND is_favorite = 1 ORDER BY name COLLATE NOCASE ASC")
-    LiveData<List<SubscribedSubredditData>> getAllFavoriteSubscribedSubreddits(String accountName);
 
     @Query("SELECT * from subscribed_subreddits WHERE username = :accountName AND name LIKE '%' || :searchQuery || '%' COLLATE NOCASE AND is_favorite = 1 ORDER BY name COLLATE NOCASE ASC")
     LiveData<List<SubscribedSubredditData>> getAllFavoriteSubscribedSubredditsWithSearchQuery(String accountName, String searchQuery);

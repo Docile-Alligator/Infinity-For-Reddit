@@ -200,6 +200,10 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
         }
     }
 
+    public void changeSearchQuery(String searchQuery) {
+        mMultiRedditViewModel.setSearchQuery(searchQuery);
+    }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
