@@ -15,4 +15,17 @@
         app:defaultValue="false"
         app:key="separate_folder_for_each_subreddit"
         app:title="@string/settings_separate_folder_for_each_subreddit" />
+
+    <PreferenceCategory
+        app:title="@string/nsfw" />
+
+    <SwitchPreference
+        app:defaultValue="false"
+        app:key="save_nsfw_media_in_different_folder"
+        app:title="@string/settings_save_nsfw_media_in_different_folder_title"
+        app:summary="@string/settings_save_nsfw_media_in_different_folder_summary" />
+
+    <Preference
+        app:key="nsfw_download_location"
+        app:title="@string/settings_nsfw_download_location_title" />
 </PreferenceScreen>

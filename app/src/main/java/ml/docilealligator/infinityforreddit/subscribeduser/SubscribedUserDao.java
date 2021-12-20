@@ -16,14 +16,14 @@ public interface SubscribedUserDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<SubscribedUserData> subscribedUserDataList);
 
-    @Query("SELECT * FROM subscribed_users WHERE username = :accountName COLLATE NOCASE ORDER BY name COLLATE NOCASE ASC")
-    LiveData<List<SubscribedUserData>> getAllSubscribedUsers(String accountName);
+    @Query("SELECT * FROM subscribed_users WHERE username = :accountName AND name LIKE '%' || :searchQuery || '%' COLLATE NOCASE ORDER BY name COLLATE NOCASE ASC")
+    LiveData<List<SubscribedUserData>> getAllSubscribedUsersWithSearchQuery(String accountName, String searchQuery);
 
     @Query("SELECT * FROM subscribed_users WHERE username = :accountName COLLATE NOCASE ORDER BY name COLLATE NOCASE ASC")
     List<SubscribedUserData> getAllSubscribedUsersList(String accountName);
 
-    @Query("SELECT * FROM subscribed_users WHERE username = :accountName COLLATE NOCASE AND is_favorite = 1 ORDER BY name COLLATE NOCASE ASC")
-    LiveData<List<SubscribedUserData>> getAllFavoriteSubscribedUsers(String accountName);
+    @Query("SELECT * FROM subscribed_users WHERE username = :accountName AND name LIKE '%' || :searchQuery || '%' COLLATE NOCASE AND is_favorite = 1 ORDER BY name COLLATE NOCASE ASC")
+    LiveData<List<SubscribedUserData>> getAllFavoriteSubscribedUsersWithSearchQuery(String accountName, String searchQuery);
 
     @Query("SELECT * FROM subscribed_users WHERE name = :name COLLATE NOCASE AND username = :accountName COLLATE NOCASE LIMIT 1")
     SubscribedUserData getSubscribedUser(String name, String accountName);

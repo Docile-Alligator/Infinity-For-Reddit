@@ -39,6 +39,7 @@ public class FetchStreamableVideo {
                 }
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
+                handler.post(fetchStreamableVideoListener::failed);
             }
         });
     }
@@ -64,6 +65,7 @@ public class FetchStreamableVideo {
                 }
             } catch (IOException | JSONException e) {
                 e.printStackTrace();
+                handler.post(fetchStreamableVideoListener::failed);
             }
         });
     }

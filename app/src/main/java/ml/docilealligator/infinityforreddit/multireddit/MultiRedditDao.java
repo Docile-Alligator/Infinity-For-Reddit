@@ -16,14 +16,14 @@ public interface MultiRedditDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insertAll(List<MultiReddit> multiReddits);
 
-    @Query("SELECT * FROM multi_reddits WHERE username = :username ORDER BY name COLLATE NOCASE ASC")
-    LiveData<List<MultiReddit>> getAllMultiReddits(String username);
+    @Query("SELECT * FROM multi_reddits WHERE username = :username AND display_name LIKE '%' || :searchQuery || '%' ORDER BY name COLLATE NOCASE ASC")
+    LiveData<List<MultiReddit>> getAllMultiRedditsWithSearchQuery(String username, String searchQuery);
 
     @Query("SELECT * FROM multi_reddits WHERE username = :username ORDER BY name COLLATE NOCASE ASC")
     List<MultiReddit> getAllMultiRedditsList(String username);
 
-    @Query("SELECT * FROM multi_reddits WHERE username = :username AND is_favorite ORDER BY name COLLATE NOCASE ASC")
-    LiveData<List<MultiReddit>> getAllFavoriteMultiReddits(String username);
+    @Query("SELECT * FROM multi_reddits WHERE username = :username AND is_favorite AND display_name LIKE '%' || :searchQuery || '%' ORDER BY name COLLATE NOCASE ASC")
+    LiveData<List<MultiReddit>> getAllFavoriteMultiRedditsWithSearchQuery(String username, String searchQuery);
 
     @Query("SELECT * FROM multi_reddits WHERE path = :path AND username = :username COLLATE NOCASE LIMIT 1")
     MultiReddit getMultiReddit(String path, String username);

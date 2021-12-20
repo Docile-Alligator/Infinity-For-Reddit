@@ -5,6 +5,8 @@ import android.app.Application;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
@@ -16,12 +18,16 @@ public class SubscribedSubredditViewModel extends AndroidViewModel {
     private SubscribedSubredditRepository mSubscribedSubredditRepository;
     private LiveData<List<SubscribedSubredditData>> mAllSubscribedSubreddits;
     private LiveData<List<SubscribedSubredditData>> mAllFavoriteSubscribedSubreddits;
+    private MutableLiveData<String> searchQueryLiveData;
 
     public SubscribedSubredditViewModel(Application application, RedditDataRoomDatabase redditDataRoomDatabase, String accountName) {
         super(application);
         mSubscribedSubredditRepository = new SubscribedSubredditRepository(redditDataRoomDatabase, accountName);
-        mAllSubscribedSubreddits = mSubscribedSubredditRepository.getAllSubscribedSubreddits();
-        mAllFavoriteSubscribedSubreddits = mSubscribedSubredditRepository.getAllFavoriteSubscribedSubreddits();
+        searchQueryLiveData = new MutableLiveData<>();
+        searchQueryLiveData.postValue("");
+
+        mAllSubscribedSubreddits = Transformations.switchMap(searchQueryLiveData, searchQuery -> mSubscribedSubredditRepository.getAllSubscribedSubredditsWithSearchQuery(searchQuery));
+        mAllFavoriteSubscribedSubreddits = Transformations.switchMap(searchQueryLiveData, searchQuery -> mSubscribedSubredditRepository.getAllFavoriteSubscribedSubredditsWithSearchQuery(searchQuery));
     }
 
     public LiveData<List<SubscribedSubredditData>> getAllSubscribedSubreddits() {
@@ -34,6 +40,10 @@ public class SubscribedSubredditViewModel extends AndroidViewModel {
 
     public void insert(SubscribedSubredditData subscribedSubredditData) {
         mSubscribedSubredditRepository.insert(subscribedSubredditData);
+    }
+
+    public void setSearchQuery(String searchQuery) {
+        searchQueryLiveData.postValue(searchQuery);
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {

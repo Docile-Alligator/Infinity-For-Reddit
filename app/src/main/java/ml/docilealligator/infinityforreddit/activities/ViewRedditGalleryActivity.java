@@ -58,6 +58,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
 
     public static final String EXTRA_REDDIT_GALLERY = "ERG";
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
+    public static final String EXTRA_IS_NSFW = "EIN";
 
     @BindView(R.id.hauler_view_view_reddit_gallery_activity)
     HaulerView haulerView;
@@ -71,6 +72,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ArrayList<Post.Gallery> gallery;
     private String subredditName;
+    private boolean isNsfw;
     private boolean useBottomAppBar;
 
     @Override
@@ -156,6 +158,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
             return;
         }
         subredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME);
+        isNsfw = getIntent().getBooleanExtra(EXTRA_IS_NSFW, false);
 
         if (sharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_VERTICALLY_TO_GO_BACK_FROM_MEDIA, true)) {
             haulerView.setOnDragDismissedListener(dragDirection -> {
@@ -301,6 +304,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
                 bundle.putString(ViewRedditGalleryVideoFragment.EXTRA_SUBREDDIT_NAME, subredditName);
                 bundle.putInt(ViewRedditGalleryVideoFragment.EXTRA_INDEX, position);
                 bundle.putInt(ViewRedditGalleryVideoFragment.EXTRA_MEDIA_COUNT, gallery.size());
+                bundle.putBoolean(ViewRedditGalleryVideoFragment.EXTRA_IS_NSFW, isNsfw);
                 fragment.setArguments(bundle);
                 return fragment;
             } else {
@@ -310,6 +314,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
                 bundle.putString(ViewRedditGalleryImageOrGifFragment.EXTRA_SUBREDDIT_NAME, subredditName);
                 bundle.putInt(ViewRedditGalleryImageOrGifFragment.EXTRA_INDEX, position);
                 bundle.putInt(ViewRedditGalleryImageOrGifFragment.EXTRA_MEDIA_COUNT, gallery.size());
+                bundle.putBoolean(ViewRedditGalleryImageOrGifFragment.EXTRA_IS_NSFW, false);
                 fragment.setArguments(bundle);
                 return fragment;
             }

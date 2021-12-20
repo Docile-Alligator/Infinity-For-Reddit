@@ -130,6 +130,7 @@ public class ViewVideoActivity extends AppCompatActivity {
     public static final String EXTRA_V_REDD_IT_URL = "EVRIU";
     public static final String EXTRA_STREAMABLE_SHORT_CODE = "ESSC";
     public static final String EXTRA_IS_NSFW = "EIN";
+    public static final int VIDEO_TYPE_IMGUR = 7;
     public static final int VIDEO_TYPE_GIF_VARIANT = 6;
     public static final int VIDEO_TYPE_STREAMABLE = 5;
     public static final int VIDEO_TYPE_V_REDD_IT = 4;
@@ -501,9 +502,13 @@ public class ViewVideoActivity extends AppCompatActivity {
                 player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
                 preparePlayer(savedInstanceState);
             }
-        } else if (videoType == VIDEO_TYPE_DIRECT) {
+        } else if (videoType == VIDEO_TYPE_DIRECT || videoType == VIDEO_TYPE_IMGUR) {
             videoDownloadUrl = mVideoUri.toString();
-            videoFileName = FilenameUtils.getName(videoDownloadUrl);
+            if (videoType == VIDEO_TYPE_DIRECT) {
+                videoFileName = FilenameUtils.getName(videoDownloadUrl);
+            } else {
+                videoFileName = "imgur-" + FilenameUtils.getName(videoDownloadUrl);
+            }
             // Produces DataSource instances through which media data is loaded.
             dataSourceFactory = new CacheDataSourceFactory(mSimpleCache,
                     new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "Infinity")));
@@ -713,6 +718,22 @@ public class ViewVideoActivity extends AppCompatActivity {
                                             videoFileName = "Redgifs-" + gfycatId + ".mp4";
                                         }
                                         loadGfycatOrRedgifsVideo(redgifsRetrofit, gfycatId, savedInstanceState, false);
+                                    } else if (post.isStreamable()) {
+                                        videoType = VIDEO_TYPE_STREAMABLE;
+                                        String shortCode = post.getStreamableShortCode();
+                                        videoFileName = "Streamable-" + shortCode + ".mp4";
+                                        loadStreamableVideo(shortCode, savedInstanceState);
+                                    } else if (post.isImgur()) {
+                                        mVideoUri = Uri.parse(post.getVideoUrl());
+                                        videoDownloadUrl = post.getVideoDownloadUrl();
+                                        videoType = VIDEO_TYPE_IMGUR;
+                                        videoFileName = "imgur-" + FilenameUtils.getName(videoDownloadUrl);
+                                        // Produces DataSource instances through which media data is loaded.
+                                        dataSourceFactory = new CacheDataSourceFactory(mSimpleCache,
+                                                new DefaultHttpDataSourceFactory(Util.getUserAgent(ViewVideoActivity.this, "Infinity")));
+                                        // Prepare the player with the source.
+                                        player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
+                                        preparePlayer(savedInstanceState);
                                     } else {
                                         progressBar.setVisibility(View.GONE);
                                         if (post.getVideoUrl() != null) {
@@ -916,11 +937,13 @@ public class ViewVideoActivity extends AppCompatActivity {
             intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
             intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, videoFileName);
             intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
+            intent.putExtra(DownloadMediaService.EXTRA_IS_NSFW, isNSFW);
         } else {
             intent = new Intent(this, DownloadRedditVideoService.class);
             intent.putExtra(DownloadRedditVideoService.EXTRA_VIDEO_URL, videoDownloadUrl);
             intent.putExtra(DownloadRedditVideoService.EXTRA_POST_ID, id);
             intent.putExtra(DownloadRedditVideoService.EXTRA_SUBREDDIT, subredditName);
+            intent.putExtra(DownloadRedditVideoService.EXTRA_IS_NSFW, isNSFW);
         }
         ContextCompat.startForegroundService(this, intent);
         Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();

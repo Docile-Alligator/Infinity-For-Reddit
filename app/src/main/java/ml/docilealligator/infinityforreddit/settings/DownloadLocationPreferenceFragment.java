@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit.settings;
 
+import static android.content.Intent.ACTION_OPEN_DOCUMENT_TREE;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -18,16 +20,16 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
-import static android.content.Intent.ACTION_OPEN_DOCUMENT_TREE;
-
 public class DownloadLocationPreferenceFragment extends PreferenceFragmentCompat {
     private static final int IMAGE_DOWNLOAD_LOCATION_REQUEST_CODE = 10;
     private static final int GIF_DOWNLOAD_LOCATION_REQUEST_CODE = 11;
     private static final int VIDEO_DOWNLOAD_LOCATION_REQUEST_CODE = 12;
+    private static final int NSFW_DOWNLOAD_LOCATION_REQUEST_CODE = 13;
 
     Preference imageDownloadLocationPreference;
     Preference gifDownloadLocationPreference;
     Preference videoDownloadLocationPreference;
+    Preference nsfwDownloadLocationPreference;
     private Activity activity;
     @Inject
     @Named("default")
@@ -40,7 +42,21 @@ public class DownloadLocationPreferenceFragment extends PreferenceFragmentCompat
         imageDownloadLocationPreference = findPreference(SharedPreferencesUtils.IMAGE_DOWNLOAD_LOCATION);
         gifDownloadLocationPreference = findPreference(SharedPreferencesUtils.GIF_DOWNLOAD_LOCATION);
         videoDownloadLocationPreference = findPreference(SharedPreferencesUtils.VIDEO_DOWNLOAD_LOCATION);
+        nsfwDownloadLocationPreference = findPreference(SharedPreferencesUtils.NSFW_DOWNLOAD_LOCATION);
 
+        if (nsfwDownloadLocationPreference != null) {
+            String downloadLocation = sharedPreferences.getString(SharedPreferencesUtils.NSFW_DOWNLOAD_LOCATION, "");
+            if (!downloadLocation.equals("")) {
+                nsfwDownloadLocationPreference.setSummary(downloadLocation);
+            }
+
+            nsfwDownloadLocationPreference.setOnPreferenceClickListener(preference -> {
+                Intent intent = new Intent(ACTION_OPEN_DOCUMENT_TREE);
+                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                startActivityForResult(intent, NSFW_DOWNLOAD_LOCATION_REQUEST_CODE);
+                return true;
+            });
+        }
         if (imageDownloadLocationPreference != null) {
             String downloadLocation = sharedPreferences.getString(SharedPreferencesUtils.IMAGE_DOWNLOAD_LOCATION, "");
             if (!downloadLocation.equals("")) {
@@ -105,6 +121,12 @@ public class DownloadLocationPreferenceFragment extends PreferenceFragmentCompat
                 sharedPreferences.edit().putString(SharedPreferencesUtils.VIDEO_DOWNLOAD_LOCATION, data.getDataString()).apply();
                 if (videoDownloadLocationPreference != null) {
                     videoDownloadLocationPreference.setSummary(data.getDataString());
+                }
+            } else if (requestCode == NSFW_DOWNLOAD_LOCATION_REQUEST_CODE) {
+                activity.getContentResolver().takePersistableUriPermission(data.getData(), Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                sharedPreferences.edit().putString(SharedPreferencesUtils.NSFW_DOWNLOAD_LOCATION, data.getDataString()).apply();
+                if (nsfwDownloadLocationPreference != null) {
+                    nsfwDownloadLocationPreference.setSummary(data.getDataString());
                 }
             }
         }

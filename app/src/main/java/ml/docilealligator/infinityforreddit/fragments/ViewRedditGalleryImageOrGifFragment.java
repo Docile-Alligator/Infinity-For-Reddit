@@ -75,6 +75,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     public static final String EXTRA_INDEX = "EI";
     public static final String EXTRA_MEDIA_COUNT = "EMC";
+    public static final String EXTRA_IS_NSFW = "EIN";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
 
     @BindView(R.id.progress_bar_view_reddit_gallery_image_or_gif_fragment)
@@ -108,6 +109,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     private RequestManager glide;
     private Post.Gallery media;
     private String subredditName;
+    private boolean isNsfw;
     private boolean isDownloading = false;
     private boolean isActionBarHidden = false;
     private boolean isUseBottomCaption = false;
@@ -132,6 +134,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 
         media = getArguments().getParcelable(EXTRA_REDDIT_GALLERY_MEDIA);
         subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
+        isNsfw = getArguments().getBoolean(EXTRA_IS_NSFW, false);
         glide = Glide.with(activity);
 
         imageView.setImageViewFactory(new GlideImageViewFactory());
@@ -398,6 +401,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
         intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, media.mediaType == Post.Gallery.TYPE_GIF ? DownloadMediaService.EXTRA_MEDIA_TYPE_GIF: DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
         intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, media.fileName);
         intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
+        intent.putExtra(DownloadMediaService.EXTRA_IS_NSFW, isNsfw);
         ContextCompat.startForegroundService(activity, intent);
         Toast.makeText(activity, R.string.download_started, Toast.LENGTH_SHORT).show();
     }

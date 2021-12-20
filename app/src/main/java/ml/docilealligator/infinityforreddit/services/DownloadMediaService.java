@@ -57,6 +57,7 @@ public class DownloadMediaService extends Service {
     public static final String EXTRA_FILE_NAME = "EFN";
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     public static final String EXTRA_MEDIA_TYPE = "EIG";
+    public static final String EXTRA_IS_NSFW = "EIN";
     public static final int EXTRA_MEDIA_TYPE_IMAGE = 0;
     public static final int EXTRA_MEDIA_TYPE_GIF = 1;
     public static final int EXTRA_MEDIA_TYPE_VIDEO = 2;
@@ -101,6 +102,7 @@ public class DownloadMediaService extends Service {
             String fileName = intent.getString(EXTRA_FILE_NAME);
             String subredditName = intent.getString(EXTRA_SUBREDDIT_NAME);
             int mediaType = intent.getInt(EXTRA_MEDIA_TYPE, EXTRA_MEDIA_TYPE_IMAGE);
+            boolean isNsfw = intent.getBoolean(EXTRA_IS_NSFW, false);
             String mimeType = mediaType == EXTRA_MEDIA_TYPE_VIDEO ? "video/*" : "image/*";
 
             final DownloadProgressResponseBody.ProgressListener progressListener = new DownloadProgressResponseBody.ProgressListener() {
@@ -139,7 +141,7 @@ public class DownloadMediaService extends Service {
             try {
                 response = retrofit.create(DownloadFile.class).downloadFile(fileUrl).execute();
                 if (response.isSuccessful() && response.body() != null) {
-                    String destinationFileDirectory = getDownloadLocation(mediaType);
+                    String destinationFileDirectory = getDownloadLocation(mediaType, isNsfw);
                     if (destinationFileDirectory.equals("")) {
                         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
                             File directory = getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
@@ -462,7 +464,10 @@ public class DownloadMediaService extends Service {
         }
     }
 
-    private String getDownloadLocation(int mediaType) {
+    private String getDownloadLocation(int mediaType, boolean isNsfw) {
+        if (isNsfw && mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_NSFW_MEDIA_IN_DIFFERENT_FOLDER, false)) {
+            return mSharedPreferences.getString(SharedPreferencesUtils.NSFW_DOWNLOAD_LOCATION, "");
+        }
         switch (mediaType) {
             case EXTRA_MEDIA_TYPE_GIF:
                 return mSharedPreferences.getString(SharedPreferencesUtils.GIF_DOWNLOAD_LOCATION, "");

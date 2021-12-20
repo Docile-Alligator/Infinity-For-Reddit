@@ -198,4 +198,8 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
             mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
         }
     }
+
+    public void changeSearchQuery(String searchQuery) {
+        mSubscribedSubredditViewModel.setSearchQuery(searchQuery);
+    }
 }

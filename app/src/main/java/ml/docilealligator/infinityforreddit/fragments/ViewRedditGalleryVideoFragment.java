@@ -63,6 +63,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     public static final String EXTRA_INDEX = "EI";
     public static final String EXTRA_MEDIA_COUNT = "EMC";
+    public static final String EXTRA_IS_NSFW = "EIN";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
     private static final String IS_MUTE_STATE = "IMS";
     private static final String POSITION_STATE = "PS";
@@ -80,6 +81,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
     private ViewRedditGalleryActivity activity;
     private Post.Gallery galleryVideo;
     private String subredditName;
+    private boolean isNsfw;
     private SimpleExoPlayer player;
     private DataSource.Factory dataSourceFactory;
     private boolean wasPlaying = false;
@@ -110,6 +112,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
 
         galleryVideo = getArguments().getParcelable(EXTRA_REDDIT_GALLERY_VIDEO);
         subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
+        isNsfw = getArguments().getBoolean(EXTRA_IS_NSFW, false);
 
         if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.VIDEO_PLAYER_IGNORE_NAV_BAR, false)) {
             if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || getResources().getBoolean(R.bool.isTablet)) {
@@ -238,6 +241,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
         intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
         intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, galleryVideo.fileName);
         intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
+        intent.putExtra(DownloadMediaService.EXTRA_IS_NSFW, isNsfw);
         ContextCompat.startForegroundService(activity, intent);
         Toast.makeText(activity, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
