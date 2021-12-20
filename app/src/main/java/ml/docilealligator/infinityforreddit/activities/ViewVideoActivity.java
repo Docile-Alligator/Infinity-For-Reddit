@@ -721,6 +721,22 @@ public class ViewVideoActivity extends AppCompatActivity {
                                             videoFileName = "Redgifs-" + gfycatId + ".mp4";
                                         }
                                         loadGfycatOrRedgifsVideo(redgifsRetrofit, gfycatId, savedInstanceState, false);
+                                    } else if (post.isStreamable()) {
+                                        videoType = VIDEO_TYPE_STREAMABLE;
+                                        String shortCode = post.getStreamableShortCode();
+                                        videoFileName = "Streamable-" + shortCode + ".mp4";
+                                        loadStreamableVideo(shortCode, savedInstanceState);
+                                    } else if (post.isImgur()) {
+                                        mVideoUri = Uri.parse(post.getVideoUrl());
+                                        videoDownloadUrl = post.getVideoDownloadUrl();
+                                        videoType = VIDEO_TYPE_IMGUR;
+                                        videoFileName = "imgur-" + FilenameUtils.getName(videoDownloadUrl);
+                                        // Produces DataSource instances through which media data is loaded.
+                                        dataSourceFactory = new CacheDataSourceFactory(mSimpleCache,
+                                                new DefaultHttpDataSourceFactory(Util.getUserAgent(ViewVideoActivity.this, "Infinity")));
+                                        // Prepare the player with the source.
+                                        player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
+                                        preparePlayer(savedInstanceState);
                                     } else {
                                         progressBar.setVisibility(View.GONE);
                                         if (post.getVideoUrl() != null) {

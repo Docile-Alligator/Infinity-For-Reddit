@@ -265,7 +265,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 url = url.replaceFirst("http://" , "https://");
                                 url = url.substring(0, url.length() - 5) + ".mp4";
                                 Intent intent = new Intent(this, ViewVideoActivity.class);
-                                intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_DIRECT);
+                                intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_IMGUR);
                                 intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, getIntent().getBooleanExtra(EXTRA_IS_NSFW, false));
                                 intent.setData(Uri.parse(url));
                                 startActivity(intent);
