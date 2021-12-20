@@ -17,9 +17,10 @@
 
     <item
         android:id="@+id/action_download_gif_variant_original_view_video_activity"
+        android:icon="@drawable/ic_file_download_toolbar_white_24dp"
         android:orderInCategory="3"
         android:title="@string/action_download_gif"
         android:visible="false"
-        android:icon="@drawable/ic_file_download_toolbar_white_24dp"
+        app:iconTint="?attr/primaryTextColor"
         app:showAsAction="never" />
 </menu>
