@@ -24,9 +24,33 @@ public class DataSavingModePreferenceFragment extends PreferenceFragmentCompat {
         SwitchPreference disableImagePreviewPreference = findPreference(SharedPreferencesUtils.DISABLE_IMAGE_PREVIEW);
         SwitchPreference onlyDisablePreviewInVideoAndGifPostsPreference = findPreference(SharedPreferencesUtils.ONLY_DISABLE_PREVIEW_IN_VIDEO_AND_GIF_POSTS);
 
+
         if (dataSavingModeListPreference != null) {
+            if (dataSavingModeListPreference.getValue().equals("0")) {
+                if (onlyDisablePreviewInVideoAndGifPostsPreference != null) {
+                    onlyDisablePreviewInVideoAndGifPostsPreference.setEnabled(false);
+                }
+                if (disableImagePreviewPreference != null) {
+                    disableImagePreviewPreference.setEnabled(false);
+                }
+            }
             dataSavingModeListPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new ChangeDataSavingModeEvent((String) newValue));
+                if (newValue.equals("0")) {
+                    if (onlyDisablePreviewInVideoAndGifPostsPreference != null) {
+                        onlyDisablePreviewInVideoAndGifPostsPreference.setEnabled(false);
+                    }
+                    if (disableImagePreviewPreference != null) {
+                        disableImagePreviewPreference.setEnabled(false);
+                    }
+                } else {
+                    if (onlyDisablePreviewInVideoAndGifPostsPreference != null) {
+                        onlyDisablePreviewInVideoAndGifPostsPreference.setEnabled(true);
+                    }
+                    if (disableImagePreviewPreference != null) {
+                        disableImagePreviewPreference.setEnabled(true);
+                    }
+                }
                 return true;
             });
         }
@@ -34,6 +58,12 @@ public class DataSavingModePreferenceFragment extends PreferenceFragmentCompat {
         if (disableImagePreviewPreference != null) {
             disableImagePreviewPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new ChangeDisableImagePreviewEvent((Boolean) newValue));
+                if ((Boolean) newValue) {
+                    EventBus.getDefault().post(new ChangeOnlyDisablePreviewInVideoAndGifPostsEvent(false));
+                    if (onlyDisablePreviewInVideoAndGifPostsPreference != null) {
+                        onlyDisablePreviewInVideoAndGifPostsPreference.setChecked(false);
+                    }
+                }
                 return true;
             });
         }
@@ -41,6 +71,12 @@ public class DataSavingModePreferenceFragment extends PreferenceFragmentCompat {
         if (onlyDisablePreviewInVideoAndGifPostsPreference != null) {
             onlyDisablePreviewInVideoAndGifPostsPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new ChangeOnlyDisablePreviewInVideoAndGifPostsEvent((Boolean) newValue));
+                if ((Boolean) newValue) {
+                    EventBus.getDefault().post(new ChangeDisableImagePreviewEvent(false));
+                    if (disableImagePreviewPreference != null) {
+                        disableImagePreviewPreference.setChecked(false);
+                    }
+                }
                 return true;
             });
         }
