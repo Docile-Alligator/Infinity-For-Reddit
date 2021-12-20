@@ -52,6 +52,7 @@ public class Post implements Parcelable {
     private String videoDownloadUrl;
     private String gfycatId;
     private String streamableShortCode;
+    private boolean isImgur;
     private boolean isGfycat;
     private boolean isRedgifs;
     private boolean isStreamable;
@@ -175,6 +176,7 @@ public class Post implements Parcelable {
         videoDownloadUrl = in.readString();
         gfycatId = in.readString();
         streamableShortCode = in.readString();
+        isImgur = in.readByte() != 0;
         isGfycat = in.readByte() != 0;
         isRedgifs = in.readByte() != 0;
         isStreamable = in.readByte() != 0;
@@ -331,6 +333,14 @@ public class Post implements Parcelable {
 
     public void setStreamableShortCode(String shortCode) {
         this.streamableShortCode = shortCode;
+    }
+
+    public void setIsImgur(boolean isImgur) {
+        this.isImgur = isImgur;
+    }
+
+    public boolean isImgur() {
+        return isImgur;
     }
 
     public boolean isGfycat() {
@@ -553,6 +563,7 @@ public class Post implements Parcelable {
         parcel.writeString(videoDownloadUrl);
         parcel.writeString(gfycatId);
         parcel.writeString(streamableShortCode);
+        parcel.writeByte((byte) (isImgur ? 1 : 0));
         parcel.writeByte((byte) (isGfycat ? 1 : 0));
         parcel.writeByte((byte) (isRedgifs ? 1 : 0));
         parcel.writeByte((byte) (isStreamable ? 1 : 0));

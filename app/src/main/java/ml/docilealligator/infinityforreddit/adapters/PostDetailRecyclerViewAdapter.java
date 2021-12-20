@@ -1657,7 +1657,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 if (canStartActivity) {
                     canStartActivity = false;
                     Intent intent = new Intent(mActivity, ViewVideoActivity.class);
-                    if (mPost.isGfycat()) {
+                    if (mPost.isImgur()) {
+                        intent.setData(Uri.parse(mPost.getVideoUrl()));
+                        intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_IMGUR);
+                    } else if (mPost.isGfycat()) {
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
                         intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, mPost.getGfycatId());
                         if (mPost.isLoadGfycatOrStreamableVideoSuccess()) {
@@ -1882,7 +1885,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     canStartActivity = false;
                     if (mPost.getPostType() == Post.VIDEO_TYPE) {
                         Intent intent = new Intent(mActivity, ViewVideoActivity.class);
-                        if (mPost.isGfycat()) {
+                        if (mPost.isImgur()) {
+                            intent.setData(Uri.parse(mPost.getVideoUrl()));
+                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_IMGUR);
+                        } else if (mPost.isGfycat()) {
                             intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
                             intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, mPost.getGfycatId());
                         } else if (mPost.isRedgifs()) {

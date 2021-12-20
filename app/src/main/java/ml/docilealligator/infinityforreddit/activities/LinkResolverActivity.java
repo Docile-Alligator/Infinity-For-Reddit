@@ -261,6 +261,8 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 startActivity(intent);
                             } else if (path.endsWith("gifv")) {
                                 String url = uri.toString();
+                                // Insecure imgur links won't load
+                                url = url.replaceFirst("http://" , "https://");
                                 url = url.substring(0, url.length() - 5) + ".mp4";
                                 Intent intent = new Intent(this, ViewVideoActivity.class);
                                 intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_DIRECT);
