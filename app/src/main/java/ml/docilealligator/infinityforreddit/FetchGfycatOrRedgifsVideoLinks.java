@@ -60,7 +60,7 @@ public class FetchGfycatOrRedgifsVideoLinks {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                fetchGfycatOrRedgifsVideoLinksListener.failed(-1);
+                handler.post(() -> fetchGfycatOrRedgifsVideoLinksListener.failed(-1));
             }
         });
     }
