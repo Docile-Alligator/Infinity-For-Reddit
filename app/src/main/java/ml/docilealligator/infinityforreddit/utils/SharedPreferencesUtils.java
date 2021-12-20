@@ -130,9 +130,9 @@ public class SharedPreferencesUtils {
     public static final String IMAGE_DOWNLOAD_LOCATION = "image_download_location";
     public static final String GIF_DOWNLOAD_LOCATION = "gif_download_location";
     public static final String VIDEO_DOWNLOAD_LOCATION = "video_download_location";
-    public static final String NSFW_DOWNLOAD_LOCATION = "nsfw_download_location";
-    public static final String SEPARATE_NSFW_FOLDER = "separate_nsfw_folder";
     public static final String SEPARATE_FOLDER_FOR_EACH_SUBREDDIT = "separate_folder_for_each_subreddit";
+    public static final String SAVE_NSFW_MEDIA_IN_DIFFERENT_FOLDER = "save_nsfw_media_in_different_folder";
+    public static final String NSFW_DOWNLOAD_LOCATION = "nsfw_download_location";
     public static final String VIBRATE_WHEN_ACTION_TRIGGERED = "vibrate_when_action_triggered";
     public static final String DISABLE_SWIPING_BETWEEN_TABS = "disable_swiping_between_tabs";
     public static final String ENABLE_SWIPE_ACTION = "enable_swipe_action";

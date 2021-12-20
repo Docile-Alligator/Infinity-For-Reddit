@@ -465,7 +465,7 @@ public class DownloadMediaService extends Service {
     }
 
     private String getDownloadLocation(int mediaType, boolean isNsfw) {
-        if (isNsfw && mSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_NSFW_FOLDER, false)) {
+        if (isNsfw && mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_NSFW_MEDIA_IN_DIFFERENT_FOLDER, false)) {
             return mSharedPreferences.getString(SharedPreferencesUtils.NSFW_DOWNLOAD_LOCATION, "");
         }
         switch (mediaType) {

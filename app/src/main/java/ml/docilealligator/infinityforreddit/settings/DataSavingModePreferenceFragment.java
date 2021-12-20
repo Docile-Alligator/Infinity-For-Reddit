@@ -28,27 +28,27 @@ public class DataSavingModePreferenceFragment extends PreferenceFragmentCompat {
         if (dataSavingModeListPreference != null) {
             if (dataSavingModeListPreference.getValue().equals("0")) {
                 if (onlyDisablePreviewInVideoAndGifPostsPreference != null) {
-                    onlyDisablePreviewInVideoAndGifPostsPreference.setEnabled(false);
+                    onlyDisablePreviewInVideoAndGifPostsPreference.setVisible(false);
                 }
                 if (disableImagePreviewPreference != null) {
-                    disableImagePreviewPreference.setEnabled(false);
+                    disableImagePreviewPreference.setVisible(false);
                 }
             }
             dataSavingModeListPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new ChangeDataSavingModeEvent((String) newValue));
                 if (newValue.equals("0")) {
                     if (onlyDisablePreviewInVideoAndGifPostsPreference != null) {
-                        onlyDisablePreviewInVideoAndGifPostsPreference.setEnabled(false);
+                        onlyDisablePreviewInVideoAndGifPostsPreference.setVisible(false);
                     }
                     if (disableImagePreviewPreference != null) {
-                        disableImagePreviewPreference.setEnabled(false);
+                        disableImagePreviewPreference.setVisible(false);
                     }
                 } else {
                     if (onlyDisablePreviewInVideoAndGifPostsPreference != null) {
-                        onlyDisablePreviewInVideoAndGifPostsPreference.setEnabled(true);
+                        onlyDisablePreviewInVideoAndGifPostsPreference.setVisible(true);
                     }
                     if (disableImagePreviewPreference != null) {
-                        disableImagePreviewPreference.setEnabled(true);
+                        disableImagePreviewPreference.setVisible(true);
                     }
                 }
                 return true;

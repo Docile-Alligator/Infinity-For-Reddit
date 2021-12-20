@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit.settings;
 
+import static android.content.Intent.ACTION_OPEN_DOCUMENT_TREE;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -17,8 +19,6 @@ import javax.inject.Named;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-
-import static android.content.Intent.ACTION_OPEN_DOCUMENT_TREE;
 
 public class DownloadLocationPreferenceFragment extends PreferenceFragmentCompat {
     private static final int IMAGE_DOWNLOAD_LOCATION_REQUEST_CODE = 10;
@@ -121,6 +121,12 @@ public class DownloadLocationPreferenceFragment extends PreferenceFragmentCompat
                 sharedPreferences.edit().putString(SharedPreferencesUtils.VIDEO_DOWNLOAD_LOCATION, data.getDataString()).apply();
                 if (videoDownloadLocationPreference != null) {
                     videoDownloadLocationPreference.setSummary(data.getDataString());
+                }
+            } else if (requestCode == NSFW_DOWNLOAD_LOCATION_REQUEST_CODE) {
+                activity.getContentResolver().takePersistableUriPermission(data.getData(), Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                sharedPreferences.edit().putString(SharedPreferencesUtils.NSFW_DOWNLOAD_LOCATION, data.getDataString()).apply();
+                if (nsfwDownloadLocationPreference != null) {
+                    nsfwDownloadLocationPreference.setSummary(data.getDataString());
                 }
             }
         }

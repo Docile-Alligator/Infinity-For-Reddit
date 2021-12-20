@@ -144,7 +144,7 @@ public class DownloadRedditVideoService extends Service {
                     if (videoResponse.isSuccessful() && videoResponse.body() != null) {
                         String externalCacheDirectoryPath = externalCacheDirectory.getAbsolutePath() + "/";
                         String destinationFileDirectory;
-                        if (isNsfw && sharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_NSFW_FOLDER, false)) {
+                        if (isNsfw && sharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_NSFW_MEDIA_IN_DIFFERENT_FOLDER, false)) {
                             destinationFileDirectory = sharedPreferences.getString(SharedPreferencesUtils.NSFW_DOWNLOAD_LOCATION, "");
                         } else {
                             destinationFileDirectory = sharedPreferences.getString(SharedPreferencesUtils.VIDEO_DOWNLOAD_LOCATION, "");
