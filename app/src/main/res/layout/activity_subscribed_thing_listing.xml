@@ -29,7 +29,21 @@
                 app:layout_collapseMode="pin"
                 app:layout_scrollFlags="scroll|enterAlways"
                 app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:navigationIcon="?attr/homeAsUpIndicator" />
+                app:navigationIcon="?attr/homeAsUpIndicator">
+
+                <EditText
+                    android:id="@+id/search_edit_text_subscribed_thing_listing_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#00000000"
+                    android:gravity="top"
+                    android:hint="@string/search"
+                    android:maxLines="1"
+                    android:textSize="?attr/font_20"
+                    android:fontFamily="?attr/font_family"
+                    android:visibility="gone" />
+
+            </androidx.appcompat.widget.Toolbar>
 
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 

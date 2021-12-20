@@ -1,15 +1,21 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -79,6 +85,8 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.toolbar_subscribed_thing_listing_activity)
     Toolbar toolbar;
+    @BindView(R.id.search_edit_text_subscribed_thing_listing_activity)
+    EditText searchEditText;
     @BindView(R.id.tab_layout_subscribed_thing_listing_activity)
     TabLayout tabLayout;
     @BindView(R.id.view_pager_subscribed_thing_listing_activity)
@@ -107,6 +115,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     private boolean mInsertMultiredditSuccess = false;
     private boolean showMultiReddits = false;
     private SectionsPagerAdapter sectionsPagerAdapter;
+    private Menu mMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,6 +174,23 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         } else {
             showMultiReddits = getIntent().getBooleanExtra(EXTRA_SHOW_MULTIREDDITS, false);
         }
+
+        searchEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                sectionsPagerAdapter.changeSearchQuery(editable.toString());
+            }
+        });
         initializeViewPagerAndLoadSubscriptions();
     }
 
@@ -184,6 +210,8 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
         applyTabLayoutTheme(tabLayout);
         applyFABTheme(fab);
+        searchEditText.setTextColor(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
+        searchEditText.setHintTextColor(mCustomThemeWrapper.getToolbarSecondaryTextColor());
     }
 
     private void initializeViewPagerAndLoadSubscriptions() {
@@ -223,13 +251,59 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.subscribed_thing_listing_activity, menu);
+        mMenu = menu;
+        applyMenuItemTheme(menu);
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
+        if (item.getItemId() == R.id.action_search_subscribed_thing_listing_activity) {
+            item.setVisible(false);
+            searchEditText.setVisibility(View.VISIBLE);
+            searchEditText.requestFocus();
+            if (searchEditText.requestFocus()) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.showSoftInput(searchEditText, InputMethodManager.SHOW_IMPLICIT);
+            }
+            return true;
+        } else if (item.getItemId() == android.R.id.home) {
+            if (searchEditText.getVisibility() == View.VISIBLE) {
+                View view = this.getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+                searchEditText.setVisibility(View.GONE);
+                searchEditText.setText("");
+                mMenu.findItem(R.id.action_search_subscribed_thing_listing_activity).setVisible(true);
+                sectionsPagerAdapter.changeSearchQuery("");
+                return true;
+            }
             finish();
             return true;
         }
 
         return false;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (searchEditText.getVisibility() == View.VISIBLE) {
+            View view = this.getCurrentFocus();
+            if (view != null) {
+                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
+            searchEditText.setVisibility(View.GONE);
+            searchEditText.setText("");
+            mMenu.findItem(R.id.action_search_subscribed_thing_listing_activity).setVisible(true);
+            sectionsPagerAdapter.changeSearchQuery("");
+        } else {
+            super.onBackPressed();
+        }
     }
 
     @Override
@@ -481,6 +555,18 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                 followedUsersListingFragment.goBackToTop();
             } else {
                 multiRedditListingFragment.goBackToTop();
+            }
+        }
+
+        void changeSearchQuery(String searchQuery) {
+            if (subscribedSubredditsListingFragment != null) {
+                subscribedSubredditsListingFragment.changeSearchQuery(searchQuery);
+            }
+            if (followedUsersListingFragment != null) {
+
+            }
+            if (multiRedditListingFragment != null) {
+
             }
         }
     }

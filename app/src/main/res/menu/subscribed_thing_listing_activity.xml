@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_search_subscribed_thing_listing_activity"
+        android:orderInCategory="1"
+        android:title="@string/action_search"
+        android:icon="@drawable/ic_search_toolbar_24dp"
+        app:showAsAction="ifRoom" />
+</menu>

@@ -12,19 +12,21 @@ public class SubscribedSubredditRepository {
     private SubscribedSubredditDao mSubscribedSubredditDao;
     private LiveData<List<SubscribedSubredditData>> mAllSubscribedSubreddits;
     private LiveData<List<SubscribedSubredditData>> mAllFavoriteSubscribedSubreddits;
+    private String mAccountName;
 
     SubscribedSubredditRepository(RedditDataRoomDatabase redditDataRoomDatabase, String accountName) {
+        mAccountName = accountName;
         mSubscribedSubredditDao = redditDataRoomDatabase.subscribedSubredditDao();
         mAllSubscribedSubreddits = mSubscribedSubredditDao.getAllSubscribedSubreddits(accountName);
         mAllFavoriteSubscribedSubreddits = mSubscribedSubredditDao.getAllFavoriteSubscribedSubreddits(accountName);
     }
 
-    LiveData<List<SubscribedSubredditData>> getAllSubscribedSubreddits() {
-        return mAllSubscribedSubreddits;
+    LiveData<List<SubscribedSubredditData>> getAllSubscribedSubredditsWithSearchQuery(String searchQuery) {
+        return mSubscribedSubredditDao.getAllSubscribedSubredditsWithSearchQuery(mAccountName, searchQuery);
     }
 
-    public LiveData<List<SubscribedSubredditData>> getAllFavoriteSubscribedSubreddits() {
-        return mAllFavoriteSubscribedSubreddits;
+    public LiveData<List<SubscribedSubredditData>> getAllFavoriteSubscribedSubredditsWithSearchQuery(String searchQuery) {
+        return mSubscribedSubredditDao.getAllFavoriteSubscribedSubredditsWithSearchQuery(mAccountName, searchQuery);
     }
 
     public void insert(SubscribedSubredditData subscribedSubredditData) {
