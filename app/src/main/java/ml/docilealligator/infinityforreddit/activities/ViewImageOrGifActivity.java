@@ -83,6 +83,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     public static final String EXTRA_FILE_NAME_KEY = "EFNK";
     public static final String EXTRA_SUBREDDIT_OR_USERNAME_KEY = "ESOUK";
     public static final String EXTRA_POST_TITLE_KEY = "EPTK";
+    public static final String EXTRA_IS_NSFW = "EIN";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
     @BindView(R.id.progress_bar_view_image_or_gif_activity)
     ProgressBar mProgressBar;
@@ -112,6 +113,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     private String mImageFileName;
     private String mSubredditName;
     private boolean isGif = true;
+    private boolean isNsfw;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -165,6 +167,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         mImageFileName = intent.getStringExtra(EXTRA_FILE_NAME_KEY);
         String postTitle = intent.getStringExtra(EXTRA_POST_TITLE_KEY);
         mSubredditName = intent.getStringExtra(EXTRA_SUBREDDIT_OR_USERNAME_KEY);
+        isNsfw = intent.getBooleanExtra(EXTRA_IS_NSFW, false);
 
         boolean useBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.USE_BOTTOM_TOOLBAR_IN_MEDIA_VIEWER, false);
         if (postTitle != null) {
@@ -368,6 +371,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, isGif ? DownloadMediaService.EXTRA_MEDIA_TYPE_GIF : DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
         intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, mImageFileName);
         intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, mSubredditName);
+        intent.putExtra(DownloadMediaService.EXTRA_IS_NSFW, isNsfw);
         ContextCompat.startForegroundService(this, intent);
         Toast.makeText(this, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
