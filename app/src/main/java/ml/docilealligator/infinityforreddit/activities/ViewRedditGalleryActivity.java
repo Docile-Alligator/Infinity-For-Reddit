@@ -158,7 +158,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
             finish();
             return;
         }
-        postTitle = getIntent().getStringExtra(EXTRA_POST_TITLE_KEY);
+        postTitle = getIntent().getStringExtra(EXTRA_POST_TITLE);
         subredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME);
         isNsfw = getIntent().getBooleanExtra(EXTRA_IS_NSFW, false);
 
