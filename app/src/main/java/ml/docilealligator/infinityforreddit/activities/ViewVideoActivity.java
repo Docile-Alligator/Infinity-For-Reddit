@@ -175,6 +175,7 @@ public class ViewVideoActivity extends AppCompatActivity {
 
     private String videoDownloadUrl;
     private String videoFileName;
+    private String postTitle;
     private String subredditName;
     private String id;
     private boolean wasPlaying;
@@ -539,6 +540,7 @@ public class ViewVideoActivity extends AppCompatActivity {
             preparePlayer(savedInstanceState);
         } else {
             videoDownloadUrl = intent.getStringExtra(EXTRA_VIDEO_DOWNLOAD_URL);
+            postTitle = intent.getStringExtra(EXTRA_POST_TITLE);
             subredditName = intent.getStringExtra(EXTRA_SUBREDDIT);
             id = intent.getStringExtra(EXTRA_ID);
             videoFileName = subredditName + "-" + id + ".mp4";
@@ -914,13 +916,14 @@ public class ViewVideoActivity extends AppCompatActivity {
             intent = new Intent(this, DownloadMediaService.class);
             intent.putExtra(DownloadMediaService.EXTRA_URL, videoDownloadUrl);
             intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
-            intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, videoFileName);
+            intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, postTitle + "-" + videoFileName);
             intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
             intent.putExtra(DownloadMediaService.EXTRA_IS_NSFW, isNSFW);
         } else {
             intent = new Intent(this, DownloadRedditVideoService.class);
             intent.putExtra(DownloadRedditVideoService.EXTRA_VIDEO_URL, videoDownloadUrl);
             intent.putExtra(DownloadRedditVideoService.EXTRA_POST_ID, id);
+            intent.putExtra(DownloadRedditVideoService.EXTRA_POST_TITLE, postTitle);
             intent.putExtra(DownloadRedditVideoService.EXTRA_SUBREDDIT, subredditName);
             intent.putExtra(DownloadRedditVideoService.EXTRA_IS_NSFW, isNSFW);
         }

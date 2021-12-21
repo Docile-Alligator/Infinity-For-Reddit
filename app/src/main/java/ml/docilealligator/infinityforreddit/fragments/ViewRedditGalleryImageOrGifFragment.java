@@ -72,6 +72,7 @@ import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 
     public static final String EXTRA_REDDIT_GALLERY_MEDIA = "ERGM";
+    public static final String EXTRA_POST_TITLE = "EPT";
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     public static final String EXTRA_INDEX = "EI";
     public static final String EXTRA_MEDIA_COUNT = "EMC";
@@ -108,6 +109,8 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     private ViewRedditGalleryActivity activity;
     private RequestManager glide;
     private Post.Gallery media;
+    private String postTitle;
+    private int galleryIndex;
     private String subredditName;
     private boolean isNsfw;
     private boolean isDownloading = false;
@@ -133,6 +136,8 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
         setHasOptionsMenu(true);
 
         media = getArguments().getParcelable(EXTRA_REDDIT_GALLERY_MEDIA);
+        postTitle = getArguments().getString(EXTRA_POST_TITLE);
+        galleryIndex = getArguments().getInt(EXTRA_INDEX) + 1;
         subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
         isNsfw = getArguments().getBoolean(EXTRA_IS_NSFW, false);
         glide = Glide.with(activity);
@@ -399,7 +404,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
         Intent intent = new Intent(activity, DownloadMediaService.class);
         intent.putExtra(DownloadMediaService.EXTRA_URL, media.hasFallback() ? media.fallbackUrl : media.url); // Retrieve original instead of the one additionally compressed by reddit
         intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, media.mediaType == Post.Gallery.TYPE_GIF ? DownloadMediaService.EXTRA_MEDIA_TYPE_GIF: DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
-        intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, media.fileName);
+        intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, postTitle + "-" + galleryIndex + "-" + media.fileName);
         intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
         intent.putExtra(DownloadMediaService.EXTRA_IS_NSFW, isNsfw);
         ContextCompat.startForegroundService(activity, intent);

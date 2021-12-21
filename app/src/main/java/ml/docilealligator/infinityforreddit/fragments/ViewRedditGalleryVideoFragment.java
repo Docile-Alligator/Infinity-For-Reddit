@@ -59,6 +59,7 @@ import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 public class ViewRedditGalleryVideoFragment extends Fragment {
 
     public static final String EXTRA_REDDIT_GALLERY_VIDEO = "EIV";
+    public static final String EXTRA_POST_TITLE = "EPT";
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     public static final String EXTRA_INDEX = "EI";
     public static final String EXTRA_MEDIA_COUNT = "EMC";
@@ -79,6 +80,8 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
     ImageView downloadImageView;
     private ViewRedditGalleryActivity activity;
     private Post.Gallery galleryVideo;
+    private String postTitle;
+    private int galleryIndex;
     private String subredditName;
     private boolean isNsfw;
     private SimpleExoPlayer player;
@@ -110,6 +113,8 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
         activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
         galleryVideo = getArguments().getParcelable(EXTRA_REDDIT_GALLERY_VIDEO);
+        postTitle = getArguments().getString(EXTRA_POST_TITLE);
+        galleryIndex = getArguments().getInt(EXTRA_INDEX) + 1;
         subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
         isNsfw = getArguments().getBoolean(EXTRA_IS_NSFW, false);
 
@@ -243,7 +248,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
         Intent intent = new Intent(activity, DownloadMediaService.class);
         intent.putExtra(DownloadMediaService.EXTRA_URL, galleryVideo.url);
         intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
-        intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, galleryVideo.fileName);
+        intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, postTitle + "-" + galleryIndex + "-" + galleryVideo.fileName);
         intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
         intent.putExtra(DownloadMediaService.EXTRA_IS_NSFW, isNsfw);
         ContextCompat.startForegroundService(activity, intent);
