@@ -111,6 +111,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     private RequestManager glide;
     private String mImageUrl;
     private String mImageFileName;
+    private String mPostTitle;
     private String mSubredditName;
     private boolean isGif = true;
     private boolean isNsfw;
@@ -165,13 +166,13 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
             mImageUrl = intent.getStringExtra(EXTRA_IMAGE_URL_KEY);
         }
         mImageFileName = intent.getStringExtra(EXTRA_FILE_NAME_KEY);
-        String postTitle = intent.getStringExtra(EXTRA_POST_TITLE_KEY);
+        mPostTitle = intent.getStringExtra(EXTRA_POST_TITLE_KEY);
         mSubredditName = intent.getStringExtra(EXTRA_SUBREDDIT_OR_USERNAME_KEY);
         isNsfw = intent.getBooleanExtra(EXTRA_IS_NSFW, false);
 
         boolean useBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.USE_BOTTOM_TOOLBAR_IN_MEDIA_VIEWER, false);
-        if (postTitle != null) {
-            Spanned title = Html.fromHtml(String.format("<font color=\"#FFFFFF\"><small>%s</small></font>", postTitle));
+        if (mPostTitle != null) {
+            Spanned title = Html.fromHtml(String.format("<font color=\"#FFFFFF\"><small>%s</small></font>", mPostTitle));
             if (useBottomAppBar) {
                 titleTextView.setText(title);
             } else {
@@ -369,7 +370,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         Intent intent = new Intent(this, DownloadMediaService.class);
         intent.putExtra(DownloadMediaService.EXTRA_URL, mImageUrl);
         intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, isGif ? DownloadMediaService.EXTRA_MEDIA_TYPE_GIF : DownloadMediaService.EXTRA_MEDIA_TYPE_IMAGE);
-        intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, mImageFileName);
+        intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, mPostTitle + "-" + mImageFileName);
         intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, mSubredditName);
         intent.putExtra(DownloadMediaService.EXTRA_IS_NSFW, isNsfw);
         ContextCompat.startForegroundService(this, intent);

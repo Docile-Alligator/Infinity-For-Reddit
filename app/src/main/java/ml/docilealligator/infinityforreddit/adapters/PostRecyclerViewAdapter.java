@@ -1967,7 +1967,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             } else if (post.getPostType() == Post.IMAGE_TYPE) {
                 Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
                 intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, post.getUrl());
-                intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, post.getTitle() + "-" + post.getSubredditName()
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, post.getSubredditName()
                         + "-" + post.getId() + ".jpg");
                 intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, post.getTitle());
                 intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, post.getSubredditName());
@@ -1975,7 +1975,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 mActivity.startActivity(intent);
             } else if (post.getPostType() == Post.GIF_TYPE) {
                 Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
-                intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, post.getTitle() + "-" + post.getSubredditName()
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, post.getSubredditName()
                         + "-" + post.getId() + ".gif");
                 intent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, post.getVideoUrl());
                 intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, post.getTitle());
