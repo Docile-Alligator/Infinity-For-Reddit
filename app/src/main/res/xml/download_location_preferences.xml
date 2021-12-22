@@ -22,8 +22,7 @@
     <SwitchPreference
         app:defaultValue="false"
         app:key="save_nsfw_media_in_different_folder"
-        app:title="@string/settings_save_nsfw_media_in_different_folder_title"
-        app:summary="@string/settings_save_nsfw_media_in_different_folder_summary" />
+        app:title="@string/settings_save_nsfw_media_in_different_folder_title" />
 
     <Preference
         app:key="nsfw_download_location"
