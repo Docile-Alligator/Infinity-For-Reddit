@@ -111,21 +111,11 @@
                 android:maxLines="1"
                 android:ellipsize="end" />
 
-            <ImageView
-                android:id="@+id/download_image_view_exo_playback_control_view"
+            <androidx.appcompat.widget.ActionMenuView
+                android:id="@+id/bottom_action_menu_view_exo_playback_control_view"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:src="@drawable/ic_file_download_toolbar_white_24dp"
-                android:background="?attr/selectableItemBackgroundBorderless" />
-
-            <ImageView
-                android:id="@+id/playback_speed_image_view_exo_playback_control_view"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="16dp"
-                android:src="@drawable/ic_playback_speed_toolbar_24dp"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                android:layout_height="wrap_content">
+            </androidx.appcompat.widget.ActionMenuView>
 
         </LinearLayout>
 

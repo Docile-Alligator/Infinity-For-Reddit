@@ -48,6 +48,7 @@ import ml.docilealligator.infinityforreddit.font.FontFamily;
 import ml.docilealligator.infinityforreddit.font.FontStyle;
 import ml.docilealligator.infinityforreddit.font.TitleFontFamily;
 import ml.docilealligator.infinityforreddit.font.TitleFontStyle;
+import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryGifVariantFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryImageOrGifFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryVideoFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
@@ -286,7 +287,17 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
         @Override
         public Fragment getItem(int position) {
             Post.Gallery media = gallery.get(position);
-            if (media.mediaType == Post.Gallery.TYPE_VIDEO) {
+            if (media.mediaType == Post.Gallery.TYPE_VIDEO && media.isGifVariant()) {
+                ViewRedditGalleryGifVariantFragment fragment = new ViewRedditGalleryGifVariantFragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(ViewRedditGalleryVideoFragment.EXTRA_REDDIT_GALLERY_VIDEO, media);
+                bundle.putString(ViewRedditGalleryVideoFragment.EXTRA_SUBREDDIT_NAME, subredditName);
+                bundle.putInt(ViewRedditGalleryVideoFragment.EXTRA_INDEX, position);
+                bundle.putInt(ViewRedditGalleryVideoFragment.EXTRA_MEDIA_COUNT, gallery.size());
+                fragment.setArguments(bundle);
+                return fragment;
+            }
+            else if (media.mediaType == Post.Gallery.TYPE_VIDEO) {
                 ViewRedditGalleryVideoFragment fragment = new ViewRedditGalleryVideoFragment();
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(ViewRedditGalleryVideoFragment.EXTRA_REDDIT_GALLERY_VIDEO, media);

@@ -17,6 +17,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewImgurVideoFragment;
+import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryGifVariantFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryVideoFragment;
 
 public class PlaybackSpeedBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
@@ -131,6 +132,8 @@ public class PlaybackSpeedBottomSheetFragment extends LandscapeExpandedRoundedBo
                 ((ViewImgurVideoFragment) parentFragment).setPlaybackSpeed(playbackSpeed);
             } else if (parentFragment instanceof ViewRedditGalleryVideoFragment) {
                 ((ViewRedditGalleryVideoFragment) parentFragment).setPlaybackSpeed(playbackSpeed);
+            } else if (parentFragment instanceof ViewRedditGalleryGifVariantFragment) {
+                ((ViewRedditGalleryGifVariantFragment) parentFragment).setPlaybackSpeed(playbackSpeed);
             }
         }
     }

@@ -1,28 +1,29 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.media.AudioManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.view.menu.MenuBuilder;
 import androidx.appcompat.widget.ActionMenuView;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -32,11 +33,9 @@ import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -49,58 +48,68 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.ViewRedditGalleryActivity;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PlaybackSpeedBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
-public class ViewRedditGalleryVideoFragment extends Fragment {
+public class ViewRedditGalleryGifVariantFragment extends Fragment {
 
     public static final String EXTRA_REDDIT_GALLERY_VIDEO = "EIV";
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     public static final String EXTRA_INDEX = "EI";
     public static final String EXTRA_MEDIA_COUNT = "EMC";
-    public static final String EXTRA_IS_NSFW = "EIN";
     private static final int PERMISSION_REQUEST_WRITE_EXTERNAL_STORAGE = 0;
-    private static final String IS_MUTE_STATE = "IMS";
     private static final String POSITION_STATE = "PS";
     private static final String PLAYBACK_SPEED_STATE = "PSS";
-    @BindView(R.id.player_view_view_reddit_gallery_video_fragment)
+    private final boolean isMute = false;
+    @BindView(R.id.player_view_view_reddit_gallery_gif_variant_fragment)
     PlayerView videoPlayerView;
-    @BindView(R.id.mute_exo_playback_control_view)
-    ImageButton muteButton;
-    @BindView(R.id.bottom_navigation_exo_playback_control_view)
+    @BindView(R.id.bottom_navigation_exo_playback_gif_variant_view)
     BottomAppBar bottomAppBar;
-    @BindView(R.id.title_text_view_exo_playback_control_view)
+    @BindView(R.id.caption_layout_view_reddit_gallery_gif_variant_fragment)
+    LinearLayout captionLayout;
+    @BindView(R.id.caption_text_view_view_reddit_gallery_gif_variant_fragment)
+    TextView captionTextView;
+    @BindView(R.id.caption_url_text_view_view_reddit_gallery_gif_variant_fragment)
+    TextView captionUrlTextView;
+    @BindView(R.id.bottom_app_bar_menu_view_reddit_gallery_gif_variant_fragment)
+    LinearLayout bottomAppBarMenu;
+    @BindView(R.id.title_text_view_exo_playback_gif_variant_view)
     TextView titleTextView;
-    @BindView(R.id.bottom_action_menu_view_exo_playback_control_view)
+    @BindView(R.id.bottom_action_menu_view_reddit_gallery_gif_variant_fragment)
     ActionMenuView bottomActionMenu;
-    private ViewRedditGalleryActivity activity;
-    private Post.Gallery galleryVideo;
-    private String subredditName;
-    private boolean isNsfw;
-    private SimpleExoPlayer player;
-    private DataSource.Factory dataSourceFactory;
-    private boolean wasPlaying = false;
-    private boolean isMute = false;
-    private boolean isDownloading = false;
-    private int playbackSpeed = 100;
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    private ViewRedditGalleryActivity activity;
+    private Post.Gallery galleryVideo;
+    private String subredditName;
+    private SimpleExoPlayer player;
+    private DataSource.Factory dataSourceFactory;
+    private boolean wasPlaying = false;
+    private boolean isDownloading = false;
+    private int playbackSpeed = 100;
+    private boolean downloadGif = false;
+    private String gifFileName;
+    private boolean isActionBarHidden = false;
+    private boolean isUseBottomCaption = false;
 
-    public ViewRedditGalleryVideoFragment() {
+    public ViewRedditGalleryGifVariantFragment() {
         // Required empty public constructor
     }
 
-
+    @SuppressLint("RestrictedApi")
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_view_reddit_gallery_video, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_view_reddit_gallery_gif_variant, container, false);
 
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
@@ -108,44 +117,21 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
-
         galleryVideo = getArguments().getParcelable(EXTRA_REDDIT_GALLERY_VIDEO);
         subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
-        isNsfw = getArguments().getBoolean(EXTRA_IS_NSFW, false);
 
-        if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.VIDEO_PLAYER_IGNORE_NAV_BAR, false)) {
-            if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || getResources().getBoolean(R.bool.isTablet)) {
-                //Set player controller bottom margin in order to display it above the navbar
-                int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-                LinearLayout controllerLinearLayout = rootView.findViewById(R.id.linear_layout_exo_playback_control_view);
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
-                params.bottomMargin = getResources().getDimensionPixelSize(resourceId);
+        videoPlayerView.getVideoSurfaceView().setOnClickListener(view -> {
+            if (isActionBarHidden) {
+                activity.getWindow().getDecorView().setSystemUiVisibility(
+                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                isActionBarHidden = false;
+                if (activity.isUseBottomAppBar() || isUseBottomCaption) {
+                    bottomAppBar.setVisibility(View.VISIBLE);
+                }
             } else {
-                //Set player controller right margin in order to display it above the navbar
-                int resourceId = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-                LinearLayout controllerLinearLayout = rootView.findViewById(R.id.linear_layout_exo_playback_control_view);
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
-                params.rightMargin = getResources().getDimensionPixelSize(resourceId);
-            }
-        }
-
-        videoPlayerView.setControllerVisibilityListener(visibility -> {
-            switch (visibility) {
-                case View.GONE:
-                    activity.getWindow().getDecorView().setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                                    | View.SYSTEM_UI_FLAG_IMMERSIVE);
-                    break;
-                case View.VISIBLE:
-                    activity.getWindow().getDecorView().setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                hideAppBar();
             }
         });
 
@@ -163,6 +149,8 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
         Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.DEFAULT_PLAYBACK_SPEED, "100"));
         preparePlayer(savedInstanceState);
 
+        captionLayout.setOnClickListener(view -> hideAppBar());
+
         if (activity.isUseBottomAppBar()) {
             onCreateOptionsMenu(bottomActionMenu.getMenu(), activity.getMenuInflater());
             bottomActionMenu.setOnMenuItemClickListener(this::onOptionsItemSelected);
@@ -171,27 +159,99 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
                     getArguments().getInt(EXTRA_INDEX) + 1, getArguments().getInt(EXTRA_MEDIA_COUNT)));
         }
 
+        String caption = galleryVideo.caption;
+        String captionUrl = galleryVideo.captionUrl;
+        boolean captionIsEmpty = TextUtils.isEmpty(caption);
+        boolean captionUrlIsEmpty = TextUtils.isEmpty(captionUrl);
+        if (!captionIsEmpty || !captionUrlIsEmpty) {
+            isUseBottomCaption = true;
+
+            if (!activity.isUseBottomAppBar()) {
+                bottomAppBar.setVisibility(View.VISIBLE);
+                bottomAppBarMenu.setVisibility(View.GONE);
+            }
+
+            captionLayout.setVisibility(View.VISIBLE);
+
+            if (!captionIsEmpty) {
+                captionTextView.setVisibility(View.VISIBLE);
+                captionTextView.setText(caption);
+                captionTextView.setOnClickListener(view -> hideAppBar());
+                captionTextView.setOnLongClickListener(view -> {
+                    if (activity != null
+                            && !activity.isDestroyed()
+                            && !activity.isFinishing()
+                            && captionTextView.getSelectionStart() == -1
+                            && captionTextView.getSelectionEnd() == -1) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, caption);
+                        CopyTextBottomSheetFragment copyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
+                        copyTextBottomSheetFragment.setArguments(bundle);
+                        copyTextBottomSheetFragment.show(activity.getSupportFragmentManager(), copyTextBottomSheetFragment.getTag());
+                    }
+                    return true;
+                });
+            }
+            if (!captionUrlIsEmpty) {
+                String scheme = Uri.parse(captionUrl).getScheme();
+                String urlWithoutScheme = "";
+                if (!TextUtils.isEmpty(scheme)) {
+                    urlWithoutScheme = captionUrl.substring(scheme.length() + 3);
+                }
+
+                captionUrlTextView.setText(TextUtils.isEmpty(urlWithoutScheme) ? captionUrl : urlWithoutScheme);
+
+                BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, captionUrlTextView).setOnLinkLongClickListener((textView, url) -> {
+                    if (activity != null && !activity.isDestroyed() && !activity.isFinishing()) {
+                        UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
+                        Bundle bundle = new Bundle();
+                        bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, captionUrl);
+                        urlMenuBottomSheetFragment.setArguments(bundle);
+                        urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
+                    }
+                    return true;
+                });
+                captionUrlTextView.setVisibility(View.VISIBLE);
+                captionUrlTextView.setHighlightColor(Color.TRANSPARENT);
+            }
+        }
+
         return rootView;
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
-        inflater.inflate(R.menu.view_reddit_gallery_video_fragment, menu);
+        if (menu instanceof MenuBuilder) {
+            ((MenuBuilder) menu).setOptionalIconsVisible(true);
+        }
+        inflater.inflate(R.menu.view_reddit_gallery_gif_variant_fragment, menu);
+        if (galleryVideo.isGifVariant()) {
+            menu.findItem(R.id.action_download_gif_variant_original_view_reddit_gallery_gif_variant_fragment).setVisible(true);
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (item.getItemId() == R.id.action_download_view_reddit_gallery_video_fragment) {
+        if (item.getItemId() == R.id.action_download_video_view_reddit_gallery_gif_variant_fragment) {
             isDownloading = true;
             requestPermissionAndDownload();
             return true;
-        } else if (item.getItemId() == R.id.action_playback_speed_view_reddit_gallery_video_fragment) {
+        } else if (item.getItemId() == R.id.action_playback_speed_view_reddit_gallery_gif_variant_fragment) {
             PlaybackSpeedBottomSheetFragment playbackSpeedBottomSheetFragment = new PlaybackSpeedBottomSheetFragment();
             Bundle bundle = new Bundle();
             bundle.putInt(PlaybackSpeedBottomSheetFragment.EXTRA_PLAYBACK_SPEED, playbackSpeed);
             playbackSpeedBottomSheetFragment.setArguments(bundle);
             playbackSpeedBottomSheetFragment.show(getChildFragmentManager(), playbackSpeedBottomSheetFragment.getTag());
+            return true;
+        } else if (item.getItemId() == R.id.action_download_gif_variant_original_view_reddit_gallery_gif_variant_fragment) {
+            if (isDownloading) {
+                return false;
+            }
+            isDownloading = true;
+            downloadGif = true;
+            requestPermissionAndDownload();
             return true;
         }
         return false;
@@ -230,6 +290,8 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
             } else if (grantResults[0] == PackageManager.PERMISSION_GRANTED && isDownloading) {
                 download();
             }
+            isDownloading = false;
+            downloadGif = false;
         }
     }
 
@@ -237,11 +299,19 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
         isDownloading = false;
 
         Intent intent = new Intent(activity, DownloadMediaService.class);
-        intent.putExtra(DownloadMediaService.EXTRA_URL, galleryVideo.url);
-        intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
-        intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, galleryVideo.fileName);
-        intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
-        intent.putExtra(DownloadMediaService.EXTRA_IS_NSFW, isNsfw);
+        if (downloadGif && galleryVideo.isGifVariant()) {
+            intent = new Intent(activity, DownloadMediaService.class);
+            intent.putExtra(DownloadMediaService.EXTRA_URL, galleryVideo.getGifVariantOriginalUrl());
+            intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_GIF);
+            intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, galleryVideo.fileName.substring(0, galleryVideo.fileName.length() - 4) + ".gif");
+            intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
+            downloadGif = false;
+        } else {
+            intent.putExtra(DownloadMediaService.EXTRA_URL, galleryVideo.url);
+            intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);
+            intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, galleryVideo.fileName);
+            intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
+        }
         ContextCompat.startForegroundService(activity, intent);
         Toast.makeText(activity, R.string.download_started, Toast.LENGTH_SHORT).show();
     }
@@ -254,57 +324,29 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
         }
         wasPlaying = true;
 
-        boolean muteVideo = mSharedPreferences.getBoolean(SharedPreferencesUtils.MUTE_VIDEO, false);
-
         if (savedInstanceState != null) {
             long position = savedInstanceState.getLong(POSITION_STATE);
             if (position > 0) {
                 player.seekTo(position);
             }
-            isMute = savedInstanceState.getBoolean(IS_MUTE_STATE);
-            if (isMute) {
-                player.setVolume(0f);
-                muteButton.setImageResource(R.drawable.ic_mute_24dp);
-            } else {
-                player.setVolume(1f);
-                muteButton.setImageResource(R.drawable.ic_unmute_24dp);
-            }
-        } else if (muteVideo) {
-            isMute = true;
-            player.setVolume(0f);
-            muteButton.setImageResource(R.drawable.ic_mute_24dp);
-        } else {
-            muteButton.setImageResource(R.drawable.ic_unmute_24dp);
         }
-
-        player.addListener(new Player.EventListener() {
-            @Override
-            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-                if (!trackGroups.isEmpty()) {
-                    for (int i = 0; i < trackGroups.length; i++) {
-                        String mimeType = trackGroups.get(i).getFormat(0).sampleMimeType;
-                        if (mimeType != null && mimeType.contains("audio")) {
-                            muteButton.setVisibility(View.VISIBLE);
-                            muteButton.setOnClickListener(view -> {
-                                if (isMute) {
-                                    isMute = false;
-                                    player.setVolume(1f);
-                                    muteButton.setImageResource(R.drawable.ic_unmute_24dp);
-                                } else {
-                                    isMute = true;
-                                    player.setVolume(0f);
-                                    muteButton.setImageResource(R.drawable.ic_mute_24dp);
-                                }
-                            });
-                            break;
-                        }
-                    }
-                } else {
-                    muteButton.setVisibility(View.GONE);
-                }
-            }
-        });
     }
+
+
+    private void hideAppBar() {
+        activity.getWindow().getDecorView().setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+        isActionBarHidden = true;
+        if (activity.isUseBottomAppBar() || isUseBottomCaption) {
+            bottomAppBar.setVisibility(View.GONE);
+        }
+    }
+
 
     @Override
     public void onResume() {
@@ -324,7 +366,6 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putBoolean(IS_MUTE_STATE, isMute);
         outState.putLong(POSITION_STATE, player.getCurrentPosition());
         outState.putInt(PLAYBACK_SPEED_STATE, playbackSpeed);
     }

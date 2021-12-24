@@ -6,6 +6,7 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -39,6 +40,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.view.menu.MenuBuilder;
+import androidx.appcompat.widget.ActionMenuView;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -116,6 +119,7 @@ public class ViewVideoActivity extends AppCompatActivity {
     public static final int PLAYBACK_SPEED_150 = 150;
     public static final int PLAYBACK_SPEED_175 = 175;
     public static final int PLAYBACK_SPEED_200 = 200;
+    public static final String EXTRA_GIF_URL_KEY = "EGUK";
     public static final String EXTRA_VIDEO_DOWNLOAD_URL = "EVDU";
     public static final String EXTRA_SUBREDDIT = "ES";
     public static final String EXTRA_ID = "EI";
@@ -127,6 +131,7 @@ public class ViewVideoActivity extends AppCompatActivity {
     public static final String EXTRA_STREAMABLE_SHORT_CODE = "ESSC";
     public static final String EXTRA_IS_NSFW = "EIN";
     public static final int VIDEO_TYPE_IMGUR = 7;
+    public static final int VIDEO_TYPE_GIF_VARIANT = 6;
     public static final int VIDEO_TYPE_STREAMABLE = 5;
     public static final int VIDEO_TYPE_V_REDD_IT = 4;
     public static final int VIDEO_TYPE_DIRECT = 3;
@@ -140,7 +145,7 @@ public class ViewVideoActivity extends AppCompatActivity {
     private static final String VIDEO_URI_STATE = "VUS";
     private static final String VIDEO_TYPE_STATE = "VTS";
     private static final String SUBREDDIT_NAME_STATE = "SNS";
-    private static final String ID_STATE=  "IS";
+    private static final String ID_STATE = "IS";
     private static final String PLAYBACK_SPEED_STATE = "PSS";
 
     @BindView(R.id.hauler_view_view_video_activity)
@@ -161,18 +166,39 @@ public class ViewVideoActivity extends AppCompatActivity {
     BottomAppBar bottomAppBar;
     @BindView(R.id.title_text_view_exo_playback_control_view)
     TextView titleTextView;
-    @BindView(R.id.download_image_view_exo_playback_control_view)
-    ImageView downloadImageView;
-    @BindView(R.id.playback_speed_image_view_exo_playback_control_view)
-    ImageView playbackSpeedImageView;
     @BindView(R.id.lockable_nested_scroll_view_view_video_activity)
     LockableNestedScrollView nestedScrollView;
-
+    @BindView(R.id.bottom_action_menu_view_exo_playback_control_view)
+    ActionMenuView bottomActionMenu;
+    @Inject
+    @Named("no_oauth")
+    Retrofit retrofit;
+    @Inject
+    @Named("gfycat")
+    Retrofit gfycatRetrofit;
+    @Inject
+    @Named("redgifs")
+    Retrofit redgifsRetrofit;
+    @Inject
+    @Named("vReddIt")
+    Retrofit vReddItRetrofit;
+    @Inject
+    @Named("streamable")
+    Retrofit streamableRetrofit;
+    @Inject
+    @Named("default")
+    SharedPreferences mSharedPreferences;
+    @Inject
+    CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor mExecutor;
+    @Inject
+    SimpleCache mSimpleCache;
     private Uri mVideoUri;
     private SimpleExoPlayer player;
     private DefaultTrackSelector trackSelector;
     private DataSource.Factory dataSourceFactory;
-
+    private String gifFileName;
     private String videoDownloadUrl;
     private String videoFileName;
     private String subredditName;
@@ -188,40 +214,11 @@ public class ViewVideoActivity extends AppCompatActivity {
     private Integer originalOrientation;
     private int playbackSpeed = 100;
     private boolean useBottomAppBar;
+    private String gifVariantOriginalUrl;
+    private boolean isGifVariant;
+    private boolean downloadGif = false;
 
-    @Inject
-    @Named("no_oauth")
-    Retrofit retrofit;
-
-    @Inject
-    @Named("gfycat")
-    Retrofit gfycatRetrofit;
-
-    @Inject
-    @Named("redgifs")
-    Retrofit redgifsRetrofit;
-
-    @Inject
-    @Named("vReddIt")
-    Retrofit vReddItRetrofit;
-
-    @Inject
-    @Named("streamable")
-    Retrofit streamableRetrofit;
-
-    @Inject
-    @Named("default")
-    SharedPreferences mSharedPreferences;
-
-    @Inject
-    CustomThemeWrapper mCustomThemeWrapper;
-
-    @Inject
-    Executor mExecutor;
-
-    @Inject
-    SimpleCache mSimpleCache;
-
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -237,7 +234,7 @@ public class ViewVideoActivity extends AppCompatActivity {
                 break;
             case 1:
                 AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_YES);
-                if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
+                if (mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
                     getTheme().applyStyle(R.style.Theme_Normal_AmoledDark, true);
                 } else {
                     getTheme().applyStyle(R.style.Theme_Normal_NormalDark, true);
@@ -249,10 +246,10 @@ public class ViewVideoActivity extends AppCompatActivity {
                 } else {
                     AppCompatDelegate.setDefaultNightMode(MODE_NIGHT_AUTO_BATTERY);
                 }
-                if((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO) {
+                if ((getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) == Configuration.UI_MODE_NIGHT_NO) {
                     getTheme().applyStyle(R.style.Theme_Normal, true);
                 } else {
-                    if(mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
+                    if (mSharedPreferences.getBoolean(SharedPreferencesUtils.AMOLED_DARK_KEY, false)) {
                         getTheme().applyStyle(R.style.Theme_Normal_AmoledDark, true);
                     } else {
                         getTheme().applyStyle(R.style.Theme_Normal_NormalDark, true);
@@ -293,28 +290,9 @@ public class ViewVideoActivity extends AppCompatActivity {
         useBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.USE_BOTTOM_TOOLBAR_IN_MEDIA_VIEWER, false);
         if (useBottomAppBar) {
             getSupportActionBar().hide();
+            onCreateOptionsMenu(bottomActionMenu.getMenu());
+            bottomActionMenu.setOnMenuItemClickListener(this::onOptionsItemSelected);
             bottomAppBar.setVisibility(View.VISIBLE);
-            downloadImageView.setOnClickListener(view -> {
-                if (isDownloading) {
-                    return;
-                }
-
-                if (videoDownloadUrl == null) {
-                    Toast.makeText(this, R.string.fetching_video_info_please_wait, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
-                isDownloading = true;
-                requestPermissionAndDownload();
-            });
-
-            playbackSpeedImageView.setOnClickListener(view -> {
-                PlaybackSpeedBottomSheetFragment playbackSpeedBottomSheetFragment = new PlaybackSpeedBottomSheetFragment();
-                Bundle bundle = new Bundle();
-                bundle.putInt(PlaybackSpeedBottomSheetFragment.EXTRA_PLAYBACK_SPEED, playbackSpeed);
-                playbackSpeedBottomSheetFragment.setArguments(bundle);
-                playbackSpeedBottomSheetFragment.show(getSupportFragmentManager(), playbackSpeedBottomSheetFragment.getTag());
-            });
         } else {
             ActionBar actionBar = getSupportActionBar();
             Drawable upArrow = resources.getDrawable(R.drawable.ic_arrow_back_white_24dp);
@@ -369,7 +347,7 @@ public class ViewVideoActivity extends AppCompatActivity {
                             int epsilon = 10;
                             int leftLandscape = 90;
                             int rightLandscape = 270;
-                            if(epsilonCheck(orientation, leftLandscape, epsilon) ||
+                            if (epsilonCheck(orientation, leftLandscape, epsilon) ||
                                     epsilonCheck(orientation, rightLandscape, epsilon)) {
                                 setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
                                 disable();
@@ -520,7 +498,7 @@ public class ViewVideoActivity extends AppCompatActivity {
             } else {
                 dataSourceFactory = new CacheDataSourceFactory(mSimpleCache,
                         new DefaultDataSourceFactory(ViewVideoActivity.this,
-                        Util.getUserAgent(ViewVideoActivity.this, "Infinity")));
+                                Util.getUserAgent(ViewVideoActivity.this, "Infinity")));
                 player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
                 preparePlayer(savedInstanceState);
             }
@@ -531,6 +509,25 @@ public class ViewVideoActivity extends AppCompatActivity {
             } else {
                 videoFileName = "imgur-" + FilenameUtils.getName(videoDownloadUrl);
             }
+            // Produces DataSource instances through which media data is loaded.
+            dataSourceFactory = new CacheDataSourceFactory(mSimpleCache,
+                    new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "Infinity")));
+            // Prepare the player with the source.
+            player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
+            preparePlayer(savedInstanceState);
+        } else if (videoType == VIDEO_TYPE_GIF_VARIANT) {
+            gifVariantOriginalUrl = intent.getStringExtra(EXTRA_GIF_URL_KEY);
+            if (gifVariantOriginalUrl != null) {
+                isGifVariant = true;
+                if (useBottomAppBar && bottomActionMenu != null) {
+                    bottomActionMenu.getMenu().findItem(R.id.action_download_gif_variant_original_view_video_activity).setVisible(true);
+                }
+            }
+            videoDownloadUrl = intent.getStringExtra(EXTRA_VIDEO_DOWNLOAD_URL);
+            subredditName = intent.getStringExtra(EXTRA_SUBREDDIT);
+            id = intent.getStringExtra(EXTRA_ID);
+            gifFileName = subredditName + "-" + id + ".gif";
+            videoFileName = subredditName + "-" + id + ".mp4";
             // Produces DataSource instances through which media data is loaded.
             dataSourceFactory = new CacheDataSourceFactory(mSimpleCache,
                     new DefaultHttpDataSourceFactory(Util.getUserAgent(this, "Infinity")));
@@ -656,7 +653,7 @@ public class ViewVideoActivity extends AppCompatActivity {
                         videoDownloadUrl = mp4;
                         dataSourceFactory = new CacheDataSourceFactory(mSimpleCache,
                                 new DefaultDataSourceFactory(ViewVideoActivity.this,
-                                Util.getUserAgent(ViewVideoActivity.this, "Infinity")));
+                                        Util.getUserAgent(ViewVideoActivity.this, "Infinity")));
                         preparePlayer(savedInstanceState);
                         player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(mVideoUri));
                     }
@@ -805,9 +802,16 @@ public class ViewVideoActivity extends AppCompatActivity {
                 });
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        if (menu instanceof MenuBuilder) {
+            ((MenuBuilder) menu).setOptionalIconsVisible(true);
+        }
         getMenuInflater().inflate(R.menu.view_video_activity, menu);
+        if (isGifVariant) {
+            menu.findItem(R.id.action_download_gif_variant_original_view_video_activity).setVisible(true);
+        }
         return true;
     }
 
@@ -844,6 +848,15 @@ public class ViewVideoActivity extends AppCompatActivity {
             bundle.putInt(PlaybackSpeedBottomSheetFragment.EXTRA_PLAYBACK_SPEED, playbackSpeed);
             playbackSpeedBottomSheetFragment.setArguments(bundle);
             playbackSpeedBottomSheetFragment.show(getSupportFragmentManager(), playbackSpeedBottomSheetFragment.getTag());
+            return true;
+        } else if (itemId == R.id.action_download_gif_variant_original_view_video_activity) {
+            if (isDownloading) {
+                return false;
+            }
+
+            isDownloading = true;
+            downloadGif = true;
+            requestPermissionAndDownload();
             return true;
         }
 
@@ -903,6 +916,7 @@ public class ViewVideoActivity extends AppCompatActivity {
                 download();
             }
             isDownloading = false;
+            downloadGif = false;
         }
     }
 
@@ -910,7 +924,14 @@ public class ViewVideoActivity extends AppCompatActivity {
         isDownloading = false;
 
         Intent intent;
-        if (videoType != VIDEO_TYPE_NORMAL) {
+        if (isGifVariant && downloadGif) {
+            intent = new Intent(this, DownloadMediaService.class);
+            intent.putExtra(DownloadMediaService.EXTRA_URL, gifVariantOriginalUrl);
+            intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_GIF);
+            intent.putExtra(DownloadMediaService.EXTRA_FILE_NAME, gifFileName);
+            intent.putExtra(DownloadMediaService.EXTRA_SUBREDDIT_NAME, subredditName);
+            downloadGif = false;
+        } else if (videoType != VIDEO_TYPE_NORMAL) {
             intent = new Intent(this, DownloadMediaService.class);
             intent.putExtra(DownloadMediaService.EXTRA_URL, videoDownloadUrl);
             intent.putExtra(DownloadMediaService.EXTRA_MEDIA_TYPE, DownloadMediaService.EXTRA_MEDIA_TYPE_VIDEO);

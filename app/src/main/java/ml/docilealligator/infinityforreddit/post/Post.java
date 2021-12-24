@@ -56,6 +56,7 @@ public class Post implements Parcelable {
     private boolean isGfycat;
     private boolean isRedgifs;
     private boolean isStreamable;
+    private boolean isGifVariant;
     private boolean loadGfyOrStreamableVideoSuccess;
     private String permalink;
     private String flair;
@@ -81,6 +82,7 @@ public class Post implements Parcelable {
     private String crosspostParentId;
     private ArrayList<Preview> previews = new ArrayList<>();
     private ArrayList<Gallery> gallery = new ArrayList<>();
+    private String gifVariantOriginalUrl;
 
     public Post(String id, String fullName, String subredditName, String subredditNamePrefixed,
                 String author, String authorFlair, String authorFlairHTML, long postTimeMillis,
@@ -174,12 +176,14 @@ public class Post implements Parcelable {
         url = in.readString();
         videoUrl = in.readString();
         videoDownloadUrl = in.readString();
+        gifVariantOriginalUrl = in.readString();
         gfycatId = in.readString();
         streamableShortCode = in.readString();
         isImgur = in.readByte() != 0;
         isGfycat = in.readByte() != 0;
         isRedgifs = in.readByte() != 0;
         isStreamable = in.readByte() != 0;
+        isGifVariant = in.readByte() != 0;
         loadGfyOrStreamableVideoSuccess = in.readByte() != 0;
         permalink = in.readString();
         flair = in.readString();
@@ -365,6 +369,22 @@ public class Post implements Parcelable {
 
     public void setIsStreamable(boolean isStreamable) {
         this.isStreamable = isStreamable;
+    }
+
+    public boolean isGifVariant() {
+        return isGifVariant;
+    }
+
+    public void setIsGifVariant(boolean isGifVariant) {
+        this.isGifVariant = isGifVariant;
+    }
+    
+    public void setGifVariantOriginalUrl(String gifVariantOriginalUrl) {
+        this.gifVariantOriginalUrl = gifVariantOriginalUrl;
+    }
+
+    public String getGifVariantOriginalUrl() {
+        return gifVariantOriginalUrl;
     }
 
     public boolean isLoadGfycatOrStreamableVideoSuccess() {
@@ -561,12 +581,14 @@ public class Post implements Parcelable {
         parcel.writeString(url);
         parcel.writeString(videoUrl);
         parcel.writeString(videoDownloadUrl);
+        parcel.writeString(gifVariantOriginalUrl);
         parcel.writeString(gfycatId);
         parcel.writeString(streamableShortCode);
         parcel.writeByte((byte) (isImgur ? 1 : 0));
         parcel.writeByte((byte) (isGfycat ? 1 : 0));
         parcel.writeByte((byte) (isRedgifs ? 1 : 0));
         parcel.writeByte((byte) (isStreamable ? 1 : 0));
+        parcel.writeByte((byte) (isGifVariant ? 1 : 0));
         parcel.writeByte((byte) (loadGfyOrStreamableVideoSuccess ? 1 : 0));
         parcel.writeString(permalink);
         parcel.writeString(flair);
@@ -619,6 +641,8 @@ public class Post implements Parcelable {
         public int mediaType;
         public String caption;
         public String captionUrl;
+        private boolean isGifVariant;
+        private String gifVariantOriginalUrl;
 
         public Gallery(String mimeType, String url, String fallbackUrl, String fileName, String caption, String captionUrl) {
             this.mimeType = mimeType;
@@ -645,6 +669,8 @@ public class Post implements Parcelable {
             mediaType = in.readInt();
             caption = in.readString();
             captionUrl = in.readString();
+            isGifVariant = in.readByte() != 0;
+            gifVariantOriginalUrl = in.readString();
         }
 
         public static final Creator<Gallery> CREATOR = new Creator<Gallery>() {
@@ -674,6 +700,8 @@ public class Post implements Parcelable {
             parcel.writeInt(mediaType);
             parcel.writeString(caption);
             parcel.writeString(captionUrl);
+            parcel.writeByte((byte) (isGifVariant ? 1 : 0));
+            parcel.writeString(gifVariantOriginalUrl);
         }
 
         public void setFallbackUrl(String fallbackUrl) { this.fallbackUrl = fallbackUrl; }
@@ -681,6 +709,22 @@ public class Post implements Parcelable {
         public void setHasFallback(boolean hasFallback) { this.hasFallback = hasFallback; }
 
         public boolean hasFallback() { return this.hasFallback; }
+
+        public boolean isGifVariant() {
+            return isGifVariant;
+        }
+
+        public void setIsGifVariant(boolean isGifVariant) {
+            this.isGifVariant = isGifVariant;
+        }
+
+        public void setGifVariantOriginalUrl(String gifVariantOriginalUrl) {
+            this.gifVariantOriginalUrl = gifVariantOriginalUrl;
+        }
+
+        public String getGifVariantOriginalUrl() {
+            return gifVariantOriginalUrl;
+        }
     }
 
     public static class Preview implements Parcelable {

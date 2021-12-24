@@ -1485,6 +1485,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                             break;
                         case Post.VIDEO_TYPE:
                             bundle.putString(ShareLinkBottomSheetFragment.EXTRA_MEDIA_LINK, mPost.getVideoDownloadUrl());
+                            if (mPost.isGifVariant()) {
+                                bundle.putString(ShareLinkBottomSheetFragment.EXTRA_GIF_VARIANT_LINK, mPost.getGifVariantOriginalUrl());
+                            }
                             break;
                     }
                 }
@@ -1677,6 +1680,13 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     } else if (mPost.isStreamable()) {
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_STREAMABLE);
                         intent.putExtra(ViewVideoActivity.EXTRA_STREAMABLE_SHORT_CODE, mPost.getStreamableShortCode());
+                    } else if (mPost.isGifVariant()) {
+                        intent.setData(Uri.parse(mPost.getVideoUrl()));
+                        intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, mPost.getSubredditName());
+                        intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GIF_VARIANT);
+                        intent.putExtra(ViewVideoActivity.EXTRA_ID, mPost.getId());
+                        intent.putExtra(ViewVideoActivity.EXTRA_GIF_URL_KEY, mPost.getGifVariantOriginalUrl());
+                        intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
                     } else {
                         intent.setData(Uri.parse(mPost.getVideoUrl()));
                         intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
@@ -1897,6 +1907,13 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         } else if (mPost.isStreamable()) {
                             intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_STREAMABLE);
                             intent.putExtra(ViewVideoActivity.EXTRA_STREAMABLE_SHORT_CODE, mPost.getStreamableShortCode());
+                        } else if (mPost.isGifVariant()) {
+                            intent.setData(Uri.parse(mPost.getVideoUrl()));
+                            intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, mPost.getSubredditName());
+                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GIF_VARIANT);
+                            intent.putExtra(ViewVideoActivity.EXTRA_ID, mPost.getId());
+                            intent.putExtra(ViewVideoActivity.EXTRA_GIF_URL_KEY, mPost.getGifVariantOriginalUrl());
+                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
                         } else {
                             intent.setData(Uri.parse(mPost.getVideoUrl()));
                             intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, mPost.getSubredditName());
@@ -2223,6 +2240,13 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         } else if (mPost.isStreamable()) {
                             intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_STREAMABLE);
                             intent.putExtra(ViewVideoActivity.EXTRA_STREAMABLE_SHORT_CODE, mPost.getStreamableShortCode());
+                        } else if (mPost.isGifVariant()) {
+                            intent.setData(Uri.parse(mPost.getVideoUrl()));
+                            intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, mPost.getSubredditName());
+                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GIF_VARIANT);
+                            intent.putExtra(ViewVideoActivity.EXTRA_ID, mPost.getId());
+                            intent.putExtra(ViewVideoActivity.EXTRA_GIF_URL_KEY, mPost.getGifVariantOriginalUrl());
+                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, mPost.getVideoDownloadUrl());
                         } else {
                             intent.setData(Uri.parse(mPost.getVideoUrl()));
                             intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, mPost.getSubredditName());

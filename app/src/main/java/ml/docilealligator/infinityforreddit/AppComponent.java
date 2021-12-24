@@ -14,8 +14,8 @@ import ml.docilealligator.infinityforreddit.activities.CustomizePostFilterActivi
 import ml.docilealligator.infinityforreddit.activities.CustomizeThemeActivity;
 import ml.docilealligator.infinityforreddit.activities.EditCommentActivity;
 import ml.docilealligator.infinityforreddit.activities.EditMultiRedditActivity;
-import ml.docilealligator.infinityforreddit.activities.EditProfileActivity;
 import ml.docilealligator.infinityforreddit.activities.EditPostActivity;
+import ml.docilealligator.infinityforreddit.activities.EditProfileActivity;
 import ml.docilealligator.infinityforreddit.activities.FetchRandomSubredditOrPostActivity;
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.FullMarkdownActivity;
@@ -75,6 +75,7 @@ import ml.docilealligator.infinityforreddit.fragments.ViewImgurImageFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewImgurVideoFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewRPANBroadcastFragment;
+import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryGifVariantFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryImageOrGifFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryVideoFragment;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
@@ -262,6 +263,8 @@ public interface AppComponent {
     void inject(ViewImgurImageFragment viewImgurImageFragment);
 
     void inject(ViewRedditGalleryImageOrGifFragment viewRedditGalleryImageOrGifFragment);
+
+    void inject(ViewRedditGalleryGifVariantFragment viewRedditGalleryGifVariantFragment);
 
     void inject(ViewPostDetailFragment viewPostDetailFragment);
 

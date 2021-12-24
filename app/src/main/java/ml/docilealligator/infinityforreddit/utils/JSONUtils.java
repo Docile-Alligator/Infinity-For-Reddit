@@ -19,6 +19,7 @@ public class JSONUtils {
     public static final String AUTHOR_KEY = "author";
     public static final String AUTHOR_FLAIR_RICHTEXT_KEY = "author_flair_richtext";
     public static final String AUTHOR_FLAIR_TEXT_KEY = "author_flair_text";
+    public static final String P_KEY = "p";
     public static final String E_KEY = "e";
     public static final String T_KEY = "t";
     public static final String U_KEY = "u";
@@ -99,6 +100,7 @@ public class JSONUtils {
     public static final String HIDDEN_KEY = "hidden";
     public static final String USER_HAS_FAVORITED_KEY = "user_has_favorited";
     public static final String RESOLUTIONS_KEY = "resolutions";
+    public static final String VARIANTS_KEY = "variants";
     public static final String NUM_SUBSCRIBERS_KEY = "num_subscribers";
     public static final String COPIED_FROM_KEY = "copied_from";
     public static final String VISIBILITY_KEY = "visibility";
