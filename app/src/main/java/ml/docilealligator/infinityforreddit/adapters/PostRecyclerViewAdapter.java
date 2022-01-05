@@ -75,6 +75,7 @@ import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStra
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.StreamableVideo;
 import ml.docilealligator.infinityforreddit.VoteThing;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewImageOrGifActivity;
@@ -2103,6 +2104,26 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             } else {
                 itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
             }
+
+            if (((BaseActivity) mActivity).typeface != null) {
+                subredditTextView.setTypeface(((BaseActivity) mActivity).typeface);
+                userTextView.setTypeface(((BaseActivity) mActivity).typeface);
+                postTimeTextView.setTypeface(((BaseActivity) mActivity).typeface);
+                typeTextView.setTypeface(((BaseActivity) mActivity).typeface);
+                spoilerTextView.setTypeface(((BaseActivity) mActivity).typeface);
+                nsfwTextView.setTypeface(((BaseActivity) mActivity).typeface);
+                flairTextView.setTypeface(((BaseActivity) mActivity).typeface);
+                awardsTextView.setTypeface(((BaseActivity) mActivity).typeface);
+                scoreTextView.setTypeface(((BaseActivity) mActivity).typeface);
+                commentsCountTextView.setTypeface(((BaseActivity) mActivity).typeface);
+            }
+            if (((BaseActivity) mActivity).titleTypeface != null) {
+                titleTextView.setTypeface(((BaseActivity) mActivity).titleTypeface);
+            }
+            if (((BaseActivity) mActivity).contentTypeface != null) {
+
+            }
+
             subredditTextView.setTextColor(mSubredditColor);
             userTextView.setTextColor(mUsernameColor);
             postTimeTextView.setTextColor(mSecondaryTextColor);

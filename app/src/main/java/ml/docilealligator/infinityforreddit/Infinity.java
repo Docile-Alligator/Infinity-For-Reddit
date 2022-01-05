@@ -5,9 +5,11 @@ import android.app.Application;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.Typeface;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -26,6 +28,7 @@ import org.greenrobot.eventbus.Subscribe;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LockScreenActivity;
 import ml.docilealligator.infinityforreddit.broadcastreceivers.NetworkWifiStatusReceiver;
 import ml.docilealligator.infinityforreddit.broadcastreceivers.WallpaperChangeReceiver;
@@ -42,6 +45,9 @@ public class Infinity extends Application implements LifecycleObserver {
     private long appLockTimeout;
     private boolean canStartLockScreenActivity = false;
     private boolean isSecureMode;
+    private Typeface typeface;
+    private Typeface titleTypeface;
+    private Typeface contentTypeface;
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
@@ -63,7 +69,23 @@ public class Infinity extends Application implements LifecycleObserver {
         appLockTimeout = Long.parseLong(mSecuritySharedPreferences.getString(SharedPreferencesUtils.APP_LOCK_TIMEOUT, "600000"));
         isSecureMode = mSecuritySharedPreferences.getBoolean(SharedPreferencesUtils.SECURE_MODE, false);
 
+        try {
+            typeface = Typeface.createFromFile(getCacheDir() + "/opensans.ttf");
+            titleTypeface = Typeface.createFromFile(getCacheDir() + "/opensans.ttf");
+            contentTypeface = Typeface.createFromFile(getCacheDir() + "/opensans.ttf");
+        } catch (RuntimeException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "Some font files do not exist", Toast.LENGTH_SHORT).show();
+        }
+
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
+            @Override
+            public void onActivityPreCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
+                if (activity instanceof BaseActivity) {
+                    ((BaseActivity) activity).setCustomFont(typeface, titleTypeface, contentTypeface);
+                }
+            }
+
             @Override
             public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle bundle) {
                 if (isSecureMode) {

@@ -182,7 +182,7 @@ public class EditProfileActivity extends BaseActivity {
                                         @Override
                                         public void failed(String message) {
                                             Toast.makeText(EditProfileActivity.this,
-                                                    getString(R.string.message_remove_banner_failed_fmt, message),
+                                                    getString(R.string.message_remove_banner_failed, message),
                                                     Toast.LENGTH_SHORT).show();
                                         }
                                     }))
@@ -224,7 +224,7 @@ public class EditProfileActivity extends BaseActivity {
                                         @Override
                                         public void failed(String message) {
                                             Toast.makeText(EditProfileActivity.this,
-                                                    getString(R.string.message_remove_avatar_failed_fmt, message),
+                                                    getString(R.string.message_remove_avatar_failed, message),
                                                     Toast.LENGTH_SHORT).show();
                                         }
                                     }))
@@ -305,7 +305,7 @@ public class EditProfileActivity extends BaseActivity {
         if (event.isSuccess) {
             Toast.makeText(this, R.string.message_change_avatar_success, Toast.LENGTH_SHORT).show();
         } else {
-            String message = getString(R.string.message_change_avatar_failed_fmt, event.errorMessage);
+            String message = getString(R.string.message_change_avatar_failed, event.errorMessage);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }
     }
@@ -315,7 +315,7 @@ public class EditProfileActivity extends BaseActivity {
         if (event.isSuccess) {
             Toast.makeText(this, R.string.message_change_banner_success, Toast.LENGTH_SHORT).show();
         } else {
-            String message = getString(R.string.message_change_banner_failed_fmt, event.errorMessage);
+            String message = getString(R.string.message_change_banner_failed, event.errorMessage);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }
     }
@@ -325,7 +325,7 @@ public class EditProfileActivity extends BaseActivity {
         if (event.isSuccess) {
             Toast.makeText(this, R.string.message_save_profile_success, Toast.LENGTH_SHORT).show();
         } else {
-            String message = getString(R.string.message_save_profile_failed_fmt, event.errorMessage);
+            String message = getString(R.string.message_save_profile_failed, event.errorMessage);
             Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
         }
     }

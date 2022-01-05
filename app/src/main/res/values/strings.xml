@@ -1235,14 +1235,14 @@
     <string name="about_you_text">About You</string>
     <string name="about_you_hint">A little description of yourself</string>
     <string name="message_remove_avatar_success">Remove avatar successfully</string>
-    <string name="message_remove_avatar_failed_fmt">Failed to remove avatar %s</string>
+    <string name="message_remove_avatar_failed">Failed to remove avatar %s</string>
     <string name="message_remove_banner_success">Remove banner successfully</string>
-    <string name="message_remove_banner_failed_fmt">Failed to remove banner %s</string>
+    <string name="message_remove_banner_failed">Failed to remove banner %s</string>
     <string name="message_change_avatar_success">Change avatar successfully</string>
-    <string name="message_change_avatar_failed_fmt">Failed to change avatar %s</string>
+    <string name="message_change_avatar_failed">Failed to change avatar %s</string>
     <string name="message_change_banner_success">Changing banner successfully</string>
-    <string name="message_change_banner_failed_fmt">Failed to change banner %s</string>
+    <string name="message_change_banner_failed">Failed to change banner %s</string>
     <string name="message_save_profile_success">Save profile successfully</string>
-    <string name="message_save_profile_failed_fmt">Failed to save profile %s</string>
+    <string name="message_save_profile_failed">Failed to save profile %s</string>
 
 </resources>

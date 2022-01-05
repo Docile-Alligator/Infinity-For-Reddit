@@ -25,6 +25,7 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -354,6 +355,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         applyTabLayoutTheme(tabLayout);
         bottomAppBar.setBackgroundTint(ColorStateList.valueOf(mCustomThemeWrapper.getBottomAppBarBackgroundColor()));
         applyFABTheme(fab);
+        for (int i = 0; i < toolbar.getChildCount(); i++) {
+            View view = toolbar.getChildAt(i);
+            if (view instanceof TextView) {
+                ((TextView) view).setTypeface(typeface);
+            }
+        }
     }
 
     private void initializeNotificationAndBindView(boolean doNotInitializeNotificationIfNoNewAccount) {

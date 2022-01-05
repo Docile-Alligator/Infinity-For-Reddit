@@ -11,6 +11,7 @@ import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -59,6 +60,9 @@ public abstract class BaseActivity extends AppCompatActivity {
     private int systemVisibilityToolbarExpanded = 0;
     private int systemVisibilityToolbarCollapsed = 0;
     private CustomThemeWrapper customThemeWrapper;
+    public Typeface typeface;
+    public Typeface titleTypeface;
+    public Typeface contentTypeface;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -366,5 +370,11 @@ public abstract class BaseActivity extends AppCompatActivity {
                 touchSlopField.set(recyclerView, touchSlop * 4);
             }
         } catch (NoSuchFieldException | IllegalAccessException ignore) {}
+    }
+
+    public void setCustomFont(Typeface typeface, Typeface titleTypeface, Typeface contentTypeface) {
+        this.typeface = typeface;
+        this.titleTypeface = titleTypeface;
+        this.contentTypeface = contentTypeface;
     }
 }
