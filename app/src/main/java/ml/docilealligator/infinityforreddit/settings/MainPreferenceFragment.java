@@ -1,16 +1,15 @@
 package ml.docilealligator.infinityforreddit.settings;
 
 
-import android.content.Context;
+import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
+import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -18,22 +17,23 @@ import javax.inject.Named;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.PostFilterPreferenceActivity;
+import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
-import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
-import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
-
-public class MainPreferenceFragment extends PreferenceFragmentCompat {
+public class MainPreferenceFragment extends CustomFontPreferenceFragmentCompat {
 
     @Inject
     @Named("default")
     SharedPreferences sharedPreferences;
-    private AppCompatActivity activity;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.main_preferences, rootKey);
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
+
+        if (activity.typeface != null) {
+            setFont(activity.typeface);
+        }
 
         Preference securityPreference = findPreference(SharedPreferencesUtils.SECURITY);
         Preference postFilterPreference = findPreference(SharedPreferencesUtils.POST_FILTER);
@@ -52,11 +52,5 @@ public class MainPreferenceFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        activity = (AppCompatActivity) context;
     }
 }

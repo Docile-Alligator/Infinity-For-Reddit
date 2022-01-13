@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,8 +14,10 @@ import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -31,7 +32,7 @@ public class PostLayoutBottomSheetFragment extends LandscapeExpandedRoundedBotto
     TextView compactLayoutTextView;
     @BindView(R.id.gallery_layout_text_view_post_layout_bottom_sheet_fragment)
     TextView galleryLayoutTextView;
-    private Activity activity;
+    private BaseActivity activity;
     public PostLayoutBottomSheetFragment() {
         // Required empty public constructor
     }
@@ -60,13 +61,17 @@ public class PostLayoutBottomSheetFragment extends LandscapeExpandedRoundedBotto
             ((PostLayoutSelectionCallback) activity).postLayoutSelected(SharedPreferencesUtils.POST_LAYOUT_CARD_2);
             dismiss();
         });
+
+        if (activity.typeface != null) {
+            Utils.setFontToAllTextViews(rootView, activity.typeface);
+        }
         return rootView;
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.activity = (Activity) context;
+        this.activity = (BaseActivity) context;
     }
 
     public interface PostLayoutSelectionCallback {

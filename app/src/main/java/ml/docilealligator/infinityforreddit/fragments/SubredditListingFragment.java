@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -99,7 +98,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
     Executor mExecutor;
     private LinearLayoutManagerBugFixed mLinearLayoutManager;
     private SubredditListingRecyclerViewAdapter mAdapter;
-    private Activity mActivity;
+    private BaseActivity mActivity;
     private SortType sortType;
 
     public SubredditListingFragment() {
@@ -218,7 +217,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mActivity = (Activity) context;
+        mActivity = (BaseActivity) context;
     }
 
     private void showErrorView(int stringResId) {
@@ -248,6 +247,9 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
         mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         mFetchSubredditListingInfoTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
+        if (mActivity.typeface != null) {
+            mFetchSubredditListingInfoTextView.setTypeface(mActivity.contentTypeface);
+        }
     }
 
     public void goBackToTop() {

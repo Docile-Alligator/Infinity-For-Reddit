@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.settings;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -25,14 +24,16 @@ import javax.inject.Inject;
 
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.adapters.CrashReportsRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class CrashReportsFragment extends Fragment {
 
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
-    private Activity activity;
+    private SettingsActivity activity;
 
     public CrashReportsFragment() {
         // Required empty public constructor
@@ -48,7 +49,7 @@ public class CrashReportsFragment extends Fragment {
 
         setHasOptionsMenu(true);
 
-        recyclerView.setAdapter(new CrashReportsRecyclerViewAdapter(CrashyReporter.INSTANCE.getLogsAsStrings()));
+        recyclerView.setAdapter(new CrashReportsRecyclerViewAdapter(activity, CrashyReporter.INSTANCE.getLogsAsStrings()));
 
         return recyclerView;
     }
@@ -82,6 +83,7 @@ public class CrashReportsFragment extends Fragment {
                         item.setIcon(drawable);
                     }
                 }
+                Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, null);
             }
         }
         return true;
@@ -90,6 +92,6 @@ public class CrashReportsFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (Activity) context;
+        activity = (SettingsActivity) context;
     }
 }

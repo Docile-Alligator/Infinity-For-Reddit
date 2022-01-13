@@ -90,7 +90,7 @@ public class SelectedSubredditsAndUsersActivity extends BaseActivity implements 
             subreddits = getIntent().getStringArrayListExtra(EXTRA_SELECTED_SUBREDDITS);
         }
 
-        adapter = new SelectedSubredditsRecyclerViewAdapter(mCustomThemeWrapper, subreddits);
+        adapter = new SelectedSubredditsRecyclerViewAdapter(this, mCustomThemeWrapper, subreddits);
         linearLayoutManager = new LinearLayoutManagerBugFixed(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(adapter);

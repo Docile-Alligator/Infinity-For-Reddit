@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
@@ -55,6 +54,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RPANBroadcast;
 import ml.docilealligator.infinityforreddit.RPANComment;
+import ml.docilealligator.infinityforreddit.activities.RPANActivity;
 import ml.docilealligator.infinityforreddit.adapters.RPANCommentStreamRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
@@ -105,7 +105,7 @@ public class ViewRPANBroadcastFragment extends Fragment {
     @Inject
     @Named("rpan")
     OkHttpClient okHttpClient;
-    private AppCompatActivity mActivity;
+    private RPANActivity mActivity;
     private RPANBroadcast rpanBroadcast;
     private SimpleExoPlayer player;
     private DefaultTrackSelector trackSelector;
@@ -132,6 +132,12 @@ public class ViewRPANBroadcastFragment extends Fragment {
         ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
+
+        if (mActivity.typeface != null) {
+            subredditNameTextView.setTypeface(mActivity.typeface);
+            usernameTextView.setTypeface(mActivity.typeface);
+            titleTextView.setTypeface(mActivity.typeface);
+        }
 
         rpanBroadcast = getArguments().getParcelable(EXTRA_RPAN_BROADCAST);
 
@@ -390,7 +396,7 @@ public class ViewRPANBroadcastFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mActivity = (AppCompatActivity) context;
+        mActivity = (RPANActivity) context;
     }
 
     private static class CommentStreamWebSocketListener extends WebSocketListener {

@@ -55,6 +55,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.PlaybackSpeedBo
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class ViewRedditGalleryVideoFragment extends Fragment {
 
@@ -106,6 +107,10 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
         ButterKnife.bind(this, rootView);
 
         setHasOptionsMenu(true);
+
+        if (activity.typeface != null) {
+            titleTextView.setTypeface(activity.typeface);
+        }
 
         activity.setVolumeControlStream(AudioManager.STREAM_MUSIC);
 
@@ -181,6 +186,10 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.view_reddit_gallery_video_fragment, menu);
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, null);
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 

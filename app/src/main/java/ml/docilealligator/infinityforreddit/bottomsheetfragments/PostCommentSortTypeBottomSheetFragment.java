@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -19,7 +18,9 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -44,7 +45,7 @@ public class PostCommentSortTypeBottomSheetFragment extends LandscapeExpandedRou
     TextView qaTypeTextView;
     @BindView(R.id.live_type_text_view_post_comment_sort_type_bottom_sheet_fragment)
     TextView liveTypeTextView;
-    private Activity activity;
+    private BaseActivity activity;
     public PostCommentSortTypeBottomSheetFragment() {
         // Required empty public constructor
     }
@@ -107,12 +108,16 @@ public class PostCommentSortTypeBottomSheetFragment extends LandscapeExpandedRou
             dismiss();
         });
 
+        if (activity.typeface != null) {
+            Utils.setFontToAllTextViews(rootView, activity.typeface);
+        }
+
         return rootView;
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.activity = (Activity) context;
+        this.activity = (BaseActivity) context;
     }
 }

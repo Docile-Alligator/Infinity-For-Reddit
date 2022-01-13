@@ -22,7 +22,7 @@ public class FetchPost {
         } else {
             postCall = retrofit.create(RedditAPI.class).getPostOauth(id, APIUtils.getOAuthHeader(accessToken));
         }
-        postCall.enqueue(new Callback<String>() {
+        postCall.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {

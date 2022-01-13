@@ -1,33 +1,33 @@
 package ml.docilealligator.infinityforreddit.settings;
 
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
-import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 /**
  * A simple {@link PreferenceFragmentCompat} subclass.
  */
-public class AboutPreferenceFragment extends PreferenceFragmentCompat {
-
-    private Activity activity;
+public class AboutPreferenceFragment extends CustomFontPreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.about_preferences, rootKey);
+
+        if (activity.typeface != null) {
+            setFont(activity.typeface);
+        }
 
         Preference openSourcePreference = findPreference(SharedPreferencesUtils.OPEN_SOURCE_KEY);
         Preference ratePreference = findPreference(SharedPreferencesUtils.RATE_KEY);
@@ -136,11 +136,5 @@ public class AboutPreferenceFragment extends PreferenceFragmentCompat {
                 }
             });
         }
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        activity = (Activity) context;
     }
 }

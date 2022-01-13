@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
-import android.content.Context;
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,21 +20,24 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditWithSelection;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 import pl.droidsonroids.gif.GifImageView;
 
 public class SubredditMultiselectionRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private BaseActivity activity;
     private ArrayList<SubredditWithSelection> subscribedSubreddits;
     private RequestManager glide;
     private int primaryTextColor;
     private int colorAccent;
 
-    public SubredditMultiselectionRecyclerViewAdapter(Context context, CustomThemeWrapper customThemeWrapper) {
-        glide = Glide.with(context);
+    public SubredditMultiselectionRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper) {
+        this.activity = activity;
+        glide = Glide.with(activity);
         primaryTextColor = customThemeWrapper.getPrimaryTextColor();
         colorAccent = customThemeWrapper.getColorAccent();
     }
@@ -118,6 +120,10 @@ public class SubredditMultiselectionRecyclerViewAdapter extends RecyclerView.Ada
             ButterKnife.bind(this, itemView);
             nameTextView.setTextColor(primaryTextColor);
             checkBox.setButtonTintList(ColorStateList.valueOf(colorAccent));
+
+            if (activity.typeface != null) {
+                nameTextView.setTypeface(activity.typeface);
+            }
         }
     }
 }

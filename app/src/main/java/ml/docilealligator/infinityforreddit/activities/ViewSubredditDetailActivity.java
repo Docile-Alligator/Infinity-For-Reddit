@@ -558,6 +558,15 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         option4BottomAppBar.setColorFilter(bottomAppBarIconColor, PorterDuff.Mode.SRC_IN);
         applyTabLayoutTheme(tabLayout);
         applyFABTheme(fab);
+        if (typeface != null) {
+            subredditNameTextView.setTypeface(typeface);
+            subscribeSubredditChip.setTypeface(typeface);
+            nSubscribersTextView.setTypeface(typeface);
+            nOnlineSubscribersTextView.setTypeface(typeface);
+            sinceTextView.setTypeface(typeface);
+            creationTimeTextView.setTypeface(typeface);
+            descriptionTextView.setTypeface(typeface);
+        }
         unsubscribedColor = mCustomThemeWrapper.getUnsubscribed();
         subscribedColor = mCustomThemeWrapper.getSubscribed();
     }

@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -45,7 +44,6 @@ import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.html.HtmlPlugin;
 import io.noties.markwon.html.tag.SuperScriptHandler;
 import io.noties.markwon.inlineparser.AutolinkInlineProcessor;
-import io.noties.markwon.inlineparser.BackslashInlineProcessor;
 import io.noties.markwon.inlineparser.BangInlineProcessor;
 import io.noties.markwon.inlineparser.HtmlInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
@@ -55,6 +53,7 @@ import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.VoteThing;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
@@ -86,7 +85,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private static final int VIEW_TYPE_LOAD_MORE_COMMENTS_FAILED = 16;
     private static final int VIEW_TYPE_VIEW_ALL_COMMENTS = 17;
 
-    private AppCompatActivity mActivity;
+    private BaseActivity mActivity;
     private ViewPostDetailFragment mFragment;
     private Executor mExecutor;
     private Retrofit mRetrofit;
@@ -145,7 +144,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     private int mSearchCommentIndex = -1;
 
-    public CommentsRecyclerViewAdapter(AppCompatActivity activity, ViewPostDetailFragment fragment,
+    public CommentsRecyclerViewAdapter(BaseActivity activity, ViewPostDetailFragment fragment,
                                        CustomThemeWrapper customThemeWrapper,
                                        Executor executor, Retrofit retrofit, Retrofit oauthRetrofit,
                                        String accessToken, String accountName,
@@ -1119,6 +1118,17 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 commentDivider.setVisibility(View.VISIBLE);
             }
 
+            if (mActivity.typeface != null) {
+                authorTextView.setTypeface(mActivity.typeface);
+                commentTimeTextView.setTypeface(mActivity.typeface);
+                authorFlairTextView.setTypeface(mActivity.typeface);
+                topScoreTextView.setTypeface(mActivity.typeface);
+                awardsTextView.setTypeface(mActivity.typeface);
+                scoreTextView.setTypeface(mActivity.typeface);
+            }
+            if (mActivity.contentTypeface != null) {
+                commentMarkdownView.setTypeface(mActivity.contentTypeface);
+            }
             itemView.setBackgroundColor(mCommentBackgroundColor);
             authorTextView.setTextColor(mUsernameColor);
             commentTimeTextView.setTextColor(mSecondaryTextColor);
@@ -1440,16 +1450,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 }
             });
 
-            /*commentMarkdownView.setMovementMethod(BetterLinkMovementMethod.newInstance().setOnLinkLongClickListener((textView, url) -> {
-                if (!mActivity.isDestroyed() && !mActivity.isFinishing()) {
-                    UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
-                    urlMenuBottomSheetFragment.setArguments(bundle);
-                    urlMenuBottomSheetFragment.show(mActivity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
-                }
-                return true;
-            }));*/
             if (mSwapTapAndLong) {
                 if (mCommentToolbarHideOnClick) {
                     View.OnLongClickListener hideToolbarOnLongClickListener = view -> hideToolbar();
@@ -1547,6 +1547,11 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             super(itemView);
             ButterKnife.bind(this, itemView);
 
+            if (mActivity.typeface != null) {
+                usernameTextView.setTypeface(mActivity.typeface);
+                scoreTextView.setTypeface(mActivity.typeface);
+                commentTimeTextView.setTypeface(mActivity.typeface);
+            }
             itemView.setBackgroundColor(mFullyCollapsedCommentBackgroundColor);
             usernameTextView.setTextColor(mUsernameColor);
             scoreTextView.setTextColor(mSecondaryTextColor);
@@ -1602,6 +1607,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 commentDivider.setVisibility(View.VISIBLE);
             }
 
+            if (mActivity.typeface != null) {
+                placeholderTextView.setTypeface(mActivity.typeface);
+            }
             itemView.setBackgroundColor(mCommentBackgroundColor);
             placeholderTextView.setTextColor(mPrimaryTextColor);
             commentDivider.setBackgroundColor(mDividerColor);
@@ -1628,6 +1636,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(view -> mCommentRecyclerViewAdapterCallback.retryFetchingComments());
+            if (mActivity.typeface != null) {
+                errorTextView.setTypeface(mActivity.typeface);
+            }
             errorTextView.setTextColor(mSecondaryTextColor);
         }
     }
@@ -1639,6 +1650,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         NoCommentViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            if (mActivity.typeface != null) {
+                errorTextView.setTypeface(mActivity.typeface);
+            }
             errorTextView.setTextColor(mSecondaryTextColor);
         }
     }
@@ -1663,6 +1677,10 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         LoadMoreCommentsFailedViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            if (mActivity.typeface != null) {
+                errorTextView.setTypeface(mActivity.typeface);
+                retryButton.setTypeface(mActivity.typeface);
+            }
             errorTextView.setText(R.string.load_comments_failed);
             retryButton.setOnClickListener(view -> mCommentRecyclerViewAdapterCallback.retryFetchingMoreComments());
             errorTextView.setTextColor(mSecondaryTextColor);
@@ -1685,6 +1703,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 }
             });
 
+            if (mActivity.typeface != null) {
+                ((TextView) itemView).setTypeface(mActivity.typeface);
+            }
             itemView.setBackgroundTintList(ColorStateList.valueOf(mCommentBackgroundColor));
             ((TextView) itemView).setTextColor(mColorAccent);
         }

@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -76,7 +75,7 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
     @Inject
     Executor mExecutor;
     SubscribedUserViewModel mSubscribedUserViewModel;
-    private Activity mActivity;
+    private BaseActivity mActivity;
     private RequestManager mGlide;
     private LinearLayoutManagerBugFixed mLinearLayoutManager;
 
@@ -154,7 +153,7 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mActivity = (Activity) context;
+        mActivity = (BaseActivity) context;
     }
 
     @Override
@@ -172,6 +171,9 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
             mSwipeRefreshLayout.setEnabled(false);
         }
         mErrorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
+        if (mActivity.typeface != null) {
+            mErrorTextView.setTypeface(mActivity.typeface);
+        }
     }
 
     public void goBackToTop() {

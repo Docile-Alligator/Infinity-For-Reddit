@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.fragments;
+package ml.docilealligator.infinityforreddit.events;
 
 public class ChangePullToRefreshEvent {
     public boolean pullToRefresh;

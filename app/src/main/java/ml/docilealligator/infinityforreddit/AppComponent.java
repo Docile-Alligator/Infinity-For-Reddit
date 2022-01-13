@@ -5,7 +5,6 @@ import javax.inject.Singleton;
 import dagger.Component;
 import ml.docilealligator.infinityforreddit.activities.AccountPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.AccountSavedThingActivity;
-import ml.docilealligator.infinityforreddit.activities.AnonymousSubscriptionsActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
 import ml.docilealligator.infinityforreddit.activities.CreateMultiRedditActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomThemeListingActivity;
@@ -270,8 +269,6 @@ public interface AppComponent {
     void inject(WebViewActivity webViewActivity);
 
     void inject(CrashReportsFragment crashReportsFragment);
-
-    void inject(AnonymousSubscriptionsActivity anonymousSubscriptionsActivity);
 
     void inject(LockScreenActivity lockScreenActivity);
 

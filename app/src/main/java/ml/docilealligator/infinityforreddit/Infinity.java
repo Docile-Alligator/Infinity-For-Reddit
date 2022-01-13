@@ -81,8 +81,8 @@ public class Infinity extends Application implements LifecycleObserver {
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
             @Override
             public void onActivityPreCreated(@NonNull Activity activity, @Nullable Bundle savedInstanceState) {
-                if (activity instanceof BaseActivity) {
-                    ((BaseActivity) activity).setCustomFont(typeface, titleTypeface, contentTypeface);
+                if (activity instanceof CustomFontReceiver) {
+                    ((CustomFontReceiver) activity).setCustomFont(typeface, titleTypeface, contentTypeface);
                 }
             }
 

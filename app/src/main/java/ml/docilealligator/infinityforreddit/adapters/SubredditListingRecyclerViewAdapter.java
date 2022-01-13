@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
-import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -32,6 +31,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.asynctasks.CheckIsSubscribedToSubreddit;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
@@ -55,7 +55,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
         }
     };
     private RequestManager glide;
-    private Context context;
+    private BaseActivity activity;
     private Executor executor;
     private Retrofit oauthRetrofit;
     private Retrofit retrofit;
@@ -73,13 +73,13 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
     private NetworkState networkState;
     private Callback callback;
 
-    public SubredditListingRecyclerViewAdapter(Context context, Executor executor, Retrofit oauthRetrofit, Retrofit retrofit,
+    public SubredditListingRecyclerViewAdapter(BaseActivity activity, Executor executor, Retrofit oauthRetrofit, Retrofit retrofit,
                                                CustomThemeWrapper customThemeWrapper,
                                                String accessToken, String accountName,
                                                RedditDataRoomDatabase redditDataRoomDatabase,
                                                boolean isMultiSelection, Callback callback) {
         super(DIFF_CALLBACK);
-        this.context = context;
+        this.activity = activity;
         this.executor = executor;
         this.oauthRetrofit = oauthRetrofit;
         this.retrofit = retrofit;
@@ -88,7 +88,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
         this.redditDataRoomDatabase = redditDataRoomDatabase;
         this.isMultiSelection = isMultiSelection;
         this.callback = callback;
-        glide = Glide.with(context);
+        glide = Glide.with(this.activity);
         colorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
         primaryTextColor = customThemeWrapper.getPrimaryTextColor();
         secondaryTextColor = customThemeWrapper.getSecondaryTextColor();
@@ -163,12 +163,12 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
                                                         @Override
                                                         public void onSubredditSubscriptionSuccess() {
                                                             ((DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
-                                                            Toast.makeText(context, R.string.subscribed, Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(activity, R.string.subscribed, Toast.LENGTH_SHORT).show();
                                                         }
 
                                                         @Override
                                                         public void onSubredditSubscriptionFail() {
-                                                            Toast.makeText(context, R.string.subscribe_failed, Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(activity, R.string.subscribe_failed, Toast.LENGTH_SHORT).show();
                                                         }
                                                     });
                                         } else {
@@ -178,12 +178,12 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
                                                         @Override
                                                         public void onSubredditSubscriptionSuccess() {
                                                             ((DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
-                                                            Toast.makeText(context, R.string.subscribed, Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(activity, R.string.subscribed, Toast.LENGTH_SHORT).show();
                                                         }
 
                                                         @Override
                                                         public void onSubredditSubscriptionFail() {
-                                                            Toast.makeText(context, R.string.subscribe_failed, Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(activity, R.string.subscribe_failed, Toast.LENGTH_SHORT).show();
                                                         }
                                                     });
                                         }
@@ -273,6 +273,10 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
             if (isMultiSelection) {
                 checkBox.setVisibility(View.VISIBLE);
             }
+
+            if (activity.typeface != null) {
+                subredditNameTextView.setTypeface(activity.typeface);
+            }
         }
     }
 
@@ -290,6 +294,11 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
             errorTextView.setTextColor(secondaryTextColor);
             retryButton.setBackgroundTintList(ColorStateList.valueOf(colorPrimaryLightTheme));
             retryButton.setTextColor(buttonTextColor);
+
+            if (activity.typeface != null) {
+                retryButton.setTypeface(activity.typeface);
+                errorTextView.setTypeface(activity.typeface);
+            }
         }
     }
 

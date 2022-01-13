@@ -25,7 +25,6 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -355,12 +354,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         applyTabLayoutTheme(tabLayout);
         bottomAppBar.setBackgroundTint(ColorStateList.valueOf(mCustomThemeWrapper.getBottomAppBarBackgroundColor()));
         applyFABTheme(fab);
-        for (int i = 0; i < toolbar.getChildCount(); i++) {
-            View view = toolbar.getChildAt(i);
-            if (view instanceof TextView) {
-                ((TextView) view).setTypeface(typeface);
-            }
-        }
     }
 
     private void initializeNotificationAndBindView(boolean doNotInitializeNotificationIfNoNewAccount) {
@@ -858,32 +851,32 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
                 switch (position) {
                     case 0:
-                        tab.setText(mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_TITLE, getString(R.string.home)));
+                        Utils.setTitleWithCustomFontToTab(typeface, tab, mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_TITLE, getString(R.string.home)));
                         break;
                     case 1:
-                        tab.setText(mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_TITLE, getString(R.string.popular)));
+                        Utils.setTitleWithCustomFontToTab(typeface, tab, mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_TITLE, getString(R.string.popular)));
                         break;
                     case 2:
-                        tab.setText(mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_TITLE, getString(R.string.all)));
+                        Utils.setTitleWithCustomFontToTab(typeface, tab, mMainActivityTabsSharedPreferences.getString((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_TITLE, getString(R.string.all)));
                         break;
                 }
                 if (position >= tabCount && (mShowFavoriteMultiReddits || mShowMultiReddits ||
                         mShowFavoriteSubscribedSubreddits || mShowSubscribedSubreddits)
                         && sectionsPagerAdapter != null) {
                     if (position - tabCount < sectionsPagerAdapter.favoriteMultiReddits.size()) {
-                        tab.setText(sectionsPagerAdapter.favoriteMultiReddits.get(position - tabCount).getName());
+                        Utils.setTitleWithCustomFontToTab(typeface, tab, sectionsPagerAdapter.favoriteMultiReddits.get(position - tabCount).getName());
                     } else if (position - tabCount - sectionsPagerAdapter.favoriteMultiReddits.size() < sectionsPagerAdapter.multiReddits.size()) {
-                        tab.setText(sectionsPagerAdapter.multiReddits.get(position - tabCount
+                        Utils.setTitleWithCustomFontToTab(typeface, tab, sectionsPagerAdapter.multiReddits.get(position - tabCount
                                 - sectionsPagerAdapter.favoriteMultiReddits.size()).getName());
                     } else if (position - tabCount - sectionsPagerAdapter.favoriteMultiReddits.size()
                             - sectionsPagerAdapter.multiReddits.size() < sectionsPagerAdapter.favoriteSubscribedSubreddits.size()) {
-                        tab.setText(sectionsPagerAdapter.favoriteSubscribedSubreddits.get(position - tabCount
+                        Utils.setTitleWithCustomFontToTab(typeface, tab, sectionsPagerAdapter.favoriteSubscribedSubreddits.get(position - tabCount
                                 - sectionsPagerAdapter.favoriteMultiReddits.size()
                                 - sectionsPagerAdapter.multiReddits.size()).getName());
                     } else if (position - tabCount - sectionsPagerAdapter.favoriteMultiReddits.size()
                             - sectionsPagerAdapter.multiReddits.size()
                             - sectionsPagerAdapter.favoriteSubscribedSubreddits.size() < sectionsPagerAdapter.subscribedSubreddits.size()) {
-                        tab.setText(sectionsPagerAdapter.subscribedSubreddits.get(position - tabCount
+                        Utils.setTitleWithCustomFontToTab(typeface, tab, sectionsPagerAdapter.subscribedSubreddits.get(position - tabCount
                                 - sectionsPagerAdapter.favoriteMultiReddits.size()
                                 - sectionsPagerAdapter.multiReddits.size()
                                 - sectionsPagerAdapter.favoriteSubscribedSubreddits.size()).getName());

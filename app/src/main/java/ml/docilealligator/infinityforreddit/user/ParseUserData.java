@@ -148,7 +148,12 @@ public class ParseUserData {
                     after = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.AFTER_KEY);
                     JSONArray children = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
                     for (int i = 0; i < children.length(); i++) {
-                        userDataArrayList.add(parseUserDataBase(children.getJSONObject(i), false));
+                        try {
+                            UserData userData = parseUserDataBase(children.getJSONObject(i), false);
+                            userDataArrayList.add(userData);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
             } catch (JSONException e) {

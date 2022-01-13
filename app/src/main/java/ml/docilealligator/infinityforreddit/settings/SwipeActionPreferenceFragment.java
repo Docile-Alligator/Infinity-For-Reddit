@@ -3,24 +3,28 @@ package ml.docilealligator.infinityforreddit.settings;
 import android.os.Bundle;
 
 import androidx.preference.ListPreference;
-import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import org.greenrobot.eventbus.EventBus;
 
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
 import ml.docilealligator.infinityforreddit.events.ChangeDisableSwipingBetweenTabsEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeEnableSwipeActionSwitchEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeSwipeActionEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeSwipeActionThresholdEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeVibrateWhenActionTriggeredEvent;
-import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
-public class SwipeActionPreferenceFragment extends PreferenceFragmentCompat {
+public class SwipeActionPreferenceFragment extends CustomFontPreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.swipe_action_preferences, rootKey);
+
+        if (activity.typeface != null) {
+            setFont(activity.typeface);
+        }
 
         SwitchPreference enableSwipeActionSwitch = findPreference(SharedPreferencesUtils.ENABLE_SWIPE_ACTION);
         ListPreference swipeLeftActionListPreference = findPreference(SharedPreferencesUtils.SWIPE_LEFT_ACTION);

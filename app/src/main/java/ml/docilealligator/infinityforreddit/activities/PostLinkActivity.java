@@ -384,6 +384,19 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
         suggestTitleButton.setTextColor(mCustomThemeWrapper.getButtonTextColor());
         linkEditText.setTextColor(primaryTextColor);
         linkEditText.setHintTextColor(secondaryTextColor);
+        if (typeface != null) {
+            subredditNameTextView.setTypeface(typeface);
+            rulesButton.setTypeface(typeface);
+            receivePostReplyNotificationsTextView.setTypeface(typeface);
+            flairTextView.setTypeface(typeface);
+            spoilerTextView.setTypeface(typeface);
+            nsfwTextView.setTypeface(typeface);
+            titleEditText.setTypeface(typeface);
+            suggestTitleButton.setTypeface(typeface);
+        }
+        if (contentTypeface != null) {
+            linkEditText.setTypeface(contentTypeface);
+        }
     }
 
     private void displaySubredditIcon() {

@@ -1,7 +1,7 @@
 package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,7 +18,9 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 
 /**
@@ -34,6 +36,8 @@ public class UserThingSortTypeBottomSheetFragment extends LandscapeExpandedRound
     TextView topTypeTextView;
     @BindView(R.id.controversial_type_text_view_user_thing_sort_type_bottom_sheet_fragment)
     TextView controversialTypeTextView;
+    private BaseActivity activity;
+
     public UserThingSortTypeBottomSheetFragment() {
         // Required empty public constructor
     }
@@ -44,8 +48,6 @@ public class UserThingSortTypeBottomSheetFragment extends LandscapeExpandedRound
         View rootView = inflater.inflate(R.layout.fragment_user_thing_sort_type_bottom_sheet, container, false);
 
         ButterKnife.bind(this, rootView);
-
-        Activity activity = getActivity();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
@@ -80,6 +82,16 @@ public class UserThingSortTypeBottomSheetFragment extends LandscapeExpandedRound
             dismiss();
         });
 
+        if (activity.typeface != null) {
+            Utils.setFontToAllTextViews(rootView, activity.typeface);
+        }
+
         return rootView;
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        this.activity = (BaseActivity) context;
     }
 }

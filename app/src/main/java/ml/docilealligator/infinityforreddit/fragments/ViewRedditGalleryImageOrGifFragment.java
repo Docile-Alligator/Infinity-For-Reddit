@@ -68,6 +68,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.SetAsWallpaperB
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 
@@ -136,6 +137,12 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
         subredditName = getArguments().getString(EXTRA_SUBREDDIT_NAME);
         isNsfw = getArguments().getBoolean(EXTRA_IS_NSFW, false);
         glide = Glide.with(activity);
+
+        if (activity.typeface != null) {
+            titleTextView.setTypeface(activity.typeface);
+            captionTextView.setTypeface(activity.typeface);
+            captionUrlTextView.setTypeface(activity.typeface);
+        }
 
         imageView.setImageViewFactory(new GlideImageViewFactory());
 
@@ -346,6 +353,10 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.view_reddit_gallery_image_or_gif_fragment, menu);
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, null);
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 

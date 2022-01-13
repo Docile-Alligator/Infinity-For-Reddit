@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
-import android.content.Context;
 import android.content.res.ColorStateList;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -32,6 +31,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.asynctasks.CheckIsFollowingUser;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.user.UserData;
@@ -55,7 +55,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
         }
     };
     private RequestManager glide;
-    private Context context;
+    private BaseActivity activity;
     private Executor executor;
     private Retrofit oauthRetrofit;
     private Retrofit retrofit;
@@ -73,12 +73,12 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
     private NetworkState networkState;
     private final Callback callback;
 
-    public UserListingRecyclerViewAdapter(Context context, Executor executor, Retrofit oauthRetrofit, Retrofit retrofit,
+    public UserListingRecyclerViewAdapter(BaseActivity activity, Executor executor, Retrofit oauthRetrofit, Retrofit retrofit,
                                           CustomThemeWrapper customThemeWrapper, String accessToken,
                                           String accountName, RedditDataRoomDatabase redditDataRoomDatabase,
                                           boolean isMultiSelection, Callback callback) {
         super(DIFF_CALLBACK);
-        this.context = context;
+        this.activity = activity;
         this.executor = executor;
         this.oauthRetrofit = oauthRetrofit;
         this.retrofit = retrofit;
@@ -87,7 +87,7 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
         this.redditDataRoomDatabase = redditDataRoomDatabase;
         this.isMultiSelection = isMultiSelection;
         this.callback = callback;
-        glide = Glide.with(context);
+        glide = Glide.with(activity);
         primaryTextColor = customThemeWrapper.getPrimaryTextColor();
         buttonTextColor = customThemeWrapper.getButtonTextColor();
         colorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
@@ -155,12 +155,12 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
                                                     @Override
                                                     public void onUserFollowingSuccess() {
                                                         ((DataViewHolder) holder).subscribeButton.setVisibility(View.GONE);
-                                                        Toast.makeText(context, R.string.followed, Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(activity, R.string.followed, Toast.LENGTH_SHORT).show();
                                                     }
 
                                                     @Override
                                                     public void onUserFollowingFail() {
-                                                        Toast.makeText(context, R.string.follow_failed, Toast.LENGTH_SHORT).show();
+                                                        Toast.makeText(activity, R.string.follow_failed, Toast.LENGTH_SHORT).show();
                                                     }
                                                 });
                                     });
@@ -246,6 +246,11 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
             ButterKnife.bind(this, itemView);
             userNameTextView.setTextColor(primaryTextColor);
             subscribeButton.setColorFilter(unsubscribedColor, android.graphics.PorterDuff.Mode.SRC_IN);
+
+            if (activity.typeface != null) {
+                userNameTextView.setTypeface(activity.typeface);
+            }
+
             if (isMultiSelection) {
                 checkBox.setVisibility(View.VISIBLE);
             }
@@ -266,6 +271,11 @@ public class UserListingRecyclerViewAdapter extends PagedListAdapter<UserData, R
             errorTextView.setTextColor(primaryTextColor);
             retryButton.setTextColor(buttonTextColor);
             retryButton.setBackgroundTintList(ColorStateList.valueOf(colorPrimaryLightTheme));
+
+            if (activity.typeface != null) {
+                retryButton.setTypeface(activity.typeface);
+                errorTextView.setTypeface(activity.typeface);
+            }
         }
     }
 

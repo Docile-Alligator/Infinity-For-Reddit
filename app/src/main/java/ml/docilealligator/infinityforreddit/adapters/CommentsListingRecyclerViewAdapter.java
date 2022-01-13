@@ -3,14 +3,9 @@ package ml.docilealligator.infinityforreddit.adapters;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
-import android.text.SpannableStringBuilder;
-import android.text.Spanned;
-import android.text.TextPaint;
-import android.text.style.ClickableSpan;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,8 +27,6 @@ import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.Locale;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,6 +47,7 @@ import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.VoteThing;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
@@ -65,10 +59,9 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.CommentIndentationView;
 import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
-import ml.docilealligator.infinityforreddit.markdown.SpoilerSpan;
+import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
@@ -87,7 +80,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             return comment.getCommentMarkdown().equals(t1.getCommentMarkdown());
         }
     };
-    private AppCompatActivity mActivity;
+    private BaseActivity mActivity;
     private Retrofit mOauthRetrofit;
     private Locale mLocale;
     private Markwon mMarkwon;
@@ -114,7 +107,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
     private NetworkState networkState;
     private RetryLoadingMoreCallback mRetryLoadingMoreCallback;
 
-    public CommentsListingRecyclerViewAdapter(AppCompatActivity activity, Retrofit oauthRetrofit,
+    public CommentsListingRecyclerViewAdapter(BaseActivity activity, Retrofit oauthRetrofit,
                                               CustomThemeWrapper customThemeWrapper, Locale locale,
                                               SharedPreferences sharedPreferences, String accessToken,
                                               String accountName, RetryLoadingMoreCallback retryLoadingMoreCallback) {
@@ -421,6 +414,16 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 commentDivider.setVisibility(View.VISIBLE);
             }
 
+            if (mActivity.typeface != null) {
+                authorTextView.setTypeface(mActivity.typeface);
+                authorFlairTextView.setTypeface(mActivity.typeface);
+                commentTimeTextView.setTypeface(mActivity.typeface);
+                awardsTextView.setTypeface(mActivity.typeface);
+                scoreTextView.setTypeface(mActivity.typeface);
+            }
+            if (mActivity.contentTypeface != null) {
+                commentMarkdownView.setTypeface(mActivity.typeface);
+            }
             itemView.setBackgroundColor(mCommentBackgroundColor);
             authorTextView.setTextColor(mUsernameColor);
             authorFlairTextView.setTextColor(mAuthorFlairColor);
@@ -705,6 +708,10 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         ErrorViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            if (mActivity.typeface != null) {
+                errorTextView.setTypeface(mActivity.typeface);
+                retryButton.setTypeface(mActivity.typeface);
+            }
             errorTextView.setText(R.string.load_comments_failed);
             retryButton.setOnClickListener(view -> mRetryLoadingMoreCallback.retryLoadingMore());
             errorTextView.setTextColor(mSecondaryTextColor);

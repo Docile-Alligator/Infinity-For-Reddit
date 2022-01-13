@@ -160,6 +160,9 @@ public class RulesActivity extends BaseActivity {
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
         progressBar.setIndeterminateTintList(ColorStateList.valueOf(mCustomThemeWrapper.getColorAccent()));
         errorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
+        if (typeface != null) {
+            errorTextView.setTypeface(typeface);
+        }
     }
 
     private void displayError() {

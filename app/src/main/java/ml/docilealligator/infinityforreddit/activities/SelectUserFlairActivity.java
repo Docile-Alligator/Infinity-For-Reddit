@@ -129,7 +129,7 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
     }
 
     private void instantiateRecyclerView() {
-        mAdapter = new UserFlairRecyclerViewAdapter(mCustomThemeWrapper, mUserFlairs, (userFlair, editUserFlair) -> {
+        mAdapter = new UserFlairRecyclerViewAdapter(this, mCustomThemeWrapper, mUserFlairs, (userFlair, editUserFlair) -> {
             if (editUserFlair) {
                 View dialogView = getLayoutInflater().inflate(R.layout.dialog_edit_flair, null);
                 EditText flairEditText = dialogView.findViewById(R.id.flair_edit_text_edit_flair_dialog);

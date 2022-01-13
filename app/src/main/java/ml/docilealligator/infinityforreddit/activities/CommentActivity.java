@@ -243,6 +243,9 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
 
                         @Override
                         public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
+                            if (contentTypeface != null) {
+                                textView.setTypeface(contentTypeface);
+                            }
                             textView.setTextColor(markdownColor);
                             textView.setOnLongClickListener(view -> {
                                 Utils.hideKeyboard(CommentActivity.this);
@@ -357,6 +360,11 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
         commentEditText.setHintTextColor(secondaryTextColor);
         markdownColor = secondaryTextColor;
+
+        if (typeface != null) {
+            commentParentMarkwonView.setTypeface(typeface);
+            commentEditText.setTypeface(typeface);
+        }
     }
 
     @Override

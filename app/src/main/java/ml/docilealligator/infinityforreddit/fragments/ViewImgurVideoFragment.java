@@ -55,6 +55,7 @@ import ml.docilealligator.infinityforreddit.activities.ViewImgurMediaActivity;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PlaybackSpeedBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class ViewImgurVideoFragment extends Fragment {
 
@@ -175,6 +176,10 @@ public class ViewImgurVideoFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.view_imgur_video_fragment, menu);
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, null);
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 

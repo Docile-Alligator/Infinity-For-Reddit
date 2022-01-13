@@ -12,7 +12,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricManager;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
@@ -32,6 +31,7 @@ import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.account.Account;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.InboxActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
@@ -62,7 +62,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private static final int POST_SECTION_ITEMS = 5;
     private static final int PREFERENCES_SECTION_ITEMS = 3;
 
-    private AppCompatActivity appCompatActivity;
+    private BaseActivity baseActivity;
     private Resources resources;
     private RequestManager glide;
     private String accountName;
@@ -92,15 +92,15 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
     private int dividerColor;
     private int primaryIconColor;
 
-    public NavigationDrawerRecyclerViewAdapter(AppCompatActivity appCompatActivity, SharedPreferences sharedPreferences,
+    public NavigationDrawerRecyclerViewAdapter(BaseActivity baseActivity, SharedPreferences sharedPreferences,
                                                SharedPreferences nsfwAndSpoilerSharedPreferences,
                                                SharedPreferences navigationDrawerSharedPreferences,
                                                CustomThemeWrapper customThemeWrapper,
                                                String accountName,
                                                ItemClickListener itemClickListener) {
-        this.appCompatActivity = appCompatActivity;
-        resources = appCompatActivity.getResources();
-        glide = Glide.with(appCompatActivity);
+        this.baseActivity = baseActivity;
+        resources = baseActivity.getResources();
+        glide = Glide.with(baseActivity);
         this.accountName = accountName;
         isNSFWEnabled = nsfwAndSpoilerSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
         requireAuthToAccountSection = sharedPreferences.getBoolean(SharedPreferencesUtils.REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER, false);
@@ -238,7 +238,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
             }
             ((NavHeaderViewHolder) holder).profileImageView.setLayoutParams(params);
             if (isLoggedIn) {
-                ((NavHeaderViewHolder) holder).karmaTextView.setText(appCompatActivity.getString(R.string.karma_info, karma));
+                ((NavHeaderViewHolder) holder).karmaTextView.setText(baseActivity.getString(R.string.karma_info, karma));
                 ((NavHeaderViewHolder) holder).accountNameTextView.setText(accountName);
                 if (profileImageUrl != null && !profileImageUrl.equals("")) {
                     glide.load(profileImageUrl)
@@ -272,10 +272,10 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
             holder.itemView.setOnClickListener(view -> {
                 if (isInMainPage) {
                     if (requireAuthToAccountSection) {
-                        BiometricManager biometricManager = BiometricManager.from(appCompatActivity);
+                        BiometricManager biometricManager = BiometricManager.from(baseActivity);
                         if (biometricManager.canAuthenticate(BIOMETRIC_STRONG | DEVICE_CREDENTIAL) == BiometricManager.BIOMETRIC_SUCCESS) {
-                            Executor executor = ContextCompat.getMainExecutor(appCompatActivity);
-                            BiometricPrompt biometricPrompt = new BiometricPrompt(appCompatActivity,
+                            Executor executor = ContextCompat.getMainExecutor(baseActivity);
+                            BiometricPrompt biometricPrompt = new BiometricPrompt(baseActivity,
                                     executor, new BiometricPrompt.AuthenticationCallback() {
                                 @Override
                                 public void onAuthenticationSucceeded(
@@ -286,7 +286,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                             });
 
                             BiometricPrompt.PromptInfo promptInfo = new BiometricPrompt.PromptInfo.Builder()
-                                    .setTitle(appCompatActivity.getString(R.string.unlock_account_section))
+                                    .setTitle(baseActivity.getString(R.string.unlock_account_section))
                                     .setAllowedAuthenticators(BIOMETRIC_STRONG | DEVICE_CREDENTIAL)
                                     .build();
 
@@ -473,14 +473,14 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                         case 5:
                             setOnClickListener = false;
                             if (inboxCount > 0) {
-                                ((MenuItemViewHolder) holder).menuTextView.setText(appCompatActivity.getString(R.string.inbox_with_count, inboxCount));
+                                ((MenuItemViewHolder) holder).menuTextView.setText(baseActivity.getString(R.string.inbox_with_count, inboxCount));
                             } else {
                                 ((MenuItemViewHolder) holder).menuTextView.setText(R.string.inbox);
                             }
-                            ((MenuItemViewHolder) holder).imageView.setImageDrawable(ContextCompat.getDrawable(appCompatActivity, R.drawable.ic_inbox_24dp));
+                            ((MenuItemViewHolder) holder).imageView.setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_inbox_24dp));
                             holder.itemView.setOnClickListener(view -> {
-                                Intent intent = new Intent(appCompatActivity, InboxActivity.class);
-                                appCompatActivity.startActivity(intent);
+                                Intent intent = new Intent(baseActivity, InboxActivity.class);
+                                baseActivity.startActivity(intent);
                             });
                             break;
                         case 7:
@@ -534,12 +534,12 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                                 if (isNSFWEnabled) {
                                     isNSFWEnabled = false;
                                     ((MenuItemViewHolder) holder).menuTextView.setText(R.string.enable_nsfw);
-                                    ((MenuItemViewHolder) holder).imageView.setImageDrawable(ContextCompat.getDrawable(appCompatActivity, R.drawable.ic_nsfw_on_24dp));
+                                    ((MenuItemViewHolder) holder).imageView.setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_nsfw_on_24dp));
                                     itemClickListener.onMenuClick(R.string.disable_nsfw);
                                 } else {
                                     isNSFWEnabled = true;
                                     ((MenuItemViewHolder) holder).menuTextView.setText(R.string.disable_nsfw);
-                                    ((MenuItemViewHolder) holder).imageView.setImageDrawable(ContextCompat.getDrawable(appCompatActivity, R.drawable.ic_nsfw_off_24dp));
+                                    ((MenuItemViewHolder) holder).imageView.setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_nsfw_off_24dp));
                                     itemClickListener.onMenuClick(R.string.enable_nsfw);
                                 }
                             });
@@ -585,12 +585,12 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
                                 if (isNSFWEnabled) {
                                     isNSFWEnabled = false;
                                     ((MenuItemViewHolder) holder).menuTextView.setText(R.string.enable_nsfw);
-                                    ((MenuItemViewHolder) holder).imageView.setImageDrawable(ContextCompat.getDrawable(appCompatActivity, R.drawable.ic_nsfw_on_24dp));
+                                    ((MenuItemViewHolder) holder).imageView.setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_nsfw_on_24dp));
                                     itemClickListener.onMenuClick(R.string.disable_nsfw);
                                 } else {
                                     isNSFWEnabled = true;
                                     ((MenuItemViewHolder) holder).menuTextView.setText(R.string.disable_nsfw);
-                                    ((MenuItemViewHolder) holder).imageView.setImageDrawable(ContextCompat.getDrawable(appCompatActivity, R.drawable.ic_nsfw_off_24dp));
+                                    ((MenuItemViewHolder) holder).imageView.setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_nsfw_off_24dp));
                                     itemClickListener.onMenuClick(R.string.enable_nsfw);
                                 }
                             });
@@ -621,7 +621,7 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
 
             if (stringId != 0) {
                 ((MenuItemViewHolder) holder).menuTextView.setText(stringId);
-                ((MenuItemViewHolder) holder).imageView.setImageDrawable(ContextCompat.getDrawable(appCompatActivity, drawableId));
+                ((MenuItemViewHolder) holder).imageView.setImageDrawable(ContextCompat.getDrawable(baseActivity, drawableId));
                 if (setOnClickListener) {
                     int finalStringId = stringId;
                     holder.itemView.setOnClickListener(view -> itemClickListener.onMenuClick(finalStringId));
@@ -863,6 +863,11 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         NavHeaderViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            if (baseActivity.typeface != null) {
+                accountNameTextView.setTypeface(baseActivity.typeface);
+                karmaTextView.setTypeface(baseActivity.typeface);
+            }
         }
     }
 
@@ -875,6 +880,9 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         MenuGroupTitleViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            if (baseActivity.typeface != null) {
+                titleTextView.setTypeface(baseActivity.typeface);
+            }
             titleTextView.setTextColor(secondaryTextColor);
             collapseIndicatorImageView.setColorFilter(secondaryTextColor, android.graphics.PorterDuff.Mode.SRC_IN);
         }
@@ -889,6 +897,9 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         MenuItemViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            if (baseActivity.typeface != null) {
+                menuTextView.setTypeface(baseActivity.typeface);
+            }
             menuTextView.setTextColor(primaryTextColor);
             imageView.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
         }
@@ -911,6 +922,9 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         FavoriteSubscribedThingViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            if (baseActivity.typeface != null) {
+                subredditNameTextView.setTypeface(baseActivity.typeface);
+            }
             subredditNameTextView.setTextColor(primaryTextColor);
         }
     }
@@ -924,6 +938,9 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         SubscribedThingViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            if (baseActivity.typeface != null) {
+                subredditNameTextView.setTypeface(baseActivity.typeface);
+            }
             subredditNameTextView.setTextColor(primaryTextColor);
         }
     }
@@ -937,6 +954,9 @@ public class NavigationDrawerRecyclerViewAdapter extends RecyclerView.Adapter<Re
         AccountViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            if (baseActivity.typeface != null) {
+                usernameTextView.setTypeface(baseActivity.typeface);
+            }
             usernameTextView.setTextColor(primaryTextColor);
         }
     }

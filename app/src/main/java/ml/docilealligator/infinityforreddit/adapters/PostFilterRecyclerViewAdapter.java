@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 
 public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -18,6 +19,7 @@ public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private static final int VIEW_TYPE_HEADER = 1;
     private static final int VIEW_TYPE_POST_FILTER = 2;
 
+    private BaseActivity activity;
     private final OnItemClickListener onItemClickListener;
     private List<PostFilter> postFilterList;
 
@@ -25,7 +27,8 @@ public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         void onItemClick(PostFilter postFilter);
     }
 
-    public PostFilterRecyclerViewAdapter(OnItemClickListener onItemClickListener) {
+    public PostFilterRecyclerViewAdapter(BaseActivity activity, OnItemClickListener onItemClickListener) {
+        this.activity = activity;
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -70,6 +73,11 @@ public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         public PostFilterViewHolder(@NonNull View itemView) {
             super(itemView);
             textView = (TextView) itemView;
+
+            if (activity.typeface != null) {
+                textView.setTypeface(activity.typeface);
+            }
+
             itemView.setOnClickListener(view -> {
                 onItemClickListener.onItemClick(postFilterList.get(getBindingAdapterPosition() - 1));
             });

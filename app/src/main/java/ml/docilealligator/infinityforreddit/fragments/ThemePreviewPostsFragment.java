@@ -142,6 +142,25 @@ public class ThemePreviewPostsFragment extends Fragment {
         saveButton.setColorFilter(customTheme.postIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
         shareButton.setColorFilter(customTheme.postIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
+        if (activity.typeface != null) {
+            subredditNameTextView.setTypeface(activity.typeface);
+            usernameTextView.setTypeface(activity.typeface);
+            postTimeTextView.setTypeface(activity.typeface);
+            typeTextView.setTypeface(activity.typeface);
+            spoilerTextView.setTypeface(activity.typeface);
+            nsfwTextView.setTypeface(activity.typeface);
+            flairTextView.setTypeface(activity.typeface);
+            awardsTextView.setTypeface(activity.typeface);
+            linkTextView.setTypeface(activity.typeface);
+            scoreTextView.setTypeface(activity.typeface);
+            commentsCountTextView.setTypeface(activity.typeface);
+        }
+        if (activity.titleTypeface != null) {
+            titleTextView.setTypeface(activity.titleTypeface);
+        }
+        if (activity.contentTypeface != null) {
+            contentTextView.setTypeface(activity.contentTypeface);
+        }
         return rootView;
     }
 

@@ -13,14 +13,17 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 
 public class SelectedSubredditsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private BaseActivity activity;
     private CustomThemeWrapper customThemeWrapper;
     private ArrayList<String> subreddits;
 
-    public SelectedSubredditsRecyclerViewAdapter(CustomThemeWrapper customThemeWrapper, ArrayList<String> subreddits) {
+    public SelectedSubredditsRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper, ArrayList<String> subreddits) {
+        this.activity = activity;
         this.customThemeWrapper = customThemeWrapper;
         if (subreddits == null) {
             this.subreddits = new ArrayList<>();
@@ -79,6 +82,10 @@ public class SelectedSubredditsRecyclerViewAdapter extends RecyclerView.Adapter<
 
             subredditNameTextView.setTextColor(customThemeWrapper.getPrimaryIconColor());
             deleteButton.setColorFilter(customThemeWrapper.getPrimaryIconColor(), android.graphics.PorterDuff.Mode.SRC_IN);
+
+            if (activity.typeface != null) {
+                subredditNameTextView.setTypeface(activity.typeface);
+            }
         }
     }
 }

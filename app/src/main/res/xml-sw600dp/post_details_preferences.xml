@@ -2,44 +2,44 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <SwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="true"
         app:key="separate_post_and_comments_in_portrait_mode"
         app:title="@string/settings_separate_post_and_comments_in_portrait_mode_title"
         app:summary="@string/settings_separate_post_and_comments_summary" />
 
-    <SwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="true"
         app:key="separate_post_and_comments_in_landscape_mode"
         app:title="@string/settings_separate_post_and_comments_in_landscape_mode_title"
         app:summary="@string/settings_separate_post_and_comments_summary" />
 
-    <SwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="hide_post_type"
         app:title="@string/settings_hide_post_type" />
 
-    <SwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="hide_post_flair"
         app:title="@string/settings_hide_post_flair" />
 
-    <SwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="hide_the_number_of_awards"
         app:title="@string/settings_hide_the_number_of_awards" />
 
-    <SwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="hide_subreddit_and_user_prefix"
         app:title="@string/settings_hide_subreddit_and_user_prefix" />
 
-    <SwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="hide_the_number_of_votes"
         app:title="@string/settings_hide_the_number_of_votes" />
 
-    <SwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="hide_the_number_of_comments"
         app:title="@string/settings_hide_the_number_of_comments" />

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
+import android.text.Spanned;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -40,9 +41,9 @@ import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPrivateMessagesActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.message.Message;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -86,6 +87,13 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
                     @Override
                     public String processMarkdown(@NonNull String markdown) {
                         return Utils.fixSuperScript(markdown);
+                    }
+
+                    @Override
+                    public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
+                        if (mViewPrivateMessagesActivity.contentTypeface != null) {
+                            textView.setTypeface(mViewPrivateMessagesActivity.contentTypeface);
+                        }
                     }
 
                     @Override

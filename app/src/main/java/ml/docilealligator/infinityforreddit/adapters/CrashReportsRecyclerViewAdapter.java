@@ -11,11 +11,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 
 public class CrashReportsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private BaseActivity activity;
     private List<String> crashReports;
 
-    public CrashReportsRecyclerViewAdapter(List<String> crashReports) {
+    public CrashReportsRecyclerViewAdapter(BaseActivity activity, List<String> crashReports) {
+        this.activity = activity;
         this.crashReports = crashReports;
     }
 
@@ -40,6 +43,10 @@ public class CrashReportsRecyclerViewAdapter extends RecyclerView.Adapter<Recycl
         public CrashReportViewHolder(@NonNull View itemView) {
             super(itemView);
             crashReportTextView = (TextView) itemView;
+
+            if (activity.typeface != null) {
+                crashReportTextView.setTypeface(activity.typeface);
+            }
         }
     }
 }

@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
@@ -46,6 +47,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.CustomFontReceiver;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RPANBroadcast;
@@ -60,13 +62,14 @@ import ml.docilealligator.infinityforreddit.font.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.fragments.ViewRPANBroadcastFragment;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class RPANActivity extends AppCompatActivity {
+public class RPANActivity extends AppCompatActivity implements CustomFontReceiver {
 
     public static final String EXTRA_RPAN_BROADCAST_FULLNAME_OR_ID = "ERBFOI";
 
@@ -90,6 +93,7 @@ public class RPANActivity extends AppCompatActivity {
     ArrayList<RPANBroadcast> rpanBroadcasts;
     @State
     String nextCursor;
+    public Typeface typeface;
     private SectionsPagerAdapter sectionsPagerAdapter;
 
     @Override
@@ -130,7 +134,7 @@ public class RPANActivity extends AppCompatActivity {
         Drawable upArrow = getResources().getDrawable(R.drawable.ic_arrow_back_white_24dp);
         actionBar.setHomeAsUpIndicator(upArrow);
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#00000000")));
-        actionBar.setTitle(Html.fromHtml("<font color=\"#FFFFFF\">" + getString(R.string.rpan_activity_label) + "</font>"));
+        actionBar.setTitle(Utils.getTabTextWithCustomFont(typeface, Html.fromHtml("<font color=\"#FFFFFF\">" + getString(R.string.rpan_activity_label) + "</font>")));
 
         if (rpanBroadcasts == null) {
             loadRPANVideos();
@@ -337,6 +341,9 @@ public class RPANActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.rpan_activity, menu);
+        for (int i = 0; i < menu.size(); i++) {
+            Utils.setTitleWithCustomFontToMenuItem(typeface, menu.getItem(i), null);
+        }
         return true;
     }
 
@@ -380,6 +387,11 @@ public class RPANActivity extends AppCompatActivity {
         } catch (ActivityNotFoundException e) {
             Toast.makeText(this, R.string.no_activity_found_for_share, Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void setCustomFont(Typeface typeface, Typeface titleTypeface, Typeface contentTypeface) {
+        this.typeface = typeface;
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {

@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -40,6 +41,7 @@ import java.util.Locale;
 
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
+import ml.docilealligator.infinityforreddit.CustomFontReceiver;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
@@ -50,8 +52,9 @@ import ml.docilealligator.infinityforreddit.font.TitleFontFamily;
 import ml.docilealligator.infinityforreddit.font.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
-public abstract class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity implements CustomFontReceiver {
     private boolean immersiveInterface;
     private boolean changeStatusBarIconColor;
     private boolean transparentStatusBarAfterToolbarCollapsed;
@@ -321,13 +324,21 @@ public abstract class BaseActivity extends AppCompatActivity {
         if (toolbar.getOverflowIcon() != null) {
             toolbar.getOverflowIcon().setColorFilter(customThemeWrapper.getToolbarPrimaryTextAndIconColor(), android.graphics.PorterDuff.Mode.SRC_IN);
         }
+        if (typeface != null) {
+            toolbar.addOnLayoutChangeListener((view, i, i1, i2, i3, i4, i5, i6, i7) -> {
+                for (int j = 0; j < toolbar.getChildCount(); j++) {
+                    if (toolbar.getChildAt(j) instanceof TextView) {
+                        ((TextView) toolbar.getChildAt(j)).setTypeface(typeface);
+                    }
+                }
+            });
+        }
     }
 
     @SuppressLint("RestrictedApi")
     protected boolean applyMenuItemTheme(Menu menu) {
         if (customThemeWrapper != null) {
-            int size = Math.min(menu.size(), 2);
-            for (int i = 0; i < size; i++) {
+            for (int i = 0; i < menu.size(); i++) {
                 MenuItem item = menu.getItem(i);
                 if (((MenuItemImpl) item).requestsActionButton()) {
                     Drawable drawable = item.getIcon();
@@ -336,6 +347,7 @@ public abstract class BaseActivity extends AppCompatActivity {
                         item.setIcon(drawable);
                     }
                 }
+                Utils.setTitleWithCustomFontToMenuItem(typeface, item, null);
             }
         }
         return true;
@@ -372,6 +384,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         } catch (NoSuchFieldException | IllegalAccessException ignore) {}
     }
 
+    @Override
     public void setCustomFont(Typeface typeface, Typeface titleTypeface, Typeface contentTypeface) {
         this.typeface = typeface;
         this.titleTypeface = titleTypeface;

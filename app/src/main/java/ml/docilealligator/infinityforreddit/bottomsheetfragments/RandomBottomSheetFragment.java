@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,7 +13,9 @@ import androidx.annotation.NonNull;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class RandomBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
@@ -71,6 +74,13 @@ public class RandomBottomSheetFragment extends LandscapeExpandedRoundedBottomShe
             activity.randomOptionSelected(RANDOM_POST);
             dismiss();
         });
+
+        Activity baseActivity = getActivity();
+        if (baseActivity instanceof BaseActivity) {
+            if (((BaseActivity) activity).typeface != null) {
+                Utils.setFontToAllTextViews(rootView, ((BaseActivity) activity).typeface);
+            }
+        }
 
         return rootView;
     }

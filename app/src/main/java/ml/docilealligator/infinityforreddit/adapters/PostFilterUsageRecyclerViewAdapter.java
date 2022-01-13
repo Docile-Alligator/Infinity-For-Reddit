@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,20 +11,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.List;
 
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
 
 public class PostFilterUsageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<PostFilterUsage> postFilterUsages;
     private OnItemClickListener onItemClickListener;
-    private Context context;
+    private BaseActivity activity;
 
     public interface OnItemClickListener {
         void onClick(PostFilterUsage postFilterUsage);
     }
 
-    public PostFilterUsageRecyclerViewAdapter(Context context,
+    public PostFilterUsageRecyclerViewAdapter(BaseActivity activity,
                                               OnItemClickListener onItemClickListener) {
-        this.context = context;
+        this.activity = activity;
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -46,21 +46,21 @@ public class PostFilterUsageRecyclerViewAdapter extends RecyclerView.Adapter<Rec
                 if (postFilterUsage.nameOfUsage.equals(PostFilterUsage.NO_USAGE)) {
                     ((PostFilterUsageViewHolder) holder).usageTextView.setText(R.string.post_filter_usage_subreddit_all);
                 } else {
-                    ((PostFilterUsageViewHolder) holder).usageTextView.setText(context.getString(R.string.post_filter_usage_subreddit, postFilterUsage.nameOfUsage));
+                    ((PostFilterUsageViewHolder) holder).usageTextView.setText(activity.getString(R.string.post_filter_usage_subreddit, postFilterUsage.nameOfUsage));
                 }
                 break;
             case PostFilterUsage.USER_TYPE:
                 if (postFilterUsage.nameOfUsage.equals(PostFilterUsage.NO_USAGE)) {
                     ((PostFilterUsageViewHolder) holder).usageTextView.setText(R.string.post_filter_usage_user_all);
                 } else {
-                    ((PostFilterUsageViewHolder) holder).usageTextView.setText(context.getString(R.string.post_filter_usage_user, postFilterUsage.nameOfUsage));
+                    ((PostFilterUsageViewHolder) holder).usageTextView.setText(activity.getString(R.string.post_filter_usage_user, postFilterUsage.nameOfUsage));
                 }
                 break;
             case PostFilterUsage.MULTIREDDIT_TYPE:
                 if (postFilterUsage.nameOfUsage.equals(PostFilterUsage.NO_USAGE)) {
                     ((PostFilterUsageViewHolder) holder).usageTextView.setText(R.string.post_filter_usage_multireddit_all);
                 } else {
-                    ((PostFilterUsageViewHolder) holder).usageTextView.setText(context.getString(R.string.post_filter_usage_multireddit, postFilterUsage.nameOfUsage));
+                    ((PostFilterUsageViewHolder) holder).usageTextView.setText(activity.getString(R.string.post_filter_usage_multireddit, postFilterUsage.nameOfUsage));
                 }
                 break;
             case PostFilterUsage.SEARCH_TYPE:
@@ -84,6 +84,10 @@ public class PostFilterUsageRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         public PostFilterUsageViewHolder(@NonNull View itemView) {
             super(itemView);
             usageTextView = (TextView) itemView;
+
+            if (activity.typeface != null) {
+                usageTextView.setTypeface(activity.typeface);
+            }
 
             usageTextView.setOnClickListener(view -> {
                 onItemClickListener.onClick(postFilterUsages.get(getBindingAdapterPosition()));

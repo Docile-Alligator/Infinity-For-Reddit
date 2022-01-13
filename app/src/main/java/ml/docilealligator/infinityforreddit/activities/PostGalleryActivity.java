@@ -425,6 +425,15 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
         nsfwTextView.setTextColor(primaryTextColor);
         titleEditText.setTextColor(primaryTextColor);
         titleEditText.setHintTextColor(secondaryTextColor);
+        if (typeface != null) {
+            subredditNameTextView.setTypeface(typeface);
+            rulesButton.setTypeface(typeface);
+            receivePostReplyNotificationsTextView.setTypeface(typeface);
+            flairTextView.setTypeface(typeface);
+            spoilerTextView.setTypeface(typeface);
+            nsfwTextView.setTypeface(typeface);
+            titleEditText.setTypeface(typeface);
+        }
     }
 
     public void selectImage() {

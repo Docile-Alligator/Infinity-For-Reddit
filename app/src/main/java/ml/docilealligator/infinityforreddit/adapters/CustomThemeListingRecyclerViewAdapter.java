@@ -10,7 +10,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -18,11 +17,12 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomThemeListingActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomizeThemeActivity;
-import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CustomThemeOptionsBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
 
 public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_PREDEFINED_THEME = 0;
@@ -30,11 +30,11 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
     private static final int VIEW_TYPE_PREDEFINED_THEME_DIVIDER = 2;
     private static final int VIEW_TYPE_USER_THEME_DIVIDER = 3;
 
-    private AppCompatActivity activity;
+    private BaseActivity activity;
     private ArrayList<CustomTheme> predefinedCustomThemes;
     private ArrayList<CustomTheme> userCustomThemes;
 
-    public CustomThemeListingRecyclerViewAdapter(AppCompatActivity activity, ArrayList<CustomTheme> predefinedCustomThemes) {
+    public CustomThemeListingRecyclerViewAdapter(BaseActivity activity, ArrayList<CustomTheme> predefinedCustomThemes) {
         this.activity = activity;
         this.predefinedCustomThemes = predefinedCustomThemes;
         userCustomThemes = new ArrayList<>();
@@ -134,6 +134,9 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
         PredefinedCustomThemeViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            if (activity.typeface != null) {
+                nameTextView.setTypeface(activity.typeface);
+            }
         }
     }
 
@@ -151,6 +154,9 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
         UserCustomThemeViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            if (activity.typeface != null) {
+                nameTextView.setTypeface(activity.typeface);
+            }
         }
     }
 
@@ -158,6 +164,9 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
 
         PreDefinedThemeDividerViewHolder(@NonNull View itemView) {
             super(itemView);
+            if (activity.typeface != null) {
+                ((TextView) itemView).setTypeface(activity.typeface);
+            }
         }
     }
 
@@ -165,6 +174,9 @@ public class CustomThemeListingRecyclerViewAdapter extends RecyclerView.Adapter<
 
         UserThemeDividerViewHolder(@NonNull View itemView) {
             super(itemView);
+            if (activity.typeface != null) {
+                ((TextView) itemView).setTypeface(activity.typeface);
+            }
         }
     }
 }

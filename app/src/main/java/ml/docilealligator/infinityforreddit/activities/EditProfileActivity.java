@@ -52,6 +52,7 @@ import ml.docilealligator.infinityforreddit.services.EditProfileService;
 import ml.docilealligator.infinityforreddit.user.UserViewModel;
 import ml.docilealligator.infinityforreddit.utils.EditProfileUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
@@ -61,7 +62,7 @@ public class EditProfileActivity extends BaseActivity {
     private static final int PICK_IMAGE_AVATAR_REQUEST_CODE = 0x402;
 
     @BindView(R.id.root_layout_view_edit_profile_activity)
-    CoordinatorLayout root;
+    CoordinatorLayout coordinatorLayout;
     @BindView(R.id.content_view_edit_profile_activity)
     LinearLayout content;
     @BindView(R.id.collapsing_toolbar_layout_edit_profile_activity)
@@ -344,9 +345,11 @@ public class EditProfileActivity extends BaseActivity {
     @Override
     protected void applyCustomTheme() {
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
-        root.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         changeColorTextView(content, mCustomThemeWrapper.getPrimaryTextColor());
+        if (typeface != null) {
+            Utils.setFontToAllTextViews(coordinatorLayout, typeface);
+        }
     }
 
     private void changeColorTextView(ViewGroup viewGroup, int color) {

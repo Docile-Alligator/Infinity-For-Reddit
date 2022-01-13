@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -30,9 +29,11 @@ import ml.docilealligator.infinityforreddit.FetchFlairs;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.adapters.FlairBottomSheetRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.FlairSelectedEvent;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 
@@ -60,7 +61,7 @@ public class FlairBottomSheetFragment extends BottomSheetDialogFragment {
     CustomThemeWrapper mCustomThemeWrapper;
     private String mAccessToken;
     private String mSubredditName;
-    private Activity mActivity;
+    private BaseActivity mActivity;
     private FlairBottomSheetRecyclerViewAdapter mAdapter;
 
     public FlairBottomSheetFragment() {
@@ -75,6 +76,10 @@ public class FlairBottomSheetFragment extends BottomSheetDialogFragment {
         ButterKnife.bind(this, rootView);
 
         ((Infinity) mActivity.getApplication()).getAppComponent().inject(this);
+
+        if (mActivity.typeface != null) {
+            Utils.setFontToAllTextViews(rootView, mActivity.typeface);
+        }
 
         long viewPostFragmentId = getArguments().getLong(EXTRA_VIEW_POST_DETAIL_FRAGMENT_ID, -1);
         mAdapter = new FlairBottomSheetRecyclerViewAdapter(mActivity, mCustomThemeWrapper, flair -> {
@@ -133,7 +138,7 @@ public class FlairBottomSheetFragment extends BottomSheetDialogFragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mActivity = (Activity) context;
+        mActivity = (BaseActivity) context;
     }
 
     public interface FlairSelectionCallback {

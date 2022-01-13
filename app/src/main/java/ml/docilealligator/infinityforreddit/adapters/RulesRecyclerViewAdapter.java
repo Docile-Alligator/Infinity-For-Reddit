@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.adapters;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Spanned;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -33,6 +33,7 @@ import io.noties.markwon.movement.MovementMethodPlugin;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Rule;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -40,12 +41,14 @@ import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecyclerViewAdapter.RuleViewHolder> {
+    private BaseActivity activity;
     private Markwon markwon;
     private ArrayList<Rule> rules;
     private int mPrimaryTextColor;
     private int mSecondaryTextColor;
 
-    public RulesRecyclerViewAdapter(AppCompatActivity activity, CustomThemeWrapper customThemeWrapper) {
+    public RulesRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper) {
+        this.activity = activity;
         markwon = Markwon.builder(activity)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                     plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
@@ -61,6 +64,15 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
                     @Override
                     public String processMarkdown(@NonNull String markdown) {
                         return Utils.fixSuperScript(markdown);
+                    }
+
+                    @Override
+                    public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
+                        if (activity.typeface != null) {
+                            textView.setTypeface(activity.typeface);
+                        }
+
+                        textView.setTextColor(mPrimaryTextColor);
                     }
 
                     @Override
@@ -138,6 +150,11 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
             ButterKnife.bind(this, itemView);
             shortNameTextView.setTextColor(mPrimaryTextColor);
             descriptionMarkwonView.setTextColor(mSecondaryTextColor);
+
+            if (activity.typeface != null) {
+                shortNameTextView.setTypeface(activity.typeface);
+                descriptionMarkwonView.setTypeface(activity.typeface);
+            }
         }
     }
 }

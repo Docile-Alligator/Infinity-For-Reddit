@@ -3,16 +3,13 @@ package ml.docilealligator.infinityforreddit.settings;
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.biometric.BiometricPrompt;
 import androidx.core.content.ContextCompat;
 import androidx.preference.ListPreference;
-import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
 
@@ -25,14 +22,14 @@ import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
 import ml.docilealligator.infinityforreddit.events.ChangeAppLockEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeRequireAuthToAccountSectionEvent;
 import ml.docilealligator.infinityforreddit.events.ToggleSecureModeEvent;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
-public class SecurityPreferenceFragment extends PreferenceFragmentCompat {
+public class SecurityPreferenceFragment extends CustomFontPreferenceFragmentCompat {
 
-    private AppCompatActivity activity;
     @Inject
     @Named("default")
     SharedPreferences sharedPreferences;
@@ -44,6 +41,10 @@ public class SecurityPreferenceFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.security_preferences, rootKey);
 
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
+
+        if (activity.typeface != null) {
+            setFont(activity.typeface);
+        }
 
         SwitchPreference requireAuthToAccountSectionSwitch = findPreference(SharedPreferencesUtils.REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER);
         SwitchPreference secureModeSwitch = findPreference(SharedPreferencesUtils.SECURE_MODE);
@@ -95,11 +96,5 @@ public class SecurityPreferenceFragment extends PreferenceFragmentCompat {
                 .build();
 
         biometricPrompt.authenticate(promptInfo);
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        this.activity = (AppCompatActivity) context;
     }
 }

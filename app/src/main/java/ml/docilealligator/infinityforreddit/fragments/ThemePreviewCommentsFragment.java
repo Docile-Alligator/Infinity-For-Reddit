@@ -143,6 +143,24 @@ public class ThemePreviewCommentsFragment extends Fragment {
         authorTextViewFullyCollapsed.setTextColor(customTheme.username);
         scoreTextViewFullyCollapsed.setTextColor(customTheme.secondaryTextColor);
         timeTextViewFullyCollapsed.setTextColor(customTheme.secondaryTextColor);
+
+        if (activity.typeface != null) {
+            authorTextView.setTypeface(activity.typeface);
+            commentTimeTextView.setTypeface(activity.typeface);
+            flairTextView.setTypeface(activity.typeface);
+            scoreTextView.setTypeface(activity.typeface);
+            authorTextViewAwardBackground.setTypeface(activity.typeface);
+            commentTimeTextViewAwardBackground.setTypeface(activity.typeface);
+            flairTextViewAwardBackground.setTypeface(activity.typeface);
+            scoreTextViewAwardBackground.setTypeface(activity.typeface);
+            authorTextViewFullyCollapsed.setTypeface(activity.typeface);
+            scoreTextViewFullyCollapsed.setTypeface(activity.typeface);
+            timeTextViewFullyCollapsed.setTypeface(activity.typeface);
+        }
+        if (activity.contentTypeface != null) {
+            contentTextView.setTypeface(activity.contentTypeface);
+            contentTextViewAwardBackground.setTypeface(activity.contentTypeface);
+        }
         return rootView;
     }
 

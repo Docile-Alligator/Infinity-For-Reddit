@@ -27,7 +27,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -90,6 +89,7 @@ import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStra
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.StreamableVideo;
 import ml.docilealligator.infinityforreddit.VoteThing;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
@@ -131,7 +131,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private static final int VIEW_TYPE_POST_DETAIL_NO_PREVIEW_LINK = 6;
     private static final int VIEW_TYPE_POST_DETAIL_GALLERY = 7;
     private static final int VIEW_TYPE_POST_DETAIL_TEXT_TYPE = 8;
-    private AppCompatActivity mActivity;
+    private BaseActivity mActivity;
     private ViewPostDetailFragment mFragment;
     private Executor mExecutor;
     private Retrofit mRetrofit;
@@ -210,7 +210,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private boolean canStartActivity = true;
     private boolean canPlayVideo = true;
 
-    public PostDetailRecyclerViewAdapter(AppCompatActivity activity, ViewPostDetailFragment fragment,
+    public PostDetailRecyclerViewAdapter(BaseActivity activity, ViewPostDetailFragment fragment,
                                          Executor executor, CustomThemeWrapper customThemeWrapper,
                                          Retrofit retrofit, Retrofit oauthRetrofit, Retrofit gfycatRetrofit,
                                          Retrofit redgifsRetrofit, Retrofit streamableRetrofit,
@@ -255,6 +255,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
                     @Override
                     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
+                        if (mActivity.contentTypeface != null) {
+                            textView.setTypeface(mActivity.typeface);
+                        }
                         textView.setTextColor(markdownColor);
                         textView.setOnLongClickListener(view -> {
                             if (textView.getSelectionStart() == -1 && textView.getSelectionEnd() == -1) {
@@ -841,14 +844,14 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 ((PostDetailGalleryViewHolder) holder).mCaptionConstraintLayout.setVisibility(View.VISIBLE);
             }
             if (!previewCaptionIsEmpty) {
-                ((PostDetailGalleryViewHolder) holder).mCaption.setTextColor(mCommentColor);
-                ((PostDetailGalleryViewHolder) holder).mCaption.setText(previewCaption);
-                ((PostDetailGalleryViewHolder) holder).mCaption.setSelected(true);
+                ((PostDetailGalleryViewHolder) holder).mCaptionTextView.setTextColor(mCommentColor);
+                ((PostDetailGalleryViewHolder) holder).mCaptionTextView.setText(previewCaption);
+                ((PostDetailGalleryViewHolder) holder).mCaptionTextView.setSelected(true);
             }
             if (!previewCaptionUrlIsEmpty) {
                 String domain = Uri.parse(previewCaptionUrl).getHost();
                 domain = domain.startsWith("www.") ? domain.substring(4) : domain;
-                mPostDetailMarkwon.setMarkdown(((PostDetailGalleryViewHolder) holder).mCaptionUrl, String.format("[%s](%s)", domain, previewCaptionUrl));
+                mPostDetailMarkwon.setMarkdown(((PostDetailGalleryViewHolder) holder).mCaptionUrlTextView, String.format("[%s](%s)", domain, previewCaptionUrl));
             }
         }
     }
@@ -1512,6 +1515,23 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 constraintSet.applyTo(mBottomConstraintLayout);
             }
 
+            if (mActivity.typeface != null) {
+                mSubredditTextView.setTypeface(mActivity.typeface);
+                mUserTextView.setTypeface(mActivity.typeface);
+                mAuthorFlairTextView.setTypeface(mActivity.typeface);
+                mPostTimeTextView.setTypeface(mActivity.typeface);
+                mTypeTextView.setTypeface(mActivity.typeface);
+                mSpoilerTextView.setTypeface(mActivity.typeface);
+                mNSFWTextView.setTypeface(mActivity.typeface);
+                mFlairTextView.setTypeface(mActivity.typeface);
+                mAwardsTextView.setTypeface(mActivity.typeface);
+                mUpvoteRatioTextView.setTypeface(mActivity.typeface);
+                mScoreTextView.setTypeface(mActivity.typeface);
+                commentsCountTextView.setTypeface(mActivity.typeface);
+            }
+            if (mActivity.titleTypeface != null) {
+                mTitleTextView.setTypeface(mActivity.typeface);
+            }
             itemView.setBackgroundColor(mCardViewColor);
             mSubredditTextView.setTextColor(mSubredditColor);
             mUserTextView.setTextColor(mUsernameColor);
@@ -2114,6 +2134,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mSaveButton,
                     mShareButton);
 
+            if (mActivity.typeface != null) {
+                mLinkTextView.setTypeface(mActivity.typeface);
+            }
             mLinkTextView.setTextColor(mSecondaryTextColor);
             mLoadImageProgressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
             mLoadImageErrorTextView.setTextColor(mPrimaryTextColor);
@@ -2206,6 +2229,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mSaveButton,
                     mShareButton);
 
+            if (mActivity.typeface != null) {
+                mLinkTextView.setTypeface(mActivity.typeface);
+            }
             mLinkTextView.setTextColor(mSecondaryTextColor);
             mNoPreviewPostTypeImageView.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
             mNoPreviewPostTypeImageView.setColorFilter(mNoPreviewPostTypeIconTint, PorterDuff.Mode.SRC_IN);
@@ -2311,9 +2337,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         @BindView(R.id.caption_constraint_layout_item_post_detail_gallery)
         ConstraintLayout mCaptionConstraintLayout;
         @BindView(R.id.caption_text_view_item_post_detail_gallery)
-        TextView mCaption;
+        TextView mCaptionTextView;
         @BindView(R.id.caption_url_text_view_item_post_detail_gallery)
-        TextView mCaptionUrl;
+        TextView mCaptionUrlTextView;
         @BindView(R.id.image_view_no_preview_link_item_post_detail_gallery)
         ImageView mNoPreviewPostTypeImageView;
         @BindView(R.id.bottom_constraint_layout_item_post_detail_gallery)
@@ -2357,6 +2383,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mSaveButton,
                     mShareButton);
 
+            if (mActivity.typeface != null) {
+                mLoadImageErrorTextView.setTypeface(mActivity.typeface);
+                mCaptionTextView.setTypeface(mActivity.typeface);
+                mCaptionUrlTextView.setTypeface(mActivity.typeface);
+            }
             videoOrGifIndicatorImageView.setColorFilter(mMediaIndicatorIconTint, PorterDuff.Mode.SRC_IN);
             videoOrGifIndicatorImageView.setBackgroundTintList(ColorStateList.valueOf(mMediaIndicatorBackgroundColor));
             mLoadImageProgressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));

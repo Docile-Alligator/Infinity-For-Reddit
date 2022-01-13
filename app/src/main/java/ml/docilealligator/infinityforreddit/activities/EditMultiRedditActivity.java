@@ -41,6 +41,7 @@ import ml.docilealligator.infinityforreddit.multireddit.FetchMultiRedditInfo;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.multireddit.MultiRedditJSONModel;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 public class EditMultiRedditActivity extends BaseActivity {
@@ -288,5 +289,9 @@ public class EditMultiRedditActivity extends BaseActivity {
         descriptionEditText.setHintTextColor(secondaryTextColor);
         visibilityTextView.setTextColor(primaryTextColor);
         selectSubredditTextView.setTextColor(primaryTextColor);
+
+        if (typeface != null) {
+            Utils.setFontToAllTextViews(coordinatorLayout, typeface);
+        }
     }
 }

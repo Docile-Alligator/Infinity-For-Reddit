@@ -15,7 +15,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
+import ml.docilealligator.infinityforreddit.activities.ViewImgurMediaActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewRedditGalleryActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class SetAsWallpaperBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
@@ -66,6 +70,20 @@ public class SetAsWallpaperBottomSheetFragment extends LandscapeExpandedRoundedB
                 }
                 dismiss();
             });
+        }
+
+        if (mActivity instanceof ViewVideoActivity) {
+            if (((ViewVideoActivity) mActivity).typeface != null) {
+                Utils.setFontToAllTextViews(rootView, ((ViewVideoActivity) mActivity).typeface);
+            }
+        } else if (mActivity instanceof ViewImgurMediaActivity) {
+            if (((ViewImgurMediaActivity) mActivity).typeface != null) {
+                Utils.setFontToAllTextViews(rootView, ((ViewImgurMediaActivity) mActivity).typeface);
+            }
+        } else if (mActivity instanceof ViewRedditGalleryActivity) {
+            if (((ViewRedditGalleryActivity) mActivity).typeface != null) {
+                Utils.setFontToAllTextViews(rootView, ((ViewRedditGalleryActivity) mActivity).typeface);
+            }
         }
 
         return rootView;

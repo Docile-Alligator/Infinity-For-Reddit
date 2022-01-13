@@ -24,7 +24,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.Barrier;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -126,7 +125,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
     };
 
-    private AppCompatActivity mActivity;
+    private BaseActivity mActivity;
     private PostFragment mFragment;
     private SharedPreferences mSharedPreferences;
     private Executor mExecutor;
@@ -212,7 +211,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private Callback mCallback;
     private boolean canPlayVideo = true;
 
-    public PostRecyclerViewAdapter(AppCompatActivity activity, PostFragment fragment, Executor executor, Retrofit oauthRetrofit,
+    public PostRecyclerViewAdapter(BaseActivity activity, PostFragment fragment, Executor executor, Retrofit oauthRetrofit,
                                    Retrofit gfycatRetrofit, Retrofit redgifsRetrofit, Retrofit streambleRetrofit,
                                    CustomThemeWrapper customThemeWrapper, Locale locale,
                                    String accessToken, String accountName, int postType, int postLayout, boolean displaySubredditName,
@@ -2105,23 +2104,20 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
             }
 
-            if (((BaseActivity) mActivity).typeface != null) {
-                subredditTextView.setTypeface(((BaseActivity) mActivity).typeface);
-                userTextView.setTypeface(((BaseActivity) mActivity).typeface);
-                postTimeTextView.setTypeface(((BaseActivity) mActivity).typeface);
-                typeTextView.setTypeface(((BaseActivity) mActivity).typeface);
-                spoilerTextView.setTypeface(((BaseActivity) mActivity).typeface);
-                nsfwTextView.setTypeface(((BaseActivity) mActivity).typeface);
-                flairTextView.setTypeface(((BaseActivity) mActivity).typeface);
-                awardsTextView.setTypeface(((BaseActivity) mActivity).typeface);
-                scoreTextView.setTypeface(((BaseActivity) mActivity).typeface);
-                commentsCountTextView.setTypeface(((BaseActivity) mActivity).typeface);
+            if (mActivity.typeface != null) {
+                subredditTextView.setTypeface(mActivity.typeface);
+                userTextView.setTypeface(mActivity.typeface);
+                postTimeTextView.setTypeface(mActivity.typeface);
+                typeTextView.setTypeface(mActivity.typeface);
+                spoilerTextView.setTypeface(mActivity.typeface);
+                nsfwTextView.setTypeface(mActivity.typeface);
+                flairTextView.setTypeface(mActivity.typeface);
+                awardsTextView.setTypeface(mActivity.typeface);
+                scoreTextView.setTypeface(mActivity.typeface);
+                commentsCountTextView.setTypeface(mActivity.typeface);
             }
-            if (((BaseActivity) mActivity).titleTypeface != null) {
-                titleTextView.setTypeface(((BaseActivity) mActivity).titleTypeface);
-            }
-            if (((BaseActivity) mActivity).contentTypeface != null) {
-
+            if (mActivity.titleTypeface != null) {
+                titleTextView.setTypeface(mActivity.titleTypeface);
             }
 
             subredditTextView.setTextColor(mSubredditColor);
@@ -2933,6 +2929,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     saveButton,
                     shareButton);
 
+            if (mActivity.typeface != null) {
+                linkTextView.setTypeface(mActivity.typeface);
+                errorTextView.setTypeface(mActivity.typeface);
+            }
             linkTextView.setTextColor(mSecondaryTextColor);
             noPreviewLinkImageView.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
             noPreviewLinkImageView.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
@@ -3053,6 +3053,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     saveButton,
                     shareButton);
 
+            if (mActivity.contentTypeface != null) {
+                contentTextView.setTypeface(mActivity.titleTypeface);
+            }
             contentTextView.setTextColor(mPostContentColor);
         }
     }
@@ -3167,6 +3170,22 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
             if (((ViewGroup) itemView).getLayoutTransition() != null) {
                 ((ViewGroup) itemView).getLayoutTransition().setAnimateParentHierarchy(false);
+            }
+
+            if (mActivity.typeface != null) {
+                nameTextView.setTypeface(mActivity.typeface);
+                postTimeTextView.setTypeface(mActivity.typeface);
+                typeTextView.setTypeface(mActivity.typeface);
+                spoilerTextView.setTypeface(mActivity.typeface);
+                nsfwTextView.setTypeface(mActivity.typeface);
+                flairTextView.setTypeface(mActivity.typeface);
+                awardsTextView.setTypeface(mActivity.typeface);
+                linkTextView.setTypeface(mActivity.typeface);
+                scoreTextView.setTypeface(mActivity.typeface);
+                commentsCountTextView.setTypeface(mActivity.typeface);
+            }
+            if (mActivity.titleTypeface != null) {
+                titleTextView.setTypeface(mActivity.titleTypeface);
             }
 
             itemView.setBackgroundColor(mCardViewBackgroundColor);
@@ -3790,6 +3809,12 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             super(itemView);
             ButterKnife.bind(this, itemView);
 
+            if (mActivity.typeface != null) {
+                errorTextView.setTypeface(mActivity.typeface);
+            }
+            if (mActivity.titleTypeface != null) {
+                titleTextView.setTypeface(mActivity.titleTypeface);
+            }
             itemView.setBackgroundTintList(ColorStateList.valueOf(mCardViewBackgroundColor));
             titleTextView.setTextColor(mPostTitleColor);
             progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
@@ -4221,6 +4246,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     shareButton,
                     true);
 
+            if (mActivity.typeface != null) {
+                linkTextView.setTypeface(mActivity.typeface);
+                errorTextView.setTypeface(mActivity.typeface);
+            }
             linkTextView.setTextColor(mSecondaryTextColor);
             noPreviewImageView.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
             noPreviewImageView.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
@@ -4345,6 +4374,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     shareButton,
                     true);
 
+            if (mActivity.contentTypeface != null) {
+                contentTextView.setTypeface(mActivity.contentTypeface);
+            }
             contentTextView.setTextColor(mPostContentColor);
             divider.setBackgroundColor(mDividerColor);
         }

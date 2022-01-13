@@ -19,19 +19,20 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 
 public class FlairBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter<FlairBottomSheetRecyclerViewAdapter.FlairViewHolder> {
-    private Context context;
+    private BaseActivity activity;
     private ArrayList<Flair> flairs;
     private int flairTextColor;
     private ItemClickListener itemClickListener;
 
-    public FlairBottomSheetRecyclerViewAdapter(Context context, CustomThemeWrapper customThemeWrapper,
+    public FlairBottomSheetRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper,
                                                ItemClickListener itemClickListener) {
-        this.context = context;
+        this.activity = activity;
         flairTextColor = customThemeWrapper.getPrimaryTextColor();
         this.itemClickListener = itemClickListener;
     }
@@ -47,14 +48,14 @@ public class FlairBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter<Fl
         if (flairs.get(holder.getBindingAdapterPosition()).isEditable()) {
             holder.editFlairImageView.setVisibility(View.VISIBLE);
             holder.editFlairImageView.setOnClickListener(view -> {
-                View dialogView = ((Activity) context).getLayoutInflater().inflate(R.layout.dialog_edit_flair, null);
+                View dialogView = ((Activity) activity).getLayoutInflater().inflate(R.layout.dialog_edit_flair, null);
                 EditText flairEditText = dialogView.findViewById(R.id.flair_edit_text_edit_flair_dialog);
                 flairEditText.requestFocus();
-                InputMethodManager imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+                InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm != null) {
                     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
                 }
-                new MaterialAlertDialogBuilder(context, R.style.MaterialAlertDialogTheme)
+                new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                         .setTitle(R.string.edit_flair)
                         .setView(dialogView)
                         .setPositiveButton(R.string.ok, (dialogInterface, i)
@@ -109,6 +110,10 @@ public class FlairBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter<Fl
             ButterKnife.bind(this, itemView);
             this.itemView = itemView;
             flairTextView.setTextColor(flairTextColor);
+
+            if (activity.typeface != null) {
+                flairTextView.setTypeface(activity.typeface);
+            }
         }
     }
 }

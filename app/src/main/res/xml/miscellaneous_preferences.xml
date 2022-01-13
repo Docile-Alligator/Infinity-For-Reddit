@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <SwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="save_front_page_scrolled_position"
         app:title="@string/settings_save_front_page_scrolled_position_title"
         app:summary="@string/settings_save_front_page_scrolled_position_summary" />
 
-    <ListPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
         app:defaultValue="0"
         app:entries="@array/link_handler"
         app:entryValues="@array/link_handler_values"
@@ -16,7 +16,7 @@
         app:title="@string/settings_link_handler_title"
         app:useSimpleSummaryProvider="true" />
 
-    <ListPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
         app:defaultValue="0"
         app:entries="@array/main_page_back_button_action"
         app:entryValues="@array/main_page_back_button_action_values"
@@ -25,13 +25,13 @@
         app:title="@string/settings_main_page_back_button_action"
         app:useSimpleSummaryProvider="true" />
 
-    <SwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="true"
         app:key="enable_search_history"
         app:title="@string/settings_enable_search_history_title"
         app:summary="@string/only_for_logged_in_user" />
 
-    <ListPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
         app:defaultValue="auto"
         app:entries="@array/settings_language"
         app:entryValues="@array/settings_language_values"

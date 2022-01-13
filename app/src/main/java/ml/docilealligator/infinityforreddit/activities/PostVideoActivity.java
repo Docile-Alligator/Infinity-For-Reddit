@@ -424,6 +424,16 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
         applyFABTheme(captureFab);
         applyFABTheme(selectFromLibraryFab);
         selectAgainTextView.setTextColor(mCustomThemeWrapper.getColorAccent());
+        if (typeface != null) {
+            subredditNameTextView.setTypeface(typeface);
+            rulesButton.setTypeface(typeface);
+            receivePostReplyNotificationsTextView.setTypeface(typeface);
+            flairTextView.setTypeface(typeface);
+            spoilerTextView.setTypeface(typeface);
+            nsfwTextView.setTypeface(typeface);
+            titleEditText.setTypeface(typeface);
+            selectAgainTextView.setTypeface(typeface);
+        }
     }
 
     private void loadVideo() {

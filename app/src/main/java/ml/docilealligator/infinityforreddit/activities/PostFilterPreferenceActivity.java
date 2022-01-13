@@ -98,7 +98,7 @@ public class PostFilterPreferenceActivity extends BaseActivity {
             }
         });
 
-        adapter = new PostFilterRecyclerViewAdapter(postFilter -> {
+        adapter = new PostFilterRecyclerViewAdapter(this, postFilter -> {
             if (post != null) {
                 showPostFilterOptions(post, postFilter);
             } else if (subredditName != null) {

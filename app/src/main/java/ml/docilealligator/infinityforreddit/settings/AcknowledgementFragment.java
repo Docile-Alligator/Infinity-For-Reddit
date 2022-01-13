@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.settings;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
@@ -17,8 +16,9 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.adapters.AcknowledgementRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.adapters.AcknowledgementRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 
 /**
@@ -28,7 +28,7 @@ public class AcknowledgementFragment extends Fragment {
 
     @BindView(R.id.recycler_view_acknowledgement_fragment)
     RecyclerView recyclerView;
-    private Activity activity;
+    private BaseActivity activity;
 
     public AcknowledgementFragment() {
         // Required empty public constructor
@@ -133,6 +133,6 @@ public class AcknowledgementFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (Activity) context;
+        activity = (BaseActivity) context;
     }
 }

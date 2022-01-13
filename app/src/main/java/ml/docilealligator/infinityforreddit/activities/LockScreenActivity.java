@@ -98,6 +98,10 @@ public class LockScreenActivity extends BaseActivity {
         textView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
         unlockButton.setTextColor(mCustomThemeWrapper.getButtonTextColor());
         unlockButton.setBackgroundColor(mCustomThemeWrapper.getColorPrimaryLightTheme());
+        if (typeface != null) {
+            textView.setTypeface(typeface);
+            unlockButton.setTypeface(typeface);
+        }
     }
 
     @Override

@@ -653,6 +653,13 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         descriptionTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
         subscribeUserChip.setTextColor(mCustomThemeWrapper.getChipTextColor());
         applyTabLayoutTheme(tabLayout);
+        if (typeface != null) {
+            userNameTextView.setTypeface(typeface);
+            karmaTextView.setTypeface(typeface);
+            cakedayTextView.setTypeface(typeface);
+            subscribeUserChip.setTypeface(typeface);
+            descriptionTextView.setTypeface(typeface);
+        }
     }
 
     private void checkNewAccountAndInitializeViewPager() {

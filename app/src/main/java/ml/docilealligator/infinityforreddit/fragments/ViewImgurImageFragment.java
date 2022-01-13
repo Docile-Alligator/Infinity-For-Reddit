@@ -56,6 +56,7 @@ import ml.docilealligator.infinityforreddit.activities.ViewImgurMediaActivity;
 import ml.docilealligator.infinityforreddit.asynctasks.SaveBitmapImageToFile;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SetAsWallpaperBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class ViewImgurImageFragment extends Fragment {
 
@@ -194,6 +195,10 @@ public class ViewImgurImageFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.view_imgur_image_fragment, menu);
+        for (int i = 0; i < menu.size(); i++) {
+            MenuItem item = menu.getItem(i);
+            Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, null);
+        }
         super.onCreateOptionsMenu(menu, inflater);
     }
 

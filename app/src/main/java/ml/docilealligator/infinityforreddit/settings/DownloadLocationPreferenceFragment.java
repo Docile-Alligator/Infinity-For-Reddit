@@ -11,16 +11,17 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
+import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
-public class DownloadLocationPreferenceFragment extends PreferenceFragmentCompat {
+public class DownloadLocationPreferenceFragment extends CustomFontPreferenceFragmentCompat {
     private static final int IMAGE_DOWNLOAD_LOCATION_REQUEST_CODE = 10;
     private static final int GIF_DOWNLOAD_LOCATION_REQUEST_CODE = 11;
     private static final int VIDEO_DOWNLOAD_LOCATION_REQUEST_CODE = 12;
@@ -30,7 +31,6 @@ public class DownloadLocationPreferenceFragment extends PreferenceFragmentCompat
     Preference gifDownloadLocationPreference;
     Preference videoDownloadLocationPreference;
     Preference nsfwDownloadLocationPreference;
-    private Activity activity;
     @Inject
     @Named("default")
     SharedPreferences sharedPreferences;
@@ -39,6 +39,11 @@ public class DownloadLocationPreferenceFragment extends PreferenceFragmentCompat
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
         setPreferencesFromResource(R.xml.download_location_preferences, rootKey);
+
+        if (activity.typeface != null) {
+            setFont(activity.typeface);
+        }
+
         imageDownloadLocationPreference = findPreference(SharedPreferencesUtils.IMAGE_DOWNLOAD_LOCATION);
         gifDownloadLocationPreference = findPreference(SharedPreferencesUtils.GIF_DOWNLOAD_LOCATION);
         videoDownloadLocationPreference = findPreference(SharedPreferencesUtils.VIDEO_DOWNLOAD_LOCATION);
@@ -130,11 +135,5 @@ public class DownloadLocationPreferenceFragment extends PreferenceFragmentCompat
                 }
             }
         }
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        activity = (Activity) context;
     }
 }

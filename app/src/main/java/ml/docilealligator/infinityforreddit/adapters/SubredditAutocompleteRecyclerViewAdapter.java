@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,19 +18,22 @@ import java.util.List;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import pl.droidsonroids.gif.GifImageView;
 
 public class SubredditAutocompleteRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private BaseActivity activity;
     private List<SubredditData> subreddits;
     private RequestManager glide;
     private CustomThemeWrapper customThemeWrapper;
     private ItemOnClickListener itemOnClickListener;
 
-    public SubredditAutocompleteRecyclerViewAdapter(Context context, CustomThemeWrapper customThemeWrapper,
+    public SubredditAutocompleteRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper,
                                                     ItemOnClickListener itemOnClickListener) {
-        glide = Glide.with(context);
+        this.activity = activity;
+        glide = Glide.with(activity);
         this.customThemeWrapper = customThemeWrapper;
         this.itemOnClickListener = itemOnClickListener;
     }
@@ -90,6 +92,10 @@ public class SubredditAutocompleteRecyclerViewAdapter extends RecyclerView.Adapt
             checkBox.setVisibility(View.GONE);
 
             subredditNameTextView.setTextColor(customThemeWrapper.getPrimaryTextColor());
+
+            if (activity.typeface != null) {
+                subredditNameTextView.setTypeface(activity.typeface);
+            }
 
             itemView.setOnClickListener(view -> {
                 itemOnClickListener.onClick(subreddits.get(getBindingAdapterPosition()));

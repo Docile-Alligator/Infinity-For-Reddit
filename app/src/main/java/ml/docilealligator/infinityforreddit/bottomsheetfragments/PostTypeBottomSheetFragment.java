@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -17,7 +16,9 @@ import androidx.fragment.app.Fragment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 
 /**
@@ -40,7 +41,7 @@ public class PostTypeBottomSheetFragment extends LandscapeExpandedRoundedBottomS
     TextView videoTypeTextView;
     @BindView(R.id.gallery_type_linear_layout_post_type_bottom_sheet_fragment)
     TextView galleryTypeTextView;
-    private Activity activity;
+    private BaseActivity activity;
 
     public PostTypeBottomSheetFragment() {
         // Required empty public constructor
@@ -82,13 +83,17 @@ public class PostTypeBottomSheetFragment extends LandscapeExpandedRoundedBottomS
             dismiss();
         });
 
+        if (activity.typeface != null) {
+            Utils.setFontToAllTextViews(rootView, activity.typeface);
+        }
+
         return rootView;
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.activity = (Activity) context;
+        this.activity = (BaseActivity) context;
     }
 
     public interface PostTypeSelectionCallback {

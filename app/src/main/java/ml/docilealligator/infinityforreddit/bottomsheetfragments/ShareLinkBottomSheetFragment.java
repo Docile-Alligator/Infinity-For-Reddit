@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 
-import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -15,14 +14,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -41,7 +41,7 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
     @BindView(R.id.copy_media_link_text_view_share_link_bottom_sheet_fragment)
     TextView copyMediaLinkTextView;
 
-    private Activity activity;
+    private BaseActivity activity;
 
     public ShareLinkBottomSheetFragment() {
         // Required empty public constructor
@@ -108,6 +108,10 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
             copyLink(postLink);
             dismiss();
         });
+
+        if (activity.typeface != null) {
+            Utils.setFontToAllTextViews(rootView, activity.typeface);
+        }
         return rootView;
     }
 
@@ -136,6 +140,6 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (AppCompatActivity) context;
+        activity = (BaseActivity) context;
     }
 }

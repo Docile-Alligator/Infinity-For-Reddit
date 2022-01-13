@@ -298,6 +298,9 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
         mEditTextLinearLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         mSendMessageIconColor = mCustomThemeWrapper.getSendMessageIconColor();
         mSendImageView.setColorFilter(mSendMessageIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        if (typeface != null) {
+            mEditText.setTypeface(typeface);
+        }
     }
 
     @Override

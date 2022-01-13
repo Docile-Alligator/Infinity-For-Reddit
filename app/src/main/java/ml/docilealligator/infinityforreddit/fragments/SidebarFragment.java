@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -49,6 +48,7 @@ import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubredditData;
@@ -84,7 +84,7 @@ public class SidebarFragment extends Fragment {
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private Activity activity;
+    private BaseActivity activity;
     private String mAccessToken;
     private String subredditName;
     private LinearLayoutManagerBugFixed linearLayoutManager;
@@ -135,6 +135,9 @@ public class SidebarFragment extends Fragment {
 
                     @Override
                     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
+                        if (activity.contentTypeface != null) {
+                            textView.setTypeface(activity.contentTypeface);
+                        }
                         textView.setTextColor(markdownColor);
                         textView.setOnLongClickListener(view -> {
                             if (sidebarDescription != null && !sidebarDescription.equals("") && textView.getSelectionStart() == -1 && textView.getSelectionEnd() == -1) {
@@ -219,7 +222,7 @@ public class SidebarFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (Activity) context;
+        activity = (BaseActivity) context;
     }
 
     public void fetchSubredditData() {

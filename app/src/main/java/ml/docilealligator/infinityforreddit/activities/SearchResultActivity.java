@@ -258,13 +258,13 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
             switch (position) {
                 case 0:
-                    tab.setText(R.string.posts);
+                    Utils.setTitleWithCustomFontToTab(typeface, tab, getString(R.string.posts));
                     break;
                 case 1:
-                    tab.setText(R.string.subreddits);
+                    Utils.setTitleWithCustomFontToTab(typeface, tab, getString(R.string.subreddits));
                     break;
                 case 2:
-                    tab.setText(R.string.users);
+                    Utils.setTitleWithCustomFontToTab(typeface, tab, getString(R.string.users));
                     break;
             }
         }).attach();

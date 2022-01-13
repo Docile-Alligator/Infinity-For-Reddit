@@ -29,11 +29,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.MultiredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.activities.SearchActivity;
 import ml.docilealligator.infinityforreddit.activities.SubredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class CustomizeMainPageTabsFragment extends Fragment {
 
@@ -134,7 +136,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
     @Inject
     @Named("main_activity_tabs")
     SharedPreferences mainActivityTabsSharedPreferences;
-    private Activity activity;
+    private BaseActivity activity;
     private String accountName;
     private int tabCount;
     private String tab1CurrentTitle;
@@ -160,6 +162,10 @@ public class CustomizeMainPageTabsFragment extends Fragment {
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
+
+        if (activity.typeface != null) {
+            Utils.setFontToAllTextViews(rootView, activity.typeface);
+        }
 
         accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
 
@@ -707,6 +713,6 @@ public class CustomizeMainPageTabsFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (Activity) context;
+        activity = (BaseActivity) context;
     }
 }

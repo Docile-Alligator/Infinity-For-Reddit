@@ -626,10 +626,10 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
                 if (mPost.isHidden()) {
                     hideItem.setVisible(true);
-                    hideItem.setTitle(R.string.action_unhide_post);
+                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, hideItem, getString(R.string.action_unhide_post));
                 } else {
                     hideItem.setVisible(true);
-                    hideItem.setTitle(R.string.action_hide_post);
+                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, hideItem, getString(R.string.action_hide_post));
                 }
             } else {
                 saveItem.setVisible(false);
@@ -645,17 +645,17 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 MenuItem nsfwItem = mMenu.findItem(R.id.action_nsfw_view_post_detail_fragment);
                 nsfwItem.setVisible(true);
                 if (mPost.isNSFW()) {
-                    nsfwItem.setTitle(R.string.action_unmark_nsfw);
+                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, nsfwItem, getString(R.string.action_unmark_nsfw));
                 } else {
-                    nsfwItem.setTitle(R.string.action_mark_nsfw);
+                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, nsfwItem, getString(R.string.action_mark_nsfw));
                 }
 
                 MenuItem spoilerItem = mMenu.findItem(R.id.action_spoiler_view_post_detail_fragment);
                 spoilerItem.setVisible(true);
                 if (mPost.isSpoiler()) {
-                    spoilerItem.setTitle(R.string.action_unmark_spoiler);
+                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, spoilerItem, getString(R.string.action_unmark_spoiler));
                 } else {
-                    spoilerItem.setTitle(R.string.action_mark_spoiler);
+                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, spoilerItem, getString(R.string.action_mark_spoiler));
                 }
 
                 mMenu.findItem(R.id.action_edit_flair_view_post_detail_fragment).setVisible(true);
@@ -889,17 +889,21 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             new SaveThing.SaveThingListener() {
                                 @Override
                                 public void success() {
-                                    mPost.setSaved(false);
-                                    item.setIcon(mUnsavedIcon);
-                                    showMessage(R.string.post_unsaved_success);
+                                    if (isAdded()) {
+                                        mPost.setSaved(false);
+                                        item.setIcon(mUnsavedIcon);
+                                        showMessage(R.string.post_unsaved_success);
+                                    }
                                     EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                                 }
 
                                 @Override
                                 public void failed() {
-                                    mPost.setSaved(true);
-                                    item.setIcon(mSavedIcon);
-                                    showMessage(R.string.post_unsaved_failed);
+                                    if (isAdded()) {
+                                        mPost.setSaved(true);
+                                        item.setIcon(mSavedIcon);
+                                        showMessage(R.string.post_unsaved_failed);
+                                    }
                                     EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                                 }
                             });
@@ -909,17 +913,21 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             new SaveThing.SaveThingListener() {
                                 @Override
                                 public void success() {
-                                    mPost.setSaved(true);
-                                    item.setIcon(mSavedIcon);
-                                    showMessage(R.string.post_saved_success);
+                                    if (isAdded()) {
+                                        mPost.setSaved(true);
+                                        item.setIcon(mSavedIcon);
+                                        showMessage(R.string.post_saved_success);
+                                    }
                                     EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                                 }
 
                                 @Override
                                 public void failed() {
-                                    mPost.setSaved(false);
-                                    item.setIcon(mUnsavedIcon);
-                                    showMessage(R.string.post_saved_failed);
+                                    if (isAdded()) {
+                                        mPost.setSaved(false);
+                                        item.setIcon(mUnsavedIcon);
+                                        showMessage(R.string.post_saved_failed);
+                                    }
                                     EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                                 }
                             });
@@ -940,42 +948,50 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         } else if (itemId == R.id.action_hide_view_post_detail_fragment) {
             if (mPost != null && mAccessToken != null) {
                 if (mPost.isHidden()) {
-                    item.setTitle(R.string.action_hide_post);
+                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, getString(R.string.action_hide_post));
 
                     HidePost.unhidePost(mOauthRetrofit, mAccessToken, mPost.getFullName(), new HidePost.HidePostListener() {
                         @Override
                         public void success() {
-                            mPost.setHidden(false);
-                            item.setTitle(R.string.action_hide_post);
-                            showMessage(R.string.post_unhide_success);
+                            if (isAdded()) {
+                                mPost.setHidden(false);
+                                Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, getString(R.string.action_hide_post));
+                                showMessage(R.string.post_unhide_success);
+                            }
                             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                         }
 
                         @Override
                         public void failed() {
-                            mPost.setHidden(true);
-                            item.setTitle(R.string.action_unhide_post);
-                            showMessage(R.string.post_unhide_failed);
+                            if (isAdded()) {
+                                mPost.setHidden(true);
+                                Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, getString(R.string.action_unhide_post));
+                                showMessage(R.string.post_unhide_failed);
+                            }
                             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                         }
                     });
                 } else {
-                    item.setTitle(R.string.action_unhide_post);
+                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, getString(R.string.action_unhide_post));
 
                     HidePost.hidePost(mOauthRetrofit, mAccessToken, mPost.getFullName(), new HidePost.HidePostListener() {
                         @Override
                         public void success() {
-                            mPost.setHidden(true);
-                            item.setTitle(R.string.action_unhide_post);
-                            showMessage(R.string.post_hide_success);
+                            if (isAdded()) {
+                                mPost.setHidden(true);
+                                Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, getString(R.string.action_unhide_post));
+                                showMessage(R.string.post_hide_success);
+                            }
                             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                         }
 
                         @Override
                         public void failed() {
-                            mPost.setHidden(false);
-                            item.setTitle(R.string.action_hide_post);
-                            showMessage(R.string.post_hide_failed);
+                            if (isAdded()) {
+                                mPost.setHidden(false);
+                                Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, getString(R.string.action_hide_post));
+                                showMessage(R.string.post_hide_failed);
+                            }
                             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                         }
                     });
@@ -1149,8 +1165,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @SuppressLint("RestrictedApi")
     protected boolean applyMenuItemTheme(Menu menu) {
         if (mCustomThemeWrapper != null) {
-            int size = Math.min(menu.size(), 2);
-            for (int i = 0; i < size; i++) {
+            for (int i = 0; i < menu.size(); i++) {
                 MenuItem item = menu.getItem(i);
                 if (((MenuItemImpl) item).requestsActionButton()) {
                     Drawable drawable = item.getIcon();
@@ -1159,6 +1174,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                         item.setIcon(drawable);
                     }
                 }
+                Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, null);
             }
         }
         return true;
@@ -1512,18 +1528,22 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                         new FetchPost.FetchPostListener() {
                             @Override
                             public void fetchPostSuccess(Post post) {
-                                mPost = post;
-                                mPostAdapter.updatePost(mPost);
-                                EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                                isRefreshing = false;
-                                setupMenu();
-                                mSwipeRefreshLayout.setRefreshing(false);
+                                if (isAdded()) {
+                                    mPost = post;
+                                    mPostAdapter.updatePost(mPost);
+                                    EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
+                                    isRefreshing = false;
+                                    setupMenu();
+                                    mSwipeRefreshLayout.setRefreshing(false);
+                                }
                             }
 
                             @Override
                             public void fetchPostFailed() {
-                                showMessage(R.string.refresh_post_failed);
-                                isRefreshing = false;
+                                if (isAdded()) {
+                                    showMessage(R.string.refresh_post_failed);
+                                    isRefreshing = false;
+                                }
                             }
                         });
             }
@@ -1922,6 +1942,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
         mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         mFetchPostInfoTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
+        if (activity.typeface != null) {
+            mFetchPostInfoTextView.setTypeface(activity.contentTypeface);
+        }
     }
 
     private void onWindowFocusChanged(boolean hasWindowsFocus) {

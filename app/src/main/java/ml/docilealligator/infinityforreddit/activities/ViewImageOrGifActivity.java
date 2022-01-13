@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -60,6 +61,7 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.BuildConfig;
+import ml.docilealligator.infinityforreddit.CustomFontReceiver;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
@@ -75,8 +77,9 @@ import ml.docilealligator.infinityforreddit.font.TitleFontFamily;
 import ml.docilealligator.infinityforreddit.font.TitleFontStyle;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
-public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWallpaperCallback {
+public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWallpaperCallback, CustomFontReceiver {
 
     public static final String EXTRA_IMAGE_URL_KEY = "EIUK";
     public static final String EXTRA_GIF_URL_KEY = "EGUK";
@@ -114,6 +117,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     private String mSubredditName;
     private boolean isGif = true;
     private boolean isNsfw;
+    private Typeface typeface;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -175,7 +179,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
             if (useBottomAppBar) {
                 titleTextView.setText(title);
             } else {
-                setTitle(title);
+                setTitle(Utils.getTabTextWithCustomFont(typeface, title));
             }
         } else {
             if (!useBottomAppBar) {
@@ -312,8 +316,12 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_image_or_gif_activity, menu);
-        if (!isGif)
+        for (int i = 0; i < menu.size(); i++) {
+            Utils.setTitleWithCustomFontToMenuItem(typeface, menu.getItem(i), null);
+        }
+        if (!isGif) {
             menu.findItem(R.id.action_set_wallpaper_view_image_or_gif_activity).setVisible(true);
+        }
         return true;
     }
 
@@ -544,5 +552,10 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     public void onDestroy() {
         super.onDestroy();
         BigImageViewer.imageLoader().cancelAll();
+    }
+
+    @Override
+    public void setCustomFont(Typeface typeface, Typeface titleTypeface, Typeface contentTypeface) {
+        this.typeface = typeface;
     }
 }

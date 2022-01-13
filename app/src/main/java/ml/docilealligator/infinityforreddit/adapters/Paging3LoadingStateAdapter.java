@@ -15,14 +15,17 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.button.MaterialButton;
 
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 
 public class Paging3LoadingStateAdapter extends LoadStateAdapter<Paging3LoadingStateAdapter.LoadStateViewHolder> {
+    private BaseActivity activity;
     private CustomThemeWrapper mCustomThemeWrapper;
     private int mErrorStringId;
     private View.OnClickListener mRetryCallback;
 
-    public Paging3LoadingStateAdapter(CustomThemeWrapper customThemeWrapper, int errorStringId, View.OnClickListener retryCallback) {
+    public Paging3LoadingStateAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper, int errorStringId, View.OnClickListener retryCallback) {
+        this.activity = activity;
         this.mCustomThemeWrapper = customThemeWrapper;
         this.mErrorStringId = errorStringId;
         this.mRetryCallback = retryCallback;
@@ -59,6 +62,11 @@ public class Paging3LoadingStateAdapter extends LoadStateAdapter<Paging3LoadingS
             mRetry.setTextColor(mCustomThemeWrapper.getButtonTextColor());
             mRetry.setOnClickListener(retryCallback);
             mErrorView.setOnClickListener(retryCallback);
+
+            if (activity.typeface != null) {
+                mErrorMsg.setTypeface(activity.typeface);
+                mRetry.setTypeface(activity.typeface);
+            }
         }
 
         public void bind(LoadState loadState) {

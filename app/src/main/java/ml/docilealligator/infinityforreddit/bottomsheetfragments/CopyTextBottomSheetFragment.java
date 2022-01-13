@@ -1,12 +1,10 @@
 package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +19,9 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,7 +39,7 @@ public class CopyTextBottomSheetFragment extends LandscapeExpandedRoundedBottomS
     @BindView(R.id.copy_all_markdown_text_view_copy_text_bottom_sheet_fragment)
     TextView copyAllMarkdownTextView;
 
-    private Activity activity;
+    private BaseActivity activity;
     private String markdownText;
 
     public CopyTextBottomSheetFragment() {
@@ -88,6 +88,10 @@ public class CopyTextBottomSheetFragment extends LandscapeExpandedRoundedBottomS
             copyAllMarkdownTextView.setVisibility(View.GONE);
         }
 
+        if (activity.typeface != null) {
+            Utils.setFontToAllTextViews(rootView, activity.typeface);
+        }
+
         return rootView;
     }
 
@@ -118,6 +122,6 @@ public class CopyTextBottomSheetFragment extends LandscapeExpandedRoundedBottomS
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (Activity) context;
+        activity = (BaseActivity) context;
     }
 }

@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
-import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,16 +13,17 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.settings.Acknowledgement;
 
 public class AcknowledgementRecyclerViewAdapter extends RecyclerView.Adapter<AcknowledgementRecyclerViewAdapter.AcknowledgementViewHolder> {
     private ArrayList<Acknowledgement> acknowledgements;
-    private Context context;
+    private BaseActivity activity;
 
-    public AcknowledgementRecyclerViewAdapter(Context context, ArrayList<Acknowledgement> acknowledgements) {
-        this.context = context;
+    public AcknowledgementRecyclerViewAdapter(BaseActivity activity, ArrayList<Acknowledgement> acknowledgements) {
+        this.activity = activity;
         this.acknowledgements = acknowledgements;
     }
 
@@ -40,10 +40,10 @@ public class AcknowledgementRecyclerViewAdapter extends RecyclerView.Adapter<Ack
             holder.nameTextView.setText(acknowledgement.getName());
             holder.introductionTextView.setText(acknowledgement.getIntroduction());
             holder.itemView.setOnClickListener(view -> {
-                if (context != null) {
-                    Intent intent = new Intent(context, LinkResolverActivity.class);
+                if (activity != null) {
+                    Intent intent = new Intent(activity, LinkResolverActivity.class);
                     intent.setData(acknowledgement.getLink());
-                    context.startActivity(intent);
+                    activity.startActivity(intent);
                 }
             });
         }
@@ -65,6 +65,11 @@ public class AcknowledgementRecyclerViewAdapter extends RecyclerView.Adapter<Ack
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.itemView = itemView;
+
+            if (activity.typeface != null) {
+                nameTextView.setTypeface(activity.typeface);
+                introductionTextView.setTypeface(activity.typeface);
+            }
         }
     }
 }

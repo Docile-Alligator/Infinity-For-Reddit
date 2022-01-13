@@ -19,7 +19,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -113,7 +112,7 @@ public class GiveAwardActivity extends BaseActivity {
     }
 
     private void bindView() {
-        adapter = new AwardRecyclerViewAdapter(Glide.with(this), mCustomThemeWrapper, award -> {
+        adapter = new AwardRecyclerViewAdapter(this, mCustomThemeWrapper, award -> {
             LayoutInflater inflater = getLayoutInflater();
             View layout = inflater.inflate(R.layout.dialog_give_award, null);
             SwitchMaterial switchMaterial = layout.findViewById(R.id.switch_material_give_award_dialog);

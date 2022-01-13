@@ -498,6 +498,10 @@ public class CustomizePostFilterActivity extends BaseActivity {
             setCursorDrawableColor(minAwardsTextInputEditText, primaryTextColor);
             setCursorDrawableColor(maxAwardsTextInputEditText, primaryTextColor);
         }
+
+        if (typeface != null) {
+            Utils.setFontToAllTextViews(coordinatorLayout, typeface);
+        }
     }
 
     public static void setCursorDrawableColor(EditText editText, int color) {

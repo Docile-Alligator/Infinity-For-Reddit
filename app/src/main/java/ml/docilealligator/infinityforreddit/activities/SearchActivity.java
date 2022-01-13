@@ -51,6 +51,7 @@ import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -360,6 +361,9 @@ public class SearchActivity extends BaseActivity {
         searchInTextView.setTextColor(colorAccent);
         subredditNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
         divider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
+        if (typeface != null) {
+            Utils.setFontToAllTextViews(coordinatorLayout, typeface);
+        }
     }
 
     @Override

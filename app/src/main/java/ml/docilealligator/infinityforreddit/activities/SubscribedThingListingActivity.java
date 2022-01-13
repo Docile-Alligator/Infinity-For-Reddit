@@ -69,6 +69,7 @@ import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 public class SubscribedThingListingActivity extends BaseActivity implements ActivityToolbarInterface {
@@ -508,11 +509,11 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return getString(R.string.subreddits);
+                    return Utils.getTabTextWithCustomFont(typeface, getString(R.string.subreddits));
                 case 1:
-                    return getString(R.string.users);
+                    return Utils.getTabTextWithCustomFont(typeface, getString(R.string.users));
                 case 2:
-                    return getString(R.string.multi_reddits);
+                    return Utils.getTabTextWithCustomFont(typeface, getString(R.string.multi_reddits));
             }
 
             return null;

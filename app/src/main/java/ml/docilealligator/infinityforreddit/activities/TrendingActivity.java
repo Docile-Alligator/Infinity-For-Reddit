@@ -332,6 +332,9 @@ public class TrendingActivity extends BaseActivity {
         swipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
         swipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         errorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
+        if (typeface != null) {
+            errorTextView.setTypeface(typeface);
+        }
     }
 
     @Subscribe

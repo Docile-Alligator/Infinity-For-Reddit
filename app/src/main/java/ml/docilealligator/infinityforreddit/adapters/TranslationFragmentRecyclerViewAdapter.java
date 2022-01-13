@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -16,18 +15,19 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.settings.Translation;
 
 public class TranslationFragmentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private Activity activity;
+    private BaseActivity activity;
     private int primaryTextColor;
     private int secondaryTextColor;
     private ArrayList<Translation> translationContributors;
 
-    public TranslationFragmentRecyclerViewAdapter(Activity activity, CustomThemeWrapper customThemeWrapper) {
+    public TranslationFragmentRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper) {
         this.activity = activity;
         primaryTextColor = customThemeWrapper.getPrimaryTextColor();
         secondaryTextColor = customThemeWrapper.getSecondaryTextColor();
@@ -72,6 +72,11 @@ public class TranslationFragmentRecyclerViewAdapter extends RecyclerView.Adapter
             super(itemView);
 
             ButterKnife.bind(this, itemView);
+
+            if (activity.typeface != null) {
+                languageNameTextView.setTypeface(activity.typeface);
+                contributorNamesTextView.setTypeface(activity.typeface);
+            }
 
             languageNameTextView.setTextColor(primaryTextColor);
             contributorNamesTextView.setTextColor(secondaryTextColor);

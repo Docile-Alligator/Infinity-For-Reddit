@@ -9,7 +9,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -25,6 +24,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.zhanghai.android.fastscroll.PopupTextProvider;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertMultireddit;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.multireddit.FavoriteMultiReddit;
@@ -39,7 +39,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
     private static final int VIEW_TYPE_MULTI_REDDIT_DIVIDER = 2;
     private static final int VIEW_TYPE_MULTI_REDDIT = 3;
 
-    private AppCompatActivity mActivity;
+    private BaseActivity mActivity;
     private Executor mExecutor;
     private Retrofit mOauthRetrofit;
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
@@ -57,7 +57,7 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
         void onLongClick(MultiReddit multiReddit);
     }
 
-    public MultiRedditListingRecyclerViewAdapter(AppCompatActivity activity, Executor executor, Retrofit oauthRetrofit,
+    public MultiRedditListingRecyclerViewAdapter(BaseActivity activity, Executor executor, Retrofit oauthRetrofit,
                                                  RedditDataRoomDatabase redditDataRoomDatabase,
                                                  CustomThemeWrapper customThemeWrapper,
                                                  String accessToken, OnItemClickListener onItemClickListener) {
@@ -377,6 +377,9 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
         MultiRedditViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            if (mActivity.typeface != null) {
+                multiRedditNameTextView.setTypeface(mActivity.typeface);
+            }
             multiRedditNameTextView.setTextColor(mPrimaryTextColor);
         }
     }
@@ -392,6 +395,9 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
         FavoriteMultiRedditViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            if (mActivity.typeface != null) {
+                multiRedditNameTextView.setTypeface(mActivity.typeface);
+            }
             multiRedditNameTextView.setTextColor(mPrimaryTextColor);
         }
     }
@@ -402,6 +408,9 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
         FavoriteMultiRedditsDividerViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            if (mActivity.typeface != null) {
+                dividerTextView.setTypeface(mActivity.typeface);
+            }
             dividerTextView.setText(R.string.favorites);
             dividerTextView.setTextColor(mSecondaryTextColor);
         }
@@ -413,6 +422,9 @@ public class MultiRedditListingRecyclerViewAdapter extends RecyclerView.Adapter<
         AllMultiRedditsDividerViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            if (mActivity.typeface != null) {
+                dividerTextView.setTypeface(mActivity.typeface);
+            }
             dividerTextView.setText(R.string.all);
             dividerTextView.setTextColor(mSecondaryTextColor);
         }

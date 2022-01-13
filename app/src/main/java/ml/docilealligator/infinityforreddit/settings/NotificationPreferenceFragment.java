@@ -1,15 +1,11 @@
 package ml.docilealligator.infinityforreddit.settings;
 
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.preference.ListPreference;
-import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 import androidx.work.Constraints;
 import androidx.work.ExistingPeriodicWorkPolicy;
@@ -25,12 +21,13 @@ import javax.inject.Named;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.PullNotificationWorker;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class NotificationPreferenceFragment extends PreferenceFragmentCompat {
+public class NotificationPreferenceFragment extends CustomFontPreferenceFragmentCompat {
 
     @Inject
     @Named("default")
@@ -38,11 +35,14 @@ public class NotificationPreferenceFragment extends PreferenceFragmentCompat {
     private boolean enableNotification;
     private long notificationInterval;
     private WorkManager workManager;
-    private Activity activity;
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.notification_preferences, rootKey);
+        
+        if (activity.typeface != null) {
+            setFont(activity.typeface);
+        }
 
         workManager = WorkManager.getInstance(activity);
 
@@ -117,11 +117,5 @@ public class NotificationPreferenceFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        activity = (Activity) context;
     }
 }

@@ -66,11 +66,6 @@
             android:name=".activities.LockScreenActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".activities.AnonymousSubscriptionsActivity"
-            android:label="@string/subscriptions"
-            android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".activities.WebViewActivity"
             android:label=""
             android:parentActivityName=".activities.MainActivity"

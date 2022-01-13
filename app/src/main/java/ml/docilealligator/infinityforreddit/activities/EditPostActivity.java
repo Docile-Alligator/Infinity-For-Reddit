@@ -196,6 +196,13 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
         titleTextView.setTextColor(mCustomThemeWrapper.getPostTitleColor());
         divider.setBackgroundColor(mCustomThemeWrapper.getPostTitleColor());
         contentEditText.setTextColor(mCustomThemeWrapper.getPostContentColor());
+
+        if (titleTypeface != null) {
+            titleTextView.setTypeface(titleTypeface);
+        }
+        if (contentTypeface != null) {
+            contentEditText.setTypeface(contentTypeface);
+        }
     }
 
     @Override

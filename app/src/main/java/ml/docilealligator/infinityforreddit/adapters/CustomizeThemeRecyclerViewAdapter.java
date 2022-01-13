@@ -7,33 +7,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeSettingsItem;
 import ml.docilealligator.infinityforreddit.customviews.ColorPickerDialog;
-import ml.docilealligator.infinityforreddit.R;
 
 public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_COLOR = 1;
     private static final int VIEW_TYPE_SWITCH = 2;
     private static final int VIEW_TYPE_THEME_NAME = 3;
-    private AppCompatActivity activity;
+    private BaseActivity activity;
     private ArrayList<CustomThemeSettingsItem> customThemeSettingsItems;
     private String themeName;
     private boolean isPredefinedTheme;
 
-    public CustomizeThemeRecyclerViewAdapter(AppCompatActivity activity, String themeName,
+    public CustomizeThemeRecyclerViewAdapter(BaseActivity activity, String themeName,
                                              boolean isPredefinedTheme) {
         this.activity = activity;
         customThemeSettingsItems = new ArrayList<>();
@@ -148,6 +148,10 @@ public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         ThemeColorItemViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            if (activity.typeface != null) {
+                themeItemNameTextView.setTypeface(activity.typeface);
+                themeItemInfoTextView.setTypeface(activity.typeface);
+            }
         }
     }
 
@@ -157,11 +161,15 @@ public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         @BindView(R.id.theme_item_info_text_view_item_custom_theme_switch_item)
         TextView themeItemInfoTextView;
         @BindView(R.id.theme_item_switch_item_custom_theme_switch_item)
-        Switch themeItemSwitch;
+        SwitchMaterial themeItemSwitch;
 
         ThemeSwitchItemViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            if (activity.typeface != null) {
+                themeItemNameTextView.setTypeface(activity.typeface);
+                themeItemInfoTextView.setTypeface(activity.typeface);
+            }
         }
     }
 
@@ -173,6 +181,10 @@ public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         public ThemeNameItemViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            if (activity.typeface != null) {
+                themeNameTextView.setTypeface(activity.typeface);
+                descriptionTextView.setTypeface(activity.typeface);
+            }
         }
     }
 }

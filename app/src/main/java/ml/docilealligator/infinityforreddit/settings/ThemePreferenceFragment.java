@@ -5,7 +5,6 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -13,15 +12,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreference;
 
 import org.greenrobot.eventbus.EventBus;
@@ -38,6 +34,7 @@ import ml.docilealligator.infinityforreddit.activities.CustomThemeListingActivit
 import ml.docilealligator.infinityforreddit.activities.CustomizeThemeActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeViewModel;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.MaterialYouUtils;
@@ -46,9 +43,8 @@ import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ThemePreferenceFragment extends PreferenceFragmentCompat {
+public class ThemePreferenceFragment extends CustomFontPreferenceFragmentCompat {
 
-    private AppCompatActivity activity;
     @Inject
     @Named("default")
     SharedPreferences sharedPreferences;
@@ -74,6 +70,10 @@ public class ThemePreferenceFragment extends PreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.theme_preferences, rootKey);
 
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
+
+        if (activity.typeface != null) {
+            setFont(activity.typeface);
+        }
 
         ListPreference themePreference = findPreference(SharedPreferencesUtils.THEME_KEY);
         SwitchPreference amoledDarkSwitch = findPreference(SharedPreferencesUtils.AMOLED_DARK_KEY);
@@ -232,11 +232,5 @@ public class ThemePreferenceFragment extends PreferenceFragmentCompat {
                 }
             }
         });
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        activity = (AppCompatActivity) context;
     }
 }

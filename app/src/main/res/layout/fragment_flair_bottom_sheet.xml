@@ -7,18 +7,6 @@
     android:orientation="vertical"
     tools:application=".FlairBottomSheetFragment">
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="16dp"
-        android:paddingBottom="16dp"
-        android:paddingStart="32dp"
-        android:paddingEnd="32dp"
-        android:text="@string/flair"
-        android:textColor="?attr/primaryTextColor"
-        android:textSize="?attr/font_18"
-        android:fontFamily="?attr/font_family" />
-
     <ProgressBar
         android:id="@+id/progress_bar_flair_bottom_sheet_fragment"
         android:layout_width="wrap_content"

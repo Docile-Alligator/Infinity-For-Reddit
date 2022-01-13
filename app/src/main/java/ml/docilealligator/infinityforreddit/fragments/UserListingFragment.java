@@ -1,7 +1,6 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -100,7 +99,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
     private LinearLayoutManagerBugFixed mLinearLayoutManager;
     private String mQuery;
     private UserListingRecyclerViewAdapter mAdapter;
-    private Activity mActivity;
+    private BaseActivity mActivity;
     private SortType sortType;
 
     public UserListingFragment() {
@@ -143,7 +142,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         sortType = new SortType(SortType.Type.valueOf(sort.toUpperCase()));
         boolean nsfw = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((accountName == null ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
 
-        mAdapter = new UserListingRecyclerViewAdapter(getActivity(), mExecutor, mOauthRetrofit, mRetrofit,
+        mAdapter = new UserListingRecyclerViewAdapter(mActivity, mExecutor, mOauthRetrofit, mRetrofit,
                 mCustomThemeWrapper, accessToken, accountName, mRedditDataRoomDatabase,
                 getArguments().getBoolean(EXTRA_IS_MULTI_SELECTION, false),
                 new UserListingRecyclerViewAdapter.Callback() {
@@ -220,7 +219,7 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mActivity = (Activity) context;
+        mActivity = (BaseActivity) context;
     }
 
     private void showErrorView(int stringResId) {
@@ -250,6 +249,9 @@ public class UserListingFragment extends Fragment implements FragmentCommunicato
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
         mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         mFetchUserListingInfoTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
+        if (mActivity.typeface != null) {
+            mFetchUserListingInfoTextView.setTypeface(mActivity.contentTypeface);
+        }
     }
 
     public void goBackToTop() {

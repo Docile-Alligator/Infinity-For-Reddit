@@ -58,6 +58,7 @@ import ml.docilealligator.infinityforreddit.fragments.InboxFragment;
 import ml.docilealligator.infinityforreddit.message.FetchMessage;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -283,10 +284,10 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
             switch (position) {
                 case 0:
-                    tab.setText(R.string.notifications);
+                    Utils.setTitleWithCustomFontToTab(typeface, tab, getString(R.string.notifications));
                     break;
                 case 1:
-                    tab.setText(R.string.messages);
+                    Utils.setTitleWithCustomFontToTab(typeface, tab, getString(R.string.messages));
                     break;
             }
         }).attach();

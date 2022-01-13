@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,14 +9,15 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.CustomizeThemeActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -36,7 +36,7 @@ public class CustomThemeOptionsBottomSheetFragment extends LandscapeExpandedRoun
     @BindView(R.id.delete_theme_text_view_custom_theme_options_bottom_sheet_fragment)
     TextView deleteTextView;
     private String themeName;
-    private Activity activity;
+    private BaseActivity activity;
 
     public CustomThemeOptionsBottomSheetFragment() {
         // Required empty public constructor
@@ -79,12 +79,16 @@ public class CustomThemeOptionsBottomSheetFragment extends LandscapeExpandedRoun
             dismiss();
         });
 
+        if (activity.typeface != null) {
+            Utils.setFontToAllTextViews(rootView, activity.typeface);
+        }
+
         return rootView;
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (AppCompatActivity) context;
+        activity = (BaseActivity) context;
     }
 }

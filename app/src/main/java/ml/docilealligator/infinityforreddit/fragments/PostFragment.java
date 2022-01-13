@@ -35,7 +35,6 @@ import android.widget.Toast;
 import androidx.annotation.DimenRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -109,6 +108,7 @@ import ml.docilealligator.infinityforreddit.events.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeOnlyDisablePreviewInVideoAndGifPostsEvent;
 import ml.docilealligator.infinityforreddit.events.ChangePostLayoutEvent;
+import ml.docilealligator.infinityforreddit.events.ChangePullToRefreshEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeRememberMutingOptionInPostFeedEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeSavePostFeedScrolledPositionEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeShowAbsoluteNumberOfVotesEvent;
@@ -212,7 +212,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Inject
     Executor mExecutor;
     private RequestManager mGlide;
-    private AppCompatActivity activity;
+    private BaseActivity activity;
     private LinearLayoutManagerBugFixed mLinearLayoutManager;
     private StaggeredGridLayoutManager mStaggeredGridLayoutManager;
     private MenuItem lazyModeItem;
@@ -1274,19 +1274,22 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             return null;
         });
 
-        mPostRecyclerView.setAdapter(mAdapter.withLoadStateFooter(new Paging3LoadingStateAdapter(mCustomThemeWrapper, R.string.load_more_posts_error,
+        mPostRecyclerView.setAdapter(mAdapter.withLoadStateFooter(new Paging3LoadingStateAdapter(activity, mCustomThemeWrapper, R.string.load_more_posts_error,
                 view -> mAdapter.retry())));
     }
 
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.post_fragment, menu);
+        for (int i = 0; i < menu.size(); i++) {
+            Utils.setTitleWithCustomFontToMenuItem(activity.typeface, menu.getItem(i), null);
+        }
         lazyModeItem = menu.findItem(R.id.action_lazy_mode_post_fragment);
 
         if (isInLazyMode) {
-            lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+            Utils.setTitleWithCustomFontToMenuItem(activity.typeface, lazyModeItem, getString(R.string.action_stop_lazy_mode));
         } else {
-            lazyModeItem.setTitle(R.string.action_start_lazy_mode);
+            Utils.setTitleWithCustomFontToMenuItem(activity.typeface, lazyModeItem, getString(R.string.action_start_lazy_mode));
         }
 
         if (activity instanceof FilteredPostsActivity) {
@@ -1396,7 +1399,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.activity = (AppCompatActivity) context;
+        this.activity = (BaseActivity) context;
     }
 
     @Override
@@ -1469,7 +1472,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             return false;
         }
 
-        lazyModeItem.setTitle(R.string.action_stop_lazy_mode);
+        Utils.setTitleWithCustomFontToMenuItem(activity.typeface, lazyModeItem, getString(R.string.action_stop_lazy_mode));
 
         if (mAdapter != null && mAdapter.isAutoplay()) {
             mAdapter.setAutoplay(false);
@@ -1490,7 +1493,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void stopLazyMode() {
-        lazyModeItem.setTitle(R.string.action_start_lazy_mode);
+        Utils.setTitleWithCustomFontToMenuItem(activity.typeface, lazyModeItem, getString(R.string.action_start_lazy_mode));
         if (mAdapter != null) {
             String autoplayString = mSharedPreferences.getString(SharedPreferencesUtils.VIDEO_AUTOPLAY, SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_NEVER);
             if (autoplayString.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ALWAYS_ON) ||
@@ -1609,6 +1612,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
         mSwipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         mFetchPostInfoTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
+        if (activity.typeface != null) {
+            mFetchPostInfoTextView.setTypeface(activity.typeface);
+        }
     }
 
     @Override

@@ -1,30 +1,30 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
-    <Preference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         app:key="image_download_location"
         app:title="@string/settings_image_download_location_title" />
 
-    <Preference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         app:key="gif_download_location"
         app:title="@string/settings_gif_download_location_title" />
 
-    <Preference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         app:key="video_download_location"
         app:title="@string/settings_video_download_location_title" />
 
-    <SwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="separate_folder_for_each_subreddit"
         app:title="@string/settings_separate_folder_for_each_subreddit" />
 
-    <PreferenceCategory
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceCategory
         app:title="@string/nsfw" />
 
-    <SwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="save_nsfw_media_in_different_folder"
         app:title="@string/settings_save_nsfw_media_in_different_folder_title" />
 
-    <Preference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         app:key="nsfw_download_location"
         app:title="@string/settings_nsfw_download_location_title" />
 </PreferenceScreen>

@@ -338,6 +338,9 @@ public class WikiActivity extends BaseActivity {
         swipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
         swipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         mFetchWikiInfoTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
+        if (typeface != null) {
+            mFetchWikiInfoTextView.setTypeface(typeface);
+        }
     }
 
     @Subscribe

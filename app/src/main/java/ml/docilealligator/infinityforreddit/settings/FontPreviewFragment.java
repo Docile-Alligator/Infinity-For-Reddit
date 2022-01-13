@@ -9,11 +9,6 @@ import androidx.fragment.app.Fragment;
 
 import ml.docilealligator.infinityforreddit.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FontPreviewFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class FontPreviewFragment extends Fragment {
 
     public FontPreviewFragment() {

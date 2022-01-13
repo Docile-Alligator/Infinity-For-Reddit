@@ -1,26 +1,27 @@
 package ml.docilealligator.infinityforreddit.settings;
 
-import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.preference.ListPreference;
-import androidx.preference.PreferenceFragmentCompat;
 
 import org.greenrobot.eventbus.EventBus;
 
-import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
+import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
-public class FontPreferenceFragment extends PreferenceFragmentCompat {
-    private Activity activity;
+public class FontPreferenceFragment extends CustomFontPreferenceFragmentCompat {
 
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.font_preferences, rootKey);
+
+        if (activity.typeface != null) {
+            setFont(activity.typeface);
+        }
+
         ListPreference fontFamilyPreference = findPreference(SharedPreferencesUtils.FONT_FAMILY_KEY);
         ListPreference titleFontFamilyPreference = findPreference(SharedPreferencesUtils.TITLE_FONT_FAMILY_KEY);
         ListPreference contentFontFamilyPreference = findPreference(SharedPreferencesUtils.CONTENT_FONT_FAMILY_KEY);
@@ -71,11 +72,5 @@ public class FontPreferenceFragment extends PreferenceFragmentCompat {
                 return true;
             });
         }
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        activity = (Activity) context;
     }
 }

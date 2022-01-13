@@ -1,5 +1,4 @@
 <resources>
-    <string name="application_name" translatable="false">Infinity</string>
     <string name="login_activity_label">Вхід</string>
     <string name="search_activity_label" translatable="false"> </string>
     <string name="comment_activity_label">Надіслати коментар</string>

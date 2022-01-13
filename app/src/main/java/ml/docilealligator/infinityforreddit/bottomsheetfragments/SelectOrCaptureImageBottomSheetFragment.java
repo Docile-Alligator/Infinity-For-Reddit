@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.PostGalleryActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class SelectOrCaptureImageBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
@@ -39,6 +40,10 @@ public class SelectOrCaptureImageBottomSheetFragment extends LandscapeExpandedRo
             mActivity.captureImage();
             dismiss();
         });
+
+        if (mActivity.typeface != null) {
+            Utils.setFontToAllTextViews(rootView, mActivity.typeface);
+        }
 
         return rootView;
     }

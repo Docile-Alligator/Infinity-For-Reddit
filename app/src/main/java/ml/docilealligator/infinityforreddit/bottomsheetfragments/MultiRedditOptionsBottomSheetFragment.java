@@ -21,6 +21,7 @@ import ml.docilealligator.infinityforreddit.activities.EditMultiRedditActivity;
 import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -78,6 +79,10 @@ public class MultiRedditOptionsBottomSheetFragment extends LandscapeExpandedRoun
             subscribedThingListingActivity.deleteMultiReddit(multiReddit);
             dismiss();
         });
+
+        if (subscribedThingListingActivity.typeface != null) {
+            Utils.setFontToAllTextViews(rootView, subscribedThingListingActivity.typeface);
+        }
 
         return rootView;
     }

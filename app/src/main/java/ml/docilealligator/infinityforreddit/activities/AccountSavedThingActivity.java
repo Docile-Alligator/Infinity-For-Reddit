@@ -52,6 +52,7 @@ import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 public class AccountSavedThingActivity extends BaseActivity implements ActivityToolbarInterface,
@@ -179,10 +180,10 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
             switch (position) {
                 case 0:
-                    tab.setText(R.string.posts);
+                    Utils.setTitleWithCustomFontToTab(typeface, tab, getString(R.string.posts));
                     break;
                 case 1:
-                    tab.setText(R.string.comments);
+                    Utils.setTitleWithCustomFontToTab(typeface, tab, getString(R.string.comments));
                     break;
             }
         }).attach();

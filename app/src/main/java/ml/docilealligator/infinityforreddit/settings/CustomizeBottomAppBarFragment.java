@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.settings;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
@@ -26,7 +25,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class CustomizeBottomAppBarFragment extends Fragment {
 
@@ -92,7 +93,7 @@ public class CustomizeBottomAppBarFragment extends Fragment {
     @Inject
     @Named("bottom_app_bar")
     SharedPreferences sharedPreferences;
-    private Activity activity;
+    private BaseActivity activity;
     private int mainActivityOptionCount;
     private int mainActivityOption1;
     private int mainActivityOption2;
@@ -119,6 +120,10 @@ public class CustomizeBottomAppBarFragment extends Fragment {
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
+
+        if (activity.typeface != null) {
+            Utils.setFontToAllTextViews(rootView, activity.typeface);
+        }
 
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
 
@@ -357,6 +362,6 @@ public class CustomizeBottomAppBarFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (Activity) context;
+        activity = (BaseActivity) context;
     }
 }

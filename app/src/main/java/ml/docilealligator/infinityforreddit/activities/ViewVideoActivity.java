@@ -14,6 +14,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Matrix;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.AudioManager;
@@ -81,6 +82,7 @@ import app.futured.hauler.HaulerView;
 import app.futured.hauler.LockableNestedScrollView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.CustomFontReceiver;
 import ml.docilealligator.infinityforreddit.FetchGfycatOrRedgifsVideoLinks;
 import ml.docilealligator.infinityforreddit.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -106,7 +108,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class ViewVideoActivity extends AppCompatActivity {
+public class ViewVideoActivity extends AppCompatActivity implements CustomFontReceiver {
 
     public static final int PLAYBACK_SPEED_25 = 25;
     public static final int PLAYBACK_SPEED_50 = 50;
@@ -167,6 +169,8 @@ public class ViewVideoActivity extends AppCompatActivity {
     ImageView playbackSpeedImageView;
     @BindView(R.id.lockable_nested_scroll_view_view_video_activity)
     LockableNestedScrollView nestedScrollView;
+
+    public Typeface typeface;
 
     private Uri mVideoUri;
     private SimpleExoPlayer player;
@@ -556,7 +560,7 @@ public class ViewVideoActivity extends AppCompatActivity {
             if (useBottomAppBar) {
                 titleTextView.setText(Html.fromHtml(String.format("<font color=\"#FFFFFF\"><small>%s</small></font>", title)));
             } else {
-                setTitle(Html.fromHtml(String.format("<font color=\"#FFFFFF\"><small>%s</small></font>", title)));
+                setTitle(Utils.getTabTextWithCustomFont(typeface, Html.fromHtml(String.format("<font color=\"#FFFFFF\"><small>%s</small></font>", title))));
             }
         } else {
             if (!useBottomAppBar) {
@@ -808,6 +812,9 @@ public class ViewVideoActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.view_video_activity, menu);
+        for (int i = 0; i < menu.size(); i++) {
+            Utils.setTitleWithCustomFontToMenuItem(typeface, menu.getItem(i), null);
+        }
         return true;
     }
 
@@ -940,5 +947,10 @@ public class ViewVideoActivity extends AppCompatActivity {
             outState.putString(ID_STATE, id);
         }
         outState.putInt(PLAYBACK_SPEED_STATE, playbackSpeed);
+    }
+
+    @Override
+    public void setCustomFont(Typeface typeface, Typeface titleTypeface, Typeface contentTypeface) {
+        this.typeface = typeface;
     }
 }

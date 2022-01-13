@@ -14,7 +14,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
@@ -78,7 +77,7 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
     Executor mExecutor;
 
     public MultiRedditViewModel mMultiRedditViewModel;
-    private AppCompatActivity mActivity;
+    private BaseActivity mActivity;
     private RequestManager mGlide;
     private LinearLayoutManagerBugFixed mLinearLayoutManager;
 
@@ -207,7 +206,7 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mActivity = (AppCompatActivity) context;
+        mActivity = (BaseActivity) context;
     }
 
     @Override
@@ -221,6 +220,9 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
         }
 
         mErrorTextView.setTextColor(mCustomThemeWrapper.getSecondaryTextColor());
+        if (mActivity.typeface != null) {
+            mErrorTextView.setTypeface(mActivity.typeface);
+        }
     }
 
     @Override

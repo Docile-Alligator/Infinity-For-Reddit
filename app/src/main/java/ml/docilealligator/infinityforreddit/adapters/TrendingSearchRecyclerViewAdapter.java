@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
-import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
@@ -29,11 +28,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.TrendingSearch;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
 import ml.docilealligator.infinityforreddit.post.Post;
 
 public class TrendingSearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private BaseActivity activity;
     private ArrayList<TrendingSearch> trendingSearches;
     private CustomThemeWrapper customThemeWrapper;
     private RequestManager glide;
@@ -43,15 +44,16 @@ public class TrendingSearchRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private float mScale;
     private ItemClickListener itemClickListener;
 
-    public TrendingSearchRecyclerViewAdapter(Context context, CustomThemeWrapper customThemeWrapper,
+    public TrendingSearchRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper,
                                              int imageViewWidth, boolean dataSavingMode, boolean disableImagePreview,
                                              ItemClickListener itemClickListener) {
+        this.activity = activity;
         this.customThemeWrapper = customThemeWrapper;
-        this.glide = Glide.with(context);
+        this.glide = Glide.with(activity);
         this.imageViewWidth = imageViewWidth;
         this.dataSavingMode = dataSavingMode;
         this.disableImagePreview = disableImagePreview;
-        mScale = context.getResources().getDisplayMetrics().density;
+        mScale = activity.getResources().getDisplayMetrics().density;
         this.itemClickListener = itemClickListener;
     }
 
@@ -215,6 +217,11 @@ public class TrendingSearchRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             noPreviewLinkImageView.setColorFilter(customThemeWrapper.getNoPreviewPostTypeIconTint(), android.graphics.PorterDuff.Mode.SRC_IN);
             progressBar.setIndeterminateTintList(ColorStateList.valueOf(customThemeWrapper.getColorAccent()));
             errorTextView.setTextColor(customThemeWrapper.getPrimaryTextColor());
+
+            if (activity.typeface != null) {
+                titleTextView.setTypeface(activity.typeface);
+                errorTextView.setTypeface(activity.typeface);
+            }
 
             itemView.setOnClickListener(view -> {
                 itemClickListener.onClick(trendingSearches.get(getBindingAdapterPosition()));

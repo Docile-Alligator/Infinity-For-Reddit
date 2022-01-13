@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.settings;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -11,7 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
@@ -23,7 +21,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class PostHistoryFragment extends Fragment {
 
@@ -50,7 +50,7 @@ public class PostHistoryFragment extends Fragment {
     @Inject
     @Named("post_history")
     SharedPreferences postHistorySharedPreferences;
-    private Activity activity;
+    private BaseActivity activity;
 
     public PostHistoryFragment() {
         // Required empty public constructor
@@ -65,6 +65,10 @@ public class PostHistoryFragment extends Fragment {
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
+
+        if (activity.typeface != null) {
+            Utils.setFontToAllTextViews(rootView, activity.typeface);
+        }
 
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
         if (accountName == null) {
@@ -111,6 +115,6 @@ public class PostHistoryFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.activity = (AppCompatActivity) context;
+        this.activity = (BaseActivity) context;
     }
 }

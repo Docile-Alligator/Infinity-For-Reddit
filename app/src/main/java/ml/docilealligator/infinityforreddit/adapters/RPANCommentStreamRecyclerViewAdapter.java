@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,13 +18,16 @@ import java.util.ArrayList;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RPANComment;
+import ml.docilealligator.infinityforreddit.activities.RPANActivity;
 
 public class RPANCommentStreamRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    private RPANActivity activity;
     private RequestManager glide;
     private ArrayList<RPANComment> rpanComments;
 
-    public RPANCommentStreamRecyclerViewAdapter(Context context) {
-        glide = Glide.with(context);
+    public RPANCommentStreamRecyclerViewAdapter(RPANActivity activity) {
+        this.activity = activity;
+        glide = Glide.with(activity);
         rpanComments = new ArrayList<>();
     }
 
@@ -70,7 +72,6 @@ public class RPANCommentStreamRecyclerViewAdapter extends RecyclerView.Adapter<R
     class RPANCommentViewHolder extends RecyclerView.ViewHolder {
         ImageView iconImageView;
         TextView authorTextView;
-        TextView timeTextView;
         TextView contentTextView;
 
         public RPANCommentViewHolder(@NonNull View itemView) {
@@ -78,6 +79,11 @@ public class RPANCommentStreamRecyclerViewAdapter extends RecyclerView.Adapter<R
             iconImageView = itemView.findViewById(R.id.icon_image_view_item_rpan_comment);
             authorTextView = itemView.findViewById(R.id.author_text_view_item_rpan_comment);
             contentTextView = itemView.findViewById(R.id.content_text_view_item_rpan_comment);
+
+            if (activity.typeface != null) {
+                authorTextView.setTypeface(activity.typeface);
+                contentTextView.setTypeface(activity.typeface);
+            }
         }
     }
 }

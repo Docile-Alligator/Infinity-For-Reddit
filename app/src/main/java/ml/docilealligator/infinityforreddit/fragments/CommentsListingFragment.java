@@ -19,7 +19,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
@@ -104,7 +103,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     Executor mExecutor;
     private String mAccessToken;
     private RequestManager mGlide;
-    private AppCompatActivity mActivity;
+    private BaseActivity mActivity;
     private LinearLayoutManagerBugFixed mLinearLayoutManager;
     private CommentsListingRecyclerViewAdapter mAdapter;
     private SortType sortType;
@@ -356,7 +355,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.mActivity = (AppCompatActivity) context;
+        this.mActivity = (BaseActivity) context;
     }
 
     @Override
@@ -371,6 +370,9 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
         mSwipeRefreshLayout.setProgressBackgroundColorSchemeColor(customThemeWrapper.getCircularProgressBarBackground());
         mSwipeRefreshLayout.setColorSchemeColors(customThemeWrapper.getColorAccent());
         mFetchCommentInfoTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
+        if (mActivity.typeface != null) {
+            mFetchCommentInfoTextView.setTypeface(mActivity.typeface);
+        }
     }
 
     private void showErrorView(int stringResId) {

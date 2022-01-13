@@ -5,6 +5,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.Network;
@@ -15,7 +16,12 @@ import android.os.Build;
 import android.os.Handler;
 import android.provider.OpenableColumns;
 import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.TypefaceSpan;
 import android.util.DisplayMetrics;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -30,6 +36,8 @@ import androidx.core.text.HtmlCompat;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -46,6 +54,7 @@ import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.noties.markwon.core.spans.CustomTypefaceSpan;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.UploadedImage;
@@ -464,5 +473,54 @@ public final class Utils {
         }
 
         return null;
+    }
+
+    public static void setTitleWithCustomFontToMenuItem(Typeface typeface, MenuItem item, String desiredTitle) {
+        if (typeface != null) {
+            CharSequence title = desiredTitle == null ? item.getTitle() : desiredTitle;
+            if (title != null) {
+                SpannableStringBuilder spannableTitle = new SpannableStringBuilder(title);
+                spannableTitle.setSpan(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ? new TypefaceSpan(typeface) : new CustomTypefaceSpan(typeface), 0, spannableTitle.length(), 0);
+                item.setTitle(spannableTitle);
+            }
+        } else if (desiredTitle != null) {
+            item.setTitle(desiredTitle);
+        }
+    }
+
+    public static void setTitleWithCustomFontToTab(Typeface typeface, TabLayout.Tab tab, String title) {
+        if (typeface != null) {
+            if (title != null) {
+                SpannableStringBuilder spannableTitle = new SpannableStringBuilder(title);
+                spannableTitle.setSpan(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ? new TypefaceSpan(typeface) : new CustomTypefaceSpan(typeface), 0, spannableTitle.length(), 0);
+                tab.setText(spannableTitle);
+            }
+        } else {
+            tab.setText(title);
+        }
+    }
+
+    public static CharSequence getTabTextWithCustomFont(Typeface typeface, CharSequence title) {
+        if (typeface != null && title != null) {
+            SpannableStringBuilder spannableTitle = new SpannableStringBuilder(title);
+            spannableTitle.setSpan(Build.VERSION.SDK_INT >= Build.VERSION_CODES.P ? new TypefaceSpan(typeface) : new CustomTypefaceSpan(typeface), 0, spannableTitle.length(), 0);
+            return spannableTitle;
+        } else {
+            return title;
+        }
+    }
+
+    public static void setFontToAllTextViews(View rootView, Typeface typeface) {
+        if (rootView instanceof TextInputLayout) {
+            ((TextInputLayout) rootView).setTypeface(typeface);
+        } else if (rootView instanceof ViewGroup) {
+            ViewGroup rootViewGroup = ((ViewGroup) rootView);
+            int childViewCount = rootViewGroup.getChildCount();
+            for (int i = 0; i < childViewCount; i++) {
+                setFontToAllTextViews(rootViewGroup.getChildAt(i), typeface);
+            }
+        } else if (rootView instanceof TextView) {
+            ((TextView) rootView).setTypeface(typeface);
+        }
     }
 }
