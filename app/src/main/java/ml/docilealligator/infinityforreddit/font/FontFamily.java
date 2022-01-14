@@ -16,7 +16,8 @@ public enum FontFamily {
     InterBold(R.style.FontFamily_InterBold, "InterBold"),
     Manrope(R.style.FontFamily_Manrope, "Manrope"),
     ManropeBold(R.style.FontFamily_ManropeBold, "ManropeBold"),
-    Sriracha(R.style.FontFamily_Sriracha, "Sriracha");
+    Sriracha(R.style.FontFamily_Sriracha, "Sriracha"),
+    Custom(R.style.FontFamily, "Custom");
 
     private int resId;
     private String title;

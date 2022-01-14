@@ -40,6 +40,9 @@ public class SharedPreferencesUtils {
     public static final String VOTE_BUTTONS_ON_THE_RIGHT_KEY = "vote_buttons_on_the_right";
     public static final String SHOW_AVATAR_ON_THE_RIGHT = "show_avatar_on_the_right";
     public static final String DEFAULT_SEARCH_RESULT_TAB = "default_search_result_tab";
+    public static final String CUSTOM_FONT_FAMILY_KEY = "custom_font_family";
+    public static final String CUSTOM_TITLE_FONT_FAMILY_KEY = "custom_title_font_family";
+    public static final String CUSTOM_CONTENT_FONT_FAMILY_KEY = "custom_content_font_family";
 
     public static final String SORT_TYPE_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.sort_type";
     public static final String SORT_TYPE_BEST_POST = "sort_type_best_post";

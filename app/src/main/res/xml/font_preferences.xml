@@ -17,6 +17,11 @@
         app:title="@string/settings_font_family_title"
         app:useSimpleSummaryProvider="true" />
 
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+        app:title="@string/settings_custom_font_family_title"
+        app:key="custom_font_family"
+        app:isPreferenceVisible="false" />
+
     <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
         app:defaultValue="Normal"
         android:entries="@array/settings_font_size"
@@ -36,6 +41,11 @@
         app:title="@string/settings_title_font_family_title"
         app:useSimpleSummaryProvider="true" />
 
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+        app:title="@string/settings_custom_title_font_family_title"
+        app:key="custom_title_font_family"
+        app:isPreferenceVisible="false" />
+
     <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
         app:defaultValue="Normal"
         android:entries="@array/settings_title_font_size"
@@ -54,6 +64,11 @@
         app:key="content_font_family"
         app:title="@string/settings_content_font_family_title"
         app:useSimpleSummaryProvider="true" />
+
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+        app:title="@string/settings_custom_content_font_family_title"
+        app:key="custom_content_font_family"
+        app:isPreferenceVisible="false" />
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
         app:defaultValue="Normal"

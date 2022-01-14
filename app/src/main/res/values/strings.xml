@@ -619,6 +619,9 @@
     <string name="settings_legacy_autoplay_video_controller_ui_title">Legacy Video Controller UI</string>
     <string name="settings_pinch_to_zoom_video_title">Pinch to Zoom Video</string>
     <string name="settings_experimental_feature">Experimental feature</string>
+    <string name="settings_custom_font_family_title">Custom Font Family</string>
+    <string name="settings_custom_title_font_family_title">Custom Title Font Family</string>
+    <string name="settings_custom_content_font_family_title">Custom Content Font Family</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -1244,5 +1247,10 @@
     <string name="message_change_banner_failed">Failed to change banner %s</string>
     <string name="message_save_profile_success">Save profile successfully</string>
     <string name="message_save_profile_failed">Failed to save profile %s</string>
+
+    <string name="select_a_ttf_font">Select a ttf font file</string>
+    <string name="unable_to_get_font_file">Unable to get your font</string>
+    <string name="unable_to_load_font">Unable to load custom font</string>
+    <string name="unable_to_copy_font_file">Unable to copy your font</string>
 
 </resources>

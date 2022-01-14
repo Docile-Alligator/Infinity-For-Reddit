@@ -28,7 +28,6 @@ import org.greenrobot.eventbus.Subscribe;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LockScreenActivity;
 import ml.docilealligator.infinityforreddit.broadcastreceivers.NetworkWifiStatusReceiver;
 import ml.docilealligator.infinityforreddit.broadcastreceivers.WallpaperChangeReceiver;
@@ -39,15 +38,15 @@ import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class Infinity extends Application implements LifecycleObserver {
+    public Typeface typeface;
+    public Typeface titleTypeface;
+    public Typeface contentTypeface;
     private AppComponent mAppComponent;
     private NetworkWifiStatusReceiver mNetworkWifiStatusReceiver;
     private boolean appLock;
     private long appLockTimeout;
     private boolean canStartLockScreenActivity = false;
     private boolean isSecureMode;
-    private Typeface typeface;
-    private Typeface titleTypeface;
-    private Typeface contentTypeface;
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
@@ -70,9 +69,9 @@ public class Infinity extends Application implements LifecycleObserver {
         isSecureMode = mSecuritySharedPreferences.getBoolean(SharedPreferencesUtils.SECURE_MODE, false);
 
         try {
-            typeface = Typeface.createFromFile(getCacheDir() + "/opensans.ttf");
-            titleTypeface = Typeface.createFromFile(getCacheDir() + "/opensans.ttf");
-            contentTypeface = Typeface.createFromFile(getCacheDir() + "/opensans.ttf");
+            typeface = Typeface.createFromFile(getExternalFilesDir("fonts") + "/font_family.ttf");
+            titleTypeface = Typeface.createFromFile(getExternalFilesDir("fonts") + "/title_font_family.ttf");
+            contentTypeface = Typeface.createFromFile(getExternalFilesDir("fonts") + "/content_font_family.ttf");
         } catch (RuntimeException e) {
             e.printStackTrace();
             Toast.makeText(this, "Some font files do not exist", Toast.LENGTH_SHORT).show();

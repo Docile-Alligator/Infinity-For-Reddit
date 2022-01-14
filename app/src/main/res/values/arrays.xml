@@ -162,6 +162,7 @@
         <item>Manrope (No Italic)</item>
         <item>Manrope Bold (No Italic)</item>
         <item>Sriracha</item>
+        <item>@string/settings_custom_font_family_title</item>
     </string-array>
 
     <string-array name="settings_font_family_values">
@@ -179,6 +180,7 @@
         <item>Manrope</item>
         <item>ManropeBold</item>
         <item>Sriracha</item>
+        <item>Custom</item>
     </string-array>
 
     <string-array name="settings_tab_post_type">

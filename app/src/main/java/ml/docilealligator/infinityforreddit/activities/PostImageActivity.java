@@ -360,7 +360,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
-            startActivityForResult(Intent.createChooser(intent, resources.getString(R.string.select_from_gallery)), PICK_IMAGE_REQUEST_CODE);
+            startActivityForResult(Intent.createChooser(intent, getString(R.string.select_from_gallery)), PICK_IMAGE_REQUEST_CODE);
         });
 
         selectAgainTextView.setOnClickListener(view -> {

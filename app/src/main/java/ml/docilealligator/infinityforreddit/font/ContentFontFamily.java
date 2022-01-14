@@ -16,7 +16,8 @@ public enum ContentFontFamily {
     InterBold(R.style.ContentFontFamily_InterBold, "InterBold"),
     Manrope(R.style.ContentFontFamily_Manrope, "Manrope"),
     ManropeBold(R.style.ContentFontFamily_ManropeBold, "ManropeBold"),
-    Sriracha(R.style.ContentFontFamily_Sriracha, "Sriracha");
+    Sriracha(R.style.ContentFontFamily_Sriracha, "Sriracha"),
+    Custom(R.style.ContentFontFamily, "Custom");
 
     private int resId;
     private String title;

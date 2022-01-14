@@ -16,7 +16,8 @@ public enum TitleFontFamily {
     InterBold(R.style.TitleFontFamily_InterBold, "InterBold"),
     Manrope(R.style.TitleFontFamily_Manrope, "Manrope"),
     ManropeBold(R.style.TitleFontFamily_ManropeBold, "ManropeBold"),
-    Sriracha(R.style.TitleFontFamily_Sriracha, "Sriracha");
+    Sriracha(R.style.TitleFontFamily_Sriracha, "Sriracha"),
+    Custom(R.style.TitleFontFamily, "Custom");
 
     private int resId;
     private String title;
