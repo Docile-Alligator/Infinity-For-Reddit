@@ -11,7 +11,6 @@ import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
-import androidx.documentfile.provider.DocumentFile;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 
@@ -196,7 +195,6 @@ public class FontPreferenceFragment extends CustomFontPreferenceFragmentCompat {
 
         executor.execute(() -> {
             File destinationFontFile = new File(fontDestinationPath, destinationFontName);
-            DocumentFile documentFile = DocumentFile.fromSingleUri(activity, uri);
             try (InputStream in = activity.getContentResolver().openInputStream(uri);
                  OutputStream out = new FileOutputStream(destinationFontFile)) {
                 if (in != null) {
@@ -226,22 +224,6 @@ public class FontPreferenceFragment extends CustomFontPreferenceFragmentCompat {
                     return;
                 }
                 handler.post(() -> {
-                    switch (type) {
-                        case 1:
-                            if (customTitleFontFamilyPreference != null) {
-                                customTitleFontFamilyPreference.setSummary(uri.toString());
-                            }
-                            break;
-                        case 2:
-                            if (customContentFontFamilyPreference != null) {
-                                customContentFontFamilyPreference.setSummary(uri.toString());
-                            }
-                            break;
-                        default:
-                            if (customFontFamilyPreference != null) {
-                                customFontFamilyPreference.setSummary(uri.toString());
-                            }
-                    }
                     EventBus.getDefault().post(new RecreateActivityEvent());
                     ActivityCompat.recreate(activity);
                 });
