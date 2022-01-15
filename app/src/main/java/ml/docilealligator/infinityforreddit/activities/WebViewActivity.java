@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.InflateException;
@@ -149,6 +150,14 @@ public class WebViewActivity extends BaseActivity {
                 Toast.makeText(this, R.string.copy_link_failed, Toast.LENGTH_SHORT).show();
             }
             return true;
+        } else if (item.getItemId() == R.id.action_open_external_browser_web_view_activity) {
+            try {
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+                startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(this, R.string.no_activity_found_for_external_browser, Toast.LENGTH_SHORT).show();
+            }
         }
         return false;
     }

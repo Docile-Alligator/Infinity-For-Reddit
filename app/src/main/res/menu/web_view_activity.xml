@@ -18,4 +18,9 @@
         android:orderInCategory="3"
         android:title="@string/action_copy_link"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_open_external_browser_web_view_activity"
+        android:orderInCategory="4"
+        android:title="@string/action_open_external_browser"
+        app:showAsAction="never" />
 </menu>
