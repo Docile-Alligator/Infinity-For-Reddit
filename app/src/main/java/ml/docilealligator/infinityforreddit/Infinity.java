@@ -34,6 +34,9 @@ import ml.docilealligator.infinityforreddit.broadcastreceivers.WallpaperChangeRe
 import ml.docilealligator.infinityforreddit.events.ChangeAppLockEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.events.ToggleSecureModeEvent;
+import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
+import ml.docilealligator.infinityforreddit.font.FontFamily;
+import ml.docilealligator.infinityforreddit.font.TitleFontFamily;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
@@ -69,12 +72,18 @@ public class Infinity extends Application implements LifecycleObserver {
         isSecureMode = mSecuritySharedPreferences.getBoolean(SharedPreferencesUtils.SECURE_MODE, false);
 
         try {
-            typeface = Typeface.createFromFile(getExternalFilesDir("fonts") + "/font_family.ttf");
-            titleTypeface = Typeface.createFromFile(getExternalFilesDir("fonts") + "/title_font_family.ttf");
-            contentTypeface = Typeface.createFromFile(getExternalFilesDir("fonts") + "/content_font_family.ttf");
+            if (mSharedPreferences.getString(SharedPreferencesUtils.FONT_FAMILY_KEY, FontFamily.Default.name()).equals(FontFamily.Custom.name())) {
+                typeface = Typeface.createFromFile(getExternalFilesDir("fonts") + "/font_family.ttf");
+            }
+            if (mSharedPreferences.getString(SharedPreferencesUtils.TITLE_FONT_FAMILY_KEY, TitleFontFamily.Default.name()).equals(TitleFontFamily.Custom.name())) {
+                titleTypeface = Typeface.createFromFile(getExternalFilesDir("fonts") + "/title_font_family.ttf");
+            }
+            if (mSharedPreferences.getString(SharedPreferencesUtils.CONTENT_FONT_FAMILY_KEY, ContentFontFamily.Default.name()).equals(ContentFontFamily.Custom.name())) {
+                contentTypeface = Typeface.createFromFile(getExternalFilesDir("fonts") + "/content_font_family.ttf");
+            }
         } catch (RuntimeException e) {
             e.printStackTrace();
-            Toast.makeText(this, "Some font files do not exist", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.unable_to_load_font, Toast.LENGTH_SHORT).show();
         }
 
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
