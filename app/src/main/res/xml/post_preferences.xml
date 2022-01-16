@@ -52,6 +52,11 @@
         app:key="hide_the_number_of_comments"
         app:title="@string/settings_hide_the_number_of_comments" />
 
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+        app:defaultValue="false"
+        app:key="fixed_height_preview_in_card"
+        app:title="@string/settings_fixed_height_preview_in_card_title" />
+
     <ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceCategory
         app:title="@string/post_layout_compact" />
 

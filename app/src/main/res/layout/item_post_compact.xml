@@ -233,6 +233,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_margin="0dp"
+                    android:padding="4dp"
                     android:background="@drawable/play_button_round_background"
                     android:visibility="gone" />
 

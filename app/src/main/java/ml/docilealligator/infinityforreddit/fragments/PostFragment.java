@@ -95,6 +95,7 @@ import ml.docilealligator.infinityforreddit.events.ChangeDefaultLinkPostLayoutEv
 import ml.docilealligator.infinityforreddit.events.ChangeDefaultPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDisableImagePreviewEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeEnableSwipeActionSwitchEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeFixedHeightPreviewInCardEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHidePostFlairEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHidePostTypeEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideSubredditAndUserPrefixEvent;
@@ -2062,6 +2063,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         rememberMutingOptionInPostFeed = event.rememberMutingOptionInPostFeedEvent;
         if (!event.rememberMutingOptionInPostFeedEvent) {
             masterMutingOption = null;
+        }
+    }
+
+    @Subscribe
+    public void onChangeFixedHeightPreviewCardEvent(ChangeFixedHeightPreviewInCardEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setFixedHeightPreviewInCard(event.fixedHeightPreviewInCard);
+            refreshAdapter();
         }
     }
 
