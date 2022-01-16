@@ -1371,6 +1371,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
             this.sortType = sortType;
             mPostViewModel.changeSortType(sortType);
+            goBackToTop();
         }
     }
 
@@ -1446,6 +1447,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         }
         saveCache();
         mAdapter.refresh();
+        goBackToTop();
     }
 
     private void showErrorView(int stringResId) {
