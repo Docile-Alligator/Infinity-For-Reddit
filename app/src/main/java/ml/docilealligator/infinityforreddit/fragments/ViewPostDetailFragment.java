@@ -626,10 +626,10 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
                 if (mPost.isHidden()) {
                     hideItem.setVisible(true);
-                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, hideItem, getString(R.string.action_unhide_post));
+                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, hideItem, activity.getString(R.string.action_unhide_post));
                 } else {
                     hideItem.setVisible(true);
-                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, hideItem, getString(R.string.action_hide_post));
+                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, hideItem, activity.getString(R.string.action_hide_post));
                 }
             } else {
                 saveItem.setVisible(false);
@@ -645,17 +645,17 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 MenuItem nsfwItem = mMenu.findItem(R.id.action_nsfw_view_post_detail_fragment);
                 nsfwItem.setVisible(true);
                 if (mPost.isNSFW()) {
-                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, nsfwItem, getString(R.string.action_unmark_nsfw));
+                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, nsfwItem, activity.getString(R.string.action_unmark_nsfw));
                 } else {
-                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, nsfwItem, getString(R.string.action_mark_nsfw));
+                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, nsfwItem, activity.getString(R.string.action_mark_nsfw));
                 }
 
                 MenuItem spoilerItem = mMenu.findItem(R.id.action_spoiler_view_post_detail_fragment);
                 spoilerItem.setVisible(true);
                 if (mPost.isSpoiler()) {
-                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, spoilerItem, getString(R.string.action_unmark_spoiler));
+                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, spoilerItem, activity.getString(R.string.action_unmark_spoiler));
                 } else {
-                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, spoilerItem, getString(R.string.action_mark_spoiler));
+                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, spoilerItem, activity.getString(R.string.action_mark_spoiler));
                 }
 
                 mMenu.findItem(R.id.action_edit_flair_view_post_detail_fragment).setVisible(true);
@@ -953,21 +953,17 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     HidePost.unhidePost(mOauthRetrofit, mAccessToken, mPost.getFullName(), new HidePost.HidePostListener() {
                         @Override
                         public void success() {
-                            if (isAdded()) {
-                                mPost.setHidden(false);
-                                Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, getString(R.string.action_hide_post));
-                                showMessage(R.string.post_unhide_success);
-                            }
+                            mPost.setHidden(false);
+                            Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, activity.getString(R.string.action_hide_post));
+                            showMessage(R.string.post_unhide_success);
                             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                         }
 
                         @Override
                         public void failed() {
-                            if (isAdded()) {
-                                mPost.setHidden(true);
-                                Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, getString(R.string.action_unhide_post));
-                                showMessage(R.string.post_unhide_failed);
-                            }
+                            mPost.setHidden(true);
+                            Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, activity.getString(R.string.action_unhide_post));
+                            showMessage(R.string.post_unhide_failed);
                             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                         }
                     });
@@ -977,21 +973,17 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     HidePost.hidePost(mOauthRetrofit, mAccessToken, mPost.getFullName(), new HidePost.HidePostListener() {
                         @Override
                         public void success() {
-                            if (isAdded()) {
-                                mPost.setHidden(true);
-                                Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, getString(R.string.action_unhide_post));
-                                showMessage(R.string.post_hide_success);
-                            }
+                            mPost.setHidden(true);
+                            Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, activity.getString(R.string.action_unhide_post));
+                            showMessage(R.string.post_hide_success);
                             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                         }
 
                         @Override
                         public void failed() {
-                            if (isAdded()) {
-                                mPost.setHidden(false);
-                                Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, getString(R.string.action_hide_post));
-                                showMessage(R.string.post_hide_failed);
-                            }
+                            mPost.setHidden(false);
+                            Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, activity.getString(R.string.action_hide_post));
+                            showMessage(R.string.post_hide_failed);
                             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                         }
                     });
