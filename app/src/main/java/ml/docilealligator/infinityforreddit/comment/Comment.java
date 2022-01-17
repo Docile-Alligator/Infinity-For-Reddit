@@ -44,6 +44,7 @@ public class Comment implements Parcelable {
     private String permalink;
     private String awards;
     private int depth;
+    private int childCount;
     private boolean collapsed;
     private boolean hasReply;
     private boolean scoreHidden;
@@ -130,6 +131,7 @@ public class Comment implements Parcelable {
         permalink = in.readString();
         awards = in.readString();
         depth = in.readInt();
+        childCount = in.readInt();
         collapsed = in.readByte() != 0;
         hasReply = in.readByte() != 0;
         scoreHidden = in.readByte() != 0;
@@ -239,6 +241,14 @@ public class Comment implements Parcelable {
         return depth;
     }
 
+    public int getChildCount() {
+        return childCount;
+    }
+
+    public void setChildCount(int childCount) {
+        this.childCount = childCount;
+    }
+
     public boolean isCollapsed() {
         return collapsed;
     }
@@ -304,10 +314,12 @@ public class Comment implements Parcelable {
                 children.addAll(moreChildren);
             }
         }
+        childCount += moreChildren == null ? 0 : moreChildren.size();
     }
 
     public void addChild(Comment comment) {
         addChild(comment, 0);
+        childCount++;
     }
 
     public void addChild(Comment comment, int position) {
@@ -387,6 +399,7 @@ public class Comment implements Parcelable {
         parcel.writeString(permalink);
         parcel.writeString(awards);
         parcel.writeInt(depth);
+        parcel.writeInt(childCount);
         parcel.writeByte((byte) (collapsed ? 1 : 0));
         parcel.writeByte((byte) (hasReply ? 1 : 0));
         parcel.writeByte((byte) (scoreHidden ? 1 : 0));

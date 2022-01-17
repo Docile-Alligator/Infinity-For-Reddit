@@ -135,10 +135,22 @@ public class ParseComment {
                 parseCommentRecursion(childrenArray, children, nextMoreChildrenFullnames, singleComment.getDepth());
                 singleComment.addChildren(children);
                 singleComment.setMoreChildrenFullnames(nextMoreChildrenFullnames);
+                singleComment.setChildCount(getChildCount(singleComment));
             }
 
             newCommentData.add(singleComment);
         }
+    }
+
+    private static int getChildCount(Comment comment) {
+        if (comment.getChildren() == null) {
+            return 0;
+        }
+        int count = 0;
+        for (Comment c : comment.getChildren()) {
+            count += getChildCount(c);
+        }
+        return comment.getChildren().size() + count;
     }
 
     private static void expandChildren(ArrayList<Comment> comments, ArrayList<Comment> visibleComments,

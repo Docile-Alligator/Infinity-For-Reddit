@@ -374,7 +374,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         @BindView(R.id.save_button_item_post_comment)
         ImageView saveButton;
         @BindView(R.id.expand_button_item_post_comment)
-        ImageView expandButton;
+        TextView expandButton;
         @BindView(R.id.reply_button_item_post_comment)
         ImageView replyButton;
         @BindView(R.id.divider_item_comment)
@@ -434,7 +434,6 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             scoreTextView.setTextColor(mCommentIconAndInfoColor);
             downvoteButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
             moreButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
-            expandButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
             saveButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
             replyButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
             commentDivider.setBackgroundColor(mDividerColor);

@@ -171,15 +171,18 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <ImageView
+            <TextView
                 android:id="@+id/expand_button_item_post_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="8dp"
+                android:gravity="center"
+                android:paddingStart="8dp"
+                android:paddingEnd="8dp"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family"
                 android:background="?actionBarItemBackground"
                 android:clickable="true"
                 android:focusable="true"
-                android:src="@drawable/ic_expand_less_grey_24dp"
                 android:visibility="gone"
                 app:layout_constraintEnd_toStartOf="@+id/save_button_item_post_comment"
                 app:layout_constraintTop_toTopOf="parent"

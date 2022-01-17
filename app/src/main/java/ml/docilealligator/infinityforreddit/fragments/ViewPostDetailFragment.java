@@ -703,11 +703,17 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (mCommentsAdapter != null) {
             mCommentsAdapter.addComment(comment);
         }
+        if (mPostAdapter != null) {
+            mPostAdapter.addOneComment();
+        }
     }
 
     public void addChildComment(Comment comment, String parentFullname, int parentPosition) {
         if (mCommentsAdapter != null) {
             mCommentsAdapter.addChildComment(comment, parentFullname, parentPosition);
+        }
+        if (mPostAdapter != null) {
+            mPostAdapter.addOneComment();
         }
     }
 

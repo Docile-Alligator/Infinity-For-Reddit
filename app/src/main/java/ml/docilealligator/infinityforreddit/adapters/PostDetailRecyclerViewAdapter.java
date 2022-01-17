@@ -1046,6 +1046,13 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         }
     }
 
+    public void addOneComment() {
+        if (mPost != null) {
+            mPost.setNComments(mPost.getNComments() + 1);
+            notifyItemChanged(0);
+        }
+    }
+
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof PostDetailBaseViewHolder) {

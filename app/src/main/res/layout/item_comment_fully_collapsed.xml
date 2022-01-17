@@ -22,6 +22,18 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:maxLines="1"
+                android:fontFamily="?attr/font_family"
+                android:paddingStart="16dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="12dp"
+                android:textSize="?attr/font_default" />
+
+            <TextView
+                android:id="@+id/child_count_text_view_item_comment_fully_collapsed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:fontFamily="?attr/font_family"
                 android:paddingStart="16dp"
                 android:paddingTop="12dp"
