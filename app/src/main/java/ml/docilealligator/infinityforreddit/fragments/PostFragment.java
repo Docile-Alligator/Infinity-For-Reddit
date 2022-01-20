@@ -99,6 +99,7 @@ import ml.docilealligator.infinityforreddit.events.ChangeFixedHeightPreviewInCar
 import ml.docilealligator.infinityforreddit.events.ChangeHidePostFlairEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHidePostTypeEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideSubredditAndUserPrefixEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeHideTextPostContent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfAwardsEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfCommentsEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfVotesEvent;
@@ -1728,6 +1729,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 post.setTitle(event.post.getTitle());
                 post.setVoteType(event.post.getVoteType());
                 post.setScore(event.post.getScore());
+                post.setNComments(event.post.getNComments());
                 post.setNSFW(event.post.isNSFW());
                 post.setHidden(event.post.isHidden());
                 post.setSpoiler(event.post.isSpoiler());
@@ -2070,6 +2072,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void onChangeFixedHeightPreviewCardEvent(ChangeFixedHeightPreviewInCardEvent event) {
         if (mAdapter != null) {
             mAdapter.setFixedHeightPreviewInCard(event.fixedHeightPreviewInCard);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeHideTextPostContentEvent(ChangeHideTextPostContent event) {
+        if (mAdapter != null) {
+            mAdapter.setHideTextPostContent(event.hideTextPostContent);
             refreshAdapter();
         }
     }

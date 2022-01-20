@@ -706,6 +706,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (mPostAdapter != null) {
             mPostAdapter.addOneComment();
         }
+        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
     }
 
     public void addChildComment(Comment comment, String parentFullname, int parentPosition) {
@@ -715,6 +716,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (mPostAdapter != null) {
             mPostAdapter.addOneComment();
         }
+        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
     }
 
     public void editComment(String commentAuthor, String commentContentMarkdown, int position) {
