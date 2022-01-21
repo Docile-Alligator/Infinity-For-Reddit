@@ -28,6 +28,9 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.request.RequestOptions;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 
 import java.util.ArrayList;
@@ -49,6 +52,7 @@ import io.noties.markwon.inlineparser.HtmlInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.movement.MovementMethodPlugin;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveThing;
@@ -96,6 +100,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private Post mPost;
     private ArrayList<Comment> mVisibleComments;
     private Locale mLocale;
+    private RequestManager mGlide;
     private String mSingleCommentId;
     private boolean mIsSingleCommentThreadMode;
     private boolean mVoteButtonsOnTheRight;
@@ -159,6 +164,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mExecutor = executor;
         mRetrofit = retrofit;
         mOauthRetrofit = oauthRetrofit;
+        mGlide = Glide.with(activity);
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
         mCommentTextColor = customThemeWrapper.getCommentColor();
         int commentSpoilerBackgroundColor = mCommentTextColor | 0xFF000000;
@@ -395,6 +401,25 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     Drawable currentUserDrawable = Utils.getTintedDrawable(mActivity, R.drawable.ic_current_user_14dp, mCurrentUserColor);
                     ((CommentViewHolder) holder).authorTextView.setCompoundDrawablesWithIntrinsicBounds(
                             currentUserDrawable, null, null, null);
+                }
+
+                if (comment.getAuthorIconUrl() == null) {
+                    mFragment.loadIcon(comment.getAuthor(), (authorName, iconUrl) -> {
+                        if (authorName.equals(comment.getAuthor())) {
+                            mGlide.load(iconUrl)
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                    .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                                    .into(((CommentViewHolder) holder).authorIconImageView);
+                            comment.setAuthorIconUrl(iconUrl);
+                        }
+                    });
+                } else {
+                    mGlide.load(comment.getAuthorIconUrl())
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                            .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                            .into(((CommentViewHolder) holder).authorIconImageView);
                 }
 
                 if (mShowElapsedTime) {
@@ -1036,6 +1061,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             ((CommentViewHolder) holder).authorTextView.setTextColor(mUsernameColor);
             ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.GONE);
             ((CommentViewHolder) holder).authorTextView.setCompoundDrawablesWithIntrinsicBounds(null, null, null, null);
+            mGlide.clear(((CommentViewHolder) holder).authorIconImageView);
             ((CommentViewHolder) holder).topScoreTextView.setTextColor(mSecondaryTextColor);
             ((CommentViewHolder) holder).awardsTextView.setText("");
             ((CommentViewHolder) holder).awardsTextView.setVisibility(View.GONE);
@@ -1078,6 +1104,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     public class CommentViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.linear_layout_item_comment)
         LinearLayout linearLayout;
+        @BindView(R.id.author_icon_image_view_item_post_comment)
+        ImageView authorIconImageView;
         @BindView(R.id.author_text_view_item_post_comment)
         TextView authorTextView;
         @BindView(R.id.author_flair_text_view_item_post_comment)
@@ -1174,6 +1202,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             if (mActivity.contentTypeface != null) {
                 commentMarkdownView.setTypeface(mActivity.contentTypeface);
             }
+
+            authorIconImageView.setVisibility(View.VISIBLE);
+
             itemView.setBackgroundColor(mCommentBackgroundColor);
             authorTextView.setTextColor(mUsernameColor);
             commentTimeTextView.setTextColor(mSecondaryTextColor);

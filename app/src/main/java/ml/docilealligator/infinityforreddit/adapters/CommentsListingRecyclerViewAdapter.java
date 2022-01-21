@@ -388,6 +388,9 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
             replyButton.setVisibility(View.GONE);
 
+            ((ConstraintLayout.LayoutParams) authorTextView.getLayoutParams()).setMarginStart(0);
+            ((ConstraintLayout.LayoutParams) authorFlairTextView.getLayoutParams()).setMarginStart(0);
+
             if (mVoteButtonsOnTheRight) {
                 ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone(bottomConstraintLayout);

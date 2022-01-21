@@ -45,6 +45,8 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -128,6 +130,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     ArrayList<Post> posts;
     @State
     Post post;
+    public Map<String, String> authorIcons = new HashMap<>();
     private FragmentManager fragmentManager;
     private SlidrInterface mSlidrInterface;
     private SectionsPagerAdapter sectionsPagerAdapter;

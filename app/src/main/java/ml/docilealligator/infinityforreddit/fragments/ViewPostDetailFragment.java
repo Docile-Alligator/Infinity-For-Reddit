@@ -84,6 +84,7 @@ import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.adapters.CommentsRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.adapters.PostDetailRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostCommentSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.comment.Comment;
@@ -839,6 +840,18 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     public void resetSearchCommentIndex() {
         if (mCommentsAdapter != null) {
             mCommentsAdapter.resetCommentSearchIndex();
+        }
+    }
+
+    public void loadIcon(String authorName, LoadIconListener loadIconListener) {
+        if (activity.authorIcons.containsKey(authorName)) {
+            loadIconListener.loadIconSuccess(authorName, activity.authorIcons.get(authorName));
+        } else {
+            LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, authorName,
+                    mRetrofit, iconImageUrl -> {
+                        activity.authorIcons.put(authorName, iconImageUrl);
+                        loadIconListener.loadIconSuccess(authorName, iconImageUrl);
+                    });
         }
     }
 
@@ -1951,5 +1964,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (mPostAdapter != null) {
             mPostAdapter.setCanPlayVideo(hasWindowsFocus);
         }
+    }
+
+    public interface LoadIconListener {
+        void loadIconSuccess(String authorName, String iconUrl);
     }
 }

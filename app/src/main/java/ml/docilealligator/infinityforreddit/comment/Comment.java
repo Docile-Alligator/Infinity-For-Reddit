@@ -30,6 +30,7 @@ public class Comment implements Parcelable {
     private String author;
     private String authorFlair;
     private String authorFlairHTML;
+    private String authorIconUrl;
     private String linkAuthor;
     private long commentTimeMillis;
     private String commentMarkdown;
@@ -117,6 +118,7 @@ public class Comment implements Parcelable {
         author = in.readString();
         authorFlair = in.readString();
         authorFlairHTML = in.readString();
+        authorIconUrl = in.readString();
         linkAuthor = in.readString();
         commentTimeMillis = in.readLong();
         commentMarkdown = in.readString();
@@ -167,6 +169,14 @@ public class Comment implements Parcelable {
 
     public String getAuthorFlairHTML() {
         return authorFlairHTML;
+    }
+
+    public String getAuthorIconUrl() {
+        return authorIconUrl;
+    }
+
+    public void setAuthorIconUrl(String authorIconUrl) {
+        this.authorIconUrl = authorIconUrl;
     }
 
     public String getLinkAuthor() {
@@ -385,6 +395,7 @@ public class Comment implements Parcelable {
         parcel.writeString(author);
         parcel.writeString(authorFlair);
         parcel.writeString(authorFlairHTML);
+        parcel.writeString(authorIconUrl);
         parcel.writeString(linkAuthor);
         parcel.writeLong(commentTimeMillis);
         parcel.writeString(commentMarkdown);
