@@ -519,6 +519,26 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             if (comment != null) {
                 String authorWithPrefix = "u/" + comment.getAuthor();
                 ((CommentFullyCollapsedViewHolder) holder).usernameTextView.setText(authorWithPrefix);
+
+                if (comment.getAuthorIconUrl() == null) {
+                    mFragment.loadIcon(comment.getAuthor(), (authorName, iconUrl) -> {
+                        if (authorName.equals(comment.getAuthor())) {
+                            mGlide.load(iconUrl)
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                                    .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                                    .into(((CommentFullyCollapsedViewHolder) holder).authorIconImageView);
+                            comment.setAuthorIconUrl(iconUrl);
+                        }
+                    });
+                } else {
+                    mGlide.load(comment.getAuthorIconUrl())
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                            .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                            .into(((CommentFullyCollapsedViewHolder) holder).authorIconImageView);
+                }
+
                 if (comment.getChildCount() > 0) {
                     ((CommentFullyCollapsedViewHolder) holder).childCountTextView.setVisibility(View.VISIBLE);
                     ((CommentFullyCollapsedViewHolder) holder).childCountTextView.setText("+" + comment.getChildCount());
@@ -1610,6 +1630,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     class CommentFullyCollapsedViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.vertical_block_indentation_item_comment_fully_collapsed)
         CommentIndentationView commentIndentationView;
+        @BindView(R.id.author_icon_image_view_item_comment_fully_collapsed)
+        ImageView authorIconImageView;
         @BindView(R.id.user_name_text_view_item_comment_fully_collapsed)
         TextView usernameTextView;
         @BindView(R.id.child_count_text_view_item_comment_fully_collapsed)
