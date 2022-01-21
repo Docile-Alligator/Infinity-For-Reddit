@@ -114,6 +114,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private boolean mShowAbsoluteNumberOfVotes;
     private boolean mFullyCollapseComment;
     private boolean mShowOnlyOneCommentLevelIndicator;
+    private boolean mHideCommentAwards;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private boolean isInitiallyLoading;
     private boolean isInitiallyLoadingFailed;
@@ -233,10 +234,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mSwapTapAndLong = sharedPreferences.getBoolean(SharedPreferencesUtils.SWAP_TAP_AND_LONG_COMMENTS, false);
         mShowCommentDivider = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_DIVIDER, false);
         mShowAbsoluteNumberOfVotes = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
-
         mFullyCollapseComment = sharedPreferences.getBoolean(SharedPreferencesUtils.FULLY_COLLAPSE_COMMENT, false);
-
         mShowOnlyOneCommentLevelIndicator = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ONLY_ONE_COMMENT_LEVEL_INDICATOR, false);
+        mHideCommentAwards = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_COMMENT_AWARDS, false);
 
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
         isInitiallyLoading = true;
@@ -437,7 +437,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     ((CommentViewHolder) holder).topScoreTextView.setVisibility(View.GONE);
                 }
 
-                if (comment.getAwards() != null && !comment.getAwards().equals("")) {
+                if (!mHideCommentAwards && comment.getAwards() != null && !comment.getAwards().equals("")) {
                     ((CommentViewHolder) holder).awardsTextView.setVisibility(View.VISIBLE);
                     Utils.setHTMLWithImageToTextView(((CommentViewHolder) holder).awardsTextView, comment.getAwards(), true);
                 }

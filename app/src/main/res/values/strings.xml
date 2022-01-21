@@ -626,6 +626,7 @@
     <string name="settings_custom_content_font_family_title">Custom Content Font Family</string>
     <string name="settings_fixed_height_preview_in_card_title">Fixed Height in Card</string>
     <string name="settings_hide_text_post_content">Hide Text Post Content</string>
+    <string name="settings_hide_comment_awards_title">Hide Comment Awards</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

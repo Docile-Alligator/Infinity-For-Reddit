@@ -202,6 +202,7 @@ public class SharedPreferencesUtils {
     public static final String PINCH_TO_ZOOM_VIDEO = "pinch_to_zoom_video";
     public static final String FIXED_HEIGHT_PREVIEW_IN_CARD = "fixed_height_preview_in_card";
     public static final String HIDE_TEXT_POST_CONTENT = "hide_text_post_content";
+    public static final String HIDE_COMMENT_AWARDS = "hide_comment_awards";
 
     public static final String DEFAULT_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit_preferences";
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";
