@@ -109,7 +109,7 @@
     <string name="online_subscribers_number_detail">"在线：%1$d"</string>
     <string name="cannot_fetch_subreddit_info">"无法获取版块信息"</string>
     <string name="cannot_fetch_user_info">"无法获取用户信息"</string>
-    <string name="cannot_fetch_sidebar">"无法加载侧边栏"</string>
+    <string name="cannot_fetch_sidebar">"无法获取侧边栏"</string>
     <string name="cannot_fetch_multireddit">"无法获取聚合版块信息"</string>
     <string name="subscribe">"订阅"</string>
     <string name="unsubscribe">"取消订阅"</string>
@@ -150,6 +150,8 @@
     <string name="send_message_success">"消息已发送"</string>
     <string name="send_message_failed">"无法发送此消息"</string>
     <string name="select_a_subreddit">"请先选择一个版块"</string>
+
+    <!-- Fuzzy -->
     <string name="title_required">"帖子需要有标题"</string>
     <string name="link_required">"嘿！链接在哪呢？"</string>
     <string name="select_an_image">"请先选择一张图片"</string>
@@ -232,6 +234,8 @@
 
     <!-- Fuzzy -->
     <string name="please_wait">"请稍等。"</string>
+
+    <!-- Fuzzy -->
     <string name="add_account">"添加帐户"</string>
     <string name="anonymous_account">"匿名"</string>
     <string name="log_out">"注销"</string>
@@ -417,6 +421,8 @@
     <string name="settings_tab_title">"标题"</string>
     <string name="settings_tab_post_type">"类型"</string>
     <string name="settings_tab_subreddit_name">"版块名称（不带 r/ 前缀）"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_tab_multi_reddit_name">"聚合版块名称（/user/您的用户名/m/您的聚合版块名称）"</string>
     <string name="settings_tab_username">"用户名（不带 u/ 前缀）"</string>
     <string name="no_developer_easter_egg">"这里没有开发者选项"</string>
@@ -769,8 +775,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="notifications">"通知"</string>
     <string name="messages">"消息"</string>
     <string name="message">"消息"</string>
-    <string name="fetch_gfycat_video_failed">"提取 Gfycat 视频失败"</string>
-    <string name="fetch_redgifs_video_failed">"提取 Redgifs 视频失败"</string>
+    <string name="fetch_gfycat_video_failed">"获取 Gfycat 视频失败"</string>
+    <string name="fetch_redgifs_video_failed">"获取 Redgifs 视频失败"</string>
     <string name="fetching_video_info_please_wait">"正在获取视频信息，请稍候。"</string>
     <string name="error_fetching_imgur_media">"无法加载图像"</string>
     <string name="downloading_reddit_video">"下载视频轨"</string>
@@ -974,7 +980,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="filter_posts">"过滤帖子"</string>
     <string name="only_nsfw">"仅 NSFW"</string>
     <string name="only_spoiler">"仅剧透"</string>
-    <string name="title_excludes_strings_hint">"标题：排除关键字（关键字1,关键字2）"</string>
+    <string name="title_excludes_strings_hint">"标题：排除关键词（关键词1,关键词2）"</string>
     <string name="title_excludes_regex_hint">"标题：排除正则表达式"</string>
     <string name="exclude_subreddits_hint">"排除版块（例如 funny,AskReddit）"</string>
     <string name="exclude_users_hint">"排除用户（例如 Hostilenemy,random）"</string>
@@ -1059,9 +1065,9 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="suicide_prevention_quote">"也许世界并不美好，但还有我们在。\u2764"</string>
     <string name="do_not_show_this_again">"不再显示"</string>
     <string name="continue_suicide_prevention_activity">"继续"</string>
-    <string name="error_fetching_v_redd_it_video_cannot_get_redirect_url">"拉取 v.redd.it 视频出错：无法获取跳转 URL"</string>
-    <string name="error_fetching_v_redd_it_video_cannot_get_post">"拉取 v.redd.it 视频出错：无法获取帖子"</string>
-    <string name="error_fetching_v_redd_it_video_cannot_get_post_id">"拉取 v.redd.it 视频出错：无法获取帖子 ID"</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_redirect_url">"获取 v.redd.it 视频出错：无法获取跳转 URL"</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_post">"获取 v.redd.it 视频出错：无法获取帖子"</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_post_id">"获取 v.redd.it 视频出错：无法获取帖子 ID"</string>
     <string name="always_on">"总是打开"</string>
     <string name="only_on_wifi">"仅 WiFi 下"</string>
     <string name="never">"从不"</string>
@@ -1078,6 +1084,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="exclude_user">"排除此用户"</string>
     <string name="exclude_flair">"排除此头衔"</string>
     <string name="contain_flair">"包含此头衔"</string>
+
+    <!-- Fuzzy -->
     <string name="exclude_domain">"排除域名"</string>
     <string name="suggest_title">"推荐标题"</string>
     <string name="suggest_title_failed">"推荐标题失败"</string>
@@ -1159,4 +1167,86 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="error_loading_wiki">"加载 Wiki 错误"</string>
     <string name="no_wiki">"此版块没有 Wiki 页面"</string>
     <string name="material_you_notification_title">"应用 Material You"</string>
+    <string name="action_go_to_wiki">"前往 Wiki"</string>
+    <string name="action_playback_speed">"播放速度"</string>
+    <string name="about">"关于"</string>
+    <string name="settings_link_handler_title">"链接处理器"</string>
+    <string name="settings_main_page_back_button_action">"主页返回按钮动作"</string>
+    <string name="settings_open_navigation_drawer">"打开导航抽屉"</string>
+    <string name="settings_number_of_columns_in_post_feed_unfolded_portrait_title">"竖屏（未折叠）"</string>
+    <string name="settings_number_of_columns_in_post_feed_unfolded_landscape_title">"横屏（未折叠）"</string>
+    <string name="settings_loop_video_title">"循环视频"</string>
+    <string name="settings_loop_video_summary">"重启应用使自动播放视频设置生效"</string>
+    <string name="settings_credits_lock_screen_animation_title">"锁屏动画"</string>
+    <string name="settings_app_lock_title">"应用锁"</string>
+    <string name="settings_app_lock_summary">"使用应用前要求身份验证"</string>
+    <string name="settings_app_lock_timeout_title">"应用锁超时"</string>
+    <string name="settings_enable_fold_support_title">"启用折叠屏手机支持"</string>
+    <string name="settings_default_playback_speed_title">"默认播放速度"</string>
+    <string name="settings_link_handler_value_external_browser">"外部浏览器"</string>
+
+    <!-- 应该指的是 Chrome 等浏览器的一个功能，属于术语不翻译 -->
+    <string name="settings_link_handler_value_custom_tab">"Custom Tab"</string>
+    <string name="settings_link_handler_value_internal_browser">"内部浏览器"</string>
+    <string name="settings_legacy_autoplay_video_controller_ui_title">"旧版视频控制栏界面"</string>
+    <string name="settings_pinch_to_zoom_video_title">"双指缩放视频"</string>
+    <string name="settings_experimental_feature">"实验性功能"</string>
+    <string name="theme_item_media_indicator_icon_color">"媒体指示器图标颜色"</string>
+    <string name="theme_item_media_indicator_icon_color_detail">"应用于：帖子预览上的视频或相册图标"</string>
+    <string name="theme_item_media_indicator_background_color">"媒体指示器背景颜色"</string>
+    <string name="theme_item_media_indicator_background_color_detail">"应用于：帖子预览上的视频或相册背景"</string>
+    <string name="go_to_top">"前往顶部"</string>
+    <string name="title_contains_strings_hint">"标题：包含关键词（关键词1,关键词2）"</string>
+    <string name="title_contains_regex_hint">"标题：包含正则表达式"</string>
+    <string name="contain_domains_hint">"包含域名"</string>
+    <string name="anonymous_multireddit_no_subreddit">"此聚合版块不含任何版块！"</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_video_url">"获取 v.redd.it 视频出错：无法获取视频 URL"</string>
+    <string name="contain_domain">"包含此域名"</string>
+    <string name="lock_screen_text">"哦嘿！"</string>
+    <string name="app_lock_timeout_immediately">"立刻"</string>
+    <string name="app_lock_timeout_1_min">"1 分"</string>
+    <string name="app_lock_timeout_2_mins">"2 分"</string>
+    <string name="app_lock_timeout_5_mins">"5 分"</string>
+    <string name="app_lock_timeout_10_mins">"10 分"</string>
+    <string name="app_lock_timeout_15_mins">"15 分"</string>
+    <string name="app_lock_timeout_20_mins">"20 分"</string>
+    <string name="app_lock_timeout_30_mins">"30 分"</string>
+    <string name="app_lock_timeout_1_hour">"1 小时"</string>
+    <string name="app_lock_timeout_2_hours">"2 小时"</string>
+    <string name="app_lock_timeout_3_hours">"3 小时"</string>
+    <string name="app_lock_timeout_4_hours">"4 小时"</string>
+    <string name="app_lock_timeout_5_hours">"5 小时"</string>
+    <string name="app_lock_timeout_6_hours">"6 小时"</string>
+    <string name="app_lock_timeout_12_hours">"12 小时"</string>
+    <string name="app_lock_timeout_24_hours">"24 小时"</string>
+    <string name="edit_profile_activity_label">"编辑档案"</string>
+    <string name="action_contact_mods">"联系管理员"</string>
+    <string name="settings_save_nsfw_media_in_different_folder_title">"在不同的位置保存 NSFW 媒体"</string>
+    <string name="settings_nsfw_download_location_title">"NSFW 下载位置"</string>
+    <string name="fetch_streamable_video_failed">"获取流式传输视频失败"</string>
+
+    <!-- EditProfileService Notification -->
+    <string name="submit_change_avatar">"提供修改头像"</string>
+    <string name="submit_change_banner">"提交修改横幅"</string>
+    <string name="submit_save_profile">"提交保存档案"</string>
+
+    <!-- EditProfileActivity -->
+    <string name="action_edit_profile">"编辑档案"</string>
+    <string name="remove_avatar">"删除头像"</string>
+    <string name="remove_banner">"删除横幅"</string>
+    <string name="display_name_text">"显示名称"</string>
+    <string name="display_name_hint">"在您的档案上显示"</string>
+    <string name="display_name_description">"显示给查看您档案的用户，不会更改您的用户名。"</string>
+    <string name="about_you_text">"关于您"</string>
+    <string name="about_you_hint">"您的简单自我介绍"</string>
+    <string name="message_remove_avatar_success">"删除头像成功"</string>
+    <string name="message_remove_avatar_failed">"删除头像失败 %s"</string>
+    <string name="message_remove_banner_success">"删除横幅成功"</string>
+    <string name="message_remove_banner_failed">"删除横幅失败 %s"</string>
+    <string name="message_change_avatar_success">"修改头像成功"</string>
+    <string name="message_change_avatar_failed">"修改头像失败 %s"</string>
+    <string name="message_change_banner_success">"修改横幅成功"</string>
+    <string name="message_change_banner_failed">"修改横幅失败 %s"</string>
+    <string name="message_save_profile_success">"保存档案成功"</string>
+    <string name="message_save_profile_failed">"保存档案失败 %s"</string>
 </resources>

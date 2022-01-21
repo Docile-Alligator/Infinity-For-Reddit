@@ -3,14 +3,14 @@
     <string name="login_activity_label">"Entrar"</string>
     <string name="comment_activity_label">"Enviar Comentário"</string>
     <string name="comment_activity_label_is_replying">"Responder"</string>
-    <string name="post_text_activity_label">"Publicar Texto"</string>
+    <string name="post_text_activity_label">"Postar Texto"</string>
     <string name="subreddit_selection_activity_label">"Selecionar um Subreddit"</string>
     <string name="post_link_activity_label">"Postar Link"</string>
     <string name="post_image_activity_label">"Postar Imagem"</string>
     <string name="post_video_activity_label">"Postar Vídeo"</string>
     <string name="rules_activity_label">"Regras"</string>
     <string name="search_subreddits_activity_label">"Subreddits"</string>
-    <string name="edit_post_activity_label">"Editar Post"</string>
+    <string name="edit_post_activity_label">"Editar Postagem"</string>
     <string name="edit_comment_activity_label">"Editar Comentário"</string>
     <string name="view_message_activity_label">"Caixa de Entrada"</string>
     <string name="settings_activity_label">"Configurações"</string>
@@ -158,6 +158,8 @@ Toque para tentar novamente."</string>
     <string name="send_message_success">"Mensagem enviada"</string>
     <string name="send_message_failed">"Não foi possível enviar esta mensagem"</string>
     <string name="select_a_subreddit">"Por favor, selecione um subreddit primeiro"</string>
+
+    <!-- Fuzzy -->
     <string name="title_required">"O post precisa de um bom título"</string>
     <string name="link_required">"Ei, onde está o link?"</string>
     <string name="select_an_image">"Por favor, selecione uma imagem primeiro"</string>
@@ -240,6 +242,8 @@ Toque para tentar novamente."</string>
 
     <!-- Fuzzy -->
     <string name="please_wait">"Por favor aguarde."</string>
+
+    <!-- Fuzzy -->
     <string name="add_account">"Adicionar conta"</string>
     <string name="anonymous_account">"Anônimo"</string>
     <string name="log_out">"Desconectar"</string>
@@ -417,6 +421,8 @@ Toque para tentar novamente."</string>
     <string name="settings_tab_title">"Título"</string>
     <string name="settings_tab_post_type">"Tipo"</string>
     <string name="settings_tab_subreddit_name">"Nome do Subreddit (Sem o Prefixo ''r/'')"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_tab_multi_reddit_name">"Nome do Multireddit (/usuário/nomedoseuusuário/m/nomedoseumultireddit)"</string>
     <string name="settings_tab_username">"Usuário (Sem o Prefixo ''u/'')"</string>
     <string name="no_developer_easter_egg">"Não existem opções de desenvolvedor aqui"</string>
@@ -1029,6 +1035,8 @@ Mensagem: %2$s"</string>
     <string name="exclude_user">"Excluir este usuário"</string>
     <string name="exclude_flair">"Excluir esta etiqueta"</string>
     <string name="contain_flair">"Conter esta estiqueta"</string>
+
+    <!-- Fuzzy -->
     <string name="exclude_domain">"Excluir Domínio"</string>
     <string name="suggest_title">"Sugerir Título"</string>
     <string name="suggest_title_failed">"Falha ao sugerir título"</string>
@@ -1052,7 +1060,15 @@ Mensagem: %2$s"</string>
 
 Ainda deseja ativá-lo?"</string>
     <string name="reply">"Responder"</string>
+    <string name="post_gallery_activity_label">"Postar Galeria"</string>
+    <string name="trending_activity_label">"Tendências"</string>
+    <string name="action_share_rpan_link">"Compartilhar Link de RPAN"</string>
+    <string name="action_share_post_link">"Compartilhar Link do Post"</string>
+    <string name="rpan">"RPAN"</string>
+    <string name="trending">"Em Alta"</string>
+    <string name="receive_post_reply_notifications">"Receber Notificações de Respostas às Postagens"</string>
     <string name="bottom_sheet_post_gallery">"Galeria"</string>
+    <string name="posting_gallery">"Postando Galeria"</string>
     <string name="label_reddit">"Reddit"</string>
     <string name="settings_category_material_you_title">"Material You"</string>
     <string name="settings_enable_material_you_warning_summary">"Tenha certeza que você não tem temas com os nomes
@@ -1066,6 +1082,7 @@ Se você tiver, os renomeie antes de ativar o Material You."</string>
     <string name="settings_apply_material_you_summary">"Caso o Infinity não tenha mudado o tema"</string>
     <string name="settings_more_tabs_show_favorite_multireddits_title">"Mostrar Multireddits Favoritos"</string>
     <string name="settings_more_tabs_show_multireddits_title">"Mostrar Multireddits"</string>
+    <string name="settings_collapse_reddit_section_title">"Recolher a"</string>
     <string name="link_post_layout_auto">"Automático"</string>
     <string name="uploaded_images">"Imagens Enviadas"</string>
     <string name="select_image">"Selecione uma Imagem"</string>
@@ -1075,7 +1092,44 @@ Se você tiver, os renomeie antes de ativar o Material You."</string>
     <string name="upload_image_failed">"Falha ao enviar a imagem"</string>
     <string name="search_comments">"Procurar Comentários"</string>
     <string name="please_wait_image_is_uploading">"Uma imagem ainda está sendo enviada. Por favor, aguarde."</string>
+    <string name="wiki_activity_label">"Wiki"</string>
     <string name="settings_post_details_title">"Detalhes do Post"</string>
-    <string name="settings_separate_post_and_comments_in_portrait_mode_title">"Separar o Post dos Comentários no Modo Retrato."</string>
-    <string name="settings_separate_post_and_comments_in_landscape_mode_title">"Separar o Post dos Comentários no Modo Paisagem."</string>
+    <string name="settings_separate_post_and_comments_in_portrait_mode_title">"Separar a postagem dos comentários no modo retrato"</string>
+    <string name="settings_separate_post_and_comments_in_landscape_mode_title">"Separar a postagem dos comentários no modo paisagem"</string>
+    <string name="discard_dialog_button">"Descartar"</string>
+    <string name="error_loading_wiki">"Erro carregando a wiki"</string>
+    <string name="no_wiki">"Este subreddit não possui página wiki"</string>
+    <string name="material_you_notification_title">"Aplicando Material You"</string>
+    <string name="action_go_to_wiki">"Ir para a wiki"</string>
+    <string name="action_playback_speed">"Velocidade de reprodução"</string>
+    <string name="about">"Sobre"</string>
+    <string name="settings_app_lock_summary">"Requer autenticação antes de usar o app"</string>
+    <string name="settings_default_playback_speed_title">"Velocidade de reprodução padrão"</string>
+    <string name="settings_link_handler_value_external_browser">"Navegador externo"</string>
+    <string name="settings_link_handler_value_custom_tab">"Aba customizada"</string>
+    <string name="settings_link_handler_value_internal_browser">"Navegador interno"</string>
+    <string name="settings_pinch_to_zoom_video_title">"Pinça para dar zoom no vídeo"</string>
+    <string name="settings_experimental_feature">"Função experimental"</string>
+    <string name="go_to_top">"Ir ao topo"</string>
+    <string name="title_contains_strings_hint">"Título: contém palavras-chave (key1, key2)"</string>
+    <string name="contain_domains_hint">"Conter domínios"</string>
+    <string name="anonymous_multireddit_no_subreddit">"Este multireddit não tem um subreddit!"</string>
+    <string name="contain_domain">"Conter este domínio"</string>
+    <string name="lock_screen_text">"Calma aí!!!"</string>
+    <string name="app_lock_timeout_immediately">"Imediatamente"</string>
+    <string name="app_lock_timeout_1_min">"1 minuto"</string>
+    <string name="app_lock_timeout_2_mins">"2 minutos"</string>
+    <string name="app_lock_timeout_5_mins">"5 minutos"</string>
+    <string name="app_lock_timeout_10_mins">"10 minutos"</string>
+    <string name="app_lock_timeout_15_mins">"15 minutos"</string>
+    <string name="app_lock_timeout_20_mins">"20 minutos"</string>
+    <string name="app_lock_timeout_30_mins">"30 minutos"</string>
+    <string name="app_lock_timeout_1_hour">"1 hora"</string>
+    <string name="app_lock_timeout_2_hours">"2 horas"</string>
+    <string name="app_lock_timeout_3_hours">"3 horas"</string>
+    <string name="app_lock_timeout_4_hours">"4 horas"</string>
+    <string name="app_lock_timeout_5_hours">"5 horas"</string>
+    <string name="app_lock_timeout_6_hours">"6 horas"</string>
+    <string name="app_lock_timeout_12_hours">"12 horas"</string>
+    <string name="app_lock_timeout_24_hours">"24 horas"</string>
 </resources>

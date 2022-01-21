@@ -152,6 +152,8 @@
     <string name="send_message_success">"Zpráva odeslána"</string>
     <string name="send_message_failed">"Nepodařilo se odeslat zprávu"</string>
     <string name="select_a_subreddit">"Nejprve prosím vyberte subreddit"</string>
+
+    <!-- Fuzzy -->
     <string name="title_required">"Příspěvek potřebuje dobrý název"</string>
     <string name="link_required">"Hej, kde je odkaz?"</string>
     <string name="select_an_image">"Nejprve prosím vyberte obrázek"</string>
@@ -232,6 +234,8 @@
     <string name="posting_video">"Posílání videa"</string>
     <string name="posting_image">"Posílání obrázku"</string>
     <string name="please_wait">"Čekejte prosím"</string>
+
+    <!-- Fuzzy -->
     <string name="add_account">"Přidat účet"</string>
     <string name="anonymous_account">"Anonymní"</string>
     <string name="log_out">"Odhlásit se"</string>
@@ -403,6 +407,8 @@
     <string name="settings_tab_title">"Název"</string>
     <string name="settings_tab_post_type">"Typ"</string>
     <string name="settings_tab_subreddit_name">"Název subredditu (bez předpony r/)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_tab_multi_reddit_name">"Název multiredditu (/user/vašejméno/m/názevmultiredditu)"</string>
     <string name="settings_tab_username">"Uživatelské jméno (bez předpony u/)"</string>
     <string name="no_developer_easter_egg">"Tady nejsou žádné vývojářské možnosti"</string>
@@ -999,6 +1005,8 @@ Zpráva: %2$s"</string>
     <string name="exclude_user">"Vyloučit tohoto uživatele"</string>
     <string name="exclude_flair">"Vyloučit tento štítek"</string>
     <string name="contain_flair">"Obsahovat tento štítek"</string>
+
+    <!-- Fuzzy -->
     <string name="exclude_domain">"Vyloučit doménu"</string>
     <string name="suggest_title">"Navrhnout název"</string>
     <string name="suggest_title_failed">"Nepodařilo se navrhnout název"</string>
@@ -1078,4 +1086,84 @@ Pokud ano, přejmenujte je, než povolíte Material You."</string>
     <string name="error_loading_wiki">"Chyba při načítání wiki"</string>
     <string name="no_wiki">"Tento subreddit nemá žádnou wiki stránku"</string>
     <string name="material_you_notification_title">"Aplikování Material You"</string>
+    <string name="action_go_to_wiki">"Jít na wiki"</string>
+    <string name="action_playback_speed">"Rychlost přehrávání"</string>
+    <string name="about">"O aplikaci"</string>
+    <string name="settings_link_handler_title">"Chování odkazů"</string>
+    <string name="settings_main_page_back_button_action">"Akce tlačítka zpět na hlavní stránce"</string>
+    <string name="settings_open_navigation_drawer">"Otevřít navigační panel"</string>
+    <string name="settings_number_of_columns_in_post_feed_unfolded_portrait_title">"Na výšku (neohnutý)"</string>
+    <string name="settings_number_of_columns_in_post_feed_unfolded_landscape_title">"Na šířku (neohnutý)"</string>
+    <string name="settings_loop_video_title">"Smyčka videí"</string>
+    <string name="settings_loop_video_summary">"Restartujte aplikaci pro použití tohoto nastavení na automaticky přehrávaná videa"</string>
+    <string name="settings_credits_lock_screen_animation_title">"Animace zamykací obrazovky"</string>
+    <string name="settings_app_lock_title">"Zámek aplikace"</string>
+    <string name="settings_app_lock_summary">"Vyžadovat ověření před použitím aplikace"</string>
+    <string name="settings_app_lock_timeout_title">"Vypršení zámku aplikace"</string>
+    <string name="settings_enable_fold_support_title">"Povolit podporu ohebných telefonů"</string>
+    <string name="settings_default_playback_speed_title">"Výchozí rychlost přehrávání"</string>
+    <string name="settings_link_handler_value_external_browser">"Externí prohlížeč"</string>
+    <string name="settings_link_handler_value_custom_tab">"Vlastní záložka"</string>
+    <string name="settings_link_handler_value_internal_browser">"Interní prohlížeč"</string>
+    <string name="settings_legacy_autoplay_video_controller_ui_title">"Staré UI ovládání videa"</string>
+    <string name="settings_pinch_to_zoom_video_title">"Povolit přibližování videí"</string>
+    <string name="settings_experimental_feature">"Experimentální funkce"</string>
+    <string name="theme_item_media_indicator_icon_color">"Barva ikony indikátoru médií"</string>
+    <string name="theme_item_media_indicator_icon_color_detail">"Použito na: ikonu videa nebo galerie na náhledu příspěvku"</string>
+    <string name="theme_item_media_indicator_background_color">"Barva pozadí indikátoru médií"</string>
+    <string name="theme_item_media_indicator_background_color_detail">"Použito na: pozadí ikony videa nebo galerie na náhledu příspěvku"</string>
+    <string name="go_to_top">"Zpět nahoru"</string>
+    <string name="title_contains_strings_hint">"Název: obsahuje klíčová slova (slovo1,slovo2)"</string>
+    <string name="title_contains_regex_hint">"Název: obsahuje regex"</string>
+    <string name="contain_domains_hint">"Obsahuje domény"</string>
+    <string name="anonymous_multireddit_no_subreddit">"Tento multireddit nemá subreddit!"</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_video_url">"Chyba při získávání v.redd.it videa: nelze získat URL videa"</string>
+    <string name="contain_domain">"Obsahovat tuto doménu"</string>
+    <string name="lock_screen_text">"Dávej pozor!!!"</string>
+    <string name="app_lock_timeout_immediately">"Ihned"</string>
+    <string name="app_lock_timeout_1_min">"1 minuta"</string>
+    <string name="app_lock_timeout_2_mins">"2 minuty"</string>
+    <string name="app_lock_timeout_5_mins">"5 minut"</string>
+    <string name="app_lock_timeout_10_mins">"10 minut"</string>
+    <string name="app_lock_timeout_15_mins">"15 minut"</string>
+    <string name="app_lock_timeout_20_mins">"20 minut"</string>
+    <string name="app_lock_timeout_30_mins">"30 minut"</string>
+    <string name="app_lock_timeout_1_hour">"1 hodina"</string>
+    <string name="app_lock_timeout_2_hours">"2 hodiny"</string>
+    <string name="app_lock_timeout_3_hours">"3 hodiny"</string>
+    <string name="app_lock_timeout_4_hours">"4 hodiny"</string>
+    <string name="app_lock_timeout_5_hours">"5 hodin"</string>
+    <string name="app_lock_timeout_6_hours">"6 hodin"</string>
+    <string name="app_lock_timeout_12_hours">"12 hodin"</string>
+    <string name="app_lock_timeout_24_hours">"24 hodin"</string>
+    <string name="edit_profile_activity_label">"Upravit profil"</string>
+    <string name="action_contact_mods">"Kontaktovat moderátory"</string>
+    <string name="settings_save_nsfw_media_in_different_folder_title">"Uložit NSFW média do jiné lokace"</string>
+    <string name="settings_nsfw_download_location_title">"Lokace NSFW stahování"</string>
+    <string name="fetch_streamable_video_failed">"Nepodařilo se získat Streamable video"</string>
+
+    <!-- EditProfileService Notification -->
+    <string name="submit_change_avatar">"Potvrdit změnu avataru"</string>
+    <string name="submit_change_banner">"Potvrdit změnu banneru"</string>
+    <string name="submit_save_profile">"Potvrdit uložení profilu"</string>
+
+    <!-- EditProfileActivity -->
+    <string name="action_edit_profile">"Upravit profil"</string>
+    <string name="remove_avatar">"Odebrat avatar"</string>
+    <string name="remove_banner">"Odebrat banner"</string>
+    <string name="display_name_text">"Zobrazované jméno"</string>
+    <string name="display_name_hint">"Zobrazit na tvé profilové stránce"</string>
+    <string name="display_name_description">"Toto bude zobrazeno lidem, kteří si budou prohlížet vaši profilovou stránku - vaše uživatelské jméno nebude změněno."</string>
+    <string name="about_you_text">"O vás"</string>
+    <string name="about_you_hint">"Krátký popis vás"</string>
+    <string name="message_remove_avatar_success">"Avatar úspěšně odebrán"</string>
+    <string name="message_remove_avatar_failed">"Nepodařilo se odebrat avatar %s"</string>
+    <string name="message_remove_banner_success">"Banner úspěšně odebrán"</string>
+    <string name="message_remove_banner_failed">"Nepodařilo se odebrat banner %s"</string>
+    <string name="message_change_avatar_success">"Avatar úspěšně změněn"</string>
+    <string name="message_change_avatar_failed">"Nepodařilo se změnit avatar %s"</string>
+    <string name="message_change_banner_success">"Avatar úspěšně změněn"</string>
+    <string name="message_change_banner_failed">"Nepodařilo se změnit banner %s"</string>
+    <string name="message_save_profile_success">"Profil úspěšně uložen"</string>
+    <string name="message_save_profile_failed">"Nepodařilo se uložit profil %s"</string>
 </resources>

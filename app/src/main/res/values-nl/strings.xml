@@ -149,6 +149,8 @@ Druk om opnieuw te proberen."</string>
     <string name="send_message_success">"Het bericht is verstuurd"</string>
     <string name="send_message_failed">"Dit bericht kan niet worden verstuurd"</string>
     <string name="select_a_subreddit">"Kies eerst een subreddit"</string>
+
+    <!-- Fuzzy -->
     <string name="title_required">"Dit bericht heeft een goede titel nodig"</string>
     <string name="link_required">"Hé, waar is de link?"</string>
     <string name="select_an_image">"Kies eerst een afbeelding"</string>
@@ -229,6 +231,8 @@ Druk om opnieuw te proberen."</string>
     <string name="posting_video">"Bezig met plaatsen van video…"</string>
     <string name="posting_image">"Bezig met plaatsen van afbeelding…"</string>
     <string name="please_wait">"Even geduld…"</string>
+
+    <!-- Fuzzy -->
     <string name="add_account">"Account toevoegen"</string>
     <string name="anonymous_account">"Anoniem"</string>
     <string name="log_out">"Uitloggen"</string>
@@ -406,6 +410,8 @@ Druk om opnieuw te proberen."</string>
     <string name="settings_tab_title">"Titel"</string>
     <string name="settings_tab_post_type">"Type"</string>
     <string name="settings_tab_subreddit_name">"Subredditnaam (zonder r/-voorvoegsel)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_tab_multi_reddit_name">"Multiredditnaam (/user/gebruikersnaam/m/mijnmultiredditnaam)"</string>
     <string name="settings_tab_username">"Gebruikersnaam (zonder u/-voorvoegsel)"</string>
     <string name="no_developer_easter_egg">"Er zijn hier geen ontwikkelaarsopties"</string>
@@ -989,6 +995,8 @@ Bericht: %2$s"</string>
     <string name="exclude_user">"Sluit deze gebruiker uit"</string>
     <string name="exclude_flair">"Sluit deze flair uit"</string>
     <string name="contain_flair">"Bevat deze flair"</string>
+
+    <!-- Fuzzy -->
     <string name="exclude_domain">"Sluit Domein uit"</string>
     <string name="suggest_title">"Titel voorstellen"</string>
     <string name="suggest_title_failed">"Mislukt om titel voor te stellen"</string>
@@ -1053,4 +1061,5 @@ Zo wel, hernoem ze voordat je Material You aanzet."</string>
     <string name="error_loading_wiki">"Fout bij laden wiki"</string>
     <string name="no_wiki">"Deze subreddit heeft geen wiki pagina"</string>
     <string name="material_you_notification_title">"Material You toepassen"</string>
+    <string name="about">"Over"</string>
 </resources>

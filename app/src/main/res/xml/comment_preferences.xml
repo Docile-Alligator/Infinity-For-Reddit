@@ -34,11 +34,6 @@
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
-        app:key="fully_collapse_comment"
-        android:title="@string/settings_fully_collapse_comment_title" />
-
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
-        app:defaultValue="false"
         app:key="hide_comment_awards"
         android:title="@string/settings_hide_comment_awards_title" />
 

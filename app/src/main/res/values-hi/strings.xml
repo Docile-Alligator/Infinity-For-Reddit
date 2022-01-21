@@ -164,6 +164,8 @@
     <string name="send_message_success">"संदेश भेज दिया"</string>
     <string name="send_message_failed">"संदेश नहीं भेज जा सका "</string>
     <string name="select_a_subreddit">"कृपया पहले एक सबरैडिट चुनिए"</string>
+
+    <!-- Fuzzy -->
     <string name="title_required">"पोस्ट कि अच्छा शीर्षक चाहिए "</string>
     <string name="link_required">"जी, लिंक दीजिए?"</string>
     <string name="select_an_image">"कृपया पहले एक चित्र चुनिए"</string>
@@ -255,6 +257,8 @@ Behavior -->
 
     <!-- Fuzzy -->
     <string name="please_wait">"कृपया इंतजार करें "</string>
+
+    <!-- Fuzzy -->
     <string name="add_account">"खाता जोड़ें "</string>
     <string name="anonymous_account">"अज्ञात "</string>
     <string name="log_out">"लॉग आउट"</string>
@@ -400,7 +404,7 @@ Behavior -->
     <string name="settings_enable_nsfw_title">"NSFW शुरू करें "</string>
     <string name="settings_blur_nsfw_title">"धुंधले NSFW चित्र "</string>
     <string name="settings_blur_spoiler_title">"धुंधले Spoiler चित्र "</string>
-    <string name="settings_about_master_title">"एप के बारे में "</string>
+    <string name="settings_about_master_title">"एप के बारे में"</string>
     <string name="settings_acknowledgement_master_title">"स्वीकृति"</string>
     <string name="settings_credits_master_title">"आभार "</string>
     <string name="settings_credits_icon_foreground_title">"अग्रभूमि आइकॉन "</string>
@@ -452,6 +456,8 @@ Behavior -->
     <string name="settings_tab_title">"शीर्षक "</string>
     <string name="settings_tab_post_type">"प्रकार "</string>
     <string name="settings_tab_subreddit_name">" सबरैडिट का नाम (r/ उपसर्ग के बिना )"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_tab_multi_reddit_name">"मल्टीरैडिट का नाम (/यूजर/आपकायूजरनाम/m/आपकेमल्टीरैडिटकानाम)"</string>
     <string name="settings_tab_username">"यूजर का नाम (u/ उपसर्ग के बिना)"</string>
     <string name="no_developer_easter_egg">"यहां डिवेलपर के लिए कोई विकल्प नहीं है "</string>
@@ -939,6 +945,40 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_no_preview_post_type_background_color">"पूर्वदर्शन अनुपलब्ध पोस्ट प्रकार पृष्टभूमि रंग"</string>
     <string name="theme_item_no_preview_post_type_background_color_detail">"पूर्वदर्शन अनुपलब्ध पोस्ट प्रकार दर्शाने वाले प्लेसहोल्डर पर लागू "</string>
     <string name="settings_language_title">"भाषा "</string>
+    <string name="customize_post_filter_activity_label">"पोस्ट फ़िल्टर कस्टमाइज़ करें"</string>
+    <string name="filtered_posts_activity_subtitle">"फ़िल्टर की गई पोस्ट"</string>
+    <string name="post_filter_preference_activity_label">"पोस्ट फ़िल्टर"</string>
+    <string name="search_users_result_activity_label">"उपयोगकर्ताओं"</string>
     <string name="multireddit_selection_activity_label">"मल्टीरेड्डिट चुनें"</string>
+    <string name="action_save_to_database">"डेटाबेस में सहेजें"</string>
+    <string name="action_read_all_messages">"सभी संदेश पढ़ें"</string>
     <string name="action_add_to_multireddit">"मल्टीरेड्डिट में जोड़ें"</string>
+    <string name="search_only_subreddits_hint">"सबरेडिट खोजें"</string>
+    <string name="search_only_users_hint">"उपयोगकर्ता खोजें"</string>
+    <string name="post_type_gif">"जीआईएफ"</string>
+    <string name="post_type_gallery">"गेलरी"</string>
+    <string name="settings_disable_immersive_interface_in_landscape_mode">"लैंडस्केप मोड में इमर्सिव इंटरफ़ेस अक्षम करें"</string>
+    <string name="settings_privacy_policy_title">"गोपनीयता नीति"</string>
+    <string name="settings_delete_read_posts_in_database_title">"डेटाबेस में सभी पढ़े गए पोस्ट हटाएं"</string>
+    <string name="settings_post_filter_title">"पोस्ट फ़िल्टर"</string>
+    <string name="settings_enable_search_history_title">"सुरक्षा इतिहास सक्षम करें"</string>
+    <string name="settings_post_history_title">"इतिहास के बाद"</string>
+    <string name="settings_mark_posts_as_read_title">"पोस्ट को पढ़ने के रूप में चिह्नित करें"</string>
+    <string name="about">"एप के बारे में"</string>
+    <string name="app_lock_timeout_immediately">"तुरंत "</string>
+    <string name="app_lock_timeout_1_min">"1 मिनट "</string>
+    <string name="app_lock_timeout_2_mins">"2 मिनट "</string>
+    <string name="app_lock_timeout_5_mins">"5 मिनट "</string>
+    <string name="app_lock_timeout_10_mins">"10 मिनट "</string>
+    <string name="app_lock_timeout_15_mins">"15 मिनट "</string>
+    <string name="app_lock_timeout_20_mins">"30 मिनट "</string>
+    <string name="app_lock_timeout_30_mins">"30 मिनट "</string>
+    <string name="app_lock_timeout_1_hour">"1 घंटा "</string>
+    <string name="app_lock_timeout_2_hours">"2 घंटे "</string>
+    <string name="app_lock_timeout_3_hours">"3 घंटे "</string>
+    <string name="app_lock_timeout_4_hours">"4 घंटे "</string>
+    <string name="app_lock_timeout_5_hours">"5 घंटे "</string>
+    <string name="app_lock_timeout_6_hours">"6 घंटे "</string>
+    <string name="app_lock_timeout_12_hours">"12 घंटे "</string>
+    <string name="app_lock_timeout_24_hours">"24 घंटे "</string>
 </resources>

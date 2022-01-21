@@ -68,12 +68,12 @@
     <string name="access_denied">"Hozzáférés megtagadva"</string>
     <string name="parse_user_info_error">"Felhasználó adat elemzési hiba"</string>
     <string name="no_system_webview_error">"Hiba a rendszer WebView szolgáltatásának megnyitása közben"</string>
-    <string name="error_loading_image_tap_to_retry">"Hiba a kép megjelenítésekor. Koppints az újraprbálkozáshoz."</string>
-    <string name="load_posts_error">"Hiba a poszt megjelenítésekor. Koppints az újraprbálkozáshoz."</string>
+    <string name="error_loading_image_tap_to_retry">"Hiba a kép megjelenítésekor. Koppints az újrapróbálkozáshoz."</string>
+    <string name="load_posts_error">"Hiba a poszt megjelenítésekor. Koppints az újrapróbálkozáshoz."</string>
     <string name="load_more_posts_error">"Hiba a poszt megjelenítésekor."</string>
-    <string name="load_post_error">"Hiba a poszt megjelenítésekor. Koppints az újraprbálkozáshoz."</string>
-    <string name="search_subreddits_error">"Hiba a subredditek keresése közben. Koppints az újraprbálkozáshoz."</string>
-    <string name="search_users_error">"Hiba a felhasználók keresése közben. Koppints az újraprbálkozáshoz."</string>
+    <string name="load_post_error">"Hiba a poszt megjelenítésekor. Koppints az újrapróbálkozáshoz."</string>
+    <string name="search_subreddits_error">"Hiba a subredditek keresése közben. Koppints az újrapróbálkozáshoz."</string>
+    <string name="search_users_error">"Hiba a felhasználók keresése közben. Koppints az újrapróbálkozáshoz."</string>
     <string name="no_posts">"Nem található poszt"</string>
     <string name="no_comments">"Nem található komment"</string>
     <string name="no_subreddits">"Nem található subreddit"</string>
@@ -98,7 +98,7 @@
     <string name="profile">"Profil"</string>
     <string name="subscriptions">"Feliratkozások"</string>
     <string name="multi_reddit">"Multireddit"</string>
-    <string name="inbox">"Póstaláda"</string>
+    <string name="inbox">"Postaláda"</string>
     <string name="upvoted">"Upvoteolt"</string>
     <string name="downvoted">"Downvoteolt"</string>
     <string name="hidden">"Rejtett"</string>
@@ -146,6 +146,8 @@
     <string name="send_message_success">"Üzenet elküldve"</string>
     <string name="send_message_failed">"Nem sikerült elküldeni az üzenetet"</string>
     <string name="select_a_subreddit">"Kérlek előbb válassz egy subredditet"</string>
+
+    <!-- Fuzzy -->
     <string name="title_required">"A posztnak szüksége van egy jó címre"</string>
     <string name="link_required">"Hé! Hol a link?"</string>
     <string name="select_an_image">"Kérlek előbb válassz egy képet"</string>
@@ -226,6 +228,8 @@
 
     <!-- Fuzzy -->
     <string name="please_wait">"Kérlek várj."</string>
+
+    <!-- Fuzzy -->
     <string name="add_account">"Fiók hozzáadása"</string>
     <string name="anonymous_account">"Anoním"</string>
     <string name="log_out">"Kijelentkezés"</string>
@@ -409,6 +413,7 @@
     <string name="settings_tab_subreddit_name">"Subreddit néb (r/ prefix nélkül)"</string>
 
     <!-- what does /m/ refer to here? -->
+    <!-- Fuzzy -->
     <string name="settings_tab_multi_reddit_name">"Multireddit név (/felhasználó/felhasználóneved/m/temultiredditneved)"</string>
     <string name="settings_tab_username">"Felhasználónév (u/ prefix nélkül)"</string>
     <string name="no_developer_easter_egg">"Itt nincsenek fejlesztői beállítésok"</string>
@@ -966,4 +971,28 @@ Videó autómatikus lejátszása le van tiltva."</string>
     <string name="settings_backup_settings_title">"Beállítások biztonsági mentése"</string>
     <string name="settings_restore_settings_title">"Beállítások visszaállítása"</string>
     <string name="settings_credits_love_animation_title">"Love animáció"</string>
+    <string name="settings_navigation_drawer_title">"Navigációs fiók"</string>
+    <string name="settings_default_search_result_tab">"Alapértelmezett keresési találatok fül"</string>
+    <string name="device_default">"Eszköz alapértelmezett"</string>
+    <string name="theme_item_current_user_color">"Jelenlegi felhasználó"</string>
+    <string name="backup_settings_success">"Sikeresen exportálás a célmappába. A generált zip fájl jelszava 123321. Kérlek ne módosítsd a fájlt."</string>
+    <string name="create_zip_in_destination_directory_failed">"Nem lehet lehet létrehozni visszaállítási zip fájlt a célmappában."</string>
+    <string name="do_not_show_this_again">"Ne mutassa újra"</string>
+    <string name="continue_suicide_prevention_activity">"Folytatás"</string>
+    <string name="always_on">"Mindig be"</string>
+    <string name="never">"Soha"</string>
+    <string name="normal">"Normál"</string>
+    <string name="extra_large">"Extra nagy"</string>
+    <string name="enormously_large">"Óriási"</string>
+    <string name="default_in_array">"Alapértelmezett"</string>
+    <string name="off">"Ki"</string>
+    <string name="upvote">"Upvote"</string>
+    <string name="downvote">"Downvote"</string>
+    <string name="select">"Kiválaszt"</string>
+    <string name="save_comment">"Mentés"</string>
+    <string name="reply">"Válasz"</string>
+    <string name="bottom_sheet_post_gallery">"Galéria"</string>
+    <string name="label_reddit">"Reddit"</string>
+    <string name="about">"Az appról"</string>
+    <string name="settings_open_navigation_drawer">"Navigációs fiók megnyitása"</string>
 </resources>

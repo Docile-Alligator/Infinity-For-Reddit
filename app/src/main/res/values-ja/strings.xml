@@ -165,6 +165,8 @@
     <string name="send_message_success">"送信しました"</string>
     <string name="send_message_failed">"送信できませんでした"</string>
     <string name="select_a_subreddit">"Subredditを選択してください"</string>
+
+    <!-- Fuzzy -->
     <string name="title_required">"タイトルが必要です"</string>
     <string name="link_required">"リンクが必要です"</string>
     <string name="select_an_image">"画像を選択してください"</string>
@@ -256,6 +258,8 @@
 
     <!-- Fuzzy -->
     <string name="please_wait">"少々お待ちください。"</string>
+
+    <!-- Fuzzy -->
     <string name="add_account">"アカウントを追加"</string>
     <string name="anonymous_account">"匿名"</string>
     <string name="log_out">"ログアウト"</string>
@@ -455,6 +459,8 @@
     <string name="settings_tab_title">"タブ名"</string>
     <string name="settings_tab_post_type">"表示内容"</string>
     <string name="settings_tab_subreddit_name">"Subreddit名 (「r/」は不要)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_tab_multi_reddit_name">"カスタムフィード名 (/user/あなたのユーザー名/m/あなたのカスタムフィード名)"</string>
     <string name="settings_tab_username">"ユーザー名 (「u/」は不要)"</string>
     <string name="no_developer_easter_egg">"開発者オプションはありません"</string>
@@ -1080,4 +1086,5 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="discard_dialog_button">"破棄"</string>
     <string name="error_loading_wiki">"Wikiの読み込み中にエラーが発生しました"</string>
     <string name="no_wiki">"このSubredditにはwikiのページがありません。"</string>
+    <string name="about">"このアプリについて"</string>
 </resources>

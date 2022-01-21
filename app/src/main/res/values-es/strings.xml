@@ -158,6 +158,8 @@ Toca para reintentar."</string>
     <string name="send_message_success">"Mensaje enviado"</string>
     <string name="send_message_failed">"No se puede enviar el mensaje"</string>
     <string name="select_a_subreddit">"Selecciona un subreddit primero"</string>
+
+    <!-- Fuzzy -->
     <string name="title_required">"Se requiere un título"</string>
     <string name="link_required">"¿Dónde ha quedado ese link?"</string>
     <string name="select_an_image">"Selecciona una imagen"</string>
@@ -238,6 +240,8 @@ Toca para reintentar."</string>
     <string name="posting_video">"Publicando vídeo"</string>
     <string name="posting_image">"Publicando imagen"</string>
     <string name="please_wait">"Espera, por favor"</string>
+
+    <!-- Fuzzy -->
     <string name="add_account">"Añadir cuenta"</string>
     <string name="anonymous_account">"Anónimo"</string>
     <string name="log_out">"Cerrar sesión"</string>
@@ -423,6 +427,8 @@ Premio means prize, so it's better suited the first word instead of the second o
     <string name="settings_tab_title">"Título"</string>
     <string name="settings_tab_post_type">"Tipo"</string>
     <string name="settings_tab_subreddit_name">"Nombre del subreddit (sin el prefijo r/)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_tab_multi_reddit_name">"Nombre del multireddit (/user/tu-nombre-de-usuario/m/nombre-del-multireddit)"</string>
     <string name="settings_tab_username">"Nombre de usuario (sin el prefijo u/)"</string>
     <string name="no_developer_easter_egg">"No hay opciones de desarrollador aquí"</string>
@@ -1033,9 +1039,9 @@ Mensaje: %2$s"</string>
     <string name="suicide_prevention_quote">"Si estas buscando un cartel para no suicidarte, aquí esta.\u2764"</string>
     <string name="do_not_show_this_again">"No mostrar esto de nuevo"</string>
     <string name="continue_suicide_prevention_activity">"Continuar"</string>
-    <string name="error_fetching_v_redd_it_video_cannot_get_redirect_url">"Error al recuperar el video de v.redd.it: No se puede conseguir la URL de redirección"</string>
-    <string name="error_fetching_v_redd_it_video_cannot_get_post">"Error al recuperar el video de v.redd.it: No se puede encontrar la publicación"</string>
-    <string name="error_fetching_v_redd_it_video_cannot_get_post_id">"Error al recuperar el video de v.redd.it: No se puede encontrar el ID de la publicación"</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_redirect_url">"Error al obtener el video de v.redd.it: No se puede conseguir la URL de redirección"</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_post">"Error al obtener el video de v.redd.it: No se puede encontrar la publicación"</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_post_id">"Error al obtener el video de v.redd.it: No se puede encontrar el ID de la publicación"</string>
     <string name="always_on">"Siempre encendido"</string>
     <string name="only_on_wifi">"Solo con Wifi"</string>
     <string name="never">"Nunca"</string>
@@ -1052,6 +1058,8 @@ Mensaje: %2$s"</string>
     <string name="exclude_user">"Excluir este usuario"</string>
     <string name="exclude_flair">"Excluir esta etiqueta"</string>
     <string name="contain_flair">"Contiene esta etiqueta"</string>
+
+    <!-- Fuzzy -->
     <string name="exclude_domain">"Excluir dominio"</string>
     <string name="suggest_title">"Sugerir título"</string>
     <string name="suggest_title_failed">"Sugerencia de título fallida"</string>
@@ -1133,4 +1141,84 @@ Toque para volver a intentarlo."</string>
     <string name="error_loading_wiki">"Error al cargar la wiki"</string>
     <string name="no_wiki">"Este subreddit no tiene página de wiki"</string>
     <string name="material_you_notification_title">"Aplicando Material You"</string>
+    <string name="action_go_to_wiki">"Ir a la Wiki"</string>
+    <string name="action_playback_speed">"Velocidad de reproducción"</string>
+    <string name="about">"Acerca de"</string>
+    <string name="settings_link_handler_title">"Controlador de enlaces"</string>
+    <string name="settings_main_page_back_button_action">"Acción del botón de retroceso de la página principal"</string>
+    <string name="settings_open_navigation_drawer">"Abrir cajón de navegación"</string>
+    <string name="settings_number_of_columns_in_post_feed_unfolded_portrait_title">"Vertical (desplegado)"</string>
+    <string name="settings_number_of_columns_in_post_feed_unfolded_landscape_title">"Horizontal (desplegado)"</string>
+    <string name="settings_loop_video_title">"Vídeo en bucle"</string>
+    <string name="settings_loop_video_summary">"Reinicie la aplicación para aplicar esta configuración a la reproducción automática de vídeos"</string>
+    <string name="settings_credits_lock_screen_animation_title">"Animación de la pantalla de bloqueo"</string>
+    <string name="settings_app_lock_title">"Bloqueo de aplicación"</string>
+    <string name="settings_app_lock_summary">"Requerir autenticación antes de usar la aplicación"</string>
+    <string name="settings_app_lock_timeout_title">"Tiempo de espera de bloqueo de la aplicación"</string>
+    <string name="settings_enable_fold_support_title">"Activar compatibilidad con teléfonos plegables"</string>
+    <string name="settings_default_playback_speed_title">"Velocidad de reproducción predeterminada"</string>
+    <string name="settings_link_handler_value_external_browser">"Navegador externo"</string>
+    <string name="settings_link_handler_value_custom_tab">"Pestaña personalizada"</string>
+    <string name="settings_link_handler_value_internal_browser">"Navegador interno"</string>
+    <string name="settings_legacy_autoplay_video_controller_ui_title">"Interfaz del controlador de vídeo heredado"</string>
+    <string name="settings_pinch_to_zoom_video_title">"Pellizcar para ampliar el vídeo"</string>
+    <string name="settings_experimental_feature">"Característica experimental"</string>
+    <string name="theme_item_media_indicator_icon_color">"Color del icono del indicador de medios"</string>
+    <string name="theme_item_media_indicator_icon_color_detail">"Aplicado a: Icono de vídeo o galería en la vista previa de la publicación"</string>
+    <string name="theme_item_media_indicator_background_color">"Color de fondo del indicador de medios"</string>
+    <string name="theme_item_media_indicator_background_color_detail">"Aplicado a: Fondo del vídeo o ícono de la galería en la vista previa de la publicación"</string>
+    <string name="go_to_top">"Ir al principio"</string>
+    <string name="title_contains_strings_hint">"Título: contiene palabras clave (clave1, clave2)"</string>
+    <string name="title_contains_regex_hint">"Título: contiene expresiones regulares"</string>
+    <string name="contain_domains_hint">"Contener dominios"</string>
+    <string name="anonymous_multireddit_no_subreddit">"¡Este multireddit no tiene subreddit!"</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_video_url">"Error al obtener el vídeo de v.redd.it: no se puede obtener la URL del vídeo"</string>
+    <string name="contain_domain">"Contener este dominio"</string>
+    <string name="lock_screen_text">"¡¡¡Vaya!!!"</string>
+    <string name="app_lock_timeout_immediately">"Inmediatamente"</string>
+    <string name="app_lock_timeout_1_min">"1 minuto"</string>
+    <string name="app_lock_timeout_2_mins">"2 minutos"</string>
+    <string name="app_lock_timeout_5_mins">"5 minutos"</string>
+    <string name="app_lock_timeout_10_mins">"10 minutos"</string>
+    <string name="app_lock_timeout_15_mins">"15 minutos"</string>
+    <string name="app_lock_timeout_20_mins">"20 minutos"</string>
+    <string name="app_lock_timeout_30_mins">"30 minutos"</string>
+    <string name="app_lock_timeout_1_hour">"1 hora"</string>
+    <string name="app_lock_timeout_2_hours">"2 horas"</string>
+    <string name="app_lock_timeout_3_hours">"3 horas"</string>
+    <string name="app_lock_timeout_4_hours">"4 horas"</string>
+    <string name="app_lock_timeout_5_hours">"5 horas"</string>
+    <string name="app_lock_timeout_6_hours">"6 horas"</string>
+    <string name="app_lock_timeout_12_hours">"12 horas"</string>
+    <string name="app_lock_timeout_24_hours">"24 horas"</string>
+    <string name="edit_profile_activity_label">"Editar perfil"</string>
+    <string name="action_contact_mods">"Contactar moderadores"</string>
+    <string name="settings_save_nsfw_media_in_different_folder_title">"Guardar contenido NSFW en una ubicación diferente"</string>
+    <string name="settings_nsfw_download_location_title">"Ubicación de descargas NSFW"</string>
+    <string name="fetch_streamable_video_failed">"No fue posible el vídeo de Streamable"</string>
+
+    <!-- EditProfileService Notification -->
+    <string name="submit_change_avatar">"Actualizando avatar"</string>
+    <string name="submit_change_banner">"Actualizando banner"</string>
+    <string name="submit_save_profile">"Actualizando perfil"</string>
+
+    <!-- EditProfileActivity -->
+    <string name="action_edit_profile">"Editar perfil"</string>
+    <string name="remove_avatar">"Remover avatar"</string>
+    <string name="remove_banner">"Remover banner"</string>
+    <string name="display_name_text">"Mostrar nombre"</string>
+    <string name="display_name_hint">"Mostrar en tu perfil"</string>
+    <string name="display_name_description">"Se mostrará a los visitantes de tu perfil y esto no afectará tu nombre de usuario"</string>
+    <string name="about_you_text">"Sobre de ti"</string>
+    <string name="about_you_hint">"Agrega una breve descripción tuya"</string>
+    <string name="message_remove_avatar_success">"Avatar removido correctamente"</string>
+    <string name="message_remove_avatar_failed">"Error al remover avatar %s"</string>
+    <string name="message_remove_banner_success">"Banner removido correctamente"</string>
+    <string name="message_remove_banner_failed">"Error al remover banner %s"</string>
+    <string name="message_change_avatar_success">"Avatar cambiado correctamente"</string>
+    <string name="message_change_avatar_failed">"Error al cambiar avatar %s"</string>
+    <string name="message_change_banner_success">"Banner cambiado correctamente"</string>
+    <string name="message_change_banner_failed">"Error al cambiar banner %s"</string>
+    <string name="message_save_profile_success">"Perfil guardado correctamente"</string>
+    <string name="message_save_profile_failed">"Error al guardar perfil"</string>
 </resources>

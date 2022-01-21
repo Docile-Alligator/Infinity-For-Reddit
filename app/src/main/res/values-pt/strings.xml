@@ -152,6 +152,8 @@ Toque para tentar novamente."</string>
     <string name="send_message_success">"Mensagem enviada"</string>
     <string name="send_message_failed">"Não foi possível enviar esta mensagem"</string>
     <string name="select_a_subreddit">"Por favor escolha uma comunidade primeiro"</string>
+
+    <!-- Fuzzy -->
     <string name="title_required">"A publicação precisa de um bom título"</string>
     <string name="link_required">"Onde está o endereço?"</string>
     <string name="select_an_image">"Por favor selecione primeiro uma imagem"</string>
@@ -236,6 +238,8 @@ Toque para tentar novamente."</string>
 
     <!-- Fuzzy -->
     <string name="please_wait">"Por favor aguarde."</string>
+
+    <!-- Fuzzy -->
     <string name="add_account">"Adicionar conta"</string>
     <string name="anonymous_account">"Anónimo"</string>
     <string name="log_out">"Terminar sessão"</string>
@@ -410,6 +414,8 @@ Toque para tentar novamente."</string>
     <string name="settings_tab_title">"Título"</string>
     <string name="settings_tab_post_type">"Tipo"</string>
     <string name="settings_tab_subreddit_name">"Nome da Comunidade (sem prefixo r/)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_tab_multi_reddit_name">"Nome MultiReddit (/utilizador/oseunomedeutilizador/m/oseunomemultireddit)"</string>
     <string name="settings_tab_username">"Nome de Utilizador (sem prefixo u/)"</string>
     <string name="no_developer_easter_egg">"Aqui não existem opções de programador"</string>
@@ -996,6 +1002,8 @@ Mensagem: %2$s"</string>
     <string name="exclude_user">"Excluir este utilizador"</string>
     <string name="exclude_flair">"Excluir esta flair"</string>
     <string name="contain_flair">"Contém esta flair"</string>
+
+    <!-- Fuzzy -->
     <string name="exclude_domain">"Excluir Domínio"</string>
     <string name="suggest_title">"Sugerir Título"</string>
     <string name="suggest_title_failed">"Falha ao sugerir título"</string>
@@ -1065,4 +1073,36 @@ Toque para tentar novamente."</string>
 Toque para tentar novamente."</string>
     <string name="no_trending_search">"Sem tendências encontradas.
 Toque para tentar novamente."</string>
+    <string name="wiki_activity_label">"Wiki"</string>
+    <string name="settings_post_details_title">"Detalhes do Post"</string>
+    <string name="settings_secure_mode_title">"Modo Seguro"</string>
+    <string name="error_loading_wiki">"Erro a carregar a Wiki"</string>
+    <string name="no_wiki">"Este subreddit não tem wiki"</string>
+    <string name="material_you_notification_title">"Aplicando Material You"</string>
+    <string name="action_go_to_wiki">"Ir para a Wiki"</string>
+    <string name="about">"Sobre"</string>
+    <string name="settings_link_handler_value_external_browser">"Browser Externo"</string>
+    <string name="settings_link_handler_value_internal_browser">"Browser interno"</string>
+    <string name="settings_experimental_feature">"Funcionalidade Experimental"</string>
+    <string name="go_to_top">"Ir para Cima"</string>
+    <string name="title_contains_regex_hint">"Título: contém regex"</string>
+    <string name="contain_domains_hint">"Contém domínios"</string>
+    <string name="anonymous_multireddit_no_subreddit">"Este multireddit não tem nenhum subreddit!"</string>
+    <string name="contain_domain">"Contém este domínio"</string>
+    <string name="app_lock_timeout_immediately">"Imediatamente"</string>
+    <string name="app_lock_timeout_1_min">"1 minuto"</string>
+    <string name="app_lock_timeout_2_mins">"2 minutos"</string>
+    <string name="app_lock_timeout_5_mins">"5 minutos"</string>
+    <string name="app_lock_timeout_10_mins">"10 minutos"</string>
+    <string name="app_lock_timeout_15_mins">"15 minutos"</string>
+    <string name="app_lock_timeout_20_mins">"20 minutos"</string>
+    <string name="app_lock_timeout_30_mins">"30 minutos"</string>
+    <string name="app_lock_timeout_1_hour">"1 hora"</string>
+    <string name="app_lock_timeout_2_hours">"2 horas"</string>
+    <string name="app_lock_timeout_3_hours">"3 horas"</string>
+    <string name="app_lock_timeout_4_hours">"4 horas"</string>
+    <string name="app_lock_timeout_5_hours">"5 horas"</string>
+    <string name="app_lock_timeout_6_hours">"6 horas"</string>
+    <string name="app_lock_timeout_12_hours">"12 horas"</string>
+    <string name="app_lock_timeout_24_hours">"24 horas"</string>
 </resources>
