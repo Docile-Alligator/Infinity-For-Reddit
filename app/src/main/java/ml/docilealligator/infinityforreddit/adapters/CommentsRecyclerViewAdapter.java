@@ -1098,6 +1098,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         TextView scoreTextView;
         @BindView(R.id.down_vote_button_item_post_comment)
         ImageView downvoteButton;
+        @BindView(R.id.placeholder_item_post_comment)
+        View placeholder;
         @BindView(R.id.more_button_item_post_comment)
         ImageView moreButton;
         @BindView(R.id.save_button_item_post_comment)
@@ -1119,20 +1121,35 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone(bottomConstraintLayout);
                 constraintSet.clear(upvoteButton.getId(), ConstraintSet.START);
+                constraintSet.clear(upvoteButton.getId(), ConstraintSet.END);
                 constraintSet.clear(scoreTextView.getId(), ConstraintSet.START);
+                constraintSet.clear(scoreTextView.getId(), ConstraintSet.END);
                 constraintSet.clear(downvoteButton.getId(), ConstraintSet.START);
+                constraintSet.clear(downvoteButton.getId(), ConstraintSet.END);
+                constraintSet.clear(expandButton.getId(), ConstraintSet.START);
                 constraintSet.clear(expandButton.getId(), ConstraintSet.END);
+                constraintSet.clear(saveButton.getId(), ConstraintSet.START);
                 constraintSet.clear(saveButton.getId(), ConstraintSet.END);
+                constraintSet.clear(replyButton.getId(), ConstraintSet.START);
                 constraintSet.clear(replyButton.getId(), ConstraintSet.END);
+                constraintSet.clear(moreButton.getId(), ConstraintSet.START);
                 constraintSet.clear(moreButton.getId(), ConstraintSet.END);
                 constraintSet.connect(upvoteButton.getId(), ConstraintSet.END, scoreTextView.getId(), ConstraintSet.START);
+                constraintSet.connect(upvoteButton.getId(), ConstraintSet.START, placeholder.getId(), ConstraintSet.END);
                 constraintSet.connect(scoreTextView.getId(), ConstraintSet.END, downvoteButton.getId(), ConstraintSet.START);
+                constraintSet.connect(scoreTextView.getId(), ConstraintSet.START, upvoteButton.getId(), ConstraintSet.END);
                 constraintSet.connect(downvoteButton.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+                constraintSet.connect(downvoteButton.getId(), ConstraintSet.START, scoreTextView.getId(), ConstraintSet.END);
+                constraintSet.connect(placeholder.getId(), ConstraintSet.END, upvoteButton.getId(), ConstraintSet.START);
+                constraintSet.connect(placeholder.getId(), ConstraintSet.START, moreButton.getId(), ConstraintSet.END);
                 constraintSet.connect(moreButton.getId(), ConstraintSet.START, expandButton.getId(), ConstraintSet.END);
+                constraintSet.connect(moreButton.getId(), ConstraintSet.END, placeholder.getId(), ConstraintSet.START);
                 constraintSet.connect(expandButton.getId(), ConstraintSet.START, saveButton.getId(), ConstraintSet.END);
+                constraintSet.connect(expandButton.getId(), ConstraintSet.END, moreButton.getId(), ConstraintSet.START);
                 constraintSet.connect(saveButton.getId(), ConstraintSet.START, replyButton.getId(), ConstraintSet.END);
+                constraintSet.connect(saveButton.getId(), ConstraintSet.END, expandButton.getId(), ConstraintSet.START);
                 constraintSet.connect(replyButton.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
-                constraintSet.setHorizontalBias(moreButton.getId(), 0);
+                constraintSet.connect(replyButton.getId(), ConstraintSet.END, saveButton.getId(), ConstraintSet.START);
                 constraintSet.applyTo(bottomConstraintLayout);
             }
 
