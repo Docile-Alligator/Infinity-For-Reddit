@@ -210,15 +210,12 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
 
-        adapter = new RedditGallerySubmissionRecyclerViewAdapter(this, mCustomThemeWrapper, new RedditGallerySubmissionRecyclerViewAdapter.ItemClickListener() {
-            @Override
-            public void onAddImageClicked() {
-                if (!isUploading) {
-                    SelectOrCaptureImageBottomSheetFragment fragment = new SelectOrCaptureImageBottomSheetFragment();
-                    fragment.show(getSupportFragmentManager(), fragment.getTag());
-                } else {
-                    Snackbar.make(coordinatorLayout, R.string.please_wait_image_is_uploading, Snackbar.LENGTH_SHORT).show();
-                }
+        adapter = new RedditGallerySubmissionRecyclerViewAdapter(this, mCustomThemeWrapper, () -> {
+            if (!isUploading) {
+                SelectOrCaptureImageBottomSheetFragment fragment = new SelectOrCaptureImageBottomSheetFragment();
+                fragment.show(getSupportFragmentManager(), fragment.getTag());
+            } else {
+                Snackbar.make(coordinatorLayout, R.string.please_wait_image_is_uploading, Snackbar.LENGTH_SHORT).show();
             }
         });
         imagesRecyclerView.setAdapter(adapter);
@@ -683,6 +680,12 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
         flairTextView.setBackgroundColor(flairBackgroundColor);
         flairTextView.setBorderColor(flairBackgroundColor);
         flairTextView.setTextColor(flairTextColor);
+    }
+
+    public void setCaptionAndUrl(int position, String caption, String url) {
+        if (adapter != null) {
+            adapter.setCaptionAndUrl(position, caption, url);
+        }
     }
 
     @Subscribe

@@ -504,7 +504,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
         }
     }
 
-    public static void setCursorDrawableColor(EditText editText, int color) {
+    public void setCursorDrawableColor(EditText editText, int color) {
         try {
             Field fCursorDrawableRes = TextView.class.getDeclaredField("mCursorDrawableRes");
             fCursorDrawableRes.setAccessible(true);

@@ -1,8 +1,8 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
-import android.content.Context;
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
+import android.os.Bundle;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.view.LayoutInflater;
@@ -33,6 +33,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditGalleryPayload;
+import ml.docilealligator.infinityforreddit.activities.PostGalleryActivity;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.SetRedditGalleryItemCaptionAndUrlBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
 
@@ -41,14 +43,16 @@ public class RedditGallerySubmissionRecyclerViewAdapter extends RecyclerView.Ada
     private static final int VIEW_TYPE_IMAGE = 1;
     private static final int VIEW_TYPE_ADD_IMAGE = 2;
 
+    private PostGalleryActivity activity;
     private ArrayList<RedditGalleryImageInfo> redditGalleryImageInfoList;
     private CustomThemeWrapper customThemeWrapper;
     private ItemClickListener itemClickListener;
     private RequestManager glide;
 
-    public RedditGallerySubmissionRecyclerViewAdapter(Context context, CustomThemeWrapper customThemeWrapper,
+    public RedditGallerySubmissionRecyclerViewAdapter(PostGalleryActivity activity, CustomThemeWrapper customThemeWrapper,
                                                       ItemClickListener itemClickListener) {
-        glide = Glide.with(context);
+        this.activity = activity;
+        glide = Glide.with(activity);
         this.customThemeWrapper = customThemeWrapper;
         this.itemClickListener = itemClickListener;
     }
@@ -76,7 +80,7 @@ public class RedditGallerySubmissionRecyclerViewAdapter extends RecyclerView.Ada
         if (holder instanceof ImageViewHolder) {
             glide.load(redditGalleryImageInfoList.get(position).imageUrlString)
                     .apply(new RequestOptions().transform(new CenterCrop(), new RoundedCorners(48)))
-                    .listener(new RequestListener<Drawable>() {
+                    .listener(new RequestListener<>() {
 
                         @Override
                         public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -141,6 +145,13 @@ public class RedditGallerySubmissionRecyclerViewAdapter extends RecyclerView.Ada
         notifyItemRemoved(redditGalleryImageInfoList.size());
     }
 
+    public void setCaptionAndUrl(int position, String caption, String url) {
+        if (redditGalleryImageInfoList.size() > position && position >= 0) {
+            redditGalleryImageInfoList.get(position).payload.setCaption(caption);
+            redditGalleryImageInfoList.get(position).payload.setOutboundUrl(url);
+        }
+    }
+
     class ImageViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.aspect_ratio_gif_image_view_item_reddit_gallery_submission_image)
         AspectRatioGifImageView imageView;
@@ -155,6 +166,19 @@ public class RedditGallerySubmissionRecyclerViewAdapter extends RecyclerView.Ada
             ButterKnife.bind(this, itemView);
 
             imageView.setRatio(1);
+
+            imageView.setOnClickListener(view -> {
+                RedditGalleryPayload.Item payload = redditGalleryImageInfoList.get(getBindingAdapterPosition()).payload;
+                if (payload != null) {
+                    SetRedditGalleryItemCaptionAndUrlBottomSheetFragment fragment = new SetRedditGalleryItemCaptionAndUrlBottomSheetFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(SetRedditGalleryItemCaptionAndUrlBottomSheetFragment.EXTRA_POSITION, getBindingAdapterPosition());
+                    bundle.putString(SetRedditGalleryItemCaptionAndUrlBottomSheetFragment.EXTRA_CAPTION, payload.getCaption());
+                    bundle.putString(SetRedditGalleryItemCaptionAndUrlBottomSheetFragment.EXTRA_URL, payload.getOutboundUrl());
+                    fragment.setArguments(bundle);
+                    fragment.show(activity.getSupportFragmentManager(), fragment.getTag());
+                }
+            });
 
             closeImageView.setOnClickListener(view -> {
                 redditGalleryImageInfoList.remove(getBindingAdapterPosition());

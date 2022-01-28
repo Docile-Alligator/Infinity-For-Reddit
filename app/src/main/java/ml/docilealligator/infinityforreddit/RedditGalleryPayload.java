@@ -92,5 +92,21 @@ public class RedditGalleryPayload {
             parcel.writeString(outboundUrl);
             parcel.writeString(mediaId);
         }
+
+        public String getCaption() {
+            return caption;
+        }
+
+        public void setCaption(String caption) {
+            this.caption = caption == null ? "" : caption;
+        }
+
+        public String getOutboundUrl() {
+            return outboundUrl;
+        }
+
+        public void setOutboundUrl(String outboundUrl) {
+            this.outboundUrl = outboundUrl;
+        }
     }
 }

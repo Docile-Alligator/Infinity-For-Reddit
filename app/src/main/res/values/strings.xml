@@ -1258,4 +1258,7 @@
     <string name="unable_to_load_font">Unable to load custom font</string>
     <string name="unable_to_copy_font_file">Unable to copy your font</string>
 
+    <string name="reddit_gallery_item_caption_hint">Caption (max 180 characters)</string>
+    <string name="reddit_gallery_item_url_hint">Url</string>
+
 </resources>
