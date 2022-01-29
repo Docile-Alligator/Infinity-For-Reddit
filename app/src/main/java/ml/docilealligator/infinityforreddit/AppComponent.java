@@ -82,6 +82,7 @@ import ml.docilealligator.infinityforreddit.services.EditProfileService;
 import ml.docilealligator.infinityforreddit.services.MaterialYouService;
 import ml.docilealligator.infinityforreddit.services.SubmitPostService;
 import ml.docilealligator.infinityforreddit.settings.AdvancedPreferenceFragment;
+import ml.docilealligator.infinityforreddit.settings.CommentPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.CrashReportsFragment;
 import ml.docilealligator.infinityforreddit.settings.CustomizeBottomAppBarFragment;
 import ml.docilealligator.infinityforreddit.settings.CustomizeMainPageTabsFragment;
@@ -292,4 +293,6 @@ public interface AppComponent {
     void inject(EditProfileActivity editProfileActivity);
 
     void inject(FontPreferenceFragment fontPreferenceFragment);
+
+    void inject(CommentPreferenceFragment commentPreferenceFragment);
 }

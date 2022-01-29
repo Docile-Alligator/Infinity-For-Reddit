@@ -115,6 +115,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private boolean mFullyCollapseComment;
     private boolean mShowOnlyOneCommentLevelIndicator;
     private boolean mHideCommentAwards;
+    private int mDepthThreshold;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private boolean isInitiallyLoading;
     private boolean isInitiallyLoadingFailed;
@@ -123,7 +124,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private Drawable expandDrawable;
     private Drawable collapseDrawable;
 
-    private int depthThreshold = 5;
     private int mColorPrimaryLightTheme;
     private int mColorAccent;
     private int mCircularProgressBarBackgroundColor;
@@ -237,6 +237,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mFullyCollapseComment = sharedPreferences.getBoolean(SharedPreferencesUtils.FULLY_COLLAPSE_COMMENT, false);
         mShowOnlyOneCommentLevelIndicator = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ONLY_ONE_COMMENT_LEVEL_INDICATOR, false);
         mHideCommentAwards = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_COMMENT_AWARDS, false);
+        mDepthThreshold = sharedPreferences.getInt(SharedPreferencesUtils.SHOW_FEWER_TOOLBAR_OPTIONS_THRESHOLD, 5);
 
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
         isInitiallyLoading = true;
@@ -451,7 +452,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
                 ((CommentViewHolder) holder).commentIndentationView.setShowOnlyOneDivider(mShowOnlyOneCommentLevelIndicator);
                 ((CommentViewHolder) holder).commentIndentationView.setLevelAndColors(comment.getDepth(), verticalBlockColors);
-                if (comment.getDepth() > depthThreshold) {
+                if (comment.getDepth() >= mDepthThreshold) {
                     ((CommentViewHolder) holder).saveButton.setVisibility(View.GONE);
                     ((CommentViewHolder) holder).replyButton.setVisibility(View.GONE);
                 } else {
@@ -1260,7 +1261,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     }
                     bundle.putString(CommentMoreBottomSheetFragment.EXTRA_COMMENT_MARKDOWN, comment.getCommentMarkdown());
                     bundle.putBoolean(CommentMoreBottomSheetFragment.EXTRA_IS_NSFW, mPost.isNSFW());
-                    if (comment.getDepth() > depthThreshold) {
+                    if (comment.getDepth() >= mDepthThreshold) {
                         bundle.putBoolean(CommentMoreBottomSheetFragment.EXTRA_SHOW_REPLY_AND_SAVE_OPTION, true);
                     }
                     CommentMoreBottomSheetFragment commentMoreBottomSheetFragment = new CommentMoreBottomSheetFragment();

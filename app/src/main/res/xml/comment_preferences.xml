@@ -37,4 +37,11 @@
         app:key="hide_comment_awards"
         android:title="@string/settings_hide_comment_awards_title" />
 
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSeekBarPreference
+        app:defaultValue="5"
+        android:max="10"
+        app:key="show_fewer_toolbar_options_threshold"
+        app:title="@string/settings_show_fewer_toolbar_options_threshold_title"
+        app:singleLineTitle="false" />
+
 </PreferenceScreen>
