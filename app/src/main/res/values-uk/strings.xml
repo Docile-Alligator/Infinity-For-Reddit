@@ -99,7 +99,7 @@
     <string name="karma_info_user_detail">"Карма:
 %1$d (%2$d + %3$d)"</string>
     <string name="cakeday_info">"День торта:
-%1$d"</string>
+%1$s"</string>
     <string name="since">"Від:"</string>
     <string name="profile">"Профіль"</string>
     <string name="subscriptions">"Підписки"</string>

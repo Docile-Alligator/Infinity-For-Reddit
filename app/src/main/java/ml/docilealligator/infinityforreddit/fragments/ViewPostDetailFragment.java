@@ -1216,9 +1216,12 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                         sortType, APIUtils.getOAuthHeader(mAccessToken));
             }
         }
-        postAndComments.enqueue(new Callback<String>() {
+        postAndComments.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (!isAdded()) {
+                    return;
+                }
                 mSwipeRefreshLayout.setRefreshing(false);
 
                 if (response.isSuccessful()) {
@@ -1344,7 +1347,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                showErrorView(subredditId);
+                if (isAdded()) {
+                    showErrorView(subredditId);
+                }
             }
         });
     }
