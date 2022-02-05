@@ -407,7 +407,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         switch (mPost.getPostType()) {
             case Post.VIDEO_TYPE:
                 if (mAutoplay && !mSeparatePostAndComments) {
-                    if (!mAutoplayNsfwVideos && mPost.isNSFW()) {
+                    if ((!mAutoplayNsfwVideos && mPost.isNSFW()) || mPost.isSpoiler()) {
                         return VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW;
                     }
                     return VIEW_TYPE_POST_DETAIL_VIDEO_AUTOPLAY;
@@ -416,7 +416,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 }
             case Post.GIF_TYPE:
                 if (mAutoplay) {
-                    if (!mAutoplayNsfwVideos && mPost.isNSFW()) {
+                    if ((!mAutoplayNsfwVideos && mPost.isNSFW()) || mPost.isSpoiler()) {
                         return VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW;
                     }
                     return VIEW_TYPE_POST_DETAIL_GIF_AUTOPLAY;

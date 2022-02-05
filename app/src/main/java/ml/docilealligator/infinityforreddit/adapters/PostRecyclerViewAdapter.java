@@ -350,7 +350,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 switch (post.getPostType()) {
                     case Post.VIDEO_TYPE:
                         if (mAutoplay) {
-                            if (!mAutoplayNsfwVideos && post.isNSFW()) {
+                            if ((!mAutoplayNsfwVideos && post.isNSFW()) || post.isSpoiler()) {
                                 return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
                             }
                             return VIEW_TYPE_POST_CARD_VIDEO_AUTOPLAY_TYPE;
@@ -399,7 +399,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 switch (post.getPostType()) {
                     case Post.VIDEO_TYPE:
                         if (mAutoplay) {
-                            if (!mAutoplayNsfwVideos && post.isNSFW()) {
+                            if ((!mAutoplayNsfwVideos && post.isNSFW()) || post.isSpoiler()) {
                                 return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
                             }
                             return VIEW_TYPE_POST_CARD_2_VIDEO_AUTOPLAY_TYPE;
@@ -1503,7 +1503,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             Post.Preview preview = ((PostWithPreviewTypeViewHolder) holder).preview;
             if (preview != null) {
                 String url;
-                boolean blurImage = (post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(post.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || post.isSpoiler() && mNeedBlurSpoiler;
+                boolean blurImage = (post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(post.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || (post.isSpoiler() && mNeedBlurSpoiler);
                 if (post.getPostType() == Post.GIF_TYPE && mAutoplay && !blurImage) {
                     url = post.getUrl();
                 } else {
@@ -1563,7 +1563,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             Post.Preview preview = ((PostCard2WithPreviewViewHolder) holder).preview;
             if (preview != null) {
                 String url;
-                boolean blurImage = (post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(post.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || post.isSpoiler() && mNeedBlurSpoiler;
+                boolean blurImage = (post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(post.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || (post.isSpoiler() && mNeedBlurSpoiler);
                 if (post.getPostType() == Post.GIF_TYPE && mAutoplay && !blurImage) {
                     url = post.getUrl();
                 } else {
