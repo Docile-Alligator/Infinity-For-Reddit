@@ -22,7 +22,6 @@ public class SubredditWithSelection implements Parcelable {
     }
 
     protected SubredditWithSelection(Parcel in) {
-        super();
         name = in.readString();
         iconUrl = in.readString();
         selected = in.readByte() != 0;

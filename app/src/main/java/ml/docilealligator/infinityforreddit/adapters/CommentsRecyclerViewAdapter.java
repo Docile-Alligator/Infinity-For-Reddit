@@ -115,6 +115,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private boolean mFullyCollapseComment;
     private boolean mShowOnlyOneCommentLevelIndicator;
     private boolean mHideCommentAwards;
+    private boolean mShowAuthorAvatar;
     private int mDepthThreshold;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private boolean isInitiallyLoading;
@@ -237,6 +238,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mFullyCollapseComment = sharedPreferences.getBoolean(SharedPreferencesUtils.FULLY_COLLAPSE_COMMENT, false);
         mShowOnlyOneCommentLevelIndicator = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ONLY_ONE_COMMENT_LEVEL_INDICATOR, false);
         mHideCommentAwards = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_COMMENT_AWARDS, false);
+        mShowAuthorAvatar = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_AUTHOR_AVATAR, false);
         mDepthThreshold = sharedPreferences.getInt(SharedPreferencesUtils.SHOW_FEWER_TOOLBAR_OPTIONS_THRESHOLD, 5);
 
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
@@ -461,7 +463,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 }
 
                 if (comment.hasReply()) {
-                    if (comment.getChildCount() > 0) {
+                    if (comment.getChildCount() > 0 && !comment.isExpanded()) {
                         ((CommentViewHolder) holder).expandButton.setText("+" + comment.getChildCount());
                     }
                     if (comment.isExpanded()) {
@@ -936,8 +938,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     public void initiallyLoading() {
         resetCommentSearchIndex();
-        notifyItemRangeRemoved(0, getItemCount());
+        int removedItemCount = getItemCount();
         mVisibleComments.clear();
+        notifyItemRangeRemoved(0, removedItemCount);
         isInitiallyLoading = true;
         isInitiallyLoadingFailed = false;
         notifyItemInserted(0);
@@ -1224,7 +1227,12 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 commentMarkdownView.setTypeface(mActivity.contentTypeface);
             }
 
-            authorIconImageView.setVisibility(View.VISIBLE);
+            if (mShowAuthorAvatar) {
+                authorIconImageView.setVisibility(View.VISIBLE);
+            } else {
+                ((ConstraintLayout.LayoutParams) authorTextView.getLayoutParams()).leftMargin = 0;
+                ((ConstraintLayout.LayoutParams) authorFlairTextView.getLayoutParams()).leftMargin = 0;
+            }
 
             itemView.setBackgroundColor(mCommentBackgroundColor);
             authorTextView.setTextColor(mUsernameColor);
@@ -1341,7 +1349,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                             Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                     comment.getScore() + comment.getVoteType())));
 
-                    int position = getBindingAdapterPosition();
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
                         public void onVoteThingSuccess(int position) {
@@ -1516,6 +1523,10 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 }
             });
 
+            authorIconImageView.setOnClickListener(view -> {
+                authorTextView.performClick();
+            });
+
             expandButton.setOnClickListener(view -> {
                 if (expandButton.getVisibility() == View.VISIBLE) {
                     int commentPosition = mIsSingleCommentThreadMode ? getBindingAdapterPosition() - 1 : getBindingAdapterPosition();
@@ -1523,6 +1534,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     if (comment != null) {
                         if (mVisibleComments.get(commentPosition).isExpanded()) {
                             collapseChildren(commentPosition);
+                            if (comment.getChildCount() > 0) {
+                                expandButton.setText("+" + comment.getChildCount());
+                            }
                             expandButton.setCompoundDrawablesWithIntrinsicBounds(expandDrawable, null, null, null);
                         } else {
                             comment.setExpanded(true);
@@ -1536,6 +1550,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                             } else {
                                 notifyItemRangeInserted(commentPosition + 1, newList.size());
                             }
+                            expandButton.setText("");
                             expandButton.setCompoundDrawablesWithIntrinsicBounds(collapseDrawable, null, null, null);
                         }
                     }
@@ -1663,6 +1678,12 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             if (mShowCommentDivider) {
                 commentDivider.setBackgroundColor(mDividerColor);
                 commentDivider.setVisibility(View.VISIBLE);
+            }
+
+            if (mShowAuthorAvatar) {
+                authorIconImageView.setVisibility(View.VISIBLE);
+            } else {
+                usernameTextView.setPaddingRelative(0, usernameTextView.getPaddingTop(), usernameTextView.getPaddingEnd(), usernameTextView.getPaddingBottom());
             }
 
             itemView.setOnClickListener(view -> {

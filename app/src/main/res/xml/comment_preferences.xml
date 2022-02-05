@@ -34,6 +34,11 @@
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
+        app:key="show_author_avatar"
+        android:title="@string/settings_show_author_avatar_title" />
+
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+        app:defaultValue="false"
         app:key="hide_comment_awards"
         android:title="@string/settings_hide_comment_awards_title" />
 

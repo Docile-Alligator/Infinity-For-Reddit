@@ -22,7 +22,8 @@
                 android:id="@+id/author_icon_image_view_item_comment_fully_collapsed"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_gravity="center_vertical" />
+                android:layout_gravity="center_vertical"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/user_name_text_view_item_comment_fully_collapsed"

@@ -253,6 +253,6 @@ public class MultiReddit implements Parcelable {
         parcel.writeByte((byte) (over18 ? 1 : 0));
         parcel.writeByte((byte) (isSubscriber ? 1 : 0));
         parcel.writeByte((byte) (isFavorite ? 1 : 0));
-        parcel.writeStringList(subreddits);
+        parcel.writeList(subreddits);
     }
 }

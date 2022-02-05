@@ -204,6 +204,7 @@ public class SharedPreferencesUtils {
     public static final String HIDE_TEXT_POST_CONTENT = "hide_text_post_content";
     public static final String HIDE_COMMENT_AWARDS = "hide_comment_awards";
     public static final String SHOW_FEWER_TOOLBAR_OPTIONS_THRESHOLD = "show_fewer_toolbar_options_threshold";
+    public static final String SHOW_AUTHOR_AVATAR = "show_author_avatar";
 
     public static final String DEFAULT_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit_preferences";
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";
