@@ -630,6 +630,7 @@
     <string name="settings_show_fewer_toolbar_options_threshold_title">Show Fewer Toolbar Options Starting From</string>
     <string name="settings_show_fewer_toolbar_options_threshold_summary">Level %1$d</string>
     <string name="settings_show_author_avatar_title">Hide Author Avatar</string>
+    <string name="settings_reddit_user_agreement_title">Reddit User Agreement</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -1263,5 +1264,10 @@
 
     <string name="reddit_gallery_item_caption_hint">Caption (max 180 characters)</string>
     <string name="reddit_gallery_item_url_hint">Url</string>
+
+    <string name="user_agreement_dialog_title">User Agreement</string>
+    <string name="user_agreement_message">You need to agree to Reddit User Agreement (%1$s) and Infinity for Reddit\'s Privacy Policy (%2$s) before logging in.</string>
+    <string name="agree">Agree</string>
+    <string name="do_not_agree">Don\'t Agree</string>
 
 </resources>

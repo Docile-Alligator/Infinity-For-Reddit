@@ -87,4 +87,12 @@
         app:title="@string/settings_about_master_title"
         app:fragment="ml.docilealligator.infinityforreddit.settings.AboutPreferenceFragment" />
 
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+        android:key="privacy_policy"
+        app:title="@string/settings_privacy_policy_title" />
+
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+        android:key="reddit_user_agreement"
+        app:title="@string/settings_reddit_user_agreement_title" />
+
 </androidx.preference.PreferenceScreen>

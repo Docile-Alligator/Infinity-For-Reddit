@@ -43,6 +43,7 @@ public class SharedPreferencesUtils {
     public static final String CUSTOM_FONT_FAMILY_KEY = "custom_font_family";
     public static final String CUSTOM_TITLE_FONT_FAMILY_KEY = "custom_title_font_family";
     public static final String CUSTOM_CONTENT_FONT_FAMILY_KEY = "custom_content_font_family";
+    public static final String REDDIT_USER_AGREEMENT_KEY = "reddit_user_agreement";
 
     public static final String SORT_TYPE_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.sort_type";
     public static final String SORT_TYPE_BEST_POST = "sort_type_best_post";

@@ -35,7 +35,6 @@ public class AboutPreferenceFragment extends CustomFontPreferenceFragmentCompat 
         Preference redditAccountPreference = findPreference(SharedPreferencesUtils.REDDIT_ACCOUNT_KEY);
         Preference subredditPreference = findPreference(SharedPreferencesUtils.SUBREDDIT_KEY);
         Preference sharePreference = findPreference(SharedPreferencesUtils.SHARE_KEY);
-        Preference privacyPolicyPreference = findPreference(SharedPreferencesUtils.PRIVACY_POLICY_KEY);
         Preference versionPreference = findPreference(SharedPreferencesUtils.VERSION_KEY);
 
         if (openSourcePreference != null) {
@@ -104,18 +103,6 @@ public class AboutPreferenceFragment extends CustomFontPreferenceFragmentCompat 
                     Toast.makeText(activity, R.string.no_app, Toast.LENGTH_SHORT).show();
                 }
                 return true;
-            });
-        }
-
-        if (privacyPolicyPreference != null) {
-            privacyPolicyPreference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    Intent intent = new Intent(activity, LinkResolverActivity.class);
-                    intent.setData(Uri.parse("https://docile-alligator.github.io/"));
-                    activity.startActivity(intent);
-                    return true;
-                }
             });
         }
 
