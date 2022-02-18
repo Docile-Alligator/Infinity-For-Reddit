@@ -116,6 +116,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private boolean mShowOnlyOneCommentLevelIndicator;
     private boolean mHideCommentAwards;
     private boolean mShowAuthorAvatar;
+    private boolean mAlwaysShowChildCommentCount;
     private int mDepthThreshold;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private boolean isInitiallyLoading;
@@ -239,6 +240,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mShowOnlyOneCommentLevelIndicator = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ONLY_ONE_COMMENT_LEVEL_INDICATOR, false);
         mHideCommentAwards = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_COMMENT_AWARDS, false);
         mShowAuthorAvatar = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_AUTHOR_AVATAR, false);
+        mAlwaysShowChildCommentCount = sharedPreferences.getBoolean(SharedPreferencesUtils.ALWAYS_SHOW_CHILD_COMMENT_COUNT, false);
         mDepthThreshold = sharedPreferences.getInt(SharedPreferencesUtils.SHOW_FEWER_TOOLBAR_OPTIONS_THRESHOLD, 5);
 
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
@@ -463,7 +465,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 }
 
                 if (comment.hasReply()) {
-                    if (comment.getChildCount() > 0 && !comment.isExpanded()) {
+                    if (comment.getChildCount() > 0 && (mAlwaysShowChildCommentCount || !comment.isExpanded())) {
                         ((CommentViewHolder) holder).expandButton.setText("+" + comment.getChildCount());
                     }
                     if (comment.isExpanded()) {
@@ -1550,7 +1552,11 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                             } else {
                                 notifyItemRangeInserted(commentPosition + 1, newList.size());
                             }
-                            expandButton.setText("");
+                            if (mAlwaysShowChildCommentCount && comment.getChildCount() > 0) {
+                                expandButton.setText("+" + comment.getChildCount());
+                            } else {
+                                expandButton.setText("");
+                            }
                             expandButton.setCompoundDrawablesWithIntrinsicBounds(collapseDrawable, null, null, null);
                         }
                     }

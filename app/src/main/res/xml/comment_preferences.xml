@@ -42,6 +42,11 @@
         app:key="hide_comment_awards"
         android:title="@string/settings_hide_comment_awards_title" />
 
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+        app:defaultValue="false"
+        app:key="always_show_child_comment_count"
+        android:title="@string/settings_always_show_child_comment_count_title" />
+
     <ml.docilealligator.infinityforreddit.customviews.CustomFontSeekBarPreference
         app:defaultValue="5"
         android:max="10"
