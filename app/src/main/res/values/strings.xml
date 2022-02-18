@@ -629,7 +629,7 @@
     <string name="settings_hide_comment_awards_title">Hide Comment Awards</string>
     <string name="settings_show_fewer_toolbar_options_threshold_title">Show Fewer Toolbar Options Starting From</string>
     <string name="settings_show_fewer_toolbar_options_threshold_summary">Level %1$d</string>
-    <string name="settings_show_author_avatar_title">Hide Author Avatar</string>
+    <string name="settings_show_author_avatar_title">Show Author Avatar</string>
     <string name="settings_reddit_user_agreement_title">Reddit User Agreement</string>
 
     <string name="no_link_available">Cannot get the link</string>
