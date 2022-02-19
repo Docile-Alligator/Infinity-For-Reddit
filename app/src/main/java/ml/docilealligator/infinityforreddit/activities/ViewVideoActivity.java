@@ -363,29 +363,33 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             resumePosition = intent.getLongExtra(EXTRA_PROGRESS_SECONDS, -1);
             if (mSharedPreferences.getBoolean(SharedPreferencesUtils.VIDEO_PLAYER_AUTOMATIC_LANDSCAPE_ORIENTATION, false)) {
                 originalOrientation = resources.getConfiguration().orientation;
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
+                try {
+                    setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR_LANDSCAPE);
 
-                if (android.provider.Settings.System.getInt(getContentResolver(),
-                        Settings.System.ACCELEROMETER_ROTATION, 0) == 1) {
-                    OrientationEventListener orientationEventListener = new OrientationEventListener(this) {
-                        @Override
-                        public void onOrientationChanged(int orientation) {
-                            int epsilon = 10;
-                            int leftLandscape = 90;
-                            int rightLandscape = 270;
-                            if(epsilonCheck(orientation, leftLandscape, epsilon) ||
-                                    epsilonCheck(orientation, rightLandscape, epsilon)) {
-                                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
-                                disable();
+                    if (android.provider.Settings.System.getInt(getContentResolver(),
+                            Settings.System.ACCELEROMETER_ROTATION, 0) == 1) {
+                        OrientationEventListener orientationEventListener = new OrientationEventListener(this) {
+                            @Override
+                            public void onOrientationChanged(int orientation) {
+                                int epsilon = 10;
+                                int leftLandscape = 90;
+                                int rightLandscape = 270;
+                                if(epsilonCheck(orientation, leftLandscape, epsilon) ||
+                                        epsilonCheck(orientation, rightLandscape, epsilon)) {
+                                    try {
+                                        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_SENSOR);
+                                        disable();
+                                    } catch (Exception ignore) {}
+                                }
                             }
-                        }
 
-                        private boolean epsilonCheck(int a, int b, int epsilon) {
-                            return a > b - epsilon && a < b + epsilon;
-                        }
-                    };
-                    orientationEventListener.enable();
-                }
+                            private boolean epsilonCheck(int a, int b, int epsilon) {
+                                return a > b - epsilon && a < b + epsilon;
+                            }
+                        };
+                        orientationEventListener.enable();
+                    }
+                } catch (Exception ignore) {}
             }
         }
 
@@ -896,7 +900,9 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         wasPlaying = player.getPlayWhenReady();
         player.setPlayWhenReady(false);
         if (originalOrientation != null) {
-            setRequestedOrientation(originalOrientation);
+            try {
+                setRequestedOrientation(originalOrientation);
+            } catch (Exception ignore) {}
         }
     }
 
