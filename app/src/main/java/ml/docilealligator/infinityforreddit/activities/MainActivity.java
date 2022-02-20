@@ -83,8 +83,8 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.account.AccountViewModel;
-import ml.docilealligator.infinityforreddit.adapters.NavigationDrawerRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.adapters.SubredditAutocompleteRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.adapters.navigationdrawer.NavigationDrawerRecyclerViewMergedAdapter;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubscribedThings;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
@@ -217,7 +217,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     Executor mExecutor;
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
-    private NavigationDrawerRecyclerViewAdapter adapter;
+    private NavigationDrawerRecyclerViewMergedAdapter adapter;
     private Call<String> subredditAutocompleteCall;
     private String mAccessToken;
     private String mAccountName;
@@ -297,9 +297,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             @Override
             public void onDrawerClosed(View drawerView) {
                 if (adapter != null) {
-                    if (adapter.closeAccountSectionWithoutChangeIconResource(true)) {
-                        adapter.notifyItemChanged(0);
-                    }
+                    adapter.closeAccountSectionWithoutChangeIconResource(true);
                 }
             }
         });
@@ -726,9 +724,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         });
         fab.setVisibility(View.VISIBLE);
 
-        adapter = new NavigationDrawerRecyclerViewAdapter(this, mSharedPreferences,
+        adapter = new NavigationDrawerRecyclerViewMergedAdapter(this, mSharedPreferences,
                 mNsfwAndSpoilerSharedPreferences, mNavigationDrawerSharedPreferences, mCustomThemeWrapper, mAccountName,
-                new NavigationDrawerRecyclerViewAdapter.ItemClickListener() {
+                new NavigationDrawerRecyclerViewMergedAdapter.ItemClickListener() {
                     @Override
                     public void onMenuClick(int stringId) {
                         Intent intent = null;
@@ -830,7 +828,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 });
         adapter.setInboxCount(inboxCount);
         navDrawerRecyclerView.setLayoutManager(new LinearLayoutManagerBugFixed(this));
-        navDrawerRecyclerView.setAdapter(adapter);
+        navDrawerRecyclerView.setAdapter(adapter.getConcatAdapter());
 
         int tabCount = mMainActivityTabsSharedPreferences.getInt((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_COUNT, 3);
         mShowFavoriteMultiReddits = mMainActivityTabsSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_MULTIREDDITS, false);
@@ -1241,7 +1239,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             RecyclerView.LayoutManager layoutManager = navDrawerRecyclerView.getLayoutManager();
             navDrawerRecyclerView.setAdapter(null);
             navDrawerRecyclerView.setLayoutManager(null);
-            navDrawerRecyclerView.setAdapter(adapter);
+            navDrawerRecyclerView.setAdapter(adapter.getConcatAdapter());
             navDrawerRecyclerView.setLayoutManager(layoutManager);
 
             if (previousPosition > 0) {

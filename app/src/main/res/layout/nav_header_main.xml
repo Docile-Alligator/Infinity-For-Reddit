@@ -55,6 +55,6 @@
         android:layout_margin="16dp"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/ic_baseline_arrow_drop_down_24px" />
+        android:src="@drawable/ic_baseline_arrow_drop_down_24dp" />
 
 </RelativeLayout>
