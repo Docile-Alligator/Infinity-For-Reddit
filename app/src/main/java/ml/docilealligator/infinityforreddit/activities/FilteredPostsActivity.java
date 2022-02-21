@@ -93,6 +93,9 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     @Named("current_account")
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
+    @Named("nsfw_and_spoiler")
+    SharedPreferences mNsfwAndSpoilerSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
@@ -156,6 +159,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
         postType = getIntent().getIntExtra(EXTRA_POST_TYPE, PostPagingSource.TYPE_FRONT_PAGE);
         int filter = getIntent().getIntExtra(EXTRA_FILTER, -1000);
         PostFilter postFilter = new PostFilter();
+        postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null || mAccountName.equals("-") ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false);
         switch (filter) {
             case Post.NSFW_TYPE:
                 postFilter.onlyNSFW = true;

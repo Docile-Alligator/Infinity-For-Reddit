@@ -1629,7 +1629,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Override
     public void changePostFilter(PostFilter postFilter) {
         this.postFilter = postFilter;
-        postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((accountName == null || accountName.equals("-") ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
         if (mPostViewModel != null) {
             mPostViewModel.changePostFilter(postFilter);
         }
