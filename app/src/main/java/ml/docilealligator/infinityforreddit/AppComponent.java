@@ -30,6 +30,7 @@ import ml.docilealligator.infinityforreddit.activities.PostFilterUsageListingAct
 import ml.docilealligator.infinityforreddit.activities.PostGalleryActivity;
 import ml.docilealligator.infinityforreddit.activities.PostImageActivity;
 import ml.docilealligator.infinityforreddit.activities.PostLinkActivity;
+import ml.docilealligator.infinityforreddit.activities.PostPollActivity;
 import ml.docilealligator.infinityforreddit.activities.PostTextActivity;
 import ml.docilealligator.infinityforreddit.activities.PostVideoActivity;
 import ml.docilealligator.infinityforreddit.activities.RPANActivity;
@@ -295,4 +296,6 @@ public interface AppComponent {
     void inject(FontPreferenceFragment fontPreferenceFragment);
 
     void inject(CommentPreferenceFragment commentPreferenceFragment);
+
+    void inject(PostPollActivity postPollActivity);
 }

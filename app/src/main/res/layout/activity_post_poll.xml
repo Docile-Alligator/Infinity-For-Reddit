@@ -1,0 +1,326 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_layout_post_poll_activity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:application=".PostPollActivity">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout_post_poll_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_post_poll_activity"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp">
+
+                <pl.droidsonroids.gif.GifImageView
+                    android:id="@+id/subreddit_icon_gif_image_view_post_poll_activity"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_alignParentStart="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="16dp" />
+
+                <TextView
+                    android:id="@+id/subreddit_name_text_view_post_poll_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="32dp"
+                    android:layout_toStartOf="@id/rules_button_post_poll_activity"
+                    android:layout_toEndOf="@id/subreddit_icon_gif_image_view_post_poll_activity"
+                    android:text="@string/choose_a_subreddit"
+                    android:textSize="?attr/font_default"
+                    android:fontFamily="?attr/font_family" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/rules_button_post_poll_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/rules"
+                    android:textSize="?attr/font_default"
+                    android:fontFamily="?attr/font_family" />
+
+            </RelativeLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider_1_post_poll_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.libRG.CustomTextView
+                    android:id="@+id/flair_custom_text_view_post_poll_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:padding="4dp"
+                    android:text="@string/flair"
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="?attr/font_default"
+                    android:fontFamily="?attr/font_family"
+                    android:visibility="gone"
+                    app:lib_setRadius="6dp"
+                    app:lib_setRoundedView="true"
+                    app:lib_setShape="rectangle" />
+
+                <com.libRG.CustomTextView
+                    android:id="@+id/spoiler_custom_text_view_post_poll_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:padding="4dp"
+                    android:text="@string/spoiler"
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="?attr/font_default"
+                    android:fontFamily="?attr/font_family"
+                    app:lib_setRadius="6dp"
+                    app:lib_setRoundedView="true"
+                    app:lib_setShape="rectangle" />
+
+                <com.libRG.CustomTextView
+                    android:id="@+id/nsfw_custom_text_view_post_poll_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="16dp"
+                    android:padding="4dp"
+                    android:text="@string/nsfw"
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="?attr/font_default"
+                    android:fontFamily="?attr/font_family"
+                    app:lib_setRadius="6dp"
+                    app:lib_setRoundedView="true"
+                    app:lib_setShape="rectangle" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/receive_post_reply_notifications_linear_layout_post_poll_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <TextView
+                    android:id="@+id/receive_post_reply_notifications_text_view_post_poll_activity"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="16dp"
+                    android:text="@string/receive_post_reply_notifications"
+                    android:textSize="?attr/font_default"
+                    android:fontFamily="?attr/font_family" />
+
+                <com.google.android.material.switchmaterial.SwitchMaterial
+                    android:id="@+id/receive_post_reply_notifications_switch_material_post_poll_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:checked="true" />
+
+            </LinearLayout>
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider_2_post_poll_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/post_title_edit_text_post_poll_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#00000000"
+                android:gravity="top"
+                android:hint="@string/post_title_hint"
+                android:inputType="textCapSentences|textMultiLine"
+                android:padding="16dp"
+                android:textColor="?attr/primaryTextColor"
+                android:textSize="?attr/title_font_18"
+                android:fontFamily="?attr/title_font_family" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:id="@+id/divider_3_post_poll_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/voting_length_text_view_post_poll_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
+
+            <com.google.android.material.slider.Slider
+                android:id="@+id/voting_length_seek_bar_post_poll_activity"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:padding="16dp"
+                android:valueFrom="1"
+                android:valueTo="7"
+                android:stepSize="1"
+                android:value="3" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/option_1_text_input_layout_post_poll_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/option_1_text_input_layout_edit_text_post_poll_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="?attr/font_family"
+                    android:textSize="?attr/font_default"
+                    android:hint="@string/option_1_hint" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/option_2_text_input_layout_post_poll_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/option_2_text_input_layout_edit_text_post_poll_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="?attr/font_family"
+                    android:textSize="?attr/font_default"
+                    android:hint="@string/option_2_hint" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/option_3_text_input_layout_post_poll_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/option_3_text_input_layout_edit_text_post_poll_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="?attr/font_family"
+                    android:textSize="?attr/font_default"
+                    android:hint="@string/option_3_hint" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/option_4_text_input_layout_post_poll_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/option_4_text_input_layout_edit_text_post_poll_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="?attr/font_family"
+                    android:textSize="?attr/font_default"
+                    android:hint="@string/option_4_hint" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/option_5_text_input_layout_post_poll_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/option_5_text_input_layout_edit_text_post_poll_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="?attr/font_family"
+                    android:textSize="?attr/font_default"
+                    android:hint="@string/option_5_hint" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/option_6_text_input_layout_post_poll_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/option_6_text_input_layout_edit_text_post_poll_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="?attr/font_family"
+                    android:textSize="?attr/font_default"
+                    android:hint="@string/option_6_hint" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

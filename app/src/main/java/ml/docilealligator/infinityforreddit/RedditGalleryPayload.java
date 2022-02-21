@@ -26,6 +26,7 @@ public class RedditGalleryPayload {
     public boolean originalContent = false;
     @SerializedName("post_to_twitter")
     public boolean postToTwitter = false;
+    @SerializedName("sendreplies")
     public boolean sendReplies;
     @SerializedName("validate_on_submit")
     public boolean validateOnSubmit = true;

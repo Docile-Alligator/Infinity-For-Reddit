@@ -1277,7 +1277,12 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 break;
             case PostTypeBottomSheetFragment.TYPE_GALLERY:
                 intent = new Intent(this, PostGalleryActivity.class);
-                intent.putExtra(PostVideoActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                intent.putExtra(PostGalleryActivity.EXTRA_SUBREDDIT_NAME, subredditName);
+                startActivity(intent);
+                break;
+            case PostTypeBottomSheetFragment.TYPE_POLL:
+                intent = new Intent(this, PostPollActivity.class);
+                intent.putExtra(PostPollActivity.EXTRA_SUBREDDIT_NAME, subredditName);
                 startActivity(intent);
         }
     }

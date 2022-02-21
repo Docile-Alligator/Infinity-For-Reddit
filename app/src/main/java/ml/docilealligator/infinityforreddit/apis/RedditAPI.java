@@ -294,6 +294,9 @@ public interface RedditAPI {
     @POST("/api/submit_gallery_post.json?resubmit=true&raw_json=1")
     Call<String> submitGalleryPost(@HeaderMap Map<String, String> headers, @Body String body);
 
+    @POST("/api/submit_poll_post.json?resubmit=true&raw_json=1&gilding_detail=1")
+    Call<String> submitPollPost(@HeaderMap Map<String, String> headers, @Body String body);
+
     @GET("/api/trending_searches_v1.json?withAds=0&raw_json=1&gilding_detail=1")
     Call<String> getTrendingSearches();
 

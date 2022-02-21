@@ -47,6 +47,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SubmitCrosspostEvent;
 import ml.docilealligator.infinityforreddit.events.SubmitGalleryPostEvent;
 import ml.docilealligator.infinityforreddit.events.SubmitImagePostEvent;
+import ml.docilealligator.infinityforreddit.events.SubmitPollPostEvent;
 import ml.docilealligator.infinityforreddit.events.SubmitTextOrLinkPostEvent;
 import ml.docilealligator.infinityforreddit.events.SubmitVideoOrGifPostEvent;
 import ml.docilealligator.infinityforreddit.post.Post;
@@ -63,6 +64,7 @@ public class SubmitPostService extends Service {
     public static final String EXTRA_TITLE = "ET";
     public static final String EXTRA_CONTENT = "EC";
     public static final String EXTRA_REDDIT_GALLERY_PAYLOAD = "ERGP";
+    public static final String EXTRA_POLL_PAYLOAD = "EPP";
     public static final String EXTRA_KIND = "EK";
     public static final String EXTRA_FLAIR = "EF";
     public static final String EXTRA_IS_SPOILER = "EIS";
@@ -73,7 +75,8 @@ public class SubmitPostService extends Service {
     public static final int EXTRA_POST_TYPE_IMAGE = 1;
     public static final int EXTRA_POST_TYPE_VIDEO = 2;
     public static final int EXTRA_POST_TYPE_GALLERY = 3;
-    public static final int EXTRA_POST_TYPE_CROSSPOST = 4;
+    public static final int EXTRA_POST_TYPE_POLL = 4;
+    public static final int EXTRA_POST_TYPE_CROSSPOST = 5;
 
     private static final String EXTRA_MEDIA_URI = "EU";
     @Inject
@@ -136,8 +139,10 @@ public class SubmitPostService extends Service {
                 Uri mediaUri = Uri.parse(bundle.getString(EXTRA_MEDIA_URI));
                 submitVideoPost(accessToken, mediaUri, subredditName, title, flair, isSpoiler, isNSFW,
                         receivePostReplyNotifications);
-            } else {
+            } else if (postType == EXTRA_POST_TYPE_GALLERY) {
                 submitGalleryPost(accessToken, bundle.getString(EXTRA_REDDIT_GALLERY_PAYLOAD));
+            } else {
+                submitPollPost(accessToken, bundle.getString(EXTRA_POLL_PAYLOAD));
             }
         }
     }
@@ -368,6 +373,42 @@ public class SubmitPostService extends Service {
         } catch (IOException | JSONException e) {
             e.printStackTrace();
             handler.post(() -> EventBus.getDefault().post(new SubmitGalleryPostEvent(false, null, e.getMessage())));
+        } finally {
+            stopService();
+        }
+    }
+
+    private void submitPollPost(String accessToken, String payload) {
+        try {
+            Response<String> response = mOauthRetrofit.create(RedditAPI.class).submitPollPost(APIUtils.getOAuthHeader(accessToken), payload).execute();
+            if (response.isSuccessful()) {
+                JSONObject responseObject = new JSONObject(response.body()).getJSONObject(JSONUtils.JSON_KEY);
+                if (responseObject.getJSONArray(JSONUtils.ERRORS_KEY).length() != 0) {
+                    JSONArray error = responseObject.getJSONArray(JSONUtils.ERRORS_KEY)
+                            .getJSONArray(responseObject.getJSONArray(JSONUtils.ERRORS_KEY).length() - 1);
+                    if (error.length() != 0) {
+                        String errorMessage;
+                        if (error.length() >= 2) {
+                            errorMessage = error.getString(1);
+                        } else {
+                            errorMessage = error.getString(0);
+                        }
+                        handler.post(() -> EventBus.getDefault().post(new SubmitPollPostEvent(false, null, errorMessage)));
+                    } else {
+                        handler.post(() -> EventBus.getDefault().post(new SubmitPollPostEvent(false, null, null)));
+                    }
+                } else {
+                    String postUrl = responseObject.getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.URL_KEY);
+                    handler.post(() -> {
+                        EventBus.getDefault().post(new SubmitPollPostEvent(true, postUrl, null));
+                    });
+                }
+            } else {
+                handler.post(() -> EventBus.getDefault().post(new SubmitPollPostEvent(false, null, response.message())));
+            }
+        } catch (IOException | JSONException e) {
+            e.printStackTrace();
+            handler.post(() -> EventBus.getDefault().post(new SubmitPollPostEvent(false, null, e.getMessage())));
         } finally {
             stopService();
         }
