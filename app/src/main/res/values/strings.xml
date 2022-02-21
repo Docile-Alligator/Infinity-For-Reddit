@@ -632,6 +632,7 @@
     <string name="settings_show_author_avatar_title">Show Author Avatar</string>
     <string name="settings_reddit_user_agreement_title">Reddit User Agreement</string>
     <string name="settings_always_show_child_comment_count_title">Always Show the Number of Child Comments</string>
+    <string name="settings_hide_upvote_ratio_title">Hide Upvote Ratio</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

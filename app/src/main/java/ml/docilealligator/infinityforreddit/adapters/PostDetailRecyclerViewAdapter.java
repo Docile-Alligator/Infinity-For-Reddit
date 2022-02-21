@@ -166,6 +166,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private boolean mOnlyDisablePreviewInVideoAndGifPosts;
     private boolean mHidePostType;
     private boolean mHidePostFlair;
+    private boolean mHideUpvoteRatio;
     private boolean mHideTheNumberOfAwards;
     private boolean mHideSubredditAndUserPrefix;
     private boolean mHideTheNumberOfVotes;
@@ -353,6 +354,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
         mHidePostType = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_POST_TYPE, false);
         mHidePostFlair = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_POST_FLAIR, false);
+        mHideUpvoteRatio = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_UPVOTE_RATIO, false);
         mHideTheNumberOfAwards = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_AWARDS, false);
         mHideSubredditAndUserPrefix = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_SUBREDDIT_AND_USER_PREFIX, false);
         mHideTheNumberOfVotes = postDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_VOTES, false);
@@ -622,7 +624,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 Utils.setHTMLWithImageToTextView(((PostDetailBaseViewHolder) holder).mAwardsTextView, mPost.getAwards(), true);
             }
 
-            ((PostDetailBaseViewHolder) holder).mUpvoteRatioTextView.setText(mPost.getUpvoteRatio() + "%");
+            if (mHideUpvoteRatio) {
+                ((PostDetailBaseViewHolder) holder).mUpvoteRatioTextView.setVisibility(View.GONE);
+            } else {
+                ((PostDetailBaseViewHolder) holder).mUpvoteRatioTextView.setText(mPost.getUpvoteRatio() + "%");
+            }
 
             if (mPost.isNSFW()) {
                 ((PostDetailBaseViewHolder) holder).mNSFWTextView.setVisibility(View.VISIBLE);

@@ -20,6 +20,11 @@
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
+        app:key="hide_upvote_ratio"
+        app:title="@string/settings_hide_upvote_ratio_title" />
+
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+        app:defaultValue="false"
         app:key="hide_the_number_of_awards"
         app:title="@string/settings_hide_the_number_of_awards" />
 
