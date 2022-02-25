@@ -17,6 +17,8 @@ public enum ContentFontFamily {
     Manrope(R.style.ContentFontFamily_Manrope, "Manrope"),
     ManropeBold(R.style.ContentFontFamily_ManropeBold, "ManropeBold"),
     Sriracha(R.style.ContentFontFamily_Sriracha, "Sriracha"),
+    AtkinsonHyperlegible(R.style.ContentFontFamily_AtkinsonHyperlegible, "AtkinsonHyperlegible"),
+    AtkinsonHyperlegibleBold(R.style.ContentFontFamily_AtkinsonHyperlegibleBold, "AtkinsonHyperlegibleBold"),
     Custom(R.style.ContentFontFamily, "Custom");
 
     private int resId;

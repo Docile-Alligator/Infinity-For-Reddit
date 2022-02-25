@@ -313,6 +313,14 @@
         <item name="font_family">@font/sriracha_regular</item>
     </style>
 
+    <style name="FontFamily.AtkinsonHyperlegible">
+        <item name="font_family">@font/atkinson_hyperlegible</item>
+    </style>
+
+    <style name="FontFamily.AtkinsonHyperlegibleBold">
+        <item name="font_family">@font/atkinson_hyperlegible_bold_version</item>
+    </style>
+
     <style name="TitleFontFamily" />
 
     <style name="TitleFontFamily.Default">
@@ -371,6 +379,14 @@
         <item name="title_font_family">@font/sriracha_regular</item>
     </style>
 
+    <style name="TitleFontFamily.AtkinsonHyperlegible">
+        <item name="title_font_family">@font/atkinson_hyperlegible</item>
+    </style>
+
+    <style name="TitleFontFamily.AtkinsonHyperlegibleBold">
+        <item name="title_font_family">@font/atkinson_hyperlegible_bold_version</item>
+    </style>
+
     <style name="ContentFontFamily" />
 
     <style name="ContentFontFamily.Default">
@@ -427,6 +443,14 @@
 
     <style name="ContentFontFamily.Sriracha">
         <item name="content_font_family">@font/sriracha_regular</item>
+    </style>
+
+    <style name="ContentFontFamily.AtkinsonHyperlegible">
+        <item name="content_font_family">@font/atkinson_hyperlegible</item>
+    </style>
+
+    <style name="ContentFontFamily.AtkinsonHyperlegibleBold">
+        <item name="content_font_family">@font/atkinson_hyperlegible_bold_version</item>
     </style>
 
     <style name="Theme" />

@@ -17,6 +17,8 @@ public enum TitleFontFamily {
     Manrope(R.style.TitleFontFamily_Manrope, "Manrope"),
     ManropeBold(R.style.TitleFontFamily_ManropeBold, "ManropeBold"),
     Sriracha(R.style.TitleFontFamily_Sriracha, "Sriracha"),
+    AtkinsonHyperlegible(R.style.TitleFontFamily_AtkinsonHyperlegible, "AtkinsonHyperlegible"),
+    AtkinsonHyperlegibleBold(R.style.TitleFontFamily_AtkinsonHyperlegibleBold, "AtkinsonHyperlegibleBold"),
     Custom(R.style.TitleFontFamily, "Custom");
 
     private int resId;
