@@ -1555,23 +1555,29 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void changePostLayout(int postLayout) {
+        changePostLayout(postLayout, false);
+    }
+
+    public void changePostLayout(int postLayout, boolean temporary) {
         this.postLayout = postLayout;
-        switch (postType) {
-            case PostPagingSource.TYPE_FRONT_PAGE:
-                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, postLayout).apply();
-                break;
-            case PostPagingSource.TYPE_SUBREDDIT:
-                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, postLayout).apply();
-                break;
-            case PostPagingSource.TYPE_USER:
-                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, postLayout).apply();
-                break;
-            case PostPagingSource.TYPE_SEARCH:
-                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, postLayout).apply();
-                break;
-            case PostPagingSource.TYPE_MULTI_REDDIT:
-                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + multiRedditPath, postLayout).apply();
-                break;
+        if (!temporary) {
+            switch (postType) {
+                case PostPagingSource.TYPE_FRONT_PAGE:
+                    mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, postLayout).apply();
+                    break;
+                case PostPagingSource.TYPE_SUBREDDIT:
+                    mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, postLayout).apply();
+                    break;
+                case PostPagingSource.TYPE_USER:
+                    mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, postLayout).apply();
+                    break;
+                case PostPagingSource.TYPE_SEARCH:
+                    mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, postLayout).apply();
+                    break;
+                case PostPagingSource.TYPE_MULTI_REDDIT:
+                    mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + multiRedditPath, postLayout).apply();
+                    break;
+            }
         }
 
         int previousPosition = -1;
@@ -1802,27 +1808,27 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             switch (postType) {
                 case PostPagingSource.TYPE_SUBREDDIT:
                     if (!mPostLayoutSharedPreferences.contains(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + bundle.getString(EXTRA_NAME))) {
-                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout);
+                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout, true);
                     }
                     break;
                 case PostPagingSource.TYPE_USER:
                     if (!mPostLayoutSharedPreferences.contains(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + bundle.getString(EXTRA_USER_NAME))) {
-                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout);
+                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout, true);
                     }
                     break;
                 case PostPagingSource.TYPE_MULTI_REDDIT:
                     if (!mPostLayoutSharedPreferences.contains(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + bundle.getString(EXTRA_NAME))) {
-                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout);
+                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout, true);
                     }
                     break;
                 case PostPagingSource.TYPE_SEARCH:
                     if (!mPostLayoutSharedPreferences.contains(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST)) {
-                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout);
+                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout, true);
                     }
                     break;
                 case PostPagingSource.TYPE_FRONT_PAGE:
                     if (!mPostLayoutSharedPreferences.contains(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST)) {
-                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout);
+                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout, true);
                     }
                     break;
             }
