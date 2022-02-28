@@ -51,7 +51,6 @@ import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
-import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CommentMoreBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.comment.Comment;
@@ -194,15 +193,9 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         if (holder instanceof CommentViewHolder) {
             Comment comment = getItem(holder.getBindingAdapterPosition());
             if (comment != null) {
-                if (comment.getSubredditName().substring(2).equals(comment.getLinkAuthor())) {
-                    String name = "u/" + comment.getLinkAuthor();
-                    ((CommentViewHolder) holder).authorTextView.setText(name);
-                    ((CommentViewHolder) holder).authorTextView.setTextColor(mUsernameColor);
-                } else {
-                    String name = "r/" + comment.getSubredditName();
-                    ((CommentViewHolder) holder).authorTextView.setText(name);
-                    ((CommentViewHolder) holder).authorTextView.setTextColor(mSubredditColor);
-                }
+                String name = "r/" + comment.getSubredditName();
+                ((CommentViewHolder) holder).authorTextView.setText(name);
+                ((CommentViewHolder) holder).authorTextView.setTextColor(mSubredditColor);
 
                 if (comment.getAuthorFlairHTML() != null && !comment.getAuthorFlairHTML().equals("")) {
                     ((CommentViewHolder) holder).authorFlairTextView.setVisibility(View.VISIBLE);
@@ -466,15 +459,9 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 }
                 Comment comment = getItem(getBindingAdapterPosition());
                 if (comment != null) {
-                    if (comment.getSubredditName().substring(2).equals(comment.getLinkAuthor())) {
-                        Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
-                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, comment.getLinkAuthor());
-                        mActivity.startActivity(intent);
-                    } else {
-                        Intent intent = new Intent(mActivity, ViewSubredditDetailActivity.class);
-                        intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, comment.getSubredditName());
-                        mActivity.startActivity(intent);
-                    }
+                    Intent intent = new Intent(mActivity, ViewSubredditDetailActivity.class);
+                    intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, comment.getSubredditName());
+                    mActivity.startActivity(intent);
                 }
             });
 
