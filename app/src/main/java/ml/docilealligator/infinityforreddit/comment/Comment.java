@@ -14,7 +14,7 @@ public class Comment implements Parcelable {
     public static final int NOT_PLACEHOLDER = 0;
     public static final int PLACEHOLDER_LOAD_MORE_COMMENTS = 1;
     public static final int PLACEHOLDER_CONTINUE_THREAD = 2;
-    public static final Creator<Comment> CREATOR = new Creator<Comment>() {
+    public static final Creator<Comment> CREATOR = new Creator<>() {
         @Override
         public Comment createFromParcel(Parcel in) {
             return new Comment(in);
@@ -139,8 +139,10 @@ public class Comment implements Parcelable {
         scoreHidden = in.readByte() != 0;
         isExpanded = in.readByte() != 0;
         hasExpandedBefore = in.readByte() != 0;
-        children = in.readArrayList(Comment.class.getClassLoader());
-        moreChildrenFullnames = in.readArrayList(Comment.class.getClassLoader());
+        children = new ArrayList<>();
+        in.readTypedList(children, Comment.CREATOR);
+        moreChildrenFullnames = new ArrayList<>();
+        in.readStringList(moreChildrenFullnames);
         moreChildrenStartingIndex = in.readInt();
         placeholderType = in.readInt();
         isLoadingMoreChildren = in.readByte() != 0;
@@ -416,8 +418,8 @@ public class Comment implements Parcelable {
         parcel.writeByte((byte) (scoreHidden ? 1 : 0));
         parcel.writeByte((byte) (isExpanded ? 1 : 0));
         parcel.writeByte((byte) (hasExpandedBefore ? 1 : 0));
-        parcel.writeList(children);
-        parcel.writeList(moreChildrenFullnames);
+        parcel.writeTypedList(children);
+        parcel.writeStringList(moreChildrenFullnames);
         parcel.writeInt(moreChildrenStartingIndex);
         parcel.writeInt(placeholderType);
         parcel.writeByte((byte) (isLoadingMoreChildren ? 1 : 0));

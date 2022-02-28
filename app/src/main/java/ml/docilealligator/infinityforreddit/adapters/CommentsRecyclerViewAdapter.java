@@ -148,7 +148,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private int mCommentIconAndInfoColor;
     private int mFullyCollapsedCommentBackgroundColor;
     private int mAwardedCommentBackgroundColor;
-    private Integer[] verticalBlockColors;
+    private int[] verticalBlockColors;
 
     private Drawable mCommentIcon;
 
@@ -273,7 +273,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mFullyCollapsedCommentBackgroundColor = customThemeWrapper.getFullyCollapsedCommentBackgroundColor();
         mAwardedCommentBackgroundColor = customThemeWrapper.getAwardedCommentBackgroundColor();
 
-        verticalBlockColors = new Integer[] {
+        verticalBlockColors = new int[] {
                 customThemeWrapper.getCommentVerticalBarColor1(),
                 customThemeWrapper.getCommentVerticalBarColor2(),
                 customThemeWrapper.getCommentVerticalBarColor3(),

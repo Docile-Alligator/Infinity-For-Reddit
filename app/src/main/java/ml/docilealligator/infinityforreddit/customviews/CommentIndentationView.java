@@ -18,7 +18,7 @@ public class CommentIndentationView extends LinearLayout {
 
     private final Paint paint;
     private int level;
-    private Integer[] colors;
+    private int[] colors;
     private ArrayList<Integer> startXs;
     private final int spacing;
     private int pathWidth;
@@ -85,7 +85,7 @@ public class CommentIndentationView extends LinearLayout {
         invalidate();
     }
 
-    public void setLevelAndColors(int level, Integer[] colors) {
+    public void setLevelAndColors(int level, int[] colors) {
         this.colors = colors;
         this.level = level;
         if (level > 0) {
@@ -106,7 +106,7 @@ public class CommentIndentationView extends LinearLayout {
 
     private static class SavedState extends BaseSavedState {
         ArrayList<Integer> startXs;
-        Integer[] colors;
+        int[] colors;
 
         SavedState(Parcelable superState) {
             super(superState);
@@ -114,18 +114,19 @@ public class CommentIndentationView extends LinearLayout {
 
         private SavedState(Parcel in) {
             super(in);
-            startXs = in.readArrayList(SavedState.class.getClassLoader());
-            colors = (Integer[]) in.readArray(SavedState.class.getClassLoader());
+            startXs = new ArrayList<>();
+            in.readList(startXs, Integer.class.getClassLoader());
+            colors = in.createIntArray();
         }
 
         @Override
         public void writeToParcel(Parcel out, int flags) {
             super.writeToParcel(out, flags);
             out.writeList(startXs);
-            out.writeArray(colors);
+            out.writeIntArray(colors);
         }
 
-        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
+        public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<>() {
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
             }

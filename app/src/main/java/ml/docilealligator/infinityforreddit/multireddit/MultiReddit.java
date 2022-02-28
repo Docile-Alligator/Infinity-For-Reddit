@@ -103,10 +103,11 @@ public class MultiReddit implements Parcelable {
         over18 = in.readByte() != 0;
         isSubscriber = in.readByte() != 0;
         isFavorite = in.readByte() != 0;
-        subreddits = in.readArrayList(MultiReddit.class.getClassLoader());
+        subreddits = new ArrayList<>();
+        in.readStringList(subreddits);
     }
 
-    public static final Creator<MultiReddit> CREATOR = new Creator<MultiReddit>() {
+    public static final Creator<MultiReddit> CREATOR = new Creator<>() {
         @Override
         public MultiReddit createFromParcel(Parcel in) {
             return new MultiReddit(in);
@@ -253,6 +254,6 @@ public class MultiReddit implements Parcelable {
         parcel.writeByte((byte) (over18 ? 1 : 0));
         parcel.writeByte((byte) (isSubscriber ? 1 : 0));
         parcel.writeByte((byte) (isFavorite ? 1 : 0));
-        parcel.writeList(subreddits);
+        parcel.writeStringList(subreddits);
     }
 }
