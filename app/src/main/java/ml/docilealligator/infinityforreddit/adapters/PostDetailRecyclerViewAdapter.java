@@ -588,7 +588,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             }
 
             if (!mHideSubredditAndUserPrefix) {
-                ((PostDetailBaseViewHolder) holder).mSubredditTextView.setText(mPost.getSubredditNamePrefixed());
+                ((PostDetailBaseViewHolder) holder).mSubredditTextView.setText("r/" + mPost.getSubredditName());
                 ((PostDetailBaseViewHolder) holder).mUserTextView.setText(mPost.getAuthorNamePrefixed());
             } else {
                 ((PostDetailBaseViewHolder) holder).mSubredditTextView.setText(mPost.getSubredditName());
@@ -1191,14 +1191,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
             mSubredditTextView.setOnClickListener(view -> {
                 Intent intent;
-                if (mPost.getSubredditNamePrefixed().equals("u/" + mPost.getAuthor())) {
-                    intent = new Intent(mActivity, ViewUserDetailActivity.class);
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mPost.getAuthor());
-                } else {
-                    intent = new Intent(mActivity, ViewSubredditDetailActivity.class);
-                    intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
-                            mPost.getSubredditNamePrefixed().substring(2));
-                }
+                intent = new Intent(mActivity, ViewSubredditDetailActivity.class);
+                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
+                        mPost.getSubredditName());
                 mActivity.startActivity(intent);
             });
 

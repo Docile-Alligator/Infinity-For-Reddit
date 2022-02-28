@@ -483,7 +483,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     ((PostBaseViewHolder) holder).subredditTextView.setText(post.getSubredditName());
                     ((PostBaseViewHolder) holder).userTextView.setText(post.getAuthor());
                 } else {
-                    ((PostBaseViewHolder) holder).subredditTextView.setText(post.getSubredditNamePrefixed());
+                    ((PostBaseViewHolder) holder).subredditTextView.setText("r/" + post.getSubredditName());
                     ((PostBaseViewHolder) holder).userTextView.setText(authorPrefixed);
                 }
 
@@ -1081,9 +1081,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
                     ((PostCompactBaseViewHolder) holder).nameTextView.setTextColor(mSubredditColor);
                     if (mHideSubredditAndUserPrefix) {
-                        ((PostCompactBaseViewHolder) holder).nameTextView.setText(subredditName);
+                        ((PostCompactBaseViewHolder) holder).nameTextView.setText(post.getSubredditName());
                     } else {
-                        ((PostCompactBaseViewHolder) holder).nameTextView.setText(subredditNamePrefixed);
+                        ((PostCompactBaseViewHolder) holder).nameTextView.setText("r/" + post.getSubredditName());
                     }
                 } else {
                     if (post.getAuthorIconUrl() == null) {
@@ -2201,17 +2201,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     if (post != null) {
                         if (canStartActivity) {
                             canStartActivity = false;
-                            if (post.getSubredditNamePrefixed().startsWith("u/")) {
-                                Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
-                                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY,
-                                        post.getSubredditNamePrefixed().substring(2));
-                                mActivity.startActivity(intent);
-                            } else {
-                                Intent intent = new Intent(mActivity, ViewSubredditDetailActivity.class);
-                                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
-                                        post.getSubredditName());
-                                mActivity.startActivity(intent);
-                            }
+                            Intent intent = new Intent(mActivity, ViewSubredditDetailActivity.class);
+                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
+                                    post.getSubredditName());
+                            mActivity.startActivity(intent);
                         }
                     }
                 });
@@ -2227,16 +2220,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     if (post != null) {
                         if (canStartActivity) {
                             canStartActivity = false;
-                            if (post.getSubredditNamePrefixed().startsWith("u/")) {
-                                Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
-                                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, post.getAuthor());
-                                mActivity.startActivity(intent);
-                            } else {
-                                Intent intent = new Intent(mActivity, ViewSubredditDetailActivity.class);
-                                intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
-                                        post.getSubredditName());
-                                mActivity.startActivity(intent);
-                            }
+                            Intent intent = new Intent(mActivity, ViewSubredditDetailActivity.class);
+                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
+                                    post.getSubredditName());
+                            mActivity.startActivity(intent);
                         }
                     }
                 });
@@ -3278,17 +3265,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 if (post != null && canStartActivity) {
                     canStartActivity = false;
                     if (mDisplaySubredditName) {
-                        if (post.getSubredditNamePrefixed().startsWith("u/")) {
-                            Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
-                            intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY,
-                                    post.getSubredditNamePrefixed().substring(2));
-                            mActivity.startActivity(intent);
-                        } else {
-                            Intent intent = new Intent(mActivity, ViewSubredditDetailActivity.class);
-                            intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
-                                    post.getSubredditNamePrefixed().substring(2));
-                            mActivity.startActivity(intent);
-                        }
+                        Intent intent = new Intent(mActivity, ViewSubredditDetailActivity.class);
+                        intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
+                                post.getSubredditName());
+                        mActivity.startActivity(intent);
                     } else {
                         Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
                         intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, post.getAuthor());
