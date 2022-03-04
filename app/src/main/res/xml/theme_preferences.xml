@@ -65,4 +65,10 @@
         app:title="@string/settings_apply_material_you_title"
         app:summary="@string/settings_apply_material_you_summary" />
 
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+        app:defaultValue="false"
+        app:key="enable-themed-icon"
+        app:title="@string/settings_enable_themed_icon_title"
+        app:summary="@string/settings_enable_themed_icon_summary" />
+
 </PreferenceScreen>
