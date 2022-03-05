@@ -225,7 +225,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="@drawable/thumbnail_compact_layout_rounded_edge"
-                    android:scaleType="center" />
+                    android:scaleType="centerCrop" />
 
                 <ImageView
                     android:id="@+id/play_button_image_view_item_post_compact"

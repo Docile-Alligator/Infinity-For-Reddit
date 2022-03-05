@@ -1207,10 +1207,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostCompactBaseViewHolder) holder).noPreviewPostImageView.setImageResource(R.drawable.ic_gallery_24dp);
                     }
                     if (post.getPreviews() != null && !post.getPreviews().isEmpty()) {
-                        if (post.getPostType() != Post.GIF_TYPE && post.getPostType() != Post.VIDEO_TYPE) {
-                            ((PostCompactBaseViewHolder) holder).imageView.setVisibility(View.VISIBLE);
-                            ((PostCompactBaseViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
-                        }
+                        ((PostCompactBaseViewHolder) holder).imageView.setVisibility(View.VISIBLE);
+                        ((PostCompactBaseViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
                         loadImage(holder);
                     }
                 }
@@ -1531,7 +1529,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
                 RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(postCompactThumbnailPreviewUrl)
                         .error(R.drawable.ic_error_outline_black_24dp).listener(((PostCompactBaseViewHolder) holder).requestListener);
-                if ((post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit())) || post.isSpoiler() && mNeedBlurSpoiler) {
+                if ((post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit())) || (post.isSpoiler() && mNeedBlurSpoiler)) {
                     imageRequestBuilder
                             .transform(new BlurTransformation(50, 2)).into(((PostCompactBaseViewHolder) holder).imageView);
                 } else {
