@@ -489,8 +489,6 @@
     <string name="settings_enable_material_you_summary">Personalize Infinity based on Your Wallpaper</string>
     <string name="settings_apply_material_you_title">Apply Material You</string>
     <string name="settings_apply_material_you_summary">In case Infinity did not change the theme</string>
-    <string name="settings_enable_themed_icon_title">Enable Themed Icon</string>
-    <string name="settings_enable_themed_icon_summary">If you have Material You enabled,\n this adapts the app icon to those colours.</string>
     <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">Custom themes cannot be applied to settings page (except toolbar, status bar and navigation bar).</string>
     <string name="settings_advanced_master_title">Advanced</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">Delete All Subreddits in Database</string>
