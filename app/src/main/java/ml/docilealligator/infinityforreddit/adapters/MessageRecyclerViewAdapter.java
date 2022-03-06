@@ -187,7 +187,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 ((DataViewHolder) holder).subjectTextView.setText(subject);
                 mMarkwon.setMarkdown(((DataViewHolder) holder).contentCustomMarkwonView, displayedMessage.getBody());
 
-                ((DataViewHolder) holder).itemView.setOnClickListener(view -> {
+                holder.itemView.setOnClickListener(view -> {
                     if (mMessageType == FetchMessage.MESSAGE_TYPE_INBOX
                             && message.getContext() != null && !message.getContext().equals("")) {
                         Uri uri = Uri.parse(message.getContext());
@@ -202,7 +202,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                     }
 
                     if (displayedMessage.isNew()) {
-                        ((DataViewHolder) holder).itemView.setBackgroundColor(mMessageBackgroundColor);
+                        holder.itemView.setBackgroundColor(mMessageBackgroundColor);
                         message.setNew(false);
 
                         ReadMessage.readMessage(mOauthRetrofit, mAccessToken, message.getFullname(),
@@ -214,7 +214,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                                     @Override
                                     public void readFailed() {
                                         message.setNew(true);
-                                        ((DataViewHolder) holder).itemView.setBackgroundColor(mUnreadMessageBackgroundColor);
+                                        holder.itemView.setBackgroundColor(mUnreadMessageBackgroundColor);
                                     }
                                 });
                     }
@@ -228,7 +228,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
 
                 ((DataViewHolder) holder).contentCustomMarkwonView.setOnClickListener(view -> {
                     if (((DataViewHolder) holder).contentCustomMarkwonView.getSelectionStart() == -1 && ((DataViewHolder) holder).contentCustomMarkwonView.getSelectionEnd() == -1) {
-                        ((DataViewHolder) holder).itemView.performClick();
+                        holder.itemView.performClick();
                     }
                 });
             }
