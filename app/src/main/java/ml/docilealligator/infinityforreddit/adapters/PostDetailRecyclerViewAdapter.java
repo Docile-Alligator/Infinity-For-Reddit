@@ -141,6 +141,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private Retrofit mStreamableRetrofit;
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
     private RequestManager mGlide;
+    private SaveMemoryCenterInisdeDownsampleStrategy mSaveMemoryCenterInsideDownSampleStrategy;
     private Markwon mPostDetailMarkwon;
     private final MarkwonAdapter mMarkwonAdapter;
     private String mAccessToken;
@@ -233,6 +234,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mStreamableRetrofit = streamableRetrofit;
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mGlide = glide;
+        mSaveMemoryCenterInsideDownSampleStrategy = new SaveMemoryCenterInisdeDownsampleStrategy(Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.POST_FEED_MAX_RESOLUTION, "5000000")));
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
         int markdownColor = customThemeWrapper.getPostContentColor();
         int postSpoilerBackgroundColor = markdownColor | 0xFF000000;
@@ -655,7 +657,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 Post.Preview preview = getSuitablePreview(mPost.getPreviews());
                 if (preview != null) {
                     ((PostDetailVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio((float) preview.getPreviewWidth() / preview.getPreviewHeight());
-                    mGlide.load(preview.getPreviewUrl()).centerInside().downsample(new SaveMemoryCenterInisdeDownsampleStrategy()).into(((PostDetailVideoAutoplayViewHolder) holder).previewImageView);
+                    mGlide.load(preview.getPreviewUrl()).centerInside().downsample(mSaveMemoryCenterInsideDownSampleStrategy).into(((PostDetailVideoAutoplayViewHolder) holder).previewImageView);
                 } else {
                     ((PostDetailVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio(1);
                 }
@@ -916,7 +918,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             if (blurImage) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10))).into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
             } else {
-                imageRequestBuilder.centerInside().downsample(new SaveMemoryCenterInisdeDownsampleStrategy()).into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
+                imageRequestBuilder.centerInside().downsample(mSaveMemoryCenterInsideDownSampleStrategy).into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
             }
         } else if (holder instanceof PostDetailVideoAndGifPreviewHolder) {
             RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(preview.getPreviewUrl())
@@ -944,7 +946,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                         .into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
             } else {
-                imageRequestBuilder.centerInside().downsample(new SaveMemoryCenterInisdeDownsampleStrategy()).into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
+                imageRequestBuilder.centerInside().downsample(mSaveMemoryCenterInsideDownSampleStrategy).into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
             }
         } else if (holder instanceof PostDetailLinkViewHolder) {
             RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(preview.getPreviewUrl())
@@ -972,7 +974,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                         .into(((PostDetailLinkViewHolder) holder).mImageView);
             } else {
-                imageRequestBuilder.centerInside().downsample(new SaveMemoryCenterInisdeDownsampleStrategy()).into(((PostDetailLinkViewHolder) holder).mImageView);
+                imageRequestBuilder.centerInside().downsample(mSaveMemoryCenterInsideDownSampleStrategy).into(((PostDetailLinkViewHolder) holder).mImageView);
             }
         } else if (holder instanceof PostDetailGalleryViewHolder) {
             RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(preview.getPreviewUrl())
@@ -999,7 +1001,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             if ((mPost.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(mPost.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || (mPost.isSpoiler() && mNeedBlurSpoiler)) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10))).into(((PostDetailGalleryViewHolder) holder).mImageView);
             } else {
-                imageRequestBuilder.centerInside().downsample(new SaveMemoryCenterInisdeDownsampleStrategy()).into(((PostDetailGalleryViewHolder) holder).mImageView);
+                imageRequestBuilder.centerInside().downsample(mSaveMemoryCenterInsideDownSampleStrategy).into(((PostDetailGalleryViewHolder) holder).mImageView);
             }
         }
     }

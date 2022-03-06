@@ -109,6 +109,7 @@ import ml.docilealligator.infinityforreddit.events.ChangeMuteNSFWVideoEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeOnlyDisablePreviewInVideoAndGifPostsEvent;
+import ml.docilealligator.infinityforreddit.events.ChangePostFeedMaxResolutionEvent;
 import ml.docilealligator.infinityforreddit.events.ChangePostLayoutEvent;
 import ml.docilealligator.infinityforreddit.events.ChangePullToRefreshEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeRememberMutingOptionInPostFeedEvent;
@@ -2085,6 +2086,14 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void onChangeHideTextPostContentEvent(ChangeHideTextPostContent event) {
         if (mAdapter != null) {
             mAdapter.setHideTextPostContent(event.hideTextPostContent);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangePostFeedMaxResolutionEvent(ChangePostFeedMaxResolutionEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setPostFeedMaxResolution(event.postFeedMaxResolution);
             refreshAdapter();
         }
     }

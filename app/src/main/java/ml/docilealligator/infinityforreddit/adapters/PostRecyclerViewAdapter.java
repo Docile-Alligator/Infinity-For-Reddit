@@ -11,9 +11,11 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -135,6 +137,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private Retrofit mStreamableRetrofit;
     private String mAccessToken;
     private RequestManager mGlide;
+    private int mMaxResolution;
+    private SaveMemoryCenterInisdeDownsampleStrategy mSaveMemoryCenterInsideDownsampleStrategy;
     private Locale mLocale;
     private boolean canStartActivity = true;
     private int mPostType;
@@ -332,6 +336,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
             mScale = resources.getDisplayMetrics().density;
             mGlide = Glide.with(mActivity);
+            mMaxResolution = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.POST_FEED_MAX_RESOLUTION, "5000000"));
+            mSaveMemoryCenterInsideDownsampleStrategy = new SaveMemoryCenterInisdeDownsampleStrategy(mMaxResolution);
             mLocale = locale;
             mExoCreator = exoCreator;
             mCallback = callback;
@@ -687,7 +693,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     Post.Preview preview = getSuitablePreview(post.getPreviews());
                     if (!mFixedHeightPreviewInCard && preview != null) {
                         ((PostVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio((float) preview.getPreviewWidth() / preview.getPreviewHeight());
-                        mGlide.load(preview.getPreviewUrl()).centerInside().downsample(new SaveMemoryCenterInisdeDownsampleStrategy()).into(((PostVideoAutoplayViewHolder) holder).previewImageView);
+                        mGlide.load(preview.getPreviewUrl()).centerInside().downsample(mSaveMemoryCenterInsideDownsampleStrategy).into(((PostVideoAutoplayViewHolder) holder).previewImageView);
                     } else {
                         ((PostVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio(1);
                     }
@@ -810,7 +816,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 ((PostWithPreviewTypeViewHolder) holder).imageView
                                         .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
                             }
-                            loadImage(holder);
+                            ((PostWithPreviewTypeViewHolder) holder).imageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                                @Override
+                                public void onGlobalLayout() {
+                                    ((PostWithPreviewTypeViewHolder) holder).imageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                    loadImage(holder);
+                                }
+                            });
                         } else {
                             ((PostWithPreviewTypeViewHolder) holder).noPreviewLinkImageView.setVisibility(View.VISIBLE);
                             if (post.getPostType() == Post.VIDEO_TYPE) {
@@ -839,7 +851,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     Post.Preview preview = getSuitablePreview(post.getPreviews());
                     if (!mFixedHeightPreviewInCard && preview != null) {
                         ((PostCard2VideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio((float) preview.getPreviewWidth() / preview.getPreviewHeight());
-                        mGlide.load(preview.getPreviewUrl()).centerInside().downsample(new SaveMemoryCenterInisdeDownsampleStrategy()).into(((PostCard2VideoAutoplayViewHolder) holder).previewImageView);
+                        mGlide.load(preview.getPreviewUrl()).centerInside().downsample(mSaveMemoryCenterInsideDownsampleStrategy).into(((PostCard2VideoAutoplayViewHolder) holder).previewImageView);
                     } else {
                         ((PostCard2VideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio(1);
                     }
@@ -964,7 +976,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 ((PostCard2WithPreviewViewHolder) holder).imageView
                                         .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
                             }
-                            loadImage(holder);
+                            ((PostCard2WithPreviewViewHolder) holder).imageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                                @Override
+                                public void onGlobalLayout() {
+                                    ((PostCard2WithPreviewViewHolder) holder).imageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                    loadImage(holder);
+                                }
+                            });
                         } else {
                             ((PostCard2WithPreviewViewHolder) holder).progressBar.setVisibility(View.GONE);
                             ((PostCard2WithPreviewViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
@@ -1342,7 +1360,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 ((PostGalleryViewHolder) holder).imageView
                                         .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
                             }
-                            loadImage(holder);
+                            ((PostGalleryViewHolder) holder).imageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                                @Override
+                                public void onGlobalLayout() {
+                                    ((PostGalleryViewHolder) holder).imageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                    loadImage(holder);
+                                }
+                            });
                         } else {
                             ((PostGalleryViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
                             if (post.getPostType() == Post.VIDEO_TYPE) {
@@ -1400,7 +1424,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 ((PostGalleryViewHolder) holder).imageView
                                         .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
                             }
-                            loadImage(holder);
+                            ((PostGalleryViewHolder) holder).imageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                                @Override
+                                public void onGlobalLayout() {
+                                    ((PostGalleryViewHolder) holder).imageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                    loadImage(holder);
+                                }
+                            });
                         } else {
                             ((PostGalleryViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
                             ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_outline_video_24dp);
@@ -1424,7 +1454,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 ((PostGalleryViewHolder) holder).imageView
                                         .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
                             }
-                            loadImage(holder);
+                            ((PostGalleryViewHolder) holder).imageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                                @Override
+                                public void onGlobalLayout() {
+                                    ((PostGalleryViewHolder) holder).imageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                    loadImage(holder);
+                                }
+                            });
                         } else {
                             ((PostGalleryViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
                             ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_link);
@@ -1458,7 +1494,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 ((PostGalleryViewHolder) holder).imageView
                                         .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
                             }
-                            loadImage(holder);
+                            ((PostGalleryViewHolder) holder).imageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                                @Override
+                                public void onGlobalLayout() {
+                                    ((PostGalleryViewHolder) holder).imageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                    loadImage(holder);
+                                }
+                            });
                         } else {
                             ((PostGalleryViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
                             ((PostGalleryViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_gallery_24dp);
@@ -1481,10 +1523,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 previewIndex = 0;
             }
             preview = previews.get(previewIndex);
-            if (preview.getPreviewWidth() * preview.getPreviewHeight() > 5_000_000) {
+            if (preview.getPreviewWidth() * preview.getPreviewHeight() > mMaxResolution) {
                 for (int i = previews.size() - 1; i >= 1; i--) {
                     preview = previews.get(i);
-                    if (preview.getPreviewWidth() * preview.getPreviewHeight() <= 5_000_000) {
+                    if (preview.getPreviewWidth() * preview.getPreviewHeight() <= mMaxResolution) {
                         return preview;
                     }
                 }
@@ -1513,7 +1555,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                             .into(((PostWithPreviewTypeViewHolder) holder).imageView);
                 } else {
-                    imageRequestBuilder.centerInside().downsample(new SaveMemoryCenterInisdeDownsampleStrategy()).into(((PostWithPreviewTypeViewHolder) holder).imageView);
+                    imageRequestBuilder.downsample(mSaveMemoryCenterInsideDownsampleStrategy).into(((PostWithPreviewTypeViewHolder) holder).imageView);
                 }
             }
         } else if (holder instanceof PostCompactBaseViewHolder) {
@@ -1553,7 +1595,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                             .into(((PostGalleryViewHolder) holder).imageView);
                 } else {
-                    imageRequestBuilder.centerInside().downsample(new SaveMemoryCenterInisdeDownsampleStrategy()).into(((PostGalleryViewHolder) holder).imageView);
+                    imageRequestBuilder.centerInside().downsample(mSaveMemoryCenterInsideDownsampleStrategy).into(((PostGalleryViewHolder) holder).imageView);
                 }
             }
         } else if (holder instanceof PostCard2WithPreviewViewHolder) {
@@ -1573,7 +1615,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                             .into(((PostCard2WithPreviewViewHolder) holder).imageView);
                 } else {
-                    imageRequestBuilder.centerInside().downsample(new SaveMemoryCenterInisdeDownsampleStrategy()).into(((PostCard2WithPreviewViewHolder) holder).imageView);
+                    imageRequestBuilder.centerInside().downsample(mSaveMemoryCenterInsideDownsampleStrategy).into(((PostCard2WithPreviewViewHolder) holder).imageView);
                 }
             }
         }
@@ -1739,6 +1781,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
     public void setHideTextPostContent(boolean hideTextPostContent) {
         mHideTextPostContent = hideTextPostContent;
+    }
+
+    public void setPostFeedMaxResolution(int postFeedMaxResolution) {
+        mMaxResolution = postFeedMaxResolution;
+        if (mSaveMemoryCenterInsideDownsampleStrategy != null) {
+            mSaveMemoryCenterInsideDownsampleStrategy.setThreshold(postFeedMaxResolution);
+        }
     }
 
     @Override
