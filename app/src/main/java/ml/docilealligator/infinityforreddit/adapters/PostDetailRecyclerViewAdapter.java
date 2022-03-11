@@ -19,7 +19,6 @@ import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -718,13 +717,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 Post.Preview preview = getSuitablePreview(mPost.getPreviews());
                 if (preview != null) {
                     ((PostDetailVideoAndGifPreviewHolder) holder).mImageView.setRatio((float) preview.getPreviewHeight() / (float) preview.getPreviewWidth());
-                    ((PostDetailVideoAndGifPreviewHolder) holder).mImageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                        @Override
-                        public void onGlobalLayout() {
-                            ((PostDetailVideoAndGifPreviewHolder) holder).mImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                            loadImage((PostDetailVideoAndGifPreviewHolder) holder, preview);
-                        }
-                    });
+                    loadImage((PostDetailVideoAndGifPreviewHolder) holder, preview);
                 }
             } else if (holder instanceof PostDetailImageAndGifAutoplayViewHolder) {
                 if (!mHidePostType) {
@@ -744,13 +737,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     } else {
                         ((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView.setRatio((float) preview.getPreviewHeight() / (float) preview.getPreviewWidth());
                     }
-                    ((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                        @Override
-                        public void onGlobalLayout() {
-                            ((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                            loadImage((PostDetailImageAndGifAutoplayViewHolder) holder, preview);
-                        }
-                    });
+                    loadImage((PostDetailImageAndGifAutoplayViewHolder) holder, preview);
                 }
             } else if (holder instanceof PostDetailLinkViewHolder) {
                 String domain = Uri.parse(mPost.getUrl()).getHost();
@@ -758,13 +745,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 Post.Preview preview = getSuitablePreview(mPost.getPreviews());
                 if (preview != null) {
                     ((PostDetailLinkViewHolder) holder).mImageView.setRatio((float) preview.getPreviewHeight() / (float) preview.getPreviewWidth());
-                    ((PostDetailLinkViewHolder) holder).mImageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                        @Override
-                        public void onGlobalLayout() {
-                            ((PostDetailLinkViewHolder) holder).mImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                            loadImage((PostDetailLinkViewHolder) holder, preview);
-                        }
-                    });
+                    loadImage((PostDetailLinkViewHolder) holder, preview);
                 }
 
             } else if (holder instanceof PostDetailNoPreviewViewHolder) {
@@ -831,13 +812,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     ((PostDetailGalleryViewHolder) holder).mImageView
                             .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
 
-                    ((PostDetailGalleryViewHolder) holder).mImageView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                        @Override
-                        public void onGlobalLayout() {
-                            ((PostDetailGalleryViewHolder) holder).mImageView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                            loadImage((PostDetailGalleryViewHolder) holder, preview);
-                        }
-                    });
+                    loadImage((PostDetailGalleryViewHolder) holder, preview);
 
                     loadCaptionPreview((PostDetailGalleryViewHolder) holder, preview);
                 } else {
