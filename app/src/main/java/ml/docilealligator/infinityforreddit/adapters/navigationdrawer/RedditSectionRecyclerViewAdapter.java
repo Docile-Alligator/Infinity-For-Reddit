@@ -103,7 +103,7 @@ public class RedditSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
     @Override
     public int getItemCount() {
-        return REDDIT_SECTION_ITEMS + 1;
+        return collapseRedditSection ? 1 : REDDIT_SECTION_ITEMS + 1;
     }
 
     class MenuGroupTitleViewHolder extends RecyclerView.ViewHolder {

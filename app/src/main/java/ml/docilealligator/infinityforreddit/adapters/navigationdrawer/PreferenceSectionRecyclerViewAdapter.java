@@ -143,7 +143,7 @@ public class PreferenceSectionRecyclerViewAdapter extends RecyclerView.Adapter<R
 
     @Override
     public int getItemCount() {
-        return PREFERENCES_SECTION_ITEMS + 1;
+        return collapsePreferencesSection ? 1 : PREFERENCES_SECTION_ITEMS + 1;
     }
 
     public void setNSFWEnabled(boolean isNSFWEnabled) {

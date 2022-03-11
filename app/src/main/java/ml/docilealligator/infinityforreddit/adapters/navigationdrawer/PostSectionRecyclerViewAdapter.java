@@ -119,7 +119,7 @@ public class PostSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recycle
 
     @Override
     public int getItemCount() {
-        return isLoggedIn ? POST_SECTION_ITEMS + 1 : 0;
+        return isLoggedIn ? (collapsePostSection ? 1: POST_SECTION_ITEMS + 1) : 0;
     }
 
     class MenuGroupTitleViewHolder extends RecyclerView.ViewHolder {

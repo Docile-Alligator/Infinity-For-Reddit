@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.adapters.navigationdrawer;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ public class AccountSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private static final int VIEW_TYPE_MENU_GROUP_TITLE = 1;
     private static final int VIEW_TYPE_MENU_ITEM = 2;
     private static final int ACCOUNT_SECTION_ITEMS = 4;
+    private static final int ANONYMOUS_ACCOUNT_SECTION_ITEMS = 2;
 
     private BaseActivity baseActivity;
     private int inboxCount;
@@ -77,10 +79,10 @@ public class AccountSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recy
             holder.itemView.setOnClickListener(view -> {
                 if (collapseAccountSection) {
                     collapseAccountSection = !collapseAccountSection;
-                    notifyItemRangeInserted(holder.getBindingAdapterPosition() + 1, ACCOUNT_SECTION_ITEMS);
+                    notifyItemRangeInserted(holder.getBindingAdapterPosition() + 1, isLoggedIn ? ACCOUNT_SECTION_ITEMS : ANONYMOUS_ACCOUNT_SECTION_ITEMS);
                 } else {
                     collapseAccountSection = !collapseAccountSection;
-                    notifyItemRangeRemoved(holder.getBindingAdapterPosition() + 1, ACCOUNT_SECTION_ITEMS);
+                    notifyItemRangeRemoved(holder.getBindingAdapterPosition() + 1, isLoggedIn ? ACCOUNT_SECTION_ITEMS : ANONYMOUS_ACCOUNT_SECTION_ITEMS);
                 }
                 notifyItemChanged(holder.getBindingAdapterPosition());
             });
@@ -103,7 +105,7 @@ public class AccountSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                         stringId = R.string.multi_reddit;
                         drawableId = R.drawable.ic_multi_reddit_24dp;
                         break;
-                    case 4:
+                    default:
                         setOnClickListener = false;
                         if (inboxCount > 0) {
                             ((MenuItemViewHolder) holder).menuTextView.setText(baseActivity.getString(R.string.inbox_with_count, inboxCount));
@@ -141,10 +143,7 @@ public class AccountSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
     @Override
     public int getItemCount() {
-        if (isLoggedIn) {
-            return ACCOUNT_SECTION_ITEMS + 1;
-        }
-        return 3;
+        return collapseAccountSection ? 1 : (isLoggedIn ? ACCOUNT_SECTION_ITEMS + 1 : ANONYMOUS_ACCOUNT_SECTION_ITEMS + 1);
     }
 
     public void setInboxCount(int inboxCount) {
