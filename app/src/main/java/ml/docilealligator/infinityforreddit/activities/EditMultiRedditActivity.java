@@ -212,6 +212,10 @@ public class EditMultiRedditActivity extends BaseActivity {
             }
 
             if (mAccessToken == null) {
+                String name = nameEditText.getText().toString();
+                multiReddit.setDisplayName(name);
+                multiReddit.setName(name);
+                multiReddit.setDescription(descriptionEditText.getText().toString());
                 EditMultiReddit.anonymousEditMultiReddit(mExecutor, new Handler(), mRedditDataRoomDatabase,
                         multiReddit, new EditMultiReddit.EditMultiRedditListener() {
                             @Override
