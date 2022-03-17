@@ -19,6 +19,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
@@ -79,8 +80,10 @@ public class WebViewActivity extends BaseActivity {
         webView.getSettings().setDomStorageEnabled(true);
 
         url = getIntent().getDataString();
-        toolbar.setTitle(url);
-        webView.loadUrl(url);
+        if (savedInstanceState == null) {
+            toolbar.setTitle(url);
+            webView.loadUrl(url);
+        }
 
         WebViewClient client = new WebViewClient() {
             @Override
@@ -176,5 +179,17 @@ public class WebViewActivity extends BaseActivity {
 
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        webView.saveState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        webView.restoreState(savedInstanceState);
     }
 }
