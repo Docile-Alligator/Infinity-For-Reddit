@@ -640,6 +640,7 @@
     <string name="settings_miscellaneous_dangerous_group_title">Dangerous</string>
     <string name="settings_post_feed_max_resolution_warning_title">Increase the value to show previews in higher resolution, but the app may crash unexpectedly.</string>
     <string name="settings_post_feed_max_resolution_title">Post Feed Preview Max Resolution (Width * Height)</string>
+    <string name="settings_reddit_video_default_resolution">Reddit Video Default Resolution</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

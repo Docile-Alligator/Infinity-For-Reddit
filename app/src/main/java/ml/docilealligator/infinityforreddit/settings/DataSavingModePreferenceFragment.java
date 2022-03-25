@@ -1,16 +1,13 @@
 package ml.docilealligator.infinityforreddit.settings;
 
-import android.content.Context;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.preference.ListPreference;
 import androidx.preference.SwitchPreference;
 
 import org.greenrobot.eventbus.EventBus;
 
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
 import ml.docilealligator.infinityforreddit.events.ChangeDataSavingModeEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDisableImagePreviewEvent;
@@ -30,7 +27,7 @@ public class DataSavingModePreferenceFragment extends CustomFontPreferenceFragme
         ListPreference dataSavingModeListPreference = findPreference(SharedPreferencesUtils.DATA_SAVING_MODE);
         SwitchPreference disableImagePreviewPreference = findPreference(SharedPreferencesUtils.DISABLE_IMAGE_PREVIEW);
         SwitchPreference onlyDisablePreviewInVideoAndGifPostsPreference = findPreference(SharedPreferencesUtils.ONLY_DISABLE_PREVIEW_IN_VIDEO_AND_GIF_POSTS);
-
+        ListPreference redditVideoDefaultResolutionListPreference = findPreference(SharedPreferencesUtils.REDDIT_VIDEO_DEFAULT_RESOLUTION);
 
         if (dataSavingModeListPreference != null) {
             if (dataSavingModeListPreference.getValue().equals("0")) {
@@ -39,6 +36,9 @@ public class DataSavingModePreferenceFragment extends CustomFontPreferenceFragme
                 }
                 if (disableImagePreviewPreference != null) {
                     disableImagePreviewPreference.setVisible(false);
+                }
+                if (redditVideoDefaultResolutionListPreference != null) {
+                    redditVideoDefaultResolutionListPreference.setVisible(false);
                 }
             }
             dataSavingModeListPreference.setOnPreferenceChangeListener((preference, newValue) -> {
@@ -50,12 +50,18 @@ public class DataSavingModePreferenceFragment extends CustomFontPreferenceFragme
                     if (disableImagePreviewPreference != null) {
                         disableImagePreviewPreference.setVisible(false);
                     }
+                    if (redditVideoDefaultResolutionListPreference != null) {
+                        redditVideoDefaultResolutionListPreference.setVisible(false);
+                    }
                 } else {
                     if (onlyDisablePreviewInVideoAndGifPostsPreference != null) {
                         onlyDisablePreviewInVideoAndGifPostsPreference.setVisible(true);
                     }
                     if (disableImagePreviewPreference != null) {
                         disableImagePreviewPreference.setVisible(true);
+                    }
+                    if (redditVideoDefaultResolutionListPreference != null) {
+                        redditVideoDefaultResolutionListPreference.setVisible(true);
                     }
                 }
                 return true;

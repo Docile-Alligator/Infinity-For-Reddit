@@ -209,6 +209,7 @@ public class SharedPreferencesUtils {
     public static final String ALWAYS_SHOW_CHILD_COMMENT_COUNT = "always_show_child_comment_count";
     public static final String HIDE_UPVOTE_RATIO = "hide_upvote_ratio";
     public static final String POST_FEED_MAX_RESOLUTION = "post_feed_max_resolution";
+    public static final String REDDIT_VIDEO_DEFAULT_RESOLUTION = "reddit_video_default_resolution";
 
     public static final String DEFAULT_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit_preferences";
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";
