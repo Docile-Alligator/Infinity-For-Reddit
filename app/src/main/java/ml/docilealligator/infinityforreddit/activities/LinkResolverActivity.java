@@ -60,7 +60,11 @@ public class LinkResolverActivity extends AppCompatActivity {
     CustomThemeWrapper mCustomThemeWrapper;
 
     private Uri getRedditUriByPath(String path) {
-        return Uri.parse("https://www.reddit.com" + path);
+        if (path.charAt(0) != '/') {
+            return Uri.parse("https://www.reddit.com/" + path);
+        } else {
+            return Uri.parse("https://www.reddit.com" + path);
+        }
     }
 
     @Override
