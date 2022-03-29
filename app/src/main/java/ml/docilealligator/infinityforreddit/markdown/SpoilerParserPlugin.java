@@ -89,7 +89,7 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
         int offset = 2;
         for (Pair<Integer, Integer> spoiler : spoilers) {
             int spoilerStart = spoiler.first - offset;
-            int spoilerEnd = spoiler.second - offset;
+            int spoilerEnd = spoiler.second - offset + 2;
 
             // Try not to set a spoiler span if it's inside a CodeSpan
             CodeSpan[] codeSpans = markdownStringBuilder.getSpans(spoilerStart, spoilerEnd, CodeSpan.class);
@@ -99,7 +99,7 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
                 markdownStringBuilder.delete(spoilerEnd, spoilerEnd + 2);
                 markdownStringBuilder.delete(spoilerStart, spoilerStart + 2);
                 SpoilerSpan spoilerSpan = new SpoilerSpan(textColor, backgroundColor);
-                markdownStringBuilder.setSpan(spoilerSpan, spoilerStart, spoilerEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                markdownStringBuilder.setSpan(spoilerSpan, spoilerStart, spoilerEnd - 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 offset += 4;
                 continue;
             }
@@ -111,7 +111,7 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
                     markdownStringBuilder.delete(spoilerEnd, spoilerEnd + 2);
                     markdownStringBuilder.delete(spoilerStart, spoilerStart + 2);
                     SpoilerSpan spoilerSpan = new SpoilerSpan(textColor, backgroundColor);
-                    markdownStringBuilder.setSpan(spoilerSpan, spoilerStart, spoilerEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    markdownStringBuilder.setSpan(spoilerSpan, spoilerStart, spoilerEnd - 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     offset += 4;
                 } else {
                     break;
@@ -125,7 +125,7 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
                     markdownStringBuilder.delete(spoilerEnd, spoilerEnd + 2);
                     markdownStringBuilder.delete(spoilerStart, spoilerStart + 2);
                     SpoilerSpan spoilerSpan = new SpoilerSpan(textColor, backgroundColor);
-                    markdownStringBuilder.setSpan(spoilerSpan, spoilerStart, spoilerEnd, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    markdownStringBuilder.setSpan(spoilerSpan, spoilerStart, spoilerEnd - 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     offset += 4;
                 } else {
                     break;
