@@ -139,6 +139,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     public static final String EXTRA_VIEW_SIDEBAR = "EVSB";
 
     private static final String FETCH_SUBREDDIT_INFO_STATE = "FSIS";
+    private static final String SUBSCRIBERS_STATE = "SS";
     private static final String CURRENT_ONLINE_SUBSCRIBERS_STATE = "COSS";
     private static final String MESSAGE_FULLNAME_STATE = "MFS";
     private static final String NEW_ACCOUNT_NAME_STATE = "NANS";
@@ -228,6 +229,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private String subredditName;
     private String description;
     private boolean mFetchSubredditInfoSuccess = false;
+    private int mNSubscribers = 0;
     private int mNCurrentOnlineSubscribers = 0;
     private boolean isNsfwSubreddit = false;
     private boolean subscriptionReady = false;
@@ -360,11 +362,13 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
         } else {
             mFetchSubredditInfoSuccess = savedInstanceState.getBoolean(FETCH_SUBREDDIT_INFO_STATE);
+            mNSubscribers = savedInstanceState.getInt(SUBSCRIBERS_STATE);
             mNCurrentOnlineSubscribers = savedInstanceState.getInt(CURRENT_ONLINE_SUBSCRIBERS_STATE);
             mMessageFullname = savedInstanceState.getString(MESSAGE_FULLNAME_STATE);
             mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
 
             if (mFetchSubredditInfoSuccess) {
+                nSubscribersTextView.setText(getString(R.string.subscribers_number_detail, mNSubscribers));
                 nOnlineSubscribersTextView.setText(getString(R.string.online_subscribers_number_detail, mNCurrentOnlineSubscribers));
             }
         }
@@ -599,8 +603,10 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         if (!mFetchSubredditInfoSuccess) {
             FetchSubredditData.fetchSubredditData(mOauthRetrofit, mRetrofit, subredditName, mAccessToken, new FetchSubredditData.FetchSubredditDataListener() {
                 @Override
-                public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
+                public void onFetchSubredditDataSuccess(SubredditData subredditData, int nSubscribers, int nCurrentOnlineSubscribers) {
+                    mNSubscribers = nSubscribers;
                     mNCurrentOnlineSubscribers = nCurrentOnlineSubscribers;
+                    nSubscribersTextView.setText(getString(R.string.subscribers_number_detail, nSubscribers));
                     nOnlineSubscribersTextView.setText(getString(R.string.online_subscribers_number_detail, nCurrentOnlineSubscribers));
                     if (isOnCreateActivity) {
                         mFetchSubredditInfoSuccess = true;
@@ -1207,6 +1213,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(FETCH_SUBREDDIT_INFO_STATE, mFetchSubredditInfoSuccess);
+        outState.putInt(SUBSCRIBERS_STATE, mNSubscribers);
         outState.putInt(CURRENT_ONLINE_SUBSCRIBERS_STATE, mNCurrentOnlineSubscribers);
         outState.putString(MESSAGE_FULLNAME_STATE, mMessageFullname);
         outState.putString(NEW_ACCOUNT_NAME_STATE, mNewAccountName);

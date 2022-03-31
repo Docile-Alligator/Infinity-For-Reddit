@@ -25,7 +25,7 @@ public class LoadSubredditIcon {
             } else {
                 handler.post(() -> FetchSubredditData.fetchSubredditData(oauthRetrofit, retrofit, subredditName, accessToken, new FetchSubredditData.FetchSubredditDataListener() {
                     @Override
-                    public void onFetchSubredditDataSuccess(SubredditData subredditData1, int nCurrentOnlineSubscribers) {
+                    public void onFetchSubredditDataSuccess(SubredditData subredditData1, int nSubscribers, int nCurrentOnlineSubscribers) {
                         ArrayList<SubredditData> singleSubredditDataList = new ArrayList<>();
                         singleSubredditDataList.add(subredditData1);
                         InsertSubscribedThings.insertSubscribedThings(executor, handler, redditDataRoomDatabase, null,

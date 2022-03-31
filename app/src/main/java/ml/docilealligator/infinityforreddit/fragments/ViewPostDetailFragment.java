@@ -1359,7 +1359,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             FetchSubredditData.fetchSubredditData(mOauthRetrofit, mRetrofit, mPost.getSubredditName(), mAccessToken,
                     new FetchSubredditData.FetchSubredditDataListener() {
                         @Override
-                        public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
+                        public void onFetchSubredditDataSuccess(SubredditData subredditData, int nSubscribers, int nCurrentOnlineSubscribers) {
                             if (subredditData.getSuggestedCommentSort() == null || subredditData.getSuggestedCommentSort().equals("null") || subredditData.getSuggestedCommentSort().equals("")) {
                                 mRespectSubredditRecommendedSortType = false;
                                 ViewPostDetailFragment.this.sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value.toUpperCase());

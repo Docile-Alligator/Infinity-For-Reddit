@@ -229,7 +229,7 @@ public class SidebarFragment extends Fragment {
         swipeRefreshLayout.setRefreshing(true);
         FetchSubredditData.fetchSubredditData(mOauthRetrofit, mRetrofit, subredditName, mAccessToken, new FetchSubredditData.FetchSubredditDataListener() {
             @Override
-            public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
+            public void onFetchSubredditDataSuccess(SubredditData subredditData, int nSubscribers, int nCurrentOnlineSubscribers) {
                 swipeRefreshLayout.setRefreshing(false);
                 InsertSubredditData.insertSubredditData(mExecutor, new Handler(), mRedditDataRoomDatabase,
                         subredditData, () -> swipeRefreshLayout.setRefreshing(false));

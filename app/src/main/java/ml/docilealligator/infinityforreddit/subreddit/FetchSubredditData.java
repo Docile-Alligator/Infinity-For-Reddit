@@ -33,8 +33,8 @@ public class FetchSubredditData {
                 if (response.isSuccessful()) {
                     ParseSubredditData.parseSubredditData(response.body(), new ParseSubredditData.ParseSubredditDataListener() {
                         @Override
-                        public void onParseSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
-                            fetchSubredditDataListener.onFetchSubredditDataSuccess(subredditData, nCurrentOnlineSubscribers);
+                        public void onParseSubredditDataSuccess(SubredditData subredditData, int nSubscribers, int nCurrentOnlineSubscribers) {
+                            fetchSubredditDataListener.onFetchSubredditDataSuccess(subredditData, nSubscribers, nCurrentOnlineSubscribers);
                         }
 
                         @Override
@@ -90,7 +90,7 @@ public class FetchSubredditData {
     }
 
     public interface FetchSubredditDataListener {
-        void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers);
+        void onFetchSubredditDataSuccess(SubredditData subredditData, int nSubscribers, int nCurrentOnlineSubscribers);
 
         void onFetchSubredditDataFail(boolean isQuarantined);
     }

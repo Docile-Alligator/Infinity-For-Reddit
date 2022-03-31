@@ -65,7 +65,7 @@ public class ParseSubredditData {
     }
 
     interface ParseSubredditDataListener {
-        void onParseSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers);
+        void onParseSubredditDataSuccess(SubredditData subredditData, int mNSubscribers, int nCurrentOnlineSubscribers);
 
         void onParseSubredditDataFail();
     }
@@ -81,6 +81,7 @@ public class ParseSubredditData {
         private boolean parseFailed;
         private ParseSubredditDataListener parseSubredditDataListener;
         private SubredditData subredditData;
+        private int mNSubscribers;
         private int mNCurrentOnlineSubscribers;
 
         ParseSubredditDataAsyncTask(String response, ParseSubredditDataListener parseSubredditDataListener) {
@@ -98,6 +99,7 @@ public class ParseSubredditData {
         protected Void doInBackground(Void... voids) {
             try {
                 JSONObject data = jsonResponse.getJSONObject(JSONUtils.DATA_KEY);
+                mNSubscribers = data.getInt(JSONUtils.SUBSCRIBERS_KEY);
                 mNCurrentOnlineSubscribers = data.getInt(JSONUtils.ACTIVE_USER_COUNT_KEY);
                 subredditData = parseSubredditData(data, true);
             } catch (JSONException e) {
@@ -110,7 +112,7 @@ public class ParseSubredditData {
         @Override
         protected void onPostExecute(Void aVoid) {
             if (!parseFailed) {
-                parseSubredditDataListener.onParseSubredditDataSuccess(subredditData, mNCurrentOnlineSubscribers);
+                parseSubredditDataListener.onParseSubredditDataSuccess(subredditData, mNSubscribers, mNCurrentOnlineSubscribers);
             } else {
                 parseSubredditDataListener.onParseSubredditDataFail();
             }
