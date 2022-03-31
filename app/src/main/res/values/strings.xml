@@ -25,12 +25,12 @@
     <string name="edit_multi_reddit_activity_label">Edit Multireddit</string>
     <string name="selected_subeddits_activity_label">Selected Subreddits</string>
     <string name="report_activity_label">Report</string>
-    <string name="view_imgur_media_activity_image_label">Image %1$d/%2$d</string>
-    <string name="view_imgur_media_activity_video_label">Video %1$d/%2$d</string>
+    <string name="view_imgur_media_activity_image_label">Image %1$,d/%2$d</string>
+    <string name="view_imgur_media_activity_video_label">Video %1$,d/%2$d</string>
     <string name="send_private_message_activity_label">Send PM</string>
-    <string name="view_reddit_gallery_activity_image_label">Image %1$d/%2$d</string>
-    <string name="view_reddit_gallery_activity_gif_label">Gif %1$d/%2$d</string>
-    <string name="view_reddit_gallery_activity_video_label">Video %1$d/%2$d</string>
+    <string name="view_reddit_gallery_activity_image_label">Image %1$,d/%2$d</string>
+    <string name="view_reddit_gallery_activity_gif_label">Gif %1$,d/%2$d</string>
+    <string name="view_reddit_gallery_activity_video_label">Video %1$,d/%2$d</string>
     <string name="submit_crosspost_activity_label">Crosspost</string>
     <string name="give_award_activity_label">Give Award</string>
     <string name="subreddit_filter_popular_and_all_activity_label">r/all and r/popular</string>
@@ -126,8 +126,8 @@
     <string name="no_messages">Empty</string>
 
     <string name="nsfw">NSFW</string>
-    <string name="karma_info">Karma: %1$d</string>
-    <string name="karma_info_user_detail">Karma:\n%1$d (%2$d + %3$d)</string>
+    <string name="karma_info">Karma: %1$,d</string>
+    <string name="karma_info_user_detail">Karma:\n%1$,d (%2$d + %3$d)</string>
     <string name="cakeday_info">Cake day:\n%1$s</string>
     <string name="since">Since:</string>
 
@@ -135,7 +135,7 @@
     <string name="subscriptions">Subscriptions</string>
     <string name="multi_reddit">Multireddit</string>
     <string name="inbox">Inbox</string>
-    <string name="inbox_with_count">Inbox (%1$d)</string>
+    <string name="inbox_with_count">Inbox (%1$,d)</string>
     <string name="rpan">RPAN</string>
     <string name="trending">Trending</string>
     <string name="upvoted">Upvoted</string>
@@ -144,8 +144,8 @@
     <string name="saved">Saved</string>
     <string name="gilded">Gilded</string>
     <string name="settings">Settings</string>
-    <string name="subscribers_number_detail">Subscribers: %1$d</string>
-    <string name="online_subscribers_number_detail">Online: %1$d</string>
+    <string name="subscribers_number_detail">Subscribers: %1$,d</string>
+    <string name="online_subscribers_number_detail">Online: %1$,d</string>
     <string name="cannot_fetch_subreddit_info">Cannot fetch subreddit info</string>
     <string name="cannot_fetch_user_info">Cannot fetch user info</string>
     <string name="cannot_fetch_sidebar">Cannot fetch sidebar</string>
@@ -198,7 +198,7 @@
     <string name="title_required">The post needs a good title</string>
     <string name="link_required">Hey where is the link?</string>
     <string name="select_an_image">Please select an image first</string>
-    <string name="voting_length">Voting length: %1$d days</string>
+    <string name="voting_length">Voting length: %1$,d days</string>
     <string name="posting">Posting</string>
     <string name="post_failed">Could not post it</string>
     <string name="error_processing_image">Error processing image</string>
@@ -355,7 +355,7 @@
     <string name="notification_summary_message">New Message</string>
     <string name="notification_summary_subreddit">Subreddit</string>
     <string name="notification_summary_award">Award</string>
-    <string name="notification_new_messages">%1$d New Messages</string>
+    <string name="notification_new_messages">%1$,d New Messages</string>
 
     <string name="label_account">Account</string>
     <string name="label_reddit">Reddit</string>
@@ -379,9 +379,9 @@
     <string name="settings_mute_autoplaying_videos_title">Mute Autoplaying Videos</string>
     <string name="settings_autoplay_nsfw_videos_title">Autoplay NSFW Videos</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">Autoplay Videos Visible Area Offset (Portrait)</string>
-    <string name="settings_start_autoplay_visible_area_offset_portrait_summary">Start autoplaying videos when %1$d%% of them are visible</string>
+    <string name="settings_start_autoplay_visible_area_offset_portrait_summary">Start autoplaying videos when %1$,d%% of them are visible</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">Autoplay Videos Visible Area Offset (Landscape)</string>
-    <string name="settings_start_autoplay_visible_area_offset_landscape_summary">Start autoplaying videos when %1$d%% of them are visible</string>
+    <string name="settings_start_autoplay_visible_area_offset_landscape_summary">Start autoplaying videos when %1$,d%% of them are visible</string>
     <string name="settings_immersive_interface_title">Immersive Interface</string>
     <string name="settings_immersive_interface_summary">Does Not Apply to All Pages</string>
     <string name="settings_immersive_interface_ignore_nav_bar_title">Ignore Navigation Bar in Immersive Interface</string>
@@ -632,7 +632,7 @@
     <string name="settings_hide_text_post_content">Hide Text Post Content</string>
     <string name="settings_hide_comment_awards_title">Hide Comment Awards</string>
     <string name="settings_show_fewer_toolbar_options_threshold_title">Show Fewer Toolbar Options Starting From</string>
-    <string name="settings_show_fewer_toolbar_options_threshold_summary">Level %1$d</string>
+    <string name="settings_show_fewer_toolbar_options_threshold_summary">Level %1$,d</string>
     <string name="settings_show_author_avatar_title">Show Author Avatar</string>
     <string name="settings_reddit_user_agreement_title">Reddit User Agreement</string>
     <string name="settings_always_show_child_comment_count_title">Always Show the Number of Child Comments</string>
@@ -682,15 +682,15 @@
 
     <string name="elapsed_time_just_now">Just Now</string>
     <string name="elapsed_time_a_minute_ago">1 Minute</string>
-    <string name="elapsed_time_minutes_ago">%1$d Minutes</string>
+    <string name="elapsed_time_minutes_ago">%1$,d Minutes</string>
     <string name="elapsed_time_an_hour_ago">1 Hour</string>
-    <string name="elapsed_time_hours_ago">%1$d Hours</string>
+    <string name="elapsed_time_hours_ago">%1$,d Hours</string>
     <string name="elapsed_time_yesterday">Yesterday</string>
-    <string name="elapsed_time_days_ago">%1$d Days</string>
+    <string name="elapsed_time_days_ago">%1$,d Days</string>
     <string name="elapsed_time_a_month_ago">1 Month</string>
-    <string name="elapsed_time_months_ago">%1$d Months</string>
+    <string name="elapsed_time_months_ago">%1$,d Months</string>
     <string name="elapsed_time_a_year_ago">1 Year</string>
-    <string name="elapsed_time_years_ago">%1$d Years</string>
+    <string name="elapsed_time_years_ago">%1$,d Years</string>
 
     <string name="error_getting_multi_reddit_data">Error getting multireddit data</string>
     <string name="error_loading_multi_reddit_list">Cannot sync multireddits</string>
@@ -989,7 +989,7 @@
     <string name="edit_multi_reddit">Edit Multireddit</string>
     <string name="delete_multi_reddit">Delete Multireddit</string>
 
-    <string name="n_awards">%1$d Awards</string>
+    <string name="n_awards">%1$,d Awards</string>
     <string name="one_award">1 Award</string>
 
     <string name="report">Report</string>
@@ -1075,7 +1075,7 @@
 
     <string name="give_award_dialog_title">Give Award?</string>
     <string name="anonymous">Anonymous</string>
-    <string name="give_award_error_message">Code: %1$d/\n Message: %2$s</string>
+    <string name="give_award_error_message">Code: %1$,d/\n Message: %2$s</string>
     <string name="give_award_success">Award given</string>
     <string name="give_award_failed">Failed</string>
 
