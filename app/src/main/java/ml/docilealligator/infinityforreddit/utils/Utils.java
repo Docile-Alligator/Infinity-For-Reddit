@@ -105,15 +105,15 @@ public final class Utils {
         StringBuilder regexed = new StringBuilder(regexedMarkdown);
         boolean hasBracket = false;
         int nCarets = 0;
-        int new_lines = 0;
+        int newLines = 0;
         for (int i = 0; i < regexed.length(); i++) {
             char currentChar = regexed.charAt(i);
             if (hasBracket && currentChar == '\n') {
-                new_lines++;
-                if (new_lines > 1) {
+                newLines++;
+                if (newLines > 1) {
                     hasBracket = false;
                     nCarets = 0;
-                    new_lines = 0;
+                    newLines = 0;
                 }
             } else if (currentChar == '^') {
                 if (!(i > 0 && regexed.charAt(i - 1) == '\\')) {
@@ -147,7 +147,7 @@ public final class Utils {
                 }
                 nCarets = 0;
             } else {
-                new_lines = 0;
+                newLines = 0;
             }
         }
         if (!hasBracket) {
