@@ -35,7 +35,7 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
         this.backgroundColor = backgroundColor;
     }
 
-    public static SpoilerParserPlugin create(@NonNull int textColor, @NonNull int backgroundColor) {
+    public static SpoilerParserPlugin create(int textColor, int backgroundColor) {
         return new SpoilerParserPlugin(textColor, backgroundColor);
     }
 

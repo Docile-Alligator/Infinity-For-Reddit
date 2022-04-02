@@ -248,13 +248,13 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
         }
     }
 
-    private void lockSwipeRightToGoBack() {
+    public void lockSwipeRightToGoBack() {
         if (mSlidrInterface != null) {
             mSlidrInterface.lock();
         }
     }
 
-    private void unlockSwipeRightToGoBack() {
+    public void unlockSwipeRightToGoBack() {
         if (mSlidrInterface != null) {
             mSlidrInterface.unlock();
         }
