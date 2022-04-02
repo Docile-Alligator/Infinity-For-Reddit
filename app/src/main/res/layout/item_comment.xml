@@ -119,16 +119,14 @@
             android:fontFamily="?attr/font_family"
             tools:visibility="visible" />
 
-        <ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/comment_markdown_view_item_post_comment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="8dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:textColor="?attr/primaryTextColor"
-            android:textSize="?attr/content_font_default"
-            android:fontFamily="?attr/content_font_family" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:nestedScrollingEnabled="false" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bottom_constraint_layout_item_post_comment"

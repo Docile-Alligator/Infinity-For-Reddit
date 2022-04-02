@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.Spanned;
 import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,8 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 
+import org.commonmark.ext.gfm.tables.TableBlock;
+
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.Executor;
@@ -52,6 +55,8 @@ import io.noties.markwon.inlineparser.HtmlInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.movement.MovementMethodPlugin;
+import io.noties.markwon.recycler.table.TableEntry;
+import io.noties.markwon.recycler.table.TableEntryPlugin;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.R;
@@ -68,6 +73,9 @@ import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.comment.FetchComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.CommentIndentationView;
+import ml.docilealligator.infinityforreddit.customviews.CustomMarkwonAdapter;
+import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
@@ -101,6 +109,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private ArrayList<Comment> mVisibleComments;
     private Locale mLocale;
     private RequestManager mGlide;
+    private RecyclerView.RecycledViewPool recycledViewPool;
     private String mSingleCommentId;
     private boolean mIsSingleCommentThreadMode;
     private boolean mVoteButtonsOnTheRight;
@@ -190,6 +199,15 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     }
 
                     @Override
+                    public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
+                        if (mActivity.contentTypeface != null) {
+                            textView.setTypeface(mActivity.contentTypeface);
+                        }
+                        textView.setTextColor(mCommentTextColor);
+                        textView.setHighlightColor(Color.TRANSPARENT);
+                    }
+
+                    @Override
                     public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
                         builder.linkResolver((view, link) -> {
                             Intent intent = new Intent(mActivity, LinkResolverActivity.class);
@@ -207,7 +225,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 })
                 .usePlugin(SpoilerParserPlugin.create(mCommentTextColor, commentSpoilerBackgroundColor))
                 .usePlugin(StrikethroughPlugin.create())
-                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.newInstance().setOnLinkLongClickListener((textView, url) -> {
+                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS).setOnLinkLongClickListener((textView, url) -> {
                     if (!activity.isDestroyed() && !activity.isFinishing()) {
                         UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
                         Bundle bundle = new Bundle();
@@ -218,7 +236,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     return true;
                 })))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                .usePlugin(TableEntryPlugin.create(mActivity))
                 .build();
+        recycledViewPool = new RecyclerView.RecycledViewPool();
         mAccessToken = accessToken;
         mAccountName = accountName;
         mPost = post;
@@ -447,7 +467,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     Utils.setHTMLWithImageToTextView(((CommentViewHolder) holder).awardsTextView, comment.getAwards(), true);
                 }
 
-                mCommentMarkwon.setMarkdown(((CommentViewHolder) holder).commentMarkdownView, comment.getCommentMarkdown());
+                ((CommentViewHolder) holder).mMarkwonAdapter.setMarkdown(mCommentMarkwon, comment.getCommentMarkdown());
+                ((CommentViewHolder) holder).mMarkwonAdapter.notifyDataSetChanged();
                 ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                         comment.getScore() + comment.getVoteType()));
                 ((CommentViewHolder) holder).topScoreTextView.setText(mActivity.getString(R.string.top_score,
@@ -1143,7 +1164,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         @BindView(R.id.awards_text_view_item_comment)
         TextView awardsTextView;
         @BindView(R.id.comment_markdown_view_item_post_comment)
-        SpoilerOnClickTextView commentMarkdownView;
+        RecyclerView commentMarkdownView;
         @BindView(R.id.bottom_constraint_layout_item_post_comment)
         ConstraintLayout bottomConstraintLayout;
         @BindView(R.id.up_vote_button_item_post_comment)
@@ -1166,6 +1187,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         CommentIndentationView commentIndentationView;
         @BindView(R.id.divider_item_comment)
         View commentDivider;
+        CustomMarkwonAdapter mMarkwonAdapter;
 
         CommentViewHolder(View itemView) {
             super(itemView);
@@ -1225,9 +1247,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 scoreTextView.setTypeface(mActivity.typeface);
                 expandButton.setTypeface(mActivity.typeface);
             }
-            if (mActivity.contentTypeface != null) {
-                commentMarkdownView.setTypeface(mActivity.contentTypeface);
-            }
 
             if (mShowAuthorAvatar) {
                 authorIconImageView.setVisibility(View.VISIBLE);
@@ -1236,10 +1255,29 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 ((ConstraintLayout.LayoutParams) authorFlairTextView.getLayoutParams()).leftMargin = 0;
             }
 
+            commentMarkdownView.setRecycledViewPool(recycledViewPool);
+            LinearLayoutManagerBugFixed linearLayoutManager = new MarkwonLinearLayoutManager(mActivity, new MarkwonLinearLayoutManager.HorizontalScrollViewScrolledListener() {
+                @Override
+                public void onScrolledLeft() {
+                    ((ViewPostDetailActivity) mActivity).lockSwipeRightToGoBack();
+                }
+
+                @Override
+                public void onScrolledRight() {
+                    ((ViewPostDetailActivity) mActivity).unlockSwipeRightToGoBack();
+                }
+            });
+            commentMarkdownView.setLayoutManager(linearLayoutManager);
+            mMarkwonAdapter = CustomMarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
+                    .include(TableBlock.class, TableEntry.create(builder -> builder
+                            .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
+                            .textLayoutIsRoot(R.layout.view_table_entry_cell)))
+                    .build();
+            commentMarkdownView.setAdapter(mMarkwonAdapter);
+
             itemView.setBackgroundColor(mCommentBackgroundColor);
             authorTextView.setTextColor(mUsernameColor);
             commentTimeTextView.setTextColor(mSecondaryTextColor);
-            commentMarkdownView.setTextColor(mCommentTextColor);
             authorFlairTextView.setTextColor(mAuthorFlairTextColor);
             topScoreTextView.setTextColor(mSecondaryTextColor);
             awardsTextView.setTextColor(mSecondaryTextColor);
@@ -1572,23 +1610,34 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 if (mCommentToolbarHideOnClick) {
                     View.OnLongClickListener hideToolbarOnLongClickListener = view -> hideToolbar();
                     itemView.setOnLongClickListener(hideToolbarOnLongClickListener);
-                    commentMarkdownView.setOnLongClickListener(hideToolbarOnLongClickListener);
                     commentTimeTextView.setOnLongClickListener(hideToolbarOnLongClickListener);
+                    mMarkwonAdapter.setOnLongClickListener(v -> {
+                        if (v instanceof TextView) {
+                            if (((TextView) v).getSelectionStart() == -1 && ((TextView) v).getSelectionEnd() == -1) {
+                                hideToolbar();
+                            }
+                        }
+                        return true;
+                    });
                 }
-                commentMarkdownView.setOnClickListener(view -> {
-                    if (commentMarkdownView.isSpoilerOnClick()) {
-                        commentMarkdownView.setSpoilerOnClick(false);
-                        return;
+                mMarkwonAdapter.setOnClickListener(v -> {
+                    if (v instanceof SpoilerOnClickTextView) {
+                        if (((SpoilerOnClickTextView) v).isSpoilerOnClick()) {
+                            ((SpoilerOnClickTextView) v).setSpoilerOnClick(false);
+                            return;
+                        }
                     }
                     expandComments();
                 });
                 itemView.setOnClickListener(view -> expandComments());
             } else {
                 if (mCommentToolbarHideOnClick) {
-                    commentMarkdownView.setOnClickListener(view -> {
-                        if (commentMarkdownView.isSpoilerOnClick()) {
-                            commentMarkdownView.setSpoilerOnClick(false);
-                            return;
+                    mMarkwonAdapter.setOnClickListener(view -> {
+                        if (view instanceof SpoilerOnClickTextView) {
+                            if (((SpoilerOnClickTextView) view).isSpoilerOnClick()) {
+                                ((SpoilerOnClickTextView) view).setSpoilerOnClick(false);
+                                return;
+                            }
                         }
                         hideToolbar();
                     });
@@ -1596,9 +1645,11 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     itemView.setOnClickListener(hideToolbarOnClickListener);
                     commentTimeTextView.setOnClickListener(hideToolbarOnClickListener);
                 }
-                commentMarkdownView.setOnLongClickListener(view -> {
-                    if (commentMarkdownView.getSelectionStart() == -1 && commentMarkdownView.getSelectionEnd() == -1) {
-                        expandComments();
+                mMarkwonAdapter.setOnLongClickListener(view -> {
+                    if (view instanceof TextView) {
+                        if (((TextView) view).getSelectionStart() == -1 && ((TextView) view).getSelectionEnd() == -1) {
+                            expandComments();
+                        }
                     }
                     return true;
                 });
@@ -1607,7 +1658,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     return true;
                 });
             }
-            commentMarkdownView.setHighlightColor(Color.TRANSPARENT);
         }
 
         private boolean expandComments() {

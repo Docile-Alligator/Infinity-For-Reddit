@@ -259,7 +259,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     @Override
                     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
                         if (mActivity.contentTypeface != null) {
-                            textView.setTypeface(mActivity.typeface);
+                            textView.setTypeface(mActivity.contentTypeface);
                         }
                         textView.setTextColor(markdownColor);
                         textView.setOnLongClickListener(view -> {
