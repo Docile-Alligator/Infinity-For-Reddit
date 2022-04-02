@@ -227,6 +227,7 @@ public class PullNotificationWorker extends Worker {
             if (response.code() == 401) {
                 String accessToken = refreshAccessToken(account);
                 if (!accessToken.equals("")) {
+                    account.setAccessToken(accessToken);
                     return fetchMessages(account, retryCount - 1);
                 }
 
