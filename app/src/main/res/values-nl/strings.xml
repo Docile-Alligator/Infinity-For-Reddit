@@ -822,7 +822,6 @@ Automatisch afspelen van video is uitgeschakeld."</string>
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"Download mislukt: geen toegang tot de bestemmingsmap"</string>
     <string name="downloading_media_failed_cannot_download_media">"Download mislukt"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"Downloaden mislukt: kan het bestand niet opslaan in de bestemmingsmap"</string>
-    <string name="view_full_comment_markdown">"Bekijk volledige markdown"</string>
     <string name="select_user_flair_success">"Gebruikersflair geselecteerd"</string>
     <string name="select_this_user_flair">"Selecteer deze gebruikersflair?"</string>
     <string name="select_header_size">"Selecteer Koptekstgrootte"</string>

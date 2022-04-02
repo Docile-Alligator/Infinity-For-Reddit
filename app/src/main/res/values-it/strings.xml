@@ -797,7 +797,6 @@ La riproduzione automatica video è disabilitata"</string>
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"Download fallito: impossibile accedere alla destinazione"</string>
     <string name="downloading_media_failed_cannot_download_media">"Download fallito"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"Download fallito: impossibile salvare il file nella destinazione"</string>
-    <string name="view_full_comment_markdown">"Visualizza Markdown completo"</string>
     <string name="select_user_flair_success">"Flair utente selezionato"</string>
     <string name="select_this_user_flair">"Seleziona questa flair utente?"</string>
     <string name="select_header_size">"Seleziona dimensione intestazione"</string>

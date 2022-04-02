@@ -884,7 +884,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"डाउनलोड असफल: गंतव्य डायरेक्टरी तक अभिगम असफल "</string>
     <string name="downloading_media_failed_cannot_download_media">"डाउनलोड असफल"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"डाउनलोड असफल: गंतव्य डायरेक्टरी में फाइल का संरक्षण असफल"</string>
-    <string name="view_full_comment_markdown">"संपूर्ण मार्कडाउन देखें "</string>
     <string name="select_user_flair_success">"यूजर फ्लेयर चुन लिया गया "</string>
     <string name="select_this_user_flair">"इस यूजर फ्लेयर का चुनाव करना है? "</string>
     <string name="select_header_size">"हेडर माप चुनें "</string>

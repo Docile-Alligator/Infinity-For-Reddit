@@ -808,7 +808,6 @@ Redarea automată a videoclipurilor este dezactivată."</string>
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"Descărcarea a eșuat: nu poate accesa directorul de destinație"</string>
     <string name="downloading_media_failed_cannot_download_media">"Descărcare eșuată"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"Descărcare eșuată: nu se poate salva fișierul în directorul de destinație"</string>
-    <string name="view_full_comment_markdown">"Vizualizați Markdown complet"</string>
     <string name="select_user_flair_success">"Flerul utilizatorului selectat"</string>
     <string name="select_this_user_flair">"Selectați acest fler de utilizator?"</string>
     <string name="select_header_size">"Selectați Dimensiunea antetului"</string>

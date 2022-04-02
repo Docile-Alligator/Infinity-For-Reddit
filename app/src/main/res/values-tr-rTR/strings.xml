@@ -832,7 +832,6 @@ Otomatik video oynatma kapatılır."</string>
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"İndirme başarısız: hedef dizine erişilemiyor"</string>
     <string name="downloading_media_failed_cannot_download_media">"İndirme başarısız"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"İndirme başarısız: dosya hedef dizine kaydedilemiyor"</string>
-    <string name="view_full_comment_markdown">"Tüm Markdown'u Görüntüle"</string>
     <string name="select_user_flair_success">"Kullanıcı rozeti seçildi"</string>
     <string name="select_this_user_flair">"Bu kullanıcı rozeti seçilsin mi?"</string>
     <string name="select_header_size">"Başlık Boyutunu Seç"</string>

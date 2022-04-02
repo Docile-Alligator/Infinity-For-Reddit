@@ -904,7 +904,6 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"Échec du téléchargement: ne peut pas accéder au répertoire de la destination"</string>
     <string name="downloading_media_failed_cannot_download_media">"Échec du téléchargement"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"Échec du téléchargement: ne peut pas sauvegarder le fichier dans le répertoire de destination"</string>
-    <string name="view_full_comment_markdown">"Voir le formatage complet"</string>
     <string name="select_user_flair_success">"Flair sélectionné"</string>
     <string name="select_this_user_flair">"Sélectionner ce flair ? "</string>
     <string name="select_header_size">"Sélectionner la taille de l'en-tête"</string>

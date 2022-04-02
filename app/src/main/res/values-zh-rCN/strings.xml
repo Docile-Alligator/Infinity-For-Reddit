@@ -873,7 +873,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"下载失败：无法访问目标目录"</string>
     <string name="downloading_media_failed_cannot_download_media">"下载失败"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"下载失败：无法将文件保存至目标目录"</string>
-    <string name="view_full_comment_markdown">"查看完整 Markdown"</string>
     <string name="select_user_flair_success">"用户头衔已选中"</string>
     <string name="select_this_user_flair">"选择此用户头衔吗？"</string>
     <string name="select_header_size">"选择标题大小"</string>

@@ -896,7 +896,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"ダウンロードに失敗しました (保存先のフォルダーにアクセスできません)"</string>
     <string name="downloading_media_failed_cannot_download_media">"ダウンロードに失敗しました"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"ダウンロードに失敗しました (保存先のフォルダーに保存できません)"</string>
-    <string name="view_full_comment_markdown">"Markdown全体を表示"</string>
     <string name="select_user_flair_success">"ユーザーフレアーを選択しました"</string>
     <string name="select_this_user_flair">"このユーザーフレアーを選択しますか？"</string>
     <string name="select_header_size">"ヘッダーサイズを選択"</string>

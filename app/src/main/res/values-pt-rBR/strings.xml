@@ -828,7 +828,6 @@ Os vídeos do Reddit ficam em menor resolução.
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"Falha ao baixar: não é possível acessar o diretório de destino"</string>
     <string name="downloading_media_failed_cannot_download_media">"Falha ao baixar"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"Falha ao baixar: não é possível salvar o arquivo no diretório de destino"</string>
-    <string name="view_full_comment_markdown">"Ver markdown completo"</string>
     <string name="select_user_flair_success">"Etiqueta de usuário selecionada"</string>
     <string name="select_this_user_flair">"Selecionar essa etiqueta de usuário?"</string>
     <string name="select_header_size">"Selecionar o tamanho do cabeçalho"</string>

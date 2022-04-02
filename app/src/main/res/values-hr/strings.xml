@@ -847,7 +847,6 @@ Reddit videi su niže rezolucije."</string>
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"Preuzimanje neuspješno:nije moguće pristupiti odredišnom direktoriju"</string>
     <string name="downloading_media_failed_cannot_download_media">"Preuzimanje neuspješno"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"Preuzimanje neuspješno: nije moguće spremiti datoteku u odredišni direktorij"</string>
-    <string name="view_full_comment_markdown">"Pogledaj cijeli Markdown"</string>
     <string name="select_user_flair_success">"Korisnički flair odabran"</string>
     <string name="select_this_user_flair">"Odabrati ovaj korisnički flair?"</string>
     <string name="select_header_size">"Odaberi veličinu zaglavlja"</string>

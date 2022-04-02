@@ -805,7 +805,6 @@ Reprodução automática de vídeos desativada."</string>
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"A transferência falhou: não é possível aceder ao diretório de destino"</string>
     <string name="downloading_media_failed_cannot_download_media">"A transferência falhou"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"A transferência falhou: não é possível guardar o ficheiro no diretório de destino"</string>
-    <string name="view_full_comment_markdown">"Ver Markdown Completo"</string>
     <string name="select_user_flair_success">"Flair de Utilizador Selecionado"</string>
     <string name="select_this_user_flair">"Selecionar este flair de utilizador?"</string>
     <string name="select_header_size">"Selecionar Tamanho do Cabeçalho"</string>

@@ -1053,8 +1053,6 @@
     <string name="block_user_success">Blocked</string>
     <string name="block_user_failed">Failed to block user</string>
 
-    <string name="view_full_comment_markdown">View Full Markdown</string>
-
     <string name="select_user_flair_success">User flair selected</string>
     <string name="select_this_user_flair">Select this user flair?</string>
 

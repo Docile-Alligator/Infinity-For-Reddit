@@ -808,7 +808,6 @@ Automatické přehrávání videí je zakázáno."</string>
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"Stahování selhalo: nelze přistupovat k cílovému adresáři"</string>
     <string name="downloading_media_failed_cannot_download_media">"Stahování selhalo"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"Stahování selhalo: nelze uložit soubor do cílového adresáře"</string>
-    <string name="view_full_comment_markdown">"Zobrazit plný markdown"</string>
     <string name="select_user_flair_success">"Vybrané uživatelské štítky"</string>
     <string name="select_this_user_flair">"Vybrat tento uživatelský štítek?"</string>
     <string name="select_header_size">"Vybrat velikost záhlaví"</string>

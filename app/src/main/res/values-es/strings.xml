@@ -850,7 +850,6 @@ La reproducción automática de video está deshabilitada."</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"Descarga fallida: no se puede guardar el archivo al directorio de destino"</string>
 
     <!-- Ver Markdown completo -->
-    <string name="view_full_comment_markdown">"Ver Markdown completo"</string>
     <string name="select_user_flair_success">"Etiqueta de usuario seleccionada"</string>
     <string name="select_this_user_flair">"¿Seleccionar esta etiqueta de usuario?"</string>
     <string name="select_header_size">"Seleccionar tamaño de encabezado"</string>

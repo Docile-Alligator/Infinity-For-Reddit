@@ -23,7 +23,6 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
 import ml.docilealligator.infinityforreddit.activities.EditCommentActivity;
-import ml.docilealligator.infinityforreddit.activities.FullMarkdownActivity;
 import ml.docilealligator.infinityforreddit.activities.GiveAwardActivity;
 import ml.docilealligator.infinityforreddit.activities.ReportActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
@@ -43,7 +42,6 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
     public static final String EXTRA_EDIT_AND_DELETE_AVAILABLE = "EEADA";
     public static final String EXTRA_POSITION = "EP";
     public static final String EXTRA_SHOW_REPLY_AND_SAVE_OPTION = "ESSARO";
-    public static final String EXTRA_COMMENT_MARKDOWN = "ECM";
     public static final String EXTRA_IS_NSFW = "EIN";
     @BindView(R.id.edit_text_view_comment_more_bottom_sheet_fragment)
     TextView editTextView;
@@ -59,8 +57,6 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
     TextView copyTextView;
     @BindView(R.id.give_award_text_view_comment_more_bottom_sheet_fragment)
     TextView giveAwardTextView;
-    @BindView(R.id.view_full_markdown_text_view_comment_more_bottom_sheet_fragment)
-    TextView viewFullMarkdownTextView;
     @BindView(R.id.report_view_comment_more_bottom_sheet_fragment)
     TextView reportTextView;
     @BindView(R.id.see_removed_view_comment_more_bottom_sheet_fragment)
@@ -191,15 +187,6 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
             copyBundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, comment.getCommentRawText());
             copyTextBottomSheetFragment.setArguments(copyBundle);
             copyTextBottomSheetFragment.show(activity.getSupportFragmentManager(), copyTextBottomSheetFragment.getTag());
-        });
-
-        viewFullMarkdownTextView.setOnClickListener(view -> {
-            Intent intent = new Intent(activity, FullMarkdownActivity.class);
-            intent.putExtra(FullMarkdownActivity.EXTRA_IS_NSFW, bundle.getBoolean(EXTRA_IS_NSFW, false));
-            intent.putExtra(FullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, bundle.getString(EXTRA_COMMENT_MARKDOWN, ""));
-            activity.startActivity(intent);
-
-            dismiss();
         });
 
         reportTextView.setOnClickListener(view -> {

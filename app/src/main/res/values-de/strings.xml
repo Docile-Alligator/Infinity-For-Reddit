@@ -873,7 +873,6 @@ Automatisches Abspielen von Videos ist deaktiviert."</string>
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"Herunterladen fehlgeschlagen: Kann nicht auf Downloadpfad zugreifen"</string>
     <string name="downloading_media_failed_cannot_download_media">"Herunterladen fehlgeschlagen"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"Herunterladen fehlgeschlagen: Kann die Datei nicht im Zielverzeichnis speichern"</string>
-    <string name="view_full_comment_markdown">"Vollständiges Markdown anzeigen"</string>
     <string name="select_user_flair_success">"Benutzerflair ausgewählt"</string>
     <string name="select_this_user_flair">"Dieses Benutzerflair auswählen?"</string>
     <string name="select_header_size">"Größe für den Header auswählen"</string>

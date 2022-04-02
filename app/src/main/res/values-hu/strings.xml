@@ -819,7 +819,6 @@ Videó autómatikus lejátszása le van tiltva."</string>
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"Letöltés sikertelen: nem lehet hozzáférni a célkönyvtárhoz"</string>
     <string name="downloading_media_failed_cannot_download_media">"Letöltés sikertelen"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"Letöltéssikertelen: nem lehet menteni a fájlt a célkönvtárba"</string>
-    <string name="view_full_comment_markdown">"Teljes markdown megtekintése"</string>
     <string name="select_user_flair_success">"Felhasználó flair kiválasztva"</string>
     <string name="select_this_user_flair">"Legyen kiválasztva ez a felhasználói flair?"</string>
     <string name="select_header_size">"Fejléc méret kiválasztása"</string>

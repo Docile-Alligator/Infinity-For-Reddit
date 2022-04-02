@@ -95,7 +95,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                     path = path.substring(0, path.length() - 1);
                 }
 
-                if (path.endsWith("jpg") || path.endsWith("png")) {
+                if (path.endsWith("jpg") || path.endsWith("png") || path.endsWith("jpeg")) {
                     Intent intent = new Intent(this, ViewImageOrGifActivity.class);
                     String url = uri.toString();
                     String fileName = FilenameUtils.getName(path);

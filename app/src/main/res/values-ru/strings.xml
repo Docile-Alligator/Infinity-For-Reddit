@@ -818,7 +818,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"Ошибка при скачивании: невозможно получить доступ к папке"</string>
     <string name="downloading_media_failed_cannot_download_media">"Ошибка при скачивании"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"Ошибка при скачивании: невозможно сохранить файл в целевую папку"</string>
-    <string name="view_full_comment_markdown">"Посмотреть полный Markdown"</string>
     <string name="select_user_flair_success">"Флейр пользователя выбран"</string>
     <string name="select_this_user_flair">"Выбрать флейр пользователя?"</string>
     <string name="select_header_size">"Выбрать размер заголовка"</string>

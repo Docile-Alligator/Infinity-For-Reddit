@@ -817,7 +817,6 @@ Tự động phát video bị tắt."</string>
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"Tải xuống thất bại: không thể truy cập thư mục đích"</string>
     <string name="downloading_media_failed_cannot_download_media">"Tải xuống thất bại"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"Tải xuống thất bại: không thể lưu tệp vào thư mục đích"</string>
-    <string name="view_full_comment_markdown">"Xem Markdown đầy đủ"</string>
     <string name="select_user_flair_success">"Tư cách người dùng đã được chọn"</string>
     <string name="select_this_user_flair">"Chọn tư cách người dùng này?"</string>
     <string name="select_header_size">"Chọn kích thước tiêu đề"</string>
