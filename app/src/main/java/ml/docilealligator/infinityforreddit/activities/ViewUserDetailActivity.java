@@ -887,8 +887,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             fabMoreOptionsBottomSheetFragment.show(getSupportFragmentManager(), fabMoreOptionsBottomSheetFragment.getTag());
             return true;
         });
-
-        fab.setVisibility(View.VISIBLE);
     }
 
     private void bottomAppBarOptionAction(int option) {
