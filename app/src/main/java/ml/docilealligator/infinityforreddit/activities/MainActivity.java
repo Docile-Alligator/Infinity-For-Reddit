@@ -98,6 +98,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTypeBottomS
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.events.ChangeDisableSwipingBetweenTabsEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeInboxCountEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeLockBottomAppBarEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeRequireAuthToAccountSectionEvent;
@@ -1249,6 +1250,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             if (previousPosition > 0) {
                 navDrawerRecyclerView.scrollToPosition(previousPosition);
             }
+        }
+    }
+
+    @Subscribe
+    public void onChangeInboxCountEvent(ChangeInboxCountEvent event) {
+        if (adapter != null) {
+            adapter.setInboxCount(event.inboxCount);
         }
     }
 

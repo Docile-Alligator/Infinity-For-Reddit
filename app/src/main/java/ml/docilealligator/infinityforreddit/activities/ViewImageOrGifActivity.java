@@ -118,6 +118,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
     private boolean isGif = true;
     private boolean isNsfw;
     private Typeface typeface;
+    private Handler handler;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,6 +162,8 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         }
 
         glide = Glide.with(this);
+
+        handler = new Handler();
 
         Intent intent = getIntent();
         mImageUrl = intent.getStringExtra(EXTRA_GIF_URL_KEY);
@@ -391,7 +394,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
             public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
                 if (getExternalCacheDir() != null) {
                     Toast.makeText(ViewImageOrGifActivity.this, R.string.save_image_first, Toast.LENGTH_SHORT).show();
-                    SaveBitmapImageToFile.SaveBitmapImageToFile(mExecutor, new Handler(), resource,
+                    SaveBitmapImageToFile.SaveBitmapImageToFile(mExecutor, handler, resource,
                             getExternalCacheDir().getPath(), mImageFileName,
                             new SaveBitmapImageToFile.SaveBitmapImageToFileListener() {
                                 @Override
@@ -427,7 +430,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
 
     private void shareGif() {
         Toast.makeText(ViewImageOrGifActivity.this, R.string.save_gif_first, Toast.LENGTH_SHORT).show();
-        glide.asGif().load(mImageUrl).listener(new RequestListener<GifDrawable>() {
+        glide.asGif().load(mImageUrl).listener(new RequestListener<>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<GifDrawable> target, boolean isFirstResource) {
                 return false;
@@ -436,7 +439,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
             @Override
             public boolean onResourceReady(GifDrawable resource, Object model, Target<GifDrawable> target, DataSource dataSource, boolean isFirstResource) {
                 if (getExternalCacheDir() != null) {
-                    SaveGIFToFile.saveGifToFile(mExecutor, new Handler(), resource, getExternalCacheDir().getPath(), mImageFileName,
+                    SaveGIFToFile.saveGifToFile(mExecutor, handler, resource, getExternalCacheDir().getPath(), mImageFileName,
                             new SaveGIFToFile.SaveGIFToFileAsyncTaskListener() {
                                 @Override
                                 public void saveSuccess(File imageFile) {
@@ -445,7 +448,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
                                     Intent shareIntent = new Intent();
                                     shareIntent.setAction(Intent.ACTION_SEND);
                                     shareIntent.putExtra(Intent.EXTRA_STREAM, uri);
-                                    shareIntent.setType("image/*");
+                                    shareIntent.setType("image/gif");
                                     shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
                                     startActivity(Intent.createChooser(shareIntent, getString(R.string.share)));
                                 }
@@ -471,7 +474,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
                 SetAsWallpaperBottomSheetFragment setAsWallpaperBottomSheetFragment = new SetAsWallpaperBottomSheetFragment();
                 setAsWallpaperBottomSheetFragment.show(getSupportFragmentManager(), setAsWallpaperBottomSheetFragment.getTag());
             } else {
-                WallpaperSetter.set(mExecutor, new Handler(), mImageUrl, WallpaperSetter.BOTH_SCREENS, this,
+                WallpaperSetter.set(mExecutor, handler, mImageUrl, WallpaperSetter.BOTH_SCREENS, this,
                         new WallpaperSetter.SetWallpaperListener() {
                             @Override
                             public void success() {
@@ -502,7 +505,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
 
     @Override
     public void setToHomeScreen(int viewPagerPosition) {
-        WallpaperSetter.set(mExecutor, new Handler(), mImageUrl, WallpaperSetter.HOME_SCREEN, this,
+        WallpaperSetter.set(mExecutor, handler, mImageUrl, WallpaperSetter.HOME_SCREEN, this,
                 new WallpaperSetter.SetWallpaperListener() {
                     @Override
                     public void success() {
@@ -518,7 +521,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
 
     @Override
     public void setToLockScreen(int viewPagerPosition) {
-        WallpaperSetter.set(mExecutor, new Handler(), mImageUrl, WallpaperSetter.LOCK_SCREEN, this,
+        WallpaperSetter.set(mExecutor, handler, mImageUrl, WallpaperSetter.LOCK_SCREEN, this,
                 new WallpaperSetter.SetWallpaperListener() {
                     @Override
                     public void success() {
@@ -534,7 +537,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
 
     @Override
     public void setToBoth(int viewPagerPosition) {
-        WallpaperSetter.set(mExecutor, new Handler(), mImageUrl, WallpaperSetter.BOTH_SCREENS, this,
+        WallpaperSetter.set(mExecutor, handler, mImageUrl, WallpaperSetter.BOTH_SCREENS, this,
                 new WallpaperSetter.SetWallpaperListener() {
                     @Override
                     public void success() {

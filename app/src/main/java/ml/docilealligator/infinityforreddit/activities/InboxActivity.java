@@ -53,6 +53,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.events.ChangeInboxCountEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.InboxFragment;
 import ml.docilealligator.infinityforreddit.message.FetchMessage;
@@ -316,7 +317,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
             if (mAccessToken != null) {
                 Toast.makeText(this, R.string.please_wait, Toast.LENGTH_SHORT).show();
                 mOauthRetrofit.create(RedditAPI.class).readAllMessages(APIUtils.getOAuthHeader(mAccessToken))
-                        .enqueue(new Callback<String>() {
+                        .enqueue(new Callback<>() {
                             @Override
                             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                                 if (response.isSuccessful()) {
@@ -324,6 +325,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
                                     if (sectionsPagerAdapter != null) {
                                         sectionsPagerAdapter.readAllMessages();
                                     }
+                                    EventBus.getDefault().post(new ChangeInboxCountEvent(0));
                                 } else {
                                     if (response.code() == 429) {
                                         Toast.makeText(InboxActivity.this, R.string.read_all_messages_time_limit, Toast.LENGTH_LONG).show();
