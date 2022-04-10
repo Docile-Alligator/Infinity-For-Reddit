@@ -52,7 +52,7 @@ public class UserData {
         this.commentKarma = commentKarma;
         this.linkKarma = linkKarma;
         this.awarderKarma = awarderKarma;
-        this.awarderKarma = awardeeKarma;
+        this.awardeeKarma = awardeeKarma;
         this.totalKarma = totalKarma;
         this.cakeday = cakeday;
         this.isGold = isGold;

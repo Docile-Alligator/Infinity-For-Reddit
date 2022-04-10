@@ -99,6 +99,7 @@ import ml.docilealligator.infinityforreddit.asynctasks.CheckIsFollowingUser;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.KarmaInfoBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.RandomBottomSheetFragment;
@@ -599,6 +600,16 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         userThingSortTypeBottomSheetFragment = new UserThingSortTypeBottomSheetFragment();
         sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
         postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
+
+        karmaTextView.setOnClickListener(view -> {
+            UserData userData = userViewModel.getUserLiveData().getValue();
+            if (userData != null) {
+                KarmaInfoBottomSheetFragment karmaInfoBottomSheetFragment = KarmaInfoBottomSheetFragment.newInstance(
+                        userData.getLinkKarma(), userData.getCommentKarma(), userData.getAwarderKarma(), userData.getAwardeeKarma()
+                );
+                karmaInfoBottomSheetFragment.show(getSupportFragmentManager(), karmaInfoBottomSheetFragment.getTag());
+            }
+        });
     }
 
     @Override
