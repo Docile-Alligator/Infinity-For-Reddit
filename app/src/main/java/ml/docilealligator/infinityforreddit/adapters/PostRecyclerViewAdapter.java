@@ -2694,7 +2694,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         private Uri mediaUri;
         private float volume;
         public Call<String> fetchGfycatOrStreamableVideoCall;
-        //public FetchGfycatOrRedgifsVideoLinks fetchGfycatOrRedgifsVideoLinks;
 
         PostVideoAutoplayViewHolder(View itemView) {
             super(itemView);
@@ -2787,7 +2786,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
             });
 
-            previewImageView.setOnLongClickListener(view -> fullscreenButton.performClick());
+            previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
+
+            videoPlayer.setOnClickListener(view -> {
+                if (videoPlayer.isControllerVisible()) {
+                    fullscreenButton.performClick();
+                }
+            });
         }
 
         void bindVideoUri(Uri videoUri) {
@@ -4096,7 +4101,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
             });
 
-            previewImageView.setOnLongClickListener(view -> fullscreenButton.performClick());
+            previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
+
+            videoPlayer.setOnClickListener(view -> {
+                if (videoPlayer.isControllerVisible()) {
+                    fullscreenButton.performClick();
+                }
+            });
         }
 
         void bindVideoUri(Uri videoUri) {

@@ -1722,8 +1722,12 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 }
             });
 
-            previewImageView.setOnLongClickListener(view -> fullscreenButton.performClick());
-            playerView.setOnLongClickListener(view -> fullscreenButton.performClick());
+            previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
+            playerView.setOnClickListener(view -> {
+                if (playerView.isControllerVisible()) {
+                    fullscreenButton.performClick();
+                }
+            });
         }
 
         void bindVideoUri(Uri videoUri) {
