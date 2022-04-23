@@ -190,30 +190,32 @@ public final class Utils {
 
     public static String parseInlineEmotes(String markdown, JSONObject mediaMetadataObject) throws JSONException {
         JSONArray mediaMetadataNames = mediaMetadataObject.names();
-        for (int i = 0; i < mediaMetadataNames.length(); i++) {
-            if (!mediaMetadataNames.isNull(i)) {
-                String mediaMetadataKey = mediaMetadataNames.getString(i);
-                if (mediaMetadataObject.isNull(mediaMetadataKey)) {
-                    continue;
-                }
-                JSONObject item = mediaMetadataObject.getJSONObject(mediaMetadataKey);
-                if (item.isNull(JSONUtils.STATUS_KEY)
-                        || !item.getString(JSONUtils.STATUS_KEY).equals("valid")
-                        || item.isNull(JSONUtils.ID_KEY)
-                        || item.isNull(JSONUtils.T_KEY)
-                        || item.isNull(JSONUtils.S_KEY)) {
-                    continue;
-                }
-                String emote_type = item.getString(JSONUtils.T_KEY);
-                String emote_id = item.getString(JSONUtils.ID_KEY);
+        if (mediaMetadataNames != null) {
+            for (int i = 0; i < mediaMetadataNames.length(); i++) {
+                if (!mediaMetadataNames.isNull(i)) {
+                    String mediaMetadataKey = mediaMetadataNames.getString(i);
+                    if (mediaMetadataObject.isNull(mediaMetadataKey)) {
+                        continue;
+                    }
+                    JSONObject item = mediaMetadataObject.getJSONObject(mediaMetadataKey);
+                    if (item.isNull(JSONUtils.STATUS_KEY)
+                            || !item.getString(JSONUtils.STATUS_KEY).equals("valid")
+                            || item.isNull(JSONUtils.ID_KEY)
+                            || item.isNull(JSONUtils.T_KEY)
+                            || item.isNull(JSONUtils.S_KEY)) {
+                        continue;
+                    }
+                    String emote_type = item.getString(JSONUtils.T_KEY);
+                    String emote_id = item.getString(JSONUtils.ID_KEY);
 
-                JSONObject s_key = item.getJSONObject(JSONUtils.S_KEY);
-                if (s_key.isNull(JSONUtils.U_KEY)) {
-                    continue;
-                }
-                String emote_url = s_key.getString(JSONUtils.U_KEY);
+                    JSONObject s_key = item.getJSONObject(JSONUtils.S_KEY);
+                    if (s_key.isNull(JSONUtils.U_KEY)) {
+                        continue;
+                    }
+                    String emote_url = s_key.getString(JSONUtils.U_KEY);
 
-                markdown = markdown.replace("![img](" + emote_id + ")", "[" + emote_type + "](" + emote_url + ") ");
+                    markdown = markdown.replace("![img](" + emote_id + ")", "[" + emote_type + "](" + emote_url + ") ");
+                }
             }
         }
         return markdown;
