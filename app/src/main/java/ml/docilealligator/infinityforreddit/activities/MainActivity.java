@@ -321,11 +321,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             mMessageFullname = savedInstanceState.getString(MESSAGE_FULLNAME_STATE);
             mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
             inboxCount = savedInstanceState.getInt(INBOX_COUNT_STATE);
-            initializeNotificationAndBindView(true);
+            initializeNotificationAndBindView();
         } else {
             mMessageFullname = getIntent().getStringExtra(EXTRA_MESSSAGE_FULLNAME);
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
-            initializeNotificationAndBindView(false);
+            initializeNotificationAndBindView();
         }
     }
 
@@ -355,7 +355,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         applyFABTheme(fab);
     }
 
-    private void initializeNotificationAndBindView(boolean doNotInitializeNotificationIfNoNewAccount) {
+    private void initializeNotificationAndBindView() {
         boolean enableNotification = mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_NOTIFICATION_KEY, true);
         long notificationInterval = Long.parseLong(mSharedPreferences.getString(SharedPreferencesUtils.NOTIFICATION_INTERVAL_KEY, "1"));
         TimeUnit timeUnit = (notificationInterval == 15 || notificationInterval == 30) ? TimeUnit.MINUTES : TimeUnit.HOURS;
@@ -385,9 +385,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 bindView();
             }
         } else {
-            if (doNotInitializeNotificationIfNoNewAccount) {
-                setNotification(workManager, notificationInterval, timeUnit, enableNotification);
-            }
+            setNotification(workManager, notificationInterval, timeUnit, enableNotification);
 
             bindView();
         }
