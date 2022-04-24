@@ -564,7 +564,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     }
 
     private void bindView() {
-        if (isDestroyed()) {
+        if (isFinishing() || isDestroyed()) {
             return;
         }
 
@@ -935,7 +935,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         });
 
         accountViewModel = new ViewModelProvider(this,
-                new AccountViewModel.Factory(getApplication(), mRedditDataRoomDatabase, mAccountName)).get(AccountViewModel.class);
+                new AccountViewModel.Factory(mRedditDataRoomDatabase)).get(AccountViewModel.class);
         accountViewModel.getAccountsExceptCurrentAccountLiveData().observe(this, adapter::changeAccountsDataset);
         accountViewModel.getCurrentAccountLiveData().observe(this, account -> {
             if (account != null) {

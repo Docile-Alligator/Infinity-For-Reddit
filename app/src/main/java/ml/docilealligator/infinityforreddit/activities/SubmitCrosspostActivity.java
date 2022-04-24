@@ -518,7 +518,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
             }
 
             Intent intent = new Intent(this, SubmitPostService.class);
-            intent.putExtra(SubmitPostService.EXTRA_ACCESS_TOKEN, mAccessToken);
+            intent.putExtra(SubmitPostService.EXTRA_ACCOUNT, mAccessToken);
             intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
             intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
             if (post.isCrosspost()) {

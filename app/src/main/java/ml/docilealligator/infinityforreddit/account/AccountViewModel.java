@@ -1,9 +1,5 @@
 package ml.docilealligator.infinityforreddit.account;
 
-import android.app.Application;
-
-import androidx.annotation.NonNull;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
@@ -12,16 +8,17 @@ import java.util.List;
 
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
-public class AccountViewModel extends AndroidViewModel {
+public class AccountViewModel extends ViewModel {
     private AccountRepository mAccountRepository;
     private LiveData<List<Account>> mAccountsExceptCurrentAccountLiveData;
     private LiveData<Account> mCurrentAccountLiveData;
+    private LiveData<List<Account>> mAllAccountsLiveData;
 
-    public AccountViewModel(Application application, RedditDataRoomDatabase redditDataRoomDatabase, String id) {
-        super(application);
-        mAccountRepository = new AccountRepository(redditDataRoomDatabase, id);
+    public AccountViewModel(RedditDataRoomDatabase redditDataRoomDatabase) {
+        mAccountRepository = new AccountRepository(redditDataRoomDatabase);
         mAccountsExceptCurrentAccountLiveData = mAccountRepository.getAccountsExceptCurrentAccountLiveData();
         mCurrentAccountLiveData = mAccountRepository.getCurrentAccountLiveData();
+        mAllAccountsLiveData = mAccountRepository.getAllAccountsLiveData();
     }
 
     public LiveData<List<Account>> getAccountsExceptCurrentAccountLiveData() {
@@ -32,27 +29,26 @@ public class AccountViewModel extends AndroidViewModel {
         return mCurrentAccountLiveData;
     }
 
+    public LiveData<List<Account>> getAllAccountsLiveData() {
+        return mAllAccountsLiveData;
+    }
+
     public void insert(Account userData) {
         mAccountRepository.insert(userData);
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
 
-        @NonNull
-        private final Application mApplication;
         private final RedditDataRoomDatabase mRedditDataRoomDatabase;
-        private final String mUsername;
 
-        public Factory(@NonNull Application application, RedditDataRoomDatabase redditDataRoomDatabase, String username) {
-            mApplication = application;
+        public Factory(RedditDataRoomDatabase redditDataRoomDatabase) {
             mRedditDataRoomDatabase = redditDataRoomDatabase;
-            mUsername = username;
         }
 
         @Override
         public <T extends ViewModel> T create(Class<T> modelClass) {
             //noinspection unchecked
-            return (T) new AccountViewModel(mApplication, mRedditDataRoomDatabase, mUsername);
+            return (T) new AccountViewModel(mRedditDataRoomDatabase);
         }
     }
 }

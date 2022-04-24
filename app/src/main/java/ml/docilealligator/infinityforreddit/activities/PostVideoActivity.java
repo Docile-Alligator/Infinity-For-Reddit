@@ -536,7 +536,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
 
             Intent intent = new Intent(this, SubmitPostService.class);
             intent.setData(videoUri);
-            intent.putExtra(SubmitPostService.EXTRA_ACCESS_TOKEN, mAccessToken);
+            intent.putExtra(SubmitPostService.EXTRA_ACCOUNT, mAccessToken);
             intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
             intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
             intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);

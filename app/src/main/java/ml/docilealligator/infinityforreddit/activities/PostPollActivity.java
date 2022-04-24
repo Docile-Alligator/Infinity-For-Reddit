@@ -580,7 +580,7 @@ public class PostPollActivity extends BaseActivity implements FlairBottomSheetFr
             mPostingSnackbar.show();
 
             Intent intent = new Intent(this, SubmitPostService.class);
-            intent.putExtra(SubmitPostService.EXTRA_ACCESS_TOKEN, mAccessToken);
+            intent.putExtra(SubmitPostService.EXTRA_ACCOUNT, mAccessToken);
             intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
             intent.putExtra(SubmitPostService.EXTRA_POST_TYPE, SubmitPostService.EXTRA_POST_TYPE_POLL);
             PollPayload payload = new PollPayload(subredditName, titleEditText.getText().toString(),
