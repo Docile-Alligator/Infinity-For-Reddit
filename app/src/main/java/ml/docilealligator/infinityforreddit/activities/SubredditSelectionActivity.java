@@ -27,6 +27,7 @@ import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -34,10 +35,12 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
+import ml.docilealligator.infinityforreddit.AnyAccountAccessTokenAuthenticator;
 import ml.docilealligator.infinityforreddit.FetchSubscribedThing;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubscribedThings;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -46,10 +49,13 @@ import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import okhttp3.ConnectionPool;
+import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 
 public class SubredditSelectionActivity extends BaseActivity implements ActivityToolbarInterface {
 
+    public static final String EXTRA_SPECIFIED_ACCOUNT = "ESA";
     public static final String EXTRA_EXTRA_CLEAR_SELECTION = "EECS";
     public static final String EXTRA_RETURN_SUBREDDIT_NAME = "ERSN";
     public static final String EXTRA_RETURN_SUBREDDIT_ICON_URL = "ERSIURL";
@@ -67,6 +73,9 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
     CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.toolbar_subreddit_selection_activity)
     Toolbar toolbar;
+    @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -128,9 +137,30 @@ public class SubredditSelectionActivity extends BaseActivity implements Activity
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
-        mAccountProfileImageUrl = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_IMAGE_URL, null);
+        if (getIntent().hasExtra(EXTRA_SPECIFIED_ACCOUNT)) {
+            Account specifiedAccount = getIntent().getParcelableExtra(EXTRA_SPECIFIED_ACCOUNT);
+            if (specifiedAccount != null) {
+                mAccessToken = specifiedAccount.getAccessToken();
+                mAccountName = specifiedAccount.getAccountName();
+                mAccountProfileImageUrl = specifiedAccount.getProfileImageUrl();
+
+                mOauthRetrofit = mOauthRetrofit.newBuilder().client(new OkHttpClient.Builder().authenticator(new AnyAccountAccessTokenAuthenticator(mRetrofit, mRedditDataRoomDatabase, specifiedAccount, mCurrentAccountSharedPreferences))
+                        .connectTimeout(30, TimeUnit.SECONDS)
+                        .readTimeout(30, TimeUnit.SECONDS)
+                        .writeTimeout(30, TimeUnit.SECONDS)
+                        .connectionPool(new ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
+                        .build())
+                        .build();
+            } else {
+                mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+                mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+                mAccountProfileImageUrl = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_IMAGE_URL, null);
+            }
+        } else {
+            mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+            mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+            mAccountProfileImageUrl = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_IMAGE_URL, null);
+        }
 
         if (savedInstanceState == null) {
             bindView(true);

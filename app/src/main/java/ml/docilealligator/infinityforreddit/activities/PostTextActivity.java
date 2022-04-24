@@ -315,12 +315,12 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
         });
 
         iconGifImageView.setOnClickListener(view -> {
-            Intent intent = new Intent(this, SubredditSelectionActivity.class);
-            startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
+            subredditNameTextView.performClick();
         });
 
         subredditNameTextView.setOnClickListener(view -> {
             Intent intent = new Intent(this, SubredditSelectionActivity.class);
+            intent.putExtra(SubredditSelectionActivity.EXTRA_SPECIFIED_ACCOUNT, selectedAccount);
             startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
         });
 

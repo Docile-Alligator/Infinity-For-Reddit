@@ -15,12 +15,12 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class FetchSubscribedThing {
-    public static void fetchSubscribedThing(final Retrofit retrofit, String accessToken, String accountName,
+    public static void fetchSubscribedThing(final Retrofit oauthRetrofit, String accessToken, String accountName,
                                             final String lastItem, final ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                             final ArrayList<SubscribedUserData> subscribedUserData,
                                             final ArrayList<SubredditData> subredditData,
                                             final FetchSubscribedThingListener fetchSubscribedThingListener) {
-        RedditAPI api = retrofit.create(RedditAPI.class);
+        RedditAPI api = oauthRetrofit.create(RedditAPI.class);
 
         Call<String> subredditDataCall = api.getSubscribedThing(lastItem, APIUtils.getOAuthHeader(accessToken));
         subredditDataCall.enqueue(new Callback<String>() {
@@ -40,7 +40,7 @@ public class FetchSubscribedThing {
                                         fetchSubscribedThingListener.onFetchSubscribedThingSuccess(
                                                 subscribedSubredditData, subscribedUserData, subredditData);
                                     } else {
-                                        fetchSubscribedThing(retrofit, accessToken, accountName, lastItem,
+                                        fetchSubscribedThing(oauthRetrofit, accessToken, accountName, lastItem,
                                                 subscribedSubredditData, subscribedUserData, subredditData,
                                                 fetchSubscribedThingListener);
                                     }
