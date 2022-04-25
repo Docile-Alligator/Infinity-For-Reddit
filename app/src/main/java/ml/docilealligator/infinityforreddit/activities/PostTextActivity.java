@@ -237,6 +237,8 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
                         .into(accountIconImageView);
 
                 accountNameTextView.setText(selectedAccount.getAccountName());
+            } else {
+                loadCurrentAccount();
             }
 
             if (subredditName != null) {
@@ -272,22 +274,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
         } else {
             isPosting = false;
 
-            Handler handler = new Handler();
-            mExecutor.execute(() -> {
-                Account account = mRedditDataRoomDatabase.accountDao().getCurrentAccount();
-                selectedAccount = account;
-                handler.post(() -> {
-                    if (!isFinishing() && !isDestroyed() && account != null) {
-                        mGlide.load(account.getProfileImageUrl())
-                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
-                                .error(mGlide.load(R.drawable.subreddit_default_icon)
-                                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                                .into(accountIconImageView);
-
-                        accountNameTextView.setText(account.getAccountName());
-                    }
-                });
-            });
+            loadCurrentAccount();
 
             if (getIntent().hasExtra(EXTRA_SUBREDDIT_NAME)) {
                 loadSubredditIconSuccessful = false;
@@ -314,9 +301,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
             fragment.show(getSupportFragmentManager(), fragment.getTag());
         });
 
-        iconGifImageView.setOnClickListener(view -> {
-            subredditNameTextView.performClick();
-        });
+        iconGifImageView.setOnClickListener(view -> subredditNameTextView.performClick());
 
         subredditNameTextView.setOnClickListener(view -> {
             Intent intent = new Intent(this, SubredditSelectionActivity.class);
@@ -411,6 +396,25 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
         markdownBottomBarRecyclerView.setLayoutManager(new LinearLayoutManagerBugFixed(this,
                 LinearLayoutManager.HORIZONTAL, false));
         markdownBottomBarRecyclerView.setAdapter(adapter);
+    }
+
+    private void loadCurrentAccount() {
+        Handler handler = new Handler();
+        mExecutor.execute(() -> {
+            Account account = mRedditDataRoomDatabase.accountDao().getCurrentAccount();
+            selectedAccount = account;
+            handler.post(() -> {
+                if (!isFinishing() && !isDestroyed() && account != null) {
+                    mGlide.load(account.getProfileImageUrl())
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                            .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                            .into(accountIconImageView);
+
+                    accountNameTextView.setText(account.getAccountName());
+                }
+            });
+        });
     }
 
     @Override

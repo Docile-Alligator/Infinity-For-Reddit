@@ -55,7 +55,9 @@ import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.AccountChooserBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SubmitImagePostEvent;
@@ -66,10 +68,12 @@ import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-public class PostImageActivity extends BaseActivity implements FlairBottomSheetFragment.FlairSelectionCallback {
+public class PostImageActivity extends BaseActivity implements FlairBottomSheetFragment.FlairSelectionCallback,
+        AccountChooserBottomSheetFragment.AccountChooserListener {
 
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
 
+    private static final String SELECTED_ACCOUNT_STATE = "SAS";
     private static final String SUBREDDIT_NAME_STATE = "SNS";
     private static final String SUBREDDIT_ICON_STATE = "SIS";
     private static final String SUBREDDIT_SELECTED_STATE = "SSS";
@@ -91,6 +95,12 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_post_image_activity)
     Toolbar toolbar;
+    @BindView(R.id.account_linear_layout_post_image_activity)
+    LinearLayout accountLinearLayout;
+    @BindView(R.id.account_icon_gif_image_view_post_image_activity)
+    GifImageView accountIconImageView;
+    @BindView(R.id.account_name_text_view_post_image_activity)
+    TextView accountNameTextView;
     @BindView(R.id.subreddit_icon_gif_image_view_post_image_activity)
     GifImageView iconGifImageView;
     @BindView(R.id.subreddit_name_text_view_post_image_activity)
@@ -146,6 +156,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
+    private Account selectedAccount;
     private String mAccessToken;
     private String mAccountName;
     private String iconUrl;
@@ -204,6 +215,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
 
         if (savedInstanceState != null) {
+            selectedAccount = savedInstanceState.getParcelable(SELECTED_ACCOUNT_STATE);
             subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
             iconUrl = savedInstanceState.getString(SUBREDDIT_ICON_STATE);
             subredditSelected = savedInstanceState.getBoolean(SUBREDDIT_SELECTED_STATE);
@@ -213,6 +225,18 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
             flair = savedInstanceState.getParcelable(FLAIR_STATE);
             isSpoiler = savedInstanceState.getBoolean(IS_SPOILER_STATE);
             isNSFW = savedInstanceState.getBoolean(IS_NSFW_STATE);
+
+            if (selectedAccount != null) {
+                mGlide.load(selectedAccount.getProfileImageUrl())
+                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                        .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                        .into(accountIconImageView);
+
+                accountNameTextView.setText(selectedAccount.getAccountName());
+            } else {
+                loadCurrentAccount();
+            }
 
             if (savedInstanceState.getString(IMAGE_URI_STATE) != null) {
                 imageUri = Uri.parse(savedInstanceState.getString(IMAGE_URI_STATE));
@@ -252,6 +276,8 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
         } else {
             isPosting = false;
 
+            loadCurrentAccount();
+
             if (getIntent().hasExtra(EXTRA_SUBREDDIT_NAME)) {
                 loadSubredditIconSuccessful = false;
                 subredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME);
@@ -272,13 +298,16 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
             }
         }
 
-        iconGifImageView.setOnClickListener(view -> {
-            Intent intent = new Intent(this, SubredditSelectionActivity.class);
-            startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
+        accountLinearLayout.setOnClickListener(view -> {
+            AccountChooserBottomSheetFragment fragment = new AccountChooserBottomSheetFragment();
+            fragment.show(getSupportFragmentManager(), fragment.getTag());
         });
+
+        iconGifImageView.setOnClickListener(view -> subredditNameTextView.performClick());
 
         subredditNameTextView.setOnClickListener(view -> {
             Intent intent = new Intent(this, SubredditSelectionActivity.class);
+            intent.putExtra(SubredditSelectionActivity.EXTRA_SPECIFIED_ACCOUNT, selectedAccount);
             startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
         });
 
@@ -372,6 +401,25 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
         });
     }
 
+    private void loadCurrentAccount() {
+        Handler handler = new Handler();
+        mExecutor.execute(() -> {
+            Account account = mRedditDataRoomDatabase.accountDao().getCurrentAccount();
+            selectedAccount = account;
+            handler.post(() -> {
+                if (!isFinishing() && !isDestroyed() && account != null) {
+                    mGlide.load(account.getProfileImageUrl())
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                            .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                            .into(accountIconImageView);
+
+                    accountNameTextView.setText(account.getAccountName());
+                }
+            });
+        });
+    }
+
     @Override
     public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
@@ -386,11 +434,12 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
+        primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
+        accountNameTextView.setTextColor(primaryTextColor);
         int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
         subredditNameTextView.setTextColor(secondaryTextColor);
         rulesButton.setTextColor(mCustomThemeWrapper.getButtonTextColor());
         rulesButton.setBackgroundColor(mCustomThemeWrapper.getColorPrimaryLightTheme());
-        primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         receivePostReplyNotificationsTextView.setTextColor(primaryTextColor);
         int dividerColor = mCustomThemeWrapper.getDividerColor();
         divider1.setDividerColor(dividerColor);
@@ -519,7 +568,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
 
             Intent intent = new Intent(this, SubmitPostService.class);
             intent.setData(imageUri);
-            intent.putExtra(SubmitPostService.EXTRA_ACCOUNT, mAccessToken);
+            intent.putExtra(SubmitPostService.EXTRA_ACCOUNT, selectedAccount);
             intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
             intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
             intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);
@@ -558,6 +607,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putParcelable(SELECTED_ACCOUNT_STATE, selectedAccount);
         outState.putString(SUBREDDIT_NAME_STATE, subredditName);
         outState.putString(SUBREDDIT_ICON_STATE, iconUrl);
         outState.putBoolean(SUBREDDIT_SELECTED_STATE, subredditSelected);
@@ -622,6 +672,21 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
         flairTextView.setBackgroundColor(flairBackgroundColor);
         flairTextView.setBorderColor(flairBackgroundColor);
         flairTextView.setTextColor(flairTextColor);
+    }
+
+    @Override
+    public void onAccountSelected(Account account) {
+        if (account != null) {
+            selectedAccount = account;
+
+            mGlide.load(selectedAccount.getProfileImageUrl())
+                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                    .error(mGlide.load(R.drawable.subreddit_default_icon)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                    .into(accountIconImageView);
+
+            accountNameTextView.setText(selectedAccount.getAccountName());
+        }
     }
 
     @Subscribe
