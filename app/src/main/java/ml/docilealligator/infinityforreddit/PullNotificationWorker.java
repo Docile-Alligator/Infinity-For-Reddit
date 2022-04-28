@@ -201,10 +201,7 @@ public class PullNotificationWorker extends Worker {
                     return Result.retry();
                 }
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return Result.retry();
-        } catch (JSONException e) {
+        } catch (IOException | JSONException e) {
             e.printStackTrace();
             return Result.retry();
         }
