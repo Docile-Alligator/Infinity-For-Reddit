@@ -59,8 +59,34 @@
                 <View
                     android:id="@+id/divider_comment_activity"
                     android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginBottom="16dp" />
+                    android:layout_height="1dp" />
+
+                <LinearLayout
+                    android:id="@+id/account_linear_layout_comment_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="16dp"
+                    android:paddingBottom="16dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
+
+                    <pl.droidsonroids.gif.GifImageView
+                        android:id="@+id/account_icon_gif_image_view_comment_activity"
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginStart="16dp" />
+
+                    <TextView
+                        android:id="@+id/account_name_text_view_comment_activity"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="32dp"
+                        android:textSize="?attr/font_default"
+                        android:fontFamily="?attr/font_family" />
+
+                </LinearLayout>
 
                 <EditText
                     android:id="@+id/comment_edit_text_comment_activity"
@@ -70,9 +96,7 @@
                     android:gravity="top"
                     android:hint="@string/write_comment_hint"
                     android:inputType="textCapSentences|textMultiLine"
-                    android:paddingStart="16dp"
-                    android:paddingEnd="16dp"
-                    android:paddingBottom="16dp"
+                    android:padding="16dp"
                     android:textColor="?attr/primaryTextColor"
                     android:textSize="?attr/content_font_18"
                     android:fontFamily="?attr/content_font_family" />

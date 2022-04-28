@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +28,9 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
@@ -39,6 +43,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -60,11 +65,16 @@ import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
+import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import ml.docilealligator.infinityforreddit.AnyAccountAccessTokenAuthenticator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.UploadImageEnabledActivity;
 import ml.docilealligator.infinityforreddit.UploadedImage;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.adapters.MarkdownBottomBarRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.AccountChooserBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UploadedImagesBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.comment.Comment;
@@ -76,9 +86,12 @@ import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
+import okhttp3.ConnectionPool;
+import okhttp3.OkHttpClient;
+import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-public class CommentActivity extends BaseActivity implements UploadImageEnabledActivity {
+public class CommentActivity extends BaseActivity implements UploadImageEnabledActivity, AccountChooserBottomSheetFragment.AccountChooserListener {
 
     public static final String EXTRA_COMMENT_PARENT_TEXT_KEY = "ECPTK";
     public static final String EXTRA_COMMENT_PARENT_TEXT_MARKDOWN_KEY = "ECPTMK";
@@ -93,6 +106,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     private static final int PICK_IMAGE_REQUEST_CODE = 100;
     private static final int CAPTURE_IMAGE_REQUEST_CODE = 200;
     private static final int MARKDOWN_PREVIEW_REQUEST_CODE = 300;
+
+    private static final String SELECTED_ACCOUNT_STATE = "SAS";
     private static final String UPLOADED_IMAGES_STATE = "UIS";
 
     @BindView(R.id.coordinator_layout_comment_activity)
@@ -107,16 +122,27 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     View divider;
     @BindView(R.id.content_markdown_view_comment_activity)
     RecyclerView contentMarkdownRecyclerView;
+    @BindView(R.id.account_linear_layout_comment_activity)
+    LinearLayout accountLinearLayout;
+    @BindView(R.id.account_icon_gif_image_view_comment_activity)
+    GifImageView accountIconImageView;
+    @BindView(R.id.account_name_text_view_comment_activity)
+    TextView accountNameTextView;
     @BindView(R.id.comment_edit_text_comment_activity)
     EditText commentEditText;
     @BindView(R.id.markdown_bottom_bar_recycler_view_comment_activity)
     RecyclerView markdownBottomBarRecyclerView;
+    @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
     @Named("upload_media")
     Retrofit mUploadMediaRetrofit;
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
@@ -127,6 +153,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
+    private RequestManager mGlide;
+    private Account selectedAccount;
     private String mAccessToken;
     private String parentFullname;
     private int parentDepth;
@@ -161,6 +189,10 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         }
 
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        if (mAccessToken == null) {
+            finish();
+            return;
+        }
 
         Intent intent = getIntent();
         String parentTextMarkdown = intent.getStringExtra(EXTRA_COMMENT_PARENT_TEXT_MARKDOWN_KEY);
@@ -297,8 +329,25 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
 
         setSupportActionBar(toolbar);
 
+        mGlide = Glide.with(this);
+
         if (savedInstanceState != null) {
+            selectedAccount = savedInstanceState.getParcelable(SELECTED_ACCOUNT_STATE);
             uploadedImages = savedInstanceState.getParcelableArrayList(UPLOADED_IMAGES_STATE);
+
+            if (selectedAccount != null) {
+                mGlide.load(selectedAccount.getProfileImageUrl())
+                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                        .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                        .into(accountIconImageView);
+
+                accountNameTextView.setText(selectedAccount.getAccountName());
+            } else {
+                loadCurrentAccount();
+            }
+        } else {
+            loadCurrentAccount();
         }
 
         MarkdownBottomBarRecyclerViewAdapter adapter = new MarkdownBottomBarRecyclerViewAdapter(
@@ -325,6 +374,11 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                 LinearLayoutManagerBugFixed.HORIZONTAL, false));
         markdownBottomBarRecyclerView.setAdapter(adapter);
 
+        accountLinearLayout.setOnClickListener(view -> {
+            AccountChooserBottomSheetFragment fragment = new AccountChooserBottomSheetFragment();
+            fragment.show(getSupportFragmentManager(), fragment.getTag());
+        });
+
         commentEditText.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
@@ -332,9 +386,29 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         }
     }
 
+    private void loadCurrentAccount() {
+        Handler handler = new Handler();
+        mExecutor.execute(() -> {
+            Account account = mRedditDataRoomDatabase.accountDao().getCurrentAccount();
+            selectedAccount = account;
+            handler.post(() -> {
+                if (!isFinishing() && !isDestroyed() && account != null) {
+                    mGlide.load(account.getProfileImageUrl())
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                            .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                            .into(accountIconImageView);
+
+                    accountNameTextView.setText(account.getAccountName());
+                }
+            });
+        });
+    }
+
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putParcelable(SELECTED_ACCOUNT_STATE, selectedAccount);
         outState.putParcelableArrayList(UPLOADED_IMAGES_STATE, uploadedImages);
     }
 
@@ -360,6 +434,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
         commentEditText.setHintTextColor(secondaryTextColor);
         markdownColor = secondaryTextColor;
+        accountNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
 
         if (typeface != null) {
             commentParentMarkwonView.setTypeface(typeface);
@@ -419,8 +494,15 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             Snackbar sendingSnackbar = Snackbar.make(coordinatorLayout, R.string.sending_comment, Snackbar.LENGTH_INDEFINITE);
             sendingSnackbar.show();
 
+            Retrofit newAuthenticatorOauthRetrofit = mOauthRetrofit.newBuilder().client(new OkHttpClient.Builder().authenticator(new AnyAccountAccessTokenAuthenticator(mRetrofit, mRedditDataRoomDatabase, selectedAccount, mCurrentAccountSharedPreferences))
+                    .connectTimeout(30, TimeUnit.SECONDS)
+                    .readTimeout(30, TimeUnit.SECONDS)
+                    .writeTimeout(30, TimeUnit.SECONDS)
+                    .connectionPool(new ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
+                    .build())
+                    .build();
             SendComment.sendComment(mExecutor, new Handler(), commentEditText.getText().toString(),
-                    parentFullname, parentDepth, mOauthRetrofit, mAccessToken,
+                    parentFullname, parentDepth, newAuthenticatorOauthRetrofit, selectedAccount,
                     new SendComment.SendCommentListener() {
                         @Override
                         public void sendCommentSuccess(Comment comment) {
@@ -544,5 +626,20 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
                 "[" + uploadedImage.imageName + "](" + uploadedImage.imageUrl + ")",
                 0, "[]()".length() + uploadedImage.imageName.length() + uploadedImage.imageUrl.length());
+    }
+
+    @Override
+    public void onAccountSelected(Account account) {
+        if (account != null) {
+            selectedAccount = account;
+
+            mGlide.load(selectedAccount.getProfileImageUrl())
+                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                    .error(mGlide.load(R.drawable.subreddit_default_icon)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                    .into(accountIconImageView);
+
+            accountNameTextView.setText(selectedAccount.getAccountName());
+        }
     }
 }
