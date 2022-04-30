@@ -156,7 +156,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
                 int navBarHeight = getNavBarHeight();
                 if (navBarHeight > 0) {
                     CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
-                    params.bottomMargin = navBarHeight;
+                    params.bottomMargin += navBarHeight;
                     fab.setLayoutParams(params);
                 }
             }

@@ -371,26 +371,14 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
                     searchPostSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchPostSortTypeBottomSheetFragment.getTag());
                     break;
                 case PostPagingSource.TYPE_SUBREDDIT:
-                    if (name.equals("popular") || name.equals("all")) {
-                        SortTypeBottomSheetFragment popularAndAllSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-                        Bundle popularBundle = new Bundle();
-                        popularBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-                        popularAndAllSortTypeBottomSheetFragment.setArguments(popularBundle);
-                        popularAndAllSortTypeBottomSheetFragment.show(getSupportFragmentManager(), popularAndAllSortTypeBottomSheetFragment.getTag());
-                    } else {
-                        SortTypeBottomSheetFragment subredditSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-                        Bundle subredditSheetBundle = new Bundle();
-                        subredditSheetBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-                        subredditSortTypeBottomSheetFragment.setArguments(subredditSheetBundle);
-                        subredditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), subredditSortTypeBottomSheetFragment.getTag());
-                    }
-                    break;
                 case PostPagingSource.TYPE_MULTI_REDDIT:
-                    SortTypeBottomSheetFragment multiRedditSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-                    Bundle multiRedditBundle = new Bundle();
-                    multiRedditBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-                    multiRedditSortTypeBottomSheetFragment.setArguments(multiRedditBundle);
-                    multiRedditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), multiRedditSortTypeBottomSheetFragment.getTag());
+                case PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT:
+                case PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE:
+                    SortTypeBottomSheetFragment sortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
+                    Bundle popularBundle = new Bundle();
+                    popularBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
+                    sortTypeBottomSheetFragment.setArguments(popularBundle);
+                    sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
                     break;
                 case PostPagingSource.TYPE_USER:
                     UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment = new UserThingSortTypeBottomSheetFragment();

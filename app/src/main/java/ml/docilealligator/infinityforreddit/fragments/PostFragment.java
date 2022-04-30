@@ -718,9 +718,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             usage = PostFilterUsage.HOME_TYPE;
             nameOfUsage = PostFilterUsage.NO_USAGE;
 
-            String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_BEST_POST, SortType.Type.BEST.name());
+            String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST_BASE + "-", SortType.Type.HOT.name());
             if (sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
-                String sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_BEST_POST, SortType.Time.ALL.name());
+                String sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST_BASE + "-", SortType.Time.ALL.name());
                 sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
             } else {
                 sortType = new SortType(SortType.Type.valueOf(sort));
@@ -778,7 +778,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             usage = PostFilterUsage.MULTIREDDIT_TYPE;
             nameOfUsage = multiRedditPath;
 
-            String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE + multiRedditPath, SortType.Type.BEST.name());
+            String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE + multiRedditPath, SortType.Type.HOT.name());
             if (sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
                 String sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_MULTI_REDDIT_POST_BASE + multiRedditPath, SortType.Time.ALL.name());
                 sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
@@ -1355,11 +1355,18 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                         }
                         break;
                     case PostPagingSource.TYPE_MULTI_REDDIT:
+                    case PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT:
                         mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE + multiRedditPath,
                                 sortType.getType().name()).apply();
                         if (sortType.getTime() != null) {
                             mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_MULTI_REDDIT_POST_BASE + multiRedditPath,
                                     sortType.getTime().name()).apply();
+                        }
+                        break;
+                    case PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE:
+                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST_BASE + "-", sortType.getType().name()).apply();
+                        if (sortType.getTime() != null) {
+                            mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST_BASE + "-", sortType.getTime().name()).apply();
                         }
                         break;
                 }
