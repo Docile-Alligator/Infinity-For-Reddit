@@ -796,6 +796,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 @Override
                 public void typeChipClicked(int filter) {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, multiRedditPath);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
                     startActivity(intent);
@@ -804,6 +805,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 @Override
                 public void flairChipClicked(String flair) {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, multiRedditPath);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredPostsActivity.EXTRA_CONTAIN_FLAIR, flair);
                     startActivity(intent);
@@ -812,6 +814,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 @Override
                 public void nsfwChipClicked() {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, multiRedditPath);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, Post.NSFW_TYPE);
                     startActivity(intent);
@@ -1001,7 +1004,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                         FetchPostFilterReadPostsAndConcatenatedSubredditNames.fetchPostFilterAndConcatenatedSubredditNames(mRedditDataRoomDatabase, mExecutor, new Handler(), usage, nameOfUsage,
                                 (postFilter, concatenatedSubredditNames) -> {
                                     if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
-                                        this.postFilter = postFilter;
                                         postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_BASE, false);
                                         this.concatenatedSubredditNames = concatenatedSubredditNames;
                                         if (concatenatedSubredditNames == null) {
@@ -1019,7 +1021,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                         FetchPostFilterReadPostsAndConcatenatedSubredditNames.fetchPostFilterAndConcatenatedSubredditNames(mRedditDataRoomDatabase, mExecutor, new Handler(), multiRedditPath, usage, nameOfUsage,
                                 (postFilter, concatenatedSubredditNames) -> {
                                     if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
-                                        this.postFilter = postFilter;
                                         postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_BASE, false);
                                         this.concatenatedSubredditNames = concatenatedSubredditNames;
                                         if (concatenatedSubredditNames == null) {

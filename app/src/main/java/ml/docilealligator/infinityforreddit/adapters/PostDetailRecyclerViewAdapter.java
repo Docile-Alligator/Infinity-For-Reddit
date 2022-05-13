@@ -421,10 +421,13 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             case Post.GIF_TYPE:
                 if (mAutoplay) {
                     if ((!mAutoplayNsfwVideos && mPost.isNSFW()) || mPost.isSpoiler()) {
-                        return VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW;
+                        return VIEW_TYPE_POST_DETAIL_NO_PREVIEW_LINK;
                     }
                     return VIEW_TYPE_POST_DETAIL_GIF_AUTOPLAY;
                 } else {
+                    if ((mPost.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit())) || (mPost.isSpoiler() && mNeedBlurSpoiler)) {
+                        return VIEW_TYPE_POST_DETAIL_NO_PREVIEW_LINK;
+                    }
                     return VIEW_TYPE_POST_DETAIL_VIDEO_AND_GIF_PREVIEW;
                 }
             case Post.IMAGE_TYPE:
