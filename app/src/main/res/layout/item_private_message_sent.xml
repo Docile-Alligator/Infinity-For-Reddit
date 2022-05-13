@@ -40,4 +40,18 @@
         app:layout_constraintWidth_percent="0.7"
         app:layout_constraintHorizontal_bias="1" />
 
+    <ImageView
+        android:id="@+id/copy_image_view_item_private_message_sent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:src="@drawable/ic_copy_24dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/actionBarItemBackground"
+        android:visibility="gone"
+        app:layout_constraintEnd_toStartOf="@id/time_text_view_item_private_message_sent"
+        app:layout_constraintTop_toBottomOf="@id/message_text_view_item_private_message_sent"
+        app:layout_constraintBottom_toBottomOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

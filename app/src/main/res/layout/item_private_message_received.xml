@@ -15,8 +15,7 @@
         android:layout_height="36dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/barrier3" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/message_text_view_item_private_message_received"
@@ -44,18 +43,24 @@
         android:textSize="?attr/font_default"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/avatar_image_view_item_private_message_received"
         app:layout_constraintTop_toBottomOf="@id/message_text_view_item_private_message_received"
         app:layout_constraintWidth_max="wrap"
         app:layout_constraintWidth_percent="0.7"
         app:layout_constraintHorizontal_bias="0" />
 
-    <androidx.constraintlayout.widget.Barrier
-        android:id="@+id/barrier3"
+    <ImageView
+        android:id="@+id/copy_image_view_item_private_message_received"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:barrierDirection="start"
-        app:constraint_referenced_ids="message_text_view_item_private_message_received, time_text_view_item_private_message_received" />
+        android:padding="16dp"
+        android:src="@drawable/ic_copy_24dp"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="?attr/actionBarItemBackground"
+        android:visibility="gone"
+        app:layout_constraintStart_toEndOf="@id/time_text_view_item_private_message_received"
+        app:layout_constraintTop_toBottomOf="@id/message_text_view_item_private_message_received"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

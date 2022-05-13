@@ -225,12 +225,6 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                     intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, message.getAuthor());
                     mActivity.startActivity(intent);
                 });
-
-                ((DataViewHolder) holder).contentCustomMarkwonView.setOnClickListener(view -> {
-                    if (((DataViewHolder) holder).contentCustomMarkwonView.getSelectionStart() == -1 && ((DataViewHolder) holder).contentCustomMarkwonView.getSelectionEnd() == -1) {
-                        holder.itemView.performClick();
-                    }
-                });
             }
         }
     }
@@ -330,6 +324,12 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
             contentCustomMarkwonView.setTextColor(mSecondaryTextColor);
 
             contentCustomMarkwonView.setMovementMethod(LinkMovementMethod.getInstance());
+
+            contentCustomMarkwonView.setOnClickListener(view -> {
+                if (contentCustomMarkwonView.getSelectionStart() == -1 && contentCustomMarkwonView.getSelectionEnd() == -1) {
+                    itemView.performClick();
+                }
+            });
         }
     }
 
