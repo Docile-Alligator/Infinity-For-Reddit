@@ -147,7 +147,11 @@ public class AccountSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     }
 
     public void setInboxCount(int inboxCount) {
-        this.inboxCount = inboxCount;
+        if (inboxCount < 0) {
+            this.inboxCount = Math.max(0, this.inboxCount + inboxCount);
+        } else {
+            this.inboxCount = inboxCount;
+        }
         notifyDataSetChanged();
     }
 

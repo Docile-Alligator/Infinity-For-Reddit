@@ -17,6 +17,8 @@ import androidx.paging.PagedListAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -40,6 +42,7 @@ import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPrivateMessagesActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.events.ChangeInboxCountEvent;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.message.FetchMessage;
@@ -171,7 +174,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                     if (markAllMessagesAsRead) {
                         message.setNew(false);
                     } else {
-                        ((DataViewHolder) holder).itemView.setBackgroundColor(
+                        holder.itemView.setBackgroundColor(
                                 mUnreadMessageBackgroundColor);
                     }
                 }
@@ -209,6 +212,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                                 new ReadMessage.ReadMessageListener() {
                                     @Override
                                     public void readSuccess() {
+                                        EventBus.getDefault().post(new ChangeInboxCountEvent(-1));
                                     }
 
                                     @Override
