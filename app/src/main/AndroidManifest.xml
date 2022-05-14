@@ -39,8 +39,7 @@
             android:label="@string/post_poll_activity_label"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize"
-            android:exported="false" />
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.EditProfileActivity"
             android:label="@string/edit_profile_activity_label"
@@ -215,7 +214,7 @@
             android:theme="@style/AppTheme.Slidable" />
         <activity
             android:name=".activities.ShareDataResolverActivity"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
