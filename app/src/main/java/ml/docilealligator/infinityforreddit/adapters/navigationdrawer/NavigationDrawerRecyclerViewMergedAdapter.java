@@ -1,14 +1,12 @@
 package ml.docilealligator.infinityforreddit.adapters.navigationdrawer;
 
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 
 import androidx.recyclerview.widget.ConcatAdapter;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import ml.docilealligator.infinityforreddit.account.Account;
@@ -26,11 +24,6 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
     private SubscribedSubredditsRecyclerViewAdapter subscribedSubredditsRecyclerViewAdapter;
     private AccountManagementSectionRecyclerViewAdapter accountManagementSectionRecyclerViewAdapter;
     private ConcatAdapter mainPageConcatAdapter;
-
-    private Resources resources;
-    private ArrayList<Account> accounts;
-    private boolean isLoggedIn;
-    private boolean isInMainPage = true;
 
     public NavigationDrawerRecyclerViewMergedAdapter(BaseActivity baseActivity, SharedPreferences sharedPreferences,
                                                      SharedPreferences nsfwAndSpoilerSharedPreferences,
@@ -92,7 +85,6 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
         mainPageConcatAdapter.removeAdapter(subscribedSubredditsRecyclerViewAdapter);
 
         mainPageConcatAdapter.addAdapter(accountManagementSectionRecyclerViewAdapter);
-        isInMainPage = false;
     }
 
     public void closeAccountSectionWithoutChangeIconResource() {

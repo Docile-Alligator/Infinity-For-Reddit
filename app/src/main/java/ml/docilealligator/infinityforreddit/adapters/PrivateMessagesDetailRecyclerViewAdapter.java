@@ -45,6 +45,7 @@ import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPrivateMessagesActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.message.Message;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -76,6 +77,7 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
         mGlide = Glide.with(viewPrivateMessagesActivity);
         mLocale = locale;
         mAccountName = accountName;
+        int commentColor = customThemeWrapper.getCommentColor();
         mMarkwon = Markwon.builder(viewPrivateMessagesActivity)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                     plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
@@ -116,6 +118,7 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
                     }
                 })
                 .usePlugin(StrikethroughPlugin.create())
+                .usePlugin(SpoilerParserPlugin.create(commentColor, commentColor | 0xFF000000))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .build();
         mShowElapsedTime = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
@@ -163,17 +166,6 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
                 } else {
                     ((MessageViewHolder) holder).timeTextView.setText(Utils.getFormattedTime(mLocale, message.getTimeUTC(), mTimeFormatPattern));
                 }
-
-                ((MessageViewHolder) holder).messageTextView.setOnClickListener(view -> {
-                    if (((MessageViewHolder) holder).timeTextView.getVisibility() != View.VISIBLE) {
-                        ((MessageViewHolder) holder).timeTextView.setVisibility(View.VISIBLE);
-                        ((MessageViewHolder) holder).copyImageView.setVisibility(View.VISIBLE);
-                    } else {
-                        ((MessageViewHolder) holder).timeTextView.setVisibility(View.GONE);
-                        ((MessageViewHolder) holder).copyImageView.setVisibility(View.GONE);
-                    }
-                    mViewPrivateMessagesActivity.delayTransition();
-                });
             }
 
             if (holder instanceof SentMessageViewHolder) {
@@ -263,6 +255,23 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
 
             messageTextView.setTextColor(Color.WHITE);
             timeTextView.setTextColor(mSecondaryTextColor);
+
+            itemView.setOnClickListener(view -> {
+                if (timeTextView.getVisibility() != View.VISIBLE) {
+                    timeTextView.setVisibility(View.VISIBLE);
+                    copyImageView.setVisibility(View.VISIBLE);
+                } else {
+                    timeTextView.setVisibility(View.GONE);
+                    copyImageView.setVisibility(View.GONE);
+                }
+                mViewPrivateMessagesActivity.delayTransition();
+            });
+
+            messageTextView.setOnClickListener(view -> {
+                if (messageTextView.getSelectionStart() == -1 && messageTextView.getSelectionEnd() == -1) {
+                    itemView.performClick();
+                }
+            });
 
             copyImageView.setColorFilter(mSecondaryTextColor, android.graphics.PorterDuff.Mode.SRC_IN);
 
