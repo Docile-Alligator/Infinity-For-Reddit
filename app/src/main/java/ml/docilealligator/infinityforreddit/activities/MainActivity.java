@@ -213,6 +213,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Named("navigation_drawer")
     SharedPreferences mNavigationDrawerSharedPreferences;
     @Inject
+    @Named("security")
+    SharedPreferences mSecuritySharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
@@ -724,8 +727,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         fab.setVisibility(View.VISIBLE);
 
         adapter = new NavigationDrawerRecyclerViewMergedAdapter(this, mSharedPreferences,
-                mNsfwAndSpoilerSharedPreferences, mNavigationDrawerSharedPreferences, mCustomThemeWrapper, mAccountName,
-                new NavigationDrawerRecyclerViewMergedAdapter.ItemClickListener() {
+                mNsfwAndSpoilerSharedPreferences, mNavigationDrawerSharedPreferences, mSecuritySharedPreferences,
+                mCustomThemeWrapper, mAccountName, new NavigationDrawerRecyclerViewMergedAdapter.ItemClickListener() {
                     @Override
                     public void onMenuClick(int stringId) {
                         Intent intent = null;

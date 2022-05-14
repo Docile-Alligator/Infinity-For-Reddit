@@ -532,7 +532,7 @@
     <string name="settings_swipe_action_threshold">Threshold</string>
     <string name="settings_pull_to_refresh_title">Pull to Refresh</string>
     <string name="settings_security_title">Security</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">Require Authentication to Go to Account Section in Navigation Drawer</string>
+    <string name="settings_require_authentication_to_show_accounts">Require Authentication to Show Accounts</string>
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">Long Press to Hide Toolbar</string>
     <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">Hide Toolbar by Default</string>
     <string name="settings_customize_bottom_app_bar_title">Customize Bottom Navigation Bar</string>

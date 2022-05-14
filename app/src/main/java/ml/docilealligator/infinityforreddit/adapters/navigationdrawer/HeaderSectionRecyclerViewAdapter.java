@@ -49,6 +49,7 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     public HeaderSectionRecyclerViewAdapter(BaseActivity baseActivity, RequestManager glide, String accountName,
                                             SharedPreferences sharedPreferences,
                                             SharedPreferences navigationDrawerSharedPreferences,
+                                            SharedPreferences securitySharedPreferences,
                                             PageToggle pageToggle) {
         this.baseActivity = baseActivity;
         resources = baseActivity.getResources();
@@ -56,7 +57,7 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         this.accountName = accountName;
         isLoggedIn = accountName != null;
         this.pageToggle = pageToggle;
-        requireAuthToAccountSection = sharedPreferences.getBoolean(SharedPreferencesUtils.REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER, false);
+        requireAuthToAccountSection = securitySharedPreferences.getBoolean(SharedPreferencesUtils.REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER, false);
         showAvatarOnTheRightInTheNavigationDrawer = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_AVATAR_ON_THE_RIGHT, false);
         showAvatarOnTheRightInTheNavigationDrawer = navigationDrawerSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_AVATAR_ON_THE_RIGHT, false);
     }

@@ -35,23 +35,25 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
     public NavigationDrawerRecyclerViewMergedAdapter(BaseActivity baseActivity, SharedPreferences sharedPreferences,
                                                      SharedPreferences nsfwAndSpoilerSharedPreferences,
                                                      SharedPreferences navigationDrawerSharedPreferences,
+                                                     SharedPreferences securitySharedPreferences,
                                                      CustomThemeWrapper customThemeWrapper,
                                                      String accountName,
                                                      ItemClickListener itemClickListener) {
         RequestManager glide = Glide.with(baseActivity);
 
         headerSectionRecyclerViewAdapter = new HeaderSectionRecyclerViewAdapter(baseActivity, glide, accountName,
-                sharedPreferences, navigationDrawerSharedPreferences, new HeaderSectionRecyclerViewAdapter.PageToggle() {
-            @Override
-            public void openAccountSection() {
-                NavigationDrawerRecyclerViewMergedAdapter.this.openAccountSection();
-            }
+                sharedPreferences, navigationDrawerSharedPreferences, securitySharedPreferences,
+                new HeaderSectionRecyclerViewAdapter.PageToggle() {
+                    @Override
+                    public void openAccountSection() {
+                        NavigationDrawerRecyclerViewMergedAdapter.this.openAccountSection();
+                    }
 
-            @Override
-            public void closeAccountSectionWithoutChangeIconResource() {
-                NavigationDrawerRecyclerViewMergedAdapter.this.closeAccountSectionWithoutChangeIconResource();
-            }
-        });
+                    @Override
+                    public void closeAccountSectionWithoutChangeIconResource() {
+                        NavigationDrawerRecyclerViewMergedAdapter.this.closeAccountSectionWithoutChangeIconResource();
+                    }
+                });
         accountSectionRecyclerViewAdapter = new AccountSectionRecyclerViewAdapter(baseActivity, customThemeWrapper,
                 navigationDrawerSharedPreferences, accountName != null, itemClickListener);
         redditSectionRecyclerViewAdapter = new RedditSectionRecyclerViewAdapter(baseActivity, customThemeWrapper,
