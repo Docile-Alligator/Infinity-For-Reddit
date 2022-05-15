@@ -288,7 +288,6 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
         if (position >= 0 && position < super.getItemCount()) {
             Message message = getItem(position);
             if (message != null) {
-                message.addReply(newReply);
                 notifyItemChanged(position);
             }
         }
