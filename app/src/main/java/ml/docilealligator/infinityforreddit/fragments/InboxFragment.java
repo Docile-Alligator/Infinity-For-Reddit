@@ -13,6 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -31,8 +32,8 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.NetworkState;
-import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.adapters.MessageRecyclerViewAdapter;
@@ -40,6 +41,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.events.RepliedToPrivateMessageEvent;
 import ml.docilealligator.infinityforreddit.message.FetchMessage;
+import ml.docilealligator.infinityforreddit.message.Message;
 import ml.docilealligator.infinityforreddit.message.MessageViewModel;
 import retrofit2.Retrofit;
 
@@ -212,6 +214,21 @@ public class InboxFragment extends Fragment implements FragmentCommunicator {
     private void onRefresh() {
         mMessageViewModel.refresh();
         mAdapter.setNetworkState(null);
+    }
+
+    public Message getMessageByIndex(int index) {
+        if (mMessageViewModel == null || index < 0) {
+            return null;
+        }
+        PagedList<Message> messages = mMessageViewModel.getMessages().getValue();
+        if (messages == null) {
+            return null;
+        }
+        if (index >= messages.size()) {
+            return null;
+        }
+
+        return messages.get(index);
     }
 
     @Override

@@ -55,7 +55,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
     private static final int VIEW_TYPE_DATA = 0;
     private static final int VIEW_TYPE_ERROR = 1;
     private static final int VIEW_TYPE_LOADING = 2;
-    private static final DiffUtil.ItemCallback<Message> DIFF_CALLBACK = new DiffUtil.ItemCallback<Message>() {
+    private static final DiffUtil.ItemCallback<Message> DIFF_CALLBACK = new DiffUtil.ItemCallback<>() {
         @Override
         public boolean areItemsTheSame(@NonNull Message message, @NonNull Message t1) {
             return message.getId().equals(t1.getId());
@@ -199,7 +199,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                         mActivity.startActivity(intent);
                     } else if (mMessageType == FetchMessage.MESSAGE_TYPE_PRIVATE_MESSAGE) {
                         Intent intent = new Intent(mActivity, ViewPrivateMessagesActivity.class);
-                        intent.putExtra(ViewPrivateMessagesActivity.EXTRA_PRIVATE_MESSAGE, message);
+                        intent.putExtra(ViewPrivateMessagesActivity.EXTRA_PRIVATE_MESSAGE_INDEX, holder.getBindingAdapterPosition());
                         intent.putExtra(ViewPrivateMessagesActivity.EXTRA_MESSAGE_POSITION, holder.getBindingAdapterPosition());
                         mActivity.startActivity(intent);
                     }

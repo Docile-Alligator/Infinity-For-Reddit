@@ -54,9 +54,12 @@ import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.ChangeInboxCountEvent;
+import ml.docilealligator.infinityforreddit.events.PassPrivateMessageEvent;
+import ml.docilealligator.infinityforreddit.events.PassPrivateMessageIndexEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.InboxFragment;
 import ml.docilealligator.infinityforreddit.message.FetchMessage;
+import ml.docilealligator.infinityforreddit.message.Message;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -378,6 +381,13 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         }
     }
 
+    @Subscribe
+    public void onPassPrivateMessageIndexEvent(PassPrivateMessageIndexEvent event) {
+        if (sectionsPagerAdapter != null) {
+            EventBus.getDefault().post(new PassPrivateMessageEvent(sectionsPagerAdapter.getPrivateMessage(event.privateMessageIndex)));
+        }
+    }
+
     @Override
     public void onLongPress() {
         if (sectionsPagerAdapter != null) {
@@ -440,6 +450,17 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
             if (fragment != null) {
                 fragment.markAllMessagesRead();
             }
+        }
+
+        Message getPrivateMessage(int index) {
+            if (viewPager2 == null || fragmentManager == null) {
+                return null;
+            }
+            Fragment fragment = fragmentManager.findFragmentByTag("f" + viewPager2.getCurrentItem());
+            if (fragment instanceof InboxFragment) {
+                return ((InboxFragment) fragment).getMessageByIndex(index);
+            }
+            return null;
         }
 
         @NonNull

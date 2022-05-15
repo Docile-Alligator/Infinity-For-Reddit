@@ -22,6 +22,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
@@ -39,6 +40,8 @@ import ml.docilealligator.infinityforreddit.adapters.PrivateMessagesDetailRecycl
 import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.events.PassPrivateMessageEvent;
+import ml.docilealligator.infinityforreddit.events.PassPrivateMessageIndexEvent;
 import ml.docilealligator.infinityforreddit.events.RepliedToPrivateMessageEvent;
 import ml.docilealligator.infinityforreddit.message.Message;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
@@ -48,9 +51,10 @@ import retrofit2.Retrofit;
 
 public class ViewPrivateMessagesActivity extends BaseActivity implements ActivityToolbarInterface {
 
-    public static final String EXTRA_PRIVATE_MESSAGE = "EPM";
+    public static final String EXTRA_PRIVATE_MESSAGE_INDEX = "EPM";
     public static final String EXTRA_MESSAGE_POSITION = "EMP";
     private static final String USER_AVATAR_STATE = "UAS";
+    private static final String PRIVATE_MESSAGES_STATE = "PMS";
     @BindView(R.id.linear_layout_view_private_messages_activity)
     LinearLayout mLinearLayout;
     @BindView(R.id.coordinator_layout_view_private_messages_activity)
@@ -111,14 +115,13 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
 
         ButterKnife.bind(this);
 
+        EventBus.getDefault().register(this);
+
         applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
             addOnOffsetChangedListener(mAppBarLayout);
         }
-
-        Intent intent = getIntent();
-        privateMessage = intent.getParcelableExtra(EXTRA_PRIVATE_MESSAGE);
 
         setSupportActionBar(mToolbar);
         setToolbarGoToTop(mToolbar);
@@ -130,8 +133,15 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
 
         if (savedInstanceState != null) {
             mUserAvatar = savedInstanceState.getString(USER_AVATAR_STATE);
+            privateMessage = savedInstanceState.getParcelable(PRIVATE_MESSAGES_STATE);
+            if (privateMessage == null) {
+                EventBus.getDefault().post(new PassPrivateMessageIndexEvent(getIntent().getIntExtra(EXTRA_PRIVATE_MESSAGE_INDEX, -1)));
+            } else {
+                bindView();
+            }
+        } else {
+            EventBus.getDefault().post(new PassPrivateMessageIndexEvent(getIntent().getIntExtra(EXTRA_PRIVATE_MESSAGE_INDEX, -1)));
         }
-        bindView();
     }
 
     private void bindView() {
@@ -275,6 +285,13 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(USER_AVATAR_STATE, mUserAvatar);
+        outState.putParcelable(PRIVATE_MESSAGES_STATE, privateMessage);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -307,6 +324,14 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     public void onLongPress() {
         if (mLinearLayoutManager != null) {
             mLinearLayoutManager.scrollToPositionWithOffset(0, 0);
+        }
+    }
+
+    @Subscribe
+    public void onPassPrivateMessageEvent(PassPrivateMessageEvent passPrivateMessageEvent) {
+        privateMessage = passPrivateMessageEvent.message;
+        if (privateMessage != null) {
+            bindView();
         }
     }
 
