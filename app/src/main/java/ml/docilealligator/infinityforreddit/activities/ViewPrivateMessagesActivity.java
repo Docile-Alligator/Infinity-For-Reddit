@@ -7,6 +7,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -14,6 +16,11 @@ import android.widget.LinearLayout;
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowCompat;
+import androidx.core.view.WindowInsetsAnimationCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
@@ -25,6 +32,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -55,8 +63,6 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     public static final String EXTRA_MESSAGE_POSITION = "EMP";
     private static final String USER_AVATAR_STATE = "UAS";
     private static final String PRIVATE_MESSAGES_STATE = "PMS";
-    @BindView(R.id.linear_layout_view_private_messages_activity)
-    LinearLayout mLinearLayout;
     @BindView(R.id.coordinator_layout_view_private_messages_activity)
     CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.appbar_layout_view_private_messages_activity)
@@ -107,7 +113,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
-        setImmersiveModeNotApplicable();
+        //setImmersiveModeNotApplicable();
 
         super.onCreate(savedInstanceState);
 
@@ -121,6 +127,34 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
             addOnOffsetChangedListener(mAppBarLayout);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            Window window = getWindow();
+
+            if (isChangeStatusBarIconColor()) {
+                addOnOffsetChangedListener(mAppBarLayout);
+            }
+
+            if (isImmersiveInterface()) {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                    mCoordinatorLayout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+                            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+                    window.setDecorFitsSystemWindows(false);
+                    WindowCompat.setDecorFitsSystemWindows(window, false);
+                } else {
+                    window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+                }
+                adjustToolbar(mToolbar);
+
+                int navBarHeight = getNavBarHeight();
+                if (navBarHeight > 0) {
+                    LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) mEditTextLinearLayout.getLayoutParams();
+                    params.bottomMargin += navBarHeight;
+                    mEditTextLinearLayout.setLayoutParams(params);
+                }
+            }
         }
 
         setSupportActionBar(mToolbar);
@@ -142,6 +176,23 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
         } else {
             EventBus.getDefault().post(new PassPrivateMessageIndexEvent(getIntent().getIntExtra(EXTRA_PRIVATE_MESSAGE_INDEX, -1)));
         }
+
+        ViewCompat.setWindowInsetsAnimationCallback(
+                mCoordinatorLayout,
+                new WindowInsetsAnimationCompat.Callback(
+                        WindowInsetsAnimationCompat.Callback.DISPATCH_MODE_CONTINUE_ON_SUBTREE
+                ) {
+                    @NonNull
+                    @Override
+                    public WindowInsetsCompat onProgress(@NonNull WindowInsetsCompat insets, @NonNull List<WindowInsetsAnimationCompat> runningAnimations) {
+                        Insets typesInset = insets.getInsets(WindowInsetsCompat.Type.ime());
+                        Insets otherInset = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                        Insets diff = Insets.max(Insets.NONE, Insets.subtract(typesInset, otherInset));
+
+                        mCoordinatorLayout.setPadding(0, 0, 0, diff.bottom);
+                        return insets;
+                    }
+                });
     }
 
     private void bindView() {
@@ -306,7 +357,7 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
 
     @Override
     protected void applyCustomTheme() {
-        mLinearLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        mCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(mAppBarLayout, null, mToolbar);
         mDivider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
         mEditText.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
