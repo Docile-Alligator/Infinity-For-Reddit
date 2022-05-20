@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit.services;
 
+import static android.os.Environment.getExternalStoragePublicDirectory;
+
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -49,8 +51,6 @@ import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 import retrofit2.Retrofit;
-
-import static android.os.Environment.getExternalStoragePublicDirectory;
 
 public class DownloadMediaService extends Service {
     public static final String EXTRA_URL = "EU";
@@ -336,7 +336,7 @@ public class DownloadMediaService extends Service {
                             intent.setAction(android.content.Intent.ACTION_VIEW);
                             intent.setDataAndType(destinationFileUri, mimeType);
                             intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                            PendingIntent pendingIntent = PendingIntent.getActivity(DownloadMediaService.this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+                            PendingIntent pendingIntent = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.getActivity(DownloadMediaService.this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE) : PendingIntent.getActivity(DownloadMediaService.this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
                             updateNotification(mediaType, R.string.downloading_media_finished, -1,
                                     randomNotificationIdOffset, pendingIntent);
                             EventBus.getDefault().post(new DownloadMediaEvent(true));
