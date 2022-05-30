@@ -215,21 +215,24 @@
         <activity
             android:name=".activities.ShareDataResolverActivity"
             android:exported="true">
-            <intent-filter>
+            <intent-filter
+                android:label="@string/submit_post">
                 <action android:name="android.intent.action.SEND" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="image/*" />
             </intent-filter>
-            <intent-filter>
+            <intent-filter
+                android:label="@string/submit_post">
                 <action android:name="android.intent.action.SEND" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="video/*" />
             </intent-filter>
-            <intent-filter>
+            <intent-filter
+                android:label="@string/submit_post">
                 <action android:name="android.intent.action.SEND" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -275,6 +278,14 @@
         <activity
             android:name=".activities.LinkResolverActivity"
             android:exported="true">
+            <intent-filter
+                android:label="@string/handle_link">
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 

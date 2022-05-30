@@ -1292,4 +1292,7 @@
     <string name="awarder_karma">Awarder Karma:</string>
     <string name="awardee_karma">Awardee Karma:</string>
 
+    <string name="handle_link">Handle Link</string>
+    <string name="invalid_link">Invalid link</string>
+
 </resources>
