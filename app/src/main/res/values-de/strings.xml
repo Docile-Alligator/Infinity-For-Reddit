@@ -6,8 +6,8 @@
 
     <!-- Ja wür ich auch sagen -->
     <string name="post_text_activity_label">"Text-Beitrag"</string>
-    <string name="subreddit_selection_activity_label">"Wähle einen Subreddit"</string>
-    <string name="post_link_activity_label">"Beitrag verlinken"</string>
+    <string name="subreddit_selection_activity_label">"Wähle ein Subreddit"</string>
+    <string name="post_link_activity_label">"Link-Beitrag"</string>
     <string name="post_image_activity_label">"Bild-Beitrag"</string>
     <string name="post_video_activity_label">"Video-Beitrag"</string>
     <string name="rules_activity_label">"Regeln"</string>
@@ -840,7 +840,6 @@ Reiter könnten den Inhalt verlieren, wenn zu anderen gewechselt wird. Selbes Ve
     <string name="settings_swipe_action_threshold">"Begrenzung"</string>
     <string name="settings_pull_to_refresh_title">"Ziehen zum Aktualisieren"</string>
     <string name="settings_security_title">"Sicherheit"</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Authentifizierung für die Kontosektion in der Seitenleiste erfordern"</string>
 
     <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Langes Drücken, um die Werkzeugleiste in der Kompaktansicht zu verstecken"</string>
@@ -1168,7 +1167,7 @@ Antippen zum Wiederholen."</string>
     <string name="settings_use_bottom_toolbar_in_media_viewer_title">"Nutzen Sie die untere Toolbar im Medienviewer"</string>
     <string name="settings_secure_mode_title">"Sicherer Modus"</string>
     <string name="settings_secure_mode_summary">"Bildschirmaufnahmen und -aufzeichnungen sind nicht erlaubt. In der Appübersicht wird keine Voransicht gezeigt."</string>
-    <string name="discard_dialog_button">"Abbrechen"</string>
+    <string name="discard_dialog_button">"Verwerfen"</string>
     <string name="error_loading_wiki">"Fehler beim Laden des Wiki"</string>
     <string name="no_wiki">"Dieser Subreddit hat keine Wiki-Seite"</string>
     <string name="material_you_notification_title">"Material You anwenden"</string>
@@ -1189,7 +1188,7 @@ Antippen zum Wiederholen."</string>
     <string name="settings_enable_fold_support_title">"Fold-Handy Unterstützung aktivieren"</string>
     <string name="settings_default_playback_speed_title">"Standard Wiedergabegeschwindigkeit"</string>
     <string name="settings_link_handler_value_external_browser">"Externer Browser"</string>
-    <string name="settings_link_handler_value_custom_tab">"Eigener Reiter"</string>
+    <string name="settings_link_handler_value_custom_tab">"Custom Tab"</string>
     <string name="settings_link_handler_value_internal_browser">"Interner Browser"</string>
     <string name="settings_legacy_autoplay_video_controller_ui_title">"Altes Video-Steuerungs UI"</string>
     <string name="settings_pinch_to_zoom_video_title">"Pinch-To-Zoom Video"</string>
@@ -1252,4 +1251,48 @@ Antippen zum Wiederholen."</string>
     <string name="message_change_banner_failed">"Banner konnte nicht geändert werden %s"</string>
     <string name="message_save_profile_success">"Profil erfolgreich gespeichert"</string>
     <string name="message_save_profile_failed">"Profil konnte nicht gespeichert werden %s"</string>
+    <string name="post_poll_activity_label">"Umfrage-Post"</string>
+    <string name="action_open_external_browser">"Im Browser öffnen"</string>
+    <string name="voting_length">"Abstimmungslänge: %1$d tage"</string>
+    <string name="two_options_required">"Eine gute Umfrage braucht zwei oder mehr Optionen!"</string>
+    <string name="bottom_sheet_post_poll">"Umfrage"</string>
+    <string name="no_activity_found_for_external_browser">"Keinen externen Browser gefunden"</string>
+    <string name="settings_require_authentication_to_show_accounts">"Authentifizierung benötigt um Profile anzuzeigen"</string>
+    <string name="settings_custom_font_family_title">"Benutzerdefinierte Schriftart-familie"</string>
+    <string name="settings_custom_title_font_family_title">"Benutzerdefinierte Titelschriftart-familie"</string>
+    <string name="settings_custom_content_font_family_title">"Benutzerdefinierte Inhaltschriftart-familie"</string>
+    <string name="settings_fixed_height_preview_in_card_title">"Festgestellte Höhe in Kartenansicht"</string>
+    <string name="settings_hide_text_post_content">"Text-Post Inhalt verstecken"</string>
+    <string name="settings_hide_comment_awards_title">"Kommentarauszeichnungen verstecken "</string>
+    <string name="settings_show_fewer_toolbar_options_threshold_title">"Weniger Werkzeugleistenoptionen anzeigen"</string>
+    <string name="settings_show_fewer_toolbar_options_threshold_summary">"Wert %1$d"</string>
+    <string name="settings_show_author_avatar_title">"Autoravatar zeigen"</string>
+    <string name="settings_reddit_user_agreement_title">"Reddit Nutzungsbestimmungen "</string>
+    <string name="settings_always_show_child_comment_count_title">"Immer die Anzahl von untergeordneten Kommentaren anzeigen"</string>
+    <string name="settings_hide_upvote_ratio_title">"Upvoteverhaltnis verstecken"</string>
+    <string name="settings_miscellaneous_dangerous_group_title">"Gefährlich"</string>
+    <string name="settings_post_feed_max_resolution_warning_title">"Wert erhöhen um Vorschau in höherer Qualität zu zeigen, aber die App kann unerwartet abstürzen."</string>
+    <string name="settings_post_feed_max_resolution_title">"Beitragsvorschau maximale Auflösung (Höhe * Breite)"</string>
+    <string name="settings_reddit_video_default_resolution">"Reddit Video Standardauflösung"</string>
+    <string name="select_a_ttf_font">"ttf Schriftart Datei auswählen"</string>
+    <string name="unable_to_get_font_file">"Schriftart konnte nicht geladen werden"</string>
+    <string name="unable_to_load_font">"Benutzerdefinierte Schriftart konnte nicht geladen werden"</string>
+    <string name="unable_to_copy_font_file">"Schriftart konnte nicht kopiert werden"</string>
+    <string name="reddit_gallery_item_caption_hint">"Titel (max 180 Buchstaben)"</string>
+    <string name="reddit_gallery_item_url_hint">"Url"</string>
+    <string name="user_agreement_dialog_title">"Nutzungsbedingungen"</string>
+    <string name="user_agreement_message">"Du musst Reddit Nutzungsbedingungen (%1$s) und Infinity for reddit's Datenschutz-Bestimmungen (%2$s) zustimmen bevor du dich anmelden kannst."</string>
+    <string name="agree">"Zustimmen"</string>
+    <string name="do_not_agree">"Nicht zustimmen "</string>
+    <string name="option_1_hint">"Option 1 (notwendig)"</string>
+    <string name="option_2_hint">"Option 2 (notwendig)"</string>
+    <string name="option_3_hint">"Option 3"</string>
+    <string name="option_4_hint">"Option 4"</string>
+    <string name="option_5_hint">"Option 5"</string>
+    <string name="option_6_hint">"Option 6"</string>
+    <string name="not_a_valid_number">"Keine valide Nummer"</string>
+    <string name="post_karma">"Beitragskarma:"</string>
+    <string name="comment_karma">"Kommentarkarma:"</string>
+    <string name="awarder_karma">"Auszeichnungskarma:"</string>
+    <string name="awardee_karma">"Ausgezeichnetenkarma:"</string>
 </resources>

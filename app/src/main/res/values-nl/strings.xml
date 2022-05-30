@@ -791,7 +791,6 @@ Voorbeeld: yourpass: 123456"</string>
     <string name="settings_swipe_action_threshold">"Drempel"</string>
     <string name="settings_pull_to_refresh_title">"Trek om te vernieuwen"</string>
     <string name="settings_security_title">"Beveiliging"</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Verificatie vereist om naar het accountgedeelte in de navigatielade te gaan"</string>
 
     <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Druk lang in om werkbalk in compacte layout te verbergen"</string>

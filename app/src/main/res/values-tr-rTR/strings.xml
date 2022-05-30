@@ -799,7 +799,6 @@ Sekmeler, diğerlerine geçtikten sonra tüm içeriği kaybedebilir. Bu, sayfay�
     <string name="settings_swipe_action_threshold">"Düzey"</string>
     <string name="settings_pull_to_refresh_title">"Yenilemek İçin Çektir"</string>
     <string name="settings_security_title">"Güvenlik"</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Gezinme Çekmecesinde Hesap Bölümüne Gitmek İçin Kimlik Doğrulaması İste"</string>
 
     <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Araç Çubuğunu Gizlemek İçin Uzun Bas"</string>

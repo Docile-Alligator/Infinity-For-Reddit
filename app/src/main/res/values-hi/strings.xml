@@ -853,7 +853,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_swipe_action_threshold">"दहलीज "</string>
     <string name="settings_pull_to_refresh_title">"ताजा करने के लिए खींचें"</string>
     <string name="settings_security_title">"सुरक्षा "</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"नेवीगेशन दराज में खाता अनुभाग पर जाने के लिए सत्यापन आवश्यक "</string>
 
     <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"संक्षिप्त विन्यास में टूलबार को छुपाने के लिए लॉंग प्रैस "</string>
@@ -963,6 +962,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_enable_search_history_title">"सुरक्षा इतिहास सक्षम करें"</string>
     <string name="settings_post_history_title">"इतिहास के बाद"</string>
     <string name="settings_mark_posts_as_read_title">"पोस्ट को पढ़ने के रूप में चिह्नित करें"</string>
+    <string name="settings_hide_read_posts_automatically_title">"पठन पोस्ट स्वचालित रूप से छुपाएँ"</string>
     <string name="about">"एप के बारे में"</string>
     <string name="app_lock_timeout_immediately">"तुरंत "</string>
     <string name="app_lock_timeout_1_min">"1 मिनट "</string>

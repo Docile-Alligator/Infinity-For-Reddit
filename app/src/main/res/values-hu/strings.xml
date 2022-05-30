@@ -786,7 +786,6 @@ Az alap az indigó amoled téma"</string>
     <string name="settings_swipe_action_threshold">"Küszöb"</string>
     <string name="settings_pull_to_refresh_title">"Húzd a frissítéshez"</string>
     <string name="settings_security_title">"Biztonság"</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Kelljen azonosítás, hogy be lehessen lépni a fiók szekcióba a navigációs fiókban"</string>
 
     <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Nyomd hosszan, hogy elrejtsd az eszköztárat kompakt elrendezésben"</string>
@@ -970,6 +969,7 @@ Videó autómatikus lejátszása le van tiltva."</string>
     <string name="settings_backup_settings_title">"Beállítások biztonsági mentése"</string>
     <string name="settings_restore_settings_title">"Beállítások visszaállítása"</string>
     <string name="settings_credits_love_animation_title">"Love animáció"</string>
+    <string name="settings_swipe_between_posts_title">"Váltás "</string>
     <string name="settings_navigation_drawer_title">"Navigációs fiók"</string>
     <string name="settings_default_search_result_tab">"Alapértelmezett keresési találatok fül"</string>
     <string name="device_default">"Eszköz alapértelmezett"</string>

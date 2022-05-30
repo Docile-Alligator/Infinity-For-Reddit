@@ -840,7 +840,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_swipe_action_threshold">"判定阈值"</string>
     <string name="settings_pull_to_refresh_title">"下拉刷新"</string>
     <string name="settings_security_title">"安全"</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"需要验证才能前往导航抽屉中的“帐户”部分"</string>
 
     <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"在紧凑布局下长按隐藏工具栏"</string>
@@ -1248,4 +1247,12 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="message_change_banner_failed">"修改横幅失败 %s"</string>
     <string name="message_save_profile_success">"保存档案成功"</string>
     <string name="message_save_profile_failed">"保存档案失败 %s"</string>
+    <string name="action_open_external_browser">"在浏览器中打开"</string>
+    <string name="voting_length">"投票时间：%1$d 天"</string>
+    <string name="settings_custom_font_family_title">"自定义字体"</string>
+    <string name="settings_custom_title_font_family_title">"自定义标题字体"</string>
+    <string name="settings_custom_content_font_family_title">"自定义正文字体"</string>
+    <string name="settings_show_fewer_toolbar_options_threshold_summary">"等级 %1$d"</string>
+    <string name="settings_show_author_avatar_title">"显示作者头像"</string>
+    <string name="settings_miscellaneous_dangerous_group_title">"危险"</string>
 </resources>

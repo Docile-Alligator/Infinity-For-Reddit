@@ -561,7 +561,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_indicator">"Colore Indicatore di Scheda del layout schede nella Barra degli Strumenti Compressa"</string>
     <string name="theme_item_tab_layout_with_collapsed_collapsing_toolbar_tab_indicator_detail">"Applicato a: Colore dell'indicatore della scheda nel layout della scheda (barra degli strumenti compressa)"</string>
     <string name="theme_item_upvoted_color">"Colore Upvoto"</string>
-    <string name="theme_item_upvoted_color_detail">"Applicato a: Pulsanti di voto e punteggi (Upvoto)"</string>
+    <string name="theme_item_upvoted_color_detail">"Applicato a: Pulsanti di voto e punteggi (Upvotato)"</string>
     <string name="theme_item_downvoted_color">"Colore Voto Negativo"</string>
     <string name="theme_item_downvoted_color_detail">"Applicato a: Pulsanti di voto e punteggi (voto negativo)"</string>
     <string name="theme_item_post_type_background_color">"Colore Sfondo del Tipo di Post"</string>
@@ -770,7 +770,6 @@ Le schede possono perdere tutto il contenuto dopo il passaggio ad altre. Questo 
     <string name="settings_swipe_action_threshold">"Soglia"</string>
     <string name="settings_pull_to_refresh_title">"Trascina per aggiornare"</string>
     <string name="settings_security_title">"Sicurezza"</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Richiede autenticazione per andare nella sezione account nella barra di navigazione"</string>
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Premere a lungo per nascondere la barra degli strumenti"</string>
     <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"Nascondi la barra degli strumenti per impostazione predefinita"</string>
     <string name="settings_customize_bottom_app_bar_title">"Personalizza la barra di navigazione inferiore"</string>
@@ -960,8 +959,8 @@ La riproduzione automatica video è disabilitata"</string>
     <string name="settings_default_search_result_tab">"Scheda predefinita dei risultati di ricerca"</string>
     <string name="device_default">"Dispositivo predefinito"</string>
     <string name="set_by_battery_saver">"Impostato dal risparmio batteria"</string>
-    <string name="theme_item_upvote_ratio_icon_tint">"Colore icona rapporto upvoto"</string>
-    <string name="theme_item_upvote_ratio_icon_tint_detail">"Applicato a: icona rapporto upvoto"</string>
+    <string name="theme_item_upvote_ratio_icon_tint">"Colore icona percentuale upvoti"</string>
+    <string name="theme_item_upvote_ratio_icon_tint_detail">"Applicato a: icona percentuale upvoti"</string>
     <string name="theme_item_current_user_color">"Utente corrente"</string>
     <string name="theme_item_current_user_color_detail">"Applicato a: Utente corrente nei commenti"</string>
     <string name="exclude_domains_hint">"Escludi domini"</string>

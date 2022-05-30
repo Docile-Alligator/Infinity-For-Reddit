@@ -821,7 +821,6 @@ Ejemplo: contraseña:123456"</string>
     <string name="settings_swipe_action_threshold">"Umbral"</string>
     <string name="settings_pull_to_refresh_title">"Jalar para actualizar"</string>
     <string name="settings_security_title">"Seguridad"</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Requerir autenticación al ir a la sección de cuentas en el cajón lateral"</string>
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Mantener pulsado para ocultar la barra de herramientas"</string>
     <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"Ocultar barra superior por defecto"</string>
     <string name="settings_customize_bottom_app_bar_title">"Personalizar barra de navegación inferior"</string>
@@ -848,8 +847,6 @@ La reproducción automática de video está deshabilitada."</string>
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"Descarga fallida: directorio de destino inaccesible"</string>
     <string name="downloading_media_failed_cannot_download_media">"Descarga fallida"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"Descarga fallida: no se puede guardar el archivo al directorio de destino"</string>
-
-    <!-- Ver Markdown completo -->
     <string name="select_user_flair_success">"Etiqueta de usuario seleccionada"</string>
     <string name="select_this_user_flair">"¿Seleccionar esta etiqueta de usuario?"</string>
     <string name="select_header_size">"Seleccionar tamaño de encabezado"</string>
@@ -1194,7 +1191,7 @@ Toque para volver a intentarlo."</string>
     <string name="action_contact_mods">"Contactar moderadores"</string>
     <string name="settings_save_nsfw_media_in_different_folder_title">"Guardar contenido NSFW en una ubicación diferente"</string>
     <string name="settings_nsfw_download_location_title">"Ubicación de descargas NSFW"</string>
-    <string name="fetch_streamable_video_failed">"No fue posible el vídeo de Streamable"</string>
+    <string name="fetch_streamable_video_failed">"No fue posible obtener el vídeo de Streamable"</string>
 
     <!-- EditProfileService Notification -->
     <string name="submit_change_avatar">"Actualizando avatar"</string>

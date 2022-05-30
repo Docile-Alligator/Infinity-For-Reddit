@@ -198,11 +198,11 @@
     <string name="search_in">"Hledat v"</string>
     <string name="all_subreddits">"Všechny subreddity"</string>
     <string name="sort_best">"Nejlepší"</string>
-    <string name="sort_hot">"Horké"</string>
-    <string name="sort_new">"Žhavé"</string>
+    <string name="sort_hot">"Žhavé"</string>
+    <string name="sort_new">"Nové"</string>
     <string name="sort_random">"Náhodné"</string>
     <string name="sort_rising">"Na vzestupu"</string>
-    <string name="sort_top">"Top"</string>
+    <string name="sort_top">"Nejčtenější"</string>
     <string name="sort_controversial">"Sporné"</string>
     <string name="sort_relevance">"Relevance"</string>
     <string name="sort_comments">"Komentáře"</string>
@@ -781,7 +781,6 @@ Karty mohou po přepnutí na jiné ztratit veškerý obsah. To je stejné jako o
     <string name="settings_swipe_action_threshold">"Práh"</string>
     <string name="settings_pull_to_refresh_title">"Potáhnout pro obnovení"</string>
     <string name="settings_security_title">"Bezpečnost"</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Vyžadovat ověření pro vstup do sekce účtů v navigačním panelu"</string>
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Dlouhé podržení pro skrytí nástrojové lišty"</string>
     <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"Skrývat nástrojovou lištu"</string>
     <string name="settings_customize_bottom_app_bar_title">"Přizpůsobit spodní navigační lištu"</string>

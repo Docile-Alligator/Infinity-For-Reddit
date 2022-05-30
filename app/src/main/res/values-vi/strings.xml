@@ -790,7 +790,6 @@ Các tab có thể sẽ mất tất cả nội dung sau khi chuyển sang các t
     <string name="settings_swipe_action_threshold">"Ngưỡng"</string>
     <string name="settings_pull_to_refresh_title">"Kéo để làm mới"</string>
     <string name="settings_security_title">"Bảo mật"</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Yêu cầu xác thực để đi đến khu vực Tài khoản trong ngăn điều hướng"</string>
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Nhấn giữ để ẩn thanh công cụ"</string>
     <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"Ẩn thanh công cụ theo mặc định"</string>
     <string name="settings_customize_bottom_app_bar_title">"Tuỳ biến thanh điều hướng ở dưới cùng"</string>
@@ -1117,11 +1116,16 @@ Nhấn để thử lại."</string>
     <string name="settings_link_handler_value_external_browser">"Trình duyệt ngoài"</string>
     <string name="settings_link_handler_value_custom_tab">"Thẻ tùy chọn"</string>
     <string name="settings_link_handler_value_internal_browser">"Trình duyệt nội bộ"</string>
+    <string name="settings_legacy_autoplay_video_controller_ui_title">"Giao diện Trình điều khiển Video cũ"</string>
     <string name="settings_pinch_to_zoom_video_title">"Chạm để thu phóng Video"</string>
     <string name="settings_experimental_feature">"Tính năng thử nghiệm"</string>
+    <string name="theme_item_media_indicator_icon_color">"Màu biểu tượng chỉ phương tiện"</string>
     <string name="theme_item_media_indicator_icon_color_detail">"Đã áp dụng cho: xem trước bài đăng cho Video hoặc Thư viện "</string>
+    <string name="theme_item_media_indicator_background_color">"Màu nền chỉ phương tiện"</string>
+    <string name="theme_item_media_indicator_background_color_detail">"Áp dụng cho: Nền của biểu tượng video hoặc thư viện ở mục xem trước bài đăng"</string>
     <string name="go_to_top">"Lên trên cùng"</string>
     <string name="title_contains_strings_hint">"Tiêu đề: chứa từ khoá (từ 1, từ 2)"</string>
+    <string name="title_contains_regex_hint">"Tiêu đề: chứa biểu thức thường"</string>
     <string name="contain_domains_hint">"Chứa đường dẫn"</string>
     <string name="anonymous_multireddit_no_subreddit">"Không có subreddit nào cho trình multireddit này!"</string>
     <string name="error_fetching_v_redd_it_video_cannot_get_video_url">"Lỗi xử lý video v.redd.it: Không thể lấy đường dẫn video"</string>
@@ -1143,4 +1147,34 @@ Nhấn để thử lại."</string>
     <string name="app_lock_timeout_6_hours">"6 tiếng"</string>
     <string name="app_lock_timeout_12_hours">"12 tiếng"</string>
     <string name="app_lock_timeout_24_hours">"24 tiếng"</string>
+    <string name="edit_profile_activity_label">"Chỉnh sửa Hồ sơ"</string>
+    <string name="action_contact_mods">"Liên hệ Quản trị viên"</string>
+    <string name="settings_save_nsfw_media_in_different_folder_title">"Lưu Phương tiện NSFW trong thư mục khác"</string>
+    <string name="settings_nsfw_download_location_title">"Vị trí tải xuống nội dung NSFW"</string>
+    <string name="fetch_streamable_video_failed">"Lấy video Streamable thất bại"</string>
+
+    <!-- EditProfileService Notification -->
+    <string name="submit_change_avatar">"Lưu thay đổi Ảnh đị diện"</string>
+    <string name="submit_change_banner">"Gửi Đổi ảnh Banner"</string>
+    <string name="submit_save_profile">"Gửi Lưu hồ sơ"</string>
+
+    <!-- EditProfileActivity -->
+    <string name="action_edit_profile">"Chỉnh sửa Hồ sơ"</string>
+    <string name="remove_avatar">"Gỡ Ảnh đại diện"</string>
+    <string name="remove_banner">"Gỡ Banner"</string>
+    <string name="display_name_text">"Tên hiển thị"</string>
+    <string name="display_name_hint">"Hiện trên trang hồ sơ của bạn"</string>
+    <string name="display_name_description">"Cái này sẽ được hiện cho những người xem trang hồ sơ của bạn và không thay đổi tên người dùng của bạn."</string>
+    <string name="about_you_text">"Thông tin về bạn"</string>
+    <string name="about_you_hint">"Mô tả ngắn về bạn"</string>
+    <string name="message_remove_avatar_success">"Xoá ảnh đại diện thành công"</string>
+    <string name="message_remove_avatar_failed">"Xoá ảnh đại diện %s thất bại"</string>
+    <string name="message_remove_banner_success">"Xoá banner thành công"</string>
+    <string name="message_remove_banner_failed">"Gỡ bỏ banner thất bại"</string>
+    <string name="message_change_avatar_success">"Thay đổi ảnh đại diện thành công"</string>
+    <string name="message_change_avatar_failed">"Thay đổi ảnh đại diện thất bại"</string>
+    <string name="message_change_banner_success">"Thay đổi banner thành công"</string>
+    <string name="message_change_banner_failed">"Thay đổi banner thất bại"</string>
+    <string name="message_save_profile_success">"Lưu Hồ sơ thành công"</string>
+    <string name="message_save_profile_failed">"Lưu hồ sơ %s thất bại"</string>
 </resources>

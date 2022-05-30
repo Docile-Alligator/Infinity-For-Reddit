@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="login_activity_label">"Se Connecter"</string>
+    <string name="login_activity_label">"Se connecter"</string>
     <string name="comment_activity_label">"Envoyer le commentaire"</string>
     <string name="comment_activity_label_is_replying">"Répondre"</string>
     <string name="post_text_activity_label">"Poster du texte"</string>
@@ -18,7 +18,7 @@
     <string name="settings_activity_label">"Paramètres"</string>
 
     <!-- Fuzzy -->
-    <string name="account_saved_thing_activity_label">"Sauvegarder"</string>
+    <string name="account_saved_thing_activity_label">"Sauvegardé"</string>
     <string name="create_multi_reddit_activity_label">"Créer un multireddit"</string>
     <string name="subreddit_multiselection_activity_label">"Sélectionner les subreddits"</string>
     <string name="custom_theme_listing_activity_label">"Thèmes personnalisés"</string>
@@ -874,7 +874,6 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="settings_swipe_action_threshold">"Seuil"</string>
     <string name="settings_pull_to_refresh_title">"Tirer pour rafraîchir"</string>
     <string name="settings_security_title">"Sécurité"</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Requérir une authentification pour accéder à la section \"compte\" dans le tiroir de navigation "</string>
 
     <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Appuyer longuement pour cacher la barre d'outils dans la disposition \"compacte\""</string>
@@ -988,6 +987,7 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="settings_hide_read_posts_automatically_title">"Cacher les posts lus automatiquement"</string>
     <string name="settings_sort_type_title">"Type de tri"</string>
     <string name="settings_save_sort_type_title">"Enregistrer le type de tri"</string>
+    <string name="settings_subreddit_default_sort_type_title">"Type de tri par défaut des subreddits"</string>
     <string name="open_link">"Ouvrir le lien"</string>
     <string name="theme_item_read_post_title_color_detail">"Lire le Titre du Post"</string>
     <string name="theme_item_read_post_content_color">"Lire la couleur du contenu du post"</string>
@@ -1027,6 +1027,7 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
     <string name="settings_hide_the_number_of_votes">"Cacher le Nombre de Votes"</string>
     <string name="settings_hide_the_number_of_comments">"Cacher le Nombre de Commentaires"</string>
     <string name="post_layout_gallery">"Disposition de la galerie"</string>
+    <string name="post_layout_card_2">"Disposition de carte 2"</string>
     <string name="have_trouble_login_title">"Problème de connexion"</string>
     <string name="have_trouble_login_message">"Voulez vous essayer un autre moyen d'identification ?"</string>
     <string name="vote">"Vote"</string>
@@ -1146,6 +1147,7 @@ Cliquer pour réessayer."</string>
     <string name="settings_separate_post_and_comments_summary">"La lecture automatique de la vidéo sera désactivée dans la page de détail de la publication"</string>
     <string name="settings_secure_mode_title">"Mode sécursé"</string>
     <string name="settings_secure_mode_summary">"Les captures d'écran et les enregistrements vidéo ne sont pas autorisés. Aucun aperçu dans l'écran de l'application récente."</string>
+    <string name="discard_dialog_button">"Jeter"</string>
     <string name="error_loading_wiki">"Erreur de chargement du wiki"</string>
     <string name="no_wiki">"Ce subreddit n'a pas de page wiki"</string>
     <string name="material_you_notification_title">"Application de Material You"</string>

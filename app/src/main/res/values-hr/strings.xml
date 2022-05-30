@@ -815,7 +815,6 @@ Baziraj na Indigo Amoled temi"</string>
     <string name="settings_swipe_action_threshold">"Prag"</string>
     <string name="settings_pull_to_refresh_title">"Povuci za ovježavanje"</string>
     <string name="settings_security_title">"Sigurnost"</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Zatraži autentikaciju pri ulasku u Račun u navigacijskoj ladici"</string>
 
     <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Dugo pritisni za skrivanje alatne trake u Kompaktnom rasporedu"</string>

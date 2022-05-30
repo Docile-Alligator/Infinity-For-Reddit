@@ -778,7 +778,6 @@ Os separadores poderão perder todo o conteúdo após alternar entre outros. É 
     <string name="settings_swipe_action_threshold">"Valor limite"</string>
     <string name="settings_pull_to_refresh_title">"Puxe para Atualizar"</string>
     <string name="settings_security_title">"Segurança"</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Requer Autenticação para Ir à Secção de Conta na Gaveta de Navegação"</string>
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Pressionar longo para Esconder Barra de Ferramentas"</string>
     <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"Esconder Barra de Ferramentas por Defeito"</string>
     <string name="settings_customize_bottom_app_bar_title">"Personalizar Barra de Navegação Inferior"</string>
