@@ -115,7 +115,7 @@ public class DownloadMediaService extends Service {
                             if (currentTime - time > 1000) {
                                 time = currentTime;
                                 updateNotification(mediaType, 0,
-                                        (int) ((100 * bytesRead) / contentLength), randomNotificationIdOffset, null);
+                                        (int) ((100 * bytesRead) / contentLength), randomNotificationIdOffset, null, null);
                             }
                         }
                     }
@@ -316,15 +316,15 @@ public class DownloadMediaService extends Service {
                 switch (errorCode) {
                     case ERROR_CANNOT_GET_DESTINATION_DIRECTORY:
                         updateNotification(mediaType, R.string.downloading_image_or_gif_failed_cannot_get_destination_directory,
-                                -1, randomNotificationIdOffset, null);
+                                -1, randomNotificationIdOffset, null, null);
                         break;
                     case ERROR_FILE_CANNOT_DOWNLOAD:
                         updateNotification(mediaType, R.string.downloading_media_failed_cannot_download_media,
-                                -1, randomNotificationIdOffset, null);
+                                -1, randomNotificationIdOffset, null, null);
                         break;
                     case ERROR_FILE_CANNOT_SAVE:
                         updateNotification(mediaType, R.string.downloading_media_failed_cannot_save_to_destination_directory,
-                                -1, randomNotificationIdOffset, null);
+                                -1, randomNotificationIdOffset, null, null);
                         break;
                 }
                 EventBus.getDefault().post(new DownloadMediaEvent(false));
@@ -332,13 +332,8 @@ public class DownloadMediaService extends Service {
                 MediaScannerConnection.scanFile(
                         DownloadMediaService.this, new String[]{destinationFileUri.toString()}, null,
                         (path, uri) -> {
-                            Intent intent = new Intent();
-                            intent.setAction(android.content.Intent.ACTION_VIEW);
-                            intent.setDataAndType(destinationFileUri, mimeType);
-                            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                            PendingIntent pendingIntent = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.getActivity(DownloadMediaService.this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE) : PendingIntent.getActivity(DownloadMediaService.this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
                             updateNotification(mediaType, R.string.downloading_media_finished, -1,
-                                    randomNotificationIdOffset, pendingIntent);
+                                    randomNotificationIdOffset, destinationFileUri, mimeType);
                             EventBus.getDefault().post(new DownloadMediaEvent(true));
                         }
                 );
@@ -414,7 +409,7 @@ public class DownloadMediaService extends Service {
     }
 
     private void updateNotification(int mediaType, int contentStringResId, int progress, int randomNotificationIdOffset,
-                                    PendingIntent pendingIntent) {
+                                    Uri mediaUri, String mimeType) {
         if (notificationManager != null) {
             if (progress < 0) {
                 builder.setProgress(0, 0, false);
@@ -424,8 +419,23 @@ public class DownloadMediaService extends Service {
             if (contentStringResId != 0) {
                 builder.setContentText(getString(contentStringResId));
             }
-            if (pendingIntent != null) {
+            if (mediaUri != null) {
+                Intent intent = new Intent();
+                intent.setAction(android.content.Intent.ACTION_VIEW);
+                intent.setDataAndType(mediaUri, mimeType);
+                intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                PendingIntent pendingIntent = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.getActivity(DownloadMediaService.this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE) : PendingIntent.getActivity(DownloadMediaService.this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
                 builder.setContentIntent(pendingIntent);
+
+                Intent shareIntent = new Intent();
+                shareIntent.setAction(Intent.ACTION_SEND);
+                shareIntent.putExtra(Intent.EXTRA_STREAM, mediaUri);
+                shareIntent.setType(mimeType);
+                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                Intent intentAction = Intent.createChooser(shareIntent, getString(R.string.share));
+                PendingIntent shareActionPendingIntent = Build.VERSION.SDK_INT >= Build.VERSION_CODES.M ? PendingIntent.getActivity(this, 1, intentAction, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE) : PendingIntent.getActivity(this, 1, intentAction, PendingIntent.FLAG_CANCEL_CURRENT);
+
+                builder.addAction(new NotificationCompat.Action(R.drawable.ic_notification, getString(R.string.share), shareActionPendingIntent));
             }
             notificationManager.notify(getNotificationId(mediaType, randomNotificationIdOffset), builder.build());
         }
