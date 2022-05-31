@@ -445,6 +445,8 @@
             android:name=".services.EditProfileService"
             android:enabled="true"
             android:exported="false" />
+
+        <receiver android:name=".broadcastreceivers.DownloadedMediaDeleteActionBroadcastReceiver" />
     </application>
 
 </manifest>
