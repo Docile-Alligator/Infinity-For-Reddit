@@ -154,7 +154,7 @@ public class MultiRedditListingFragment extends Fragment implements FragmentComm
                 }
             });
         }
-        new FastScrollerBuilder(mRecyclerView).build();
+        new FastScrollerBuilder(mRecyclerView).useMd2Style().build();
 
         mMultiRedditViewModel = new ViewModelProvider(this,
                 new MultiRedditViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, accountName))

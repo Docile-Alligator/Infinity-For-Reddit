@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 
-import androidx.core.content.ContextCompat;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
-import ml.docilealligator.infinityforreddit.services.MaterialYouService;
+import ml.docilealligator.infinityforreddit.MaterialYouWorker;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class WallpaperChangeReceiver extends BroadcastReceiver {
@@ -20,8 +22,9 @@ public class WallpaperChangeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         if (sharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_MATERIAL_YOU, false)) {
-            Intent materialYouIntent = new Intent(context, MaterialYouService.class);
-            ContextCompat.startForegroundService(context, materialYouIntent);
+            OneTimeWorkRequest materialYouRequest = OneTimeWorkRequest.from(MaterialYouWorker.class);
+            WorkManager.getInstance(context).enqueueUniqueWork(MaterialYouWorker.UNIQUE_WORKER_NAME,
+                    ExistingWorkPolicy.REPLACE, materialYouRequest);
         }
     }
 }

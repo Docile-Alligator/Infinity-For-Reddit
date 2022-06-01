@@ -439,9 +439,6 @@
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".services.MaterialYouService"
-            android:exported="false" />
-        <service
             android:name=".services.EditProfileService"
             android:enabled="true"
             android:exported="false" />

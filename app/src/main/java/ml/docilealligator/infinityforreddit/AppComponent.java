@@ -81,7 +81,6 @@ import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryVideoFrag
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.services.DownloadRedditVideoService;
 import ml.docilealligator.infinityforreddit.services.EditProfileService;
-import ml.docilealligator.infinityforreddit.services.MaterialYouService;
 import ml.docilealligator.infinityforreddit.services.SubmitPostService;
 import ml.docilealligator.infinityforreddit.settings.AdvancedPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.CommentPreferenceFragment;
@@ -276,8 +275,6 @@ public interface AppComponent {
 
     void inject(LockScreenActivity lockScreenActivity);
 
-    void inject(MaterialYouService materialYouService);
-
     void inject(RPANActivity rpanActivity);
 
     void inject(ViewRPANBroadcastFragment viewRPANBroadcastFragment);
@@ -301,4 +298,6 @@ public interface AppComponent {
     void inject(PostPollActivity postPollActivity);
 
     void inject(AccountChooserBottomSheetFragment accountChooserBottomSheetFragment);
+
+    void inject(MaterialYouWorker materialYouWorker);
 }

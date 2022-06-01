@@ -117,7 +117,7 @@ public class FollowedUsersListingFragment extends Fragment implements FragmentCo
         FollowedUsersRecyclerViewAdapter adapter = new FollowedUsersRecyclerViewAdapter(mActivity,
                 mExecutor, mOauthRetrofit, mRedditDataRoomDatabase, mCustomThemeWrapper, accessToken);
         mRecyclerView.setAdapter(adapter);
-        new FastScrollerBuilder(mRecyclerView).build();
+        new FastScrollerBuilder(mRecyclerView).useMd2Style().build();
 
         mSubscribedUserViewModel = new ViewModelProvider(this,
                 new SubscribedUserViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, getArguments().getString(EXTRA_ACCOUNT_NAME)))

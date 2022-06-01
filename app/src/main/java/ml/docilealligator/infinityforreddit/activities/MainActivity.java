@@ -61,6 +61,7 @@ import com.google.android.material.textfield.TextInputEditText;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -1210,7 +1211,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         }
     }
 
-    @Subscribe
+    @Subscribe(threadMode = ThreadMode.MAIN)
     public void onRecreateActivityEvent(RecreateActivityEvent recreateActivityEvent) {
         ActivityCompat.recreate(this);
     }
