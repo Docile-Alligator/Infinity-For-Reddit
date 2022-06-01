@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.InflateException;
@@ -34,6 +35,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LollipopBugFixedWebView;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class WebViewActivity extends BaseActivity {
@@ -49,6 +51,9 @@ public class WebViewActivity extends BaseActivity {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private String url;
@@ -75,6 +80,10 @@ public class WebViewActivity extends BaseActivity {
         applyCustomTheme();
 
         setSupportActionBar(toolbar);
+
+        if (mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null) == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            webView.setAnonymous(true);
+        }
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);

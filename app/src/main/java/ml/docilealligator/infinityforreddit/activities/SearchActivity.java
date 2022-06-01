@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.view.inputmethod.EditorInfoCompat;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -181,6 +183,10 @@ public class SearchActivity extends BaseActivity {
             }
             finish();
         });
+
+        if (mAccessToken == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            searchEditText.setImeOptions(searchEditText.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
+        }
 
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override

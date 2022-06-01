@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.core.view.inputmethod.EditorInfoCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -247,6 +248,10 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             }
             return false;
         });
+
+        if (mAccessToken == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            searchTextInputEditText.setImeOptions(searchTextInputEditText.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
+        }
 
         checkNewAccountAndBindView(savedInstanceState);
     }
