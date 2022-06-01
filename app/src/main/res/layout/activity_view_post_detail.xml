@@ -113,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:padding="8dp"
-                android:src="@drawable/ic_close_black_24dp"
+                android:src="@drawable/ic_close_24dp"
                 android:background="?actionBarItemBackground"
                 android:clickable="true"
                 android:focusable="true" />

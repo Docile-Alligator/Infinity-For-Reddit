@@ -286,7 +286,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 fab.setImageResource(R.drawable.ic_post_layout_24dp);
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH:
-                fab.setImageResource(R.drawable.ic_search_black_24dp);
+                fab.setImageResource(R.drawable.ic_search_24dp);
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_SUBREDDIT:
                 fab.setImageResource(R.drawable.ic_subreddit_24dp);

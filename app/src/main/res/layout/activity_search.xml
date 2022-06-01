@@ -13,32 +13,28 @@
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
-        <FrameLayout
-            android:id="@+id/toolbar_frame_layout_search_activity"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:navigationIcon="?attr/homeAsUpIndicator">
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="?attr/actionBarSize"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
-
-            <com.ferfalk.simplesearchview.SimpleSearchView
-                android:id="@+id/search_view_search_activity"
+            <EditText
+                android:id="@+id/search_edit_text_search_activity"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:backIconAlpha="1"
-                app:backIconTint="@android:color/white"
-                app:cursorColor="@android:color/white"
-                app:hintColor="#E0E0E0"
-                app:iconsAlpha="1"
-                app:iconsTint="@android:color/white"
-                app:searchBackground="?attr/colorPrimary"
-                app:voiceSearch="true" />
+                android:background="#00000000"
+                android:gravity="top"
+                android:hint="@string/search"
+                android:maxLines="1"
+                android:textSize="?attr/font_20"
+                android:fontFamily="?attr/font_family"
+                android:inputType="textNoSuggestions"
+                android:imeOptions="actionSearch" />
 
-        </FrameLayout>
+        </androidx.appcompat.widget.Toolbar>
 
     </com.google.android.material.appbar.AppBarLayout>
 

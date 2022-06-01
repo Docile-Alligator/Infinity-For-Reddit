@@ -743,7 +743,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_CHANGE_POST_LAYOUT:
                 return R.drawable.ic_post_layout_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SEARCH:
-                return R.drawable.ic_search_black_24dp;
+                return R.drawable.ic_search_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_SUBREDDIT:
                 return R.drawable.ic_subreddit_24dp;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_USER:
@@ -853,7 +853,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 fab.setImageResource(R.drawable.ic_post_layout_24dp);
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH:
-                fab.setImageResource(R.drawable.ic_search_black_24dp);
+                fab.setImageResource(R.drawable.ic_search_24dp);
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_SUBREDDIT:
                 fab.setImageResource(R.drawable.ic_subreddit_24dp);

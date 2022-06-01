@@ -4,12 +4,15 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
-import android.view.Menu;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -20,9 +23,6 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.ferfalk.simplesearchview.SimpleOnQueryTextListener;
-import com.ferfalk.simplesearchview.SimpleSearchView;
-import com.ferfalk.simplesearchview.SimpleSearchViewListener;
 import com.google.android.material.appbar.AppBarLayout;
 import com.r0adkll.slidr.Slidr;
 
@@ -86,8 +86,8 @@ public class SearchActivity extends BaseActivity {
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
-    @BindView(R.id.search_view_search_activity)
-    SimpleSearchView simpleSearchView;
+    @BindView(R.id.search_edit_text_search_activity)
+    EditText searchEditText;
     @BindView(R.id.subreddit_name_relative_layout_search_activity)
     RelativeLayout subredditNameRelativeLayout;
     @BindView(R.id.search_in_text_view_search_activity)
@@ -152,17 +152,10 @@ public class SearchActivity extends BaseActivity {
         searchOnlyUsers = getIntent().getBooleanExtra(EXTRA_SEARCH_ONLY_USERS, false);
 
         if (searchOnlySubreddits) {
-            simpleSearchView.setHint(getText(R.string.search_only_subreddits_hint));
+            searchEditText.setHint(getText(R.string.search_only_subreddits_hint));
         } else if (searchOnlyUsers) {
-            simpleSearchView.setHint(getText(R.string.search_only_users_hint));
+            searchEditText.setHint(getText(R.string.search_only_users_hint));
         }
-
-        simpleSearchView.setOnSearchViewListener(new SimpleSearchViewListener() {
-            @Override
-            public void onSearchViewClosed() {
-                finish();
-            }
-        });
 
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
@@ -189,21 +182,26 @@ public class SearchActivity extends BaseActivity {
             finish();
         });
 
-        simpleSearchView.setOnQueryTextListener(new SimpleOnQueryTextListener() {
+        searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onQueryTextSubmit(@NonNull String query) {
-                search(query);
-                return true;
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
             }
 
             @Override
-            public boolean onQueryTextChange(@NonNull String newText) {
-                if (!newText.isEmpty()) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().trim().isEmpty()) {
                     if (subredditAutocompleteCall != null) {
                         subredditAutocompleteCall.cancel();
                     }
+
                     subredditAutocompleteCall = mOauthRetrofit.create(RedditAPI.class).subredditAutocomplete(APIUtils.getOAuthHeader(mAccessToken),
-                            newText, nsfw);
+                            s.toString(), nsfw);
                     subredditAutocompleteCall.enqueue(new Callback<String>() {
                         @Override
                         public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
@@ -228,10 +226,18 @@ public class SearchActivity extends BaseActivity {
 
                         }
                     });
+                }
+            }
+        });
+
+        searchEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if ((actionId == EditorInfo.IME_ACTION_DONE || actionId == EditorInfo.IME_ACTION_SEARCH) || (event.getKeyCode() == KeyEvent.KEYCODE_ENTER && event.getAction() == KeyEvent.ACTION_DOWN )) {
+                if (!searchEditText.getText().toString().isEmpty()) {
+                    search(searchEditText.getText().toString());
                     return true;
                 }
-                return false;
             }
+            return false;
         });
 
         if (savedInstanceState != null) {
@@ -243,11 +249,10 @@ public class SearchActivity extends BaseActivity {
             } else {
                 subredditNameTextView.setText(subredditName);
             }
-            bindView();
         } else {
             query = getIntent().getStringExtra(EXTRA_QUERY);
-            bindView();
         }
+        bindView();
 
         if (searchOnlySubreddits || searchOnlyUsers) {
             subredditNameRelativeLayout.setVisibility(View.GONE);
@@ -351,12 +356,9 @@ public class SearchActivity extends BaseActivity {
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
-        simpleSearchView.setSearchBackground(new ColorDrawable(mCustomThemeWrapper.getColorPrimary()));
         int toolbarPrimaryTextAndIconColorColor = mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor();
-        simpleSearchView.setIconsColor(toolbarPrimaryTextAndIconColorColor);
-        simpleSearchView.setTextColor(toolbarPrimaryTextAndIconColorColor);
-        simpleSearchView.setBackIconColor(toolbarPrimaryTextAndIconColorColor);
-        simpleSearchView.setHintTextColor(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
+        searchEditText.setTextColor(toolbarPrimaryTextAndIconColorColor);
+        searchEditText.setHintTextColor(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
         int colorAccent = mCustomThemeWrapper.getColorAccent();
         searchInTextView.setTextColor(colorAccent);
         subredditNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
@@ -369,11 +371,10 @@ public class SearchActivity extends BaseActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        simpleSearchView.showSearch(false);
-        simpleSearchView.requestFocus();
+        searchEditText.requestFocus();
 
         if (query != null) {
-            simpleSearchView.setQuery(query, false);
+            searchEditText.setText(query);
             query = null;
         }
 
@@ -388,16 +389,12 @@ public class SearchActivity extends BaseActivity {
         super.onPause();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
-            imm.hideSoftInputFromWindow(simpleSearchView.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(searchEditText.getWindowToken(), 0);
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        if (data != null && simpleSearchView.onActivityResult(requestCode, resultCode, data)) {
-            return;
-        }
-
         if (resultCode == RESULT_OK && data != null) {
             if (requestCode == SUBREDDIT_SELECTION_REQUEST_CODE) {
                 subredditName = data.getStringExtra(SubredditSelectionActivity.EXTRA_RETURN_SUBREDDIT_NAME);
@@ -438,13 +435,6 @@ public class SearchActivity extends BaseActivity {
         }
 
         super.onActivityResult(requestCode, resultCode, data);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.search_activity, menu);
-        simpleSearchView.setMenuItem(menu.findItem(R.id.action_search_search_activity));
-        return true;
     }
 
     @Override
