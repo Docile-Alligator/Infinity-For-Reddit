@@ -23,7 +23,8 @@
             android:hint="@string/text_hint"
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
-            android:fontFamily="?attr/font_family" />
+            android:fontFamily="?attr/font_family"
+            android:inputType="textNoSuggestions" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -45,7 +46,8 @@
             android:hint="@string/link_hint"
             android:textColor="?attr/primaryTextColor"
             android:textSize="?attr/font_default"
-            android:fontFamily="?attr/font_family" />
+            android:fontFamily="?attr/font_family"
+            android:inputType="textNoSuggestions" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
