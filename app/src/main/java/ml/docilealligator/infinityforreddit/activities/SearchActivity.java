@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -90,6 +92,8 @@ public class SearchActivity extends BaseActivity {
     Toolbar toolbar;
     @BindView(R.id.search_edit_text_search_activity)
     EditText searchEditText;
+    @BindView(R.id.link_handler_image_view_search_activity)
+    ImageView linkHandlerImageView;
     @BindView(R.id.subreddit_name_relative_layout_search_activity)
     RelativeLayout subredditNameRelativeLayout;
     @BindView(R.id.search_in_text_view_search_activity)
@@ -208,7 +212,7 @@ public class SearchActivity extends BaseActivity {
 
                     subredditAutocompleteCall = mOauthRetrofit.create(RedditAPI.class).subredditAutocomplete(APIUtils.getOAuthHeader(mAccessToken),
                             s.toString(), nsfw);
-                    subredditAutocompleteCall.enqueue(new Callback<String>() {
+                    subredditAutocompleteCall.enqueue(new Callback<>() {
                         @Override
                         public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                             if (response.isSuccessful()) {
@@ -244,6 +248,15 @@ public class SearchActivity extends BaseActivity {
                 }
             }
             return false;
+        });
+
+        linkHandlerImageView.setOnClickListener(view -> {
+            if (!searchEditText.getText().toString().equals("")) {
+                Intent intent = new Intent(this, LinkResolverActivity.class);
+                intent.setData(Uri.parse(searchEditText.getText().toString()));
+                startActivity(intent);
+                finish();
+            }
         });
 
         if (savedInstanceState != null) {
@@ -365,6 +378,7 @@ public class SearchActivity extends BaseActivity {
         int toolbarPrimaryTextAndIconColorColor = mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor();
         searchEditText.setTextColor(toolbarPrimaryTextAndIconColorColor);
         searchEditText.setHintTextColor(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
+        linkHandlerImageView.setColorFilter(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor(), android.graphics.PorterDuff.Mode.SRC_IN);
         int colorAccent = mCustomThemeWrapper.getColorAccent();
         searchInTextView.setTextColor(colorAccent);
         subredditNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
