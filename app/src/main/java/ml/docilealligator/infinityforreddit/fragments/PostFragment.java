@@ -787,7 +787,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 sortType = new SortType(SortType.Type.valueOf(sort));
             }
 
-            postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, defaultPostLayout);
+            postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + multiRedditPath, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
@@ -1573,6 +1573,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if (!temporary) {
             switch (postType) {
                 case PostPagingSource.TYPE_FRONT_PAGE:
+                case PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE:
                     mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, postLayout).apply();
                     break;
                 case PostPagingSource.TYPE_SUBREDDIT:
@@ -1585,6 +1586,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, postLayout).apply();
                     break;
                 case PostPagingSource.TYPE_MULTI_REDDIT:
+                case PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT:
                     mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + multiRedditPath, postLayout).apply();
                     break;
             }
