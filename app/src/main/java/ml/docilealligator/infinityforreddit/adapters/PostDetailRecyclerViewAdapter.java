@@ -174,6 +174,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private boolean mHideTheNumberOfComments;
     private boolean mSeparatePostAndComments;
     private boolean mLegacyAutoplayVideoControllerUI;
+    private boolean mEasierToWatchInFullScreen;
     private PostDetailRecyclerViewAdapterCallback mPostDetailRecyclerViewAdapterCallback;
 
     private int mColorAccent;
@@ -313,6 +314,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 .build();
         mSeparatePostAndComments = separatePostAndComments;
         mLegacyAutoplayVideoControllerUI = sharedPreferences.getBoolean(SharedPreferencesUtils.LEGACY_AUTOPLAY_VIDEO_CONTROLLER_UI, false);
+        mEasierToWatchInFullScreen = sharedPreferences.getBoolean(SharedPreferencesUtils.EASIER_TO_WATCH_IN_FULL_SCREEN, false);
         mAccessToken = accessToken;
         mAccountName = accountName;
         mPost = post;
@@ -1727,7 +1729,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
             previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
             playerView.setOnClickListener(view -> {
-                if (playerView.isControllerVisible()) {
+                if (mEasierToWatchInFullScreen && playerView.isControllerVisible()) {
                     fullscreenButton.performClick();
                 }
             });

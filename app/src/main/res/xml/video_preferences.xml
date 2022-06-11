@@ -77,6 +77,11 @@
         app:key="autoplay_nsfw_videos"
         app:title="@string/settings_autoplay_nsfw_videos_title" />
 
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+        app:defaultValue="false"
+        app:key="easier_to_watch_in_full_screen"
+        app:title="@string/settings_easier_to_watch_in_full_screen_title" />
+
     <ml.docilealligator.infinityforreddit.customviews.CustomFontSeekBarPreference
         app:defaultValue="75"
         android:max="100"

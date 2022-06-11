@@ -211,6 +211,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private boolean mLegacyAutoplayVideoControllerUI;
     private boolean mFixedHeightPreviewInCard;
     private boolean mHideTextPostContent;
+    private boolean mEasierToWatchInFullScreen;
     private Drawable mCommentIcon;
     private ExoCreator mExoCreator;
     private Callback mCallback;
@@ -289,6 +290,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mLegacyAutoplayVideoControllerUI = sharedPreferences.getBoolean(SharedPreferencesUtils.LEGACY_AUTOPLAY_VIDEO_CONTROLLER_UI, false);
             mFixedHeightPreviewInCard = sharedPreferences.getBoolean(SharedPreferencesUtils.FIXED_HEIGHT_PREVIEW_IN_CARD, false);
             mHideTextPostContent = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_TEXT_POST_CONTENT, false);
+            mEasierToWatchInFullScreen = sharedPreferences.getBoolean(SharedPreferencesUtils.EASIER_TO_WATCH_IN_FULL_SCREEN, false);
 
             mPostLayout = postLayout;
             mDefaultLinkPostLayout = Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.DEFAULT_LINK_POST_LAYOUT_KEY, "-1"));
@@ -1812,6 +1814,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
     }
 
+    public void setEasierToWatchInFullScreen(boolean easierToWatchInFullScreen) {
+        this.mEasierToWatchInFullScreen = easierToWatchInFullScreen;
+    }
+
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         if (holder instanceof PostBaseViewHolder) {
@@ -2808,7 +2814,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
 
             videoPlayer.setOnClickListener(view -> {
-                if (videoPlayer.isControllerVisible()) {
+                if (mEasierToWatchInFullScreen && videoPlayer.isControllerVisible()) {
                     fullscreenButton.performClick();
                 }
             });

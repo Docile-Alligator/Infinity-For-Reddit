@@ -94,6 +94,7 @@ import ml.docilealligator.infinityforreddit.events.ChangeDataSavingModeEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDefaultLinkPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDefaultPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDisableImagePreviewEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeEasierToWatchInFullScreenEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeEnableSwipeActionSwitchEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeFixedHeightPreviewInCardEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHidePostFlairEvent;
@@ -2103,6 +2104,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if (mAdapter != null) {
             mAdapter.setPostFeedMaxResolution(event.postFeedMaxResolution);
             refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeEasierToWatchInFullScreenEvent(ChangeEasierToWatchInFullScreenEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setEasierToWatchInFullScreen(event.easierToWatchInFullScreen);
         }
     }
 
