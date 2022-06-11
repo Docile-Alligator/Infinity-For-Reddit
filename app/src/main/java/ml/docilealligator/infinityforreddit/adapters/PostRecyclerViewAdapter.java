@@ -11,7 +11,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -4129,7 +4128,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
 
             videoPlayer.setOnClickListener(view -> {
-                if (videoPlayer.isControllerVisible()) {
+                if (mEasierToWatchInFullScreen && videoPlayer.isControllerVisible()) {
                     fullscreenButton.performClick();
                 }
             });
