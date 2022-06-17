@@ -61,9 +61,9 @@ dependencies {
     def pagingVersion = '3.1.0'
     implementation "androidx.paging:paging-runtime:$pagingVersion"
     implementation "androidx.paging:paging-guava:$pagingVersion"
-    implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.preference:preference:1.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    def roomVersion = "2.3.0"
+    def roomVersion = "2.4.2"
     implementation "androidx.room:room-runtime:$roomVersion"
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
     implementation 'androidx.viewpager2:viewpager2:1.1.0-beta01'
