@@ -757,7 +757,7 @@ Ze is niet ziek of zo, maar ze kan zeker beter worden."</string>
     <string name="load_video_in_redgifs">"Probeer de video op Redgifs te laden"</string>
     <string name="top_score">"%1$s pnt"</string>
     <string name="login_activity_2fa_prompt">"Als je 2-factor authenticatie hebt ingeschakeld, typ dan je wachtwoord als volgt in: &lt;wachtwoord&gt;: &lt;2FA code&gt;.
-Voorbeeld: yourpass: 123456"</string>
+Voorbeeld: yourpass:123456"</string>
     <string name="block_user">"Blokkeer gebruiker"</string>
     <string name="block_user_success">"Geblokkeerd"</string>
     <string name="block_user_failed">"Kan gebruiker niet blokkeren"</string>
