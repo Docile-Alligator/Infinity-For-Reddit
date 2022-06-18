@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navigation_rail_option_1"
+        android:enabled="true"/>
+    <item
+        android:id="@+id/navigation_rail_option_2"
+        android:enabled="true"/>
+    <item
+        android:id="@+id/navigation_rail_option_3"
+        android:enabled="true"/>
+    <item
+        android:id="@+id/navigation_rail_option_4"
+        android:enabled="true"/>
+</menu>

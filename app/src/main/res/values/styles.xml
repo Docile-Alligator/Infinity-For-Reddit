@@ -140,6 +140,10 @@
         <item name="colorOnSurface">@color/colorPrimary</item>
         <item name="colorPrimary">@color/primaryTextColor</item>
     </style>
+
+    <style name="App.Custom.Indicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">#00000000</item>
+    </style>
     
     <style name="FontStyle" />
 
