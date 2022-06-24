@@ -62,6 +62,7 @@ import retrofit2.Retrofit;
 public class DownloadRedditVideoService extends Service {
 
     public static final String EXTRA_VIDEO_URL = "EVU";
+    public static final String EXTRA_POST_TITLE = "EPT";
     public static final String EXTRA_SUBREDDIT = "ES";
     public static final String EXTRA_POST_ID = "EPI";
     public static final String EXTRA_IS_NSFW = "EIN";
@@ -99,8 +100,9 @@ public class DownloadRedditVideoService extends Service {
             Bundle intent = msg.getData();
             String videoUrl = intent.getString(EXTRA_VIDEO_URL);
             String audioUrl = videoUrl.substring(0, videoUrl.lastIndexOf('/')) + "/DASH_audio.mp4";
+            String postTitle = intent.getString(EXTRA_POST_TITLE);
             String subredditName = intent.getString(EXTRA_SUBREDDIT);
-            String fileNameWithoutExtension = subredditName + "-" + intent.getString(EXTRA_POST_ID);
+            String fileNameWithoutExtension = postTitle + "-" + subredditName + "-" + intent.getString(EXTRA_POST_ID);
             boolean isNsfw = intent.getBoolean(EXTRA_IS_NSFW, false);
             int randomNotificationIdOffset = msg.arg1;
 

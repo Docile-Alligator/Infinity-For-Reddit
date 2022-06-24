@@ -60,6 +60,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     public static final String EXTRA_REDDIT_GALLERY = "ERG";
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     public static final String EXTRA_IS_NSFW = "EIN";
+    public static final String EXTRA_POST_TITLE = "EPT";
 
     @BindView(R.id.hauler_view_view_reddit_gallery_activity)
     HaulerView haulerView;
@@ -73,6 +74,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     public Typeface typeface;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private ArrayList<Post.Gallery> gallery;
+    private String postTitle;
     private String subredditName;
     private boolean isNsfw;
     private boolean useBottomAppBar;
@@ -154,6 +156,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
             finish();
             return;
         }
+        postTitle = getIntent().getStringExtra(EXTRA_POST_TITLE);
         subredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME);
         isNsfw = getIntent().getBooleanExtra(EXTRA_IS_NSFW, false);
 
@@ -293,6 +296,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
                 ViewRedditGalleryVideoFragment fragment = new ViewRedditGalleryVideoFragment();
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(ViewRedditGalleryVideoFragment.EXTRA_REDDIT_GALLERY_VIDEO, media);
+                bundle.putString(ViewRedditGalleryVideoFragment.EXTRA_POST_TITLE, postTitle);
                 bundle.putString(ViewRedditGalleryVideoFragment.EXTRA_SUBREDDIT_NAME, subredditName);
                 bundle.putInt(ViewRedditGalleryVideoFragment.EXTRA_INDEX, position);
                 bundle.putInt(ViewRedditGalleryVideoFragment.EXTRA_MEDIA_COUNT, gallery.size());
@@ -303,6 +307,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
                 ViewRedditGalleryImageOrGifFragment fragment = new ViewRedditGalleryImageOrGifFragment();
                 Bundle bundle = new Bundle();
                 bundle.putParcelable(ViewRedditGalleryImageOrGifFragment.EXTRA_REDDIT_GALLERY_MEDIA, media);
+                bundle.putString(ViewRedditGalleryImageOrGifFragment.EXTRA_POST_TITLE, postTitle);
                 bundle.putString(ViewRedditGalleryImageOrGifFragment.EXTRA_SUBREDDIT_NAME, subredditName);
                 bundle.putInt(ViewRedditGalleryImageOrGifFragment.EXTRA_INDEX, position);
                 bundle.putInt(ViewRedditGalleryImageOrGifFragment.EXTRA_MEDIA_COUNT, gallery.size());
