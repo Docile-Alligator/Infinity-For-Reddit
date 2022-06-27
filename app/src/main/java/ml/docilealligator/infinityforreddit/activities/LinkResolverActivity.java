@@ -92,6 +92,11 @@ public class LinkResolverActivity extends AppCompatActivity {
         }
 
         if (uri.getScheme() == null && uri.getHost() == null) {
+            if (uri.toString().isEmpty()) {
+                Toast.makeText(this, R.string.invalid_link, Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
             handleUri(getRedditUriByPath(uri.toString()));
         } else {
             handleUri(uri);
