@@ -25,6 +25,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
@@ -98,7 +99,7 @@ public class DownloadRedditVideoService extends Service {
         public void handleMessage(Message msg) {
             Bundle intent = msg.getData();
             String videoUrl = intent.getString(EXTRA_VIDEO_URL);
-            String audioUrl = videoUrl.substring(0, videoUrl.lastIndexOf('/')) + "/DASH_audio.mp4";
+            String audioUrl = Build.VERSION.SDK_INT > Build.VERSION_CODES.N ? videoUrl.substring(0, videoUrl.lastIndexOf('/')) + "/DASH_audio.mp4" : null;
             String subredditName = intent.getString(EXTRA_SUBREDDIT);
             String fileNameWithoutExtension = subredditName + "-" + intent.getString(EXTRA_POST_ID);
             boolean isNsfw = intent.getBoolean(EXTRA_IS_NSFW, false);
@@ -221,37 +222,50 @@ public class DownloadRedditVideoService extends Service {
                             return;
                         }
 
-                        Response<ResponseBody> audioResponse = downloadFile.downloadFile(audioUrl).execute();
-                        if (audioResponse.isSuccessful() && audioResponse.body() != null) {
-                            String audioFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + "-cache.mp3";
-                            String outputFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + ".mp4";
+                        if (audioUrl != null) {
+                            Response<ResponseBody> audioResponse = downloadFile.downloadFile(audioUrl).execute();
+                            if (audioResponse.isSuccessful() && audioResponse.body() != null) {
+                                String audioFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + "-cache.mp3";
+                                String outputFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + ".mp4";
 
-                            String savedAudioFilePath = writeResponseBodyToDisk(audioResponse.body(), audioFilePath);
-                            if (savedAudioFilePath == null) {
-                                downloadFinished(null, ERROR_AUDIO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
-                                return;
-                            }
+                                String savedAudioFilePath = writeResponseBodyToDisk(audioResponse.body(), audioFilePath);
+                                if (savedAudioFilePath == null) {
+                                    downloadFinished(null, ERROR_AUDIO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
+                                    return;
+                                }
 
-                            updateNotification(R.string.downloading_reddit_video_muxing, -1,
-                                    randomNotificationIdOffset, null);
-                            if (!muxVideoAndAudio(videoFilePath, audioFilePath, outputFilePath)) {
-                                downloadFinished(null, ERROR_MUX_FAILED, randomNotificationIdOffset);
-                                return;
-                            }
+                                updateNotification(R.string.downloading_reddit_video_muxing, -1,
+                                        randomNotificationIdOffset, null);
+                                if (!muxVideoAndAudio(videoFilePath, audioFilePath, outputFilePath)) {
+                                    downloadFinished(null, ERROR_MUX_FAILED, randomNotificationIdOffset);
+                                    return;
+                                }
 
-                            updateNotification(R.string.downloading_reddit_video_save_file_to_public_dir, -1,
-                                    randomNotificationIdOffset, null);
-                            try {
-                                Uri destinationFileUri = copyToDestination(outputFilePath, destinationFileUriString, destinationFileName, isDefaultDestination);
+                                updateNotification(R.string.downloading_reddit_video_save_file_to_public_dir, -1,
+                                        randomNotificationIdOffset, null);
+                                try {
+                                    Uri destinationFileUri = copyToDestination(outputFilePath, destinationFileUriString, destinationFileName, isDefaultDestination);
 
-                                new File(videoFilePath).delete();
-                                new File(audioFilePath).delete();
-                                new File(outputFilePath).delete();
+                                    new File(videoFilePath).delete();
+                                    new File(audioFilePath).delete();
+                                    new File(outputFilePath).delete();
 
-                                downloadFinished(destinationFileUri, NO_ERROR, randomNotificationIdOffset);
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                                downloadFinished(null, ERROR_MUXED_VIDEO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
+                                    downloadFinished(destinationFileUri, NO_ERROR, randomNotificationIdOffset);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                    downloadFinished(null, ERROR_MUXED_VIDEO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
+                                }
+                            } else {
+                                updateNotification(R.string.downloading_reddit_video_save_file_to_public_dir, -1,
+                                        randomNotificationIdOffset, null);
+                                try {
+                                    Uri destinationFileUri = copyToDestination(videoFilePath, destinationFileUriString, destinationFileName, isDefaultDestination);
+                                    new File(videoFilePath).delete();
+                                    downloadFinished(destinationFileUri, NO_ERROR, randomNotificationIdOffset);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                    downloadFinished(null, ERROR_MUXED_VIDEO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
+                                }
                             }
                         } else {
                             updateNotification(R.string.downloading_reddit_video_save_file_to_public_dir, -1,
@@ -325,6 +339,7 @@ public class DownloadRedditVideoService extends Service {
         }
 
         private boolean muxVideoAndAudio(String videoFilePath, String audioFilePath, String outputFilePath) {
+            Log.i("asdfasdf", "sasdfasdf");
             try {
                 File file = new File(outputFilePath);
                 file.createNewFile();
