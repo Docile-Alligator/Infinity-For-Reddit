@@ -160,20 +160,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     RecyclerView navDrawerRecyclerView;
     @BindView(R.id.tab_layout_main_activity)
     TabLayout tabLayout;
-    /*@BindView(R.id.bottom_app_bar_bottom_app_bar)
-    BottomAppBar bottomAppBar;
-    @BindView(R.id.linear_layout_bottom_app_bar)
-    LinearLayout linearLayoutBottomAppBar;
-    @BindView(R.id.option_1_bottom_app_bar)
-    ImageView option1BottomAppBar;
-    @BindView(R.id.option_2_bottom_app_bar)
-    ImageView option2BottomAppBar;
-    @BindView(R.id.option_3_bottom_app_bar)
-    ImageView option3BottomAppBar;
-    @BindView(R.id.option_4_bottom_app_bar)
-    ImageView option4BottomAppBar;*/
-    /*@BindView(R.id.fab_main_activity)
-    FloatingActionButton fab;*/
     MultiRedditViewModel multiRedditViewModel;
     SubscribedSubredditViewModel subscribedSubredditViewModel;
     AccountViewModel accountViewModel;
@@ -580,17 +566,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             int option1 = mBottomAppBarSharedPreference.getInt((mAccessToken == null ? "-" : "") + SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_1, SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS);
             int option2 = mBottomAppBarSharedPreference.getInt((mAccessToken == null ? "-" : "") + SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_2, SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_MULTIREDDITS);
 
-            //bottomAppBar.setVisibility(View.VISIBLE);
-
             if (optionCount == 2) {
                 navigationWrapper.bindOptionDrawableResource(getBottomAppBarOptionDrawableResource(option1), getBottomAppBarOptionDrawableResource(option2));
-
-                /*linearLayoutBottomAppBar.setWeightSum(3);
-                option1BottomAppBar.setVisibility(View.GONE);
-                option3BottomAppBar.setVisibility(View.GONE);
-
-                option2BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option1));
-                option4BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option2));*/
 
                 if (navigationWrapper.navigationRailView == null) {
                     navigationWrapper.option2BottomAppBar.setOnClickListener(view -> {
@@ -620,11 +597,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 navigationWrapper.bindOptionDrawableResource(getBottomAppBarOptionDrawableResource(option1),
                         getBottomAppBarOptionDrawableResource(option2), getBottomAppBarOptionDrawableResource(option3),
                         getBottomAppBarOptionDrawableResource(option4));
-
-                /*navigationWrapper.option1BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option1));
-                navigationWrapper.option2BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option2));
-                navigationWrapper.option3BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option3));
-                navigationWrapper.option4BottomAppBar.setImageResource(getBottomAppBarOptionDrawableResource(option4));*/
 
                 if (navigationWrapper.navigationRailView == null) {
                     navigationWrapper.option1BottomAppBar.setOnClickListener(view -> {
@@ -937,7 +909,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 if (showBottomAppBar) {
                     navigationWrapper.showNavigation();
                 }
-                //fab.show();
                 navigationWrapper.showFab();
                 sectionsPagerAdapter.displaySortTypeInToolbar();
             }
@@ -1221,11 +1192,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Override
     public void contentScrollUp() {
         if (showBottomAppBar && !mLockBottomAppBar) {
-            //bottomAppBar.performShow();
             navigationWrapper.showNavigation();
         }
         if (!(showBottomAppBar && mLockBottomAppBar)) {
-            //fab.show();
             navigationWrapper.showFab();
         }
     }
@@ -1233,11 +1202,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Override
     public void contentScrollDown() {
         if (!(showBottomAppBar && mLockBottomAppBar)) {
-            //fab.hide();
             navigationWrapper.hideFab();
         }
         if (showBottomAppBar && !mLockBottomAppBar) {
-            //bottomAppBar.performHide();
             navigationWrapper.hideNavigation();
         }
     }

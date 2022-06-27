@@ -175,20 +175,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     TextView cakedayTextView;
     @BindView(R.id.description_text_view_view_user_detail_activity)
     TextView descriptionTextView;
-    /*@BindView(R.id.bottom_app_bar_bottom_app_bar)
-    BottomAppBar bottomNavigationView;
-    @BindView(R.id.linear_layout_bottom_app_bar)
-    LinearLayout linearLayoutBottomAppBar;
-    @BindView(R.id.option_1_bottom_app_bar)
-    ImageView option1BottomAppBar;
-    @BindView(R.id.option_2_bottom_app_bar)
-    ImageView option2BottomAppBar;
-    @BindView(R.id.option_3_bottom_app_bar)
-    ImageView option3BottomAppBar;
-    @BindView(R.id.option_4_bottom_app_bar)
-    ImageView option4BottomAppBar;
-    @BindView(R.id.fab_view_user_detail_activity)
-    FloatingActionButton fab;*/
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
