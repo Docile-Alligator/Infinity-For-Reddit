@@ -219,6 +219,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private NavigationDrawerRecyclerViewMergedAdapter adapter;
+    private NavigationWrapper navigationWrapper;
     private Call<String> subredditAutocompleteCall;
     private String mAccessToken;
     private String mAccountName;
@@ -237,8 +238,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private boolean mShowSubscribedSubreddits;
     private int fabOption;
     private int inboxCount;
-
-    private NavigationWrapper navigationWrapper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -356,16 +355,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     protected void applyCustomTheme() {
         int backgroundColor = mCustomThemeWrapper.getBackgroundColor();
         drawer.setBackgroundColor(backgroundColor);
-        int bottomAppBarIconColor = mCustomThemeWrapper.getBottomAppBarIconColor();
-        navigationWrapper.applyCustomTheme(bottomAppBarIconColor, mCustomThemeWrapper.getBottomAppBarBackgroundColor());
-        /*option1BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        option2BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        option3BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-        option4BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);*/
+        navigationWrapper.applyCustomTheme(mCustomThemeWrapper.getBottomAppBarIconColor(), mCustomThemeWrapper.getBottomAppBarBackgroundColor());
         navigationView.setBackgroundColor(backgroundColor);
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
         applyTabLayoutTheme(tabLayout);
-        //bottomAppBar.setBackgroundTint(ColorStateList.valueOf());
         applyFABTheme(navigationWrapper.floatingActionButton);
     }
 
@@ -941,10 +934,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                if (mAccessToken != null) {
-                    if (showBottomAppBar) {
-                        navigationWrapper.showNavigation();
-                    }
+                if (showBottomAppBar) {
+                    navigationWrapper.showNavigation();
                 }
                 //fab.show();
                 navigationWrapper.showFab();
