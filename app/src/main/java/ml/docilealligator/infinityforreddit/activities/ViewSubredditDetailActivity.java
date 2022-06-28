@@ -264,10 +264,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             if (isImmersiveInterface()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-                    /*coordinatorLayout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);*/
-                    getWindow().setDecorFitsSystemWindows(false);
+                    window.setDecorFitsSystemWindows(false);
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
@@ -278,10 +275,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) navigationWrapper.floatingActionButton.getLayoutParams();
                         params.bottomMargin += navBarHeight;
                         navigationWrapper.floatingActionButton.setLayoutParams(params);
-                    }
-                    if (navigationWrapper.linearLayoutBottomAppBar != null) {
-                        navigationWrapper.linearLayoutBottomAppBar.setPadding(0,
-                                navigationWrapper.linearLayoutBottomAppBar.getPaddingTop(), 0, navBarHeight);
                     }
                 }
 

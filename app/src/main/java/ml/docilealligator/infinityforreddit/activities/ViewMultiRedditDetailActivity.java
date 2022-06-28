@@ -174,9 +174,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
 
             if (isImmersiveInterface()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    coordinatorLayout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+                    window.setDecorFitsSystemWindows(false);
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
@@ -188,11 +186,6 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) navigationWrapper.floatingActionButton.getLayoutParams();
                         params.bottomMargin += navBarHeight;
                         navigationWrapper.floatingActionButton.setLayoutParams(params);
-                    }
-
-                    if (navigationWrapper.linearLayoutBottomAppBar != null) {
-                        navigationWrapper.linearLayoutBottomAppBar.setPadding(0,
-                                navigationWrapper.linearLayoutBottomAppBar.getPaddingTop(), 0, navBarHeight);
                     }
                 }
             }

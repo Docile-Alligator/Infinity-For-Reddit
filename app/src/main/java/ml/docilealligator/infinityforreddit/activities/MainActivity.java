@@ -262,7 +262,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 drawer.setStatusBarBackgroundColor(Color.TRANSPARENT);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                     drawer.setFitsSystemWindows(false);
-                    getWindow().setDecorFitsSystemWindows(false);
+                    window.setDecorFitsSystemWindows(false);
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
