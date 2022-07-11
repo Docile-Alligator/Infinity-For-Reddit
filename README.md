@@ -1,7 +1,7 @@
 # Infinity-For-Reddit [<img src="https://img.shields.io/badge/Patreon-F96854?style=for-the-badge&logo=patreon&logoColor=white" alt="Patreon">](https://www.patreon.com/docile_alligator)
 
-<img src="fastlane/metadata/android/en-US/images/icon.png" align="left"
-width="200" hspace="10" vspace="10">
+[<img src="fastlane/metadata/android/en-US/images/icon.png" align="left"
+width="200" hspace="10" vspace="10">](https://raw.githubusercontent.com/Wladefant/Infinity-For-Reddit/master/fastlane/metadata/android/en-US/images/icon.png)
 
 Infinity For Reddit is a Reddit client on Android written in Java. It does not have any ads and it features clean UI and smooth browsing experience.
 
