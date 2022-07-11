@@ -29,13 +29,13 @@ Bitcoin: bc1qxtkd5ap9na7uy8nr9qpt6jny6tdwaj4v43ddle
 
 [<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" align="left"
 width="200"
-    hspace="10" vspace="10">](images/screenshot1.png)
+    hspace="10" vspace="10">](fastlane/metadata/android/en-US/images/phoneScreenshots/1.png)
 [<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" align="center"
 width="200"
-    hspace="10" vspace="10">](images/screenshot2.png)
+    hspace="10" vspace="10">](fastlane/metadata/android/en-US/images/phoneScreenshots/1.png)
 [<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" align="center"
 width="200"
-    hspace="10" vspace="10">](images/screenshot3.png)
+    hspace="10" vspace="10">](fastlane/metadata/android/en-US/images/phoneScreenshots/1.png)
 
 ### Highlighted feature
 - Lazy mode: Automatic scrolling of posts enables you to enjoy amazing posts without moving your thumb.
