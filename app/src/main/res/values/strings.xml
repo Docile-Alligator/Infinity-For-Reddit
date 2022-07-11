@@ -253,7 +253,7 @@
     <string name="no_flair">No flair</string>
     <string name="error_loading_flairs">Error loading flairs.\nTap to retry.</string>
 
-    <string name="no_rule">No rule</string>
+    <string name="no_rule">No rules</string>
     <string name="error_loading_rules">Error loading rules.\nTap to retry.</string>
     <string name="error_loading_rules_without_retry">Error Loading Rules</string>
 
@@ -738,7 +738,7 @@
     <string name="create_multi_reddit_failed">Cannot create this multireddit</string>
     <string name="duplicate_multi_reddit">This multireddit already exists</string>
     <string name="edit_multi_reddit_failed">Cannot edit this multireddit</string>
-    <string name="delete_multi_reddit_success">Delete successfully</string>
+    <string name="delete_multi_reddit_success">Deleted successfully</string>
     <string name="delete_multi_reddit_failed">Delete failed</string>
     <string name="delete_multi_reddit_dialog_message">Are you sure?</string>
 
@@ -945,7 +945,7 @@
     <string name="edit_theme_name">Edit Theme Name</string>
     <string name="edit_theme">Edit Theme</string>
     <string name="delete_theme">Delete Theme</string>
-    <string name="delete_theme_dialog_message">Are you sure to delete %1$s?</string>
+    <string name="delete_theme_dialog_message">Are you sure you want to delete %1$s?</string>
     <string name="share_theme">Share Theme</string>
     <string name="change_theme_name">Change Name</string>
     <string name="theme_copied">Copied! Paste and share it to other people.</string>
@@ -963,14 +963,14 @@
     <string name="color_picker">Color Picker</string>
     <string name="invalid_color">Invalid Color</string>
 
-    <string name="delete_all_subreddits_success">Delete all subreddits successfully</string>
-    <string name="delete_all_users_success">Delete all users successfully</string>
-    <string name="delete_all_sort_types_success">Delete all sort types successfully</string>
-    <string name="delete_all_post_layouts_success">Delete all post layouts successfully</string>
-    <string name="delete_all_themes_success">Delete all themes successfully</string>
-    <string name="delete_all_front_page_scrolled_positions_success">Delete all scrolled positions in front page successfully</string>
-    <string name="delete_all_read_posts_success">Delete all read posts successfully</string>
-    <string name="delete_all_legacy_settings_success">Delete all legacy settings successfully</string>
+    <string name="delete_all_subreddits_success">Deleted all subreddits successfully</string>
+    <string name="delete_all_users_success">Deleted all users successfully</string>
+    <string name="delete_all_sort_types_success">Deleted all sort types successfully</string>
+    <string name="delete_all_post_layouts_success">Deleted all post layouts successfully</string>
+    <string name="delete_all_themes_success">Deleted all themes successfully</string>
+    <string name="delete_all_front_page_scrolled_positions_success">Deleted all scrolled positions in front page successfully</string>
+    <string name="delete_all_read_posts_success">Deleted all read posts successfully</string>
+    <string name="delete_all_legacy_settings_success">Deleted all legacy settings successfully</string>
     <string name="reset_all_settings_success">Reset all settings successfully</string>
 
     <string name="username_preview">u/Hostilenemy</string>
@@ -1192,9 +1192,9 @@
     <string name="suggest_title">Suggest Title</string>
     <string name="suggest_title_failed">Failed to suggest a title</string>
 
-    <string name="crash_reports_deleted">Crash reports are deleted</string>
+    <string name="crash_reports_deleted">Crash reports have been deleted</string>
 
-    <string name="disable_nsfw_forever_message">Once enabled, NSFW will be permanently disabled, regardless of whether the NSFW setting is enabled or not. And this option is irreversible, the only way to re-enable NSFW is to clear the app data.\n\nStill want to enable it?</string>
+    <string name="disable_nsfw_forever_message">Once enabled, NSFW will be permanently disabled, regardless of whether the NSFW setting is enabled or not. This option is irreversible, the only way to re-enable NSFW is to clear the app data.\n\nDo you still want to enable it?</string>
 
     <string name="reply">Reply</string>
 
