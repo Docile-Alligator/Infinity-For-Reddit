@@ -32,10 +32,10 @@ width="200"
     hspace="10" vspace="10">](https://raw.githubusercontent.com/Wladefant/Infinity-For-Reddit/master/fastlane/metadata/android/en-US/images/phoneScreenshots/1.png)
 [<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" align="center"
 width="200"
-    hspace="10" vspace="10">](fastlane/metadata/android/en-US/images/phoneScreenshots/1.png)
+    hspace="10" vspace="10">](https://raw.githubusercontent.com/Wladefant/Infinity-For-Reddit/master/fastlane/metadata/android/en-US/images/phoneScreenshots/6.png)
 [<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" align="center"
 width="200"
-    hspace="10" vspace="10">](fastlane/metadata/android/en-US/images/phoneScreenshots/1.png)
+    hspace="10" vspace="10">](https://raw.githubusercontent.com/Wladefant/Infinity-For-Reddit/master/fastlane/metadata/android/en-US/images/phoneScreenshots/7.png)
 
 ### Highlighted feature
 - Lazy mode: Automatic scrolling of posts enables you to enjoy amazing posts without moving your thumb.
