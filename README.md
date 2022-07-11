@@ -82,3 +82,11 @@ Here are other ways you can help:
 Distributed under the AGPL-3.0 License. See `LICENSE` for more information.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
+
+## Contact
+
+docilealligator.app@gmail.com
+
+Project Link: [https://github.com/Docile-Alligator/Infinity-For-Reddit](https://github.com/Docile-Alligator/Infinity-For-Reddit)
+
+<p align="right">(<a href="#top">back to top</a>)</p>
