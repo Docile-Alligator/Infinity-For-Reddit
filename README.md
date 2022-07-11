@@ -1,6 +1,6 @@
 # Infinity-For-Reddit [<img src="https://img.shields.io/badge/Patreon-F96854?style=for-the-badge&logo=patreon&logoColor=white" alt="Patreon">](https://www.patreon.com/docile_alligator)
 
-<img src="/images/logo.png" align="left"
+<img src="fastlane/metadata/android/en-US/images/icon.png" align="left"
 width="200" hspace="10" vspace="10">
 
 Infinity For Reddit is a Reddit client on Android written in Java. It does not have any ads and it features clean UI and smooth browsing experience.
@@ -27,13 +27,13 @@ Bitcoin: bc1qxtkd5ap9na7uy8nr9qpt6jny6tdwaj4v43ddle
 
 ## About The Project
 
-[<img src="images/screenshot1.png" align="left"
+[<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" align="left"
 width="200"
     hspace="10" vspace="10">](images/screenshot1.png)
-[<img src="images/screenshot2.png" align="center"
+[<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" align="center"
 width="200"
     hspace="10" vspace="10">](images/screenshot2.png)
-[<img src="images/screenshot3.png" align="center"
+[<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" align="center"
 width="200"
     hspace="10" vspace="10">](images/screenshot3.png)
 
