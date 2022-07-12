@@ -85,6 +85,7 @@ Distributed under the AGPL-3.0 License. See `LICENSE` for more information.
 
 ## Contact
 
+[u/Hostilenemy](https://www.reddit.com/user/Hostilenemy)
 docilealligator.app@gmail.com
 
 Project Link: [https://github.com/Docile-Alligator/Infinity-For-Reddit](https://github.com/Docile-Alligator/Infinity-For-Reddit)
