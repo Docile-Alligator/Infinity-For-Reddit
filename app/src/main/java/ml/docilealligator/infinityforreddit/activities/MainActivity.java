@@ -733,11 +733,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             }
         });
         navigationWrapper.floatingActionButton.setOnLongClickListener(view -> {
-            FABMoreOptionsBottomSheetFragment fabMoreOptionsBottomSheetFragment= new FABMoreOptionsBottomSheetFragment();
+            /*FABMoreOptionsBottomSheetFragment fabMoreOptionsBottomSheetFragment= new FABMoreOptionsBottomSheetFragment();
             Bundle bundle = new Bundle();
             bundle.putBoolean(FABMoreOptionsBottomSheetFragment.EXTRA_ANONYMOUS_MODE, mAccessToken == null);
             fabMoreOptionsBottomSheetFragment.setArguments(bundle);
-            fabMoreOptionsBottomSheetFragment.show(getSupportFragmentManager(), fabMoreOptionsBottomSheetFragment.getTag());
+            fabMoreOptionsBottomSheetFragment.show(getSupportFragmentManager(), fabMoreOptionsBottomSheetFragment.getTag());*/
+            Intent intent = new Intent(this, HistoryActivity.class);
+            startActivity(intent);
             return true;
         });
         navigationWrapper.floatingActionButton.setVisibility(View.VISIBLE);

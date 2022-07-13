@@ -68,6 +68,7 @@ public class SharedPreferencesUtils {
     public static final String POST_LAYOUT_MULTI_REDDIT_POST_BASE = "post_layout_multi_reddit_post_";
     public static final String POST_LAYOUT_USER_POST_BASE = "post_layout_user_post_";
     public static final String POST_LAYOUT_SEARCH_POST = "post_layout_search_post";
+    public static final String HISTORY_POST_LAYOUT_FRONT_PAGE_POST = "history_post_layout_read_post";
     public static final int POST_LAYOUT_CARD = 0;
     public static final int POST_LAYOUT_COMPACT = 1;
     public static final int POST_LAYOUT_GALLERY = 2;

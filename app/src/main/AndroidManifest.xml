@@ -35,6 +35,12 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
         <activity
+            android:name=".activities.HistoryActivity"
+            android:exported="false"
+            android:label="@string/history_activity_label"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.Slidable" />
+        <activity
             android:name=".activities.PostPollActivity"
             android:label="@string/post_poll_activity_label"
             android:parentActivityName=".activities.MainActivity"
@@ -73,10 +79,10 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.WebViewActivity"
+            android:configChanges="orientation|screenSize"
             android:label=""
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:configChanges="orientation|screenSize" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.SuicidePreventionActivity"
             android:parentActivityName=".activities.MainActivity"
@@ -215,24 +221,21 @@
         <activity
             android:name=".activities.ShareDataResolverActivity"
             android:exported="true">
-            <intent-filter
-                android:label="@string/submit_post">
+            <intent-filter android:label="@string/submit_post">
                 <action android:name="android.intent.action.SEND" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="image/*" />
             </intent-filter>
-            <intent-filter
-                android:label="@string/submit_post">
+            <intent-filter android:label="@string/submit_post">
                 <action android:name="android.intent.action.SEND" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="video/*" />
             </intent-filter>
-            <intent-filter
-                android:label="@string/submit_post">
+            <intent-filter android:label="@string/submit_post">
                 <action android:name="android.intent.action.SEND" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -278,8 +281,7 @@
         <activity
             android:name=".activities.LinkResolverActivity"
             android:exported="true">
-            <intent-filter
-                android:label="@string/handle_link">
+            <intent-filter android:label="@string/handle_link">
                 <action android:name="android.intent.action.SEND" />
 
                 <category android:name="android.intent.category.DEFAULT" />
