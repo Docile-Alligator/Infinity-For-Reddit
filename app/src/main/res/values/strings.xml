@@ -135,6 +135,7 @@
     <string name="profile">Profile</string>
     <string name="subscriptions">Subscriptions</string>
     <string name="multi_reddit">Multireddit</string>
+    <string name="history">History</string>
     <string name="inbox">Inbox</string>
     <string name="inbox_with_count">Inbox (%1$,d)</string>
     <string name="rpan">RPAN</string>

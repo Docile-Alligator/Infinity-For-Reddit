@@ -733,13 +733,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             }
         });
         navigationWrapper.floatingActionButton.setOnLongClickListener(view -> {
-            /*FABMoreOptionsBottomSheetFragment fabMoreOptionsBottomSheetFragment= new FABMoreOptionsBottomSheetFragment();
+            FABMoreOptionsBottomSheetFragment fabMoreOptionsBottomSheetFragment= new FABMoreOptionsBottomSheetFragment();
             Bundle bundle = new Bundle();
             bundle.putBoolean(FABMoreOptionsBottomSheetFragment.EXTRA_ANONYMOUS_MODE, mAccessToken == null);
             fabMoreOptionsBottomSheetFragment.setArguments(bundle);
-            fabMoreOptionsBottomSheetFragment.show(getSupportFragmentManager(), fabMoreOptionsBottomSheetFragment.getTag());*/
-            Intent intent = new Intent(this, HistoryActivity.class);
-            startActivity(intent);
+            fabMoreOptionsBottomSheetFragment.show(getSupportFragmentManager(), fabMoreOptionsBottomSheetFragment.getTag());
             return true;
         });
         navigationWrapper.floatingActionButton.setVisibility(View.VISIBLE);
@@ -762,6 +760,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         } else if (stringId == R.string.multi_reddit) {
                             intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
                             intent.putExtra(SubscribedThingListingActivity.EXTRA_SHOW_MULTIREDDITS, true);
+                        } else if (stringId == R.string.history) {
+                            intent = new Intent(MainActivity.this, HistoryActivity.class);
                         } else if (stringId == R.string.rpan) {
                             intent = new Intent(MainActivity.this, RPANActivity.class);
                         } else if (stringId == R.string.trending) {
