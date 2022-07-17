@@ -153,8 +153,11 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setToolbarGoToTop(toolbar);
 
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
         name = getIntent().getStringExtra(EXTRA_NAME);
         postType = getIntent().getIntExtra(EXTRA_POST_TYPE, PostPagingSource.TYPE_FRONT_PAGE);
+
         int filter = getIntent().getIntExtra(EXTRA_FILTER, -1000);
         PostFilter postFilter = new PostFilter();
         postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null || mAccountName.equals("-") ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false);
@@ -223,9 +226,6 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
                 mMenu.findItem(R.id.action_sort_filtered_thing_activity).setVisible(false);
             }
         }
-
-        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
 
         if (savedInstanceState != null) {
             mFragment = (PostFragment) getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
