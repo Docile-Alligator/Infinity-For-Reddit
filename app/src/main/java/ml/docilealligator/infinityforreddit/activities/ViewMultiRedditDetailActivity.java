@@ -145,7 +145,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (mFragment instanceof PostFragment)
-            return ((PostFragment) mFragment).handleKeyDown(keyCode);
+            return ((PostFragment) mFragment).handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
         return super.onKeyDown(keyCode, event);
     }
 
