@@ -242,7 +242,7 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
     @Override
     public void postLayoutSelected(int postLayout) {
         if (sectionsPagerAdapter != null) {
-            mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + mAccountName, postLayout).apply();
+            mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.HISTORY_POST_LAYOUT_READ_POST, postLayout).apply();
             sectionsPagerAdapter.changePostLayout(postLayout);
         }
     }
@@ -311,8 +311,8 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
 
         public void changePostLayout(int postLayout) {
             Fragment fragment = getCurrentFragment();
-            if (fragment instanceof PostFragment) {
-                ((PostFragment) fragment).changePostLayout(postLayout);
+            if (fragment instanceof HistoryPostFragment) {
+                ((HistoryPostFragment) fragment).changePostLayout(postLayout);
             }
         }
 

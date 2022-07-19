@@ -336,7 +336,7 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
         Locale locale = getResources().getConfiguration().locale;
 
         if (historyType == HISTORY_TYPE_READ_POSTS) {
-            postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.HISTORY_POST_LAYOUT_FRONT_PAGE_POST, defaultPostLayout);
+            postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.HISTORY_POST_LAYOUT_READ_POST, defaultPostLayout);
 
             mAdapter = new HistoryPostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
@@ -813,7 +813,7 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
         if (!temporary) {
             switch (postType) {
                 case HistoryPostPagingSource.TYPE_READ_POSTS:
-                    mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.HISTORY_POST_LAYOUT_FRONT_PAGE_POST, postLayout).apply();
+                    mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.HISTORY_POST_LAYOUT_READ_POST, postLayout).apply();
             }
         }
 
