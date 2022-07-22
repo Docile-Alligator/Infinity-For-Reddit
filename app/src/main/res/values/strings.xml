@@ -255,7 +255,7 @@
     <string name="no_flair">No flair</string>
     <string name="error_loading_flairs">Error loading flairs.\nTap to retry.</string>
 
-    <string name="no_rule">No rule</string>
+    <string name="no_rule">No rules</string>
     <string name="error_loading_rules">Error loading rules.\nTap to retry.</string>
     <string name="error_loading_rules_without_retry">Error Loading Rules</string>
 
@@ -493,14 +493,14 @@
     <string name="settings_apply_material_you_summary">In case Infinity did not change the theme</string>
     <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">Custom themes cannot be applied to settings page (except toolbar, status bar and navigation bar).</string>
     <string name="settings_advanced_master_title">Advanced</string>
-    <string name="settings_delete_all_subreddits_data_in_database_title">Delete All Subreddits in Database</string>
-    <string name="settings_delete_all_users_data_in_database_title">Delete All Users in Database</string>
-    <string name="settings_delete_all_sort_type_data_in_database_title">Delete All Sort Types in Database</string>
-    <string name="settings_delete_all_post_layout_data_in_database_title">Delete All Post Layouts in Database</string>
-    <string name="settings_delete_all_themes_in_database_title">Delete All Themes in Database</string>
-    <string name="settings_delete_front_page_scrolled_positions_in_database_title">Delete All Front Page Scrolled Positions in Database</string>
-    <string name="settings_delete_read_posts_in_database_title">Delete All Read Posts in Database</string>
-    <string name="settings_delete_all_legacy_settings_title">Delete All Legacy Settings</string>
+    <string name="settings_delete_all_subreddits_data_in_database_title">Deleted All Subreddits in Database</string>
+    <string name="settings_delete_all_users_data_in_database_title">Deleted All Users in Database</string>
+    <string name="settings_delete_all_sort_type_data_in_database_title">Deleted All Sort Types in Database</string>
+    <string name="settings_delete_all_post_layout_data_in_database_title">Deleted All Post Layouts in Database</string>
+    <string name="settings_delete_all_themes_in_database_title">Deleted All Themes in Database</string>
+    <string name="settings_delete_front_page_scrolled_positions_in_database_title">Deleted All Front Page Scrolled Positions in Database</string>
+    <string name="settings_delete_read_posts_in_database_title">Deleted All Read Posts in Database</string>
+    <string name="settings_delete_all_legacy_settings_title">Deleted All Legacy Settings</string>
     <string name="settings_reset_all_settings_title">Reset All Settings</string>
     <string name="restart_app_see_changes">Restart the app to see the changes</string>
     <string name="settings_tab_count">Tab Count</string>
@@ -740,7 +740,7 @@
     <string name="create_multi_reddit_failed">Cannot create this multireddit</string>
     <string name="duplicate_multi_reddit">This multireddit already exists</string>
     <string name="edit_multi_reddit_failed">Cannot edit this multireddit</string>
-    <string name="delete_multi_reddit_success">Delete successfully</string>
+    <string name="delete_multi_reddit_success">Deleted successfully</string>
     <string name="delete_multi_reddit_failed">Delete failed</string>
     <string name="delete_multi_reddit_dialog_message">Are you sure?</string>
 
@@ -947,7 +947,7 @@
     <string name="edit_theme_name">Edit Theme Name</string>
     <string name="edit_theme">Edit Theme</string>
     <string name="delete_theme">Delete Theme</string>
-    <string name="delete_theme_dialog_message">Are you sure to delete %1$s?</string>
+    <string name="delete_theme_dialog_message">Are you sure you want to delete %1$s?</string>
     <string name="share_theme">Share Theme</string>
     <string name="change_theme_name">Change Name</string>
     <string name="theme_copied">Copied! Paste and share it to other people.</string>
@@ -1194,9 +1194,9 @@
     <string name="suggest_title">Suggest Title</string>
     <string name="suggest_title_failed">Failed to suggest a title</string>
 
-    <string name="crash_reports_deleted">Crash reports are deleted</string>
+    <string name="crash_reports_deleted">Crash reports have been deleted</string>
 
-    <string name="disable_nsfw_forever_message">Once enabled, NSFW will be permanently disabled, regardless of whether the NSFW setting is enabled or not. And this option is irreversible, the only way to re-enable NSFW is to clear the app data.\n\nStill want to enable it?</string>
+    <string name="disable_nsfw_forever_message">Once enabled, NSFW will be permanently disabled, regardless of whether the NSFW setting is enabled or not. This option is irreversible, the only way to re-enable NSFW is to clear the app data.\n\nDo you still want to enable it?</string>
 
     <string name="reply">Reply</string>
 
