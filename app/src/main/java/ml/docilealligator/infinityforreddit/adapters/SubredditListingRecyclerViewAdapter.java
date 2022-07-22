@@ -141,6 +141,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
                 }
 
                 ((DataViewHolder) holder).subredditNameTextView.setText(subredditData.getName());
+                ((DataViewHolder) holder).subscriberCountTextView.setText(activity.getString(R.string.subscribers_number_detail, subredditData.getNSubscribers()));
 
                 if (!isMultiSelection) {
                     CheckIsSubscribedToSubreddit.checkIsSubscribedToSubreddit(executor, new Handler(),
@@ -260,6 +261,8 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
         GifImageView iconGifImageView;
         @BindView(R.id.subreddit_name_text_view_item_subreddit_listing)
         TextView subredditNameTextView;
+        @BindView(R.id.subscriber_count_text_view_item_subreddit_listing)
+        TextView subscriberCountTextView;
         @BindView(R.id.subscribe_image_view_item_subreddit_listing)
         ImageView subscribeButton;
         @BindView(R.id.checkbox_item_subreddit_listing)
@@ -269,6 +272,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
             super(itemView);
             ButterKnife.bind(this, itemView);
             subredditNameTextView.setTextColor(primaryTextColor);
+            subscriberCountTextView.setTextColor(secondaryTextColor);
             subscribeButton.setColorFilter(unsubscribed, android.graphics.PorterDuff.Mode.SRC_IN);
             if (isMultiSelection) {
                 checkBox.setVisibility(View.VISIBLE);
@@ -276,6 +280,7 @@ public class SubredditListingRecyclerViewAdapter extends PagedListAdapter<Subred
 
             if (activity.typeface != null) {
                 subredditNameTextView.setTypeface(activity.typeface);
+                subscriberCountTextView.setTypeface(activity.typeface);
             }
         }
     }

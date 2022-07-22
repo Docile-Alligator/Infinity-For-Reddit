@@ -19,6 +19,7 @@ import ml.docilealligator.infinityforreddit.activities.FetchRandomSubredditOrPos
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.FullMarkdownActivity;
 import ml.docilealligator.infinityforreddit.activities.GiveAwardActivity;
+import ml.docilealligator.infinityforreddit.activities.HistoryActivity;
 import ml.docilealligator.infinityforreddit.activities.InboxActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.LockScreenActivity;
@@ -65,6 +66,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.AccountChooserB
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.fragments.CommentsListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.FollowedUsersListingFragment;
+import ml.docilealligator.infinityforreddit.fragments.HistoryPostFragment;
 import ml.docilealligator.infinityforreddit.fragments.InboxFragment;
 import ml.docilealligator.infinityforreddit.fragments.MultiRedditListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
@@ -300,4 +302,8 @@ public interface AppComponent {
     void inject(AccountChooserBottomSheetFragment accountChooserBottomSheetFragment);
 
     void inject(MaterialYouWorker materialYouWorker);
+
+    void inject(HistoryPostFragment historyPostFragment);
+
+    void inject(HistoryActivity historyActivity);
 }

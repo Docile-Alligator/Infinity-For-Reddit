@@ -1,0 +1,46 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:application="ml.docilealligator.infinityforreddit.fragments.HistoryPostFragment">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe_refresh_layout_history_post_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ml.docilealligator.infinityforreddit.customviews.CustomToroContainer
+            android:id="@+id/recycler_view_history_post_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false" />
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/fetch_post_info_linear_layout_history_post_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="48dp"
+        android:layout_marginBottom="48dp"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/fetch_post_info_image_view_history_post_fragment"
+            android:layout_width="150dp"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/fetch_post_info_text_view_history_post_fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

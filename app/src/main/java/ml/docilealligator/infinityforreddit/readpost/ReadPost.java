@@ -21,15 +21,19 @@ public class ReadPost implements Parcelable {
     @NonNull
     @ColumnInfo(name = "id")
     private String id;
+    @ColumnInfo(name = "time")
+    private long time;
 
     public ReadPost(@NonNull String username, @NonNull String id) {
         this.username = username;
         this.id = id;
+        this.time = System.currentTimeMillis();
     }
 
     protected ReadPost(Parcel in) {
         username = in.readString();
         id = in.readString();
+        time = in.readLong();
     }
 
     public static final Creator<ReadPost> CREATOR = new Creator<ReadPost>() {
@@ -62,6 +66,14 @@ public class ReadPost implements Parcelable {
         this.id = id;
     }
 
+    public long getTime() {
+        return time;
+    }
+
+    public void setTime(long time) {
+        this.time = time;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -71,6 +83,7 @@ public class ReadPost implements Parcelable {
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(username);
         parcel.writeString(id);
+        parcel.writeLong(time);
     }
 
     @Override

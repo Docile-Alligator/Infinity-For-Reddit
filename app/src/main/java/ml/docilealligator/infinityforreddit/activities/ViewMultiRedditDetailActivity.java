@@ -9,6 +9,7 @@ import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -140,6 +141,13 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     private boolean lockBottomAppBar;
     private Call<String> subredditAutocompleteCall;
     private NavigationWrapper navigationWrapper;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (mFragment instanceof PostFragment)
+            return ((PostFragment) mFragment).handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
+        return super.onKeyDown(keyCode, event);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -337,7 +337,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         Resources resources = getResources();
 
-        if ((activity instanceof BaseActivity && ((BaseActivity) activity).isImmersiveInterface())) {
+        if ((activity != null && activity.isImmersiveInterface())) {
             mPostRecyclerView.setPadding(0, 0, 0, ((BaseActivity) activity).getNavBarHeight());
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {

@@ -4,53 +4,71 @@
     android:id="@+id/constraint_layout_item_subreddit_listing"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="16dp"
+    android:background="?attr/selectableItemBackground"
     android:clickable="true"
     android:focusable="true"
-    android:background="?attr/selectableItemBackground">
+    android:padding="16dp">
 
     <pl.droidsonroids.gif.GifImageView
         android:id="@+id/subreddit_icon_gif_image_view_item_subreddit_listing"
         android:layout_width="36dp"
         android:layout_height="36dp"
         android:layout_gravity="center_vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/subreddit_name_text_view_item_subreddit_listing"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
         android:layout_marginStart="32dp"
-        android:textSize="?attr/font_default"
         android:fontFamily="?attr/font_family"
+        android:textSize="?attr/font_default"
+        app:layout_constraintStart_toEndOf="@+id/subreddit_icon_gif_image_view_item_subreddit_listing"
+        app:layout_constraintEnd_toStartOf="@id/barrier3"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/subscriber_count_text_view_item_subreddit_listing"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:fontFamily="?attr/font_family"
+        android:textSize="?attr/font_default"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/subreddit_icon_gif_image_view_item_subreddit_listing"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toStartOf="@id/barrier3"
+        app:layout_constraintTop_toBottomOf="@id/subreddit_name_text_view_item_subreddit_listing" />
 
     <ImageView
         android:id="@+id/subscribe_image_view_item_subreddit_listing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:src="@drawable/ic_add_24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:background="?attr/selectableItemBackground"
         android:clickable="true"
         android:focusable="true"
-        android:background="?attr/selectableItemBackground"
-        android:visibility="gone"/>
+        android:src="@drawable/ic_add_24dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.checkbox.MaterialCheckBox
         android:id="@+id/checkbox_item_subreddit_listing"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:visibility="gone" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Barrier
+        android:id="@+id/barrier3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:barrierDirection="start"
+        app:constraint_referenced_ids="subscribe_image_view_item_subreddit_listing,checkbox_item_subreddit_listing" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
