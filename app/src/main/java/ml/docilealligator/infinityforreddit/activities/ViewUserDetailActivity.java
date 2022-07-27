@@ -111,6 +111,7 @@ import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
 import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
+import ml.docilealligator.infinityforreddit.user.BlockUser;
 import ml.docilealligator.infinityforreddit.user.FetchUserData;
 import ml.docilealligator.infinityforreddit.user.UserDao;
 import ml.docilealligator.infinityforreddit.user.UserData;
@@ -1119,6 +1120,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         if (username.equals(mAccountName)) {
             menu.findItem(R.id.action_send_private_message_view_user_detail_activity).setVisible(false);
             menu.findItem(R.id.action_report_view_user_detail_activity).setVisible(false);
+            menu.findItem(R.id.action_block_user_view_user_detail_activity).setVisible(false);
         } else {
             menu.findItem(R.id.action_edit_profile_view_user_detail_activity).setVisible(false);
         }
@@ -1186,6 +1188,30 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             Intent reportIntent = new Intent(this, LinkResolverActivity.class);
             reportIntent.setData(Uri.parse("https://www.reddithelp.com/en/categories/rules-reporting/account-and-community-restrictions/what-should-i-do-if-i-see-something-i"));
             startActivity(reportIntent);
+            return true;
+        } else if (itemId == R.id.action_block_user_view_user_detail_activity) {
+            if (mAccessToken == null) {
+                Toast.makeText(this, R.string.login_first, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
+            new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                    .setTitle(R.string.block_user)
+                    .setMessage(R.string.are_you_sure)
+                    .setPositiveButton(R.string.yes, (dialogInterface, i)
+                            -> BlockUser.blockUser(mOauthRetrofit, mAccessToken, username, new BlockUser.BlockUserListener() {
+                        @Override
+                        public void success() {
+                            Toast.makeText(ViewUserDetailActivity.this, R.string.block_user_success, Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void failed() {
+                            Toast.makeText(ViewUserDetailActivity.this, R.string.block_user_failed, Toast.LENGTH_SHORT).show();
+                        }
+                    }))
+                    .setNegativeButton(R.string.no, null)
+                    .show();
             return true;
         } else if (itemId == R.id.action_edit_profile_view_user_detail_activity) {
             startActivity(new Intent(this, EditProfileActivity.class));
