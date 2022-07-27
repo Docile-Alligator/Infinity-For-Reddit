@@ -63,7 +63,6 @@
     <string name="action_see_removed">"Ver Removido"</string>
     <string name="action_set_wallpaper">"Definir como Papel de Parede"</string>
     <string name="action_send_private_message">"Enviar Mensagem Privada"</string>
-    <string name="action_block_user">"Bloquear Usuário"</string>
     <string name="parse_json_response_error">"Ocorreu uma falha ao analisar a resposta do JSON"</string>
     <string name="retrieve_token_error">"Falha ao recuperar token"</string>
     <string name="something_went_wrong">"Algo deu errado. Tente novamente mais tarde."</string>
@@ -747,9 +746,6 @@ Ela não está doente nem nada, mas definitivamente poderia melhorar."</string>
     <string name="top_score">"%1$s pontos"</string>
     <string name="login_activity_2fa_prompt">"Se você tem a Autenticação em 2 Etapas ativada, digite a senha da seguinte forma: &lt;senha&gt;:&lt;código de autenticação&gt;.
 Exemplo: suasenha:123456"</string>
-    <string name="block_user">"Bloquear usuário"</string>
-    <string name="block_user_success">"Bloqueado"</string>
-    <string name="block_user_failed">"Erro ao bloquear usuário"</string>
     <string name="submit_crosspost_activity_label">"Crosspost"</string>
     <string name="give_award_activity_label">"Dar prêmio"</string>
     <string name="action_crosspost">"Crosspost"</string>

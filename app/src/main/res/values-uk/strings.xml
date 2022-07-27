@@ -61,7 +61,6 @@
     <string name="action_see_removed">"Переглянути вилучені"</string>
     <string name="action_set_wallpaper">"Зробити шпалерами"</string>
     <string name="action_send_private_message">"Надіслати приватне повідомлення"</string>
-    <string name="action_block_user">"Блокувати користувача"</string>
     <string name="parse_json_response_error">"Помилка відбулася під час аналізу відповіді JSON"</string>
     <string name="retrieve_token_error">"Помилка отримання токена"</string>
     <string name="something_went_wrong">"Щось пішло не так. Спробуйте пізніше."</string>
@@ -741,9 +740,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="top_score">"%1$s блв"</string>
     <string name="login_activity_2fa_prompt">"Якщо у Вас дозволена 2-факторна автентифікація, вводьте свій пароль наступним чином: &lt;пароль&gt;:&lt;код 2ФА&gt;.
 Приклад: yourpass:123456"</string>
-    <string name="block_user">"Блокувати користувача"</string>
-    <string name="block_user_success">"Заблоковано"</string>
-    <string name="block_user_failed">"Не вдалося заблокувати користувача"</string>
     <string name="submit_crosspost_activity_label">"Передопис"</string>
     <string name="give_award_activity_label">"Дати нагороду"</string>
     <string name="action_crosspost">"Передопис"</string>

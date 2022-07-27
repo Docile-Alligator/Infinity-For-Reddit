@@ -61,7 +61,6 @@
     <string name="action_see_removed">"Ver Removido"</string>
     <string name="action_set_wallpaper">"Definir como Imagem de Fundo"</string>
     <string name="action_send_private_message">"Enviar Mensagem Privada"</string>
-    <string name="action_block_user">"Bloquear Utilizador"</string>
     <string name="parse_json_response_error">"Ocorreu um erro ao analisar a resposta do JSON"</string>
     <string name="retrieve_token_error">"Erro ao Recuperar token"</string>
     <string name="something_went_wrong">"Algo correu mal. Tente novamente mais tarde."</string>
@@ -744,9 +743,6 @@ Ela não está doente nem nada, mas certamente poderá melhorar."</string>
     <string name="top_score">"%1$s pontos"</string>
     <string name="login_activity_2fa_prompt">"Caso tenha autenticação de 2 fatores ativada, por favor introduza a palavra-passe da seguinte forma: &lt;palavra-passe&gt;:&lt;código 2FA&gt;.
 Exemplo: asuapasse:123456"</string>
-    <string name="block_user">"Bloquear Utilizador"</string>
-    <string name="block_user_success">"Bloqueado"</string>
-    <string name="block_user_failed">"Falha a bloquear utilizador"</string>
     <string name="submit_crosspost_activity_label">"Republicar"</string>
     <string name="give_award_activity_label">"Premiar"</string>
     <string name="action_crosspost">"Republicar"</string>

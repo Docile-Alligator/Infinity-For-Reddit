@@ -61,7 +61,6 @@
     <string name="action_see_removed">"Vezi eliminarea"</string>
     <string name="action_set_wallpaper">"Setează ca fundal"</string>
     <string name="action_send_private_message">"Trimite mesaj pirvat"</string>
-    <string name="action_block_user">"Blochează utilizator"</string>
     <string name="parse_json_response_error">"A apărut o eroare la parcurgerea răspunsului JSON"</string>
     <string name="retrieve_token_error">"Eroare în recuperarea tokenului"</string>
     <string name="something_went_wrong">"Ceva nu merge. Încearcă mai târziu."</string>
@@ -743,9 +742,6 @@ Nu este bolnavă sau ceva de genul ăsta, dar cu siguranță ar putea să se fac
     <string name="top_score">"%1$s puncte"</string>
     <string name="login_activity_2fa_prompt">"Dacă aveți activată autentificarea cu 2 factori, vă rugăm să introduceți parola dvs. după cum urmează: &lt;parolă&gt;:&lt;cod 2FA&gt;.
 Exemplu: parolata:123456"</string>
-    <string name="block_user">"Blocați utilizatorul"</string>
-    <string name="block_user_success">"Blocat"</string>
-    <string name="block_user_failed">"Nu s-a reușit blocarea utilizatorului"</string>
     <string name="submit_crosspost_activity_label">"Crosspost"</string>
     <string name="give_award_activity_label">"Acordați un premiu"</string>
     <string name="action_crosspost">"Crosspost"</string>

@@ -76,7 +76,6 @@
     <string name="action_see_removed">"Afficher les Publications Supprimées"</string>
     <string name="action_set_wallpaper">"Définir comme Fond d'Écran"</string>
     <string name="action_send_private_message">"Envoyer le Message Privé"</string>
-    <string name="action_block_user">"Bloquer l'Utilisateur"</string>
     <string name="parse_json_response_error">"Une erreur s'est produite lors de l'analyse de la réponse JSON"</string>
     <string name="retrieve_token_error">"Erreur dans la récupération du jeton"</string>
     <string name="something_went_wrong">"Une erreur s'est produite. Veuillez réessayer plus tard."</string>
@@ -840,9 +839,6 @@ Basé sur le thème sombre Indigo"</string>
     <string name="top_score">"%1$s pts"</string>
     <string name="login_activity_2fa_prompt">"Si vous avez activé l'authentification à 2 facteurs, veuillez saisir votre mot de passe comme suit : &lt;mot de passe&gt;:&lt;code A2F&gt;.
 Exemple : motdepasse:123456"</string>
-    <string name="block_user">"Bloquer l'utilisateur"</string>
-    <string name="block_user_success">"Bloqué"</string>
-    <string name="block_user_failed">"Impossible de bloquer l'utilisateur"</string>
     <string name="submit_crosspost_activity_label">"Crosspost"</string>
     <string name="give_award_activity_label">"Récompenser"</string>
     <string name="action_crosspost">"Crosspost"</string>

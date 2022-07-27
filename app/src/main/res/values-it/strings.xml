@@ -61,7 +61,6 @@
     <string name="action_see_removed">"Visualizza Rimosso"</string>
     <string name="action_set_wallpaper">"Imposta come sfondo del dispositivo"</string>
     <string name="action_send_private_message">"Invia Messaggio privato"</string>
-    <string name="action_block_user">"Blocca utente"</string>
     <string name="parse_json_response_error">"Si è verificato un errore durante l'analisi della risposta JSON"</string>
     <string name="retrieve_token_error">"Errore durante il recupero del token"</string>
     <string name="something_went_wrong">"Qualcosa è andato storto. Riprova più tardi."</string>
@@ -736,9 +735,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="top_score">"%1$s pts"</string>
     <string name="login_activity_2fa_prompt">"Se hai attivato l'autenticazione a due fattori, per favore inserisci la password come segue: &lt;password&gt;:&lt;codice per l'autenticazione a due fattori&gt;.
 Esempio: latuapassword:123456"</string>
-    <string name="block_user">"Blocca utente"</string>
-    <string name="block_user_success">"Bloccato"</string>
-    <string name="block_user_failed">"Blocco utente fallito"</string>
     <string name="submit_crosspost_activity_label">"Crosspost"</string>
     <string name="give_award_activity_label">"Assegna Premio"</string>
     <string name="action_crosspost">"Crosspost"</string>

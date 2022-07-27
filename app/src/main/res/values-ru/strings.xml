@@ -67,7 +67,6 @@
     <string name="action_see_removed">"Просмотр удалённого"</string>
     <string name="action_set_wallpaper">"Установить как обои"</string>
     <string name="action_send_private_message">"Отправить личное сообщение"</string>
-    <string name="action_block_user">"Заблокировать пользователя"</string>
     <string name="parse_json_response_error">"Произошла ошибка при анализе JSON-отчёта"</string>
     <string name="retrieve_token_error">"Ошибка получения токена"</string>
     <string name="something_went_wrong">"Что-то пошло не так. Попробуйте позже."</string>
@@ -757,9 +756,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="top_score">"%1$s пойнтов"</string>
     <string name="login_activity_2fa_prompt">"Если у вас включена двухфакторная аутентификация, введите пароль, как показано ниже: &amp;lt;password&amp;gt;:&amp;lt;2FA code&amp;gt;.
 Пример: yourpass:123456"</string>
-    <string name="block_user">"Заблокировать пользователя"</string>
-    <string name="block_user_success">"Заблокирован"</string>
-    <string name="block_user_failed">"Ошибка блокировки пользователя"</string>
     <string name="submit_crosspost_activity_label">"Кросспост"</string>
     <string name="give_award_activity_label">"Наградить"</string>
     <string name="action_crosspost">"Кросспост"</string>

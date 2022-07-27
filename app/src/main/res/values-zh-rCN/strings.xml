@@ -61,7 +61,6 @@
     <string name="action_see_removed">"查看已删除"</string>
     <string name="action_set_wallpaper">"设为壁纸"</string>
     <string name="action_send_private_message">"发送私信"</string>
-    <string name="action_block_user">"屏蔽用户"</string>
     <string name="parse_json_response_error">"解析 JSON 响应错误"</string>
     <string name="retrieve_token_error">"获取 Token 错误"</string>
     <string name="something_went_wrong">"出错了，请稍后重试。"</string>
@@ -804,9 +803,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="top_score">"%1$s 分"</string>
     <string name="login_activity_2fa_prompt">"如果您启用了两步验证，请按如下格式输入密码（使用英文的冒号）：&lt;密码&gt;:&lt;两步验证代码&gt;。
 范例：yourpass:123456"</string>
-    <string name="block_user">"屏蔽用户"</string>
-    <string name="block_user_success">"已屏蔽"</string>
-    <string name="block_user_failed">"屏蔽用户失败"</string>
     <string name="submit_crosspost_activity_label">"转发"</string>
     <string name="give_award_activity_label">"给予奖励"</string>
     <string name="action_crosspost">"转发"</string>

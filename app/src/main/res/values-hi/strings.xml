@@ -67,7 +67,6 @@
     <string name="action_see_removed">"हटाए हुए पोस्ट देखें"</string>
     <string name="action_set_wallpaper">"वालपेपर लगाएं "</string>
     <string name="action_send_private_message">"व्यक्तिगत संदेश भेजें"</string>
-    <string name="action_block_user">"प्रतिबंधित करें "</string>
     <string name="parse_json_response_error">"JSON प्रतिक्रिया को समझने में त्रुटि"</string>
     <string name="retrieve_token_error">"टोकन प्राप्ति में त्रुटि"</string>
     <string name="something_went_wrong">"कुछ गलत हो गया है। बाद में पुनः प्रयास करें।"</string>
@@ -816,9 +815,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="top_score">"%1$s अंक"</string>
     <string name="login_activity_2fa_prompt">"अगार आपका 2-कदाम प्रमाणीकरण चालू है, तो कृपिया आपना पासबर्ड(चाबी) निम्ना लिखित तरीके से दिजीये: &lt;पासबर्ड&gt;:&lt;2FA code&gt;
 उदाहरण: पासबर्ड:123456"</string>
-    <string name="block_user">"एकाउंट ब्लक करे"</string>
-    <string name="block_user_success">"एकाउंट ब्लक"</string>
-    <string name="block_user_failed">"ब्लक करना असफल रहा"</string>
     <string name="submit_crosspost_activity_label">"क्रॉसपोस्ट "</string>
     <string name="give_award_activity_label">"पुरस्कार दें "</string>
     <string name="action_crosspost">"क्रॉसपोस्ट"</string>
