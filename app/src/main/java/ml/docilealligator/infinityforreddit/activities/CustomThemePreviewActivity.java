@@ -16,6 +16,7 @@ import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
@@ -80,6 +81,8 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
     CollapsingToolbarLayout collapsingToolbarLayout;
     @BindView(R.id.toolbar_linear_layout_theme_preview_activity)
     LinearLayout linearLayout;
+    @BindView(R.id.extra_padding_view_theme_preview_activity)
+    View extraPaddingView;
     @BindView(R.id.subreddit_name_text_view_theme_preview_activity)
     TextView subredditNameTextView;
     @BindView(R.id.user_name_text_view_theme_preview_activity)
@@ -239,6 +242,7 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
+                adjustToolbar(toolbar);
 
                 Resources resources = getResources();
                 int navBarResourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
@@ -304,7 +308,6 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
             });
         }
 
-        adjustToolbar(toolbar);
         setSupportActionBar(toolbar);
 
         subscribeSubredditChip.setOnClickListener(view -> {
@@ -335,6 +338,13 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
 
     private void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(customTheme.backgroundColor);
+        appBarLayout.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                appBarLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                collapsingToolbarLayout.setScrimVisibleHeightTrigger(toolbar.getHeight() + tabLayout.getHeight() + getStatusBarHeight() * 2);
+            }
+        });
         collapsingToolbarLayout.setContentScrimColor(customTheme.colorPrimary);
         subscribeSubredditChip.setTextColor(customTheme.chipTextColor);
         subscribeSubredditChip.setChipBackgroundColor(ColorStateList.valueOf(customTheme.unsubscribed));
@@ -346,6 +356,7 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
         collapsedTabIndicatorColor = customTheme.tabLayoutWithCollapsedCollapsingToolbarTabIndicator;
         collapsedTabBackgroundColor = customTheme.tabLayoutWithCollapsedCollapsingToolbarTabBackground;
         linearLayout.setBackgroundColor(customTheme.tabLayoutWithExpandedCollapsingToolbarTabBackground);
+        extraPaddingView.setBackgroundColor(customTheme.colorPrimary);
         subredditNameTextView.setTextColor(customTheme.subreddit);
         usernameTextView.setTextColor(customTheme.username);
         subscribeSubredditChip.setTextColor(customTheme.chipTextColor);
@@ -368,6 +379,15 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
             secondaryTextView.setTypeface(typeface);
             subscribeSubredditChip.setTypeface(typeface);
         }
+    }
+
+    private int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
     }
 
     protected void applyAppBarLayoutAndToolbarTheme(AppBarLayout appBarLayout, Toolbar toolbar) {

@@ -187,7 +187,7 @@
             android:name=".activities.CustomThemePreviewActivity"
             android:label="@string/theme_preview_activity_label"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.SlidableWithTranslucentWindow" />
+            android:theme="@style/AppTheme.Slidable" />
         <activity
             android:name=".activities.CustomThemeListingActivity"
             android:label="@string/custom_theme_listing_activity_label"
@@ -411,11 +411,11 @@
         <activity
             android:name=".activities.ViewSubredditDetailActivity"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.SlidableWithTranslucentWindow" />
+            android:theme="@style/AppTheme.Slidable" />
         <activity
             android:name=".activities.ViewUserDetailActivity"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.SlidableWithTranslucentWindow" />
+            android:theme="@style/AppTheme.Slidable" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -286,8 +286,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
         Resources resources = getResources();
 
-        adjustToolbar(toolbar);
-
         String title = "u/" + username;
         userNameTextView.setText(title);
         toolbar.setTitle(title);
@@ -304,6 +302,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
+                adjustToolbar(toolbar);
 
                 int navBarHeight = getNavBarHeight();
                 if (navBarHeight > 0) {

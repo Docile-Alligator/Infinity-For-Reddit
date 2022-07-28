@@ -29,7 +29,7 @@
                     android:id="@+id/banner_image_view_view_subreddit_detail_activity"
                     android:layout_width="match_parent"
                     android:scaleType="centerCrop"
-                    android:layout_height="180dp"
+                    android:layout_height="160dp"
                     android:contentDescription="@string/content_description_banner_imageview" />
 
                 <pl.droidsonroids.gif.GifImageView

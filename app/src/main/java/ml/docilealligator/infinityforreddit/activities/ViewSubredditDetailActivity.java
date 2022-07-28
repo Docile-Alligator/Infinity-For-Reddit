@@ -236,7 +236,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
-        setTransparentStatusBarAfterToolbarCollapsed();
 
         super.onCreate(savedInstanceState);
 
@@ -268,6 +267,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
+                adjustToolbar(toolbar);
 
                 int navBarHeight = getNavBarHeight();
                 if (navBarHeight > 0) {
@@ -364,7 +364,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         subredditNameTextView.setText(title);
 
         toolbar.setTitle(title);
-        adjustToolbar(toolbar);
         setSupportActionBar(toolbar);
         setToolbarGoToTop(toolbar);
 
@@ -537,7 +536,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         creationTimeTextView.setTextColor(primaryTextColor);
         descriptionTextView.setTextColor(primaryTextColor);
         navigationWrapper.applyCustomTheme(mCustomThemeWrapper.getBottomAppBarIconColor(), mCustomThemeWrapper.getBottomAppBarBackgroundColor());
-        int bottomAppBarIconColor = mCustomThemeWrapper.getBottomAppBarIconColor();
         applyTabLayoutTheme(tabLayout);
         applyFABTheme(navigationWrapper.floatingActionButton);
         if (typeface != null) {

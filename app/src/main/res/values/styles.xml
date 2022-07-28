@@ -34,10 +34,6 @@
         <item name="android:fontFamily">?attr/font_family</item>
     </style>
 
-    <style name="AppTheme.SlidableWithTranslucentWindow" parent="AppTheme.Slidable">
-        <item name="android:windowTranslucentStatus">true</item>
-    </style>
-
     <style name="AppTheme.Draggable" parent="AppTheme">
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowContentOverlay">@null</item>
