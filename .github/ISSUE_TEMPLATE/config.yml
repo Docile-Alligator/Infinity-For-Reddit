@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Feature Request
+    url: https://github.com/Docile-Alligator/Infinity-For-Reddit/discussions/categories/ideas
+    about: Discuss ideas for new features of changes
+  - name: Questions
+    url: https://github.com/Docile-Alligator/Infinity-For-Reddit/discussions/categories/q-a
+    about: Please ask and answer questions here.
+  - name: Help needed
+    url: https://github.com/Docile-Alligator/Infinity-For-Reddit/discussions/categories/help-needed
+    about: Please ask for help here
