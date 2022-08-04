@@ -11,6 +11,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.recyclerview.widget.RecyclerView;
@@ -162,12 +163,20 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
                         })
                         .show();
             } else {
-                new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
-                        .setTitle(R.string.select_this_user_flair)
-                        .setMessage(userFlair.getText())
-                        .setPositiveButton(R.string.yes, (dialogInterface, i) -> selectUserFlair(userFlair))
-                        .setNegativeButton(R.string.no, null)
-                        .show();
+                if (userFlair == null) {
+                    new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                            .setTitle(R.string.clear_user_flair)
+                            .setPositiveButton(R.string.yes, (dialogInterface, i) -> selectUserFlair(userFlair))
+                            .setNegativeButton(R.string.no, null)
+                            .show();
+                } else {
+                    new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                            .setTitle(R.string.select_this_user_flair)
+                            .setMessage(userFlair.getText())
+                            .setPositiveButton(R.string.yes, (dialogInterface, i) -> selectUserFlair(userFlair))
+                            .setNegativeButton(R.string.no, null)
+                            .show();
+                }
             }
         });
         mLinearLayoutManager = new LinearLayoutManagerBugFixed(SelectUserFlairActivity.this);
@@ -175,19 +184,27 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
         recyclerView.setAdapter(mAdapter);
     }
 
-    private void selectUserFlair(UserFlair userFlair) {
+    private void selectUserFlair(@Nullable UserFlair userFlair) {
         SelectUserFlair.selectUserFlair(mOauthRetrofit, mAccessToken, userFlair, mSubredditName, mAccountName,
                 new SelectUserFlair.SelectUserFlairListener() {
                     @Override
                     public void success() {
-                        Toast.makeText(SelectUserFlairActivity.this, R.string.select_user_flair_success, Toast.LENGTH_SHORT).show();
+                        if (userFlair == null) {
+                            Toast.makeText(SelectUserFlairActivity.this, R.string.clear_user_flair_success, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(SelectUserFlairActivity.this, R.string.select_user_flair_success, Toast.LENGTH_SHORT).show();
+                        }
                         finish();
                     }
 
                     @Override
                     public void failed(String errorMessage) {
                         if (errorMessage == null || errorMessage.equals("")) {
-                            Snackbar.make(coordinatorLayout, R.string.select_user_flair_success, Snackbar.LENGTH_SHORT).show();
+                            if (userFlair == null) {
+                                Snackbar.make(coordinatorLayout, R.string.clear_user_flair_success, Snackbar.LENGTH_SHORT).show();
+                            } else {
+                                Snackbar.make(coordinatorLayout, R.string.select_user_flair_success, Snackbar.LENGTH_SHORT).show();
+                            }
                         } else {
                             Snackbar.make(coordinatorLayout, errorMessage, Snackbar.LENGTH_SHORT).show();
                         }

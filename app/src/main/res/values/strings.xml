@@ -1053,6 +1053,8 @@
 
     <string name="select_user_flair_success">User flair selected</string>
     <string name="select_this_user_flair">Select this user flair?</string>
+    <string name="clear_user_flair">Clear Flair</string>
+    <string name="clear_user_flair_success">User flair cleared</string>
 
     <string name="select_header_size">Select Header Size</string>
     <string name="large">Large</string>
