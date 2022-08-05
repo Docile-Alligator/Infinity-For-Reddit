@@ -395,6 +395,7 @@ public class SearchActivity extends BaseActivity {
 
         if (query != null) {
             searchEditText.setText(query);
+            searchEditText.setSelection(query.length());
             query = null;
         }
 
