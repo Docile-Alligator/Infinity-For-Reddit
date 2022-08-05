@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.font;
 import ml.docilealligator.infinityforreddit.R;
 
 public enum ContentFontStyle {
+    XSmall(R.style.ContentFontStyle_XSmall, "XSmall"),
     Small(R.style.ContentFontStyle_Small, "Small"),
     Normal(R.style.ContentFontStyle_Normal, "Normal"),
     Large(R.style.ContentFontStyle_Large, "Large"),

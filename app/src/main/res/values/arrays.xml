@@ -104,6 +104,7 @@
     </string-array>
 
     <string-array name="settings_font_size">
+        <item>@string/extra_small</item>
         <item>@string/small</item>
         <item>@string/normal</item>
         <item>@string/large</item>
@@ -111,6 +112,7 @@
     </string-array>
 
     <string-array name="settings_font_size_values">
+        <item>XSmall</item>
         <item>Small</item>
         <item>Normal</item>
         <item>Large</item>
@@ -118,6 +120,7 @@
     </string-array>
 
     <string-array name="settings_title_font_size">
+        <item>@string/extra_small</item>
         <item>@string/small</item>
         <item>@string/normal</item>
         <item>@string/large</item>
@@ -125,6 +128,7 @@
     </string-array>
 
     <string-array name="settings_title_font_size_values">
+        <item>XSmall</item>
         <item>Small</item>
         <item>Normal</item>
         <item>Large</item>
@@ -132,6 +136,7 @@
     </string-array>
 
     <string-array name="settings_content_font_size">
+        <item>@string/extra_small</item>
         <item>@string/small</item>
         <item>@string/normal</item>
         <item>@string/large</item>
@@ -140,6 +145,7 @@
     </string-array>
 
     <string-array name="settings_content_font_size_values">
+        <item>XSmall</item>
         <item>Small</item>
         <item>Normal</item>
         <item>Large</item>

@@ -1172,6 +1172,7 @@
     <string name="only_on_wifi">Only on Wifi</string>
     <string name="never">Never</string>
     <string name="normal">Normal</string>
+    <string name="extra_small">Extra Small</string>
     <string name="extra_large">Extra Large</string>
     <string name="enormously_large">Enormously Large</string>
     <string name="default_in_array">Default</string>

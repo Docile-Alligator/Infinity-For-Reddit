@@ -143,6 +143,15 @@
     
     <style name="FontStyle" />
 
+    <style name="FontStyle.XSmall">
+        <item name="font_default">10sp</item>
+        <item name="font_10">8sp</item>
+        <item name="font_12">10sp</item>
+        <item name="font_16">12sp</item>
+        <item name="font_18">14sp</item>
+        <item name="font_20">16sp</item>
+    </style>
+
     <style name="FontStyle.Small">
         <item name="font_default">12sp</item>
         <item name="font_10">10sp</item>
@@ -181,6 +190,14 @@
 
     <style name="TitleFontStyle" />
 
+    <style name="TitleFontStyle.XSmall">
+        <item name="title_font_default">10sp</item>
+        <item name="title_font_12">10sp</item>
+        <item name="title_font_16">12sp</item>
+        <item name="title_font_18">14sp</item>
+        <item name="title_font_20">16sp</item>
+    </style>
+
     <style name="TitleFontStyle.Small">
         <item name="title_font_default">12sp</item>
         <item name="title_font_12">12sp</item>
@@ -214,6 +231,14 @@
     </style>
 
     <style name="ContentFontStyle" />
+
+    <style name="ContentFontStyle.XSmall">
+        <item name="content_font_default">10sp</item>
+        <item name="content_font_12">10sp</item>
+        <item name="content_font_16">12sp</item>
+        <item name="content_font_18">14sp</item>
+        <item name="content_font_20">16sp</item>
+    </style>
 
     <style name="ContentFontStyle.Small">
         <item name="content_font_default">12sp</item>
