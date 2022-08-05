@@ -812,6 +812,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             Post.Preview preview = getSuitablePreview(post.getPreviews());
                             ((PostWithPreviewTypeViewHolder) holder).preview = preview;
                             if (preview != null) {
+                                ((PostWithPreviewTypeViewHolder) holder).imageView.setVisibility(View.VISIBLE);
                                 ((PostWithPreviewTypeViewHolder) holder).imageWrapperRelativeLayout.setVisibility(View.VISIBLE);
                                 if (mFixedHeightPreviewInCard || (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0)) {
                                     int height = (int) (400 * mScale);
@@ -1847,6 +1848,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 ((PostVideoAutoplayViewHolder) holder).previewImageView.setVisibility(View.GONE);
             } else if (holder instanceof PostWithPreviewTypeViewHolder) {
                 mGlide.clear(((PostWithPreviewTypeViewHolder) holder).imageView);
+                ((PostWithPreviewTypeViewHolder) holder).imageView.setVisibility(View.GONE);
                 ((PostWithPreviewTypeViewHolder) holder).imageWrapperRelativeLayout.setVisibility(View.GONE);
                 ((PostWithPreviewTypeViewHolder) holder).errorTextView.setVisibility(View.GONE);
                 ((PostWithPreviewTypeViewHolder) holder).noPreviewLinkImageView.setVisibility(View.GONE);
