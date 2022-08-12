@@ -65,12 +65,12 @@ body:
     id: expected
     attributes:
       label: Expected behaviour
-      description: After following the steps, what did you think AntennaPod would do?
+      description: After following the steps, what did you think Infinity would do?
   - type: textarea
     id: current
     attributes:
       label: Current behaviour
-      description: What did AntennaPod do instead? Screenshots might help. Usually, you can take a screenshot of your smartphone by pressing *Power* + *Volume down* for a few seconds.
+      description: What did Infinity do instead? Screenshots might help. Usually, you can take a screenshot of your smartphone by pressing *Power* + *Volume down* for a few seconds.
   - type: textarea
     id: logs
     attributes:
