@@ -163,6 +163,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     private boolean isSubmitting = false;
     private boolean isReplying;
     private int markdownColor;
+    private int spoilerBackgroundColor;
     private Uri capturedImageUri;
     private ArrayList<UploadedImage> uploadedImages = new ArrayList<>();
     private Menu mMenu;
@@ -307,6 +308,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                             builder.linkColor(linkColor);
                         }
                     })
+                    .usePlugin(SpoilerParserPlugin.create(markdownColor, spoilerBackgroundColor))
+                    .usePlugin(RedditHeadingPlugin.create())
                     .usePlugin(StrikethroughPlugin.create())
                     .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                     .usePlugin(TableEntryPlugin.create(this))
@@ -436,6 +439,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
         commentEditText.setHintTextColor(secondaryTextColor);
         markdownColor = secondaryTextColor;
+        spoilerBackgroundColor = markdownColor | 0xFF000000;
         accountNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
 
         if (typeface != null) {
