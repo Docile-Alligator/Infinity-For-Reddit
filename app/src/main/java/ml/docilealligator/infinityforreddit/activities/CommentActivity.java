@@ -236,6 +236,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                 })
                 .usePlugin(SpoilerParserPlugin.create(commentColor, commentSpoilerBackgroundColor))
                 .usePlugin(RedditHeadingPlugin.create())
+                .usePlugin(StrikethroughPlugin.create())
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .build();
         if (parentTextMarkdown != null) {
