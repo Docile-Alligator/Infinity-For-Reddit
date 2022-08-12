@@ -68,6 +68,7 @@ import ml.docilealligator.infinityforreddit.customviews.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
+import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -192,6 +193,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                     }
                 })
                 .usePlugin(SpoilerParserPlugin.create(mCommentColor, commentSpoilerBackgroundColor))
+                .usePlugin(RedditHeadingPlugin.create())
                 .usePlugin(StrikethroughPlugin.create())
                 .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS).setOnLinkLongClickListener((textView, url) -> {
                     if (!activity.isDestroyed() && !activity.isFinishing()) {

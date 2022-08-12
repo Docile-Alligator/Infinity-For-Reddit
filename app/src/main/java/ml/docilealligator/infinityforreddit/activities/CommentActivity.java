@@ -82,6 +82,7 @@ import ml.docilealligator.infinityforreddit.comment.SendComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -233,6 +234,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     }
                 })
                 .usePlugin(SpoilerParserPlugin.create(commentColor, commentSpoilerBackgroundColor))
+                .usePlugin(RedditHeadingPlugin.create())
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .build();
         if (parentTextMarkdown != null) {
