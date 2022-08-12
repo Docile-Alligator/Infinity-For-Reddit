@@ -1,6 +1,6 @@
 name: Bug report
 description: Create a report to help us improve existing features
-labels: ["Type: Possible bug"]
+labels: ["type: possible bug"]
 body:
   - type: markdown
     attributes:
