@@ -682,8 +682,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 break;
             }
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SAVED: {
-                Intent intent = new Intent(this, AccountPostsActivity.class);
-                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_SAVED);
+                Intent intent = new Intent(ViewSubredditDetailActivity.this, AccountSavedThingActivity.class);
                 startActivity(intent);
                 break;
             }

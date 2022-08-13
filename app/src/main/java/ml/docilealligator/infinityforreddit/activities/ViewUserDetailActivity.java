@@ -995,8 +995,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 break;
             }
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SAVED: {
-                Intent intent = new Intent(this, AccountPostsActivity.class);
-                intent.putExtra(AccountPostsActivity.EXTRA_USER_WHERE, PostPagingSource.USER_WHERE_SAVED);
+                Intent intent = new Intent(ViewUserDetailActivity.this, AccountSavedThingActivity.class);
                 startActivity(intent);
                 break;
             }
