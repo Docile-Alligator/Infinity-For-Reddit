@@ -25,7 +25,7 @@ public class AspectRatioGifImageView extends GifImageView {
     }
 
     public final void setRatio(float var1) {
-        if (this.ratio != var1) {
+        if (Math.abs(this.ratio - var1) > 0.0001) {
             this.ratio = var1;
 
             requestLayout();
