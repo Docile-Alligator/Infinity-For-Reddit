@@ -34,8 +34,8 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
                                                      ItemClickListener itemClickListener) {
         RequestManager glide = Glide.with(baseActivity);
 
-        headerSectionRecyclerViewAdapter = new HeaderSectionRecyclerViewAdapter(baseActivity, glide, accountName,
-                sharedPreferences, navigationDrawerSharedPreferences, securitySharedPreferences,
+        headerSectionRecyclerViewAdapter = new HeaderSectionRecyclerViewAdapter(baseActivity, customThemeWrapper,
+                glide, accountName, sharedPreferences, navigationDrawerSharedPreferences, securitySharedPreferences,
                 new HeaderSectionRecyclerViewAdapter.PageToggle() {
                     @Override
                     public void openAccountSection() {

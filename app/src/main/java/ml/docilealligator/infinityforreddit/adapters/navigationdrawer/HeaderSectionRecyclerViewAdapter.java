@@ -29,11 +29,13 @@ import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import pl.droidsonroids.gif.GifImageView;
 
 public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private BaseActivity baseActivity;
+    private CustomThemeWrapper customThemeWrapper;
     private Resources resources;
     private RequestManager glide;
     private String accountName;
@@ -46,12 +48,14 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     private boolean isInMainPage = true;
     private PageToggle pageToggle;
 
-    public HeaderSectionRecyclerViewAdapter(BaseActivity baseActivity, RequestManager glide, String accountName,
+    public HeaderSectionRecyclerViewAdapter(BaseActivity baseActivity, CustomThemeWrapper customThemeWrapper,
+                                            RequestManager glide, String accountName,
                                             SharedPreferences sharedPreferences,
                                             SharedPreferences navigationDrawerSharedPreferences,
                                             SharedPreferences securitySharedPreferences,
                                             PageToggle pageToggle) {
         this.baseActivity = baseActivity;
+        this.customThemeWrapper = customThemeWrapper;
         resources = baseActivity.getResources();
         this.glide = glide;
         this.accountName = accountName;
@@ -206,6 +210,11 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                 accountNameTextView.setTypeface(baseActivity.typeface);
                 karmaTextView.setTypeface(baseActivity.typeface);
             }
+
+            itemView.setBackgroundColor(customThemeWrapper.getColorPrimary());
+            accountNameTextView.setTextColor(customThemeWrapper.getToolbarPrimaryTextAndIconColor());
+            karmaTextView.setTextColor(customThemeWrapper.getToolbarSecondaryTextColor());
+            dropIconImageView.setColorFilter(customThemeWrapper.getToolbarPrimaryTextAndIconColor(), android.graphics.PorterDuff.Mode.SRC_IN);
         }
     }
 
