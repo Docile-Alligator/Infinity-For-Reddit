@@ -320,6 +320,16 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/content_markdown_view_item_post_detail_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:visibility="gone"
+        android:nestedScrollingEnabled="false" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/bottom_constraint_layout_item_post_detail_gallery"
         android:layout_width="match_parent"

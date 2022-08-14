@@ -108,7 +108,6 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.ShareLinkBottom
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
-import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
@@ -657,6 +656,13 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 ((PostDetailBaseViewHolder) holder).mSaveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
             }
 
+            if (mPost.getSelfText() != null && !mPost.getSelfText().equals("")) {
+                ((PostDetailBaseViewHolder) holder).mContentMarkdownView.setVisibility(View.VISIBLE);
+                ((PostDetailBaseViewHolder) holder).mContentMarkdownView.setAdapter(mMarkwonAdapter);
+                mMarkwonAdapter.setMarkdown(mPostDetailMarkwon, mPost.getSelfText());
+                mMarkwonAdapter.notifyDataSetChanged();
+            }
+
             if (holder instanceof PostDetailVideoAutoplayViewHolder) {
                 ((PostDetailVideoAutoplayViewHolder) holder).previewImageView.setVisibility(View.VISIBLE);
                 Post.Preview preview = getSuitablePreview(mPost.getPreviews());
@@ -752,7 +758,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     ((PostDetailLinkViewHolder) holder).mImageView.setRatio((float) preview.getPreviewHeight() / (float) preview.getPreviewWidth());
                     loadImage((PostDetailLinkViewHolder) holder, preview);
                 }
-
             } else if (holder instanceof PostDetailNoPreviewViewHolder) {
                 if (mPost.getPostType() == Post.LINK_TYPE || mPost.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
                     if (!mHidePostType) {
@@ -791,25 +796,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                             break;
                     }
                 }
-
-                if (mPost.getSelfText() != null && !mPost.getSelfText().equals("")) {
-                    ((PostDetailNoPreviewViewHolder) holder).mContentMarkdownView.setVisibility(View.VISIBLE);
-                    LinearLayoutManagerBugFixed linearLayoutManager = new MarkwonLinearLayoutManager(mActivity, new MarkwonLinearLayoutManager.HorizontalScrollViewScrolledListener() {
-                        @Override
-                        public void onScrolledLeft() {
-                            ((ViewPostDetailActivity) mActivity).lockSwipeRightToGoBack();
-                        }
-
-                        @Override
-                        public void onScrolledRight() {
-                            ((ViewPostDetailActivity) mActivity).unlockSwipeRightToGoBack();
-                        }
-                    });
-                    ((PostDetailNoPreviewViewHolder) holder).mContentMarkdownView.setLayoutManager(linearLayoutManager);
-                    ((PostDetailNoPreviewViewHolder) holder).mContentMarkdownView.setAdapter(mMarkwonAdapter);
-                    mMarkwonAdapter.setMarkdown(mPostDetailMarkwon, mPost.getSelfText());
-                    mMarkwonAdapter.notifyDataSetChanged();
-                }
             } else if (holder instanceof PostDetailGalleryViewHolder) {
                 Post.Preview preview = getSuitablePreview(mPost.getPreviews());
                 if (preview != null) {
@@ -822,25 +808,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     loadCaptionPreview((PostDetailGalleryViewHolder) holder, preview);
                 } else {
                     ((PostDetailGalleryViewHolder) holder).mNoPreviewPostTypeImageView.setVisibility(View.VISIBLE);
-                }
-            } else if (holder instanceof PostDetailTextViewHolder) {
-                if (mPost.getSelfText() != null && !mPost.getSelfText().equals("")) {
-                    ((PostDetailTextViewHolder) holder).mContentMarkdownView.setVisibility(View.VISIBLE);
-                    LinearLayoutManagerBugFixed linearLayoutManager = new MarkwonLinearLayoutManager(mActivity, new MarkwonLinearLayoutManager.HorizontalScrollViewScrolledListener() {
-                        @Override
-                        public void onScrolledLeft() {
-                            ((ViewPostDetailActivity) mActivity).lockSwipeRightToGoBack();
-                        }
-
-                        @Override
-                        public void onScrolledRight() {
-                            ((ViewPostDetailActivity) mActivity).unlockSwipeRightToGoBack();
-                        }
-                    });
-                    ((PostDetailTextViewHolder) holder).mContentMarkdownView.setLayoutManager(linearLayoutManager);
-                    ((PostDetailTextViewHolder) holder).mContentMarkdownView.setAdapter(mMarkwonAdapter);
-                    mMarkwonAdapter.setMarkdown(mPostDetailMarkwon, mPost.getSelfText());
-                    mMarkwonAdapter.notifyDataSetChanged();
                 }
             }
         }
@@ -1075,6 +1042,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             ((PostDetailBaseViewHolder) holder).mFlairTextView.setVisibility(View.GONE);
             ((PostDetailBaseViewHolder) holder).mSpoilerTextView.setVisibility(View.GONE);
             ((PostDetailBaseViewHolder) holder).mNSFWTextView.setVisibility(View.GONE);
+            ((PostDetailBaseViewHolder) holder).mContentMarkdownView.setVisibility(View.GONE);
 
             if (holder instanceof PostDetailVideoAutoplayViewHolder) {
                 if (((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall != null && !((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall.isCanceled()) {
@@ -1137,6 +1105,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         CustomTextView mFlairTextView;
         TextView mAwardsTextView;
         TextView mUpvoteRatioTextView;
+        RecyclerView mContentMarkdownView;
         ConstraintLayout mBottomConstraintLayout;
         ImageView mUpvoteButton;
         TextView mScoreTextView;
@@ -1164,6 +1133,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                          CustomTextView mFlairTextView,
                          TextView mAwardsTextView,
                          TextView mUpvoteRatioTextView,
+                         RecyclerView mContentMarkdownView,
                          ConstraintLayout mBottomConstraintLayout,
                          ImageView mUpvoteButton,
                          TextView mScoreTextView,
@@ -1186,6 +1156,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             this.mFlairTextView = mFlairTextView;
             this.mAwardsTextView = mAwardsTextView;
             this.mUpvoteRatioTextView = mUpvoteRatioTextView;
+            this.mContentMarkdownView = mContentMarkdownView;
             this.mBottomConstraintLayout = mBottomConstraintLayout;
             this.mUpvoteButton = mUpvoteButton;
             this.mScoreTextView = mScoreTextView;
@@ -1249,6 +1220,18 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, Post.NSFW_TYPE);
                 mActivity.startActivity(intent);
             });
+
+            mContentMarkdownView.setLayoutManager(new MarkwonLinearLayoutManager(mActivity, new MarkwonLinearLayoutManager.HorizontalScrollViewScrolledListener() {
+                @Override
+                public void onScrolledLeft() {
+                    ((ViewPostDetailActivity) mActivity).lockSwipeRightToGoBack();
+                }
+
+                @Override
+                public void onScrolledRight() {
+                    ((ViewPostDetailActivity) mActivity).unlockSwipeRightToGoBack();
+                }
+            }));
 
             mUpvoteButton.setOnClickListener(view -> {
                 if (mPost.isArchived()) {
@@ -1627,6 +1610,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         ImageView muteButton;
         @BindView(R.id.fullscreen_exo_playback_control_view)
         ImageView fullscreenButton;
+        @BindView(R.id.content_markdown_view_item_post_detail_video_autoplay)
+        RecyclerView mContentMarkdownView;
         @BindView(R.id.bottom_constraint_layout_item_post_detail_video_autoplay)
         ConstraintLayout mBottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_detail_video_autoplay)
@@ -1664,6 +1649,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mFlairTextView,
                     mAwardsTextView,
                     mUpvoteRatioTextView,
+                    mContentMarkdownView,
                     mBottomConstraintLayout,
                     mUpvoteButton,
                     mScoreTextView,
@@ -1873,6 +1859,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         ImageView videoOrGifIndicatorImageView;
         @BindView(R.id.image_view_item_post_detail_video_and_gif_preview)
         AspectRatioGifImageView mImageView;
+        @BindView(R.id.content_markdown_view_item_post_detail_video_and_gif_preview)
+        RecyclerView mContentMarkdownView;
         @BindView(R.id.bottom_constraint_layout_item_post_detail_video_and_gif_preview)
         ConstraintLayout mBottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_detail_video_and_gif_preview)
@@ -1906,6 +1894,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mFlairTextView,
                     mAwardsTextView,
                     mUpvoteRatioTextView,
+                    mContentMarkdownView,
                     mBottomConstraintLayout,
                     mUpvoteButton,
                     mScoreTextView,
@@ -2000,6 +1989,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         TextView mLoadImageErrorTextView;
         @BindView(R.id.image_view_item_post_detail_image_and_gif_autoplay)
         AspectRatioGifImageView mImageView;
+        @BindView(R.id.content_markdown_view_item_post_detail_image_and_gif_autoplay)
+        RecyclerView mContentMarkdownView;
         @BindView(R.id.bottom_constraint_layout_item_post_detail_image_and_gif_autoplay)
         ConstraintLayout mBottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_detail_image_and_gif_autoplay)
@@ -2033,6 +2024,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mFlairTextView,
                     mAwardsTextView,
                     mUpvoteRatioTextView,
+                    mContentMarkdownView,
                     mBottomConstraintLayout,
                     mUpvoteButton,
                     mScoreTextView,
@@ -2112,6 +2104,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         TextView mLoadImageErrorTextView;
         @BindView(R.id.image_view_item_post_detail_link)
         AspectRatioGifImageView mImageView;
+        @BindView(R.id.content_markdown_view_item_post_detail_link)
+        RecyclerView mContentMarkdownView;
         @BindView(R.id.bottom_constraint_layout_item_post_detail_link)
         ConstraintLayout mBottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_detail_link)
@@ -2145,6 +2139,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mFlairTextView,
                     mAwardsTextView,
                     mUpvoteRatioTextView,
+                    mContentMarkdownView,
                     mBottomConstraintLayout,
                     mUpvoteButton,
                     mScoreTextView,
@@ -2240,6 +2235,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mFlairTextView,
                     mAwardsTextView,
                     mUpvoteRatioTextView,
+                    mContentMarkdownView,
                     mBottomConstraintLayout,
                     mUpvoteButton,
                     mScoreTextView,
@@ -2361,6 +2357,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         TextView mCaptionUrlTextView;
         @BindView(R.id.image_view_no_preview_link_item_post_detail_gallery)
         ImageView mNoPreviewPostTypeImageView;
+        @BindView(R.id.content_markdown_view_item_post_detail_gallery)
+        RecyclerView mContentMarkdownView;
         @BindView(R.id.bottom_constraint_layout_item_post_detail_gallery)
         ConstraintLayout mBottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_detail_gallery)
@@ -2394,6 +2392,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mFlairTextView,
                     mAwardsTextView,
                     mUpvoteRatioTextView,
+                    mContentMarkdownView,
                     mBottomConstraintLayout,
                     mUpvoteButton,
                     mScoreTextView,
@@ -2493,6 +2492,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mFlairTextView,
                     mAwardsTextView,
                     mUpvoteRatioTextView,
+                    mContentMarkdownView,
                     mBottomConstraintLayout,
                     mUpvoteButton,
                     mScoreTextView,
