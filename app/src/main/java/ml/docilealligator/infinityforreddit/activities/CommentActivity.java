@@ -82,6 +82,7 @@ import ml.docilealligator.infinityforreddit.comment.SendComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -162,6 +163,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     private boolean isSubmitting = false;
     private boolean isReplying;
     private int markdownColor;
+    private int spoilerBackgroundColor;
     private Uri capturedImageUri;
     private ArrayList<UploadedImage> uploadedImages = new ArrayList<>();
     private Menu mMenu;
@@ -233,6 +235,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     }
                 })
                 .usePlugin(SpoilerParserPlugin.create(commentColor, commentSpoilerBackgroundColor))
+                .usePlugin(RedditHeadingPlugin.create())
+                .usePlugin(StrikethroughPlugin.create())
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .build();
         if (parentTextMarkdown != null) {
@@ -305,6 +309,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                             builder.linkColor(linkColor);
                         }
                     })
+                    .usePlugin(SpoilerParserPlugin.create(markdownColor, spoilerBackgroundColor))
+                    .usePlugin(RedditHeadingPlugin.create())
                     .usePlugin(StrikethroughPlugin.create())
                     .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                     .usePlugin(TableEntryPlugin.create(this))
@@ -434,6 +440,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
         commentEditText.setHintTextColor(secondaryTextColor);
         markdownColor = secondaryTextColor;
+        spoilerBackgroundColor = markdownColor | 0xFF000000;
         accountNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
 
         if (typeface != null) {

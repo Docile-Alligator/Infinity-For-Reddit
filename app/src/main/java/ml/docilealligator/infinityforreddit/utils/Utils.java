@@ -74,12 +74,6 @@ public final class Utils {
             Pattern.compile("((?<=[\\s])|^)/[rRuU]/[\\w-]+/{0,1}"),
             Pattern.compile("((?<=[\\s])|^)[rRuU]/[\\w-]+/{0,1}"),
             Pattern.compile("\\^{2,}"),
-            Pattern.compile("(^|^ *|\\n *)#(?!($|\\s|#))"),
-            Pattern.compile("(^|^ *|\\n *)##(?!($|\\s|#))"),
-            Pattern.compile("(^|^ *|\\n *)###(?!($|\\s|#))"),
-            Pattern.compile("(^|^ *|\\n *)####(?!($|\\s|#))"),
-            Pattern.compile("(^|^ *|\\n *)#####(?!($|\\s|#))"),
-            Pattern.compile("(^|^ *|\\n *)######(?!($|\\s|#))"),
             Pattern.compile("!\\[gif]\\(giphy\\|\\w+\\)"),
             Pattern.compile("!\\[gif]\\(giphy\\|\\w+\\|downsized\\)"),
             Pattern.compile("!\\[gif]\\(emote\\|\\w+\\|\\w+\\)"),
@@ -89,12 +83,6 @@ public final class Utils {
         String regexed = REGEX_PATTERNS[0].matcher(markdown).replaceAll("[$0](https://www.reddit.com$0)");
         regexed = REGEX_PATTERNS[1].matcher(regexed).replaceAll("[$0](https://www.reddit.com/$0)");
         regexed = REGEX_PATTERNS[2].matcher(regexed).replaceAll("^");
-        regexed = REGEX_PATTERNS[3].matcher(regexed).replaceAll("$0 ");
-        regexed = REGEX_PATTERNS[4].matcher(regexed).replaceAll("$0 ");
-        regexed = REGEX_PATTERNS[5].matcher(regexed).replaceAll("$0 ");
-        regexed = REGEX_PATTERNS[6].matcher(regexed).replaceAll("$0 ");
-        regexed = REGEX_PATTERNS[7].matcher(regexed).replaceAll("$0 ");
-        regexed = REGEX_PATTERNS[8].matcher(regexed).replaceAll("$0 ");
 
         //return fixSuperScript(regexed);
         // We don't want to fix super scripts here because we need the original markdown later for editing posts
@@ -161,21 +149,21 @@ public final class Utils {
 
     public static String parseInlineGifInComments(String markdown) {
         StringBuilder markdownStringBuilder = new StringBuilder(markdown);
-        Pattern inlineGifPattern = REGEX_PATTERNS[9];
+        Pattern inlineGifPattern = REGEX_PATTERNS[3];
         Matcher matcher = inlineGifPattern.matcher(markdownStringBuilder);
         while (matcher.find()) {
             markdownStringBuilder.replace(matcher.start(), matcher.end(), "[gif](https://i.giphy.com/media/" + markdownStringBuilder.substring(matcher.start() + "![gif](giphy|".length(), matcher.end() - 1) + "/giphy.mp4)");
             matcher = inlineGifPattern.matcher(markdownStringBuilder);
         }
 
-        Pattern inlineGifPattern2 = REGEX_PATTERNS[10];
+        Pattern inlineGifPattern2 = REGEX_PATTERNS[4];
         Matcher matcher2 = inlineGifPattern2.matcher(markdownStringBuilder);
         while (matcher2.find()) {
             markdownStringBuilder.replace(matcher2.start(), matcher2.end(), "[gif](https://i.giphy.com/media/" + markdownStringBuilder.substring(matcher2.start() + "![gif](giphy|".length(), matcher2.end() - "|downsized\\)".length() + 1) + "/giphy.mp4)");
             matcher2 = inlineGifPattern2.matcher(markdownStringBuilder);
         }
 
-        Pattern inlineGifPattern3 = REGEX_PATTERNS[11];
+        Pattern inlineGifPattern3 = REGEX_PATTERNS[5];
         Matcher matcher3 = inlineGifPattern3.matcher(markdownStringBuilder);
         while (matcher3.find()) {
             markdownStringBuilder.replace(matcher3.start(), matcher3.end(),
