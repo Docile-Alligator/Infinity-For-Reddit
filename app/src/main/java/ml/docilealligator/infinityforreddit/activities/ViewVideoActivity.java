@@ -529,9 +529,9 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
 
             if (mVideoUri == null) {
                 if (videoType == VIDEO_TYPE_GFYCAT) {
-                    loadGfycatOrRedgifsVideo(gfycatRetrofit, gfycatId, savedInstanceState, true);
+                    loadGfycatOrRedgifsVideo(gfycatRetrofit, gfycatId, true, savedInstanceState, true);
                 } else {
-                    loadGfycatOrRedgifsVideo(redgifsRetrofit, gfycatId, savedInstanceState, false);
+                    loadGfycatOrRedgifsVideo(redgifsRetrofit, gfycatId, false, savedInstanceState, false);
                 }
             } else {
                 dataSourceFactory = new CacheDataSourceFactory(mSimpleCache,
@@ -675,10 +675,11 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         return C.TRACK_TYPE_UNKNOWN;
     }
 
-    private void loadGfycatOrRedgifsVideo(Retrofit retrofit, String gfycatId, Bundle savedInstanceState, boolean needErrorHandling) {
+    private void loadGfycatOrRedgifsVideo(Retrofit retrofit, String gfycatId, boolean isGfycatVideo,
+                                          Bundle savedInstanceState, boolean needErrorHandling) {
         progressBar.setVisibility(View.VISIBLE);
         FetchGfycatOrRedgifsVideoLinks.fetchGfycatOrRedgifsVideoLinks(mExecutor, new Handler(), retrofit, gfycatId,
-                new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
+                isGfycatVideo, new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
                     @Override
                     public void success(String webm, String mp4) {
                         progressBar.setVisibility(View.GONE);
@@ -697,10 +698,10 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                         if (videoType == VIDEO_TYPE_GFYCAT) {
                             if (errorCode == 404 && needErrorHandling) {
                                 if (mSharedPreferences.getBoolean(SharedPreferencesUtils.AUTOMATICALLY_TRY_REDGIFS, true)) {
-                                    loadGfycatOrRedgifsVideo(redgifsRetrofit, gfycatId, savedInstanceState, false);
+                                    loadGfycatOrRedgifsVideo(redgifsRetrofit, gfycatId, false, savedInstanceState, false);
                                 } else {
                                     Snackbar.make(coordinatorLayout, R.string.load_video_in_redgifs, Snackbar.LENGTH_INDEFINITE).setAction(R.string.yes,
-                                            view -> loadGfycatOrRedgifsVideo(redgifsRetrofit, gfycatId, savedInstanceState, false)).show();
+                                            view -> loadGfycatOrRedgifsVideo(redgifsRetrofit, gfycatId, false, savedInstanceState, false)).show();
                                 }
                             } else {
                                 Toast.makeText(ViewVideoActivity.this, R.string.fetch_gfycat_video_failed, Toast.LENGTH_SHORT).show();
@@ -738,7 +739,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                                         } else {
                                             videoFileName = "Redgifs-" + gfycatId + ".mp4";
                                         }
-                                        loadGfycatOrRedgifsVideo(gfycatRetrofit, gfycatId, savedInstanceState, true);
+                                        loadGfycatOrRedgifsVideo(gfycatRetrofit, gfycatId, true, savedInstanceState, true);
                                     } else if (post.isRedgifs()) {
                                         videoType = VIDEO_TYPE_REDGIFS;
                                         String gfycatId = post.getGfycatId();
@@ -750,7 +751,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                                         } else {
                                             videoFileName = "Redgifs-" + gfycatId + ".mp4";
                                         }
-                                        loadGfycatOrRedgifsVideo(redgifsRetrofit, gfycatId, savedInstanceState, false);
+                                        loadGfycatOrRedgifsVideo(redgifsRetrofit, gfycatId, false, savedInstanceState, false);
                                     } else if (post.isStreamable()) {
                                         videoType = VIDEO_TYPE_STREAMABLE;
                                         String shortCode = post.getStreamableShortCode();

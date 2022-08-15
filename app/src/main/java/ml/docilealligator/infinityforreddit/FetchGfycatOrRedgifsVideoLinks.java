@@ -22,13 +22,17 @@ public class FetchGfycatOrRedgifsVideoLinks {
     }
 
     public static void fetchGfycatOrRedgifsVideoLinks(Executor executor, Handler handler, Retrofit gfycatRetrofit,
-                                                      String gfycatId,
+                                                      String gfycatId, boolean isGfycatVideo,
                                                       FetchGfycatOrRedgifsVideoLinksListener fetchGfycatOrRedgifsVideoLinksListener) {
         executor.execute(() -> {
             try {
                 Response<String> response = gfycatRetrofit.create(GfycatAPI.class).getGfycatData(gfycatId).execute();
                 if (response.isSuccessful()) {
-                    parseGfycatVideoLinks(handler, response.body(), fetchGfycatOrRedgifsVideoLinksListener);
+                    if (isGfycatVideo) {
+                        parseGfycatVideoLinks(handler, response.body(), fetchGfycatOrRedgifsVideoLinksListener);
+                    } else {
+                        parseRedgifsVideoLinks(handler, response.body(), fetchGfycatOrRedgifsVideoLinksListener);
+                    }
                 } else {
                     handler.post(() -> fetchGfycatOrRedgifsVideoLinksListener.failed(response.code()));
                 }
@@ -49,7 +53,11 @@ public class FetchGfycatOrRedgifsVideoLinks {
             try {
                 Response<String> response = gfycatCall.execute();
                 if (response.isSuccessful()) {
-                    parseGfycatVideoLinks(handler, response.body(), fetchGfycatOrRedgifsVideoLinksListener);
+                    if (isGfycatVideo) {
+                        parseGfycatVideoLinks(handler, response.body(), fetchGfycatOrRedgifsVideoLinksListener);
+                    } else {
+                        parseRedgifsVideoLinks(handler, response.body(), fetchGfycatOrRedgifsVideoLinksListener);
+                    }
                 } else {
                     if (response.code() == 404 && isGfycatVideo && automaticallyTryRedgifs) {
                         fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(executor, handler, gfycatCall.clone(),
@@ -87,6 +95,18 @@ public class FetchGfycatOrRedgifsVideoLinks {
                 webm = mp4;
             }
             handler.post(() -> fetchGfycatOrRedgifsVideoLinksListener.success(webm, mp4));
+        } catch (JSONException e) {
+            e.printStackTrace();
+            handler.post(() -> fetchGfycatOrRedgifsVideoLinksListener.failed(-1));
+        }
+    }
+
+    private static void parseRedgifsVideoLinks(Handler handler, String response,
+                                              FetchGfycatOrRedgifsVideoLinksListener fetchGfycatOrRedgifsVideoLinksListener) {
+        try {
+            String mp4 = new JSONObject(response).getJSONObject(JSONUtils.GIF_KEY).getJSONObject(JSONUtils.URLS_KEY)
+                    .getString(JSONUtils.HD_KEY);
+            handler.post(() -> fetchGfycatOrRedgifsVideoLinksListener.success(mp4, mp4));
         } catch (JSONException e) {
             e.printStackTrace();
             handler.post(() -> fetchGfycatOrRedgifsVideoLinksListener.failed(-1));
