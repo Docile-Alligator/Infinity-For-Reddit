@@ -11,6 +11,20 @@
         android:orientation="vertical">
 
         <TextView
+            android:id="@+id/post_link_text_view_share_link_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:textColor="?attr/secondaryTextColor"
+            android:textSize="?attr/font_12"
+            android:fontFamily="?attr/font_family"
+            android:drawablePadding="48dp" />
+
+        <TextView
             android:id="@+id/share_post_link_text_view_share_link_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -47,6 +61,21 @@
             android:clickable="true"
             android:focusable="true"
             android:background="?attr/selectableItemBackground" />
+
+        <TextView
+            android:id="@+id/media_link_text_view_share_link_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:textColor="?attr/secondaryTextColor"
+            android:textSize="?attr/font_12"
+            android:fontFamily="?attr/font_family"
+            android:drawablePadding="48dp"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/share_media_link_text_view_share_link_bottom_sheet_fragment"
