@@ -403,11 +403,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
         descriptionTextView.setOnLongClickListener(view -> {
             if (description != null && !description.equals("") && descriptionTextView.getSelectionStart() == -1 && descriptionTextView.getSelectionEnd() == -1) {
-                Bundle bundle = new Bundle();
-                bundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, description);
-                CopyTextBottomSheetFragment copyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
-                copyTextBottomSheetFragment.setArguments(bundle);
-                copyTextBottomSheetFragment.show(getSupportFragmentManager(), copyTextBottomSheetFragment.getTag());
+                CopyTextBottomSheetFragment.show(getSupportFragmentManager(), description, null);
             }
             return true;
         });

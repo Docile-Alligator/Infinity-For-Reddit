@@ -199,7 +199,6 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         Intent intent = getIntent();
         String parentTextMarkdown = intent.getStringExtra(EXTRA_COMMENT_PARENT_TEXT_MARKDOWN_KEY);
         String parentText = intent.getStringExtra(EXTRA_COMMENT_PARENT_TEXT_KEY);
-        CopyTextBottomSheetFragment copyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
 
         int linkColor = mCustomThemeWrapper.getLinkColor();
         Markwon markwon = Markwon.builder(this)
@@ -242,15 +241,13 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         if (parentTextMarkdown != null) {
             commentParentMarkwonView.setOnLongClickListener(view -> {
                 Utils.hideKeyboard(CommentActivity.this);
-                Bundle bundle = new Bundle();
                 if (parentText == null) {
-                    bundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, parentTextMarkdown);
+                    CopyTextBottomSheetFragment.show(getSupportFragmentManager(),
+                            parentTextMarkdown, null);
                 } else {
-                    bundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, parentText);
-                    bundle.putString(CopyTextBottomSheetFragment.EXTRA_MARKDOWN, parentTextMarkdown);
+                    CopyTextBottomSheetFragment.show(getSupportFragmentManager(),
+                            parentText, parentTextMarkdown);
                 }
-                copyTextBottomSheetFragment.setArguments(bundle);
-                copyTextBottomSheetFragment.show(getSupportFragmentManager(), copyTextBottomSheetFragment.getTag());
                 return true;
             });
             markwon.setMarkdown(commentParentMarkwonView, parentTextMarkdown);
@@ -285,11 +282,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                             textView.setTextColor(markdownColor);
                             textView.setOnLongClickListener(view -> {
                                 Utils.hideKeyboard(CommentActivity.this);
-                                Bundle bundle = new Bundle();
-                                bundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, parentBody);
-                                bundle.putString(CopyTextBottomSheetFragment.EXTRA_MARKDOWN, parentBodyMarkdown);
-                                copyTextBottomSheetFragment.setArguments(bundle);
-                                copyTextBottomSheetFragment.show(getSupportFragmentManager(), copyTextBottomSheetFragment.getTag());
+                                CopyTextBottomSheetFragment.show(getSupportFragmentManager(),
+                                        parentBody, parentBodyMarkdown);
                                 return true;
                             });
                         }

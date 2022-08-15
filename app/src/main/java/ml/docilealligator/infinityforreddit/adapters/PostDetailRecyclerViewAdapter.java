@@ -265,12 +265,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         textView.setTextColor(markdownColor);
                         textView.setOnLongClickListener(view -> {
                             if (textView.getSelectionStart() == -1 && textView.getSelectionEnd() == -1) {
-                                Bundle bundle = new Bundle();
-                                bundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, mPost.getSelfTextPlain());
-                                bundle.putString(CopyTextBottomSheetFragment.EXTRA_MARKDOWN, mPost.getSelfText());
-                                CopyTextBottomSheetFragment copyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
-                                copyTextBottomSheetFragment.setArguments(bundle);
-                                copyTextBottomSheetFragment.show(mActivity.getSupportFragmentManager(), copyTextBottomSheetFragment.getTag());
+                                CopyTextBottomSheetFragment.show(
+                                        mActivity.getSupportFragmentManager(),
+                                        mPost.getSelfTextPlain(), mPost.getSelfText()
+                                );
                             }
                             return true;
                         });

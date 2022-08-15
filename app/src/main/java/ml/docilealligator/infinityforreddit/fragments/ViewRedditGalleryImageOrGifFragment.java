@@ -286,11 +286,8 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                             && !activity.isFinishing()
                             && captionTextView.getSelectionStart() == -1
                             && captionTextView.getSelectionEnd() == -1) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, caption);
-                        CopyTextBottomSheetFragment copyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
-                        copyTextBottomSheetFragment.setArguments(bundle);
-                        copyTextBottomSheetFragment.show(activity.getSupportFragmentManager(), copyTextBottomSheetFragment.getTag());
+                        CopyTextBottomSheetFragment.show(
+                                activity.getSupportFragmentManager(), caption, null);
                     }
                     return true;
                 });
