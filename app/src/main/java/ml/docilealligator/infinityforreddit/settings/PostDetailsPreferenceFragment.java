@@ -14,9 +14,5 @@ public class PostDetailsPreferenceFragment extends CustomFontPreferenceFragmentC
         PreferenceManager preferenceManager = getPreferenceManager();
         preferenceManager.setSharedPreferencesName(SharedPreferencesUtils.POST_DETAILS_SHARED_PREFERENCES_FILE);
         setPreferencesFromResource(R.xml.post_details_preferences, rootKey);
-
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
     }
 }

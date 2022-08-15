@@ -18,11 +18,9 @@
             android:padding="16dp"
             android:drawablePadding="32dp"
             android:text="@string/restart_app_see_changes"
-            android:textColor="@color/settingsSubtitleColor"
             android:gravity="center_vertical"
             android:textSize="?attr/font_default"
-            android:fontFamily="?attr/font_family"
-            app:drawableStartCompat="@drawable/ic_info_preference_24dp" />
+            android:fontFamily="?attr/font_family" />
 
         <View
             android:layout_width="match_parent"
@@ -37,7 +35,6 @@
             android:paddingStart="72dp"
             android:paddingEnd="16dp"
             android:text="@string/settings_main_activity_bottom_app_bar_group_summary"
-            android:textColor="@color/colorAccent"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family" />
 
@@ -55,6 +52,7 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/main_activity_option_count_title_text_view_customize_bottom_app_bar_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -90,6 +88,7 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/main_activity_option_1_title_text_view_customize_bottom_app_bar_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -123,6 +122,7 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/main_activity_option_2_title_text_view_customize_bottom_app_bar_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -156,6 +156,7 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/main_activity_option_3_title_text_view_customize_bottom_app_bar_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -189,6 +190,7 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/main_activity_option_4_title_text_view_customize_bottom_app_bar_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -222,6 +224,7 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/main_activity_fab_title_text_view_customize_bottom_app_bar_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -255,7 +258,6 @@
             android:paddingStart="72dp"
             android:paddingEnd="16dp"
             android:text="@string/settings_other_activities_bottom_app_bar_group_summary"
-            android:textColor="@color/colorAccent"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family" />
 
@@ -273,6 +275,7 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/other_activities_option_count_title_text_view_customize_bottom_app_bar_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -308,6 +311,7 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/other_activities_option_1_title_text_view_customize_bottom_app_bar_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -341,6 +345,7 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/other_activities_option_2_title_text_view_customize_bottom_app_bar_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -374,6 +379,7 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/other_activities_option_3_title_text_view_customize_bottom_app_bar_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -407,6 +413,7 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/other_activities_option_4_title_text_view_customize_bottom_app_bar_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
@@ -440,6 +447,7 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/other_activities_fab_title_text_view_customize_bottom_app_bar_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"

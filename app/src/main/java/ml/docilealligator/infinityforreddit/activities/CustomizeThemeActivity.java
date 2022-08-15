@@ -148,14 +148,14 @@ public class CustomizeThemeActivity extends BaseActivity {
                         themeName = customTheme.name;
                     }
 
-                    adapter = new CustomizeThemeRecyclerViewAdapter(this, themeName, isPredefinedTheme);
+                    adapter = new CustomizeThemeRecyclerViewAdapter(this, customThemeWrapper, themeName);
                     recyclerView.setAdapter(adapter);
                     adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
                 });
             } else {
                 isPredefinedTheme = getIntent().getBooleanExtra(EXTRA_IS_PREDEFIINED_THEME, false);
                 themeName = getIntent().getStringExtra(EXTRA_THEME_NAME);
-                adapter = new CustomizeThemeRecyclerViewAdapter(this, themeName, isPredefinedTheme);
+                adapter = new CustomizeThemeRecyclerViewAdapter(this, customThemeWrapper, themeName);
                 recyclerView.setAdapter(adapter);
                 if (isPredefinedTheme) {
                     customThemeSettingsItems = CustomThemeSettingsItem.convertCustomThemeToSettingsItem(
@@ -163,7 +163,7 @@ public class CustomizeThemeActivity extends BaseActivity {
                             CustomThemeWrapper.getPredefinedCustomTheme(this, themeName),
                             androidVersion);
 
-                    adapter = new CustomizeThemeRecyclerViewAdapter(this, themeName, isPredefinedTheme);
+                    adapter = new CustomizeThemeRecyclerViewAdapter(this, customThemeWrapper, themeName);
                     recyclerView.setAdapter(adapter);
                     adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
                 } else {
@@ -177,7 +177,7 @@ public class CustomizeThemeActivity extends BaseActivity {
                 }
             }
         } else {
-            adapter = new CustomizeThemeRecyclerViewAdapter(this, themeName, isPredefinedTheme);
+            adapter = new CustomizeThemeRecyclerViewAdapter(this, customThemeWrapper, themeName);
             recyclerView.setAdapter(adapter);
             adapter.setCustomThemeSettingsItem(customThemeSettingsItems);
         }
@@ -257,5 +257,6 @@ public class CustomizeThemeActivity extends BaseActivity {
     @Override
     protected void applyCustomTheme() {
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
+        coordinatorLayout.setBackgroundColor(customThemeWrapper.getBackgroundColor());
     }
 }

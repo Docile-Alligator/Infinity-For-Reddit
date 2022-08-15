@@ -12,7 +12,9 @@ import java.util.List;
 
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
@@ -20,6 +22,7 @@ public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private static final int VIEW_TYPE_POST_FILTER = 2;
 
     private BaseActivity activity;
+    private CustomThemeWrapper customThemeWrapper;
     private final OnItemClickListener onItemClickListener;
     private List<PostFilter> postFilterList;
 
@@ -27,8 +30,10 @@ public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         void onItemClick(PostFilter postFilter);
     }
 
-    public PostFilterRecyclerViewAdapter(BaseActivity activity, OnItemClickListener onItemClickListener) {
+    public PostFilterRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper,
+                                         OnItemClickListener onItemClickListener) {
         this.activity = activity;
+        this.customThemeWrapper = customThemeWrapper;
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -74,6 +79,8 @@ public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             super(itemView);
             textView = (TextView) itemView;
 
+            textView.setTextColor(customThemeWrapper.getPrimaryTextColor());
+
             if (activity.typeface != null) {
                 textView.setTypeface(activity.typeface);
             }
@@ -84,10 +91,13 @@ public class PostFilterRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         }
     }
 
-    private static class HeaderViewHolder extends RecyclerView.ViewHolder {
+    private class HeaderViewHolder extends RecyclerView.ViewHolder {
 
         public HeaderViewHolder(@NonNull View itemView) {
             super(itemView);
+            TextView infoTextView = itemView.findViewById(R.id.info_text_view_item_filter_fragment_header);
+            infoTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
+            infoTextView.setCompoundDrawablesWithIntrinsicBounds(Utils.getTintedDrawable(activity, R.drawable.ic_info_preference_24dp, activity.customThemeWrapper.getPrimaryIconColor()), null, null, null);
         }
     }
 }

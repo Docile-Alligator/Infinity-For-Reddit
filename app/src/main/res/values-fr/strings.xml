@@ -450,7 +450,6 @@ peut ne pas fonctionner sur Android 11"</string>
     <string name="settings_customize_dark_theme_title">"Thème Sombre"</string>
     <string name="settings_customize_amoled_theme_title">"Thème Amoled"</string>
     <string name="settings_manage_themes_title">"Gérer les Thèmes"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Les thèmes personnalisés ne peuvent pas être appliqués à la page des paramètres (sauf la barre d'outils, la barre d'état et barre de navigation.)"</string>
     <string name="settings_advanced_master_title">"Avancés"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Supprimer Tous les Subreddits de la Base de Données"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Supprimer Tous les Utilisateurs de la Base de Données"</string>

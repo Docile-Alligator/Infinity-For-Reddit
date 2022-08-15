@@ -45,6 +45,8 @@ public class TranslationFragment extends Fragment {
         TranslationFragmentRecyclerViewAdapter adapter = new TranslationFragmentRecyclerViewAdapter(activity, customThemeWrapper);
         recyclerView.setAdapter(adapter);
 
+        rootView.setBackgroundColor(customThemeWrapper.getBackgroundColor());
+
         return rootView;
     }
 

@@ -440,7 +440,6 @@ Behavior -->
     <string name="settings_customize_dark_theme_title">"गहरी थीम "</string>
     <string name="settings_customize_amoled_theme_title">"अमोलेड थीम "</string>
     <string name="settings_manage_themes_title">"थीम्स नियंत्रण "</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"अनुकूलित थीम सेटिंग्स पृष्ट(टूलबार, स्टैटस बार एवं नेवीगेशन बार के अलावा) पर लागू नहीं की जा सकती।"</string>
     <string name="settings_advanced_master_title">"उन्नत "</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"डेटाबेस से सभी सबरैडिट्स मिटा दें "</string>
     <string name="settings_delete_all_users_data_in_database_title">"डेटाबेस से सभी यूजर्स हटा दें "</string>

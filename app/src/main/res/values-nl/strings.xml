@@ -394,7 +394,6 @@ Druk om opnieuw te proberen."</string>
     <string name="settings_customize_dark_theme_title">"Donker thema"</string>
     <string name="settings_customize_amoled_theme_title">"Amoled-thema"</string>
     <string name="settings_manage_themes_title">"Thema's beheren"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Aangepaste thema's kunnen niet worden toegepast op de instellingenpagina (behalve de werkbalk, statusbalk en navigatiebalk)."</string>
     <string name="settings_advanced_master_title">"Geavanceerd"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Alle subreddits verwijderen uit databank"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Alle gebruikers verwijderen uit databank"</string>

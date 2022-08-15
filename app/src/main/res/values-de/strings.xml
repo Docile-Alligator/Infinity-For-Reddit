@@ -421,7 +421,6 @@ Tippen für Neuversuch."</string>
     <string name="settings_customize_dark_theme_title">"Dunkles Thema"</string>
     <string name="settings_customize_amoled_theme_title">"AMOLED-Thema"</string>
     <string name="settings_manage_themes_title">"Themen verwalten"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Benutzerdefinierte Themen können nicht auf die Einstellungs-Seite angewandt werden (ausgenommen Werkzeug-, Status- und Navigationsleiste)."</string>
     <string name="settings_advanced_master_title">"Erweitert"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Alle Subreddits aus der Datenbank löschen"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Alle Benutzer aus der Datenbank löschen"</string>

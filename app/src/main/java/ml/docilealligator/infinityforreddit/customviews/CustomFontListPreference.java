@@ -4,14 +4,18 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.preference.ListPreference;
 import androidx.preference.PreferenceViewHolder;
 
 import ml.docilealligator.infinityforreddit.CustomFontReceiver;
+import ml.docilealligator.infinityforreddit.CustomThemeWrapperReceiver;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 
-public class CustomFontListPreference extends ListPreference implements CustomFontReceiver {
+public class CustomFontListPreference extends ListPreference implements CustomFontReceiver, CustomThemeWrapperReceiver {
+    private CustomThemeWrapper customThemeWrapper;
     private Typeface typeface;
 
     public CustomFontListPreference(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
@@ -33,12 +37,30 @@ public class CustomFontListPreference extends ListPreference implements CustomFo
     @Override
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
+        View iconImageView = holder.findViewById(android.R.id.icon);
+        View titleTextView = holder.findViewById(android.R.id.title);
+        View summaryTextView = holder.findViewById(android.R.id.summary);
+
+        if (customThemeWrapper != null) {
+            if (iconImageView instanceof ImageView) {
+                if (isEnabled()) {
+                    ((ImageView) iconImageView).setColorFilter(customThemeWrapper.getPrimaryIconColor(), android.graphics.PorterDuff.Mode.SRC_IN);
+                } else {
+                    ((ImageView) iconImageView).setColorFilter(customThemeWrapper.getSecondaryTextColor(), android.graphics.PorterDuff.Mode.SRC_IN);
+                }
+            }
+            if (titleTextView instanceof TextView) {
+                ((TextView) titleTextView).setTextColor(customThemeWrapper.getPrimaryTextColor());
+            }
+            if (summaryTextView instanceof TextView) {
+                ((TextView) summaryTextView).setTextColor(customThemeWrapper.getSecondaryTextColor());
+            }
+        }
+
         if (typeface != null) {
-            View titleTextView = holder.findViewById(android.R.id.title);
             if (titleTextView instanceof TextView) {
                 ((TextView) titleTextView).setTypeface(typeface);
             }
-            View summaryTextView = holder.findViewById(android.R.id.summary);
             if (summaryTextView instanceof TextView) {
                 ((TextView) summaryTextView).setTypeface(typeface);
             }
@@ -48,5 +70,10 @@ public class CustomFontListPreference extends ListPreference implements CustomFo
     @Override
     public void setCustomFont(Typeface typeface, Typeface titleTypeface, Typeface contentTypeface) {
         this.typeface = typeface;
+    }
+
+    @Override
+    public void setCustomThemeWrapper(CustomThemeWrapper customThemeWrapper) {
+        this.customThemeWrapper = customThemeWrapper;
     }
 }

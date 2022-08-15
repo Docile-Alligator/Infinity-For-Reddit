@@ -410,7 +410,6 @@
     <string name="settings_customize_dark_theme_title">"Tamna tema"</string>
     <string name="settings_customize_amoled_theme_title">"Amoled tema"</string>
     <string name="settings_manage_themes_title">"Upravljaj temama"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Vlastite teme se ne mogu primijeniti na stranicu postavki (osim alatne trake, trake statusa i navigacijske trake)"</string>
     <string name="settings_advanced_master_title">"Napredno"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Obriši sve podreddite u bazi podataka"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Obriši sve korisnike u bazi podataka"</string>

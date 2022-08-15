@@ -411,7 +411,6 @@ Premio means prize, so it's better suited the first word instead of the second o
     <string name="settings_customize_dark_theme_title">"Tema Oscuro"</string>
     <string name="settings_customize_amoled_theme_title">"Tema AMOLED"</string>
     <string name="settings_manage_themes_title">"Administrar Temas"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Los temas no pueden ser aplicados a la página de configuración (a excepción de la barra de herramientas, la barra de estado y la barra de navegación)."</string>
     <string name="settings_advanced_master_title">"Avanzado"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Borrar Todos los subreddits en la base de datos"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Borrar todos los usuarios en la base de datos"</string>

@@ -400,7 +400,6 @@ Nhấn để thử lại."</string>
     <string name="settings_customize_dark_theme_title">"Chủ đề tối"</string>
     <string name="settings_customize_amoled_theme_title">"Chủ đề Amoled"</string>
     <string name="settings_manage_themes_title">"Quản lý chủ đề"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Các chủ đề tuỳ chỉnh không thể được áp dụng cho trang cài đặt (trừ thanh công cụ, thanh trạng thái và thanh điều hướng)."</string>
     <string name="settings_advanced_master_title">"Nâng cao"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Xoá tất cả subreddit trong cơ sở dữ liệu"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Xoá tất cả người dùng trong cơ sở dữ liệu"</string>

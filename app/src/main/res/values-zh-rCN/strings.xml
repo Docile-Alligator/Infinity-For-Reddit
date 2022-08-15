@@ -405,7 +405,6 @@
     <string name="settings_customize_dark_theme_title">"黑暗主题"</string>
     <string name="settings_customize_amoled_theme_title">"Amoled 主题"</string>
     <string name="settings_manage_themes_title">"管理主题"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"自定义主题无法应用于设置页面（工具栏、状态栏和导航栏除外）"</string>
     <string name="settings_advanced_master_title">"高级"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"删除数据库中的所有版块"</string>
     <string name="settings_delete_all_users_data_in_database_title">"删除数据库中的所有用户"</string>

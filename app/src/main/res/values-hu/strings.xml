@@ -395,7 +395,6 @@
     <string name="settings_customize_dark_theme_title">"Sötét téma"</string>
     <string name="settings_customize_amoled_theme_title">"Amoled téma"</string>
     <string name="settings_manage_themes_title">"Témák kezelése"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Egyedi témákat nem lehet használni a beállítások aldalán (kivéve az eszköztáron, státusz sávon és navigációs sávon)."</string>
     <string name="settings_advanced_master_title">"Haladó"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Adatbázisban szereplő összes subreddit törlése"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Adatbázisban szereplő összes felhasználó törlése"</string>

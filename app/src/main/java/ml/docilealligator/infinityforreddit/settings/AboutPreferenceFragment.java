@@ -25,10 +25,6 @@ public class AboutPreferenceFragment extends CustomFontPreferenceFragmentCompat 
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.about_preferences, rootKey);
 
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
-
         Preference openSourcePreference = findPreference(SharedPreferencesUtils.OPEN_SOURCE_KEY);
         Preference ratePreference = findPreference(SharedPreferencesUtils.RATE_KEY);
         Preference emailPreference = findPreference(SharedPreferencesUtils.EMAIL_KEY);

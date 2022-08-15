@@ -10,8 +10,11 @@ import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceViewHolder;
 
 import ml.docilealligator.infinityforreddit.CustomFontReceiver;
+import ml.docilealligator.infinityforreddit.CustomThemeWrapperReceiver;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 
-public class CustomFontPreferenceCategory extends PreferenceCategory implements CustomFontReceiver {
+public class CustomFontPreferenceCategory extends PreferenceCategory implements CustomFontReceiver, CustomThemeWrapperReceiver {
+    private CustomThemeWrapper customThemeWrapper;
     private Typeface typeface;
 
     public CustomFontPreferenceCategory(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
@@ -33,14 +36,17 @@ public class CustomFontPreferenceCategory extends PreferenceCategory implements 
     @Override
     public void onBindViewHolder(PreferenceViewHolder holder) {
         super.onBindViewHolder(holder);
+        View titleTextView = holder.findViewById(android.R.id.title);
+
+        if (customThemeWrapper != null) {
+            if (titleTextView instanceof TextView) {
+                ((TextView) titleTextView).setTextColor(customThemeWrapper.getColorAccent());
+            }
+        }
+
         if (typeface != null) {
-            View titleTextView = holder.findViewById(android.R.id.title);
             if (titleTextView instanceof TextView) {
                 ((TextView) titleTextView).setTypeface(typeface);
-            }
-            View summaryTextView = holder.findViewById(android.R.id.summary);
-            if (summaryTextView instanceof TextView) {
-                ((TextView) summaryTextView).setTypeface(typeface);
             }
         }
     }
@@ -48,5 +54,10 @@ public class CustomFontPreferenceCategory extends PreferenceCategory implements 
     @Override
     public void setCustomFont(Typeface typeface, Typeface titleTypeface, Typeface contentTypeface) {
         this.typeface = typeface;
+    }
+
+    @Override
+    public void setCustomThemeWrapper(CustomThemeWrapper customThemeWrapper) {
+        this.customThemeWrapper = customThemeWrapper;
     }
 }

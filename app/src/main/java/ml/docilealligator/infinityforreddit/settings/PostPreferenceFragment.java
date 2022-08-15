@@ -31,10 +31,6 @@ public class PostPreferenceFragment extends CustomFontPreferenceFragmentCompat {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.post_preferences, rootKey);
-        
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
 
         ListPreference defaultPostLayoutList = findPreference(SharedPreferencesUtils.DEFAULT_POST_LAYOUT_KEY);
         ListPreference defaultLinkPostLayoutList = findPreference(SharedPreferencesUtils.DEFAULT_LINK_POST_LAYOUT_KEY);

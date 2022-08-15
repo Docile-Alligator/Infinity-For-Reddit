@@ -17,7 +17,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.adapters.AcknowledgementRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 
@@ -28,7 +28,7 @@ public class AcknowledgementFragment extends Fragment {
 
     @BindView(R.id.recycler_view_acknowledgement_fragment)
     RecyclerView recyclerView;
-    private BaseActivity activity;
+    private SettingsActivity activity;
 
     public AcknowledgementFragment() {
         // Required empty public constructor
@@ -127,12 +127,14 @@ public class AcknowledgementFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManagerBugFixed(activity));
         recyclerView.setAdapter(adapter);
 
+        rootView.setBackgroundColor(activity.customThemeWrapper.getBackgroundColor());
+
         return rootView;
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (BaseActivity) context;
+        activity = (SettingsActivity) context;
     }
 }

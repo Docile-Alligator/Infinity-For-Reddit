@@ -406,7 +406,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_customize_dark_theme_title">"Koyu Tema"</string>
     <string name="settings_customize_amoled_theme_title">"Amoled Tema"</string>
     <string name="settings_manage_themes_title">"Temaları Yönetin"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Özel temalar ayarlar sayfasına uygulanamaz (araç çubuğu, durum çubuğu ve navigasyon çubuğu hariç)."</string>
     <string name="settings_advanced_master_title">"Gelişmiş"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Veritabanındaki Tüm Subredditleri Sil"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Veritabanındaki Tüm Kullanıcıları Sil"</string>

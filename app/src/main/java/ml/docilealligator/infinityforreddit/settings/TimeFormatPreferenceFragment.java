@@ -18,10 +18,6 @@ public class TimeFormatPreferenceFragment extends CustomFontPreferenceFragmentCo
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.time_format_preferences, rootKey);
 
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
-
         SwitchPreference showElapsedTimeSwitch = findPreference(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY);
         ListPreference timeFormatList = findPreference(SharedPreferencesUtils.TIME_FORMAT_KEY);
 

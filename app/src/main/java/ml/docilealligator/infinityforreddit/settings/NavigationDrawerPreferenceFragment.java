@@ -20,10 +20,6 @@ public class NavigationDrawerPreferenceFragment extends CustomFontPreferenceFrag
         preferenceManager.setSharedPreferencesName(SharedPreferencesUtils.NAVIGATION_DRAWER_SHARED_PREFERENCES_FILE);
         setPreferencesFromResource(R.xml.navigation_drawer_preferences, rootKey);
 
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
-
         SwitchPreference showAvatarOnTheRightSwitch = findPreference(SharedPreferencesUtils.SHOW_AVATAR_ON_THE_RIGHT);
 
         if (showAvatarOnTheRightSwitch != null) {

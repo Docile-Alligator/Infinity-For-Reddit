@@ -62,7 +62,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
     private boolean isImmersiveInterfaceApplicable = true;
     private int systemVisibilityToolbarExpanded = 0;
     private int systemVisibilityToolbarCollapsed = 0;
-    private CustomThemeWrapper customThemeWrapper;
+    public CustomThemeWrapper customThemeWrapper;
     public Typeface typeface;
     public Typeface titleTypeface;
     public Typeface contentTypeface;

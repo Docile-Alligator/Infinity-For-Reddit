@@ -12,20 +12,23 @@ import java.util.List;
 
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
 
 public class PostFilterUsageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<PostFilterUsage> postFilterUsages;
-    private OnItemClickListener onItemClickListener;
     private BaseActivity activity;
+    private CustomThemeWrapper customThemeWrapper;
+    private OnItemClickListener onItemClickListener;
 
     public interface OnItemClickListener {
         void onClick(PostFilterUsage postFilterUsage);
     }
 
-    public PostFilterUsageRecyclerViewAdapter(BaseActivity activity,
+    public PostFilterUsageRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper,
                                               OnItemClickListener onItemClickListener) {
         this.activity = activity;
+        this.customThemeWrapper = customThemeWrapper;
         this.onItemClickListener = onItemClickListener;
     }
 
@@ -84,6 +87,8 @@ public class PostFilterUsageRecyclerViewAdapter extends RecyclerView.Adapter<Rec
         public PostFilterUsageViewHolder(@NonNull View itemView) {
             super(itemView);
             usageTextView = (TextView) itemView;
+
+            usageTextView.setTextColor(customThemeWrapper.getPrimaryTextColor());
 
             if (activity.typeface != null) {
                 usageTextView.setTypeface(activity.typeface);

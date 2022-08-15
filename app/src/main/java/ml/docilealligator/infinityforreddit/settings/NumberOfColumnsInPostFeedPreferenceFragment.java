@@ -9,9 +9,5 @@ public class NumberOfColumnsInPostFeedPreferenceFragment extends CustomFontPrefe
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.number_of_columns_in_post_feed_preferences, rootKey);
-
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
     }
 }

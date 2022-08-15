@@ -387,7 +387,6 @@ Atinge pentru a reîncerca."</string>
     <string name="settings_customize_dark_theme_title">"Temă întunecată"</string>
     <string name="settings_customize_amoled_theme_title">"Temă Amoled"</string>
     <string name="settings_manage_themes_title">"Gestionați temele"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Temele personalizate nu pot fi aplicate la pagina de setări (cu excepția barei de instrumente, a barei de stare și a barei de navigare)."</string>
     <string name="settings_advanced_master_title">"Avansat"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Ștergeți toate subredditele din baza de date"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Ștergeți toți utilizatorii din baza de date"</string>

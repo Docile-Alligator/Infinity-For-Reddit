@@ -391,7 +391,6 @@
     <string name="settings_customize_dark_theme_title">"Tmavý motiv"</string>
     <string name="settings_customize_amoled_theme_title">"Amoled"</string>
     <string name="settings_manage_themes_title">"Spravovat motivy"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Vlastní motivy nemohou být použity na stránku nastavení (kromě nástrojové lišty, stavové lišty a navigační lišty)."</string>
     <string name="settings_advanced_master_title">"Pokročilé"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Odstranit všechny subreddity v databázi"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Odstranit všechny uživatele v databázi"</string>

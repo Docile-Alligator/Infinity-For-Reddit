@@ -398,7 +398,6 @@ Toque para tentar novamente."</string>
     <string name="settings_customize_dark_theme_title">"Tema Escuro"</string>
     <string name="settings_customize_amoled_theme_title">"Tema Amoled"</string>
     <string name="settings_manage_themes_title">"Gerir Temas"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Temas personalizados não podem ser aplicados à página de definições (exceto à barra de ferramentas, barra de estado e barra de navegação)."</string>
     <string name="settings_advanced_master_title">"Avançado"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Eliminar Todas as Comunidades da BD"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Eliminar Todos os Utilizadores da BD"</string>

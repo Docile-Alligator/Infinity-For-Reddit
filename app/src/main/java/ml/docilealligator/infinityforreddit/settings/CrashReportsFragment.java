@@ -51,6 +51,8 @@ public class CrashReportsFragment extends Fragment {
 
         recyclerView.setAdapter(new CrashReportsRecyclerViewAdapter(activity, CrashyReporter.INSTANCE.getLogsAsStrings()));
 
+        recyclerView.setBackgroundColor(activity.customThemeWrapper.getBackgroundColor());
+
         return recyclerView;
     }
 
