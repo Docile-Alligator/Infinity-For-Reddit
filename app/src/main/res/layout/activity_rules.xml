@@ -45,7 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:clipToPadding="false"
-        app:layoutManager=".customviews.LinearLayoutManagerBugFixed"
+        app:layoutManager="ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <TextView

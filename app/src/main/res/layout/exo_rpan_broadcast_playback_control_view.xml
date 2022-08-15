@@ -142,7 +142,7 @@
         android:paddingEnd="16dp"
         app:layout_constraintTop_toBottomOf="@id/control_linear_layout"
         app:layout_constraintBottom_toTopOf="@id/time_bar_linear_layout"
-        app:layoutManager=".customviews.LinearLayoutManagerBugFixed" />
+        app:layoutManager="ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed" />
 
     <LinearLayout
         android:id="@+id/time_bar_linear_layout"

@@ -29,6 +29,6 @@
         android:id="@+id/recycler_view_bottom_sheet_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager=".customviews.LinearLayoutManagerBugFixed" />
+        app:layoutManager="ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed" />
 
 </LinearLayout>
