@@ -34,6 +34,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.paging.ItemSnapshotList;
 import androidx.paging.LoadState;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearSmoothScroller;
@@ -47,6 +48,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -80,19 +82,56 @@ import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.CustomToroContainer;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.events.ChangeAutoplayNsfwVideosEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeCompactLayoutToolbarHiddenByDefaultEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeDataSavingModeEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeDefaultLinkPostLayoutEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeDefaultPostLayoutEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeDisableImagePreviewEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeEasierToWatchInFullScreenEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeEnableSwipeActionSwitchEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeFixedHeightPreviewInCardEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeHidePostFlairEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeHidePostTypeEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeHideSubredditAndUserPrefixEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeHideTextPostContent;
+import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfAwardsEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfCommentsEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfVotesEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeLongPressToHideToolbarInCompactLayoutEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeMuteAutoplayingVideosEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeMuteNSFWVideoEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeNSFWBlurEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeOnlyDisablePreviewInVideoAndGifPostsEvent;
+import ml.docilealligator.infinityforreddit.events.ChangePostFeedMaxResolutionEvent;
+import ml.docilealligator.infinityforreddit.events.ChangePostLayoutEvent;
+import ml.docilealligator.infinityforreddit.events.ChangePullToRefreshEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeRememberMutingOptionInPostFeedEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeShowAbsoluteNumberOfVotesEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeShowElapsedTimeEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeSpoilerBlurEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeStartAutoplayVisibleAreaOffsetEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeSwipeActionEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeSwipeActionThresholdEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeTimeFormatEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeVibrateWhenActionTriggeredEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeVideoAutoplayEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeVoteButtonsPositionEvent;
+import ml.docilealligator.infinityforreddit.events.NeedForPostListFromPostFragmentEvent;
+import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostList;
+import ml.docilealligator.infinityforreddit.events.ProvidePostListToViewPostDetailActivityEvent;
+import ml.docilealligator.infinityforreddit.events.ShowDividerInCompactLayoutPreferenceEvent;
+import ml.docilealligator.infinityforreddit.events.ShowThumbnailOnTheRightInCompactLayoutEvent;
 import ml.docilealligator.infinityforreddit.post.HistoryPostPagingSource;
 import ml.docilealligator.infinityforreddit.post.HistoryPostViewModel;
+import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link HistoryPostFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class HistoryPostFragment extends Fragment implements FragmentCommunicator {
 
     public static final String EXTRA_ACCESS_TOKEN = "EAT";
@@ -218,7 +257,7 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
 
         setHasOptionsMenu(true);
 
-        //EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
 
         applyTheme();
 
@@ -958,6 +997,360 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
     private void onWindowFocusChanged(boolean hasWindowsFocus) {
         if (mAdapter != null) {
             mAdapter.setCanPlayVideo(hasWindowsFocus);
+        }
+    }
+
+    @Subscribe
+    public void onPostUpdateEvent(PostUpdateEventToPostList event) {
+        ItemSnapshotList<Post> posts = mAdapter.snapshot();
+        if (event.positionInList >= 0 && event.positionInList < posts.size()) {
+            Post post = posts.get(event.positionInList);
+            if (post != null && post.getFullName().equals(event.post.getFullName())) {
+                post.setTitle(event.post.getTitle());
+                post.setVoteType(event.post.getVoteType());
+                post.setScore(event.post.getScore());
+                post.setNComments(event.post.getNComments());
+                post.setNSFW(event.post.isNSFW());
+                post.setHidden(event.post.isHidden());
+                post.setSpoiler(event.post.isSpoiler());
+                post.setFlair(event.post.getFlair());
+                post.setSaved(event.post.isSaved());
+                if (event.post.isRead()) {
+                    post.markAsRead(true);
+                }
+                mAdapter.notifyItemChanged(event.positionInList);
+            }
+        }
+    }
+
+    @Subscribe
+    public void onChangeShowElapsedTimeEvent(ChangeShowElapsedTimeEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setShowElapsedTime(event.showElapsedTime);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeTimeFormatEvent(ChangeTimeFormatEvent changeTimeFormatEvent) {
+        if (mAdapter != null) {
+            mAdapter.setTimeFormat(changeTimeFormatEvent.timeFormat);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeVoteButtonsPositionEvent(ChangeVoteButtonsPositionEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setVoteButtonsPosition(event.voteButtonsOnTheRight);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeNSFWBlurEvent(ChangeNSFWBlurEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setBlurNsfwAndDoNotBlurNsfwInNsfwSubreddits(event.needBlurNSFW);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeSpoilerBlurEvent(ChangeSpoilerBlurEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setBlurSpoiler(event.needBlurSpoiler);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangePostLayoutEvent(ChangePostLayoutEvent event) {
+        changePostLayout(event.postLayout);
+    }
+
+    @Subscribe
+    public void onShowDividerInCompactLayoutPreferenceEvent(ShowDividerInCompactLayoutPreferenceEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setShowDividerInCompactLayout(event.showDividerInCompactLayout);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeDefaultPostLayoutEvent(ChangeDefaultPostLayoutEvent changeDefaultPostLayoutEvent) {
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            switch (postType) {
+                case HistoryPostPagingSource.TYPE_READ_POSTS:
+                    if (mPostLayoutSharedPreferences.contains(SharedPreferencesUtils.HISTORY_POST_LAYOUT_READ_POST)) {
+                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout, true);
+                    }
+                    break;
+            }
+        }
+    }
+
+    @Subscribe
+    public void onChangeDefaultLinkPostLayoutEvent(ChangeDefaultLinkPostLayoutEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setDefaultLinkPostLayout(event.defaultLinkPostLayout);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeShowAbsoluteNumberOfVotesEvent(ChangeShowAbsoluteNumberOfVotesEvent changeShowAbsoluteNumberOfVotesEvent) {
+        if (mAdapter != null) {
+            mAdapter.setShowAbsoluteNumberOfVotes(changeShowAbsoluteNumberOfVotesEvent.showAbsoluteNumberOfVotes);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeVideoAutoplayEvent(ChangeVideoAutoplayEvent changeVideoAutoplayEvent) {
+        if (mAdapter != null) {
+            boolean autoplay = false;
+            if (changeVideoAutoplayEvent.autoplay.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ALWAYS_ON)) {
+                autoplay = true;
+            } else if (changeVideoAutoplayEvent.autoplay.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI)) {
+                autoplay = Utils.isConnectedToWifi(activity);
+            }
+            mAdapter.setAutoplay(autoplay);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeAutoplayNsfwVideosEvent(ChangeAutoplayNsfwVideosEvent changeAutoplayNsfwVideosEvent) {
+        if (mAdapter != null) {
+            mAdapter.setAutoplayNsfwVideos(changeAutoplayNsfwVideosEvent.autoplayNsfwVideos);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeMuteAutoplayingVideosEvent(ChangeMuteAutoplayingVideosEvent changeMuteAutoplayingVideosEvent) {
+        if (mAdapter != null) {
+            mAdapter.setMuteAutoplayingVideos(changeMuteAutoplayingVideosEvent.muteAutoplayingVideos);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeNetworkStatusEvent(ChangeNetworkStatusEvent changeNetworkStatusEvent) {
+        if (mAdapter != null) {
+            String autoplay = mSharedPreferences.getString(SharedPreferencesUtils.VIDEO_AUTOPLAY, SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_NEVER);
+            String dataSavingMode = mSharedPreferences.getString(SharedPreferencesUtils.DATA_SAVING_MODE, SharedPreferencesUtils.DATA_SAVING_MODE_OFF);
+            boolean stateChanged = false;
+            if (autoplay.equals(SharedPreferencesUtils.VIDEO_AUTOPLAY_VALUE_ON_WIFI)) {
+                mAdapter.setAutoplay(changeNetworkStatusEvent.connectedNetwork == Utils.NETWORK_TYPE_WIFI);
+                stateChanged = true;
+            }
+            if (dataSavingMode.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
+                mAdapter.setDataSavingMode(changeNetworkStatusEvent.connectedNetwork == Utils.NETWORK_TYPE_CELLULAR);
+                stateChanged = true;
+            }
+
+            if (stateChanged) {
+                refreshAdapter();
+            }
+        }
+    }
+
+    @Subscribe
+    public void onShowThumbnailOnTheRightInCompactLayoutEvent(ShowThumbnailOnTheRightInCompactLayoutEvent showThumbnailOnTheRightInCompactLayoutEvent) {
+        if (mAdapter != null) {
+            mAdapter.setShowThumbnailOnTheRightInCompactLayout(showThumbnailOnTheRightInCompactLayoutEvent.showThumbnailOnTheRightInCompactLayout);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeStartAutoplayVisibleAreaOffsetEvent(ChangeStartAutoplayVisibleAreaOffsetEvent changeStartAutoplayVisibleAreaOffsetEvent) {
+        if (mAdapter != null) {
+            mAdapter.setStartAutoplayVisibleAreaOffset(changeStartAutoplayVisibleAreaOffsetEvent.startAutoplayVisibleAreaOffset);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeMuteNSFWVideoEvent(ChangeMuteNSFWVideoEvent changeMuteNSFWVideoEvent) {
+        if (mAdapter != null) {
+            mAdapter.setMuteNSFWVideo(changeMuteNSFWVideoEvent.muteNSFWVideo);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeVibrateWhenActionTriggeredEvent(ChangeVibrateWhenActionTriggeredEvent changeVibrateWhenActionTriggeredEvent) {
+        vibrateWhenActionTriggered = changeVibrateWhenActionTriggeredEvent.vibrateWhenActionTriggered;
+    }
+
+    @Subscribe
+    public void onChangeEnableSwipeActionSwitchEvent(ChangeEnableSwipeActionSwitchEvent changeEnableSwipeActionSwitchEvent) {
+        if (touchHelper != null) {
+            if (changeEnableSwipeActionSwitchEvent.enableSwipeAction) {
+                touchHelper.attachToRecyclerView(mPostRecyclerView);
+            } else {
+                touchHelper.attachToRecyclerView(null);
+            }
+        }
+    }
+
+    @Subscribe
+    public void onChangePullToRefreshEvent(ChangePullToRefreshEvent changePullToRefreshEvent) {
+        mSwipeRefreshLayout.setEnabled(changePullToRefreshEvent.pullToRefresh);
+    }
+
+    @Subscribe
+    public void onChangeLongPressToHideToolbarInCompactLayoutEvent(ChangeLongPressToHideToolbarInCompactLayoutEvent changeLongPressToHideToolbarInCompactLayoutEvent) {
+        if (mAdapter != null) {
+            mAdapter.setLongPressToHideToolbarInCompactLayout(changeLongPressToHideToolbarInCompactLayoutEvent.longPressToHideToolbarInCompactLayout);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeCompactLayoutToolbarHiddenByDefaultEvent(ChangeCompactLayoutToolbarHiddenByDefaultEvent changeCompactLayoutToolbarHiddenByDefaultEvent) {
+        if (mAdapter != null) {
+            mAdapter.setCompactLayoutToolbarHiddenByDefault(changeCompactLayoutToolbarHiddenByDefaultEvent.compactLayoutToolbarHiddenByDefault);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeSwipeActionThresholdEvent(ChangeSwipeActionThresholdEvent changeSwipeActionThresholdEvent) {
+        swipeActionThreshold = changeSwipeActionThresholdEvent.swipeActionThreshold;
+    }
+
+    @Subscribe
+    public void onChangeDataSavingModeEvent(ChangeDataSavingModeEvent changeDataSavingModeEvent) {
+        if (mAdapter != null) {
+            boolean dataSavingMode = false;
+            if (changeDataSavingModeEvent.dataSavingMode.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ONLY_ON_CELLULAR_DATA)) {
+                dataSavingMode = Utils.isConnectedToCellularData(activity);
+            } else if (changeDataSavingModeEvent.dataSavingMode.equals(SharedPreferencesUtils.DATA_SAVING_MODE_ALWAYS)) {
+                dataSavingMode = true;
+            }
+            mAdapter.setDataSavingMode(dataSavingMode);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeDisableImagePreviewEvent(ChangeDisableImagePreviewEvent changeDisableImagePreviewEvent) {
+        if (mAdapter != null) {
+            mAdapter.setDisableImagePreview(changeDisableImagePreviewEvent.disableImagePreview);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeOnlyDisablePreviewInVideoAndGifPostsEvent(ChangeOnlyDisablePreviewInVideoAndGifPostsEvent changeOnlyDisablePreviewInVideoAndGifPostsEvent) {
+        if (mAdapter != null) {
+            mAdapter.setOnlyDisablePreviewInVideoPosts(changeOnlyDisablePreviewInVideoAndGifPostsEvent.onlyDisablePreviewInVideoAndGifPosts);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeSwipeActionEvent(ChangeSwipeActionEvent changeSwipeActionEvent) {
+        swipeRightAction = changeSwipeActionEvent.swipeRightAction == -1 ? swipeRightAction : changeSwipeActionEvent.swipeRightAction;
+        swipeLeftAction = changeSwipeActionEvent.swipeLeftAction == -1 ? swipeLeftAction : changeSwipeActionEvent.swipeLeftAction;
+        initializeSwipeActionDrawable();
+    }
+
+    @Subscribe
+    public void onNeedForPostListFromPostRecyclerViewAdapterEvent(NeedForPostListFromPostFragmentEvent event) {
+        if (historyPostFragmentId == event.postFragmentTimeId && mAdapter != null) {
+            EventBus.getDefault().post(new ProvidePostListToViewPostDetailActivityEvent(historyPostFragmentId, new ArrayList<>(mAdapter.snapshot())));
+        }
+    }
+
+    @Subscribe
+    public void onChangeHidePostTypeEvent(ChangeHidePostTypeEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setHidePostType(event.hidePostType);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeHidePostFlairEvent(ChangeHidePostFlairEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setHidePostFlair(event.hidePostFlair);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeHideTheNumberOfAwardsEvent(ChangeHideTheNumberOfAwardsEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setHideTheNumberOfAwards(event.hideTheNumberOfAwards);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeHideSubredditAndUserEvent(ChangeHideSubredditAndUserPrefixEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setHideSubredditAndUserPrefix(event.hideSubredditAndUserPrefix);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeHideTheNumberOfVotesEvent(ChangeHideTheNumberOfVotesEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setHideTheNumberOfVotes(event.hideTheNumberOfVotes);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeHideTheNumberOfCommentsEvent(ChangeHideTheNumberOfCommentsEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setHideTheNumberOfComments(event.hideTheNumberOfComments);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeRememberMutingOptionInPostFeedEvent(ChangeRememberMutingOptionInPostFeedEvent event) {
+        rememberMutingOptionInPostFeed = event.rememberMutingOptionInPostFeedEvent;
+        if (!event.rememberMutingOptionInPostFeedEvent) {
+            masterMutingOption = null;
+        }
+    }
+
+    @Subscribe
+    public void onChangeFixedHeightPreviewCardEvent(ChangeFixedHeightPreviewInCardEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setFixedHeightPreviewInCard(event.fixedHeightPreviewInCard);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeHideTextPostContentEvent(ChangeHideTextPostContent event) {
+        if (mAdapter != null) {
+            mAdapter.setHideTextPostContent(event.hideTextPostContent);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangePostFeedMaxResolutionEvent(ChangePostFeedMaxResolutionEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setPostFeedMaxResolution(event.postFeedMaxResolution);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeEasierToWatchInFullScreenEvent(ChangeEasierToWatchInFullScreenEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setEasierToWatchInFullScreen(event.easierToWatchInFullScreen);
         }
     }
 
