@@ -72,7 +72,6 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.adapters.HistoryPostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.adapters.Paging3LoadingStateAdapter;
@@ -217,7 +216,6 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
     private String accountName;
     private int maxPosition = -1;
     private int postLayout;
-    private SortType sortType;
     private PostFilter postFilter;
     private ColorDrawable backgroundSwipeRight;
     private ColorDrawable backgroundSwipeLeft;
