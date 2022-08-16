@@ -19,11 +19,10 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
 
-    - name: Grant Execute Permission for gradlew
-      run: chmod +x gradlew
-
-    - name: Build with Gradle
-      run: ./gradlew build -x lint
+    - name: Setup and build with Gradle
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: build -x lint
 
     - name: Upload apk
       uses: actions/upload-artifact@v2
