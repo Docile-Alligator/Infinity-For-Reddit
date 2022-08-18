@@ -16,22 +16,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.content.FileProvider;
-import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -48,8 +42,6 @@ import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
@@ -81,6 +73,7 @@ import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.comment.SendComment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.databinding.ActivityCommentBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
@@ -89,7 +82,6 @@ import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
-import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
 public class CommentActivity extends BaseActivity implements UploadImageEnabledActivity, AccountChooserBottomSheetFragment.AccountChooserListener {
@@ -111,28 +103,6 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     private static final String SELECTED_ACCOUNT_STATE = "SAS";
     private static final String UPLOADED_IMAGES_STATE = "UIS";
 
-    @BindView(R.id.coordinator_layout_comment_activity)
-    CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_comment_activity)
-    AppBarLayout appBarLayout;
-    @BindView(R.id.toolbar_comment_activity)
-    Toolbar toolbar;
-    @BindView(R.id.comment_parent_markwon_view_comment_activity)
-    TextView commentParentMarkwonView;
-    @BindView(R.id.divider_comment_activity)
-    View divider;
-    @BindView(R.id.content_markdown_view_comment_activity)
-    RecyclerView contentMarkdownRecyclerView;
-    @BindView(R.id.account_linear_layout_comment_activity)
-    LinearLayout accountLinearLayout;
-    @BindView(R.id.account_icon_gif_image_view_comment_activity)
-    GifImageView accountIconImageView;
-    @BindView(R.id.account_name_text_view_comment_activity)
-    TextView accountNameTextView;
-    @BindView(R.id.comment_edit_text_comment_activity)
-    EditText commentEditText;
-    @BindView(R.id.markdown_bottom_bar_recycler_view_comment_activity)
-    RecyclerView markdownBottomBarRecyclerView;
     @Inject
     @Named("no_oauth")
     Retrofit mRetrofit;
@@ -169,6 +139,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     private Menu mMenu;
     private int commentColor;
     private int commentSpoilerBackgroundColor;
+    private ActivityCommentBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,17 +148,15 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         setImmersiveModeNotApplicable();
 
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_comment);
-
-        ButterKnife.bind(this);
+        binding = ActivityCommentBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         EventBus.getDefault().register(this);
 
         applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
-            addOnOffsetChangedListener(appBarLayout);
+            addOnOffsetChangedListener(binding.commentAppbarLayout);
         }
 
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
@@ -240,7 +209,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .build();
         if (parentTextMarkdown != null) {
-            commentParentMarkwonView.setOnLongClickListener(view -> {
+            binding.commentCommentParentMarkwonView.setOnLongClickListener(view -> {
                 Utils.hideKeyboard(CommentActivity.this);
                 Bundle bundle = new Bundle();
                 if (parentText == null) {
@@ -253,13 +222,13 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                 copyTextBottomSheetFragment.show(getSupportFragmentManager(), copyTextBottomSheetFragment.getTag());
                 return true;
             });
-            markwon.setMarkdown(commentParentMarkwonView, parentTextMarkdown);
+            markwon.setMarkdown(binding.commentCommentParentMarkwonView, parentTextMarkdown);
         }
         String parentBodyMarkdown = intent.getStringExtra(EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY);
         String parentBody = intent.getStringExtra(EXTRA_COMMENT_PARENT_BODY_KEY);
         if (parentBodyMarkdown != null && !parentBodyMarkdown.equals("")) {
-            contentMarkdownRecyclerView.setVisibility(View.VISIBLE);
-            contentMarkdownRecyclerView.setNestedScrollingEnabled(false);
+            binding.commentContentMarkdownView.setVisibility(View.VISIBLE);
+            binding.commentContentMarkdownView.setNestedScrollingEnabled(false);
             Markwon postBodyMarkwon = Markwon.builder(this)
                     .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                         plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
@@ -320,8 +289,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                             .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
                             .textLayoutIsRoot(R.layout.view_table_entry_cell)))
                     .build();
-            contentMarkdownRecyclerView.setLayoutManager(new LinearLayoutManagerBugFixed(this));
-            contentMarkdownRecyclerView.setAdapter(markwonAdapter);
+            binding.commentContentMarkdownView.setLayoutManager(new LinearLayoutManagerBugFixed(this));
+            binding.commentContentMarkdownView.setAdapter(markwonAdapter);
             markwonAdapter.setMarkdown(postBodyMarkwon, parentBodyMarkdown);
             markwonAdapter.notifyDataSetChanged();
         }
@@ -330,10 +299,10 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         parentPosition = intent.getExtras().getInt(EXTRA_PARENT_POSITION_KEY);
         isReplying = intent.getExtras().getBoolean(EXTRA_IS_REPLYING_KEY);
         if (isReplying) {
-            toolbar.setTitle(getString(R.string.comment_activity_label_is_replying));
+            binding.commentToolbar.setTitle(getString(R.string.comment_activity_label_is_replying));
         }
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.commentToolbar);
 
         mGlide = Glide.with(this);
 
@@ -346,9 +315,9 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                         .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                         .error(mGlide.load(R.drawable.subreddit_default_icon)
                                 .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                        .into(accountIconImageView);
+                        .into(binding.commentAccountIconGifImageView);
 
-                accountNameTextView.setText(selectedAccount.getAccountName());
+                binding.commentAccountNameTextView.setText(selectedAccount.getAccountName());
             } else {
                 loadCurrentAccount();
             }
@@ -361,7 +330,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             @Override
             public void onClick(int item) {
                 MarkdownBottomBarRecyclerViewAdapter.bindEditTextWithItemClickListener(
-                        CommentActivity.this, commentEditText, item);
+                        CommentActivity.this, binding.commentCommentEditText, item);
             }
 
             @Override
@@ -376,16 +345,16 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             }
         });
 
-        markdownBottomBarRecyclerView.setLayoutManager(new LinearLayoutManagerBugFixed(this,
+        binding.commentMarkdownBottomBarRecyclerView.setLayoutManager(new LinearLayoutManagerBugFixed(this,
                 LinearLayoutManagerBugFixed.HORIZONTAL, false));
-        markdownBottomBarRecyclerView.setAdapter(adapter);
+        binding.commentMarkdownBottomBarRecyclerView.setAdapter(adapter);
 
-        accountLinearLayout.setOnClickListener(view -> {
+        binding.commentAccountLinearLayout.setOnClickListener(view -> {
             AccountChooserBottomSheetFragment fragment = new AccountChooserBottomSheetFragment();
             fragment.show(getSupportFragmentManager(), fragment.getTag());
         });
 
-        commentEditText.requestFocus();
+        binding.commentCommentEditText.requestFocus();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
@@ -403,9 +372,9 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                             .error(mGlide.load(R.drawable.subreddit_default_icon)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                            .into(accountIconImageView);
+                            .into(binding.commentAccountIconGifImageView);
 
-                    accountNameTextView.setText(account.getAccountName());
+                    binding.commentAccountNameTextView.setText(account.getAccountName());
                 }
             });
         });
@@ -430,22 +399,22 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
 
     @Override
     protected void applyCustomTheme() {
-        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
+        binding.commentCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.commentAppbarLayout, null, binding.commentToolbar);
         commentColor = mCustomThemeWrapper.getCommentColor();
         commentSpoilerBackgroundColor = commentColor | 0xFF000000;
-        commentParentMarkwonView.setTextColor(commentColor);
-        divider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
-        commentEditText.setTextColor(mCustomThemeWrapper.getCommentColor());
+        binding.commentCommentParentMarkwonView.setTextColor(commentColor);
+        binding.commentDivider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
+        binding.commentCommentEditText.setTextColor(mCustomThemeWrapper.getCommentColor());
         int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
-        commentEditText.setHintTextColor(secondaryTextColor);
+        binding.commentCommentEditText.setHintTextColor(secondaryTextColor);
         markdownColor = secondaryTextColor;
         spoilerBackgroundColor = markdownColor | 0xFF000000;
-        accountNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+        binding.commentAccountNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
 
         if (typeface != null) {
-            commentParentMarkwonView.setTypeface(typeface);
-            commentEditText.setTypeface(typeface);
+            binding.commentCommentParentMarkwonView.setTypeface(typeface);
+            binding.commentCommentEditText.setTypeface(typeface);
         }
     }
 
@@ -454,7 +423,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         super.onPause();
         InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         if (imm != null) {
-            imm.hideSoftInputFromWindow(commentEditText.getWindowToken(), 0);
+            imm.hideSoftInputFromWindow(binding.commentCommentEditText.getWindowToken(), 0);
         }
     }
 
@@ -474,7 +443,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             return true;
         } else if (itemId == R.id.action_preview_comment_activity) {
             Intent intent = new Intent(this, FullMarkdownActivity.class);
-            intent.putExtra(FullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, commentEditText.getText().toString());
+            intent.putExtra(FullMarkdownActivity.EXTRA_COMMENT_MARKDOWN, binding.commentCommentEditText.getText().toString());
             intent.putExtra(FullMarkdownActivity.EXTRA_SUBMIT_POST, true);
             startActivityForResult(intent, MARKDOWN_PREVIEW_REQUEST_CODE);
         } else if (itemId == R.id.action_send_comment_activity) {
@@ -488,9 +457,9 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     public void sendComment(@Nullable MenuItem item) {
         if (!isSubmitting) {
             isSubmitting = true;
-            if (commentEditText.getText() == null || commentEditText.getText().toString().equals("")) {
+            if (binding.commentCommentEditText.getText() == null || binding.commentCommentEditText.getText().toString().equals("")) {
                 isSubmitting = false;
-                Snackbar.make(coordinatorLayout, R.string.comment_content_required, Snackbar.LENGTH_SHORT).show();
+                Snackbar.make(binding.commentCoordinatorLayout, R.string.comment_content_required, Snackbar.LENGTH_SHORT).show();
                 return;
             }
 
@@ -498,7 +467,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                 item.setEnabled(false);
                 item.getIcon().setAlpha(130);
             }
-            Snackbar sendingSnackbar = Snackbar.make(coordinatorLayout, R.string.sending_comment, Snackbar.LENGTH_INDEFINITE);
+            Snackbar sendingSnackbar = Snackbar.make(binding.commentCoordinatorLayout, R.string.sending_comment, Snackbar.LENGTH_INDEFINITE);
             sendingSnackbar.show();
 
             Retrofit newAuthenticatorOauthRetrofit = mOauthRetrofit.newBuilder().client(new OkHttpClient.Builder().authenticator(new AnyAccountAccessTokenAuthenticator(mRetrofit, mRedditDataRoomDatabase, selectedAccount, mCurrentAccountSharedPreferences))
@@ -508,7 +477,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     .connectionPool(new ConnectionPool(0, 1, TimeUnit.NANOSECONDS))
                     .build())
                     .build();
-            SendComment.sendComment(mExecutor, new Handler(), commentEditText.getText().toString(),
+            SendComment.sendComment(mExecutor, new Handler(), binding.commentCommentEditText.getText().toString(),
                     parentFullname, parentDepth, newAuthenticatorOauthRetrofit, selectedAccount,
                     new SendComment.SendCommentListener() {
                         @Override
@@ -539,9 +508,9 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                             }
 
                             if (errorMessage == null || !errorMessage.equals("")) {
-                                Snackbar.make(coordinatorLayout, R.string.send_comment_failed, Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(binding.commentCoordinatorLayout, R.string.send_comment_failed, Snackbar.LENGTH_SHORT).show();
                             } else {
-                                Snackbar.make(coordinatorLayout, errorMessage, Snackbar.LENGTH_SHORT).show();
+                                Snackbar.make(binding.commentCoordinatorLayout, errorMessage, Snackbar.LENGTH_SHORT).show();
                             }
                         }
                     });
@@ -568,10 +537,10 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     return;
                 }
                 Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
-                        mAccessToken, commentEditText, coordinatorLayout, data.getData(), uploadedImages);
+                        mAccessToken, binding.commentCommentEditText, binding.commentCoordinatorLayout, data.getData(), uploadedImages);
             } else if (requestCode == CAPTURE_IMAGE_REQUEST_CODE) {
                 Utils.uploadImageToReddit(this, mExecutor, mOauthRetrofit, mUploadMediaRetrofit,
-                        mAccessToken, commentEditText, coordinatorLayout, capturedImageUri, uploadedImages);
+                        mAccessToken, binding.commentCommentEditText, binding.commentCoordinatorLayout, capturedImageUri, uploadedImages);
             } else if (requestCode == MARKDOWN_PREVIEW_REQUEST_CODE) {
                 sendComment(mMenu == null ? null : mMenu.findItem(R.id.action_send_comment_activity));
             }
@@ -583,7 +552,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         if (isSubmitting) {
             promptAlertDialog(R.string.exit_when_submit, R.string.exit_when_edit_comment_detail);
         } else {
-            if (commentEditText.getText().toString().equals("")) {
+            if (binding.commentCommentEditText.getText().toString().equals("")) {
                 finish();
             } else {
                 promptAlertDialog(R.string.discard, R.string.discard_detail);
@@ -628,9 +597,9 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
 
     @Override
     public void insertImageUrl(UploadedImage uploadedImage) {
-        int start = Math.max(commentEditText.getSelectionStart(), 0);
-        int end = Math.max(commentEditText.getSelectionEnd(), 0);
-        commentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
+        int start = Math.max(binding.commentCommentEditText.getSelectionStart(), 0);
+        int end = Math.max(binding.commentCommentEditText.getSelectionEnd(), 0);
+        binding.commentCommentEditText.getText().replace(Math.min(start, end), Math.max(start, end),
                 "[" + uploadedImage.imageName + "](" + uploadedImage.imageUrl + ")",
                 0, "[]()".length() + uploadedImage.imageName.length() + uploadedImage.imageUrl.length());
     }
@@ -644,9 +613,9 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                     .error(mGlide.load(R.drawable.subreddit_default_icon)
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
-                    .into(accountIconImageView);
+                    .into(binding.commentAccountIconGifImageView);
 
-            accountNameTextView.setText(selectedAccount.getAccountName());
+            binding.commentAccountNameTextView.setText(selectedAccount.getAccountName());
         }
     }
 }
