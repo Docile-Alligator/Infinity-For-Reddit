@@ -233,6 +233,10 @@ public class Comment implements Parcelable {
         return isSubmitter;
     }
 
+    public void setSubmittedByAuthor(boolean isSubmittedByAuthor) {
+        this.isSubmitter = isSubmittedByAuthor;
+    }
+
     public boolean isModerator() {
         return distinguished != null && distinguished.equals("moderator");
     }

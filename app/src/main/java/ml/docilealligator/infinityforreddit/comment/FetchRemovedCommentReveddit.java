@@ -55,11 +55,13 @@ public class FetchRemovedCommentReveddit {
         String id = result.getString(JSONUtils.ID_KEY);
         String author = result.getString(JSONUtils.AUTHOR_KEY);
         String body = Utils.modifyMarkdown(result.optString(JSONUtils.BODY_KEY).trim());
+        boolean isSubmitter = result.getBoolean(JSONUtils.IS_SUBMITTER_KEY);
 
         if (id.equals(comment.getId()) && (!author.equals(comment.getAuthor()) || !body.equals(comment.getCommentRawText()))) {
             comment.setAuthor(author);
             comment.setCommentMarkdown(body);
             comment.setCommentRawText(body);
+            comment.setSubmittedByAuthor(isSubmitter);
             return comment;
         } else {
             return null;
