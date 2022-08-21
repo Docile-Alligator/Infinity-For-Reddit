@@ -324,8 +324,11 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                     break;
                 }
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE: {
-                    SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment = new SearchPostSortTypeBottomSheetFragment();
-                    searchPostSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchPostSortTypeBottomSheetFragment.getTag());
+                    Fragment fragment = sectionsPagerAdapter.getCurrentFragment();
+                    if (fragment instanceof PostFragment) {
+                        SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment = SearchPostSortTypeBottomSheetFragment.getNewInstance(((PostFragment) fragment).getSortType());
+                        searchPostSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchPostSortTypeBottomSheetFragment.getTag());
+                    }
                     break;
                 }
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT: {
@@ -382,21 +385,20 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     }
 
     private void displaySortTypeBottomSheetFragment() {
-        switch (viewPager2.getCurrentItem()) {
-            case 0: {
-                SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment = new SearchPostSortTypeBottomSheetFragment();
-                searchPostSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchPostSortTypeBottomSheetFragment.getTag());
-                break;
-            }
-            case 1:
-            case 2:
+        Fragment fragment = sectionsPagerAdapter.getCurrentFragment();
+        if (fragment instanceof PostFragment) {
+            SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment = SearchPostSortTypeBottomSheetFragment.getNewInstance(((PostFragment) fragment).getSortType());
+            searchPostSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchPostSortTypeBottomSheetFragment.getTag());
+        } else {
+            if (fragment instanceof SubredditListingFragment) {
                 SearchUserAndSubredditSortTypeBottomSheetFragment searchUserAndSubredditSortTypeBottomSheetFragment
-                        = new SearchUserAndSubredditSortTypeBottomSheetFragment();
-                Bundle bundle = new Bundle();
-                bundle.putInt(SearchUserAndSubredditSortTypeBottomSheetFragment.EXTRA_FRAGMENT_POSITION, viewPager2.getCurrentItem());
-                searchUserAndSubredditSortTypeBottomSheetFragment.setArguments(bundle);
+                        = SearchUserAndSubredditSortTypeBottomSheetFragment.getNewInstance(viewPager2.getCurrentItem(), ((SubredditListingFragment) fragment).getSortType());
                 searchUserAndSubredditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchUserAndSubredditSortTypeBottomSheetFragment.getTag());
-                break;
+            } else if (fragment instanceof UserListingFragment) {
+                SearchUserAndSubredditSortTypeBottomSheetFragment searchUserAndSubredditSortTypeBottomSheetFragment
+                        = SearchUserAndSubredditSortTypeBottomSheetFragment.getNewInstance(viewPager2.getCurrentItem(), ((UserListingFragment) fragment).getSortType());
+                searchUserAndSubredditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchUserAndSubredditSortTypeBottomSheetFragment.getTag());
+            }
         }
     }
 

@@ -576,7 +576,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
 
     private void showSortTypeBottomSheetFragment() {
         if (mFragment instanceof PostFragment) {
-            SortTypeBottomSheetFragment sortTypeBottomSheetFragment = SortTypeBottomSheetFragment.getNewInstance(true, ((PostFragment) mFragment).getSortType().getType().fullName);
+            SortTypeBottomSheetFragment sortTypeBottomSheetFragment = SortTypeBottomSheetFragment.getNewInstance(true, ((PostFragment) mFragment).getSortType());
             sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
         }
     }

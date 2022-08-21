@@ -208,9 +208,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private RequestManager glide;
-    private UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment;
-    private SortTimeBottomSheetFragment sortTimeBottomSheetFragment;
-    private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
     private NavigationWrapper navigationWrapper;
     private Call<String> subredditAutocompleteCall;
     private String mAccessToken;
@@ -585,10 +582,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             }
         });
 
-        userThingSortTypeBottomSheetFragment = new UserThingSortTypeBottomSheetFragment();
-        sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
-        postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
-
         karmaTextView.setOnClickListener(view -> {
             UserData userData = userViewModel.getUserLiveData().getValue();
             if (userData != null) {
@@ -862,10 +855,11 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                     break;
                 }
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE: {
-                    userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
+
                     break;
                 }
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT: {
+                    PostLayoutBottomSheetFragment postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
                     postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
                     break;
                 }
@@ -944,7 +938,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 break;
             }
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_CHANGE_SORT_TYPE: {
-                userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
+                displaySortTypeBottomSheetFragment();
                 break;
             }
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_CHANGE_POST_LAYOUT: {
@@ -1065,6 +1059,17 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         }
     }
 
+    private void displaySortTypeBottomSheetFragment() {
+        Fragment fragment = sectionsPagerAdapter.getCurrentFragment();
+        if (fragment instanceof PostFragment) {
+            UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment = UserThingSortTypeBottomSheetFragment.getNewInstance(((PostFragment) fragment).getSortType());
+            userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
+        } else if (fragment instanceof CommentsListingFragment) {
+            UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment = UserThingSortTypeBottomSheetFragment.getNewInstance(((CommentsListingFragment) fragment).getSortType());
+            userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
+        }
+    }
+
     private void fetchUserInfo() {
         if (!mFetchUserInfoSuccess) {
             FetchUserData.fetchUserData(mRetrofit, username, new FetchUserData.FetchUserDataListener() {
@@ -1123,7 +1128,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             finish();
             return true;
         } else if (itemId == R.id.action_sort_view_user_detail_activity) {
-            userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
+            displaySortTypeBottomSheetFragment();
             return true;
         } else if (itemId == R.id.action_search_view_user_detail_activity) {
             Intent intent = new Intent(this, SearchActivity.class);
@@ -1137,6 +1142,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             fetchUserInfo();
             return true;
         } else if (itemId == R.id.action_change_post_layout_view_user_detail_activity) {
+            PostLayoutBottomSheetFragment postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
             postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
             return true;
         } else if (itemId == R.id.action_share_view_user_detail_activity) {
@@ -1262,6 +1268,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
     @Override
     public void sortTypeSelected(String sortType) {
+        SortTimeBottomSheetFragment sortTimeBottomSheetFragment = new SortTimeBottomSheetFragment();
         Bundle bundle = new Bundle();
         bundle.putString(SortTimeBottomSheetFragment.EXTRA_SORT_TYPE, sortType);
         sortTimeBottomSheetFragment.setArguments(bundle);
@@ -1286,9 +1293,10 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 }
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_CHANGE_SORT_TYPE:
-                userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
+                displaySortTypeBottomSheetFragment();
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_CHANGE_POST_LAYOUT:
+                PostLayoutBottomSheetFragment postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
                 postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_SEARCH:

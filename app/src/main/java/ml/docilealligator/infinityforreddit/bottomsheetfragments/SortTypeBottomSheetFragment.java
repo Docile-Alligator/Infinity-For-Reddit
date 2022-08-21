@@ -49,11 +49,11 @@ public class SortTypeBottomSheetFragment extends LandscapeExpandedRoundedBottomS
         // Required empty public constructor
     }
 
-    public static SortTypeBottomSheetFragment getNewInstance(boolean isNoBestType, String currentSortType) {
+    public static SortTypeBottomSheetFragment getNewInstance(boolean isNoBestType, SortType currentSortType) {
         SortTypeBottomSheetFragment fragment = new SortTypeBottomSheetFragment();
         Bundle bundle = new Bundle();
         bundle.putBoolean(EXTRA_NO_BEST_TYPE, isNoBestType);
-        bundle.putString(EXTRA_CURRENT_SORT_TYPE, currentSortType);
+        bundle.putString(EXTRA_CURRENT_SORT_TYPE, currentSortType.getType().fullName);
         fragment.setArguments(bundle);
         return fragment;
     }

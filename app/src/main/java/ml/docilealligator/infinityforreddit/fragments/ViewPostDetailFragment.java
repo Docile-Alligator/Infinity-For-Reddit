@@ -958,7 +958,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             return true;
         } else if (itemId == R.id.action_sort_view_post_detail_fragment) {
             if (mPost != null) {
-                PostCommentSortTypeBottomSheetFragment postCommentSortTypeBottomSheetFragment = new PostCommentSortTypeBottomSheetFragment();
+                PostCommentSortTypeBottomSheetFragment postCommentSortTypeBottomSheetFragment = PostCommentSortTypeBottomSheetFragment.getNewInstance(sortType);
                 postCommentSortTypeBottomSheetFragment.show(activity.getSupportFragmentManager(), postCommentSortTypeBottomSheetFragment.getTag());
             }
             return true;

@@ -339,7 +339,6 @@ public class DownloadRedditVideoService extends Service {
         }
 
         private boolean muxVideoAndAudio(String videoFilePath, String audioFilePath, String outputFilePath) {
-            Log.i("asdfasdf", "sasdfasdf");
             try {
                 File file = new File(outputFilePath);
                 file.createNewFile();
