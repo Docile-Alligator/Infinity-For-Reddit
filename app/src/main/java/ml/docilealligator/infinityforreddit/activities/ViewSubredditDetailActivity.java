@@ -1091,11 +1091,11 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     }
 
     private void displaySortTypeBottomSheetFragment() {
-        SortTypeBottomSheetFragment sortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-        Bundle bottomSheetBundle = new Bundle();
-        bottomSheetBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-        sortTypeBottomSheetFragment.setArguments(bottomSheetBundle);
-        sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
+        Fragment fragment = fragmentManager.findFragmentByTag("f0");
+        if (fragment instanceof PostFragment) {
+            SortTypeBottomSheetFragment sortTypeBottomSheetFragment = SortTypeBottomSheetFragment.getNewInstance(true, ((PostFragment) fragment).getSortType().getType().fullName);
+            sortTypeBottomSheetFragment.show(fragmentManager, sortTypeBottomSheetFragment.getTag());
+        }
     }
 
     @Override

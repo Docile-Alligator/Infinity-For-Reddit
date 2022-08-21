@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 
 import butterknife.BindView;
@@ -29,6 +30,8 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
 public class SortTypeBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
     public static final String EXTRA_NO_BEST_TYPE = "ENBT";
+    public static final String EXTRA_CURRENT_SORT_TYPE = "ECST";
+
     @BindView(R.id.best_type_text_view_sort_type_bottom_sheet_fragment)
     TextView bestTypeTextView;
     @BindView(R.id.hot_type_text_view_sort_type_bottom_sheet_fragment)
@@ -46,6 +49,15 @@ public class SortTypeBottomSheetFragment extends LandscapeExpandedRoundedBottomS
         // Required empty public constructor
     }
 
+    public static SortTypeBottomSheetFragment getNewInstance(boolean isNoBestType, String currentSortType) {
+        SortTypeBottomSheetFragment fragment = new SortTypeBottomSheetFragment();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(EXTRA_NO_BEST_TYPE, isNoBestType);
+        bundle.putString(EXTRA_CURRENT_SORT_TYPE, currentSortType);
+        fragment.setArguments(bundle);
+        return fragment;
+    }
+
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -57,13 +69,28 @@ public class SortTypeBottomSheetFragment extends LandscapeExpandedRoundedBottomS
             rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
 
-        if (getArguments() == null || getArguments().getBoolean(EXTRA_NO_BEST_TYPE)) {
+        if (getArguments().getBoolean(EXTRA_NO_BEST_TYPE)) {
             bestTypeTextView.setVisibility(View.GONE);
         } else {
             bestTypeTextView.setOnClickListener(view -> {
                 ((SortTypeSelectionCallback) activity).sortTypeSelected(new SortType(SortType.Type.BEST));
                 dismiss();
             });
+        }
+
+        String currentSortType = getArguments().getString(EXTRA_CURRENT_SORT_TYPE);
+        if (currentSortType.equals(SortType.Type.BEST.fullName)) {
+            bestTypeTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(bestTypeTextView.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
+        } else if (currentSortType.equals(SortType.Type.HOT.fullName)) {
+            hotTypeTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(hotTypeTextView.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
+        } else if (currentSortType.equals(SortType.Type.NEW.fullName)) {
+            newTypeTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(newTypeTextView.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
+        } else if (currentSortType.equals(SortType.Type.RISING.fullName)) {
+            risingTypeTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(risingTypeTextView.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
+        } else if (currentSortType.equals(SortType.Type.TOP.fullName)) {
+            topTypeTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(topTypeTextView.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
+        } else if (currentSortType.equals(SortType.Type.CONTROVERSIAL.fullName)) {
+            controversialTypeTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(controversialTypeTextView.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
         }
 
         hotTypeTextView.setOnClickListener(view -> {

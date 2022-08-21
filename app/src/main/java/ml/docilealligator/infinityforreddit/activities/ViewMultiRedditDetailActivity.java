@@ -575,11 +575,10 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     }
 
     private void showSortTypeBottomSheetFragment() {
-        SortTypeBottomSheetFragment sortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-        Bundle bottomSheetBundle = new Bundle();
-        bottomSheetBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-        sortTypeBottomSheetFragment.setArguments(bottomSheetBundle);
-        sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
+        if (mFragment instanceof PostFragment) {
+            SortTypeBottomSheetFragment sortTypeBottomSheetFragment = SortTypeBottomSheetFragment.getNewInstance(true, ((PostFragment) mFragment).getSortType().getType().fullName);
+            sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
+        }
     }
 
     private void showPostLayoutBottomSheetFragment() {

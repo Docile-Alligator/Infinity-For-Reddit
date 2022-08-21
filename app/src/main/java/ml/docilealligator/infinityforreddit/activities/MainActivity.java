@@ -1065,11 +1065,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
     private void changeSortType() {
         int currentPostType = sectionsPagerAdapter.getCurrentPostType();
-        Bundle bundle = new Bundle();
-        bundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, currentPostType != PostPagingSource.TYPE_FRONT_PAGE);
-        SortTypeBottomSheetFragment sortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-        sortTypeBottomSheetFragment.setArguments(bundle);
-        sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
+        PostFragment postFragment = sectionsPagerAdapter.getCurrentFragment();
+        if (postFragment != null) {
+            SortTypeBottomSheetFragment sortTypeBottomSheetFragment = SortTypeBottomSheetFragment.getNewInstance(currentPostType != PostPagingSource.TYPE_FRONT_PAGE, postFragment.getSortType().getType().fullName);
+            sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
+        }
     }
 
     @Override
