@@ -10,6 +10,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
@@ -30,10 +31,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.view.menu.MenuItemImpl;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -693,9 +694,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     }
 
     private Drawable getMenuItemIcon(int drawableId) {
-        Drawable icon = ContextCompat.getDrawable(activity, drawableId);
+        Drawable icon = AppCompatResources.getDrawable(activity, drawableId);
         if (icon != null) {
-            DrawableCompat.setTint(icon, mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
+            icon.setTint(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
         }
 
         return icon;
@@ -1182,11 +1183,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             for (int i = 0; i < menu.size(); i++) {
                 MenuItem item = menu.getItem(i);
                 if (((MenuItemImpl) item).requestsActionButton()) {
-                    Drawable drawable = item.getIcon();
-                    if (drawable != null) {
-                        DrawableCompat.setTint(drawable, mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
-                        item.setIcon(drawable);
-                    }
+                    MenuItemCompat.setIconTintList(item, ColorStateList
+                            .valueOf(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor()));
                 }
                 Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, null);
             }

@@ -13,8 +13,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.cardview.widget.CardView;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -24,10 +24,10 @@ import com.libRG.CustomTextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.CustomThemePreviewActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
-import ml.docilealligator.infinityforreddit.R;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -134,9 +134,9 @@ public class ThemePreviewPostsFragment extends Fragment {
         scoreTextView.setTextColor(customTheme.postIconAndInfoColor);
         downvoteButton.setColorFilter(customTheme.postIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
         commentsCountTextView.setTextColor(customTheme.postIconAndInfoColor);
-        Drawable commentIcon = activity.getDrawable(R.drawable.ic_comment_grey_24dp);
+        Drawable commentIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_comment_grey_24dp);
         if (commentIcon != null) {
-            DrawableCompat.setTint(commentIcon, customTheme.postIconAndInfoColor);
+            commentIcon.setTint(customTheme.postIconAndInfoColor);
         }
         commentsCountTextView.setCompoundDrawablesWithIntrinsicBounds(commentIcon, null, null, null);
         saveButton.setColorFilter(customTheme.postIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
