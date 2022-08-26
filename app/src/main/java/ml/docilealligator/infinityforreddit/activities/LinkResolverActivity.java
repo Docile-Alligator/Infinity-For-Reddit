@@ -166,7 +166,11 @@ public class LinkResolverActivity extends AppCompatActivity {
                         } else if (authority.contains("reddit.com") || authority.contains("redd.it") || authority.contains("reddit.app")) {
                             if (authority.equals("reddit.app.link") && path.isEmpty()) {
                                 String redirect = uri.getQueryParameter("$og_redirect");
-                                handleUri(Uri.parse(redirect));
+                                if (redirect != null) {
+                                    handleUri(Uri.parse(redirect));
+                                } else {
+                                    deepLinkError(uri);
+                                }
                             } else if (path.isEmpty()) {
                                 Intent intent = new Intent(this, MainActivity.class);
                                 startActivity(intent);
