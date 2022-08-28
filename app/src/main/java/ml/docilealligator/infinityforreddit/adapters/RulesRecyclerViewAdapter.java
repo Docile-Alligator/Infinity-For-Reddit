@@ -66,6 +66,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
         this.activity = activity;
         this.slidrInterface = slidrInterface;
         mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
+        int spoilerBackgroundColor = mPrimaryTextColor | 0xFF000000;
         markwon = Markwon.builder(activity)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                     plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
@@ -118,6 +119,8 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
                     return true;
                 })))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                .usePlugin(SpoilerParserPlugin.create(mPrimaryTextColor, spoilerBackgroundColor))
+                .usePlugin(RedditHeadingPlugin.create())
                 .usePlugin(StrikethroughPlugin.create())
                 .usePlugin(TableEntryPlugin.create(activity))
                 .build();
