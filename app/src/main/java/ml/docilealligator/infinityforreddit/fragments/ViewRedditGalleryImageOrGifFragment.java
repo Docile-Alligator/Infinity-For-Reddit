@@ -221,6 +221,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                 activity.setActionBarHidden(false);
                 if (activity.isUseBottomAppBar()) {
                     bottomAppBarMenu.setVisibility(View.VISIBLE);
+                    bottomAppBar.setVisibility(View.VISIBLE);
                 }
             } else {
                 hideAppBar();
@@ -272,6 +273,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 
             if (!activity.isUseBottomAppBar()) {
                 bottomAppBarMenu.setVisibility(View.GONE);
+                bottomAppBar.setVisibility(View.VISIBLE);
             }
 
             captionLayout.setVisibility(View.VISIBLE);
@@ -333,6 +335,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
         activity.setActionBarHidden(true);
         if (activity.isUseBottomAppBar()) {
             bottomAppBarMenu.setVisibility(View.GONE);
+            bottomAppBar.setVisibility(View.GONE);
         }
     }
 
