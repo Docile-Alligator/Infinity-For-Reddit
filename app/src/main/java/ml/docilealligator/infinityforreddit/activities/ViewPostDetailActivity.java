@@ -150,7 +150,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
         super.onCreate(savedInstanceState);
 
-        BigImageViewer.initialize(GlideImageLoader.with(this));
+        BigImageViewer.initialize(GlideImageLoader.with(this.getApplicationContext()));
 
         setContentView(R.layout.activity_view_post_detail);
 
