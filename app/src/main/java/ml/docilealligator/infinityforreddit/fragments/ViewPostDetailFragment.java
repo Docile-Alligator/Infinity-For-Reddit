@@ -1,9 +1,9 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
-import static im.ene.toro.media.PlaybackInfo.INDEX_UNSET;
-import static im.ene.toro.media.PlaybackInfo.TIME_UNSET;
 import static ml.docilealligator.infinityforreddit.activities.CommentActivity.RETURN_EXTRA_COMMENT_DATA_KEY;
 import static ml.docilealligator.infinityforreddit.activities.CommentActivity.WRITE_COMMENT_REQUEST_CODE;
+import static ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo.INDEX_UNSET;
+import static ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo.TIME_UNSET;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -63,9 +63,6 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import im.ene.toro.exoplayer.ExoCreator;
-import im.ene.toro.media.PlaybackInfo;
-import im.ene.toro.media.VolumeInfo;
 import ml.docilealligator.infinityforreddit.DeleteThing;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
@@ -113,6 +110,9 @@ import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.videoautoplay.ExoCreator;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -556,7 +556,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     this, mExecutor, mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mStreamableRetrofit, mRedditDataRoomDatabase, mGlide,
                     mSeparatePostAndComments, mAccessToken, mAccountName, mPost, mLocale,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
+                    mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
                     mExoCreator, post -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
             mCommentsAdapter = new CommentsRecyclerViewAdapter(activity,
                     this, mCustomThemeWrapper, mExecutor, mRetrofit, mOauthRetrofit,
@@ -1239,8 +1239,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                     mRetrofit, mOauthRetrofit, mGfycatRetrofit, mRedgifsRetrofit,
                                     mStreamableRetrofit, mRedditDataRoomDatabase, mGlide, mSeparatePostAndComments,
                                     mAccessToken, mAccountName, mPost, mLocale, mSharedPreferences,
-                                    mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
-                                    mExoCreator,
+                                    mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences,
+                                    mPostDetailsSharedPreferences, mExoCreator,
                                     post1 -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
 
                             mCommentsAdapter = new CommentsRecyclerViewAdapter(activity,

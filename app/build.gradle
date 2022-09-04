@@ -77,11 +77,11 @@ dependencies {
     implementation "com.google.android.exoplayer:exoplayer-dash:$exoplayerVersion"
     implementation "com.google.android.exoplayer:exoplayer-hls:$exoplayerVersion"
     implementation "com.google.android.exoplayer:exoplayer-ui:$exoplayerVersion"
-    def toroVersion = "3.7.0.2010003"
+    /*def toroVersion = "3.7.0.2010003"
     implementation "im.ene.toro3:toro:$toroVersion"
     implementation("im.ene.toro3:toro-ext-exoplayer:$toroVersion") {
         exclude module: 'extension-ima'
-    }
+    }*/
 
 /** Third-party **/
 

@@ -20,15 +20,15 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import im.ene.toro.exoplayer.Config;
-import im.ene.toro.exoplayer.ExoCreator;
-import im.ene.toro.exoplayer.MediaSourceBuilder;
-import im.ene.toro.exoplayer.ToroExo;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LoopAvailableExoCreator;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.videoautoplay.Config;
+import ml.docilealligator.infinityforreddit.videoautoplay.ExoCreator;
+import ml.docilealligator.infinityforreddit.videoautoplay.MediaSourceBuilder;
+import ml.docilealligator.infinityforreddit.videoautoplay.ToroExo;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -119,9 +119,24 @@ class AppModule {
     @Provides
     @Named("redgifs")
     @Singleton
-    Retrofit provideRedgifsRetrofit() {
+    Retrofit provideRedgifsRetrofit(@Named("current_account") SharedPreferences currentAccountSharedPreferences) {
+        OkHttpClient.Builder okHttpClientBuilder = new OkHttpClient.Builder();
+        okHttpClientBuilder
+                .addInterceptor(chain -> chain.proceed(
+                        chain.request()
+                                .newBuilder()
+                                .header("User-Agent", APIUtils.getRedgifsUserAgent(mApplication))
+                                .build()
+                ))
+                .addInterceptor(new RedgifsAccessTokenAuthenticator(currentAccountSharedPreferences))
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .connectionPool(new ConnectionPool(0, 1, TimeUnit.NANOSECONDS));
+
         return new Retrofit.Builder()
                 .baseUrl(APIUtils.REDGIFS_API_BASE_URI)
+                .client(okHttpClientBuilder.build())
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
     }

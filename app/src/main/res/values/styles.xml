@@ -517,4 +517,30 @@
         <item name="switchStyle">@style/Widget.App.Switch.Dark</item>        
     </style>
 
+    <style name="ToroMediaButton">
+        <item name="android:background">@null</item>
+        <item name="android:layout_width">65dp</item>
+        <item name="android:layout_height">48dp</item>
+    </style>
+
+    <style name="ToroMediaButton.Play">
+        <item name="android:src">@drawable/exo_controls_play</item>
+        <item name="android:contentDescription">@string/exo_controls_play_description</item>
+    </style>
+
+    <style name="ToroMediaButton.Pause">
+        <item name="android:src">@drawable/exo_controls_pause</item>
+        <item name="android:contentDescription">@string/exo_controls_pause_description</item>
+    </style>
+
+    <style name="ToroMediaButton.VolumeUp">
+        <item name="android:src">@drawable/ic_volume_up_black_24dp</item>
+        <item name="android:contentDescription">@string/exo_controls_volume_up_description</item>
+    </style>
+
+    <style name="ToroMediaButton.VolumeOff">
+        <item name="android:src">@drawable/ic_volume_off_black_24dp</item>
+        <item name="android:contentDescription">@string/exo_controls_volume_off_description</item>
+    </style>
+
 </resources>

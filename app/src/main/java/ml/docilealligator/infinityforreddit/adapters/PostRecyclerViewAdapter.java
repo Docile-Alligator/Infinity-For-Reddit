@@ -56,14 +56,6 @@ import java.util.concurrent.Executor;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import im.ene.toro.CacheManager;
-import im.ene.toro.ToroPlayer;
-import im.ene.toro.ToroUtil;
-import im.ene.toro.exoplayer.ExoCreator;
-import im.ene.toro.exoplayer.ExoPlayerViewHelper;
-import im.ene.toro.exoplayer.Playable;
-import im.ene.toro.media.PlaybackInfo;
-import im.ene.toro.widget.Container;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.FetchGfycatOrRedgifsVideoLinks;
@@ -84,6 +76,7 @@ import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivi
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity;
 import ml.docilealligator.infinityforreddit.apis.GfycatAPI;
+import ml.docilealligator.infinityforreddit.apis.RedgifsAPI;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.ShareLinkBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -95,6 +88,14 @@ import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.videoautoplay.CacheManager;
+import ml.docilealligator.infinityforreddit.videoautoplay.ExoCreator;
+import ml.docilealligator.infinityforreddit.videoautoplay.ExoPlayerViewHelper;
+import ml.docilealligator.infinityforreddit.videoautoplay.Playable;
+import ml.docilealligator.infinityforreddit.videoautoplay.ToroPlayer;
+import ml.docilealligator.infinityforreddit.videoautoplay.ToroUtil;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
+import ml.docilealligator.infinityforreddit.videoautoplay.widget.Container;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -128,6 +129,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private BaseActivity mActivity;
     private PostFragment mFragment;
     private SharedPreferences mSharedPreferences;
+    private SharedPreferences mCurrentAccountSharedPreferences;
     private Executor mExecutor;
     private Retrofit mOauthRetrofit;
     private Retrofit mGfycatRetrofit;
@@ -220,7 +222,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                    Retrofit gfycatRetrofit, Retrofit redgifsRetrofit, Retrofit streambleRetrofit,
                                    CustomThemeWrapper customThemeWrapper, Locale locale,
                                    String accessToken, String accountName, int postType, int postLayout, boolean displaySubredditName,
-                                   SharedPreferences sharedPreferences, SharedPreferences nsfwAndSpoilerSharedPreferences,
+                                   SharedPreferences sharedPreferences, SharedPreferences currentAccountSharedPreferences,
+                                   SharedPreferences nsfwAndSpoilerSharedPreferences,
                                    SharedPreferences postHistorySharedPreferences,
                                    ExoCreator exoCreator, Callback callback) {
         super(DIFF_CALLBACK);
@@ -228,6 +231,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mActivity = activity;
             mFragment = fragment;
             mSharedPreferences = sharedPreferences;
+            mCurrentAccountSharedPreferences = currentAccountSharedPreferences;
             mExecutor = executor;
             mOauthRetrofit = oauthRetrofit;
             mGfycatRetrofit = gfycatRetrofit;
@@ -705,9 +709,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
                     if ((post.isGfycat() || post.isRedgifs()) && !post.isLoadGfycatOrStreamableVideoSuccess()) {
                         ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall =
-                                (post.isGfycat() ? mGfycatRetrofit : mRedgifsRetrofit).create(GfycatAPI.class).getGfycatData(post.getGfycatId());
+                                post.isGfycat() ? mGfycatRetrofit.create(GfycatAPI.class).getGfycatData(post.getGfycatId()) :
+                                        mRedgifsRetrofit.create(RedgifsAPI.class).getRedgifsData(APIUtils.getRedgifsOAuthHeader(mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")), post.getGfycatId(), APIUtils.getRedgifsUserAgent(mActivity));
                         FetchGfycatOrRedgifsVideoLinks.fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
-                                ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall, post.getGfycatId(),
+                                ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall,
                                 post.isGfycat(), mAutomaticallyTryRedgifs,
                                 new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
                                     @Override
@@ -870,9 +875,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
                     if ((post.isGfycat() || post.isRedgifs()) && !post.isLoadGfycatOrStreamableVideoSuccess()) {
                         ((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall =
-                                (post.isGfycat() ? mGfycatRetrofit : mRedgifsRetrofit).create(GfycatAPI.class).getGfycatData(post.getGfycatId());
+                                post.isGfycat() ? mGfycatRetrofit.create(GfycatAPI.class).getGfycatData(post.getGfycatId()) :
+                                        mRedgifsRetrofit.create(RedgifsAPI.class).getRedgifsData(APIUtils.getRedgifsOAuthHeader(mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")), post.getGfycatId(), APIUtils.getRedgifsUserAgent(mActivity));
                         FetchGfycatOrRedgifsVideoLinks.fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
-                                ((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall, post.getGfycatId(),
+                                ((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall,
                                 post.isGfycat(), mAutomaticallyTryRedgifs,
                                 new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
                                     @Override

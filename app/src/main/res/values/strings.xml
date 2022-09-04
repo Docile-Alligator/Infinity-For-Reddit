@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="application_name" translatable="false">Infinity</string>
     <string name="login_activity_label">Login</string>
     <string name="search_activity_label" translatable="false"> </string>
@@ -1294,5 +1294,22 @@
 
     <string name="handle_link">Handle Link</string>
     <string name="invalid_link">Invalid link</string>
+
+    <string name="unexpected_intent_action">Unexpected intent action: <xliff:g id="action">%1$s</xliff:g></string>
+    <string name="enable_random_adaptation">Enable random adaptation</string>
+    <string name="error_drm_not_supported">Protected content not supported on API levels below 18</string>
+    <string name="error_drm_unsupported_scheme">This device does not support the required DRM scheme</string>
+    <string name="error_drm_unknown">An unknown DRM error occurred</string>
+    <string name="error_no_decoder">This device does not provide a decoder for <xliff:g id="mime_type">%1$s</xliff:g></string>
+    <string name="error_no_secure_decoder">This device does not provide a secure decoder for <xliff:g id="mime_type">%1$s</xliff:g></string>
+    <string name="error_querying_decoders">Unable to query device decoders</string>
+    <string name="error_instantiating_decoder">Unable to instantiate decoder <xliff:g id="decoder_name">%1$s</xliff:g></string>
+    <string name="error_unsupported_video">Media includes video tracks, but none are playable by this device</string>
+    <string name="error_unsupported_audio">Media includes audio tracks, but none are playable by this device</string>
+    <string name="storage_permission_denied">Permission to access storage was denied</string>
+    <string name="sample_list_load_error">One or more sample lists failed to load</string>
+
+    <string name="exo_controls_volume_up_description">Volume Up</string>
+    <string name="exo_controls_volume_off_description">Volume Off</string>
 
 </resources>
