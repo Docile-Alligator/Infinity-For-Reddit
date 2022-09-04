@@ -280,7 +280,7 @@ public final class Utils {
     }
 
     public static int getConnectedNetwork(Context context) {
-        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connMgr = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connMgr != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 Network nw = connMgr.getActiveNetwork();
@@ -327,7 +327,7 @@ public final class Utils {
     }
 
     public static boolean isConnectedToWifi(Context context) {
-        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connMgr = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connMgr != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 Network nw = connMgr.getActiveNetwork();
@@ -348,7 +348,7 @@ public final class Utils {
     }
 
     public static boolean isConnectedToCellularData(Context context) {
-        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connMgr = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connMgr != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 Network nw = connMgr.getActiveNetwork();
