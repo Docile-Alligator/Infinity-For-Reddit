@@ -40,6 +40,16 @@
                     android:imeOptions="actionSearch" />
 
                 <ImageView
+                    android:id="@+id/clear_search_edit_view_search_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_cancel_24dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/actionBarItemBackground" />
+
+                <ImageView
                     android:id="@+id/link_handler_image_view_search_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
