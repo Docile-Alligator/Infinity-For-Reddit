@@ -1,4 +1,4 @@
-# Infinity-For-Reddit [<img src="https://img.shields.io/badge/Patreon-F96854?style=for-the-badge&logo=patreon&logoColor=white" alt="Patreon">](https://www.patreon.com/docile_alligator)
+# Infinity-For-Reddit
 
 [<img src="fastlane/metadata/android/en-US/images/icon.png" align="left"
 width="200" hspace="10" vspace="10">](https://raw.githubusercontent.com/Wladefant/Infinity-For-Reddit/master/fastlane/metadata/android/en-US/images/icon.png)
@@ -19,11 +19,6 @@ Infinity for Reddit is available on the Google Play Store and F-Droid.
         src="https://f-droid.org/badge/get-it-on.png" />
         </a>
         </p>
-
-## Donation
-Patreon: https://www.patreon.com/docile_alligator
-
-Bitcoin: bc1qxtkd5ap9na7uy8nr9qpt6jny6tdwaj4v43ddle
 
 ## About The Project
 
