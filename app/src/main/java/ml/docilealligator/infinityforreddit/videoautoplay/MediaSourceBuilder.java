@@ -35,6 +35,8 @@ import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.dash.DashMediaSource;
 import com.google.android.exoplayer2.source.dash.DefaultDashChunkSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
+import com.google.android.exoplayer2.source.smoothstreaming.DefaultSsChunkSource;
+import com.google.android.exoplayer2.source.smoothstreaming.SsMediaSource;
 import com.google.android.exoplayer2.upstream.DataSource;
 
 /**
@@ -59,11 +61,11 @@ public interface MediaSourceBuilder {
       @ContentType int type = isEmpty(ext) ? inferContentType(uri) : inferContentType("." + ext);
       MediaSource result;
       switch (type) {
-        /*case C.TYPE_SS:
-          result = new SsMediaSource.Factory( //
-              new DefaultSsChunkSource.Factory(mediaDataSourceFactory), manifestDataSourceFactory)//
+        case C.TYPE_SS:
+          result = new SsMediaSource.Factory(
+              new DefaultSsChunkSource.Factory(mediaDataSourceFactory), manifestDataSourceFactory)
               .createMediaSource(uri);
-          break;*/
+          break;
         case C.TYPE_DASH:
           result = new DashMediaSource.Factory(
               new DefaultDashChunkSource.Factory(mediaDataSourceFactory), manifestDataSourceFactory)

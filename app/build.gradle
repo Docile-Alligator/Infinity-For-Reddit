@@ -6,8 +6,8 @@ android {
         applicationId "ml.docilealligator.infinityforreddit"
         minSdkVersion 21
         targetSdkVersion 31
-        versionCode 102
-        versionName "5.3.0"
+        versionCode 103
+        versionName "5.3.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -77,6 +77,7 @@ dependencies {
     implementation "com.google.android.exoplayer:exoplayer-dash:$exoplayerVersion"
     implementation "com.google.android.exoplayer:exoplayer-hls:$exoplayerVersion"
     implementation "com.google.android.exoplayer:exoplayer-ui:$exoplayerVersion"
+    implementation "com.google.android.exoplayer:exoplayer-smoothstreaming:$exoplayerVersion"
     /*def toroVersion = "3.7.0.2010003"
     implementation "im.ene.toro3:toro:$toroVersion"
     implementation("im.ene.toro3:toro-ext-exoplayer:$toroVersion") {
