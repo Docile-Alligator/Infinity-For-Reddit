@@ -209,6 +209,22 @@ public final class Utils {
         return markdown;
     }
 
+    public static String trimTrailingWhitespace(String source) {
+
+        if (source == null) {
+            return "";
+        }
+
+        int i = source.length();
+
+        // loop back to the first non-whitespace character
+        do {
+            i--;
+        } while (i >= 0 && Character.isWhitespace(source.charAt(i)));
+
+        return source.substring(0, i + 1);
+    }
+
     public static CharSequence trimTrailingWhitespace(CharSequence source) {
 
         if (source == null) {
