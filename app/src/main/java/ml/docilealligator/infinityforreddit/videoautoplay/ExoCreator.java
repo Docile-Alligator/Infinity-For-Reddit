@@ -22,6 +22,7 @@ import android.net.Uri;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.MediaSource;
 
@@ -52,7 +53,8 @@ public interface ExoCreator {
    *
    * @return a new {@link SimpleExoPlayer} instance.
    */
-  @NonNull SimpleExoPlayer createPlayer();
+  @NonNull
+  ExoPlayer createPlayer();
 
   /**
    * Create a {@link MediaSource} from media {@link Uri}.

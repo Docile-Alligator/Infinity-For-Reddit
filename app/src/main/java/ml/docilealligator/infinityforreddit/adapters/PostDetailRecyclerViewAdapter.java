@@ -40,10 +40,10 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.common.collect.ImmutableList;
 import com.libRG.CustomTextView;
 
 import org.commonmark.ext.gfm.tables.TableBlock;
@@ -1761,10 +1761,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
                 helper.addEventListener(new Playable.DefaultEventListener() {
                     @Override
-                    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+                    public void onTracksChanged(@NonNull Tracks tracks) {
+                        ImmutableList<Tracks.Group> trackGroups = tracks.getGroups();
                         if (!trackGroups.isEmpty()) {
-                            for (int i = 0; i < trackGroups.length; i++) {
-                                String mimeType = trackGroups.get(i).getFormat(0).sampleMimeType;
+                            for (int i = 0; i < trackGroups.size(); i++) {
+                                String mimeType = trackGroups.get(i).getTrackFormat(0).sampleMimeType;
                                 if (mimeType != null && mimeType.contains("audio")) {
                                     helper.setVolume(volume);
                                     muteButton.setVisibility(View.VISIBLE);
