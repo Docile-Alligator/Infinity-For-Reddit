@@ -88,7 +88,7 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
     @Inject
     Executor mExecutor;
     private FragmentManager fragmentManager;
-    private SectionsPagerAdapter sectionsPagerAdapter;
+    private AccountSavedThingStateAdapter accountSavedThingStateAdapter;
     private SlidrInterface mSlidrInterface;
     private String mAccessToken;
     private String mAccountName;
@@ -145,8 +145,8 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (sectionsPagerAdapter != null) {
-            return sectionsPagerAdapter.handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
+        if (accountSavedThingStateAdapter != null) {
+            return accountSavedThingStateAdapter.handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
         }
 
         return super.onKeyDown(keyCode, event);
@@ -170,8 +170,8 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
     }
 
     private void initializeViewPager() {
-        sectionsPagerAdapter = new SectionsPagerAdapter(this);
-        viewPager2.setAdapter(sectionsPagerAdapter);
+        accountSavedThingStateAdapter = new AccountSavedThingStateAdapter(this);
+        viewPager2.setAdapter(accountSavedThingStateAdapter);
         viewPager2.setOffscreenPageLimit(2);
         viewPager2.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
@@ -213,7 +213,7 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
             finish();
             return true;
         } else if (itemId == R.id.action_refresh_account_saved_thing_activity) {
-            sectionsPagerAdapter.refresh();
+            accountSavedThingStateAdapter.refresh();
             return true;
         } else if (itemId == R.id.action_change_post_layout_account_saved_thing_activity) {
             postLayoutBottomSheetFragment.show(getSupportFragmentManager(), postLayoutBottomSheetFragment.getTag());
@@ -235,13 +235,13 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
 
     @Subscribe
     public void onChangeNSFWEvent(ChangeNSFWEvent changeNSFWEvent) {
-        sectionsPagerAdapter.changeNSFW(changeNSFWEvent.nsfw);
+        accountSavedThingStateAdapter.changeNSFW(changeNSFWEvent.nsfw);
     }
 
     @Override
     public void onLongPress() {
-        if (sectionsPagerAdapter != null) {
-            sectionsPagerAdapter.goBackToTop();
+        if (accountSavedThingStateAdapter != null) {
+            accountSavedThingStateAdapter.goBackToTop();
         }
     }
 
@@ -259,9 +259,9 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
 
     @Override
     public void postLayoutSelected(int postLayout) {
-        if (sectionsPagerAdapter != null) {
+        if (accountSavedThingStateAdapter != null) {
             mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + mAccountName, postLayout).apply();
-            sectionsPagerAdapter.changePostLayout(postLayout);
+            accountSavedThingStateAdapter.changePostLayout(postLayout);
         }
     }
 
@@ -270,9 +270,9 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
         InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId());
     }
 
-    private class SectionsPagerAdapter extends FragmentStateAdapter {
+    private class AccountSavedThingStateAdapter extends FragmentStateAdapter {
 
-        SectionsPagerAdapter(FragmentActivity fa) {
+        AccountSavedThingStateAdapter(FragmentActivity fa) {
             super(fa);
         }
 

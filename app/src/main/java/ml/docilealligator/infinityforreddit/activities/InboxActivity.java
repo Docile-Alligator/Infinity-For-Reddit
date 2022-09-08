@@ -106,7 +106,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     @Inject
     Executor mExecutor;
     private SlidrInterface mSlidrInterface;
-    private SectionsPagerAdapter sectionsPagerAdapter;
+    private InboxStateAdapter inboxStateAdapter;
     private FragmentManager fragmentManager;
     private String mAccessToken;
     private String mAccountName;
@@ -270,7 +270,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     }
 
     private void bindView(Bundle savedInstanceState) {
-        sectionsPagerAdapter = new SectionsPagerAdapter(this);
+        inboxStateAdapter = new InboxStateAdapter(this);
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -281,7 +281,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
                 }
             }
         });
-        viewPager2.setAdapter(sectionsPagerAdapter);
+        viewPager2.setAdapter(inboxStateAdapter);
         viewPager2.setOffscreenPageLimit(2);
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
             switch (position) {
@@ -310,8 +310,8 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.action_refresh_inbox_activity) {
-            if (sectionsPagerAdapter != null) {
-                sectionsPagerAdapter.refresh();
+            if (inboxStateAdapter != null) {
+                inboxStateAdapter.refresh();
             }
             return true;
         } else if (item.getItemId() == R.id.action_read_all_messages_inbox_activity) {
@@ -323,8 +323,8 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
                             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                                 if (response.isSuccessful()) {
                                     Toast.makeText(InboxActivity.this, R.string.read_all_messages_success, Toast.LENGTH_SHORT).show();
-                                    if (sectionsPagerAdapter != null) {
-                                        sectionsPagerAdapter.readAllMessages();
+                                    if (inboxStateAdapter != null) {
+                                        inboxStateAdapter.readAllMessages();
                                     }
                                     EventBus.getDefault().post(new ChangeInboxCountEvent(0));
                                 } else {
@@ -381,15 +381,15 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
 
     @Subscribe
     public void onPassPrivateMessageIndexEvent(PassPrivateMessageIndexEvent event) {
-        if (sectionsPagerAdapter != null) {
-            EventBus.getDefault().post(new PassPrivateMessageEvent(sectionsPagerAdapter.getPrivateMessage(event.privateMessageIndex)));
+        if (inboxStateAdapter != null) {
+            EventBus.getDefault().post(new PassPrivateMessageEvent(inboxStateAdapter.getPrivateMessage(event.privateMessageIndex)));
         }
     }
 
     @Override
     public void onLongPress() {
-        if (sectionsPagerAdapter != null) {
-            sectionsPagerAdapter.goBackToTop();
+        if (inboxStateAdapter != null) {
+            inboxStateAdapter.goBackToTop();
         }
     }
 
@@ -415,9 +415,9 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         fab.hide();
     }
 
-    private class SectionsPagerAdapter extends FragmentStateAdapter {
+    private class InboxStateAdapter extends FragmentStateAdapter {
 
-        SectionsPagerAdapter(FragmentActivity fa) {
+        InboxStateAdapter(FragmentActivity fa) {
             super(fa);
         }
 

@@ -206,7 +206,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     Executor mExecutor;
     public UserViewModel userViewModel;
     private FragmentManager fragmentManager;
-    private SectionsPagerAdapter sectionsPagerAdapter;
+    private ViewUserDetailStateAdapter viewUserDetailStateAdapter;
     private RequestManager glide;
     private NavigationWrapper navigationWrapper;
     private Call<String> subredditAutocompleteCall;
@@ -595,8 +595,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (sectionsPagerAdapter != null) {
-            return sectionsPagerAdapter.handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
+        if (viewUserDetailStateAdapter != null) {
+            return viewUserDetailStateAdapter.handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
         }
 
         return super.onKeyDown(keyCode, event);
@@ -674,8 +674,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     }
 
     private void initializeViewPager() {
-        sectionsPagerAdapter = new SectionsPagerAdapter(this);
-        viewPager2.setAdapter(sectionsPagerAdapter);
+        viewUserDetailStateAdapter = new ViewUserDetailStateAdapter(this);
+        viewPager2.setAdapter(viewUserDetailStateAdapter);
         viewPager2.setOffscreenPageLimit(2);
         viewPager2.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
@@ -703,7 +703,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 }
                 navigationWrapper.showFab();
 
-                sectionsPagerAdapter.displaySortTypeInToolbar();
+                viewUserDetailStateAdapter.displaySortTypeInToolbar();
             }
         });
 
@@ -849,8 +849,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         navigationWrapper.floatingActionButton.setOnClickListener(view -> {
             switch (fabOption) {
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH: {
-                    if (sectionsPagerAdapter != null) {
-                        sectionsPagerAdapter.refresh();
+                    if (viewUserDetailStateAdapter != null) {
+                        viewUserDetailStateAdapter.refresh();
                     }
                     break;
                 }
@@ -878,13 +878,13 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                     random();
                     break;
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
-                    if (sectionsPagerAdapter != null) {
-                        sectionsPagerAdapter.hideReadPosts();
+                    if (viewUserDetailStateAdapter != null) {
+                        viewUserDetailStateAdapter.hideReadPosts();
                     }
                     break;
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
-                    if (sectionsPagerAdapter != null) {
-                        sectionsPagerAdapter.filterPosts();
+                    if (viewUserDetailStateAdapter != null) {
+                        viewUserDetailStateAdapter.filterPosts();
                     }
                     break;
                 default:
@@ -932,8 +932,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 break;
             }
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_REFRESH: {
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.refresh();
+                if (viewUserDetailStateAdapter != null) {
+                    viewUserDetailStateAdapter.refresh();
                 }
                 break;
             }
@@ -961,13 +961,13 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 random();
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HIDE_READ_POSTS:
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.hideReadPosts();
+                if (viewUserDetailStateAdapter != null) {
+                    viewUserDetailStateAdapter.hideReadPosts();
                 }
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_FILTER_POSTS:
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.filterPosts();
+                if (viewUserDetailStateAdapter != null) {
+                    viewUserDetailStateAdapter.filterPosts();
                 }
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_UPVOTED: {
@@ -1000,8 +1000,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 break;
             }
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_TOP: {
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.goBackToTop();
+                if (viewUserDetailStateAdapter != null) {
+                    viewUserDetailStateAdapter.goBackToTop();
                 }
                 break;
             }
@@ -1060,7 +1060,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     }
 
     private void displaySortTypeBottomSheetFragment() {
-        Fragment fragment = sectionsPagerAdapter.getCurrentFragment();
+        Fragment fragment = viewUserDetailStateAdapter.getCurrentFragment();
         if (fragment instanceof PostFragment) {
             UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment = UserThingSortTypeBottomSheetFragment.getNewInstance(((PostFragment) fragment).getSortType());
             userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
@@ -1137,7 +1137,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             startActivity(intent);
             return true;
         } else if (itemId == R.id.action_refresh_view_user_detail_activity) {
-            sectionsPagerAdapter.refresh();
+            viewUserDetailStateAdapter.refresh();
             mFetchUserInfoSuccess = false;
             fetchUserInfo();
             return true;
@@ -1197,13 +1197,13 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 Toast.makeText(this, R.string.give_award_success, Toast.LENGTH_SHORT).show();
                 int position = data.getIntExtra(GiveAwardActivity.EXTRA_RETURN_ITEM_POSITION, 0);
                 String newAwardsHTML = data.getStringExtra(GiveAwardActivity.EXTRA_RETURN_NEW_AWARDS);
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.giveAward(newAwardsHTML, position);
+                if (viewUserDetailStateAdapter != null) {
+                    viewUserDetailStateAdapter.giveAward(newAwardsHTML, position);
                 }
             } else if (requestCode == EDIT_COMMENT_REQUEST_CODE) {
                 if (data != null) {
-                    if (sectionsPagerAdapter != null) {
-                        sectionsPagerAdapter.editComment(
+                    if (viewUserDetailStateAdapter != null) {
+                        viewUserDetailStateAdapter.editComment(
                                 data.getStringExtra(EditCommentActivity.EXTRA_EDITED_COMMENT_CONTENT),
                                 data.getExtras().getInt(EditCommentActivity.EXTRA_EDITED_COMMENT_POSITION));
                     }
@@ -1263,7 +1263,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
     @Override
     public void sortTypeSelected(SortType sortType) {
-        sectionsPagerAdapter.changeSortType(sortType);
+        viewUserDetailStateAdapter.changeSortType(sortType);
     }
 
     @Override
@@ -1277,7 +1277,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
     @Override
     public void postLayoutSelected(int postLayout) {
-        sectionsPagerAdapter.changePostLayout(postLayout);
+        viewUserDetailStateAdapter.changePostLayout(postLayout);
     }
 
     @Override
@@ -1288,8 +1288,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_REFRESH:
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.refresh();
+                if (viewUserDetailStateAdapter != null) {
+                    viewUserDetailStateAdapter.refresh();
                 }
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_CHANGE_SORT_TYPE:
@@ -1316,14 +1316,14 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 break;
             }
             case FABMoreOptionsBottomSheetFragment.FAB_HIDE_READ_POSTS: {
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.hideReadPosts();
+                if (viewUserDetailStateAdapter != null) {
+                    viewUserDetailStateAdapter.hideReadPosts();
                 }
                 break;
             }
             case FABMoreOptionsBottomSheetFragment.FAB_FILTER_POSTS: {
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.filterPosts();
+                if (viewUserDetailStateAdapter != null) {
+                    viewUserDetailStateAdapter.filterPosts();
                 }
                 break;
             }
@@ -1520,7 +1520,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
     @Subscribe
     public void onChangeNSFWEvent(ChangeNSFWEvent changeNSFWEvent) {
-        sectionsPagerAdapter.changeNSFW(changeNSFWEvent.nsfw);
+        viewUserDetailStateAdapter.changeNSFW(changeNSFWEvent.nsfw);
     }
 
     @Subscribe
@@ -1530,15 +1530,15 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
     @Override
     public void onLongPress() {
-        if (sectionsPagerAdapter != null) {
-            sectionsPagerAdapter.goBackToTop();
+        if (viewUserDetailStateAdapter != null) {
+            viewUserDetailStateAdapter.goBackToTop();
         }
     }
 
     @Override
     public void displaySortType() {
-        if (sectionsPagerAdapter != null) {
-            sectionsPagerAdapter.displaySortTypeInToolbar();
+        if (viewUserDetailStateAdapter != null) {
+            viewUserDetailStateAdapter.displaySortTypeInToolbar();
         }
     }
 
@@ -1605,9 +1605,9 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         }
     }
 
-    private class SectionsPagerAdapter extends FragmentStateAdapter {
+    private class ViewUserDetailStateAdapter extends FragmentStateAdapter {
 
-        SectionsPagerAdapter(FragmentActivity fa) {
+        ViewUserDetailStateAdapter(FragmentActivity fa) {
             super(fa);
         }
 

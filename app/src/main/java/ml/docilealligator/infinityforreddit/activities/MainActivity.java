@@ -203,7 +203,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Inject
     Executor mExecutor;
     private FragmentManager fragmentManager;
-    private SectionsPagerAdapter sectionsPagerAdapter;
+    private MainStateAdapter mainStateAdapter;
     private NavigationDrawerRecyclerViewMergedAdapter adapter;
     private NavigationWrapper navigationWrapper;
     private Call<String> subredditAutocompleteCall;
@@ -429,8 +429,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 break;
             }
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_REFRESH: {
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.refresh();
+                if (mainStateAdapter != null) {
+                    mainStateAdapter.refresh();
                 }
                 break;
             }
@@ -458,13 +458,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 randomThing();
                 break;
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_HIDE_READ_POSTS:
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.hideReadPosts();
+                if (mainStateAdapter != null) {
+                    mainStateAdapter.hideReadPosts();
                 }
                 break;
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_FILTER_POSTS:
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.filterPosts();
+                if (mainStateAdapter != null) {
+                    mainStateAdapter.filterPosts();
                 }
                 break;
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_UPVOTED: {
@@ -497,8 +497,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 break;
             }
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_OPTION_GO_TO_TOP: {
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.goBackToTop();
+                if (mainStateAdapter != null) {
+                    mainStateAdapter.goBackToTop();
                 }
                 break;
             }
@@ -687,8 +687,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         navigationWrapper.floatingActionButton.setOnClickListener(view -> {
             switch (fabOption) {
                 case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_REFRESH: {
-                    if (sectionsPagerAdapter != null) {
-                        sectionsPagerAdapter.refresh();
+                    if (mainStateAdapter != null) {
+                        mainStateAdapter.refresh();
                     }
                     break;
                 }
@@ -716,13 +716,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     randomThing();
                     break;
                 case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
-                    if (sectionsPagerAdapter != null) {
-                        sectionsPagerAdapter.hideReadPosts();
+                    if (mainStateAdapter != null) {
+                        mainStateAdapter.hideReadPosts();
                     }
                     break;
                 case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
-                    if (sectionsPagerAdapter != null) {
-                        sectionsPagerAdapter.filterPosts();
+                    if (mainStateAdapter != null) {
+                        mainStateAdapter.filterPosts();
                     }
                     break;
                 default:
@@ -792,14 +792,14 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                                 mCustomThemeWrapper.setThemeType(CustomThemeSharedPreferencesUtils.DARK);
                             }
                         } else if (stringId == R.string.enable_nsfw) {
-                            if (sectionsPagerAdapter != null) {
+                            if (mainStateAdapter != null) {
                                 mNsfwAndSpoilerSharedPreferences.edit().putBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, true).apply();
-                                sectionsPagerAdapter.changeNSFW(true);
+                                mainStateAdapter.changeNSFW(true);
                             }
                         } else if (stringId == R.string.disable_nsfw) {
-                            if (sectionsPagerAdapter != null) {
+                            if (mainStateAdapter != null) {
                                 mNsfwAndSpoilerSharedPreferences.edit().putBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false).apply();
-                                sectionsPagerAdapter.changeNSFW(false);
+                                mainStateAdapter.changeNSFW(false);
                             }
                         } else if (stringId == R.string.settings) {
                             intent = new Intent(MainActivity.this, SettingsActivity.class);
@@ -854,9 +854,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         mShowMultiReddits = mMainActivityTabsSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_MULTIREDDITS, false);
         mShowFavoriteSubscribedSubreddits = mMainActivityTabsSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_FAVORITE_SUBSCRIBED_SUBREDDITS, false);
         mShowSubscribedSubreddits = mMainActivityTabsSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_SUBSCRIBED_SUBREDDITS, false);
-        sectionsPagerAdapter = new SectionsPagerAdapter(this, tabCount, mShowFavoriteMultiReddits,
+        mainStateAdapter = new MainStateAdapter(this, tabCount, mShowFavoriteMultiReddits,
                 mShowMultiReddits, mShowFavoriteSubscribedSubreddits, mShowSubscribedSubreddits);
-        viewPager2.setAdapter(sectionsPagerAdapter);
+        viewPager2.setAdapter(mainStateAdapter);
         viewPager2.setOffscreenPageLimit(1);
         viewPager2.setUserInputEnabled(!mDisableSwipingBetweenTabs);
         if (mMainActivityTabsSharedPreferences.getBoolean((mAccountName == null ? "" : mAccountName) + SharedPreferencesUtils.MAIN_PAGE_SHOW_TAB_NAMES, true)) {
@@ -879,24 +879,24 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 }
                 if (position >= tabCount && (mShowFavoriteMultiReddits || mShowMultiReddits ||
                         mShowFavoriteSubscribedSubreddits || mShowSubscribedSubreddits)
-                        && sectionsPagerAdapter != null) {
-                    if (position - tabCount < sectionsPagerAdapter.favoriteMultiReddits.size()) {
-                        Utils.setTitleWithCustomFontToTab(typeface, tab, sectionsPagerAdapter.favoriteMultiReddits.get(position - tabCount).getName());
-                    } else if (position - tabCount - sectionsPagerAdapter.favoriteMultiReddits.size() < sectionsPagerAdapter.multiReddits.size()) {
-                        Utils.setTitleWithCustomFontToTab(typeface, tab, sectionsPagerAdapter.multiReddits.get(position - tabCount
-                                - sectionsPagerAdapter.favoriteMultiReddits.size()).getName());
-                    } else if (position - tabCount - sectionsPagerAdapter.favoriteMultiReddits.size()
-                            - sectionsPagerAdapter.multiReddits.size() < sectionsPagerAdapter.favoriteSubscribedSubreddits.size()) {
-                        Utils.setTitleWithCustomFontToTab(typeface, tab, sectionsPagerAdapter.favoriteSubscribedSubreddits.get(position - tabCount
-                                - sectionsPagerAdapter.favoriteMultiReddits.size()
-                                - sectionsPagerAdapter.multiReddits.size()).getName());
-                    } else if (position - tabCount - sectionsPagerAdapter.favoriteMultiReddits.size()
-                            - sectionsPagerAdapter.multiReddits.size()
-                            - sectionsPagerAdapter.favoriteSubscribedSubreddits.size() < sectionsPagerAdapter.subscribedSubreddits.size()) {
-                        Utils.setTitleWithCustomFontToTab(typeface, tab, sectionsPagerAdapter.subscribedSubreddits.get(position - tabCount
-                                - sectionsPagerAdapter.favoriteMultiReddits.size()
-                                - sectionsPagerAdapter.multiReddits.size()
-                                - sectionsPagerAdapter.favoriteSubscribedSubreddits.size()).getName());
+                        && mainStateAdapter != null) {
+                    if (position - tabCount < mainStateAdapter.favoriteMultiReddits.size()) {
+                        Utils.setTitleWithCustomFontToTab(typeface, tab, mainStateAdapter.favoriteMultiReddits.get(position - tabCount).getName());
+                    } else if (position - tabCount - mainStateAdapter.favoriteMultiReddits.size() < mainStateAdapter.multiReddits.size()) {
+                        Utils.setTitleWithCustomFontToTab(typeface, tab, mainStateAdapter.multiReddits.get(position - tabCount
+                                - mainStateAdapter.favoriteMultiReddits.size()).getName());
+                    } else if (position - tabCount - mainStateAdapter.favoriteMultiReddits.size()
+                            - mainStateAdapter.multiReddits.size() < mainStateAdapter.favoriteSubscribedSubreddits.size()) {
+                        Utils.setTitleWithCustomFontToTab(typeface, tab, mainStateAdapter.favoriteSubscribedSubreddits.get(position - tabCount
+                                - mainStateAdapter.favoriteMultiReddits.size()
+                                - mainStateAdapter.multiReddits.size()).getName());
+                    } else if (position - tabCount - mainStateAdapter.favoriteMultiReddits.size()
+                            - mainStateAdapter.multiReddits.size()
+                            - mainStateAdapter.favoriteSubscribedSubreddits.size() < mainStateAdapter.subscribedSubreddits.size()) {
+                        Utils.setTitleWithCustomFontToTab(typeface, tab, mainStateAdapter.subscribedSubreddits.get(position - tabCount
+                                - mainStateAdapter.favoriteMultiReddits.size()
+                                - mainStateAdapter.multiReddits.size()
+                                - mainStateAdapter.favoriteSubscribedSubreddits.size()).getName());
                     }
                 }
             }).attach();
@@ -911,7 +911,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                     navigationWrapper.showNavigation();
                 }
                 navigationWrapper.showFab();
-                sectionsPagerAdapter.displaySortTypeInToolbar();
+                mainStateAdapter.displaySortTypeInToolbar();
             }
         });
 
@@ -924,14 +924,14 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 .get(MultiRedditViewModel.class);
 
         multiRedditViewModel.getAllFavoriteMultiReddits().observe(this, multiReddits -> {
-            if (mShowFavoriteMultiReddits && sectionsPagerAdapter != null) {
-                sectionsPagerAdapter.setFavoriteMultiReddits(multiReddits);
+            if (mShowFavoriteMultiReddits && mainStateAdapter != null) {
+                mainStateAdapter.setFavoriteMultiReddits(multiReddits);
             }
         });
 
         multiRedditViewModel.getAllMultiReddits().observe(this, multiReddits -> {
-            if (mShowMultiReddits && sectionsPagerAdapter != null) {
-                sectionsPagerAdapter.setMultiReddits(multiReddits);
+            if (mShowMultiReddits && mainStateAdapter != null) {
+                mainStateAdapter.setMultiReddits(multiReddits);
             }
         });
 
@@ -941,14 +941,14 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         subscribedSubredditViewModel.getAllSubscribedSubreddits().observe(this,
                 subscribedSubredditData -> {
                     adapter.setSubscribedSubreddits(subscribedSubredditData);
-                    if (mShowSubscribedSubreddits && sectionsPagerAdapter != null) {
-                        sectionsPagerAdapter.setSubscribedSubreddits(subscribedSubredditData);
+                    if (mShowSubscribedSubreddits && mainStateAdapter != null) {
+                        mainStateAdapter.setSubscribedSubreddits(subscribedSubredditData);
                     }
                 });
         subscribedSubredditViewModel.getAllFavoriteSubscribedSubreddits().observe(this, subscribedSubredditData -> {
             adapter.setFavoriteSubscribedSubreddits(subscribedSubredditData);
-            if (mShowFavoriteSubscribedSubreddits && sectionsPagerAdapter != null) {
-                sectionsPagerAdapter.setFavoriteSubscribedSubreddits(subscribedSubredditData);
+            if (mShowFavoriteSubscribedSubreddits && mainStateAdapter != null) {
+                mainStateAdapter.setFavoriteSubscribedSubreddits(subscribedSubredditData);
             }
         });
 
@@ -1064,8 +1064,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     }
 
     private void changeSortType() {
-        int currentPostType = sectionsPagerAdapter.getCurrentPostType();
-        PostFragment postFragment = sectionsPagerAdapter.getCurrentFragment();
+        int currentPostType = mainStateAdapter.getCurrentPostType();
+        PostFragment postFragment = mainStateAdapter.getCurrentFragment();
         if (postFragment != null) {
             SortTypeBottomSheetFragment sortTypeBottomSheetFragment = SortTypeBottomSheetFragment.getNewInstance(currentPostType != PostPagingSource.TYPE_FRONT_PAGE, postFragment.getSortType());
             sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
@@ -1083,7 +1083,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             changeSortType();
             return true;
         } else if (itemId == R.id.action_refresh_main_activity) {
-            sectionsPagerAdapter.refresh();
+            mainStateAdapter.refresh();
             mFetchUserInfoSuccess = false;
             loadUserData();
             return true;
@@ -1117,8 +1117,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (sectionsPagerAdapter != null) {
-            return sectionsPagerAdapter.handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
+        if (mainStateAdapter != null) {
+            return mainStateAdapter.handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
         }
 
         return super.onKeyDown(keyCode, event);
@@ -1143,7 +1143,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
     @Override
     public void sortTypeSelected(SortType sortType) {
-        sectionsPagerAdapter.changeSortType(sortType);
+        mainStateAdapter.changeSortType(sortType);
     }
 
     @Override
@@ -1187,7 +1187,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
     @Override
     public void postLayoutSelected(int postLayout) {
-        sectionsPagerAdapter.changePostLayout(postLayout);
+        mainStateAdapter.changePostLayout(postLayout);
     }
 
     @Override
@@ -1219,7 +1219,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
     @Subscribe
     public void onChangeNSFWEvent(ChangeNSFWEvent changeNSFWEvent) {
-        sectionsPagerAdapter.changeNSFW(changeNSFWEvent.nsfw);
+        mainStateAdapter.changeNSFW(changeNSFWEvent.nsfw);
         if (adapter != null) {
             adapter.setNSFWEnabled(changeNSFWEvent.nsfw);
         }
@@ -1278,15 +1278,15 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
     @Override
     public void onLongPress() {
-        if (sectionsPagerAdapter != null) {
-            sectionsPagerAdapter.goBackToTop();
+        if (mainStateAdapter != null) {
+            mainStateAdapter.goBackToTop();
         }
     }
 
     @Override
     public void displaySortType() {
-        if (sectionsPagerAdapter != null) {
-            sectionsPagerAdapter.displaySortTypeInToolbar();
+        if (mainStateAdapter != null) {
+            mainStateAdapter.displaySortTypeInToolbar();
         }
     }
 
@@ -1298,8 +1298,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_REFRESH:
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.refresh();
+                if (mainStateAdapter != null) {
+                    mainStateAdapter.refresh();
                 }
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_CHANGE_SORT_TYPE:
@@ -1326,14 +1326,14 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 break;
             }
             case FABMoreOptionsBottomSheetFragment.FAB_HIDE_READ_POSTS: {
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.hideReadPosts();
+                if (mainStateAdapter != null) {
+                    mainStateAdapter.hideReadPosts();
                 }
                 break;
             }
             case FABMoreOptionsBottomSheetFragment.FAB_FILTER_POSTS: {
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.filterPosts();
+                if (mainStateAdapter != null) {
+                    mainStateAdapter.filterPosts();
                 }
                 break;
             }
@@ -1507,7 +1507,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId());
     }
 
-    private class SectionsPagerAdapter extends FragmentStateAdapter {
+    private class MainStateAdapter extends FragmentStateAdapter {
         int tabCount;
         boolean showFavoriteMultiReddits;
         boolean showMultiReddits;
@@ -1518,9 +1518,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         List<SubscribedSubredditData> favoriteSubscribedSubreddits;
         List<SubscribedSubredditData> subscribedSubreddits;
 
-        SectionsPagerAdapter(FragmentActivity fa, int tabCount, boolean showFavoriteMultiReddits,
-                             boolean showMultiReddits, boolean showFavoriteSubscribedSubreddits,
-                             boolean showSubscribedSubreddits) {
+        MainStateAdapter(FragmentActivity fa, int tabCount, boolean showFavoriteMultiReddits,
+                         boolean showMultiReddits, boolean showFavoriteSubscribedSubreddits,
+                         boolean showSubscribedSubreddits) {
             super(fa);
             this.tabCount = tabCount;
             favoriteMultiReddits = new ArrayList<>();

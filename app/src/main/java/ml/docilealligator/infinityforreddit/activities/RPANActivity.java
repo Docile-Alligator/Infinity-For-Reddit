@@ -94,7 +94,7 @@ public class RPANActivity extends AppCompatActivity implements CustomFontReceive
     @State
     String nextCursor;
     public Typeface typeface;
-    private SectionsPagerAdapter sectionsPagerAdapter;
+    private RPANStateAdapter rpanStateAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -314,8 +314,8 @@ public class RPANActivity extends AppCompatActivity implements CustomFontReceive
     }
 
     private void initializeViewPager() {
-        sectionsPagerAdapter = new SectionsPagerAdapter(this);
-        viewPager2.setAdapter(sectionsPagerAdapter);
+        rpanStateAdapter = new RPANStateAdapter(this);
+        viewPager2.setAdapter(rpanStateAdapter);
         viewPager2.setOffscreenPageLimit(3);
         fixViewPager2Sensitivity(viewPager2);
     }
@@ -394,9 +394,9 @@ public class RPANActivity extends AppCompatActivity implements CustomFontReceive
         this.typeface = typeface;
     }
 
-    private class SectionsPagerAdapter extends FragmentStateAdapter {
+    private class RPANStateAdapter extends FragmentStateAdapter {
 
-        public SectionsPagerAdapter(FragmentActivity fa) {
+        public RPANStateAdapter(FragmentActivity fa) {
             super(fa);
         }
 
