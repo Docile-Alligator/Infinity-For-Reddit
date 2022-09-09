@@ -24,11 +24,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.Barrier;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -335,9 +335,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mPostIconAndInfoColor = customThemeWrapper.getPostIconAndInfoColor();
             mDividerColor = customThemeWrapper.getDividerColor();
 
-            mCommentIcon = activity.getDrawable(R.drawable.ic_comment_grey_24dp);
+            mCommentIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_comment_grey_24dp);
             if (mCommentIcon != null) {
-                DrawableCompat.setTint(mCommentIcon, mPostIconAndInfoColor);
+                mCommentIcon.setTint(mPostIconAndInfoColor);
             }
 
             mScale = resources.getDisplayMetrics().density;

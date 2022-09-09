@@ -28,10 +28,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.text.HtmlCompat;
 
 import com.bumptech.glide.Glide;
@@ -398,14 +397,11 @@ public final class Utils {
 
     @Nullable
     public static Drawable getTintedDrawable(Context context, int drawableId, int color) {
-        Drawable drawable = ContextCompat.getDrawable(context, drawableId);
+        final Drawable drawable = AppCompatResources.getDrawable(context, drawableId);
         if (drawable != null) {
-            Drawable wrappedDrawable = DrawableCompat.wrap(drawable).mutate();
-            DrawableCompat.setTint(wrappedDrawable, color);
-            return wrappedDrawable;
+            drawable.setTint(color);
         }
-
-        return null;
+        return drawable;
     }
 
     public static void uploadImageToReddit(Context context, Executor executor, Retrofit oauthRetrofit,
