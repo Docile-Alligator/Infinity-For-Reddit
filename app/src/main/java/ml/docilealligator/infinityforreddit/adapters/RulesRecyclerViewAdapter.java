@@ -2,7 +2,6 @@ package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.text.Spanned;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -88,11 +87,8 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
         };
         BetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener = (textView, url) -> {
             if (activity != null && !activity.isDestroyed() && !activity.isFinishing()) {
-                UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
-                urlMenuBottomSheetFragment.setArguments(bundle);
-                urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
+                UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = UrlMenuBottomSheetFragment.newInstance(url);
+                urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), null);
             }
             return true;
         };

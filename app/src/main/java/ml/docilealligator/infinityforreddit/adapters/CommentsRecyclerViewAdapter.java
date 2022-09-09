@@ -204,11 +204,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         };
         BetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener = (textView, url) -> {
             if (!activity.isDestroyed() && !activity.isFinishing()) {
-                UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
-                urlMenuBottomSheetFragment.setArguments(bundle);
-                urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
+                UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = UrlMenuBottomSheetFragment.newInstance(url);
+                urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), null);
             }
             return true;
         };

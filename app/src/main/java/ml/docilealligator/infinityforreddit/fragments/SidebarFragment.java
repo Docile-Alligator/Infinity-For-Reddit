@@ -147,11 +147,8 @@ public class SidebarFragment extends Fragment {
             }
         };
         BetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener = (textView, url) -> {
-            UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
-            urlMenuBottomSheetFragment.setArguments(bundle);
-            urlMenuBottomSheetFragment.show(getChildFragmentManager(), urlMenuBottomSheetFragment.getTag());
+            UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = UrlMenuBottomSheetFragment.newInstance(url);
+            urlMenuBottomSheetFragment.show(getChildFragmentManager(), null);
             return true;
         };
         Markwon markwon = MarkdownUtils.createFullRedditMarkwon(activity,

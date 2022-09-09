@@ -382,11 +382,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             }
         };
         BetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener = (textView, url) -> {
-            UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
-            urlMenuBottomSheetFragment.setArguments(bundle);
-            urlMenuBottomSheetFragment.show(getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
+            UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = UrlMenuBottomSheetFragment.newInstance(url);
+            urlMenuBottomSheetFragment.show(getSupportFragmentManager(), null);
             return true;
         };
         Markwon markwon = MarkdownUtils.createLinksOnlyMarkwon(this,
