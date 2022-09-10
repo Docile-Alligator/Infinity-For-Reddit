@@ -47,6 +47,7 @@ import javax.inject.Named;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
 import io.noties.markwon.html.HtmlPlugin;
@@ -192,6 +193,42 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             binding.commentContentMarkdownView.setVisibility(View.VISIBLE);
             binding.commentContentMarkdownView.setNestedScrollingEnabled(false);
             int linkColor = mCustomThemeWrapper.getLinkColor();
+            MarkwonPlugin miscPlugin = new AbstractMarkwonPlugin() {
+                @NonNull
+                @Override
+                public String processMarkdown(@NonNull String markdown) {
+                    return Utils.fixSuperScript(markdown);
+                }
+
+                @Override
+                public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
+                    if (contentTypeface != null) {
+                        textView.setTypeface(contentTypeface);
+                    }
+                    textView.setTextColor(parentTextColor);
+                    textView.setOnLongClickListener(view -> {
+                        Utils.hideKeyboard(CommentActivity.this);
+                        CopyTextBottomSheetFragment.show(getSupportFragmentManager(),
+                                parentBody, parentBodyMarkdown);
+                        return true;
+                    });
+                }
+
+                @Override
+                public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                    builder.linkResolver((view, link) -> {
+                        Intent intent = new Intent(CommentActivity.this, LinkResolverActivity.class);
+                        Uri uri = Uri.parse(link);
+                        intent.setData(uri);
+                        startActivity(intent);
+                    });
+                }
+
+                @Override
+                public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                    builder.linkColor(linkColor);
+                }
+            };
             Markwon postBodyMarkwon = Markwon.builder(this)
                     .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                         plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
@@ -202,42 +239,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     .usePlugin(HtmlPlugin.create(plugin -> {
                         plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
                     }))
-                    .usePlugin(new AbstractMarkwonPlugin() {
-                        @NonNull
-                        @Override
-                        public String processMarkdown(@NonNull String markdown) {
-                            return Utils.fixSuperScript(markdown);
-                        }
-
-                        @Override
-                        public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
-                            if (contentTypeface != null) {
-                                textView.setTypeface(contentTypeface);
-                            }
-                            textView.setTextColor(parentTextColor);
-                            textView.setOnLongClickListener(view -> {
-                                Utils.hideKeyboard(CommentActivity.this);
-                                CopyTextBottomSheetFragment.show(getSupportFragmentManager(),
-                                        parentBody, parentBodyMarkdown);
-                                return true;
-                            });
-                        }
-
-                        @Override
-                        public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
-                            builder.linkResolver((view, link) -> {
-                                Intent intent = new Intent(CommentActivity.this, LinkResolverActivity.class);
-                                Uri uri = Uri.parse(link);
-                                intent.setData(uri);
-                                startActivity(intent);
-                            });
-                        }
-
-                        @Override
-                        public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
-                            builder.linkColor(linkColor);
-                        }
-                    })
+                    .usePlugin(miscPlugin)
                     .usePlugin(SpoilerParserPlugin.create(parentTextColor, parentSpoilerBackgroundColor))
                     .usePlugin(RedditHeadingPlugin.create())
                     .usePlugin(StrikethroughPlugin.create())
