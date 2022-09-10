@@ -387,6 +387,14 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 builder.linkColor(mCustomThemeWrapper.getLinkColor());
             }
         };
+        BetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener = (textView, url) -> {
+            UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
+            urlMenuBottomSheetFragment.setArguments(bundle);
+            urlMenuBottomSheetFragment.show(getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
+            return true;
+        };
         Markwon markwon = Markwon.builder(this)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                     plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
@@ -394,14 +402,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     plugin.excludeInlineProcessor(BangInlineProcessor.class);
                 }))
                 .usePlugin(miscPlugin)
-                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS).setOnLinkLongClickListener((textView, url) -> {
-                    UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
-                    urlMenuBottomSheetFragment.setArguments(bundle);
-                    urlMenuBottomSheetFragment.show(getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
-                    return true;
-                })))
+                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS).setOnLinkLongClickListener(onLinkLongClickListener)))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS)).build();
 
         descriptionTextView.setOnLongClickListener(view -> {
