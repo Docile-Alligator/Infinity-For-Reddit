@@ -45,8 +45,6 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.common.collect.ImmutableList;
 import com.libRG.CustomTextView;
 
-import org.commonmark.ext.gfm.tables.TableBlock;
-
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.Executor;
@@ -59,7 +57,6 @@ import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.recycler.MarkwonAdapter;
-import io.noties.markwon.recycler.table.TableEntry;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
@@ -284,11 +281,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         };
         mPostDetailMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
                 miscPlugin, markdownColor, postSpoilerBackgroundColor, onLinkLongClickListener);
-        mMarkwonAdapter = MarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
-                .include(TableBlock.class, TableEntry.create(builder -> builder
-                        .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
-                        .textLayoutIsRoot(R.layout.view_table_entry_cell)))
-                .build();
+        mMarkwonAdapter = MarkdownUtils.createTablesAdapter();
+
         mSeparatePostAndComments = separatePostAndComments;
         mLegacyAutoplayVideoControllerUI = sharedPreferences.getBoolean(SharedPreferencesUtils.LEGACY_AUTOPLAY_VIDEO_CONTROLLER_UI, false);
         mEasierToWatchInFullScreen = sharedPreferences.getBoolean(SharedPreferencesUtils.EASIER_TO_WATCH_IN_FULL_SCREEN, false);

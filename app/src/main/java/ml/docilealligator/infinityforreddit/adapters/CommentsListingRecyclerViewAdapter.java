@@ -26,8 +26,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.commonmark.ext.gfm.tables.TableBlock;
-
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -37,7 +35,6 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
-import io.noties.markwon.recycler.table.TableEntry;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
@@ -524,11 +521,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 }
             });
             commentMarkdownView.setLayoutManager(linearLayoutManager);
-            markwonAdapter = CustomMarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
-                    .include(TableBlock.class, TableEntry.create(builder -> builder
-                            .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
-                            .textLayoutIsRoot(R.layout.view_table_entry_cell)))
-                    .build();
+            markwonAdapter = MarkdownUtils.createCustomTablesAdapter();
             markwonAdapter.setOnClickListener(view -> {
                 if (view instanceof SpoilerOnClickTextView) {
                     if (((SpoilerOnClickTextView) view).isSpoilerOnClick()) {

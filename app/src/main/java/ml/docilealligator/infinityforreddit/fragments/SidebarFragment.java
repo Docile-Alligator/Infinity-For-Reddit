@@ -18,8 +18,6 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import org.commonmark.ext.gfm.tables.TableBlock;
-
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -33,7 +31,6 @@ import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.recycler.MarkwonAdapter;
-import io.noties.markwon.recycler.table.TableEntry;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
@@ -153,11 +150,7 @@ public class SidebarFragment extends Fragment {
         };
         Markwon markwon = MarkdownUtils.createFullRedditMarkwon(activity,
                 miscPlugin, markdownColor, spoilerBackgroundColor, onLinkLongClickListener);
-        MarkwonAdapter markwonAdapter = MarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
-                .include(TableBlock.class, TableEntry.create(builder -> builder
-                        .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
-                        .textLayoutIsRoot(R.layout.view_table_entry_cell)))
-                .build();
+        MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter();
 
         linearLayoutManager = new LinearLayoutManagerBugFixed(activity);
         recyclerView.setLayoutManager(linearLayoutManager);

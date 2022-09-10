@@ -30,7 +30,6 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
-import org.commonmark.ext.gfm.tables.TableBlock;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -49,7 +48,6 @@ import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.recycler.MarkwonAdapter;
-import io.noties.markwon.recycler.table.TableEntry;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.AnyAccountAccessTokenAuthenticator;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -217,11 +215,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             };
             Markwon postBodyMarkwon = MarkdownUtils.createFullRedditMarkwon(this,
                     miscPlugin, parentTextColor, parentSpoilerBackgroundColor, null);
-            MarkwonAdapter markwonAdapter = MarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
-                    .include(TableBlock.class, TableEntry.create(builder -> builder
-                            .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
-                            .textLayoutIsRoot(R.layout.view_table_entry_cell)))
-                    .build();
+            MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter();
             binding.commentContentMarkdownView.setLayoutManager(new LinearLayoutManagerBugFixed(this));
             binding.commentContentMarkdownView.setAdapter(markwonAdapter);
             markwonAdapter.setMarkdown(postBodyMarkwon, parentBodyMarkdown);

@@ -23,7 +23,6 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrInterface;
 
-import org.commonmark.ext.gfm.tables.TableBlock;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -38,7 +37,6 @@ import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.recycler.MarkwonAdapter;
-import io.noties.markwon.recycler.table.TableEntry;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -151,11 +149,7 @@ public class FullMarkdownActivity extends BaseActivity {
         Markwon markwon = MarkdownUtils.createFullRedditMarkwon(this,
                 miscPlugin, markdownColor, spoilerBackgroundColor, null);
 
-        MarkwonAdapter markwonAdapter = MarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
-                .include(TableBlock.class, TableEntry.create(builder -> builder
-                        .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
-                        .textLayoutIsRoot(R.layout.view_table_entry_cell)))
-                .build();
+        MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter();
         LinearLayoutManagerBugFixed linearLayoutManager = new MarkwonLinearLayoutManager(this, new MarkwonLinearLayoutManager.HorizontalScrollViewScrolledListener() {
             @Override
             public void onScrolledLeft() {

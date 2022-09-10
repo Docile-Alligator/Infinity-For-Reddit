@@ -33,8 +33,6 @@ import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 
-import org.commonmark.ext.gfm.tables.TableBlock;
-
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.Executor;
@@ -46,7 +44,6 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
-import io.noties.markwon.recycler.table.TableEntry;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.R;
@@ -1248,11 +1245,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 }
             });
             commentMarkdownView.setLayoutManager(linearLayoutManager);
-            mMarkwonAdapter = CustomMarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
-                    .include(TableBlock.class, TableEntry.create(builder -> builder
-                            .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
-                            .textLayoutIsRoot(R.layout.view_table_entry_cell)))
-                    .build();
+            mMarkwonAdapter = MarkdownUtils.createCustomTablesAdapter();
             commentMarkdownView.setAdapter(mMarkwonAdapter);
 
             itemView.setBackgroundColor(mCommentBackgroundColor);
