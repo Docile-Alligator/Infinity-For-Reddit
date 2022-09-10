@@ -51,4 +51,24 @@ public class MarkdownUtils {
                 .usePlugin(TableEntryPlugin.create(context))
                 .build();
     }
+
+    /**
+     * Creates a Markwon instance that processes only the links.
+     * @return configured Markwon instance
+     */
+    @NonNull
+    public static Markwon createLinksOnlyMarkwon(@NonNull Context context,
+                                                  @NonNull MarkwonPlugin miscPlugin,
+                                                  @Nullable BetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener) {
+        return Markwon.builder(context)
+                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
+                    plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
+                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
+                    plugin.excludeInlineProcessor(BangInlineProcessor.class);
+                }))
+                .usePlugin(miscPlugin)
+                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS).setOnLinkLongClickListener(onLinkLongClickListener)))
+                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                .build();
+    }
 }
