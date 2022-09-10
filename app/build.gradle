@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk 32
     defaultConfig {
         applicationId "ml.docilealligator.infinityforreddit"
         minSdk 21
-        targetSdk 31
+        targetSdk 32
         versionCode 103
         versionName "5.3.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -60,6 +60,7 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-process:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-runtime:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycleVersion"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
     def pagingVersion = '3.1.1'
     implementation "androidx.paging:paging-runtime:$pagingVersion"
     implementation "androidx.paging:paging-guava:$pagingVersion"
