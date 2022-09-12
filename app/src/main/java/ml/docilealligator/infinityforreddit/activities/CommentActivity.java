@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.util.Linkify;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,6 +22,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
@@ -161,13 +163,16 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     private int parentPosition;
     private boolean isSubmitting = false;
     private boolean isReplying;
-    private int markdownColor;
-    private int spoilerBackgroundColor;
     private Uri capturedImageUri;
     private ArrayList<UploadedImage> uploadedImages = new ArrayList<>();
     private Menu mMenu;
-    private int commentColor;
-    private int commentSpoilerBackgroundColor;
+    /**
+     * Post or comment body text color
+     */
+    @ColorInt
+    private int parentTextColor;
+    @ColorInt
+    private int parentSpoilerBackgroundColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,6 +188,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
 
         EventBus.getDefault().register(this);
 
+        Intent intent = getIntent();
+        isReplying = intent.getExtras().getBoolean(EXTRA_IS_REPLYING_KEY);
         applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
@@ -195,10 +202,9 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             return;
         }
 
-        Intent intent = getIntent();
         String parentTitle = intent.getStringExtra(EXTRA_COMMENT_PARENT_TITLE_KEY);
-
-        if (parentTitle != null) {
+        if (!TextUtils.isEmpty(parentTitle)) {
+            commentParentTitleTextView.setVisibility(View.VISIBLE);
             commentParentTitleTextView.setText(parentTitle);
             commentParentTitleTextView.setOnLongClickListener(view -> {
                 Utils.hideKeyboard(CommentActivity.this);
@@ -206,8 +212,6 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                         parentTitle, null);
                 return true;
             });
-        } else {
-            commentParentTitleTextView.setVisibility(View.GONE);
         }
 
         String parentBodyMarkdown = intent.getStringExtra(EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY);
@@ -238,7 +242,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                             if (contentTypeface != null) {
                                 textView.setTypeface(contentTypeface);
                             }
-                            textView.setTextColor(markdownColor);
+                            textView.setTextColor(parentTextColor);
                             textView.setOnLongClickListener(view -> {
                                 Utils.hideKeyboard(CommentActivity.this);
                                 CopyTextBottomSheetFragment.show(getSupportFragmentManager(),
@@ -262,7 +266,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                             builder.linkColor(linkColor);
                         }
                     })
-                    .usePlugin(SpoilerParserPlugin.create(markdownColor, spoilerBackgroundColor))
+                    .usePlugin(SpoilerParserPlugin.create(parentTextColor, parentSpoilerBackgroundColor))
                     .usePlugin(RedditHeadingPlugin.create())
                     .usePlugin(StrikethroughPlugin.create())
                     .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
@@ -281,7 +285,6 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         parentFullname = intent.getStringExtra(EXTRA_PARENT_FULLNAME_KEY);
         parentDepth = intent.getExtras().getInt(EXTRA_PARENT_DEPTH_KEY);
         parentPosition = intent.getExtras().getInt(EXTRA_PARENT_POSITION_KEY);
-        isReplying = intent.getExtras().getBoolean(EXTRA_IS_REPLYING_KEY);
         if (isReplying) {
             toolbar.setTitle(getString(R.string.comment_activity_label_is_replying));
         }
@@ -385,20 +388,24 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
-        commentColor = mCustomThemeWrapper.getCommentColor();
-        commentSpoilerBackgroundColor = commentColor | 0xFF000000;
-        commentParentTitleTextView.setTextColor(commentColor);
+        commentParentTitleTextView.setTextColor(customThemeWrapper.getPostTitleColor());
         divider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
         commentEditText.setTextColor(mCustomThemeWrapper.getCommentColor());
         int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
         commentEditText.setHintTextColor(secondaryTextColor);
-        markdownColor = secondaryTextColor;
-        spoilerBackgroundColor = markdownColor | 0xFF000000;
+        if (isReplying) {
+            parentTextColor = mCustomThemeWrapper.getCommentColor();
+        } else {
+            parentTextColor = mCustomThemeWrapper.getPostContentColor();
+        }
+        parentSpoilerBackgroundColor = parentTextColor | 0xFF000000;
         accountNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
 
         if (typeface != null) {
-            commentParentTitleTextView.setTypeface(typeface);
             commentEditText.setTypeface(typeface);
+        }
+        if (titleTypeface != null) {
+            commentParentTitleTextView.setTypeface(titleTypeface);
         }
     }
 
