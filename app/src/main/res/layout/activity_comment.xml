@@ -40,7 +40,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/comment_parent_markwon_view_comment_activity"
+                    android:id="@+id/comment_parent_title_text_view_comment_activity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"

@@ -95,7 +95,6 @@ import retrofit2.Retrofit;
 public class CommentActivity extends BaseActivity implements UploadImageEnabledActivity, AccountChooserBottomSheetFragment.AccountChooserListener {
 
     public static final String EXTRA_COMMENT_PARENT_TITLE_KEY = "ECPTK";
-    public static final String EXTRA_COMMENT_PARENT_TITLE_MARKDOWN_KEY = "ECPTMK";
     public static final String EXTRA_COMMENT_PARENT_BODY_KEY = "ECPBK";
     public static final String EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY = "ECPBMK";
     public static final String EXTRA_PARENT_FULLNAME_KEY = "EPFK";
@@ -117,8 +116,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_comment_activity)
     Toolbar toolbar;
-    @BindView(R.id.comment_parent_markwon_view_comment_activity)
-    TextView commentParentMarkwonView;
+    @BindView(R.id.comment_parent_title_text_view_comment_activity)
+    TextView commentParentTitleTextView;
     @BindView(R.id.divider_comment_activity)
     View divider;
     @BindView(R.id.content_markdown_view_comment_activity)
@@ -197,66 +196,26 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         }
 
         Intent intent = getIntent();
-        String parentTitleMarkdown = intent.getStringExtra(EXTRA_COMMENT_PARENT_TITLE_MARKDOWN_KEY);
         String parentTitle = intent.getStringExtra(EXTRA_COMMENT_PARENT_TITLE_KEY);
 
-        int linkColor = mCustomThemeWrapper.getLinkColor();
-        Markwon markwon = Markwon.builder(this)
-                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
-                    plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
-                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
-                    plugin.excludeInlineProcessor(BangInlineProcessor.class);
-                    plugin.addInlineProcessor(new SuperscriptInlineProcessor());
-                }))
-                .usePlugin(HtmlPlugin.create(plugin -> {
-                    plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
-                }))
-                .usePlugin(new AbstractMarkwonPlugin() {
-                    @NonNull
-                    @Override
-                    public String processMarkdown(@NonNull String markdown) {
-                        return Utils.fixSuperScript(markdown);
-                    }
-
-                    @Override
-                    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
-                        builder.linkResolver((view, link) -> {
-                            Intent intent = new Intent(CommentActivity.this, LinkResolverActivity.class);
-                            Uri uri = Uri.parse(link);
-                            intent.setData(uri);
-                            startActivity(intent);
-                        });
-                    }
-
-                    @Override
-                    public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
-                        builder.linkColor(linkColor);
-                    }
-                })
-                .usePlugin(SpoilerParserPlugin.create(commentColor, commentSpoilerBackgroundColor))
-                .usePlugin(RedditHeadingPlugin.create())
-                .usePlugin(StrikethroughPlugin.create())
-                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
-                .build();
-        if (parentTitleMarkdown != null) {
-            commentParentMarkwonView.setOnLongClickListener(view -> {
+        if (parentTitle != null) {
+            commentParentTitleTextView.setText(parentTitle);
+            commentParentTitleTextView.setOnLongClickListener(view -> {
                 Utils.hideKeyboard(CommentActivity.this);
-                if (parentTitle == null) {
-                    CopyTextBottomSheetFragment.show(getSupportFragmentManager(),
-                            parentTitleMarkdown, null);
-                } else {
-                    CopyTextBottomSheetFragment.show(getSupportFragmentManager(),
-                            parentTitle, parentTitleMarkdown);
-                }
+                CopyTextBottomSheetFragment.show(getSupportFragmentManager(),
+                        parentTitle, null);
                 return true;
             });
-            markwon.setMarkdown(commentParentMarkwonView, parentTitleMarkdown);
+        } else {
+            commentParentTitleTextView.setVisibility(View.GONE);
         }
+
         String parentBodyMarkdown = intent.getStringExtra(EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY);
         String parentBody = intent.getStringExtra(EXTRA_COMMENT_PARENT_BODY_KEY);
         if (parentBodyMarkdown != null && !parentBodyMarkdown.equals("")) {
             contentMarkdownRecyclerView.setVisibility(View.VISIBLE);
             contentMarkdownRecyclerView.setNestedScrollingEnabled(false);
+            int linkColor = mCustomThemeWrapper.getLinkColor();
             Markwon postBodyMarkwon = Markwon.builder(this)
                     .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                         plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
@@ -428,7 +387,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
         commentColor = mCustomThemeWrapper.getCommentColor();
         commentSpoilerBackgroundColor = commentColor | 0xFF000000;
-        commentParentMarkwonView.setTextColor(commentColor);
+        commentParentTitleTextView.setTextColor(commentColor);
         divider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
         commentEditText.setTextColor(mCustomThemeWrapper.getCommentColor());
         int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
@@ -438,7 +397,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         accountNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
 
         if (typeface != null) {
-            commentParentMarkwonView.setTypeface(typeface);
+            commentParentTitleTextView.setTypeface(typeface);
             commentEditText.setTypeface(typeface);
         }
     }
