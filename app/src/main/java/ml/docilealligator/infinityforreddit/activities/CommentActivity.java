@@ -94,8 +94,8 @@ import retrofit2.Retrofit;
 
 public class CommentActivity extends BaseActivity implements UploadImageEnabledActivity, AccountChooserBottomSheetFragment.AccountChooserListener {
 
-    public static final String EXTRA_COMMENT_PARENT_TEXT_KEY = "ECPTK";
-    public static final String EXTRA_COMMENT_PARENT_TEXT_MARKDOWN_KEY = "ECPTMK";
+    public static final String EXTRA_COMMENT_PARENT_TITLE_KEY = "ECPTK";
+    public static final String EXTRA_COMMENT_PARENT_TITLE_MARKDOWN_KEY = "ECPTMK";
     public static final String EXTRA_COMMENT_PARENT_BODY_KEY = "ECPBK";
     public static final String EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY = "ECPBMK";
     public static final String EXTRA_PARENT_FULLNAME_KEY = "EPFK";
@@ -197,8 +197,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         }
 
         Intent intent = getIntent();
-        String parentTextMarkdown = intent.getStringExtra(EXTRA_COMMENT_PARENT_TEXT_MARKDOWN_KEY);
-        String parentText = intent.getStringExtra(EXTRA_COMMENT_PARENT_TEXT_KEY);
+        String parentTitleMarkdown = intent.getStringExtra(EXTRA_COMMENT_PARENT_TITLE_MARKDOWN_KEY);
+        String parentTitle = intent.getStringExtra(EXTRA_COMMENT_PARENT_TITLE_KEY);
 
         int linkColor = mCustomThemeWrapper.getLinkColor();
         Markwon markwon = Markwon.builder(this)
@@ -238,19 +238,19 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                 .usePlugin(StrikethroughPlugin.create())
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .build();
-        if (parentTextMarkdown != null) {
+        if (parentTitleMarkdown != null) {
             commentParentMarkwonView.setOnLongClickListener(view -> {
                 Utils.hideKeyboard(CommentActivity.this);
-                if (parentText == null) {
+                if (parentTitle == null) {
                     CopyTextBottomSheetFragment.show(getSupportFragmentManager(),
-                            parentTextMarkdown, null);
+                            parentTitleMarkdown, null);
                 } else {
                     CopyTextBottomSheetFragment.show(getSupportFragmentManager(),
-                            parentText, parentTextMarkdown);
+                            parentTitle, parentTitleMarkdown);
                 }
                 return true;
             });
-            markwon.setMarkdown(commentParentMarkwonView, parentTextMarkdown);
+            markwon.setMarkdown(commentParentMarkwonView, parentTitleMarkdown);
         }
         String parentBodyMarkdown = intent.getStringExtra(EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY);
         String parentBody = intent.getStringExtra(EXTRA_COMMENT_PARENT_BODY_KEY);
