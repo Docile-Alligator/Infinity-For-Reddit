@@ -123,7 +123,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.9'
 
     // Java library for zip files and streams
-    implementation 'net.lingala.zip4j:zip4j:2.9.0'
+    implementation 'net.lingala.zip4j:zip4j:2.11.2'
 
     // IO functionality
     implementation 'commons-io:commons-io:2.5'
