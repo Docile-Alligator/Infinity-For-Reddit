@@ -21,6 +21,7 @@ Infinity for Reddit is available on the Google Play Store and F-Droid.
         </p>
 
 ## Donation
+
 Patreon: https://www.patreon.com/docile_alligator
 
 Bitcoin: bc1qxtkd5ap9na7uy8nr9qpt6jny6tdwaj4v43ddle
@@ -38,9 +39,11 @@ width="200"
     hspace="10" vspace="10">](https://raw.githubusercontent.com/Wladefant/Infinity-For-Reddit/master/fastlane/metadata/android/en-US/images/phoneScreenshots/7.png)
 
 ### Highlighted feature
+
 - Lazy mode: Automatic scrolling of posts enables you to enjoy amazing posts without moving your thumb.
 
 ### Features
+
 - Browsing posts
 - View comments
 - Expand and collapse comments section
@@ -72,8 +75,8 @@ Don't forget to give the project a star! Thanks again!
 
 Here are other ways you can help:
 
-* [Report bugs and make suggestions](https://github.com/Docile-Alligator/Infinity-For-Reddit/issues)
- * [Translate the app](https://poeditor.com/join/project?hash=b2IRyfaJv6)
+- [Report bugs and make suggestions](https://github.com/Docile-Alligator/Infinity-For-Reddit/issues)
+- [Translate the app](https://poeditor.com/join/project?hash=b2IRyfaJv6)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
@@ -85,8 +88,10 @@ Distributed under the AGPL-3.0 License. See `LICENSE` for more information.
 
 ## Contact
 
-[u/Hostilenemy](https://www.reddit.com/user/Hostilenemy) - 
-docilealligator.app@gmail.com
+[u/Hostilenemy](https://www.reddit.com/user/Hostilenemy) -
+docilealligator.app@gmail.com (Owner)
+
+or [u/Wladefant](https://www.reddit.com/user/Wladefant) - wladefant@gmail.com (Collaborator)
 
 Project Link: [https://github.com/Docile-Alligator/Infinity-For-Reddit](https://github.com/Docile-Alligator/Infinity-For-Reddit)
 
