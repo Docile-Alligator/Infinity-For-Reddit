@@ -1,49 +1,76 @@
-# Infinity-For-Reddit [<img src="https://img.shields.io/badge/Patreon-F96854?style=for-the-badge&logo=patreon&logoColor=white" alt="Patreon">](https://www.patreon.com/docile_alligator)
+<h1 align="center">
+  Infinity For Reddit
+</h1>
 
-[<img src="fastlane/metadata/android/en-US/images/icon.png" align="left"
-width="200" hspace="10" vspace="10">](https://raw.githubusercontent.com/Wladefant/Infinity-For-Reddit/master/fastlane/metadata/android/en-US/images/icon.png)
+<div align="center">
 
-Infinity For Reddit is a Reddit client on Android written in Java. It does not have any ads and it features clean UI and smooth browsing experience.
+A Reddit client on Android written in Java. It does not have any ads and it features a clean UI and smooth browsing experience
 
-Infinity for Reddit is available on the Google Play Store and F-Droid.
+</div>
 
-<p align="left">
-<a href="https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit">
-    <img alt="Get it on Google Play"
-        height="80"
-        src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
-</a>  
-<a href="https://f-droid.org/packages/ml.docilealligator.infinityforreddit/">
-    <img alt="Get it on F-Droid"
-        height="80"
-        src="https://f-droid.org/badge/get-it-on.png" />
-        </a>
-        </p>
+<br>
 
-## Donation
+<div align="center">
 
-Patreon: https://www.patreon.com/docile_alligator
+Infinity for Reddit is available on Google Play and F-Droid
 
-Bitcoin: bc1qxtkd5ap9na7uy8nr9qpt6jny6tdwaj4v43ddle
+  <a href="https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit">
+      <img alt="Get it on Google Play" height="80" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
+      </a>  
+      <a href="https://f-droid.org/packages/ml.docilealligator.infinityforreddit/">
+          <img alt="Get it on F-Droid" height="80" src="https://f-droid.org/badge/get-it-on.png" />
+  </a>
+
+</div>
+
+<div align="center">
+
+<a href="https://github.com/Docile-Alligator/Infinity-For-Reddit/issues">Report a Bug</a>
+·
+<a href="hhttps://github.com/Docile-Alligator/Infinity-For-Reddit/discussions/categories/ideas">Request a Feature</a>
+·
+<a href="https://github.com/Docile-Alligator/Infinity-For-Reddit/discussions/categories/q-a">Ask a Question</a>
+
+</div>
+<br>
+
+<div align="center">
+
+[![release](https://img.shields.io/github/v/release/Docile-Alligator/Infinity-For-Reddit.svg?style=flat-square)](https://github.com/Docile-Alligator/Infinity-For-Reddit/releases)
+[![license](https://img.shields.io/github/license/Docile-Alligator/Infinity-For-Reddit.svg?style=flat-square)](LICENSE)
+
+</div>
+
+<details>
+  <summary>Table of Contents</summary>
+
+- [About](#about)
+  - [Built With](#built-with)
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Usage](#usage)
+    - [Cookiecutter template](#cookiecutter-template)
+    - [Manual setup](#manual-setup)
+    - [Variables reference](#variables-reference)
+- [Roadmap](#roadmap)
+- [Contributing](#contributing)
+- [Support](#support)
+- [License](#license)
+- [Acknowledgements](#acknowledgements)
+
+</details>
+
+---
 
 ## About The Project
 
-[<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" align="left"
-width="200"
-    hspace="10" vspace="10">](https://raw.githubusercontent.com/Wladefant/Infinity-For-Reddit/master/fastlane/metadata/android/en-US/images/phoneScreenshots/1.png)
-[<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" align="center"
-width="200"
-    hspace="10" vspace="10">](https://raw.githubusercontent.com/Wladefant/Infinity-For-Reddit/master/fastlane/metadata/android/en-US/images/phoneScreenshots/6.png)
-[<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" align="center"
-width="200"
-    hspace="10" vspace="10">](https://raw.githubusercontent.com/Wladefant/Infinity-For-Reddit/master/fastlane/metadata/android/en-US/images/phoneScreenshots/7.png)
+<table>
+<tr>
+<td>
 
-### Highlighted feature
+Key features of **Infinity For Reddit**:
 
 - Lazy mode: Automatic scrolling of posts enables you to enjoy amazing posts without moving your thumb.
-
-### Features
-
 - Browsing posts
 - View comments
 - Expand and collapse comments section
@@ -58,13 +85,51 @@ width="200"
 - Get notifications of unread messages
 - etc...
 
+</td>
+</tr>
+</table>
+
+<img 
+  src="https://raw.githubusercontent.com/Wladefant/Infinity-For-Reddit/master/fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" 
+  alt="Screenshot 1"
+  height="200" >
+<img 
+  src="https://raw.githubusercontent.com/Wladefant/Infinity-For-Reddit/master/fastlane/metadata/android/en-US/images/phoneScreenshots/2.png" 
+  alt="Screenshot 2"
+  height="200" >
+<img 
+  src="https://raw.githubusercontent.com/Wladefant/Infinity-For-Reddit/master/fastlane/metadata/android/en-US/images/phoneScreenshots/3.png" 
+  alt="Screenshot 3"
+  height="200" >
+<img 
+  src="https://raw.githubusercontent.com/Wladefant/Infinity-For-Reddit/master/fastlane/metadata/android/en-US/images/phoneScreenshots/4.png" 
+  alt="Screenshot 4"
+  height="200" >
+<img 
+  src="https://raw.githubusercontent.com/Wladefant/Infinity-For-Reddit/master/fastlane/metadata/android/en-US/images/phoneScreenshots/5.png" 
+  alt="Screenshot 5"
+  height="200" >
+<img 
+  src="https://raw.githubusercontent.com/Wladefant/Infinity-For-Reddit/master/fastlane/metadata/android/en-US/images/phoneScreenshots/6.png" 
+  alt="Screenshot 6"
+  height="200" >
+<img 
+  src="https://raw.githubusercontent.com/Wladefant/Infinity-For-Reddit/master/fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" 
+  alt="Screenshot 7"
+  height="200" >
+<img 
+  src="https://raw.githubusercontent.com/Wladefant/Infinity-For-Reddit/master/fastlane/metadata/android/en-US/images/phoneScreenshots/8.png" 
+  alt="Screenshot 8"
+  height="200" >
+
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## Contributing
 
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
+First off, thanks for taking the time to contribute! Contributions are what makes the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
+If you have a suggestion that would make this better, please fork the repo and create a pull request.
+
 Don't forget to give the project a star! Thanks again!
 
 1. Fork the Project
@@ -75,14 +140,15 @@ Don't forget to give the project a star! Thanks again!
 
 Here are other ways you can help:
 
-- [Report bugs and make suggestions](https://github.com/Docile-Alligator/Infinity-For-Reddit/issues)
-- [Translate the app](https://poeditor.com/join/project?hash=b2IRyfaJv6)
+- [Report Bugs](https://github.com/Docile-Alligator/Infinity-For-Reddit/issues)
+- [Make Suggestions](https://github.com/Docile-Alligator/Infinity-For-Reddit/discussions)
+- [Translate The App](https://poeditor.com/join/project?hash=b2IRyfaJv6)
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
 ## License
 
-Distributed under the AGPL-3.0 License. See `LICENSE` for more information.
+Distributed under the AGPL-3.0 License. See <a href="https://github.com/Docile-Alligator/Infinity-For-Reddit/blob/master/LICENSE">LICENSE</a> for more information.
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
