@@ -6,6 +6,8 @@
 
 A Reddit client on Android written in Java. It does not have any ads and it features a clean UI and smooth browsing experience
 
+<img align="right" src="https://raw.githubusercontent.com/Docile-Alligator/Infinity-For-Reddit/master/fastlane/metadata/android/en-US/images/icon.png" width=200>
+
 </div>
 
 <br>
@@ -36,8 +38,9 @@ Infinity for Reddit is available on Google Play and F-Droid
 
 <div align="center">
 
-[![release](https://img.shields.io/github/v/release/Docile-Alligator/Infinity-For-Reddit.svg?style=flat-square)](https://github.com/Docile-Alligator/Infinity-For-Reddit/releases)
-[![license](https://img.shields.io/github/license/Docile-Alligator/Infinity-For-Reddit.svg?style=flat-square)](LICENSE)
+[![release](https://img.shields.io/github/v/release/Docile-Alligator/Infinity-For-Reddit)](https://github.com/Docile-Alligator/Infinity-For-Reddit/releases)
+[![license](https://img.shields.io/github/license/Docile-Alligator/Infinity-For-Reddit)](LICENSE)
+[![GitHub issues](https://img.shields.io/github/issues/Docile-Alligator/Infinity-For-Reddit)](https://github.com/Docile-Alligator/Infinity-For-Reddit/issues)
 
 </div>
 
