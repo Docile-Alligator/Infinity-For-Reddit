@@ -27,6 +27,10 @@ Infinity for Reddit is available on Google Play and F-Droid
 
 <div align="center">
 
+<br>
+    <a href="https://github.com/Docile-Alligator/Infinity-For-Reddit/wiki"><strong>Explore the docs »</strong></a>
+<br>
+
 <a href="https://github.com/Docile-Alligator/Infinity-For-Reddit/issues">Report a Bug</a>
 ·
 <a href="https://github.com/Docile-Alligator/Infinity-For-Reddit/discussions/categories/ideas">Request a Feature</a>
@@ -34,6 +38,7 @@ Infinity for Reddit is available on Google Play and F-Droid
 <a href="https://github.com/Docile-Alligator/Infinity-For-Reddit/discussions/categories/q-a">Ask a Question</a>
 
 </div>
+
 <br>
 
 <div align="center">
