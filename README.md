@@ -117,10 +117,6 @@ Key features of **Infinity For Reddit**:
   src="https://raw.githubusercontent.com/Wladefant/Infinity-For-Reddit/master/fastlane/metadata/android/en-US/images/phoneScreenshots/7.png" 
   alt="Screenshot 7"
   height="200" >
-<img 
-  src="https://raw.githubusercontent.com/Wladefant/Infinity-For-Reddit/master/fastlane/metadata/android/en-US/images/phoneScreenshots/8.png" 
-  alt="Screenshot 8"
-  height="200" >
 
 <p align="right">(<a href="#top">back to top</a>)</p>
 
