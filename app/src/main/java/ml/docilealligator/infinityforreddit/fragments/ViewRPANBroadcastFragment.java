@@ -354,7 +354,7 @@ public class ViewRPANBroadcastFragment extends Fragment {
         super.onResume();
         if (dataSourceFactory == null) {
             dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.getRedgifsUserAgent(mActivity)));
+                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
             // Prepare the player with the source.
             player.prepare();
             player.setMediaSource(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(rpanBroadcast.rpanStream.hlsUrl)));
