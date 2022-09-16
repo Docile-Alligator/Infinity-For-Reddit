@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit.markdown;
 import android.graphics.Color;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
-import android.util.Pair;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -14,6 +13,7 @@ import org.commonmark.node.HtmlBlock;
 import org.commonmark.parser.Parser;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Set;
 import java.util.Stack;
 
@@ -79,73 +79,69 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
 
         SpannableStringBuilder markdownStringBuilder = new SpannableStringBuilder(textView.getText());
 
-        ArrayList<Pair<Integer, Integer>> spoilers = parse(markdownStringBuilder, firstSpoilerStart);
+        ArrayList<SpoilerRange> spoilers = parse(markdownStringBuilder, firstSpoilerStart);
         firstSpoilerStart = 0;
         textHasSpoiler = false; // Since PostDetail can contain multiple TextViews, we do this here
         if (spoilers.size() == 0) {
             return;
         }
 
-        int offset = 2;
-        for (Pair<Integer, Integer> spoiler : spoilers) {
-            int spoilerStart = spoiler.first - offset;
-            int spoilerEnd = spoiler.second - offset + 2;
-
-            // Try not to set a spoiler span if it's inside a CodeSpan
-            CodeSpan[] codeSpans = markdownStringBuilder.getSpans(spoilerStart, spoilerEnd, CodeSpan.class);
-            CodeBlockSpan[] codeBlockSpans = markdownStringBuilder.getSpans(spoilerStart, spoilerEnd, CodeBlockSpan.class);
-
-            if (codeSpans.length == 0 && codeBlockSpans.length == 0) {
-                markdownStringBuilder.delete(spoilerEnd, spoilerEnd + 2);
-                markdownStringBuilder.delete(spoilerStart, spoilerStart + 2);
-                SpoilerSpan spoilerSpan = new SpoilerSpan(textColor, backgroundColor);
-                markdownStringBuilder.setSpan(spoilerSpan, spoilerStart, spoilerEnd - 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                offset += 4;
-                continue;
-            }
-
-            for (CodeSpan codeSpan : codeSpans) {
-                int spanBeginning = markdownStringBuilder.getSpanStart(codeSpan);
-                int spanEnd = markdownStringBuilder.getSpanEnd(codeSpan);
-                if (spoilerStart + 2 <= spanBeginning && spanEnd <= spoilerEnd + 2) {
-                    markdownStringBuilder.delete(spoilerEnd, spoilerEnd + 2);
-                    markdownStringBuilder.delete(spoilerStart, spoilerStart + 2);
-                    SpoilerSpan spoilerSpan = new SpoilerSpan(textColor, backgroundColor);
-                    markdownStringBuilder.setSpan(spoilerSpan, spoilerStart, spoilerEnd - 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    offset += 4;
-                } else {
-                    break;
-                }
-            }
-
-            for (CodeBlockSpan codeBlockSpan : codeBlockSpans) {
-                int spanBeginning = markdownStringBuilder.getSpanStart(codeBlockSpan);
-                int spanEnd = markdownStringBuilder.getSpanEnd(codeBlockSpan);
-                if (spoilerStart + 2 <= spanBeginning && spanEnd <= spoilerEnd + 2) {
-                    markdownStringBuilder.delete(spoilerEnd, spoilerEnd + 2);
-                    markdownStringBuilder.delete(spoilerStart, spoilerStart + 2);
-                    SpoilerSpan spoilerSpan = new SpoilerSpan(textColor, backgroundColor);
-                    markdownStringBuilder.setSpan(spoilerSpan, spoilerStart, spoilerEnd - 2, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    offset += 4;
-                } else {
-                    break;
-                }
-            }
+        // Process all the found spoilers. We always want to delete the brackets
+        // because they are in matching pairs. But we want to apply SpoilerSpan
+        // only to the outermost spoilers because nested spans break revealing-hiding
+        int openingPosition = -1;
+        ArrayList<SpoilerBracket> brackets = new ArrayList<>();
+        for (SpoilerRange range : spoilers) {
+            brackets.add(new SpoilerBracket(range.start, true, range.nested));
+            brackets.add(new SpoilerBracket(range.end, false, range.nested));
         }
+        //noinspection ComparatorCombinators as it requires api 24+
+        Collections.sort(brackets, (lhs, rhs) -> Integer.compare(lhs.position, rhs.position));
+
+        int offset = 2;
+        for (SpoilerBracket bracket: brackets) {
+            if (bracket.opening) {
+                int spoilerStart = bracket.position - offset;
+                if (!bracket.nested) {
+                    openingPosition = spoilerStart;
+                }
+                markdownStringBuilder.delete(spoilerStart, spoilerStart + 2);
+            } else {
+                int spoilerEnd = bracket.position - offset + 2;
+                markdownStringBuilder.delete(spoilerEnd, spoilerEnd + 2);
+                if (!bracket.nested) {
+                    SpoilerSpan spoilerSpan = new SpoilerSpan(textColor, backgroundColor);
+                    markdownStringBuilder.setSpan(spoilerSpan, openingPosition, spoilerEnd,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            }
+            offset += 2;
+        }
+
         if (offset > 2) {
             textView.setText(markdownStringBuilder);
         }
     }
 
-    // Very naive implementation, needs to be improved for efficiency and edge cases
-    // Don't allow more than one new line after every non-blank line
-    // Try not to care about recursing spoilers, we just want the outermost spoiler because
-    // spoiler revealing-hiding breaks with recursing spoilers
-    private ArrayList<Pair<Integer, Integer>> parse(SpannableStringBuilder markdown, int start) {
+    private boolean noCodeIntersection(SpannableStringBuilder markdown, int position) {
+        return markdown.getSpans(position, position + 2, CodeSpan.class).length == 0
+                && markdown.getSpans(position, position + 2, CodeBlockSpan.class).length == 0;
+    }
+
+    /** Parse spoilers in the string starting from {@code start}.
+     *
+     * Returns all spoilers, spoilers that are nested inside other spoilers will have
+     * {@code nested} set to {@code true}.
+     * Doesn't allow more than one new line after every non-blank line.
+     *
+     * NB: could be optimized to reduce the number of calls to {@link #noCodeIntersection(SpannableStringBuilder, int)}
+     */
+    private ArrayList<SpoilerRange> parse(SpannableStringBuilder markdown, int start) {
         final int MAX_NEW_LINE = 1;
         int length = markdown.length();
         Stack<Integer> openSpoilerStack = new Stack<>();
-        ArrayList<Pair<Integer, Integer>> closedSpoilers = new ArrayList<>();
+        Stack<SpoilerRange> spoilersStack = new Stack<>();
+        ArrayList<SpoilerRange> closedSpoilers = new ArrayList<>();
         int new_lines = 0;
         for (int i = start; i < length; i++) {
             char currentChar = markdown.charAt(i);
@@ -159,28 +155,57 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
                     && (currentChar != '<')
                     && (currentChar != '!')) {
                 new_lines = 0;
-            } else if ((i + 1 < length)
-                    && currentChar == '>'
-                    && markdown.charAt(i + 1) == '!') {
+            } else if (currentChar == '>'
+                    && i + 1 < length
+                    && markdown.charAt(i + 1) == '!'
+                    && noCodeIntersection(markdown, i)) {
                 openSpoilerStack.push(i + 2);
-            } else if ((i + 1 < length) && (i - 1 >= 0)
-                    && openSpoilerStack.size() > 0
-                    && markdown.charAt(i - 1) != '>'
+                i++; // skip '!'
+            } else if (openSpoilerStack.size() > 0
                     && currentChar == '!'
-                    && markdown.charAt(i + 1) == '<') {
+                    && i + 1 < length
+                    && markdown.charAt(i + 1) == '<'
+                    && noCodeIntersection(markdown, i)) {
                 var pos = openSpoilerStack.pop();
-                if (!closedSpoilers.isEmpty()
-                        && closedSpoilers.get(closedSpoilers.size() - 1).first > pos
-                        && closedSpoilers.get(closedSpoilers.size() - 1).second < i) {
-                    closedSpoilers.remove(closedSpoilers.size() - 1);
+                while (!spoilersStack.isEmpty()
+                        && spoilersStack.peek().start > pos) {
+                    SpoilerRange nestedRange = spoilersStack.pop();
+                    nestedRange.nested = true;
+                    closedSpoilers.add(nestedRange);
                 }
-                if (pos != i) {
-                    closedSpoilers.add(Pair.create(pos, i));
-                }
+                SpoilerRange range = new SpoilerRange(pos, i);
+                spoilersStack.push(range);
+                i++; // skip '<'
             } else {
                 new_lines = 0;
             }
         }
+
+        closedSpoilers.addAll(spoilersStack);
         return closedSpoilers;
+    }
+
+    private static class SpoilerBracket {
+        final int position;
+        final boolean opening;
+        final boolean nested;
+
+
+        private SpoilerBracket(int position, boolean opening, boolean nested) {
+            this.position = position;
+            this.opening = opening;
+            this.nested = nested;
+        }
+    }
+
+    private static class SpoilerRange {
+        final int start;
+        final int end;
+        boolean nested;
+
+        SpoilerRange(int start, int end) {
+            this.start = start;
+            this.end = end;
+        }
     }
 }
