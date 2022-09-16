@@ -1,5 +1,5 @@
 <h1 align="center">
-  Infinity For Reddit
+  Infinity For Reddit <img src="https://img.shields.io/badge/Patreon-F96854?style=for-the-badge&logo=patreon&logoColor=white" alt="Patreon">
 </h1>
 
 <div align="center">
@@ -48,6 +48,11 @@ Infinity for Reddit is available on Google Play and F-Droid
 [![GitHub issues](https://img.shields.io/github/issues/Docile-Alligator/Infinity-For-Reddit)](https://github.com/Docile-Alligator/Infinity-For-Reddit/issues)
 
 </div>
+
+## Donation
+Patreon: https://www.patreon.com/docile_alligator
+
+Bitcoin: bc1qxtkd5ap9na7uy8nr9qpt6jny6tdwaj4v43ddle
 
 <details>
   <summary>Table of Contents</summary>
