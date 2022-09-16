@@ -98,7 +98,7 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
         //noinspection ComparatorCombinators as it requires api 24+
         Collections.sort(brackets, (lhs, rhs) -> Integer.compare(lhs.position, rhs.position));
 
-        int offset = 2;
+        int offset = 0;
         for (SpoilerBracket bracket: brackets) {
             if (bracket.opening) {
                 int spoilerStart = bracket.position - offset;
@@ -107,7 +107,7 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
                 }
                 markdownStringBuilder.delete(spoilerStart, spoilerStart + 2);
             } else {
-                int spoilerEnd = bracket.position - offset + 2;
+                int spoilerEnd = bracket.position - offset;
                 markdownStringBuilder.delete(spoilerEnd, spoilerEnd + 2);
                 if (!bracket.nested) {
                     SpoilerSpan spoilerSpan = new SpoilerSpan(textColor, backgroundColor);
@@ -118,7 +118,7 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
             offset += 2;
         }
 
-        if (offset > 2) {
+        if (offset > 0) {
             textView.setText(markdownStringBuilder);
         }
     }
@@ -159,7 +159,7 @@ public class SpoilerParserPlugin extends AbstractMarkwonPlugin {
                     && i + 1 < length
                     && markdown.charAt(i + 1) == '!'
                     && noCodeIntersection(markdown, i)) {
-                openSpoilerStack.push(i + 2);
+                openSpoilerStack.push(i);
                 i++; // skip '!'
             } else if (openSpoilerStack.size() > 0
                     && currentChar == '!'
