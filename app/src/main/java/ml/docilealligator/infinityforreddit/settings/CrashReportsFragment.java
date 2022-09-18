@@ -2,7 +2,7 @@ package ml.docilealligator.infinityforreddit.settings;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.drawable.Drawable;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.view.menu.MenuItemImpl;
-import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -79,11 +79,8 @@ public class CrashReportsFragment extends Fragment {
             for (int i = 0; i < size; i++) {
                 MenuItem item = menu.getItem(i);
                 if (((MenuItemImpl) item).requestsActionButton()) {
-                    Drawable drawable = item.getIcon();
-                    if (drawable != null) {
-                        DrawableCompat.setTint(drawable, mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
-                        item.setIcon(drawable);
-                    }
+                    MenuItemCompat.setIconTintList(item, ColorStateList
+                            .valueOf(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor()));
                 }
                 Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, null);
             }

@@ -1,7 +1,7 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
-import static im.ene.toro.media.PlaybackInfo.INDEX_UNSET;
-import static im.ene.toro.media.PlaybackInfo.TIME_UNSET;
+import static ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo.INDEX_UNSET;
+import static ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo.TIME_UNSET;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -63,9 +63,6 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import im.ene.toro.exoplayer.ExoCreator;
-import im.ene.toro.media.PlaybackInfo;
-import im.ene.toro.media.VolumeInfo;
 import ml.docilealligator.infinityforreddit.FetchPostFilterReadPostsAndConcatenatedSubredditNames;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -129,6 +126,9 @@ import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.videoautoplay.ExoCreator;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
 import retrofit2.Retrofit;
 
 public class HistoryPostFragment extends Fragment implements FragmentCommunicator {
@@ -176,6 +176,9 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     @Named("post_layout")
     SharedPreferences mPostLayoutSharedPreferences;
@@ -378,7 +381,7 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
             mAdapter = new HistoryPostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
+                    mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences,
                     mExoCreator, new HistoryPostRecyclerViewAdapter.Callback() {
                 @Override
                 public void typeChipClicked(int filter) {

@@ -7,7 +7,6 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.media.AudioManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -26,22 +25,21 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
+import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
+import com.google.android.exoplayer2.upstream.cache.SimpleCache;
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.common.collect.ImmutableList;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -54,6 +52,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.ViewImgurMediaActivity;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PlaybackSpeedBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
@@ -78,7 +77,7 @@ public class ViewImgurVideoFragment extends Fragment {
     ImageView downloadImageView;
     private ViewImgurMediaActivity activity;
     private ImgurMedia imgurMedia;
-    private SimpleExoPlayer player;
+    private ExoPlayer player;
     private DataSource.Factory dataSourceFactory;
     private boolean wasPlaying = false;
     private boolean isMute = false;
@@ -87,6 +86,8 @@ public class ViewImgurVideoFragment extends Fragment {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    SimpleCache mSimpleCache;
 
     public ViewImgurVideoFragment() {
         // Required empty public constructor
@@ -143,13 +144,13 @@ public class ViewImgurVideoFragment extends Fragment {
             }
         });
 
-        TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory();
-        TrackSelector trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-        player = ExoPlayerFactory.newSimpleInstance(activity, trackSelector);
+        TrackSelector trackSelector = new DefaultTrackSelector(activity);
+        player = new ExoPlayer.Builder(activity).setTrackSelector(trackSelector).build();
         videoPlayerView.setPlayer(player);
-        dataSourceFactory = new DefaultDataSourceFactory(activity,
-                Util.getUserAgent(activity, "Infinity"));
-        player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(imgurMedia.getLink())));
+        dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
+                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
+        player.prepare();
+        player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(imgurMedia.getLink())));
 
         if (savedInstanceState != null) {
             playbackSpeed = savedInstanceState.getInt(PLAYBACK_SPEED_STATE);
@@ -278,12 +279,13 @@ public class ViewImgurVideoFragment extends Fragment {
             muteButton.setImageResource(R.drawable.ic_unmute_24dp);
         }
 
-        player.addListener(new Player.EventListener() {
+        player.addListener(new Player.Listener() {
             @Override
-            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+            public void onTracksChanged(@NonNull Tracks tracks) {
+                ImmutableList<Tracks.Group> trackGroups = tracks.getGroups();
                 if (!trackGroups.isEmpty()) {
-                    for (int i = 0; i < trackGroups.length; i++) {
-                        String mimeType = trackGroups.get(i).getFormat(0).sampleMimeType;
+                    for (int i = 0; i < trackGroups.size(); i++) {
+                        String mimeType = trackGroups.get(i).getTrackFormat(0).sampleMimeType;
                         if (mimeType != null && mimeType.contains("audio")) {
                             muteButton.setVisibility(View.VISIBLE);
                             muteButton.setOnClickListener(view -> {

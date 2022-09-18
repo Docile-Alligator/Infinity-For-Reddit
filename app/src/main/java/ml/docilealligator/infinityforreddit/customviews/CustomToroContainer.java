@@ -5,7 +5,7 @@ import android.util.AttributeSet;
 
 import androidx.annotation.Nullable;
 
-import im.ene.toro.widget.Container;
+import ml.docilealligator.infinityforreddit.videoautoplay.widget.Container;
 
 public class CustomToroContainer extends Container {
     private OnWindowFocusChangedListener listener;

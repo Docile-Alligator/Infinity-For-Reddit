@@ -11,7 +11,12 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.r0adkll.slidr.model.SlidrInterface;
+
+import org.commonmark.ext.gfm.tables.TableBlock;
 
 import java.util.ArrayList;
 
@@ -30,6 +35,9 @@ import io.noties.markwon.inlineparser.HtmlInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.movement.MovementMethodPlugin;
+import io.noties.markwon.recycler.MarkwonAdapter;
+import io.noties.markwon.recycler.table.TableEntry;
+import io.noties.markwon.recycler.table.TableEntryPlugin;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Rule;
@@ -37,18 +45,28 @@ import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
+import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecyclerViewAdapter.RuleViewHolder> {
     private BaseActivity activity;
     private Markwon markwon;
+    @Nullable
+    private final SlidrInterface slidrInterface;
     private ArrayList<Rule> rules;
     private int mPrimaryTextColor;
-    private int mSecondaryTextColor;
 
-    public RulesRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper) {
+    public RulesRecyclerViewAdapter(@NonNull BaseActivity activity,
+                                    @NonNull CustomThemeWrapper customThemeWrapper,
+                                    @Nullable SlidrInterface slidrInterface) {
         this.activity = activity;
+        this.slidrInterface = slidrInterface;
+        mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
+        int spoilerBackgroundColor = mPrimaryTextColor | 0xFF000000;
         markwon = Markwon.builder(activity)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                     plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
@@ -101,10 +119,11 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
                     return true;
                 })))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                .usePlugin(SpoilerParserPlugin.create(mPrimaryTextColor, spoilerBackgroundColor))
+                .usePlugin(RedditHeadingPlugin.create())
                 .usePlugin(StrikethroughPlugin.create())
+                .usePlugin(TableEntryPlugin.create(activity))
                 .build();
-        mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
-        mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
     }
 
     @NonNull
@@ -115,11 +134,14 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
 
     @Override
     public void onBindViewHolder(@NonNull RuleViewHolder holder, int position) {
-        holder.shortNameTextView.setText(rules.get(holder.getBindingAdapterPosition()).getShortName());
-        if (rules.get(holder.getBindingAdapterPosition()).getDescriptionHtml() == null) {
+        Rule rule = rules.get(holder.getBindingAdapterPosition());
+        holder.shortNameTextView.setText(rule.getShortName());
+        if (rule.getDescriptionHtml() == null) {
             holder.descriptionMarkwonView.setVisibility(View.GONE);
         } else {
-            markwon.setMarkdown(holder.descriptionMarkwonView, rules.get(holder.getBindingAdapterPosition()).getDescriptionHtml());
+            holder.markwonAdapter.setMarkdown(markwon, rule.getDescriptionHtml());
+            //noinspection NotifyDatasetChanged
+            holder.markwonAdapter.notifyDataSetChanged();
         }
     }
 
@@ -143,18 +165,41 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
         @BindView(R.id.short_name_text_view_item_rule)
         TextView shortNameTextView;
         @BindView(R.id.description_markwon_view_item_rule)
-        TextView descriptionMarkwonView;
+        RecyclerView descriptionMarkwonView;
+        @NonNull
+        final MarkwonAdapter markwonAdapter;
 
         RuleViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
             shortNameTextView.setTextColor(mPrimaryTextColor);
-            descriptionMarkwonView.setTextColor(mSecondaryTextColor);
 
             if (activity.typeface != null) {
                 shortNameTextView.setTypeface(activity.typeface);
-                descriptionMarkwonView.setTypeface(activity.typeface);
             }
+            markwonAdapter = MarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
+                    .include(TableBlock.class, TableEntry.create(builder -> builder
+                            .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
+                            .textLayoutIsRoot(R.layout.view_table_entry_cell)))
+                    .build();
+            LinearLayoutManagerBugFixed linearLayoutManager = new MarkwonLinearLayoutManager(activity,
+                    new MarkwonLinearLayoutManager.HorizontalScrollViewScrolledListener() {
+                @Override
+                public void onScrolledLeft() {
+                    if (slidrInterface != null) {
+                        slidrInterface.lock();
+                    }
+                }
+
+                @Override
+                public void onScrolledRight() {
+                    if (slidrInterface != null) {
+                        slidrInterface.unlock();
+                    }
+                }
+            });
+            descriptionMarkwonView.setLayoutManager(linearLayoutManager);
+            descriptionMarkwonView.setAdapter(markwonAdapter);
         }
     }
 }

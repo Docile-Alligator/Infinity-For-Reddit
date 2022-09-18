@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="application_name" translatable="false">Infinity</string>
     <string name="login_activity_label">Login</string>
     <string name="search_activity_label" translatable="false"> </string>
@@ -515,7 +515,7 @@
     <string name="settings_tab_title">Title</string>
     <string name="settings_tab_post_type">Type</string>
     <string name="settings_tab_subreddit_name">Subreddit Name (Without r/ prefix)</string>
-    <string name="settings_tab_multi_reddit_name">MultiReddit Path (/user/yourusername/m/yourmultiredditname)</string>
+    <string name="settings_tab_multi_reddit_name">MultiReddit Path (/user/yourusername/m/yourmultiredditname) (only lowercase characters)</string>
     <string name="settings_tab_username">Username (Without u/ prefix)</string>
     <string name="no_developer_easter_egg">There\'s no developer options here</string>
     <string name="settings_download_location_title">Download Location</string>
@@ -1294,5 +1294,15 @@
 
     <string name="handle_link">Handle Link</string>
     <string name="invalid_link">Invalid link</string>
+
+    <string name="unexpected_intent_action">Unexpected intent action: <xliff:g id="action">%1$s</xliff:g></string>
+    <string name="enable_random_adaptation">Enable random adaptation</string>
+    <string name="error_unsupported_video">Media includes video tracks, but none are playable by this device</string>
+    <string name="error_unsupported_audio">Media includes audio tracks, but none are playable by this device</string>
+    <string name="storage_permission_denied">Permission to access storage was denied</string>
+    <string name="sample_list_load_error">One or more sample lists failed to load</string>
+
+    <string name="exo_controls_volume_up_description">Volume Up</string>
+    <string name="exo_controls_volume_off_description">Volume Off</string>
 
 </resources>

@@ -4,13 +4,13 @@ import android.content.SharedPreferences;
 
 import androidx.annotation.NonNull;
 
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 
-import im.ene.toro.exoplayer.Config;
-import im.ene.toro.exoplayer.DefaultExoCreator;
-import im.ene.toro.exoplayer.ToroExo;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.videoautoplay.Config;
+import ml.docilealligator.infinityforreddit.videoautoplay.DefaultExoCreator;
+import ml.docilealligator.infinityforreddit.videoautoplay.ToroExo;
 
 public class LoopAvailableExoCreator extends DefaultExoCreator {
     private final SharedPreferences sharedPreferences;
@@ -22,8 +22,8 @@ public class LoopAvailableExoCreator extends DefaultExoCreator {
 
     @NonNull
     @Override
-    public SimpleExoPlayer createPlayer() {
-        SimpleExoPlayer player = super.createPlayer();
+    public ExoPlayer createPlayer() {
+        ExoPlayer player = super.createPlayer();
         if (sharedPreferences.getBoolean(SharedPreferencesUtils.LOOP_VIDEO, true)) {
             player.setRepeatMode(Player.REPEAT_MODE_ALL);
         } else {

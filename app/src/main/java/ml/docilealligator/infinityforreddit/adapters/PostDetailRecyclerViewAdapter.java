@@ -27,9 +27,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,10 +40,10 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.common.collect.ImmutableList;
 import com.libRG.CustomTextView;
 
 import org.commonmark.ext.gfm.tables.TableBlock;
@@ -54,14 +54,6 @@ import java.util.concurrent.Executor;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import im.ene.toro.CacheManager;
-import im.ene.toro.ToroPlayer;
-import im.ene.toro.ToroUtil;
-import im.ene.toro.exoplayer.ExoCreator;
-import im.ene.toro.exoplayer.ExoPlayerViewHelper;
-import im.ene.toro.exoplayer.Playable;
-import im.ene.toro.media.PlaybackInfo;
-import im.ene.toro.widget.Container;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
@@ -100,6 +92,7 @@ import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivi
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity;
 import ml.docilealligator.infinityforreddit.apis.GfycatAPI;
+import ml.docilealligator.infinityforreddit.apis.RedgifsAPI;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
@@ -118,6 +111,14 @@ import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.videoautoplay.CacheManager;
+import ml.docilealligator.infinityforreddit.videoautoplay.ExoCreator;
+import ml.docilealligator.infinityforreddit.videoautoplay.ExoPlayerViewHelper;
+import ml.docilealligator.infinityforreddit.videoautoplay.Playable;
+import ml.docilealligator.infinityforreddit.videoautoplay.ToroPlayer;
+import ml.docilealligator.infinityforreddit.videoautoplay.ToroUtil;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
+import ml.docilealligator.infinityforreddit.videoautoplay.widget.Container;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -140,6 +141,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private Retrofit mRedgifsRetrofit;
     private Retrofit mStreamableRetrofit;
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
+    private SharedPreferences mCurrentAccountSharedPreferences;
     private RequestManager mGlide;
     private SaveMemoryCenterInisdeDownsampleStrategy mSaveMemoryCenterInsideDownSampleStrategy;
     private Markwon mPostDetailMarkwon;
@@ -221,6 +223,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                          boolean separatePostAndComments, String accessToken,
                                          String accountName, Post post, Locale locale,
                                          SharedPreferences sharedPreferences,
+                                         SharedPreferences currentAccountSharedPreferences,
                                          SharedPreferences nsfwAndSpoilerSharedPreferences,
                                          SharedPreferences postDetailsSharedPreferences,
                                          ExoCreator exoCreator,
@@ -236,6 +239,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mGlide = glide;
         mSaveMemoryCenterInsideDownSampleStrategy = new SaveMemoryCenterInisdeDownsampleStrategy(Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.POST_FEED_MAX_RESOLUTION, "5000000")));
+        mCurrentAccountSharedPreferences = currentAccountSharedPreferences;
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
         int markdownColor = customThemeWrapper.getPostContentColor();
         int postSpoilerBackgroundColor = markdownColor | 0xFF000000;
@@ -265,12 +269,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         textView.setTextColor(markdownColor);
                         textView.setOnLongClickListener(view -> {
                             if (textView.getSelectionStart() == -1 && textView.getSelectionEnd() == -1) {
-                                Bundle bundle = new Bundle();
-                                bundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, mPost.getSelfTextPlain());
-                                bundle.putString(CopyTextBottomSheetFragment.EXTRA_MARKDOWN, mPost.getSelfText());
-                                CopyTextBottomSheetFragment copyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
-                                copyTextBottomSheetFragment.setArguments(bundle);
-                                copyTextBottomSheetFragment.show(mActivity.getSupportFragmentManager(), copyTextBottomSheetFragment.getTag());
+                                CopyTextBottomSheetFragment.show(
+                                        mActivity.getSupportFragmentManager(),
+                                        mPost.getSelfTextPlain(), mPost.getSelfText()
+                                );
                             }
                             return true;
                         });
@@ -397,9 +399,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mPostIconAndInfoColor = customThemeWrapper.getPostIconAndInfoColor();
         mCommentColor = customThemeWrapper.getCommentColor();
 
-        mCommentIcon = activity.getDrawable(R.drawable.ic_comment_grey_24dp);
+        mCommentIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_comment_grey_24dp);
         if (mCommentIcon != null) {
-            DrawableCompat.setTint(mCommentIcon, mPostIconAndInfoColor);
+            mCommentIcon.setTint(mPostIconAndInfoColor);
         }
 
         mExoCreator = exoCreator;
@@ -678,9 +680,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
                 if (mPost.isGfycat() || mPost.isRedgifs() && !mPost.isLoadGfycatOrStreamableVideoSuccess()) {
                     ((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall =
-                            (mPost.isGfycat() ? mGfycatRetrofit : mRedgifsRetrofit).create(GfycatAPI.class).getGfycatData(mPost.getGfycatId());
+                            mPost.isGfycat() ? mGfycatRetrofit.create(GfycatAPI.class).getGfycatData(mPost.getGfycatId()) :
+                                    mRedgifsRetrofit.create(RedgifsAPI.class).getRedgifsData(APIUtils.getRedgifsOAuthHeader(mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")), mPost.getGfycatId(), APIUtils.USER_AGENT);
                     FetchGfycatOrRedgifsVideoLinks.fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
-                            ((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall, mPost.getGfycatId(),
+                            ((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall,
                             mPost.isGfycat(), mAutomaticallyTryRedgifs,
                             new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
                                 @Override
@@ -1756,10 +1759,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
                 helper.addEventListener(new Playable.DefaultEventListener() {
                     @Override
-                    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+                    public void onTracksChanged(@NonNull Tracks tracks) {
+                        ImmutableList<Tracks.Group> trackGroups = tracks.getGroups();
                         if (!trackGroups.isEmpty()) {
-                            for (int i = 0; i < trackGroups.length; i++) {
-                                String mimeType = trackGroups.get(i).getFormat(0).sampleMimeType;
+                            for (int i = 0; i < trackGroups.size(); i++) {
+                                String mimeType = trackGroups.get(i).getTrackFormat(0).sampleMimeType;
                                 if (mimeType != null && mimeType.contains("audio")) {
                                     helper.setVolume(volume);
                                     muteButton.setVisibility(View.VISIBLE);

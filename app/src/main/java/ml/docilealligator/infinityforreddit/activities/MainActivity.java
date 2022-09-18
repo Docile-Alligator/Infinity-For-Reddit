@@ -1097,8 +1097,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
     @Override
     public void onBackPressed() {;
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
+        if (drawer.isOpen()) {
+            drawer.close();
         } else {
             if (mBackButtonAction == SharedPreferencesUtils.MAIN_PAGE_BACK_BUTTON_ACTION_CONFIRM_EXIT) {
                 new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
@@ -1108,7 +1108,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         .setNegativeButton(R.string.no, null)
                         .show();
             } else if (mBackButtonAction == SharedPreferencesUtils.MAIN_PAGE_BACK_BUTTON_ACTION_OPEN_NAVIGATION_DRAWER) {
-                drawer.openDrawer(GravityCompat.START);
+                drawer.open();
             } else {
                 super.onBackPressed();
             }

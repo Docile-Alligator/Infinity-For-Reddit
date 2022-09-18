@@ -24,11 +24,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.Barrier;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -42,10 +42,10 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.common.collect.ImmutableList;
 import com.libRG.CustomTextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -56,14 +56,6 @@ import java.util.concurrent.Executor;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import im.ene.toro.CacheManager;
-import im.ene.toro.ToroPlayer;
-import im.ene.toro.ToroUtil;
-import im.ene.toro.exoplayer.ExoCreator;
-import im.ene.toro.exoplayer.ExoPlayerViewHelper;
-import im.ene.toro.exoplayer.Playable;
-import im.ene.toro.media.PlaybackInfo;
-import im.ene.toro.widget.Container;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.FetchGfycatOrRedgifsVideoLinks;
@@ -83,18 +75,26 @@ import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivi
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity;
 import ml.docilealligator.infinityforreddit.apis.GfycatAPI;
+import ml.docilealligator.infinityforreddit.apis.RedgifsAPI;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.ShareLinkBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
 import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostDetailFragment;
 import ml.docilealligator.infinityforreddit.fragments.HistoryPostFragment;
-import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.videoautoplay.CacheManager;
+import ml.docilealligator.infinityforreddit.videoautoplay.ExoCreator;
+import ml.docilealligator.infinityforreddit.videoautoplay.ExoPlayerViewHelper;
+import ml.docilealligator.infinityforreddit.videoautoplay.Playable;
+import ml.docilealligator.infinityforreddit.videoautoplay.ToroPlayer;
+import ml.docilealligator.infinityforreddit.videoautoplay.ToroUtil;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
+import ml.docilealligator.infinityforreddit.videoautoplay.widget.Container;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -124,6 +124,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
     private BaseActivity mActivity;
     private HistoryPostFragment mFragment;
     private SharedPreferences mSharedPreferences;
+    private SharedPreferences mCurrentAccountSharedPreferences;
     private Executor mExecutor;
     private Retrofit mOauthRetrofit;
     private Retrofit mGfycatRetrofit;
@@ -209,14 +210,15 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                                           Retrofit gfycatRetrofit, Retrofit redgifsRetrofit, Retrofit streambleRetrofit,
                                           CustomThemeWrapper customThemeWrapper, Locale locale,
                                           String accessToken, String accountName, int postType, int postLayout, boolean displaySubredditName,
-                                          SharedPreferences sharedPreferences, SharedPreferences nsfwAndSpoilerSharedPreferences,
-                                          SharedPreferences postHistorySharedPreferences,
+                                          SharedPreferences sharedPreferences, SharedPreferences currentAccountSharedPreferences,
+                                          SharedPreferences nsfwAndSpoilerSharedPreferences,
                                           ExoCreator exoCreator, Callback callback) {
         super(DIFF_CALLBACK);
         if (activity != null) {
             mActivity = activity;
             mFragment = fragment;
             mSharedPreferences = sharedPreferences;
+            mCurrentAccountSharedPreferences = currentAccountSharedPreferences;
             mExecutor = executor;
             mOauthRetrofit = oauthRetrofit;
             mGfycatRetrofit = gfycatRetrofit;
@@ -310,9 +312,9 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
             mPostIconAndInfoColor = customThemeWrapper.getPostIconAndInfoColor();
             mDividerColor = customThemeWrapper.getDividerColor();
 
-            mCommentIcon = activity.getDrawable(R.drawable.ic_comment_grey_24dp);
+            mCommentIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_comment_grey_24dp);
             if (mCommentIcon != null) {
-                DrawableCompat.setTint(mCommentIcon, mPostIconAndInfoColor);
+                mCommentIcon.setTint(mPostIconAndInfoColor);
             }
 
             mScale = resources.getDisplayMetrics().density;
@@ -676,9 +678,10 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
 
                     if ((post.isGfycat() || post.isRedgifs()) && !post.isLoadGfycatOrStreamableVideoSuccess()) {
                         ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall =
-                                (post.isGfycat() ? mGfycatRetrofit : mRedgifsRetrofit).create(GfycatAPI.class).getGfycatData(post.getGfycatId());
+                                post.isGfycat() ? mGfycatRetrofit.create(GfycatAPI.class).getGfycatData(post.getGfycatId()) :
+                                        mRedgifsRetrofit.create(RedgifsAPI.class).getRedgifsData(APIUtils.getRedgifsOAuthHeader(mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")), post.getGfycatId(), APIUtils.USER_AGENT);
                         FetchGfycatOrRedgifsVideoLinks.fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
-                                ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall, post.getGfycatId(),
+                                ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall,
                                 post.isGfycat(), mAutomaticallyTryRedgifs,
                                 new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
                                     @Override
@@ -837,9 +840,10 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
 
                     if ((post.isGfycat() || post.isRedgifs()) && !post.isLoadGfycatOrStreamableVideoSuccess()) {
                         ((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall =
-                                (post.isGfycat() ? mGfycatRetrofit : mRedgifsRetrofit).create(GfycatAPI.class).getGfycatData(post.getGfycatId());
+                                post.isGfycat() ? mGfycatRetrofit.create(GfycatAPI.class).getGfycatData(post.getGfycatId()) :
+                                        mRedgifsRetrofit.create(RedgifsAPI.class).getRedgifsData(APIUtils.getRedgifsOAuthHeader(mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")), post.getGfycatId(), APIUtils.USER_AGENT);
                         FetchGfycatOrRedgifsVideoLinks.fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
-                                ((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall, post.getGfycatId(),
+                                ((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall,
                                 post.isGfycat(), mAutomaticallyTryRedgifs,
                                 new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
                                     @Override
@@ -2751,10 +2755,11 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                 helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
                 helper.addEventListener(new Playable.DefaultEventListener() {
                     @Override
-                    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+                    public void onTracksChanged(@NonNull Tracks tracks) {
+                        ImmutableList<Tracks.Group> trackGroups = tracks.getGroups();
                         if (!trackGroups.isEmpty()) {
-                            for (int i = 0; i < trackGroups.length; i++) {
-                                String mimeType = trackGroups.get(i).getFormat(0).sampleMimeType;
+                            for (int i = 0; i < trackGroups.size(); i++) {
+                                String mimeType = trackGroups.get(i).getTrackFormat(0).sampleMimeType;
                                 if (mimeType != null && mimeType.contains("audio")) {
                                     if (mFragment.getMasterMutingOption() != null) {
                                         volume = mFragment.getMasterMutingOption() ? 0f : 1f;
@@ -4018,10 +4023,11 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                 helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
                 helper.addEventListener(new Playable.DefaultEventListener() {
                     @Override
-                    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+                    public void onTracksChanged(@NonNull Tracks tracks) {
+                        ImmutableList<Tracks.Group> trackGroups = tracks.getGroups();
                         if (!trackGroups.isEmpty()) {
-                            for (int i = 0; i < trackGroups.length; i++) {
-                                String mimeType = trackGroups.get(i).getFormat(0).sampleMimeType;
+                            for (int i = 0; i < trackGroups.size(); i++) {
+                                String mimeType = trackGroups.get(i).getTrackFormat(0).sampleMimeType;
                                 if (mimeType != null && mimeType.contains("audio")) {
                                     if (mFragment.getMasterMutingOption() != null) {
                                         volume = mFragment.getMasterMutingOption() ? 0f : 1f;

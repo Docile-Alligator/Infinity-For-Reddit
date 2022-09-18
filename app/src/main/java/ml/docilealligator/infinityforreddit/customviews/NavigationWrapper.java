@@ -1,7 +1,7 @@
 package ml.docilealligator.infinityforreddit.customviews;
 
+import android.annotation.SuppressLint;
 import android.content.res.ColorStateList;
-import android.graphics.drawable.Drawable;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -9,7 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import androidx.appcompat.view.menu.MenuItemImpl;
-import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.view.MenuItemCompat;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -65,15 +65,12 @@ public class NavigationWrapper {
         }
     }
 
+    @SuppressLint("RestrictedApi")
     private void applyMenuItemTheme(Menu menu, int bottomAppBarIconColor) {
         for (int i = 0; i < menu.size(); i++) {
             MenuItem item = menu.getItem(i);
             if (((MenuItemImpl) item).requestsActionButton()) {
-                Drawable drawable = item.getIcon();
-                if (drawable != null) {
-                    DrawableCompat.setTint(drawable, bottomAppBarIconColor);
-                    item.setIcon(drawable);
-                }
+                MenuItemCompat.setIconTintList(item, ColorStateList.valueOf(bottomAppBarIconColor));
             }
         }
     }

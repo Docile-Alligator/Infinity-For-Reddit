@@ -1,13 +1,15 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 
 android {
-    compileSdkVersion 31
+    compileSdk 32
     defaultConfig {
         applicationId "ml.docilealligator.infinityforreddit"
-        minSdkVersion 21
-        targetSdkVersion 31
-        versionCode 102
-        versionName "5.3.0"
+        minSdk 21
+        targetSdk 32
+        versionCode 104
+        versionName "5.3.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -33,7 +35,7 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
 
-    lintOptions {
+    lint {
         disable 'MissingTranslation'
     }
 
@@ -46,42 +48,39 @@ android {
 
 dependencies {
 /** AndroidX **/
-    implementation 'androidx.appcompat:appcompat:1.4.2'
+    implementation 'androidx.appcompat:appcompat:1.5.0'
     implementation 'androidx.biometric:biometric:1.2.0-alpha04'
     implementation 'androidx.browser:browser:1.4.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    def lifecycleVersion = "2.3.1"
+    def lifecycleVersion = "2.5.1"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-process:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-runtime:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycleVersion"
-    def pagingVersion = '3.1.0'
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:$lifecycleVersion"
+    def pagingVersion = '3.1.1'
     implementation "androidx.paging:paging-runtime:$pagingVersion"
     implementation "androidx.paging:paging-guava:$pagingVersion"
     implementation 'androidx.preference:preference:1.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    def roomVersion = "2.4.2"
+    def roomVersion = "2.4.3"
     implementation "androidx.room:room-runtime:$roomVersion"
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
     implementation "androidx.room:room-guava:$roomVersion"
     implementation 'androidx.viewpager2:viewpager2:1.1.0-beta01'
     implementation 'androidx.work:work-runtime:2.7.1'
-    implementation 'com.google.android.material:material:1.5.0-alpha05'
+    implementation 'com.google.android.material:material:1.8.0-alpha01'
 
 /** ExoPlayer **/
-    def exoplayerVersion = "2.10.8"
+    def exoplayerVersion = "2.18.1"
     implementation "com.google.android.exoplayer:exoplayer-core:$exoplayerVersion"
     implementation "com.google.android.exoplayer:exoplayer-dash:$exoplayerVersion"
     implementation "com.google.android.exoplayer:exoplayer-hls:$exoplayerVersion"
     implementation "com.google.android.exoplayer:exoplayer-ui:$exoplayerVersion"
-    def toroVersion = "3.7.0.2010003"
-    implementation "im.ene.toro3:toro:$toroVersion"
-    implementation("im.ene.toro3:toro-ext-exoplayer:$toroVersion") {
-        exclude module: 'extension-ima'
-    }
+    implementation "com.google.android.exoplayer:exoplayer-smoothstreaming:$exoplayerVersion"
 
 /** Third-party **/
 

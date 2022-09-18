@@ -122,7 +122,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        BigImageViewer.initialize(GlideImageLoader.with(activity));
+        BigImageViewer.initialize(GlideImageLoader.with(activity.getApplicationContext()));
 
         View rootView = inflater.inflate(R.layout.fragment_view_reddit_gallery_image_or_gif, container, false);
 
@@ -286,11 +286,8 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                             && !activity.isFinishing()
                             && captionTextView.getSelectionStart() == -1
                             && captionTextView.getSelectionEnd() == -1) {
-                        Bundle bundle = new Bundle();
-                        bundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, caption);
-                        CopyTextBottomSheetFragment copyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
-                        copyTextBottomSheetFragment.setArguments(bundle);
-                        copyTextBottomSheetFragment.show(activity.getSupportFragmentManager(), copyTextBottomSheetFragment.getTag());
+                        CopyTextBottomSheetFragment.show(
+                                activity.getSupportFragmentManager(), caption, null);
                     }
                     return true;
                 });

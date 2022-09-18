@@ -146,7 +146,7 @@ public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWa
         getTheme().applyStyle(ContentFontFamily.valueOf(mSharedPreferences
                 .getString(SharedPreferencesUtils.CONTENT_FONT_FAMILY_KEY, ContentFontFamily.Default.name())).getResId(), true);
 
-        BigImageViewer.initialize(GlideImageLoader.with(this));
+        BigImageViewer.initialize(GlideImageLoader.with(this.getApplicationContext()));
 
         setContentView(R.layout.activity_view_image_or_gif);
 
