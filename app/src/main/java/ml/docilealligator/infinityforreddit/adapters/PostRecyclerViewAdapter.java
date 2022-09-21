@@ -24,11 +24,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.Barrier;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.paging.PagingDataAdapter;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -42,10 +42,10 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.common.collect.ImmutableList;
 import com.libRG.CustomTextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -333,9 +333,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mPostIconAndInfoColor = customThemeWrapper.getPostIconAndInfoColor();
             mDividerColor = customThemeWrapper.getDividerColor();
 
-            mCommentIcon = activity.getDrawable(R.drawable.ic_comment_grey_24dp);
+            mCommentIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_comment_grey_24dp);
             if (mCommentIcon != null) {
-                DrawableCompat.setTint(mCommentIcon, mPostIconAndInfoColor);
+                mCommentIcon.setTint(mPostIconAndInfoColor);
             }
 
             mScale = resources.getDisplayMetrics().density;
@@ -710,7 +710,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     if ((post.isGfycat() || post.isRedgifs()) && !post.isLoadGfycatOrStreamableVideoSuccess()) {
                         ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall =
                                 post.isGfycat() ? mGfycatRetrofit.create(GfycatAPI.class).getGfycatData(post.getGfycatId()) :
-                                        mRedgifsRetrofit.create(RedgifsAPI.class).getRedgifsData(APIUtils.getRedgifsOAuthHeader(mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")), post.getGfycatId(), APIUtils.getRedgifsUserAgent(mActivity));
+                                        mRedgifsRetrofit.create(RedgifsAPI.class).getRedgifsData(APIUtils.getRedgifsOAuthHeader(mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")), post.getGfycatId(), APIUtils.USER_AGENT);
                         FetchGfycatOrRedgifsVideoLinks.fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
                                 ((PostVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall,
                                 post.isGfycat(), mAutomaticallyTryRedgifs,
@@ -876,7 +876,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     if ((post.isGfycat() || post.isRedgifs()) && !post.isLoadGfycatOrStreamableVideoSuccess()) {
                         ((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall =
                                 post.isGfycat() ? mGfycatRetrofit.create(GfycatAPI.class).getGfycatData(post.getGfycatId()) :
-                                        mRedgifsRetrofit.create(RedgifsAPI.class).getRedgifsData(APIUtils.getRedgifsOAuthHeader(mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")), post.getGfycatId(), APIUtils.getRedgifsUserAgent(mActivity));
+                                        mRedgifsRetrofit.create(RedgifsAPI.class).getRedgifsData(APIUtils.getRedgifsOAuthHeader(mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")), post.getGfycatId(), APIUtils.USER_AGENT);
                         FetchGfycatOrRedgifsVideoLinks.fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
                                 ((PostCard2VideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall,
                                 post.isGfycat(), mAutomaticallyTryRedgifs,
@@ -2860,10 +2860,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
                 helper.addEventListener(new Playable.DefaultEventListener() {
                     @Override
-                    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+                    public void onTracksChanged(@NonNull Tracks tracks) {
+                        ImmutableList<Tracks.Group> trackGroups = tracks.getGroups();
                         if (!trackGroups.isEmpty()) {
-                            for (int i = 0; i < trackGroups.length; i++) {
-                                String mimeType = trackGroups.get(i).getFormat(0).sampleMimeType;
+                            for (int i = 0; i < trackGroups.size(); i++) {
+                                String mimeType = trackGroups.get(i).getTrackFormat(0).sampleMimeType;
                                 if (mimeType != null && mimeType.contains("audio")) {
                                     if (mFragment.getMasterMutingOption() != null) {
                                         volume = mFragment.getMasterMutingOption() ? 0f : 1f;
@@ -4175,10 +4176,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
                 helper.addEventListener(new Playable.DefaultEventListener() {
                     @Override
-                    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+                    public void onTracksChanged(@NonNull Tracks tracks) {
+                        ImmutableList<Tracks.Group> trackGroups = tracks.getGroups();
                         if (!trackGroups.isEmpty()) {
-                            for (int i = 0; i < trackGroups.length; i++) {
-                                String mimeType = trackGroups.get(i).getFormat(0).sampleMimeType;
+                            for (int i = 0; i < trackGroups.size(); i++) {
+                                String mimeType = trackGroups.get(i).getTrackFormat(0).sampleMimeType;
                                 if (mimeType != null && mimeType.contains("audio")) {
                                     if (mFragment.getMasterMutingOption() != null) {
                                         volume = mFragment.getMasterMutingOption() ? 0f : 1f;

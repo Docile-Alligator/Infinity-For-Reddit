@@ -27,9 +27,9 @@ import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -189,7 +189,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     private FlairBottomSheetFragment mFlairSelectionBottomSheetFragment;
     private Snackbar mPostingSnackbar;
     private DataSource.Factory dataSourceFactory;
-    private SimpleExoPlayer player;
+    private ExoPlayer player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -216,7 +216,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
 
         mGlide = Glide.with(this);
 
-        player = ExoPlayerFactory.newSimpleInstance(this);
+        player = new ExoPlayer.Builder(this).build();
         videoPlayerView.setPlayer(player);
         dataSourceFactory = new DefaultDataSourceFactory(this,
                 Util.getUserAgent(this, "Infinity"));
@@ -491,7 +491,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
         constraintLayout.setVisibility(View.GONE);
         selectAgainTextView.setVisibility(View.VISIBLE);
         videoPlayerView.setVisibility(View.VISIBLE);
-        player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(videoUri));
+        player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(videoUri)));
         player.setPlayWhenReady(true);
         wasPlaying = true;
     }

@@ -1,10 +1,10 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -23,21 +23,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.source.BehindLiveWindowException;
-import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
-import com.google.android.exoplayer2.trackselection.AdaptiveTrackSelection;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.ui.TrackSelectionDialogBuilder;
 import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import com.google.android.exoplayer2.util.Util;
+import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
+import com.google.android.exoplayer2.upstream.cache.CacheDataSource;
+import com.google.android.exoplayer2.upstream.cache.SimpleCache;
+import com.google.common.collect.ImmutableList;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -58,6 +57,7 @@ import ml.docilealligator.infinityforreddit.activities.RPANActivity;
 import ml.docilealligator.infinityforreddit.adapters.RPANCommentStreamRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import okhttp3.OkHttpClient;
@@ -105,9 +105,11 @@ public class ViewRPANBroadcastFragment extends Fragment {
     @Inject
     @Named("rpan")
     OkHttpClient okHttpClient;
+    @Inject
+    SimpleCache mSimpleCache;
     private RPANActivity mActivity;
     private RPANBroadcast rpanBroadcast;
-    private SimpleExoPlayer player;
+    private ExoPlayer player;
     private DefaultTrackSelector trackSelector;
     private DataSource.Factory dataSourceFactory;
     private Handler handler;
@@ -175,9 +177,8 @@ public class ViewRPANBroadcastFragment extends Fragment {
             }
         });
 
-        TrackSelection.Factory videoTrackSelectionFactory = new AdaptiveTrackSelection.Factory();
-        trackSelector = new DefaultTrackSelector(videoTrackSelectionFactory);
-        player = ExoPlayerFactory.newSimpleInstance(mActivity, trackSelector);
+        trackSelector = new DefaultTrackSelector(mActivity);
+        player = new ExoPlayer.Builder(mActivity).setTrackSelector(trackSelector).build();
         playerView.setPlayer(player);
 
         wasPlaying = true;
@@ -202,9 +203,10 @@ public class ViewRPANBroadcastFragment extends Fragment {
             muteButton.setImageResource(R.drawable.ic_unmute_24dp);
         }
 
-        player.addListener(new Player.EventListener() {
+        player.addListener(new Player.Listener() {
             @Override
-            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+            public void onTracksChanged(@NonNull Tracks tracks) {
+                ImmutableList<Tracks.Group> trackGroups = tracks.getGroups();
                 if (!trackGroups.isEmpty()) {
                     if (isDataSavingMode) {
                         trackSelector.setParameters(
@@ -214,18 +216,19 @@ public class ViewRPANBroadcastFragment extends Fragment {
 
                     hdButton.setVisibility(View.VISIBLE);
                     hdButton.setOnClickListener(view -> {
-                        TrackSelectionDialogBuilder builder = new TrackSelectionDialogBuilder(mActivity,
-                                getString(R.string.select_video_quality), trackSelector, 0);
+                        TrackSelectionDialogBuilder builder = new TrackSelectionDialogBuilder(mActivity, getString(R.string.select_video_quality), player, 0);
                         builder.setShowDisableOption(true);
                         builder.setAllowAdaptiveSelections(false);
-                        AlertDialog alertDialog = builder.build();
-                        alertDialog.show();
-                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
-                        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+                        Dialog dialog = builder.build();
+                        dialog.show();
+                        if (dialog instanceof AlertDialog) {
+                            ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+                            ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+                        }
                     });
 
-                    for (int i = 0; i < trackGroups.length; i++) {
-                        String mimeType = trackGroups.get(i).getFormat(0).sampleMimeType;
+                    for (int i = 0; i < trackGroups.size(); i++) {
+                        String mimeType = trackGroups.get(i).getTrackFormat(0).sampleMimeType;
                         if (mimeType != null && mimeType.contains("audio")) {
                             muteButton.setVisibility(View.VISIBLE);
                             muteButton.setOnClickListener(view -> {
@@ -350,9 +353,11 @@ public class ViewRPANBroadcastFragment extends Fragment {
     public void onResume() {
         super.onResume();
         if (dataSourceFactory == null) {
-            dataSourceFactory = new DefaultHttpDataSourceFactory(Util.getUserAgent(mActivity, "Infinity"));
+            dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
+                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
             // Prepare the player with the source.
-            player.prepare(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(Uri.parse(rpanBroadcast.rpanStream.hlsUrl)));
+            player.prepare();
+            player.setMediaSource(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(rpanBroadcast.rpanStream.hlsUrl)));
             if (mSharedPreferences.getBoolean(SharedPreferencesUtils.LOOP_VIDEO, true)) {
                 player.setRepeatMode(Player.REPEAT_MODE_ALL);
             } else {

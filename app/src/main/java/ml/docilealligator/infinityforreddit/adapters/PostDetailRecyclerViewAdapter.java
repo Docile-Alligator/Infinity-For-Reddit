@@ -27,9 +27,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,10 +40,10 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.common.collect.ImmutableList;
 import com.libRG.CustomTextView;
 
 import org.commonmark.ext.gfm.tables.TableBlock;
@@ -269,12 +269,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         textView.setTextColor(markdownColor);
                         textView.setOnLongClickListener(view -> {
                             if (textView.getSelectionStart() == -1 && textView.getSelectionEnd() == -1) {
-                                Bundle bundle = new Bundle();
-                                bundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, mPost.getSelfTextPlain());
-                                bundle.putString(CopyTextBottomSheetFragment.EXTRA_MARKDOWN, mPost.getSelfText());
-                                CopyTextBottomSheetFragment copyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
-                                copyTextBottomSheetFragment.setArguments(bundle);
-                                copyTextBottomSheetFragment.show(mActivity.getSupportFragmentManager(), copyTextBottomSheetFragment.getTag());
+                                CopyTextBottomSheetFragment.show(
+                                        mActivity.getSupportFragmentManager(),
+                                        mPost.getSelfTextPlain(), mPost.getSelfText()
+                                );
                             }
                             return true;
                         });
@@ -401,9 +399,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mPostIconAndInfoColor = customThemeWrapper.getPostIconAndInfoColor();
         mCommentColor = customThemeWrapper.getCommentColor();
 
-        mCommentIcon = activity.getDrawable(R.drawable.ic_comment_grey_24dp);
+        mCommentIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_comment_grey_24dp);
         if (mCommentIcon != null) {
-            DrawableCompat.setTint(mCommentIcon, mPostIconAndInfoColor);
+            mCommentIcon.setTint(mPostIconAndInfoColor);
         }
 
         mExoCreator = exoCreator;
@@ -683,7 +681,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 if (mPost.isGfycat() || mPost.isRedgifs() && !mPost.isLoadGfycatOrStreamableVideoSuccess()) {
                     ((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall =
                             mPost.isGfycat() ? mGfycatRetrofit.create(GfycatAPI.class).getGfycatData(mPost.getGfycatId()) :
-                                    mRedgifsRetrofit.create(RedgifsAPI.class).getRedgifsData(APIUtils.getRedgifsOAuthHeader(mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")), mPost.getGfycatId(), APIUtils.getRedgifsUserAgent(mActivity));
+                                    mRedgifsRetrofit.create(RedgifsAPI.class).getRedgifsData(APIUtils.getRedgifsOAuthHeader(mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")), mPost.getGfycatId(), APIUtils.USER_AGENT);
                     FetchGfycatOrRedgifsVideoLinks.fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
                             ((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall,
                             mPost.isGfycat(), mAutomaticallyTryRedgifs,
@@ -1761,10 +1759,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
                 helper.addEventListener(new Playable.DefaultEventListener() {
                     @Override
-                    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+                    public void onTracksChanged(@NonNull Tracks tracks) {
+                        ImmutableList<Tracks.Group> trackGroups = tracks.getGroups();
                         if (!trackGroups.isEmpty()) {
-                            for (int i = 0; i < trackGroups.length; i++) {
-                                String mimeType = trackGroups.get(i).getFormat(0).sampleMimeType;
+                            for (int i = 0; i < trackGroups.size(); i++) {
+                                String mimeType = trackGroups.get(i).getTrackFormat(0).sampleMimeType;
                                 if (mimeType != null && mimeType.contains("audio")) {
                                     helper.setVolume(volume);
                                     muteButton.setVisibility(View.VISIBLE);

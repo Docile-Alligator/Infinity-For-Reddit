@@ -28,6 +28,7 @@ import androidx.annotation.Nullable;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.C.ContentType;
+import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.source.LoopingMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.MediaSourceEventListener;
@@ -46,59 +47,62 @@ import com.google.android.exoplayer2.upstream.DataSource;
 
 public interface MediaSourceBuilder {
 
-  @NonNull MediaSource buildMediaSource(@NonNull Context context, @NonNull Uri uri,
-      @Nullable String fileExt, @Nullable Handler handler,
-      @NonNull DataSource.Factory manifestDataSourceFactory,
-      @NonNull DataSource.Factory mediaDataSourceFactory,
-      @Nullable MediaSourceEventListener listener);
+    @NonNull
+    MediaSource buildMediaSource(@NonNull Context context, @NonNull Uri uri,
+                                 @Nullable String fileExt, @Nullable Handler handler,
+                                 @NonNull DataSource.Factory manifestDataSourceFactory,
+                                 @NonNull DataSource.Factory mediaDataSourceFactory,
+                                 @Nullable MediaSourceEventListener listener);
 
-  MediaSourceBuilder DEFAULT = new MediaSourceBuilder() {
-    @NonNull @Override
-    public MediaSource buildMediaSource(@NonNull Context context, @NonNull Uri uri,
-        @Nullable String ext, @Nullable Handler handler,
-        @NonNull DataSource.Factory manifestDataSourceFactory,
-        @NonNull DataSource.Factory mediaDataSourceFactory, MediaSourceEventListener listener) {
-      @ContentType int type = isEmpty(ext) ? inferContentType(uri) : inferContentType("." + ext);
-      MediaSource result;
-      switch (type) {
-        case C.TYPE_SS:
-          result = new SsMediaSource.Factory(
-              new DefaultSsChunkSource.Factory(mediaDataSourceFactory), manifestDataSourceFactory)
-              .createMediaSource(uri);
-          break;
-        case C.TYPE_DASH:
-          result = new DashMediaSource.Factory(
-              new DefaultDashChunkSource.Factory(mediaDataSourceFactory), manifestDataSourceFactory)
-              .createMediaSource(uri);
-          break;
-        case C.TYPE_HLS:
-          result = new HlsMediaSource.Factory(mediaDataSourceFactory) //
-              .createMediaSource(uri);
-          break;
-        case C.TYPE_OTHER:
-          result = new ProgressiveMediaSource.Factory(mediaDataSourceFactory) //
-              .createMediaSource(uri);
-          break;
-        default:
-          throw new IllegalStateException("Unsupported type: " + type);
-      }
+    MediaSourceBuilder DEFAULT = new MediaSourceBuilder() {
+        @NonNull
+        @Override
+        public MediaSource buildMediaSource(@NonNull Context context, @NonNull Uri uri,
+                                            @Nullable String ext, @Nullable Handler handler,
+                                            @NonNull DataSource.Factory manifestDataSourceFactory,
+                                            @NonNull DataSource.Factory mediaDataSourceFactory, MediaSourceEventListener listener) {
+            @ContentType int type = isEmpty(ext) ? inferContentType(uri) : inferContentType("." + ext);
+            MediaSource result;
+            switch (type) {
+                case C.CONTENT_TYPE_SS:
+                    result = new SsMediaSource.Factory(
+                            new DefaultSsChunkSource.Factory(mediaDataSourceFactory), manifestDataSourceFactory)
+                            .createMediaSource(MediaItem.fromUri(uri));
+                    break;
+                case C.CONTENT_TYPE_DASH:
+                    result = new DashMediaSource.Factory(
+                            new DefaultDashChunkSource.Factory(mediaDataSourceFactory), manifestDataSourceFactory)
+                            .createMediaSource(MediaItem.fromUri(uri));
+                    break;
+                case C.CONTENT_TYPE_HLS:
+                    result = new HlsMediaSource.Factory(mediaDataSourceFactory) //
+                            .createMediaSource(MediaItem.fromUri(uri));
+                    break;
+                case C.CONTENT_TYPE_OTHER:
+                    result = new ProgressiveMediaSource.Factory(mediaDataSourceFactory) //
+                            .createMediaSource(MediaItem.fromUri(uri));
+                    break;
+                default:
+                    throw new IllegalStateException("Unsupported type: " + type);
+            }
 
-      result.addEventListener(handler, listener);
-      return result;
-    }
-  };
+            result.addEventListener(handler, listener);
+            return result;
+        }
+    };
 
-  MediaSourceBuilder LOOPING = new MediaSourceBuilder() {
+    MediaSourceBuilder LOOPING = new MediaSourceBuilder() {
 
-    @NonNull @Override
-    public MediaSource buildMediaSource(@NonNull Context context, @NonNull Uri uri,
-        @Nullable String fileExt, @Nullable Handler handler,
-        @NonNull DataSource.Factory manifestDataSourceFactory,
-        @NonNull DataSource.Factory mediaDataSourceFactory,
-        @Nullable MediaSourceEventListener listener) {
-      return new LoopingMediaSource(
-          DEFAULT.buildMediaSource(context, uri, fileExt, handler, manifestDataSourceFactory,
-              mediaDataSourceFactory, listener));
-    }
-  };
+        @NonNull
+        @Override
+        public MediaSource buildMediaSource(@NonNull Context context, @NonNull Uri uri,
+                                            @Nullable String fileExt, @Nullable Handler handler,
+                                            @NonNull DataSource.Factory manifestDataSourceFactory,
+                                            @NonNull DataSource.Factory mediaDataSourceFactory,
+                                            @Nullable MediaSourceEventListener listener) {
+            return new LoopingMediaSource(
+                    DEFAULT.buildMediaSource(context, uri, fileExt, handler, manifestDataSourceFactory,
+                            mediaDataSourceFactory, listener));
+        }
+    };
 }

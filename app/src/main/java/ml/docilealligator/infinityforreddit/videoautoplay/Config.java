@@ -29,14 +29,10 @@ import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory.ExtensionRendererMode;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.drm.DrmSessionManager;
-import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
 import com.google.android.exoplayer2.upstream.cache.Cache;
-
-import ml.docilealligator.infinityforreddit.videoautoplay.annotations.Beta;
 
 /**
  * Necessary configuration for {@link ExoCreator} to produces {@link SimpleExoPlayer} and
@@ -61,7 +57,6 @@ public final class Config {
   @NonNull final MediaSourceBuilder mediaSourceBuilder;
 
   // Nullable options
-  @Nullable final DrmSessionManager<FrameworkMediaCrypto> drmSessionManager;
   @Nullable final Cache cache; // null by default
   // If null, ExoCreator must come up with a default one.
   // This is to help customizing the Data source, for example using OkHttp extension.
@@ -69,17 +64,16 @@ public final class Config {
 
   @SuppressWarnings("WeakerAccess") //
   Config(@Nullable Context context, int extensionMode, @NonNull BaseMeter meter,
-      @NonNull LoadControl loadControl,
-      @Nullable DataSource.Factory dataSourceFactory,
-      @NonNull MediaSourceBuilder mediaSourceBuilder,
-      @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, @Nullable Cache cache) {
+         @NonNull LoadControl loadControl,
+         @Nullable DataSource.Factory dataSourceFactory,
+         @NonNull MediaSourceBuilder mediaSourceBuilder,
+         @Nullable Cache cache) {
     this.context = context != null ? context.getApplicationContext() : null;
     this.extensionMode = extensionMode;
     this.meter = meter;
     this.loadControl = loadControl;
     this.dataSourceFactory = dataSourceFactory;
     this.mediaSourceBuilder = mediaSourceBuilder;
-    this.drmSessionManager = drmSessionManager;
     this.cache = cache;
   }
 
@@ -93,7 +87,6 @@ public final class Config {
     if (!meter.equals(config.meter)) return false;
     if (!loadControl.equals(config.loadControl)) return false;
     if (!mediaSourceBuilder.equals(config.mediaSourceBuilder)) return false;
-    if (!ObjectsCompat.equals(drmSessionManager, config.drmSessionManager)) return false;
     if (!ObjectsCompat.equals(cache, config.cache)) return false;
     return ObjectsCompat.equals(dataSourceFactory, config.dataSourceFactory);
   }
@@ -103,7 +96,6 @@ public final class Config {
     result = 31 * result + meter.hashCode();
     result = 31 * result + loadControl.hashCode();
     result = 31 * result + mediaSourceBuilder.hashCode();
-    result = 31 * result + (drmSessionManager != null ? drmSessionManager.hashCode() : 0);
     result = 31 * result + (cache != null ? cache.hashCode() : 0);
     result = 31 * result + (dataSourceFactory != null ? dataSourceFactory.hashCode() : 0);
     return result;
@@ -111,7 +103,6 @@ public final class Config {
 
   @SuppressWarnings("unused") public Builder newBuilder() {
     return new Builder(context).setCache(this.cache)
-        .setDrmSessionManager(this.drmSessionManager)
         .setExtensionMode(this.extensionMode)
         .setLoadControl(this.loadControl)
         .setMediaSourceBuilder(this.mediaSourceBuilder)
@@ -145,7 +136,6 @@ public final class Config {
     private LoadControl loadControl = new DefaultLoadControl();
     private DataSource.Factory dataSourceFactory = null;
     private MediaSourceBuilder mediaSourceBuilder = MediaSourceBuilder.DEFAULT;
-    private DrmSessionManager<FrameworkMediaCrypto> drmSessionManager = null;
     private Cache cache = null;
 
     public Builder setExtensionMode(@ExtensionRendererMode int extensionMode) {
@@ -175,13 +165,6 @@ public final class Config {
       return this;
     }
 
-    @Beta //
-    public Builder setDrmSessionManager(
-        @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager) {
-      this.drmSessionManager = drmSessionManager;
-      return this;
-    }
-
     public Builder setCache(@Nullable Cache cache) {
       this.cache = cache;
       return this;
@@ -189,7 +172,7 @@ public final class Config {
 
     public Config build() {
       return new Config(context, extensionMode, meter, loadControl, dataSourceFactory,
-          mediaSourceBuilder, drmSessionManager, cache);
+          mediaSourceBuilder, cache);
     }
   }
 }

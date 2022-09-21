@@ -23,9 +23,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -305,9 +305,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 customThemeWrapper.getCommentVerticalBarColor7(),
         };
 
-        mCommentIcon = activity.getDrawable(R.drawable.ic_comment_grey_24dp);
+        mCommentIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_comment_grey_24dp);
         if (mCommentIcon != null) {
-            DrawableCompat.setTint(mCommentIcon, mPostIconAndInfoColor);
+            mCommentIcon.setTint(mPostIconAndInfoColor);
         }
     }
 
@@ -987,8 +987,15 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public void editComment(String commentAuthor, String commentContentMarkdown, int position) {
-        if (commentAuthor != null)
+        editComment(commentAuthor, mVisibleComments.get(position).isSubmitter(), commentContentMarkdown, position);
+    }
+
+    public void editComment(String commentAuthor, boolean isSubmitter, String commentContentMarkdown, int position) {
+        if (commentAuthor != null) {
             mVisibleComments.get(position).setAuthor(commentAuthor);
+        }
+
+        mVisibleComments.get(position).setSubmittedByAuthor(isSubmitter);
 
         mVisibleComments.get(position).setCommentMarkdown(commentContentMarkdown);
         if (mIsSingleCommentThreadMode) {

@@ -12,8 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -49,6 +51,19 @@ public class CopyTextBottomSheetFragment extends LandscapeExpandedRoundedBottomS
         // Required empty public constructor
     }
 
+    /**
+     * Convenience method for creating the dialog, creating and setting arguments bundle
+     * and displaying the dialog
+     */
+    public static void show(@NonNull FragmentManager fragmentManager,
+                            @Nullable String rawText, @Nullable String markdown) {
+        Bundle bundle = new Bundle();
+        bundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, rawText);
+        bundle.putString(CopyTextBottomSheetFragment.EXTRA_MARKDOWN, markdown);
+        CopyTextBottomSheetFragment copyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
+        copyTextBottomSheetFragment.setArguments(bundle);
+        copyTextBottomSheetFragment.show(fragmentManager, null);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

@@ -181,12 +181,8 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
 
         copyTextView.setOnClickListener(view -> {
             dismiss();
-            CopyTextBottomSheetFragment copyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
-            Bundle copyBundle = new Bundle();
-            copyBundle.putString(CopyTextBottomSheetFragment.EXTRA_MARKDOWN, comment.getCommentMarkdown());
-            copyBundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, comment.getCommentRawText());
-            copyTextBottomSheetFragment.setArguments(copyBundle);
-            copyTextBottomSheetFragment.show(activity.getSupportFragmentManager(), copyTextBottomSheetFragment.getTag());
+            CopyTextBottomSheetFragment.show(activity.getSupportFragmentManager(),
+                    comment.getCommentRawText(), comment.getCommentMarkdown());
         });
 
         reportTextView.setOnClickListener(view -> {

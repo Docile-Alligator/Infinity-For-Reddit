@@ -83,6 +83,9 @@ Thumbs.db
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
+# Visual Studio Code
+.vscode/
+
 # Package Files #
 *.war
 *.ear

@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.utils;
 
-import android.content.Context;
 import android.util.Base64;
 
 import java.util.HashMap;
@@ -152,24 +151,5 @@ public class APIUtils {
         params.put(APIUtils.REFERER_KEY, APIUtils.REVEDDIT_REFERER);
         params.put(APIUtils.USER_AGENT_KEY, APIUtils.USER_AGENT);
         return params;
-    }
-
-    public static String getRedgifsUserAgent(Context context) {
-        return APIUtils.USER_AGENT;
-        /*String versionName;
-        try {
-            String packageName = context.getPackageName();
-            PackageInfo info = context.getPackageManager().getPackageInfo(packageName, 0);
-            versionName = info.versionName;
-        } catch (Exception e) {
-            versionName = "?";
-        }
-        return "Toro ExoPlayer Extension, v3.7.0.2010003"
-                + "/"
-                + versionName
-                + " (Linux;Android "
-                + Build.VERSION.RELEASE
-                + ") "
-                + ExoPlayerLibraryInfo.VERSION_SLASHY;*/
     }
 }

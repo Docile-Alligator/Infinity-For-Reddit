@@ -23,13 +23,11 @@ import android.os.Looper;
 
 import androidx.annotation.CallSuper;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 
+import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.RenderersFactory;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.drm.DrmSessionManager;
-import com.google.android.exoplayer2.drm.FrameworkMediaCrypto;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 
@@ -41,53 +39,65 @@ import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
  * @author eneim (2018/03/27).
  */
 @SuppressWarnings("WeakerAccess") //
-public class ToroExoPlayer extends SimpleExoPlayer {
+public class ToroExoPlayer {
 
-  protected ToroExoPlayer(Context context, RenderersFactory renderersFactory,
-      TrackSelector trackSelector, LoadControl loadControl, BandwidthMeter bandwidthMeter,
-      @Nullable DrmSessionManager<FrameworkMediaCrypto> drmSessionManager, Looper looper) {
-    super(context, renderersFactory, trackSelector, loadControl, bandwidthMeter, drmSessionManager,
-        looper);
-  }
+    private ExoPlayer player;
 
-  private ToroPlayer.VolumeChangeListeners listeners;
-
-  public final void addOnVolumeChangeListener(@NonNull ToroPlayer.OnVolumeChangeListener listener) {
-    if (this.listeners == null) this.listeners = new ToroPlayer.VolumeChangeListeners();
-    this.listeners.add(checkNotNull(listener));
-  }
-
-  public final void removeOnVolumeChangeListener(ToroPlayer.OnVolumeChangeListener listener) {
-    if (this.listeners != null) this.listeners.remove(listener);
-  }
-
-  public final void clearOnVolumeChangeListener() {
-    if (this.listeners != null) this.listeners.clear();
-  }
-
-  @CallSuper @Override public void setVolume(float audioVolume) {
-    this.setVolumeInfo(new VolumeInfo(audioVolume == 0, audioVolume));
-  }
-
-  private final VolumeInfo volumeInfo = new VolumeInfo(false, 1f);
-
-  @SuppressWarnings("UnusedReturnValue")
-  public final boolean setVolumeInfo(@NonNull VolumeInfo volumeInfo) {
-    boolean changed = !this.volumeInfo.equals(volumeInfo);
-    if (changed) {
-      this.volumeInfo.setTo(volumeInfo.isMute(), volumeInfo.getVolume());
-      super.setVolume(volumeInfo.isMute() ? 0 : volumeInfo.getVolume());
-      if (listeners != null) {
-        for (ToroPlayer.OnVolumeChangeListener listener : this.listeners) {
-          listener.onVolumeChanged(volumeInfo);
-        }
-      }
+    public ToroExoPlayer(Context context, RenderersFactory renderersFactory,
+                            TrackSelector trackSelector, LoadControl loadControl, BandwidthMeter bandwidthMeter,
+                            Looper looper) {
+        player = new ExoPlayer.Builder(context).setRenderersFactory(renderersFactory).setTrackSelector(trackSelector).setLoadControl(loadControl).setBandwidthMeter(bandwidthMeter).setLooper(looper).build();
     }
 
-    return changed;
-  }
+    public ToroExoPlayer(ExoPlayer exoPlayer) {
+        this.player = exoPlayer;
+    }
 
-  @SuppressWarnings("unused") @NonNull public final VolumeInfo getVolumeInfo() {
-    return volumeInfo;
-  }
+    private ToroPlayer.VolumeChangeListeners listeners;
+
+    public final void addOnVolumeChangeListener(@NonNull ToroPlayer.OnVolumeChangeListener listener) {
+        if (this.listeners == null) this.listeners = new ToroPlayer.VolumeChangeListeners();
+        this.listeners.add(checkNotNull(listener));
+    }
+
+    public final void removeOnVolumeChangeListener(ToroPlayer.OnVolumeChangeListener listener) {
+        if (this.listeners != null) this.listeners.remove(listener);
+    }
+
+    public final void clearOnVolumeChangeListener() {
+        if (this.listeners != null) this.listeners.clear();
+    }
+
+    @CallSuper
+    public void setVolume(float audioVolume) {
+        this.setVolumeInfo(new VolumeInfo(audioVolume == 0, audioVolume));
+    }
+
+    private final VolumeInfo volumeInfo = new VolumeInfo(false, 1f);
+
+    @SuppressWarnings("UnusedReturnValue")
+    public final boolean setVolumeInfo(@NonNull VolumeInfo volumeInfo) {
+        boolean changed = !this.volumeInfo.equals(volumeInfo);
+        if (changed) {
+            this.volumeInfo.setTo(volumeInfo.isMute(), volumeInfo.getVolume());
+            player.setVolume(volumeInfo.isMute() ? 0 : volumeInfo.getVolume());
+            if (listeners != null) {
+                for (ToroPlayer.OnVolumeChangeListener listener : this.listeners) {
+                    listener.onVolumeChanged(volumeInfo);
+                }
+            }
+        }
+
+        return changed;
+    }
+
+    @SuppressWarnings("unused")
+    @NonNull
+    public final VolumeInfo getVolumeInfo() {
+        return volumeInfo;
+    }
+
+    public ExoPlayer getPlayer() {
+        return player;
+    }
 }

@@ -515,7 +515,7 @@
     <string name="settings_tab_title">Title</string>
     <string name="settings_tab_post_type">Type</string>
     <string name="settings_tab_subreddit_name">Subreddit Name (Without r/ prefix)</string>
-    <string name="settings_tab_multi_reddit_name">MultiReddit Path (/user/yourusername/m/yourmultiredditname)</string>
+    <string name="settings_tab_multi_reddit_name">MultiReddit Path (/user/yourusername/m/yourmultiredditname) (only lowercase characters)</string>
     <string name="settings_tab_username">Username (Without u/ prefix)</string>
     <string name="no_developer_easter_egg">There\'s no developer options here</string>
     <string name="settings_download_location_title">Download Location</string>
@@ -1297,13 +1297,6 @@
 
     <string name="unexpected_intent_action">Unexpected intent action: <xliff:g id="action">%1$s</xliff:g></string>
     <string name="enable_random_adaptation">Enable random adaptation</string>
-    <string name="error_drm_not_supported">Protected content not supported on API levels below 18</string>
-    <string name="error_drm_unsupported_scheme">This device does not support the required DRM scheme</string>
-    <string name="error_drm_unknown">An unknown DRM error occurred</string>
-    <string name="error_no_decoder">This device does not provide a decoder for <xliff:g id="mime_type">%1$s</xliff:g></string>
-    <string name="error_no_secure_decoder">This device does not provide a secure decoder for <xliff:g id="mime_type">%1$s</xliff:g></string>
-    <string name="error_querying_decoders">Unable to query device decoders</string>
-    <string name="error_instantiating_decoder">Unable to instantiate decoder <xliff:g id="decoder_name">%1$s</xliff:g></string>
     <string name="error_unsupported_video">Media includes video tracks, but none are playable by this device</string>
     <string name="error_unsupported_audio">Media includes audio tracks, but none are playable by this device</string>
     <string name="storage_permission_denied">Permission to access storage was denied</string>
