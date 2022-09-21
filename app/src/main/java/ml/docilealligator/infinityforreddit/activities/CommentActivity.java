@@ -187,8 +187,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         String parentBodyMarkdown = intent.getStringExtra(EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY);
         String parentBody = intent.getStringExtra(EXTRA_COMMENT_PARENT_BODY_KEY);
         if (parentBodyMarkdown != null && !parentBodyMarkdown.equals("")) {
-            binding.contentMarkdownRecyclerView.setVisibility(View.VISIBLE);
-            binding.contentMarkdownRecyclerView.setNestedScrollingEnabled(false);
+            binding.commentContentMarkdownView.setVisibility(View.VISIBLE);
+            binding.commentContentMarkdownView.setNestedScrollingEnabled(false);
             int linkColor = mCustomThemeWrapper.getLinkColor();
             Markwon postBodyMarkwon = Markwon.builder(this)
                     .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
@@ -356,26 +356,26 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
 
     @Override
     protected void applyCustomTheme() {
-        binding.coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appBarLayout, null, toolbar);
+        binding.commentCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.commentAppbarLayout, null, binding.commentToolbar);
         binding.commentParentTitleTextView.setTextColor(customThemeWrapper.getPostTitleColor());
-        binding.divider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
-        binding.commentEditText.setTextColor(mCustomThemeWrapper.getCommentColor());
+        binding.commentDivider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
+        binding.commentCommentEditText.setTextColor(mCustomThemeWrapper.getCommentColor());
         int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
-        binding.commentEditText.setHintTextColor(secondaryTextColor);
+        binding.commentCommentEditText.setHintTextColor(secondaryTextColor);
         if (isReplying) {
             parentTextColor = mCustomThemeWrapper.getCommentColor();
         } else {
             parentTextColor = mCustomThemeWrapper.getPostContentColor();
         }
         parentSpoilerBackgroundColor = parentTextColor | 0xFF000000;
-        binding.accountNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+        binding.commentAccountNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
 
         if (typeface != null) {
-            commentEditText.setTypeface(typeface);
+            binding.commentCommentEditText.setTypeface(typeface);
         }
         if (titleTypeface != null) {
-            commentParentTitleTextView.setTypeface(titleTypeface);
+            binding.commentParentTitleTextView.setTypeface(titleTypeface);
         }
     }
 

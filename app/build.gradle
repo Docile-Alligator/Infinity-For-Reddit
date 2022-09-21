@@ -110,6 +110,7 @@ dependencies {
     def butterknifeVersion = "10.2.3"
     implementation "com.jakewharton:butterknife:$butterknifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+    compileOnly 'com.android.databinding:viewbinding:7.3.0'
 
     // Events
     def eventbusVersion = "3.3.1"
