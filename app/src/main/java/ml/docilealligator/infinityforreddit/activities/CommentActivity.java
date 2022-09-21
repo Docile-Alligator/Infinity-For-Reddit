@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.os.Handler;
 import android.provider.MediaStore;
 import android.text.Spanned;
+import android.text.TextUtils;
 import android.text.util.Linkify;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +20,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.FileProvider;
@@ -86,8 +88,7 @@ import retrofit2.Retrofit;
 
 public class CommentActivity extends BaseActivity implements UploadImageEnabledActivity, AccountChooserBottomSheetFragment.AccountChooserListener {
 
-    public static final String EXTRA_COMMENT_PARENT_TEXT_KEY = "ECPTK";
-    public static final String EXTRA_COMMENT_PARENT_TEXT_MARKDOWN_KEY = "ECPTMK";
+    public static final String EXTRA_COMMENT_PARENT_TITLE_KEY = "ECPTK";
     public static final String EXTRA_COMMENT_PARENT_BODY_KEY = "ECPBK";
     public static final String EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY = "ECPBMK";
     public static final String EXTRA_PARENT_FULLNAME_KEY = "EPFK";
@@ -132,13 +133,17 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     private int parentPosition;
     private boolean isSubmitting = false;
     private boolean isReplying;
-    private int markdownColor;
-    private int spoilerBackgroundColor;
     private Uri capturedImageUri;
     private ArrayList<UploadedImage> uploadedImages = new ArrayList<>();
     private Menu mMenu;
-    private int commentColor;
-    private int commentSpoilerBackgroundColor;
+
+    /**
+     * Post or comment body text color
+     */
+    @ColorInt
+    private int parentTextColor;
+    @ColorInt
+    private int parentSpoilerBackgroundColor;
     private ActivityCommentBinding binding;
 
     @Override
@@ -153,6 +158,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
 
         EventBus.getDefault().register(this);
 
+        Intent intent = getIntent();
+        isReplying = intent.getExtras().getBoolean(EXTRA_IS_REPLYING_KEY);
         applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
@@ -165,67 +172,24 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             return;
         }
 
-        Intent intent = getIntent();
-        String parentTextMarkdown = intent.getStringExtra(EXTRA_COMMENT_PARENT_TEXT_MARKDOWN_KEY);
-        String parentText = intent.getStringExtra(EXTRA_COMMENT_PARENT_TEXT_KEY);
-
-        int linkColor = mCustomThemeWrapper.getLinkColor();
-        Markwon markwon = Markwon.builder(this)
-                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
-                    plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
-                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
-                    plugin.excludeInlineProcessor(BangInlineProcessor.class);
-                    plugin.addInlineProcessor(new SuperscriptInlineProcessor());
-                }))
-                .usePlugin(HtmlPlugin.create(plugin -> {
-                    plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
-                }))
-                .usePlugin(new AbstractMarkwonPlugin() {
-                    @NonNull
-                    @Override
-                    public String processMarkdown(@NonNull String markdown) {
-                        return Utils.fixSuperScript(markdown);
-                    }
-
-                    @Override
-                    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
-                        builder.linkResolver((view, link) -> {
-                            Intent intent = new Intent(CommentActivity.this, LinkResolverActivity.class);
-                            Uri uri = Uri.parse(link);
-                            intent.setData(uri);
-                            startActivity(intent);
-                        });
-                    }
-
-                    @Override
-                    public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
-                        builder.linkColor(linkColor);
-                    }
-                })
-                .usePlugin(SpoilerParserPlugin.create(commentColor, commentSpoilerBackgroundColor))
-                .usePlugin(RedditHeadingPlugin.create())
-                .usePlugin(StrikethroughPlugin.create())
-                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
-                .build();
-        if (parentTextMarkdown != null) {
-            binding.commentCommentParentMarkwonView.setOnLongClickListener(view -> {
+        String parentTitle = intent.getStringExtra(EXTRA_COMMENT_PARENT_TITLE_KEY);
+        if (!TextUtils.isEmpty(parentTitle)) {
+            binding.commentParentTitleTextView.setVisibility(View.VISIBLE);
+            binding.commentParentTitleTextView.setText(parentTitle);
+            binding.commentParentTitleTextView.setOnLongClickListener(view -> {
                 Utils.hideKeyboard(CommentActivity.this);
-                if (parentText == null) {
-                    CopyTextBottomSheetFragment.show(getSupportFragmentManager(),
-                            parentTextMarkdown, null);
-                } else {
-                    CopyTextBottomSheetFragment.show(getSupportFragmentManager(),
-                            parentText, parentTextMarkdown);
-                }
+                CopyTextBottomSheetFragment.show(getSupportFragmentManager(),
+                        parentTitle, null);
                 return true;
             });
-            markwon.setMarkdown(binding.commentCommentParentMarkwonView, parentTextMarkdown);
         }
+
         String parentBodyMarkdown = intent.getStringExtra(EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY);
         String parentBody = intent.getStringExtra(EXTRA_COMMENT_PARENT_BODY_KEY);
         if (parentBodyMarkdown != null && !parentBodyMarkdown.equals("")) {
-            binding.commentContentMarkdownView.setVisibility(View.VISIBLE);
-            binding.commentContentMarkdownView.setNestedScrollingEnabled(false);
+            binding.contentMarkdownRecyclerView.setVisibility(View.VISIBLE);
+            binding.contentMarkdownRecyclerView.setNestedScrollingEnabled(false);
+            int linkColor = mCustomThemeWrapper.getLinkColor();
             Markwon postBodyMarkwon = Markwon.builder(this)
                     .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                         plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
@@ -248,7 +212,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                             if (contentTypeface != null) {
                                 textView.setTypeface(contentTypeface);
                             }
-                            textView.setTextColor(markdownColor);
+                            textView.setTextColor(parentTextColor);
                             textView.setOnLongClickListener(view -> {
                                 Utils.hideKeyboard(CommentActivity.this);
                                 CopyTextBottomSheetFragment.show(getSupportFragmentManager(),
@@ -272,7 +236,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                             builder.linkColor(linkColor);
                         }
                     })
-                    .usePlugin(SpoilerParserPlugin.create(markdownColor, spoilerBackgroundColor))
+                    .usePlugin(SpoilerParserPlugin.create(parentTextColor, parentSpoilerBackgroundColor))
                     .usePlugin(RedditHeadingPlugin.create())
                     .usePlugin(StrikethroughPlugin.create())
                     .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
@@ -291,7 +255,6 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         parentFullname = intent.getStringExtra(EXTRA_PARENT_FULLNAME_KEY);
         parentDepth = intent.getExtras().getInt(EXTRA_PARENT_DEPTH_KEY);
         parentPosition = intent.getExtras().getInt(EXTRA_PARENT_POSITION_KEY);
-        isReplying = intent.getExtras().getBoolean(EXTRA_IS_REPLYING_KEY);
         if (isReplying) {
             binding.commentToolbar.setTitle(getString(R.string.comment_activity_label_is_replying));
         }
@@ -393,22 +356,26 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
 
     @Override
     protected void applyCustomTheme() {
-        binding.commentCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.commentAppbarLayout, null, binding.commentToolbar);
-        commentColor = mCustomThemeWrapper.getCommentColor();
-        commentSpoilerBackgroundColor = commentColor | 0xFF000000;
-        binding.commentCommentParentMarkwonView.setTextColor(commentColor);
-        binding.commentDivider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
-        binding.commentCommentEditText.setTextColor(mCustomThemeWrapper.getCommentColor());
+        binding.coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appBarLayout, null, toolbar);
+        binding.commentParentTitleTextView.setTextColor(customThemeWrapper.getPostTitleColor());
+        binding.divider.setBackgroundColor(mCustomThemeWrapper.getDividerColor());
+        binding.commentEditText.setTextColor(mCustomThemeWrapper.getCommentColor());
         int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
-        binding.commentCommentEditText.setHintTextColor(secondaryTextColor);
-        markdownColor = secondaryTextColor;
-        spoilerBackgroundColor = markdownColor | 0xFF000000;
-        binding.commentAccountNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
+        binding.commentEditText.setHintTextColor(secondaryTextColor);
+        if (isReplying) {
+            parentTextColor = mCustomThemeWrapper.getCommentColor();
+        } else {
+            parentTextColor = mCustomThemeWrapper.getPostContentColor();
+        }
+        parentSpoilerBackgroundColor = parentTextColor | 0xFF000000;
+        binding.accountNameTextView.setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
 
         if (typeface != null) {
-            binding.commentCommentParentMarkwonView.setTypeface(typeface);
-            binding.commentCommentEditText.setTypeface(typeface);
+            commentEditText.setTypeface(typeface);
+        }
+        if (titleTypeface != null) {
+            commentParentTitleTextView.setTypeface(titleTypeface);
         }
     }
 
