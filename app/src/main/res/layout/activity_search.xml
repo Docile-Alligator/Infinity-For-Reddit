@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/coordinator_layout_search_activity"
-    tools:application=".SearchActivity">
+    tools:application="ml.docilealligator.infinityforreddit.activities.SearchActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_search_activity"
@@ -119,7 +119,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layoutManager=".customviews.LinearLayoutManagerBugFixed" />
+                app:layoutManager="ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed" />
 
         </LinearLayout>
 
