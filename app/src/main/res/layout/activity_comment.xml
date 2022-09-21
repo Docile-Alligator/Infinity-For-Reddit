@@ -2,19 +2,19 @@
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/coordinator_layout_comment_activity"
+    android:id="@+id/comment_coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:application=".CommentActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar_layout_comment_activity"
+        android:id="@+id/comment_appbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <androidx.appcompat.widget.Toolbar
-            android:id="@+id/toolbar_comment_activity"
+            android:id="@+id/comment_toolbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
@@ -40,7 +40,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/comment_parent_markwon_view_comment_activity"
+                    android:id="@+id/comment_comment_parent_markwon_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_margin="16dp"
@@ -48,7 +48,7 @@
                     android:fontFamily="?attr/content_font_family" />
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/content_markdown_view_comment_activity"
+                    android:id="@+id/comment_content_markdown_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
@@ -57,12 +57,12 @@
                     android:visibility="gone" />
 
                 <View
-                    android:id="@+id/divider_comment_activity"
+                    android:id="@+id/comment_divider"
                     android:layout_width="match_parent"
                     android:layout_height="1dp" />
 
                 <LinearLayout
-                    android:id="@+id/account_linear_layout_comment_activity"
+                    android:id="@+id/comment_account_linear_layout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingTop="16dp"
@@ -72,13 +72,13 @@
                     android:background="?attr/selectableItemBackground">
 
                     <pl.droidsonroids.gif.GifImageView
-                        android:id="@+id/account_icon_gif_image_view_comment_activity"
+                        android:id="@+id/comment_account_icon_gif_image_view"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
                         android:layout_marginStart="16dp" />
 
                     <TextView
-                        android:id="@+id/account_name_text_view_comment_activity"
+                        android:id="@+id/comment_account_name_text_view"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
@@ -89,7 +89,7 @@
                 </LinearLayout>
 
                 <EditText
-                    android:id="@+id/comment_edit_text_comment_activity"
+                    android:id="@+id/comment_comment_edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:background="#00000000"
@@ -106,7 +106,7 @@
         </androidx.core.widget.NestedScrollView>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/markdown_bottom_bar_recycler_view_comment_activity"
+            android:id="@+id/comment_markdown_bottom_bar_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="horizontal"
