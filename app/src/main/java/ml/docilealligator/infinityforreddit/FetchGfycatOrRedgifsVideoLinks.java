@@ -51,7 +51,7 @@ public class FetchGfycatOrRedgifsVideoLinks {
         executor.execute(() -> {
             try {
                 Response<String> response = redgifsRetrofit.create(RedgifsAPI.class).getRedgifsData(APIUtils.getRedgifsOAuthHeader(currentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")),
-                         gfycatId, APIUtils.getRedgifsUserAgent(context)).execute();
+                         gfycatId, APIUtils.USER_AGENT).execute();
                 if (response.isSuccessful()) {
                     parseRedgifsVideoLinks(handler, response.body(), fetchGfycatOrRedgifsVideoLinksListener);
                 } else {

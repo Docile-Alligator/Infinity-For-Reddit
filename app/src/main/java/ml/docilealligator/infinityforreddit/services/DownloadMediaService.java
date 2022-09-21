@@ -46,10 +46,12 @@ import ml.docilealligator.infinityforreddit.apis.DownloadFile;
 import ml.docilealligator.infinityforreddit.broadcastreceivers.DownloadedMediaDeleteActionBroadcastReceiver;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.DownloadMediaEvent;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.NotificationUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
+import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
@@ -130,6 +132,12 @@ public class DownloadMediaService extends Service {
                                 .body(new DownloadProgressResponseBody(originalResponse.body(), progressListener))
                                 .build();
                     })
+                    .addInterceptor(chain -> chain.proceed(
+                            chain.request()
+                                    .newBuilder()
+                                    .header("User-Agent", APIUtils.USER_AGENT)
+                                    .build()
+                    ))
                     .build();
 
             retrofit = retrofit.newBuilder().client(client).build();
@@ -140,7 +148,8 @@ public class DownloadMediaService extends Service {
             String destinationFileUriString = null;
             boolean isDefaultDestination = true;
             try {
-                response = retrofit.create(DownloadFile.class).downloadFile(fileUrl).execute();
+                Call<ResponseBody> call = retrofit.create(DownloadFile.class).downloadFile(fileUrl);
+                response = call.execute();
                 if (response.isSuccessful() && response.body() != null) {
                     String destinationFileDirectory = getDownloadLocation(mediaType, isNsfw);
                     if (destinationFileDirectory.equals("")) {

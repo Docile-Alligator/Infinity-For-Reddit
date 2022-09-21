@@ -6,7 +6,6 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 import android.Manifest;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -25,7 +24,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
 import android.text.Html;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.OrientationEventListener;
@@ -40,6 +38,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -505,7 +504,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                 loadStreamableVideo(shortCode, savedInstanceState);
             } else {
                 dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                        .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.getRedgifsUserAgent(ViewVideoActivity.this)));
+                        .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
                 player.prepare();
                 player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
                 preparePlayer(savedInstanceState);
@@ -537,7 +536,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                 }
             } else {
                 dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                        .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.getRedgifsUserAgent(ViewVideoActivity.this)));
+                        .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
                 player.prepare();
                 player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
                 preparePlayer(savedInstanceState);
@@ -551,7 +550,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             }
             // Produces DataSource instances through which media data is loaded.
             dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.getRedgifsUserAgent(ViewVideoActivity.this)));
+                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
             // Prepare the player with the source.
             player.prepare();
             player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
@@ -563,7 +562,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             videoFileName = subredditName + "-" + id + ".mp4";
             // Produces DataSource instances through which media data is loaded.
             dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.getRedgifsUserAgent(ViewVideoActivity.this)));
+                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
             // Prepare the player with the source.
             player.prepare();
             player.setMediaSource(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
@@ -625,13 +624,12 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                     if (videoType == VIDEO_TYPE_NORMAL) {
                         hdButton.setVisibility(View.VISIBLE);
                         hdButton.setOnClickListener(view -> {
-                            TrackSelectionDialogBuilder builder = new TrackSelectionDialogBuilder(ViewVideoActivity.this, getString(R.string.select_video_quality), player, 0);
+                            TrackSelectionDialogBuilder builder = new TrackSelectionDialogBuilder(ViewVideoActivity.this, getString(R.string.select_video_quality), player, C.TRACK_TYPE_VIDEO);
                             builder.setShowDisableOption(true);
                             builder.setAllowAdaptiveSelections(false);
-                            Dialog dialog = builder.build();
+                            Dialog dialog = builder.setTheme(R.style.MaterialAlertDialogTheme).build();
                             dialog.show();
                             if (dialog instanceof AlertDialog) {
-                                Log.i("asfadsf", "asdfasdf");
                                 ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
                                 ((AlertDialog) dialog).getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(mCustomThemeWrapper.getPrimaryTextColor());
                             }
@@ -695,7 +693,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                             mVideoUri = Uri.parse(webm);
                             videoDownloadUrl = mp4;
                             dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.getRedgifsUserAgent(ViewVideoActivity.this)));
+                                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
                             preparePlayer(savedInstanceState);
                             player.prepare();
                             player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
@@ -725,7 +723,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                             mVideoUri = Uri.parse(webm);
                             videoDownloadUrl = mp4;
                             dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.getRedgifsUserAgent(ViewVideoActivity.this)));
+                                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
                             preparePlayer(savedInstanceState);
                             player.prepare();
                             player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
@@ -791,7 +789,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                                         videoFileName = "imgur-" + FilenameUtils.getName(videoDownloadUrl);
                                         // Produces DataSource instances through which media data is loaded.
                                         dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                                                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.getRedgifsUserAgent(ViewVideoActivity.this)));
+                                                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
                                         // Prepare the player with the source.
                                         player.prepare();
                                         player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
@@ -807,7 +805,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                                             videoFileName = subredditName + "-" + id + ".mp4";
                                             // Produces DataSource instances through which media data is loaded.
                                             dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                                                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.getRedgifsUserAgent(ViewVideoActivity.this)));
+                                                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
                                             // Prepare the player with the source.
                                             preparePlayer(savedInstanceState);
                                             player.prepare();
@@ -850,7 +848,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                         videoDownloadUrl = streamableVideo.mp4 == null ? streamableVideo.mp4Mobile.url : streamableVideo.mp4.url;
                         mVideoUri = Uri.parse(videoDownloadUrl);
                         dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.getRedgifsUserAgent(ViewVideoActivity.this)));
+                                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
                         preparePlayer(savedInstanceState);
                         player.prepare();
                         player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));

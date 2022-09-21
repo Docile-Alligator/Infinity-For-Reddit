@@ -125,7 +125,7 @@ class AppModule {
                 .addInterceptor(chain -> chain.proceed(
                         chain.request()
                                 .newBuilder()
-                                .header("User-Agent", APIUtils.getRedgifsUserAgent(mApplication))
+                                .header("User-Agent", APIUtils.USER_AGENT)
                                 .build()
                 ))
                 .addInterceptor(new RedgifsAccessTokenAuthenticator(currentAccountSharedPreferences))
