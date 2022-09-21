@@ -138,7 +138,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     private String mSubredditName;
     private boolean mInsertSearchQuerySuccess;
     private FragmentManager fragmentManager;
-    private SectionsPagerAdapter sectionsPagerAdapter;
+    private SearchResultStateAdapter searchResultStateAdapter;
     private SlidrInterface mSlidrInterface;
     private int fabOption;
 
@@ -212,8 +212,8 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (sectionsPagerAdapter != null) {
-            return sectionsPagerAdapter.handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
+        if (searchResultStateAdapter != null) {
+            return searchResultStateAdapter.handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
         }
         return super.onKeyDown(keyCode, event);
     }
@@ -237,15 +237,15 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     }
 
     private void bindView(Bundle savedInstanceState) {
-        sectionsPagerAdapter = new SectionsPagerAdapter(this);
-        viewPager2.setAdapter(sectionsPagerAdapter);
+        searchResultStateAdapter = new SearchResultStateAdapter(this);
+        viewPager2.setAdapter(searchResultStateAdapter);
         viewPager2.setOffscreenPageLimit(3);
         viewPager2.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 fab.show();
-                sectionsPagerAdapter.displaySortTypeInToolbar();
+                searchResultStateAdapter.displaySortTypeInToolbar();
                 if (position == 0) {
                     unlockSwipeRightToGoBack();
                 } else {
@@ -318,13 +318,13 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         fab.setOnClickListener(view -> {
             switch (fabOption) {
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH: {
-                    if (sectionsPagerAdapter != null) {
-                        sectionsPagerAdapter.refresh();
+                    if (searchResultStateAdapter != null) {
+                        searchResultStateAdapter.refresh();
                     }
                     break;
                 }
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE: {
-                    Fragment fragment = sectionsPagerAdapter.getCurrentFragment();
+                    Fragment fragment = searchResultStateAdapter.getCurrentFragment();
                     if (fragment instanceof PostFragment) {
                         SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment = SearchPostSortTypeBottomSheetFragment.getNewInstance(((PostFragment) fragment).getSortType());
                         searchPostSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchPostSortTypeBottomSheetFragment.getTag());
@@ -354,13 +354,13 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                     random();
                     break;
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
-                    if (sectionsPagerAdapter != null) {
-                        sectionsPagerAdapter.hideReadPosts();
+                    if (searchResultStateAdapter != null) {
+                        searchResultStateAdapter.hideReadPosts();
                     }
                     break;
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
-                    if (sectionsPagerAdapter != null) {
-                        sectionsPagerAdapter.filterPosts();
+                    if (searchResultStateAdapter != null) {
+                        searchResultStateAdapter.filterPosts();
                     }
                     break;
                 default:
@@ -385,7 +385,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     }
 
     private void displaySortTypeBottomSheetFragment() {
-        Fragment fragment = sectionsPagerAdapter.getCurrentFragment();
+        Fragment fragment = searchResultStateAdapter.getCurrentFragment();
         if (fragment instanceof PostFragment) {
             SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment = SearchPostSortTypeBottomSheetFragment.getNewInstance(((PostFragment) fragment).getSortType());
             searchPostSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchPostSortTypeBottomSheetFragment.getTag());
@@ -428,8 +428,8 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 startActivity(intent);
                 return true;
             case R.id.action_refresh_search_result_activity:
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.refresh();
+                if (searchResultStateAdapter != null) {
+                    searchResultStateAdapter.refresh();
                 }
                 return true;
             case R.id.action_change_post_layout_search_result_activity:
@@ -454,8 +454,8 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
 
     @Override
     public void sortTypeSelected(SortType sortType) {
-        if (sectionsPagerAdapter != null) {
-            sectionsPagerAdapter.changeSortType(sortType);
+        if (searchResultStateAdapter != null) {
+            searchResultStateAdapter.changeSortType(sortType);
         }
 
     }
@@ -471,16 +471,16 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
 
     @Override
     public void searchUserAndSubredditSortTypeSelected(SortType sortType, int fragmentPosition) {
-        if (sectionsPagerAdapter != null) {
-            sectionsPagerAdapter.changeSortType(sortType, fragmentPosition);
+        if (searchResultStateAdapter != null) {
+            searchResultStateAdapter.changeSortType(sortType, fragmentPosition);
         }
 
     }
 
     @Override
     public void postLayoutSelected(int postLayout) {
-        if (sectionsPagerAdapter != null) {
-            sectionsPagerAdapter.changePostLayout(postLayout);
+        if (searchResultStateAdapter != null) {
+            searchResultStateAdapter.changePostLayout(postLayout);
         }
 
     }
@@ -492,22 +492,22 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
 
     @Subscribe
     public void onChangeNSFWEvent(ChangeNSFWEvent changeNSFWEvent) {
-        if (sectionsPagerAdapter != null) {
-            sectionsPagerAdapter.changeNSFW(changeNSFWEvent.nsfw);
+        if (searchResultStateAdapter != null) {
+            searchResultStateAdapter.changeNSFW(changeNSFWEvent.nsfw);
         }
     }
 
     @Override
     public void onLongPress() {
-        if (sectionsPagerAdapter != null) {
-            sectionsPagerAdapter.goBackToTop();
+        if (searchResultStateAdapter != null) {
+            searchResultStateAdapter.goBackToTop();
         }
     }
 
     @Override
     public void displaySortType() {
-        if (sectionsPagerAdapter != null) {
-            sectionsPagerAdapter.displaySortTypeInToolbar();
+        if (searchResultStateAdapter != null) {
+            searchResultStateAdapter.displaySortTypeInToolbar();
         }
     }
 
@@ -519,8 +519,8 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_REFRESH:
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.refresh();
+                if (searchResultStateAdapter != null) {
+                    searchResultStateAdapter.refresh();
                 }
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_CHANGE_SORT_TYPE:
@@ -550,14 +550,14 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 break;
             }
             case FABMoreOptionsBottomSheetFragment.FAB_HIDE_READ_POSTS: {
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.hideReadPosts();
+                if (searchResultStateAdapter != null) {
+                    searchResultStateAdapter.hideReadPosts();
                 }
                 break;
             }
             case FABMoreOptionsBottomSheetFragment.FAB_FILTER_POSTS: {
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.filterPosts();
+                if (searchResultStateAdapter != null) {
+                    searchResultStateAdapter.filterPosts();
                 }
                 break;
             }
@@ -765,9 +765,9 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         startActivity(intent);
     }
 
-    private class SectionsPagerAdapter extends FragmentStateAdapter {
+    private class SearchResultStateAdapter extends FragmentStateAdapter {
 
-        public SectionsPagerAdapter(FragmentActivity fa) {
+        public SearchResultStateAdapter(FragmentActivity fa) {
             super(fa);
         }
 

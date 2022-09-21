@@ -204,7 +204,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     @Inject
     Executor mExecutor;
     private FragmentManager fragmentManager;
-    private SectionsPagerAdapter sectionsPagerAdapter;
+    private ViewSubredditDetailStateAdapter viewSubredditDetailStateAdapter;
     private NavigationWrapper navigationWrapper;
     private Call<String> subredditAutocompleteCall;
     private String mAccessToken;
@@ -488,8 +488,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (sectionsPagerAdapter != null) {
-            return sectionsPagerAdapter.handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
+        if (viewSubredditDetailStateAdapter != null) {
+            return viewSubredditDetailStateAdapter.handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
         }
 
         return super.onKeyDown(keyCode, event);
@@ -620,8 +620,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 break;
             }
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_REFRESH: {
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.refresh(false);
+                if (viewSubredditDetailStateAdapter != null) {
+                    viewSubredditDetailStateAdapter.refresh(false);
                 }
                 break;
             }
@@ -650,13 +650,13 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 random();
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HIDE_READ_POSTS:
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.hideReadPosts();
+                if (viewSubredditDetailStateAdapter != null) {
+                    viewSubredditDetailStateAdapter.hideReadPosts();
                 }
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_FILTER_POSTS:
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.filterPosts();
+                if (viewSubredditDetailStateAdapter != null) {
+                    viewSubredditDetailStateAdapter.filterPosts();
                 }
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_UPVOTED: {
@@ -689,8 +689,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 break;
             }
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_GO_TO_TOP: {
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.goBackToTop();
+                if (viewSubredditDetailStateAdapter != null) {
+                    viewSubredditDetailStateAdapter.goBackToTop();
                 }
                 break;
             }
@@ -890,8 +890,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         navigationWrapper.floatingActionButton.setOnClickListener(view -> {
             switch (fabOption) {
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_REFRESH: {
-                    if (sectionsPagerAdapter != null) {
-                        sectionsPagerAdapter.refresh(false);
+                    if (viewSubredditDetailStateAdapter != null) {
+                        viewSubredditDetailStateAdapter.refresh(false);
                     }
                     break;
                 }
@@ -920,13 +920,13 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     random();
                     break;
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
-                    if (sectionsPagerAdapter != null) {
-                        sectionsPagerAdapter.hideReadPosts();
+                    if (viewSubredditDetailStateAdapter != null) {
+                        viewSubredditDetailStateAdapter.hideReadPosts();
                     }
                     break;
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
-                    if (sectionsPagerAdapter != null) {
-                        sectionsPagerAdapter.filterPosts();
+                    if (viewSubredditDetailStateAdapter != null) {
+                        viewSubredditDetailStateAdapter.filterPosts();
                     }
                     break;
                 default:
@@ -1049,7 +1049,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     }
                 });
 
-        sectionsPagerAdapter = new SectionsPagerAdapter(this);
+        viewSubredditDetailStateAdapter = new ViewSubredditDetailStateAdapter(this);
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
@@ -1063,10 +1063,10 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                     navigationWrapper.showNavigation();
                 }
                 navigationWrapper.showFab();
-                sectionsPagerAdapter.displaySortTypeInToolbar();
+                viewSubredditDetailStateAdapter.displaySortTypeInToolbar();
             }
         });
-        viewPager2.setAdapter(sectionsPagerAdapter);
+        viewPager2.setAdapter(viewSubredditDetailStateAdapter);
         viewPager2.setOffscreenPageLimit(2);
         viewPager2.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
         new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
@@ -1116,8 +1116,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             startActivity(intent);
             return true;
         } else if (itemId == R.id.action_refresh_view_subreddit_detail_activity) {
-            if (sectionsPagerAdapter != null) {
-                sectionsPagerAdapter.refresh(true);
+            if (viewSubredditDetailStateAdapter != null) {
+                viewSubredditDetailStateAdapter.refresh(true);
             }
             return true;
         } else if (itemId == R.id.action_change_post_layout_view_subreddit_detail_activity) {
@@ -1232,8 +1232,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     @Override
     public void sortTypeSelected(SortType sortType) {
-        if (sectionsPagerAdapter != null) {
-            sectionsPagerAdapter.changeSortType(sortType);
+        if (viewSubredditDetailStateAdapter != null) {
+            viewSubredditDetailStateAdapter.changeSortType(sortType);
         }
     }
 
@@ -1285,7 +1285,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     @Override
     public void postLayoutSelected(int postLayout) {
         mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, postLayout).apply();
-        sectionsPagerAdapter.changePostLayout(postLayout);
+        viewSubredditDetailStateAdapter.changePostLayout(postLayout);
     }
 
     @Override
@@ -1317,7 +1317,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     @Subscribe
     public void onChangeNSFWEvent(ChangeNSFWEvent changeNSFWEvent) {
-        sectionsPagerAdapter.changeNSFW(changeNSFWEvent.nsfw);
+        viewSubredditDetailStateAdapter.changeNSFW(changeNSFWEvent.nsfw);
     }
 
     @Subscribe
@@ -1327,15 +1327,15 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     @Override
     public void onLongPress() {
-        if (sectionsPagerAdapter != null) {
-            sectionsPagerAdapter.goBackToTop();
+        if (viewSubredditDetailStateAdapter != null) {
+            viewSubredditDetailStateAdapter.goBackToTop();
         }
     }
 
     @Override
     public void displaySortType() {
-        if (sectionsPagerAdapter != null) {
-            sectionsPagerAdapter.displaySortTypeInToolbar();
+        if (viewSubredditDetailStateAdapter != null) {
+            viewSubredditDetailStateAdapter.displaySortTypeInToolbar();
         }
     }
 
@@ -1347,8 +1347,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 postTypeBottomSheetFragment.show(getSupportFragmentManager(), postTypeBottomSheetFragment.getTag());
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_REFRESH:
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.refresh(false);
+                if (viewSubredditDetailStateAdapter != null) {
+                    viewSubredditDetailStateAdapter.refresh(false);
                 }
                 break;
             case FABMoreOptionsBottomSheetFragment.FAB_OPTION_CHANGE_SORT_TYPE:
@@ -1376,14 +1376,14 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 break;
             }
             case FABMoreOptionsBottomSheetFragment.FAB_HIDE_READ_POSTS: {
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.hideReadPosts();
+                if (viewSubredditDetailStateAdapter != null) {
+                    viewSubredditDetailStateAdapter.hideReadPosts();
                 }
                 break;
             }
             case FABMoreOptionsBottomSheetFragment.FAB_FILTER_POSTS: {
-                if (sectionsPagerAdapter != null) {
-                    sectionsPagerAdapter.filterPosts();
+                if (viewSubredditDetailStateAdapter != null) {
+                    viewSubredditDetailStateAdapter.filterPosts();
                 }
                 break;
             }
@@ -1568,9 +1568,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         }
     }
 
-    private class SectionsPagerAdapter extends FragmentStateAdapter {
+    private class ViewSubredditDetailStateAdapter extends FragmentStateAdapter {
 
-        SectionsPagerAdapter(FragmentActivity fa) {
+        ViewSubredditDetailStateAdapter(FragmentActivity fa) {
             super(fa);
         }
 

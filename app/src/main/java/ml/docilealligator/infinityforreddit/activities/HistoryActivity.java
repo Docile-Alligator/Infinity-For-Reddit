@@ -73,7 +73,7 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private FragmentManager fragmentManager;
-    private SectionsPagerAdapter sectionsPagerAdapter;
+    private HistoryStateAdapter historyStateAdapter;
     private SlidrInterface mSlidrInterface;
     private String mAccessToken;
     private String mAccountName;
@@ -127,8 +127,8 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (sectionsPagerAdapter != null) {
-            return sectionsPagerAdapter.handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
+        if (historyStateAdapter != null) {
+            return historyStateAdapter.handleKeyDown(keyCode) || super.onKeyDown(keyCode, event);
         }
 
         return super.onKeyDown(keyCode, event);
@@ -152,9 +152,9 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
     }
 
     private void initializeViewPager() {
-        sectionsPagerAdapter = new SectionsPagerAdapter(this);
+        historyStateAdapter = new HistoryStateAdapter(this);
         tabLayout.setVisibility(View.GONE);
-        viewPager2.setAdapter(sectionsPagerAdapter);
+        viewPager2.setAdapter(historyStateAdapter);
         viewPager2.setOffscreenPageLimit(2);
         //viewPager2.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
         viewPager2.setUserInputEnabled(false);
@@ -194,7 +194,7 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
             finish();
             return true;
         } else if (itemId == R.id.action_refresh_history_activity) {
-            sectionsPagerAdapter.refresh();
+            historyStateAdapter.refresh();
             return true;
         } else if (itemId == R.id.action_change_post_layout_history_activity) {
             PostLayoutBottomSheetFragment postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
@@ -217,13 +217,13 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
 
     @Subscribe
     public void onChangeNSFWEvent(ChangeNSFWEvent changeNSFWEvent) {
-        sectionsPagerAdapter.changeNSFW(changeNSFWEvent.nsfw);
+        historyStateAdapter.changeNSFW(changeNSFWEvent.nsfw);
     }
 
     @Override
     public void onLongPress() {
-        if (sectionsPagerAdapter != null) {
-            sectionsPagerAdapter.goBackToTop();
+        if (historyStateAdapter != null) {
+            historyStateAdapter.goBackToTop();
         }
     }
 
@@ -241,15 +241,15 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
 
     @Override
     public void postLayoutSelected(int postLayout) {
-        if (sectionsPagerAdapter != null) {
+        if (historyStateAdapter != null) {
             mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.HISTORY_POST_LAYOUT_READ_POST, postLayout).apply();
-            sectionsPagerAdapter.changePostLayout(postLayout);
+            historyStateAdapter.changePostLayout(postLayout);
         }
     }
 
-    private class SectionsPagerAdapter extends FragmentStateAdapter {
+    private class HistoryStateAdapter extends FragmentStateAdapter {
 
-        SectionsPagerAdapter(FragmentActivity fa) {
+        HistoryStateAdapter(FragmentActivity fa) {
             super(fa);
         }
 
