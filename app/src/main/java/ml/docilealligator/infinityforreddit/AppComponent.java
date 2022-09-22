@@ -103,7 +103,7 @@ import ml.docilealligator.infinityforreddit.settings.TranslationFragment;
 import ml.docilealligator.infinityforreddit.settings.VideoPreferenceFragment;
 
 @Singleton
-@Component(modules = AppModule.class)
+@Component(modules = {AppModule.class, NetworkModule.class})
 public interface AppComponent {
     void inject(MainActivity mainActivity);
 
