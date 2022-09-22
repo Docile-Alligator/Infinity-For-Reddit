@@ -12,6 +12,7 @@ import dagger.Provides;
 import dagger.Reusable;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import okhttp3.ConnectionPool;
+import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.guava.GuavaCallAdapterFactory;
@@ -124,9 +125,15 @@ abstract class NetworkModule {
     }
 
     @Provides
+    @Named("RedgifsAccessTokenAuthenticator")
+    static Interceptor redgifsAccessTokenAuthenticator(@Named("current_account") SharedPreferences currentAccountSharedPreferences) {
+        return new RedgifsAccessTokenAuthenticator(currentAccountSharedPreferences);
+    }
+
+    @Provides
     @Named("redgifs")
     @Reusable
-    static Retrofit provideRedgifsRetrofit(@Named("current_account") SharedPreferences currentAccountSharedPreferences,
+    static Retrofit provideRedgifsRetrofit(@Named("RedgifsAccessTokenAuthenticator") Interceptor accessTokenAuthenticator,
                                            OkHttpClient httpClient,
                                            Retrofit retrofit,
                                            ConnectionPool connectionPool) {
@@ -137,7 +144,7 @@ abstract class NetworkModule {
                                 .header("User-Agent", APIUtils.USER_AGENT)
                                 .build()
                 ))
-                .addInterceptor(new RedgifsAccessTokenAuthenticator(currentAccountSharedPreferences))
+                .addInterceptor(accessTokenAuthenticator)
                 .connectionPool(connectionPool);
 
         return retrofit.newBuilder()
