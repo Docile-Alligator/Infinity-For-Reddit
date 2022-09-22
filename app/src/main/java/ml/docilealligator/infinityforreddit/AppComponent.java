@@ -1,7 +1,10 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.app.Application;
+
 import javax.inject.Singleton;
 
+import dagger.BindsInstance;
 import dagger.Component;
 import ml.docilealligator.infinityforreddit.activities.AccountPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.AccountSavedThingActivity;
@@ -306,4 +309,12 @@ public interface AppComponent {
     void inject(HistoryPostFragment historyPostFragment);
 
     void inject(HistoryActivity historyActivity);
+
+    @Component.Builder
+    interface Builder {
+
+        AppComponent build();
+
+        @BindsInstance Builder application(Application application);
+    }
 }
