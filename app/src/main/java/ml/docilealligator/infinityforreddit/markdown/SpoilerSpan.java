@@ -50,6 +50,10 @@ public class SpoilerSpan extends ClickableSpan {
         widget.invalidate();
     }
 
+    public boolean isShowing() {
+        return isShowing;
+    }
+
     @Override
     public void updateDrawState(@NonNull TextPaint ds) {
         if (isShowing) {
