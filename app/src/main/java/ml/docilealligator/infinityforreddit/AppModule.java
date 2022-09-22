@@ -45,6 +45,16 @@ class AppModule {
     }
 
     @Provides
+    Context providesContext() {
+        return mApplication;
+    }
+
+    @Provides
+    Application providesApplication() {
+        return mApplication;
+    }
+
+    @Provides
     @Singleton
     RedditDataRoomDatabase provideRedditDataRoomDatabase() {
         return RedditDataRoomDatabase.getDatabase(mApplication);
