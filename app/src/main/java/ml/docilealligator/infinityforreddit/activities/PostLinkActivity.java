@@ -9,7 +9,6 @@ import android.os.Handler;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.URLUtil;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -352,10 +351,10 @@ public class PostLinkActivity extends BaseActivity implements FlairBottomSheetFr
         suggestTitleButton.setOnClickListener(view -> {
             Toast.makeText(this, R.string.please_wait, Toast.LENGTH_SHORT).show();
             String url = linkEditText.getText().toString().trim();
-            if (!URLUtil.isHttpsUrl(url) && !URLUtil.isHttpUrl(url)) {
+            if (!url.startsWith("https://") || !url.startsWith("http://")) {
                 url = "https://" + url;
             }
-            mRetrofit.newBuilder()
+            new Retrofit.Builder()
                     .baseUrl("http://localhost/")
                     .addConverterFactory(ScalarsConverterFactory.create())
                     .build().create(TitleSuggestion.class).getHtml(url).enqueue(new Callback<String>() {

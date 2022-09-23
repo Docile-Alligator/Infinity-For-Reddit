@@ -54,14 +54,12 @@ public class FetchRemovedCommentReveddit {
     private static Comment parseRemovedComment(JSONObject result, Comment comment) throws JSONException {
         String id = result.getString(JSONUtils.ID_KEY);
         String author = result.getString(JSONUtils.AUTHOR_KEY);
-        String body = Utils.modifyMarkdown(Utils.trimTrailingWhitespace(result.optString(JSONUtils.BODY_KEY)));
-        boolean isSubmitter = result.getBoolean(JSONUtils.IS_SUBMITTER_KEY);
+        String body = Utils.modifyMarkdown(result.optString(JSONUtils.BODY_KEY).trim());
 
         if (id.equals(comment.getId()) && (!author.equals(comment.getAuthor()) || !body.equals(comment.getCommentRawText()))) {
             comment.setAuthor(author);
             comment.setCommentMarkdown(body);
             comment.setCommentRawText(body);
-            comment.setSubmittedByAuthor(isSubmitter);
             return comment;
         } else {
             return null;

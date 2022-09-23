@@ -56,7 +56,7 @@ public class FetchRemovedComment {
                         comment.getLinkId(),
                         3000,
                         "asc",
-                        "id,author,body,is_submitter",
+                        "id,author,body",
                         after,
                         after + 43200, // 12 Hours later
                         "*").execute();
@@ -106,8 +106,7 @@ public class FetchRemovedComment {
     private static Comment parseRemovedComment(@NonNull JSONObject result, Comment comment) throws JSONException {
         String id = result.getString(JSONUtils.ID_KEY);
         String author = result.getString(JSONUtils.AUTHOR_KEY);
-        String body = Utils.modifyMarkdown(Utils.trimTrailingWhitespace(result.optString(JSONUtils.BODY_KEY)));
-        boolean isSubmitter = result.getBoolean(JSONUtils.IS_SUBMITTER_KEY);
+        String body = Utils.modifyMarkdown(result.optString(JSONUtils.BODY_KEY).trim());
 
         if (id.equals(comment.getId()) &&
                 (!author.equals(comment.getAuthor()) ||
@@ -116,7 +115,6 @@ public class FetchRemovedComment {
             comment.setAuthor(author);
             comment.setCommentMarkdown(body);
             comment.setCommentRawText(body);
-            comment.setSubmittedByAuthor(isSubmitter);
             return comment;
         } else {
             return null;

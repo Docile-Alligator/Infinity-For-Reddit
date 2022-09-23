@@ -414,10 +414,10 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 } else {
                     glide.load(userData.getBanner()).into(bannerImageView);
                     bannerImageView.setOnClickListener(view -> {
-                        Intent intent = new Intent(this, ViewImageOrGifActivity.class);
-                        intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, userData.getBanner());
-                        intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, username + "-banner.jpg");
-                        intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, username);
+                        Intent intent = new Intent(this, ViewImageActivity.class);
+                        intent.putExtra(ViewImageActivity.EXTRA_IMAGE_URL_KEY, userData.getBanner());
+                        intent.putExtra(ViewImageActivity.EXTRA_FILE_NAME_KEY, username + "-banner.jpg");
+                        intent.putExtra(ViewImageActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, username);
                         startActivity(intent);
                     });
                 }
@@ -435,10 +435,10 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                             .into(iconGifImageView);
 
                     iconGifImageView.setOnClickListener(view -> {
-                        Intent intent = new Intent(this, ViewImageOrGifActivity.class);
-                        intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, userData.getIconUrl());
-                        intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, username + "-icon.jpg");
-                        intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, username);
+                        Intent intent = new Intent(this, ViewImageActivity.class);
+                        intent.putExtra(ViewImageActivity.EXTRA_IMAGE_URL_KEY, userData.getIconUrl());
+                        intent.putExtra(ViewImageActivity.EXTRA_FILE_NAME_KEY, username + "-icon.jpg");
+                        intent.putExtra(ViewImageActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, username);
                         startActivity(intent);
                     });
                 }

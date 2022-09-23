@@ -6,12 +6,17 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.Toolbar;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.r0adkll.slidr.Slidr;
 
 import org.greenrobot.eventbus.EventBus;
@@ -20,6 +25,8 @@ import org.greenrobot.eventbus.Subscribe;
 import javax.inject.Inject;
 import javax.inject.Named;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
@@ -28,7 +35,6 @@ import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.databinding.ActivityAccountPostsBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
@@ -42,6 +48,14 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
 
     private static final String FRAGMENT_OUT_STATE = "FOS";
 
+    @BindView(R.id.coordinator_layout_account_posts_activity)
+    CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.appbar_layout_account_posts_activity)
+    AppBarLayout appBarLayout;
+    @BindView(R.id.collapsing_toolbar_layout_account_posts_activity)
+    CollapsingToolbarLayout collapsingToolbarLayout;
+    @BindView(R.id.toolbar_account_posts_activity)
+    Toolbar toolbar;
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
@@ -58,7 +72,6 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     private String mUserWhere;
     private Fragment mFragment;
     private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
-    private ActivityAccountPostsBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,8 +79,9 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
 
         super.onCreate(savedInstanceState);
 
-        binding = ActivityAccountPostsBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
+        setContentView(R.layout.activity_account_posts);
+
+        ButterKnife.bind(this);
 
         EventBus.getDefault().register(this);
 
@@ -81,7 +95,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
             Window window = getWindow();
 
             if (isChangeStatusBarIconColor()) {
-                addOnOffsetChangedListener(binding.accountPostsAppbarLayout);
+                addOnOffsetChangedListener(appBarLayout);
             }
 
             if (isImmersiveInterface()) {
@@ -90,24 +104,24 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
-                adjustToolbar(binding.accountPostsToolbar);
+                adjustToolbar(toolbar);
             }
         }
 
         mUserWhere = getIntent().getExtras().getString(EXTRA_USER_WHERE);
         if (mUserWhere.equals(PostPagingSource.USER_WHERE_UPVOTED)) {
-            binding.accountPostsToolbar.setTitle(R.string.upvoted);
+            toolbar.setTitle(R.string.upvoted);
         } else if (mUserWhere.equals(PostPagingSource.USER_WHERE_DOWNVOTED)) {
-            binding.accountPostsToolbar.setTitle(R.string.downvoted);
+            toolbar.setTitle(R.string.downvoted);
         } else if (mUserWhere.equals(PostPagingSource.USER_WHERE_HIDDEN)) {
-            binding.accountPostsToolbar.setTitle(R.string.hidden);
+            toolbar.setTitle(R.string.hidden);
         } else if (mUserWhere.equals(PostPagingSource.USER_WHERE_GILDED)) {
-            binding.accountPostsToolbar.setTitle(R.string.gilded);
+            toolbar.setTitle(R.string.gilded);
         }
 
-        setSupportActionBar(binding.accountPostsToolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setToolbarGoToTop(binding.accountPostsToolbar);
+        setToolbarGoToTop(toolbar);
 
         postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
 
@@ -116,9 +130,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
 
         if (savedInstanceState != null) {
             mFragment = getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(binding.accountPostsFrameLayout.getId(), mFragment)
-                    .commit();
+            getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_account_posts_activity, mFragment).commit();
         } else {
             initializeFragment();
         }
@@ -145,10 +157,8 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
 
     @Override
     protected void applyCustomTheme() {
-        binding.accountPostsCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(
-                binding.accountPostsAppbarLayout, binding.accountPostsCollapsingToolbarLayout,
-                binding.accountPostsToolbar);
+        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
     }
 
     private void initializeFragment() {
@@ -161,9 +171,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
         bundle.putString(PostFragment.EXTRA_ACCOUNT_NAME, mAccountName);
         bundle.putBoolean(PostFragment.EXTRA_DISABLE_READ_POSTS, true);
         mFragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction()
-                .replace(binding.accountPostsFrameLayout.getId(), mFragment)
-                .commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.frame_layout_account_posts_activity, mFragment).commit();
     }
 
     @Override
