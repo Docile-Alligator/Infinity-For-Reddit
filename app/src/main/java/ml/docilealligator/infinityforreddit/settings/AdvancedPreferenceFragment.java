@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit.settings;
 import static android.app.Activity.RESULT_OK;
 import static android.content.Intent.ACTION_OPEN_DOCUMENT_TREE;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -11,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
@@ -28,7 +26,6 @@ import javax.inject.Named;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.asynctasks.BackupSettings;
 import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllPostLayouts;
 import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllReadPosts;
@@ -91,10 +88,6 @@ public class AdvancedPreferenceFragment extends CustomFontPreferenceFragmentComp
         setPreferencesFromResource(R.xml.advanced_preferences, rootKey);
 
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
-
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
 
         Preference deleteSubredditsPreference = findPreference(SharedPreferencesUtils.DELETE_ALL_SUBREDDITS_DATA_IN_DATABASE);
         Preference deleteUsersPreference = findPreference(SharedPreferencesUtils.DELETE_ALL_USERS_DATA_IN_DATABASE);

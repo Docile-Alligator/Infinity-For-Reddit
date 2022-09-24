@@ -145,25 +145,6 @@
             app:drawableStartCompat="@drawable/ic_give_award_24dp" />
 
         <TextView
-            android:id="@+id/view_full_markdown_text_view_comment_more_bottom_sheet_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/selectableItemBackground"
-            android:clickable="true"
-            android:drawablePadding="48dp"
-            android:focusable="true"
-            android:gravity="center_vertical"
-            android:paddingStart="32dp"
-            android:paddingTop="16dp"
-            android:paddingEnd="32dp"
-            android:paddingBottom="16dp"
-            android:text="@string/view_full_comment_markdown"
-            android:textColor="?attr/primaryTextColor"
-            android:textSize="?attr/font_default"
-            android:fontFamily="?attr/font_family"
-            app:drawableStartCompat="@drawable/ic_full_markdown_24dp" />
-
-        <TextView
             android:id="@+id/report_view_comment_more_bottom_sheet_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

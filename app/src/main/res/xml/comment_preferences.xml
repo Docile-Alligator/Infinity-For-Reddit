@@ -32,4 +32,26 @@
         app:key="fully_collapse_comment"
         android:title="@string/settings_fully_collapse_comment_title" />
 
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+        app:defaultValue="false"
+        app:key="show_author_avatar"
+        android:title="@string/settings_show_author_avatar_title" />
+
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+        app:defaultValue="false"
+        app:key="hide_comment_awards"
+        android:title="@string/settings_hide_comment_awards_title" />
+
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+        app:defaultValue="false"
+        app:key="always_show_child_comment_count"
+        android:title="@string/settings_always_show_child_comment_count_title" />
+
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSeekBarPreference
+        app:defaultValue="5"
+        android:max="10"
+        app:key="show_fewer_toolbar_options_threshold"
+        app:title="@string/settings_show_fewer_toolbar_options_threshold_title"
+        app:singleLineTitle="false" />
+
 </PreferenceScreen>

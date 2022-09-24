@@ -12,7 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
@@ -20,6 +23,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewRedditGalleryActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
@@ -39,13 +43,27 @@ public class CopyTextBottomSheetFragment extends LandscapeExpandedRoundedBottomS
     @BindView(R.id.copy_all_markdown_text_view_copy_text_bottom_sheet_fragment)
     TextView copyAllMarkdownTextView;
 
-    private BaseActivity activity;
+    private BaseActivity baseActivity;
+    private ViewRedditGalleryActivity viewRedditGalleryActivity;
     private String markdownText;
 
     public CopyTextBottomSheetFragment() {
         // Required empty public constructor
     }
 
+    /**
+     * Convenience method for creating the dialog, creating and setting arguments bundle
+     * and displaying the dialog
+     */
+    public static void show(@NonNull FragmentManager fragmentManager,
+                            @Nullable String rawText, @Nullable String markdown) {
+        Bundle bundle = new Bundle();
+        bundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, rawText);
+        bundle.putString(CopyTextBottomSheetFragment.EXTRA_MARKDOWN, markdown);
+        CopyTextBottomSheetFragment copyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
+        copyTextBottomSheetFragment.setArguments(bundle);
+        copyTextBottomSheetFragment.show(fragmentManager, null);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -73,7 +91,6 @@ public class CopyTextBottomSheetFragment extends LandscapeExpandedRoundedBottomS
         }
 
         if (markdownText != null) {
-            //markdownText = markdownText.replaceAll("<sup>", "^").replaceAll("</sup>", "");
             copyMarkdownTextView.setOnClickListener(view -> {
                 showCopyDialog(markdownText);
                 dismiss();
@@ -88,14 +105,17 @@ public class CopyTextBottomSheetFragment extends LandscapeExpandedRoundedBottomS
             copyAllMarkdownTextView.setVisibility(View.GONE);
         }
 
-        if (activity.typeface != null) {
-            Utils.setFontToAllTextViews(rootView, activity.typeface);
+        if (baseActivity != null && baseActivity.typeface != null) {
+            Utils.setFontToAllTextViews(rootView, baseActivity.typeface);
+        } else if (viewRedditGalleryActivity != null && viewRedditGalleryActivity.typeface != null) {
+            Utils.setFontToAllTextViews(rootView, viewRedditGalleryActivity.typeface);
         }
 
         return rootView;
     }
 
     private void showCopyDialog(String text) {
+        AppCompatActivity activity = baseActivity == null ? viewRedditGalleryActivity : baseActivity;
         LayoutInflater inflater = activity.getLayoutInflater();
         View layout = inflater.inflate(R.layout.copy_text_material_dialog, null);
         TextView textView = layout.findViewById(R.id.text_view_copy_text_material_dialog);
@@ -109,6 +129,7 @@ public class CopyTextBottomSheetFragment extends LandscapeExpandedRoundedBottomS
     }
 
     private void copyText(String text) {
+        AppCompatActivity activity = baseActivity == null ? viewRedditGalleryActivity : baseActivity;
         ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
         if (clipboard != null) {
             ClipData clip = ClipData.newPlainText("simple text", text);
@@ -122,6 +143,10 @@ public class CopyTextBottomSheetFragment extends LandscapeExpandedRoundedBottomS
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (BaseActivity) context;
+        if (context instanceof BaseActivity) {
+            baseActivity = (BaseActivity) context;
+        } else {
+            viewRedditGalleryActivity = (ViewRedditGalleryActivity) context;
+        }
     }
 }

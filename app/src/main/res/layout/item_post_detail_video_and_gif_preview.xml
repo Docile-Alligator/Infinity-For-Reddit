@@ -213,8 +213,7 @@
                 android:id="@+id/image_view_item_post_detail_video_and_gif_preview"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:scaleType="fitStart" />
+                android:adjustViewBounds="true" />
 
             <ImageView
                 android:id="@+id/video_or_gif_indicator_image_view_item_post_detail"
@@ -254,6 +253,16 @@
         </RelativeLayout>
 
     </RelativeLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/content_markdown_view_item_post_detail_video_and_gif_preview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:visibility="gone"
+        android:nestedScrollingEnabled="false" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"

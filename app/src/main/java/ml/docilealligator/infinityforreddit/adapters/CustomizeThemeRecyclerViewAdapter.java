@@ -22,6 +22,7 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeSettingsItem;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.ColorPickerDialog;
 
 public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -29,16 +30,16 @@ public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<Recy
     private static final int VIEW_TYPE_SWITCH = 2;
     private static final int VIEW_TYPE_THEME_NAME = 3;
     private BaseActivity activity;
+    private CustomThemeWrapper customThemeWrapper;
     private ArrayList<CustomThemeSettingsItem> customThemeSettingsItems;
     private String themeName;
-    private boolean isPredefinedTheme;
 
-    public CustomizeThemeRecyclerViewAdapter(BaseActivity activity, String themeName,
-                                             boolean isPredefinedTheme) {
+    public CustomizeThemeRecyclerViewAdapter(BaseActivity activity, CustomThemeWrapper customThemeWrapper,
+                                             String themeName) {
         this.activity = activity;
+        this.customThemeWrapper = customThemeWrapper;
         customThemeSettingsItems = new ArrayList<>();
         this.themeName = themeName;
-        this.isPredefinedTheme = isPredefinedTheme;
     }
 
     @Override
@@ -148,6 +149,10 @@ public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         ThemeColorItemViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            themeItemNameTextView.setTextColor(customThemeWrapper.getPrimaryTextColor());
+            themeItemInfoTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
+
             if (activity.typeface != null) {
                 themeItemNameTextView.setTypeface(activity.typeface);
                 themeItemInfoTextView.setTypeface(activity.typeface);
@@ -166,6 +171,10 @@ public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         ThemeSwitchItemViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            themeItemNameTextView.setTextColor(customThemeWrapper.getPrimaryTextColor());
+            themeItemInfoTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
+
             if (activity.typeface != null) {
                 themeItemNameTextView.setTypeface(activity.typeface);
                 themeItemInfoTextView.setTypeface(activity.typeface);
@@ -181,6 +190,10 @@ public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         public ThemeNameItemViewHolder(@NonNull View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
+            themeNameTextView.setTextColor(customThemeWrapper.getPrimaryTextColor());
+            descriptionTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
+
             if (activity.typeface != null) {
                 themeNameTextView.setTypeface(activity.typeface);
                 descriptionTextView.setTypeface(activity.typeface);

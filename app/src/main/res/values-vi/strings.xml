@@ -3,12 +3,12 @@
     <string name="login_activity_label">"Đăng nhập"</string>
     <string name="comment_activity_label">"Gửi bình luận"</string>
     <string name="comment_activity_label_is_replying">"Trả lời"</string>
-    <string name="post_text_activity_label">"Bài đăng chữ"</string>
+    <string name="post_text_activity_label">"Bài đăng dạng văn bản"</string>
     <string name="subreddit_selection_activity_label">"Chọn một Subreddit"</string>
     <string name="post_link_activity_label">"Bài đăng chứa Liên kết"</string>
-    <string name="post_image_activity_label">"Bài đăng hình ảnh"</string>
-    <string name="post_video_activity_label">"Bài đăng video"</string>
-    <string name="rules_activity_label">"Qui định"</string>
+    <string name="post_image_activity_label">"Bài đăng chứa hình ảnh"</string>
+    <string name="post_video_activity_label">"Bài đăng chứa video"</string>
+    <string name="rules_activity_label">"Quy định"</string>
     <string name="search_subreddits_activity_label">"Các Subreddit"</string>
     <string name="edit_post_activity_label">"Sửa bài đăng"</string>
     <string name="edit_comment_activity_label">"Sửa bình luận"</string>
@@ -26,7 +26,7 @@
     <string name="report_activity_label">"Báo cáo"</string>
     <string name="view_imgur_media_activity_image_label">"Hình ảnh %1$d/%2$d"</string>
     <string name="view_imgur_media_activity_video_label">"Video %1$d/%2$d"</string>
-    <string name="send_private_message_activity_label">"Gửi PM"</string>
+    <string name="send_private_message_activity_label">"Gửi tin nhắn riêng tư"</string>
     <string name="view_reddit_gallery_activity_image_label">"Hình ảnh %1$d/%2$d"</string>
     <string name="view_reddit_gallery_activity_gif_label">"Gif %1$d/%2$d"</string>
     <string name="view_reddit_gallery_activity_video_label">"Video %1$d/%2$d"</string>
@@ -36,7 +36,7 @@
     <string name="action_refresh">"Làm mới"</string>
     <string name="action_add_comment">"Thêm một bình luận"</string>
     <string name="action_save_post">"Lưu bài đăng"</string>
-    <string name="action_view_crosspost_parent">"Xem mục mẹ của bài đăng chéo"</string>
+    <string name="action_view_crosspost_parent">"Xem bài đăng gốc của bài đăng chia sẻ"</string>
     <string name="action_search">"Tìm kiếm"</string>
     <string name="action_start_lazy_mode">"Bật chế độ lười biếng"</string>
     <string name="action_stop_lazy_mode">"Tắt chế độ lười biếng"</string>
@@ -46,8 +46,8 @@
     <string name="action_unhide_post">"Hiện bài đăng"</string>
     <string name="action_edit_post">"Sửa bài đăng"</string>
     <string name="action_delete_post">"Xóa bài đăng"</string>
-    <string name="action_mark_nsfw">"Đánh dấu NSFW"</string>
-    <string name="action_unmark_nsfw">"Bỏ đánh dấu NSFW"</string>
+    <string name="action_mark_nsfw">"Đánh dấu NSFW (18+)"</string>
+    <string name="action_unmark_nsfw">"Bỏ đánh dấu NSFW (18+)"</string>
     <string name="action_mark_spoiler">"Đánh dấu Spoiler"</string>
     <string name="action_unmark_spoiler">"Bỏ đánh dấu Spoiler"</string>
     <string name="action_edit_flair">"Sửa tư cách"</string>
@@ -58,10 +58,9 @@
     <string name="action_share">"Chia sẻ"</string>
     <string name="action_preview">"Xem trước"</string>
     <string name="action_report">"Báo cáo"</string>
-    <string name="action_see_removed">"Xem bài đăng đã xóa"</string>
+    <string name="action_see_removed">"Xem bài đăng đã bị xóa"</string>
     <string name="action_set_wallpaper">"Đặt làm hình nền"</string>
     <string name="action_send_private_message">"Gửi tin nhắn riêng tư"</string>
-    <string name="action_block_user">"Chặn người dùng"</string>
     <string name="parse_json_response_error">"Lỗi khi phân tích phản hồi JSON"</string>
     <string name="retrieve_token_error">"Lỗi khi truy xuất mã thông báo"</string>
     <string name="something_went_wrong">"Đã xảy ra lỗi. Thử lại sau"</string>
@@ -79,18 +78,18 @@
     <string name="no_subreddits">"Không tìm thấy subreddits"</string>
     <string name="no_users">"Không tìm thấy người dùng"</string>
     <string name="no_multi_reddits">"Không tìm thấy Multireddits"</string>
-    <string name="no_storage_permission">"Không có quyền bộ nhớ để lưu tệp này"</string>
+    <string name="no_storage_permission">"Không có quyền truy cập bộ nhớ để lưu tệp này"</string>
     <string name="load_comments_failed">"Lỗi khi tải bình luận. Chạm để thử lại."</string>
     <string name="retry">"Thử lại"</string>
     <string name="comments">"Bình luận"</string>
-    <string name="no_comments_yet">"Chưa có bình luận nào cả. Viết một bình luận không?"</string>
+    <string name="no_comments_yet">"Chưa có bình luận nào cả. Hãy là người đầu tiên viết một bình luận đi :)"</string>
     <string name="vote_failed">"Vote thất bại"</string>
     <string name="refresh_post_failed">"Lỗi khi làm mới bài đăng"</string>
     <string name="load_messages_failed">"Lỗi khi tải tin nhắn. Chạm để thử lại"</string>
     <string name="no_messages">"Không có tin nhắn"</string>
-    <string name="nsfw">"NSFW"</string>
-    <string name="karma_info">"Nghiệp quả: %1$d"</string>
-    <string name="karma_info_user_detail">"Nghiệp quả:
+    <string name="nsfw">"NSFW (18+)"</string>
+    <string name="karma_info">"Karma: %1$d"</string>
+    <string name="karma_info_user_detail">"Karma:
 %1$d (%2$d + %3$d)"</string>
     <string name="cakeday_info">"Ngày bánh ga tô:
 %1$s"</string>
@@ -123,8 +122,8 @@
     <string name="unfollow">"Hủy theo dõi"</string>
     <string name="followed">"Đã theo dõi"</string>
     <string name="follow_failed">"Theo dõi thất bại"</string>
-    <string name="unfollowed">"Đã ngừng theo dõi"</string>
-    <string name="unfollow_failed">"Ngừng theo dõi thất bại"</string>
+    <string name="unfollowed">"Đã hủy theo dõi"</string>
+    <string name="unfollow_failed">"Hủy theo dõi thất bại"</string>
     <string name="content_description_banner_imageview">"Ảnh bìa của Subreddit"</string>
     <string name="app_label">"Infinity"</string>
     <string name="search_hint">"Tìm bất cứ thứ gì"</string>
@@ -133,8 +132,8 @@
     <string name="lazy_mode_stop">"Chế độ lười biếng đã dừng"</string>
     <string name="write_comment_hint">"Viết những ý nghĩ thú vị của bạn ở đây"</string>
     <string name="comment_content_required">"Những ý nghĩ thú vị của bạn đâu rồi?"</string>
-    <string name="sending_comment">"Đang gửi"</string>
-    <string name="send_comment_success">"Bình luận đã gửi"</string>
+    <string name="sending_comment">"Đang gửi bình luận"</string>
+    <string name="send_comment_success">"Bình luận đã gửi thành công"</string>
     <string name="send_comment_failed">"Không thể gửi bình luận này"</string>
     <string name="send_message_username_hint">"Người dùng"</string>
     <string name="send_message_subject_hint">"Chủ đề (100 kí tự tối đa)"</string>
@@ -145,27 +144,29 @@
     <string name="message_subject_required">"Tin nhắn của bạn nên có một chủ đề"</string>
     <string name="message_content_required">"Bạn cần phải nói với người nhận điều gì đó"</string>
     <string name="sending_message">"Đang gửi"</string>
-    <string name="send_message_success">"Tin nhắn đã gửi"</string>
+    <string name="send_message_success">"Tin nhắn đã được gửi thành công"</string>
     <string name="send_message_failed">"Không thể gửi tin nhắn này"</string>
     <string name="select_a_subreddit">"Hãy chọn một subreddit trước"</string>
+
+    <!-- Fuzzy -->
     <string name="title_required">"Bài đăng cần một tiêu đề hay"</string>
     <string name="link_required">"Này, Liên kết đâu rồi?"</string>
     <string name="select_an_image">"Hãy chọn một bức ảnh trước"</string>
     <string name="posting">"Đang đăng bài"</string>
-    <string name="post_failed">"Không thể đăng bài được"</string>
+    <string name="post_failed">"Không thể đăng bài được :("</string>
     <string name="error_processing_image">"Lỗi khi xử lí ảnh"</string>
     <string name="error_processing_video">"Lỗi khi xử lí video"</string>
-    <string name="download_started">"Đã bắt đầu tải về. Hãy kiểm tra thông báo để xem tiến độ."</string>
+    <string name="download_started">"Đã bắt đầu tải về. Hãy kiểm tra thông báo để xem tiến trình :)"</string>
     <string name="comment_load_more_comments">"Tải thêm bình luận"</string>
     <string name="comment_load_more_comments_failed">"Tải thất bại. Chạm để thử lại."</string>
     <string name="loading">"Đang tải"</string>
     <string name="post_title_hint">"Tiêu đề"</string>
     <string name="post_text_content_hint">"Nội dung"</string>
     <string name="choose_a_subreddit">"Chọn một subreddit"</string>
-    <string name="rules">"Luật lệ"</string>
+    <string name="rules">"Luật"</string>
     <string name="post_link_hint">"URL"</string>
     <string name="subreddits">"Các subreddit"</string>
-    <string name="users">"Những người dùng"</string>
+    <string name="users">"Các người dùng"</string>
     <string name="multi_reddits">"Các MultiReddit"</string>
     <string name="bottom_sheet_post_text">"Văn bản"</string>
     <string name="bottom_sheet_post_link">"Liên kết"</string>
@@ -192,30 +193,30 @@ Nhấn để thử lại."</string>
     <string name="all_subreddits">"Tất cả các subreddit"</string>
     <string name="sort_best">"Hay nhất"</string>
     <string name="sort_hot">"Nóng"</string>
-    <string name="sort_new">"Mới"</string>
+    <string name="sort_new">"Mới nhất"</string>
     <string name="sort_random">"Ngẫu nhiên"</string>
     <string name="sort_rising">"Đang nổi"</string>
     <string name="sort_top">"Hàng đầu"</string>
-    <string name="sort_controversial">"Gây tranh cãi"</string>
+    <string name="sort_controversial">"Đối thoại nhiều"</string>
     <string name="sort_relevance">"Liên quan"</string>
     <string name="sort_comments">"Bình luận"</string>
-    <string name="sort_activity">"Sự hoạt động"</string>
-    <string name="sort_confidence">"Sự tự tin"</string>
+    <string name="sort_activity">"Hoạt động"</string>
+    <string name="sort_confidence">"Tự tin"</string>
     <string name="sort_old">"Cũ nhất"</string>
-    <string name="sort_qa">"QA"</string>
+    <string name="sort_qa">"Hỏi và trả lời (QnA)"</string>
     <string name="sort_live">"Trực tiếp"</string>
     <string name="sort_time_hour">"Giờ"</string>
     <string name="sort_time_day">"Ngày"</string>
     <string name="sort_time_week">"Tuần"</string>
     <string name="sort_time_month">"Tháng"</string>
     <string name="sort_time_year">"Năm"</string>
-    <string name="sort_time_all_time">"Mọi thời gian"</string>
-    <string name="no_activity_found_for_share">"Không có ứng dụng nào có thể xử lý hành động chia sẻ"</string>
-    <string name="archived_post_vote_unavailable">"Bài đăng đang được lưu trữ. Không thể vote."</string>
-    <string name="archived_post_comment_unavailable">"Bài đăng đang được lưu trữ. Không thể bình luận."</string>
-    <string name="archived_post_reply_unavailable">"Bài đăng đang được lưu trữ. Không thể trả lời."</string>
-    <string name="locked_post_comment_unavailable">"Bài đăng đang bị khóa. Không thể bình luận."</string>
-    <string name="locked_post_reply_unavailable">"Bài đăng đang bị khóa. Không thể trả lời."</string>
+    <string name="sort_time_all_time">"Mọi thời điểm"</string>
+    <string name="no_activity_found_for_share">"Không có ứng dụng nào có thể chia sẻ được"</string>
+    <string name="archived_post_vote_unavailable">"Bài đăng đang được lưu trữ. Không thể đánh giá"</string>
+    <string name="archived_post_comment_unavailable">"Bài đăng đang được lưu trữ. Không thể bình luận"</string>
+    <string name="archived_post_reply_unavailable">"Bài đăng đang được lưu trữ. Không thể trả lời"</string>
+    <string name="locked_post_comment_unavailable">"Bài đăng đang bị khóa. Không thể bình luận"</string>
+    <string name="locked_post_reply_unavailable">"Bài đăng đang bị khóa. Không thể trả lời"</string>
     <string name="text">"VĂN BẢN"</string>
     <string name="link">"LIÊN KẾT"</string>
     <string name="image">"HÌNH ẢNH"</string>
@@ -224,21 +225,23 @@ Nhấn để thử lại."</string>
     <string name="gallery">"BỘ SƯU TẬP"</string>
     <string name="best">"Hay nhất"</string>
     <string name="search">"Tìm kiếm"</string>
-    <string name="posting_video">"Đang đăng video"</string>
-    <string name="posting_image">"Đang đăng hình ảnh"</string>
+    <string name="posting_video">"Đang đăng video..."</string>
+    <string name="posting_image">"Đang đăng hình ảnh..."</string>
 
     <!-- Fuzzy -->
-    <string name="please_wait">"Vui lòng đợi."</string>
+    <string name="please_wait">"Vui lòng đợi..."</string>
+
+    <!-- Fuzzy -->
     <string name="add_account">"Thêm tài khoản"</string>
-    <string name="anonymous_account">"Vô danh"</string>
+    <string name="anonymous_account">"Ẩn danh"</string>
     <string name="log_out">"Đăng xuất"</string>
     <string name="press_here_to_login">"Nhấn vào đây để đăng nhập"</string>
-    <string name="login_first">"Đăng nhập trước đã"</string>
+    <string name="login_first">"Đăng nhập trước đi rồi làm gì thì làm"</string>
     <string name="post_saved_success">"Bài đăng đã được lưu"</string>
-    <string name="post_saved_failed">"Không thể lưu bài đăng"</string>
-    <string name="post_unsaved_success">"Bài đăng đã được huỷ lưu"</string>
-    <string name="post_unsaved_failed">"Không thể huỷ lưu bài đăng"</string>
-    <string name="post_hide_success">"Bài đăng đã được ẩn"</string>
+    <string name="post_saved_failed">"Không thể lưu bài đăng :("</string>
+    <string name="post_unsaved_success">"Bài đăng đã không được lưu"</string>
+    <string name="post_unsaved_failed">"Không thể không lưu bài đăng"</string>
+    <string name="post_hide_success">"Bài đăng bị được ẩn"</string>
     <string name="post_hide_failed">"Không thể ẩn bài đăng"</string>
     <string name="post_unhide_success">"Bài đăng đã được hiện"</string>
     <string name="thing_favorite_failed">"Yêu thích thất bại"</string>
@@ -397,7 +400,6 @@ Nhấn để thử lại."</string>
     <string name="settings_customize_dark_theme_title">"Chủ đề tối"</string>
     <string name="settings_customize_amoled_theme_title">"Chủ đề Amoled"</string>
     <string name="settings_manage_themes_title">"Quản lý chủ đề"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Các chủ đề tuỳ chỉnh không thể được áp dụng cho trang cài đặt (trừ thanh công cụ, thanh trạng thái và thanh điều hướng)."</string>
     <string name="settings_advanced_master_title">"Nâng cao"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Xoá tất cả subreddit trong cơ sở dữ liệu"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Xoá tất cả người dùng trong cơ sở dữ liệu"</string>
@@ -412,6 +414,8 @@ Nhấn để thử lại."</string>
     <string name="settings_tab_title">"Tiêu đề"</string>
     <string name="settings_tab_post_type">"Loại"</string>
     <string name="settings_tab_subreddit_name">"Tên subreddit (Không có tiền tố r/)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_tab_multi_reddit_name">"Tên MultiReddit (/user/yourusername/m/yourmultiredditname)"</string>
     <string name="settings_tab_username">"Tên người dùng (Không có tiền tố u/)"</string>
     <string name="no_developer_easter_egg">"Không có tuỳ chọn cho nhà phát triển nào ở đây"</string>
@@ -750,9 +754,6 @@ Cô ta không ốm hay gì cả, nhưng cô ấy chắc chắn có thể khá h�
     <string name="top_score">"%1$s điểm"</string>
     <string name="login_activity_2fa_prompt">"Nếu bạn đã bật xác thực 2 yếu tố, hãy vui lòng nhập mật khẩu như sau: &lt;mật khẩu&gt;:&lt;mã 2FA&gt;.
 Ví dụ: yourpass:123456"</string>
-    <string name="block_user">"Chặn người dùng"</string>
-    <string name="block_user_success">"Đã chặn"</string>
-    <string name="block_user_failed">"Chặn người dùng thất bại"</string>
     <string name="submit_crosspost_activity_label">"Đăng chéo"</string>
     <string name="give_award_activity_label">"Cho giải thưởng"</string>
     <string name="action_crosspost">"Đăng chéo"</string>
@@ -784,7 +785,6 @@ Các tab có thể sẽ mất tất cả nội dung sau khi chuyển sang các t
     <string name="settings_swipe_action_threshold">"Ngưỡng"</string>
     <string name="settings_pull_to_refresh_title">"Kéo để làm mới"</string>
     <string name="settings_security_title">"Bảo mật"</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Yêu cầu xác thực để đi đến khu vực Tài khoản trong ngăn điều hướng"</string>
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Nhấn giữ để ẩn thanh công cụ"</string>
     <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"Ẩn thanh công cụ theo mặc định"</string>
     <string name="settings_customize_bottom_app_bar_title">"Tuỳ biến thanh điều hướng ở dưới cùng"</string>
@@ -811,7 +811,6 @@ Tự động phát video bị tắt."</string>
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"Tải xuống thất bại: không thể truy cập thư mục đích"</string>
     <string name="downloading_media_failed_cannot_download_media">"Tải xuống thất bại"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"Tải xuống thất bại: không thể lưu tệp vào thư mục đích"</string>
-    <string name="view_full_comment_markdown">"Xem Markdown đầy đủ"</string>
     <string name="select_user_flair_success">"Tư cách người dùng đã được chọn"</string>
     <string name="select_this_user_flair">"Chọn tư cách người dùng này?"</string>
     <string name="select_header_size">"Chọn kích thước tiêu đề"</string>
@@ -1010,6 +1009,8 @@ Thông báo: %2$s"</string>
     <string name="exclude_user">"Loại trừ người dùng này"</string>
     <string name="exclude_flair">"Loại trừ tư cách này"</string>
     <string name="contain_flair">"Chứa tư cách này"</string>
+
+    <!-- Fuzzy -->
     <string name="exclude_domain">"Loại trừ miền"</string>
     <string name="suggest_title">"Đề xuất tiêu đề"</string>
     <string name="suggest_title_failed">"Đề xuất tiêu đề thất bại"</string>
@@ -1091,4 +1092,84 @@ Nhấn để thử lại."</string>
     <string name="error_loading_wiki">"Lỗi khi tải wiki"</string>
     <string name="no_wiki">"Subreddit này không có trang wiki"</string>
     <string name="material_you_notification_title">"Đang áp dụng Material You"</string>
+    <string name="action_go_to_wiki">"Đi tới Wiki"</string>
+    <string name="action_playback_speed">"Tốc độ phát"</string>
+    <string name="about">"Về"</string>
+    <string name="settings_link_handler_title">"Xử lý liên kết"</string>
+    <string name="settings_main_page_back_button_action">"Trang chủ nút quay lại hành động"</string>
+    <string name="settings_open_navigation_drawer">"Mở ngăn điều hướng"</string>
+    <string name="settings_number_of_columns_in_post_feed_unfolded_portrait_title">"Dọc (mở ra)"</string>
+    <string name="settings_number_of_columns_in_post_feed_unfolded_landscape_title">"Ngang (mở ra)"</string>
+    <string name="settings_loop_video_title">"Lặp lại Video"</string>
+    <string name="settings_loop_video_summary">"Khởi động lại ứng dụng để áp dụng các cài đặt"</string>
+    <string name="settings_credits_lock_screen_animation_title">"Hiệu ứng màn hình khoá"</string>
+    <string name="settings_app_lock_title">"Khoá ứng dụng"</string>
+    <string name="settings_app_lock_summary">"Yêu cầu xác minh trước khi mở ứng dụng"</string>
+    <string name="settings_app_lock_timeout_title">"Khoá ứng dụng sau"</string>
+    <string name="settings_enable_fold_support_title">"Bật chế độ hỗ trợ thiết bị màn hình gập"</string>
+    <string name="settings_default_playback_speed_title">"Tốc độ phát mặc định"</string>
+    <string name="settings_link_handler_value_external_browser">"Trình duyệt ngoài"</string>
+    <string name="settings_link_handler_value_custom_tab">"Thẻ tùy chọn"</string>
+    <string name="settings_link_handler_value_internal_browser">"Trình duyệt nội bộ"</string>
+    <string name="settings_legacy_autoplay_video_controller_ui_title">"Giao diện Trình điều khiển Video cũ"</string>
+    <string name="settings_pinch_to_zoom_video_title">"Chạm để thu phóng Video"</string>
+    <string name="settings_experimental_feature">"Tính năng thử nghiệm"</string>
+    <string name="theme_item_media_indicator_icon_color">"Màu biểu tượng chỉ phương tiện"</string>
+    <string name="theme_item_media_indicator_icon_color_detail">"Đã áp dụng cho: xem trước bài đăng cho Video hoặc Thư viện "</string>
+    <string name="theme_item_media_indicator_background_color">"Màu nền chỉ phương tiện"</string>
+    <string name="theme_item_media_indicator_background_color_detail">"Áp dụng cho: Nền của biểu tượng video hoặc thư viện ở mục xem trước bài đăng"</string>
+    <string name="go_to_top">"Lên trên cùng"</string>
+    <string name="title_contains_strings_hint">"Tiêu đề: chứa từ khoá (từ 1, từ 2)"</string>
+    <string name="title_contains_regex_hint">"Tiêu đề: chứa biểu thức thường"</string>
+    <string name="contain_domains_hint">"Chứa đường dẫn"</string>
+    <string name="anonymous_multireddit_no_subreddit">"Không có subreddit nào cho trình multireddit này!"</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_video_url">"Lỗi xử lý video v.redd.it: Không thể lấy đường dẫn video"</string>
+    <string name="contain_domain">"Chứa đường dẫn"</string>
+    <string name="lock_screen_text">"Chào!"</string>
+    <string name="app_lock_timeout_immediately">"Ngay lập tức"</string>
+    <string name="app_lock_timeout_1_min">"1 phút"</string>
+    <string name="app_lock_timeout_2_mins">"2 phút"</string>
+    <string name="app_lock_timeout_5_mins">"5 phút"</string>
+    <string name="app_lock_timeout_10_mins">"10 phút"</string>
+    <string name="app_lock_timeout_15_mins">"15 phút"</string>
+    <string name="app_lock_timeout_20_mins">"20 phút"</string>
+    <string name="app_lock_timeout_30_mins">"30 phút"</string>
+    <string name="app_lock_timeout_1_hour">"1 tiếng"</string>
+    <string name="app_lock_timeout_2_hours">"2 tiếng"</string>
+    <string name="app_lock_timeout_3_hours">"3 tiếng"</string>
+    <string name="app_lock_timeout_4_hours">"4 tiếng"</string>
+    <string name="app_lock_timeout_5_hours">"5 tiếng"</string>
+    <string name="app_lock_timeout_6_hours">"6 tiếng"</string>
+    <string name="app_lock_timeout_12_hours">"12 tiếng"</string>
+    <string name="app_lock_timeout_24_hours">"24 tiếng"</string>
+    <string name="edit_profile_activity_label">"Chỉnh sửa Hồ sơ"</string>
+    <string name="action_contact_mods">"Liên hệ Quản trị viên"</string>
+    <string name="settings_save_nsfw_media_in_different_folder_title">"Lưu Phương tiện NSFW trong thư mục khác"</string>
+    <string name="settings_nsfw_download_location_title">"Vị trí tải xuống nội dung NSFW"</string>
+    <string name="fetch_streamable_video_failed">"Lấy video Streamable thất bại"</string>
+
+    <!-- EditProfileService Notification -->
+    <string name="submit_change_avatar">"Lưu thay đổi Ảnh đị diện"</string>
+    <string name="submit_change_banner">"Gửi Đổi ảnh Banner"</string>
+    <string name="submit_save_profile">"Gửi Lưu hồ sơ"</string>
+
+    <!-- EditProfileActivity -->
+    <string name="action_edit_profile">"Chỉnh sửa Hồ sơ"</string>
+    <string name="remove_avatar">"Gỡ Ảnh đại diện"</string>
+    <string name="remove_banner">"Gỡ Banner"</string>
+    <string name="display_name_text">"Tên hiển thị"</string>
+    <string name="display_name_hint">"Hiện trên trang hồ sơ của bạn"</string>
+    <string name="display_name_description">"Cái này sẽ được hiện cho những người xem trang hồ sơ của bạn và không thay đổi tên người dùng của bạn."</string>
+    <string name="about_you_text">"Thông tin về bạn"</string>
+    <string name="about_you_hint">"Mô tả ngắn về bạn"</string>
+    <string name="message_remove_avatar_success">"Xoá ảnh đại diện thành công"</string>
+    <string name="message_remove_avatar_failed">"Xoá ảnh đại diện %s thất bại"</string>
+    <string name="message_remove_banner_success">"Xoá banner thành công"</string>
+    <string name="message_remove_banner_failed">"Gỡ bỏ banner thất bại"</string>
+    <string name="message_change_avatar_success">"Thay đổi ảnh đại diện thành công"</string>
+    <string name="message_change_avatar_failed">"Thay đổi ảnh đại diện thất bại"</string>
+    <string name="message_change_banner_success">"Thay đổi banner thành công"</string>
+    <string name="message_change_banner_failed">"Thay đổi banner thất bại"</string>
+    <string name="message_save_profile_success">"Lưu Hồ sơ thành công"</string>
+    <string name="message_save_profile_failed">"Lưu hồ sơ %s thất bại"</string>
 </resources>

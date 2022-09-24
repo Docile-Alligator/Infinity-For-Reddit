@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import retrofit2.Call;
@@ -19,16 +20,16 @@ import retrofit2.Retrofit;
 public class SendComment {
     public static void sendComment(Executor executor, Handler handler, String commentMarkdown,
                                    String thingFullname, int parentDepth,
-                                   Retrofit oauthRetrofit, String accessToken,
+                                   Retrofit newAuthenticatorOauthRetrofit, Account account,
                                    SendCommentListener sendCommentListener) {
-        Map<String, String> headers = APIUtils.getOAuthHeader(accessToken);
+        Map<String, String> headers = APIUtils.getOAuthHeader(account.getAccessToken());
         Map<String, String> params = new HashMap<>();
         params.put(APIUtils.API_TYPE_KEY, "json");
         params.put(APIUtils.RETURN_RTJSON_KEY, "true");
         params.put(APIUtils.TEXT_KEY, commentMarkdown);
         params.put(APIUtils.THING_ID_KEY, thingFullname);
 
-        oauthRetrofit.create(RedditAPI.class).sendCommentOrReplyToMessage(headers, params).enqueue(new Callback<String>() {
+        newAuthenticatorOauthRetrofit.create(RedditAPI.class).sendCommentOrReplyToMessage(headers, params).enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {

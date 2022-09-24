@@ -53,9 +53,13 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.events.ChangeInboxCountEvent;
+import ml.docilealligator.infinityforreddit.events.PassPrivateMessageEvent;
+import ml.docilealligator.infinityforreddit.events.PassPrivateMessageIndexEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.InboxFragment;
 import ml.docilealligator.infinityforreddit.message.FetchMessage;
+import ml.docilealligator.infinityforreddit.message.Message;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -135,9 +139,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
 
             if (isImmersiveInterface()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    mCoordinatorLayout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+                    window.setDecorFitsSystemWindows(false);
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
@@ -316,7 +318,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
             if (mAccessToken != null) {
                 Toast.makeText(this, R.string.please_wait, Toast.LENGTH_SHORT).show();
                 mOauthRetrofit.create(RedditAPI.class).readAllMessages(APIUtils.getOAuthHeader(mAccessToken))
-                        .enqueue(new Callback<String>() {
+                        .enqueue(new Callback<>() {
                             @Override
                             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                                 if (response.isSuccessful()) {
@@ -324,6 +326,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
                                     if (sectionsPagerAdapter != null) {
                                         sectionsPagerAdapter.readAllMessages();
                                     }
+                                    EventBus.getDefault().post(new ChangeInboxCountEvent(0));
                                 } else {
                                     if (response.code() == 429) {
                                         Toast.makeText(InboxActivity.this, R.string.read_all_messages_time_limit, Toast.LENGTH_LONG).show();
@@ -373,6 +376,13 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
         if (!getClass().getName().equals(event.excludeActivityClassName)) {
             finish();
+        }
+    }
+
+    @Subscribe
+    public void onPassPrivateMessageIndexEvent(PassPrivateMessageIndexEvent event) {
+        if (sectionsPagerAdapter != null) {
+            EventBus.getDefault().post(new PassPrivateMessageEvent(sectionsPagerAdapter.getPrivateMessage(event.privateMessageIndex)));
         }
     }
 
@@ -438,6 +448,17 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
             if (fragment != null) {
                 fragment.markAllMessagesRead();
             }
+        }
+
+        Message getPrivateMessage(int index) {
+            if (viewPager2 == null || fragmentManager == null) {
+                return null;
+            }
+            Fragment fragment = fragmentManager.findFragmentByTag("f" + viewPager2.getCurrentItem());
+            if (fragment instanceof InboxFragment) {
+                return ((InboxFragment) fragment).getMessageByIndex(index);
+            }
+            return null;
         }
 
         @NonNull

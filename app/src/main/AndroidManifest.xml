@@ -25,8 +25,8 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
-        android:name="ml.docilealligator.infinityforreddit.Infinity"
-        android:allowBackup="true"
+        android:name=".Infinity"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/application_name"
         android:roundIcon="@mipmap/ic_launcher_round"
@@ -34,6 +34,18 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
+        <activity
+            android:name=".activities.HistoryActivity"
+            android:exported="false"
+            android:label="@string/history_activity_label"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.Slidable" />
+        <activity
+            android:name=".activities.PostPollActivity"
+            android:label="@string/post_poll_activity_label"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".activities.EditProfileActivity"
             android:label="@string/edit_profile_activity_label"
@@ -67,6 +79,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.WebViewActivity"
+            android:configChanges="orientation|screenSize"
             android:label=""
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -174,7 +187,7 @@
             android:name=".activities.CustomThemePreviewActivity"
             android:label="@string/theme_preview_activity_label"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.SlidableWithTranslucentWindow" />
+            android:theme="@style/AppTheme.Slidable" />
         <activity
             android:name=".activities.CustomThemeListingActivity"
             android:label="@string/custom_theme_listing_activity_label"
@@ -207,22 +220,22 @@
             android:theme="@style/AppTheme.Slidable" />
         <activity
             android:name=".activities.ShareDataResolverActivity"
-            android:exported="false">
-            <intent-filter>
+            android:exported="true">
+            <intent-filter android:label="@string/submit_post">
                 <action android:name="android.intent.action.SEND" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="image/*" />
             </intent-filter>
-            <intent-filter>
+            <intent-filter android:label="@string/submit_post">
                 <action android:name="android.intent.action.SEND" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="video/*" />
             </intent-filter>
-            <intent-filter>
+            <intent-filter android:label="@string/submit_post">
                 <action android:name="android.intent.action.SEND" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -268,6 +281,13 @@
         <activity
             android:name=".activities.LinkResolverActivity"
             android:exported="true">
+            <intent-filter android:label="@string/handle_link">
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/plain" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -391,11 +411,11 @@
         <activity
             android:name=".activities.ViewSubredditDetailActivity"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.SlidableWithTranslucentWindow" />
+            android:theme="@style/AppTheme.Slidable" />
         <activity
             android:name=".activities.ViewUserDetailActivity"
             android:parentActivityName=".activities.MainActivity"
-            android:theme="@style/AppTheme.SlidableWithTranslucentWindow" />
+            android:theme="@style/AppTheme.Slidable" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -421,12 +441,11 @@
             android:enabled="true"
             android:exported="false" />
         <service
-            android:name=".services.MaterialYouService"
-            android:exported="false" />
-        <service
             android:name=".services.EditProfileService"
             android:enabled="true"
             android:exported="false" />
+
+        <receiver android:name=".broadcastreceivers.DownloadedMediaDeleteActionBroadcastReceiver" />
     </application>
 
 </manifest>

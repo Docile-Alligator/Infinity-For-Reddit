@@ -1,6 +1,7 @@
 package ml.docilealligator.infinityforreddit;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.graphics.Color;
 
 import androidx.annotation.NonNull;
@@ -37,7 +38,7 @@ import ml.docilealligator.infinityforreddit.user.UserData;
 
 @Database(entities = {Account.class, SubredditData.class, SubscribedSubredditData.class, UserData.class,
         SubscribedUserData.class, MultiReddit.class, CustomTheme.class, RecentSearchQuery.class,
-        ReadPost.class, PostFilter.class, PostFilterUsage.class, AnonymousMultiredditSubreddit.class}, version = 22)
+        ReadPost.class, PostFilter.class, PostFilterUsage.class, AnonymousMultiredditSubreddit.class}, version = 23)
 public abstract class RedditDataRoomDatabase extends RoomDatabase {
     private static RedditDataRoomDatabase INSTANCE;
 
@@ -52,7 +53,7 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
                                     MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13,
                                     MIGRATION_13_14, MIGRATION_14_15, MIGRATION_15_16, MIGRATION_16_17,
                                     MIGRATION_17_18, MIGRATION_18_19, MIGRATION_19_20, MIGRATION_20_21,
-                                    MIGRATION_21_22)
+                                    MIGRATION_21_22, MIGRATION_22_23)
                             .build();
                 }
             }
@@ -363,6 +364,31 @@ public abstract class RedditDataRoomDatabase extends RoomDatabase {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE users ADD COLUMN title TEXT");
+        }
+    };
+    private static final Migration MIGRATION_22_23 = new Migration(22, 23) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE read_posts ADD COLUMN time INTEGER DEFAULT 0 NOT NULL");
+            Cursor cursor = database.query("SELECT * FROM read_posts");
+            int row = 0;
+            database.beginTransaction();
+            try {
+                while (cursor.moveToNext()) {
+                    int index;
+
+                    index = cursor.getColumnIndexOrThrow("username");
+                    String username = cursor.getString(index);
+
+                    index = cursor.getColumnIndexOrThrow("id");
+                    String id = cursor.getString(index);
+
+                    database.execSQL("UPDATE read_posts SET time = " + row++ + " WHERE username = '" + username + "' AND id = '" + id + "'");
+                }
+                database.setTransactionSuccessful();
+            } finally {
+                database.endTransaction();
+            }
         }
     };
 }

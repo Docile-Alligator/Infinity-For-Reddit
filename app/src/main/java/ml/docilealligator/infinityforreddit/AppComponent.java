@@ -13,12 +13,13 @@ import ml.docilealligator.infinityforreddit.activities.CustomizePostFilterActivi
 import ml.docilealligator.infinityforreddit.activities.CustomizeThemeActivity;
 import ml.docilealligator.infinityforreddit.activities.EditCommentActivity;
 import ml.docilealligator.infinityforreddit.activities.EditMultiRedditActivity;
-import ml.docilealligator.infinityforreddit.activities.EditProfileActivity;
 import ml.docilealligator.infinityforreddit.activities.EditPostActivity;
+import ml.docilealligator.infinityforreddit.activities.EditProfileActivity;
 import ml.docilealligator.infinityforreddit.activities.FetchRandomSubredditOrPostActivity;
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.FullMarkdownActivity;
 import ml.docilealligator.infinityforreddit.activities.GiveAwardActivity;
+import ml.docilealligator.infinityforreddit.activities.HistoryActivity;
 import ml.docilealligator.infinityforreddit.activities.InboxActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.LockScreenActivity;
@@ -30,6 +31,7 @@ import ml.docilealligator.infinityforreddit.activities.PostFilterUsageListingAct
 import ml.docilealligator.infinityforreddit.activities.PostGalleryActivity;
 import ml.docilealligator.infinityforreddit.activities.PostImageActivity;
 import ml.docilealligator.infinityforreddit.activities.PostLinkActivity;
+import ml.docilealligator.infinityforreddit.activities.PostPollActivity;
 import ml.docilealligator.infinityforreddit.activities.PostTextActivity;
 import ml.docilealligator.infinityforreddit.activities.PostVideoActivity;
 import ml.docilealligator.infinityforreddit.activities.RPANActivity;
@@ -60,9 +62,11 @@ import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity;
 import ml.docilealligator.infinityforreddit.activities.WebViewActivity;
 import ml.docilealligator.infinityforreddit.activities.WikiActivity;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.AccountChooserBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.fragments.CommentsListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.FollowedUsersListingFragment;
+import ml.docilealligator.infinityforreddit.fragments.HistoryPostFragment;
 import ml.docilealligator.infinityforreddit.fragments.InboxFragment;
 import ml.docilealligator.infinityforreddit.fragments.MultiRedditListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
@@ -79,9 +83,9 @@ import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryVideoFrag
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
 import ml.docilealligator.infinityforreddit.services.DownloadRedditVideoService;
 import ml.docilealligator.infinityforreddit.services.EditProfileService;
-import ml.docilealligator.infinityforreddit.services.MaterialYouService;
 import ml.docilealligator.infinityforreddit.services.SubmitPostService;
 import ml.docilealligator.infinityforreddit.settings.AdvancedPreferenceFragment;
+import ml.docilealligator.infinityforreddit.settings.CommentPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.CrashReportsFragment;
 import ml.docilealligator.infinityforreddit.settings.CustomizeBottomAppBarFragment;
 import ml.docilealligator.infinityforreddit.settings.CustomizeMainPageTabsFragment;
@@ -273,8 +277,6 @@ public interface AppComponent {
 
     void inject(LockScreenActivity lockScreenActivity);
 
-    void inject(MaterialYouService materialYouService);
-
     void inject(RPANActivity rpanActivity);
 
     void inject(ViewRPANBroadcastFragment viewRPANBroadcastFragment);
@@ -292,4 +294,16 @@ public interface AppComponent {
     void inject(EditProfileActivity editProfileActivity);
 
     void inject(FontPreferenceFragment fontPreferenceFragment);
+
+    void inject(CommentPreferenceFragment commentPreferenceFragment);
+
+    void inject(PostPollActivity postPollActivity);
+
+    void inject(AccountChooserBottomSheetFragment accountChooserBottomSheetFragment);
+
+    void inject(MaterialYouWorker materialYouWorker);
+
+    void inject(HistoryPostFragment historyPostFragment);
+
+    void inject(HistoryActivity historyActivity);
 }

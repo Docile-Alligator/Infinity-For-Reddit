@@ -12,7 +12,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -27,7 +26,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.view.menu.MenuItemImpl;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -62,7 +61,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
     private boolean isImmersiveInterfaceApplicable = true;
     private int systemVisibilityToolbarExpanded = 0;
     private int systemVisibilityToolbarCollapsed = 0;
-    private CustomThemeWrapper customThemeWrapper;
+    public CustomThemeWrapper customThemeWrapper;
     public Typeface typeface;
     public Typeface titleTypeface;
     public Typeface contentTypeface;
@@ -341,11 +340,8 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
             for (int i = 0; i < menu.size(); i++) {
                 MenuItem item = menu.getItem(i);
                 if (((MenuItemImpl) item).requestsActionButton()) {
-                    Drawable drawable = item.getIcon();
-                    if (drawable != null) {
-                        DrawableCompat.setTint(drawable, customThemeWrapper.getToolbarPrimaryTextAndIconColor());
-                        item.setIcon(drawable);
-                    }
+                    MenuItemCompat.setIconTintList(item, ColorStateList
+                            .valueOf(customThemeWrapper.getToolbarPrimaryTextAndIconColor()));
                 }
                 Utils.setTitleWithCustomFontToMenuItem(typeface, item, null);
             }

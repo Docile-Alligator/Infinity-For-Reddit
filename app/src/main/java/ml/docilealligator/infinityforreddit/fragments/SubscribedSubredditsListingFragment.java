@@ -132,7 +132,7 @@ public class SubscribedSubredditsListingFragment extends Fragment implements Fra
         }
 
         mRecyclerView.setAdapter(adapter);
-        new FastScrollerBuilder(mRecyclerView).build();
+        new FastScrollerBuilder(mRecyclerView).useMd2Style().build();
 
         mSubscribedSubredditViewModel = new ViewModelProvider(this,
                 new SubscribedSubredditViewModel.Factory(mActivity.getApplication(), mRedditDataRoomDatabase, accountName))

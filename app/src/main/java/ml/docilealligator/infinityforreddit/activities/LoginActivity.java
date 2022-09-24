@@ -8,6 +8,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.SpannableString;
+import android.text.util.Linkify;
 import android.util.Log;
 import android.view.InflateException;
 import android.view.MenuItem;
@@ -40,6 +42,7 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.FetchMyInfo;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
@@ -58,6 +61,7 @@ import retrofit2.Retrofit;
 public class LoginActivity extends BaseActivity {
 
     private static final String ENABLE_DOM_STATE = "EDS";
+    private static final String IS_AGREE_TO_USER_AGGREMENT_STATE = "IATUAS";
 
     @BindView(R.id.coordinator_layout_login_activity)
     CoordinatorLayout coordinatorLayout;
@@ -91,6 +95,7 @@ public class LoginActivity extends BaseActivity {
     Executor mExecutor;
     private String authCode;
     private boolean enableDom = false;
+    private boolean isAgreeToUserAgreement = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +128,7 @@ public class LoginActivity extends BaseActivity {
 
         if (savedInstanceState != null) {
             enableDom = savedInstanceState.getBoolean(ENABLE_DOM_STATE);
+            isAgreeToUserAgreement = savedInstanceState.getBoolean(IS_AGREE_TO_USER_AGGREMENT_STATE);
         }
 
         fab.setOnClickListener(view -> {
@@ -260,12 +266,39 @@ public class LoginActivity extends BaseActivity {
                 super.onPageFinished(view, url);
             }
         });
+
+        if (!isAgreeToUserAgreement) {
+            TextView messageTextView = new TextView(this);
+            int padding = (int) Utils.convertDpToPixel(24, this);
+            messageTextView.setPaddingRelative(padding, padding, padding, padding);
+            SpannableString message = new SpannableString(getString(R.string.user_agreement_message, "https://www.redditinc.com/policies/user-agreement-september-12-2021", "https://docile-alligator.github.io"));
+            Linkify.addLinks(message, Linkify.WEB_URLS);
+            messageTextView.setMovementMethod(BetterLinkMovementMethod.newInstance().setOnLinkClickListener(new BetterLinkMovementMethod.OnLinkClickListener() {
+                @Override
+                public boolean onClick(TextView textView, String url) {
+                    Intent intent = new Intent(LoginActivity.this, LinkResolverActivity.class);
+                    intent.setData(Uri.parse(url));
+                    startActivity(intent);
+                    return true;
+                }
+            }));
+            messageTextView.setLinkTextColor(getResources().getColor(R.color.colorAccent));
+            messageTextView.setText(message);
+            new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                    .setTitle(getString(R.string.user_agreement_dialog_title))
+                    .setView(messageTextView)
+                    .setPositiveButton(R.string.agree, (dialogInterface, i) -> isAgreeToUserAgreement = true)
+                    .setNegativeButton(R.string.do_not_agree, (dialogInterface, i) -> finish())
+                    .setCancelable(false)
+                    .show();
+        }
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putBoolean(ENABLE_DOM_STATE, enableDom);
+        outState.putBoolean(IS_AGREE_TO_USER_AGGREMENT_STATE, isAgreeToUserAgreement);
     }
 
     @Override

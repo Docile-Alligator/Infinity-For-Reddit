@@ -19,33 +19,33 @@ public class InsertCustomTheme {
                                          CustomTheme customTheme, boolean checkDuplicate,
                                          InsertCustomThemeListener insertCustomThemeListener) {
         executor.execute(() -> {
-            if (checkDuplicate) {
-                if (redditDataRoomDatabase.customThemeDao().getCustomTheme(customTheme.name) != null) {
-                    handler.post(insertCustomThemeListener::duplicate);
-                }
-            }
             CustomTheme previousTheme = redditDataRoomDatabase.customThemeDao().getCustomTheme(customTheme.name);
-            if (customTheme.isLightTheme) {
-                redditDataRoomDatabase.customThemeDao().unsetLightTheme();
-                CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(customTheme, lightThemeSharedPreferences);
-            } else if (previousTheme != null && previousTheme.isLightTheme) {
-                lightThemeSharedPreferences.edit().clear().apply();
-            }
-            if (customTheme.isDarkTheme) {
-                redditDataRoomDatabase.customThemeDao().unsetDarkTheme();
-                CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(customTheme, darkThemeSharedPreferences);
-            } else if (previousTheme != null && previousTheme.isDarkTheme) {
-                darkThemeSharedPreferences.edit().clear().apply();
-            }
-            if (customTheme.isAmoledTheme) {
-                redditDataRoomDatabase.customThemeDao().unsetAmoledTheme();
-                CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(customTheme, amoledThemeSharedPreferences);
-            } else if (previousTheme != null && previousTheme.isAmoledTheme) {
-                amoledThemeSharedPreferences.edit().clear().apply();
-            }
-            redditDataRoomDatabase.customThemeDao().insert(customTheme);
 
-            handler.post(insertCustomThemeListener::success);
+            if (checkDuplicate && previousTheme != null) {
+                handler.post(insertCustomThemeListener::duplicate);
+            } else {
+                if (customTheme.isLightTheme) {
+                    redditDataRoomDatabase.customThemeDao().unsetLightTheme();
+                    CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(customTheme, lightThemeSharedPreferences);
+                } else if (previousTheme != null && previousTheme.isLightTheme) {
+                    lightThemeSharedPreferences.edit().clear().apply();
+                }
+                if (customTheme.isDarkTheme) {
+                    redditDataRoomDatabase.customThemeDao().unsetDarkTheme();
+                    CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(customTheme, darkThemeSharedPreferences);
+                } else if (previousTheme != null && previousTheme.isDarkTheme) {
+                    darkThemeSharedPreferences.edit().clear().apply();
+                }
+                if (customTheme.isAmoledTheme) {
+                    redditDataRoomDatabase.customThemeDao().unsetAmoledTheme();
+                    CustomThemeSharedPreferencesUtils.insertThemeToSharedPreferences(customTheme, amoledThemeSharedPreferences);
+                } else if (previousTheme != null && previousTheme.isAmoledTheme) {
+                    amoledThemeSharedPreferences.edit().clear().apply();
+                }
+                redditDataRoomDatabase.customThemeDao().insert(customTheme);
+
+                handler.post(insertCustomThemeListener::success);
+            }
         });
     }
 

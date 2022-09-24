@@ -42,10 +42,6 @@ public class SecurityPreferenceFragment extends CustomFontPreferenceFragmentComp
 
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
-
         SwitchPreference requireAuthToAccountSectionSwitch = findPreference(SharedPreferencesUtils.REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER);
         SwitchPreference secureModeSwitch = findPreference(SharedPreferencesUtils.SECURE_MODE);
         SwitchPreference appLockSwitch = findPreference(SharedPreferencesUtils.APP_LOCK);

@@ -169,9 +169,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
 
             if (isImmersiveInterface()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    coordinatorLayout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+                    window.setDecorFitsSystemWindows(false);
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
@@ -286,7 +284,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 fab.setImageResource(R.drawable.ic_post_layout_24dp);
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_SEARCH:
-                fab.setImageResource(R.drawable.ic_search_black_24dp);
+                fab.setImageResource(R.drawable.ic_search_24dp);
                 break;
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_SUBREDDIT:
                 fab.setImageResource(R.drawable.ic_subreddit_24dp);
@@ -326,8 +324,11 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                     break;
                 }
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_SORT_TYPE: {
-                    SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment = new SearchPostSortTypeBottomSheetFragment();
-                    searchPostSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchPostSortTypeBottomSheetFragment.getTag());
+                    Fragment fragment = sectionsPagerAdapter.getCurrentFragment();
+                    if (fragment instanceof PostFragment) {
+                        SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment = SearchPostSortTypeBottomSheetFragment.getNewInstance(((PostFragment) fragment).getSortType());
+                        searchPostSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchPostSortTypeBottomSheetFragment.getTag());
+                    }
                     break;
                 }
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_CHANGE_POST_LAYOUT: {
@@ -384,21 +385,20 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     }
 
     private void displaySortTypeBottomSheetFragment() {
-        switch (viewPager2.getCurrentItem()) {
-            case 0: {
-                SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment = new SearchPostSortTypeBottomSheetFragment();
-                searchPostSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchPostSortTypeBottomSheetFragment.getTag());
-                break;
-            }
-            case 1:
-            case 2:
+        Fragment fragment = sectionsPagerAdapter.getCurrentFragment();
+        if (fragment instanceof PostFragment) {
+            SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment = SearchPostSortTypeBottomSheetFragment.getNewInstance(((PostFragment) fragment).getSortType());
+            searchPostSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchPostSortTypeBottomSheetFragment.getTag());
+        } else {
+            if (fragment instanceof SubredditListingFragment) {
                 SearchUserAndSubredditSortTypeBottomSheetFragment searchUserAndSubredditSortTypeBottomSheetFragment
-                        = new SearchUserAndSubredditSortTypeBottomSheetFragment();
-                Bundle bundle = new Bundle();
-                bundle.putInt(SearchUserAndSubredditSortTypeBottomSheetFragment.EXTRA_FRAGMENT_POSITION, viewPager2.getCurrentItem());
-                searchUserAndSubredditSortTypeBottomSheetFragment.setArguments(bundle);
+                        = SearchUserAndSubredditSortTypeBottomSheetFragment.getNewInstance(viewPager2.getCurrentItem(), ((SubredditListingFragment) fragment).getSortType());
                 searchUserAndSubredditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchUserAndSubredditSortTypeBottomSheetFragment.getTag());
-                break;
+            } else if (fragment instanceof UserListingFragment) {
+                SearchUserAndSubredditSortTypeBottomSheetFragment searchUserAndSubredditSortTypeBottomSheetFragment
+                        = SearchUserAndSubredditSortTypeBottomSheetFragment.getNewInstance(viewPager2.getCurrentItem(), ((UserListingFragment) fragment).getSortType());
+                searchUserAndSubredditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchUserAndSubredditSortTypeBottomSheetFragment.getTag());
+            }
         }
     }
 
@@ -740,6 +740,10 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 break;
             case PostTypeBottomSheetFragment.TYPE_GALLERY:
                 intent = new Intent(this, PostGalleryActivity.class);
+                startActivity(intent);
+                break;
+            case PostTypeBottomSheetFragment.TYPE_POLL:
+                intent = new Intent(this, PostPollActivity.class);
                 startActivity(intent);
         }
     }

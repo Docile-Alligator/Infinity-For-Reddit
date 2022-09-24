@@ -1,15 +1,16 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
-import static im.ene.toro.media.PlaybackInfo.INDEX_UNSET;
-import static im.ene.toro.media.PlaybackInfo.TIME_UNSET;
 import static ml.docilealligator.infinityforreddit.activities.CommentActivity.RETURN_EXTRA_COMMENT_DATA_KEY;
 import static ml.docilealligator.infinityforreddit.activities.CommentActivity.WRITE_COMMENT_REQUEST_CODE;
+import static ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo.INDEX_UNSET;
+import static ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo.TIME_UNSET;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.graphics.drawable.ColorDrawable;
@@ -30,10 +31,10 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.view.menu.MenuItemImpl;
-import androidx.core.content.ContextCompat;
 import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -63,9 +64,6 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import im.ene.toro.exoplayer.ExoCreator;
-import im.ene.toro.media.PlaybackInfo;
-import im.ene.toro.media.VolumeInfo;
 import ml.docilealligator.infinityforreddit.DeleteThing;
 import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
@@ -84,6 +82,7 @@ import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.adapters.CommentsRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.adapters.PostDetailRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostCommentSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.comment.Comment;
@@ -112,6 +111,9 @@ import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.videoautoplay.ExoCreator;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -280,7 +282,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         }
         if (!((mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_LANDSCAPE_MODE, true)
                 && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
-                || (mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_PORTRAIT_MODE, false)))) {
+                || (mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_PORTRAIT_MODE, false)
+                && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE))) {
             if (mCommentsRecyclerView != null) {
                 mCommentsRecyclerView.setVisibility(View.GONE);
                 mCommentsRecyclerView = null;
@@ -554,7 +557,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     this, mExecutor, mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mStreamableRetrofit, mRedditDataRoomDatabase, mGlide,
                     mSeparatePostAndComments, mAccessToken, mAccountName, mPost, mLocale,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
+                    mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
                     mExoCreator, post -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
             mCommentsAdapter = new CommentsRecyclerViewAdapter(activity,
                     this, mCustomThemeWrapper, mExecutor, mRetrofit, mOauthRetrofit,
@@ -626,10 +629,10 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
                 if (mPost.isHidden()) {
                     hideItem.setVisible(true);
-                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, hideItem, getString(R.string.action_unhide_post));
+                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, hideItem, activity.getString(R.string.action_unhide_post));
                 } else {
                     hideItem.setVisible(true);
-                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, hideItem, getString(R.string.action_hide_post));
+                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, hideItem, activity.getString(R.string.action_hide_post));
                 }
             } else {
                 saveItem.setVisible(false);
@@ -645,17 +648,17 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 MenuItem nsfwItem = mMenu.findItem(R.id.action_nsfw_view_post_detail_fragment);
                 nsfwItem.setVisible(true);
                 if (mPost.isNSFW()) {
-                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, nsfwItem, getString(R.string.action_unmark_nsfw));
+                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, nsfwItem, activity.getString(R.string.action_unmark_nsfw));
                 } else {
-                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, nsfwItem, getString(R.string.action_mark_nsfw));
+                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, nsfwItem, activity.getString(R.string.action_mark_nsfw));
                 }
 
                 MenuItem spoilerItem = mMenu.findItem(R.id.action_spoiler_view_post_detail_fragment);
                 spoilerItem.setVisible(true);
                 if (mPost.isSpoiler()) {
-                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, spoilerItem, getString(R.string.action_unmark_spoiler));
+                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, spoilerItem, activity.getString(R.string.action_unmark_spoiler));
                 } else {
-                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, spoilerItem, getString(R.string.action_mark_spoiler));
+                    Utils.setTitleWithCustomFontToMenuItem(activity.typeface, spoilerItem, activity.getString(R.string.action_mark_spoiler));
                 }
 
                 mMenu.findItem(R.id.action_edit_flair_view_post_detail_fragment).setVisible(true);
@@ -691,9 +694,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     }
 
     private Drawable getMenuItemIcon(int drawableId) {
-        Drawable icon = ContextCompat.getDrawable(activity, drawableId);
+        Drawable icon = AppCompatResources.getDrawable(activity, drawableId);
         if (icon != null) {
-            DrawableCompat.setTint(icon, mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
+            icon.setTint(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
         }
 
         return icon;
@@ -703,12 +706,20 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (mCommentsAdapter != null) {
             mCommentsAdapter.addComment(comment);
         }
+        if (mPostAdapter != null) {
+            mPostAdapter.addOneComment();
+        }
+        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
     }
 
     public void addChildComment(Comment comment, String parentFullname, int parentPosition) {
         if (mCommentsAdapter != null) {
             mCommentsAdapter.addChildComment(comment, parentFullname, parentPosition);
         }
+        if (mPostAdapter != null) {
+            mPostAdapter.addOneComment();
+        }
+        EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
     }
 
     public void editComment(String commentAuthor, String commentContentMarkdown, int position) {
@@ -834,6 +845,18 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         }
     }
 
+    public void loadIcon(String authorName, LoadIconListener loadIconListener) {
+        if (activity.authorIcons.containsKey(authorName)) {
+            loadIconListener.loadIconSuccess(authorName, activity.authorIcons.get(authorName));
+        } else {
+            LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, authorName,
+                    mRetrofit, iconImageUrl -> {
+                        activity.authorIcons.put(authorName, iconImageUrl);
+                        loadIconListener.loadIconSuccess(authorName, iconImageUrl);
+                    });
+        }
+    }
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         inflater.inflate(R.menu.view_post_detail_fragment, menu);
@@ -872,7 +895,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 }
 
                 Intent intent = new Intent(activity, CommentActivity.class);
-                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_MARKDOWN_KEY, mPost.getTitle());
+                intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TITLE_KEY, mPost.getTitle());
                 intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY, mPost.getSelfText());
                 intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_KEY, mPost.getSelfTextPlain());
                 intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, mPost.getFullName());
@@ -936,7 +959,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             return true;
         } else if (itemId == R.id.action_sort_view_post_detail_fragment) {
             if (mPost != null) {
-                PostCommentSortTypeBottomSheetFragment postCommentSortTypeBottomSheetFragment = new PostCommentSortTypeBottomSheetFragment();
+                PostCommentSortTypeBottomSheetFragment postCommentSortTypeBottomSheetFragment = PostCommentSortTypeBottomSheetFragment.getNewInstance(sortType);
                 postCommentSortTypeBottomSheetFragment.show(activity.getSupportFragmentManager(), postCommentSortTypeBottomSheetFragment.getTag());
             }
             return true;
@@ -953,21 +976,17 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     HidePost.unhidePost(mOauthRetrofit, mAccessToken, mPost.getFullName(), new HidePost.HidePostListener() {
                         @Override
                         public void success() {
-                            if (isAdded()) {
-                                mPost.setHidden(false);
-                                Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, getString(R.string.action_hide_post));
-                                showMessage(R.string.post_unhide_success);
-                            }
+                            mPost.setHidden(false);
+                            Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, activity.getString(R.string.action_hide_post));
+                            showMessage(R.string.post_unhide_success);
                             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                         }
 
                         @Override
                         public void failed() {
-                            if (isAdded()) {
-                                mPost.setHidden(true);
-                                Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, getString(R.string.action_unhide_post));
-                                showMessage(R.string.post_unhide_failed);
-                            }
+                            mPost.setHidden(true);
+                            Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, activity.getString(R.string.action_unhide_post));
+                            showMessage(R.string.post_unhide_failed);
                             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                         }
                     });
@@ -977,21 +996,17 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     HidePost.hidePost(mOauthRetrofit, mAccessToken, mPost.getFullName(), new HidePost.HidePostListener() {
                         @Override
                         public void success() {
-                            if (isAdded()) {
-                                mPost.setHidden(true);
-                                Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, getString(R.string.action_unhide_post));
-                                showMessage(R.string.post_hide_success);
-                            }
+                            mPost.setHidden(true);
+                            Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, activity.getString(R.string.action_unhide_post));
+                            showMessage(R.string.post_hide_success);
                             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                         }
 
                         @Override
                         public void failed() {
-                            if (isAdded()) {
-                                mPost.setHidden(false);
-                                Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, getString(R.string.action_hide_post));
-                                showMessage(R.string.post_hide_failed);
-                            }
+                            mPost.setHidden(false);
+                            Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, activity.getString(R.string.action_hide_post));
+                            showMessage(R.string.post_hide_failed);
                             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
                         }
                     });
@@ -1168,11 +1183,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             for (int i = 0; i < menu.size(); i++) {
                 MenuItem item = menu.getItem(i);
                 if (((MenuItemImpl) item).requestsActionButton()) {
-                    Drawable drawable = item.getIcon();
-                    if (drawable != null) {
-                        DrawableCompat.setTint(drawable, mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
-                        item.setIcon(drawable);
-                    }
+                    MenuItemCompat.setIconTintList(item, ColorStateList
+                            .valueOf(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor()));
                 }
                 Utils.setTitleWithCustomFontToMenuItem(activity.typeface, item, null);
             }
@@ -1203,9 +1215,12 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                         sortType, APIUtils.getOAuthHeader(mAccessToken));
             }
         }
-        postAndComments.enqueue(new Callback<String>() {
+        postAndComments.enqueue(new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
+                if (!isAdded()) {
+                    return;
+                }
                 mSwipeRefreshLayout.setRefreshing(false);
 
                 if (response.isSuccessful()) {
@@ -1222,8 +1237,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                     mRetrofit, mOauthRetrofit, mGfycatRetrofit, mRedgifsRetrofit,
                                     mStreamableRetrofit, mRedditDataRoomDatabase, mGlide, mSeparatePostAndComments,
                                     mAccessToken, mAccountName, mPost, mLocale, mSharedPreferences,
-                                    mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
-                                    mExoCreator,
+                                    mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences,
+                                    mPostDetailsSharedPreferences, mExoCreator,
                                     post1 -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
 
                             mCommentsAdapter = new CommentsRecyclerViewAdapter(activity,
@@ -1331,7 +1346,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
             @Override
             public void onFailure(@NonNull Call<String> call, @NonNull Throwable t) {
-                showErrorView(subredditId);
+                if (isAdded()) {
+                    showErrorView(subredditId);
+                }
             }
         });
     }
@@ -1951,5 +1968,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (mPostAdapter != null) {
             mPostAdapter.setCanPlayVideo(hasWindowsFocus);
         }
+    }
+
+    public interface LoadIconListener {
+        void loadIconSuccess(String authorName, String iconUrl);
     }
 }

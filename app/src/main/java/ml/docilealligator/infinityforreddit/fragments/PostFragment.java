@@ -1,8 +1,7 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
-
-import static im.ene.toro.media.PlaybackInfo.INDEX_UNSET;
-import static im.ene.toro.media.PlaybackInfo.TIME_UNSET;
+import static ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo.INDEX_UNSET;
+import static ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo.TIME_UNSET;
 
 import android.content.Context;
 import android.content.Intent;
@@ -67,9 +66,6 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import im.ene.toro.exoplayer.ExoCreator;
-import im.ene.toro.media.PlaybackInfo;
-import im.ene.toro.media.VolumeInfo;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.FetchPostFilterReadPostsAndConcatenatedSubredditNames;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
@@ -94,11 +90,13 @@ import ml.docilealligator.infinityforreddit.events.ChangeDataSavingModeEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDefaultLinkPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDefaultPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDisableImagePreviewEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeEasierToWatchInFullScreenEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeEnableSwipeActionSwitchEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeFixedHeightPreviewInCardEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHidePostFlairEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHidePostTypeEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideSubredditAndUserPrefixEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeHideTextPostContent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfAwardsEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfCommentsEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfVotesEvent;
@@ -108,6 +106,7 @@ import ml.docilealligator.infinityforreddit.events.ChangeMuteNSFWVideoEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWBlurEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeOnlyDisablePreviewInVideoAndGifPostsEvent;
+import ml.docilealligator.infinityforreddit.events.ChangePostFeedMaxResolutionEvent;
 import ml.docilealligator.infinityforreddit.events.ChangePostLayoutEvent;
 import ml.docilealligator.infinityforreddit.events.ChangePullToRefreshEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeRememberMutingOptionInPostFeedEvent;
@@ -134,6 +133,9 @@ import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.videoautoplay.ExoCreator;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
 import retrofit2.Retrofit;
 
 
@@ -191,6 +193,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     @Named("sort_type")
     SharedPreferences mSortTypeSharedPreferences;
@@ -334,7 +339,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         Resources resources = getResources();
 
-        if ((activity instanceof BaseActivity && ((BaseActivity) activity).isImmersiveInterface())) {
+        if ((activity != null && activity.isImmersiveInterface())) {
             mPostRecyclerView.setPadding(0, 0, 0, ((BaseActivity) activity).getNavBarHeight());
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {
@@ -455,7 +460,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
+                    mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void typeChipClicked(int filter) {
@@ -532,7 +537,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, displaySubredditName,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
+                    mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void typeChipClicked(int filter) {
@@ -603,7 +608,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
+                    mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void typeChipClicked(int filter) {
@@ -668,7 +673,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
+                    mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void typeChipClicked(int filter) {
@@ -716,9 +721,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             usage = PostFilterUsage.HOME_TYPE;
             nameOfUsage = PostFilterUsage.NO_USAGE;
 
-            String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_BEST_POST, SortType.Type.BEST.name());
+            String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST_BASE + "-", SortType.Type.HOT.name());
             if (sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
-                String sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_BEST_POST, SortType.Time.ALL.name());
+                String sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST_BASE + "-", SortType.Time.ALL.name());
                 sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
             } else {
                 sortType = new SortType(SortType.Type.valueOf(sort));
@@ -729,7 +734,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
+                    mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void typeChipClicked(int filter) {
@@ -776,7 +781,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             usage = PostFilterUsage.MULTIREDDIT_TYPE;
             nameOfUsage = multiRedditPath;
 
-            String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE + multiRedditPath, SortType.Type.BEST.name());
+            String sort = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE + multiRedditPath, SortType.Type.HOT.name());
             if (sort.equals(SortType.Type.CONTROVERSIAL.name()) || sort.equals(SortType.Type.TOP.name())) {
                 String sortTime = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TIME_MULTI_REDDIT_POST_BASE + multiRedditPath, SortType.Time.ALL.name());
                 sortType = new SortType(SortType.Type.valueOf(sort), SortType.Time.valueOf(sortTime));
@@ -784,16 +789,17 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 sortType = new SortType(SortType.Type.valueOf(sort));
             }
 
-            postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, defaultPostLayout);
+            postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + multiRedditPath, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
+                    mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void typeChipClicked(int filter) {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, multiRedditPath);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, filter);
                     startActivity(intent);
@@ -802,6 +808,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 @Override
                 public void flairChipClicked(String flair) {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, multiRedditPath);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredPostsActivity.EXTRA_CONTAIN_FLAIR, flair);
                     startActivity(intent);
@@ -810,6 +817,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 @Override
                 public void nsfwChipClicked() {
                     Intent intent = new Intent(activity, FilteredPostsActivity.class);
+                    intent.putExtra(FilteredPostsActivity.EXTRA_NAME, multiRedditPath);
                     intent.putExtra(FilteredPostsActivity.EXTRA_POST_TYPE, postType);
                     intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, Post.NSFW_TYPE);
                     startActivity(intent);
@@ -843,7 +851,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
+                    mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void typeChipClicked(int filter) {
@@ -909,7 +917,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     if (postFilter == null) {
                         FetchPostFilterReadPostsAndConcatenatedSubredditNames.fetchPostFilterAndReadPosts(mRedditDataRoomDatabase, mExecutor,
                                 new Handler(), null, usage, nameOfUsage, (postFilter, readPostList) -> {
-                                    if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
+                                    if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
                                         this.postFilter = postFilter;
                                         postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(accountName + SharedPreferencesUtils.NSFW_BASE, false);
                                         initializeAndBindPostViewModel(accessToken);
@@ -921,7 +929,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 } else {
                     FetchPostFilterReadPostsAndConcatenatedSubredditNames.fetchPostFilterAndReadPosts(mRedditDataRoomDatabase, mExecutor,
                             new Handler(), accountName, usage, nameOfUsage, (postFilter, readPostList) -> {
-                                if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
+                                if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
                                     if (this.postFilter == null) {
                                         this.postFilter = postFilter;
                                         postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(accountName + SharedPreferencesUtils.NSFW_BASE, false);
@@ -935,7 +943,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 if (postFilter == null) {
                     FetchPostFilterReadPostsAndConcatenatedSubredditNames.fetchPostFilterAndReadPosts(mRedditDataRoomDatabase, mExecutor,
                             new Handler(), null, usage, nameOfUsage, (postFilter, readPostList) -> {
-                                if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
+                                if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
                                     this.postFilter = postFilter;
                                     postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(accountName + SharedPreferencesUtils.NSFW_BASE, false);
                                     initializeAndBindPostViewModel(accessToken);
@@ -951,7 +959,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     if (concatenatedSubredditNames == null) {
                         FetchPostFilterReadPostsAndConcatenatedSubredditNames.fetchPostFilterAndConcatenatedSubredditNames(mRedditDataRoomDatabase, mExecutor, new Handler(), usage, nameOfUsage,
                                 (postFilter, concatenatedSubredditNames) -> {
-                                    if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
+                                    if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
                                         this.postFilter = postFilter;
                                         postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_BASE, false);
                                         this.concatenatedSubredditNames = concatenatedSubredditNames;
@@ -969,7 +977,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     if (concatenatedSubredditNames == null) {
                         FetchPostFilterReadPostsAndConcatenatedSubredditNames.fetchPostFilterAndConcatenatedSubredditNames(mRedditDataRoomDatabase, mExecutor, new Handler(), multiRedditPath, usage, nameOfUsage,
                                 (postFilter, concatenatedSubredditNames) -> {
-                                    if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
+                                    if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
                                         this.postFilter = postFilter;
                                         postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_BASE, false);
                                         this.concatenatedSubredditNames = concatenatedSubredditNames;
@@ -986,7 +994,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 } else {
                     FetchPostFilterReadPostsAndConcatenatedSubredditNames.fetchPostFilterAndReadPosts(mRedditDataRoomDatabase, mExecutor,
                             new Handler(), null, usage, nameOfUsage, (postFilter, readPostList) -> {
-                                if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
+                                if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
                                     this.postFilter = postFilter;
                                     postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_BASE, false);
                                     initializeAndBindPostViewModelForAnonymous(null);
@@ -998,8 +1006,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     if (concatenatedSubredditNames == null) {
                         FetchPostFilterReadPostsAndConcatenatedSubredditNames.fetchPostFilterAndConcatenatedSubredditNames(mRedditDataRoomDatabase, mExecutor, new Handler(), usage, nameOfUsage,
                                 (postFilter, concatenatedSubredditNames) -> {
-                                    if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
-                                        this.postFilter = postFilter;
+                                    if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
                                         postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_BASE, false);
                                         this.concatenatedSubredditNames = concatenatedSubredditNames;
                                         if (concatenatedSubredditNames == null) {
@@ -1016,8 +1023,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     if (concatenatedSubredditNames == null) {
                         FetchPostFilterReadPostsAndConcatenatedSubredditNames.fetchPostFilterAndConcatenatedSubredditNames(mRedditDataRoomDatabase, mExecutor, new Handler(), multiRedditPath, usage, nameOfUsage,
                                 (postFilter, concatenatedSubredditNames) -> {
-                                    if (activity != null && !activity.isFinishing() && !activity.isDestroyed()) {
-                                        this.postFilter = postFilter;
+                                    if (activity != null && !activity.isFinishing() && !activity.isDestroyed() && !isDetached()) {
                                         postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean(SharedPreferencesUtils.NSFW_BASE, false);
                                         this.concatenatedSubredditNames = concatenatedSubredditNames;
                                         if (concatenatedSubredditNames == null) {
@@ -1353,11 +1359,18 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                         }
                         break;
                     case PostPagingSource.TYPE_MULTI_REDDIT:
+                    case PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT:
                         mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_MULTI_REDDIT_POST_BASE + multiRedditPath,
                                 sortType.getType().name()).apply();
                         if (sortType.getTime() != null) {
                             mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_MULTI_REDDIT_POST_BASE + multiRedditPath,
                                     sortType.getTime().name()).apply();
+                        }
+                        break;
+                    case PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE:
+                        mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_SUBREDDIT_POST_BASE + "-", sortType.getType().name()).apply();
+                        if (sortType.getTime() != null) {
+                            mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TIME_SUBREDDIT_POST_BASE + "-", sortType.getTime().name()).apply();
                         }
                         break;
                 }
@@ -1554,23 +1567,31 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void changePostLayout(int postLayout) {
+        changePostLayout(postLayout, false);
+    }
+
+    public void changePostLayout(int postLayout, boolean temporary) {
         this.postLayout = postLayout;
-        switch (postType) {
-            case PostPagingSource.TYPE_FRONT_PAGE:
-                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, postLayout).apply();
-                break;
-            case PostPagingSource.TYPE_SUBREDDIT:
-                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, postLayout).apply();
-                break;
-            case PostPagingSource.TYPE_USER:
-                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, postLayout).apply();
-                break;
-            case PostPagingSource.TYPE_SEARCH:
-                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, postLayout).apply();
-                break;
-            case PostPagingSource.TYPE_MULTI_REDDIT:
-                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + multiRedditPath, postLayout).apply();
-                break;
+        if (!temporary) {
+            switch (postType) {
+                case PostPagingSource.TYPE_FRONT_PAGE:
+                case PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE:
+                    mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, postLayout).apply();
+                    break;
+                case PostPagingSource.TYPE_SUBREDDIT:
+                    mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + subredditName, postLayout).apply();
+                    break;
+                case PostPagingSource.TYPE_USER:
+                    mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, postLayout).apply();
+                    break;
+                case PostPagingSource.TYPE_SEARCH:
+                    mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, postLayout).apply();
+                    break;
+                case PostPagingSource.TYPE_MULTI_REDDIT:
+                case PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT:
+                    mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + multiRedditPath, postLayout).apply();
+                    break;
+            }
         }
 
         int previousPosition = -1;
@@ -1628,7 +1649,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Override
     public void changePostFilter(PostFilter postFilter) {
         this.postFilter = postFilter;
-        postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((accountName == null || accountName.equals("-") ? "" : accountName) + SharedPreferencesUtils.NSFW_BASE, false);
         if (mPostViewModel != null) {
             mPostViewModel.changePostFilter(postFilter);
         }
@@ -1728,6 +1748,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 post.setTitle(event.post.getTitle());
                 post.setVoteType(event.post.getVoteType());
                 post.setScore(event.post.getScore());
+                post.setNComments(event.post.getNComments());
                 post.setNSFW(event.post.isNSFW());
                 post.setHidden(event.post.isHidden());
                 post.setSpoiler(event.post.isSpoiler());
@@ -1801,27 +1822,27 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             switch (postType) {
                 case PostPagingSource.TYPE_SUBREDDIT:
                     if (!mPostLayoutSharedPreferences.contains(SharedPreferencesUtils.POST_LAYOUT_SUBREDDIT_POST_BASE + bundle.getString(EXTRA_NAME))) {
-                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout);
+                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout, true);
                     }
                     break;
                 case PostPagingSource.TYPE_USER:
                     if (!mPostLayoutSharedPreferences.contains(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + bundle.getString(EXTRA_USER_NAME))) {
-                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout);
+                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout, true);
                     }
                     break;
                 case PostPagingSource.TYPE_MULTI_REDDIT:
                     if (!mPostLayoutSharedPreferences.contains(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + bundle.getString(EXTRA_NAME))) {
-                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout);
+                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout, true);
                     }
                     break;
                 case PostPagingSource.TYPE_SEARCH:
                     if (!mPostLayoutSharedPreferences.contains(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST)) {
-                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout);
+                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout, true);
                     }
                     break;
                 case PostPagingSource.TYPE_FRONT_PAGE:
                     if (!mPostLayoutSharedPreferences.contains(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST)) {
-                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout);
+                        changePostLayout(changeDefaultPostLayoutEvent.defaultPostLayout, true);
                     }
                     break;
             }
@@ -2071,6 +2092,29 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if (mAdapter != null) {
             mAdapter.setFixedHeightPreviewInCard(event.fixedHeightPreviewInCard);
             refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeHideTextPostContentEvent(ChangeHideTextPostContent event) {
+        if (mAdapter != null) {
+            mAdapter.setHideTextPostContent(event.hideTextPostContent);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangePostFeedMaxResolutionEvent(ChangePostFeedMaxResolutionEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setPostFeedMaxResolution(event.postFeedMaxResolution);
+            refreshAdapter();
+        }
+    }
+
+    @Subscribe
+    public void onChangeEasierToWatchInFullScreenEvent(ChangeEasierToWatchInFullScreenEvent event) {
+        if (mAdapter != null) {
+            mAdapter.setEasierToWatchInFullScreen(event.easierToWatchInFullScreen);
         }
     }
 

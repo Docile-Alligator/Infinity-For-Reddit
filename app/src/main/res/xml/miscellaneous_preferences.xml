@@ -40,4 +40,18 @@
         app:title="@string/settings_language_title"
         app:useSimpleSummaryProvider="true" />
 
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceCategory
+        app:title="@string/settings_miscellaneous_dangerous_group_title" />
+
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
+        app:icon="@drawable/ic_info_preference_24dp"
+        app:summary="@string/settings_post_feed_max_resolution_warning_title"
+        app:enabled="false" />
+
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontEditTextPreference
+        app:defaultValue="5000000"
+        app:key="post_feed_max_resolution"
+        app:title="@string/settings_post_feed_max_resolution_title"
+        app:useSimpleSummaryProvider="true" />
+
 </PreferenceScreen>

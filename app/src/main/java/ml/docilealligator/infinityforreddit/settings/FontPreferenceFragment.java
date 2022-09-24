@@ -56,10 +56,6 @@ public class FontPreferenceFragment extends CustomFontPreferenceFragmentCompat {
 
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
-
         ListPreference fontFamilyPreference = findPreference(SharedPreferencesUtils.FONT_FAMILY_KEY);
         customFontFamilyPreference = findPreference(SharedPreferencesUtils.CUSTOM_FONT_FAMILY_KEY);
         ListPreference titleFontFamilyPreference = findPreference(SharedPreferencesUtils.TITLE_FONT_FAMILY_KEY);

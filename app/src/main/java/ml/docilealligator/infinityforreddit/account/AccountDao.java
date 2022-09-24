@@ -17,6 +17,9 @@ public interface AccountDao {
     boolean isAnonymousAccountInserted();
 
     @Query("SELECT * FROM accounts WHERE username != '-'")
+    LiveData<List<Account>> getAllAccountsLiveData();
+
+    @Query("SELECT * FROM accounts WHERE username != '-'")
     List<Account> getAllAccounts();
 
     @Query("SELECT * FROM accounts WHERE is_current_user = 0 AND username != '-'")

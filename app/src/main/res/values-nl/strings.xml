@@ -61,7 +61,6 @@
     <string name="action_see_removed">"Zie verwijderd"</string>
     <string name="action_set_wallpaper">"Instellen als startschermachtergrond"</string>
     <string name="action_send_private_message">"Privebericht versturen"</string>
-    <string name="action_block_user">"Gebruiker blokkeren"</string>
     <string name="parse_json_response_error">"Er is een fout opgetreden bij het verwerken van het json-antwoord"</string>
     <string name="retrieve_token_error">"De toegangssleutel kan niet worden opgehaald"</string>
     <string name="something_went_wrong">"Er is iets misgegaan - probeer het later opnieuw."</string>
@@ -149,6 +148,8 @@ Druk om opnieuw te proberen."</string>
     <string name="send_message_success">"Het bericht is verstuurd"</string>
     <string name="send_message_failed">"Dit bericht kan niet worden verstuurd"</string>
     <string name="select_a_subreddit">"Kies eerst een subreddit"</string>
+
+    <!-- Fuzzy -->
     <string name="title_required">"Dit bericht heeft een goede titel nodig"</string>
     <string name="link_required">"Hé, waar is de link?"</string>
     <string name="select_an_image">"Kies eerst een afbeelding"</string>
@@ -229,6 +230,8 @@ Druk om opnieuw te proberen."</string>
     <string name="posting_video">"Bezig met plaatsen van video…"</string>
     <string name="posting_image">"Bezig met plaatsen van afbeelding…"</string>
     <string name="please_wait">"Even geduld…"</string>
+
+    <!-- Fuzzy -->
     <string name="add_account">"Account toevoegen"</string>
     <string name="anonymous_account">"Anoniem"</string>
     <string name="log_out">"Uitloggen"</string>
@@ -391,7 +394,6 @@ Druk om opnieuw te proberen."</string>
     <string name="settings_customize_dark_theme_title">"Donker thema"</string>
     <string name="settings_customize_amoled_theme_title">"Amoled-thema"</string>
     <string name="settings_manage_themes_title">"Thema's beheren"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Aangepaste thema's kunnen niet worden toegepast op de instellingenpagina (behalve de werkbalk, statusbalk en navigatiebalk)."</string>
     <string name="settings_advanced_master_title">"Geavanceerd"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Alle subreddits verwijderen uit databank"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Alle gebruikers verwijderen uit databank"</string>
@@ -406,6 +408,8 @@ Druk om opnieuw te proberen."</string>
     <string name="settings_tab_title">"Titel"</string>
     <string name="settings_tab_post_type">"Type"</string>
     <string name="settings_tab_subreddit_name">"Subredditnaam (zonder r/-voorvoegsel)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_tab_multi_reddit_name">"Multiredditnaam (/user/gebruikersnaam/m/mijnmultiredditnaam)"</string>
     <string name="settings_tab_username">"Gebruikersnaam (zonder u/-voorvoegsel)"</string>
     <string name="no_developer_easter_egg">"Er zijn hier geen ontwikkelaarsopties"</string>
@@ -751,10 +755,7 @@ Ze is niet ziek of zo, maar ze kan zeker beter worden."</string>
     <string name="load_video_in_redgifs">"Probeer de video op Redgifs te laden"</string>
     <string name="top_score">"%1$s pnt"</string>
     <string name="login_activity_2fa_prompt">"Als je 2-factor authenticatie hebt ingeschakeld, typ dan je wachtwoord als volgt in: &lt;wachtwoord&gt;: &lt;2FA code&gt;.
-Voorbeeld: yourpass: 123456"</string>
-    <string name="block_user">"Blokkeer gebruiker"</string>
-    <string name="block_user_success">"Geblokkeerd"</string>
-    <string name="block_user_failed">"Kan gebruiker niet blokkeren"</string>
+Voorbeeld: yourpass:123456"</string>
     <string name="submit_crosspost_activity_label">"Crosspost"</string>
     <string name="give_award_activity_label">"Geef Award"</string>
     <string name="action_crosspost">"Crosspost"</string>
@@ -785,7 +786,6 @@ Voorbeeld: yourpass: 123456"</string>
     <string name="settings_swipe_action_threshold">"Drempel"</string>
     <string name="settings_pull_to_refresh_title">"Trek om te vernieuwen"</string>
     <string name="settings_security_title">"Beveiliging"</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Verificatie vereist om naar het accountgedeelte in de navigatielade te gaan"</string>
 
     <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Druk lang in om werkbalk in compacte layout te verbergen"</string>
@@ -816,7 +816,6 @@ Automatisch afspelen van video is uitgeschakeld."</string>
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"Download mislukt: geen toegang tot de bestemmingsmap"</string>
     <string name="downloading_media_failed_cannot_download_media">"Download mislukt"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"Downloaden mislukt: kan het bestand niet opslaan in de bestemmingsmap"</string>
-    <string name="view_full_comment_markdown">"Bekijk volledige markdown"</string>
     <string name="select_user_flair_success">"Gebruikersflair geselecteerd"</string>
     <string name="select_this_user_flair">"Selecteer deze gebruikersflair?"</string>
     <string name="select_header_size">"Selecteer Koptekstgrootte"</string>
@@ -989,6 +988,8 @@ Bericht: %2$s"</string>
     <string name="exclude_user">"Sluit deze gebruiker uit"</string>
     <string name="exclude_flair">"Sluit deze flair uit"</string>
     <string name="contain_flair">"Bevat deze flair"</string>
+
+    <!-- Fuzzy -->
     <string name="exclude_domain">"Sluit Domein uit"</string>
     <string name="suggest_title">"Titel voorstellen"</string>
     <string name="suggest_title_failed">"Mislukt om titel voor te stellen"</string>
@@ -1053,4 +1054,5 @@ Zo wel, hernoem ze voordat je Material You aanzet."</string>
     <string name="error_loading_wiki">"Fout bij laden wiki"</string>
     <string name="no_wiki">"Deze subreddit heeft geen wiki pagina"</string>
     <string name="material_you_notification_title">"Material You toepassen"</string>
+    <string name="about">"Over"</string>
 </resources>

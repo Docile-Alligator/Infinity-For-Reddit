@@ -67,7 +67,6 @@
     <string name="action_see_removed">"हटाए हुए पोस्ट देखें"</string>
     <string name="action_set_wallpaper">"वालपेपर लगाएं "</string>
     <string name="action_send_private_message">"व्यक्तिगत संदेश भेजें"</string>
-    <string name="action_block_user">"प्रतिबंधित करें "</string>
     <string name="parse_json_response_error">"JSON प्रतिक्रिया को समझने में त्रुटि"</string>
     <string name="retrieve_token_error">"टोकन प्राप्ति में त्रुटि"</string>
     <string name="something_went_wrong">"कुछ गलत हो गया है। बाद में पुनः प्रयास करें।"</string>
@@ -164,6 +163,8 @@
     <string name="send_message_success">"संदेश भेज दिया"</string>
     <string name="send_message_failed">"संदेश नहीं भेज जा सका "</string>
     <string name="select_a_subreddit">"कृपया पहले एक सबरैडिट चुनिए"</string>
+
+    <!-- Fuzzy -->
     <string name="title_required">"पोस्ट कि अच्छा शीर्षक चाहिए "</string>
     <string name="link_required">"जी, लिंक दीजिए?"</string>
     <string name="select_an_image">"कृपया पहले एक चित्र चुनिए"</string>
@@ -255,6 +256,8 @@ Behavior -->
 
     <!-- Fuzzy -->
     <string name="please_wait">"कृपया इंतजार करें "</string>
+
+    <!-- Fuzzy -->
     <string name="add_account">"खाता जोड़ें "</string>
     <string name="anonymous_account">"अज्ञात "</string>
     <string name="log_out">"लॉग आउट"</string>
@@ -400,7 +403,7 @@ Behavior -->
     <string name="settings_enable_nsfw_title">"NSFW शुरू करें "</string>
     <string name="settings_blur_nsfw_title">"धुंधले NSFW चित्र "</string>
     <string name="settings_blur_spoiler_title">"धुंधले Spoiler चित्र "</string>
-    <string name="settings_about_master_title">"एप के बारे में "</string>
+    <string name="settings_about_master_title">"एप के बारे में"</string>
     <string name="settings_acknowledgement_master_title">"स्वीकृति"</string>
     <string name="settings_credits_master_title">"आभार "</string>
     <string name="settings_credits_icon_foreground_title">"अग्रभूमि आइकॉन "</string>
@@ -437,7 +440,6 @@ Behavior -->
     <string name="settings_customize_dark_theme_title">"गहरी थीम "</string>
     <string name="settings_customize_amoled_theme_title">"अमोलेड थीम "</string>
     <string name="settings_manage_themes_title">"थीम्स नियंत्रण "</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"अनुकूलित थीम सेटिंग्स पृष्ट(टूलबार, स्टैटस बार एवं नेवीगेशन बार के अलावा) पर लागू नहीं की जा सकती।"</string>
     <string name="settings_advanced_master_title">"उन्नत "</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"डेटाबेस से सभी सबरैडिट्स मिटा दें "</string>
     <string name="settings_delete_all_users_data_in_database_title">"डेटाबेस से सभी यूजर्स हटा दें "</string>
@@ -452,6 +454,8 @@ Behavior -->
     <string name="settings_tab_title">"शीर्षक "</string>
     <string name="settings_tab_post_type">"प्रकार "</string>
     <string name="settings_tab_subreddit_name">" सबरैडिट का नाम (r/ उपसर्ग के बिना )"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_tab_multi_reddit_name">"मल्टीरैडिट का नाम (/यूजर/आपकायूजरनाम/m/आपकेमल्टीरैडिटकानाम)"</string>
     <string name="settings_tab_username">"यूजर का नाम (u/ उपसर्ग के बिना)"</string>
     <string name="no_developer_easter_egg">"यहां डिवेलपर के लिए कोई विकल्प नहीं है "</string>
@@ -810,9 +814,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="top_score">"%1$s अंक"</string>
     <string name="login_activity_2fa_prompt">"अगार आपका 2-कदाम प्रमाणीकरण चालू है, तो कृपिया आपना पासबर्ड(चाबी) निम्ना लिखित तरीके से दिजीये: &lt;पासबर्ड&gt;:&lt;2FA code&gt;
 उदाहरण: पासबर्ड:123456"</string>
-    <string name="block_user">"एकाउंट ब्लक करे"</string>
-    <string name="block_user_success">"एकाउंट ब्लक"</string>
-    <string name="block_user_failed">"ब्लक करना असफल रहा"</string>
     <string name="submit_crosspost_activity_label">"क्रॉसपोस्ट "</string>
     <string name="give_award_activity_label">"पुरस्कार दें "</string>
     <string name="action_crosspost">"क्रॉसपोस्ट"</string>
@@ -847,7 +848,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_swipe_action_threshold">"दहलीज "</string>
     <string name="settings_pull_to_refresh_title">"ताजा करने के लिए खींचें"</string>
     <string name="settings_security_title">"सुरक्षा "</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"नेवीगेशन दराज में खाता अनुभाग पर जाने के लिए सत्यापन आवश्यक "</string>
 
     <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"संक्षिप्त विन्यास में टूलबार को छुपाने के लिए लॉंग प्रैस "</string>
@@ -878,7 +878,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"डाउनलोड असफल: गंतव्य डायरेक्टरी तक अभिगम असफल "</string>
     <string name="downloading_media_failed_cannot_download_media">"डाउनलोड असफल"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"डाउनलोड असफल: गंतव्य डायरेक्टरी में फाइल का संरक्षण असफल"</string>
-    <string name="view_full_comment_markdown">"संपूर्ण मार्कडाउन देखें "</string>
     <string name="select_user_flair_success">"यूजर फ्लेयर चुन लिया गया "</string>
     <string name="select_this_user_flair">"इस यूजर फ्लेयर का चुनाव करना है? "</string>
     <string name="select_header_size">"हेडर माप चुनें "</string>
@@ -939,6 +938,41 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="theme_item_no_preview_post_type_background_color">"पूर्वदर्शन अनुपलब्ध पोस्ट प्रकार पृष्टभूमि रंग"</string>
     <string name="theme_item_no_preview_post_type_background_color_detail">"पूर्वदर्शन अनुपलब्ध पोस्ट प्रकार दर्शाने वाले प्लेसहोल्डर पर लागू "</string>
     <string name="settings_language_title">"भाषा "</string>
+    <string name="customize_post_filter_activity_label">"पोस्ट फ़िल्टर कस्टमाइज़ करें"</string>
+    <string name="filtered_posts_activity_subtitle">"फ़िल्टर की गई पोस्ट"</string>
+    <string name="post_filter_preference_activity_label">"पोस्ट फ़िल्टर"</string>
+    <string name="search_users_result_activity_label">"उपयोगकर्ताओं"</string>
     <string name="multireddit_selection_activity_label">"मल्टीरेड्डिट चुनें"</string>
+    <string name="action_save_to_database">"डेटाबेस में सहेजें"</string>
+    <string name="action_read_all_messages">"सभी संदेश पढ़ें"</string>
     <string name="action_add_to_multireddit">"मल्टीरेड्डिट में जोड़ें"</string>
+    <string name="search_only_subreddits_hint">"सबरेडिट खोजें"</string>
+    <string name="search_only_users_hint">"उपयोगकर्ता खोजें"</string>
+    <string name="post_type_gif">"जीआईएफ"</string>
+    <string name="post_type_gallery">"गेलरी"</string>
+    <string name="settings_disable_immersive_interface_in_landscape_mode">"लैंडस्केप मोड में इमर्सिव इंटरफ़ेस अक्षम करें"</string>
+    <string name="settings_privacy_policy_title">"गोपनीयता नीति"</string>
+    <string name="settings_delete_read_posts_in_database_title">"डेटाबेस में सभी पढ़े गए पोस्ट हटाएं"</string>
+    <string name="settings_post_filter_title">"पोस्ट फ़िल्टर"</string>
+    <string name="settings_enable_search_history_title">"सुरक्षा इतिहास सक्षम करें"</string>
+    <string name="settings_post_history_title">"इतिहास के बाद"</string>
+    <string name="settings_mark_posts_as_read_title">"पोस्ट को पढ़ने के रूप में चिह्नित करें"</string>
+    <string name="settings_hide_read_posts_automatically_title">"पठन पोस्ट स्वचालित रूप से छुपाएँ"</string>
+    <string name="about">"एप के बारे में"</string>
+    <string name="app_lock_timeout_immediately">"तुरंत "</string>
+    <string name="app_lock_timeout_1_min">"1 मिनट "</string>
+    <string name="app_lock_timeout_2_mins">"2 मिनट "</string>
+    <string name="app_lock_timeout_5_mins">"5 मिनट "</string>
+    <string name="app_lock_timeout_10_mins">"10 मिनट "</string>
+    <string name="app_lock_timeout_15_mins">"15 मिनट "</string>
+    <string name="app_lock_timeout_20_mins">"30 मिनट "</string>
+    <string name="app_lock_timeout_30_mins">"30 मिनट "</string>
+    <string name="app_lock_timeout_1_hour">"1 घंटा "</string>
+    <string name="app_lock_timeout_2_hours">"2 घंटे "</string>
+    <string name="app_lock_timeout_3_hours">"3 घंटे "</string>
+    <string name="app_lock_timeout_4_hours">"4 घंटे "</string>
+    <string name="app_lock_timeout_5_hours">"5 घंटे "</string>
+    <string name="app_lock_timeout_6_hours">"6 घंटे "</string>
+    <string name="app_lock_timeout_12_hours">"12 घंटे "</string>
+    <string name="app_lock_timeout_24_hours">"24 घंटे "</string>
 </resources>

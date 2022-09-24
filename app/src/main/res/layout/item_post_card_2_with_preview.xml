@@ -49,6 +49,7 @@
             android:layout_height="wrap_content"
             android:drawableTop="@drawable/ic_error_outline_black_24dp"
             android:layout_gravity="center"
+            android:gravity="center"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
             android:text="@string/error_loading_image_tap_to_retry"

@@ -7,6 +7,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
 import android.os.Bundle;
+import android.webkit.URLUtil;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -60,7 +61,11 @@ public class LinkResolverActivity extends AppCompatActivity {
     CustomThemeWrapper mCustomThemeWrapper;
 
     private Uri getRedditUriByPath(String path) {
-        return Uri.parse("https://www.reddit.com" + path);
+        if (path.charAt(0) != '/') {
+            return Uri.parse("https://www.reddit.com/" + path);
+        } else {
+            return Uri.parse("https://www.reddit.com" + path);
+        }
     }
 
     @Override
@@ -70,8 +75,28 @@ public class LinkResolverActivity extends AppCompatActivity {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
         Uri uri = getIntent().getData();
+        if (uri == null) {
+            String url = getIntent().getStringExtra(Intent.EXTRA_TEXT);
+            if (!URLUtil.isValidUrl(url)) {
+                Toast.makeText(this, R.string.invalid_link, Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
+            try {
+                uri = Uri.parse(url);
+            } catch (NullPointerException e) {
+                Toast.makeText(this, R.string.invalid_link, Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
+        }
 
         if (uri.getScheme() == null && uri.getHost() == null) {
+            if (uri.toString().isEmpty()) {
+                Toast.makeText(this, R.string.invalid_link, Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
             handleUri(getRedditUriByPath(uri.toString()));
         } else {
             handleUri(uri);
@@ -91,7 +116,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                     path = path.substring(0, path.length() - 1);
                 }
 
-                if (path.endsWith("jpg") || path.endsWith("png")) {
+                if (path.endsWith("jpg") || path.endsWith("png") || path.endsWith("jpeg")) {
                     Intent intent = new Intent(this, ViewImageOrGifActivity.class);
                     String url = uri.toString();
                     String fileName = FilenameUtils.getName(path);
@@ -141,7 +166,11 @@ public class LinkResolverActivity extends AppCompatActivity {
                         } else if (authority.contains("reddit.com") || authority.contains("redd.it") || authority.contains("reddit.app")) {
                             if (authority.equals("reddit.app.link") && path.isEmpty()) {
                                 String redirect = uri.getQueryParameter("$og_redirect");
-                                handleUri(Uri.parse(redirect));
+                                if (redirect != null) {
+                                    handleUri(Uri.parse(redirect));
+                                } else {
+                                    deepLinkError(uri);
+                                }
                             } else if (path.isEmpty()) {
                                 Intent intent = new Intent(this, MainActivity.class);
                                 startActivity(intent);

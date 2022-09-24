@@ -4,25 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/coordinator_layout_account_saved_thing_activity"
+    android:id="@+id/account_saved_thing_coordinator_layout"
     tools:context=".activities.AccountPostsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar_layout_account_saved_thing_activity"
+        android:id="@+id/account_saved_thing_appbar_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/collapsing_toolbar_layout_account_saved_thing_activity"
+            android:id="@+id/account_saved_thing_collapsing_toolbar_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|enterAlways"
             app:titleEnabled="false"
-            app:toolbarId="@+id/toolbar_account_saved_thing_activity">
+            app:toolbarId="@+id/account_saved_thing_toolbar">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar_account_saved_thing_activity"
+                android:id="@+id/account_saved_thing_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="?attr/actionBarSize"
@@ -34,7 +34,7 @@
         </com.google.android.material.appbar.CollapsingToolbarLayout>
 
         <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tab_layout_tab_layout_account_saved_thing_activity_activity"
+            android:id="@+id/account_saved_thing_tab_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
@@ -48,7 +48,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/view_pager_account_saved_thing_activity"
+        android:id="@+id/account_saved_thing_view_pager_2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />

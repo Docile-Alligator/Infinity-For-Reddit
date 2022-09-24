@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.fragment.app.Fragment;
 
 import butterknife.BindView;
@@ -29,13 +30,25 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
 public class SearchUserAndSubredditSortTypeBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 
     public static final String EXTRA_FRAGMENT_POSITION = "EFP";
+    public static final String EXTRA_CURRENT_SORT_TYPE = "ECST";
+
     @BindView(R.id.relevance_type_text_view_search_user_and_subreddit_sort_type_bottom_sheet_fragment)
     TextView relevanceTypeTextView;
     @BindView(R.id.activity_type_text_view_search_user_and_subreddit_sort_type_bottom_sheet_fragment)
     TextView activityTypeTextView;
     private BaseActivity activity;
+
     public SearchUserAndSubredditSortTypeBottomSheetFragment() {
         // Required empty public constructor
+    }
+
+    public static SearchUserAndSubredditSortTypeBottomSheetFragment getNewInstance(int fragmentPosition, SortType currentSortType) {
+        SearchUserAndSubredditSortTypeBottomSheetFragment fragment = new SearchUserAndSubredditSortTypeBottomSheetFragment();
+        Bundle bundle = new Bundle();
+        bundle.putInt(EXTRA_FRAGMENT_POSITION, fragmentPosition);
+        bundle.putString(EXTRA_CURRENT_SORT_TYPE, currentSortType.getType().fullName);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
@@ -43,6 +56,13 @@ public class SearchUserAndSubredditSortTypeBottomSheetFragment extends Landscape
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_search_user_and_subreddit_sort_type_bottom_sheet, container, false);
         ButterKnife.bind(this, rootView);
+
+        String currentSortType = getArguments().getString(EXTRA_CURRENT_SORT_TYPE);
+        if (currentSortType.equals(SortType.Type.RELEVANCE.fullName)) {
+            relevanceTypeTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(relevanceTypeTextView.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
+        } else if (currentSortType.equals(SortType.Type.ACTIVITY.fullName)) {
+            activityTypeTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(activityTypeTextView.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
+        }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {

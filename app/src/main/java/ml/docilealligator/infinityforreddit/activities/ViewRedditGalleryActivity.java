@@ -16,7 +16,6 @@ import android.os.Handler;
 import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -77,6 +76,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     private String subredditName;
     private boolean isNsfw;
     private boolean useBottomAppBar;
+    private boolean isActionBarHidden = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,11 +137,6 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
         setContentView(R.layout.activity_view_reddit_gallery);
 
         ButterKnife.bind(this);
-
-        getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
 
         useBottomAppBar = sharedPreferences.getBoolean(SharedPreferencesUtils.USE_BOTTOM_TOOLBAR_IN_MEDIA_VIEWER, false);
 
@@ -283,6 +278,14 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     @Override
     public void setCustomFont(Typeface typeface, Typeface titleTypeface, Typeface contentTypeface) {
         this.typeface = typeface;
+    }
+
+    public boolean isActionBarHidden() {
+        return isActionBarHidden;
+    }
+
+    public void setActionBarHidden(boolean isActionBarHidden) {
+        this.isActionBarHidden = isActionBarHidden;
     }
 
     private class SectionsPagerAdapter extends FragmentStatePagerAdapter {

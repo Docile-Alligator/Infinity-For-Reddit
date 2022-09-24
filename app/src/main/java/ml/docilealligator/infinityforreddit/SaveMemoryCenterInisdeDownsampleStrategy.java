@@ -4,16 +4,22 @@ import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy;
 
 public class SaveMemoryCenterInisdeDownsampleStrategy extends DownsampleStrategy {
 
+    private int threshold;
+
+    public SaveMemoryCenterInisdeDownsampleStrategy(int threshold) {
+        this.threshold = threshold;
+    }
+
     @Override
     public float getScaleFactor(int sourceWidth, int sourceHeight, int requestedWidth, int requestedHeight) {
         int originalSourceWidth = sourceWidth;
         int originalSourceHeight = sourceHeight;
-        if (sourceWidth * sourceHeight > 5_000_000) {
+        if (sourceWidth * sourceHeight > threshold) {
             int divisor = 2;
             do {
                 sourceWidth /= divisor;
                 sourceHeight /= divisor;
-            } while (sourceWidth * sourceHeight > 5_000_000);
+            } while (sourceWidth * sourceHeight > threshold);
         }
 
         float widthPercentage = (float) requestedWidth / (float) sourceWidth;
@@ -25,5 +31,9 @@ public class SaveMemoryCenterInisdeDownsampleStrategy extends DownsampleStrategy
     @Override
     public SampleSizeRounding getSampleSizeRounding(int sourceWidth, int sourceHeight, int requestedWidth, int requestedHeight) {
         return SampleSizeRounding.MEMORY;
+    }
+
+    public void setThreshold(int threshold) {
+        this.threshold = threshold;
     }
 }

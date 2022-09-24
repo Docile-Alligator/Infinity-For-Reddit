@@ -41,6 +41,8 @@
                     android:maxLines="1"
                     android:textSize="?attr/font_20"
                     android:fontFamily="?attr/font_family"
+                    android:inputType="textNoSuggestions"
+                    android:imeOptions="actionSearch"
                     android:visibility="gone" />
 
             </androidx.appcompat.widget.Toolbar>

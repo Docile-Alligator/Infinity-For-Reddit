@@ -34,10 +34,6 @@ public class GesturesAndButtonsPreferenceFragment extends CustomFontPreferenceFr
         setPreferencesFromResource(R.xml.gestures_and_buttons_preferences, rootKey);
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
-
         SwitchPreference lockJumpToNextTopLevelCommentButtonSwitch =
                 findPreference(SharedPreferencesUtils.LOCK_JUMP_TO_NEXT_TOP_LEVEL_COMMENT_BUTTON);
         SwitchPreference lockBottomAppBarSwitch = findPreference(SharedPreferencesUtils.LOCK_BOTTOM_APP_BAR);

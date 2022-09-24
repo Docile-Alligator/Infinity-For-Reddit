@@ -367,37 +367,37 @@ public class CustomThemeWrapper {
                 getDefaultColor("#F0F0F0", "#3C3C3C", "#3C3C3C"));
     }
 
-    public Integer getCommentVerticalBarColor1() {
+    public int getCommentVerticalBarColor1() {
         return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.COMMENT_VERTICAL_BAR_COLOR_1,
                 getDefaultColor("#0336FF", "#0336FF", "#0336FF"));
     }
 
-    public Integer getCommentVerticalBarColor2() {
+    public int getCommentVerticalBarColor2() {
         return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.COMMENT_VERTICAL_BAR_COLOR_2,
                 getDefaultColor("#EE02BE", "#C300B3", "#C300B3"));
     }
 
-    public Integer getCommentVerticalBarColor3() {
+    public int getCommentVerticalBarColor3() {
         return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.COMMENT_VERTICAL_BAR_COLOR_3,
                 getDefaultColor("#02DFEE", "#00B8DA", "#00B8DA"));
     }
 
-    public Integer getCommentVerticalBarColor4() {
+    public int getCommentVerticalBarColor4() {
         return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.COMMENT_VERTICAL_BAR_COLOR_4,
                 getDefaultColor("#EED502", "#EDCA00", "#EDCA00"));
     }
 
-    public Integer getCommentVerticalBarColor5() {
+    public int getCommentVerticalBarColor5() {
         return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.COMMENT_VERTICAL_BAR_COLOR_5,
                 getDefaultColor("#EE0220", "#EE0219", "#EE0219"));
     }
 
-    public Integer getCommentVerticalBarColor6() {
+    public int getCommentVerticalBarColor6() {
         return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.COMMENT_VERTICAL_BAR_COLOR_6,
                 getDefaultColor("#02EE6E", "#00B925", "#00B925"));
     }
 
-    public Integer getCommentVerticalBarColor7() {
+    public int getCommentVerticalBarColor7() {
         return getThemeSharedPreferences().getInt(CustomThemeSharedPreferencesUtils.COMMENT_VERTICAL_BAR_COLOR_7,
                 getDefaultColor("#EE4602", "#EE4602", "#EE4602"));
     }

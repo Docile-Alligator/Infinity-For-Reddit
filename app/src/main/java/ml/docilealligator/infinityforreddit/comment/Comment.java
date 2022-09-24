@@ -14,7 +14,7 @@ public class Comment implements Parcelable {
     public static final int NOT_PLACEHOLDER = 0;
     public static final int PLACEHOLDER_LOAD_MORE_COMMENTS = 1;
     public static final int PLACEHOLDER_CONTINUE_THREAD = 2;
-    public static final Creator<Comment> CREATOR = new Creator<Comment>() {
+    public static final Creator<Comment> CREATOR = new Creator<>() {
         @Override
         public Comment createFromParcel(Parcel in) {
             return new Comment(in);
@@ -30,6 +30,7 @@ public class Comment implements Parcelable {
     private String author;
     private String authorFlair;
     private String authorFlairHTML;
+    private String authorIconUrl;
     private String linkAuthor;
     private long commentTimeMillis;
     private String commentMarkdown;
@@ -44,6 +45,7 @@ public class Comment implements Parcelable {
     private String permalink;
     private String awards;
     private int depth;
+    private int childCount;
     private boolean collapsed;
     private boolean hasReply;
     private boolean scoreHidden;
@@ -116,6 +118,7 @@ public class Comment implements Parcelable {
         author = in.readString();
         authorFlair = in.readString();
         authorFlairHTML = in.readString();
+        authorIconUrl = in.readString();
         linkAuthor = in.readString();
         commentTimeMillis = in.readLong();
         commentMarkdown = in.readString();
@@ -130,13 +133,16 @@ public class Comment implements Parcelable {
         permalink = in.readString();
         awards = in.readString();
         depth = in.readInt();
+        childCount = in.readInt();
         collapsed = in.readByte() != 0;
         hasReply = in.readByte() != 0;
         scoreHidden = in.readByte() != 0;
         isExpanded = in.readByte() != 0;
         hasExpandedBefore = in.readByte() != 0;
-        children = in.readArrayList(Comment.class.getClassLoader());
-        moreChildrenFullnames = in.readArrayList(Comment.class.getClassLoader());
+        children = new ArrayList<>();
+        in.readTypedList(children, Comment.CREATOR);
+        moreChildrenFullnames = new ArrayList<>();
+        in.readStringList(moreChildrenFullnames);
         moreChildrenStartingIndex = in.readInt();
         placeholderType = in.readInt();
         isLoadingMoreChildren = in.readByte() != 0;
@@ -165,6 +171,14 @@ public class Comment implements Parcelable {
 
     public String getAuthorFlairHTML() {
         return authorFlairHTML;
+    }
+
+    public String getAuthorIconUrl() {
+        return authorIconUrl;
+    }
+
+    public void setAuthorIconUrl(String authorIconUrl) {
+        this.authorIconUrl = authorIconUrl;
     }
 
     public String getLinkAuthor() {
@@ -219,6 +233,10 @@ public class Comment implements Parcelable {
         return isSubmitter;
     }
 
+    public void setSubmittedByAuthor(boolean isSubmittedByAuthor) {
+        this.isSubmitter = isSubmittedByAuthor;
+    }
+
     public boolean isModerator() {
         return distinguished != null && distinguished.equals("moderator");
     }
@@ -237,6 +255,14 @@ public class Comment implements Parcelable {
 
     public int getDepth() {
         return depth;
+    }
+
+    public int getChildCount() {
+        return childCount;
+    }
+
+    public void setChildCount(int childCount) {
+        this.childCount = childCount;
     }
 
     public boolean isCollapsed() {
@@ -304,10 +330,12 @@ public class Comment implements Parcelable {
                 children.addAll(moreChildren);
             }
         }
+        childCount += moreChildren == null ? 0 : moreChildren.size();
     }
 
     public void addChild(Comment comment) {
         addChild(comment, 0);
+        childCount++;
     }
 
     public void addChild(Comment comment, int position) {
@@ -373,6 +401,7 @@ public class Comment implements Parcelable {
         parcel.writeString(author);
         parcel.writeString(authorFlair);
         parcel.writeString(authorFlairHTML);
+        parcel.writeString(authorIconUrl);
         parcel.writeString(linkAuthor);
         parcel.writeLong(commentTimeMillis);
         parcel.writeString(commentMarkdown);
@@ -387,13 +416,14 @@ public class Comment implements Parcelable {
         parcel.writeString(permalink);
         parcel.writeString(awards);
         parcel.writeInt(depth);
+        parcel.writeInt(childCount);
         parcel.writeByte((byte) (collapsed ? 1 : 0));
         parcel.writeByte((byte) (hasReply ? 1 : 0));
         parcel.writeByte((byte) (scoreHidden ? 1 : 0));
         parcel.writeByte((byte) (isExpanded ? 1 : 0));
         parcel.writeByte((byte) (hasExpandedBefore ? 1 : 0));
-        parcel.writeList(children);
-        parcel.writeList(moreChildrenFullnames);
+        parcel.writeTypedList(children);
+        parcel.writeStringList(moreChildrenFullnames);
         parcel.writeInt(moreChildrenStartingIndex);
         parcel.writeInt(placeholderType);
         parcel.writeByte((byte) (isLoadingMoreChildren ? 1 : 0));

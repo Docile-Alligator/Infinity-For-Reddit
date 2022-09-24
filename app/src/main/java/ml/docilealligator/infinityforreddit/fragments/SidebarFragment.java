@@ -48,7 +48,6 @@ import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubredditData;
@@ -84,7 +83,7 @@ public class SidebarFragment extends Fragment {
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private BaseActivity activity;
+    private ViewSubredditDetailActivity activity;
     private String mAccessToken;
     private String subredditName;
     private LinearLayoutManagerBugFixed linearLayoutManager;
@@ -199,7 +198,7 @@ public class SidebarFragment extends Fragment {
             }
         });
 
-        mSubredditViewModel = new ViewModelProvider(this,
+        mSubredditViewModel = new ViewModelProvider(activity,
                 new SubredditViewModel.Factory(activity.getApplication(), mRedditDataRoomDatabase, subredditName))
                 .get(SubredditViewModel.class);
         mSubredditViewModel.getSubredditLiveData().observe(getViewLifecycleOwner(), subredditData -> {
@@ -222,7 +221,7 @@ public class SidebarFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (BaseActivity) context;
+        activity = (ViewSubredditDetailActivity) context;
     }
 
     public void fetchSubredditData() {

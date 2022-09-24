@@ -31,14 +31,17 @@
                 android:id="@+id/toolbar_linear_layout_theme_preview_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingTop="16dp"
-                android:paddingStart="16dp"
-                android:paddingEnd="16dp">
+                android:orientation="vertical">
+
+                <View
+                    android:id="@+id/extra_padding_view_theme_preview_activity"
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:padding="16dp">
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -69,16 +72,19 @@
                         android:id="@+id/subscribe_subreddit_chip_theme_preview_activity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginEnd="16dp"
                         android:text="@string/subscribe"
-                        android:layout_gravity="center_horizontal"/>
+                        app:chipStrokeColor="#00000000" />
 
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginBottom="16dp">
+                    android:paddingBottom="16dp"
+                    android:paddingStart="16dp"
+                    android:paddingEnd="16dp">
 
                     <TextView
                         android:id="@+id/primary_text_text_view_theme_preview_activity"

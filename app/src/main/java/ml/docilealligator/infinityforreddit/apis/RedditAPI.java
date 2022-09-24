@@ -251,11 +251,6 @@ public interface RedditAPI {
     @POST("/api/compose")
     Call<String> composePrivateMessage(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
-
-    @FormUrlEncoded
-    @POST("api/block_user")
-    Call<String> blockUser(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
-
     @GET("r/{subredditName}/api/user_flair_v2.json?raw_json=1")
     Call<String> getUserFlairs(@HeaderMap Map<String, String> headers, @Path("subredditName") String subredditName);
 
@@ -288,11 +283,14 @@ public interface RedditAPI {
     Call<String> optInQuarantinedSubreddit(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
     @GET("/api/subreddit_autocomplete_v2?typeahead_active=true&include_profiles=false&raw_json=1")
-    Call<String> subredditAutocomplete(@HeaderMap Map<String ,String> headers, @Query("query") String query,
+    Call<String> subredditAutocomplete(@HeaderMap Map<String, String> headers, @Query("query") String query,
                                        @Query("include_over_18") boolean nsfw);
 
     @POST("/api/submit_gallery_post.json?resubmit=true&raw_json=1")
     Call<String> submitGalleryPost(@HeaderMap Map<String, String> headers, @Body String body);
+
+    @POST("/api/submit_poll_post.json?resubmit=true&raw_json=1&gilding_detail=1")
+    Call<String> submitPollPost(@HeaderMap Map<String, String> headers, @Body String body);
 
     @GET("/api/trending_searches_v1.json?withAds=0&raw_json=1&gilding_detail=1")
     Call<String> getTrendingSearches();

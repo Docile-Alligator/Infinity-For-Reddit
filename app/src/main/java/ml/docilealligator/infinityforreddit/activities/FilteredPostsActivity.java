@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -93,6 +92,9 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     @Named("current_account")
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
+    @Named("nsfw_and_spoiler")
+    SharedPreferences mNsfwAndSpoilerSharedPreferences;
+    @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
@@ -131,9 +133,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
 
             if (isImmersiveInterface()) {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    coordinatorLayout.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                            View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                            View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION);
+                    window.setDecorFitsSystemWindows(false);
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
@@ -152,10 +152,14 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setToolbarGoToTop(toolbar);
 
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
         name = getIntent().getStringExtra(EXTRA_NAME);
         postType = getIntent().getIntExtra(EXTRA_POST_TYPE, PostPagingSource.TYPE_FRONT_PAGE);
+
         int filter = getIntent().getIntExtra(EXTRA_FILTER, -1000);
         PostFilter postFilter = new PostFilter();
+        postFilter.allowNSFW = !mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_NSFW_FOREVER, false) && mNsfwAndSpoilerSharedPreferences.getBoolean((mAccountName == null || mAccountName.equals("-") ? "" : mAccountName) + SharedPreferencesUtils.NSFW_BASE, false);
         switch (filter) {
             case Post.NSFW_TYPE:
                 postFilter.onlyNSFW = true;
@@ -221,9 +225,6 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
                 mMenu.findItem(R.id.action_sort_filtered_thing_activity).setVisible(false);
             }
         }
-
-        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
 
         if (savedInstanceState != null) {
             mFragment = (PostFragment) getSupportFragmentManager().getFragment(savedInstanceState, FRAGMENT_OUT_STATE);
@@ -354,42 +355,22 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
         } else if (itemId == R.id.action_sort_filtered_thing_activity) {
             switch (postType) {
                 case PostPagingSource.TYPE_FRONT_PAGE:
-                    SortTypeBottomSheetFragment bestSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-                    Bundle bestBundle = new Bundle();
-                    bestBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, false);
-                    bestSortTypeBottomSheetFragment.setArguments(bestBundle);
+                    SortTypeBottomSheetFragment bestSortTypeBottomSheetFragment = SortTypeBottomSheetFragment.getNewInstance(false, mFragment.getSortType());
                     bestSortTypeBottomSheetFragment.show(getSupportFragmentManager(), bestSortTypeBottomSheetFragment.getTag());
                     break;
                 case PostPagingSource.TYPE_SEARCH:
-                    SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment = new SearchPostSortTypeBottomSheetFragment();
-                    Bundle searchBundle = new Bundle();
-                    searchPostSortTypeBottomSheetFragment.setArguments(searchBundle);
+                    SearchPostSortTypeBottomSheetFragment searchPostSortTypeBottomSheetFragment = SearchPostSortTypeBottomSheetFragment.getNewInstance(mFragment.getSortType());
                     searchPostSortTypeBottomSheetFragment.show(getSupportFragmentManager(), searchPostSortTypeBottomSheetFragment.getTag());
                     break;
                 case PostPagingSource.TYPE_SUBREDDIT:
-                    if (name.equals("popular") || name.equals("all")) {
-                        SortTypeBottomSheetFragment popularAndAllSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-                        Bundle popularBundle = new Bundle();
-                        popularBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-                        popularAndAllSortTypeBottomSheetFragment.setArguments(popularBundle);
-                        popularAndAllSortTypeBottomSheetFragment.show(getSupportFragmentManager(), popularAndAllSortTypeBottomSheetFragment.getTag());
-                    } else {
-                        SortTypeBottomSheetFragment subredditSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-                        Bundle subredditSheetBundle = new Bundle();
-                        subredditSheetBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-                        subredditSortTypeBottomSheetFragment.setArguments(subredditSheetBundle);
-                        subredditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), subredditSortTypeBottomSheetFragment.getTag());
-                    }
-                    break;
                 case PostPagingSource.TYPE_MULTI_REDDIT:
-                    SortTypeBottomSheetFragment multiRedditSortTypeBottomSheetFragment = new SortTypeBottomSheetFragment();
-                    Bundle multiRedditBundle = new Bundle();
-                    multiRedditBundle.putBoolean(SortTypeBottomSheetFragment.EXTRA_NO_BEST_TYPE, true);
-                    multiRedditSortTypeBottomSheetFragment.setArguments(multiRedditBundle);
-                    multiRedditSortTypeBottomSheetFragment.show(getSupportFragmentManager(), multiRedditSortTypeBottomSheetFragment.getTag());
+                case PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT:
+                case PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE:
+                    SortTypeBottomSheetFragment sortTypeBottomSheetFragment = SortTypeBottomSheetFragment.getNewInstance(true, mFragment.getSortType());
+                    sortTypeBottomSheetFragment.show(getSupportFragmentManager(), sortTypeBottomSheetFragment.getTag());
                     break;
                 case PostPagingSource.TYPE_USER:
-                    UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment = new UserThingSortTypeBottomSheetFragment();
+                    UserThingSortTypeBottomSheetFragment userThingSortTypeBottomSheetFragment = UserThingSortTypeBottomSheetFragment.getNewInstance(mFragment.getSortType());
                     userThingSortTypeBottomSheetFragment.show(getSupportFragmentManager(), userThingSortTypeBottomSheetFragment.getTag());
             }
             return true;

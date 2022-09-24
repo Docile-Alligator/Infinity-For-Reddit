@@ -26,6 +26,7 @@ public class RedditGalleryPayload {
     public boolean originalContent = false;
     @SerializedName("post_to_twitter")
     public boolean postToTwitter = false;
+    @SerializedName("sendreplies")
     public boolean sendReplies;
     @SerializedName("validate_on_submit")
     public boolean validateOnSubmit = true;
@@ -91,6 +92,22 @@ public class RedditGalleryPayload {
             parcel.writeString(caption);
             parcel.writeString(outboundUrl);
             parcel.writeString(mediaId);
+        }
+
+        public String getCaption() {
+            return caption;
+        }
+
+        public void setCaption(String caption) {
+            this.caption = caption == null ? "" : caption;
+        }
+
+        public String getOutboundUrl() {
+            return outboundUrl;
+        }
+
+        public void setOutboundUrl(String outboundUrl) {
+            this.outboundUrl = outboundUrl;
         }
     }
 }

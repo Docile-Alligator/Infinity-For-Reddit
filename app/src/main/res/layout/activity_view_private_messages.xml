@@ -1,88 +1,87 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/linear_layout_view_private_messages_activity"
+    android:id="@+id/coordinator_layout_view_private_messages_activity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_weight="1"
+    tools:context=".activities.ViewPrivateMessagesActivity">
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar_layout_view_private_messages_activity"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/coordinator_layout_view_private_messages_activity"
-        tools:context=".activities.ViewPrivateMessagesActivity">
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appbar_layout_view_private_messages_activity"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/toolbar_view_private_messages_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/AppTheme.AppBarOverlay">
+            android:minHeight="?attr/actionBarSize"
+            app:navigationIcon="?attr/homeAsUpIndicator"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
 
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar_view_private_messages_activity"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="?attr/actionBarSize"
-                app:popupTheme="@style/AppTheme.PopupOverlay"
-                app:navigationIcon="?attr/homeAsUpIndicator" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-        </com.google.android.material.appbar.AppBarLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" >
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler_view_view_private_messages"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:clipToPadding="false"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    <LinearLayout
-        android:id="@+id/edit_text_wrapper_linear_layout_view_private_messages_activity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="bottom">
-
-        <View
-            android:id="@+id/edit_text_divider_view_private_messages_activity"
-            android:layout_width="match_parent"
-            android:layout_height="1dp" />
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false" />
 
         <LinearLayout
+            android:id="@+id/edit_text_wrapper_linear_layout_view_private_messages_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/edit_text_view_private_messages_activity"
-                android:layout_width="0dp"
+            <View
+                android:id="@+id/edit_text_divider_view_private_messages_activity"
+                android:layout_width="match_parent"
+                android:layout_height="1dp" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:padding="16dp"
-                android:hint="@string/message"
-                android:inputType="textMultiLine"
-                android:textSize="?attr/font_default"
-                android:background="#00000000"
-                android:textColor="?attr/primaryTextColor"
-                android:fontFamily="?attr/font_family"
-                android:maxLines="3" />
+                android:orientation="horizontal">
 
-            <ImageView
-                android:id="@+id/send_image_view_view_private_messages_activity"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_gravity="center_vertical"
-                android:scaleType="center"
-                android:src="@drawable/ic_send_black_24dp"
-                android:clickable="true"
-                android:focusable="true"
-                android:background="?attr/selectableItemBackgroundBorderless" />
+                <EditText
+                    android:id="@+id/edit_text_view_private_messages_activity"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#00000000"
+                    android:fontFamily="?attr/font_family"
+                    android:hint="@string/message"
+                    android:inputType="textMultiLine"
+                    android:maxLines="3"
+                    android:padding="16dp"
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="?attr/font_default" />
+
+                <ImageView
+                    android:id="@+id/send_image_view_view_private_messages_activity"
+                    android:layout_width="56dp"
+                    android:layout_height="56dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:scaleType="center"
+                    android:src="@drawable/ic_send_black_24dp" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
     </LinearLayout>
 
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

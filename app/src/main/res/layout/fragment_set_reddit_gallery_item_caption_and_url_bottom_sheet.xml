@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="8dp"
+    android:overScrollMode="never">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/caption_text_input_layout_set_reddit_gallery_item_caption_and_url_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:boxStrokeColor="?attr/primaryTextColor"
+            app:hintTextColor="?attr/primaryTextColor"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/caption_text_input_edit_text_set_reddit_gallery_item_caption_and_url_bottom_sheet_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="?attr/font_family"
+                android:textSize="?attr/font_default"
+                android:textColor="?attr/primaryTextColor"
+                android:hint="@string/reddit_gallery_item_caption_hint"
+                android:maxLength="180" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/url_text_input_layout_set_reddit_gallery_item_caption_and_url_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            app:boxStrokeColor="?attr/primaryTextColor"
+            app:hintTextColor="?attr/primaryTextColor"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/url_text_input_edit_text_set_reddit_gallery_item_caption_and_url_bottom_sheet_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="?attr/font_family"
+                android:textSize="?attr/font_default"
+                android:textColor="?attr/primaryTextColor"
+                android:hint="@string/reddit_gallery_item_url_hint" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/ok_button_set_reddit_gallery_item_caption_and_url_bottom_sheet_fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:layout_margin="16dp"
+            android:backgroundTint="?attr/colorPrimaryLightTheme"
+            android:text="@string/ok"
+            android:fontFamily="?attr/font_family"
+            android:textSize="?attr/font_default"
+            android:textColor="#FFFFFF" />
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>

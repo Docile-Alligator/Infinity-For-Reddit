@@ -61,7 +61,6 @@
     <string name="action_see_removed">"Ver Removido"</string>
     <string name="action_set_wallpaper">"Definir como Imagem de Fundo"</string>
     <string name="action_send_private_message">"Enviar Mensagem Privada"</string>
-    <string name="action_block_user">"Bloquear Utilizador"</string>
     <string name="parse_json_response_error">"Ocorreu um erro ao analisar a resposta do JSON"</string>
     <string name="retrieve_token_error">"Erro ao Recuperar token"</string>
     <string name="something_went_wrong">"Algo correu mal. Tente novamente mais tarde."</string>
@@ -152,6 +151,8 @@ Toque para tentar novamente."</string>
     <string name="send_message_success">"Mensagem enviada"</string>
     <string name="send_message_failed">"Não foi possível enviar esta mensagem"</string>
     <string name="select_a_subreddit">"Por favor escolha uma comunidade primeiro"</string>
+
+    <!-- Fuzzy -->
     <string name="title_required">"A publicação precisa de um bom título"</string>
     <string name="link_required">"Onde está o endereço?"</string>
     <string name="select_an_image">"Por favor selecione primeiro uma imagem"</string>
@@ -236,6 +237,8 @@ Toque para tentar novamente."</string>
 
     <!-- Fuzzy -->
     <string name="please_wait">"Por favor aguarde."</string>
+
+    <!-- Fuzzy -->
     <string name="add_account">"Adicionar conta"</string>
     <string name="anonymous_account">"Anónimo"</string>
     <string name="log_out">"Terminar sessão"</string>
@@ -395,7 +398,6 @@ Toque para tentar novamente."</string>
     <string name="settings_customize_dark_theme_title">"Tema Escuro"</string>
     <string name="settings_customize_amoled_theme_title">"Tema Amoled"</string>
     <string name="settings_manage_themes_title">"Gerir Temas"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Temas personalizados não podem ser aplicados à página de definições (exceto à barra de ferramentas, barra de estado e barra de navegação)."</string>
     <string name="settings_advanced_master_title">"Avançado"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Eliminar Todas as Comunidades da BD"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Eliminar Todos os Utilizadores da BD"</string>
@@ -410,6 +412,8 @@ Toque para tentar novamente."</string>
     <string name="settings_tab_title">"Título"</string>
     <string name="settings_tab_post_type">"Tipo"</string>
     <string name="settings_tab_subreddit_name">"Nome da Comunidade (sem prefixo r/)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_tab_multi_reddit_name">"Nome MultiReddit (/utilizador/oseunomedeutilizador/m/oseunomemultireddit)"</string>
     <string name="settings_tab_username">"Nome de Utilizador (sem prefixo u/)"</string>
     <string name="no_developer_easter_egg">"Aqui não existem opções de programador"</string>
@@ -738,9 +742,6 @@ Ela não está doente nem nada, mas certamente poderá melhorar."</string>
     <string name="top_score">"%1$s pontos"</string>
     <string name="login_activity_2fa_prompt">"Caso tenha autenticação de 2 fatores ativada, por favor introduza a palavra-passe da seguinte forma: &lt;palavra-passe&gt;:&lt;código 2FA&gt;.
 Exemplo: asuapasse:123456"</string>
-    <string name="block_user">"Bloquear Utilizador"</string>
-    <string name="block_user_success">"Bloqueado"</string>
-    <string name="block_user_failed">"Falha a bloquear utilizador"</string>
     <string name="submit_crosspost_activity_label">"Republicar"</string>
     <string name="give_award_activity_label">"Premiar"</string>
     <string name="action_crosspost">"Republicar"</string>
@@ -772,7 +773,6 @@ Os separadores poderão perder todo o conteúdo após alternar entre outros. É 
     <string name="settings_swipe_action_threshold">"Valor limite"</string>
     <string name="settings_pull_to_refresh_title">"Puxe para Atualizar"</string>
     <string name="settings_security_title">"Segurança"</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Requer Autenticação para Ir à Secção de Conta na Gaveta de Navegação"</string>
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Pressionar longo para Esconder Barra de Ferramentas"</string>
     <string name="settings_post_compact_layout_toolbar_hidden_by_default_title">"Esconder Barra de Ferramentas por Defeito"</string>
     <string name="settings_customize_bottom_app_bar_title">"Personalizar Barra de Navegação Inferior"</string>
@@ -799,7 +799,6 @@ Reprodução automática de vídeos desativada."</string>
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"A transferência falhou: não é possível aceder ao diretório de destino"</string>
     <string name="downloading_media_failed_cannot_download_media">"A transferência falhou"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"A transferência falhou: não é possível guardar o ficheiro no diretório de destino"</string>
-    <string name="view_full_comment_markdown">"Ver Markdown Completo"</string>
     <string name="select_user_flair_success">"Flair de Utilizador Selecionado"</string>
     <string name="select_this_user_flair">"Selecionar este flair de utilizador?"</string>
     <string name="select_header_size">"Selecionar Tamanho do Cabeçalho"</string>
@@ -996,6 +995,8 @@ Mensagem: %2$s"</string>
     <string name="exclude_user">"Excluir este utilizador"</string>
     <string name="exclude_flair">"Excluir esta flair"</string>
     <string name="contain_flair">"Contém esta flair"</string>
+
+    <!-- Fuzzy -->
     <string name="exclude_domain">"Excluir Domínio"</string>
     <string name="suggest_title">"Sugerir Título"</string>
     <string name="suggest_title_failed">"Falha ao sugerir título"</string>
@@ -1065,4 +1066,36 @@ Toque para tentar novamente."</string>
 Toque para tentar novamente."</string>
     <string name="no_trending_search">"Sem tendências encontradas.
 Toque para tentar novamente."</string>
+    <string name="wiki_activity_label">"Wiki"</string>
+    <string name="settings_post_details_title">"Detalhes do Post"</string>
+    <string name="settings_secure_mode_title">"Modo Seguro"</string>
+    <string name="error_loading_wiki">"Erro a carregar a Wiki"</string>
+    <string name="no_wiki">"Este subreddit não tem wiki"</string>
+    <string name="material_you_notification_title">"Aplicando Material You"</string>
+    <string name="action_go_to_wiki">"Ir para a Wiki"</string>
+    <string name="about">"Sobre"</string>
+    <string name="settings_link_handler_value_external_browser">"Browser Externo"</string>
+    <string name="settings_link_handler_value_internal_browser">"Browser interno"</string>
+    <string name="settings_experimental_feature">"Funcionalidade Experimental"</string>
+    <string name="go_to_top">"Ir para Cima"</string>
+    <string name="title_contains_regex_hint">"Título: contém regex"</string>
+    <string name="contain_domains_hint">"Contém domínios"</string>
+    <string name="anonymous_multireddit_no_subreddit">"Este multireddit não tem nenhum subreddit!"</string>
+    <string name="contain_domain">"Contém este domínio"</string>
+    <string name="app_lock_timeout_immediately">"Imediatamente"</string>
+    <string name="app_lock_timeout_1_min">"1 minuto"</string>
+    <string name="app_lock_timeout_2_mins">"2 minutos"</string>
+    <string name="app_lock_timeout_5_mins">"5 minutos"</string>
+    <string name="app_lock_timeout_10_mins">"10 minutos"</string>
+    <string name="app_lock_timeout_15_mins">"15 minutos"</string>
+    <string name="app_lock_timeout_20_mins">"20 minutos"</string>
+    <string name="app_lock_timeout_30_mins">"30 minutos"</string>
+    <string name="app_lock_timeout_1_hour">"1 hora"</string>
+    <string name="app_lock_timeout_2_hours">"2 horas"</string>
+    <string name="app_lock_timeout_3_hours">"3 horas"</string>
+    <string name="app_lock_timeout_4_hours">"4 horas"</string>
+    <string name="app_lock_timeout_5_hours">"5 horas"</string>
+    <string name="app_lock_timeout_6_hours">"6 horas"</string>
+    <string name="app_lock_timeout_12_hours">"12 horas"</string>
+    <string name="app_lock_timeout_24_hours">"24 horas"</string>
 </resources>

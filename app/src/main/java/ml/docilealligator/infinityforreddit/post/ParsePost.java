@@ -267,35 +267,8 @@ public class ParsePost {
                         authorFlair, authorFlairHTML, postTimeMillis, title, permalink, score, postType,
                         voteType, nComments, upvoteRatio, flair, awards, nAwards, hidden, spoiler, nsfw,
                         stickied, archived, locked, saved, isCrosspost);
-                if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
-                    post.setSelfText("");
-                } else {
-                    String selfText = Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim());
-                    post.setSelfText(selfText);
-                    if (data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
-                        post.setSelfTextPlainTrimmed("");
-                    } else {
-                        String selfTextPlain = Utils.trimTrailingWhitespace(
-                                Html.fromHtml(data.getString(JSONUtils.SELFTEXT_HTML_KEY))).toString();
-                        post.setSelfTextPlain(selfTextPlain);
-                        if (selfTextPlain.length() > 250) {
-                            selfTextPlain = selfTextPlain.substring(0, 250);
-                        }
-                        if (!selfText.equals("")) {
-                            Pattern p = Pattern.compile(">!.+!<");
-                            Matcher m = p.matcher(selfText.substring(0, Math.min(selfText.length(), 400)));
-                            if (m.find()) {
-                                post.setSelfTextPlainTrimmed("");
-                            } else {
-                                post.setSelfTextPlainTrimmed(selfTextPlain);
-                            }
-                        } else {
-                            post.setSelfTextPlainTrimmed(selfTextPlain);
-                        }
-                    }
-                }
             } else {
-                if (url.endsWith("jpg") || url.endsWith("png")) {
+                if (url.endsWith("jpg") || url.endsWith("png") || url.endsWith("jpeg")) {
                     //Image post
                     int postType = Post.IMAGE_TYPE;
 
@@ -333,7 +306,7 @@ public class ParsePost {
                         if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                             post.setSelfText("");
                         } else {
-                            post.setSelfText(Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
+                            post.setSelfText(Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY))));
                         }
 
                         Uri uri = Uri.parse(url);
@@ -496,34 +469,6 @@ public class ParsePost {
 
                             //Need attention
                             post.setPreviews(previews);
-
-                            if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
-                                post.setSelfText("");
-                            } else {
-                                String selfText = Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim());
-                                post.setSelfText(selfText);
-                                if (data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
-                                    post.setSelfTextPlainTrimmed("");
-                                } else {
-                                    String selfTextPlain = Utils.trimTrailingWhitespace(
-                                            Html.fromHtml(data.getString(JSONUtils.SELFTEXT_HTML_KEY))).toString();
-                                    post.setSelfTextPlain(selfTextPlain);
-                                    if (selfTextPlain.length() > 250) {
-                                        selfTextPlain = selfTextPlain.substring(0, 250);
-                                    }
-                                    if (!selfText.equals("")) {
-                                        Pattern p = Pattern.compile(">!.+!<");
-                                        Matcher m = p.matcher(selfText.substring(0, Math.min(selfText.length(), 400)));
-                                        if (m.find()) {
-                                            post.setSelfTextPlainTrimmed("");
-                                        } else {
-                                            post.setSelfTextPlainTrimmed(selfTextPlain);
-                                        }
-                                    } else {
-                                        post.setSelfTextPlainTrimmed(selfTextPlain);
-                                    }
-                                }
-                            }
                         } else {
                             //Link post
                             int postType = Post.LINK_TYPE;
@@ -535,7 +480,7 @@ public class ParsePost {
                             if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                                 post.setSelfText("");
                             } else {
-                                post.setSelfText(Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
+                                post.setSelfText(Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY))));
                             }
 
                             post.setPreviews(previews);
@@ -604,7 +549,7 @@ public class ParsePost {
                     if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                         post.setSelfText("");
                     } else {
-                        post.setSelfText(Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
+                        post.setSelfText(Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY))));
                     }
 
                     Uri uri = Uri.parse(url);
@@ -742,6 +687,36 @@ public class ParsePost {
                         post.setIsStreamable(true);
                         post.setVideoUrl(url);
                         post.setStreamableShortCode(shortCode);
+                    }
+                }
+            }
+        }
+
+        if (post.getPostType() != Post.LINK_TYPE && post.getPostType() != Post.NO_PREVIEW_LINK_TYPE) {
+            if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
+                post.setSelfText("");
+            } else {
+                String selfText = Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY)));
+                post.setSelfText(selfText);
+                if (data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
+                    post.setSelfTextPlainTrimmed("");
+                } else {
+                    String selfTextPlain = Utils.trimTrailingWhitespace(
+                            Html.fromHtml(data.getString(JSONUtils.SELFTEXT_HTML_KEY))).toString();
+                    post.setSelfTextPlain(selfTextPlain);
+                    if (selfTextPlain.length() > 250) {
+                        selfTextPlain = selfTextPlain.substring(0, 250);
+                    }
+                    if (!selfText.equals("")) {
+                        Pattern p = Pattern.compile(">!.+!<");
+                        Matcher m = p.matcher(selfText.substring(0, Math.min(selfText.length(), 400)));
+                        if (m.find()) {
+                            post.setSelfTextPlainTrimmed("");
+                        } else {
+                            post.setSelfTextPlainTrimmed(selfTextPlain);
+                        }
+                    } else {
+                        post.setSelfTextPlainTrimmed(selfTextPlain);
                     }
                 }
             }

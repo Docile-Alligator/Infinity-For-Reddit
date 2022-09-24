@@ -25,4 +25,12 @@
         app:key="only_disable_preview_in_video_and_gif_posts"
         android:title="@string/settings_only_disable_preview_in_video_and_gif_posts_title" />
 
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+        app:defaultValue="360"
+        app:key="reddit_video_default_resolution"
+        android:title="@string/settings_reddit_video_default_resolution"
+        app:entries="@array/settings_reddit_video_default_resolution"
+        app:entryValues="@array/settings_reddit_video_default_resolution_values"
+        app:useSimpleSummaryProvider="true" />
+
 </PreferenceScreen>

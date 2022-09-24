@@ -15,13 +15,35 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp">
+
+            <ImageView
+                android:id="@+id/author_icon_image_view_item_comment_fully_collapsed"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_gravity="center_vertical"
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/user_name_text_view_item_comment_fully_collapsed"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:maxLines="1"
+                android:fontFamily="?attr/font_family"
+                android:paddingStart="8dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="8dp"
+                android:paddingBottom="12dp"
+                android:textSize="?attr/font_default" />
+
+            <TextView
+                android:id="@+id/child_count_text_view_item_comment_fully_collapsed"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:fontFamily="?attr/font_family"
                 android:paddingStart="16dp"
                 android:paddingTop="12dp"
@@ -33,6 +55,7 @@
                 android:id="@+id/score_text_view_item_comment_fully_collapsed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:fontFamily="?attr/font_family"
                 android:paddingStart="8dp"
                 android:paddingTop="12dp"
@@ -44,7 +67,7 @@
                 android:id="@+id/time_text_view_item_comment_fully_collapsed"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
+                android:layout_gravity="center_vertical|end"
                 android:fontFamily="?attr/font_family"
                 android:paddingStart="8dp"
                 android:paddingTop="12dp"

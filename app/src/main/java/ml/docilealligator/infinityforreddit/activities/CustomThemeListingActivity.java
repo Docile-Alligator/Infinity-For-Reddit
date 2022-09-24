@@ -156,6 +156,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
     @Override
     protected void applyCustomTheme() {
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
+        applyFABTheme(fab);
     }
 
     @Override

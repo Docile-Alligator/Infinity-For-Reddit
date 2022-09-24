@@ -1,5 +1,8 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -11,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,6 +45,8 @@ import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPrivateMessagesActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.message.Message;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -72,6 +78,7 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
         mGlide = Glide.with(viewPrivateMessagesActivity);
         mLocale = locale;
         mAccountName = accountName;
+        int commentColor = customThemeWrapper.getCommentColor();
         mMarkwon = Markwon.builder(viewPrivateMessagesActivity)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                     plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
@@ -112,6 +119,8 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
                     }
                 })
                 .usePlugin(StrikethroughPlugin.create())
+                .usePlugin(SpoilerParserPlugin.create(commentColor, commentColor | 0xFF000000))
+                .usePlugin(RedditHeadingPlugin.create())
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .build();
         mShowElapsedTime = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
@@ -154,22 +163,11 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
             if (holder instanceof MessageViewHolder) {
                 mMarkwon.setMarkdown(((MessageViewHolder) holder).messageTextView, message.getBody());
 
-                ((MessageViewHolder) holder).messageTextView.setOnClickListener(view -> ((MessageViewHolder) holder).itemView.performClick());
                 if (mShowElapsedTime) {
                     ((MessageViewHolder) holder).timeTextView.setText(Utils.getElapsedTime(mViewPrivateMessagesActivity, message.getTimeUTC()));
                 } else {
                     ((MessageViewHolder) holder).timeTextView.setText(Utils.getFormattedTime(mLocale, message.getTimeUTC(), mTimeFormatPattern));
                 }
-
-                ((MessageViewHolder) holder).messageTextView.setOnClickListener(view -> {
-                    if (((MessageViewHolder) holder).timeTextView.getVisibility() != View.VISIBLE) {
-                        ((MessageViewHolder) holder).timeTextView.setVisibility(View.VISIBLE);
-                        mViewPrivateMessagesActivity.delayTransition();
-                    } else {
-                        ((MessageViewHolder) holder).timeTextView.setVisibility(View.GONE);
-                        mViewPrivateMessagesActivity.delayTransition();
-                    }
-                });
             }
 
             if (holder instanceof SentMessageViewHolder) {
@@ -246,17 +244,57 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
     class MessageViewHolder extends RecyclerView.ViewHolder {
         TextView messageTextView;
         TextView timeTextView;
+        ImageView copyImageView;
 
         public MessageViewHolder(@NonNull View itemView) {
             super(itemView);
         }
 
-        void setBaseView(TextView messageTextView, TextView timeTextView) {
+        void setBaseView(TextView messageTextView, TextView timeTextView, ImageView copyImageView) {
             this.messageTextView = messageTextView;
             this.timeTextView = timeTextView;
+            this.copyImageView = copyImageView;
 
             messageTextView.setTextColor(Color.WHITE);
             timeTextView.setTextColor(mSecondaryTextColor);
+
+            itemView.setOnClickListener(view -> {
+                if (timeTextView.getVisibility() != View.VISIBLE) {
+                    timeTextView.setVisibility(View.VISIBLE);
+                    copyImageView.setVisibility(View.VISIBLE);
+                } else {
+                    timeTextView.setVisibility(View.GONE);
+                    copyImageView.setVisibility(View.GONE);
+                }
+                mViewPrivateMessagesActivity.delayTransition();
+            });
+
+            messageTextView.setOnClickListener(view -> {
+                if (messageTextView.getSelectionStart() == -1 && messageTextView.getSelectionEnd() == -1) {
+                    itemView.performClick();
+                }
+            });
+
+            copyImageView.setColorFilter(mSecondaryTextColor, android.graphics.PorterDuff.Mode.SRC_IN);
+
+            copyImageView.setOnClickListener(view -> {
+                Message message;
+                if (getBindingAdapterPosition() == 0) {
+                    message = mMessage;
+                } else {
+                    message = mMessage.getReplies().get(getBindingAdapterPosition() - 1);
+                }
+                if (message != null) {
+                    ClipboardManager clipboard = (ClipboardManager) mViewPrivateMessagesActivity.getSystemService(Context.CLIPBOARD_SERVICE);
+                    if (clipboard != null) {
+                        ClipData clip = ClipData.newPlainText("simple text", message.getBody());
+                        clipboard.setPrimaryClip(clip);
+                        Toast.makeText(mViewPrivateMessagesActivity, R.string.copy_success, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(mViewPrivateMessagesActivity, R.string.copy_failed, Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
         }
     }
 
@@ -265,14 +303,15 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
         TextView messageTextView;
         @BindView(R.id.time_text_view_item_private_message_sent)
         TextView timeTextView;
+        @BindView(R.id.copy_image_view_item_private_message_sent)
+        ImageView copyImageView;
 
         SentMessageViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            setBaseView(messageTextView, timeTextView);
+            setBaseView(messageTextView, timeTextView, copyImageView);
 
             messageTextView.setTextColor(mSentMessageTextColor);
-
         }
     }
 
@@ -283,11 +322,13 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
         TextView messageTextView;
         @BindView(R.id.time_text_view_item_private_message_received)
         TextView timeTextView;
+        @BindView(R.id.copy_image_view_item_private_message_received)
+        ImageView copyImageView;
 
         ReceivedMessageViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            setBaseView(messageTextView, timeTextView);
+            setBaseView(messageTextView, timeTextView, copyImageView);
 
             messageTextView.setTextColor(mReceivedMessageTextColor);
         }

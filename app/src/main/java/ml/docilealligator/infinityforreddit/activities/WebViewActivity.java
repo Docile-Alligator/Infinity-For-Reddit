@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.InflateException;
@@ -19,6 +20,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
@@ -33,6 +35,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LollipopBugFixedWebView;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class WebViewActivity extends BaseActivity {
@@ -48,6 +51,9 @@ public class WebViewActivity extends BaseActivity {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private String url;
@@ -75,12 +81,18 @@ public class WebViewActivity extends BaseActivity {
 
         setSupportActionBar(toolbar);
 
+        if (mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null) == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            webView.setAnonymous(true);
+        }
+
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setDomStorageEnabled(true);
 
         url = getIntent().getDataString();
-        toolbar.setTitle(url);
-        webView.loadUrl(url);
+        if (savedInstanceState == null) {
+            toolbar.setTitle(url);
+            webView.loadUrl(url);
+        }
 
         WebViewClient client = new WebViewClient() {
             @Override
@@ -111,7 +123,7 @@ public class WebViewActivity extends BaseActivity {
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
-        Drawable closeIcon = Utils.getTintedDrawable(this, R.drawable.ic_close_black_24dp, mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
+        Drawable closeIcon = Utils.getTintedDrawable(this, R.drawable.ic_close_24dp, mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
         toolbar.setNavigationIcon(closeIcon);
     }
 
@@ -176,5 +188,17 @@ public class WebViewActivity extends BaseActivity {
 
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        webView.saveState(outState);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        webView.restoreState(savedInstanceState);
     }
 }

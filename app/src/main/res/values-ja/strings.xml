@@ -65,7 +65,6 @@
     <string name="action_see_removed">"削除済みを見る"</string>
     <string name="action_set_wallpaper">"壁紙に設定"</string>
     <string name="action_send_private_message">"個人メッセージを送信"</string>
-    <string name="action_block_user">"ユーザーをブロック"</string>
     <string name="parse_json_response_error">"JSONの解析中にエラーが発生しました"</string>
     <string name="retrieve_token_error">"トークンの取得中にエラーが発生しました"</string>
     <string name="something_went_wrong">"エラーが発生しました。後ほど再度お試しください。"</string>
@@ -165,6 +164,8 @@
     <string name="send_message_success">"送信しました"</string>
     <string name="send_message_failed">"送信できませんでした"</string>
     <string name="select_a_subreddit">"Subredditを選択してください"</string>
+
+    <!-- Fuzzy -->
     <string name="title_required">"タイトルが必要です"</string>
     <string name="link_required">"リンクが必要です"</string>
     <string name="select_an_image">"画像を選択してください"</string>
@@ -256,6 +257,8 @@
 
     <!-- Fuzzy -->
     <string name="please_wait">"少々お待ちください。"</string>
+
+    <!-- Fuzzy -->
     <string name="add_account">"アカウントを追加"</string>
     <string name="anonymous_account">"匿名"</string>
     <string name="log_out">"ログアウト"</string>
@@ -440,7 +443,6 @@
     <string name="settings_customize_dark_theme_title">"ダークテーマ"</string>
     <string name="settings_customize_amoled_theme_title">"AMOLEDテーマ"</string>
     <string name="settings_manage_themes_title">"テーマの管理"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"カスタムテーマは設定画面には適用できません (ツールバー、ステータスバー、ナビゲーションバーを除く)"</string>
     <string name="settings_advanced_master_title">"高度な設定"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"データベース中の全てのSubreddit情報を削除"</string>
     <string name="settings_delete_all_users_data_in_database_title">"データベース中の全てのユーザー情報を削除"</string>
@@ -455,6 +457,8 @@
     <string name="settings_tab_title">"タブ名"</string>
     <string name="settings_tab_post_type">"表示内容"</string>
     <string name="settings_tab_subreddit_name">"Subreddit名 (「r/」は不要)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_tab_multi_reddit_name">"カスタムフィード名 (/user/あなたのユーザー名/m/あなたのカスタムフィード名)"</string>
     <string name="settings_tab_username">"ユーザー名 (「u/」は不要)"</string>
     <string name="no_developer_easter_egg">"開発者オプションはありません"</string>
@@ -825,9 +829,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="top_score">"%1$s点"</string>
     <string name="login_activity_2fa_prompt">"2段階認証を有効にしている場合、パスワードは次のように入力してください 「&lt;パスワード&gt;:&lt;2段階認証コード&gt;」。
 例「yourpass:123456」"</string>
-    <string name="block_user">"ユーザーをブロック"</string>
-    <string name="block_user_success">"ブロックしました"</string>
-    <string name="block_user_failed">"ユーザーのブロックに失敗しました"</string>
     <string name="submit_crosspost_activity_label">"クロスポスト"</string>
     <string name="give_award_activity_label">"アワードを贈る"</string>
     <string name="action_crosspost">"クロスポスト"</string>
@@ -860,7 +861,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_swipe_action_threshold">"しきい値"</string>
     <string name="settings_pull_to_refresh_title">"引き下げて更新"</string>
     <string name="settings_security_title">"セキュリティ"</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"ナビゲーションドロワーからアカウントに移動する際に認証を要求"</string>
 
     <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"コンパクトレイアウトのツールバーを長押しで非表示"</string>
@@ -890,7 +890,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"ダウンロードに失敗しました (保存先のフォルダーにアクセスできません)"</string>
     <string name="downloading_media_failed_cannot_download_media">"ダウンロードに失敗しました"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"ダウンロードに失敗しました (保存先のフォルダーに保存できません)"</string>
-    <string name="view_full_comment_markdown">"Markdown全体を表示"</string>
     <string name="select_user_flair_success">"ユーザーフレアーを選択しました"</string>
     <string name="select_this_user_flair">"このユーザーフレアーを選択しますか？"</string>
     <string name="select_header_size">"ヘッダーサイズを選択"</string>
@@ -976,16 +975,23 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="settings_save_sort_type_title">"ソート方法を保存する"</string>
     <string name="open_link">"リンクを開く"</string>
     <string name="hide_read_posts">"既読の投稿を非表示にする"</string>
+    <string name="filter_posts">"投稿をフィルタリング"</string>
     <string name="only_nsfw">"NSFWのみ"</string>
     <string name="only_spoiler">"ネタバレのみ"</string>
     <string name="title_excludes_strings_hint">"タイトル: 除外するキーワード (key1,key2)"</string>
     <string name="title_excludes_regex_hint">"タイトル: 除外する正規表現"</string>
     <string name="exclude_subreddits_hint">"除外するSubreddit (例: funny,AskReddit)"</string>
     <string name="exclude_users_hint">"除外するユーザー（例: Hostilenemy,random)"</string>
+    <string name="exclude_flairs_hint">"除外するFlair (例: flair1,flair2)"</string>
+    <string name="contain_flairs_hint">"含めるFlair (例: flair1,flair2)"</string>
+    <string name="min_comments_hint">"最小のコメント数 (-1: 制限なし)"</string>
+    <string name="max_comments_hint">"最大のコメント数 (-1: 制限なし)"</string>
+    <string name="min_awards_hint">"最小のアワード数 (-1: 制限なし)"</string>
     <string name="duplicate_post_filter_dialog_title">"「%1$s 」は既に存在します"</string>
     <string name="duplicate_post_filter_dialog_message">"上書きしますか？"</string>
     <string name="apply_post_filter_to">"適用"</string>
     <string name="post_filter_usage_home">"ホーム"</string>
+    <string name="post_filter_usage_subreddit_all">"Subreddit"</string>
     <string name="post_filter_usage_user">"ユーザー: %1$s"</string>
     <string name="post_filter_usage_user_all">"ユーザー"</string>
     <string name="user">"ユーザー"</string>
@@ -1021,6 +1027,8 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="exclude_domains_hint">"除外するドメイン"</string>
     <string name="anonymous_front_page_no_subscriptions">"Subredditに参加して始めましょう！"</string>
     <string name="backup_settings_success">"設定を目的のディレクトリに正常にエクスポートしました。生成されたzipファイルのパスワードは123321です。zipファイルは変更しないでください。"</string>
+    <string name="create_zip_in_destination_directory_failed">"目的のディレクトリにバックアップzipファイルを作成することができませんでした"</string>
+    <string name="backup_some_settings_failed">"一部の設定をバックアップできませんでしたが、他の設定は目的ディレクトリに正常にエクスポートされました"</string>
     <string name="restore_settings_success">"設定を正常に復元しました。変更を確認するにはアプリを再起動してください。"</string>
     <string name="restore_settings_partially_failed">"いくつかの設定が正しく復元されませんでした。変更を反映するにはアプリを再起動してください。"</string>
     <string name="restore_settings_failed_file_corrupted">"設定を復元できません。ファイルが破損している可能性があります。"</string>
@@ -1040,7 +1048,9 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="exclude_user">"このユーザーを除外"</string>
     <string name="exclude_flair">"このFlairを除外"</string>
     <string name="contain_flair">"このFlairを含む"</string>
+    <string name="exclude_domain">"このドメインを除外"</string>
     <string name="inbox_with_count">"受信トレイ (%1$d)"</string>
+    <string name="settings_swipe_vertically_to_go_back_from_media_title">"縦方向にスワイプして画像やGIF動画の画面から戻る"</string>
     <string name="settings_crash_reports_title">"クラッシュレポート"</string>
     <string name="settings_disable_nsfw_forever_title">"NSFWを永久に無効にする"</string>
     <string name="copy_multi_reddit_path">"Multiredditのパスをコピー"</string>
@@ -1051,7 +1061,9 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 それでも有効にしますか？"</string>
     <string name="reply">"返信"</string>
     <string name="trending_activity_label">"トレンド"</string>
+    <string name="label_reddit">"Reddit"</string>
     <string name="settings_default_link_post_layout">"デフォルトのリンク付き投稿のレイアウト"</string>
+    <string name="settings_category_material_you_title">"Material You"</string>
     <string name="settings_enable_material_you_warning_summary">"「Material You」
 「Material You Dark」
 「Material You Amoled」
@@ -1071,6 +1083,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="upload_image_failed">"画像をアップロードできません"</string>
     <string name="search_comments">"コメントを検索"</string>
     <string name="please_wait_image_is_uploading">"画像はまだアップロード中です。お待ちください。"</string>
+    <string name="wiki_activity_label">"Wiki"</string>
     <string name="settings_post_details_title">"投稿の詳細"</string>
     <string name="settings_separate_post_and_comments_in_portrait_mode_title">"縦画面で投稿とコメントを分割する"</string>
     <string name="settings_separate_post_and_comments_in_landscape_mode_title">"横画面で投稿とコメントを分割する"</string>
@@ -1080,4 +1093,30 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="discard_dialog_button">"破棄"</string>
     <string name="error_loading_wiki">"Wikiの読み込み中にエラーが発生しました"</string>
     <string name="no_wiki">"このSubredditにはwikiのページがありません。"</string>
+    <string name="action_playback_speed">"再生速度"</string>
+    <string name="about">"About"</string>
+    <string name="settings_loop_video_title">"動画をループ再生する"</string>
+    <string name="settings_loop_video_summary">"この設定を反映するにはアプリを再起動して下さい"</string>
+    <string name="settings_default_playback_speed_title">"デフォルトの再生速度"</string>
+    <string name="settings_link_handler_value_external_browser">"外部ブラウザ"</string>
+    <string name="settings_link_handler_value_internal_browser">"内部ブラウザ"</string>
+    <string name="settings_pinch_to_zoom_video_title">"ピンチしてビデオをズームする"</string>
+    <string name="settings_experimental_feature">"実験的機能"</string>
+    <string name="contain_domain">"このドメインを含める"</string>
+    <string name="app_lock_timeout_immediately">"即時"</string>
+    <string name="app_lock_timeout_1_min">"1分"</string>
+    <string name="app_lock_timeout_2_mins">"2分"</string>
+    <string name="app_lock_timeout_5_mins">"5分"</string>
+    <string name="app_lock_timeout_10_mins">"10分"</string>
+    <string name="app_lock_timeout_15_mins">"15分"</string>
+    <string name="app_lock_timeout_20_mins">"20分"</string>
+    <string name="app_lock_timeout_30_mins">"30分"</string>
+    <string name="app_lock_timeout_1_hour">"1時間"</string>
+    <string name="app_lock_timeout_2_hours">"2時間"</string>
+    <string name="app_lock_timeout_3_hours">"3時間"</string>
+    <string name="app_lock_timeout_4_hours">"4時間"</string>
+    <string name="app_lock_timeout_5_hours">"5時間"</string>
+    <string name="app_lock_timeout_6_hours">"6時間"</string>
+    <string name="app_lock_timeout_12_hours">"12時間"</string>
+    <string name="app_lock_timeout_24_hours">"24時間"</string>
 </resources>

@@ -31,6 +31,7 @@ public class PostTypeBottomSheetFragment extends LandscapeExpandedRoundedBottomS
     public static final int TYPE_IMAGE = 2;
     public static final int TYPE_VIDEO = 3;
     public static final int TYPE_GALLERY = 4;
+    public static final int TYPE_POLL = 5;
     @BindView(R.id.text_type_linear_layout_post_type_bottom_sheet_fragment)
     TextView textTypeTextView;
     @BindView(R.id.link_type_linear_layout_post_type_bottom_sheet_fragment)
@@ -41,6 +42,8 @@ public class PostTypeBottomSheetFragment extends LandscapeExpandedRoundedBottomS
     TextView videoTypeTextView;
     @BindView(R.id.gallery_type_linear_layout_post_type_bottom_sheet_fragment)
     TextView galleryTypeTextView;
+    @BindView(R.id.poll_type_linear_layout_post_type_bottom_sheet_fragment)
+    TextView pollTypeTextView;
     private BaseActivity activity;
 
     public PostTypeBottomSheetFragment() {
@@ -80,6 +83,11 @@ public class PostTypeBottomSheetFragment extends LandscapeExpandedRoundedBottomS
 
         galleryTypeTextView.setOnClickListener(view -> {
             ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_GALLERY);
+            dismiss();
+        });
+
+        pollTypeTextView.setOnClickListener(view -> {
+            ((PostTypeSelectionCallback) activity).postTypeSelected(TYPE_POLL);
             dismiss();
         });
 

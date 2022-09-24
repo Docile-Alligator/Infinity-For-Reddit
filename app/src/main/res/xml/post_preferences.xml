@@ -54,6 +54,11 @@
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
+        app:key="hide_text_post_content"
+        app:title="@string/settings_hide_text_post_content" />
+
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+        app:defaultValue="false"
         app:key="fixed_height_preview_in_card"
         app:title="@string/settings_fixed_height_preview_in_card_title" />
 

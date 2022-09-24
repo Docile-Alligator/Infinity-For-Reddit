@@ -55,7 +55,9 @@ import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.AccountChooserBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SubmitCrosspostEvent;
@@ -67,10 +69,12 @@ import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-public class SubmitCrosspostActivity extends BaseActivity implements FlairBottomSheetFragment.FlairSelectionCallback {
+public class SubmitCrosspostActivity extends BaseActivity implements FlairBottomSheetFragment.FlairSelectionCallback,
+        AccountChooserBottomSheetFragment.AccountChooserListener {
 
     public static final String EXTRA_POST = "EP";
 
+    private static final String SELECTED_ACCOUNT_STATE = "SAS";
     private static final String SUBREDDIT_NAME_STATE = "SNS";
     private static final String SUBREDDIT_ICON_STATE = "SIS";
     private static final String SUBREDDIT_SELECTED_STATE = "SSS";
@@ -89,6 +93,12 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_submit_crosspost_activity)
     Toolbar toolbar;
+    @BindView(R.id.account_linear_layout_submit_crosspost_activity)
+    LinearLayout accountLinearLayout;
+    @BindView(R.id.account_icon_gif_image_view_submit_crosspost_activity)
+    GifImageView accountIconImageView;
+    @BindView(R.id.account_name_text_view_submit_crosspost_activity)
+    TextView accountNameTextView;
     @BindView(R.id.subreddit_icon_gif_image_view_submit_crosspost_activity)
     GifImageView iconGifImageView;
     @BindView(R.id.subreddit_name_text_view_submit_crosspost_activity)
@@ -143,6 +153,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
+    private Account selectedAccount;
     private String mAccessToken;
     private Post post;
     private String iconUrl;
@@ -200,6 +211,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
 
         if (savedInstanceState != null) {
+            selectedAccount = savedInstanceState.getParcelable(SELECTED_ACCOUNT_STATE);
             subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
             iconUrl = savedInstanceState.getString(SUBREDDIT_ICON_STATE);
             subredditSelected = savedInstanceState.getBoolean(SUBREDDIT_SELECTED_STATE);
@@ -209,6 +221,18 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
             flair = savedInstanceState.getParcelable(FLAIR_STATE);
             isSpoiler = savedInstanceState.getBoolean(IS_SPOILER_STATE);
             isNSFW = savedInstanceState.getBoolean(IS_NSFW_STATE);
+
+            if (selectedAccount != null) {
+                mGlide.load(selectedAccount.getProfileImageUrl())
+                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                        .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                        .into(accountIconImageView);
+
+                accountNameTextView.setText(selectedAccount.getAccountName());
+            } else {
+                loadCurrentAccount();
+            }
 
             if (subredditName != null) {
                 subredditNameTextView.setTextColor(primaryTextColor);
@@ -242,6 +266,8 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
             }
         } else {
             isPosting = false;
+
+            loadCurrentAccount();
 
             mGlide.load(R.drawable.subreddit_default_icon)
                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
@@ -293,13 +319,18 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
             }
         }
 
+        accountLinearLayout.setOnClickListener(view -> {
+            AccountChooserBottomSheetFragment fragment = new AccountChooserBottomSheetFragment();
+            fragment.show(getSupportFragmentManager(), fragment.getTag());
+        });
+
         iconGifImageView.setOnClickListener(view -> {
-            Intent intent = new Intent(this, SubredditSelectionActivity.class);
-            startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
+            subredditNameTextView.performClick();
         });
 
         subredditNameTextView.setOnClickListener(view -> {
             Intent intent = new Intent(this, SubredditSelectionActivity.class);
+            intent.putExtra(SubredditSelectionActivity.EXTRA_SPECIFIED_ACCOUNT, selectedAccount);
             startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
         });
 
@@ -368,6 +399,25 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
         });
     }
 
+    private void loadCurrentAccount() {
+        Handler handler = new Handler();
+        mExecutor.execute(() -> {
+            Account account = mRedditDataRoomDatabase.accountDao().getCurrentAccount();
+            selectedAccount = account;
+            handler.post(() -> {
+                if (!isFinishing() && !isDestroyed() && account != null) {
+                    mGlide.load(account.getProfileImageUrl())
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                            .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                            .into(accountIconImageView);
+
+                    accountNameTextView.setText(account.getAccountName());
+                }
+            });
+        });
+    }
+
     @Nullable
     private Post.Preview getPreview(Post post) {
         ArrayList<Post.Preview> previews = post.getPreviews();
@@ -392,11 +442,12 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
+        primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
+        accountNameTextView.setTextColor(primaryTextColor);
         int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
         subredditNameTextView.setTextColor(secondaryTextColor);
         rulesButton.setTextColor(mCustomThemeWrapper.getButtonTextColor());
         rulesButton.setBackgroundColor(mCustomThemeWrapper.getColorPrimaryLightTheme());
-        primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         receivePostReplyNotificationsTextView.setTextColor(primaryTextColor);
         int dividerColor = mCustomThemeWrapper.getDividerColor();
         divider1.setBackgroundColor(dividerColor);
@@ -518,7 +569,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
             }
 
             Intent intent = new Intent(this, SubmitPostService.class);
-            intent.putExtra(SubmitPostService.EXTRA_ACCESS_TOKEN, mAccessToken);
+            intent.putExtra(SubmitPostService.EXTRA_ACCOUNT, selectedAccount);
             intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
             intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
             if (post.isCrosspost()) {
@@ -556,6 +607,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putParcelable(SELECTED_ACCOUNT_STATE, selectedAccount);
         outState.putString(SUBREDDIT_NAME_STATE, subredditName);
         outState.putString(SUBREDDIT_ICON_STATE, iconUrl);
         outState.putBoolean(SUBREDDIT_SELECTED_STATE, subredditSelected);
@@ -603,6 +655,21 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
         flairTextView.setBackgroundColor(flairBackgroundColor);
         flairTextView.setBorderColor(flairBackgroundColor);
         flairTextView.setTextColor(flairTextColor);
+    }
+
+    @Override
+    public void onAccountSelected(Account account) {
+        if (account != null) {
+            selectedAccount = account;
+
+            mGlide.load(selectedAccount.getProfileImageUrl())
+                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                    .error(mGlide.load(R.drawable.subreddit_default_icon)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                    .into(accountIconImageView);
+
+            accountNameTextView.setText(selectedAccount.getAccountName());
+        }
     }
 
     @Subscribe

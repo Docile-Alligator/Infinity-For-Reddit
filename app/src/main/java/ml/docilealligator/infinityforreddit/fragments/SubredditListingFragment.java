@@ -120,7 +120,7 @@ public class SubredditListingFragment extends Fragment implements FragmentCommun
 
         Resources resources = getResources();
 
-        if ((mActivity instanceof BaseActivity && ((BaseActivity) mActivity).isImmersiveInterface())) {
+        if ((mActivity != null && ((BaseActivity) mActivity).isImmersiveInterface())) {
             mSubredditListingRecyclerView.setPadding(0, 0, 0, ((BaseActivity) mActivity).getNavBarHeight());
         } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
                 && mSharedPreferences.getBoolean(SharedPreferencesUtils.IMMERSIVE_INTERFACE_KEY, true)) {

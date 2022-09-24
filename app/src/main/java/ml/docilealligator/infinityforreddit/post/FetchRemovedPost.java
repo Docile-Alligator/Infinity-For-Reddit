@@ -45,7 +45,7 @@ public class FetchRemovedPost {
         String id = result.getString(JSONUtils.ID_KEY);
         String author = result.getString(JSONUtils.AUTHOR_KEY);
         String title = result.getString(JSONUtils.TITLE_KEY);
-        String body = Utils.modifyMarkdown(result.getString(JSONUtils.SELFTEXT_KEY).trim());
+        String body = Utils.modifyMarkdown(Utils.trimTrailingWhitespace(result.getString(JSONUtils.SELFTEXT_KEY)));
 
         if ( id.equals(post.getId()) &&
            (!author.equals(post.getAuthor()) ||

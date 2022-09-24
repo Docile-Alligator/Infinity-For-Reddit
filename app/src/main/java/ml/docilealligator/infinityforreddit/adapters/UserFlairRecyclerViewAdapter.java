@@ -46,23 +46,28 @@ public class UserFlairRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         if (holder instanceof UserFlairViewHolder) {
-            UserFlair userFlair = userFlairs.get(holder.getBindingAdapterPosition());
-            if (userFlair.getHtmlText() == null || userFlair.getHtmlText().equals("")) {
-                ((UserFlairViewHolder) holder).userFlairHtmlTextView.setText(userFlair.getText());
-            } else {
-                Utils.setHTMLWithImageToTextView(((UserFlairViewHolder) holder).userFlairHtmlTextView, userFlair.getHtmlText(), true);
-            }
-            if (userFlair.isEditable()) {
-                ((UserFlairViewHolder) holder).editUserFlairImageView.setVisibility(View.VISIBLE);
-            } else {
+            if (position == 0) {
+                ((UserFlairViewHolder) holder).userFlairHtmlTextView.setText(R.string.clear_user_flair);
                 ((UserFlairViewHolder) holder).editUserFlairImageView.setVisibility(View.GONE);
+            } else {
+                UserFlair userFlair = userFlairs.get(holder.getBindingAdapterPosition() - 1);
+                if (userFlair.getHtmlText() == null || userFlair.getHtmlText().equals("")) {
+                    ((UserFlairViewHolder) holder).userFlairHtmlTextView.setText(userFlair.getText());
+                } else {
+                    Utils.setHTMLWithImageToTextView(((UserFlairViewHolder) holder).userFlairHtmlTextView, userFlair.getHtmlText(), true);
+                }
+                if (userFlair.isEditable()) {
+                    ((UserFlairViewHolder) holder).editUserFlairImageView.setVisibility(View.VISIBLE);
+                } else {
+                    ((UserFlairViewHolder) holder).editUserFlairImageView.setVisibility(View.GONE);
+                }
             }
         }
     }
 
     @Override
     public int getItemCount() {
-        return userFlairs == null ? 0 : userFlairs.size();
+        return userFlairs == null ? 1 : userFlairs.size() + 1;
     }
 
     class UserFlairViewHolder extends RecyclerView.ViewHolder {
@@ -84,11 +89,15 @@ public class UserFlairRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerV
             }
 
             itemView.setOnClickListener(view -> {
-                itemClickListener.onClick(userFlairs.get(getBindingAdapterPosition()), false);
+                if (getBindingAdapterPosition() == 0) {
+                    itemClickListener.onClick(null, false);
+                } else {
+                    itemClickListener.onClick(userFlairs.get(getBindingAdapterPosition() - 1), false);
+                }
             });
 
             editUserFlairImageView.setOnClickListener(view -> {
-                itemClickListener.onClick(userFlairs.get(getBindingAdapterPosition()), true);
+                itemClickListener.onClick(userFlairs.get(getBindingAdapterPosition() - 1), true);
             });
         }
     }

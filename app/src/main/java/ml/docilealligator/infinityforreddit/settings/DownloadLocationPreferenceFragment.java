@@ -3,12 +3,10 @@ package ml.docilealligator.infinityforreddit.settings;
 import static android.content.Intent.ACTION_OPEN_DOCUMENT_TREE;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 
@@ -17,7 +15,6 @@ import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
@@ -39,10 +36,6 @@ public class DownloadLocationPreferenceFragment extends CustomFontPreferenceFrag
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
         setPreferencesFromResource(R.xml.download_location_preferences, rootKey);
-
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
 
         imageDownloadLocationPreference = findPreference(SharedPreferencesUtils.IMAGE_DOWNLOAD_LOCATION);
         gifDownloadLocationPreference = findPreference(SharedPreferencesUtils.GIF_DOWNLOAD_LOCATION);

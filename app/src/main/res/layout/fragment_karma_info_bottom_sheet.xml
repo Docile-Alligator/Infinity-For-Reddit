@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".bottomsheetfragments.KarmaInfoBottomSheetFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingTop="16dp"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:text="@string/post_karma"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="?attr/font_default"
+        android:fontFamily="?attr/font_family" />
+
+    <TextView
+        android:id="@+id/post_karma_karma_info_bottom_sheet_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingBottom="16dp"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="?attr/font_20"
+        android:fontFamily="?attr/font_family" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingTop="16dp"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:text="@string/comment_karma"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="?attr/font_default"
+        android:fontFamily="?attr/font_family" />
+
+    <TextView
+        android:id="@+id/comment_karma_karma_info_bottom_sheet_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingBottom="16dp"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="?attr/font_20"
+        android:fontFamily="?attr/font_family" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingTop="16dp"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:text="@string/awarder_karma"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="?attr/font_default"
+        android:fontFamily="?attr/font_family" />
+
+    <TextView
+        android:id="@+id/awarder_karma_karma_info_bottom_sheet_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingBottom="16dp"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="?attr/font_20"
+        android:fontFamily="?attr/font_family" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingTop="16dp"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:text="@string/awardee_karma"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="?attr/font_default"
+        android:fontFamily="?attr/font_family" />
+
+    <TextView
+        android:id="@+id/awardee_karma_karma_info_bottom_sheet_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingBottom="16dp"
+        android:paddingStart="32dp"
+        android:paddingEnd="32dp"
+        android:textColor="?attr/primaryTextColor"
+        android:textSize="?attr/font_20"
+        android:fontFamily="?attr/font_family" />
+
+</LinearLayout>

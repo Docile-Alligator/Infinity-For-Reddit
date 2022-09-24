@@ -1,13 +1,15 @@
-apply plugin: 'com.android.application'
+plugins {
+    id 'com.android.application'
+}
 
 android {
-    compileSdkVersion 31
+    compileSdk 32
     defaultConfig {
         applicationId "ml.docilealligator.infinityforreddit"
-        minSdkVersion 21
-        targetSdkVersion 30
-        versionCode 90
-        versionName "5.1.6-beta1"
+        minSdk 21
+        targetSdk 32
+        versionCode 105
+        versionName "5.3.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -37,7 +39,7 @@ android {
         targetCompatibility JavaVersion.VERSION_11
     }
 
-    lintOptions {
+    lint {
         disable 'MissingTranslation'
     }
 
@@ -46,15 +48,19 @@ android {
             enableSplit = false
         }
     }
+
+    buildFeatures {
+        viewBinding true
+    }
 }
 
 dependencies {
 /** AndroidX **/
-    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.appcompat:appcompat:1.4.2'
     implementation 'androidx.biometric:biometric:1.2.0-alpha04'
     implementation 'androidx.browser:browser:1.4.0'
     implementation 'androidx.cardview:cardview:1.0.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     def lifecycleVersion = "2.3.1"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
@@ -62,29 +68,26 @@ dependencies {
     implementation "androidx.lifecycle:lifecycle-process:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-runtime:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycleVersion"
-    def pagingVersion = '3.1.0'
+    def pagingVersion = '3.1.1'
     implementation "androidx.paging:paging-runtime:$pagingVersion"
     implementation "androidx.paging:paging-guava:$pagingVersion"
-    implementation 'androidx.preference:preference:1.1.1'
+    implementation 'androidx.preference:preference:1.2.0'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
-    def roomVersion = "2.3.0"
+    def roomVersion = "2.4.3"
     implementation "androidx.room:room-runtime:$roomVersion"
     annotationProcessor "androidx.room:room-compiler:$roomVersion"
+    implementation "androidx.room:room-guava:$roomVersion"
     implementation 'androidx.viewpager2:viewpager2:1.1.0-beta01'
     implementation 'androidx.work:work-runtime:2.7.1'
     implementation 'com.google.android.material:material:1.5.0-alpha05'
 
 /** ExoPlayer **/
-    def exoplayerVersion = "2.10.8"
+    def exoplayerVersion = "2.18.1"
     implementation "com.google.android.exoplayer:exoplayer-core:$exoplayerVersion"
     implementation "com.google.android.exoplayer:exoplayer-dash:$exoplayerVersion"
     implementation "com.google.android.exoplayer:exoplayer-hls:$exoplayerVersion"
     implementation "com.google.android.exoplayer:exoplayer-ui:$exoplayerVersion"
-    def toroVersion = "3.7.0.2010003"
-    implementation "im.ene.toro3:toro:$toroVersion"
-    implementation("im.ene.toro3:toro-ext-exoplayer:$toroVersion") {
-        exclude module: 'extension-ima'
-    }
+    implementation "com.google.android.exoplayer:exoplayer-smoothstreaming:$exoplayerVersion"
 
 /** Third-party **/
 
@@ -107,6 +110,7 @@ dependencies {
     def butterknifeVersion = "10.2.3"
     implementation "com.jakewharton:butterknife:$butterknifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+    compileOnly 'com.android.databinding:viewbinding:7.3.0'
 
     // Events
     def eventbusVersion = "3.3.1"
@@ -168,9 +172,6 @@ dependencies {
     // Loading ProgressBar
     implementation 'com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE'
 
-    // SearchView
-    implementation 'com.github.Ferfalk:SimpleSearchView:0.2.0'
-
     // Customizable TextView
     implementation 'com.libRG:customtextview:2.4'
 
@@ -185,7 +186,7 @@ dependencies {
     implementation 'com.nex3z:flow-layout:1.3.3'
 
     // RecyclerView fast scrolling
-    implementation 'me.zhanghai.android.fastscroll:library:1.1.7'
+    implementation 'me.zhanghai.android.fastscroll:library:1.1.8'
 
     implementation 'com.otaliastudios:zoomlayout:1.9.0'
 

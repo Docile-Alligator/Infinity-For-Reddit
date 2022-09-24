@@ -104,6 +104,7 @@
     </string-array>
 
     <string-array name="settings_font_size">
+        <item>@string/extra_small</item>
         <item>@string/small</item>
         <item>@string/normal</item>
         <item>@string/large</item>
@@ -111,6 +112,7 @@
     </string-array>
 
     <string-array name="settings_font_size_values">
+        <item>XSmall</item>
         <item>Small</item>
         <item>Normal</item>
         <item>Large</item>
@@ -118,6 +120,7 @@
     </string-array>
 
     <string-array name="settings_title_font_size">
+        <item>@string/extra_small</item>
         <item>@string/small</item>
         <item>@string/normal</item>
         <item>@string/large</item>
@@ -125,6 +128,7 @@
     </string-array>
 
     <string-array name="settings_title_font_size_values">
+        <item>XSmall</item>
         <item>Small</item>
         <item>Normal</item>
         <item>Large</item>
@@ -132,6 +136,7 @@
     </string-array>
 
     <string-array name="settings_content_font_size">
+        <item>@string/extra_small</item>
         <item>@string/small</item>
         <item>@string/normal</item>
         <item>@string/large</item>
@@ -140,6 +145,7 @@
     </string-array>
 
     <string-array name="settings_content_font_size_values">
+        <item>XSmall</item>
         <item>Small</item>
         <item>Normal</item>
         <item>Large</item>
@@ -162,6 +168,8 @@
         <item>Manrope (No Italic)</item>
         <item>Manrope Bold (No Italic)</item>
         <item>Sriracha</item>
+        <item>Atkinson Hyperlegible</item>
+        <item>Atkinson Hyperlegible Bold</item>
         <item>@string/settings_custom_font_family_title</item>
     </string-array>
 
@@ -180,6 +188,8 @@
         <item>Manrope</item>
         <item>ManropeBold</item>
         <item>Sriracha</item>
+        <item>AtkinsonHyperlegible</item>
+        <item>AtkinsonHyperlegibleBold</item>
         <item>Custom</item>
     </string-array>
 
@@ -637,6 +647,26 @@
         <item>0</item>
         <item>1</item>
         <item>2</item>
+    </string-array>
+
+    <string-array name="settings_reddit_video_default_resolution">
+        <item>Auto</item>
+        <item>1080p</item>
+        <item>720p</item>
+        <item>480p</item>
+        <item>360p</item>
+        <item>240p</item>
+        <item>144p</item>
+    </string-array>
+
+    <string-array name="settings_reddit_video_default_resolution_values">
+        <item>0</item>
+        <item>1080</item>
+        <item>720</item>
+        <item>480</item>
+        <item>360</item>
+        <item>240</item>
+        <item>144</item>
     </string-array>
 
 </resources>

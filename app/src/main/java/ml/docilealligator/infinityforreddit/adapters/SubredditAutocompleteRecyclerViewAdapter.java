@@ -53,6 +53,7 @@ public class SubredditAutocompleteRecyclerViewAdapter extends RecyclerView.Adapt
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                     .into(((SubredditViewHolder) holder).iconImageView);
             ((SubredditViewHolder) holder).subredditNameTextView.setText(subreddits.get(position).getName());
+            ((SubredditViewHolder) holder).subscriberCountTextView.setText(activity.getString(R.string.subscribers_number_detail, subreddits.get(position).getNSubscribers()));
         }
     }
 
@@ -78,6 +79,7 @@ public class SubredditAutocompleteRecyclerViewAdapter extends RecyclerView.Adapt
 
         GifImageView iconImageView;
         TextView subredditNameTextView;
+        TextView subscriberCountTextView;
         ImageView subscribeImageView;
         MaterialCheckBox checkBox;
 
@@ -85,6 +87,7 @@ public class SubredditAutocompleteRecyclerViewAdapter extends RecyclerView.Adapt
             super(itemView);
             iconImageView = itemView.findViewById(R.id.subreddit_icon_gif_image_view_item_subreddit_listing);
             subredditNameTextView = itemView.findViewById(R.id.subreddit_name_text_view_item_subreddit_listing);
+            subscriberCountTextView = itemView.findViewById(R.id.subscriber_count_text_view_item_subreddit_listing);
             subscribeImageView = itemView.findViewById(R.id.subscribe_image_view_item_subreddit_listing);
             checkBox = itemView.findViewById(R.id.checkbox_item_subreddit_listing);
 
@@ -92,9 +95,11 @@ public class SubredditAutocompleteRecyclerViewAdapter extends RecyclerView.Adapt
             checkBox.setVisibility(View.GONE);
 
             subredditNameTextView.setTextColor(customThemeWrapper.getPrimaryTextColor());
+            subscriberCountTextView.setTextColor(customThemeWrapper.getSecondaryTextColor());
 
             if (activity.typeface != null) {
                 subredditNameTextView.setTypeface(activity.typeface);
+                subscriberCountTextView.setTypeface(activity.typeface);
             }
 
             itemView.setOnClickListener(view -> {

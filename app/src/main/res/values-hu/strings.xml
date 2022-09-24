@@ -61,19 +61,18 @@
     <string name="action_see_removed">"Eltávolítottak megtekintése"</string>
     <string name="action_set_wallpaper">"Beállítás háttérképként"</string>
     <string name="action_send_private_message">"Privát üzenet küldése"</string>
-    <string name="action_block_user">"Felhasználó tiltása"</string>
     <string name="parse_json_response_error">"JSON elemzési hiba"</string>
     <string name="retrieve_token_error">"Token kérési hiba"</string>
     <string name="something_went_wrong">"Ismeretlen hiba. Próbáld meg később."</string>
     <string name="access_denied">"Hozzáférés megtagadva"</string>
     <string name="parse_user_info_error">"Felhasználó adat elemzési hiba"</string>
     <string name="no_system_webview_error">"Hiba a rendszer WebView szolgáltatásának megnyitása közben"</string>
-    <string name="error_loading_image_tap_to_retry">"Hiba a kép megjelenítésekor. Koppints az újraprbálkozáshoz."</string>
-    <string name="load_posts_error">"Hiba a poszt megjelenítésekor. Koppints az újraprbálkozáshoz."</string>
+    <string name="error_loading_image_tap_to_retry">"Hiba a kép megjelenítésekor. Koppints az újrapróbálkozáshoz."</string>
+    <string name="load_posts_error">"Hiba a poszt megjelenítésekor. Koppints az újrapróbálkozáshoz."</string>
     <string name="load_more_posts_error">"Hiba a poszt megjelenítésekor."</string>
-    <string name="load_post_error">"Hiba a poszt megjelenítésekor. Koppints az újraprbálkozáshoz."</string>
-    <string name="search_subreddits_error">"Hiba a subredditek keresése közben. Koppints az újraprbálkozáshoz."</string>
-    <string name="search_users_error">"Hiba a felhasználók keresése közben. Koppints az újraprbálkozáshoz."</string>
+    <string name="load_post_error">"Hiba a poszt megjelenítésekor. Koppints az újrapróbálkozáshoz."</string>
+    <string name="search_subreddits_error">"Hiba a subredditek keresése közben. Koppints az újrapróbálkozáshoz."</string>
+    <string name="search_users_error">"Hiba a felhasználók keresése közben. Koppints az újrapróbálkozáshoz."</string>
     <string name="no_posts">"Nem található poszt"</string>
     <string name="no_comments">"Nem található komment"</string>
     <string name="no_subreddits">"Nem található subreddit"</string>
@@ -98,7 +97,7 @@
     <string name="profile">"Profil"</string>
     <string name="subscriptions">"Feliratkozások"</string>
     <string name="multi_reddit">"Multireddit"</string>
-    <string name="inbox">"Póstaláda"</string>
+    <string name="inbox">"Postaláda"</string>
     <string name="upvoted">"Upvoteolt"</string>
     <string name="downvoted">"Downvoteolt"</string>
     <string name="hidden">"Rejtett"</string>
@@ -146,6 +145,8 @@
     <string name="send_message_success">"Üzenet elküldve"</string>
     <string name="send_message_failed">"Nem sikerült elküldeni az üzenetet"</string>
     <string name="select_a_subreddit">"Kérlek előbb válassz egy subredditet"</string>
+
+    <!-- Fuzzy -->
     <string name="title_required">"A posztnak szüksége van egy jó címre"</string>
     <string name="link_required">"Hé! Hol a link?"</string>
     <string name="select_an_image">"Kérlek előbb válassz egy képet"</string>
@@ -226,6 +227,8 @@
 
     <!-- Fuzzy -->
     <string name="please_wait">"Kérlek várj."</string>
+
+    <!-- Fuzzy -->
     <string name="add_account">"Fiók hozzáadása"</string>
     <string name="anonymous_account">"Anoním"</string>
     <string name="log_out">"Kijelentkezés"</string>
@@ -392,7 +395,6 @@
     <string name="settings_customize_dark_theme_title">"Sötét téma"</string>
     <string name="settings_customize_amoled_theme_title">"Amoled téma"</string>
     <string name="settings_manage_themes_title">"Témák kezelése"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Egyedi témákat nem lehet használni a beállítások aldalán (kivéve az eszköztáron, státusz sávon és navigációs sávon)."</string>
     <string name="settings_advanced_master_title">"Haladó"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Adatbázisban szereplő összes subreddit törlése"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Adatbázisban szereplő összes felhasználó törlése"</string>
@@ -409,6 +411,7 @@
     <string name="settings_tab_subreddit_name">"Subreddit néb (r/ prefix nélkül)"</string>
 
     <!-- what does /m/ refer to here? -->
+    <!-- Fuzzy -->
     <string name="settings_tab_multi_reddit_name">"Multireddit név (/felhasználó/felhasználóneved/m/temultiredditneved)"</string>
     <string name="settings_tab_username">"Felhasználónév (u/ prefix nélkül)"</string>
     <string name="no_developer_easter_egg">"Itt nincsenek fejlesztői beállítésok"</string>
@@ -748,9 +751,6 @@ Az alap az indigó amoled téma"</string>
     <string name="load_video_in_redgifs">"Próbáld meg betölteni a videót Redgifs-en"</string>
     <string name="top_score">"%1$s pont"</string>
     <string name="login_activity_2fa_prompt">"Ha a két faktoros azonosítás be van kapcsolva, kérlek írd be a jelszavad így: &lt;jelszó&gt;:&lt;2FA kód&gt;. Például: jelszavad:123456"</string>
-    <string name="block_user">"Felhasználó tiltása"</string>
-    <string name="block_user_success">"Tiltva"</string>
-    <string name="block_user_failed">"Felhasználó tiltása nem sikerült"</string>
     <string name="submit_crosspost_activity_label">"Crossposzt"</string>
     <string name="give_award_activity_label">"Adj kitüntetést"</string>
     <string name="action_crosspost">"Crossposzt"</string>
@@ -781,7 +781,6 @@ Az alap az indigó amoled téma"</string>
     <string name="settings_swipe_action_threshold">"Küszöb"</string>
     <string name="settings_pull_to_refresh_title">"Húzd a frissítéshez"</string>
     <string name="settings_security_title">"Biztonság"</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Kelljen azonosítás, hogy be lehessen lépni a fiók szekcióba a navigációs fiókban"</string>
 
     <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Nyomd hosszan, hogy elrejtsd az eszköztárat kompakt elrendezésben"</string>
@@ -814,7 +813,6 @@ Videó autómatikus lejátszása le van tiltva."</string>
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"Letöltés sikertelen: nem lehet hozzáférni a célkönyvtárhoz"</string>
     <string name="downloading_media_failed_cannot_download_media">"Letöltés sikertelen"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"Letöltéssikertelen: nem lehet menteni a fájlt a célkönvtárba"</string>
-    <string name="view_full_comment_markdown">"Teljes markdown megtekintése"</string>
     <string name="select_user_flair_success">"Felhasználó flair kiválasztva"</string>
     <string name="select_this_user_flair">"Legyen kiválasztva ez a felhasználói flair?"</string>
     <string name="select_header_size">"Fejléc méret kiválasztása"</string>
@@ -966,4 +964,29 @@ Videó autómatikus lejátszása le van tiltva."</string>
     <string name="settings_backup_settings_title">"Beállítások biztonsági mentése"</string>
     <string name="settings_restore_settings_title">"Beállítások visszaállítása"</string>
     <string name="settings_credits_love_animation_title">"Love animáció"</string>
+    <string name="settings_swipe_between_posts_title">"Váltás "</string>
+    <string name="settings_navigation_drawer_title">"Navigációs fiók"</string>
+    <string name="settings_default_search_result_tab">"Alapértelmezett keresési találatok fül"</string>
+    <string name="device_default">"Eszköz alapértelmezett"</string>
+    <string name="theme_item_current_user_color">"Jelenlegi felhasználó"</string>
+    <string name="backup_settings_success">"Sikeresen exportálás a célmappába. A generált zip fájl jelszava 123321. Kérlek ne módosítsd a fájlt."</string>
+    <string name="create_zip_in_destination_directory_failed">"Nem lehet lehet létrehozni visszaállítási zip fájlt a célmappában."</string>
+    <string name="do_not_show_this_again">"Ne mutassa újra"</string>
+    <string name="continue_suicide_prevention_activity">"Folytatás"</string>
+    <string name="always_on">"Mindig be"</string>
+    <string name="never">"Soha"</string>
+    <string name="normal">"Normál"</string>
+    <string name="extra_large">"Extra nagy"</string>
+    <string name="enormously_large">"Óriási"</string>
+    <string name="default_in_array">"Alapértelmezett"</string>
+    <string name="off">"Ki"</string>
+    <string name="upvote">"Upvote"</string>
+    <string name="downvote">"Downvote"</string>
+    <string name="select">"Kiválaszt"</string>
+    <string name="save_comment">"Mentés"</string>
+    <string name="reply">"Válasz"</string>
+    <string name="bottom_sheet_post_gallery">"Galéria"</string>
+    <string name="label_reddit">"Reddit"</string>
+    <string name="about">"Az appról"</string>
+    <string name="settings_open_navigation_drawer">"Navigációs fiók megnyitása"</string>
 </resources>

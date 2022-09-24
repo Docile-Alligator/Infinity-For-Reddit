@@ -61,7 +61,6 @@
     <string name="action_see_removed">"Kaldırılanları Göster"</string>
     <string name="action_set_wallpaper">"Duvar Kağıdı Yap"</string>
     <string name="action_send_private_message">"Özel Mesaj Gönder"</string>
-    <string name="action_block_user">"Kullanıcıyı Engelle"</string>
     <string name="parse_json_response_error">"JSON yanıtı ayrıştırılırken hata oluştu"</string>
     <string name="retrieve_token_error">"Token alınırken hata oluştu"</string>
     <string name="something_went_wrong">"Bir şeyler yanlış gitti. Daha sonra tekrar deneyin."</string>
@@ -157,6 +156,8 @@ This translation does it work well in this kinda format. People use "since" in s
     <string name="send_message_success">"Mesaj gönderildi"</string>
     <string name="send_message_failed">"Bu mesaj gönderilemedi"</string>
     <string name="select_a_subreddit">"Lütfen önce bir subreddit seçin"</string>
+
+    <!-- Fuzzy -->
     <string name="title_required">"Gönderinin iyi bir başlığa ihtiyacı var"</string>
     <string name="link_required">"Hey, bağlantı nerede?"</string>
     <string name="select_an_image">"Lütfen önce bir resim seçin"</string>
@@ -239,6 +240,8 @@ Tekrar denemek için tıklayın."</string>
 
     <!-- Fuzzy -->
     <string name="please_wait">"Lütfen bekleyin"</string>
+
+    <!-- Fuzzy -->
     <string name="add_account">"Hesap ekle"</string>
     <string name="anonymous_account">"Anonim"</string>
     <string name="log_out">"Çıkış yap"</string>
@@ -403,7 +406,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_customize_dark_theme_title">"Koyu Tema"</string>
     <string name="settings_customize_amoled_theme_title">"Amoled Tema"</string>
     <string name="settings_manage_themes_title">"Temaları Yönetin"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Özel temalar ayarlar sayfasına uygulanamaz (araç çubuğu, durum çubuğu ve navigasyon çubuğu hariç)."</string>
     <string name="settings_advanced_master_title">"Gelişmiş"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Veritabanındaki Tüm Subredditleri Sil"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Veritabanındaki Tüm Kullanıcıları Sil"</string>
@@ -418,6 +420,8 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_tab_title">"Başlık"</string>
     <string name="settings_tab_post_type">"Tür"</string>
     <string name="settings_tab_subreddit_name">"Subreddit Adı (r/ öneksiz)"</string>
+
+    <!-- Fuzzy -->
     <string name="settings_tab_multi_reddit_name">"Multireddit Adı (/user/kullanıcıadın/m/multiredditadın)"</string>
     <string name="settings_tab_username">"Kullanıcı adı (u/ öneksiz)"</string>
     <string name="no_developer_easter_egg">"Burada geliştirici seçeneği yok"</string>
@@ -759,9 +763,6 @@ Amoled Tema Şablonu Oluştur"</string>
     <string name="top_score">"%1$s puan"</string>
     <string name="login_activity_2fa_prompt">"2 faktörlü kimlik doğrulamasını etkinleştirdiyseniz, lütfen şifrenizi aşağıdaki gibi yazınız: &lt;parola&gt;: &lt;2FA code&gt;.
 Örnek: yourpass:123456"</string>
-    <string name="block_user">"Kullanıcıyı Engelle"</string>
-    <string name="block_user_success">"Engellendi"</string>
-    <string name="block_user_failed">"Engelleme başarısız"</string>
     <string name="submit_crosspost_activity_label">"Çapraz Gönderi"</string>
     <string name="give_award_activity_label">"Ödül Ver"</string>
     <string name="action_crosspost">"Çapraz Gönderi"</string>
@@ -793,7 +794,6 @@ Sekmeler, diğerlerine geçtikten sonra tüm içeriği kaybedebilir. Bu, sayfay�
     <string name="settings_swipe_action_threshold">"Düzey"</string>
     <string name="settings_pull_to_refresh_title">"Yenilemek İçin Çektir"</string>
     <string name="settings_security_title">"Güvenlik"</string>
-    <string name="settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title">"Gezinme Çekmecesinde Hesap Bölümüne Gitmek İçin Kimlik Doğrulaması İste"</string>
 
     <!-- Fuzzy -->
     <string name="settings_long_press_to_hide_toolbar_in_compact_layout_title">"Araç Çubuğunu Gizlemek İçin Uzun Bas"</string>
@@ -826,7 +826,6 @@ Otomatik video oynatma kapatılır."</string>
     <string name="downloading_image_or_gif_failed_cannot_get_destination_directory">"İndirme başarısız: hedef dizine erişilemiyor"</string>
     <string name="downloading_media_failed_cannot_download_media">"İndirme başarısız"</string>
     <string name="downloading_media_failed_cannot_save_to_destination_directory">"İndirme başarısız: dosya hedef dizine kaydedilemiyor"</string>
-    <string name="view_full_comment_markdown">"Tüm Markdown'u Görüntüle"</string>
     <string name="select_user_flair_success">"Kullanıcı rozeti seçildi"</string>
     <string name="select_this_user_flair">"Bu kullanıcı rozeti seçilsin mi?"</string>
     <string name="select_header_size">"Başlık Boyutunu Seç"</string>
@@ -1037,6 +1036,8 @@ Mesaj: %2$s"</string>
     <string name="exclude_user">"Bu kullanıcıyı hariç tut"</string>
     <string name="exclude_flair">"Bu etiketi hariç tut"</string>
     <string name="contain_flair">"Bu etiketi içer"</string>
+
+    <!-- Fuzzy -->
     <string name="exclude_domain">"Alan Adını Hariç Tut"</string>
     <string name="suggest_title">"Başlık Öner"</string>
     <string name="suggest_title_failed">"Bir başlık önerilemedi"</string>
@@ -1120,4 +1121,84 @@ Tekrar denemek için tıklayın."</string>
     <string name="error_loading_wiki">"Viki yüklenirken hata oluştu"</string>
     <string name="no_wiki">"Bu subreddit'in viki sayfası yok"</string>
     <string name="material_you_notification_title">"Material You'u Yap"</string>
+    <string name="action_go_to_wiki">"Wiki'ye git"</string>
+    <string name="action_playback_speed">"Oynatma Hızı"</string>
+    <string name="about">"Hakkında"</string>
+    <string name="settings_link_handler_title">"Bağlantı İşleyicisi"</string>
+    <string name="settings_main_page_back_button_action">"Ana Sayfaya Dön Düğmesi Eylemi"</string>
+    <string name="settings_open_navigation_drawer">"Navigasyon Çekmecesini Aç"</string>
+    <string name="settings_number_of_columns_in_post_feed_unfolded_portrait_title">"Portre (Katlanmamış)"</string>
+    <string name="settings_number_of_columns_in_post_feed_unfolded_landscape_title">"Manzara (Katlanmamış)"</string>
+    <string name="settings_loop_video_title">"Yinelenen Video"</string>
+    <string name="settings_loop_video_summary">"Bu ayarı otomatik olarak oynatılan videolara uygulamak için uygulamayı yeniden başlatın"</string>
+    <string name="settings_credits_lock_screen_animation_title">"Kilit Ekranı Animasyonu"</string>
+    <string name="settings_app_lock_title">"Uygulama Kilidi"</string>
+    <string name="settings_app_lock_summary">"Uygulamayı kullanmadan önce kimlik doğrulaması iste"</string>
+    <string name="settings_app_lock_timeout_title">"Uygulama Kilidi Zaman Aşımı"</string>
+    <string name="settings_enable_fold_support_title">"Katlanır telefon desteğini etkinleştir"</string>
+    <string name="settings_default_playback_speed_title">"Varsayılan Oynatma Hızı"</string>
+    <string name="settings_link_handler_value_external_browser">"Harici Tarayıcı"</string>
+    <string name="settings_link_handler_value_custom_tab">"Özel Sekme"</string>
+    <string name="settings_link_handler_value_internal_browser">"Dahili Tarayıcı"</string>
+    <string name="settings_legacy_autoplay_video_controller_ui_title">"Eski Video Denetleyicisi Kullanıcı Arayüzü"</string>
+    <string name="settings_pinch_to_zoom_video_title">"Videoyu Yakınlaştırmak için Kıstır"</string>
+    <string name="settings_experimental_feature">"Deneysel özellik"</string>
+    <string name="theme_item_media_indicator_icon_color">"Medya Gösterge Simgesi Rengi"</string>
+    <string name="theme_item_media_indicator_icon_color_detail">"Uygulandığı yer: Yayın önizlemesindeki video veya galeri simgesi"</string>
+    <string name="theme_item_media_indicator_background_color">"Medya Göstergesi Arka Plan Rengi"</string>
+    <string name="theme_item_media_indicator_background_color_detail">"Uygulandığı yer: Yayın önizlemesindeki videonun arka planı veya galeri simgesi"</string>
+    <string name="go_to_top">"Başa Dön"</string>
+    <string name="title_contains_strings_hint">"Başlık: anahtar kelimeleri içer (key1,key2)"</string>
+    <string name="title_contains_regex_hint">"Başlık: normal ifade içer"</string>
+    <string name="contain_domains_hint">"Alan adlarını içer"</string>
+    <string name="anonymous_multireddit_no_subreddit">"Bu multireddit'in bir subreddit'i yok!"</string>
+    <string name="error_fetching_v_redd_it_video_cannot_get_video_url">"v.redd.it videosu alınırken hata oluştu: video bağlantısı alınamıyor"</string>
+    <string name="contain_domain">"Bu alan adını içer"</string>
+    <string name="lock_screen_text">"Vay canına!!!"</string>
+    <string name="app_lock_timeout_immediately">"Hemen"</string>
+    <string name="app_lock_timeout_1_min">"1 dakika"</string>
+    <string name="app_lock_timeout_2_mins">"2 dakika"</string>
+    <string name="app_lock_timeout_5_mins">"5 dakika"</string>
+    <string name="app_lock_timeout_10_mins">"10 dakika"</string>
+    <string name="app_lock_timeout_15_mins">"15 dakika"</string>
+    <string name="app_lock_timeout_20_mins">"20 dakika"</string>
+    <string name="app_lock_timeout_30_mins">"30 dakika"</string>
+    <string name="app_lock_timeout_1_hour">"1 saat"</string>
+    <string name="app_lock_timeout_2_hours">"2 saat"</string>
+    <string name="app_lock_timeout_3_hours">"3 saat"</string>
+    <string name="app_lock_timeout_4_hours">"4 saat"</string>
+    <string name="app_lock_timeout_5_hours">"5 saat"</string>
+    <string name="app_lock_timeout_6_hours">"6 saat"</string>
+    <string name="app_lock_timeout_12_hours">"12 saat"</string>
+    <string name="app_lock_timeout_24_hours">"24 saat"</string>
+    <string name="edit_profile_activity_label">"Profili Düzenle"</string>
+    <string name="action_contact_mods">"İletişim Modları"</string>
+    <string name="settings_save_nsfw_media_in_different_folder_title">"NSFW Medyasını Farklı Konumda Kaydet"</string>
+    <string name="settings_nsfw_download_location_title">"NSFW İndirme Konumu"</string>
+    <string name="fetch_streamable_video_failed">"Video akışı getirilemedi"</string>
+
+    <!-- EditProfileService Notification -->
+    <string name="submit_change_avatar">"Avatar Değiştirme Gönder"</string>
+    <string name="submit_change_banner">"Banner Değiştirme Gönder"</string>
+    <string name="submit_save_profile">"Profil Kaydetme Gönder"</string>
+
+    <!-- EditProfileActivity -->
+    <string name="action_edit_profile">"Profili Düzenle"</string>
+    <string name="remove_avatar">"Avatarı Kaldır"</string>
+    <string name="remove_banner">"Bannerı Kaldır"</string>
+    <string name="display_name_text">"Ekran adı"</string>
+    <string name="display_name_hint">"Profil sayfanda göster"</string>
+    <string name="display_name_description">"Bu, profil sayfanızın izleyicilerine gösterilecektir ve kullanıcı adınızı değiştirmez."</string>
+    <string name="about_you_text">"Hakkınızda"</string>
+    <string name="about_you_hint">"Kendinden küçük bir açıklama"</string>
+    <string name="message_remove_avatar_success">"Avatar başarıyla kaldırıldı"</string>
+    <string name="message_remove_avatar_failed">"%s avatarı kaldırılamadı"</string>
+    <string name="message_remove_banner_success">"Banner başarıyla kaldırıldı"</string>
+    <string name="message_remove_banner_failed">"%s bannerı kaldırılamadı"</string>
+    <string name="message_change_avatar_success">"Avatar başarıyla değiştirildi"</string>
+    <string name="message_change_avatar_failed">"%s avatarı değiştirilemedi"</string>
+    <string name="message_change_banner_success">"Banner başarıyla değiştirildi"</string>
+    <string name="message_change_banner_failed">"%s bannerı değiştirilemedi"</string>
+    <string name="message_save_profile_success">"Profil başarıyla kaydedildi"</string>
+    <string name="message_save_profile_failed">"%s profili kaydedilemedi"</string>
 </resources>

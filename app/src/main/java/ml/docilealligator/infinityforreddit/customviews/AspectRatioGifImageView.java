@@ -25,7 +25,12 @@ public class AspectRatioGifImageView extends GifImageView {
     }
 
     public final void setRatio(float var1) {
-        this.ratio = var1;
+        if (Math.abs(this.ratio - var1) > 0.0001) {
+            this.ratio = var1;
+
+            requestLayout();
+            invalidate();
+        }
     }
 
     private void init(Context context, AttributeSet attrs) {
@@ -34,9 +39,9 @@ public class AspectRatioGifImageView extends GifImageView {
             this.ratio = a.getFloat(com.santalu.aspectratioimageview.R.styleable.AspectRatioImageView_ari_ratio, 1.0F);
             a.recycle();
         }
-
     }
 
+    @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int width = this.getMeasuredWidth();
@@ -51,4 +56,24 @@ public class AspectRatioGifImageView extends GifImageView {
             this.setMeasuredDimension(width, height);
         }
     }
+
+    /*@Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+
+        int desiredHeight = (int) (widthSize * ratio);
+        int selectedHeight;
+
+        if(heightMode == MeasureSpec.EXACTLY) {
+            selectedHeight = heightSize;
+        } else if(heightMode == MeasureSpec.AT_MOST) {
+            selectedHeight = Math.min(heightSize, desiredHeight);
+        } else {
+            selectedHeight = desiredHeight;
+        }
+        super.onMeasure(MeasureSpec.makeMeasureSpec(widthSize, MeasureSpec.EXACTLY),
+                MeasureSpec.makeMeasureSpec(selectedHeight, MeasureSpec.EXACTLY));
+    }*/
 }

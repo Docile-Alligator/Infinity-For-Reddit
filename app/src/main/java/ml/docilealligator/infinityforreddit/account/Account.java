@@ -1,5 +1,8 @@
 package ml.docilealligator.infinityforreddit.account;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -7,7 +10,7 @@ import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
 
 @Entity(tableName = "accounts")
-public class Account {
+public class Account implements Parcelable {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "username")
@@ -26,6 +29,30 @@ public class Account {
     private String code;
     @ColumnInfo(name = "is_current_user")
     private boolean isCurrentUser;
+
+    @Ignore
+    protected Account(Parcel in) {
+        accountName = in.readString();
+        profileImageUrl = in.readString();
+        bannerImageUrl = in.readString();
+        karma = in.readInt();
+        accessToken = in.readString();
+        refreshToken = in.readString();
+        code = in.readString();
+        isCurrentUser = in.readByte() != 0;
+    }
+
+    public static final Creator<Account> CREATOR = new Creator<Account>() {
+        @Override
+        public Account createFromParcel(Parcel in) {
+            return new Account(in);
+        }
+
+        @Override
+        public Account[] newArray(int size) {
+            return new Account[size];
+        }
+    };
 
     @Ignore
     public static Account getAnonymousAccount() {
@@ -79,5 +106,22 @@ public class Account {
 
     public boolean isCurrentUser() {
         return isCurrentUser;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(accountName);
+        dest.writeString(profileImageUrl);
+        dest.writeString(bannerImageUrl);
+        dest.writeInt(karma);
+        dest.writeString(accessToken);
+        dest.writeString(refreshToken);
+        dest.writeString(code);
+        dest.writeByte((byte) (isCurrentUser ? 1 : 0));
     }
 }

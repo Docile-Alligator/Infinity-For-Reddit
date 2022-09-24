@@ -12,11 +12,13 @@ public class AccountRepository {
     private AccountDao mAccountDao;
     private LiveData<List<Account>> mAccountsExceptCurrentAccountLiveData;
     private LiveData<Account> mCurrentAccountLiveData;
+    private LiveData<List<Account>> mAllAccountsLiveData;
 
-    AccountRepository(RedditDataRoomDatabase redditDataRoomDatabase, String username) {
+    AccountRepository(RedditDataRoomDatabase redditDataRoomDatabase) {
         mAccountDao = redditDataRoomDatabase.accountDao();
         mAccountsExceptCurrentAccountLiveData = mAccountDao.getAccountsExceptCurrentAccountLiveData();
         mCurrentAccountLiveData = mAccountDao.getCurrentAccountLiveData();
+        mAllAccountsLiveData = mAccountDao.getAllAccountsLiveData();
     }
 
     public LiveData<List<Account>> getAccountsExceptCurrentAccountLiveData() {
@@ -25,6 +27,10 @@ public class AccountRepository {
 
     public LiveData<Account> getCurrentAccountLiveData() {
         return mCurrentAccountLiveData;
+    }
+
+    public LiveData<List<Account>> getAllAccountsLiveData() {
+        return mAllAccountsLiveData;
     }
 
     public void insert(Account Account) {

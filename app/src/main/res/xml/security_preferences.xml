@@ -3,7 +3,7 @@
     <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="require_auth_to_account_section"
-        app:title="@string/settings_require_authentication_to_go_to_account_section_in_navigation_drawer_title" />
+        app:title="@string/settings_require_authentication_to_show_accounts" />
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"

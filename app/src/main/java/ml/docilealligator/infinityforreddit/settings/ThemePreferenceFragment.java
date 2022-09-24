@@ -71,10 +71,6 @@ public class ThemePreferenceFragment extends CustomFontPreferenceFragmentCompat 
 
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
-
         ListPreference themePreference = findPreference(SharedPreferencesUtils.THEME_KEY);
         SwitchPreference amoledDarkSwitch = findPreference(SharedPreferencesUtils.AMOLED_DARK_KEY);
         Preference customizeLightThemePreference = findPreference(SharedPreferencesUtils.CUSTOMIZE_LIGHT_THEME);
@@ -179,7 +175,7 @@ public class ThemePreferenceFragment extends CustomFontPreferenceFragmentCompat 
 
             enableMaterialYouSwitchPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 if ((Boolean) newValue) {
-                    MaterialYouUtils.changeTheme(activity, executor, new Handler(),
+                    MaterialYouUtils.changeThemeASync(activity, executor, new Handler(),
                             redditDataRoomDatabase, customThemeWrapper,
                             lightThemeSharedPreferences, darkThemeSharedPreferences,
                             amoledThemeSharedPreferences, null);
@@ -191,7 +187,7 @@ public class ThemePreferenceFragment extends CustomFontPreferenceFragmentCompat 
             });
 
             applyMaterialYouPreference.setOnPreferenceClickListener(preference -> {
-                MaterialYouUtils.changeTheme(activity, executor, new Handler(),
+                MaterialYouUtils.changeThemeASync(activity, executor, new Handler(),
                         redditDataRoomDatabase, customThemeWrapper,
                         lightThemeSharedPreferences, darkThemeSharedPreferences,
                         amoledThemeSharedPreferences, null);

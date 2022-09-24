@@ -27,9 +27,9 @@ import androidx.core.content.ContextCompat;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
-import com.google.android.exoplayer2.ExoPlayerFactory;
+import com.google.android.exoplayer2.ExoPlayer;
+import com.google.android.exoplayer2.MediaItem;
 import com.google.android.exoplayer2.Player;
-import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -59,7 +59,9 @@ import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.AccountChooserBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.SubmitVideoOrGifPostEvent;
@@ -69,10 +71,12 @@ import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
-public class PostVideoActivity extends BaseActivity implements FlairBottomSheetFragment.FlairSelectionCallback {
+public class PostVideoActivity extends BaseActivity implements FlairBottomSheetFragment.FlairSelectionCallback,
+        AccountChooserBottomSheetFragment.AccountChooserListener {
 
     static final String EXTRA_SUBREDDIT_NAME = "ESN";
 
+    private static final String SELECTED_ACCOUNT_STATE = "SAS";
     private static final String SUBREDDIT_NAME_STATE = "SNS";
     private static final String SUBREDDIT_ICON_STATE = "SIS";
     private static final String SUBREDDIT_SELECTED_STATE = "SSS";
@@ -94,6 +98,12 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     AppBarLayout appBarLayout;
     @BindView(R.id.toolbar_post_video_activity)
     Toolbar toolbar;
+    @BindView(R.id.account_linear_layout_post_video_activity)
+    LinearLayout accountLinearLayout;
+    @BindView(R.id.account_icon_gif_image_view_post_video_activity)
+    GifImageView accountIconImageView;
+    @BindView(R.id.account_name_text_view_post_video_activity)
+    TextView accountNameTextView;
     @BindView(R.id.subreddit_icon_gif_image_view_post_video_activity)
     GifImageView iconGifImageView;
     @BindView(R.id.subreddit_name_text_view_post_video_activity)
@@ -152,6 +162,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
+    private Account selectedAccount;
     private String mAccessToken;
     private String mAccountName;
     private String iconUrl;
@@ -178,7 +189,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     private FlairBottomSheetFragment mFlairSelectionBottomSheetFragment;
     private Snackbar mPostingSnackbar;
     private DataSource.Factory dataSourceFactory;
-    private SimpleExoPlayer player;
+    private ExoPlayer player;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,7 +216,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
 
         mGlide = Glide.with(this);
 
-        player = ExoPlayerFactory.newSimpleInstance(this);
+        player = new ExoPlayer.Builder(this).build();
         videoPlayerView.setPlayer(player);
         dataSourceFactory = new DefaultDataSourceFactory(this,
                 Util.getUserAgent(this, "Infinity"));
@@ -223,6 +234,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
 
         if (savedInstanceState != null) {
+            selectedAccount = savedInstanceState.getParcelable(SELECTED_ACCOUNT_STATE);
             subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
             iconUrl = savedInstanceState.getString(SUBREDDIT_ICON_STATE);
             subredditSelected = savedInstanceState.getBoolean(SUBREDDIT_SELECTED_STATE);
@@ -232,6 +244,18 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
             flair = savedInstanceState.getParcelable(FLAIR_STATE);
             isSpoiler = savedInstanceState.getBoolean(IS_SPOILER_STATE);
             isNSFW = savedInstanceState.getBoolean(IS_NSFW_STATE);
+
+            if (selectedAccount != null) {
+                mGlide.load(selectedAccount.getProfileImageUrl())
+                        .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                        .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                        .into(accountIconImageView);
+
+                accountNameTextView.setText(selectedAccount.getAccountName());
+            } else {
+                loadCurrentAccount();
+            }
 
             if (savedInstanceState.getString(VIDEO_URI_STATE) != null) {
                 videoUri = Uri.parse(savedInstanceState.getString(VIDEO_URI_STATE));
@@ -271,6 +295,8 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
         } else {
             isPosting = false;
 
+            loadCurrentAccount();
+
             if (getIntent().hasExtra(EXTRA_SUBREDDIT_NAME)) {
                 loadSubredditIconSuccessful = false;
                 subredditName = getIntent().getStringExtra(EXTRA_SUBREDDIT_NAME);
@@ -291,13 +317,18 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
             }
         }
 
+        accountLinearLayout.setOnClickListener(view -> {
+            AccountChooserBottomSheetFragment fragment = new AccountChooserBottomSheetFragment();
+            fragment.show(getSupportFragmentManager(), fragment.getTag());
+        });
+
         iconGifImageView.setOnClickListener(view -> {
-            Intent intent = new Intent(this, SubredditSelectionActivity.class);
-            startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
+            subredditNameTextView.performClick();
         });
 
         subredditNameTextView.setOnClickListener(view -> {
             Intent intent = new Intent(this, SubredditSelectionActivity.class);
+            intent.putExtra(SubredditSelectionActivity.EXTRA_SPECIFIED_ACCOUNT, selectedAccount);
             startActivityForResult(intent, SUBREDDIT_SELECTION_REQUEST_CODE);
         });
 
@@ -387,6 +418,25 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
         });
     }
 
+    private void loadCurrentAccount() {
+        Handler handler = new Handler();
+        mExecutor.execute(() -> {
+            Account account = mRedditDataRoomDatabase.accountDao().getCurrentAccount();
+            selectedAccount = account;
+            handler.post(() -> {
+                if (!isFinishing() && !isDestroyed() && account != null) {
+                    mGlide.load(account.getProfileImageUrl())
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                            .error(mGlide.load(R.drawable.subreddit_default_icon)
+                                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                            .into(accountIconImageView);
+
+                    accountNameTextView.setText(account.getAccountName());
+                }
+            });
+        });
+    }
+
     @Override
     public SharedPreferences getDefaultSharedPreferences() {
         return mSharedPreferences;
@@ -401,11 +451,12 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     protected void applyCustomTheme() {
         coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, null, toolbar);
+        primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
+        accountNameTextView.setTextColor(primaryTextColor);
         int secondaryTextColor = mCustomThemeWrapper.getSecondaryTextColor();
         subredditNameTextView.setTextColor(secondaryTextColor);
         rulesButton.setTextColor(mCustomThemeWrapper.getButtonTextColor());
         rulesButton.setBackgroundColor(mCustomThemeWrapper.getColorPrimaryLightTheme());
-        primaryTextColor = mCustomThemeWrapper.getPrimaryTextColor();
         receivePostReplyNotificationsTextView.setTextColor(primaryTextColor);
         int dividerColor = mCustomThemeWrapper.getDividerColor();
         divider1.setDividerColor(dividerColor);
@@ -440,7 +491,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
         constraintLayout.setVisibility(View.GONE);
         selectAgainTextView.setVisibility(View.VISIBLE);
         videoPlayerView.setVisibility(View.VISIBLE);
-        player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(videoUri));
+        player.prepare(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(videoUri)));
         player.setPlayWhenReady(true);
         wasPlaying = true;
     }
@@ -536,7 +587,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
 
             Intent intent = new Intent(this, SubmitPostService.class);
             intent.setData(videoUri);
-            intent.putExtra(SubmitPostService.EXTRA_ACCESS_TOKEN, mAccessToken);
+            intent.putExtra(SubmitPostService.EXTRA_ACCOUNT, selectedAccount);
             intent.putExtra(SubmitPostService.EXTRA_SUBREDDIT_NAME, subredditName);
             intent.putExtra(SubmitPostService.EXTRA_TITLE, titleEditText.getText().toString());
             intent.putExtra(SubmitPostService.EXTRA_FLAIR, flair);
@@ -584,6 +635,7 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putParcelable(SELECTED_ACCOUNT_STATE, selectedAccount);
         outState.putString(SUBREDDIT_NAME_STATE, subredditName);
         outState.putString(SUBREDDIT_ICON_STATE, iconUrl);
         outState.putBoolean(SUBREDDIT_SELECTED_STATE, subredditSelected);
@@ -658,6 +710,21 @@ public class PostVideoActivity extends BaseActivity implements FlairBottomSheetF
         flairTextView.setBackgroundColor(flairBackgroundColor);
         flairTextView.setBorderColor(flairBackgroundColor);
         flairTextView.setTextColor(flairTextColor);
+    }
+
+    @Override
+    public void onAccountSelected(Account account) {
+        if (account != null) {
+            selectedAccount = account;
+
+            mGlide.load(selectedAccount.getProfileImageUrl())
+                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
+                    .error(mGlide.load(R.drawable.subreddit_default_icon)
+                            .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
+                    .into(accountIconImageView);
+
+            accountNameTextView.setText(selectedAccount.getAccountName());
+        }
     }
 
     @Subscribe
