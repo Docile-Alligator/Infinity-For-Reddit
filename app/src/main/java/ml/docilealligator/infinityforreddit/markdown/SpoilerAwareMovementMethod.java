@@ -82,4 +82,21 @@ public class SpoilerAwareMovementMethod extends BetterLinkMovementMethod {
             return spoilerSpan;
         }
     }
+
+    @Override
+    protected void dispatchUrlLongClick(TextView textView, ClickableSpan clickableSpan) {
+        if (clickableSpan instanceof SpoilerSpan) {
+            ((SpoilerSpan) clickableSpan).onLongClick(textView);
+            return;
+        }
+        super.dispatchUrlLongClick(textView, clickableSpan);
+    }
+
+    @Override
+    protected void highlightUrl(TextView textView, ClickableSpan clickableSpan, Spannable text) {
+        if (clickableSpan instanceof SpoilerSpan) {
+            return;
+        }
+        super.highlightUrl(textView, clickableSpan, text);
+    }
 }

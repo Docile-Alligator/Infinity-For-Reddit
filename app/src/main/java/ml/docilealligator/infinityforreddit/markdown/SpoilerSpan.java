@@ -50,6 +50,12 @@ public class SpoilerSpan extends ClickableSpan {
         widget.invalidate();
     }
 
+    public void onLongClick(@NonNull View widget) {
+        if (widget instanceof SpoilerOnClickTextView) {
+            ((SpoilerOnClickTextView) widget).setSpoilerOnClick(true);
+        }
+    }
+
     public boolean isShowing() {
         return isShowing;
     }
