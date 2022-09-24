@@ -108,7 +108,11 @@ public class SubscribedSubredditsRecyclerViewAdapter extends RecyclerView.Adapte
             }
 
             holder.itemView.setOnClickListener(view -> {
-                itemClickListener.onSubscribedSubredditClick(subredditName);
+                itemClickListener.onSubscribedSubredditClick(subredditName,0);
+            });
+            holder.itemView.setOnLongClickListener(view -> {
+                itemClickListener.onSubscribedSubredditClick(subredditName,1);
+                return true;
             });
         }
     }
