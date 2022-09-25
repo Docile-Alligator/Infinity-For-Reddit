@@ -39,6 +39,7 @@ import io.noties.markwon.inlineparser.BangInlineProcessor;
 import io.noties.markwon.inlineparser.HtmlInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
+import io.noties.markwon.movement.MovementMethodPlugin;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
@@ -46,6 +47,7 @@ import ml.docilealligator.infinityforreddit.activities.ViewPrivateMessagesActivi
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SpoilerAwareMovementMethod;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.message.Message;
@@ -121,6 +123,7 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
                 .usePlugin(StrikethroughPlugin.create())
                 .usePlugin(SpoilerParserPlugin.create(commentColor, commentColor | 0xFF000000))
                 .usePlugin(RedditHeadingPlugin.create())
+                .usePlugin(MovementMethodPlugin.create(new SpoilerAwareMovementMethod()))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .build();
         mShowElapsedTime = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);

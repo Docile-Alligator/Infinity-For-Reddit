@@ -72,7 +72,6 @@ import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.FetchGfycatOrRedgifsVideoLinks;
 import ml.docilealligator.infinityforreddit.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.R;
@@ -104,6 +103,7 @@ import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
 import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
 import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SpoilerAwareMovementMethod;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.post.Post;
@@ -297,7 +297,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 .usePlugin(SpoilerParserPlugin.create(markdownColor, postSpoilerBackgroundColor))
                 .usePlugin(RedditHeadingPlugin.create())
                 .usePlugin(StrikethroughPlugin.create())
-                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS).setOnLinkLongClickListener((textView, url) -> {
+                .usePlugin(MovementMethodPlugin.create(new SpoilerAwareMovementMethod().setOnLinkLongClickListener((textView, url) -> {
                     if (activity != null && !activity.isDestroyed() && !activity.isFinishing()) {
                         UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
                         Bundle bundle = new Bundle();

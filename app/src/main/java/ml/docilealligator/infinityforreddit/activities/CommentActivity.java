@@ -56,6 +56,7 @@ import io.noties.markwon.inlineparser.BangInlineProcessor;
 import io.noties.markwon.inlineparser.HtmlInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
+import io.noties.markwon.movement.MovementMethodPlugin;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
@@ -78,6 +79,7 @@ import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFi
 import ml.docilealligator.infinityforreddit.databinding.ActivityCommentBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SpoilerAwareMovementMethod;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -239,6 +241,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     .usePlugin(SpoilerParserPlugin.create(parentTextColor, parentSpoilerBackgroundColor))
                     .usePlugin(RedditHeadingPlugin.create())
                     .usePlugin(StrikethroughPlugin.create())
+                    .usePlugin(MovementMethodPlugin.create(new SpoilerAwareMovementMethod()))
                     .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                     .usePlugin(TableEntryPlugin.create(this))
                     .build();

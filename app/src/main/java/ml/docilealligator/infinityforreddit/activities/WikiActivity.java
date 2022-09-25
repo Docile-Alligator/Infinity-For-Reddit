@@ -55,7 +55,6 @@ import io.noties.markwon.movement.MovementMethodPlugin;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
-import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
@@ -65,6 +64,7 @@ import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFi
 import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SpoilerAwareMovementMethod;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
@@ -201,7 +201,7 @@ public class WikiActivity extends BaseActivity {
                 .usePlugin(SpoilerParserPlugin.create(markdownColor, spoilerBackgroundColor))
                 .usePlugin(RedditHeadingPlugin.create())
                 .usePlugin(StrikethroughPlugin.create())
-                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS).setOnLinkLongClickListener((textView, url) -> {
+                .usePlugin(MovementMethodPlugin.create(new SpoilerAwareMovementMethod().setOnLinkLongClickListener((textView, url) -> {
                     UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);

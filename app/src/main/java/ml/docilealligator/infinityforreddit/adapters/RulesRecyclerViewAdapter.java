@@ -38,7 +38,6 @@ import io.noties.markwon.movement.MovementMethodPlugin;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
-import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Rule;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
@@ -48,6 +47,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SpoilerAwareMovementMethod;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -108,7 +108,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
                         builder.linkColor(customThemeWrapper.getLinkColor());
                     }
                 })
-                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS).setOnLinkLongClickListener((textView, url) -> {
+                .usePlugin(MovementMethodPlugin.create(new SpoilerAwareMovementMethod().setOnLinkLongClickListener((textView, url) -> {
                     if (activity != null && !activity.isDestroyed() && !activity.isFinishing()) {
                         UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
                         Bundle bundle = new Bundle();
@@ -122,6 +122,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
                 .usePlugin(SpoilerParserPlugin.create(mPrimaryTextColor, spoilerBackgroundColor))
                 .usePlugin(RedditHeadingPlugin.create())
                 .usePlugin(StrikethroughPlugin.create())
+                .usePlugin(MovementMethodPlugin.create(new SpoilerAwareMovementMethod()))
                 .usePlugin(TableEntryPlugin.create(activity))
                 .build();
     }

@@ -35,6 +35,7 @@ import io.noties.markwon.inlineparser.BangInlineProcessor;
 import io.noties.markwon.inlineparser.HtmlInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
+import io.noties.markwon.movement.MovementMethodPlugin;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
@@ -44,6 +45,7 @@ import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.ChangeInboxCountEvent;
 import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SpoilerAwareMovementMethod;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.message.FetchMessage;
@@ -138,6 +140,7 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 .usePlugin(SpoilerParserPlugin.create(mSecondaryTextColor, spoilerBackgroundColor))
                 .usePlugin(RedditHeadingPlugin.create())
                 .usePlugin(StrikethroughPlugin.create())
+                .usePlugin(MovementMethodPlugin.create(new SpoilerAwareMovementMethod()))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .build();
         mAccessToken = accessToken;
