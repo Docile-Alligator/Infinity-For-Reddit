@@ -73,7 +73,7 @@ public class MarkdownUtils {
                     plugin.excludeInlineProcessor(BangInlineProcessor.class);
                 }))
                 .usePlugin(miscPlugin)
-                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS).setOnLinkLongClickListener(onLinkLongClickListener)))
+                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.newInstance().setOnLinkLongClickListener(onLinkLongClickListener)))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .build();
     }
