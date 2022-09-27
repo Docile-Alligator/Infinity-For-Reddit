@@ -89,6 +89,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSh
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
 import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
+import ml.docilealligator.infinityforreddit.customviews.SwipeLockScrollView;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.post.Post;
@@ -1194,14 +1195,14 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 mActivity.startActivity(intent);
             });
 
-            mContentMarkdownView.setLayoutManager(new MarkwonLinearLayoutManager(mActivity, new MarkwonLinearLayoutManager.HorizontalScrollViewScrolledListener() {
+            mContentMarkdownView.setLayoutManager(new MarkwonLinearLayoutManager(mActivity, new SwipeLockScrollView.SwipeLockInterface() {
                 @Override
-                public void onScrolledLeft() {
+                public void lockSwipe() {
                     ((ViewPostDetailActivity) mActivity).lockSwipeRightToGoBack();
                 }
 
                 @Override
-                public void onScrolledRight() {
+                public void unlockSwipe() {
                     ((ViewPostDetailActivity) mActivity).unlockSwipeRightToGoBack();
                 }
             }));

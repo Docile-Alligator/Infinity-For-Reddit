@@ -33,6 +33,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSh
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
+import ml.docilealligator.infinityforreddit.customviews.SwipeLockScrollView;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
@@ -146,16 +147,16 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
             }
             markwonAdapter = MarkdownUtils.createTablesAdapter();
             LinearLayoutManagerBugFixed linearLayoutManager = new MarkwonLinearLayoutManager(activity,
-                    new MarkwonLinearLayoutManager.HorizontalScrollViewScrolledListener() {
+                    new SwipeLockScrollView.SwipeLockInterface() {
                 @Override
-                public void onScrolledLeft() {
+                public void lockSwipe() {
                     if (slidrInterface != null) {
                         slidrInterface.lock();
                     }
                 }
 
                 @Override
-                public void onScrolledRight() {
+                public void unlockSwipe() {
                     if (slidrInterface != null) {
                         slidrInterface.unlock();
                     }
