@@ -292,7 +292,9 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
                     if (clipboard != null) {
                         ClipData clip = ClipData.newPlainText("simple text", message.getBody());
                         clipboard.setPrimaryClip(clip);
-                        Toast.makeText(mViewPrivateMessagesActivity, R.string.copy_success, Toast.LENGTH_SHORT).show();
+                        if (android.os.Build.VERSION.SDK_INT < 33) {
+                            Toast.makeText(mViewPrivateMessagesActivity, R.string.copy_success, Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         Toast.makeText(mViewPrivateMessagesActivity, R.string.copy_failed, Toast.LENGTH_SHORT).show();
                     }

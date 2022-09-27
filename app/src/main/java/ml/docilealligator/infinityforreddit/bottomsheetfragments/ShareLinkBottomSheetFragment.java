@@ -140,7 +140,9 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
         if (clipboard != null) {
             ClipData clip = ClipData.newPlainText("simple text", link);
             clipboard.setPrimaryClip(clip);
-            Toast.makeText(activity, R.string.copy_success, Toast.LENGTH_SHORT).show();
+            if (android.os.Build.VERSION.SDK_INT < 33) {
+                Toast.makeText(activity, R.string.copy_success, Toast.LENGTH_SHORT).show();
+            }
         } else {
             Toast.makeText(activity, R.string.copy_link_failed, Toast.LENGTH_SHORT).show();
         }
