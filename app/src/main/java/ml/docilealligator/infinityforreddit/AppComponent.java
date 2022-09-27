@@ -310,11 +310,9 @@ public interface AppComponent {
 
     void inject(HistoryActivity historyActivity);
 
-    @Component.Builder
-    interface Builder {
-
-        AppComponent build();
-
-        @BindsInstance Builder application(Application application);
+    @Component.Factory
+    interface Factory {
+        
+        AppComponent create(@BindsInstance Application application);
     }
 }
