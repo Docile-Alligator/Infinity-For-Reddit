@@ -37,7 +37,6 @@ import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 import org.commonmark.ext.gfm.tables.TableBlock;
 
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executor;
 
@@ -78,8 +77,7 @@ import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFi
 import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
-import ml.docilealligator.infinityforreddit.markdown.CodeRangeParser;
-import ml.docilealligator.infinityforreddit.markdown.CodeRangeParserPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SuperscriptPreprocessorPlugin;
 import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerAwareMovementMethod;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
@@ -167,8 +165,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     private int mSearchCommentIndex = -1;
 
-    private List<CodeRangeParser.CodeRange> codeRanges;
-
     public CommentsRecyclerViewAdapter(BaseActivity activity, ViewPostDetailFragment fragment,
                                        CustomThemeWrapper customThemeWrapper,
                                        Executor executor, Retrofit retrofit, Retrofit oauthRetrofit,
@@ -187,7 +183,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mCommentTextColor = customThemeWrapper.getCommentColor();
         int commentSpoilerBackgroundColor = mCommentTextColor | 0xFF000000;
         int linkColor = customThemeWrapper.getLinkColor();
-        codeRanges = new ArrayList<>();
         mCommentMarkwon = Markwon.builder(mActivity)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                     plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
@@ -198,14 +193,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 .usePlugin(HtmlPlugin.create(plugin -> {
                     plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
                 }))
-                .usePlugin(CodeRangeParserPlugin.create(codeRanges))
+                .usePlugin(SuperscriptPreprocessorPlugin.create())
                 .usePlugin(new AbstractMarkwonPlugin() {
-                    @NonNull
-                    @Override
-                    public String processMarkdown(@NonNull String markdown) {
-                        return Utils.fixSuperScript(markdown, codeRanges);
-                    }
-
                     @Override
                     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
                         if (mActivity.contentTypeface != null) {

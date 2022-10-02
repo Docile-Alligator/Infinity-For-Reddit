@@ -21,8 +21,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import org.commonmark.ext.gfm.tables.TableBlock;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
@@ -57,13 +55,11 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomS
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
-import ml.docilealligator.infinityforreddit.markdown.CodeRangeParser;
-import ml.docilealligator.infinityforreddit.markdown.CodeRangeParserPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SuperscriptPreprocessorPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.subreddit.FetchSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditViewModel;
-import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 public class SidebarFragment extends Fragment {
@@ -94,8 +90,6 @@ public class SidebarFragment extends Fragment {
     private int markdownColor;
     private String sidebarDescription;
 
-    private List<CodeRangeParser.CodeRange> codeRanges;
-
     public SidebarFragment() {
         // Required empty public constructor
     }
@@ -120,7 +114,6 @@ public class SidebarFragment extends Fragment {
         swipeRefreshLayout.setProgressBackgroundColorSchemeColor(mCustomThemeWrapper.getCircularProgressBarBackground());
         swipeRefreshLayout.setColorSchemeColors(mCustomThemeWrapper.getColorAccent());
         markdownColor = mCustomThemeWrapper.getPrimaryTextColor();
-        codeRanges = new ArrayList<>();
 
         Markwon markwon = Markwon.builder(activity)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
@@ -132,14 +125,8 @@ public class SidebarFragment extends Fragment {
                 .usePlugin(HtmlPlugin.create(plugin -> {
                     plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
                 }))
-                .usePlugin(CodeRangeParserPlugin.create(codeRanges))
+                .usePlugin(SuperscriptPreprocessorPlugin.create())
                 .usePlugin(new AbstractMarkwonPlugin() {
-                    @NonNull
-                    @Override
-                    public String processMarkdown(@NonNull String markdown) {
-                        return Utils.fixSuperScript(markdown, codeRanges);
-                    }
-
                     @Override
                     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
                         if (activity.contentTypeface != null) {

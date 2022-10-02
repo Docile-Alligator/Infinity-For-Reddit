@@ -34,8 +34,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -65,8 +63,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.markdown.CodeRangeParser;
-import ml.docilealligator.infinityforreddit.markdown.CodeRangeParserPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SuperscriptPreprocessorPlugin;
 import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerAwareMovementMethod;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
@@ -119,8 +116,6 @@ public class WikiActivity extends BaseActivity {
     private boolean isRefreshing = false;
     private RequestManager mGlide;
 
-    private java.util.List<CodeRangeParser.CodeRange> codeRanges;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
@@ -164,7 +159,6 @@ public class WikiActivity extends BaseActivity {
         swipeRefreshLayout.setEnabled(mSharedPreferences.getBoolean(SharedPreferencesUtils.PULL_TO_REFRESH, true));
         swipeRefreshLayout.setOnRefreshListener(this::loadWiki);
 
-        codeRanges = new ArrayList<>();
         int markdownColor = mCustomThemeWrapper.getPrimaryTextColor();
         int spoilerBackgroundColor = markdownColor | 0xFF000000;
         int linkColor = mCustomThemeWrapper.getLinkColor();
@@ -178,14 +172,8 @@ public class WikiActivity extends BaseActivity {
                 .usePlugin(HtmlPlugin.create(plugin -> {
                     plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
                 }))
-                .usePlugin(CodeRangeParserPlugin.create(codeRanges))
+                .usePlugin(SuperscriptPreprocessorPlugin.create())
                 .usePlugin(new AbstractMarkwonPlugin() {
-                    @NonNull
-                    @Override
-                    public String processMarkdown(@NonNull String markdown) {
-                        return Utils.fixSuperScript(markdown, codeRanges);
-                    }
-
                     @Override
                     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
                         textView.setTextColor(markdownColor);

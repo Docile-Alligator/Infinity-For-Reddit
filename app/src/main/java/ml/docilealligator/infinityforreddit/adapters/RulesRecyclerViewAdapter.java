@@ -19,7 +19,6 @@ import com.r0adkll.slidr.model.SlidrInterface;
 import org.commonmark.ext.gfm.tables.TableBlock;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -47,13 +46,11 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSh
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
-import ml.docilealligator.infinityforreddit.markdown.CodeRangeParser;
-import ml.docilealligator.infinityforreddit.markdown.CodeRangeParserPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SuperscriptPreprocessorPlugin;
 import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerAwareMovementMethod;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
-import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecyclerViewAdapter.RuleViewHolder> {
     private BaseActivity activity;
@@ -63,8 +60,6 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
     private ArrayList<Rule> rules;
     private int mPrimaryTextColor;
 
-    private final List<CodeRangeParser.CodeRange> codeRanges;
-
     public RulesRecyclerViewAdapter(@NonNull BaseActivity activity,
                                     @NonNull CustomThemeWrapper customThemeWrapper,
                                     @Nullable SlidrInterface slidrInterface) {
@@ -72,7 +67,6 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
         this.slidrInterface = slidrInterface;
         mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
         int spoilerBackgroundColor = mPrimaryTextColor | 0xFF000000;
-        codeRanges = new ArrayList<>();
         markwon = Markwon.builder(activity)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                     plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
@@ -83,14 +77,8 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
                 .usePlugin(HtmlPlugin.create(plugin -> {
                     plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
                 }))
-                .usePlugin(CodeRangeParserPlugin.create(codeRanges))
+                .usePlugin(SuperscriptPreprocessorPlugin.create())
                 .usePlugin(new AbstractMarkwonPlugin() {
-                    @NonNull
-                    @Override
-                    public String processMarkdown(@NonNull String markdown) {
-                        return Utils.fixSuperScript(markdown, codeRanges);
-                    }
-
                     @Override
                     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
                         if (activity.typeface != null) {

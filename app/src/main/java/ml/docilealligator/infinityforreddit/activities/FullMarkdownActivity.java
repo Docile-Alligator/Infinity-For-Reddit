@@ -28,9 +28,6 @@ import org.commonmark.ext.gfm.tables.TableBlock;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.inject.Named;
 
@@ -58,14 +55,12 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.markdown.CodeRangeParser;
-import ml.docilealligator.infinityforreddit.markdown.CodeRangeParserPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SuperscriptPreprocessorPlugin;
 import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerAwareMovementMethod;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class FullMarkdownActivity extends BaseActivity {
 
@@ -89,8 +84,6 @@ public class FullMarkdownActivity extends BaseActivity {
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private SlidrInterface mSlidrInterface;
-
-    private List<CodeRangeParser.CodeRange> codeRanges;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +130,6 @@ public class FullMarkdownActivity extends BaseActivity {
         int markdownColor = mCustomThemeWrapper.getCommentColor();
         int spoilerBackgroundColor = markdownColor | 0xFF000000;
         int linkColor = mCustomThemeWrapper.getLinkColor();
-        codeRanges = new ArrayList<>();
         Markwon markwon = Markwon.builder(this)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                     plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
@@ -148,14 +140,8 @@ public class FullMarkdownActivity extends BaseActivity {
                 .usePlugin(HtmlPlugin.create(plugin -> {
                     plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
                 }))
-                .usePlugin(CodeRangeParserPlugin.create(codeRanges))
+                .usePlugin(SuperscriptPreprocessorPlugin.create())
                 .usePlugin(new AbstractMarkwonPlugin() {
-                    @NonNull
-                    @Override
-                    public String processMarkdown(@NonNull String markdown) {
-                        return Utils.fixSuperScript(markdown, codeRanges);
-                    }
-
                     @Override
                     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
                         if (typeface != null) {
