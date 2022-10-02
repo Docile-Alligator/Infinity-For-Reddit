@@ -47,6 +47,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executor;
@@ -57,6 +58,7 @@ import io.noties.markwon.core.spans.CustomTypefaceSpan;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.UploadedImage;
+import ml.docilealligator.infinityforreddit.markdown.CodeRangeParser;
 import retrofit2.Retrofit;
 
 public final class Utils {
@@ -88,32 +90,60 @@ public final class Utils {
         return regexed;
     }
 
+    public static String fixSuperScript(String regexedMarkdown, List<CodeRangeParser.CodeRange> codeRanges) {
+        return prepareSuperscript(regexedMarkdown, codeRanges);
+    }
+
     public static String fixSuperScript(String regexedMarkdown) {
+        return prepareSuperscript(regexedMarkdown, null);
+    }
+
+    private static String prepareSuperscript(String regexedMarkdown, @Nullable List<CodeRangeParser.CodeRange> codeRanges) {
+        final boolean hasCodeRanges = codeRanges != null && codeRanges.size() > 0;
+
         StringBuilder regexed = new StringBuilder(regexedMarkdown);
         boolean hasBracket = false;
         int nCarets = 0;
         int newLines = 0;
+        int offset = 0;
+        int escapes = 0;
+
+        outerLoop:
         for (int i = 0; i < regexed.length(); i++) {
             char currentChar = regexed.charAt(i);
-            if (hasBracket && currentChar == '\n') {
+
+            if (hasCodeRanges && currentChar == '^') {
+                for (var codeRange : codeRanges) {
+                    if (codeRange.start + offset <= i && i <= codeRange.end + offset) {
+                        continue outerLoop;
+                    }
+                }
+            }
+
+            if (currentChar == '\\') {
+                escapes++;
+                newLines = 0;
+            } else if (hasBracket && currentChar == '\n') {
                 newLines++;
                 if (newLines > 1) {
                     hasBracket = false;
                     nCarets = 0;
                     newLines = 0;
                 }
-            } else if (currentChar == '^') {
-                if (!(i > 0 && regexed.charAt(i - 1) == '\\')) {
-                    if (nCarets == 0 && i < regexed.length() - 1 && regexed.charAt(i + 1) == '(') {
-                        regexed.replace(i, i + 2, "<sup>");
-                        hasBracket = true;
-                    } else {
-                        regexed.replace(i, i + 1, "<sup>");
-                    }
-                    nCarets++;
+            } else if (currentChar == '^' && escapes % 2 == 0) {
+                if (nCarets == 0 && i < regexed.length() - 1 && regexed.charAt(i + 1) == '(') {
+                    regexed.replace(i, i + 2, "<sup>");
+                    hasBracket = true;
+                    i += 3;
+                    offset += 3;
+                } else {
+                    regexed.replace(i, i + 1, "<sup>");
+                    i += 4;
+                    offset += 4;
                 }
+                nCarets++;
             } else if (hasBracket && currentChar == ')') {
-                if (i > 0 && regexed.charAt(i - 1) == '\\') {
+                if (escapes % 2 != 0) {
                     hasBracket = false;
                     nCarets--;
                     continue;
@@ -121,29 +151,53 @@ public final class Utils {
                 hasBracket = false;
                 regexed.replace(i, i + 1, "</sup>");
                 nCarets--;
+                i += 5;
+                offset += 5;
+            } else if (hasCodeRanges && nCarets > 0 && exists(codeRanges, offset, i)) {
+                for (int j = 0; j < nCarets; j++) {
+                    regexed.insert(i, "</sup>");
+                    i += 6;
+                    offset += 6;
+                }
+                nCarets = 0;
             } else if (!hasBracket && currentChar == '\n') {
                 for (int j = 0; j < nCarets; j++) {
                     regexed.insert(i, "</sup>");
                     i += 6;
+                    offset += 6;
                 }
                 nCarets = 0;
             } else if (!hasBracket && Character.isWhitespace(currentChar)) {
                 for (int j = 0; j < nCarets; j++) {
                     regexed.insert(i, "</sup>");
                     i += 6;
+                    offset += 6;
                 }
                 nCarets = 0;
-            } else {
+            } else if (currentChar != '^') {
+                escapes = 0;
+            }
+
+            if (!Character.isWhitespace(currentChar)) {
                 newLines = 0;
             }
         }
+
         if (!hasBracket) {
             for (int j = 0; j < nCarets; j++) {
                 regexed.append("</sup>");
+                offset += 6;
             }
         }
 
         return regexed.toString();
+    }
+
+    private static boolean exists(List<CodeRangeParser.CodeRange> list, int offset, int value) {
+        for (var range : list)
+            if (range.start + offset == value)
+                return true;
+        return false;
     }
 
     public static String parseInlineGifInComments(String markdown) {

@@ -38,6 +38,7 @@ import org.greenrobot.eventbus.Subscribe;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 import java.util.concurrent.TimeUnit;
 
@@ -78,6 +79,8 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.ActivityCommentBinding;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.markdown.CodeRangeParser;
+import ml.docilealligator.infinityforreddit.markdown.CodeRangeParserPlugin;
 import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerAwareMovementMethod;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
@@ -148,6 +151,8 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     private int parentSpoilerBackgroundColor;
     private ActivityCommentBinding binding;
 
+    private List<CodeRangeParser.CodeRange> codeRanges;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
@@ -186,6 +191,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             });
         }
 
+        codeRanges = new ArrayList<>();
         String parentBodyMarkdown = intent.getStringExtra(EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY);
         String parentBody = intent.getStringExtra(EXTRA_COMMENT_PARENT_BODY_KEY);
         if (parentBodyMarkdown != null && !parentBodyMarkdown.equals("")) {
@@ -202,11 +208,12 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
                     .usePlugin(HtmlPlugin.create(plugin -> {
                         plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
                     }))
+                    .usePlugin(CodeRangeParserPlugin.create(codeRanges))
                     .usePlugin(new AbstractMarkwonPlugin() {
                         @NonNull
                         @Override
                         public String processMarkdown(@NonNull String markdown) {
-                            return Utils.fixSuperScript(markdown);
+                            return Utils.fixSuperScript(markdown, codeRanges);
                         }
 
                         @Override

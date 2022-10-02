@@ -20,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import org.greenrobot.eventbus.EventBus;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,6 +45,8 @@ import ml.docilealligator.infinityforreddit.activities.ViewPrivateMessagesActivi
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.ChangeInboxCountEvent;
+import ml.docilealligator.infinityforreddit.markdown.CodeRangeParser;
+import ml.docilealligator.infinityforreddit.markdown.CodeRangeParserPlugin;
 import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerAwareMovementMethod;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
@@ -86,6 +89,8 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
     private int mButtonTextColor;
     private boolean markAllMessagesAsRead = false;
 
+    private final List<CodeRangeParser.CodeRange> codeRanges;
+
     public MessageRecyclerViewAdapter(BaseActivity activity, Retrofit oauthRetrofit,
                                       CustomThemeWrapper customThemeWrapper,
                                       String accessToken, String where,
@@ -105,6 +110,8 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
         mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
         mButtonTextColor = customThemeWrapper.getButtonTextColor();
 
+        codeRanges = new ArrayList<>();
+
         mMarkwon = Markwon.builder(mActivity)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                     plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
@@ -115,11 +122,12 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 .usePlugin(HtmlPlugin.create(plugin -> {
                     plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
                 }))
+                .usePlugin(CodeRangeParserPlugin.create(codeRanges))
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @NonNull
                     @Override
                     public String processMarkdown(@NonNull String markdown) {
-                        return Utils.fixSuperScript(markdown);
+                        return Utils.fixSuperScript(markdown, codeRanges);
                     }
 
                     @Override

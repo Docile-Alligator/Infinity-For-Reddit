@@ -23,6 +23,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -46,6 +48,8 @@ import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPrivateMessagesActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.markdown.CodeRangeParser;
+import ml.docilealligator.infinityforreddit.markdown.CodeRangeParserPlugin;
 import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerAwareMovementMethod;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
@@ -71,6 +75,8 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
     private int mReceivedMessageBackgroundColor;
     private int mSentMessageBackgroundColor;
 
+    private final List<CodeRangeParser.CodeRange> codeRanges;
+
     public PrivateMessagesDetailRecyclerViewAdapter(ViewPrivateMessagesActivity viewPrivateMessagesActivity,
                                                     SharedPreferences sharedPreferences, Locale locale,
                                                     Message message, String accountName,
@@ -81,6 +87,7 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
         mLocale = locale;
         mAccountName = accountName;
         int commentColor = customThemeWrapper.getCommentColor();
+        codeRanges = new ArrayList<>();
         mMarkwon = Markwon.builder(viewPrivateMessagesActivity)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                     plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
@@ -91,11 +98,12 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
                 .usePlugin(HtmlPlugin.create(plugin -> {
                     plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
                 }))
+                .usePlugin(CodeRangeParserPlugin.create(codeRanges))
                 .usePlugin(new AbstractMarkwonPlugin() {
                     @NonNull
                     @Override
                     public String processMarkdown(@NonNull String markdown) {
-                        return Utils.fixSuperScript(markdown);
+                        return Utils.fixSuperScript(markdown, codeRanges);
                     }
 
                     @Override
