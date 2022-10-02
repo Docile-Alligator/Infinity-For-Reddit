@@ -153,7 +153,7 @@ public final class Utils {
                 nCarets--;
                 i += 5;
                 offset += 5;
-            } else if (hasCodeRanges && nCarets > 0 && exists(codeRanges, offset, i)) {
+            } else if (!hasBracket && hasCodeRanges && nCarets > 0 && exists(codeRanges, offset, i)) {
                 for (int j = 0; j < nCarets; j++) {
                     regexed.insert(i, "</sup>");
                     i += 6;
