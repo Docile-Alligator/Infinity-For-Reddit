@@ -103,10 +103,12 @@ public final class Utils {
 
         StringBuilder regexed = new StringBuilder(regexedMarkdown);
         boolean hasBracket = false;
+        boolean isInterruptedByCode = false;
         int nCarets = 0;
         int newLines = 0;
         int offset = 0;
         int escapes = 0;
+        Integer codeEnd;
 
         outerLoop:
         for (int i = 0; i < regexed.length(); i++) {
@@ -131,6 +133,7 @@ public final class Utils {
                     newLines = 0;
                 }
             } else if (currentChar == '^' && escapes % 2 == 0) {
+                isInterruptedByCode = false;
                 if (nCarets == 0 && i < regexed.length() - 1 && regexed.charAt(i + 1) == '(') {
                     regexed.replace(i, i + 2, "<sup>");
                     hasBracket = true;
@@ -144,8 +147,6 @@ public final class Utils {
                 nCarets++;
             } else if (hasBracket && currentChar == ')') {
                 if (escapes % 2 != 0) {
-                    hasBracket = false;
-                    nCarets--;
                     continue;
                 }
                 hasBracket = false;
@@ -153,13 +154,6 @@ public final class Utils {
                 nCarets--;
                 i += 5;
                 offset += 5;
-            } else if (!hasBracket && hasCodeRanges && nCarets > 0 && exists(codeRanges, offset, i)) {
-                for (int j = 0; j < nCarets; j++) {
-                    regexed.insert(i, "</sup>");
-                    i += 6;
-                    offset += 6;
-                }
-                nCarets = 0;
             } else if (!hasBracket && currentChar == '\n') {
                 for (int j = 0; j < nCarets; j++) {
                     regexed.insert(i, "</sup>");
@@ -167,17 +161,45 @@ public final class Utils {
                     offset += 6;
                 }
                 nCarets = 0;
-            } else if (!hasBracket && Character.isWhitespace(currentChar)) {
+            } else if (nCarets > 0 && !hasBracket && Character.isWhitespace(currentChar)) {
                 for (int j = 0; j < nCarets; j++) {
                     regexed.insert(i, "</sup>");
                     i += 6;
                     offset += 6;
                 }
                 nCarets = 0;
+            } else if (hasCodeRanges && nCarets > 0 && (codeEnd = exists(codeRanges, offset, i)) != null) {
+                for (int j = 0; j < nCarets; j++) {
+                    regexed.insert(i, "</sup>");
+                    i += 6;
+                    offset += 6;
+                    codeEnd += 6;
+                }
+                nCarets = 0;
+                // Skip to end of inline Code
+                i = codeEnd;
+                isInterruptedByCode = true;
+            } else if (isInterruptedByCode && !hasBracket && !Character.isWhitespace(currentChar)) {
+                regexed.insert(i, "<sup>");
+                i += 5;
+                offset += 5;
+                nCarets++;
+                isInterruptedByCode = false;
+            } else if (isInterruptedByCode && hasBracket) {
+                regexed.insert(i, "<sup>");
+                i += 5;
+                offset += 5;
+                nCarets++;
+                isInterruptedByCode = false;
             } else if (currentChar != '^') {
-                escapes = 0;
+                isInterruptedByCode = false;
+            } else {
+                isInterruptedByCode = false;
             }
 
+            if (currentChar != '\\') {
+                escapes = 0;
+            }
             if (!Character.isWhitespace(currentChar)) {
                 newLines = 0;
             }
@@ -193,11 +215,11 @@ public final class Utils {
         return regexed.toString();
     }
 
-    private static boolean exists(List<CodeRangeParser.CodeRange> list, int offset, int value) {
+    private static Integer exists(List<CodeRangeParser.CodeRange> list, int offset, int value) {
         for (var range : list)
             if (range.start + offset == value)
-                return true;
-        return false;
+                return range.end + offset;
+        return null;
     }
 
     public static String parseInlineGifInComments(String markdown) {
