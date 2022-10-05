@@ -32,6 +32,7 @@
                 android:layout_weight="1"
                 android:layout_gravity="center_vertical"
                 android:maxLines="1"
+                android:ellipsize="end"
                 android:fontFamily="?attr/font_family"
                 android:paddingStart="8dp"
                 android:paddingTop="12dp"
