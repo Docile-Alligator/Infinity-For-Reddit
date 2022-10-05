@@ -471,11 +471,20 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
                 ((CommentViewHolder) holder).mMarkwonAdapter.setMarkdown(mCommentMarkwon, comment.getCommentMarkdown());
                 ((CommentViewHolder) holder).mMarkwonAdapter.notifyDataSetChanged();
-                ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                        comment.getScore() + comment.getVoteType()));
-                ((CommentViewHolder) holder).topScoreTextView.setText(mActivity.getString(R.string.top_score,
-                        Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                comment.getScore() + comment.getVoteType())));
+
+                String commentText = "";
+                String topScoreText = "";
+                if (comment.isScoreHidden()) {
+                    commentText = mActivity.getString(R.string.hidden);
+                } else {
+                    commentText = Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                            comment.getScore() + comment.getVoteType());
+                    topScoreText = mActivity.getString(R.string.top_score,
+                            Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                    comment.getScore() + comment.getVoteType()));
+                }
+                ((CommentViewHolder) holder).scoreTextView.setText(commentText);
+                ((CommentViewHolder) holder).topScoreTextView.setText(topScoreText);
 
                 ((CommentViewHolder) holder).commentIndentationView.setShowOnlyOneDivider(mShowOnlyOneCommentLevelIndicator);
                 ((CommentViewHolder) holder).commentIndentationView.setLevelAndColors(comment.getDepth(), verticalBlockColors);
@@ -1391,11 +1400,13 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         topScoreTextView.setTextColor(mSecondaryTextColor);
                     }
 
-                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                            comment.getScore() + comment.getVoteType()));
-                    topScoreTextView.setText(mActivity.getString(R.string.top_score,
-                            Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                    comment.getScore() + comment.getVoteType())));
+                    if (!comment.isScoreHidden()) {
+                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                comment.getScore() + comment.getVoteType()));
+                        topScoreTextView.setText(mActivity.getString(R.string.top_score,
+                                Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                        comment.getScore() + comment.getVoteType())));
+                    }
 
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
@@ -1419,11 +1430,13 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
                             if (currentPosition == position) {
                                 downvoteButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                        comment.getScore() + comment.getVoteType()));
-                                topScoreTextView.setText(mActivity.getString(R.string.top_score,
-                                        Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                                comment.getScore() + comment.getVoteType())));
+                                if (!comment.isScoreHidden()) {
+                                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                            comment.getScore() + comment.getVoteType()));
+                                    topScoreTextView.setText(mActivity.getString(R.string.top_score,
+                                            Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                                    comment.getScore() + comment.getVoteType())));
+                                }
                             }
                         }
 
@@ -1468,11 +1481,13 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         topScoreTextView.setTextColor(mSecondaryTextColor);
                     }
 
-                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                            comment.getScore() + comment.getVoteType()));
-                    topScoreTextView.setText(mActivity.getString(R.string.top_score,
-                            Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                    comment.getScore() + comment.getVoteType())));
+                    if (!comment.isScoreHidden()) {
+                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                comment.getScore() + comment.getVoteType()));
+                        topScoreTextView.setText(mActivity.getString(R.string.top_score,
+                                Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                        comment.getScore() + comment.getVoteType())));
+                    }
 
                     int position = getBindingAdapterPosition();
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
@@ -1497,11 +1512,13 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
                             if (currentPosition == position) {
                                 upvoteButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                        comment.getScore() + comment.getVoteType()));
-                                topScoreTextView.setText(mActivity.getString(R.string.top_score,
-                                        Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                                comment.getScore() + comment.getVoteType())));
+                                if (!comment.isScoreHidden()) {
+                                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                            comment.getScore() + comment.getVoteType()));
+                                    topScoreTextView.setText(mActivity.getString(R.string.top_score,
+                                            Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                                    comment.getScore() + comment.getVoteType())));
+                                }
                             }
                         }
 
