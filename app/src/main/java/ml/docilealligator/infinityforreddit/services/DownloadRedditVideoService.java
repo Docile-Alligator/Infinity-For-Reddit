@@ -222,9 +222,9 @@ public class DownloadRedditVideoService extends Service {
                             return;
                         }
 
-                        String outputFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + ".mp4";
                         if (audioUrl != null) {
                             Response<ResponseBody> audioResponse = downloadFile.downloadFile(audioUrl).execute();
+                            String outputFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + ".mp4";
                             if (audioResponse.isSuccessful() && audioResponse.body() != null) {
                                 String audioFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + "-cache.mp3";
 
