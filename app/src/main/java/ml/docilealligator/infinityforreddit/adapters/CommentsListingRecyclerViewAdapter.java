@@ -8,7 +8,6 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spanned;
-import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +26,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.commonmark.ext.gfm.tables.TableBlock;
-
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -36,18 +33,9 @@ import butterknife.ButterKnife;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
-import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
-import io.noties.markwon.html.HtmlPlugin;
-import io.noties.markwon.html.tag.SuperScriptHandler;
-import io.noties.markwon.inlineparser.AutolinkInlineProcessor;
-import io.noties.markwon.inlineparser.BangInlineProcessor;
-import io.noties.markwon.inlineparser.HtmlInlineProcessor;
-import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
-import io.noties.markwon.linkify.LinkifyPlugin;
-import io.noties.markwon.movement.MovementMethodPlugin;
-import io.noties.markwon.recycler.table.TableEntry;
-import io.noties.markwon.recycler.table.TableEntryPlugin;
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveThing;
@@ -67,10 +55,7 @@ import ml.docilealligator.infinityforreddit.customviews.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
-import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
-import ml.docilealligator.infinityforreddit.markdown.SpoilerAwareMovementMethod;
-import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
-import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
+import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -151,63 +136,46 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         mColorAccent = customThemeWrapper.getColorAccent();
         mCommentIconAndInfoColor = customThemeWrapper.getCommentIconAndInfoColor();
         int linkColor = customThemeWrapper.getLinkColor();
-        mMarkwon = Markwon.builder(mActivity)
-                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
-                    plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
-                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
-                    plugin.excludeInlineProcessor(BangInlineProcessor.class);
-                    plugin.addInlineProcessor(new SuperscriptInlineProcessor());
-                }))
-                .usePlugin(HtmlPlugin.create(plugin -> {
-                    plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
-                }))
-                .usePlugin(new AbstractMarkwonPlugin() {
-                    @NonNull
-                    @Override
-                    public String processMarkdown(@NonNull String markdown) {
-                        return Utils.fixSuperScript(markdown);
-                    }
+        MarkwonPlugin miscPlugin = new AbstractMarkwonPlugin() {
+            @NonNull
+            @Override
+            public String processMarkdown(@NonNull String markdown) {
+                return Utils.fixSuperScript(markdown);
+            }
 
-                    @Override
-                    public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
-                        if (mActivity.contentTypeface != null) {
-                            textView.setTypeface(mActivity.contentTypeface);
-                        }
-                        textView.setTextColor(mCommentColor);
-                        textView.setHighlightColor(Color.TRANSPARENT);
-                    }
+            @Override
+            public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
+                if (mActivity.contentTypeface != null) {
+                    textView.setTypeface(mActivity.contentTypeface);
+                }
+                textView.setTextColor(mCommentColor);
+                textView.setHighlightColor(Color.TRANSPARENT);
+            }
 
-                    @Override
-                    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
-                        builder.linkResolver((view, link) -> {
-                            Intent intent = new Intent(mActivity, LinkResolverActivity.class);
-                            Uri uri = Uri.parse(link);
-                            intent.setData(uri);
-                            mActivity.startActivity(intent);
-                        });
-                    }
+            @Override
+            public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                builder.linkResolver((view, link) -> {
+                    Intent intent = new Intent(mActivity, LinkResolverActivity.class);
+                    Uri uri = Uri.parse(link);
+                    intent.setData(uri);
+                    mActivity.startActivity(intent);
+                });
+            }
 
-                    @Override
-                    public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
-                        builder.linkColor(linkColor);
-                    }
-                })
-                .usePlugin(SpoilerParserPlugin.create(mCommentColor, commentSpoilerBackgroundColor))
-                .usePlugin(RedditHeadingPlugin.create())
-                .usePlugin(StrikethroughPlugin.create())
-                .usePlugin(MovementMethodPlugin.create(new SpoilerAwareMovementMethod().setOnLinkLongClickListener((textView, url) -> {
-                    if (!activity.isDestroyed() && !activity.isFinishing()) {
-                        UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
-                        urlMenuBottomSheetFragment.setArguments(bundle);
-                        urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
-                    }
-                    return true;
-                })))
-                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
-                .usePlugin(TableEntryPlugin.create(mActivity))
-                .build();
+            @Override
+            public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                builder.linkColor(linkColor);
+            }
+        };
+        BetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener = (textView, url) -> {
+            if (!activity.isDestroyed() && !activity.isFinishing()) {
+                UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = UrlMenuBottomSheetFragment.newInstance(url);
+                urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), null);
+            }
+            return true;
+        };
+        mMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
+                miscPlugin, mCommentColor, commentSpoilerBackgroundColor, onLinkLongClickListener);
         recycledViewPool = new RecyclerView.RecycledViewPool();
     }
 
@@ -553,11 +521,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 }
             });
             commentMarkdownView.setLayoutManager(linearLayoutManager);
-            markwonAdapter = CustomMarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
-                    .include(TableBlock.class, TableEntry.create(builder -> builder
-                            .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
-                            .textLayoutIsRoot(R.layout.view_table_entry_cell)))
-                    .build();
+            markwonAdapter = MarkdownUtils.createCustomTablesAdapter();
             markwonAdapter.setOnClickListener(view -> {
                 if (view instanceof SpoilerOnClickTextView) {
                     if (((SpoilerOnClickTextView) view).isSpoilerOnClick()) {

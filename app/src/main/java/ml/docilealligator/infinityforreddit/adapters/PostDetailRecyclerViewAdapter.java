@@ -15,7 +15,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -46,8 +45,6 @@ import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.common.collect.ImmutableList;
 import com.libRG.CustomTextView;
 
-import org.commonmark.ext.gfm.tables.TableBlock;
-
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.Executor;
@@ -57,21 +54,12 @@ import butterknife.ButterKnife;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
-import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
-import io.noties.markwon.html.HtmlPlugin;
-import io.noties.markwon.html.tag.SuperScriptHandler;
-import io.noties.markwon.inlineparser.AutolinkInlineProcessor;
-import io.noties.markwon.inlineparser.BangInlineProcessor;
-import io.noties.markwon.inlineparser.HtmlInlineProcessor;
-import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
-import io.noties.markwon.linkify.LinkifyPlugin;
-import io.noties.markwon.movement.MovementMethodPlugin;
 import io.noties.markwon.recycler.MarkwonAdapter;
-import io.noties.markwon.recycler.table.TableEntry;
-import io.noties.markwon.recycler.table.TableEntryPlugin;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
+import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.FetchGfycatOrRedgifsVideoLinks;
 import ml.docilealligator.infinityforreddit.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.R;
@@ -102,10 +90,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
 import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
-import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
-import ml.docilealligator.infinityforreddit.markdown.SpoilerAwareMovementMethod;
-import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
-import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
+import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
@@ -244,77 +229,60 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         int markdownColor = customThemeWrapper.getPostContentColor();
         int postSpoilerBackgroundColor = markdownColor | 0xFF000000;
         int linkColor = customThemeWrapper.getLinkColor();
-        mPostDetailMarkwon = Markwon.builder(mActivity)
-                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
-                    plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
-                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
-                    plugin.excludeInlineProcessor(BangInlineProcessor.class);
-                    plugin.addInlineProcessor(new SuperscriptInlineProcessor());
-                }))
-                .usePlugin(HtmlPlugin.create(plugin -> {
-                    plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
-                }))
-                .usePlugin(new AbstractMarkwonPlugin() {
-                    @NonNull
-                    @Override
-                    public String processMarkdown(@NonNull String markdown) {
-                        return Utils.fixSuperScript(markdown);
-                    }
+        MarkwonPlugin miscPlugin = new AbstractMarkwonPlugin() {
+            @NonNull
+            @Override
+            public String processMarkdown(@NonNull String markdown) {
+                return Utils.fixSuperScript(markdown);
+            }
 
-                    @Override
-                    public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
-                        if (mActivity.contentTypeface != null) {
-                            textView.setTypeface(mActivity.contentTypeface);
-                        }
-                        textView.setTextColor(markdownColor);
-                        textView.setOnLongClickListener(view -> {
-                            if (textView.getSelectionStart() == -1 && textView.getSelectionEnd() == -1) {
-                                CopyTextBottomSheetFragment.show(
-                                        mActivity.getSupportFragmentManager(),
-                                        mPost.getSelfTextPlain(), mPost.getSelfText()
-                                );
-                            }
-                            return true;
-                        });
-                    }
-
-                    @Override
-                    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
-                        builder.linkResolver((view, link) -> {
-                            Intent intent = new Intent(mActivity, LinkResolverActivity.class);
-                            Uri uri = Uri.parse(link);
-                            intent.setData(uri);
-                            intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, mPost.isNSFW());
-                            mActivity.startActivity(intent);
-                        });
-                    }
-
-                    @Override
-                    public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
-                        builder.linkColor(linkColor);
-                    }
-                })
-                .usePlugin(SpoilerParserPlugin.create(markdownColor, postSpoilerBackgroundColor))
-                .usePlugin(RedditHeadingPlugin.create())
-                .usePlugin(StrikethroughPlugin.create())
-                .usePlugin(MovementMethodPlugin.create(new SpoilerAwareMovementMethod().setOnLinkLongClickListener((textView, url) -> {
-                    if (activity != null && !activity.isDestroyed() && !activity.isFinishing()) {
-                        UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
-                        urlMenuBottomSheetFragment.setArguments(bundle);
-                        urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
+            @Override
+            public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
+                if (mActivity.contentTypeface != null) {
+                    textView.setTypeface(mActivity.contentTypeface);
+                }
+                textView.setTextColor(markdownColor);
+                textView.setOnLongClickListener(view -> {
+                    if (textView.getSelectionStart() == -1 && textView.getSelectionEnd() == -1) {
+                        CopyTextBottomSheetFragment.show(
+                                mActivity.getSupportFragmentManager(),
+                                mPost.getSelfTextPlain(), mPost.getSelfText()
+                        );
                     }
                     return true;
-                })))
-                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
-                .usePlugin(TableEntryPlugin.create(mActivity))
-                .build();
-        mMarkwonAdapter = MarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
-                .include(TableBlock.class, TableEntry.create(builder -> builder
-                        .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
-                        .textLayoutIsRoot(R.layout.view_table_entry_cell)))
-                .build();
+                });
+            }
+
+            @Override
+            public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                builder.linkResolver((view, link) -> {
+                    Intent intent = new Intent(mActivity, LinkResolverActivity.class);
+                    Uri uri = Uri.parse(link);
+                    intent.setData(uri);
+                    intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, mPost.isNSFW());
+                    mActivity.startActivity(intent);
+                });
+            }
+
+            @Override
+            public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                builder.linkColor(linkColor);
+            }
+        };
+        BetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener = (textView, url) -> {
+            if (activity != null && !activity.isDestroyed() && !activity.isFinishing()) {
+                UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
+                urlMenuBottomSheetFragment.setArguments(bundle);
+                urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
+            }
+            return true;
+        };
+        mPostDetailMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
+                miscPlugin, markdownColor, postSpoilerBackgroundColor, onLinkLongClickListener);
+        mMarkwonAdapter = MarkdownUtils.createTablesAdapter();
+
         mSeparatePostAndComments = separatePostAndComments;
         mLegacyAutoplayVideoControllerUI = sharedPreferences.getBoolean(SharedPreferencesUtils.LEGACY_AUTOPLAY_VIDEO_CONTROLLER_UI, false);
         mEasierToWatchInFullScreen = sharedPreferences.getBoolean(SharedPreferencesUtils.EASIER_TO_WATCH_IN_FULL_SCREEN, false);

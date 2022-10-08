@@ -81,6 +81,8 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
         mLocale = locale;
         mAccountName = accountName;
         int commentColor = customThemeWrapper.getCommentColor();
+        // todo:https://github.com/Docile-Alligator/Infinity-For-Reddit/issues/1027
+        //  add tables support and replace with MarkdownUtils#commonPostMarkwonBuilder
         mMarkwon = Markwon.builder(viewPrivateMessagesActivity)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                     plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);

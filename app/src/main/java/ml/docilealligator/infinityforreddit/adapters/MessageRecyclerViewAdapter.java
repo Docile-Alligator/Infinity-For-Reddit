@@ -105,6 +105,8 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
         mColorPrimaryLightTheme = customThemeWrapper.getColorPrimaryLightTheme();
         mButtonTextColor = customThemeWrapper.getButtonTextColor();
 
+        // todo:https://github.com/Docile-Alligator/Infinity-For-Reddit/issues/1027
+        //  add tables support and replace with MarkdownUtils#commonPostMarkwonBuilder
         mMarkwon = Markwon.builder(mActivity)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
                     plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);

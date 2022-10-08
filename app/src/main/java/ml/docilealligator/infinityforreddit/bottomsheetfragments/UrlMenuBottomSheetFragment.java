@@ -15,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -41,6 +42,15 @@ public class UrlMenuBottomSheetFragment extends LandscapeExpandedRoundedBottomSh
 
     public UrlMenuBottomSheetFragment() {
         // Required empty public constructor
+    }
+
+    @NonNull
+    public static UrlMenuBottomSheetFragment newInstance(String url) {
+        UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
+        urlMenuBottomSheetFragment.setArguments(bundle);
+        return urlMenuBottomSheetFragment;
     }
 
     @Override
