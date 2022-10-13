@@ -83,67 +83,7 @@ public final class Utils {
         regexed = REGEX_PATTERNS[1].matcher(regexed).replaceAll("[$0](https://www.reddit.com/$0)");
         regexed = REGEX_PATTERNS[2].matcher(regexed).replaceAll("^");
 
-        //return fixSuperScript(regexed);
-        // We don't want to fix super scripts here because we need the original markdown later for editing posts
         return regexed;
-    }
-
-    public static String fixSuperScript(String regexedMarkdown) {
-        StringBuilder regexed = new StringBuilder(regexedMarkdown);
-        boolean hasBracket = false;
-        int nCarets = 0;
-        int newLines = 0;
-        for (int i = 0; i < regexed.length(); i++) {
-            char currentChar = regexed.charAt(i);
-            if (hasBracket && currentChar == '\n') {
-                newLines++;
-                if (newLines > 1) {
-                    hasBracket = false;
-                    nCarets = 0;
-                    newLines = 0;
-                }
-            } else if (currentChar == '^') {
-                if (!(i > 0 && regexed.charAt(i - 1) == '\\')) {
-                    if (nCarets == 0 && i < regexed.length() - 1 && regexed.charAt(i + 1) == '(') {
-                        regexed.replace(i, i + 2, "<sup>");
-                        hasBracket = true;
-                    } else {
-                        regexed.replace(i, i + 1, "<sup>");
-                    }
-                    nCarets++;
-                }
-            } else if (hasBracket && currentChar == ')') {
-                if (i > 0 && regexed.charAt(i - 1) == '\\') {
-                    hasBracket = false;
-                    nCarets--;
-                    continue;
-                }
-                hasBracket = false;
-                regexed.replace(i, i + 1, "</sup>");
-                nCarets--;
-            } else if (!hasBracket && currentChar == '\n') {
-                for (int j = 0; j < nCarets; j++) {
-                    regexed.insert(i, "</sup>");
-                    i += 6;
-                }
-                nCarets = 0;
-            } else if (!hasBracket && Character.isWhitespace(currentChar)) {
-                for (int j = 0; j < nCarets; j++) {
-                    regexed.insert(i, "</sup>");
-                    i += 6;
-                }
-                nCarets = 0;
-            } else {
-                newLines = 0;
-            }
-        }
-        if (!hasBracket) {
-            for (int j = 0; j < nCarets; j++) {
-                regexed.append("</sup>");
-            }
-        }
-
-        return regexed.toString();
     }
 
     public static String parseInlineGifInComments(String markdown) {

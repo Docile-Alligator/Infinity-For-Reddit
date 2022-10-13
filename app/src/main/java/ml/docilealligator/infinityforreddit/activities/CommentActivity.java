@@ -178,12 +178,6 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             binding.commentContentMarkdownView.setNestedScrollingEnabled(false);
             int linkColor = mCustomThemeWrapper.getLinkColor();
             MarkwonPlugin miscPlugin = new AbstractMarkwonPlugin() {
-                @NonNull
-                @Override
-                public String processMarkdown(@NonNull String markdown) {
-                    return Utils.fixSuperScript(markdown);
-                }
-
                 @Override
                 public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
                     if (contentTypeface != null) {
