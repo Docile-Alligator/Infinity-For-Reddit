@@ -7,6 +7,15 @@ import androidx.annotation.NonNull;
 
 public class SuperscriptSpan extends MetricAffectingSpan {
     private static final float SCRIPT_DEF_TEXT_SIZE_RATIO = .75F;
+    public final boolean isBracketed;
+
+    public SuperscriptSpan() {
+        this.isBracketed = false;
+    }
+
+    public SuperscriptSpan(boolean isBracketed) {
+        this.isBracketed = isBracketed;
+    }
 
     @Override
     public void updateDrawState(TextPaint tp) {
