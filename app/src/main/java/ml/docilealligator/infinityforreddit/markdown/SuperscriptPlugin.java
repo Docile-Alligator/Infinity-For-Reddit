@@ -1,6 +1,6 @@
 package ml.docilealligator.infinityforreddit.markdown;
 
-import android.text.SpannableStringBuilder;
+import android.text.Spannable;
 import android.text.Spanned;
 import android.widget.TextView;
 
@@ -38,13 +38,13 @@ public class SuperscriptPlugin extends AbstractMarkwonPlugin {
         return index >= 0 && index < input.length() ? input.charAt(index) : '\0';
     }
 
-    private static List<SpanInfo> getSpans(SpannableStringBuilder spannableStringBuilder, int start, int end) {
-        var spanArray = spannableStringBuilder.getSpans(start, end, Object.class);
+    private static List<SpanInfo> getSpans(Spannable spannable, int start, int end) {
+        var spanArray = spannable.getSpans(start, end, Object.class);
         List<SpanInfo> spanList = new ArrayList<>();
         for (Object span : spanArray) {
-            int spanStart = spannableStringBuilder.getSpanStart(span);
-            int spanEnd = spannableStringBuilder.getSpanEnd(span);
-            int spanFlags = spannableStringBuilder.getSpanFlags(span);
+            int spanStart = spannable.getSpanStart(span);
+            int spanEnd = spannable.getSpanEnd(span);
+            int spanFlags = spannable.getSpanFlags(span);
             spanList.add(new SpanInfo(span, spanStart, spanEnd, spanFlags));
         }
         return spanList;
@@ -62,6 +62,15 @@ public class SuperscriptPlugin extends AbstractMarkwonPlugin {
             if (span.what.getClass() != TextViewSpan.class && (span.end == value || span.start == value))
                 return span;
         return null;
+    }
+
+    @Override
+    public void configure(@NonNull Registry registry) {
+        registry.require(MarkwonInlineParserPlugin.class, plugin -> {
+                    plugin.factoryBuilder().addInlineProcessor(new SuperscriptOpeningInlineProcessor(superscriptOpeningBracketStorage));
+                    plugin.factoryBuilder().addInlineProcessor(new SuperscriptClosingInlineProcessor(superscriptOpeningBracketStorage));
+                }
+        );
     }
 
     @Override
@@ -89,22 +98,16 @@ public class SuperscriptPlugin extends AbstractMarkwonPlugin {
                 depth--;
                 if (depth == 0) {
                     int end = visitor.builder().length();
-                    var spannableStringBuilder = visitor.builder().spannableStringBuilder();
-                    var codeSpans = spannableStringBuilder.getSpans(start, end, CodeSpan.class);
-                    if (codeSpans.length > 0) {
-                        for (int i = codeSpans.length - 1; i >= 0; i--) {
-                            var span = codeSpans[i];
-                            var spanStart = spannableStringBuilder.getSpanStart(span);
-                            var spanEnd = spannableStringBuilder.getSpanEnd(span);
-                            var nextSpan = i - 1 >= 0 ? codeSpans[i - 1] : null;
-                            var nextSpanStart = nextSpan == null ? null : spannableStringBuilder.getSpanStart(nextSpan);
-                            if (spanEnd <= end) {
-                                visitor.builder().setSpan(new SuperscriptSpan(true), start, spanStart);
-                                visitor.builder().setSpan(new SuperscriptSpan(true), spanEnd, nextSpanStart == null ? end : nextSpanStart);
-                                start = spanEnd;
+                    var spans = visitor.builder().getSpans(start, end);
+                    for (var span : spans) {
+                        if (span.what instanceof CodeSpan) {
+                            if (span.end <= end) {
+                                visitor.builder().setSpan(new SuperscriptSpan(true), start, span.start);
                             }
+                            start = span.end;
                         }
-                    } else {
+                    }
+                    if (start < end) {
                         visitor.setSpansForNode(superscript, start);
                     }
                 }
@@ -118,23 +121,14 @@ public class SuperscriptPlugin extends AbstractMarkwonPlugin {
     }
 
     @Override
-    public void configure(@NonNull Registry registry) {
-        registry.require(MarkwonInlineParserPlugin.class, plugin -> {
-                    plugin.factoryBuilder().addInlineProcessor(new SuperscriptOpeningInlineProcessor(superscriptOpeningBracketStorage));
-                    plugin.factoryBuilder().addInlineProcessor(new SuperscriptClosingInlineProcessor(superscriptOpeningBracketStorage));
-                }
-        );
-    }
-
-    @Override
-    public void afterSetText(@NonNull TextView textView) {
-        if (superscriptOpeningList.size() == 0) {
+    public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
+        if (superscriptOpeningList.size() == 0 || !(markdown instanceof Spannable)) {
             return;
         }
 
-        CharSequence text = textView.getText();
-        var spannableStringBuilder = new SpannableStringBuilder(text);
-        var spans = getSpans(spannableStringBuilder, 0, spannableStringBuilder.length());
+        var spannable = (Spannable) markdown;
+        var spans = getSpans(spannable, 0, spannable.length());
+        final String text = spannable.toString();
 
         outerLoop:
         for (int i = 0; i < superscriptOpeningList.size(); i++) {
@@ -145,10 +139,11 @@ public class SuperscriptPlugin extends AbstractMarkwonPlugin {
             var superscriptMarker = matchSpanAtPosition(spans, opening.start, SuperscriptSpan.class);
             if (superscriptMarker == null || ((SuperscriptSpan) superscriptMarker.what).isBracketed)
                 return;
-            spannableStringBuilder.removeSpan(superscriptMarker.what);
+            spannable.removeSpan(superscriptMarker.what);
             spans.remove(superscriptMarker);
 
-            if (opening.start >= text.length() || (matchSpanAtPosition(spans, opening.start, CodeSpan.class) == null && Character.isWhitespace(text.charAt(opening.start))) || (nextOpening != null && opening.start.equals(nextOpening.start))) {
+            boolean isNextOpeningOfLocalNode = nextOpening != null && opening.node.getParent().equals(nextOpening.node.getParent());
+            if (opening.start >= text.length() || (matchSpanAtPosition(spans, opening.start, CodeSpan.class) == null && Character.isWhitespace(text.charAt(opening.start))) || (isNextOpeningOfLocalNode && opening.start.equals(nextOpening.start))) {
                 superscriptOpeningList.remove(i);
                 i--;
                 continue;
@@ -162,26 +157,24 @@ public class SuperscriptPlugin extends AbstractMarkwonPlugin {
                 boolean isChildOfDelimited = !(opening.node.getParent() == null || opening.node.getParent() instanceof Paragraph || opening.node.getParent() instanceof TableCell);
                 boolean isInsideDelimited = nonTextSpanAtBoundary != null && openingStart != j && j == nonTextSpanAtBoundary.end && (openingStart > nonTextSpanAtBoundary.start || isChildOfDelimited);
                 if (codeSpanAtPosition != null) {
-                    spannableStringBuilder.setSpan(new SuperscriptSpan(), openingStart, j, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    spannable.setSpan(new SuperscriptSpan(false), openingStart, j, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     //Skip to end of CodeSpan
                     j = codeSpanAtPosition.end;
                     currentChar = peek(j, text);
-                    if (currentChar == '\0' || Character.isWhitespace(currentChar) || (nextOpening != null && j == nextOpening.start)) {
+                    if (currentChar == '\0' || Character.isWhitespace(currentChar) || (isNextOpeningOfLocalNode && j == nextOpening.start)) {
                         superscriptOpeningList.remove(i);
                         i--;
                         continue outerLoop;
                     }
                     openingStart = j;
-                } else if (currentChar == '\0' || Character.isWhitespace(currentChar) || (nextOpening != null && j == nextOpening.start) || isInsideDelimited) {
-                    spannableStringBuilder.setSpan(new SuperscriptSpan(), openingStart, j, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                } else if (currentChar == '\0' || Character.isWhitespace(currentChar) || (isNextOpeningOfLocalNode && j == nextOpening.start) || isInsideDelimited) {
+                    spannable.setSpan(new SuperscriptSpan(false), openingStart, j, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     superscriptOpeningList.remove(i);
                     i--;
                     continue outerLoop;
                 }
             }
         }
-
-        textView.setText(spannableStringBuilder);
     }
 
     private static class SpanInfo {
