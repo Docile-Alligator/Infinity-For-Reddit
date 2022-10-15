@@ -223,8 +223,14 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 ((CommentViewHolder) holder).markwonAdapter.setMarkdown(mMarkwon, comment.getCommentMarkdown());
                 ((CommentViewHolder) holder).markwonAdapter.notifyDataSetChanged();
 
-                ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                        comment.getScore() + comment.getVoteType()));
+                String commentText = "";
+                if (comment.isScoreHidden()) {
+                    commentText = mActivity.getString(R.string.hidden);
+                } else {
+                    commentText = Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                            comment.getScore() + comment.getVoteType());
+                }
+                ((CommentViewHolder) holder).scoreTextView.setText(commentText);
 
                 switch (comment.getVoteType()) {
                     case Comment.VOTE_TYPE_UPVOTE:
@@ -565,8 +571,10 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         scoreTextView.setTextColor(mCommentIconAndInfoColor);
                     }
 
-                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                            comment.getScore() + comment.getVoteType()));
+                    if (!comment.isScoreHidden()) {
+                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                comment.getScore() + comment.getVoteType()));
+                    }
 
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
@@ -588,8 +596,10 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
                             if (currentPosition == position) {
                                 downvoteButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                        comment.getScore() + comment.getVoteType()));
+                                if (!comment.isScoreHidden()) {
+                                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                            comment.getScore() + comment.getVoteType()));
+                                }
                             }
                         }
 
@@ -631,8 +641,10 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         scoreTextView.setTextColor(mCommentIconAndInfoColor);
                     }
 
-                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                            comment.getScore() + comment.getVoteType()));
+                    if (!comment.isScoreHidden()) {
+                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                comment.getScore() + comment.getVoteType()));
+                    }
 
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
@@ -654,8 +666,10 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
                             if (currentPosition == position) {
                                 upvoteButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                        comment.getScore() + comment.getVoteType()));
+                                if (!comment.isScoreHidden()) {
+                                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                            comment.getScore() + comment.getVoteType()));
+                                }
                             }
                         }
 
