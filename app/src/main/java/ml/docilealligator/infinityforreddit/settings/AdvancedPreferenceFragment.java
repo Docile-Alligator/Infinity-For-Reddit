@@ -276,7 +276,6 @@ public class AdvancedPreferenceFragment extends CustomFontPreferenceFragmentComp
         if (backupSettingsPreference != null) {
             backupSettingsPreference.setOnPreferenceClickListener(preference -> {
                 Intent intent = new Intent(ACTION_OPEN_DOCUMENT_TREE);
-                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 startActivityForResult(intent, SELECT_BACKUP_SETTINGS_DIRECTORY_REQUEST_CODE);
                 return true;
             });
