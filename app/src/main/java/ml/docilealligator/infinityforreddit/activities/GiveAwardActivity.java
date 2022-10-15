@@ -148,7 +148,9 @@ public class GiveAwardActivity extends BaseActivity {
                                                     if (clipboard != null) {
                                                         ClipData clip = ClipData.newPlainText("simple text", text);
                                                         clipboard.setPrimaryClip(clip);
-                                                        Toast.makeText(GiveAwardActivity.this, R.string.copy_success, Toast.LENGTH_SHORT).show();
+                                                        if (android.os.Build.VERSION.SDK_INT < 33) {
+                                                            Toast.makeText(GiveAwardActivity.this, R.string.copy_success, Toast.LENGTH_SHORT).show();
+                                                        }
                                                     } else {
                                                         Toast.makeText(GiveAwardActivity.this, R.string.copy_failed, Toast.LENGTH_SHORT).show();
                                                     }
