@@ -802,16 +802,12 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         return -1;
     }
 
-    private void expandChildren(ArrayList<Comment> comments, ArrayList<Comment> newList, int position) {
+    private void expandChildren(ArrayList<Comment> comments, ArrayList<Comment> newList) {
         if (comments != null && comments.size() > 0) {
-            newList.addAll(position, comments);
-            for (int i = 0; i < comments.size(); i++) {
-                position++;
-                if (comments.get(i).getChildren() != null && comments.get(i).getChildren().size() > 0) {
-                    expandChildren(comments.get(i).getChildren(), newList, position);
-                    position = position + comments.get(i).getChildren().size();
-                }
-                comments.get(i).setExpanded(true);
+            for (Comment comment : comments) {
+                newList.add(comment);
+                expandChildren(comment.getChildren(), newList);
+                comment.setExpanded(true);
             }
         }
     }
@@ -909,7 +905,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mVisibleComments.get(parentPosition).setHasReply(true);
         if (!mVisibleComments.get(parentPosition).isExpanded()) {
             ArrayList<Comment> newList = new ArrayList<>();
-            expandChildren(mVisibleComments.get(parentPosition).getChildren(), newList, 0);
+            expandChildren(mVisibleComments.get(parentPosition).getChildren(), newList);
             mVisibleComments.get(parentPosition).setExpanded(true);
             mVisibleComments.addAll(parentPosition + 1, newList);
             if (mIsSingleCommentThreadMode) {
@@ -1572,7 +1568,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         } else {
                             comment.setExpanded(true);
                             ArrayList<Comment> newList = new ArrayList<>();
-                            expandChildren(mVisibleComments.get(commentPosition).getChildren(), newList, 0);
+                            expandChildren(mVisibleComments.get(commentPosition).getChildren(), newList);
                             mVisibleComments.get(commentPosition).setExpanded(true);
                             mVisibleComments.addAll(commentPosition + 1, newList);
 
@@ -1740,7 +1736,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     if (comment != null) {
                         comment.setExpanded(true);
                         ArrayList<Comment> newList = new ArrayList<>();
-                        expandChildren(mVisibleComments.get(commentPosition).getChildren(), newList, 0);
+                        expandChildren(mVisibleComments.get(commentPosition).getChildren(), newList);
                         mVisibleComments.get(commentPosition).setExpanded(true);
                         mVisibleComments.addAll(commentPosition + 1, newList);
 
