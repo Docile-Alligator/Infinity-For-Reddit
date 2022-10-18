@@ -41,13 +41,21 @@ public class SuperscriptPlugin extends AbstractMarkwonPlugin {
     private static List<SpanInfo> getSpans(Spannable spannable, int start, int end) {
         var spanArray = spannable.getSpans(start, end, Object.class);
         List<SpanInfo> spanList = new ArrayList<>();
-        for (Object span : spanArray) {
+        for (int i = spanArray.length - 1; i >= 0; i--) {
+            Object span = spanArray[i];
             int spanStart = spannable.getSpanStart(span);
             int spanEnd = spannable.getSpanEnd(span);
             int spanFlags = spannable.getSpanFlags(span);
             spanList.add(new SpanInfo(span, spanStart, spanEnd, spanFlags));
         }
         return spanList;
+    }
+
+    private static SpanInfo matchSuperscriptAtPosition(List<SpanInfo> spans, int value) {
+        for (var span : spans)
+            if (span.what.getClass() == SuperscriptSpan.class && !((SuperscriptSpan) span.what).isBracketed && span.start <= value && value <= span.end)
+                return span;
+        return null;
     }
 
     private static SpanInfo matchSpanAtPosition(List<SpanInfo> spans, int value, Object spanClass) {
@@ -59,7 +67,7 @@ public class SuperscriptPlugin extends AbstractMarkwonPlugin {
 
     private static SpanInfo matchNonTextSpanAtBoundary(List<SpanInfo> spans, int value) {
         for (var span : spans)
-            if (span.what.getClass() != TextViewSpan.class && (span.end == value || span.start == value))
+            if ((span.end == value || span.start == value) && span.what.getClass() != CodeSpan.class && span.what.getClass() != SuperscriptSpan.class && span.what.getClass() != TextViewSpan.class)
                 return span;
         return null;
     }
@@ -136,8 +144,8 @@ public class SuperscriptPlugin extends AbstractMarkwonPlugin {
             SuperscriptOpening nextOpening = i + 1 < superscriptOpeningList.size() ? superscriptOpeningList.get(i + 1) : null;
 
             // Workaround for Table Plugin
-            var superscriptMarker = matchSpanAtPosition(spans, opening.start, SuperscriptSpan.class);
-            if (superscriptMarker == null || ((SuperscriptSpan) superscriptMarker.what).isBracketed)
+            var superscriptMarker = matchSuperscriptAtPosition(spans, opening.start);
+            if (superscriptMarker == null)
                 return;
             spannable.removeSpan(superscriptMarker.what);
             spans.remove(superscriptMarker);
@@ -149,25 +157,30 @@ public class SuperscriptPlugin extends AbstractMarkwonPlugin {
                 continue;
             }
 
+            boolean isChildOfDelimited = !(opening.node.getParent() == null || opening.node.getParent() instanceof Paragraph || opening.node.getParent() instanceof TableCell);
             int openingStart = opening.start;
             for (int j = opening.start; j <= text.length(); j++) {
                 char currentChar = peek(j, text);
                 SpanInfo codeSpanAtPosition = matchSpanAtPosition(spans, j, CodeSpan.class);
                 SpanInfo nonTextSpanAtBoundary = matchNonTextSpanAtBoundary(spans, j);
-                boolean isChildOfDelimited = !(opening.node.getParent() == null || opening.node.getParent() instanceof Paragraph || opening.node.getParent() instanceof TableCell);
+                // When we reach the end position of, for example, an Emphasis
+                // Check whether the superscript originated from inside this Emphasis
+                // If so, stop further spanning of the current Superscript
                 boolean isInsideDelimited = nonTextSpanAtBoundary != null && openingStart != j && j == nonTextSpanAtBoundary.end && (openingStart > nonTextSpanAtBoundary.start || isChildOfDelimited);
                 if (codeSpanAtPosition != null) {
-                    spannable.setSpan(new SuperscriptSpan(false), openingStart, j, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    if (openingStart < j) {
+                        spannable.setSpan(new SuperscriptSpan(false), openingStart, j, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    }
                     //Skip to end of CodeSpan
                     j = codeSpanAtPosition.end;
                     currentChar = peek(j, text);
-                    if (currentChar == '\0' || Character.isWhitespace(currentChar) || (isNextOpeningOfLocalNode && j == nextOpening.start)) {
+                    if (currentChar == '\0' || Character.isWhitespace(currentChar) || (isNextOpeningOfLocalNode && j == nextOpening.start) || isInsideDelimited) {
                         superscriptOpeningList.remove(i);
                         i--;
                         continue outerLoop;
                     }
                     openingStart = j;
-                } else if (currentChar == '\0' || Character.isWhitespace(currentChar) || (isNextOpeningOfLocalNode && j == nextOpening.start) || isInsideDelimited) {
+                } else if (currentChar == '\0' || Character.isWhitespace(currentChar) || isInsideDelimited) {
                     spannable.setSpan(new SuperscriptSpan(false), openingStart, j, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                     superscriptOpeningList.remove(i);
                     i--;
