@@ -47,6 +47,7 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     private boolean isLoggedIn;
     private boolean isInMainPage = true;
     private PageToggle pageToggle;
+    private boolean showKarma;
 
     public HeaderSectionRecyclerViewAdapter(BaseActivity baseActivity, CustomThemeWrapper customThemeWrapper,
                                             RequestManager glide, String accountName,
@@ -64,6 +65,7 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         requireAuthToAccountSection = securitySharedPreferences.getBoolean(SharedPreferencesUtils.REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER, false);
         showAvatarOnTheRightInTheNavigationDrawer = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_AVATAR_ON_THE_RIGHT, false);
         showAvatarOnTheRightInTheNavigationDrawer = navigationDrawerSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_AVATAR_ON_THE_RIGHT, false);
+        this.showKarma = !sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_PERSONAL_KARMA, false);
     }
 
     @NonNull
@@ -84,8 +86,13 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             }
             ((NavHeaderViewHolder) holder).profileImageView.setLayoutParams(params);
             if (isLoggedIn) {
-                ((NavHeaderViewHolder) holder).karmaTextView.setText(baseActivity.getString(R.string.karma_info, karma));
-                ((NavHeaderViewHolder) holder).accountNameTextView.setText(accountName);
+                if (showKarma) {
+                    ((NavHeaderViewHolder) holder).karmaTextView.setText(baseActivity.getString(R.string.karma_info, karma));
+                    ((NavHeaderViewHolder) holder).accountNameTextView.setText(accountName);
+                } else {
+                    ((NavHeaderViewHolder) holder).karmaTextView.setText(accountName);
+                }
+
                 if (profileImageUrl != null && !profileImageUrl.equals("")) {
                     glide.load(profileImageUrl)
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(144, 0)))

@@ -611,6 +611,7 @@
     <string name="settings_separate_post_and_comments_in_landscape_mode_title">Separate Post And Comments in Landscape Mode</string>
     <string name="settings_separate_post_and_comments_summary">Video autoplay will be disabled in the post detail page</string>
     <string name="settings_use_bottom_toolbar_in_media_viewer_title">Use Bottom Toolbar in Media Viewer</string>
+    <string name="settings_enable_hide_personal_karma_title">Hide Personal Account Karma</string>
     <string name="settings_secure_mode_title">Secure Mode</string>
     <string name="settings_secure_mode_summary">Screenshot and video recording are not allowed. No preview in recent app screen.</string>
     <string name="settings_credits_lock_screen_animation_title">Lock Screen Animation</string>

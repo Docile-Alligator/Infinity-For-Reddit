@@ -196,6 +196,7 @@ public class SharedPreferencesUtils {
     public static final String REMEMBER_MUTING_OPTION_IN_POST_FEED = "remember_muting_option_in_post_feed";
     public static final String DEFAULT_LINK_POST_LAYOUT_KEY = "default_link_post_layout";
     public static final String USE_BOTTOM_TOOLBAR_IN_MEDIA_VIEWER = "use_bottom_toolbar_in_media_viewer";
+    public static final String HIDE_PERSONAL_KARMA = "hide_personal_karma";
     public static final String LOCK_SCREEN_ANIMATION = "lock_screen_animation";
     public static final String ENABLE_FOLD_SUPPORT = "enable_fold_support";
     public static final String LOOP_VIDEO = "loop_video";
