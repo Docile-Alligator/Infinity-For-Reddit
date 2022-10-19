@@ -39,11 +39,6 @@
         app:key="use_bottom_toolbar_in_media_viewer"
         app:title="@string/settings_use_bottom_toolbar_in_media_viewer_title" />
 
-    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
-        app:defaultValue="false"
-        app:key="hide_personal_karma"
-        app:title="@string/settings_enable_hide_personal_karma_title" />
-
     <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
         app:defaultValue="0"
         app:entries="@array/settings_default_search_result_tab"

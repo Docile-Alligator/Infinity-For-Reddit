@@ -535,8 +535,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 if (!title.equals(userFullName)) {
                     getSupportActionBar().setTitle(userFullName);
                 }
-                boolean showKarma = !mSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_PERSONAL_KARMA, false);
-                String karma = showKarma ? getString(R.string.karma_info_user_detail, userData.getTotalKarma(), userData.getLinkKarma(), userData.getCommentKarma()) : "";
+                String karma = getString(R.string.karma_info_user_detail, userData.getTotalKarma(), userData.getLinkKarma(), userData.getCommentKarma());
                 karmaTextView.setText(karma);
                 cakedayTextView.setText(getString(R.string.cakeday_info, new SimpleDateFormat("MMM d, yyyy",
                         locale).format(userData.getCakeday())));
