@@ -86,7 +86,12 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             }
             ((NavHeaderViewHolder) holder).profileImageView.setLayoutParams(params);
             if (isLoggedIn) {
-                ((NavHeaderViewHolder) holder).karmaTextView.setText( showKarma ? baseActivity.getString(R.string.karma_info, karma) : "");
+                if (showKarma) {
+                    ((NavHeaderViewHolder) holder).karmaTextView.setText(baseActivity.getString(R.string.karma_info, karma));
+                } else {
+                    int karmaTextHeight = ((NavHeaderViewHolder) holder).karmaTextView.getHeight();
+                    ((NavHeaderViewHolder) holder).accountNameTextView.setTranslationY(karmaTextHeight / 2);
+                }
                 ((NavHeaderViewHolder) holder).accountNameTextView.setText(accountName);
                 if (profileImageUrl != null && !profileImageUrl.equals("")) {
                     glide.load(profileImageUrl)
