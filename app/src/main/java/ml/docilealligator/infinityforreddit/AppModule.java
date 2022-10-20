@@ -22,6 +22,7 @@ import dagger.Module;
 import dagger.Provides;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LoopAvailableExoCreator;
+import ml.docilealligator.infinityforreddit.network.SortTypeConverterFactory;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -50,6 +51,7 @@ class AppModule {
         return new Retrofit.Builder()
                 .baseUrl(APIUtils.OAUTH_API_BASE_URI)
                 .client(okHttpClient)
+                .addConverterFactory(SortTypeConverterFactory.create())
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(GuavaCallAdapterFactory.create())
                 .build();
@@ -61,6 +63,7 @@ class AppModule {
     Retrofit provideOauthWithoutAuthenticatorRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(APIUtils.OAUTH_API_BASE_URI)
+                .addConverterFactory(SortTypeConverterFactory.create())
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
     }
@@ -71,6 +74,7 @@ class AppModule {
     Retrofit provideRetrofit() {
         return new Retrofit.Builder()
                 .baseUrl(APIUtils.API_BASE_URI)
+                .addConverterFactory(SortTypeConverterFactory.create())
                 .addConverterFactory(ScalarsConverterFactory.create())
                 .addCallAdapterFactory(GuavaCallAdapterFactory.create())
                 .build();
