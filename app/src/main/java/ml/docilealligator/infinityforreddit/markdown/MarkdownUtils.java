@@ -37,7 +37,6 @@ public class MarkdownUtils {
                                                   @Nullable BetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener) {
         return Markwon.builder(context)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
-                    plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
                     plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
                     plugin.excludeInlineProcessor(BangInlineProcessor.class);
                 }))
@@ -63,7 +62,6 @@ public class MarkdownUtils {
                                                   @Nullable BetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener) {
         return Markwon.builder(context)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
-                    plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
                     plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
                     plugin.excludeInlineProcessor(BangInlineProcessor.class);
                 }))

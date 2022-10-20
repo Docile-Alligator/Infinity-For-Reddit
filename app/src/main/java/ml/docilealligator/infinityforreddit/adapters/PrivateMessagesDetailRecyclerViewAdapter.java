@@ -83,7 +83,6 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
         //  add tables support and replace with MarkdownUtils#commonPostMarkwonBuilder
         mMarkwon = Markwon.builder(viewPrivateMessagesActivity)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
-                    plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
                     plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
                     plugin.excludeInlineProcessor(BangInlineProcessor.class);
                 }))
