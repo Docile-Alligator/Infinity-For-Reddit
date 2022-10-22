@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Call;
@@ -25,10 +26,10 @@ public class FetchRules {
         void failed();
     }
 
-    public static void fetchRules(Executor executor, Handler handler, Retrofit retrofit, String subredditName,
+    public static void fetchRules(Executor executor, Handler handler, Retrofit retrofit, String accessToken, String subredditName,
                                   FetchRulesListener fetchRulesListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> rulesCall = api.getRules(subredditName);
+        Call<String> rulesCall =  api.getRules(subredditName);
         rulesCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
