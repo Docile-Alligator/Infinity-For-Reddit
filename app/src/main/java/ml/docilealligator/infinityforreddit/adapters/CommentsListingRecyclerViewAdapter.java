@@ -55,6 +55,7 @@ import ml.docilealligator.infinityforreddit.customviews.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
+import ml.docilealligator.infinityforreddit.customviews.SwipeLockScrollView;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -507,9 +508,9 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             });
 
             commentMarkdownView.setRecycledViewPool(recycledViewPool);
-            LinearLayoutManagerBugFixed linearLayoutManager = new MarkwonLinearLayoutManager(mActivity, new MarkwonLinearLayoutManager.HorizontalScrollViewScrolledListener() {
+            LinearLayoutManagerBugFixed linearLayoutManager = new MarkwonLinearLayoutManager(mActivity, new SwipeLockScrollView.SwipeLockInterface() {
                 @Override
-                public void onScrolledLeft() {
+                public void lockSwipe() {
                     if (mActivity instanceof AccountSavedThingActivity) {
                         ((AccountSavedThingActivity) mActivity).lockSwipeRightToGoBack();
                     } else {
@@ -518,7 +519,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 }
 
                 @Override
-                public void onScrolledRight() {
+                public void unlockSwipe() {
                     if (mActivity instanceof AccountSavedThingActivity) {
                         ((AccountSavedThingActivity) mActivity).unlockSwipeRightToGoBack();
                     } else {

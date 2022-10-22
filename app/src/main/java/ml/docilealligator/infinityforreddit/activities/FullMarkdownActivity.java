@@ -42,6 +42,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
+import ml.docilealligator.infinityforreddit.customviews.SwipeLockScrollView;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -150,16 +151,16 @@ public class FullMarkdownActivity extends BaseActivity {
                 miscPlugin, markdownColor, spoilerBackgroundColor, null);
 
         MarkwonAdapter markwonAdapter = MarkdownUtils.createTablesAdapter();
-        LinearLayoutManagerBugFixed linearLayoutManager = new MarkwonLinearLayoutManager(this, new MarkwonLinearLayoutManager.HorizontalScrollViewScrolledListener() {
+        LinearLayoutManagerBugFixed linearLayoutManager = new MarkwonLinearLayoutManager(this, new SwipeLockScrollView.SwipeLockInterface() {
             @Override
-            public void onScrolledLeft() {
+            public void lockSwipe() {
                 if (mSlidrInterface != null) {
                     mSlidrInterface.lock();
                 }
             }
 
             @Override
-            public void onScrolledRight() {
+            public void unlockSwipe() {
                 if (mSlidrInterface != null) {
                     mSlidrInterface.unlock();
                 }
