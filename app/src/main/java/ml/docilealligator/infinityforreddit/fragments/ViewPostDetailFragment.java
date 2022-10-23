@@ -1762,8 +1762,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 mExecutor, new Handler(), pushshiftRetrofit, comment,
                 new FetchRemovedComment.FetchRemovedCommentListener() {
                     @Override
-                    public void fetchSuccess(Comment comment) {
-                        mCommentsAdapter.editComment(comment.getAuthor(), comment.getCommentMarkdown(), position);
+                    public void fetchSuccess(Comment fetchedComment, Comment originalComment) {
+                        mCommentsAdapter.editComment(fetchedComment, originalComment, position);
                     }
 
                     @Override
@@ -1773,8 +1773,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                 comment, mPost.getPostTimeMillis(), mPost.getNComments(),
                                 new FetchRemovedCommentReveddit.FetchRemovedCommentListener() {
                                     @Override
-                                    public void fetchSuccess(Comment comment) {
-                                        mCommentsAdapter.editComment(comment.getAuthor(), comment.getCommentMarkdown(), position);
+                                    public void fetchSuccess(Comment fetchedComment, Comment originalComment) {
+                                        mCommentsAdapter.editComment(fetchedComment, originalComment, position);
                                     }
 
                                     @Override
