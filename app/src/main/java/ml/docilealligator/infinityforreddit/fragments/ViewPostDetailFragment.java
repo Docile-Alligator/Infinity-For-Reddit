@@ -508,7 +508,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             mMessageFullname = getArguments().getString(EXTRA_MESSAGE_FULLNAME);
 
             if (!mRespectSubredditRecommendedSortType || isSingleCommentThreadMode) {
-                sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value.toUpperCase());
+                sortType = loadSortType();
                 if (sortType != null) {
                     activity.setTitle(new SortType(SortType.Type.valueOf(sortType)).getType().fullName);
                     sortType = sortType.toLowerCase();
@@ -775,6 +775,19 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, sortType.getType().name()).apply();
         }
         fetchCommentsRespectRecommendedSort(false, false, sortType.getType().value);
+    }
+
+    private String loadSortType() {
+        String sortTypeName = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.CONFIDENCE.name());
+        if (SortType.Type.BEST.name().equals(sortTypeName)) {
+            // migrate from BEST to CONFIDENCE
+            // key guaranteed to exist because got non-default value
+            mSharedPreferences.edit()
+                    .putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.CONFIDENCE.name())
+                    .apply();
+            return SortType.Type.CONFIDENCE.name();
+        }
+        return sortTypeName;
     }
 
     public void goToTop() {
@@ -1361,7 +1374,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                         public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
                             if (subredditData.getSuggestedCommentSort() == null || subredditData.getSuggestedCommentSort().equals("null") || subredditData.getSuggestedCommentSort().equals("")) {
                                 mRespectSubredditRecommendedSortType = false;
-                                ViewPostDetailFragment.this.sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value.toUpperCase());
+                                ViewPostDetailFragment.this.sortType = loadSortType();
                                 if (ViewPostDetailFragment.this.sortType != null) {
                                     activity.setTitle(new SortType(SortType.Type.valueOf(ViewPostDetailFragment.this.sortType)).getType().fullName);
                                     ViewPostDetailFragment.this.sortType = ViewPostDetailFragment.this.sortType.toLowerCase();
@@ -1369,8 +1382,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                 fetchComments(changeRefreshState, checkSortState, ViewPostDetailFragment.this.sortType);
                             } else {
                                 ViewPostDetailFragment.this.sortType = subredditData.getSuggestedCommentSort();
-                                String sortTypeTemp = ViewPostDetailFragment.this.sortType.toLowerCase().substring(0, 1).toUpperCase() + ViewPostDetailFragment.this.sortType.substring(1);
-                                activity.setTitle(sortTypeTemp);
+                                activity.setTitle(SortType.Type.valueOf(ViewPostDetailFragment.this.sortType.toUpperCase(Locale.US)).fullName);
                                 fetchComments(changeRefreshState, checkSortState, subredditData.getSuggestedCommentSort());
                             }
                         }
@@ -1378,7 +1390,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                         @Override
                         public void onFetchSubredditDataFail(boolean isQuarantined) {
                             mRespectSubredditRecommendedSortType = false;
-                            ViewPostDetailFragment.this.sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value.toUpperCase());
+                            ViewPostDetailFragment.this.sortType = loadSortType();
                             if (ViewPostDetailFragment.this.sortType != null) {
                                 activity.setTitle(new SortType(SortType.Type.valueOf(ViewPostDetailFragment.this.sortType)).getType().fullName);
                                 ViewPostDetailFragment.this.sortType = ViewPostDetailFragment.this.sortType.toLowerCase();
