@@ -350,12 +350,12 @@ public class PostFilter implements Parcelable {
                 postFilter.containDomains = stringBuilder.toString();
             }
 
-            postFilter.containTextType = p.containTextType || postFilter.containTextType;
-            postFilter.containLinkType = p.containLinkType || postFilter.containLinkType;
-            postFilter.containImageType = p.containImageType || postFilter.containImageType;
-            postFilter.containGifType = p.containGifType || postFilter.containGifType;
-            postFilter.containVideoType = p.containVideoType || postFilter.containVideoType;
-            postFilter.containGalleryType = p.containGalleryType || postFilter.containGalleryType;
+            postFilter.containTextType = p.containTextType && postFilter.containTextType;
+            postFilter.containLinkType = p.containLinkType && postFilter.containLinkType;
+            postFilter.containImageType = p.containImageType && postFilter.containImageType;
+            postFilter.containGifType = p.containGifType && postFilter.containGifType;
+            postFilter.containVideoType = p.containVideoType && postFilter.containVideoType;
+            postFilter.containGalleryType = p.containGalleryType && postFilter.containGalleryType;
         }
 
         return postFilter;
