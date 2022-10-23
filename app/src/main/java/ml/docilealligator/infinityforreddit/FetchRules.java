@@ -29,7 +29,7 @@ public class FetchRules {
     public static void fetchRules(Executor executor, Handler handler, Retrofit retrofit, String accessToken, String subredditName,
                                   FetchRulesListener fetchRulesListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
-        Call<String> rulesCall =  api.getRules(subredditName);
+        Call<String> rulesCall = accessToken == null ? api.getRules(subredditName) : api.getRulesOauth(APIUtils.getOAuthHeader(accessToken), subredditName);
         rulesCall.enqueue(new Callback<String>() {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {

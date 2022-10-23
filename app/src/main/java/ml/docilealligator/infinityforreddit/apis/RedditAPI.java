@@ -131,6 +131,9 @@ public interface RedditAPI {
     @GET("/r/{subredditName}/about/rules.json?raw_json=1")
     Call<String> getRules(@Path("subredditName") String subredditName);
 
+    @GET("/r/{subredditName}/about/rules.json?raw_json=1")
+    Call<String> getRulesOauth(@HeaderMap Map<String, String> headers, @Path("subredditName") String subredditName);
+
     @GET("/comments/{id}/placeholder/{singleCommentId}.json?raw_json=1")
     Call<String> getPostAndCommentsSingleThreadByIdOauth(@Path("id") String id, @Path("singleCommentId") String singleCommentId,
                                                          @Query("sort") String sortType, @Query("context") String contextNumber,
