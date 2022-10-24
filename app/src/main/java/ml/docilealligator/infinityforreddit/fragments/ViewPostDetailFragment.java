@@ -17,6 +17,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -38,6 +39,7 @@ import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -128,6 +130,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     public static final String EXTRA_MESSAGE_FULLNAME = "EMF";
     public static final String EXTRA_POST_LIST_POSITION = "EPLP";
     private static final int EDIT_POST_REQUEST_CODE = 2;
+    private static final String SCROLL_POSITION_STATE = "SPS";
 
     @BindView(R.id.swipe_refresh_layout_view_post_detail_fragment)
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -246,6 +249,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private int swipeRightAction;
     private float swipeActionThreshold;
     private ItemTouchHelper touchHelper;
+    private int scrollPosition;
 
     public ViewPostDetailFragment() {
         // Required empty public constructor
@@ -307,6 +311,40 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (savedInstanceState == null) {
             mRespectSubredditRecommendedSortType = mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false);
             viewPostDetailFragmentId = System.currentTimeMillis();
+        } else {
+            scrollPosition = savedInstanceState.getInt(SCROLL_POSITION_STATE);
+            // if the scrollPosition < 0 do nothing
+            if (scrollPosition >= 0) {
+                if (getResources().getBoolean(R.bool.isTablet)) {
+                    boolean separatePortrait = mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_PORTRAIT_MODE, true);
+                    boolean separateLandscape = mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_LANDSCAPE_MODE, true);
+                    if (separatePortrait != separateLandscape) {
+                        if (mCommentsRecyclerView != null) {
+                            //restore the position for commentsadapter
+                            scrollPosition--;
+                            mCommentsRecyclerView.scrollToPosition(scrollPosition);
+                        } else {
+                            // restore the position for mrecyclerview
+                            scrollPosition++;
+                            mRecyclerView.scrollToPosition(scrollPosition);
+                        }
+                    }
+                } else {
+                    if (mSeparatePostAndComments) {
+                        if (mCommentsRecyclerView != null) {
+                            scrollPosition--;
+                            mCommentsRecyclerView.scrollToPosition(scrollPosition);
+                        }
+                    } else {
+                        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                            if (mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_LANDSCAPE_MODE, true)) {
+                                scrollPosition++;
+                                mRecyclerView.scrollToPosition(scrollPosition);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         mGlide = Glide.with(this);
@@ -1159,6 +1197,17 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         comments = mCommentsAdapter == null ? null : mCommentsAdapter.getVisibleComments();
+        if (mCommentsRecyclerView != null) {
+            //scrollpositionn = mcommentsadapter.getPosition()
+            LinearLayoutManager myLayoutManager = (LinearLayoutManager) mCommentsRecyclerView.getLayoutManager();
+            scrollPosition = myLayoutManager != null ? myLayoutManager.findFirstVisibleItemPosition() : 0;
+            
+        } else {
+            //scrollposition = mrecyclerviewadapter.getposition()
+            LinearLayoutManager myLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+            scrollPosition = myLayoutManager != null ? myLayoutManager.findFirstVisibleItemPosition() : 0;
+        }
+        outState.putInt(SCROLL_POSITION_STATE, scrollPosition);
         Bridge.saveInstanceState(this, outState);
     }
 
