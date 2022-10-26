@@ -70,36 +70,25 @@ public class FetchComment {
 
     public static void fetchMoreComment(Executor executor, Handler handler, Retrofit retrofit,
                                         @Nullable String accessToken,
-                                        ArrayList<String> allChildren, int startingIndex,
+                                        ArrayList<String> allChildren,
                                         boolean expandChildren, String postFullName,
                                         FetchMoreCommentListener fetchMoreCommentListener) {
         if (allChildren == null) {
             return;
         }
 
-        // todo: build query from all comments and use POST method to avoid "414 Request-URI Too Large"
-        //  see https://www.reddit.com/r/redditdev/comments/3hr3ls/get_apimorechildren_returns_414_requesturi_too/
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < 100; i++) {
-            if (allChildren.size() <= startingIndex + i) {
-                break;
-            }
-            String childId = allChildren.get(startingIndex + i);
-            stringBuilder.append(childId).append(",");
-        }
+        String childrenIds = String.join(",", allChildren);
 
-        if (stringBuilder.length() == 0) {
+        if (childrenIds.isEmpty()) {
             return;
         }
-
-        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
 
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> moreComments;
         if (accessToken == null) {
-            moreComments = api.moreChildren(postFullName, stringBuilder.toString());
+            moreComments = api.moreChildren(postFullName, childrenIds);
         } else {
-            moreComments = api.moreChildrenOauth(postFullName, stringBuilder.toString(), APIUtils.getOAuthHeader(accessToken));
+            moreComments = api.moreChildrenOauth(postFullName, childrenIds, APIUtils.getOAuthHeader(accessToken));
         }
 
         moreComments.enqueue(new Callback<String>() {
@@ -111,8 +100,7 @@ public class FetchComment {
                                 @Override
                                 public void onParseCommentSuccess(ArrayList<Comment> expandedComments,
                                                                   String parentId, ArrayList<String> moreChildrenIds) {
-                                    fetchMoreCommentListener.onFetchMoreCommentSuccess(expandedComments,
-                                            startingIndex + 100);
+                                    fetchMoreCommentListener.onFetchMoreCommentSuccess(expandedComments, moreChildrenIds);
                                 }
 
                                 @Override
@@ -139,7 +127,7 @@ public class FetchComment {
     }
 
     public interface FetchMoreCommentListener {
-        void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments, int childrenStartingIndex);
+        void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments,  ArrayList<String> moreChildrenIds);
 
         void onFetchMoreCommentFailed();
     }

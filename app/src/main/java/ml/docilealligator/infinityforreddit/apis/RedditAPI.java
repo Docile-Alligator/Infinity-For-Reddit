@@ -10,6 +10,7 @@ import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
+import retrofit2.http.Field;
 import retrofit2.http.FieldMap;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -425,9 +426,11 @@ public interface RedditAPI {
     @POST("/api/site_admin")
     Call<String> postSiteAdmin(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
-    @GET("/api/morechildren.json?raw_json=1&api_type=json")
-    Call<String> moreChildren(@Query("link_id") String linkId, @Query("children") String children);
+    @FormUrlEncoded
+    @POST("/api/morechildren.json?raw_json=1&api_type=json")
+    Call<String> moreChildren(@Field("link_id") String linkId, @Field("children") String children);
 
-    @GET("/api/morechildren.json?raw_json=1&api_type=json")
-    Call<String> moreChildrenOauth(@Query("link_id") String linkId, @Query("children") String children, @HeaderMap Map<String, String> headers);
+    @FormUrlEncoded
+    @POST("/api/morechildren.json?raw_json=1&api_type=json")
+    Call<String> moreChildrenOauth(@Field("link_id") String linkId, @Field("children") String children, @HeaderMap Map<String, String> headers);
 }

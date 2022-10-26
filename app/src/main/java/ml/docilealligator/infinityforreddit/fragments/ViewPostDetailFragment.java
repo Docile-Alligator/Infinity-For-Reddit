@@ -200,8 +200,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @State
     ArrayList<String> children;
     @State
-    int mChildrenStartingIndex = 0;
-    @State
     boolean loadMoreChildrenSuccess = true;
     @State
     boolean hasMoreChildren;
@@ -765,7 +763,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     public void changeSortType(SortType sortType) {
         mFetchPostInfoLinearLayout.setVisibility(View.GONE);
         mGlide.clear(mFetchPostInfoImageView);
-        mChildrenStartingIndex = 0;
         if (children != null) {
             children.clear();
         }
@@ -1502,13 +1499,13 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         isLoadingMoreChildren = true;
 
         Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
-        FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken, children, mChildrenStartingIndex,
+        FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken, children,
                 mExpandChildren, mPost.getFullName(), new FetchComment.FetchMoreCommentListener() {
                     @Override
-                    public void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments, int childrenStartingIndex) {
-                        hasMoreChildren = childrenStartingIndex < children.size();
+                    public void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments, ArrayList<String> moreChildrenIds) {
+                        children = moreChildrenIds;
+                        hasMoreChildren = !children.isEmpty();
                         mCommentsAdapter.addComments(expandedComments, hasMoreChildren);
-                        mChildrenStartingIndex = childrenStartingIndex;
                         isLoadingMoreChildren = false;
                         loadMoreChildrenSuccess = true;
                     }
@@ -1525,7 +1522,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     public void refresh(boolean fetchPost, boolean fetchComments) {
         if (mPostAdapter != null && !isRefreshing) {
             isRefreshing = true;
-            mChildrenStartingIndex = 0;
 
             mFetchPostInfoLinearLayout.setVisibility(View.GONE);
             mGlide.clear(mFetchPostInfoImageView);

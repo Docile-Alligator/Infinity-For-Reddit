@@ -54,7 +54,6 @@ public class Comment implements Parcelable {
     private boolean hasExpandedBefore;
     private ArrayList<Comment> children;
     private ArrayList<String> moreChildrenIds;
-    private int moreChildrenStartingIndex;
     private int placeholderType;
     private boolean isLoadingMoreChildren;
     private boolean loadMoreChildrenFailed;
@@ -91,7 +90,6 @@ public class Comment implements Parcelable {
         this.saved = saved;
         this.isExpanded = false;
         this.hasExpandedBefore = false;
-        moreChildrenStartingIndex = 0;
         placeholderType = NOT_PLACEHOLDER;
     }
 
@@ -143,7 +141,6 @@ public class Comment implements Parcelable {
         in.readTypedList(children, Comment.CREATOR);
         moreChildrenIds = new ArrayList<>();
         in.readStringList(moreChildrenIds);
-        moreChildrenStartingIndex = in.readInt();
         placeholderType = in.readInt();
         isLoadingMoreChildren = in.readByte() != 0;
         loadMoreChildrenFailed = in.readByte() != 0;
@@ -361,14 +358,6 @@ public class Comment implements Parcelable {
         moreChildrenIds.clear();
     }
 
-    public int getMoreChildrenStartingIndex() {
-        return moreChildrenStartingIndex;
-    }
-
-    public void setMoreChildrenStartingIndex(int moreChildrenStartingIndex) {
-        this.moreChildrenStartingIndex = moreChildrenStartingIndex;
-    }
-
     public int getPlaceholderType() {
         return placeholderType;
     }
@@ -424,7 +413,6 @@ public class Comment implements Parcelable {
         parcel.writeByte((byte) (hasExpandedBefore ? 1 : 0));
         parcel.writeTypedList(children);
         parcel.writeStringList(moreChildrenIds);
-        parcel.writeInt(moreChildrenStartingIndex);
         parcel.writeInt(placeholderType);
         parcel.writeByte((byte) (isLoadingMoreChildren ? 1 : 0));
         parcel.writeByte((byte) (loadMoreChildrenFailed ? 1 : 0));

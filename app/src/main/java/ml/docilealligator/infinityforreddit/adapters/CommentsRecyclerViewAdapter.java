@@ -597,16 +597,14 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
                         FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken,
                                 parentComment.getMoreChildrenIds(),
-                                parentComment.getMoreChildrenStartingIndex(),
                                 mExpandChildren, mPost.getFullName(), new FetchComment.FetchMoreCommentListener() {
                                     @Override
-                                    public void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments,
-                                                                          int childrenStartingIndex) {
+                                    public void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments, ArrayList<String> moreChildrenIds) {
                                         if (mVisibleComments.size() > parentPosition
                                                 && parentComment.getFullName().equals(mVisibleComments.get(parentPosition).getFullName())) {
                                             if (mVisibleComments.get(parentPosition).isExpanded()) {
-                                                if (mVisibleComments.get(parentPosition).getChildren().size() > childrenStartingIndex) {
-                                                    mVisibleComments.get(parentPosition).setMoreChildrenStartingIndex(childrenStartingIndex);
+                                                if (!moreChildrenIds.isEmpty()) {
+                                                    mVisibleComments.get(parentPosition).setMoreChildrenIds(moreChildrenIds);
                                                     mVisibleComments.get(parentPosition).getChildren().get(mVisibleComments.get(parentPosition).getChildren().size() - 1)
                                                             .setLoadingMoreChildren(false);
                                                     mVisibleComments.get(parentPosition).getChildren().get(mVisibleComments.get(parentPosition).getChildren().size() - 1)
@@ -662,7 +660,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                                                     }
                                                 }
                                             } else {
-                                                if (mVisibleComments.get(parentPosition).hasReply() && mVisibleComments.get(parentPosition).getChildren().size() <= childrenStartingIndex) {
+                                                if (mVisibleComments.get(parentPosition).hasReply() && moreChildrenIds.isEmpty()) {
                                                     mVisibleComments.get(parentPosition).getChildren()
                                                             .remove(mVisibleComments.get(parentPosition).getChildren().size() - 1);
                                                     mVisibleComments.get(parentPosition).removeMoreChildrenIds();

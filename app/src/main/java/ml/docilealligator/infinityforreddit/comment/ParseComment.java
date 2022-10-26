@@ -6,6 +6,7 @@ import static ml.docilealligator.infinityforreddit.comment.Comment.VOTE_TYPE_UPV
 
 import android.os.Handler;
 import android.text.Html;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -225,7 +226,7 @@ public class ParseComment {
             } else {
                 c.setExpanded(true);
             }
-            if (c.hasMoreChildrenIds() && c.getMoreChildrenIds().size() > c.getMoreChildrenStartingIndex()) {
+            if (c.hasMoreChildrenIds() && !c.getMoreChildrenIds().isEmpty()) {
                 //Add a load more placeholder
                 Comment placeholder = new Comment(c.getFullName(), c.getDepth() + 1, Comment.PLACEHOLDER_LOAD_MORE_COMMENTS);
                 visibleComments.add(placeholder);
