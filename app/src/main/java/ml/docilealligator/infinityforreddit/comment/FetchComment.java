@@ -46,9 +46,9 @@ public class FetchComment {
                             expandChildren, new ParseComment.ParseCommentListener() {
                                 @Override
                                 public void onParseCommentSuccess(ArrayList<Comment> expandedComments,
-                                                                  String parentId, ArrayList<String> moreChildrenFullnames) {
+                                                                  String parentId, ArrayList<String> moreChildrenIds) {
                                     fetchCommentListener.onFetchCommentSuccess(expandedComments, parentId,
-                                            moreChildrenFullnames);
+                                            moreChildrenIds);
                                 }
 
                                 @Override
@@ -84,8 +84,8 @@ public class FetchComment {
             if (allChildren.size() <= startingIndex + i) {
                 break;
             }
-            String child = allChildren.get(startingIndex + i);
-            stringBuilder.append(child.substring(3)).append(",");
+            String childId = allChildren.get(startingIndex + i);
+            stringBuilder.append(childId).append(",");
         }
 
         if (stringBuilder.length() == 0) {
@@ -110,7 +110,7 @@ public class FetchComment {
                             expandChildren, new ParseComment.ParseCommentListener() {
                                 @Override
                                 public void onParseCommentSuccess(ArrayList<Comment> expandedComments,
-                                                                  String parentId, ArrayList<String> moreChildrenFullnames) {
+                                                                  String parentId, ArrayList<String> moreChildrenIds) {
                                     fetchMoreCommentListener.onFetchMoreCommentSuccess(expandedComments,
                                             startingIndex + 100);
                                 }

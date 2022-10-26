@@ -1273,8 +1273,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                 ParseComment.parseComment(mExecutor, new Handler(), response.body(), new ArrayList<>(),
                                         mExpandChildren, new ParseComment.ParseCommentListener() {
                                             @Override
-                                            public void onParseCommentSuccess(ArrayList<Comment> expandedComments, String parentId, ArrayList<String> moreChildrenFullnames) {
-                                                ViewPostDetailFragment.this.children = moreChildrenFullnames;
+                                            public void onParseCommentSuccess(ArrayList<Comment> expandedComments, String parentId, ArrayList<String> moreChildrenIds) {
+                                                ViewPostDetailFragment.this.children = moreChildrenIds;
 
                                                 hasMoreChildren = children.size() != 0;
                                                 mCommentsAdapter.addComments(expandedComments, hasMoreChildren);

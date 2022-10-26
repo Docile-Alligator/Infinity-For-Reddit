@@ -596,7 +596,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
                         Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
                         FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken,
-                                parentComment.getMoreChildrenFullnames(),
+                                parentComment.getMoreChildrenIds(),
                                 parentComment.getMoreChildrenStartingIndex(),
                                 mExpandChildren, mPost.getFullName(), new FetchComment.FetchMoreCommentListener() {
                                     @Override
@@ -635,7 +635,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                                                 } else {
                                                     mVisibleComments.get(parentPosition).getChildren()
                                                             .remove(mVisibleComments.get(parentPosition).getChildren().size() - 1);
-                                                    mVisibleComments.get(parentPosition).removeMoreChildrenFullnames();
+                                                    mVisibleComments.get(parentPosition).removeMoreChildrenIds();
 
                                                     int placeholderPosition = commentPosition;
                                                     if (mVisibleComments.get(commentPosition).getFullName().equals(parentComment.getFullName())) {
@@ -665,7 +665,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                                                 if (mVisibleComments.get(parentPosition).hasReply() && mVisibleComments.get(parentPosition).getChildren().size() <= childrenStartingIndex) {
                                                     mVisibleComments.get(parentPosition).getChildren()
                                                             .remove(mVisibleComments.get(parentPosition).getChildren().size() - 1);
-                                                    mVisibleComments.get(parentPosition).removeMoreChildrenFullnames();
+                                                    mVisibleComments.get(parentPosition).removeMoreChildrenIds();
                                                 }
                                             }
 

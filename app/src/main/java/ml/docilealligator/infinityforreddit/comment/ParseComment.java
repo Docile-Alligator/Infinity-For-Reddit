@@ -33,10 +33,10 @@ public class ParseComment {
                 childrenArray = childrenArray.getJSONObject(1).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
 
                 ArrayList<Comment> expandedNewComments = new ArrayList<>();
-                ArrayList<String> moreChildrenFullnames = new ArrayList<>();
+                ArrayList<String> moreChildrenIds = new ArrayList<>();
                 ArrayList<Comment> newComments = new ArrayList<>();
 
-                parseCommentRecursion(childrenArray, newComments, moreChildrenFullnames, 0);
+                parseCommentRecursion(childrenArray, newComments, moreChildrenIds, 0);
                 expandChildren(newComments, expandedNewComments, expandChildren);
 
                 if (expandChildren) {
@@ -45,7 +45,7 @@ public class ParseComment {
                     commentData.addAll(newComments);
                 }
 
-                handler.post(() -> parseCommentListener.onParseCommentSuccess(commentData, parentId, moreChildrenFullnames));
+                handler.post(() -> parseCommentListener.onParseCommentSuccess(commentData, parentId, moreChildrenIds));
             } catch (JSONException e) {
                 e.printStackTrace();
                 handler.post(parseCommentListener::onParseCommentFailed);
@@ -63,7 +63,7 @@ public class ParseComment {
 
                 ArrayList<Comment> newComments = new ArrayList<>();
                 ArrayList<Comment> expandedNewComments = new ArrayList<>();
-                ArrayList<String> moreChildrenFullnames = new ArrayList<>();
+                ArrayList<String> moreChildrenIds = new ArrayList<>();
 
                 // api response is a flat list of comments tree
                 // process it in order and rebuild the tree
@@ -75,19 +75,19 @@ public class ParseComment {
                         JSONArray childrenIds = childData.getJSONArray(JSONUtils.CHILDREN_KEY);
 
                         if (childrenIds.length() != 0) {
-                            ArrayList<String> localMoreChildrenFullnames = new ArrayList<>(childrenIds.length());
+                            ArrayList<String> localMoreChildrenIds = new ArrayList<>(childrenIds.length());
                             for (int j = 0; j < childrenIds.length(); j++) {
-                                localMoreChildrenFullnames.add("t1_" + childrenIds.getString(j));
+                                localMoreChildrenIds.add(childrenIds.getString(j));
                             }
 
                             Comment parentComment = findCommentByFullName(newComments, parentFullName);
                             if (parentComment != null) {
                                 parentComment.setHasReply(true);
-                                parentComment.setMoreChildrenFullnames(localMoreChildrenFullnames);
+                                parentComment.setMoreChildrenIds(localMoreChildrenIds);
                                 parentComment.addChildren(new ArrayList<>()); // ensure children list is not null
                             } else {
                                 // assume that it is parent of this call
-                                moreChildrenFullnames.addAll(localMoreChildrenFullnames);
+                                moreChildrenIds.addAll(localMoreChildrenIds);
                             }
                         } else {
                             Comment continueThreadPlaceholder = new Comment(
@@ -131,7 +131,7 @@ public class ParseComment {
                     commentData.addAll(newComments);
                 }
 
-                handler.post(() -> parseCommentListener.onParseCommentSuccess(commentData, null, moreChildrenFullnames));
+                handler.post(() -> parseCommentListener.onParseCommentSuccess(commentData, null, moreChildrenIds));
             } catch (JSONException e) {
                 e.printStackTrace();
                 handler.post(parseCommentListener::onParseCommentFailed);
@@ -156,7 +156,7 @@ public class ParseComment {
     }
 
     private static void parseCommentRecursion(JSONArray comments, ArrayList<Comment> newCommentData,
-                                              ArrayList<String> moreChildrenFullnames, int depth) throws JSONException {
+                                              ArrayList<String> moreChildrenIds, int depth) throws JSONException {
         int actualCommentLength;
 
         if (comments.length() == 0) {
@@ -165,17 +165,17 @@ public class ParseComment {
 
         JSONObject more = comments.getJSONObject(comments.length() - 1).getJSONObject(JSONUtils.DATA_KEY);
 
-        //Maybe moreChildrenFullnames contain only commentsJSONArray and no more info
+        //Maybe moreChildrenIds contain only commentsJSONArray and no more info
         if (more.has(JSONUtils.COUNT_KEY)) {
             JSONArray childrenArray = more.getJSONArray(JSONUtils.CHILDREN_KEY);
 
             for (int i = 0; i < childrenArray.length(); i++) {
-                moreChildrenFullnames.add("t1_" + childrenArray.getString(i));
+                moreChildrenIds.add(childrenArray.getString(i));
             }
 
             actualCommentLength = comments.length() - 1;
 
-            if (moreChildrenFullnames.isEmpty() && comments.getJSONObject(comments.length() - 1).getString(JSONUtils.KIND_KEY).equals(JSONUtils.KIND_VALUE_MORE)) {
+            if (moreChildrenIds.isEmpty() && comments.getJSONObject(comments.length() - 1).getString(JSONUtils.KIND_KEY).equals(JSONUtils.KIND_VALUE_MORE)) {
                 newCommentData.add(new Comment(more.getString(JSONUtils.PARENT_ID_KEY), more.getInt(JSONUtils.DEPTH_KEY), Comment.PLACEHOLDER_CONTINUE_THREAD));
                 return;
             }
@@ -191,10 +191,10 @@ public class ParseComment {
                 JSONArray childrenArray = data.getJSONObject(JSONUtils.REPLIES_KEY)
                         .getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
                 ArrayList<Comment> children = new ArrayList<>();
-                ArrayList<String> nextMoreChildrenFullnames = new ArrayList<>();
-                parseCommentRecursion(childrenArray, children, nextMoreChildrenFullnames, singleComment.getDepth());
+                ArrayList<String> nextMoreChildrenIds = new ArrayList<>();
+                parseCommentRecursion(childrenArray, children, nextMoreChildrenIds, singleComment.getDepth());
                 singleComment.addChildren(children);
-                singleComment.setMoreChildrenFullnames(nextMoreChildrenFullnames);
+                singleComment.setMoreChildrenIds(nextMoreChildrenIds);
                 singleComment.setChildCount(getChildCount(singleComment));
             }
 
@@ -225,7 +225,7 @@ public class ParseComment {
             } else {
                 c.setExpanded(true);
             }
-            if (c.hasMoreChildrenFullnames() && c.getMoreChildrenFullnames().size() > c.getMoreChildrenStartingIndex()) {
+            if (c.hasMoreChildrenIds() && c.getMoreChildrenIds().size() > c.getMoreChildrenStartingIndex()) {
                 //Add a load more placeholder
                 Comment placeholder = new Comment(c.getFullName(), c.getDepth() + 1, Comment.PLACEHOLDER_LOAD_MORE_COMMENTS);
                 visibleComments.add(placeholder);
@@ -365,7 +365,7 @@ public class ParseComment {
 
     public interface ParseCommentListener {
         void onParseCommentSuccess(ArrayList<Comment> expandedComments, String parentId,
-                                   ArrayList<String> moreChildrenFullnames);
+                                   ArrayList<String> moreChildrenIds);
 
         void onParseCommentFailed();
     }

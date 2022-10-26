@@ -53,7 +53,7 @@ public class Comment implements Parcelable {
     private boolean isExpanded;
     private boolean hasExpandedBefore;
     private ArrayList<Comment> children;
-    private ArrayList<String> moreChildrenFullnames;
+    private ArrayList<String> moreChildrenIds;
     private int moreChildrenStartingIndex;
     private int placeholderType;
     private boolean isLoadingMoreChildren;
@@ -141,8 +141,8 @@ public class Comment implements Parcelable {
         hasExpandedBefore = in.readByte() != 0;
         children = new ArrayList<>();
         in.readTypedList(children, Comment.CREATOR);
-        moreChildrenFullnames = new ArrayList<>();
-        in.readStringList(moreChildrenFullnames);
+        moreChildrenIds = new ArrayList<>();
+        in.readStringList(moreChildrenIds);
         moreChildrenStartingIndex = in.readInt();
         placeholderType = in.readInt();
         isLoadingMoreChildren = in.readByte() != 0;
@@ -345,20 +345,20 @@ public class Comment implements Parcelable {
         children.add(position, comment);
     }
 
-    public ArrayList<String> getMoreChildrenFullnames() {
-        return moreChildrenFullnames;
+    public ArrayList<String> getMoreChildrenIds() {
+        return moreChildrenIds;
     }
 
-    public void setMoreChildrenFullnames(ArrayList<String> moreChildrenFullnames) {
-        this.moreChildrenFullnames = moreChildrenFullnames;
+    public void setMoreChildrenIds(ArrayList<String> moreChildrenIds) {
+        this.moreChildrenIds = moreChildrenIds;
     }
 
-    public boolean hasMoreChildrenFullnames() {
-        return moreChildrenFullnames != null;
+    public boolean hasMoreChildrenIds() {
+        return moreChildrenIds != null;
     }
 
-    public void removeMoreChildrenFullnames() {
-        moreChildrenFullnames.clear();
+    public void removeMoreChildrenIds() {
+        moreChildrenIds.clear();
     }
 
     public int getMoreChildrenStartingIndex() {
@@ -423,7 +423,7 @@ public class Comment implements Parcelable {
         parcel.writeByte((byte) (isExpanded ? 1 : 0));
         parcel.writeByte((byte) (hasExpandedBefore ? 1 : 0));
         parcel.writeTypedList(children);
-        parcel.writeStringList(moreChildrenFullnames);
+        parcel.writeStringList(moreChildrenIds);
         parcel.writeInt(moreChildrenStartingIndex);
         parcel.writeInt(placeholderType);
         parcel.writeByte((byte) (isLoadingMoreChildren ? 1 : 0));
