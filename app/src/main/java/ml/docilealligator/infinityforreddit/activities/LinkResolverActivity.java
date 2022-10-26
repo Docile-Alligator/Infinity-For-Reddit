@@ -50,7 +50,7 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String IMGUR_ALBUM_PATTERN = "/(album|a)/\\w+/?";
     private static final String IMGUR_IMAGE_PATTERN = "/\\w+/?";
     private static final String RPAN_BROADCAST_PATTERN = "/rpan/r/[\\w-]+/\\w+/?\\w+/?";
-    private static final String WIKI_PATTERN = "/[rR]/[\\w-]+/(wiki|w)?(?:/\\w+)+";
+    private static final String WIKI_PATTERN = "/[rR]/[\\w-]+/(wiki|w)?(?:/?[\\w-]+)+";
     private static final String GOOGLE_AMP_PATTERN = "/amp/s/amp.reddit.com/.*";
     private static final String STREAMABLE_PATTERN = "/\\w+/?";
 
@@ -204,7 +204,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                                     deepLinkError(uri);
                                 }
                             } else if (path.matches(WIKI_PATTERN)) {
-                                final String wikiPage = path.substring(path.lastIndexOf("/wiki/") + 6);
+                                String wikiPage = path.endsWith("/wiki") ? "index" : path.substring(path.lastIndexOf("/wiki/") + 6);
                                 Intent intent = new Intent(this, WikiActivity.class);
                                 intent.putExtra(WikiActivity.EXTRA_SUBREDDIT_NAME, segments.get(1));
                                 intent.putExtra(WikiActivity.EXTRA_WIKI_PATH, wikiPage);
