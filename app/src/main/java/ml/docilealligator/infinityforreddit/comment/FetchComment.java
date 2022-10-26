@@ -72,6 +72,7 @@ public class FetchComment {
                                         @Nullable String accessToken,
                                         ArrayList<String> allChildren,
                                         boolean expandChildren, String postFullName,
+                                        String sortType,
                                         FetchMoreCommentListener fetchMoreCommentListener) {
         if (allChildren == null) {
             return;
@@ -86,9 +87,10 @@ public class FetchComment {
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> moreComments;
         if (accessToken == null) {
-            moreComments = api.moreChildren(postFullName, childrenIds);
+            moreComments = api.moreChildren(postFullName, childrenIds, sortType);
         } else {
-            moreComments = api.moreChildrenOauth(postFullName, childrenIds, APIUtils.getOAuthHeader(accessToken));
+            moreComments = api.moreChildrenOauth(postFullName, childrenIds,
+                    sortType, APIUtils.getOAuthHeader(accessToken));
         }
 
         moreComments.enqueue(new Callback<String>() {

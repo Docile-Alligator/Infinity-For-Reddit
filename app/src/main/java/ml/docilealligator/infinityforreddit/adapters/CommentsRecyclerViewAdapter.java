@@ -595,9 +595,10 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.loading);
 
                         Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
+                        String sortType = mCommentRecyclerViewAdapterCallback.getSortType();
                         FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken,
                                 parentComment.getMoreChildrenIds(),
-                                mExpandChildren, mPost.getFullName(), new FetchComment.FetchMoreCommentListener() {
+                                mExpandChildren, mPost.getFullName(), sortType, new FetchComment.FetchMoreCommentListener() {
                                     @Override
                                     public void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments, ArrayList<String> moreChildrenIds) {
                                         if (mVisibleComments.size() > parentPosition
@@ -1129,6 +1130,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         void retryFetchingComments();
 
         void retryFetchingMoreComments();
+
+        String getSortType();
     }
 
     public class CommentViewHolder extends RecyclerView.ViewHolder {

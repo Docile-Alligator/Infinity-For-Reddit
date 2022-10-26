@@ -574,6 +574,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
                             fetchMoreComments();
                         }
+
+                        @Override
+                        public String getSortType() {
+                            return sortType;
+                        }
                     });
             if (mCommentsRecyclerView != null) {
                 mRecyclerView.setAdapter(mPostAdapter);
@@ -1255,6 +1260,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
                                             fetchMoreComments();
                                         }
+
+                                        @Override
+                                        public String getSortType() {
+                                            return sortType;
+                                        }
                                     });
                             if (mCommentsRecyclerView != null) {
                                 mRecyclerView.setAdapter(mPostAdapter);
@@ -1500,7 +1510,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
         Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
         FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken, children,
-                mExpandChildren, mPost.getFullName(), new FetchComment.FetchMoreCommentListener() {
+                mExpandChildren, mPost.getFullName(), sortType, new FetchComment.FetchMoreCommentListener() {
                     @Override
                     public void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments, ArrayList<String> moreChildrenIds) {
                         children = moreChildrenIds;

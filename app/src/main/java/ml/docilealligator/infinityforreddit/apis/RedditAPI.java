@@ -428,9 +428,9 @@ public interface RedditAPI {
 
     @FormUrlEncoded
     @POST("/api/morechildren.json?raw_json=1&api_type=json")
-    Call<String> moreChildren(@Field("link_id") String linkId, @Field("children") String children);
+    Call<String> moreChildren(@Field("link_id") String linkId, @Field("children") String children, @Field("sort") String sort);
 
     @FormUrlEncoded
     @POST("/api/morechildren.json?raw_json=1&api_type=json")
-    Call<String> moreChildrenOauth(@Field("link_id") String linkId, @Field("children") String children, @HeaderMap Map<String, String> headers);
+    Call<String> moreChildrenOauth(@Field("link_id") String linkId, @Field("children") String children, @Field("sort") String sort, @HeaderMap Map<String, String> headers);
 }
