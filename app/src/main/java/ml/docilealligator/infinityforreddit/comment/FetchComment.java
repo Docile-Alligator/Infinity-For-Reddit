@@ -71,18 +71,21 @@ public class FetchComment {
     public static void fetchMoreComment(Executor executor, Handler handler, Retrofit retrofit,
                                         @Nullable String accessToken,
                                         ArrayList<String> allChildren, int startingIndex,
-                                        int depth, boolean expandChildren,
+                                        boolean expandChildren, String postFullName,
                                         FetchMoreCommentListener fetchMoreCommentListener) {
         if (allChildren == null) {
             return;
         }
 
+        // todo: build query from all comments and use POST method to avoid "414 Request-URI Too Large"
+        //  see https://www.reddit.com/r/redditdev/comments/3hr3ls/get_apimorechildren_returns_414_requesturi_too/
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < 100; i++) {
             if (allChildren.size() <= startingIndex + i) {
                 break;
             }
-            stringBuilder.append(allChildren.get(startingIndex + i)).append(",");
+            String child = allChildren.get(startingIndex + i);
+            stringBuilder.append(child.substring(3)).append(",");
         }
 
         if (stringBuilder.length() == 0) {
@@ -94,9 +97,9 @@ public class FetchComment {
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> moreComments;
         if (accessToken == null) {
-            moreComments = api.getInfo(stringBuilder.toString());
+            moreComments = api.moreChildren(postFullName, stringBuilder.toString());
         } else {
-            moreComments = api.getInfoOauth(stringBuilder.toString(), APIUtils.getOAuthHeader(accessToken));
+            moreComments = api.moreChildrenOauth(postFullName, stringBuilder.toString(), APIUtils.getOAuthHeader(accessToken));
         }
 
         moreComments.enqueue(new Callback<String>() {
@@ -104,7 +107,7 @@ public class FetchComment {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
                     ParseComment.parseMoreComment(executor, handler, response.body(), new ArrayList<>(),
-                            depth, expandChildren, new ParseComment.ParseCommentListener() {
+                            expandChildren, new ParseComment.ParseCommentListener() {
                                 @Override
                                 public void onParseCommentSuccess(ArrayList<Comment> expandedComments,
                                                                   String parentId, ArrayList<String> moreChildrenFullnames) {

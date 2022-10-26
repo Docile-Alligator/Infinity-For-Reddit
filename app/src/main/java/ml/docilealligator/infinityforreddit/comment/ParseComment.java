@@ -7,6 +7,7 @@ import static ml.docilealligator.infinityforreddit.comment.Comment.VOTE_TYPE_UPV
 import android.os.Handler;
 import android.text.Html;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import org.json.JSONArray;
@@ -14,6 +15,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Executor;
 
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
@@ -52,17 +54,75 @@ public class ParseComment {
     }
 
     static void parseMoreComment(Executor executor, Handler handler, String response,
-                                 ArrayList<Comment> commentData, int depth, boolean expandChildren,
+                                 ArrayList<Comment> commentData, boolean expandChildren,
                                  ParseCommentListener parseCommentListener) {
         executor.execute(() -> {
             try {
-                JSONArray childrenArray = new JSONObject(response).getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
+                JSONArray childrenArray = new JSONObject(response).getJSONObject(JSONUtils.JSON_KEY)
+                        .getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.THINGS_KEY);
 
                 ArrayList<Comment> newComments = new ArrayList<>();
                 ArrayList<Comment> expandedNewComments = new ArrayList<>();
                 ArrayList<String> moreChildrenFullnames = new ArrayList<>();
 
-                parseCommentRecursion(childrenArray, newComments, moreChildrenFullnames, depth);
+                // api response is a flat list of comments tree
+                // process it in order and rebuild the tree
+                for (int i = 0; i < childrenArray.length(); i++) {
+                    JSONObject child = childrenArray.getJSONObject(i);
+                    JSONObject childData = child.getJSONObject(JSONUtils.DATA_KEY);
+                    if (child.getString(JSONUtils.KIND_KEY).equals(JSONUtils.KIND_VALUE_MORE)) {
+                        String parentFullName = childData.getString(JSONUtils.PARENT_ID_KEY);
+                        JSONArray childrenIds = childData.getJSONArray(JSONUtils.CHILDREN_KEY);
+
+                        if (childrenIds.length() != 0) {
+                            ArrayList<String> localMoreChildrenFullnames = new ArrayList<>(childrenIds.length());
+                            for (int j = 0; j < childrenIds.length(); j++) {
+                                localMoreChildrenFullnames.add("t1_" + childrenIds.getString(j));
+                            }
+
+                            Comment parentComment = findCommentByFullName(newComments, parentFullName);
+                            if (parentComment != null) {
+                                parentComment.setHasReply(true);
+                                parentComment.setMoreChildrenFullnames(localMoreChildrenFullnames);
+                                parentComment.addChildren(new ArrayList<>()); // ensure children list is not null
+                            } else {
+                                // assume that it is parent of this call
+                                moreChildrenFullnames.addAll(localMoreChildrenFullnames);
+                            }
+                        } else {
+                            Comment continueThreadPlaceholder = new Comment(
+                                    parentFullName,
+                                    childData.getInt(JSONUtils.DEPTH_KEY),
+                                    Comment.PLACEHOLDER_CONTINUE_THREAD
+                            );
+
+                            Comment parentComment = findCommentByFullName(newComments, parentFullName);
+                            if (parentComment != null) {
+                                parentComment.setHasReply(true);
+                                parentComment.addChild(continueThreadPlaceholder, parentComment.getChildCount());
+                                parentComment.setChildCount(parentComment.getChildCount() + 1);
+                            } else {
+                                // assume that it is parent of this call
+                                newComments.add(continueThreadPlaceholder);
+                            }
+                        }
+                    } else {
+                        Comment comment = parseSingleComment(childData, 0);
+                        String parentFullName = comment.getParentId();
+
+                        Comment parentComment = findCommentByFullName(newComments, parentFullName);
+                        if (parentComment != null) {
+                            parentComment.setHasReply(true);
+                            parentComment.addChild(comment, parentComment.getChildCount());
+                            parentComment.setChildCount(parentComment.getChildCount() + 1);
+                        } else {
+                            // assume that it is parent of this call
+                            newComments.add(comment);
+                        }
+                    }
+                }
+
+                updateChildrenCount(newComments);
                 expandChildren(newComments, expandedNewComments, expandChildren);
 
                 if (expandChildren) {
@@ -275,6 +335,32 @@ public class ParseComment {
         }
 
         return null;
+    }
+
+    @Nullable
+    private static Comment findCommentByFullName(@NonNull List<Comment> comments, @NonNull String fullName) {
+        for (Comment comment: comments) {
+            if (comment.getFullName().equals(fullName) &&
+                    comment.getPlaceholderType() == Comment.NOT_PLACEHOLDER) {
+                return comment;
+            }
+            if (comment.getChildren() != null) {
+                Comment result = findCommentByFullName(comment.getChildren(), fullName);
+                if (result != null) {
+                    return result;
+                }
+            }
+        }
+        return null;
+    }
+
+    private static void updateChildrenCount(@NonNull List<Comment> comments) {
+        for (Comment comment: comments) {
+            comment.setChildCount(getChildCount(comment));
+            if (comment.getChildren() != null) {
+                updateChildrenCount(comment.getChildren());
+            }
+        }
     }
 
     public interface ParseCommentListener {

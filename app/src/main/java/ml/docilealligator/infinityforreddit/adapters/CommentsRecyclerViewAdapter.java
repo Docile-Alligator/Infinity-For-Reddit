@@ -597,8 +597,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
                         FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken,
                                 parentComment.getMoreChildrenFullnames(),
-                                parentComment.getMoreChildrenStartingIndex(), parentComment.getDepth() + 1,
-                                mExpandChildren, new FetchComment.FetchMoreCommentListener() {
+                                parentComment.getMoreChildrenStartingIndex(),
+                                mExpandChildren, mPost.getFullName(), new FetchComment.FetchMoreCommentListener() {
                                     @Override
                                     public void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments,
                                                                           int childrenStartingIndex) {

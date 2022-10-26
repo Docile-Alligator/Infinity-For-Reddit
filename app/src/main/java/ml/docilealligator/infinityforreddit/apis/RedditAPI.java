@@ -424,4 +424,10 @@ public interface RedditAPI {
     @FormUrlEncoded
     @POST("/api/site_admin")
     Call<String> postSiteAdmin(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
+    @GET("/api/morechildren.json?raw_json=1&api_type=json")
+    Call<String> moreChildren(@Query("link_id") String linkId, @Query("children") String children);
+
+    @GET("/api/morechildren.json?raw_json=1&api_type=json")
+    Call<String> moreChildrenOauth(@Query("link_id") String linkId, @Query("children") String children, @HeaderMap Map<String, String> headers);
 }
