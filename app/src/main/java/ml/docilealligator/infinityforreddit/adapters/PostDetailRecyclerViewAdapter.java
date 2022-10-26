@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -243,6 +244,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     textView.setTypeface(mActivity.contentTypeface);
                 }
                 textView.setTextColor(markdownColor);
+                textView.setHighlightColor(Color.TRANSPARENT);
                 textView.setOnLongClickListener(view -> {
                     if (textView.getSelectionStart() == -1 && textView.getSelectionEnd() == -1) {
                         CopyTextBottomSheetFragment.show(
