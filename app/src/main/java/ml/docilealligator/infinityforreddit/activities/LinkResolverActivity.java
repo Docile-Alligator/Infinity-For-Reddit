@@ -50,7 +50,7 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String IMGUR_ALBUM_PATTERN = "/(album|a)/\\w+/?";
     private static final String IMGUR_IMAGE_PATTERN = "/\\w+/?";
     private static final String RPAN_BROADCAST_PATTERN = "/rpan/r/[\\w-]+/\\w+/?\\w+/?";
-    private static final String WIKI_PATTERN = "^(/[rR]/[\\w-]+/(wiki|w)?(?:/?[\\w-]+)+)$";
+    private static final String WIKI_PATTERN = "/[rR]/[\\w-]+/(wiki|w)?(?:/?[\\w-]+)+";
     private static final String GOOGLE_AMP_PATTERN = "/amp/s/amp.reddit.com/.*";
     private static final String STREAMABLE_PATTERN = "/\\w+/?";
 
