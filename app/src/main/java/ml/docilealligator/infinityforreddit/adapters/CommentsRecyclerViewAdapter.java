@@ -402,12 +402,16 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 if (comment.getAuthorIconUrl() == null) {
                     mFragment.loadIcon(comment.getAuthor(), (authorName, iconUrl) -> {
                         if (authorName.equals(comment.getAuthor())) {
+                            comment.setAuthorIconUrl(iconUrl);
+                        }
+
+                        Comment currentComment = getCurrentComment(holder);
+                        if (currentComment != null && authorName.equals(currentComment.getAuthor())) {
                             mGlide.load(iconUrl)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                     .error(mGlide.load(R.drawable.subreddit_default_icon)
                                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                                     .into(((CommentViewHolder) holder).authorIconImageView);
-                            comment.setAuthorIconUrl(iconUrl);
                         }
                     });
                 } else {
@@ -529,12 +533,16 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 if (comment.getAuthorIconUrl() == null) {
                     mFragment.loadIcon(comment.getAuthor(), (authorName, iconUrl) -> {
                         if (authorName.equals(comment.getAuthor())) {
+                            comment.setAuthorIconUrl(iconUrl);
+                        }
+
+                        Comment currentComment = getCurrentComment(holder);
+                        if (currentComment != null && authorName.equals(currentComment.getAuthor())) {
                             mGlide.load(iconUrl)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                     .error(mGlide.load(R.drawable.subreddit_default_icon)
                                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                                     .into(((CommentFullyCollapsedViewHolder) holder).authorIconImageView);
-                            comment.setAuthorIconUrl(iconUrl);
                         }
                     });
                 } else {
