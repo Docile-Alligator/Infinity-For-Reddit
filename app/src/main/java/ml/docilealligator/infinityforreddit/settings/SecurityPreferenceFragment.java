@@ -34,8 +34,14 @@ public class SecurityPreferenceFragment extends CustomFontPreferenceFragmentComp
     @Named("default")
     SharedPreferences sharedPreferences;
 
+    String rootKey;
+
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
+        this.rootKey = rootKey;
+    }
+
+    private void createPreferences() {
         PreferenceManager preferenceManager = getPreferenceManager();
         preferenceManager.setSharedPreferencesName(SharedPreferencesUtils.SECURITY_SHARED_PREFERENCES_FILE);
         setPreferencesFromResource(R.xml.security_preferences, rootKey);
@@ -80,6 +86,12 @@ public class SecurityPreferenceFragment extends CustomFontPreferenceFragmentComp
         Executor executor = ContextCompat.getMainExecutor(activity);
         BiometricPrompt biometricPrompt = new BiometricPrompt(SecurityPreferenceFragment.this,
                 executor, new BiometricPrompt.AuthenticationCallback() {
+            @Override
+            public void onAuthenticationSucceeded(@NonNull BiometricPrompt.AuthenticationResult result) {
+                super.onAuthenticationSucceeded(result);
+                createPreferences();
+            }
+
             @Override
             public void onAuthenticationError(int errorCode, @NonNull CharSequence errString) {
                 activity.onBackPressed();
