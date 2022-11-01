@@ -16,7 +16,7 @@ A Reddit client on Android written in Java. It does not have any ads and it feat
 <div align="center">
 
 Infinity for Reddit is available on Google Play Store and F-Droid.
-  
+
   <a href="https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit">
       <img alt="Get it on Google Play Store" height="80" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
       </a>
@@ -138,7 +138,7 @@ Key features of **Infinity for Reddit**:
 
 First off, thanks for taking the time to contribute! Contributions are what makes the open source community such an amazing place to create, inspire, and learn. Any contributions you make are **greatly appreciated**.
 
-Pease fork the repository and open a pull request if you have a suggestion that would make this better.
+Pease fork the repository and open a pull request if you have a suggestion that would make the app better.
 It is better to also open an issue describing the issue you want to fix, but it is not required.
 
 Do not forget to give the project a star! Thanks again!
