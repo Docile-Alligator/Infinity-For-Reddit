@@ -90,6 +90,7 @@
     <string name="action_open_external_browser">Open in browser</string>
     <string name="action_add_to_post_filter">Add to Post Filter</string>
     <string name="action_delete_logs">Delete Logs</string>
+    <string name="action_create_github_issue">Create GitHub Issue</string>
     <string name="action_share_rpan_link">Share RPAN Link</string>
     <string name="action_share_post_link">Share Post Link</string>
     <string name="action_go_to_wiki">Go to Wiki</string>
