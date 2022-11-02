@@ -11,6 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -65,6 +66,15 @@ public class RulesActivity extends BaseActivity {
     @Named("no_oauth")
     Retrofit mRetrofit;
     @Inject
+    @Named("oauth")
+    Retrofit mOauthRetrofit;
+
+    private String mAccessToken;
+    @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
+
+    @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
     @Inject
@@ -114,6 +124,7 @@ public class RulesActivity extends BaseActivity {
                 }
             }
         }
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
 
         appBarLayout.setBackgroundColor(mCustomThemeWrapper.getColorPrimary());
         setSupportActionBar(toolbar);
@@ -124,7 +135,7 @@ public class RulesActivity extends BaseActivity {
         mAdapter = new RulesRecyclerViewAdapter(this, mCustomThemeWrapper, slidrInterface);
         recyclerView.setAdapter(mAdapter);
 
-        FetchRules.fetchRules(mExecutor, new Handler(), mRetrofit, mSubredditName, new FetchRules.FetchRulesListener() {
+        FetchRules.fetchRules(mExecutor, new Handler(), mAccessToken == null ? mRetrofit : mOauthRetrofit, mAccessToken, mSubredditName, new FetchRules.FetchRulesListener() {
             @Override
             public void success(ArrayList<Rule> rules) {
                 progressBar.setVisibility(View.GONE);
@@ -142,6 +153,7 @@ public class RulesActivity extends BaseActivity {
                 displayError();
             }
         });
+
     }
 
     @Override
@@ -172,7 +184,7 @@ public class RulesActivity extends BaseActivity {
         errorTextView.setOnClickListener(view -> {
             progressBar.setVisibility(View.VISIBLE);
             errorTextView.setVisibility(View.GONE);
-            FetchRules.fetchRules(mExecutor, new Handler(), mRetrofit, mSubredditName, new FetchRules.FetchRulesListener() {
+            FetchRules.fetchRules(mExecutor, new Handler(), mAccessToken == null ? mRetrofit : mOauthRetrofit, mAccessToken, mSubredditName, new FetchRules.FetchRulesListener() {
                 @Override
                 public void success(ArrayList<Rule> rules) {
                     progressBar.setVisibility(View.GONE);

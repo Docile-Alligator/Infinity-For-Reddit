@@ -66,7 +66,8 @@ public class SpoilerAwareMovementMethod extends BetterLinkMovementMethod {
     private ClickableSpan selectClickableSpan(@NonNull Object[] spans) {
         SpoilerSpan spoilerSpan = null;
         ClickableSpan nonSpoilerSpan = null;
-        for (final Object span : spans) {
+        for (int i = spans.length - 1; i >= 0; i--) {
+            final Object span = spans[i];
             if (span instanceof SpoilerSpan) {
                 spoilerSpan = (SpoilerSpan) span;
             } else if (span instanceof ClickableSpan) {

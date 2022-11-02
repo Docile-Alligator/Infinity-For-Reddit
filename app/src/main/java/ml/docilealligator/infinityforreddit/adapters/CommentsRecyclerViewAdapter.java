@@ -963,17 +963,31 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public void editComment(String commentAuthor, String commentContentMarkdown, int position) {
-        editComment(commentAuthor, mVisibleComments.get(position).isSubmitter(), commentContentMarkdown, position);
-    }
-
-    public void editComment(String commentAuthor, boolean isSubmitter, String commentContentMarkdown, int position) {
         if (commentAuthor != null) {
             mVisibleComments.get(position).setAuthor(commentAuthor);
         }
 
-        mVisibleComments.get(position).setSubmittedByAuthor(isSubmitter);
+        mVisibleComments.get(position).setSubmittedByAuthor(mVisibleComments.get(position).isSubmitter());
 
         mVisibleComments.get(position).setCommentMarkdown(commentContentMarkdown);
+        if (mIsSingleCommentThreadMode) {
+            notifyItemChanged(position + 1);
+        } else {
+            notifyItemChanged(position);
+        }
+    }
+
+    public void editComment(Comment fetchedComment, Comment originalComment, int position) {
+        if (position >= mVisibleComments.size() || !mVisibleComments.get(position).equals(originalComment)) {
+            position = mVisibleComments.indexOf(originalComment);
+            if (position < 0) {
+                Toast.makeText(mActivity, R.string.show_removed_comment_failed, Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+        mVisibleComments.get(position).setSubmittedByAuthor(originalComment.isSubmitter());
+        mVisibleComments.get(position).setCommentMarkdown(fetchedComment.getCommentMarkdown());
+
         if (mIsSingleCommentThreadMode) {
             notifyItemChanged(position + 1);
         } else {

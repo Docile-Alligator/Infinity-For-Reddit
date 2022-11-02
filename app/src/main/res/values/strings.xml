@@ -90,6 +90,7 @@
     <string name="action_open_external_browser">Open in browser</string>
     <string name="action_add_to_post_filter">Add to Post Filter</string>
     <string name="action_delete_logs">Delete Logs</string>
+    <string name="action_create_github_issue">Create GitHub Issue</string>
     <string name="action_share_rpan_link">Share RPAN Link</string>
     <string name="action_share_post_link">Share Post Link</string>
     <string name="action_go_to_wiki">Go to Wiki</string>
@@ -585,6 +586,7 @@
     <string name="settings_hide_the_number_of_comments">Hide the Number of Comments</string>
     <string name="settings_show_avatar_on_the_right">Show Avatar on the Right</string>
     <string name="settings_backup_settings_title">Backup Settings</string>
+    <string name="settings_backup_settings_summary">The backup file password is \"123321\".</string>
     <string name="settings_restore_settings_title">Restore Settings</string>
     <string name="settings_credits_love_animation_title">Love Animation</string>
     <string name="settings_swipe_between_posts_title">Swipe Between Posts</string>

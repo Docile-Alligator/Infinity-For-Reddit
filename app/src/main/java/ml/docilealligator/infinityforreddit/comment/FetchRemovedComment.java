@@ -29,7 +29,7 @@ public class FetchRemovedComment {
                     Comment removedComment = parseComment(response.body(), comment);
                     handler.post(() -> {
                         if (removedComment != null) {
-                            listener.fetchSuccess(removedComment);
+                            listener.fetchSuccess(removedComment, comment);
                         } else {
                             listener.fetchFailed();
                         }
@@ -64,7 +64,7 @@ public class FetchRemovedComment {
                     Comment removedComment = parseComment(response.body(), comment);
                     handler.post(() -> {
                         if (removedComment != null) {
-                            listener.fetchSuccess(removedComment);
+                            listener.fetchSuccess(removedComment, comment);
                         } else {
                             listener.fetchFailed();
                         }
@@ -124,7 +124,7 @@ public class FetchRemovedComment {
     }
 
     public interface FetchRemovedCommentListener {
-        void fetchSuccess(Comment comment);
+        void fetchSuccess(Comment fetchedComment, Comment originalComment);
 
         void fetchFailed();
     }
