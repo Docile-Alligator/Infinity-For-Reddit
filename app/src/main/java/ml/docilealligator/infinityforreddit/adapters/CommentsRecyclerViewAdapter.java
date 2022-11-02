@@ -978,8 +978,12 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public void editComment(Comment fetchedComment, Comment originalComment, int position) {
-        if (!mVisibleComments.get(position).equals(originalComment)) {
+        if (position >= mVisibleComments.size() || !mVisibleComments.get(position).equals(originalComment)) {
             position = mVisibleComments.indexOf(originalComment);
+            if (position < 0) {
+                Toast.makeText(mActivity, R.string.show_removed_comment_failed, Toast.LENGTH_SHORT).show();
+                return;
+            }
         }
         mVisibleComments.get(position).setSubmittedByAuthor(originalComment.isSubmitter());
         mVisibleComments.get(position).setCommentMarkdown(fetchedComment.getCommentMarkdown());
