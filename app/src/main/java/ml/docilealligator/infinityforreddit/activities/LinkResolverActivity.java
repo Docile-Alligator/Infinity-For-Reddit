@@ -174,6 +174,8 @@ public class LinkResolverActivity extends AppCompatActivity {
                             } else if (path.isEmpty()) {
                                 Intent intent = new Intent(this, MainActivity.class);
                                 startActivity(intent);
+                            } else if (path.equals("/report")) {
+                                openInWebView(uri);
                             } else if (path.matches(POST_PATTERN) || path.matches(POST_PATTERN_2)) {
                                 int commentsIndex = segments.lastIndexOf("comments");
                                 if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
