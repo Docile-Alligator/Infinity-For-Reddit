@@ -36,7 +36,7 @@ public class FetchRemovedCommentReveddit {
                     Comment removedComment = parseRemovedComment(new JSONObject(response.body()).getJSONObject(comment.getId()), comment);
                     handler.post(() -> {
                         if (removedComment != null) {
-                            listener.fetchSuccess(removedComment);
+                            listener.fetchSuccess(removedComment, comment);
                         } else {
                             listener.fetchFailed();
                         }
@@ -69,7 +69,7 @@ public class FetchRemovedCommentReveddit {
     }
 
     public interface FetchRemovedCommentListener {
-        void fetchSuccess(Comment comment);
+        void fetchSuccess(Comment fetchedComment, Comment originalComment);
 
         void fetchFailed();
     }
