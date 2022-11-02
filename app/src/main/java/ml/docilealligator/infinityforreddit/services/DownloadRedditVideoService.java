@@ -224,9 +224,9 @@ public class DownloadRedditVideoService extends Service {
 
                         if (audioUrl != null) {
                             Response<ResponseBody> audioResponse = downloadFile.downloadFile(audioUrl).execute();
+                            String outputFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + ".mp4";
                             if (audioResponse.isSuccessful() && audioResponse.body() != null) {
                                 String audioFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + "-cache.mp3";
-                                String outputFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + ".mp4";
 
                                 String savedAudioFilePath = writeResponseBodyToDisk(audioResponse.body(), audioFilePath);
                                 if (savedAudioFilePath == null) {
@@ -256,11 +256,21 @@ public class DownloadRedditVideoService extends Service {
                                     downloadFinished(null, ERROR_MUXED_VIDEO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
                                 }
                             } else {
+                                updateNotification(R.string.downloading_reddit_video_muxing, -1,
+                                        randomNotificationIdOffset, null);
+                                if (!muxVideoAndAudio(videoFilePath, null, outputFilePath)) {
+                                    downloadFinished(null, ERROR_MUX_FAILED, randomNotificationIdOffset);
+                                    return;
+                                }
+
                                 updateNotification(R.string.downloading_reddit_video_save_file_to_public_dir, -1,
                                         randomNotificationIdOffset, null);
                                 try {
-                                    Uri destinationFileUri = copyToDestination(videoFilePath, destinationFileUriString, destinationFileName, isDefaultDestination);
+                                    Uri destinationFileUri = copyToDestination(outputFilePath, destinationFileUriString, destinationFileName, isDefaultDestination);
+
                                     new File(videoFilePath).delete();
+                                    new File(outputFilePath).delete();
+
                                     downloadFinished(destinationFileUri, NO_ERROR, randomNotificationIdOffset);
                                 } catch (IOException e) {
                                     e.printStackTrace();
@@ -268,6 +278,7 @@ public class DownloadRedditVideoService extends Service {
                                 }
                             }
                         } else {
+                            // do not remux video on <= Android N, just save video
                             updateNotification(R.string.downloading_reddit_video_save_file_to_public_dir, -1,
                                     randomNotificationIdOffset, null);
                             try {
@@ -344,66 +355,72 @@ public class DownloadRedditVideoService extends Service {
                 file.createNewFile();
                 MediaExtractor videoExtractor = new MediaExtractor();
                 videoExtractor.setDataSource(videoFilePath);
-                MediaExtractor audioExtractor = new MediaExtractor();
-                audioExtractor.setDataSource(audioFilePath);
                 MediaMuxer muxer = new MediaMuxer(outputFilePath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
 
                 videoExtractor.selectTrack(0);
                 MediaFormat videoFormat = videoExtractor.getTrackFormat(0);
                 int videoTrack = muxer.addTrack(videoFormat);
 
-                audioExtractor.selectTrack(0);
-                MediaFormat audioFormat = audioExtractor.getTrackFormat(0);
-                int audioTrack = muxer.addTrack(audioFormat);
                 boolean sawEOS = false;
                 int offset = 100;
                 int sampleSize = 4096 * 1024;
                 ByteBuffer videoBuf = ByteBuffer.allocate(sampleSize);
                 ByteBuffer audioBuf = ByteBuffer.allocate(sampleSize);
                 MediaCodec.BufferInfo videoBufferInfo = new MediaCodec.BufferInfo();
-                MediaCodec.BufferInfo audioBufferInfo = new MediaCodec.BufferInfo();
 
                 videoExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
-                audioExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
+
+                // audio not present for all videos
+                MediaExtractor audioExtractor = new MediaExtractor();
+                MediaCodec.BufferInfo audioBufferInfo = new MediaCodec.BufferInfo();
+                int audioTrack = -1;
+                if (audioFilePath != null) {
+                    audioExtractor.setDataSource(audioFilePath);
+                    audioExtractor.selectTrack(0);
+                    MediaFormat audioFormat = audioExtractor.getTrackFormat(0);
+                    audioExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
+                    audioTrack = muxer.addTrack(audioFormat);
+                }
 
                 muxer.start();
 
-                int muxedSize = 0;
                 while (!sawEOS) {
                     videoBufferInfo.offset = offset;
                     videoBufferInfo.size = videoExtractor.readSampleData(videoBuf, offset);
 
-                    if (videoBufferInfo.size < 0 || audioBufferInfo.size < 0) {
+                    if (videoBufferInfo.size < 0) {
                         sawEOS = true;
                         videoBufferInfo.size = 0;
                     } else {
                         videoBufferInfo.presentationTimeUs = videoExtractor.getSampleTime();
                         videoBufferInfo.flags = videoExtractor.getSampleFlags();
                         muxer.writeSampleData(videoTrack, videoBuf, videoBufferInfo);
-                        muxedSize += videoTrack;
                         videoExtractor.advance();
                     }
                 }
 
-                boolean sawEOS2 = false;
-                while (!sawEOS2) {
-                    audioBufferInfo.offset = offset;
-                    audioBufferInfo.size = audioExtractor.readSampleData(audioBuf, offset);
+                if (audioFilePath != null) {
+                    boolean sawEOS2 = false;
+                    while (!sawEOS2) {
+                        audioBufferInfo.offset = offset;
+                        audioBufferInfo.size = audioExtractor.readSampleData(audioBuf, offset);
 
-                    if (videoBufferInfo.size < 0 || audioBufferInfo.size < 0) {
-                        sawEOS2 = true;
-                        audioBufferInfo.size = 0;
-                    } else {
-                        audioBufferInfo.presentationTimeUs = audioExtractor.getSampleTime();
-                        audioBufferInfo.flags = audioExtractor.getSampleFlags();
-                        muxer.writeSampleData(audioTrack, audioBuf, audioBufferInfo);
-                        audioExtractor.advance();
+                        if (audioBufferInfo.size < 0) {
+                            sawEOS2 = true;
+                            audioBufferInfo.size = 0;
+                        } else {
+                            audioBufferInfo.presentationTimeUs = audioExtractor.getSampleTime();
+                            audioBufferInfo.flags = audioExtractor.getSampleFlags();
+                            muxer.writeSampleData(audioTrack, audioBuf, audioBufferInfo);
+                            audioExtractor.advance();
+                        }
                     }
                 }
 
                 muxer.stop();
                 muxer.release();
-            } catch (IllegalArgumentException | IllegalStateException ignore) {
+            } catch (IllegalArgumentException | IllegalStateException e) {
+                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
                 return false;
