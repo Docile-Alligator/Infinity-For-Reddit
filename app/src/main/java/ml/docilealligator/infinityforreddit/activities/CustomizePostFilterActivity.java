@@ -35,6 +35,8 @@ import com.r0adkll.slidr.Slidr;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
+import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -540,20 +542,28 @@ public class CustomizePostFilterActivity extends BaseActivity {
             finish();
             return true;
         } else if (item.getItemId() == R.id.action_save_customize_post_filter_activity) {
-            constructPostFilter();
-            Intent returnIntent = new Intent();
-            returnIntent.putExtra(RETURN_EXTRA_POST_FILTER, postFilter);
-            setResult(Activity.RESULT_OK, returnIntent);
-            finish();
+            try {
+                constructPostFilter();
+                Intent returnIntent = new Intent();
+                returnIntent.putExtra(RETURN_EXTRA_POST_FILTER, postFilter);
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
+            } catch (PatternSyntaxException e) {
+                Toast.makeText(this, R.string.invalid_regex, Toast.LENGTH_SHORT).show();
+            }
 
             return true;
         } else if (item.getItemId() == R.id.action_save_to_database_customize_post_filter_activity) {
-            constructPostFilter();
+            try {
+                constructPostFilter();
 
-            if (!postFilter.name.equals("")) {
-                savePostFilter(originalName);
-            } else {
-                Toast.makeText(CustomizePostFilterActivity.this, R.string.post_filter_requires_a_name, Toast.LENGTH_LONG).show();
+                if (!postFilter.name.equals("")) {
+                    savePostFilter(originalName);
+                } else {
+                    Toast.makeText(CustomizePostFilterActivity.this, R.string.post_filter_requires_a_name, Toast.LENGTH_LONG).show();
+                }
+            } catch (PatternSyntaxException e) {
+                Toast.makeText(this, R.string.invalid_regex, Toast.LENGTH_SHORT).show();
             }
         }
         return false;
@@ -627,7 +637,7 @@ public class CustomizePostFilterActivity extends BaseActivity {
         }
     }
 
-    private void constructPostFilter() {
+    private void constructPostFilter() throws PatternSyntaxException {
         postFilter.name = nameTextInputEditText.getText().toString();
         postFilter.maxVote = maxVoteTextInputEditText.getText() == null || maxVoteTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(maxVoteTextInputEditText.getText().toString());
         postFilter.minVote = minVoteTextInputEditText.getText() == null || minVoteTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(minVoteTextInputEditText.getText().toString());
@@ -636,7 +646,9 @@ public class CustomizePostFilterActivity extends BaseActivity {
         postFilter.maxAwards = maxAwardsTextInputEditText.getText() == null || maxAwardsTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(maxAwardsTextInputEditText.getText().toString());
         postFilter.minAwards = minAwardsTextInputEditText.getText() == null || minAwardsTextInputEditText.getText().toString().equals("") ? -1 : Integer.parseInt(minAwardsTextInputEditText.getText().toString());
         postFilter.postTitleExcludesRegex = titleExcludesRegexTextInputEditText.getText().toString();
+        Pattern.compile(postFilter.postTitleExcludesRegex);
         postFilter.postTitleContainsRegex = titleContainsRegexTextInputEditText.getText().toString();
+        Pattern.compile(postFilter.postTitleContainsRegex);
         postFilter.postTitleExcludesStrings = titleExcludesStringsTextInputEditText.getText().toString();
         postFilter.postTitleContainsStrings = titleContainsStringsTextInputEditText.getText().toString();
         postFilter.excludeSubreddits = excludesSubredditsTextInputEditText.getText().toString();
