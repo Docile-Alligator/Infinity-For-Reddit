@@ -30,7 +30,6 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
-import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -100,6 +99,7 @@ import ml.docilealligator.infinityforreddit.events.ChangeLockBottomAppBarEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeRequireAuthToAccountSectionEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeShowAvatarOnTheRightInTheNavigationDrawerEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeHideKarmaEvent;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
@@ -1273,6 +1273,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     public void onChangeInboxCountEvent(ChangeInboxCountEvent event) {
         if (adapter != null) {
             adapter.setInboxCount(event.inboxCount);
+        }
+    }
+
+    @Subscribe
+    public void onChangeHideKarmaEvent(ChangeHideKarmaEvent event) {
+        if (adapter != null) {
+            adapter.setHideKarma(event.hideKarma);
         }
     }
 
