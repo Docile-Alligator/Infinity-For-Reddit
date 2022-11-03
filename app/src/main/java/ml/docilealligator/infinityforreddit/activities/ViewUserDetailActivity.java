@@ -221,6 +221,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     private int subscribedColor;
     private int fabOption;
     private boolean showToast = false;
+    private boolean hideFab;
     private boolean showBottomAppBar;
     private boolean lockBottomAppBar;
     private String mMessageFullname;
@@ -239,6 +240,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
         ButterKnife.bind(this);
 
+        hideFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_FAB_IN_POST_FEED, false);
         showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false);
 
         navigationWrapper = new NavigationWrapper(findViewById(R.id.bottom_app_bar_bottom_app_bar), findViewById(R.id.linear_layout_bottom_app_bar),
@@ -688,7 +690,9 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 if (showBottomAppBar) {
                     navigationWrapper.showNavigation();
                 }
-                navigationWrapper.showFab();
+                if (!hideFab) {
+                    navigationWrapper.showFab();
+                }
 
                 sectionsPagerAdapter.displaySortTypeInToolbar();
             }
@@ -709,6 +713,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 }
             });
         }
+
+        navigationWrapper.floatingActionButton.setVisibility(hideFab ? View.GONE : View.VISIBLE);
 
         if (showBottomAppBar) {
             int optionCount = mBottomAppBarSharedPreference.getInt((mAccessToken == null ? "-" : "") + SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_COUNT, 4);
@@ -1483,14 +1489,14 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         if (showBottomAppBar && !lockBottomAppBar) {
             navigationWrapper.showNavigation();
         }
-        if (!(showBottomAppBar && lockBottomAppBar)) {
+        if (!(showBottomAppBar && lockBottomAppBar) && !hideFab) {
             navigationWrapper.showFab();
         }
     }
 
     @Override
     public void contentScrollDown() {
-        if (!(showBottomAppBar && lockBottomAppBar)) {
+        if (!(showBottomAppBar && lockBottomAppBar) && !hideFab) {
             navigationWrapper.hideFab();
         }
         if (showBottomAppBar && !lockBottomAppBar) {

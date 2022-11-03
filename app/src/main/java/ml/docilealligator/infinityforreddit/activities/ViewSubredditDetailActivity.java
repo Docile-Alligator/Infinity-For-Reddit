@@ -211,6 +211,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private boolean isNsfwSubreddit = false;
     private boolean subscriptionReady = false;
     private boolean showToast = false;
+    private boolean hideFab;
     private boolean showBottomAppBar;
     private boolean lockBottomAppBar;
     private String mMessageFullname;
@@ -238,6 +239,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
         ButterKnife.bind(this);
 
+        hideFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_FAB_IN_POST_FEED, false);
         showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false);
         navigationWrapper = new NavigationWrapper(findViewById(R.id.bottom_app_bar_bottom_app_bar), findViewById(R.id.linear_layout_bottom_app_bar),
                 findViewById(R.id.option_1_bottom_app_bar), findViewById(R.id.option_2_bottom_app_bar),
@@ -930,7 +932,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             fabMoreOptionsBottomSheetFragment.show(getSupportFragmentManager(), fabMoreOptionsBottomSheetFragment.getTag());
             return true;
         });
-        navigationWrapper.floatingActionButton.setVisibility(View.VISIBLE);
+        navigationWrapper.floatingActionButton.setVisibility(hideFab ? View.GONE : View.VISIBLE);
 
         subscribeSubredditChip.setOnClickListener(view -> {
             if (mAccessToken == null) {
@@ -1049,7 +1051,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 if (showBottomAppBar) {
                     navigationWrapper.showNavigation();
                 }
-                navigationWrapper.showFab();
+                if (!hideFab) {
+                    navigationWrapper.showFab();
+                }
                 sectionsPagerAdapter.displaySortTypeInToolbar();
             }
         });
@@ -1280,14 +1284,14 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         if (showBottomAppBar && !lockBottomAppBar) {
             navigationWrapper.showNavigation();
         }
-        if (!(showBottomAppBar && lockBottomAppBar)) {
+        if (!(showBottomAppBar && lockBottomAppBar) && !hideFab) {
             navigationWrapper.showFab();
         }
     }
 
     @Override
     public void contentScrollDown() {
-        if (!(showBottomAppBar && lockBottomAppBar)) {
+        if (!(showBottomAppBar && lockBottomAppBar) && !hideFab) {
             navigationWrapper.hideFab();
         }
         if (showBottomAppBar && !lockBottomAppBar) {

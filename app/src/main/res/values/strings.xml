@@ -646,6 +646,7 @@
     <string name="settings_post_feed_max_resolution_title">Post Feed Preview Max Resolution (Width * Height)</string>
     <string name="settings_reddit_video_default_resolution">Reddit Video Default Resolution</string>
     <string name="settings_easier_to_watch_in_full_screen_title">Easier to Watch in Full Screen</string>
+    <string name="settings_hide_fab_in_post_feed">Hide FAB in Post Feed</string>
 
     <string name="no_link_available">Cannot get the link</string>
 

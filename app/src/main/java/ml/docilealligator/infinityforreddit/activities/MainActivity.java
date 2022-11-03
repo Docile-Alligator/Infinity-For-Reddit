@@ -94,12 +94,13 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.NavigationWrapper;
 import ml.docilealligator.infinityforreddit.events.ChangeDisableSwipingBetweenTabsEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeHideFabInPostFeedEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeHideKarmaEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeInboxCountEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeLockBottomAppBarEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeRequireAuthToAccountSectionEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeShowAvatarOnTheRightInTheNavigationDrawerEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeHideKarmaEvent;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
@@ -214,6 +215,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     private boolean mDrawerOnAccountSwitch = false;
     private String mMessageFullname;
     private String mNewAccountName;
+    private boolean hideFab;
     private boolean showBottomAppBar;
     private int mBackButtonAction;
     private boolean mLockBottomAppBar;
@@ -239,6 +241,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
         ButterKnife.bind(this);
 
+        hideFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_FAB_IN_POST_FEED, false);
         showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false);
 
         navigationWrapper = new NavigationWrapper(findViewById(R.id.bottom_app_bar_bottom_app_bar), findViewById(R.id.linear_layout_bottom_app_bar),
@@ -739,7 +742,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             fabMoreOptionsBottomSheetFragment.show(getSupportFragmentManager(), fabMoreOptionsBottomSheetFragment.getTag());
             return true;
         });
-        navigationWrapper.floatingActionButton.setVisibility(View.VISIBLE);
+        navigationWrapper.floatingActionButton.setVisibility(hideFab ? View.GONE : View.VISIBLE);
 
         adapter = new NavigationDrawerRecyclerViewMergedAdapter(this, mSharedPreferences,
                 mNsfwAndSpoilerSharedPreferences, mNavigationDrawerSharedPreferences, mSecuritySharedPreferences,
@@ -910,7 +913,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 if (showBottomAppBar) {
                     navigationWrapper.showNavigation();
                 }
-                navigationWrapper.showFab();
+                if (!hideFab) {
+                    navigationWrapper.showFab();
+                }
                 sectionsPagerAdapter.displaySortTypeInToolbar();
             }
         });
@@ -1195,14 +1200,14 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         if (showBottomAppBar && !mLockBottomAppBar) {
             navigationWrapper.showNavigation();
         }
-        if (!(showBottomAppBar && mLockBottomAppBar)) {
+        if (!(showBottomAppBar && mLockBottomAppBar) && !hideFab) {
             navigationWrapper.showFab();
         }
     }
 
     @Override
     public void contentScrollDown() {
-        if (!(showBottomAppBar && mLockBottomAppBar)) {
+        if (!(showBottomAppBar && mLockBottomAppBar) && !hideFab) {
             navigationWrapper.hideFab();
         }
         if (showBottomAppBar && !mLockBottomAppBar) {
@@ -1281,6 +1286,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         if (adapter != null) {
             adapter.setHideKarma(event.hideKarma);
         }
+    }
+
+    @Subscribe
+    public void onChangeHideFabInPostFeed(ChangeHideFabInPostFeedEvent event) {
+        hideFab = event.hideFabInPostFeed;
+        navigationWrapper.floatingActionButton.setVisibility(hideFab ? View.GONE : View.VISIBLE);
     }
 
     @Override
