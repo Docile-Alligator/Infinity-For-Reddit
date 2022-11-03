@@ -17,7 +17,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -287,7 +286,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (!((mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_LANDSCAPE_MODE, true)
                 && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
                 || (mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_PORTRAIT_MODE, false)
-                && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE))) {
+                && getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT))) {
             if (mCommentsRecyclerView != null) {
                 mCommentsRecyclerView.setVisibility(View.GONE);
                 mCommentsRecyclerView = null;
