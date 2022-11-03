@@ -263,6 +263,10 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
         lockBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_BOTTOM_APP_BAR, false);
 
+        if (username.equalsIgnoreCase("me")) {
+            username = mAccountName;
+        }
+
         if (savedInstanceState == null) {
             mMessageFullname = getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME);
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
