@@ -81,6 +81,7 @@ import ml.docilealligator.infinityforreddit.adapters.Paging3LoadingStateAdapter;
 import ml.docilealligator.infinityforreddit.adapters.PostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.CustomToroContainer;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
@@ -1315,6 +1316,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             return true;
         } else if (item.getItemId() == R.id.action_filter_posts_post_fragment) {
             filterPosts();
+            return true;
+        } else if (item.getItemId() == R.id.action_more_options_post_fragment) {
+            FABMoreOptionsBottomSheetFragment fabMoreOptionsBottomSheetFragment= new FABMoreOptionsBottomSheetFragment();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(FABMoreOptionsBottomSheetFragment.EXTRA_ANONYMOUS_MODE, accessToken == null);
+            fabMoreOptionsBottomSheetFragment.setArguments(bundle);
+            fabMoreOptionsBottomSheetFragment.show(activity.getSupportFragmentManager(), fabMoreOptionsBottomSheetFragment.getTag());
             return true;
         }
         return false;
