@@ -104,12 +104,6 @@ public class SidebarFragment extends Fragment {
         int spoilerBackgroundColor = markdownColor | 0xFF000000;
 
         MarkwonPlugin miscPlugin = new AbstractMarkwonPlugin() {
-            @NonNull
-            @Override
-            public String processMarkdown(@NonNull String markdown) {
-                return Utils.fixSuperScript(markdown);
-            }
-
             @Override
             public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
                 if (activity.contentTypeface != null) {
