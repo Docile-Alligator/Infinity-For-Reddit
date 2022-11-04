@@ -49,6 +49,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
@@ -77,6 +78,7 @@ import ml.docilealligator.infinityforreddit.post.ParsePost;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
+import ml.docilealligator.infinityforreddit.readpost.ReadPost;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Call;
@@ -660,7 +662,50 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                 isFetchingMorePosts = false;
             });
         } else {
-            
+            mExecutor.execute((Runnable) () -> {
+                long lastItem = posts.isEmpty() ? System.currentTimeMillis() : posts.get(posts.size() - 1).getPostTimeMillis();
+                List<ReadPost> readPosts = mRedditDataRoomDatabase.readPostDao().getAllReadPosts(username, lastItem);
+                StringBuilder ids = new StringBuilder();
+                for (ReadPost readPost : readPosts) {
+                    ids.append("t3_").append(readPost.getId()).append(",");
+                }
+                if (ids.length() > 0) {
+                    ids.deleteCharAt(ids.length() - 1);
+                }
+
+                Call<String> historyPosts;
+                if (mAccessToken != null && !mAccessToken.isEmpty()) {
+                    historyPosts = mOauthRetrofit.create(RedditAPI.class).getInfoOauth(ids.toString(), APIUtils.getOAuthHeader(mAccessToken));
+                } else {
+                    historyPosts = mRetrofit.create(RedditAPI.class).getInfo(ids.toString());
+                }
+
+                try {
+                    Response<String> response = historyPosts.execute();
+                    if (response.isSuccessful()) {
+                        String responseString = response.body();
+                        LinkedHashSet<Post> newPosts = ParsePost.parsePostsSync(responseString, -1, postFilter, null);
+                        if (newPosts == null || newPosts.isEmpty()) {
+                            noMorePosts = true;
+                        } else {
+                            LinkedHashSet<Post> postLinkedHashSet = new LinkedHashSet<>(posts);
+                            int currentPostsSize = postLinkedHashSet.size();
+                            postLinkedHashSet.addAll(newPosts);
+                            if (currentPostsSize == postLinkedHashSet.size()) {
+                                noMorePosts = true;
+                            } else {
+                                posts = new ArrayList<>(postLinkedHashSet);
+                                handler.post(() -> sectionsPagerAdapter.notifyItemRangeInserted(currentPostsSize, postLinkedHashSet.size() - currentPostsSize));
+                            }
+                        }
+                    } else {
+                        fetchMorePostsFailed = true;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    fetchMorePostsFailed = true;
+                }
+            });
         }
     }
 
