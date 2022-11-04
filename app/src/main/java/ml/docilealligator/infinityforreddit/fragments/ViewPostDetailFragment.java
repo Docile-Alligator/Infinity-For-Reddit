@@ -814,11 +814,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
     @NonNull
     private SortType.Type loadSortType() {
-        String sortTypeName = mSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.CONFIDENCE.name());
+        String sortTypeName = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.CONFIDENCE.name());
         if (SortType.Type.BEST.name().equals(sortTypeName)) {
             // migrate from BEST to CONFIDENCE
             // key guaranteed to exist because got non-default value
-            mSharedPreferences.edit()
+            mSortTypeSharedPreferences.edit()
                     .putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.CONFIDENCE.name())
                     .apply();
             return SortType.Type.CONFIDENCE;
