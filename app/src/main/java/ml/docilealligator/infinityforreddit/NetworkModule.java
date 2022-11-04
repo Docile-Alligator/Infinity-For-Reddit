@@ -9,7 +9,6 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import dagger.Reusable;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import okhttp3.ConnectionPool;
 import okhttp3.Interceptor;
@@ -50,7 +49,9 @@ abstract class NetworkModule {
     @Provides
     @Named("no_oauth")
     static Retrofit provideRetrofit(Retrofit retrofit) {
-        return retrofit;
+        return retrofit.newBuilder()
+                .baseUrl(APIUtils.OAUTH_API_BASE_URI)
+                .build();
     }
 
     @Provides
@@ -61,7 +62,7 @@ abstract class NetworkModule {
 
     @Provides
     @Named("default")
-    @Reusable
+    @Singleton
     static OkHttpClient provideOkHttpClient(OkHttpClient httpClient,
                                             Retrofit retrofit,
                                             RedditDataRoomDatabase accountRoomDatabase,
@@ -81,7 +82,7 @@ abstract class NetworkModule {
 
     @Provides
     @Named("oauth_without_authenticator")
-    @Reusable
+    @Singleton
     static Retrofit provideOauthWithoutAuthenticatorRetrofit(Retrofit retrofit) {
         return retrofit.newBuilder()
                 .baseUrl(APIUtils.OAUTH_API_BASE_URI)
@@ -90,7 +91,7 @@ abstract class NetworkModule {
 
     @Provides
     @Named("upload_media")
-    @Reusable
+    @Singleton
     static Retrofit provideUploadMediaRetrofit(Retrofit retrofit) {
         return retrofit.newBuilder()
                 .baseUrl(APIUtils.API_UPLOAD_MEDIA_URI)
@@ -99,7 +100,7 @@ abstract class NetworkModule {
 
     @Provides
     @Named("upload_video")
-    @Reusable
+    @Singleton
     static Retrofit provideUploadVideoRetrofit(Retrofit retrofit) {
         return retrofit.newBuilder()
                 .baseUrl(APIUtils.API_UPLOAD_VIDEO_URI)
@@ -108,7 +109,7 @@ abstract class NetworkModule {
 
     @Provides
     @Named("download_media")
-    @Reusable
+    @Singleton
     static Retrofit provideDownloadRedditVideoRetrofit(Retrofit retrofit) {
         return retrofit.newBuilder()
                 .baseUrl("http://localhost/")
@@ -117,7 +118,7 @@ abstract class NetworkModule {
 
     @Provides
     @Named("gfycat")
-    @Reusable
+    @Singleton
     static Retrofit provideGfycatRetrofit(Retrofit retrofit) {
         return retrofit.newBuilder()
                 .baseUrl(APIUtils.GFYCAT_API_BASE_URI)
@@ -132,7 +133,7 @@ abstract class NetworkModule {
 
     @Provides
     @Named("redgifs")
-    @Reusable
+    @Singleton
     static Retrofit provideRedgifsRetrofit(@Named("RedgifsAccessTokenAuthenticator") Interceptor accessTokenAuthenticator,
                                            OkHttpClient httpClient,
                                            Retrofit retrofit,
@@ -155,7 +156,7 @@ abstract class NetworkModule {
 
     @Provides
     @Named("imgur")
-    @Reusable
+    @Singleton
     static Retrofit provideImgurRetrofit(Retrofit retrofit) {
         return retrofit.newBuilder()
                 .baseUrl(APIUtils.IMGUR_API_BASE_URI)
@@ -164,7 +165,7 @@ abstract class NetworkModule {
 
     @Provides
     @Named("pushshift")
-    @Reusable
+    @Singleton
     static Retrofit providePushshiftRetrofit(Retrofit retrofit) {
         return retrofit.newBuilder()
                 .baseUrl(APIUtils.PUSHSHIFT_API_BASE_URI)
@@ -173,7 +174,7 @@ abstract class NetworkModule {
 
     @Provides
     @Named("reveddit")
-    @Reusable
+    @Singleton
     static Retrofit provideRevedditRetrofit(Retrofit retrofit) {
         return retrofit.newBuilder()
                 .baseUrl(APIUtils.REVEDDIT_API_BASE_URI)
@@ -182,7 +183,7 @@ abstract class NetworkModule {
 
     @Provides
     @Named("vReddIt")
-    @Reusable
+    @Singleton
     static Retrofit provideVReddItRetrofit(Retrofit retrofit) {
         return retrofit.newBuilder()
                 .baseUrl("http://localhost/")
@@ -191,7 +192,7 @@ abstract class NetworkModule {
 
     @Provides
     @Named("strapi")
-    @Reusable
+    @Singleton
     static Retrofit providestrapiRetrofit(@Named("default") OkHttpClient okHttpClient,
                                           Retrofit retrofit) {
         return retrofit.newBuilder()
@@ -202,7 +203,7 @@ abstract class NetworkModule {
 
     @Provides
     @Named("streamable")
-    @Reusable
+    @Singleton
     static Retrofit provideStreamableRetrofit(Retrofit retrofit) {
         return retrofit.newBuilder()
                 .baseUrl(APIUtils.STREAMABLE_API_BASE_URI)
