@@ -2035,7 +2035,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Subscribe
     public void onNeedForPostListFromPostRecyclerViewAdapterEvent(NeedForPostListFromPostFragmentEvent event) {
         if (postFragmentId == event.postFragmentTimeId && mAdapter != null) {
-            EventBus.getDefault().post(new ProvidePostListToViewPostDetailActivityEvent(postFragmentId, new ArrayList<>(mAdapter.snapshot())));
+            EventBus.getDefault().post(new ProvidePostListToViewPostDetailActivityEvent(postFragmentId,
+                    new ArrayList<>(mAdapter.snapshot()), postType, subredditName, username, where,
+                    multiRedditPath, query, trendingSource, postFilter, sortType, readPosts));
         }
     }
 

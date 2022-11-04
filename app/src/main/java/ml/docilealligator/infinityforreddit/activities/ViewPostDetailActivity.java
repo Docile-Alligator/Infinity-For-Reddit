@@ -45,8 +45,10 @@ import com.r0adkll.slidr.model.SlidrInterface;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashSet;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
@@ -62,6 +64,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -69,8 +72,15 @@ import ml.docilealligator.infinityforreddit.events.NeedForPostListFromPostFragme
 import ml.docilealligator.infinityforreddit.events.ProvidePostListToViewPostDetailActivityEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
+import ml.docilealligator.infinityforreddit.post.HistoryPostPagingSource;
+import ml.docilealligator.infinityforreddit.post.ParsePost;
 import ml.docilealligator.infinityforreddit.post.Post;
+import ml.docilealligator.infinityforreddit.post.PostPagingSource;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import retrofit2.Call;
+import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class ViewPostDetailActivity extends BaseActivity implements SortTypeSelectionCallback, ActivityToolbarInterface {
@@ -113,6 +123,9 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @BindView(R.id.close_search_panel_image_view_view_post_detail_activity)
     ImageView closeSearchPanelImageView;
     @Inject
+    @Named("no_oauth")
+    Retrofit mRetrofit;
+    @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
     @Inject
@@ -130,7 +143,35 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @State
     ArrayList<Post> posts;
     @State
+    int postType;
+    @State
+    String subredditName;
+    @State
+    String username;
+    @State
+    String userWhere;
+    @State
+    String multiPath;
+    @State
+    String query;
+    @State
+    String trendingSource;
+    @State
+    PostFilter postFilter;
+    @State
+    String sortType;
+    @State
+    String sortTime;
+    @State
+    ArrayList<String> readPostList;
+    @State
     Post post;
+    @State
+    boolean isFetchingMorePosts;
+    @State
+    boolean noMorePosts;
+    @State
+    boolean fetchMorePostsFailed;
     public Map<String, String> authorIcons = new HashMap<>();
     private FragmentManager fragmentManager;
     private SlidrInterface mSlidrInterface;
@@ -327,6 +368,14 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         if (savedInstanceState == null) {
             viewPager2.setCurrentItem(getIntent().getIntExtra(EXTRA_POST_LIST_POSITION, 0), false);
         }
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                if (position > posts.size() - 5) {
+                    fetchMorePosts();
+                }
+            }
+        });
 
         searchPanelMaterialCardView.setOnClickListener(null);
         
@@ -457,6 +506,164 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         }
     }
 
+    public void fetchMorePosts() {
+        if (isFetchingMorePosts || noMorePosts) {
+            return;
+        }
+
+        isFetchingMorePosts = true;
+        fetchMorePostsFailed = false;
+
+        Handler handler = new Handler();
+
+        if (postType != HistoryPostPagingSource.TYPE_READ_POSTS) {
+            mExecutor.execute(() -> {
+                RedditAPI api = (mAccessToken == null ? mRetrofit : mOauthRetrofit).create(RedditAPI.class);
+                Call<String> call;
+                String afterKey = posts.isEmpty() ? null : posts.get(posts.size() - 1).getFullName();
+                switch (postType) {
+                    case PostPagingSource.TYPE_SUBREDDIT:
+                        if (mAccessToken == null) {
+                            if (sortTime != null) {
+                                call = api.getSubredditBestPosts(subredditName, sortType, sortTime, afterKey);
+                            } else {
+                                call = api.getSubredditBestPosts(subredditName, sortType, afterKey);
+                            }
+                        } else {
+                            if (sortTime != null) {
+                                call = api.getSubredditBestPostsOauth(subredditName, sortType,
+                                        sortTime, afterKey, APIUtils.getOAuthHeader(mAccessToken));
+                            } else {
+                                call = api.getSubredditBestPostsOauth(subredditName, sortType,
+                                        afterKey, APIUtils.getOAuthHeader(mAccessToken));
+                            }
+                        }
+                        break;
+                    case PostPagingSource.TYPE_USER:
+                        if (mAccessToken == null) {
+                            if (sortTime != null) {
+                                call = api.getUserPosts(username, afterKey, sortType,
+                                        sortTime);
+                            } else {
+                                call = api.getUserPosts(username, afterKey, sortType);
+                            }
+                        } else {
+                            if (sortTime != null) {
+                                call = api.getUserPostsOauth(username, userWhere, afterKey, sortType,
+                                        sortTime, APIUtils.getOAuthHeader(mAccessToken));
+                            } else {
+                                call = api.getUserPostsOauth(username, userWhere, afterKey, sortType,
+                                        APIUtils.getOAuthHeader(mAccessToken));
+                            }
+                        }
+                        break;
+                    case PostPagingSource.TYPE_SEARCH:
+                        if (subredditName == null) {
+                            if (mAccessToken == null) {
+                                if (sortTime != null) {
+                                    call = api.searchPosts(query, afterKey, sortType, sortTime,
+                                            trendingSource);
+                                } else {
+                                    call = api.searchPosts(query, afterKey, sortType, trendingSource);
+                                }
+                            } else {
+                                if (sortTime != null) {
+                                    call = api.searchPostsOauth(query, afterKey, sortType,
+                                            sortTime, trendingSource, APIUtils.getOAuthHeader(mAccessToken));
+                                } else {
+                                    call = api.searchPostsOauth(query, afterKey, sortType, trendingSource,
+                                            APIUtils.getOAuthHeader(mAccessToken));
+                                }
+                            }
+                        } else {
+                            if (mAccessToken == null) {
+                                if (sortTime != null) {
+                                    call = api.searchPostsInSpecificSubreddit(subredditName, query,
+                                            sortType, sortTime, afterKey);
+                                } else {
+                                    call = api.searchPostsInSpecificSubreddit(subredditName, query,
+                                            sortType, afterKey);
+                                }
+                            } else {
+                                if (sortTime != null) {
+                                    call = api.searchPostsInSpecificSubredditOauth(subredditName, query,
+                                            sortType, sortTime, afterKey,
+                                            APIUtils.getOAuthHeader(mAccessToken));
+                                } else {
+                                    call = api.searchPostsInSpecificSubredditOauth(subredditName, query,
+                                            sortType, afterKey,
+                                            APIUtils.getOAuthHeader(mAccessToken));
+                                }
+                            }
+                        }
+                        break;
+                    case PostPagingSource.TYPE_MULTI_REDDIT:
+                        if (mAccessToken == null) {
+                            if (sortTime != null) {
+                                call = api.getMultiRedditPosts(multiPath, afterKey, sortTime);
+                            } else {
+                                call = api.getMultiRedditPosts(multiPath, afterKey);
+                            }
+                        } else {
+                            if (sortTime != null) {
+                                call = api.getMultiRedditPostsOauth(multiPath, afterKey,
+                                        sortTime, APIUtils.getOAuthHeader(mAccessToken));
+                            } else {
+                                call = api.getMultiRedditPostsOauth(multiPath, afterKey,
+                                        APIUtils.getOAuthHeader(mAccessToken));
+                            }
+                        }
+                        break;
+                    case PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE:
+                        //case PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT
+                        if (sortTime != null) {
+                            call = api.getSubredditBestPosts(subredditName, sortType, sortTime, afterKey);
+                        } else {
+                            call = api.getSubredditBestPosts(subredditName, sortType, afterKey);
+                        }
+                        break;
+                    default:
+                        if (sortTime != null) {
+                            call = api.getBestPosts(sortType, sortTime, afterKey,
+                                    APIUtils.getOAuthHeader(mAccessToken));
+                        } else {
+                            call = api.getBestPosts(sortType, afterKey, APIUtils.getOAuthHeader(mAccessToken));
+                        }
+                }
+
+                try {
+                    Response<String> response = call.execute();
+                    if (response.isSuccessful()) {
+                        String responseString = response.body();
+                        LinkedHashSet<Post> newPosts = ParsePost.parsePostsSync(responseString, -1, postFilter, readPostList);
+                        if (newPosts == null) {
+                            noMorePosts = true;
+                        } else {
+                            LinkedHashSet<Post> postLinkedHashSet = new LinkedHashSet<>(posts);
+                            int currentPostsSize = postLinkedHashSet.size();
+                            postLinkedHashSet.addAll(newPosts);
+                            if (currentPostsSize == postLinkedHashSet.size()) {
+                                noMorePosts = true;
+                            } else {
+                                posts = new ArrayList<>(postLinkedHashSet);
+                                handler.post(() -> sectionsPagerAdapter.notifyItemRangeInserted(currentPostsSize, postLinkedHashSet.size() - currentPostsSize));
+                            }
+                        }
+                    } else {
+                        fetchMorePostsFailed = true;
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    fetchMorePostsFailed = true;
+                }
+
+                isFetchingMorePosts = false;
+            });
+        } else {
+            
+        }
+    }
+
     @Subscribe
     public void onAccountSwitchEvent(SwitchAccountEvent event) {
         if (!getClass().getName().equals(event.excludeActivityClassName)) {
@@ -467,7 +674,19 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @Subscribe
     public void onProvidePostListToViewPostDetailActivityEvent(ProvidePostListToViewPostDetailActivityEvent event) {
         if (event.postFragmentId == postFragmentId && posts == null) {
-            posts = event.posts;
+            this.posts = event.posts;
+            this.postType = event.postType;
+            this.subredditName = event.subredditName;
+            this.username = event.username;
+            this.userWhere = event.userWhere;
+            this.multiPath = event.multiPath;
+            this.query = event.query;
+            this.trendingSource = event.trendingSource;
+            this.postFilter = event.postFilter;
+            this.sortType = event.sortType.getType().value;
+            this.sortTime = event.sortType.getTime() == null ? null : event.sortType.getTime().value;
+            this.readPostList = event.readPostList;
+
             if (sectionsPagerAdapter != null) {
                 if (postListPosition > 0)
                     sectionsPagerAdapter.notifyDataSetChanged();

@@ -28,7 +28,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class HistoryPostPagingSource extends ListenableFuturePagingSource<String, Post> {
-    public static final int TYPE_READ_POSTS = 0;
+    public static final int TYPE_READ_POSTS = 100;
 
     private Retrofit retrofit;
     private Executor executor;
