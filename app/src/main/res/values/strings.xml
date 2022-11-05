@@ -1312,4 +1312,7 @@
 
     <string name="invalid_regex">Invalid regex pattern</string>
 
+    <string name="load_more_posts_failed">Failed to load more posts</string>
+    <string name="no_more_posts">No more posts</string>
+
 </resources>

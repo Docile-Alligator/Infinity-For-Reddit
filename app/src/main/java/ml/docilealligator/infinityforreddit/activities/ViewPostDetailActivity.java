@@ -9,6 +9,7 @@ import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Looper;
 import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
@@ -72,6 +73,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.NeedForPostListFromPostFragmentEvent;
 import ml.docilealligator.infinityforreddit.events.ProvidePostListToViewPostDetailActivityEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.fragments.MorePostsInfoFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
 import ml.docilealligator.infinityforreddit.post.HistoryPostPagingSource;
 import ml.docilealligator.infinityforreddit.post.ParsePost;
@@ -373,7 +375,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                if (posts != null && position > posts.size() - 5) {
+                if (posts != null && position > posts.size() - 2) {
                     fetchMorePosts();
                 }
             }
@@ -516,7 +518,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         isFetchingMorePosts = true;
         fetchMorePostsFailed = false;
 
-        Handler handler = new Handler();
+        Handler handler = new Handler(Looper.getMainLooper());
 
         if (postType != HistoryPostPagingSource.TYPE_READ_POSTS) {
             mExecutor.execute(() -> {
@@ -639,27 +641,53 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                         String responseString = response.body();
                         LinkedHashSet<Post> newPosts = ParsePost.parsePostsSync(responseString, -1, postFilter, readPostList);
                         if (newPosts == null) {
-                            noMorePosts = true;
+                            handler.post(() -> {
+                                noMorePosts = true;
+                                MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
+                                if (fragment != null) {
+                                    fragment.setStatus(MorePostsInfoFragment.Status.NO_MORE_POSTS);
+                                }
+                            });
                         } else {
                             LinkedHashSet<Post> postLinkedHashSet = new LinkedHashSet<>(posts);
                             int currentPostsSize = postLinkedHashSet.size();
                             postLinkedHashSet.addAll(newPosts);
                             if (currentPostsSize == postLinkedHashSet.size()) {
-                                noMorePosts = true;
+                                handler.post(() -> {
+                                    noMorePosts = true;
+                                    MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
+                                    if (fragment != null) {
+                                        fragment.setStatus(MorePostsInfoFragment.Status.NO_MORE_POSTS);
+                                    }
+                                });
                             } else {
                                 posts = new ArrayList<>(postLinkedHashSet);
                                 handler.post(() -> sectionsPagerAdapter.notifyItemRangeInserted(currentPostsSize, postLinkedHashSet.size() - currentPostsSize));
                             }
                         }
                     } else {
-                        fetchMorePostsFailed = true;
+                        handler.post(() -> {
+                            fetchMorePostsFailed = true;
+                            MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
+                            if (fragment != null) {
+                                fragment.setStatus(MorePostsInfoFragment.Status.FAILED);
+                            }
+                        });
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    fetchMorePostsFailed = true;
+                    handler.post(() -> {
+                        fetchMorePostsFailed = true;
+                        MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
+                        if (fragment != null) {
+                            fragment.setStatus(MorePostsInfoFragment.Status.FAILED);
+                        }
+                    });
                 }
 
-                isFetchingMorePosts = false;
+                handler.post(() -> {
+                    isFetchingMorePosts = false;
+                });
             });
         } else {
             mExecutor.execute((Runnable) () -> {
@@ -686,25 +714,53 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                         String responseString = response.body();
                         LinkedHashSet<Post> newPosts = ParsePost.parsePostsSync(responseString, -1, postFilter, null);
                         if (newPosts == null || newPosts.isEmpty()) {
-                            noMorePosts = true;
+                            handler.post(() -> {
+                                noMorePosts = true;
+                                MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
+                                if (fragment != null) {
+                                    fragment.setStatus(MorePostsInfoFragment.Status.NO_MORE_POSTS);
+                                }
+                            });
                         } else {
                             LinkedHashSet<Post> postLinkedHashSet = new LinkedHashSet<>(posts);
                             int currentPostsSize = postLinkedHashSet.size();
                             postLinkedHashSet.addAll(newPosts);
                             if (currentPostsSize == postLinkedHashSet.size()) {
-                                noMorePosts = true;
+                                handler.post(() -> {
+                                    noMorePosts = true;
+                                    MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
+                                    if (fragment != null) {
+                                        fragment.setStatus(MorePostsInfoFragment.Status.NO_MORE_POSTS);
+                                    }
+                                });
                             } else {
                                 posts = new ArrayList<>(postLinkedHashSet);
                                 handler.post(() -> sectionsPagerAdapter.notifyItemRangeInserted(currentPostsSize, postLinkedHashSet.size() - currentPostsSize));
                             }
                         }
                     } else {
-                        fetchMorePostsFailed = true;
+                        handler.post(() -> {
+                            fetchMorePostsFailed = true;
+                            MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
+                            if (fragment != null) {
+                                fragment.setStatus(MorePostsInfoFragment.Status.NO_MORE_POSTS);
+                            }
+                        });
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
-                    fetchMorePostsFailed = true;
+                    handler.post(() -> {
+                        fetchMorePostsFailed = true;
+                        MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
+                        if (fragment != null) {
+                            fragment.setStatus(MorePostsInfoFragment.Status.NO_MORE_POSTS);
+                        }
+                    });
                 }
+
+                handler.post(() -> {
+                    isFetchingMorePosts = false;
+                });
             });
         }
     }
@@ -877,6 +933,13 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                     bundle.putString(ViewPostDetailFragment.EXTRA_CONTEXT_NUMBER, getIntent().getStringExtra(EXTRA_CONTEXT_NUMBER));
                     bundle.putString(ViewPostDetailFragment.EXTRA_MESSAGE_FULLNAME, getIntent().getStringExtra(EXTRA_MESSAGE_FULLNAME));
                 } else {
+                    if (position >= posts.size()) {
+                        MorePostsInfoFragment morePostsInfoFragment = new MorePostsInfoFragment();
+                        Bundle moreBundle = new Bundle();
+                        moreBundle.putInt(MorePostsInfoFragment.EXTRA_STATUS, MorePostsInfoFragment.Status.LOADING);
+                        morePostsInfoFragment.setArguments(moreBundle);
+                        return morePostsInfoFragment;
+                    }
                     bundle.putParcelable(ViewPostDetailFragment.EXTRA_POST_DATA, posts.get(position));
                     bundle.putInt(ViewPostDetailFragment.EXTRA_POST_LIST_POSITION, position);
                 }
@@ -897,7 +960,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
         @Override
         public int getItemCount() {
-            return posts == null ? 1 : posts.size();
+            return posts == null ? 1 : posts.size() + 1;
         }
 
         @Nullable
@@ -908,6 +971,18 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             Fragment fragment = fragmentManager.findFragmentByTag("f" + viewPager2.getCurrentItem());
             if (fragment instanceof ViewPostDetailFragment) {
                 return (ViewPostDetailFragment) fragment;
+            }
+            return null;
+        }
+
+        @Nullable
+        MorePostsInfoFragment getMorePostsInfoFragment() {
+            if (posts == null || fragmentManager == null) {
+                return null;
+            }
+            Fragment fragment = fragmentManager.findFragmentByTag("f" + posts.size());
+            if (fragment instanceof MorePostsInfoFragment) {
+                return (MorePostsInfoFragment) fragment;
             }
             return null;
         }
