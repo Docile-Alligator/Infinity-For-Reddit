@@ -373,7 +373,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                if (position > posts.size() - 5) {
+                if (posts != null && position > posts.size() - 5) {
                     fetchMorePosts();
                 }
             }
@@ -663,7 +663,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             });
         } else {
             mExecutor.execute((Runnable) () -> {
-                long lastItem = posts.isEmpty() ? System.currentTimeMillis() : posts.get(posts.size() - 1).getPostTimeMillis();
+                long lastItem = posts.isEmpty() ? 0 : posts.get(posts.size() - 1).getPostTimeMillis();
                 List<ReadPost> readPosts = mRedditDataRoomDatabase.readPostDao().getAllReadPosts(username, lastItem);
                 StringBuilder ids = new StringBuilder();
                 for (ReadPost readPost : readPosts) {

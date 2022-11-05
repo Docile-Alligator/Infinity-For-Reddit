@@ -111,8 +111,8 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
     }
 
     private ListenableFuture<LoadResult<String, Post>> loadHomePosts(@NonNull LoadParams<String> loadParams, RedditDataRoomDatabase redditDataRoomDatabase) {
-        String before = loadParams.getKey();
-        ListenableFuture<List<ReadPost>> readPosts = redditDataRoomDatabase.readPostDao().getAllReadPostsListenableFuture(username, Long.parseLong(before == null ? Long.toString(System.currentTimeMillis()) : before));
+        String after = loadParams.getKey();
+        ListenableFuture<List<ReadPost>> readPosts = redditDataRoomDatabase.readPostDao().getAllReadPostsListenableFuture(username, Long.parseLong(after == null ? "0" : after));
 
         ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.transform(readPosts, this::transformData, executor);
 
