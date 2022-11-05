@@ -373,7 +373,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
-                if (posts != null && position > posts.size() - 2) {
+                if (posts != null && position > posts.size() - 5) {
                     fetchMorePosts();
                 }
             }

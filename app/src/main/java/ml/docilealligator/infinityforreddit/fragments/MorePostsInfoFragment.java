@@ -50,14 +50,20 @@ public class MorePostsInfoFragment extends Fragment {
     public void setStatus(@LoadingMorePostsStatus int status) {
         this.status = status;
         switch (status) {
+            case LoadingMorePostsStatus.NOT_LOADING:
+                binding.progressBarViewMorePostsInfoFragment.setVisibility(View.GONE);
+                break;
             case LoadingMorePostsStatus.LOADING:
                 binding.infoTextViewMorePostsInfoFragment.setText(R.string.loading);
+                binding.progressBarViewMorePostsInfoFragment.setVisibility(View.VISIBLE);
                 break;
             case LoadingMorePostsStatus.FAILED:
                 binding.infoTextViewMorePostsInfoFragment.setText(R.string.load_more_posts_failed);
+                binding.progressBarViewMorePostsInfoFragment.setVisibility(View.GONE);
                 break;
             case LoadingMorePostsStatus.NO_MORE_POSTS:
                 binding.infoTextViewMorePostsInfoFragment.setText(R.string.no_more_posts);
+                binding.progressBarViewMorePostsInfoFragment.setVisibility(View.GONE);
         }
     }
 
