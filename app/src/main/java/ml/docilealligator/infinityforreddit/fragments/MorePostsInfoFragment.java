@@ -6,16 +6,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 
 import javax.inject.Inject;
 
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.LoadingMorePostsStatus;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -29,7 +26,7 @@ public class MorePostsInfoFragment extends Fragment {
     CustomThemeWrapper mCustomThemeWrapper;
     private FragmentMorePostsInfoBinding binding;
     private BaseActivity mActivity;
-    @Status
+    @LoadingMorePostsStatus
     int status;
 
     public MorePostsInfoFragment() {
@@ -45,21 +42,21 @@ public class MorePostsInfoFragment extends Fragment {
 
         applyTheme();
 
-        setStatus(getArguments().getInt(EXTRA_STATUS, Status.LOADING));
+        setStatus(getArguments().getInt(EXTRA_STATUS, LoadingMorePostsStatus.LOADING));
 
         return binding.getRoot();
     }
 
-    public void setStatus(@Status int status) {
+    public void setStatus(@LoadingMorePostsStatus int status) {
         this.status = status;
         switch (status) {
-            case Status.LOADING:
+            case LoadingMorePostsStatus.LOADING:
                 binding.infoTextViewMorePostsInfoFragment.setText(R.string.loading);
                 break;
-            case Status.FAILED:
+            case LoadingMorePostsStatus.FAILED:
                 binding.infoTextViewMorePostsInfoFragment.setText(R.string.load_more_posts_failed);
                 break;
-            case Status.NO_MORE_POSTS:
+            case LoadingMorePostsStatus.NO_MORE_POSTS:
                 binding.infoTextViewMorePostsInfoFragment.setText(R.string.no_more_posts);
         }
     }
@@ -72,13 +69,5 @@ public class MorePostsInfoFragment extends Fragment {
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         mActivity = (BaseActivity) context;
-    }
-
-    @IntDef({Status.LOADING, Status.FAILED, Status.NO_MORE_POSTS})
-    @Retention(RetentionPolicy.SOURCE)
-    public @interface Status {
-        int LOADING = 0;
-        int FAILED = 1;
-        int NO_MORE_POSTS = 2;
     }
 }

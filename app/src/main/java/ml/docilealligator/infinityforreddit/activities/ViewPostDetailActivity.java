@@ -61,6 +61,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.LoadingMorePostsStatus;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SaveThing;
@@ -171,11 +172,8 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @State
     Post post;
     @State
-    boolean isFetchingMorePosts;
-    @State
-    boolean noMorePosts;
-    @State
-    boolean fetchMorePostsFailed;
+    @LoadingMorePostsStatus
+    int loadingMorePostsStatus = LoadingMorePostsStatus.NOT_LOADING;
     public Map<String, String> authorIcons = new HashMap<>();
     private FragmentManager fragmentManager;
     private SlidrInterface mSlidrInterface;
@@ -511,12 +509,11 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     }
 
     public void fetchMorePosts() {
-        if (isFetchingMorePosts || noMorePosts) {
+        if (loadingMorePostsStatus == LoadingMorePostsStatus.LOADING || loadingMorePostsStatus == LoadingMorePostsStatus.NO_MORE_POSTS) {
             return;
         }
 
-        isFetchingMorePosts = true;
-        fetchMorePostsFailed = false;
+        loadingMorePostsStatus = LoadingMorePostsStatus.LOADING;
 
         Handler handler = new Handler(Looper.getMainLooper());
 
@@ -642,10 +639,10 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                         LinkedHashSet<Post> newPosts = ParsePost.parsePostsSync(responseString, -1, postFilter, readPostList);
                         if (newPosts == null) {
                             handler.post(() -> {
-                                noMorePosts = true;
+                                loadingMorePostsStatus = LoadingMorePostsStatus.NO_MORE_POSTS;
                                 MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
                                 if (fragment != null) {
-                                    fragment.setStatus(MorePostsInfoFragment.Status.NO_MORE_POSTS);
+                                    fragment.setStatus(LoadingMorePostsStatus.NO_MORE_POSTS);
                                 }
                             });
                         } else {
@@ -654,45 +651,51 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                             postLinkedHashSet.addAll(newPosts);
                             if (currentPostsSize == postLinkedHashSet.size()) {
                                 handler.post(() -> {
-                                    noMorePosts = true;
+                                    loadingMorePostsStatus = LoadingMorePostsStatus.NO_MORE_POSTS;
                                     MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
                                     if (fragment != null) {
-                                        fragment.setStatus(MorePostsInfoFragment.Status.NO_MORE_POSTS);
+                                        fragment.setStatus(LoadingMorePostsStatus.NO_MORE_POSTS);
                                     }
                                 });
                             } else {
                                 posts = new ArrayList<>(postLinkedHashSet);
-                                handler.post(() -> sectionsPagerAdapter.notifyItemRangeInserted(currentPostsSize, postLinkedHashSet.size() - currentPostsSize));
+                                handler.post(() -> {
+                                    sectionsPagerAdapter.notifyItemRangeInserted(currentPostsSize, postLinkedHashSet.size() - currentPostsSize);
+                                    loadingMorePostsStatus = LoadingMorePostsStatus.NOT_LOADING;
+                                    MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
+                                    if (fragment != null) {
+                                        fragment.setStatus(LoadingMorePostsStatus.NOT_LOADING);
+                                    }
+                                });
                             }
                         }
                     } else {
                         handler.post(() -> {
-                            fetchMorePostsFailed = true;
+                            loadingMorePostsStatus = LoadingMorePostsStatus.FAILED;
                             MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
                             if (fragment != null) {
-                                fragment.setStatus(MorePostsInfoFragment.Status.FAILED);
+                                fragment.setStatus(LoadingMorePostsStatus.FAILED);
                             }
                         });
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                     handler.post(() -> {
-                        fetchMorePostsFailed = true;
+                        loadingMorePostsStatus = LoadingMorePostsStatus.FAILED;
                         MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
                         if (fragment != null) {
-                            fragment.setStatus(MorePostsInfoFragment.Status.FAILED);
+                            fragment.setStatus(LoadingMorePostsStatus.FAILED);
                         }
                     });
                 }
-
-                handler.post(() -> {
-                    isFetchingMorePosts = false;
-                });
             });
         } else {
             mExecutor.execute((Runnable) () -> {
-                long lastItem = posts.isEmpty() ? 0 : posts.get(posts.size() - 1).getPostTimeMillis();
-                List<ReadPost> readPosts = mRedditDataRoomDatabase.readPostDao().getAllReadPosts(username, lastItem);
+                long lastItem = 0;
+                if (!posts.isEmpty()) {
+                    lastItem = mRedditDataRoomDatabase.readPostDao().getReadPost(posts.get(posts.size() - 1).getId()).getTime();
+                }
+                List<ReadPost> readPosts = mRedditDataRoomDatabase.readPostDao().getAllReadPosts(mAccountName, lastItem);
                 StringBuilder ids = new StringBuilder();
                 for (ReadPost readPost : readPosts) {
                     ids.append("t3_").append(readPost.getId()).append(",");
@@ -715,10 +718,10 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                         LinkedHashSet<Post> newPosts = ParsePost.parsePostsSync(responseString, -1, postFilter, null);
                         if (newPosts == null || newPosts.isEmpty()) {
                             handler.post(() -> {
-                                noMorePosts = true;
+                                loadingMorePostsStatus = LoadingMorePostsStatus.NO_MORE_POSTS;
                                 MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
                                 if (fragment != null) {
-                                    fragment.setStatus(MorePostsInfoFragment.Status.NO_MORE_POSTS);
+                                    fragment.setStatus(LoadingMorePostsStatus.NO_MORE_POSTS);
                                 }
                             });
                         } else {
@@ -727,40 +730,43 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                             postLinkedHashSet.addAll(newPosts);
                             if (currentPostsSize == postLinkedHashSet.size()) {
                                 handler.post(() -> {
-                                    noMorePosts = true;
+                                    loadingMorePostsStatus = LoadingMorePostsStatus.NO_MORE_POSTS;
                                     MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
                                     if (fragment != null) {
-                                        fragment.setStatus(MorePostsInfoFragment.Status.NO_MORE_POSTS);
+                                        fragment.setStatus(LoadingMorePostsStatus.NO_MORE_POSTS);
                                     }
                                 });
                             } else {
                                 posts = new ArrayList<>(postLinkedHashSet);
-                                handler.post(() -> sectionsPagerAdapter.notifyItemRangeInserted(currentPostsSize, postLinkedHashSet.size() - currentPostsSize));
+                                handler.post(() -> {
+                                    sectionsPagerAdapter.notifyItemRangeInserted(currentPostsSize, postLinkedHashSet.size() - currentPostsSize);
+                                    loadingMorePostsStatus = LoadingMorePostsStatus.NOT_LOADING;
+                                    MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
+                                    if (fragment != null) {
+                                        fragment.setStatus(LoadingMorePostsStatus.NOT_LOADING);
+                                    }
+                                });
                             }
                         }
                     } else {
                         handler.post(() -> {
-                            fetchMorePostsFailed = true;
+                            loadingMorePostsStatus = LoadingMorePostsStatus.FAILED;
                             MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
                             if (fragment != null) {
-                                fragment.setStatus(MorePostsInfoFragment.Status.NO_MORE_POSTS);
+                                fragment.setStatus(LoadingMorePostsStatus.FAILED);
                             }
                         });
                     }
                 } catch (IOException e) {
                     e.printStackTrace();
                     handler.post(() -> {
-                        fetchMorePostsFailed = true;
+                        loadingMorePostsStatus = LoadingMorePostsStatus.FAILED;
                         MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
                         if (fragment != null) {
-                            fragment.setStatus(MorePostsInfoFragment.Status.NO_MORE_POSTS);
+                            fragment.setStatus(LoadingMorePostsStatus.FAILED);
                         }
                     });
                 }
-
-                handler.post(() -> {
-                    isFetchingMorePosts = false;
-                });
             });
         }
     }
@@ -936,7 +942,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                     if (position >= posts.size()) {
                         MorePostsInfoFragment morePostsInfoFragment = new MorePostsInfoFragment();
                         Bundle moreBundle = new Bundle();
-                        moreBundle.putInt(MorePostsInfoFragment.EXTRA_STATUS, MorePostsInfoFragment.Status.LOADING);
+                        moreBundle.putInt(MorePostsInfoFragment.EXTRA_STATUS, loadingMorePostsStatus);
                         morePostsInfoFragment.setArguments(moreBundle);
                         return morePostsInfoFragment;
                     }

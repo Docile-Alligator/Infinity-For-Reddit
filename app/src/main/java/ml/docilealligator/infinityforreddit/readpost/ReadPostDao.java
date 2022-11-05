@@ -23,6 +23,9 @@ public interface ReadPostDao {
     @Query("SELECT * FROM read_posts WHERE username = :username")
     List<ReadPost> getAllReadPosts(String username);
 
+    @Query("SELECT * FROM read_posts WHERE id = :id LIMIT 1")
+    ReadPost getReadPost(String id);
+
     @Query("SELECT COUNT(id) FROM read_posts")
     int getReadPostsCount();
 
