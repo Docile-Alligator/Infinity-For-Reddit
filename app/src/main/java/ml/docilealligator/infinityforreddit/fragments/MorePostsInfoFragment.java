@@ -46,7 +46,7 @@ public class MorePostsInfoFragment extends Fragment {
 
         binding.getRoot().setOnClickListener(view -> {
             if (status == LoadingMorePostsStatus.FAILED) {
-                mActivity.fetchMorePosts();
+                mActivity.fetchMorePosts(true);
             }
         });
 

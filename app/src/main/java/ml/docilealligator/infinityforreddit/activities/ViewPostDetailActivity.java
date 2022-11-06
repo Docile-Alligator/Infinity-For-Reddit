@@ -296,7 +296,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
         if (loadingMorePostsStatus == LoadingMorePostsStatus.LOADING) {
             loadingMorePostsStatus = LoadingMorePostsStatus.NOT_LOADING;
-            fetchMorePosts();
+            fetchMorePosts(false);
         }
 
         checkNewAccountAndBindView(savedInstanceState);
@@ -379,7 +379,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             @Override
             public void onPageSelected(int position) {
                 if (posts != null && position > posts.size() - 5) {
-                    fetchMorePosts();
+                    fetchMorePosts(false);
                 }
             }
         });
@@ -513,7 +513,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         }
     }
 
-    public void fetchMorePosts() {
+    public void fetchMorePosts(boolean changePage) {
         if (loadingMorePostsStatus == LoadingMorePostsStatus.LOADING || loadingMorePostsStatus == LoadingMorePostsStatus.NO_MORE_POSTS) {
             return;
         }
@@ -670,6 +670,9 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                             } else {
                                 posts = new ArrayList<>(postLinkedHashSet);
                                 handler.post(() -> {
+                                    if (changePage) {
+                                        viewPager2.setCurrentItem(currentPostsSize - 1, false);
+                                    }
                                     sectionsPagerAdapter.notifyItemRangeInserted(currentPostsSize, postLinkedHashSet.size() - currentPostsSize);
                                     loadingMorePostsStatus = LoadingMorePostsStatus.NOT_LOADING;
                                     MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
@@ -749,6 +752,9 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                             } else {
                                 posts = new ArrayList<>(postLinkedHashSet);
                                 handler.post(() -> {
+                                    if (changePage) {
+                                        viewPager2.setCurrentItem(currentPostsSize - 1, false);
+                                    }
                                     sectionsPagerAdapter.notifyItemRangeInserted(currentPostsSize, postLinkedHashSet.size() - currentPostsSize);
                                     loadingMorePostsStatus = LoadingMorePostsStatus.NOT_LOADING;
                                     MorePostsInfoFragment fragment = sectionsPagerAdapter.getMorePostsInfoFragment();
