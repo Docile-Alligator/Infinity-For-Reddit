@@ -294,6 +294,11 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             searchTextInputEditText.setImeOptions(searchTextInputEditText.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
         }
 
+        if (loadingMorePostsStatus == LoadingMorePostsStatus.LOADING) {
+            loadingMorePostsStatus = LoadingMorePostsStatus.NOT_LOADING;
+            fetchMorePosts();
+        }
+
         checkNewAccountAndBindView(savedInstanceState);
     }
 
@@ -514,6 +519,11 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         }
 
         loadingMorePostsStatus = LoadingMorePostsStatus.LOADING;
+
+        MorePostsInfoFragment morePostsFragment = sectionsPagerAdapter.getMorePostsInfoFragment();
+        if (morePostsFragment != null) {
+            morePostsFragment.setStatus(LoadingMorePostsStatus.LOADING);
+        }
 
         Handler handler = new Handler(Looper.getMainLooper());
 

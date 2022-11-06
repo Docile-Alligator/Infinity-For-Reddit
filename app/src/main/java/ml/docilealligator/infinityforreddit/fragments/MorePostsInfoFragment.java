@@ -14,7 +14,7 @@ import javax.inject.Inject;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.LoadingMorePostsStatus;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.databinding.FragmentMorePostsInfoBinding;
 
@@ -25,7 +25,7 @@ public class MorePostsInfoFragment extends Fragment {
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
     private FragmentMorePostsInfoBinding binding;
-    private BaseActivity mActivity;
+    private ViewPostDetailActivity mActivity;
     @LoadingMorePostsStatus
     int status;
 
@@ -43,6 +43,12 @@ public class MorePostsInfoFragment extends Fragment {
         applyTheme();
 
         setStatus(getArguments().getInt(EXTRA_STATUS, LoadingMorePostsStatus.LOADING));
+
+        binding.getRoot().setOnClickListener(view -> {
+            if (status == LoadingMorePostsStatus.FAILED) {
+                mActivity.fetchMorePosts();
+            }
+        });
 
         return binding.getRoot();
     }
@@ -74,6 +80,6 @@ public class MorePostsInfoFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        mActivity = (BaseActivity) context;
+        mActivity = (ViewPostDetailActivity) context;
     }
 }
