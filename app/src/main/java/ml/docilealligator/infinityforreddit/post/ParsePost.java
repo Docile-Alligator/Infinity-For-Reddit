@@ -306,7 +306,7 @@ public class ParsePost {
                         if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                             post.setSelfText("");
                         } else {
-                            post.setSelfText(Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
+                            post.setSelfText(Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY))));
                         }
 
                         Uri uri = Uri.parse(url);
@@ -480,7 +480,7 @@ public class ParsePost {
                             if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                                 post.setSelfText("");
                             } else {
-                                post.setSelfText(Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
+                                post.setSelfText(Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY))));
                             }
 
                             post.setPreviews(previews);
@@ -549,7 +549,7 @@ public class ParsePost {
                     if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                         post.setSelfText("");
                     } else {
-                        post.setSelfText(Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim()));
+                        post.setSelfText(Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY))));
                     }
 
                     Uri uri = Uri.parse(url);
@@ -696,7 +696,7 @@ public class ParsePost {
             if (data.isNull(JSONUtils.SELFTEXT_KEY)) {
                 post.setSelfText("");
             } else {
-                String selfText = Utils.modifyMarkdown(data.getString(JSONUtils.SELFTEXT_KEY).trim());
+                String selfText = Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY)));
                 post.setSelfText(selfText);
                 if (data.isNull(JSONUtils.SELFTEXT_HTML_KEY)) {
                     post.setSelfTextPlainTrimmed("");

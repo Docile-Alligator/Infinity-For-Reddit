@@ -69,8 +69,7 @@ import ml.docilealligator.infinityforreddit.VoteThing;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
-import ml.docilealligator.infinityforreddit.activities.ViewGifActivity;
-import ml.docilealligator.infinityforreddit.activities.ViewImageActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewImageOrGifActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewRedditGalleryActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
@@ -2059,22 +2058,22 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, post.isNSFW());
                 mActivity.startActivity(intent);
             } else if (post.getPostType() == Post.IMAGE_TYPE) {
-                Intent intent = new Intent(mActivity, ViewImageActivity.class);
-                intent.putExtra(ViewImageActivity.EXTRA_IMAGE_URL_KEY, post.getUrl());
-                intent.putExtra(ViewImageActivity.EXTRA_FILE_NAME_KEY, post.getSubredditName()
+                Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, post.getUrl());
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, post.getSubredditName()
                         + "-" + post.getId() + ".jpg");
-                intent.putExtra(ViewImageActivity.EXTRA_POST_TITLE_KEY, post.getTitle());
-                intent.putExtra(ViewImageActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, post.getSubredditName());
-                intent.putExtra(ViewImageActivity.EXTRA_IS_NSFW, post.isNSFW());
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, post.getTitle());
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, post.getSubredditName());
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_IS_NSFW, post.isNSFW());
                 mActivity.startActivity(intent);
             } else if (post.getPostType() == Post.GIF_TYPE) {
-                Intent intent = new Intent(mActivity, ViewGifActivity.class);
-                intent.putExtra(ViewGifActivity.EXTRA_FILE_NAME_KEY, post.getSubredditName()
+                Intent intent = new Intent(mActivity, ViewImageOrGifActivity.class);
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, post.getSubredditName()
                         + "-" + post.getId() + ".gif");
-                intent.putExtra(ViewGifActivity.EXTRA_GIF_URL_KEY, post.getVideoUrl());
-                intent.putExtra(ViewGifActivity.EXTRA_POST_TITLE_KEY, post.getTitle());
-                intent.putExtra(ViewGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, post.getSubredditName());
-                intent.putExtra(ViewGifActivity.EXTRA_IS_NSFW, post.isNSFW());
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, post.getVideoUrl());
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, post.getTitle());
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, post.getSubredditName());
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_IS_NSFW, post.isNSFW());
                 mActivity.startActivity(intent);
             } else if (post.getPostType() == Post.LINK_TYPE || post.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
                 Intent intent = new Intent(mActivity, LinkResolverActivity.class);

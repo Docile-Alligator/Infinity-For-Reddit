@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/hauler_view_view_image_or_gif_activity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    tools:application="ml.docilealligator.infinityforreddit.activities.ViewImageActivity">
+
+    <ProgressBar
+        android:id="@+id/progress_bar_view_image_or_gif_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <com.github.piasy.biv.view.BigImageView
+        android:id="@+id/image_view_view_image_or_gif_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:optimizeDisplay="true"
+        app:tapToRetry="false" />
+
+    <LinearLayout
+        android:id="@+id/load_image_error_linear_layout_view_image_or_gif_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/ic_error_outline_white_24dp"
+            android:fontFamily="?attr/font_family"
+            android:gravity="center"
+            android:text="@string/error_loading_image_tap_to_retry"
+            android:textColor="@android:color/white"
+            android:textSize="?attr/font_default" />
+
+    </LinearLayout>
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottom_navigation_view_image_or_gif_activity"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        android:backgroundTint="#80000000"
+        android:visibility="gone"
+        style="@style/Widget.MaterialComponents.BottomAppBar">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/title_text_view_view_image_or_gif_activity"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"
+                android:gravity="center_vertical"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp"
+                android:textColor="#FFFFFF"
+                android:textSize="?attr/font_20"
+                android:fontFamily="?attr/font_family"
+                android:maxLines="1"
+                android:ellipsize="end" />
+
+            <ImageView
+                android:id="@+id/download_image_view_view_image_or_gif_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:src="@drawable/ic_file_download_toolbar_white_24dp"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <ImageView
+                android:id="@+id/share_image_view_view_image_or_gif_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:src="@drawable/ic_share_toolbar_white_24dp"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+            <ImageView
+                android:id="@+id/wallpaper_image_view_view_image_or_gif_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:padding="16dp"
+                android:src="@drawable/ic_wallpaper_white_24dp"
+                android:background="?attr/selectableItemBackgroundBorderless" />
+
+        </LinearLayout>
+
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

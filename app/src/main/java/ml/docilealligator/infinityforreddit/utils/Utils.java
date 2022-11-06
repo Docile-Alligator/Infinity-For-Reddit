@@ -148,6 +148,22 @@ public final class Utils {
         return markdown;
     }
 
+    public static String trimTrailingWhitespace(String source) {
+
+        if (source == null) {
+            return "";
+        }
+
+        int i = source.length();
+
+        // loop back to the first non-whitespace character
+        do {
+            i--;
+        } while (i >= 0 && Character.isWhitespace(source.charAt(i)));
+
+        return source.substring(0, i + 1);
+    }
+
     public static CharSequence trimTrailingWhitespace(CharSequence source) {
 
         if (source == null) {
@@ -219,7 +235,7 @@ public final class Utils {
     }
 
     public static int getConnectedNetwork(Context context) {
-        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connMgr = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connMgr != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 Network nw = connMgr.getActiveNetwork();
@@ -266,7 +282,7 @@ public final class Utils {
     }
 
     public static boolean isConnectedToWifi(Context context) {
-        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connMgr = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connMgr != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 Network nw = connMgr.getActiveNetwork();
@@ -287,7 +303,7 @@ public final class Utils {
     }
 
     public static boolean isConnectedToCellularData(Context context) {
-        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connMgr = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connMgr != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 Network nw = connMgr.getActiveNetwork();

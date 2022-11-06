@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    compileSdk 31
+    compileSdk 32
     defaultConfig {
         applicationId "ml.docilealligator.infinityforreddit"
         minSdk 21
@@ -29,6 +29,10 @@ android {
             shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            applicationIdSuffix '.debug'
+            versionNameSuffix ' (DEBUG)'
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_11
@@ -43,6 +47,10 @@ android {
         language {
             enableSplit = false
         }
+    }
+
+    buildFeatures {
+        viewBinding true
     }
 }
 
@@ -102,6 +110,7 @@ dependencies {
     def butterknifeVersion = "10.2.3"
     implementation "com.jakewharton:butterknife:$butterknifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
+    compileOnly 'com.android.databinding:viewbinding:7.3.0'
 
     // Events
     def eventbusVersion = "3.3.1"
@@ -139,7 +148,7 @@ dependencies {
     annotationProcessor "com.github.bumptech.glide:compiler:$glideVersion"
     implementation 'jp.wasabeef:glide-transformations:4.3.0'
     implementation 'com.github.santalu:aspect-ratio-imageview:1.0.9'
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.25'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.23'
     def bivVersion = "1.8.1"
     implementation "com.github.piasy:BigImageViewer:$bivVersion"
     implementation "com.github.piasy:GlideImageLoader:$bivVersion"
