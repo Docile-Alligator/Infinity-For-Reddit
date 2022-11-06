@@ -4,25 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/account_posts_coordinator_layout"
+    android:id="@+id/coordinator_layout_account_posts_activity"
     tools:context=".activities.AccountPostsActivity">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/account_posts_appbar_layout"
+        android:id="@+id/appbar_layout_account_posts_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <com.google.android.material.appbar.CollapsingToolbarLayout
-            android:id="@+id/account_posts_collapsing_toolbar_layout"
+            android:id="@+id/collapsing_toolbar_layout_account_posts_activity"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:layout_scrollFlags="scroll|enterAlways"
             app:titleEnabled="false"
-            app:toolbarId="@+id/account_posts_toolbar">
+            app:toolbarId="@+id/toolbar_account_posts_activity">
 
             <androidx.appcompat.widget.Toolbar
-                android:id="@+id/account_posts_toolbar"
+                android:id="@+id/toolbar_account_posts_activity"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="?attr/actionBarSize"
@@ -34,7 +34,7 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/account_posts_frame_layout"
+        android:id="@+id/frame_layout_account_posts_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />

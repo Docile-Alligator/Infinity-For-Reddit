@@ -215,21 +215,12 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 
         loadImage();
 
-        String caption = media.caption;
-        String captionUrl = media.captionUrl;
-        boolean captionIsEmpty = TextUtils.isEmpty(caption);
-        boolean captionUrlIsEmpty = TextUtils.isEmpty(captionUrl);
-        boolean captionTextOrUrlIsNotEmpty = !captionIsEmpty || !captionUrlIsEmpty;
-
         imageView.setOnClickListener(view -> {
             if (activity.isActionBarHidden()) {
                 activity.getWindow().getDecorView().setSystemUiVisibility(0);
                 activity.setActionBarHidden(false);
                 if (activity.isUseBottomAppBar()) {
                     bottomAppBarMenu.setVisibility(View.VISIBLE);
-                }
-                if (captionTextOrUrlIsNotEmpty){
-                    bottomAppBar.setVisibility(View.VISIBLE);
                 }
             } else {
                 hideAppBar();
@@ -272,7 +263,11 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
             });
         }
 
-        if (captionTextOrUrlIsNotEmpty) {
+        String caption = media.caption;
+        String captionUrl = media.captionUrl;
+        boolean captionIsEmpty = TextUtils.isEmpty(caption);
+        boolean captionUrlIsEmpty = TextUtils.isEmpty(captionUrl);
+        if (!captionIsEmpty || !captionUrlIsEmpty) {
             isUseBottomCaption = true;
 
             if (!activity.isUseBottomAppBar()) {
@@ -316,8 +311,6 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                 captionUrlTextView.setVisibility(View.VISIBLE);
                 captionUrlTextView.setHighlightColor(Color.TRANSPARENT);
             }
-        } else {
-            bottomAppBar.setVisibility(View.GONE);
         }
 
         return rootView;
@@ -335,7 +328,6 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
         if (activity.isUseBottomAppBar()) {
             bottomAppBarMenu.setVisibility(View.GONE);
         }
-        bottomAppBar.setVisibility(View.GONE);
     }
 
     private void loadImage() {

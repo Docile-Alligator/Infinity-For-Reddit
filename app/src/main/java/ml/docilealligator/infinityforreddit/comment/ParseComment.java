@@ -200,7 +200,7 @@ public class ParseComment {
         String distinguished = singleCommentData.getString(JSONUtils.DISTINGUISHED_KEY);
         String commentMarkdown = "";
         if (!singleCommentData.isNull(JSONUtils.BODY_KEY)) {
-            commentMarkdown = Utils.parseInlineGifInComments(Utils.modifyMarkdown(Utils.trimTrailingWhitespace(singleCommentData.getString(JSONUtils.BODY_KEY))));
+            commentMarkdown = Utils.parseInlineGifInComments(Utils.modifyMarkdown(singleCommentData.getString(JSONUtils.BODY_KEY).trim()));
             if (!singleCommentData.isNull(JSONUtils.MEDIA_METADATA_KEY)) {
                 JSONObject mediaMetadataObject = singleCommentData.getJSONObject(JSONUtils.MEDIA_METADATA_KEY);
                 commentMarkdown = Utils.parseInlineEmotes(commentMarkdown, mediaMetadataObject);

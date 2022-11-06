@@ -35,6 +35,13 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:label">
         <activity
+            android:name=".ViewGifActivity"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".activities.HistoryActivity"
             android:exported="false"
             android:label="@string/history_activity_label"
@@ -395,7 +402,11 @@
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
-            android:name=".activities.ViewImageOrGifActivity"
+            android:name=".activities.ViewImageActivity"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.SlidableWithActionBar" />
+        <activity
+            android:name=".activities.ViewGifActivity"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.SlidableWithActionBar" />
         <activity
@@ -419,7 +430,7 @@
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.provider"
+            android:authorities="ml.docilealligator.infinityforreddit.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

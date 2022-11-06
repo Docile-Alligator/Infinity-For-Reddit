@@ -117,20 +117,20 @@ public class LinkResolverActivity extends AppCompatActivity {
                 }
 
                 if (path.endsWith("jpg") || path.endsWith("png") || path.endsWith("jpeg")) {
-                    Intent intent = new Intent(this, ViewImageOrGifActivity.class);
+                    Intent intent = new Intent(this, ViewImageActivity.class);
                     String url = uri.toString();
                     String fileName = FilenameUtils.getName(path);
-                    intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, url);
-                    intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, fileName);
-                    intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, fileName);
+                    intent.putExtra(ViewImageActivity.EXTRA_IMAGE_URL_KEY, url);
+                    intent.putExtra(ViewImageActivity.EXTRA_FILE_NAME_KEY, fileName);
+                    intent.putExtra(ViewImageActivity.EXTRA_POST_TITLE_KEY, fileName);
                     startActivity(intent);
                 } else if (path.endsWith("gif")) {
-                    Intent intent = new Intent(this, ViewImageOrGifActivity.class);
+                    Intent intent = new Intent(this, ViewGifActivity.class);
                     String url = uri.toString();
                     String fileName = FilenameUtils.getName(path);
-                    intent.putExtra(ViewImageOrGifActivity.EXTRA_GIF_URL_KEY, url);
-                    intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, fileName);
-                    intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, fileName);
+                    intent.putExtra(ViewGifActivity.EXTRA_GIF_URL_KEY, url);
+                    intent.putExtra(ViewGifActivity.EXTRA_FILE_NAME_KEY, fileName);
+                    intent.putExtra(ViewGifActivity.EXTRA_POST_TITLE_KEY, fileName);
                     startActivity(intent);
                 } else if (path.endsWith("mp4")) {
                     Intent intent = new Intent(this, ViewVideoActivity.class);
@@ -154,9 +154,9 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 return;
                             }
                             String id = unescapedUrl.substring(lastSlashIndex + 1);
-                            Intent intent = new Intent(this, ViewImageOrGifActivity.class);
-                            intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, uri.toString());
-                            intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, id + ".jpg");
+                            Intent intent = new Intent(this, ViewImageActivity.class);
+                            intent.putExtra(ViewImageActivity.EXTRA_IMAGE_URL_KEY, uri.toString());
+                            intent.putExtra(ViewImageActivity.EXTRA_FILE_NAME_KEY, id + ".jpg");
                             startActivity(intent);
                         } else if (authority.equals("v.redd.it")) {
                             Intent intent = new Intent(this, ViewVideoActivity.class);
