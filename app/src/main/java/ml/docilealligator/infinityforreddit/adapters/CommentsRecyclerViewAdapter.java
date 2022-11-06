@@ -780,7 +780,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 });
             } else {
                 ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setOnClickListener(view -> {
-                    Comment comment = getCurrentComment(position);
+                    Comment comment = getCurrentComment(holder);
                     if (comment != null) {
                         Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
                         intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, mPost);
