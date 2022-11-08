@@ -1666,20 +1666,6 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         mShowAbsoluteNumberOfVotes = showAbsoluteNumberOfVotes;
     }
 
-    public int getNextItemPositionWithoutBeingHidden(int fromPosition) {
-        int temp = fromPosition;
-        while (temp >= 0 && temp < super.getItemCount()) {
-            Post post = getItem(temp);
-            if (post != null && post.isHiddenInRecyclerView()) {
-                temp++;
-            } else {
-                break;
-            }
-        }
-
-        return temp;
-    }
-
     public void setAutoplay(boolean autoplay) {
         mAutoplay = autoplay;
     }
