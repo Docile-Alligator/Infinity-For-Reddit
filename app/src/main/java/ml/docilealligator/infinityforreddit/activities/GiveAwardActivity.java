@@ -21,7 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import com.r0adkll.slidr.Slidr;
 
 import java.util.concurrent.Executor;
@@ -115,12 +115,12 @@ public class GiveAwardActivity extends BaseActivity {
         adapter = new AwardRecyclerViewAdapter(this, mCustomThemeWrapper, award -> {
             LayoutInflater inflater = getLayoutInflater();
             View layout = inflater.inflate(R.layout.dialog_give_award, null);
-            SwitchMaterial switchMaterial = layout.findViewById(R.id.switch_material_give_award_dialog);
+            MaterialSwitch materialSwitch = layout.findViewById(R.id.switch_material_give_award_dialog);
             new MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.give_award_dialog_title)
                     .setView(layout)
                     .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
-                        boolean isAnonymous = switchMaterial.isChecked();
+                        boolean isAnonymous = materialSwitch.isChecked();
 
                         GiveAward.giveAwardV2(mExecutor, new Handler(), mOauthRetrofit, mAccessToken,
                                 thingFullname, award.getId(), isAnonymous, new GiveAward.GiveAwardListener() {

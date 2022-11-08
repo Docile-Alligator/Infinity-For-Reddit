@@ -34,6 +34,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.divider.MaterialDivider;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.libRG.CustomTextView;
@@ -129,7 +130,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
     @BindView(R.id.receive_post_reply_notifications_text_view_post_text_activity)
     TextView receivePostReplyNotificationsTextView;
     @BindView(R.id.receive_post_reply_notifications_switch_material_post_text_activity)
-    SwitchMaterial receivePostReplyNotificationsSwitchMaterial;
+    MaterialSwitch receivePostReplyNotificationsSwitchMaterial;
     @BindView(R.id.divider_2_post_text_activity)
     MaterialDivider divider2;
     @BindView(R.id.post_title_edit_text_post_text_activity)

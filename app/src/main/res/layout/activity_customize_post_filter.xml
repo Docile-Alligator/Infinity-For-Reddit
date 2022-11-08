@@ -265,7 +265,7 @@
                     android:fontFamily="?attr/font_default"
                     android:textSize="?attr/font_default" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/only_nsfw_switch_customize_post_filter_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -295,7 +295,7 @@
                     android:fontFamily="?attr/font_default"
                     android:textSize="?attr/font_default" />
 
-                <com.google.android.material.switchmaterial.SwitchMaterial
+                <com.google.android.material.materialswitch.MaterialSwitch
                     android:id="@+id/only_spoiler_switch_customize_post_filter_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.android.material.materialswitch.MaterialSwitch;
 
 import java.util.ArrayList;
 
@@ -166,7 +166,7 @@ public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<Recy
         @BindView(R.id.theme_item_info_text_view_item_custom_theme_switch_item)
         TextView themeItemInfoTextView;
         @BindView(R.id.theme_item_switch_item_custom_theme_switch_item)
-        SwitchMaterial themeItemSwitch;
+        MaterialSwitch themeItemSwitch;
 
         ThemeSwitchItemViewHolder(@NonNull View itemView) {
             super(itemView);

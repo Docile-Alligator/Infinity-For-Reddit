@@ -35,8 +35,8 @@ import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.libRG.CustomTextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -120,7 +120,7 @@ public class SubmitCrosspostActivity extends BaseActivity implements FlairBottom
     @BindView(R.id.receive_post_reply_notifications_text_view_submit_crosspost_activity)
     TextView receivePostReplyNotificationsTextView;
     @BindView(R.id.receive_post_reply_notifications_switch_material_submit_crosspost_activity)
-    SwitchMaterial receivePostReplyNotificationsSwitchMaterial;
+    MaterialSwitch receivePostReplyNotificationsSwitchMaterial;
     @BindView(R.id.divider_3_submit_crosspost_activity)
     View divider3;
     @BindView(R.id.post_title_edit_text_submit_crosspost_activity)

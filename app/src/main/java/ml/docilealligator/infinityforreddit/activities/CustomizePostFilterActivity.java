@@ -27,7 +27,7 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.checkbox.MaterialCheckBox;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.r0adkll.slidr.Slidr;
@@ -122,13 +122,13 @@ public class CustomizePostFilterActivity extends BaseActivity {
     @BindView(R.id.only_nsfw_text_view_customize_post_filter_activity)
     TextView onlyNSFWTextView;
     @BindView(R.id.only_nsfw_switch_customize_post_filter_activity)
-    SwitchMaterial onlyNSFWSwitch;
+    MaterialSwitch onlyNSFWSwitch;
     @BindView(R.id.only_spoiler_linear_layout_customize_post_filter_activity)
     LinearLayout onlySpoilerLinearLayout;
     @BindView(R.id.only_spoiler_text_view_customize_post_filter_activity)
     TextView onlySpoilerTextView;
     @BindView(R.id.only_spoiler_switch_customize_post_filter_activity)
-    SwitchMaterial onlySpoilerSwitch;
+    MaterialSwitch onlySpoilerSwitch;
     @BindView(R.id.title_excludes_strings_text_input_layout_customize_post_filter_activity)
     TextInputLayout titleExcludesStringsTextInputLayout;
     @BindView(R.id.title_excludes_strings_text_input_edit_text_customize_post_filter_activity)
