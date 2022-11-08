@@ -282,15 +282,8 @@ public interface RedditAPI {
     Call<String> getWikiPage(@Path("subredditName") String subredditName, @Path("wikiPage") String wikiPage);
 
     @GET("{sortType}?raw_json=1")
-    ListenableFuture<Response<String>> getBestPostsListenableFuture(@Path("sortType") SortType.Type sortType, @Query("after") String lastItem, @HeaderMap Map<String, String> headers);
-
-    @GET("{sortType}?raw_json=1")
     ListenableFuture<Response<String>> getBestPostsListenableFuture(@Path("sortType") SortType.Type sortType, @Query("t") SortType.Time sortTime,
                                                                    @Query("after") String lastItem, @HeaderMap Map<String, String> headers);
-
-    @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=25&always_show_media=1")
-    ListenableFuture<Response<String>> getSubredditBestPostsOauthListenableFuture(@Path("subredditName") String subredditName, @Path("sortType") SortType.Type sortType,
-                                            @Query("after") String lastItem, @HeaderMap Map<String, String> headers);
 
     @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=25&always_show_media=1")
     ListenableFuture<Response<String>> getSubredditBestPostsOauthListenableFuture(@Path("subredditName") String subredditName, @Path("sortType") SortType.Type sortType,
@@ -299,15 +292,7 @@ public interface RedditAPI {
 
     @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=25&always_show_media=1")
     ListenableFuture<Response<String>> getSubredditBestPostsListenableFuture(@Path("subredditName") String subredditName, @Path("sortType") SortType.Type sortType,
-                                       @Query("after") String lastItem);
-
-    @GET("r/{subredditName}/{sortType}.json?raw_json=1&limit=25&always_show_media=1")
-    ListenableFuture<Response<String>> getSubredditBestPostsListenableFuture(@Path("subredditName") String subredditName, @Path("sortType") SortType.Type sortType,
                                        @Query("t") SortType.Time sortTime, @Query("after") String lastItem);
-
-    @GET("user/{username}/{where}.json?&type=links&raw_json=1&limit=25")
-    ListenableFuture<Response<String>> getUserPostsOauthListenableFuture(@Path("username") String username, @Path("where") String where,
-                                   @Query("after") String lastItem, @Query("sort") SortType.Type sortType, @HeaderMap Map<String, String> headers);
 
     @GET("user/{username}/{where}.json?&type=links&raw_json=1&limit=25")
     ListenableFuture<Response<String>> getUserPostsOauthListenableFuture(@Path("username") String username, @Path("where") String where,
@@ -316,16 +301,7 @@ public interface RedditAPI {
 
     @GET("user/{username}/submitted.json?raw_json=1&limit=25")
     ListenableFuture<Response<String>> getUserPostsListenableFuture(@Path("username") String username, @Query("after") String lastItem,
-                              @Query("sort") SortType.Type sortType);
-
-    @GET("user/{username}/submitted.json?raw_json=1&limit=25")
-    ListenableFuture<Response<String>> getUserPostsListenableFuture(@Path("username") String username, @Query("after") String lastItem,
                               @Query("sort") SortType.Type sortType, @Query("t") SortType.Time sortTime);
-
-    @GET("search.json?include_over_18=1&raw_json=1&type=link")
-    ListenableFuture<Response<String>> searchPostsOauthListenableFuture(@Query("q") String query, @Query("after") String after,
-                                  @Query("sort") SortType.Type sort, @Query("source") String source,
-                                  @HeaderMap Map<String, String> headers);
 
     @GET("search.json?include_over_18=1&raw_json=1&type=link")
     ListenableFuture<Response<String>> searchPostsOauthListenableFuture(@Query("q") String query, @Query("after") String after,
@@ -335,18 +311,8 @@ public interface RedditAPI {
 
     @GET("search.json?include_over_18=1&raw_json=1&type=link")
     ListenableFuture<Response<String>> searchPostsListenableFuture(@Query("q") String query, @Query("after") String after,
-                             @Query("sort") SortType.Type sort, @Query("source") String source);
-
-    @GET("search.json?include_over_18=1&raw_json=1&type=link")
-    ListenableFuture<Response<String>> searchPostsListenableFuture(@Query("q") String query, @Query("after") String after,
                              @Query("sort") SortType.Type sort, @Query("t") SortType.Time sortTime,
                              @Query("source") String source);
-
-    @GET("r/{subredditName}/search.json?include_over_18=1&raw_json=1&type=link&restrict_sr=true")
-    ListenableFuture<Response<String>> searchPostsInSpecificSubredditOauthListenableFuture(@Path("subredditName") String subredditName,
-                                                     @Query("q") String query, @Query("sort") SortType.Type sort,
-                                                     @Query("after") String after,
-                                                     @HeaderMap Map<String, String> headers);
 
     @GET("r/{subredditName}/search.json?include_over_18=1&raw_json=1&type=link&restrict_sr=true")
     ListenableFuture<Response<String>> searchPostsInSpecificSubredditOauthListenableFuture(@Path("subredditName") String subredditName,
@@ -357,16 +323,7 @@ public interface RedditAPI {
     @GET("r/{subredditName}/search.json?include_over_18=1&raw_json=1&type=link&restrict_sr=true")
     ListenableFuture<Response<String>> searchPostsInSpecificSubredditListenableFuture(@Path("subredditName") String subredditName,
                                                 @Query("q") String query, @Query("sort") SortType.Type sort,
-                                                @Query("after") String after);
-
-    @GET("r/{subredditName}/search.json?include_over_18=1&raw_json=1&type=link&restrict_sr=true")
-    ListenableFuture<Response<String>> searchPostsInSpecificSubredditListenableFuture(@Path("subredditName") String subredditName,
-                                                @Query("q") String query, @Query("sort") SortType.Type sort,
                                                 @Query("t") SortType.Time sortTime, @Query("after") String after);
-
-    @GET("{multipath}?raw_json=1")
-    ListenableFuture<Response<String>> getMultiRedditPostsListenableFuture(@Path(value = "multipath", encoded = true) String multiPath,
-                                     @Query("after") String after);
 
     @GET("{multipath}?raw_json=1")
     ListenableFuture<Response<String>> getMultiRedditPostsListenableFuture(@Path(value = "multipath", encoded = true) String multiPath,
@@ -376,10 +333,6 @@ public interface RedditAPI {
     ListenableFuture<Response<String>> getMultiRedditPostsOauthListenableFuture(@Path(value = "multipath", encoded = true) String multiPath,
                                           @Query("after") String after, @Query("t") SortType.Time sortTime,
                                           @HeaderMap Map<String, String> headers);
-
-    @GET("{multipath}.json?raw_json=1")
-    ListenableFuture<Response<String>> getMultiRedditPostsOauthListenableFuture(@Path(value = "multipath", encoded = true) String multiPath,
-                                          @Query("after") String after, @HeaderMap Map<String, String> headers);
 
     @GET("{sortType}?raw_json=1")
     Call<String> getBestPosts(@Path("sortType") String sortType, @Query("after") String lastItem, @HeaderMap Map<String, String> headers);
