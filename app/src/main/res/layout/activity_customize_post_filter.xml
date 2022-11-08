@@ -59,7 +59,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
-                    android:hint="@string/post_filter_name_hint" />
+                    android:hint="@string/post_filter_name_hint"
+                    android:maxLines="10" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -319,7 +320,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
-                    android:hint="@string/title_excludes_strings_hint" />
+                    android:hint="@string/title_excludes_strings_hint"
+                    android:maxLines="10" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -339,7 +341,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
-                    android:hint="@string/title_contains_strings_hint" />
+                    android:hint="@string/title_contains_strings_hint"
+                    android:maxLines="10" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -359,7 +362,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
-                    android:hint="@string/title_excludes_regex_hint" />
+                    android:hint="@string/title_excludes_regex_hint"
+                    android:maxLines="10" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -379,7 +383,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
-                    android:hint="@string/title_contains_regex_hint" />
+                    android:hint="@string/title_contains_regex_hint"
+                    android:maxLines="10" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -404,7 +409,8 @@
                         android:layout_weight="1"
                         android:fontFamily="?attr/font_family"
                         android:textSize="?attr/font_default"
-                        android:hint="@string/exclude_subreddits_hint" />
+                        android:hint="@string/exclude_subreddits_hint"
+                        android:maxLines="10" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -440,7 +446,8 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="?attr/font_family"
                         android:textSize="?attr/font_default"
-                        android:hint="@string/exclude_users_hint" />
+                        android:hint="@string/exclude_users_hint"
+                        android:maxLines="10" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -472,7 +479,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
-                    android:hint="@string/exclude_flairs_hint" />
+                    android:hint="@string/exclude_flairs_hint"
+                    android:maxLines="10" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -492,7 +500,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
-                    android:hint="@string/contain_flairs_hint" />
+                    android:hint="@string/contain_flairs_hint"
+                    android:maxLines="10" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -512,7 +521,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
-                    android:hint="@string/exclude_domains_hint" />
+                    android:hint="@string/exclude_domains_hint"
+                    android:maxLines="10" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -532,7 +542,8 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
-                    android:hint="@string/contain_domains_hint" />
+                    android:hint="@string/contain_domains_hint"
+                    android:maxLines="10" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -553,7 +564,8 @@
                     android:inputType="numberSigned"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
-                    android:hint="@string/min_vote_hint" />
+                    android:hint="@string/min_vote_hint"
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -574,7 +586,8 @@
                     android:inputType="numberSigned"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
-                    android:hint="@string/max_vote_hint" />
+                    android:hint="@string/max_vote_hint"
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -595,7 +608,8 @@
                     android:inputType="numberSigned"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
-                    android:hint="@string/min_comments_hint" />
+                    android:hint="@string/min_comments_hint"
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -616,7 +630,8 @@
                     android:inputType="numberSigned"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
-                    android:hint="@string/max_comments_hint" />
+                    android:hint="@string/max_comments_hint"
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -637,7 +652,8 @@
                     android:inputType="numberSigned"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
-                    android:hint="@string/min_awards_hint" />
+                    android:hint="@string/min_awards_hint"
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -658,7 +674,8 @@
                     android:inputType="numberSigned"
                     android:fontFamily="?attr/font_family"
                     android:textSize="?attr/font_default"
-                    android:hint="@string/max_awards_hint" />
+                    android:hint="@string/max_awards_hint"
+                    android:maxLines="1" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
