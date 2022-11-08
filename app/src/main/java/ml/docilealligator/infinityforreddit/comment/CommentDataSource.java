@@ -80,27 +80,27 @@ public class CommentDataSource extends PageKeyedDataSource<String, Comment> {
         if (areSavedComments) {
             if (sortType.getTime() != null) {
                 commentsCall = api.getUserSavedCommentsOauth(username, PostPagingSource.USER_WHERE_SAVED,
-                        null, sortType.getType().value, sortType.getTime().value,
+                        null, sortType.getType(), sortType.getTime(),
                         APIUtils.getOAuthHeader(accessToken));
             } else {
                 commentsCall = api.getUserSavedCommentsOauth(username, PostPagingSource.USER_WHERE_SAVED,
-                        null, sortType.getType().value, APIUtils.getOAuthHeader(accessToken));
+                        null, sortType.getType(), APIUtils.getOAuthHeader(accessToken));
             }
         } else {
             if (accessToken == null) {
                 if (sortType.getTime() != null) {
-                    commentsCall = api.getUserComments(username, null, sortType.getType().value,
-                            sortType.getTime().value);
+                    commentsCall = api.getUserComments(username, null, sortType.getType(),
+                            sortType.getTime());
                 } else {
-                    commentsCall = api.getUserComments(username, null, sortType.getType().value);
+                    commentsCall = api.getUserComments(username, null, sortType.getType());
                 }
             } else {
                 if (sortType.getTime() != null) {
                     commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken), username,
-                            null, sortType.getType().value, sortType.getTime().value);
+                            null, sortType.getType(), sortType.getTime());
                 } else {
                     commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken), username,
-                            null, sortType.getType().value);
+                            null, sortType.getType());
                 }
             }
         }
@@ -159,26 +159,26 @@ public class CommentDataSource extends PageKeyedDataSource<String, Comment> {
         if (areSavedComments) {
             if (sortType.getTime() != null) {
                 commentsCall = api.getUserSavedCommentsOauth(username, PostPagingSource.USER_WHERE_SAVED, params.key,
-                        sortType.getType().value, sortType.getTime().value, APIUtils.getOAuthHeader(accessToken));
+                        sortType.getType(), sortType.getTime(), APIUtils.getOAuthHeader(accessToken));
             } else {
                 commentsCall = api.getUserSavedCommentsOauth(username, PostPagingSource.USER_WHERE_SAVED, params.key,
-                        sortType.getType().value, APIUtils.getOAuthHeader(accessToken));
+                        sortType.getType(), APIUtils.getOAuthHeader(accessToken));
             }
         } else {
             if (accessToken == null) {
                 if (sortType.getTime() != null) {
-                    commentsCall = api.getUserComments(username, params.key, sortType.getType().value,
-                            sortType.getTime().value);
+                    commentsCall = api.getUserComments(username, params.key, sortType.getType(),
+                            sortType.getTime());
                 } else {
-                    commentsCall = api.getUserComments(username, params.key, sortType.getType().value);
+                    commentsCall = api.getUserComments(username, params.key, sortType.getType());
                 }
             } else {
                 if (sortType.getTime() != null) {
                     commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken),
-                            username, params.key, sortType.getType().value, sortType.getTime().value);
+                            username, params.key, sortType.getType(), sortType.getTime());
                 } else {
                     commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken),
-                            username, params.key, sortType.getType().value);
+                            username, params.key, sortType.getType());
                 }
             }
         }
