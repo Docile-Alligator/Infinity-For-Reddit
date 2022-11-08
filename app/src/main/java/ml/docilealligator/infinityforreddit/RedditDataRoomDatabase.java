@@ -40,7 +40,7 @@ import ml.docilealligator.infinityforreddit.user.UserData;
         SubscribedUserData.class, MultiReddit.class, CustomTheme.class, RecentSearchQuery.class,
         ReadPost.class, PostFilter.class, PostFilterUsage.class, AnonymousMultiredditSubreddit.class}, version = 23)
 public abstract class RedditDataRoomDatabase extends RoomDatabase {
-    private static RedditDataRoomDatabase INSTANCE;
+    private static volatile RedditDataRoomDatabase INSTANCE;
 
     public static RedditDataRoomDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
