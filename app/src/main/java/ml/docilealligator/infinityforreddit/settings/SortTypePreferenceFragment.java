@@ -10,9 +10,5 @@ public class SortTypePreferenceFragment extends CustomFontPreferenceFragmentComp
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.sort_type_preferences, rootKey);
-
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
     }
 }

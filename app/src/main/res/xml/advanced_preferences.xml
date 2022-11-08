@@ -40,7 +40,8 @@
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         app:key="backup_settings"
-        app:title="@string/settings_backup_settings_title" />
+        app:title="@string/settings_backup_settings_title"
+        app:summary="@string/settings_backup_settings_summary" />
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         app:key="restore_settings"

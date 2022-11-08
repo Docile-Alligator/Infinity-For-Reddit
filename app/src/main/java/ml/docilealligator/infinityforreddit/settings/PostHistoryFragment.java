@@ -2,6 +2,7 @@ package ml.docilealligator.infinityforreddit.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.android.material.materialswitch.MaterialSwitch;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -21,7 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
@@ -33,24 +34,32 @@ public class PostHistoryFragment extends Fragment {
     TextView infoTextView;
     @BindView(R.id.mark_posts_as_read_linear_layout_post_history_fragment)
     LinearLayout markPostsAsReadLinearLayout;
+    @BindView(R.id.mark_posts_as_read_text_view_post_history_fragment)
+    TextView markPostsAsReadTextView;
     @BindView(R.id.mark_posts_as_read_switch_post_history_fragment)
-    SwitchMaterial markPostsAsReadSwitch;
+    MaterialSwitch markPostsAsReadSwitch;
     @BindView(R.id.mark_posts_as_read_after_voting_linear_layout_post_history_fragment)
     LinearLayout markPostsAsReadAfterVotingLinearLayout;
+    @BindView(R.id.mark_posts_as_read_after_voting_text_view_post_history_fragment)
+    TextView markPostsAsReadAfterVotingTextView;
     @BindView(R.id.mark_posts_as_read_after_voting_switch_post_history_fragment)
-    SwitchMaterial markPostsAsReadAfterVotingSwitch;
+    MaterialSwitch markPostsAsReadAfterVotingSwitch;
     @BindView(R.id.mark_posts_as_read_on_scroll_linear_layout_post_history_fragment)
     LinearLayout markPostsAsReadOnScrollLinearLayout;
+    @BindView(R.id.mark_posts_as_read_on_scroll_text_view_post_history_fragment)
+    TextView markPostsAsReadOnScrollTextView;
     @BindView(R.id.mark_posts_as_read_on_scroll_switch_post_history_fragment)
-    SwitchMaterial markPostsAsReadOnScrollSwitch;
+    MaterialSwitch markPostsAsReadOnScrollSwitch;
     @BindView(R.id.hide_read_posts_automatically_linear_layout_post_history_fragment)
     LinearLayout hideReadPostsAutomaticallyLinearLayout;
+    @BindView(R.id.hide_read_posts_automatically_text_view_post_history_fragment)
+    TextView hideReadPostsAutomaticallyTextView;
     @BindView(R.id.hide_read_posts_automatically_switch_post_history_fragment)
-    SwitchMaterial hideReadPostsAutomaticallySwitch;
+    MaterialSwitch hideReadPostsAutomaticallySwitch;
     @Inject
     @Named("post_history")
     SharedPreferences postHistorySharedPreferences;
-    private BaseActivity activity;
+    private SettingsActivity activity;
 
     public PostHistoryFragment() {
         // Required empty public constructor
@@ -65,6 +74,9 @@ public class PostHistoryFragment extends Fragment {
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
+
+        rootView.setBackgroundColor(activity.customThemeWrapper.getBackgroundColor());
+        applyCustomTheme();
 
         if (activity.typeface != null) {
             Utils.setFontToAllTextViews(rootView, activity.typeface);
@@ -112,9 +124,20 @@ public class PostHistoryFragment extends Fragment {
         return rootView;
     }
 
+    private void applyCustomTheme() {
+        infoTextView.setTextColor(activity.customThemeWrapper.getSecondaryTextColor());
+        Drawable infoDrawable = Utils.getTintedDrawable(activity, R.drawable.ic_info_preference_24dp, activity.customThemeWrapper.getPrimaryIconColor());
+        infoTextView.setCompoundDrawablesWithIntrinsicBounds(infoDrawable, null, null, null);
+        int primaryTextColor = activity.customThemeWrapper.getPrimaryTextColor();
+        markPostsAsReadTextView.setTextColor(primaryTextColor);
+        markPostsAsReadAfterVotingTextView.setTextColor(primaryTextColor);
+        markPostsAsReadOnScrollTextView.setTextColor(primaryTextColor);
+        hideReadPostsAutomaticallyTextView.setTextColor(primaryTextColor);
+    }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        this.activity = (BaseActivity) context;
+        this.activity = (SettingsActivity) context;
     }
 }

@@ -28,10 +28,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.content.ContextCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.core.text.HtmlCompat;
 
 import com.bumptech.glide.Glide;
@@ -74,12 +73,6 @@ public final class Utils {
             Pattern.compile("((?<=[\\s])|^)/[rRuU]/[\\w-]+/{0,1}"),
             Pattern.compile("((?<=[\\s])|^)[rRuU]/[\\w-]+/{0,1}"),
             Pattern.compile("\\^{2,}"),
-            Pattern.compile("(^|^ *|\\n *)#(?!($|\\s|#))"),
-            Pattern.compile("(^|^ *|\\n *)##(?!($|\\s|#))"),
-            Pattern.compile("(^|^ *|\\n *)###(?!($|\\s|#))"),
-            Pattern.compile("(^|^ *|\\n *)####(?!($|\\s|#))"),
-            Pattern.compile("(^|^ *|\\n *)#####(?!($|\\s|#))"),
-            Pattern.compile("(^|^ *|\\n *)######(?!($|\\s|#))"),
             Pattern.compile("!\\[gif]\\(giphy\\|\\w+\\)"),
             Pattern.compile("!\\[gif]\\(giphy\\|\\w+\\|downsized\\)"),
             Pattern.compile("!\\[gif]\\(emote\\|\\w+\\|\\w+\\)"),
@@ -89,93 +82,27 @@ public final class Utils {
         String regexed = REGEX_PATTERNS[0].matcher(markdown).replaceAll("[$0](https://www.reddit.com$0)");
         regexed = REGEX_PATTERNS[1].matcher(regexed).replaceAll("[$0](https://www.reddit.com/$0)");
         regexed = REGEX_PATTERNS[2].matcher(regexed).replaceAll("^");
-        regexed = REGEX_PATTERNS[3].matcher(regexed).replaceAll("$0 ");
-        regexed = REGEX_PATTERNS[4].matcher(regexed).replaceAll("$0 ");
-        regexed = REGEX_PATTERNS[5].matcher(regexed).replaceAll("$0 ");
-        regexed = REGEX_PATTERNS[6].matcher(regexed).replaceAll("$0 ");
-        regexed = REGEX_PATTERNS[7].matcher(regexed).replaceAll("$0 ");
-        regexed = REGEX_PATTERNS[8].matcher(regexed).replaceAll("$0 ");
 
-        //return fixSuperScript(regexed);
-        // We don't want to fix super scripts here because we need the original markdown later for editing posts
         return regexed;
-    }
-
-    public static String fixSuperScript(String regexedMarkdown) {
-        StringBuilder regexed = new StringBuilder(regexedMarkdown);
-        boolean hasBracket = false;
-        int nCarets = 0;
-        int newLines = 0;
-        for (int i = 0; i < regexed.length(); i++) {
-            char currentChar = regexed.charAt(i);
-            if (hasBracket && currentChar == '\n') {
-                newLines++;
-                if (newLines > 1) {
-                    hasBracket = false;
-                    nCarets = 0;
-                    newLines = 0;
-                }
-            } else if (currentChar == '^') {
-                if (!(i > 0 && regexed.charAt(i - 1) == '\\')) {
-                    if (nCarets == 0 && i < regexed.length() - 1 && regexed.charAt(i + 1) == '(') {
-                        regexed.replace(i, i + 2, "<sup>");
-                        hasBracket = true;
-                    } else {
-                        regexed.replace(i, i + 1, "<sup>");
-                    }
-                    nCarets++;
-                }
-            } else if (hasBracket && currentChar == ')') {
-                if (i > 0 && regexed.charAt(i - 1) == '\\') {
-                    hasBracket = false;
-                    nCarets--;
-                    continue;
-                }
-                hasBracket = false;
-                regexed.replace(i, i + 1, "</sup>");
-                nCarets--;
-            } else if (!hasBracket && currentChar == '\n') {
-                for (int j = 0; j < nCarets; j++) {
-                    regexed.insert(i, "</sup>");
-                    i += 6;
-                }
-                nCarets = 0;
-            } else if (!hasBracket && Character.isWhitespace(currentChar)) {
-                for (int j = 0; j < nCarets; j++) {
-                    regexed.insert(i, "</sup>");
-                    i += 6;
-                }
-                nCarets = 0;
-            } else {
-                newLines = 0;
-            }
-        }
-        if (!hasBracket) {
-            for (int j = 0; j < nCarets; j++) {
-                regexed.append("</sup>");
-            }
-        }
-
-        return regexed.toString();
     }
 
     public static String parseInlineGifInComments(String markdown) {
         StringBuilder markdownStringBuilder = new StringBuilder(markdown);
-        Pattern inlineGifPattern = REGEX_PATTERNS[9];
+        Pattern inlineGifPattern = REGEX_PATTERNS[3];
         Matcher matcher = inlineGifPattern.matcher(markdownStringBuilder);
         while (matcher.find()) {
             markdownStringBuilder.replace(matcher.start(), matcher.end(), "[gif](https://i.giphy.com/media/" + markdownStringBuilder.substring(matcher.start() + "![gif](giphy|".length(), matcher.end() - 1) + "/giphy.mp4)");
             matcher = inlineGifPattern.matcher(markdownStringBuilder);
         }
 
-        Pattern inlineGifPattern2 = REGEX_PATTERNS[10];
+        Pattern inlineGifPattern2 = REGEX_PATTERNS[4];
         Matcher matcher2 = inlineGifPattern2.matcher(markdownStringBuilder);
         while (matcher2.find()) {
             markdownStringBuilder.replace(matcher2.start(), matcher2.end(), "[gif](https://i.giphy.com/media/" + markdownStringBuilder.substring(matcher2.start() + "![gif](giphy|".length(), matcher2.end() - "|downsized\\)".length() + 1) + "/giphy.mp4)");
             matcher2 = inlineGifPattern2.matcher(markdownStringBuilder);
         }
 
-        Pattern inlineGifPattern3 = REGEX_PATTERNS[11];
+        Pattern inlineGifPattern3 = REGEX_PATTERNS[5];
         Matcher matcher3 = inlineGifPattern3.matcher(markdownStringBuilder);
         while (matcher3.find()) {
             markdownStringBuilder.replace(matcher3.start(), matcher3.end(),
@@ -219,6 +146,22 @@ public final class Utils {
             }
         }
         return markdown;
+    }
+
+    public static String trimTrailingWhitespace(String source) {
+
+        if (source == null) {
+            return "";
+        }
+
+        int i = source.length();
+
+        // loop back to the first non-whitespace character
+        do {
+            i--;
+        } while (i >= 0 && Character.isWhitespace(source.charAt(i)));
+
+        return source.substring(0, i + 1);
     }
 
     public static CharSequence trimTrailingWhitespace(CharSequence source) {
@@ -292,7 +235,7 @@ public final class Utils {
     }
 
     public static int getConnectedNetwork(Context context) {
-        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connMgr = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connMgr != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 Network nw = connMgr.getActiveNetwork();
@@ -339,7 +282,7 @@ public final class Utils {
     }
 
     public static boolean isConnectedToWifi(Context context) {
-        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connMgr = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connMgr != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 Network nw = connMgr.getActiveNetwork();
@@ -360,7 +303,7 @@ public final class Utils {
     }
 
     public static boolean isConnectedToCellularData(Context context) {
-        ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager connMgr = (ConnectivityManager) context.getApplicationContext().getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connMgr != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 Network nw = connMgr.getActiveNetwork();
@@ -410,14 +353,11 @@ public final class Utils {
 
     @Nullable
     public static Drawable getTintedDrawable(Context context, int drawableId, int color) {
-        Drawable drawable = ContextCompat.getDrawable(context, drawableId);
+        final Drawable drawable = AppCompatResources.getDrawable(context, drawableId);
         if (drawable != null) {
-            Drawable wrappedDrawable = DrawableCompat.wrap(drawable).mutate();
-            DrawableCompat.setTint(wrappedDrawable, color);
-            return wrappedDrawable;
+            drawable.setTint(color);
         }
-
-        return null;
+        return drawable;
     }
 
     public static void uploadImageToReddit(Context context, Executor executor, Retrofit oauthRetrofit,

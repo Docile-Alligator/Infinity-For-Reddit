@@ -11,17 +11,12 @@ import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.widget.Toolbar;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.r0adkll.slidr.Slidr;
 import com.r0adkll.slidr.model.SlidrInterface;
@@ -34,8 +29,6 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
@@ -43,6 +36,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.databinding.ActivityAccountSavedThingBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.CommentsListingFragment;
@@ -57,18 +51,6 @@ import retrofit2.Retrofit;
 public class AccountSavedThingActivity extends BaseActivity implements ActivityToolbarInterface,
         PostLayoutBottomSheetFragment.PostLayoutSelectionCallback, MarkPostAsReadInterface {
 
-    @BindView(R.id.coordinator_layout_account_saved_thing_activity)
-    CoordinatorLayout coordinatorLayout;
-    @BindView(R.id.appbar_layout_account_saved_thing_activity)
-    AppBarLayout appBarLayout;
-    @BindView(R.id.collapsing_toolbar_layout_account_saved_thing_activity)
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.toolbar_account_saved_thing_activity)
-    Toolbar toolbar;
-    @BindView(R.id.tab_layout_tab_layout_account_saved_thing_activity_activity)
-    TabLayout tabLayout;
-    @BindView(R.id.view_pager_account_saved_thing_activity)
-    ViewPager2 viewPager2;
     @Inject
     @Named("oauth")
     Retrofit mOauthRetrofit;
@@ -93,16 +75,15 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
     private String mAccessToken;
     private String mAccountName;
     private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
+    private ActivityAccountSavedThingBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
 
         super.onCreate(savedInstanceState);
-
-        setContentView(R.layout.activity_account_saved_thing);
-
-        ButterKnife.bind(this);
+        binding = ActivityAccountSavedThingBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         EventBus.getDefault().register(this);
 
@@ -116,7 +97,7 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
             Window window = getWindow();
 
             if (isChangeStatusBarIconColor()) {
-                addOnOffsetChangedListener(appBarLayout);
+                addOnOffsetChangedListener(binding.accountSavedThingAppbarLayout);
             }
 
             if (isImmersiveInterface()) {
@@ -125,13 +106,13 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
                 } else {
                     window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
                 }
-                adjustToolbar(toolbar);
+                adjustToolbar(binding.accountSavedThingToolbar);
             }
         }
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.accountSavedThingToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setToolbarGoToTop(toolbar);
+        setToolbarGoToTop(binding.accountSavedThingToolbar);
 
         postLayoutBottomSheetFragment = new PostLayoutBottomSheetFragment();
 
@@ -164,17 +145,20 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
 
     @Override
     protected void applyCustomTheme() {
-        coordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
-        applyTabLayoutTheme(tabLayout);
+        binding.accountSavedThingCoordinatorLayout.setBackgroundColor(mCustomThemeWrapper.getBackgroundColor());
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(
+                binding.accountSavedThingAppbarLayout,
+                binding.accountSavedThingCollapsingToolbarLayout,
+                binding.accountSavedThingToolbar);
+        applyTabLayoutTheme(binding.accountSavedThingTabLayout);
     }
 
     private void initializeViewPager() {
         sectionsPagerAdapter = new SectionsPagerAdapter(this);
-        viewPager2.setAdapter(sectionsPagerAdapter);
-        viewPager2.setOffscreenPageLimit(2);
-        viewPager2.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
-        new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
+        binding.accountSavedThingViewPager2.setAdapter(sectionsPagerAdapter);
+        binding.accountSavedThingViewPager2.setOffscreenPageLimit(2);
+        binding.accountSavedThingViewPager2.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
+        new TabLayoutMediator(binding.accountSavedThingTabLayout, binding.accountSavedThingViewPager2, (tab, position) -> {
             switch (position) {
                 case 0:
                     Utils.setTitleWithCustomFontToTab(typeface, tab, getString(R.string.posts));
@@ -185,7 +169,7 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
             }
         }).attach();
 
-        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+        binding.accountSavedThingViewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 if (position == 0) {
@@ -196,7 +180,7 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
             }
         });
 
-        fixViewPager2Sensitivity(viewPager2);
+        fixViewPager2Sensitivity(binding.accountSavedThingViewPager2);
     }
 
     @Override
@@ -303,14 +287,14 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
 
         @Nullable
         private Fragment getCurrentFragment() {
-            if (viewPager2 == null || fragmentManager == null) {
+            if (fragmentManager == null) {
                 return null;
             }
-            return fragmentManager.findFragmentByTag("f" + viewPager2.getCurrentItem());
+            return fragmentManager.findFragmentByTag("f" + binding.accountSavedThingViewPager2.getCurrentItem());
         }
 
         public boolean handleKeyDown(int keyCode) {
-            if (viewPager2.getCurrentItem() == 0) {
+            if (binding.accountSavedThingViewPager2.getCurrentItem() == 0) {
                 Fragment fragment = getCurrentFragment();
                 if (fragment instanceof PostFragment) {
                     return ((PostFragment) fragment).handleKeyDown(keyCode);

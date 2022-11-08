@@ -61,7 +61,6 @@
     <string name="action_see_removed">"Zobrazit odebrané"</string>
     <string name="action_set_wallpaper">"Nastavit jako pozadí"</string>
     <string name="action_send_private_message">"Poslat soukromou zprávu"</string>
-    <string name="action_block_user">"Zablokovat uživatele"</string>
     <string name="parse_json_response_error">"Při parsování JSON odpovědi se vyskytla chyba"</string>
     <string name="retrieve_token_error">"Chyba při získávání tokenu"</string>
     <string name="something_went_wrong">"Něco se pokazilo. Zkuste to znovu později."</string>
@@ -392,7 +391,6 @@
     <string name="settings_customize_dark_theme_title">"Tmavý motiv"</string>
     <string name="settings_customize_amoled_theme_title">"Amoled"</string>
     <string name="settings_manage_themes_title">"Spravovat motivy"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Vlastní motivy nemohou být použity na stránku nastavení (kromě nástrojové lišty, stavové lišty a navigační lišty)."</string>
     <string name="settings_advanced_master_title">"Pokročilé"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Odstranit všechny subreddity v databázi"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Odstranit všechny uživatele v databázi"</string>
@@ -747,9 +745,6 @@ Chodí popředu."</string>
     <string name="top_score">"%1$s bodů"</string>
     <string name="login_activity_2fa_prompt">"Pokud máte zapnuté dvoufázové ověření, zadejte prosím heslo v následujícím formátu: &lt;heslo&gt;:&lt;2FA kód&gt;.
 Příklad: mojeheslo:123456"</string>
-    <string name="block_user">"Zablokovat uživatele"</string>
-    <string name="block_user_success">"Zablokován"</string>
-    <string name="block_user_failed">"Nepodařilo se zablokovat uživatele"</string>
     <string name="submit_crosspost_activity_label">"Crosspost"</string>
     <string name="give_award_activity_label">"Dát ocenění"</string>
     <string name="action_crosspost">"Crosspost"</string>

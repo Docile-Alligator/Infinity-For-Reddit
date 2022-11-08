@@ -65,7 +65,6 @@
     <string name="action_see_removed">"Vidi uklonjeno"</string>
     <string name="action_set_wallpaper">"Postavi kao pozadinu zaslona"</string>
     <string name="action_send_private_message">"Pošalji privatnu poruku"</string>
-    <string name="action_block_user">"Blokiraj korisnika"</string>
     <string name="parse_json_response_error">"Došlo je do pogreške prilikom raščlanjivanja JSON odgovora"</string>
     <string name="retrieve_token_error">"Pogreška pri dohvaćanju tokena"</string>
     <string name="something_went_wrong">"Nešto je pošlo po zlu. Pokušajte ponovno kasnije."</string>
@@ -411,7 +410,6 @@
     <string name="settings_customize_dark_theme_title">"Tamna tema"</string>
     <string name="settings_customize_amoled_theme_title">"Amoled tema"</string>
     <string name="settings_manage_themes_title">"Upravljaj temama"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Vlastite teme se ne mogu primijeniti na stranicu postavki (osim alatne trake, trake statusa i navigacijske trake)"</string>
     <string name="settings_advanced_master_title">"Napredno"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Obriši sve podreddite u bazi podataka"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Obriši sve korisnike u bazi podataka"</string>
@@ -782,9 +780,6 @@ Baziraj na Indigo Amoled temi"</string>
     <string name="load_video_in_redgifs">"Pokušajte učitati video na Redgifs"</string>
     <string name="top_score">"%1$s boda/ova"</string>
     <string name="login_activity_2fa_prompt">"Ukoliko imate omogućenu 2-faktorsku autentikaciju, upišite zaporku na sljedeći način:&lt;zaporka&gt;:&lt;2FA kod&gt;. Primjer: vašazaporka:123456"</string>
-    <string name="block_user">"Blokiraj korisnika"</string>
-    <string name="block_user_success">"Blokiran"</string>
-    <string name="block_user_failed">"Blokiranje nije uspjelo"</string>
     <string name="submit_crosspost_activity_label">"Crosspost"</string>
     <string name="give_award_activity_label">"Nagradi"</string>
     <string name="action_crosspost">"Crosspost"</string>

@@ -22,10 +22,6 @@ public class SwipeActionPreferenceFragment extends CustomFontPreferenceFragmentC
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.swipe_action_preferences, rootKey);
 
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
-
         SwitchPreference enableSwipeActionSwitch = findPreference(SharedPreferencesUtils.ENABLE_SWIPE_ACTION);
         ListPreference swipeLeftActionListPreference = findPreference(SharedPreferencesUtils.SWIPE_LEFT_ACTION);
         ListPreference swipeRightActionListPreference = findPreference(SharedPreferencesUtils.SWIPE_RIGHT_ACTION);

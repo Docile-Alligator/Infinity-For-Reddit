@@ -42,7 +42,12 @@ public class AnyAccountAccessTokenAuthenticator implements Authenticator {
     @Override
     public Request authenticate(Route route, @NonNull Response response) {
         if (response.code() == 401) {
-            String accessToken = response.request().header(APIUtils.AUTHORIZATION_KEY).substring(APIUtils.AUTHORIZATION_BASE.length());
+            String accessTokenHeader = response.request().header(APIUtils.AUTHORIZATION_KEY);
+            if (accessTokenHeader == null) {
+                return null;
+            }
+
+            String accessToken = accessTokenHeader.substring(APIUtils.AUTHORIZATION_BASE.length());
             synchronized (this) {
                 if (mAccount == null) {
                     return null;

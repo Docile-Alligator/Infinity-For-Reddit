@@ -65,7 +65,6 @@
     <string name="action_see_removed">"削除済みを見る"</string>
     <string name="action_set_wallpaper">"壁紙に設定"</string>
     <string name="action_send_private_message">"個人メッセージを送信"</string>
-    <string name="action_block_user">"ユーザーをブロック"</string>
     <string name="parse_json_response_error">"JSONの解析中にエラーが発生しました"</string>
     <string name="retrieve_token_error">"トークンの取得中にエラーが発生しました"</string>
     <string name="something_went_wrong">"エラーが発生しました。後ほど再度お試しください。"</string>
@@ -444,7 +443,6 @@
     <string name="settings_customize_dark_theme_title">"ダークテーマ"</string>
     <string name="settings_customize_amoled_theme_title">"AMOLEDテーマ"</string>
     <string name="settings_manage_themes_title">"テーマの管理"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"カスタムテーマは設定画面には適用できません (ツールバー、ステータスバー、ナビゲーションバーを除く)"</string>
     <string name="settings_advanced_master_title">"高度な設定"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"データベース中の全てのSubreddit情報を削除"</string>
     <string name="settings_delete_all_users_data_in_database_title">"データベース中の全てのユーザー情報を削除"</string>
@@ -831,9 +829,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="top_score">"%1$s点"</string>
     <string name="login_activity_2fa_prompt">"2段階認証を有効にしている場合、パスワードは次のように入力してください 「&lt;パスワード&gt;:&lt;2段階認証コード&gt;」。
 例「yourpass:123456」"</string>
-    <string name="block_user">"ユーザーをブロック"</string>
-    <string name="block_user_success">"ブロックしました"</string>
-    <string name="block_user_failed">"ユーザーのブロックに失敗しました"</string>
     <string name="submit_crosspost_activity_label">"クロスポスト"</string>
     <string name="give_award_activity_label">"アワードを贈る"</string>
     <string name="action_crosspost">"クロスポスト"</string>

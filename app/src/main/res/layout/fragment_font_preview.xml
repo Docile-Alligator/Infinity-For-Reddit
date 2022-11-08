@@ -6,6 +6,7 @@
     tools:context=".settings.FontPreviewFragment">
 
     <LinearLayout
+        android:id="@+id/linear_layout_font_preview_fragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">

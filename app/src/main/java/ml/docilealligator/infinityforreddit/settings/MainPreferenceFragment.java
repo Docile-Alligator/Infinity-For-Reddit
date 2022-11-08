@@ -33,10 +33,6 @@ public class MainPreferenceFragment extends CustomFontPreferenceFragmentCompat {
         setPreferencesFromResource(R.xml.main_preferences, rootKey);
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
-
         Preference securityPreference = findPreference(SharedPreferencesUtils.SECURITY);
         Preference postFilterPreference = findPreference(SharedPreferencesUtils.POST_FILTER);
         Preference privacyPolicyPreference = findPreference(SharedPreferencesUtils.PRIVACY_POLICY_KEY);

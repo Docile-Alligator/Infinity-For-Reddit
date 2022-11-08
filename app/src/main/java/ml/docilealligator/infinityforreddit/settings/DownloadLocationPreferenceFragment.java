@@ -3,12 +3,10 @@ package ml.docilealligator.infinityforreddit.settings;
 import static android.content.Intent.ACTION_OPEN_DOCUMENT_TREE;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.preference.Preference;
 
@@ -17,7 +15,6 @@ import javax.inject.Named;
 
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
@@ -40,10 +37,6 @@ public class DownloadLocationPreferenceFragment extends CustomFontPreferenceFrag
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
         setPreferencesFromResource(R.xml.download_location_preferences, rootKey);
 
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
-
         imageDownloadLocationPreference = findPreference(SharedPreferencesUtils.IMAGE_DOWNLOAD_LOCATION);
         gifDownloadLocationPreference = findPreference(SharedPreferencesUtils.GIF_DOWNLOAD_LOCATION);
         videoDownloadLocationPreference = findPreference(SharedPreferencesUtils.VIDEO_DOWNLOAD_LOCATION);
@@ -57,7 +50,6 @@ public class DownloadLocationPreferenceFragment extends CustomFontPreferenceFrag
 
             nsfwDownloadLocationPreference.setOnPreferenceClickListener(preference -> {
                 Intent intent = new Intent(ACTION_OPEN_DOCUMENT_TREE);
-                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 startActivityForResult(intent, NSFW_DOWNLOAD_LOCATION_REQUEST_CODE);
                 return true;
             });
@@ -70,7 +62,6 @@ public class DownloadLocationPreferenceFragment extends CustomFontPreferenceFrag
 
             imageDownloadLocationPreference.setOnPreferenceClickListener(preference -> {
                 Intent intent = new Intent(ACTION_OPEN_DOCUMENT_TREE);
-                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 startActivityForResult(intent, IMAGE_DOWNLOAD_LOCATION_REQUEST_CODE);
                 return true;
             });
@@ -84,7 +75,6 @@ public class DownloadLocationPreferenceFragment extends CustomFontPreferenceFrag
 
             gifDownloadLocationPreference.setOnPreferenceClickListener(preference -> {
                 Intent intent = new Intent(ACTION_OPEN_DOCUMENT_TREE);
-                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 startActivityForResult(intent, GIF_DOWNLOAD_LOCATION_REQUEST_CODE);
                 return true;
             });
@@ -98,7 +88,6 @@ public class DownloadLocationPreferenceFragment extends CustomFontPreferenceFrag
 
             videoDownloadLocationPreference.setOnPreferenceClickListener(preference -> {
                 Intent intent = new Intent(ACTION_OPEN_DOCUMENT_TREE);
-                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 startActivityForResult(intent, VIDEO_DOWNLOAD_LOCATION_REQUEST_CODE);
                 return true;
             });
@@ -110,25 +99,29 @@ public class DownloadLocationPreferenceFragment extends CustomFontPreferenceFrag
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             if (requestCode == IMAGE_DOWNLOAD_LOCATION_REQUEST_CODE) {
-                activity.getContentResolver().takePersistableUriPermission(data.getData(), Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                activity.getContentResolver().takePersistableUriPermission(data.getData(),
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 sharedPreferences.edit().putString(SharedPreferencesUtils.IMAGE_DOWNLOAD_LOCATION, data.getDataString()).apply();
                 if (imageDownloadLocationPreference != null) {
                     imageDownloadLocationPreference.setSummary(data.getDataString());
                 }
             } else if (requestCode == GIF_DOWNLOAD_LOCATION_REQUEST_CODE) {
-                activity.getContentResolver().takePersistableUriPermission(data.getData(), Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                activity.getContentResolver().takePersistableUriPermission(data.getData(),
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 sharedPreferences.edit().putString(SharedPreferencesUtils.GIF_DOWNLOAD_LOCATION, data.getDataString()).apply();
                 if (gifDownloadLocationPreference != null) {
                     gifDownloadLocationPreference.setSummary(data.getDataString());
                 }
             } else if (requestCode == VIDEO_DOWNLOAD_LOCATION_REQUEST_CODE) {
-                activity.getContentResolver().takePersistableUriPermission(data.getData(), Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                activity.getContentResolver().takePersistableUriPermission(data.getData(),
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 sharedPreferences.edit().putString(SharedPreferencesUtils.VIDEO_DOWNLOAD_LOCATION, data.getDataString()).apply();
                 if (videoDownloadLocationPreference != null) {
                     videoDownloadLocationPreference.setSummary(data.getDataString());
                 }
             } else if (requestCode == NSFW_DOWNLOAD_LOCATION_REQUEST_CODE) {
-                activity.getContentResolver().takePersistableUriPermission(data.getData(), Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                activity.getContentResolver().takePersistableUriPermission(data.getData(),
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 sharedPreferences.edit().putString(SharedPreferencesUtils.NSFW_DOWNLOAD_LOCATION, data.getDataString()).apply();
                 if (nsfwDownloadLocationPreference != null) {
                     nsfwDownloadLocationPreference.setSummary(data.getDataString());

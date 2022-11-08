@@ -32,12 +32,16 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
     public static final String EXTRA_MEDIA_LINK = "EML";
     public static final String EXTRA_MEDIA_TYPE = "EMT";
 
+    @BindView(R.id.post_link_text_view_share_link_bottom_sheet_fragment)
+    TextView postLinkTextView;
     @BindView(R.id.share_post_link_text_view_share_link_bottom_sheet_fragment)
     TextView sharePostLinkTextView;
-    @BindView(R.id.share_media_link_text_view_share_link_bottom_sheet_fragment)
-    TextView shareMediaLinkTextView;
     @BindView(R.id.copy_post_link_text_view_share_link_bottom_sheet_fragment)
     TextView copyPostLinkTextView;
+    @BindView(R.id.media_link_text_view_share_link_bottom_sheet_fragment)
+    TextView mediaLinkTextView;
+    @BindView(R.id.share_media_link_text_view_share_link_bottom_sheet_fragment)
+    TextView shareMediaLinkTextView;
     @BindView(R.id.copy_media_link_text_view_share_link_bottom_sheet_fragment)
     TextView copyMediaLinkTextView;
 
@@ -59,9 +63,14 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
         String postLink = getArguments().getString(EXTRA_POST_LINK);
         String mediaLink = getArguments().containsKey(EXTRA_MEDIA_LINK) ? getArguments().getString(EXTRA_MEDIA_LINK) : null;
 
+        postLinkTextView.setText(postLink);
+
         if (mediaLink != null) {
+            mediaLinkTextView.setVisibility(View.VISIBLE);
             shareMediaLinkTextView.setVisibility(View.VISIBLE);
             copyMediaLinkTextView.setVisibility(View.VISIBLE);
+
+            mediaLinkTextView.setText(mediaLink);
 
             int mediaType = getArguments().getInt(EXTRA_MEDIA_TYPE);
             switch (mediaType) {
@@ -131,7 +140,9 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
         if (clipboard != null) {
             ClipData clip = ClipData.newPlainText("simple text", link);
             clipboard.setPrimaryClip(clip);
-            Toast.makeText(activity, R.string.copy_success, Toast.LENGTH_SHORT).show();
+            if (android.os.Build.VERSION.SDK_INT < 33) {
+                Toast.makeText(activity, R.string.copy_success, Toast.LENGTH_SHORT).show();
+            }
         } else {
             Toast.makeText(activity, R.string.copy_link_failed, Toast.LENGTH_SHORT).show();
         }

@@ -18,11 +18,9 @@
             android:padding="16dp"
             android:drawablePadding="32dp"
             android:text="@string/restart_app_see_changes"
-            android:textColor="@color/settingsSubtitleColor"
             android:gravity="center_vertical"
             android:textSize="?attr/font_default"
-            android:fontFamily="?attr/font_family"
-            app:drawableStartCompat="@drawable/ic_info_preference_24dp" />
+            android:fontFamily="?attr/font_family" />
 
         <View
             android:layout_width="match_parent"
@@ -43,12 +41,12 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/tab_count_title_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_gravity="center_vertical"
                 android:text="@string/settings_tab_count"
-                android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
@@ -58,7 +56,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:layout_gravity="center_vertical"
-                android:textColor="?attr/secondaryTextColor"
                 android:textSize="?attr/font_default"
                 android:fontFamily="?attr/font_family" />
 
@@ -77,17 +74,17 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/show_tab_names_title_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="16dp"
                 android:layout_gravity="center_vertical"
                 android:text="@string/settings_show_tab_names"
-                android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/show_tab_names_switch_material_customize_main_page_tabs_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -109,7 +106,6 @@
             android:paddingStart="72dp"
             android:paddingEnd="16dp"
             android:text="@string/settings_tab_1_summary"
-            android:textColor="@color/colorAccent"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family" />
 
@@ -127,10 +123,10 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/tab_1_title_title_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_tab_title"
-                android:textColor="@color/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
@@ -138,7 +134,6 @@
                 android:id="@+id/tab_1_title_summary_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="?attr/secondaryTextColor"
                 android:textSize="?attr/font_default"
                 android:fontFamily="?attr/font_family" />
 
@@ -158,10 +153,10 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/tab_1_type_title_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_tab_post_type"
-                android:textColor="@color/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
@@ -169,7 +164,6 @@
                 android:id="@+id/tab_1_type_summary_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="?attr/secondaryTextColor"
                 android:textSize="?attr/font_default"
                 android:fontFamily="?attr/font_family" />
 
@@ -194,7 +188,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="?attr/font_family"
-                android:textColor="@color/primaryTextColor"
                 android:textSize="?attr/font_16"
                 app:layout_constraintEnd_toStartOf="@id/tab_1_name_add_image_view_customize_main_page_tabs_fragment"
                 app:layout_constraintStart_toStartOf="parent"
@@ -205,7 +198,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="?attr/font_family"
-                android:textColor="?attr/secondaryTextColor"
                 android:textSize="?attr/font_default"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/tab_1_name_add_image_view_customize_main_page_tabs_fragment"
@@ -241,7 +233,6 @@
             android:paddingStart="72dp"
             android:paddingEnd="16dp"
             android:text="@string/settings_tab_2_summary"
-            android:textColor="@color/colorAccent"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family" />
 
@@ -259,10 +250,10 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/tab_2_title_title_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_tab_title"
-                android:textColor="@color/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
@@ -270,7 +261,6 @@
                 android:id="@+id/tab_2_title_summary_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="?attr/secondaryTextColor"
                 android:textSize="?attr/font_default"
                 android:fontFamily="?attr/font_family" />
 
@@ -290,10 +280,10 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/tab_2_type_title_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_tab_post_type"
-                android:textColor="@color/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
@@ -301,7 +291,6 @@
                 android:id="@+id/tab_2_type_summary_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="?attr/secondaryTextColor"
                 android:textSize="?attr/font_default"
                 android:fontFamily="?attr/font_family" />
 
@@ -325,7 +314,6 @@
                 android:id="@+id/tab_2_name_title_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family"
                 app:layout_constraintTop_toTopOf="parent"
@@ -336,7 +324,6 @@
                 android:id="@+id/tab_2_name_summary_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="?attr/secondaryTextColor"
                 android:textSize="?attr/font_default"
                 android:fontFamily="?attr/font_family"
                 app:layout_constraintTop_toBottomOf="@id/tab_2_name_title_text_view_customize_main_page_tabs_fragment"
@@ -373,7 +360,6 @@
             android:paddingStart="72dp"
             android:paddingEnd="16dp"
             android:text="@string/settings_tab_3_summary"
-            android:textColor="@color/colorAccent"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family" />
 
@@ -391,10 +377,10 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/tab_3_title_title_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_tab_title"
-                android:textColor="@color/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
@@ -402,7 +388,6 @@
                 android:id="@+id/tab_3_title_summary_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="?attr/secondaryTextColor"
                 android:textSize="?attr/font_default"
                 android:fontFamily="?attr/font_family" />
 
@@ -422,10 +407,10 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/tab_3_type_title_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/settings_tab_post_type"
-                android:textColor="@color/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
@@ -433,7 +418,6 @@
                 android:id="@+id/tab_3_type_summary_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="?attr/secondaryTextColor"
                 android:textSize="?attr/font_default"
                 android:fontFamily="?attr/font_family" />
 
@@ -457,7 +441,6 @@
                 android:id="@+id/tab_3_name_title_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="@color/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family"
                 app:layout_constraintTop_toTopOf="parent"
@@ -468,7 +451,6 @@
                 android:id="@+id/tab_3_name_summary_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:textColor="?attr/secondaryTextColor"
                 android:textSize="?attr/font_default"
                 android:fontFamily="?attr/font_family"
                 app:layout_constraintTop_toBottomOf="@id/tab_3_name_title_text_view_customize_main_page_tabs_fragment"
@@ -505,7 +487,6 @@
             android:paddingStart="72dp"
             android:paddingEnd="16dp"
             android:text="@string/settings_more_tabs_summary"
-            android:textColor="@color/colorAccent"
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family" />
 
@@ -516,11 +497,9 @@
             android:padding="16dp"
             android:drawablePadding="32dp"
             android:text="@string/settings_more_tabs_info_summary"
-            android:textColor="@color/settingsSubtitleColor"
             android:gravity="center_vertical"
             android:textSize="?attr/font_default"
-            android:fontFamily="?attr/font_family"
-            app:drawableStartCompat="@drawable/ic_info_preference_24dp" />
+            android:fontFamily="?attr/font_family" />
 
         <LinearLayout
             android:id="@+id/show_favorite_multireddits_linear_layout_customize_main_page_tabs_fragment"
@@ -535,17 +514,17 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/show_favorite_multireddits_title_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="16dp"
                 android:layout_gravity="center_vertical"
                 android:text="@string/settings_more_tabs_show_favorite_multireddits_title"
-                android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/show_favorite_multireddits_switch_material_customize_main_page_tabs_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -566,17 +545,17 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/show_multireddits_title_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="16dp"
                 android:layout_gravity="center_vertical"
                 android:text="@string/settings_more_tabs_show_multireddits_title"
-                android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/show_multireddits_switch_material_customize_main_page_tabs_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -597,17 +576,17 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/show_favorite_subscribed_subreddits_title_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="16dp"
                 android:layout_gravity="center_vertical"
                 android:text="@string/settings_more_tabs_show_favorite_subscribed_subreddits_title"
-                android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/show_favorite_subscribed_subreddits_switch_material_customize_main_page_tabs_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -628,17 +607,17 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/show_subscribed_subreddits_title_text_view_customize_main_page_tabs_fragment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="16dp"
                 android:layout_gravity="center_vertical"
                 android:text="@string/settings_more_tabs_show_subscribed_subreddits_title"
-                android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/show_subscribed_subreddits_switch_material_customize_main_page_tabs_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

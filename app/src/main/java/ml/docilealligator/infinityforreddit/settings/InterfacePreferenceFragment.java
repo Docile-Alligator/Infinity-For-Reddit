@@ -11,6 +11,7 @@ import org.greenrobot.eventbus.EventBus;
 
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
+import ml.docilealligator.infinityforreddit.events.ChangeHideFabInPostFeedEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeVoteButtonsPositionEvent;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -20,16 +21,20 @@ public class InterfacePreferenceFragment extends CustomFontPreferenceFragmentCom
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.interface_preferences, rootKey);
 
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
-
         Preference immersiveInterfaceEntryPreference = findPreference(SharedPreferencesUtils.IMMERSIVE_INTERFACE_ENTRY_KEY);
+        SwitchPreference hideFabInPostFeedSwitchPreference = findPreference(SharedPreferencesUtils.HIDE_FAB_IN_POST_FEED);
         SwitchPreference bottomAppBarSwitch = findPreference(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY);
         SwitchPreference voteButtonsOnTheRightSwitch = findPreference(SharedPreferencesUtils.VOTE_BUTTONS_ON_THE_RIGHT_KEY);
 
         if (immersiveInterfaceEntryPreference != null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             immersiveInterfaceEntryPreference.setVisible(true);
+        }
+
+        if (hideFabInPostFeedSwitchPreference != null) {
+            hideFabInPostFeedSwitchPreference.setOnPreferenceChangeListener((preference, newValue) -> {
+                EventBus.getDefault().post(new ChangeHideFabInPostFeedEvent((Boolean) newValue));
+                return true;
+            });
         }
 
         if (bottomAppBarSwitch != null) {

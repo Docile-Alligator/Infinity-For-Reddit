@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Spanned;
-import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +22,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,8 +32,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
-
-import org.commonmark.ext.gfm.tables.TableBlock;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -45,18 +42,8 @@ import butterknife.ButterKnife;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
-import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
-import io.noties.markwon.html.HtmlPlugin;
-import io.noties.markwon.html.tag.SuperScriptHandler;
-import io.noties.markwon.inlineparser.AutolinkInlineProcessor;
-import io.noties.markwon.inlineparser.BangInlineProcessor;
-import io.noties.markwon.inlineparser.HtmlInlineProcessor;
-import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
-import io.noties.markwon.linkify.LinkifyPlugin;
-import io.noties.markwon.movement.MovementMethodPlugin;
-import io.noties.markwon.recycler.table.TableEntry;
-import io.noties.markwon.recycler.table.TableEntryPlugin;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.R;
@@ -77,9 +64,9 @@ import ml.docilealligator.infinityforreddit.customviews.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
+import ml.docilealligator.infinityforreddit.customviews.SwipeLockScrollView;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
-import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
-import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
+import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -126,6 +113,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private boolean mHideCommentAwards;
     private boolean mShowAuthorAvatar;
     private boolean mAlwaysShowChildCommentCount;
+    private boolean mHideTheNumberOfVotes;
     private int mDepthThreshold;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private boolean isInitiallyLoading;
@@ -181,63 +169,41 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mCommentTextColor = customThemeWrapper.getCommentColor();
         int commentSpoilerBackgroundColor = mCommentTextColor | 0xFF000000;
         int linkColor = customThemeWrapper.getLinkColor();
-        mCommentMarkwon = Markwon.builder(mActivity)
-                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
-                    plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
-                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
-                    plugin.excludeInlineProcessor(BangInlineProcessor.class);
-                    plugin.addInlineProcessor(new SuperscriptInlineProcessor());
-                }))
-                .usePlugin(HtmlPlugin.create(plugin -> {
-                    plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
-                }))
-                .usePlugin(new AbstractMarkwonPlugin() {
-                    @NonNull
-                    @Override
-                    public String processMarkdown(@NonNull String markdown) {
-                        return Utils.fixSuperScript(markdown);
-                    }
+        MarkwonPlugin miscPlugin = new AbstractMarkwonPlugin() {
+            @Override
+            public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
+                if (mActivity.contentTypeface != null) {
+                    textView.setTypeface(mActivity.contentTypeface);
+                }
+                textView.setTextColor(mCommentTextColor);
+                textView.setHighlightColor(Color.TRANSPARENT);
+            }
 
-                    @Override
-                    public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
-                        if (mActivity.contentTypeface != null) {
-                            textView.setTypeface(mActivity.contentTypeface);
-                        }
-                        textView.setTextColor(mCommentTextColor);
-                        textView.setHighlightColor(Color.TRANSPARENT);
-                    }
+            @Override
+            public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                builder.linkResolver((view, link) -> {
+                    Intent intent = new Intent(mActivity, LinkResolverActivity.class);
+                    Uri uri = Uri.parse(link);
+                    intent.setData(uri);
+                    intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, mPost.isNSFW());
+                    mActivity.startActivity(intent);
+                });
+            }
 
-                    @Override
-                    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
-                        builder.linkResolver((view, link) -> {
-                            Intent intent = new Intent(mActivity, LinkResolverActivity.class);
-                            Uri uri = Uri.parse(link);
-                            intent.setData(uri);
-                            intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, mPost.isNSFW());
-                            mActivity.startActivity(intent);
-                        });
-                    }
-
-                    @Override
-                    public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
-                        builder.linkColor(linkColor);
-                    }
-                })
-                .usePlugin(SpoilerParserPlugin.create(mCommentTextColor, commentSpoilerBackgroundColor))
-                .usePlugin(StrikethroughPlugin.create())
-                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS).setOnLinkLongClickListener((textView, url) -> {
-                    if (!activity.isDestroyed() && !activity.isFinishing()) {
-                        UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
-                        urlMenuBottomSheetFragment.setArguments(bundle);
-                        urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
-                    }
-                    return true;
-                })))
-                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
-                .usePlugin(TableEntryPlugin.create(mActivity))
-                .build();
+            @Override
+            public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                builder.linkColor(linkColor);
+            }
+        };
+        BetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener = (textView, url) -> {
+            if (!activity.isDestroyed() && !activity.isFinishing()) {
+                UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = UrlMenuBottomSheetFragment.newInstance(url);
+                urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), null);
+            }
+            return true;
+        };
+        mCommentMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
+                miscPlugin, mCommentTextColor, commentSpoilerBackgroundColor, onLinkLongClickListener);
         recycledViewPool = new RecyclerView.RecycledViewPool();
         mAccessToken = accessToken;
         mAccountName = accountName;
@@ -261,6 +227,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mHideCommentAwards = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_COMMENT_AWARDS, false);
         mShowAuthorAvatar = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_AUTHOR_AVATAR, false);
         mAlwaysShowChildCommentCount = sharedPreferences.getBoolean(SharedPreferencesUtils.ALWAYS_SHOW_CHILD_COMMENT_COUNT, false);
+        mHideTheNumberOfVotes = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_VOTES_IN_COMMENTS, false);
         mDepthThreshold = sharedPreferences.getInt(SharedPreferencesUtils.SHOW_FEWER_TOOLBAR_OPTIONS_THRESHOLD, 5);
 
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
@@ -303,9 +270,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 customThemeWrapper.getCommentVerticalBarColor7(),
         };
 
-        mCommentIcon = activity.getDrawable(R.drawable.ic_comment_grey_24dp);
+        mCommentIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_comment_grey_24dp);
         if (mCommentIcon != null) {
-            DrawableCompat.setTint(mCommentIcon, mPostIconAndInfoColor);
+            mCommentIcon.setTint(mPostIconAndInfoColor);
         }
     }
 
@@ -431,12 +398,16 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 if (comment.getAuthorIconUrl() == null) {
                     mFragment.loadIcon(comment.getAuthor(), (authorName, iconUrl) -> {
                         if (authorName.equals(comment.getAuthor())) {
+                            comment.setAuthorIconUrl(iconUrl);
+                        }
+
+                        Comment currentComment = getCurrentComment(holder);
+                        if (currentComment != null && authorName.equals(currentComment.getAuthor())) {
                             mGlide.load(iconUrl)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                     .error(mGlide.load(R.drawable.subreddit_default_icon)
                                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                                     .into(((CommentViewHolder) holder).authorIconImageView);
-                            comment.setAuthorIconUrl(iconUrl);
                         }
                     });
                 } else {
@@ -456,7 +427,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
                 if (mCommentToolbarHidden) {
                     ((CommentViewHolder) holder).bottomConstraintLayout.getLayoutParams().height = 0;
-                    ((CommentViewHolder) holder).topScoreTextView.setVisibility(View.VISIBLE);
+                    if (!mHideTheNumberOfVotes) {
+                        ((CommentViewHolder) holder).topScoreTextView.setVisibility(View.VISIBLE);
+                    }
                 } else {
                     ((CommentViewHolder) holder).bottomConstraintLayout.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
                     ((CommentViewHolder) holder).topScoreTextView.setVisibility(View.GONE);
@@ -469,11 +442,24 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
                 ((CommentViewHolder) holder).mMarkwonAdapter.setMarkdown(mCommentMarkwon, comment.getCommentMarkdown());
                 ((CommentViewHolder) holder).mMarkwonAdapter.notifyDataSetChanged();
-                ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                        comment.getScore() + comment.getVoteType()));
-                ((CommentViewHolder) holder).topScoreTextView.setText(mActivity.getString(R.string.top_score,
-                        Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                comment.getScore() + comment.getVoteType())));
+
+                if (!mHideTheNumberOfVotes) {
+                    String commentText = "";
+                    String topScoreText = "";
+                    if (comment.isScoreHidden()) {
+                        commentText = mActivity.getString(R.string.hidden);
+                    } else {
+                        commentText = Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                comment.getScore() + comment.getVoteType());
+                        topScoreText = mActivity.getString(R.string.top_score,
+                                Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                        comment.getScore() + comment.getVoteType()));
+                    }
+                    ((CommentViewHolder) holder).scoreTextView.setText(commentText);
+                    ((CommentViewHolder) holder).topScoreTextView.setText(topScoreText);
+                } else {
+                    ((CommentViewHolder) holder).scoreTextView.setText(mActivity.getString(R.string.vote));
+                }
 
                 ((CommentViewHolder) holder).commentIndentationView.setShowOnlyOneDivider(mShowOnlyOneCommentLevelIndicator);
                 ((CommentViewHolder) holder).commentIndentationView.setLevelAndColors(comment.getDepth(), verticalBlockColors);
@@ -549,12 +535,16 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 if (comment.getAuthorIconUrl() == null) {
                     mFragment.loadIcon(comment.getAuthor(), (authorName, iconUrl) -> {
                         if (authorName.equals(comment.getAuthor())) {
+                            comment.setAuthorIconUrl(iconUrl);
+                        }
+
+                        Comment currentComment = getCurrentComment(holder);
+                        if (currentComment != null && authorName.equals(currentComment.getAuthor())) {
                             mGlide.load(iconUrl)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                     .error(mGlide.load(R.drawable.subreddit_default_icon)
                                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                                     .into(((CommentFullyCollapsedViewHolder) holder).authorIconImageView);
-                            comment.setAuthorIconUrl(iconUrl);
                         }
                     });
                 } else {
@@ -576,8 +566,12 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 } else {
                     ((CommentFullyCollapsedViewHolder) holder).commentTimeTextView.setText(Utils.getFormattedTime(mLocale, comment.getCommentTimeMillis(), mTimeFormatPattern));
                 }
-                ((CommentFullyCollapsedViewHolder) holder).scoreTextView.setText(mActivity.getString(R.string.top_score,
-                        Utils.getNVotes(mShowAbsoluteNumberOfVotes, comment.getScore() + comment.getVoteType())));
+                if (!comment.isScoreHidden() && !mHideTheNumberOfVotes) {
+                    ((CommentFullyCollapsedViewHolder) holder).scoreTextView.setText(mActivity.getString(R.string.top_score,
+                            Utils.getNVotes(mShowAbsoluteNumberOfVotes, comment.getScore() + comment.getVoteType())));
+                } else if (mHideTheNumberOfVotes) {
+                    ((CommentFullyCollapsedViewHolder) holder).scoreTextView.setText(mActivity.getString(R.string.vote));
+                }
                 ((CommentFullyCollapsedViewHolder) holder).commentIndentationView.setShowOnlyOneDivider(mShowOnlyOneCommentLevelIndicator);
                 ((CommentFullyCollapsedViewHolder) holder).commentIndentationView.setLevelAndColors(comment.getDepth(), verticalBlockColors);
             }
@@ -796,7 +790,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 });
             } else {
                 ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setOnClickListener(view -> {
-                    Comment comment = getCurrentComment(position);
+                    Comment comment = getCurrentComment(holder);
                     if (comment != null) {
                         Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
                         intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, mPost);
@@ -821,16 +815,12 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         return -1;
     }
 
-    private void expandChildren(ArrayList<Comment> comments, ArrayList<Comment> newList, int position) {
+    private void expandChildren(ArrayList<Comment> comments, ArrayList<Comment> newList) {
         if (comments != null && comments.size() > 0) {
-            newList.addAll(position, comments);
-            for (int i = 0; i < comments.size(); i++) {
-                position++;
-                if (comments.get(i).getChildren() != null && comments.get(i).getChildren().size() > 0) {
-                    expandChildren(comments.get(i).getChildren(), newList, position);
-                    position = position + comments.get(i).getChildren().size();
-                }
-                comments.get(i).setExpanded(true);
+            for (Comment comment : comments) {
+                newList.add(comment);
+                expandChildren(comment.getChildren(), newList);
+                comment.setExpanded(true);
             }
         }
     }
@@ -928,7 +918,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mVisibleComments.get(parentPosition).setHasReply(true);
         if (!mVisibleComments.get(parentPosition).isExpanded()) {
             ArrayList<Comment> newList = new ArrayList<>();
-            expandChildren(mVisibleComments.get(parentPosition).getChildren(), newList, 0);
+            expandChildren(mVisibleComments.get(parentPosition).getChildren(), newList);
             mVisibleComments.get(parentPosition).setExpanded(true);
             mVisibleComments.addAll(parentPosition + 1, newList);
             if (mIsSingleCommentThreadMode) {
@@ -985,10 +975,31 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public void editComment(String commentAuthor, String commentContentMarkdown, int position) {
-        if (commentAuthor != null)
+        if (commentAuthor != null) {
             mVisibleComments.get(position).setAuthor(commentAuthor);
+        }
+
+        mVisibleComments.get(position).setSubmittedByAuthor(mVisibleComments.get(position).isSubmitter());
 
         mVisibleComments.get(position).setCommentMarkdown(commentContentMarkdown);
+        if (mIsSingleCommentThreadMode) {
+            notifyItemChanged(position + 1);
+        } else {
+            notifyItemChanged(position);
+        }
+    }
+
+    public void editComment(Comment fetchedComment, Comment originalComment, int position) {
+        if (position >= mVisibleComments.size() || !mVisibleComments.get(position).equals(originalComment)) {
+            position = mVisibleComments.indexOf(originalComment);
+            if (position < 0) {
+                Toast.makeText(mActivity, R.string.show_removed_comment_failed, Toast.LENGTH_SHORT).show();
+                return;
+            }
+        }
+        mVisibleComments.get(position).setSubmittedByAuthor(originalComment.isSubmitter());
+        mVisibleComments.get(position).setCommentMarkdown(fetchedComment.getCommentMarkdown());
+
         if (mIsSingleCommentThreadMode) {
             notifyItemChanged(position + 1);
         } else {
@@ -1256,23 +1267,19 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             }
 
             commentMarkdownView.setRecycledViewPool(recycledViewPool);
-            LinearLayoutManagerBugFixed linearLayoutManager = new MarkwonLinearLayoutManager(mActivity, new MarkwonLinearLayoutManager.HorizontalScrollViewScrolledListener() {
+            LinearLayoutManagerBugFixed linearLayoutManager = new MarkwonLinearLayoutManager(mActivity, new SwipeLockScrollView.SwipeLockInterface() {
                 @Override
-                public void onScrolledLeft() {
+                public void lockSwipe() {
                     ((ViewPostDetailActivity) mActivity).lockSwipeRightToGoBack();
                 }
 
                 @Override
-                public void onScrolledRight() {
+                public void unlockSwipe() {
                     ((ViewPostDetailActivity) mActivity).unlockSwipeRightToGoBack();
                 }
             });
             commentMarkdownView.setLayoutManager(linearLayoutManager);
-            mMarkwonAdapter = CustomMarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
-                    .include(TableBlock.class, TableEntry.create(builder -> builder
-                            .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
-                            .textLayoutIsRoot(R.layout.view_table_entry_cell)))
-                    .build();
+            mMarkwonAdapter = MarkdownUtils.createCustomTablesAdapter();
             commentMarkdownView.setAdapter(mMarkwonAdapter);
 
             itemView.setBackgroundColor(mCommentBackgroundColor);
@@ -1337,8 +1344,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 if (comment != null) {
                     Intent intent = new Intent(mActivity, CommentActivity.class);
                     intent.putExtra(CommentActivity.EXTRA_PARENT_DEPTH_KEY, comment.getDepth() + 1);
-                    intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_MARKDOWN_KEY, comment.getCommentMarkdown());
-                    intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_KEY, comment.getCommentRawText());
+                    intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY, comment.getCommentMarkdown());
+                    intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_KEY, comment.getCommentRawText());
                     intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, comment.getFullName());
                     intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, true);
 
@@ -1382,11 +1389,13 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         topScoreTextView.setTextColor(mSecondaryTextColor);
                     }
 
-                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                            comment.getScore() + comment.getVoteType()));
-                    topScoreTextView.setText(mActivity.getString(R.string.top_score,
-                            Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                    comment.getScore() + comment.getVoteType())));
+                    if (!comment.isScoreHidden() && !mHideTheNumberOfVotes) {
+                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                comment.getScore() + comment.getVoteType()));
+                        topScoreTextView.setText(mActivity.getString(R.string.top_score,
+                                Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                        comment.getScore() + comment.getVoteType())));
+                    }
 
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
@@ -1410,11 +1419,13 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
                             if (currentPosition == position) {
                                 downvoteButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                        comment.getScore() + comment.getVoteType()));
-                                topScoreTextView.setText(mActivity.getString(R.string.top_score,
-                                        Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                                comment.getScore() + comment.getVoteType())));
+                                if (!comment.isScoreHidden() && !mHideTheNumberOfVotes) {
+                                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                            comment.getScore() + comment.getVoteType()));
+                                    topScoreTextView.setText(mActivity.getString(R.string.top_score,
+                                            Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                                    comment.getScore() + comment.getVoteType())));
+                                }
                             }
                         }
 
@@ -1459,11 +1470,13 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         topScoreTextView.setTextColor(mSecondaryTextColor);
                     }
 
-                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                            comment.getScore() + comment.getVoteType()));
-                    topScoreTextView.setText(mActivity.getString(R.string.top_score,
-                            Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                    comment.getScore() + comment.getVoteType())));
+                    if (!comment.isScoreHidden() && !mHideTheNumberOfVotes) {
+                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                comment.getScore() + comment.getVoteType()));
+                        topScoreTextView.setText(mActivity.getString(R.string.top_score,
+                                Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                        comment.getScore() + comment.getVoteType())));
+                    }
 
                     int position = getBindingAdapterPosition();
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
@@ -1488,11 +1501,13 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
                             if (currentPosition == position) {
                                 upvoteButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                        comment.getScore() + comment.getVoteType()));
-                                topScoreTextView.setText(mActivity.getString(R.string.top_score,
-                                        Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                                comment.getScore() + comment.getVoteType())));
+                                if (!comment.isScoreHidden() && !mHideTheNumberOfVotes) {
+                                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                            comment.getScore() + comment.getVoteType()));
+                                    topScoreTextView.setText(mActivity.getString(R.string.top_score,
+                                            Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                                    comment.getScore() + comment.getVoteType())));
+                                }
                             }
                         }
 
@@ -1580,7 +1595,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         } else {
                             comment.setExpanded(true);
                             ArrayList<Comment> newList = new ArrayList<>();
-                            expandChildren(mVisibleComments.get(commentPosition).getChildren(), newList, 0);
+                            expandChildren(mVisibleComments.get(commentPosition).getChildren(), newList);
                             mVisibleComments.get(commentPosition).setExpanded(true);
                             mVisibleComments.addAll(commentPosition + 1, newList);
 
@@ -1672,7 +1687,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             } else {
                 mFragment.delayTransition();
                 bottomConstraintLayout.getLayoutParams().height = 0;
-                topScoreTextView.setVisibility(View.VISIBLE);
+                if (!mHideTheNumberOfVotes) {
+                    topScoreTextView.setVisibility(View.VISIBLE);
+                }
             }
             return true;
         }
@@ -1748,7 +1765,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     if (comment != null) {
                         comment.setExpanded(true);
                         ArrayList<Comment> newList = new ArrayList<>();
-                        expandChildren(mVisibleComments.get(commentPosition).getChildren(), newList, 0);
+                        expandChildren(mVisibleComments.get(commentPosition).getChildren(), newList);
                         mVisibleComments.get(commentPosition).setExpanded(true);
                         mVisibleComments.addAll(commentPosition + 1, newList);
 

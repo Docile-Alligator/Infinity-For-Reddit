@@ -20,10 +20,6 @@ public class DataSavingModePreferenceFragment extends CustomFontPreferenceFragme
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.data_saving_mode_preferences, rootKey);
 
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
-
         ListPreference dataSavingModeListPreference = findPreference(SharedPreferencesUtils.DATA_SAVING_MODE);
         SwitchPreference disableImagePreviewPreference = findPreference(SharedPreferencesUtils.DISABLE_IMAGE_PREVIEW);
         SwitchPreference onlyDisablePreviewInVideoAndGifPostsPreference = findPreference(SharedPreferencesUtils.ONLY_DISABLE_PREVIEW_IN_VIDEO_AND_GIF_POSTS);

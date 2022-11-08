@@ -34,8 +34,8 @@ import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.divider.MaterialDivider;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.libRG.CustomTextView;
 
 import org.greenrobot.eventbus.EventBus;
@@ -120,7 +120,7 @@ public class PostImageActivity extends BaseActivity implements FlairBottomSheetF
     @BindView(R.id.receive_post_reply_notifications_text_view_post_image_activity)
     TextView receivePostReplyNotificationsTextView;
     @BindView(R.id.receive_post_reply_notifications_switch_material_post_image_activity)
-    SwitchMaterial receivePostReplyNotificationsSwitchMaterial;
+    MaterialSwitch receivePostReplyNotificationsSwitchMaterial;
     @BindView(R.id.divider_2_post_image_activity)
     MaterialDivider divider2;
     @BindView(R.id.post_title_edit_text_post_image_activity)

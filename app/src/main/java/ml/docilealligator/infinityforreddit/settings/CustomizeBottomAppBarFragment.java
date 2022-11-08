@@ -3,6 +3,7 @@ package ml.docilealligator.infinityforreddit.settings;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +26,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 
@@ -39,26 +40,38 @@ public class CustomizeBottomAppBarFragment extends Fragment {
     TextView mainActivityGroupSummaryTextView;
     @BindView(R.id.main_activity_option_count_linear_layout_customize_bottom_app_bar_fragment)
     LinearLayout mainActivityOptionCountLinearLayout;
+    @BindView(R.id.main_activity_option_count_title_text_view_customize_bottom_app_bar_fragment)
+    TextView mainActivityOptionCountTitleTextView;
     @BindView(R.id.main_activity_option_count_text_view_customize_bottom_app_bar_fragment)
     TextView mainActivityOptionCountTextView;
     @BindView(R.id.main_activity_option_1_linear_layout_customize_bottom_app_bar_fragment)
     LinearLayout mainActivityOption1LinearLayout;
+    @BindView(R.id.main_activity_option_1_title_text_view_customize_bottom_app_bar_fragment)
+    TextView mainActivityOption1TitleTextView;
     @BindView(R.id.main_activity_option_1_text_view_customize_bottom_app_bar_fragment)
     TextView mainActivityOption1TextView;
     @BindView(R.id.main_activity_option_2_linear_layout_customize_bottom_app_bar_fragment)
     LinearLayout mainActivityOption2LinearLayout;
+    @BindView(R.id.main_activity_option_2_title_text_view_customize_bottom_app_bar_fragment)
+    TextView mainActivityOption2TitleTextView;
     @BindView(R.id.main_activity_option_2_text_view_customize_bottom_app_bar_fragment)
     TextView mainActivityOption2TextView;
     @BindView(R.id.main_activity_option_3_linear_layout_customize_bottom_app_bar_fragment)
     LinearLayout mainActivityOption3LinearLayout;
+    @BindView(R.id.main_activity_option_3_title_text_view_customize_bottom_app_bar_fragment)
+    TextView mainActivityOption3TitleTextView;
     @BindView(R.id.main_activity_option_3_text_view_customize_bottom_app_bar_fragment)
     TextView mainActivityOption3TextView;
     @BindView(R.id.main_activity_option_4_linear_layout_customize_bottom_app_bar_fragment)
     LinearLayout mainActivityOption4LinearLayout;
+    @BindView(R.id.main_activity_option_4_title_text_view_customize_bottom_app_bar_fragment)
+    TextView mainActivityOption4TitleTextView;
     @BindView(R.id.main_activity_option_4_text_view_customize_bottom_app_bar_fragment)
     TextView mainActivityOption4TextView;
     @BindView(R.id.main_activity_fab_linear_layout_customize_bottom_app_bar_fragment)
     LinearLayout mainActivityFABLinearLayout;
+    @BindView(R.id.main_activity_fab_title_text_view_customize_bottom_app_bar_fragment)
+    TextView mainActivityFABTitleTextView;
     @BindView(R.id.main_activity_fab_text_view_customize_bottom_app_bar_fragment)
     TextView mainActivityFABTextView;
 
@@ -68,32 +81,44 @@ public class CustomizeBottomAppBarFragment extends Fragment {
     TextView otherActivitiesGroupSummaryTextView;
     @BindView(R.id.other_activities_option_count_linear_layout_customize_bottom_app_bar_fragment)
     LinearLayout otherActivitiesOptionCountLinearLayout;
+    @BindView(R.id.other_activities_option_count_title_text_view_customize_bottom_app_bar_fragment)
+    TextView otherActivitiesOptionCountTitleTextView;
     @BindView(R.id.other_activities_option_count_text_view_customize_bottom_app_bar_fragment)
     TextView otherActivitiesOptionCountTextView;
     @BindView(R.id.other_activities_option_1_linear_layout_customize_bottom_app_bar_fragment)
     LinearLayout otherActivitiesOption1LinearLayout;
+    @BindView(R.id.other_activities_option_1_title_text_view_customize_bottom_app_bar_fragment)
+    TextView otherActivitiesOption1TitleTextView;
     @BindView(R.id.other_activities_option_1_text_view_customize_bottom_app_bar_fragment)
     TextView otherActivitiesOption1TextView;
     @BindView(R.id.other_activities_option_2_linear_layout_customize_bottom_app_bar_fragment)
     LinearLayout otherActivitiesOption2LinearLayout;
+    @BindView(R.id.other_activities_option_2_title_text_view_customize_bottom_app_bar_fragment)
+    TextView otherActivitiesOption2TitleTextView;
     @BindView(R.id.other_activities_option_2_text_view_customize_bottom_app_bar_fragment)
     TextView otherActivitiesOption2TextView;
     @BindView(R.id.other_activities_option_3_linear_layout_customize_bottom_app_bar_fragment)
     LinearLayout otherActivitiesOption3LinearLayout;
+    @BindView(R.id.other_activities_option_3_title_text_view_customize_bottom_app_bar_fragment)
+    TextView otherActivitiesOption3TitleTextView;
     @BindView(R.id.other_activities_option_3_text_view_customize_bottom_app_bar_fragment)
     TextView otherActivitiesOption3TextView;
     @BindView(R.id.other_activities_option_4_linear_layout_customize_bottom_app_bar_fragment)
     LinearLayout otherActivitiesOption4LinearLayout;
+    @BindView(R.id.other_activities_option_4_title_text_view_customize_bottom_app_bar_fragment)
+    TextView otherActivitiesOption4TitleTextView;
     @BindView(R.id.other_activities_option_4_text_view_customize_bottom_app_bar_fragment)
     TextView otherActivitiesOption4TextView;
     @BindView(R.id.other_activities_fab_linear_layout_customize_bottom_app_bar_fragment)
     LinearLayout otherActivitiesFABLinearLayout;
+    @BindView(R.id.other_activities_fab_title_text_view_customize_bottom_app_bar_fragment)
+    TextView otherActivitiesFABTitleTextView;
     @BindView(R.id.other_activities_fab_text_view_customize_bottom_app_bar_fragment)
     TextView otherActivitiesFABTextView;
     @Inject
     @Named("bottom_app_bar")
     SharedPreferences sharedPreferences;
-    private BaseActivity activity;
+    private SettingsActivity activity;
     private int mainActivityOptionCount;
     private int mainActivityOption1;
     private int mainActivityOption2;
@@ -120,6 +145,10 @@ public class CustomizeBottomAppBarFragment extends Fragment {
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
+
+        rootView.setBackgroundColor(activity.customThemeWrapper.getBackgroundColor());
+
+        applyCustomTheme();
 
         if (activity.typeface != null) {
             Utils.setFontToAllTextViews(rootView, activity.typeface);
@@ -359,9 +388,45 @@ public class CustomizeBottomAppBarFragment extends Fragment {
         return rootView;
     }
 
+    private void applyCustomTheme() {
+        int primaryTextColor = activity.customThemeWrapper.getPrimaryTextColor();
+        int secondaryTextColor = activity.customThemeWrapper.getSecondaryTextColor();
+        int accentColor = activity.customThemeWrapper.getColorAccent();
+        infoTextView.setTextColor(secondaryTextColor);
+        Drawable infoDrawable = Utils.getTintedDrawable(activity, R.drawable.ic_info_preference_24dp, activity.customThemeWrapper.getPrimaryIconColor());
+        infoTextView.setCompoundDrawablesWithIntrinsicBounds(infoDrawable, null, null, null);
+        mainActivityGroupSummaryTextView.setTextColor(accentColor);
+        mainActivityOptionCountTitleTextView.setTextColor(primaryTextColor);
+        mainActivityOptionCountTextView.setTextColor(secondaryTextColor);
+        mainActivityOption1TitleTextView.setTextColor(primaryTextColor);
+        mainActivityOption1TextView.setTextColor(secondaryTextColor);
+        mainActivityOption2TitleTextView.setTextColor(primaryTextColor);
+        mainActivityOption2TextView.setTextColor(secondaryTextColor);
+        mainActivityOption3TitleTextView.setTextColor(primaryTextColor);
+        mainActivityOption3TextView.setTextColor(secondaryTextColor);
+        mainActivityOption4TitleTextView.setTextColor(primaryTextColor);
+        mainActivityOption4TextView.setTextColor(secondaryTextColor);
+        mainActivityFABTitleTextView.setTextColor(primaryTextColor);
+        mainActivityFABTextView.setTextColor(secondaryTextColor);
+
+        otherActivitiesGroupSummaryTextView.setTextColor(accentColor);
+        otherActivitiesOptionCountTitleTextView.setTextColor(primaryTextColor);
+        otherActivitiesOptionCountTextView.setTextColor(secondaryTextColor);
+        otherActivitiesOption1TitleTextView.setTextColor(primaryTextColor);
+        otherActivitiesOption1TextView.setTextColor(secondaryTextColor);
+        otherActivitiesOption2TitleTextView.setTextColor(primaryTextColor);
+        otherActivitiesOption2TextView.setTextColor(secondaryTextColor);
+        otherActivitiesOption3TitleTextView.setTextColor(primaryTextColor);
+        otherActivitiesOption3TextView.setTextColor(secondaryTextColor);
+        otherActivitiesOption4TitleTextView.setTextColor(primaryTextColor);
+        otherActivitiesOption4TextView.setTextColor(secondaryTextColor);
+        otherActivitiesFABTitleTextView.setTextColor(primaryTextColor);
+        otherActivitiesFABTextView.setTextColor(secondaryTextColor);
+    }
+
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (BaseActivity) context;
+        activity = (SettingsActivity) context;
     }
 }

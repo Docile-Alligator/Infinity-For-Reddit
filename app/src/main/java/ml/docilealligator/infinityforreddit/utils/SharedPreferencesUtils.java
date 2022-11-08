@@ -44,6 +44,7 @@ public class SharedPreferencesUtils {
     public static final String CUSTOM_TITLE_FONT_FAMILY_KEY = "custom_title_font_family";
     public static final String CUSTOM_CONTENT_FONT_FAMILY_KEY = "custom_content_font_family";
     public static final String REDDIT_USER_AGREEMENT_KEY = "reddit_user_agreement";
+    public static final String HIDE_FAB_IN_POST_FEED = "hide_fab_in_post_feed";
 
     public static final String SORT_TYPE_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.sort_type";
     public static final String SORT_TYPE_BEST_POST = "sort_type_best_post";
@@ -68,7 +69,7 @@ public class SharedPreferencesUtils {
     public static final String POST_LAYOUT_MULTI_REDDIT_POST_BASE = "post_layout_multi_reddit_post_";
     public static final String POST_LAYOUT_USER_POST_BASE = "post_layout_user_post_";
     public static final String POST_LAYOUT_SEARCH_POST = "post_layout_search_post";
-    public static final String HISTORY_POST_LAYOUT_FRONT_PAGE_POST = "history_post_layout_read_post";
+    public static final String HISTORY_POST_LAYOUT_READ_POST = "history_post_layout_read_post";
     public static final int POST_LAYOUT_CARD = 0;
     public static final int POST_LAYOUT_COMPACT = 1;
     public static final int POST_LAYOUT_GALLERY = 2;
@@ -196,6 +197,7 @@ public class SharedPreferencesUtils {
     public static final String REMEMBER_MUTING_OPTION_IN_POST_FEED = "remember_muting_option_in_post_feed";
     public static final String DEFAULT_LINK_POST_LAYOUT_KEY = "default_link_post_layout";
     public static final String USE_BOTTOM_TOOLBAR_IN_MEDIA_VIEWER = "use_bottom_toolbar_in_media_viewer";
+    public static final String HIDE_ACCOUNT_KARMA_NAV_BAR = "hide_account_karma";
     public static final String LOCK_SCREEN_ANIMATION = "lock_screen_animation";
     public static final String ENABLE_FOLD_SUPPORT = "enable_fold_support";
     public static final String LOOP_VIDEO = "loop_video";
@@ -212,6 +214,7 @@ public class SharedPreferencesUtils {
     public static final String POST_FEED_MAX_RESOLUTION = "post_feed_max_resolution";
     public static final String REDDIT_VIDEO_DEFAULT_RESOLUTION = "reddit_video_default_resolution";
     public static final String EASIER_TO_WATCH_IN_FULL_SCREEN = "easier_to_watch_in_full_screen";
+    public static final String HIDE_THE_NUMBER_OF_VOTES_IN_COMMENTS = "hide_the_number_of_votes_in_comments";
 
     public static final String DEFAULT_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit_preferences";
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";
@@ -337,6 +340,7 @@ public class SharedPreferencesUtils {
     public static final String ACCOUNT_NAME = "account_name";
     public static final String ACCESS_TOKEN = "access_token";
     public static final String ACCOUNT_IMAGE_URL = "account_image_url";
+    public static final String REDGIFS_ACCESS_TOKEN = "redgifs_access_token";
 
     public static final String NAVIGATION_DRAWER_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.navigation_drawer";
     public static final String COLLAPSE_ACCOUNT_SECTION = "collapse_account_section";

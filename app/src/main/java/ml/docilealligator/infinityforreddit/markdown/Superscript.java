@@ -3,19 +3,19 @@ package ml.docilealligator.infinityforreddit.markdown;
 import org.commonmark.node.CustomNode;
 import org.commonmark.node.Visitor;
 
-class SpoilerOpening extends CustomNode {
-    private String literal;
+public class Superscript extends CustomNode {
+    private boolean isBracketed;
 
     @Override
     public void accept(Visitor visitor) {
         visitor.visit(this);
     }
 
-    public String getLiteral() {
-        return literal;
+    public boolean isBracketed() {
+        return isBracketed;
     }
 
-    public void setLiteral(String literal) {
-        this.literal = literal;
+    public void setBracketed(boolean bracketed) {
+        isBracketed = bracketed;
     }
 }

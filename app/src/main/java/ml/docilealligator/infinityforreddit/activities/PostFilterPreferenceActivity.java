@@ -98,7 +98,7 @@ public class PostFilterPreferenceActivity extends BaseActivity {
             }
         });
 
-        adapter = new PostFilterRecyclerViewAdapter(this, postFilter -> {
+        adapter = new PostFilterRecyclerViewAdapter(this, customThemeWrapper, postFilter -> {
             if (post != null) {
                 showPostFilterOptions(post, postFilter);
             } else if (subredditName != null) {
@@ -211,6 +211,8 @@ public class PostFilterPreferenceActivity extends BaseActivity {
     @Override
     protected void applyCustomTheme() {
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
+        applyFABTheme(fab);
+        coordinatorLayout.setBackgroundColor(customThemeWrapper.getBackgroundColor());
     }
 
     @Override

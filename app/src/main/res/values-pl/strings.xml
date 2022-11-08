@@ -61,7 +61,6 @@
     <string name="action_see_removed">"Zobacz usunięte"</string>
     <string name="action_set_wallpaper">"Ustaw jako tapetę"</string>
     <string name="action_send_private_message">"Wyślij wiadomość prywatną"</string>
-    <string name="action_block_user">"Zablokuj użytkownika"</string>
     <string name="parse_json_response_error">"Wystąpił błąd podczas analizy odpowiedzi JSON"</string>
     <string name="retrieve_token_error">"Wystąpił błąd podczas pobierania tokenu"</string>
     <string name="something_went_wrong">"Coś poszło nie tak. Spróbuj ponownie później."</string>
@@ -390,8 +389,6 @@
     <string name="settings_customize_dark_theme_title">"Ciemny motyw"</string>
     <string name="settings_customize_amoled_theme_title">"Amoledowy motyw"</string>
     <string name="settings_manage_themes_title">"Zarządzaj motywami"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Niestandardowe motywy nie mogą być zaaplikowane do strony ustawień
-(z wyjątkiem paska narzędzi, paska stanu i paska nawigacji)."</string>
     <string name="settings_advanced_master_title">"Zaawansowane"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Usuń wszystkie Subreddity w bazie danych"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Usuń wszystkich użytkowników w bazie danych"</string>
@@ -748,9 +745,6 @@ Nie jest chora ani nic, ale na pewno może stać się lepsza."</string>
     <string name="top_score">"%1$s punktów"</string>
     <string name="login_activity_2fa_prompt">"Jeśli masz włączone uwierzytelnianie dwuskładnikowe, wpisz swoje hasło w następujący sposób:  &lt;hasło&gt;:&lt;kod 2FA&gt;
 Example: yourpass:123456"</string>
-    <string name="block_user">"Zablokuj użytkownika"</string>
-    <string name="block_user_success">"Zablokowano"</string>
-    <string name="block_user_failed">"Nie udało się zablokować użytkownika"</string>
     <string name="submit_crosspost_activity_label">"Crosspost"</string>
     <string name="give_award_activity_label">"Daj nagrodę"</string>
     <string name="action_crosspost">"Crosspost"</string>

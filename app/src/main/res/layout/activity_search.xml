@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/coordinator_layout_search_activity"
-    tools:application=".SearchActivity">
+    tools:application="ml.docilealligator.infinityforreddit.activities.SearchActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_search_activity"
@@ -38,6 +38,16 @@
                     android:fontFamily="?attr/font_family"
                     android:inputType="textNoSuggestions"
                     android:imeOptions="actionSearch" />
+
+                <ImageView
+                    android:id="@+id/clear_search_edit_view_search_activity"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="8dp"
+                    android:src="@drawable/ic_cancel_24dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/actionBarItemBackground" />
 
                 <ImageView
                     android:id="@+id/link_handler_image_view_search_activity"
@@ -109,7 +119,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                app:layoutManager=".customviews.LinearLayoutManagerBugFixed" />
+                app:layoutManager="ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed" />
 
         </LinearLayout>
 

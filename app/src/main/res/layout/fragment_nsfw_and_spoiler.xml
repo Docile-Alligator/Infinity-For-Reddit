@@ -26,19 +26,19 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/enable_nsfw_text_view_nsfw_and_spoiler_fragment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:layout_marginEnd="16dp"
                 android:layout_gravity="center_vertical"
-                app:drawableStartCompat="@drawable/ic_nsfw_on_24dp"
                 android:drawablePadding="32dp"
                 android:text="@string/settings_enable_nsfw_title"
                 android:textColor="?attr/primaryTextColor"
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/enable_nsfw_switch_nsfw_and_spoiler_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -60,6 +60,7 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/blur_nsfw_text_view_nsfw_and_spoiler_fragment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -70,7 +71,7 @@
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/blur_nsfw_switch_nsfw_and_spoiler_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -92,6 +93,7 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/do_not_blur_nsfw_text_view_nsfw_and_spoiler_fragment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -102,7 +104,7 @@
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/do_not_blur_nsfw_in_nsfw_subreddits_switch_nsfw_and_spoiler_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -123,6 +125,7 @@
             android:background="?attr/selectableItemBackground">
 
             <TextView
+                android:id="@+id/blur_spoiler_text_view_nsfw_and_spoiler_fragment"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -133,7 +136,7 @@
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/blur_spoiler_switch_nsfw_and_spoiler_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -147,6 +150,7 @@
             android:background="@color/dividerColor" />
 
         <TextView
+            android:id="@+id/dangerous_text_view_nsfw_and_spoiler_fragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="16dp"
@@ -181,7 +185,7 @@
                 android:textSize="?attr/font_16"
                 android:fontFamily="?attr/font_family" />
 
-            <com.google.android.material.switchmaterial.SwitchMaterial
+            <com.google.android.material.materialswitch.MaterialSwitch
                 android:id="@+id/disable_nsfw_forever_switch_nsfw_and_spoiler_fragment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -92,6 +92,8 @@ public class SearchActivity extends BaseActivity {
     Toolbar toolbar;
     @BindView(R.id.search_edit_text_search_activity)
     EditText searchEditText;
+    @BindView(R.id.clear_search_edit_view_search_activity)
+    ImageView clearSearchTextImageView;
     @BindView(R.id.link_handler_image_view_search_activity)
     ImageView linkHandlerImageView;
     @BindView(R.id.subreddit_name_relative_layout_search_activity)
@@ -153,6 +155,8 @@ public class SearchActivity extends BaseActivity {
         }
 
         setSupportActionBar(toolbar);
+
+        clearSearchTextImageView.setVisibility(View.GONE);
 
         searchOnlySubreddits = getIntent().getBooleanExtra(EXTRA_SEARCH_ONLY_SUBREDDITS, false);
         searchOnlyUsers = getIntent().getBooleanExtra(EXTRA_SEARCH_ONLY_USERS, false);
@@ -236,6 +240,9 @@ public class SearchActivity extends BaseActivity {
 
                         }
                     });
+                    clearSearchTextImageView.setVisibility(View.VISIBLE);
+                } else {
+                    clearSearchTextImageView.setVisibility(View.GONE);
                 }
             }
         });
@@ -248,6 +255,10 @@ public class SearchActivity extends BaseActivity {
                 }
             }
             return false;
+        });
+
+        clearSearchTextImageView.setOnClickListener(view -> {
+            searchEditText.getText().clear();
         });
 
         linkHandlerImageView.setOnClickListener(view -> {
@@ -378,6 +389,7 @@ public class SearchActivity extends BaseActivity {
         int toolbarPrimaryTextAndIconColorColor = mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor();
         searchEditText.setTextColor(toolbarPrimaryTextAndIconColorColor);
         searchEditText.setHintTextColor(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor());
+        clearSearchTextImageView.setColorFilter(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor(), android.graphics.PorterDuff.Mode.SRC_IN);
         linkHandlerImageView.setColorFilter(mCustomThemeWrapper.getToolbarPrimaryTextAndIconColor(), android.graphics.PorterDuff.Mode.SRC_IN);
         int colorAccent = mCustomThemeWrapper.getColorAccent();
         searchInTextView.setTextColor(colorAccent);
@@ -395,6 +407,7 @@ public class SearchActivity extends BaseActivity {
 
         if (query != null) {
             searchEditText.setText(query);
+            searchEditText.setSelection(query.length());
             query = null;
         }
 

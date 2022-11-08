@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -15,7 +16,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Spanned;
 import android.text.TextUtils;
-import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +27,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.graphics.drawable.DrawableCompat;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -40,13 +40,11 @@ import com.bumptech.glide.load.engine.GlideException;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
-import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.common.collect.ImmutableList;
 import com.libRG.CustomTextView;
-
-import org.commonmark.ext.gfm.tables.TableBlock;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -54,30 +52,12 @@ import java.util.concurrent.Executor;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import im.ene.toro.CacheManager;
-import im.ene.toro.ToroPlayer;
-import im.ene.toro.ToroUtil;
-import im.ene.toro.exoplayer.ExoCreator;
-import im.ene.toro.exoplayer.ExoPlayerViewHelper;
-import im.ene.toro.exoplayer.Playable;
-import im.ene.toro.media.PlaybackInfo;
-import im.ene.toro.widget.Container;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
-import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
-import io.noties.markwon.html.HtmlPlugin;
-import io.noties.markwon.html.tag.SuperScriptHandler;
-import io.noties.markwon.inlineparser.AutolinkInlineProcessor;
-import io.noties.markwon.inlineparser.BangInlineProcessor;
-import io.noties.markwon.inlineparser.HtmlInlineProcessor;
-import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
-import io.noties.markwon.linkify.LinkifyPlugin;
-import io.noties.markwon.movement.MovementMethodPlugin;
 import io.noties.markwon.recycler.MarkwonAdapter;
-import io.noties.markwon.recycler.table.TableEntry;
-import io.noties.markwon.recycler.table.TableEntryPlugin;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
@@ -100,6 +80,7 @@ import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivi
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity;
 import ml.docilealligator.infinityforreddit.apis.GfycatAPI;
+import ml.docilealligator.infinityforreddit.apis.RedgifsAPI;
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
@@ -108,16 +89,23 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.ShareLinkBottom
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
-import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
+import ml.docilealligator.infinityforreddit.customviews.SwipeLockScrollView;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
-import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
-import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
+import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.videoautoplay.CacheManager;
+import ml.docilealligator.infinityforreddit.videoautoplay.ExoCreator;
+import ml.docilealligator.infinityforreddit.videoautoplay.ExoPlayerViewHelper;
+import ml.docilealligator.infinityforreddit.videoautoplay.Playable;
+import ml.docilealligator.infinityforreddit.videoautoplay.ToroPlayer;
+import ml.docilealligator.infinityforreddit.videoautoplay.ToroUtil;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
+import ml.docilealligator.infinityforreddit.videoautoplay.widget.Container;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -140,6 +128,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private Retrofit mRedgifsRetrofit;
     private Retrofit mStreamableRetrofit;
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
+    private SharedPreferences mCurrentAccountSharedPreferences;
     private RequestManager mGlide;
     private SaveMemoryCenterInisdeDownsampleStrategy mSaveMemoryCenterInsideDownSampleStrategy;
     private Markwon mPostDetailMarkwon;
@@ -221,6 +210,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                                          boolean separatePostAndComments, String accessToken,
                                          String accountName, Post post, Locale locale,
                                          SharedPreferences sharedPreferences,
+                                         SharedPreferences currentAccountSharedPreferences,
                                          SharedPreferences nsfwAndSpoilerSharedPreferences,
                                          SharedPreferences postDetailsSharedPreferences,
                                          ExoCreator exoCreator,
@@ -236,82 +226,60 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mGlide = glide;
         mSaveMemoryCenterInsideDownSampleStrategy = new SaveMemoryCenterInisdeDownsampleStrategy(Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.POST_FEED_MAX_RESOLUTION, "5000000")));
+        mCurrentAccountSharedPreferences = currentAccountSharedPreferences;
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
         int markdownColor = customThemeWrapper.getPostContentColor();
         int postSpoilerBackgroundColor = markdownColor | 0xFF000000;
         int linkColor = customThemeWrapper.getLinkColor();
-        mPostDetailMarkwon = Markwon.builder(mActivity)
-                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
-                    plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
-                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
-                    plugin.excludeInlineProcessor(BangInlineProcessor.class);
-                    plugin.addInlineProcessor(new SuperscriptInlineProcessor());
-                }))
-                .usePlugin(HtmlPlugin.create(plugin -> {
-                    plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
-                }))
-                .usePlugin(new AbstractMarkwonPlugin() {
-                    @NonNull
-                    @Override
-                    public String processMarkdown(@NonNull String markdown) {
-                        return Utils.fixSuperScript(markdown);
-                    }
-
-                    @Override
-                    public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
-                        if (mActivity.contentTypeface != null) {
-                            textView.setTypeface(mActivity.contentTypeface);
-                        }
-                        textView.setTextColor(markdownColor);
-                        textView.setOnLongClickListener(view -> {
-                            if (textView.getSelectionStart() == -1 && textView.getSelectionEnd() == -1) {
-                                Bundle bundle = new Bundle();
-                                bundle.putString(CopyTextBottomSheetFragment.EXTRA_RAW_TEXT, mPost.getSelfTextPlain());
-                                bundle.putString(CopyTextBottomSheetFragment.EXTRA_MARKDOWN, mPost.getSelfText());
-                                CopyTextBottomSheetFragment copyTextBottomSheetFragment = new CopyTextBottomSheetFragment();
-                                copyTextBottomSheetFragment.setArguments(bundle);
-                                copyTextBottomSheetFragment.show(mActivity.getSupportFragmentManager(), copyTextBottomSheetFragment.getTag());
-                            }
-                            return true;
-                        });
-                    }
-
-                    @Override
-                    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
-                        builder.linkResolver((view, link) -> {
-                            Intent intent = new Intent(mActivity, LinkResolverActivity.class);
-                            Uri uri = Uri.parse(link);
-                            intent.setData(uri);
-                            intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, mPost.isNSFW());
-                            mActivity.startActivity(intent);
-                        });
-                    }
-
-                    @Override
-                    public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
-                        builder.linkColor(linkColor);
-                    }
-                })
-                .usePlugin(SpoilerParserPlugin.create(markdownColor, postSpoilerBackgroundColor))
-                .usePlugin(StrikethroughPlugin.create())
-                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS).setOnLinkLongClickListener((textView, url) -> {
-                    if (activity != null && !activity.isDestroyed() && !activity.isFinishing()) {
-                        UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
-                        urlMenuBottomSheetFragment.setArguments(bundle);
-                        urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
+        MarkwonPlugin miscPlugin = new AbstractMarkwonPlugin() {
+            @Override
+            public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
+                if (mActivity.contentTypeface != null) {
+                    textView.setTypeface(mActivity.contentTypeface);
+                }
+                textView.setTextColor(markdownColor);
+                textView.setHighlightColor(Color.TRANSPARENT);
+                textView.setOnLongClickListener(view -> {
+                    if (textView.getSelectionStart() == -1 && textView.getSelectionEnd() == -1) {
+                        CopyTextBottomSheetFragment.show(
+                                mActivity.getSupportFragmentManager(),
+                                mPost.getSelfTextPlain(), mPost.getSelfText()
+                        );
                     }
                     return true;
-                })))
-                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
-                .usePlugin(TableEntryPlugin.create(mActivity))
-                .build();
-        mMarkwonAdapter = MarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
-                .include(TableBlock.class, TableEntry.create(builder -> builder
-                        .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
-                        .textLayoutIsRoot(R.layout.view_table_entry_cell)))
-                .build();
+                });
+            }
+
+            @Override
+            public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                builder.linkResolver((view, link) -> {
+                    Intent intent = new Intent(mActivity, LinkResolverActivity.class);
+                    Uri uri = Uri.parse(link);
+                    intent.setData(uri);
+                    intent.putExtra(LinkResolverActivity.EXTRA_IS_NSFW, mPost.isNSFW());
+                    mActivity.startActivity(intent);
+                });
+            }
+
+            @Override
+            public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                builder.linkColor(linkColor);
+            }
+        };
+        BetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener = (textView, url) -> {
+            if (activity != null && !activity.isDestroyed() && !activity.isFinishing()) {
+                UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
+                urlMenuBottomSheetFragment.setArguments(bundle);
+                urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
+            }
+            return true;
+        };
+        mPostDetailMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
+                miscPlugin, markdownColor, postSpoilerBackgroundColor, onLinkLongClickListener);
+        mMarkwonAdapter = MarkdownUtils.createTablesAdapter();
+
         mSeparatePostAndComments = separatePostAndComments;
         mLegacyAutoplayVideoControllerUI = sharedPreferences.getBoolean(SharedPreferencesUtils.LEGACY_AUTOPLAY_VIDEO_CONTROLLER_UI, false);
         mEasierToWatchInFullScreen = sharedPreferences.getBoolean(SharedPreferencesUtils.EASIER_TO_WATCH_IN_FULL_SCREEN, false);
@@ -396,9 +364,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mPostIconAndInfoColor = customThemeWrapper.getPostIconAndInfoColor();
         mCommentColor = customThemeWrapper.getCommentColor();
 
-        mCommentIcon = activity.getDrawable(R.drawable.ic_comment_grey_24dp);
+        mCommentIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_comment_grey_24dp);
         if (mCommentIcon != null) {
-            DrawableCompat.setTint(mCommentIcon, mPostIconAndInfoColor);
+            mCommentIcon.setTint(mPostIconAndInfoColor);
         }
 
         mExoCreator = exoCreator;
@@ -657,6 +625,13 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 ((PostDetailBaseViewHolder) holder).mSaveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
             }
 
+            if (mPost.getSelfText() != null && !mPost.getSelfText().equals("")) {
+                ((PostDetailBaseViewHolder) holder).mContentMarkdownView.setVisibility(View.VISIBLE);
+                ((PostDetailBaseViewHolder) holder).mContentMarkdownView.setAdapter(mMarkwonAdapter);
+                mMarkwonAdapter.setMarkdown(mPostDetailMarkwon, mPost.getSelfText());
+                mMarkwonAdapter.notifyDataSetChanged();
+            }
+
             if (holder instanceof PostDetailVideoAutoplayViewHolder) {
                 ((PostDetailVideoAutoplayViewHolder) holder).previewImageView.setVisibility(View.VISIBLE);
                 Post.Preview preview = getSuitablePreview(mPost.getPreviews());
@@ -670,9 +645,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
                 if (mPost.isGfycat() || mPost.isRedgifs() && !mPost.isLoadGfycatOrStreamableVideoSuccess()) {
                     ((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall =
-                            (mPost.isGfycat() ? mGfycatRetrofit : mRedgifsRetrofit).create(GfycatAPI.class).getGfycatData(mPost.getGfycatId());
+                            mPost.isGfycat() ? mGfycatRetrofit.create(GfycatAPI.class).getGfycatData(mPost.getGfycatId()) :
+                                    mRedgifsRetrofit.create(RedgifsAPI.class).getRedgifsData(APIUtils.getRedgifsOAuthHeader(mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.REDGIFS_ACCESS_TOKEN, "")), mPost.getGfycatId(), APIUtils.USER_AGENT);
                     FetchGfycatOrRedgifsVideoLinks.fetchGfycatOrRedgifsVideoLinksInRecyclerViewAdapter(mExecutor, new Handler(),
-                            ((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall, mPost.getGfycatId(),
+                            ((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall,
                             mPost.isGfycat(), mAutomaticallyTryRedgifs,
                             new FetchGfycatOrRedgifsVideoLinks.FetchGfycatOrRedgifsVideoLinksListener() {
                                 @Override
@@ -752,7 +728,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     ((PostDetailLinkViewHolder) holder).mImageView.setRatio((float) preview.getPreviewHeight() / (float) preview.getPreviewWidth());
                     loadImage((PostDetailLinkViewHolder) holder, preview);
                 }
-
             } else if (holder instanceof PostDetailNoPreviewViewHolder) {
                 if (mPost.getPostType() == Post.LINK_TYPE || mPost.getPostType() == Post.NO_PREVIEW_LINK_TYPE) {
                     if (!mHidePostType) {
@@ -791,25 +766,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                             break;
                     }
                 }
-
-                if (mPost.getSelfText() != null && !mPost.getSelfText().equals("")) {
-                    ((PostDetailNoPreviewViewHolder) holder).mContentMarkdownView.setVisibility(View.VISIBLE);
-                    LinearLayoutManagerBugFixed linearLayoutManager = new MarkwonLinearLayoutManager(mActivity, new MarkwonLinearLayoutManager.HorizontalScrollViewScrolledListener() {
-                        @Override
-                        public void onScrolledLeft() {
-                            ((ViewPostDetailActivity) mActivity).lockSwipeRightToGoBack();
-                        }
-
-                        @Override
-                        public void onScrolledRight() {
-                            ((ViewPostDetailActivity) mActivity).unlockSwipeRightToGoBack();
-                        }
-                    });
-                    ((PostDetailNoPreviewViewHolder) holder).mContentMarkdownView.setLayoutManager(linearLayoutManager);
-                    ((PostDetailNoPreviewViewHolder) holder).mContentMarkdownView.setAdapter(mMarkwonAdapter);
-                    mMarkwonAdapter.setMarkdown(mPostDetailMarkwon, mPost.getSelfText());
-                    mMarkwonAdapter.notifyDataSetChanged();
-                }
             } else if (holder instanceof PostDetailGalleryViewHolder) {
                 Post.Preview preview = getSuitablePreview(mPost.getPreviews());
                 if (preview != null) {
@@ -822,25 +778,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     loadCaptionPreview((PostDetailGalleryViewHolder) holder, preview);
                 } else {
                     ((PostDetailGalleryViewHolder) holder).mNoPreviewPostTypeImageView.setVisibility(View.VISIBLE);
-                }
-            } else if (holder instanceof PostDetailTextViewHolder) {
-                if (mPost.getSelfText() != null && !mPost.getSelfText().equals("")) {
-                    ((PostDetailTextViewHolder) holder).mContentMarkdownView.setVisibility(View.VISIBLE);
-                    LinearLayoutManagerBugFixed linearLayoutManager = new MarkwonLinearLayoutManager(mActivity, new MarkwonLinearLayoutManager.HorizontalScrollViewScrolledListener() {
-                        @Override
-                        public void onScrolledLeft() {
-                            ((ViewPostDetailActivity) mActivity).lockSwipeRightToGoBack();
-                        }
-
-                        @Override
-                        public void onScrolledRight() {
-                            ((ViewPostDetailActivity) mActivity).unlockSwipeRightToGoBack();
-                        }
-                    });
-                    ((PostDetailTextViewHolder) holder).mContentMarkdownView.setLayoutManager(linearLayoutManager);
-                    ((PostDetailTextViewHolder) holder).mContentMarkdownView.setAdapter(mMarkwonAdapter);
-                    mMarkwonAdapter.setMarkdown(mPostDetailMarkwon, mPost.getSelfText());
-                    mMarkwonAdapter.notifyDataSetChanged();
                 }
             }
         }
@@ -1075,6 +1012,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             ((PostDetailBaseViewHolder) holder).mFlairTextView.setVisibility(View.GONE);
             ((PostDetailBaseViewHolder) holder).mSpoilerTextView.setVisibility(View.GONE);
             ((PostDetailBaseViewHolder) holder).mNSFWTextView.setVisibility(View.GONE);
+            ((PostDetailBaseViewHolder) holder).mContentMarkdownView.setVisibility(View.GONE);
 
             if (holder instanceof PostDetailVideoAutoplayViewHolder) {
                 if (((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall != null && !((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall.isCanceled()) {
@@ -1137,6 +1075,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         CustomTextView mFlairTextView;
         TextView mAwardsTextView;
         TextView mUpvoteRatioTextView;
+        RecyclerView mContentMarkdownView;
         ConstraintLayout mBottomConstraintLayout;
         ImageView mUpvoteButton;
         TextView mScoreTextView;
@@ -1164,6 +1103,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                          CustomTextView mFlairTextView,
                          TextView mAwardsTextView,
                          TextView mUpvoteRatioTextView,
+                         RecyclerView mContentMarkdownView,
                          ConstraintLayout mBottomConstraintLayout,
                          ImageView mUpvoteButton,
                          TextView mScoreTextView,
@@ -1186,6 +1126,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             this.mFlairTextView = mFlairTextView;
             this.mAwardsTextView = mAwardsTextView;
             this.mUpvoteRatioTextView = mUpvoteRatioTextView;
+            this.mContentMarkdownView = mContentMarkdownView;
             this.mBottomConstraintLayout = mBottomConstraintLayout;
             this.mUpvoteButton = mUpvoteButton;
             this.mScoreTextView = mScoreTextView;
@@ -1249,6 +1190,18 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 intent.putExtra(FilteredPostsActivity.EXTRA_FILTER, Post.NSFW_TYPE);
                 mActivity.startActivity(intent);
             });
+
+            mContentMarkdownView.setLayoutManager(new MarkwonLinearLayoutManager(mActivity, new SwipeLockScrollView.SwipeLockInterface() {
+                @Override
+                public void lockSwipe() {
+                    ((ViewPostDetailActivity) mActivity).lockSwipeRightToGoBack();
+                }
+
+                @Override
+                public void unlockSwipe() {
+                    ((ViewPostDetailActivity) mActivity).unlockSwipeRightToGoBack();
+                }
+            }));
 
             mUpvoteButton.setOnClickListener(view -> {
                 if (mPost.isArchived()) {
@@ -1429,7 +1382,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
                     Intent intent = new Intent(mActivity, CommentActivity.class);
                     intent.putExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY, mPost.getFullName());
-                    intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TEXT_MARKDOWN_KEY, mPost.getTitle());
+                    intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_TITLE_KEY, mPost.getTitle());
                     intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_MARKDOWN_KEY, mPost.getSelfText());
                     intent.putExtra(CommentActivity.EXTRA_COMMENT_PARENT_BODY_KEY, mPost.getSelfTextPlain());
                     intent.putExtra(CommentActivity.EXTRA_IS_REPLYING_KEY, false);
@@ -1627,6 +1580,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         ImageView muteButton;
         @BindView(R.id.fullscreen_exo_playback_control_view)
         ImageView fullscreenButton;
+        @BindView(R.id.content_markdown_view_item_post_detail_video_autoplay)
+        RecyclerView mContentMarkdownView;
         @BindView(R.id.bottom_constraint_layout_item_post_detail_video_autoplay)
         ConstraintLayout mBottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_detail_video_autoplay)
@@ -1664,6 +1619,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mFlairTextView,
                     mAwardsTextView,
                     mUpvoteRatioTextView,
+                    mContentMarkdownView,
                     mBottomConstraintLayout,
                     mUpvoteButton,
                     mScoreTextView,
@@ -1768,10 +1724,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
                 helper.addEventListener(new Playable.DefaultEventListener() {
                     @Override
-                    public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+                    public void onTracksChanged(@NonNull Tracks tracks) {
+                        ImmutableList<Tracks.Group> trackGroups = tracks.getGroups();
                         if (!trackGroups.isEmpty()) {
-                            for (int i = 0; i < trackGroups.length; i++) {
-                                String mimeType = trackGroups.get(i).getFormat(0).sampleMimeType;
+                            for (int i = 0; i < trackGroups.size(); i++) {
+                                String mimeType = trackGroups.get(i).getTrackFormat(0).sampleMimeType;
                                 if (mimeType != null && mimeType.contains("audio")) {
                                     helper.setVolume(volume);
                                     muteButton.setVisibility(View.VISIBLE);
@@ -1873,6 +1830,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         ImageView videoOrGifIndicatorImageView;
         @BindView(R.id.image_view_item_post_detail_video_and_gif_preview)
         AspectRatioGifImageView mImageView;
+        @BindView(R.id.content_markdown_view_item_post_detail_video_and_gif_preview)
+        RecyclerView mContentMarkdownView;
         @BindView(R.id.bottom_constraint_layout_item_post_detail_video_and_gif_preview)
         ConstraintLayout mBottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_detail_video_and_gif_preview)
@@ -1906,6 +1865,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mFlairTextView,
                     mAwardsTextView,
                     mUpvoteRatioTextView,
+                    mContentMarkdownView,
                     mBottomConstraintLayout,
                     mUpvoteButton,
                     mScoreTextView,
@@ -2000,6 +1960,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         TextView mLoadImageErrorTextView;
         @BindView(R.id.image_view_item_post_detail_image_and_gif_autoplay)
         AspectRatioGifImageView mImageView;
+        @BindView(R.id.content_markdown_view_item_post_detail_image_and_gif_autoplay)
+        RecyclerView mContentMarkdownView;
         @BindView(R.id.bottom_constraint_layout_item_post_detail_image_and_gif_autoplay)
         ConstraintLayout mBottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_detail_image_and_gif_autoplay)
@@ -2033,6 +1995,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mFlairTextView,
                     mAwardsTextView,
                     mUpvoteRatioTextView,
+                    mContentMarkdownView,
                     mBottomConstraintLayout,
                     mUpvoteButton,
                     mScoreTextView,
@@ -2112,6 +2075,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         TextView mLoadImageErrorTextView;
         @BindView(R.id.image_view_item_post_detail_link)
         AspectRatioGifImageView mImageView;
+        @BindView(R.id.content_markdown_view_item_post_detail_link)
+        RecyclerView mContentMarkdownView;
         @BindView(R.id.bottom_constraint_layout_item_post_detail_link)
         ConstraintLayout mBottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_detail_link)
@@ -2145,6 +2110,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mFlairTextView,
                     mAwardsTextView,
                     mUpvoteRatioTextView,
+                    mContentMarkdownView,
                     mBottomConstraintLayout,
                     mUpvoteButton,
                     mScoreTextView,
@@ -2240,6 +2206,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mFlairTextView,
                     mAwardsTextView,
                     mUpvoteRatioTextView,
+                    mContentMarkdownView,
                     mBottomConstraintLayout,
                     mUpvoteButton,
                     mScoreTextView,
@@ -2361,6 +2328,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         TextView mCaptionUrlTextView;
         @BindView(R.id.image_view_no_preview_link_item_post_detail_gallery)
         ImageView mNoPreviewPostTypeImageView;
+        @BindView(R.id.content_markdown_view_item_post_detail_gallery)
+        RecyclerView mContentMarkdownView;
         @BindView(R.id.bottom_constraint_layout_item_post_detail_gallery)
         ConstraintLayout mBottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_detail_gallery)
@@ -2394,6 +2363,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mFlairTextView,
                     mAwardsTextView,
                     mUpvoteRatioTextView,
+                    mContentMarkdownView,
                     mBottomConstraintLayout,
                     mUpvoteButton,
                     mScoreTextView,
@@ -2493,6 +2463,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mFlairTextView,
                     mAwardsTextView,
                     mUpvoteRatioTextView,
+                    mContentMarkdownView,
                     mBottomConstraintLayout,
                     mUpvoteButton,
                     mScoreTextView,

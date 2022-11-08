@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="application_name" translatable="false">Infinity</string>
     <string name="login_activity_label">Login</string>
     <string name="search_activity_label" translatable="false"> </string>
@@ -80,7 +80,6 @@
     <string name="action_crosspost">Crosspost</string>
     <string name="action_set_wallpaper">Set as Wallpaper</string>
     <string name="action_send_private_message">Send Private Message</string>
-    <string name="action_block_user">Block User</string>
     <string name="action_select_user_flair">Select User Flair</string>
     <string name="action_give_award">Give Award</string>
     <string name="action_save_to_database">Save to Database</string>
@@ -91,11 +90,13 @@
     <string name="action_open_external_browser">Open in browser</string>
     <string name="action_add_to_post_filter">Add to Post Filter</string>
     <string name="action_delete_logs">Delete Logs</string>
+    <string name="action_create_github_issue">Create GitHub Issue</string>
     <string name="action_share_rpan_link">Share RPAN Link</string>
     <string name="action_share_post_link">Share Post Link</string>
     <string name="action_go_to_wiki">Go to Wiki</string>
     <string name="action_playback_speed">Playback Speed</string>
     <string name="action_contact_mods">Contact Mods</string>
+    <string name="action_more_options">More Options</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -255,7 +256,7 @@
     <string name="no_flair">No flair</string>
     <string name="error_loading_flairs">Error loading flairs.\nTap to retry.</string>
 
-    <string name="no_rule">No rule</string>
+    <string name="no_rule">No rules</string>
     <string name="error_loading_rules">Error loading rules.\nTap to retry.</string>
     <string name="error_loading_rules_without_retry">Error Loading Rules</string>
 
@@ -491,7 +492,6 @@
     <string name="settings_enable_material_you_summary">Personalize Infinity based on Your Wallpaper</string>
     <string name="settings_apply_material_you_title">Apply Material You</string>
     <string name="settings_apply_material_you_summary">In case Infinity did not change the theme</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">Custom themes cannot be applied to settings page (except toolbar, status bar and navigation bar).</string>
     <string name="settings_advanced_master_title">Advanced</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">Delete All Subreddits in Database</string>
     <string name="settings_delete_all_users_data_in_database_title">Delete All Users in Database</string>
@@ -517,7 +517,7 @@
     <string name="settings_tab_title">Title</string>
     <string name="settings_tab_post_type">Type</string>
     <string name="settings_tab_subreddit_name">Subreddit Name (Without r/ prefix)</string>
-    <string name="settings_tab_multi_reddit_name">MultiReddit Path (/user/yourusername/m/yourmultiredditname)</string>
+    <string name="settings_tab_multi_reddit_name">MultiReddit Path (/user/yourusername/m/yourmultiredditname) (only lowercase characters)</string>
     <string name="settings_tab_username">Username (Without u/ prefix)</string>
     <string name="no_developer_easter_egg">There\'s no developer options here</string>
     <string name="settings_download_location_title">Download Location</string>
@@ -587,6 +587,7 @@
     <string name="settings_hide_the_number_of_comments">Hide the Number of Comments</string>
     <string name="settings_show_avatar_on_the_right">Show Avatar on the Right</string>
     <string name="settings_backup_settings_title">Backup Settings</string>
+    <string name="settings_backup_settings_summary">The backup file password is \"123321\".</string>
     <string name="settings_restore_settings_title">Restore Settings</string>
     <string name="settings_credits_love_animation_title">Love Animation</string>
     <string name="settings_swipe_between_posts_title">Swipe Between Posts</string>
@@ -613,6 +614,7 @@
     <string name="settings_separate_post_and_comments_in_landscape_mode_title">Separate Post And Comments in Landscape Mode</string>
     <string name="settings_separate_post_and_comments_summary">Video autoplay will be disabled in the post detail page</string>
     <string name="settings_use_bottom_toolbar_in_media_viewer_title">Use Bottom Toolbar in Media Viewer</string>
+    <string name="settings_navigation_drawer_enable_hide_karma_title">Hide Account Karma</string>
     <string name="settings_secure_mode_title">Secure Mode</string>
     <string name="settings_secure_mode_summary">Screenshot and video recording are not allowed. No preview in recent app screen.</string>
     <string name="settings_credits_lock_screen_animation_title">Lock Screen Animation</string>
@@ -644,6 +646,7 @@
     <string name="settings_post_feed_max_resolution_title">Post Feed Preview Max Resolution (Width * Height)</string>
     <string name="settings_reddit_video_default_resolution">Reddit Video Default Resolution</string>
     <string name="settings_easier_to_watch_in_full_screen_title">Easier to Watch in Full Screen</string>
+    <string name="settings_hide_fab_in_post_feed">Hide FAB in Post Feed</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -740,7 +743,7 @@
     <string name="create_multi_reddit_failed">Cannot create this multireddit</string>
     <string name="duplicate_multi_reddit">This multireddit already exists</string>
     <string name="edit_multi_reddit_failed">Cannot edit this multireddit</string>
-    <string name="delete_multi_reddit_success">Delete successfully</string>
+    <string name="delete_multi_reddit_success">Deleted successfully</string>
     <string name="delete_multi_reddit_failed">Delete failed</string>
     <string name="delete_multi_reddit_dialog_message">Are you sure?</string>
 
@@ -947,7 +950,7 @@
     <string name="edit_theme_name">Edit Theme Name</string>
     <string name="edit_theme">Edit Theme</string>
     <string name="delete_theme">Delete Theme</string>
-    <string name="delete_theme_dialog_message">Are you sure to delete %1$s?</string>
+    <string name="delete_theme_dialog_message">Are you sure you want to delete %1$s?</string>
     <string name="share_theme">Share Theme</string>
     <string name="change_theme_name">Change Name</string>
     <string name="theme_copied">Copied! Paste and share it to other people.</string>
@@ -1052,12 +1055,10 @@
 
     <string name="login_activity_2fa_prompt">If you have 2-factor authentication enabled, kindly type your password like the following: &lt;password&gt;:&lt;2FA code&gt;.\nExample: yourpass:123456</string>
 
-    <string name="block_user">Block User</string>
-    <string name="block_user_success">Blocked</string>
-    <string name="block_user_failed">Failed to block user</string>
-
     <string name="select_user_flair_success">User flair selected</string>
     <string name="select_this_user_flair">Select this user flair?</string>
+    <string name="clear_user_flair">Clear Flair</string>
+    <string name="clear_user_flair_success">User flair cleared</string>
 
     <string name="select_header_size">Select Header Size</string>
     <string name="large">Large</string>
@@ -1175,6 +1176,7 @@
     <string name="only_on_wifi">Only on Wifi</string>
     <string name="never">Never</string>
     <string name="normal">Normal</string>
+    <string name="extra_small">Extra Small</string>
     <string name="extra_large">Extra Large</string>
     <string name="enormously_large">Enormously Large</string>
     <string name="default_in_array">Default</string>
@@ -1194,9 +1196,9 @@
     <string name="suggest_title">Suggest Title</string>
     <string name="suggest_title_failed">Failed to suggest a title</string>
 
-    <string name="crash_reports_deleted">Crash reports are deleted</string>
+    <string name="crash_reports_deleted">Crash reports have been deleted</string>
 
-    <string name="disable_nsfw_forever_message">Once enabled, NSFW will be permanently disabled, regardless of whether the NSFW setting is enabled or not. And this option is irreversible, the only way to re-enable NSFW is to clear the app data.\n\nStill want to enable it?</string>
+    <string name="disable_nsfw_forever_message">Once enabled, NSFW will be permanently disabled, regardless of whether the NSFW setting is enabled or not. This option is irreversible, the only way to re-enable NSFW is to clear the app data.\n\nDo you still want to enable it?</string>
 
     <string name="reply">Reply</string>
 
@@ -1297,5 +1299,20 @@
 
     <string name="handle_link">Handle Link</string>
     <string name="invalid_link">Invalid link</string>
+
+    <string name="unexpected_intent_action">Unexpected intent action: <xliff:g id="action">%1$s</xliff:g></string>
+    <string name="enable_random_adaptation">Enable random adaptation</string>
+    <string name="error_unsupported_video">Media includes video tracks, but none are playable by this device</string>
+    <string name="error_unsupported_audio">Media includes audio tracks, but none are playable by this device</string>
+    <string name="storage_permission_denied">Permission to access storage was denied</string>
+    <string name="sample_list_load_error">One or more sample lists failed to load</string>
+
+    <string name="exo_controls_volume_up_description">Volume Up</string>
+    <string name="exo_controls_volume_off_description">Volume Off</string>
+
+    <string name="invalid_regex">Invalid regex pattern</string>
+
+    <string name="load_more_posts_failed">Failed to load more posts.\nTap to retry.</string>
+    <string name="no_more_posts">No more posts</string>
 
 </resources>

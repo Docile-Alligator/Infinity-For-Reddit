@@ -71,10 +71,6 @@ public class ThemePreferenceFragment extends CustomFontPreferenceFragmentCompat 
 
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
-
         ListPreference themePreference = findPreference(SharedPreferencesUtils.THEME_KEY);
         SwitchPreference amoledDarkSwitch = findPreference(SharedPreferencesUtils.AMOLED_DARK_KEY);
         Preference customizeLightThemePreference = findPreference(SharedPreferencesUtils.CUSTOMIZE_LIGHT_THEME);

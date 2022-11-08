@@ -29,7 +29,7 @@ public class FetchRemovedComment {
                     Comment removedComment = parseComment(response.body(), comment);
                     handler.post(() -> {
                         if (removedComment != null) {
-                            listener.fetchSuccess(removedComment);
+                            listener.fetchSuccess(removedComment, comment);
                         } else {
                             listener.fetchFailed();
                         }
@@ -56,7 +56,7 @@ public class FetchRemovedComment {
                         comment.getLinkId(),
                         3000,
                         "asc",
-                        "id,author,body",
+                        "id,author,body,is_submitter",
                         after,
                         after + 43200, // 12 Hours later
                         "*").execute();
@@ -64,7 +64,7 @@ public class FetchRemovedComment {
                     Comment removedComment = parseComment(response.body(), comment);
                     handler.post(() -> {
                         if (removedComment != null) {
-                            listener.fetchSuccess(removedComment);
+                            listener.fetchSuccess(removedComment, comment);
                         } else {
                             listener.fetchFailed();
                         }
@@ -106,7 +106,8 @@ public class FetchRemovedComment {
     private static Comment parseRemovedComment(@NonNull JSONObject result, Comment comment) throws JSONException {
         String id = result.getString(JSONUtils.ID_KEY);
         String author = result.getString(JSONUtils.AUTHOR_KEY);
-        String body = Utils.modifyMarkdown(result.optString(JSONUtils.BODY_KEY).trim());
+        String body = Utils.modifyMarkdown(Utils.trimTrailingWhitespace(result.optString(JSONUtils.BODY_KEY)));
+        boolean isSubmitter = result.getBoolean(JSONUtils.IS_SUBMITTER_KEY);
 
         if (id.equals(comment.getId()) &&
                 (!author.equals(comment.getAuthor()) ||
@@ -115,6 +116,7 @@ public class FetchRemovedComment {
             comment.setAuthor(author);
             comment.setCommentMarkdown(body);
             comment.setCommentRawText(body);
+            comment.setSubmittedByAuthor(isSubmitter);
             return comment;
         } else {
             return null;
@@ -122,7 +124,7 @@ public class FetchRemovedComment {
     }
 
     public interface FetchRemovedCommentListener {
-        void fetchSuccess(Comment comment);
+        void fetchSuccess(Comment fetchedComment, Comment originalComment);
 
         void fetchFailed();
     }

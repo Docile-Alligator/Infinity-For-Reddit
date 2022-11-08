@@ -51,4 +51,10 @@
         app:key="hide_subscribed_subreddits_sections"
         app:title="@string/settings_hide_subscribed_subreddits_sections_title" />
 
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+        app:defaultValue="false"
+        app:key="hide_account_karma"
+        app:title="@string/settings_navigation_drawer_enable_hide_karma_title" />
+
+
 </PreferenceScreen>

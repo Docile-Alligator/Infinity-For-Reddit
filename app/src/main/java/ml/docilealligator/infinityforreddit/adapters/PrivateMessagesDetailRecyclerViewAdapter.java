@@ -32,21 +32,22 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
-import io.noties.markwon.html.HtmlPlugin;
-import io.noties.markwon.html.tag.SuperScriptHandler;
 import io.noties.markwon.inlineparser.AutolinkInlineProcessor;
 import io.noties.markwon.inlineparser.BangInlineProcessor;
 import io.noties.markwon.inlineparser.HtmlInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
+import io.noties.markwon.movement.MovementMethodPlugin;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPrivateMessagesActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SpoilerAwareMovementMethod;
 import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
-import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
+import ml.docilealligator.infinityforreddit.markdown.SuperscriptPlugin;
 import ml.docilealligator.infinityforreddit.message.Message;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -78,23 +79,14 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
         mLocale = locale;
         mAccountName = accountName;
         int commentColor = customThemeWrapper.getCommentColor();
+        // todo:https://github.com/Docile-Alligator/Infinity-For-Reddit/issues/1027
+        //  add tables support and replace with MarkdownUtils#commonPostMarkwonBuilder
         mMarkwon = Markwon.builder(viewPrivateMessagesActivity)
                 .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
-                    plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
                     plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
                     plugin.excludeInlineProcessor(BangInlineProcessor.class);
-                    plugin.addInlineProcessor(new SuperscriptInlineProcessor());
-                }))
-                .usePlugin(HtmlPlugin.create(plugin -> {
-                    plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
                 }))
                 .usePlugin(new AbstractMarkwonPlugin() {
-                    @NonNull
-                    @Override
-                    public String processMarkdown(@NonNull String markdown) {
-                        return Utils.fixSuperScript(markdown);
-                    }
-
                     @Override
                     public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
                         if (mViewPrivateMessagesActivity.contentTypeface != null) {
@@ -117,8 +109,11 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
                         builder.linkColor(customThemeWrapper.getLinkColor());
                     }
                 })
+                .usePlugin(SuperscriptPlugin.create())
                 .usePlugin(StrikethroughPlugin.create())
                 .usePlugin(SpoilerParserPlugin.create(commentColor, commentColor | 0xFF000000))
+                .usePlugin(RedditHeadingPlugin.create())
+                .usePlugin(MovementMethodPlugin.create(new SpoilerAwareMovementMethod()))
                 .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
                 .build();
         mShowElapsedTime = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ELAPSED_TIME_KEY, false);
@@ -287,7 +282,9 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
                     if (clipboard != null) {
                         ClipData clip = ClipData.newPlainText("simple text", message.getBody());
                         clipboard.setPrimaryClip(clip);
-                        Toast.makeText(mViewPrivateMessagesActivity, R.string.copy_success, Toast.LENGTH_SHORT).show();
+                        if (android.os.Build.VERSION.SDK_INT < 33) {
+                            Toast.makeText(mViewPrivateMessagesActivity, R.string.copy_success, Toast.LENGTH_SHORT).show();
+                        }
                     } else {
                         Toast.makeText(mViewPrivateMessagesActivity, R.string.copy_failed, Toast.LENGTH_SHORT).show();
                     }

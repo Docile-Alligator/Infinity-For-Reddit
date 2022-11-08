@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +21,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.android.material.materialswitch.MaterialSwitch;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -29,9 +30,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.MultiredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.activities.SearchActivity;
+import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.activities.SubredditSelectionActivity;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -45,22 +46,30 @@ public class CustomizeMainPageTabsFragment extends Fragment {
     TextView infoTextView;
     @BindView(R.id.tab_count_linear_layout_customize_main_page_tabs_fragment)
     LinearLayout tabCountLinearLayout;
+    @BindView(R.id.tab_count_title_text_view_customize_main_page_tabs_fragment)
+    TextView tabCountTitleTextView;
     @BindView(R.id.tab_count_text_view_customize_main_page_tabs_fragment)
     TextView tabCountTextView;
     @BindView(R.id.show_tab_names_linear_layout_customize_main_page_tabs_fragment)
     LinearLayout showTabNamesLinearLayout;
+    @BindView(R.id.show_tab_names_title_text_view_customize_main_page_tabs_fragment)
+    TextView showTabNamesTitleTextView;
     @BindView(R.id.show_tab_names_switch_material_customize_main_page_tabs_fragment)
-    SwitchMaterial showTabNamesSwitch;
+    MaterialSwitch showTabNamesSwitch;
     @BindView(R.id.divider_1_customize_main_page_tabs_fragment)
     View divider1;
     @BindView(R.id.tab_1_group_summary_customize_main_page_tabs_fragment)
     TextView tab1GroupSummaryTextView;
     @BindView(R.id.tab_1_title_linear_layout_customize_main_page_tabs_fragment)
     LinearLayout tab1TitleLinearLayout;
+    @BindView(R.id.tab_1_title_title_text_view_customize_main_page_tabs_fragment)
+    TextView tab1TitleTitleTextView;
     @BindView(R.id.tab_1_title_summary_text_view_customize_main_page_tabs_fragment)
     TextView tab1TitleSummaryTextView;
     @BindView(R.id.tab_1_type_linear_layout_customize_main_page_tabs_fragment)
     LinearLayout tab1TypeLinearLayout;
+    @BindView(R.id.tab_1_type_title_text_view_customize_main_page_tabs_fragment)
+    TextView tab1TypeTitleTextView;
     @BindView(R.id.tab_1_type_summary_text_view_customize_main_page_tabs_fragment)
     TextView tab1TypeSummaryTextView;
     @BindView(R.id.tab_1_name_constraint_layout_customize_main_page_tabs_fragment)
@@ -77,10 +86,14 @@ public class CustomizeMainPageTabsFragment extends Fragment {
     TextView tab2GroupSummaryTextView;
     @BindView(R.id.tab_2_title_linear_layout_customize_main_page_tabs_fragment)
     LinearLayout tab2TitleLinearLayout;
+    @BindView(R.id.tab_2_title_title_text_view_customize_main_page_tabs_fragment)
+    TextView tab2TitleTitleTextView;
     @BindView(R.id.tab_2_title_summary_text_view_customize_main_page_tabs_fragment)
     TextView tab2TitleSummaryTextView;
     @BindView(R.id.tab_2_type_linear_layout_customize_main_page_tabs_fragment)
     LinearLayout tab2TypeLinearLayout;
+    @BindView(R.id.tab_2_type_title_text_view_customize_main_page_tabs_fragment)
+    TextView tab2TypeTitleTextView;
     @BindView(R.id.tab_2_type_summary_text_view_customize_main_page_tabs_fragment)
     TextView tab2TypeSummaryTextView;
     @BindView(R.id.tab_2_name_constraint_layout_customize_main_page_tabs_fragment)
@@ -97,10 +110,14 @@ public class CustomizeMainPageTabsFragment extends Fragment {
     TextView tab3GroupSummaryTextView;
     @BindView(R.id.tab_3_title_linear_layout_customize_main_page_tabs_fragment)
     LinearLayout tab3TitleLinearLayout;
+    @BindView(R.id.tab_3_title_title_text_view_customize_main_page_tabs_fragment)
+    TextView tab3TitleTitleTextView;
     @BindView(R.id.tab_3_title_summary_text_view_customize_main_page_tabs_fragment)
     TextView tab3TitleSummaryTextView;
     @BindView(R.id.tab_3_type_linear_layout_customize_main_page_tabs_fragment)
     LinearLayout tab3TypeLinearLayout;
+    @BindView(R.id.tab_3_type_title_text_view_customize_main_page_tabs_fragment)
+    TextView tab3TypeTitleTextView;
     @BindView(R.id.tab_3_type_summary_text_view_customize_main_page_tabs_fragment)
     TextView tab3TypeSummaryTextView;
     @BindView(R.id.tab_3_name_constraint_layout_customize_main_page_tabs_fragment)
@@ -119,24 +136,32 @@ public class CustomizeMainPageTabsFragment extends Fragment {
     TextView moreTabsInfoTextView;
     @BindView(R.id.show_favorite_multireddits_linear_layout_customize_main_page_tabs_fragment)
     LinearLayout showFavoriteMultiredditsLinearLayout;
+    @BindView(R.id.show_favorite_multireddits_title_text_view_customize_main_page_tabs_fragment)
+    TextView showFavoriteMultiredditsTitleTextView;
     @BindView(R.id.show_favorite_multireddits_switch_material_customize_main_page_tabs_fragment)
-    SwitchMaterial showFavoriteMultiredditsSwitchMaterial;
+    MaterialSwitch showFavoriteMultiredditsSwitchMaterial;
     @BindView(R.id.show_multireddits_linear_layout_customize_main_page_tabs_fragment)
     LinearLayout showMultiredditsLinearLayout;
+    @BindView(R.id.show_multireddits_title_text_view_customize_main_page_tabs_fragment)
+    TextView showMultiredditsTitleTextView;
     @BindView(R.id.show_multireddits_switch_material_customize_main_page_tabs_fragment)
-    SwitchMaterial showMultiredditsSwitchMaterial;
+    MaterialSwitch showMultiredditsSwitchMaterial;
     @BindView(R.id.show_subscribed_subreddits_linear_layout_customize_main_page_tabs_fragment)
     LinearLayout showSubscribedSubredditsLinearLayout;
+    @BindView(R.id.show_subscribed_subreddits_title_text_view_customize_main_page_tabs_fragment)
+    TextView showSubscribedSubredditsTitleTextView;
     @BindView(R.id.show_subscribed_subreddits_switch_material_customize_main_page_tabs_fragment)
-    SwitchMaterial showSubscribedSubredditsSwitchMaterial;
+    MaterialSwitch showSubscribedSubredditsSwitchMaterial;
     @BindView(R.id.show_favorite_subscribed_subreddits_linear_layout_customize_main_page_tabs_fragment)
     LinearLayout showFavoriteSubscribedSubredditsLinearLayout;
+    @BindView(R.id.show_favorite_subscribed_subreddits_title_text_view_customize_main_page_tabs_fragment)
+    TextView showFavoriteSubscribedSubredditsTitleTextView;
     @BindView(R.id.show_favorite_subscribed_subreddits_switch_material_customize_main_page_tabs_fragment)
-    SwitchMaterial showFavoriteSubscribedSubredditsSwitchMaterial;
+    MaterialSwitch showFavoriteSubscribedSubredditsSwitchMaterial;
     @Inject
     @Named("main_activity_tabs")
     SharedPreferences mainActivityTabsSharedPreferences;
-    private BaseActivity activity;
+    private SettingsActivity activity;
     private String accountName;
     private int tabCount;
     private String tab1CurrentTitle;
@@ -162,6 +187,9 @@ public class CustomizeMainPageTabsFragment extends Fragment {
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
         ButterKnife.bind(this, rootView);
+
+        rootView.setBackgroundColor(activity.customThemeWrapper.getBackgroundColor());
+        applyCustomTheme();
 
         if (activity.typeface != null) {
             Utils.setFontToAllTextViews(rootView, activity.typeface);
@@ -525,6 +553,50 @@ public class CustomizeMainPageTabsFragment extends Fragment {
         return rootView;
     }
 
+    private void applyCustomTheme() {
+        int primaryTextColor = activity.customThemeWrapper.getPrimaryTextColor();
+        int secondaryTextColor = activity.customThemeWrapper.getSecondaryTextColor();
+        int colorAccent = activity.customThemeWrapper.getColorAccent();
+        int primaryIconColor = activity.customThemeWrapper.getPrimaryIconColor();
+        infoTextView.setTextColor(secondaryTextColor);
+        Drawable infoDrawable = Utils.getTintedDrawable(activity, R.drawable.ic_info_preference_24dp, secondaryTextColor);
+        infoTextView.setCompoundDrawablesWithIntrinsicBounds(infoDrawable, null, null, null);
+        tabCountTitleTextView.setTextColor(primaryTextColor);
+        tabCountTextView.setTextColor(secondaryTextColor);
+        showTabNamesTitleTextView.setTextColor(primaryTextColor);
+        tab1GroupSummaryTextView.setTextColor(colorAccent);
+        tab1TitleTitleTextView.setTextColor(primaryTextColor);
+        tab1TitleSummaryTextView.setTextColor(secondaryTextColor);
+        tab1TypeTitleTextView.setTextColor(primaryTextColor);
+        tab1TypeSummaryTextView.setTextColor(secondaryTextColor);
+        tab1NameTitleTextView.setTextColor(primaryTextColor);
+        tab1NameSummaryTextView.setTextColor(secondaryTextColor);
+        tab1AddImageView.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        tab2GroupSummaryTextView.setTextColor(colorAccent);
+        tab2TitleTitleTextView.setTextColor(primaryTextColor);
+        tab2TitleSummaryTextView.setTextColor(secondaryTextColor);
+        tab2TypeTitleTextView.setTextColor(primaryTextColor);
+        tab2TypeSummaryTextView.setTextColor(secondaryTextColor);
+        tab2NameTitleTextView.setTextColor(primaryTextColor);
+        tab2NameSummaryTextView.setTextColor(secondaryTextColor);
+        tab2AddImageView.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        tab3GroupSummaryTextView.setTextColor(colorAccent);
+        tab3TitleTitleTextView.setTextColor(primaryTextColor);
+        tab3TitleSummaryTextView.setTextColor(secondaryTextColor);
+        tab3TypeTitleTextView.setTextColor(primaryTextColor);
+        tab3TypeSummaryTextView.setTextColor(secondaryTextColor);
+        tab3NameTitleTextView.setTextColor(primaryTextColor);
+        tab3NameSummaryTextView.setTextColor(secondaryTextColor);
+        tab3AddImageView.setColorFilter(primaryIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+        moreTabsGroupSummaryTextView.setTextColor(colorAccent);
+        moreTabsInfoTextView.setTextColor(secondaryTextColor);
+        moreTabsInfoTextView.setCompoundDrawablesWithIntrinsicBounds(infoDrawable, null, null, null);
+        showFavoriteMultiredditsTitleTextView.setTextColor(primaryTextColor);
+        showMultiredditsTitleTextView.setTextColor(primaryTextColor);
+        showSubscribedSubredditsTitleTextView.setTextColor(primaryTextColor);
+        showFavoriteSubscribedSubredditsTitleTextView.setTextColor(primaryTextColor);
+    }
+
     private void applyTab1NameView(ConstraintLayout constraintLayout, TextView titleTextView, int postType) {
         switch (postType) {
             case SharedPreferencesUtils.MAIN_PAGE_TAB_POST_TYPE_SUBREDDIT:
@@ -713,6 +785,6 @@ public class CustomizeMainPageTabsFragment extends Fragment {
     @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
-        activity = (BaseActivity) context;
+        activity = (SettingsActivity) context;
     }
 }

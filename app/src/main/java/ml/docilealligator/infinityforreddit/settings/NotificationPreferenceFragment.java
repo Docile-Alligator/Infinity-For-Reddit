@@ -39,10 +39,6 @@ public class NotificationPreferenceFragment extends CustomFontPreferenceFragment
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.notification_preferences, rootKey);
-        
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
 
         workManager = WorkManager.getInstance(activity);
 

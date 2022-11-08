@@ -26,6 +26,11 @@
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
+        app:key="hide_fab_in_post_feed"
+        app:title="@string/settings_hide_fab_in_post_feed" />
+
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+        app:defaultValue="false"
         app:key="bottom_app_bar"
         app:title="@string/settings_enable_bottom_app_bar_title" />
 

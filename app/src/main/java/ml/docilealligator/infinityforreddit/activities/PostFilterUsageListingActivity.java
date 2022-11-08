@@ -94,7 +94,7 @@ public class PostFilterUsageListingActivity extends BaseActivity {
             newPostFilterUsageBottomSheetFragment.show(getSupportFragmentManager(), newPostFilterUsageBottomSheetFragment.getTag());
         });
 
-        adapter = new PostFilterUsageRecyclerViewAdapter(this, postFilterUsage -> {
+        adapter = new PostFilterUsageRecyclerViewAdapter(this, customThemeWrapper, postFilterUsage -> {
             PostFilterUsageOptionsBottomSheetFragment postFilterUsageOptionsBottomSheetFragment = new PostFilterUsageOptionsBottomSheetFragment();
             Bundle bundle = new Bundle();
             bundle.putParcelable(PostFilterUsageOptionsBottomSheetFragment.EXTRA_POST_FILTER_USAGE, postFilterUsage);
@@ -213,5 +213,7 @@ public class PostFilterUsageListingActivity extends BaseActivity {
     @Override
     protected void applyCustomTheme() {
         applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
+        applyFABTheme(fab);
+        coordinatorLayout.setBackgroundColor(customThemeWrapper.getBackgroundColor());
     }
 }

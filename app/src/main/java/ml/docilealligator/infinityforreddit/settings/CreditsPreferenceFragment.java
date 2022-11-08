@@ -1,18 +1,15 @@
 package ml.docilealligator.infinityforreddit.settings;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
-import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
@@ -24,10 +21,6 @@ public class CreditsPreferenceFragment extends CustomFontPreferenceFragmentCompa
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.credits_preferences, rootKey);
-
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
 
         Preference iconForegroundPreference = findPreference(SharedPreferencesUtils.ICON_FOREGROUND_KEY);
         Preference iconBackgroundPreference = findPreference(SharedPreferencesUtils.ICON_BACKGROUND_KEY);

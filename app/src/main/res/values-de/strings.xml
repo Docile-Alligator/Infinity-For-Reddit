@@ -63,7 +63,6 @@
     <string name="action_see_removed">"Entfernten Beitrag ansehen"</string>
     <string name="action_set_wallpaper">"Als Hintergrundbild einstellen"</string>
     <string name="action_send_private_message">"Private Nachricht senden"</string>
-    <string name="action_block_user">"Benutzer blockieren"</string>
     <string name="parse_json_response_error">"Ein Fehler trat beim Abruf der JSON-Antwort auf"</string>
     <string name="retrieve_token_error">"Fehler beim Abruf des Tokens"</string>
     <string name="something_went_wrong">"Etwas ist schiefgelaufen. Versuche es später erneut."</string>
@@ -422,7 +421,6 @@ Tippen für Neuversuch."</string>
     <string name="settings_customize_dark_theme_title">"Dunkles Thema"</string>
     <string name="settings_customize_amoled_theme_title">"AMOLED-Thema"</string>
     <string name="settings_manage_themes_title">"Themen verwalten"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Benutzerdefinierte Themen können nicht auf die Einstellungs-Seite angewandt werden (ausgenommen Werkzeug-, Status- und Navigationsleiste)."</string>
     <string name="settings_advanced_master_title">"Erweitert"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Alle Subreddits aus der Datenbank löschen"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Alle Benutzer aus der Datenbank löschen"</string>
@@ -806,9 +804,6 @@ Sie ist nicht krank oder so, aber sie könnte sich definitiv bessern."</string>
     <string name="top_score">"%1$s Punkte"</string>
     <string name="login_activity_2fa_prompt">"Wenn du die Zwei-Faktor-Authentifizierung aktiviert hast, tippe dein Passwort wie folgt ein: &lt;passwort&gt;:&lt;2FA code&gt;.
 Beispiel: DeinPasswort:123456"</string>
-    <string name="block_user">"Benutzer blockieren"</string>
-    <string name="block_user_success">"Blockiert"</string>
-    <string name="block_user_failed">"Blockieren des Benutzers fehlgeschlagen"</string>
     <string name="submit_crosspost_activity_label">"Crossposten"</string>
     <string name="give_award_activity_label">"Auszeichnung verleihen"</string>
     <string name="action_crosspost">"Crossposten"</string>

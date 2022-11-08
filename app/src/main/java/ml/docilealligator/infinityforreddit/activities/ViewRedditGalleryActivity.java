@@ -76,6 +76,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     private String subredditName;
     private boolean isNsfw;
     private boolean useBottomAppBar;
+    private boolean isActionBarHidden = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -277,6 +278,14 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     @Override
     public void setCustomFont(Typeface typeface, Typeface titleTypeface, Typeface contentTypeface) {
         this.typeface = typeface;
+    }
+
+    public boolean isActionBarHidden() {
+        return isActionBarHidden;
+    }
+
+    public void setActionBarHidden(boolean isActionBarHidden) {
+        this.isActionBarHidden = isActionBarHidden;
     }
 
     private class SectionsPagerAdapter extends FragmentStatePagerAdapter {

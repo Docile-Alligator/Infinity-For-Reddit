@@ -1,8 +1,7 @@
 package ml.docilealligator.infinityforreddit.fragments;
 
-
-import static im.ene.toro.media.PlaybackInfo.INDEX_UNSET;
-import static im.ene.toro.media.PlaybackInfo.TIME_UNSET;
+import static ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo.INDEX_UNSET;
+import static ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo.TIME_UNSET;
 
 import android.content.Context;
 import android.content.Intent;
@@ -67,9 +66,6 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import im.ene.toro.exoplayer.ExoCreator;
-import im.ene.toro.media.PlaybackInfo;
-import im.ene.toro.media.VolumeInfo;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.FetchPostFilterReadPostsAndConcatenatedSubredditNames;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
@@ -85,6 +81,7 @@ import ml.docilealligator.infinityforreddit.adapters.Paging3LoadingStateAdapter;
 import ml.docilealligator.infinityforreddit.adapters.PostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.CustomToroContainer;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
@@ -137,6 +134,9 @@ import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.videoautoplay.ExoCreator;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
 import retrofit2.Retrofit;
 
 
@@ -194,6 +194,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Inject
     @Named("default")
     SharedPreferences mSharedPreferences;
+    @Inject
+    @Named("current_account")
+    SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     @Named("sort_type")
     SharedPreferences mSortTypeSharedPreferences;
@@ -458,7 +461,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
+                    mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void typeChipClicked(int filter) {
@@ -535,7 +538,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, displaySubredditName,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
+                    mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void typeChipClicked(int filter) {
@@ -606,7 +609,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
+                    mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void typeChipClicked(int filter) {
@@ -671,7 +674,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
+                    mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void typeChipClicked(int filter) {
@@ -732,7 +735,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
+                    mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void typeChipClicked(int filter) {
@@ -792,7 +795,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
+                    mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void typeChipClicked(int filter) {
@@ -849,7 +852,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
-                    mSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
+                    mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
                 @Override
                 public void typeChipClicked(int filter) {
@@ -1072,6 +1075,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 if (touchHelper != null) {
+                    exceedThreshold = false;
                     touchHelper.attachToRecyclerView(null);
                     touchHelper.attachToRecyclerView(mPostRecyclerView);
                     if (mAdapter != null) {
@@ -1084,55 +1088,64 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
 
-                View itemView = viewHolder.itemView;
-                int horizontalOffset = (int) Utils.convertDpToPixel(16, activity);
-                if (dX > 0) {
-                    if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
-                        if (!exceedThreshold) {
-                            exceedThreshold = true;
-                            if (vibrateWhenActionTriggered) {
-                                viewHolder.itemView.setHapticFeedbackEnabled(true);
-                                viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                if (isCurrentlyActive) {
+                    View itemView = viewHolder.itemView;
+                    int horizontalOffset = (int) Utils.convertDpToPixel(16, activity);
+                    if (dX > 0) {
+                        if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
+                            if (!exceedThreshold) {
+                                exceedThreshold = true;
+                                if (vibrateWhenActionTriggered) {
+                                    viewHolder.itemView.setHapticFeedbackEnabled(true);
+                                    viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                }
                             }
+                            backgroundSwipeRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                        } else {
+                            exceedThreshold = false;
+                            backgroundSwipeRight.setBounds(0, 0, 0, 0);
                         }
-                        backgroundSwipeRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                    } else {
-                        exceedThreshold = false;
-                        backgroundSwipeRight.setBounds(0, 0, 0, 0);
-                    }
 
-                    drawableSwipeRight.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableSwipeRight.getIntrinsicWidth(),
-                            (itemView.getBottom() + itemView.getTop() - drawableSwipeRight.getIntrinsicHeight()) / 2,
-                            itemView.getLeft() + ((int) dX) - horizontalOffset,
-                            (itemView.getBottom() + itemView.getTop() + drawableSwipeRight.getIntrinsicHeight()) / 2);
-                    backgroundSwipeRight.draw(c);
-                    drawableSwipeRight.draw(c);
-                } else if (dX < 0) {
-                    if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
-                        if (!exceedThreshold) {
-                            exceedThreshold = true;
-                            if (vibrateWhenActionTriggered) {
-                                viewHolder.itemView.setHapticFeedbackEnabled(true);
-                                viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                        drawableSwipeRight.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableSwipeRight.getIntrinsicWidth(),
+                                (itemView.getBottom() + itemView.getTop() - drawableSwipeRight.getIntrinsicHeight()) / 2,
+                                itemView.getLeft() + ((int) dX) - horizontalOffset,
+                                (itemView.getBottom() + itemView.getTop() + drawableSwipeRight.getIntrinsicHeight()) / 2);
+                        backgroundSwipeRight.draw(c);
+                        drawableSwipeRight.draw(c);
+                    } else if (dX < 0) {
+                        if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
+                            if (!exceedThreshold) {
+                                exceedThreshold = true;
+                                if (vibrateWhenActionTriggered) {
+                                    viewHolder.itemView.setHapticFeedbackEnabled(true);
+                                    viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                }
                             }
+                            backgroundSwipeLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                        } else {
+                            exceedThreshold = false;
+                            backgroundSwipeLeft.setBounds(0, 0, 0, 0);
                         }
-                        backgroundSwipeLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                    } else {
-                        exceedThreshold = false;
-                        backgroundSwipeLeft.setBounds(0, 0, 0, 0);
+                        drawableSwipeLeft.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
+                                (itemView.getBottom() + itemView.getTop() - drawableSwipeLeft.getIntrinsicHeight()) / 2,
+                                itemView.getRight() + ((int) dX) + horizontalOffset + drawableSwipeLeft.getIntrinsicWidth(),
+                                (itemView.getBottom() + itemView.getTop() + drawableSwipeLeft.getIntrinsicHeight()) / 2);
+                        backgroundSwipeLeft.draw(c);
+                        drawableSwipeLeft.draw(c);
                     }
-                    drawableSwipeLeft.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
-                            (itemView.getBottom() + itemView.getTop() - drawableSwipeLeft.getIntrinsicHeight()) / 2,
-                            itemView.getRight() + ((int) dX) + horizontalOffset + drawableSwipeLeft.getIntrinsicWidth(),
-                            (itemView.getBottom() + itemView.getTop() + drawableSwipeLeft.getIntrinsicHeight()) / 2);
-                    backgroundSwipeLeft.draw(c);
-                    drawableSwipeLeft.draw(c);
+                } else {
+                    if (exceedThreshold) {
+                        mAdapter.onItemSwipe(viewHolder, dX > 0 ? ItemTouchHelper.END : ItemTouchHelper.START, swipeLeftAction, swipeRightAction);
+                        exceedThreshold = false;
+                    }
                 }
+
+
             }
 
             @Override
             public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
-                return swipeActionThreshold;
+                return 100;
             }
         });
 
@@ -1313,6 +1326,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             return true;
         } else if (item.getItemId() == R.id.action_filter_posts_post_fragment) {
             filterPosts();
+            return true;
+        } else if (item.getItemId() == R.id.action_more_options_post_fragment) {
+            FABMoreOptionsBottomSheetFragment fabMoreOptionsBottomSheetFragment= new FABMoreOptionsBottomSheetFragment();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(FABMoreOptionsBottomSheetFragment.EXTRA_ANONYMOUS_MODE, accessToken == null);
+            fabMoreOptionsBottomSheetFragment.setArguments(bundle);
+            fabMoreOptionsBottomSheetFragment.show(activity.getSupportFragmentManager(), fabMoreOptionsBottomSheetFragment.getTag());
             return true;
         }
         return false;
@@ -2025,7 +2045,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Subscribe
     public void onNeedForPostListFromPostRecyclerViewAdapterEvent(NeedForPostListFromPostFragmentEvent event) {
         if (postFragmentId == event.postFragmentTimeId && mAdapter != null) {
-            EventBus.getDefault().post(new ProvidePostListToViewPostDetailActivityEvent(postFragmentId, new ArrayList<>(mAdapter.snapshot())));
+            EventBus.getDefault().post(new ProvidePostListToViewPostDetailActivityEvent(postFragmentId,
+                    new ArrayList<>(mAdapter.snapshot()), postType, subredditName, username, where,
+                    multiRedditPath, query, trendingSource, postFilter, sortType, readPosts));
         }
     }
 

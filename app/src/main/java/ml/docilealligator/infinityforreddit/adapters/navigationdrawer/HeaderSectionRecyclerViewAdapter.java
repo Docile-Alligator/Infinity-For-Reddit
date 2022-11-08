@@ -29,11 +29,13 @@ import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import pl.droidsonroids.gif.GifImageView;
 
 public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private BaseActivity baseActivity;
+    private CustomThemeWrapper customThemeWrapper;
     private Resources resources;
     private RequestManager glide;
     private String accountName;
@@ -45,13 +47,16 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     private boolean isLoggedIn;
     private boolean isInMainPage = true;
     private PageToggle pageToggle;
+    private boolean hideKarma;
 
-    public HeaderSectionRecyclerViewAdapter(BaseActivity baseActivity, RequestManager glide, String accountName,
+    public HeaderSectionRecyclerViewAdapter(BaseActivity baseActivity, CustomThemeWrapper customThemeWrapper,
+                                            RequestManager glide, String accountName,
                                             SharedPreferences sharedPreferences,
                                             SharedPreferences navigationDrawerSharedPreferences,
                                             SharedPreferences securitySharedPreferences,
                                             PageToggle pageToggle) {
         this.baseActivity = baseActivity;
+        this.customThemeWrapper = customThemeWrapper;
         resources = baseActivity.getResources();
         this.glide = glide;
         this.accountName = accountName;
@@ -60,6 +65,7 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         requireAuthToAccountSection = securitySharedPreferences.getBoolean(SharedPreferencesUtils.REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER, false);
         showAvatarOnTheRightInTheNavigationDrawer = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_AVATAR_ON_THE_RIGHT, false);
         showAvatarOnTheRightInTheNavigationDrawer = navigationDrawerSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_AVATAR_ON_THE_RIGHT, false);
+        this.hideKarma = navigationDrawerSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_ACCOUNT_KARMA_NAV_BAR, false);
     }
 
     @NonNull
@@ -80,7 +86,15 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             }
             ((NavHeaderViewHolder) holder).profileImageView.setLayoutParams(params);
             if (isLoggedIn) {
-                ((NavHeaderViewHolder) holder).karmaTextView.setText(baseActivity.getString(R.string.karma_info, karma));
+                if (hideKarma) {
+                    int karmaTextHeight = ((NavHeaderViewHolder) holder).karmaTextView.getHeight();
+                    ((NavHeaderViewHolder) holder).karmaTextView.setVisibility(View.GONE);
+                    ((NavHeaderViewHolder) holder).accountNameTextView.setTranslationY(karmaTextHeight / 2);
+                } else {
+                    ((NavHeaderViewHolder) holder).karmaTextView.setVisibility(View.VISIBLE);
+                    ((NavHeaderViewHolder) holder).karmaTextView.setText(baseActivity.getString(R.string.karma_info, karma));
+                    ((NavHeaderViewHolder) holder).accountNameTextView.setTranslationY(0);
+                }
                 ((NavHeaderViewHolder) holder).accountNameTextView.setText(accountName);
                 if (profileImageUrl != null && !profileImageUrl.equals("")) {
                     glide.load(profileImageUrl)
@@ -186,6 +200,11 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         this.showAvatarOnTheRightInTheNavigationDrawer = showAvatarOnTheRightInTheNavigationDrawer;
     }
 
+    public void setHideKarma(boolean hideKarma) {
+        this.hideKarma = hideKarma;
+        notifyItemChanged(0);
+    }
+
     class NavHeaderViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.name_text_view_nav_header_main)
         TextView accountNameTextView;
@@ -206,6 +225,11 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
                 accountNameTextView.setTypeface(baseActivity.typeface);
                 karmaTextView.setTypeface(baseActivity.typeface);
             }
+
+            itemView.setBackgroundColor(customThemeWrapper.getColorPrimary());
+            accountNameTextView.setTextColor(customThemeWrapper.getToolbarPrimaryTextAndIconColor());
+            karmaTextView.setTextColor(customThemeWrapper.getToolbarSecondaryTextColor());
+            dropIconImageView.setColorFilter(customThemeWrapper.getToolbarPrimaryTextAndIconColor(), android.graphics.PorterDuff.Mode.SRC_IN);
         }
     }
 

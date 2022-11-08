@@ -14,15 +14,15 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.settings.Acknowledgement;
 
 public class AcknowledgementRecyclerViewAdapter extends RecyclerView.Adapter<AcknowledgementRecyclerViewAdapter.AcknowledgementViewHolder> {
     private ArrayList<Acknowledgement> acknowledgements;
-    private BaseActivity activity;
+    private SettingsActivity activity;
 
-    public AcknowledgementRecyclerViewAdapter(BaseActivity activity, ArrayList<Acknowledgement> acknowledgements) {
+    public AcknowledgementRecyclerViewAdapter(SettingsActivity activity, ArrayList<Acknowledgement> acknowledgements) {
         this.activity = activity;
         this.acknowledgements = acknowledgements;
     }
@@ -65,6 +65,9 @@ public class AcknowledgementRecyclerViewAdapter extends RecyclerView.Adapter<Ack
             super(itemView);
             ButterKnife.bind(this, itemView);
             this.itemView = itemView;
+
+            nameTextView.setTextColor(activity.customThemeWrapper.getPrimaryTextColor());
+            introductionTextView.setTextColor(activity.customThemeWrapper.getSecondaryTextColor());
 
             if (activity.typeface != null) {
                 nameTextView.setTypeface(activity.typeface);

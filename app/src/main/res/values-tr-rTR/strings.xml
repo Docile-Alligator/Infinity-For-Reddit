@@ -61,7 +61,6 @@
     <string name="action_see_removed">"Kaldırılanları Göster"</string>
     <string name="action_set_wallpaper">"Duvar Kağıdı Yap"</string>
     <string name="action_send_private_message">"Özel Mesaj Gönder"</string>
-    <string name="action_block_user">"Kullanıcıyı Engelle"</string>
     <string name="parse_json_response_error">"JSON yanıtı ayrıştırılırken hata oluştu"</string>
     <string name="retrieve_token_error">"Token alınırken hata oluştu"</string>
     <string name="something_went_wrong">"Bir şeyler yanlış gitti. Daha sonra tekrar deneyin."</string>
@@ -407,7 +406,6 @@ Tekrar denemek için tıklayın."</string>
     <string name="settings_customize_dark_theme_title">"Koyu Tema"</string>
     <string name="settings_customize_amoled_theme_title">"Amoled Tema"</string>
     <string name="settings_manage_themes_title">"Temaları Yönetin"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Özel temalar ayarlar sayfasına uygulanamaz (araç çubuğu, durum çubuğu ve navigasyon çubuğu hariç)."</string>
     <string name="settings_advanced_master_title">"Gelişmiş"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Veritabanındaki Tüm Subredditleri Sil"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Veritabanındaki Tüm Kullanıcıları Sil"</string>
@@ -765,9 +763,6 @@ Amoled Tema Şablonu Oluştur"</string>
     <string name="top_score">"%1$s puan"</string>
     <string name="login_activity_2fa_prompt">"2 faktörlü kimlik doğrulamasını etkinleştirdiyseniz, lütfen şifrenizi aşağıdaki gibi yazınız: &lt;parola&gt;: &lt;2FA code&gt;.
 Örnek: yourpass:123456"</string>
-    <string name="block_user">"Kullanıcıyı Engelle"</string>
-    <string name="block_user_success">"Engellendi"</string>
-    <string name="block_user_failed">"Engelleme başarısız"</string>
     <string name="submit_crosspost_activity_label">"Çapraz Gönderi"</string>
     <string name="give_award_activity_label">"Ödül Ver"</string>
     <string name="action_crosspost">"Çapraz Gönderi"</string>

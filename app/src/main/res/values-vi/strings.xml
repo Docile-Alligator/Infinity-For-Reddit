@@ -61,7 +61,6 @@
     <string name="action_see_removed">"Xem bài đăng đã bị xóa"</string>
     <string name="action_set_wallpaper">"Đặt làm hình nền"</string>
     <string name="action_send_private_message">"Gửi tin nhắn riêng tư"</string>
-    <string name="action_block_user">"Chặn người dùng"</string>
     <string name="parse_json_response_error">"Lỗi khi phân tích phản hồi JSON"</string>
     <string name="retrieve_token_error">"Lỗi khi truy xuất mã thông báo"</string>
     <string name="something_went_wrong">"Đã xảy ra lỗi. Thử lại sau"</string>
@@ -401,7 +400,6 @@ Nhấn để thử lại."</string>
     <string name="settings_customize_dark_theme_title">"Chủ đề tối"</string>
     <string name="settings_customize_amoled_theme_title">"Chủ đề Amoled"</string>
     <string name="settings_manage_themes_title">"Quản lý chủ đề"</string>
-    <string name="settings_custom_theme_cannot_apply_to_settings_page_summary">"Các chủ đề tuỳ chỉnh không thể được áp dụng cho trang cài đặt (trừ thanh công cụ, thanh trạng thái và thanh điều hướng)."</string>
     <string name="settings_advanced_master_title">"Nâng cao"</string>
     <string name="settings_delete_all_subreddits_data_in_database_title">"Xoá tất cả subreddit trong cơ sở dữ liệu"</string>
     <string name="settings_delete_all_users_data_in_database_title">"Xoá tất cả người dùng trong cơ sở dữ liệu"</string>
@@ -756,9 +754,6 @@ Cô ta không ốm hay gì cả, nhưng cô ấy chắc chắn có thể khá h�
     <string name="top_score">"%1$s điểm"</string>
     <string name="login_activity_2fa_prompt">"Nếu bạn đã bật xác thực 2 yếu tố, hãy vui lòng nhập mật khẩu như sau: &lt;mật khẩu&gt;:&lt;mã 2FA&gt;.
 Ví dụ: yourpass:123456"</string>
-    <string name="block_user">"Chặn người dùng"</string>
-    <string name="block_user_success">"Đã chặn"</string>
-    <string name="block_user_failed">"Chặn người dùng thất bại"</string>
     <string name="submit_crosspost_activity_label">"Đăng chéo"</string>
     <string name="give_award_activity_label">"Cho giải thưởng"</string>
     <string name="action_crosspost">"Đăng chéo"</string>

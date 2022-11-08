@@ -34,8 +34,8 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
                                                      ItemClickListener itemClickListener) {
         RequestManager glide = Glide.with(baseActivity);
 
-        headerSectionRecyclerViewAdapter = new HeaderSectionRecyclerViewAdapter(baseActivity, glide, accountName,
-                sharedPreferences, navigationDrawerSharedPreferences, securitySharedPreferences,
+        headerSectionRecyclerViewAdapter = new HeaderSectionRecyclerViewAdapter(baseActivity, customThemeWrapper,
+                glide, accountName, sharedPreferences, navigationDrawerSharedPreferences, securitySharedPreferences,
                 new HeaderSectionRecyclerViewAdapter.PageToggle() {
                     @Override
                     public void openAccountSection() {
@@ -133,6 +133,10 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
 
     public void setSubscribedSubreddits(List<SubscribedSubredditData> subscribedSubreddits) {
         subscribedSubredditsRecyclerViewAdapter.setSubscribedSubreddits(subscribedSubreddits);
+    }
+
+    public void setHideKarma(boolean hideKarma) {
+        headerSectionRecyclerViewAdapter.setHideKarma(hideKarma);
     }
 
     public interface ItemClickListener {

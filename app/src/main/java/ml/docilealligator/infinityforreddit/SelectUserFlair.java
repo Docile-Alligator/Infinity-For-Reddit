@@ -26,15 +26,17 @@ public class SelectUserFlair {
         void failed(String errorMessage);
     }
 
-    public static void selectUserFlair(Retrofit oauthRetrofit, String accessToken, UserFlair userFlair,
+    public static void selectUserFlair(Retrofit oauthRetrofit, String accessToken, @Nullable UserFlair userFlair,
                                        String subredditName, String accountName, SelectUserFlairListener selectUserFlairListener) {
         Map<String, String> params = new HashMap<>();
         params.put(APIUtils.API_TYPE_KEY, APIUtils.API_TYPE_JSON);
-        params.put(APIUtils.FLAIR_TEMPLATE_ID_KEY, userFlair.getId());
+        if (userFlair != null) {
+            params.put(APIUtils.FLAIR_TEMPLATE_ID_KEY, userFlair.getId());
+            params.put(APIUtils.TEXT_KEY, userFlair.getText());
+        }
         params.put(APIUtils.NAME_KEY, accountName);
-        params.put(APIUtils.TEXT_KEY, userFlair.getText());
         oauthRetrofit.create(RedditAPI.class).selectUserFlair(APIUtils.getOAuthHeader(accessToken), params, subredditName)
-                .enqueue(new Callback<String>() {
+                .enqueue(new Callback<>() {
                     @Override
                     public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                         if (response.isSuccessful()) {

@@ -26,10 +26,6 @@ public class CommentPreferenceFragment extends CustomFontPreferenceFragmentCompa
 
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
 
-        if (activity.typeface != null) {
-            setFont(activity.typeface);
-        }
-
         SeekBarPreference showFewerToolbarOptionsThresholdSeekBarPreference = findPreference(SharedPreferencesUtils.SHOW_FEWER_TOOLBAR_OPTIONS_THRESHOLD);
 
         if (showFewerToolbarOptionsThresholdSeekBarPreference != null) {
