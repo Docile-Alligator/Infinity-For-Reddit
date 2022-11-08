@@ -1025,7 +1025,7 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
                 post.setFlair(event.post.getFlair());
                 post.setSaved(event.post.isSaved());
                 if (event.post.isRead()) {
-                    post.markAsRead(true);
+                    post.markAsRead();
                 }
                 mAdapter.notifyItemChanged(event.positionInList);
             }

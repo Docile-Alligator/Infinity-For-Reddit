@@ -1773,7 +1773,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 post.setFlair(event.post.getFlair());
                 post.setSaved(event.post.isSaved());
                 if (event.post.isRead()) {
-                    post.markAsRead(true);
+                    post.markAsRead();
                 }
                 mAdapter.notifyItemChanged(event.positionInList);
             }
