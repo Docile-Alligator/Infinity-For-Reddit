@@ -96,6 +96,7 @@
     <string name="action_go_to_wiki">Go to Wiki</string>
     <string name="action_playback_speed">Playback Speed</string>
     <string name="action_contact_mods">Contact Mods</string>
+    <string name="action_more_options">More Options</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -645,6 +646,7 @@
     <string name="settings_post_feed_max_resolution_title">Post Feed Preview Max Resolution (Width * Height)</string>
     <string name="settings_reddit_video_default_resolution">Reddit Video Default Resolution</string>
     <string name="settings_easier_to_watch_in_full_screen_title">Easier to Watch in Full Screen</string>
+    <string name="settings_hide_fab_in_post_feed">Hide FAB in Post Feed</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -1307,5 +1309,10 @@
 
     <string name="exo_controls_volume_up_description">Volume Up</string>
     <string name="exo_controls_volume_off_description">Volume Off</string>
+
+    <string name="invalid_regex">Invalid regex pattern</string>
+
+    <string name="load_more_posts_failed">Failed to load more posts.\nTap to retry.</string>
+    <string name="no_more_posts">No more posts</string>
 
 </resources>

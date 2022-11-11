@@ -21,7 +21,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.android.material.materialswitch.MaterialSwitch;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -55,7 +55,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
     @BindView(R.id.show_tab_names_title_text_view_customize_main_page_tabs_fragment)
     TextView showTabNamesTitleTextView;
     @BindView(R.id.show_tab_names_switch_material_customize_main_page_tabs_fragment)
-    SwitchMaterial showTabNamesSwitch;
+    MaterialSwitch showTabNamesSwitch;
     @BindView(R.id.divider_1_customize_main_page_tabs_fragment)
     View divider1;
     @BindView(R.id.tab_1_group_summary_customize_main_page_tabs_fragment)
@@ -139,25 +139,25 @@ public class CustomizeMainPageTabsFragment extends Fragment {
     @BindView(R.id.show_favorite_multireddits_title_text_view_customize_main_page_tabs_fragment)
     TextView showFavoriteMultiredditsTitleTextView;
     @BindView(R.id.show_favorite_multireddits_switch_material_customize_main_page_tabs_fragment)
-    SwitchMaterial showFavoriteMultiredditsSwitchMaterial;
+    MaterialSwitch showFavoriteMultiredditsSwitchMaterial;
     @BindView(R.id.show_multireddits_linear_layout_customize_main_page_tabs_fragment)
     LinearLayout showMultiredditsLinearLayout;
     @BindView(R.id.show_multireddits_title_text_view_customize_main_page_tabs_fragment)
     TextView showMultiredditsTitleTextView;
     @BindView(R.id.show_multireddits_switch_material_customize_main_page_tabs_fragment)
-    SwitchMaterial showMultiredditsSwitchMaterial;
+    MaterialSwitch showMultiredditsSwitchMaterial;
     @BindView(R.id.show_subscribed_subreddits_linear_layout_customize_main_page_tabs_fragment)
     LinearLayout showSubscribedSubredditsLinearLayout;
     @BindView(R.id.show_subscribed_subreddits_title_text_view_customize_main_page_tabs_fragment)
     TextView showSubscribedSubredditsTitleTextView;
     @BindView(R.id.show_subscribed_subreddits_switch_material_customize_main_page_tabs_fragment)
-    SwitchMaterial showSubscribedSubredditsSwitchMaterial;
+    MaterialSwitch showSubscribedSubredditsSwitchMaterial;
     @BindView(R.id.show_favorite_subscribed_subreddits_linear_layout_customize_main_page_tabs_fragment)
     LinearLayout showFavoriteSubscribedSubredditsLinearLayout;
     @BindView(R.id.show_favorite_subscribed_subreddits_title_text_view_customize_main_page_tabs_fragment)
     TextView showFavoriteSubscribedSubredditsTitleTextView;
     @BindView(R.id.show_favorite_subscribed_subreddits_switch_material_customize_main_page_tabs_fragment)
-    SwitchMaterial showFavoriteSubscribedSubredditsSwitchMaterial;
+    MaterialSwitch showFavoriteSubscribedSubredditsSwitchMaterial;
     @Inject
     @Named("main_activity_tabs")
     SharedPreferences mainActivityTabsSharedPreferences;

@@ -28,7 +28,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class HistoryPostPagingSource extends ListenableFuturePagingSource<String, Post> {
-    public static final int TYPE_READ_POSTS = 0;
+    public static final int TYPE_READ_POSTS = 100;
 
     private Retrofit retrofit;
     private Executor executor;
@@ -111,8 +111,8 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
     }
 
     private ListenableFuture<LoadResult<String, Post>> loadHomePosts(@NonNull LoadParams<String> loadParams, RedditDataRoomDatabase redditDataRoomDatabase) {
-        String before = loadParams.getKey();
-        ListenableFuture<List<ReadPost>> readPosts = redditDataRoomDatabase.readPostDao().getAllReadPostsListenableFuture(username, Long.parseLong(before == null ? Long.toString(System.currentTimeMillis()) : before));
+        String after = loadParams.getKey();
+        ListenableFuture<List<ReadPost>> readPosts = redditDataRoomDatabase.readPostDao().getAllReadPostsListenableFuture(username, Long.parseLong(after == null ? "0" : after));
 
         ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.transform(readPosts, this::transformData, executor);
 

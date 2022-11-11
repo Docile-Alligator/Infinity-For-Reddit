@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.android.material.materialswitch.MaterialSwitch;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -40,25 +40,25 @@ public class NsfwAndSpoilerFragment extends Fragment {
     @BindView(R.id.enable_nsfw_text_view_nsfw_and_spoiler_fragment)
     TextView enableNsfwTextView;
     @BindView(R.id.enable_nsfw_switch_nsfw_and_spoiler_fragment)
-    SwitchMaterial enableNsfwSwitchMaterial;
+    MaterialSwitch enableNsfwSwitchMaterial;
     @BindView(R.id.blur_nsfw_linear_layout_nsfw_and_spoiler_fragment)
     LinearLayout blurNsfwLinearLayout;
     @BindView(R.id.blur_nsfw_text_view_nsfw_and_spoiler_fragment)
     TextView blurNsfwTextView;
     @BindView(R.id.blur_nsfw_switch_nsfw_and_spoiler_fragment)
-    SwitchMaterial blurNsfwSwitchMaterial;
+    MaterialSwitch blurNsfwSwitchMaterial;
     @BindView(R.id.do_not_blur_nsfw_in_nsfw_subreddits_linear_layout_nsfw_and_spoiler_fragment)
     LinearLayout doNotBlurNsfwInNsfwSubredditsLinearLayout;
     @BindView(R.id.do_not_blur_nsfw_text_view_nsfw_and_spoiler_fragment)
     TextView doNotBlurNsfwInNsfwSubredditsTextView;
     @BindView(R.id.do_not_blur_nsfw_in_nsfw_subreddits_switch_nsfw_and_spoiler_fragment)
-    SwitchMaterial doNotBlurNsfwInNsfwSubredditsSwitch;
+    MaterialSwitch doNotBlurNsfwInNsfwSubredditsSwitch;
     @BindView(R.id.blur_spoiler_linear_layout_nsfw_and_spoiler_fragment)
     LinearLayout blurSpoilerLinearLayout;
     @BindView(R.id.blur_spoiler_text_view_nsfw_and_spoiler_fragment)
     TextView blurSpoilerTextView;
     @BindView(R.id.blur_spoiler_switch_nsfw_and_spoiler_fragment)
-    SwitchMaterial blurSpoilerSwitchMaterial;
+    MaterialSwitch blurSpoilerSwitchMaterial;
     @BindView(R.id.dangerous_text_view_nsfw_and_spoiler_fragment)
     TextView dangerousTextView;
     @BindView(R.id.disable_nsfw_forever_linear_layout_nsfw_and_spoiler_fragment)
@@ -66,7 +66,7 @@ public class NsfwAndSpoilerFragment extends Fragment {
     @BindView(R.id.disable_nsfw_forever_text_view_nsfw_and_spoiler_fragment)
     TextView disableNsfwForeverTextView;
     @BindView(R.id.disable_nsfw_forever_switch_nsfw_and_spoiler_fragment)
-    SwitchMaterial disableNsfwForeverSwitchMaterial;
+    MaterialSwitch disableNsfwForeverSwitchMaterial;
     @Inject
     @Named("default")
     SharedPreferences sharedPreferences;

@@ -47,7 +47,7 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
     private boolean isLoggedIn;
     private boolean isInMainPage = true;
     private PageToggle pageToggle;
-    private boolean showKarma;
+    private boolean hideKarma;
 
     public HeaderSectionRecyclerViewAdapter(BaseActivity baseActivity, CustomThemeWrapper customThemeWrapper,
                                             RequestManager glide, String accountName,
@@ -65,7 +65,7 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
         requireAuthToAccountSection = securitySharedPreferences.getBoolean(SharedPreferencesUtils.REQUIRE_AUTHENTICATION_TO_GO_TO_ACCOUNT_SECTION_IN_NAVIGATION_DRAWER, false);
         showAvatarOnTheRightInTheNavigationDrawer = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_AVATAR_ON_THE_RIGHT, false);
         showAvatarOnTheRightInTheNavigationDrawer = navigationDrawerSharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_AVATAR_ON_THE_RIGHT, false);
-        this.showKarma = !navigationDrawerSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_ACCOUNT_KARMA_NAV_BAR, false);
+        this.hideKarma = navigationDrawerSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_ACCOUNT_KARMA_NAV_BAR, false);
     }
 
     @NonNull
@@ -86,11 +86,14 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
             }
             ((NavHeaderViewHolder) holder).profileImageView.setLayoutParams(params);
             if (isLoggedIn) {
-                if (showKarma) {
-                    ((NavHeaderViewHolder) holder).karmaTextView.setText(baseActivity.getString(R.string.karma_info, karma));
-                } else {
+                if (hideKarma) {
                     int karmaTextHeight = ((NavHeaderViewHolder) holder).karmaTextView.getHeight();
+                    ((NavHeaderViewHolder) holder).karmaTextView.setVisibility(View.GONE);
                     ((NavHeaderViewHolder) holder).accountNameTextView.setTranslationY(karmaTextHeight / 2);
+                } else {
+                    ((NavHeaderViewHolder) holder).karmaTextView.setVisibility(View.VISIBLE);
+                    ((NavHeaderViewHolder) holder).karmaTextView.setText(baseActivity.getString(R.string.karma_info, karma));
+                    ((NavHeaderViewHolder) holder).accountNameTextView.setTranslationY(0);
                 }
                 ((NavHeaderViewHolder) holder).accountNameTextView.setText(accountName);
                 if (profileImageUrl != null && !profileImageUrl.equals("")) {
@@ -195,6 +198,11 @@ public class HeaderSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
     public void setShowAvatarOnTheRightInTheNavigationDrawer(boolean showAvatarOnTheRightInTheNavigationDrawer) {
         this.showAvatarOnTheRightInTheNavigationDrawer = showAvatarOnTheRightInTheNavigationDrawer;
+    }
+
+    public void setHideKarma(boolean hideKarma) {
+        this.hideKarma = hideKarma;
+        notifyItemChanged(0);
     }
 
     class NavHeaderViewHolder extends RecyclerView.ViewHolder {

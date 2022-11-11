@@ -17,7 +17,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -287,7 +286,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (!((mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_LANDSCAPE_MODE, true)
                 && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
                 || (mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_PORTRAIT_MODE, false)
-                && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE))) {
+                && getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT))) {
             if (mCommentsRecyclerView != null) {
                 mCommentsRecyclerView.setVisibility(View.GONE);
                 mCommentsRecyclerView = null;
@@ -459,6 +458,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 if (touchHelper != null) {
+                    exceedThreshold = false;
                     touchHelper.attachToRecyclerView(null);
                     touchHelper.attachToRecyclerView((mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView));
                     if (mCommentsAdapter != null) {
@@ -471,55 +471,64 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
 
-                View itemView = viewHolder.itemView;
-                int horizontalOffset = (int) Utils.convertDpToPixel(16, activity);
-                if (dX > 0) {
-                    if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
-                        if (!exceedThreshold) {
-                            exceedThreshold = true;
-                            if (vibrateWhenActionTriggered) {
-                                viewHolder.itemView.setHapticFeedbackEnabled(true);
-                                viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                if (isCurrentlyActive) {
+                    View itemView = viewHolder.itemView;
+                    int horizontalOffset = (int) Utils.convertDpToPixel(16, activity);
+                    if (dX > 0) {
+                        if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
+                            if (!exceedThreshold) {
+                                exceedThreshold = true;
+                                if (vibrateWhenActionTriggered) {
+                                    viewHolder.itemView.setHapticFeedbackEnabled(true);
+                                    viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                }
                             }
+                            backgroundSwipeRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                        } else {
+                            exceedThreshold = false;
+                            backgroundSwipeRight.setBounds(0, 0, 0, 0);
                         }
-                        backgroundSwipeRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                    } else {
-                        exceedThreshold = false;
-                        backgroundSwipeRight.setBounds(0, 0, 0, 0);
-                    }
 
-                    drawableSwipeRight.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableSwipeRight.getIntrinsicWidth(),
-                            (itemView.getBottom() + itemView.getTop() - drawableSwipeRight.getIntrinsicHeight()) / 2,
-                            itemView.getLeft() + ((int) dX) - horizontalOffset,
-                            (itemView.getBottom() + itemView.getTop() + drawableSwipeRight.getIntrinsicHeight()) / 2);
-                    backgroundSwipeRight.draw(c);
-                    drawableSwipeRight.draw(c);
-                } else if (dX < 0) {
-                    if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
-                        if (!exceedThreshold) {
-                            exceedThreshold = true;
-                            if (vibrateWhenActionTriggered) {
-                                viewHolder.itemView.setHapticFeedbackEnabled(true);
-                                viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                        drawableSwipeRight.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableSwipeRight.getIntrinsicWidth(),
+                                (itemView.getBottom() + itemView.getTop() - drawableSwipeRight.getIntrinsicHeight()) / 2,
+                                itemView.getLeft() + ((int) dX) - horizontalOffset,
+                                (itemView.getBottom() + itemView.getTop() + drawableSwipeRight.getIntrinsicHeight()) / 2);
+                        backgroundSwipeRight.draw(c);
+                        drawableSwipeRight.draw(c);
+                    } else if (dX < 0) {
+                        if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
+                            if (!exceedThreshold) {
+                                exceedThreshold = true;
+                                if (vibrateWhenActionTriggered) {
+                                    viewHolder.itemView.setHapticFeedbackEnabled(true);
+                                    viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                }
                             }
+                            backgroundSwipeLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                        } else {
+                            exceedThreshold = false;
+                            backgroundSwipeLeft.setBounds(0, 0, 0, 0);
                         }
-                        backgroundSwipeLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                    } else {
-                        exceedThreshold = false;
-                        backgroundSwipeLeft.setBounds(0, 0, 0, 0);
+                        drawableSwipeLeft.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
+                                (itemView.getBottom() + itemView.getTop() - drawableSwipeLeft.getIntrinsicHeight()) / 2,
+                                itemView.getRight() + ((int) dX) + horizontalOffset + drawableSwipeLeft.getIntrinsicWidth(),
+                                (itemView.getBottom() + itemView.getTop() + drawableSwipeLeft.getIntrinsicHeight()) / 2);
+                        backgroundSwipeLeft.draw(c);
+                        drawableSwipeLeft.draw(c);
                     }
-                    drawableSwipeLeft.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
-                            (itemView.getBottom() + itemView.getTop() - drawableSwipeLeft.getIntrinsicHeight()) / 2,
-                            itemView.getRight() + ((int) dX) + horizontalOffset + drawableSwipeLeft.getIntrinsicWidth(),
-                            (itemView.getBottom() + itemView.getTop() + drawableSwipeLeft.getIntrinsicHeight()) / 2);
-                    backgroundSwipeLeft.draw(c);
-                    drawableSwipeLeft.draw(c);
+                } else {
+                    if (exceedThreshold) {
+                        if (mCommentsAdapter != null) {
+                            mCommentsAdapter.onItemSwipe(viewHolder, dX > 0 ? ItemTouchHelper.END : ItemTouchHelper.START, swipeLeftAction, swipeRightAction);
+                        }
+                        exceedThreshold = false;
+                    }
                 }
             }
 
             @Override
             public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
-                return swipeActionThreshold;
+                return 100;
             }
         });
 
@@ -546,15 +555,13 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             mMessageFullname = getArguments().getString(EXTRA_MESSAGE_FULLNAME);
 
             if (!mRespectSubredditRecommendedSortType || isSingleCommentThreadMode) {
-                sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value.toUpperCase());
-                if (sortType != null) {
-                    activity.setTitle(new SortType(SortType.Type.valueOf(sortType)).getType().fullName);
-                    sortType = sortType.toLowerCase();
-                }
+                SortType.Type sortTypeType = loadSortType();
+                activity.setTitle(sortTypeType.fullName);
+                sortType = sortTypeType.value;
             }
         } else {
             if (sortType != null) {
-                activity.setTitle(new SortType(SortType.Type.valueOf(sortType.toUpperCase())).getType().fullName);
+                activity.setTitle(SortType.Type.valueOf(sortType.toUpperCase()).fullName);
             }
         }
 
@@ -813,6 +820,20 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, sortType.getType().name()).apply();
         }
         fetchCommentsRespectRecommendedSort(false, false, sortType.getType().value);
+    }
+
+    @NonNull
+    private SortType.Type loadSortType() {
+        String sortTypeName = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.CONFIDENCE.name());
+        if (SortType.Type.BEST.name().equals(sortTypeName)) {
+            // migrate from BEST to CONFIDENCE
+            // key guaranteed to exist because got non-default value
+            mSortTypeSharedPreferences.edit()
+                    .putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.CONFIDENCE.name())
+                    .apply();
+            return SortType.Type.CONFIDENCE;
+        }
+        return SortType.Type.valueOf(sortTypeName);
     }
 
     public void goToTop() {
@@ -1408,30 +1429,25 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     new FetchSubredditData.FetchSubredditDataListener() {
                         @Override
                         public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
-                            if (subredditData.getSuggestedCommentSort() == null || subredditData.getSuggestedCommentSort().equals("null") || subredditData.getSuggestedCommentSort().equals("")) {
+                            String suggestedCommentSort = subredditData.getSuggestedCommentSort();
+                            SortType.Type sortTypeType;
+                            if (suggestedCommentSort == null || suggestedCommentSort.equals("null") || suggestedCommentSort.equals("")) {
                                 mRespectSubredditRecommendedSortType = false;
-                                ViewPostDetailFragment.this.sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value.toUpperCase());
-                                if (ViewPostDetailFragment.this.sortType != null) {
-                                    activity.setTitle(new SortType(SortType.Type.valueOf(ViewPostDetailFragment.this.sortType)).getType().fullName);
-                                    ViewPostDetailFragment.this.sortType = ViewPostDetailFragment.this.sortType.toLowerCase();
-                                }
-                                fetchComments(changeRefreshState, checkSortState, ViewPostDetailFragment.this.sortType);
+                                sortTypeType = loadSortType();
                             } else {
-                                ViewPostDetailFragment.this.sortType = subredditData.getSuggestedCommentSort();
-                                String sortTypeTemp = ViewPostDetailFragment.this.sortType.toLowerCase().substring(0, 1).toUpperCase() + ViewPostDetailFragment.this.sortType.substring(1);
-                                activity.setTitle(sortTypeTemp);
-                                fetchComments(changeRefreshState, checkSortState, subredditData.getSuggestedCommentSort());
+                                sortTypeType = SortType.Type.valueOf(suggestedCommentSort.toUpperCase(Locale.US));
                             }
+                            activity.setTitle(sortTypeType.fullName);
+                            ViewPostDetailFragment.this.sortType = sortTypeType.value;
+                            fetchComments(changeRefreshState, checkSortState, ViewPostDetailFragment.this.sortType);
                         }
 
                         @Override
                         public void onFetchSubredditDataFail(boolean isQuarantined) {
                             mRespectSubredditRecommendedSortType = false;
-                            ViewPostDetailFragment.this.sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value.toUpperCase());
-                            if (ViewPostDetailFragment.this.sortType != null) {
-                                activity.setTitle(new SortType(SortType.Type.valueOf(ViewPostDetailFragment.this.sortType)).getType().fullName);
-                                ViewPostDetailFragment.this.sortType = ViewPostDetailFragment.this.sortType.toLowerCase();
-                            }
+                            SortType.Type sortTypeType = loadSortType();
+                            activity.setTitle(sortTypeType.fullName);
+                            ViewPostDetailFragment.this.sortType = sortTypeType.value;
                         }
                     });
         } else {

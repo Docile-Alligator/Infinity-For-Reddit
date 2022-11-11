@@ -31,8 +31,6 @@ public class PostCommentSortTypeBottomSheetFragment extends LandscapeExpandedRou
     public static final String EXTRA_CURRENT_SORT_TYPE = "ECST";
 
     @BindView(R.id.best_type_text_view_post_comment_sort_type_bottom_sheet_fragment)
-    TextView bestTypeTextView;
-    @BindView(R.id.confidence_type_text_view_post_comment_sort_type_bottom_sheet_fragment)
     TextView confidenceTypeTextView;
     @BindView(R.id.top_type_text_view_post_comment_sort_type_bottom_sheet_fragment)
     TextView topTypeTextView;
@@ -71,9 +69,7 @@ public class PostCommentSortTypeBottomSheetFragment extends LandscapeExpandedRou
         ButterKnife.bind(this, rootView);
 
         String currentSortType = getArguments().getString(EXTRA_CURRENT_SORT_TYPE);
-        if (currentSortType.equals(SortType.Type.BEST.value)) {
-            bestTypeTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(bestTypeTextView.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
-        } else if (currentSortType.equals(SortType.Type.CONFIDENCE.value)) {
+        if (currentSortType.equals(SortType.Type.BEST.value) || currentSortType.equals(SortType.Type.CONFIDENCE.value)) {
             confidenceTypeTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(confidenceTypeTextView.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
         } else if (currentSortType.equals(SortType.Type.TOP.value)) {
             topTypeTextView.setCompoundDrawablesRelativeWithIntrinsicBounds(topTypeTextView.getCompoundDrawablesRelative()[0], null, AppCompatResources.getDrawable(activity, R.drawable.ic_round_check_circle_day_night_24dp), null);
@@ -95,11 +91,6 @@ public class PostCommentSortTypeBottomSheetFragment extends LandscapeExpandedRou
                 && (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK) != Configuration.UI_MODE_NIGHT_YES) {
             rootView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR);
         }
-
-        bestTypeTextView.setOnClickListener(view -> {
-            ((SortTypeSelectionCallback) activity).sortTypeSelected(new SortType(SortType.Type.BEST));
-            dismiss();
-        });
 
         confidenceTypeTextView.setOnClickListener(view -> {
             ((SortTypeSelectionCallback) activity).sortTypeSelected(new SortType(SortType.Type.CONFIDENCE));

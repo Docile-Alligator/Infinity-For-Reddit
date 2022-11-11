@@ -12,6 +12,7 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
@@ -314,6 +315,10 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
         }
         if (setToolbarBackgroundColor) {
             toolbar.setBackgroundColor(customThemeWrapper.getColorPrimary());
+        } else if (!isImmersiveInterface()) {
+            int[] colors = {customThemeWrapper.getColorPrimary(), Color.TRANSPARENT};
+            GradientDrawable gradientDrawable = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM, colors);
+            toolbar.setBackground(gradientDrawable);
         }
         toolbar.setTitleTextColor(customThemeWrapper.getToolbarPrimaryTextAndIconColor());
         toolbar.setSubtitleTextColor(customThemeWrapper.getToolbarSecondaryTextColor());

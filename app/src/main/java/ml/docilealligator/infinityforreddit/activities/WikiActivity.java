@@ -149,12 +149,6 @@ public class WikiActivity extends BaseActivity {
         int spoilerBackgroundColor = markdownColor | 0xFF000000;
         int linkColor = mCustomThemeWrapper.getLinkColor();
         MarkwonPlugin miscPlugin = new AbstractMarkwonPlugin() {
-            @NonNull
-            @Override
-            public String processMarkdown(@NonNull String markdown) {
-                return Utils.fixSuperScript(markdown);
-            }
-
             @Override
             public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
                 textView.setTextColor(markdownColor);

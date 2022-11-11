@@ -113,6 +113,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private boolean mHideCommentAwards;
     private boolean mShowAuthorAvatar;
     private boolean mAlwaysShowChildCommentCount;
+    private boolean mHideTheNumberOfVotes;
     private int mDepthThreshold;
     private CommentRecyclerViewAdapterCallback mCommentRecyclerViewAdapterCallback;
     private boolean isInitiallyLoading;
@@ -169,12 +170,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         int commentSpoilerBackgroundColor = mCommentTextColor | 0xFF000000;
         int linkColor = customThemeWrapper.getLinkColor();
         MarkwonPlugin miscPlugin = new AbstractMarkwonPlugin() {
-            @NonNull
-            @Override
-            public String processMarkdown(@NonNull String markdown) {
-                return Utils.fixSuperScript(markdown);
-            }
-
             @Override
             public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
                 if (mActivity.contentTypeface != null) {
@@ -232,6 +227,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mHideCommentAwards = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_COMMENT_AWARDS, false);
         mShowAuthorAvatar = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_AUTHOR_AVATAR, false);
         mAlwaysShowChildCommentCount = sharedPreferences.getBoolean(SharedPreferencesUtils.ALWAYS_SHOW_CHILD_COMMENT_COUNT, false);
+        mHideTheNumberOfVotes = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_VOTES_IN_COMMENTS, false);
         mDepthThreshold = sharedPreferences.getInt(SharedPreferencesUtils.SHOW_FEWER_TOOLBAR_OPTIONS_THRESHOLD, 5);
 
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
@@ -402,12 +398,16 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 if (comment.getAuthorIconUrl() == null) {
                     mFragment.loadIcon(comment.getAuthor(), (authorName, iconUrl) -> {
                         if (authorName.equals(comment.getAuthor())) {
+                            comment.setAuthorIconUrl(iconUrl);
+                        }
+
+                        Comment currentComment = getCurrentComment(holder);
+                        if (currentComment != null && authorName.equals(currentComment.getAuthor())) {
                             mGlide.load(iconUrl)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                     .error(mGlide.load(R.drawable.subreddit_default_icon)
                                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                                     .into(((CommentViewHolder) holder).authorIconImageView);
-                            comment.setAuthorIconUrl(iconUrl);
                         }
                     });
                 } else {
@@ -427,7 +427,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
                 if (mCommentToolbarHidden) {
                     ((CommentViewHolder) holder).bottomConstraintLayout.getLayoutParams().height = 0;
-                    ((CommentViewHolder) holder).topScoreTextView.setVisibility(View.VISIBLE);
+                    if (!mHideTheNumberOfVotes) {
+                        ((CommentViewHolder) holder).topScoreTextView.setVisibility(View.VISIBLE);
+                    }
                 } else {
                     ((CommentViewHolder) holder).bottomConstraintLayout.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
                     ((CommentViewHolder) holder).topScoreTextView.setVisibility(View.GONE);
@@ -441,19 +443,23 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 ((CommentViewHolder) holder).mMarkwonAdapter.setMarkdown(mCommentMarkwon, comment.getCommentMarkdown());
                 ((CommentViewHolder) holder).mMarkwonAdapter.notifyDataSetChanged();
 
-                String commentText = "";
-                String topScoreText = "";
-                if (comment.isScoreHidden()) {
-                    commentText = mActivity.getString(R.string.hidden);
+                if (!mHideTheNumberOfVotes) {
+                    String commentText = "";
+                    String topScoreText = "";
+                    if (comment.isScoreHidden()) {
+                        commentText = mActivity.getString(R.string.hidden);
+                    } else {
+                        commentText = Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                comment.getScore() + comment.getVoteType());
+                        topScoreText = mActivity.getString(R.string.top_score,
+                                Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                        comment.getScore() + comment.getVoteType()));
+                    }
+                    ((CommentViewHolder) holder).scoreTextView.setText(commentText);
+                    ((CommentViewHolder) holder).topScoreTextView.setText(topScoreText);
                 } else {
-                    commentText = Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                            comment.getScore() + comment.getVoteType());
-                    topScoreText = mActivity.getString(R.string.top_score,
-                            Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                    comment.getScore() + comment.getVoteType()));
+                    ((CommentViewHolder) holder).scoreTextView.setText(mActivity.getString(R.string.vote));
                 }
-                ((CommentViewHolder) holder).scoreTextView.setText(commentText);
-                ((CommentViewHolder) holder).topScoreTextView.setText(topScoreText);
 
                 ((CommentViewHolder) holder).commentIndentationView.setShowOnlyOneDivider(mShowOnlyOneCommentLevelIndicator);
                 ((CommentViewHolder) holder).commentIndentationView.setLevelAndColors(comment.getDepth(), verticalBlockColors);
@@ -529,12 +535,16 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 if (comment.getAuthorIconUrl() == null) {
                     mFragment.loadIcon(comment.getAuthor(), (authorName, iconUrl) -> {
                         if (authorName.equals(comment.getAuthor())) {
+                            comment.setAuthorIconUrl(iconUrl);
+                        }
+
+                        Comment currentComment = getCurrentComment(holder);
+                        if (currentComment != null && authorName.equals(currentComment.getAuthor())) {
                             mGlide.load(iconUrl)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0)))
                                     .error(mGlide.load(R.drawable.subreddit_default_icon)
                                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                                     .into(((CommentFullyCollapsedViewHolder) holder).authorIconImageView);
-                            comment.setAuthorIconUrl(iconUrl);
                         }
                     });
                 } else {
@@ -556,9 +566,11 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 } else {
                     ((CommentFullyCollapsedViewHolder) holder).commentTimeTextView.setText(Utils.getFormattedTime(mLocale, comment.getCommentTimeMillis(), mTimeFormatPattern));
                 }
-                if (!comment.isScoreHidden()) {
+                if (!comment.isScoreHidden() && !mHideTheNumberOfVotes) {
                     ((CommentFullyCollapsedViewHolder) holder).scoreTextView.setText(mActivity.getString(R.string.top_score,
                             Utils.getNVotes(mShowAbsoluteNumberOfVotes, comment.getScore() + comment.getVoteType())));
+                } else if (mHideTheNumberOfVotes) {
+                    ((CommentFullyCollapsedViewHolder) holder).scoreTextView.setText(mActivity.getString(R.string.vote));
                 }
                 ((CommentFullyCollapsedViewHolder) holder).commentIndentationView.setShowOnlyOneDivider(mShowOnlyOneCommentLevelIndicator);
                 ((CommentFullyCollapsedViewHolder) holder).commentIndentationView.setLevelAndColors(comment.getDepth(), verticalBlockColors);
@@ -778,7 +790,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 });
             } else {
                 ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setOnClickListener(view -> {
-                    Comment comment = getCurrentComment(position);
+                    Comment comment = getCurrentComment(holder);
                     if (comment != null) {
                         Intent intent = new Intent(mActivity, ViewPostDetailActivity.class);
                         intent.putExtra(ViewPostDetailActivity.EXTRA_POST_DATA, mPost);
@@ -1377,7 +1389,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         topScoreTextView.setTextColor(mSecondaryTextColor);
                     }
 
-                    if (!comment.isScoreHidden()) {
+                    if (!comment.isScoreHidden() && !mHideTheNumberOfVotes) {
                         scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                 comment.getScore() + comment.getVoteType()));
                         topScoreTextView.setText(mActivity.getString(R.string.top_score,
@@ -1407,7 +1419,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
                             if (currentPosition == position) {
                                 downvoteButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
-                                if (!comment.isScoreHidden()) {
+                                if (!comment.isScoreHidden() && !mHideTheNumberOfVotes) {
                                     scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                             comment.getScore() + comment.getVoteType()));
                                     topScoreTextView.setText(mActivity.getString(R.string.top_score,
@@ -1458,7 +1470,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         topScoreTextView.setTextColor(mSecondaryTextColor);
                     }
 
-                    if (!comment.isScoreHidden()) {
+                    if (!comment.isScoreHidden() && !mHideTheNumberOfVotes) {
                         scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                 comment.getScore() + comment.getVoteType()));
                         topScoreTextView.setText(mActivity.getString(R.string.top_score,
@@ -1489,7 +1501,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
                             if (currentPosition == position) {
                                 upvoteButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
-                                if (!comment.isScoreHidden()) {
+                                if (!comment.isScoreHidden() && !mHideTheNumberOfVotes) {
                                     scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
                                             comment.getScore() + comment.getVoteType()));
                                     topScoreTextView.setText(mActivity.getString(R.string.top_score,
@@ -1675,7 +1687,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             } else {
                 mFragment.delayTransition();
                 bottomConstraintLayout.getLayoutParams().height = 0;
-                topScoreTextView.setVisibility(View.VISIBLE);
+                if (!mHideTheNumberOfVotes) {
+                    topScoreTextView.setVisibility(View.VISIBLE);
+                }
             }
             return true;
         }

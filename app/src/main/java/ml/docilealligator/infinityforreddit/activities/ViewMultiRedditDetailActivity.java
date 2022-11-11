@@ -137,6 +137,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     private String multiPath;
     private Fragment mFragment;
     private int fabOption;
+    private boolean hideFab;
     private boolean showBottomAppBar;
     private boolean lockBottomAppBar;
     private Call<String> subredditAutocompleteCall;
@@ -159,6 +160,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
 
         EventBus.getDefault().register(this);
 
+        hideFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_FAB_IN_POST_FEED, false);
         showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false);
 
         navigationWrapper = new NavigationWrapper(findViewById(R.id.bottom_app_bar_bottom_app_bar), findViewById(R.id.linear_layout_bottom_app_bar),
@@ -228,6 +230,8 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
         } else {
             initializeFragment();
         }
+
+        navigationWrapper.floatingActionButton.setVisibility(hideFab ? View.GONE : View.VISIBLE);
 
         if (showBottomAppBar) {
             int optionCount = mBottomAppBarSharedPreference.getInt((mAccessToken == null ? "-" : "") + SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_COUNT, 4);
@@ -975,14 +979,14 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
         if (showBottomAppBar && !lockBottomAppBar) {
             navigationWrapper.showNavigation();
         }
-        if (!(showBottomAppBar && lockBottomAppBar)) {
+        if (!(showBottomAppBar && lockBottomAppBar) && !hideFab) {
             navigationWrapper.showFab();
         }
     }
 
     @Override
     public void contentScrollDown() {
-        if (!(showBottomAppBar && lockBottomAppBar)) {
+        if (!(showBottomAppBar && lockBottomAppBar) && !hideFab) {
             navigationWrapper.hideFab();
         }
         if (showBottomAppBar && !lockBottomAppBar) {

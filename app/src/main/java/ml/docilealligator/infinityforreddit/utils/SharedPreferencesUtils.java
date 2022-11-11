@@ -44,6 +44,7 @@ public class SharedPreferencesUtils {
     public static final String CUSTOM_TITLE_FONT_FAMILY_KEY = "custom_title_font_family";
     public static final String CUSTOM_CONTENT_FONT_FAMILY_KEY = "custom_content_font_family";
     public static final String REDDIT_USER_AGREEMENT_KEY = "reddit_user_agreement";
+    public static final String HIDE_FAB_IN_POST_FEED = "hide_fab_in_post_feed";
 
     public static final String SORT_TYPE_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.sort_type";
     public static final String SORT_TYPE_BEST_POST = "sort_type_best_post";
@@ -213,6 +214,7 @@ public class SharedPreferencesUtils {
     public static final String POST_FEED_MAX_RESOLUTION = "post_feed_max_resolution";
     public static final String REDDIT_VIDEO_DEFAULT_RESOLUTION = "reddit_video_default_resolution";
     public static final String EASIER_TO_WATCH_IN_FULL_SCREEN = "easier_to_watch_in_full_screen";
+    public static final String HIDE_THE_NUMBER_OF_VOTES_IN_COMMENTS = "hide_the_number_of_votes_in_comments";
 
     public static final String DEFAULT_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit_preferences";
     public static final String MAIN_PAGE_TABS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.main_page_tabs";

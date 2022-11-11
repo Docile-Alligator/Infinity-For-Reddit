@@ -68,6 +68,7 @@ import ml.docilealligator.infinityforreddit.fragments.CommentsListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.FollowedUsersListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.HistoryPostFragment;
 import ml.docilealligator.infinityforreddit.fragments.InboxFragment;
+import ml.docilealligator.infinityforreddit.fragments.MorePostsInfoFragment;
 import ml.docilealligator.infinityforreddit.fragments.MultiRedditListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.fragments.SidebarFragment;
@@ -306,4 +307,6 @@ public interface AppComponent {
     void inject(HistoryPostFragment historyPostFragment);
 
     void inject(HistoryActivity historyActivity);
+
+    void inject(MorePostsInfoFragment morePostsInfoFragment);
 }

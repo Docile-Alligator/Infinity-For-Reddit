@@ -232,12 +232,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         int postSpoilerBackgroundColor = markdownColor | 0xFF000000;
         int linkColor = customThemeWrapper.getLinkColor();
         MarkwonPlugin miscPlugin = new AbstractMarkwonPlugin() {
-            @NonNull
-            @Override
-            public String processMarkdown(@NonNull String markdown) {
-                return Utils.fixSuperScript(markdown);
-            }
-
             @Override
             public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
                 if (mActivity.contentTypeface != null) {

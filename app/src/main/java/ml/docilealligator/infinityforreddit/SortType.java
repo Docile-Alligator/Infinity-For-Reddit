@@ -33,7 +33,7 @@ public class SortType {
         RELEVANCE("relevance", "Relevance"),
         COMMENTS("comments", "Comments"),
         ACTIVITY("activity", "Activity"),
-        CONFIDENCE("confidence", "Confidence"),
+        CONFIDENCE("confidence", "Best"),
         OLD("old", "Old"),
         QA("qa", "QA"),
         LIVE("live", "Live");
