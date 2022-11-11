@@ -624,7 +624,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                                                             .setLoadMoreChildrenFailed(false);
 
                                                     int placeholderPosition = commentPosition;
-                                                    if (mVisibleComments.get(commentPosition).getFullName().equals(parentComment.getFullName())) {
+                                                    if (!mVisibleComments.get(commentPosition).getFullName().equals(parentComment.getFullName())) {
                                                         for (int i = parentPosition + 1; i < mVisibleComments.size(); i++) {
                                                             if (mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
                                                                 placeholderPosition = i;
@@ -649,7 +649,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                                                     mVisibleComments.get(parentPosition).removeMoreChildrenIds();
 
                                                     int placeholderPosition = commentPosition;
-                                                    if (mVisibleComments.get(commentPosition).getFullName().equals(parentComment.getFullName())) {
+                                                    if (!mVisibleComments.get(commentPosition).getFullName().equals(parentComment.getFullName())) {
                                                         for (int i = parentPosition + 1; i < mVisibleComments.size(); i++) {
                                                             if (mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
                                                                 placeholderPosition = i;
