@@ -89,13 +89,8 @@ public class HistoryPostViewModel extends ViewModel {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            if (postType == HistoryPostPagingSource.TYPE_READ_POSTS) {
-                return (T) new HistoryPostViewModel(executor, retrofit, redditDataRoomDatabase, accessToken, accountName, sharedPreferences,
-                        postType, postFilter);
-            } else {
-                return (T) new HistoryPostViewModel(executor, retrofit, redditDataRoomDatabase, accessToken, accountName, sharedPreferences,
-                        postType, postFilter);
-            }
+            return (T) new HistoryPostViewModel(executor, retrofit, redditDataRoomDatabase, accessToken, accountName, sharedPreferences,
+                    postType, postFilter);
         }
     }
 }

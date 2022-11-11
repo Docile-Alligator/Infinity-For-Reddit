@@ -230,10 +230,8 @@ public class PullNotificationWorker extends Worker {
                     return fetchMessages(account, retryCount - 1);
                 }
 
-                return null;
-            } else {
-                return null;
             }
+            return null;
         }
     }
 
