@@ -623,53 +623,39 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                                                     mVisibleComments.get(parentPosition).getChildren().get(mVisibleComments.get(parentPosition).getChildren().size() - 1)
                                                             .setLoadMoreChildrenFailed(false);
 
-                                                    int placeholderPosition = commentPosition;
-                                                    if (!mVisibleComments.get(commentPosition).getFullName().equals(parentComment.getFullName())) {
-                                                        for (int i = parentPosition + 1; i < mVisibleComments.size(); i++) {
-                                                            if (mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
-                                                                placeholderPosition = i;
-                                                                break;
-                                                            }
+                                                    int placeholderPosition = findLoadMoreCommentsPlaceholderPosition(parentComment.getFullName(), commentPosition);
+                                                    if (placeholderPosition != -1) {
+                                                        mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
+                                                        mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(false);
+                                                        ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.comment_load_more_comments);
+
+                                                        mVisibleComments.addAll(placeholderPosition, expandedComments);
+                                                        if (mIsSingleCommentThreadMode) {
+                                                            notifyItemRangeInserted(placeholderPosition + 1, expandedComments.size());
+                                                        } else {
+                                                            notifyItemRangeInserted(placeholderPosition, expandedComments.size());
                                                         }
-                                                    }
-
-                                                    mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
-                                                    mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(false);
-                                                    ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.comment_load_more_comments);
-
-                                                    mVisibleComments.addAll(placeholderPosition, expandedComments);
-                                                    if (mIsSingleCommentThreadMode) {
-                                                        notifyItemRangeInserted(placeholderPosition + 1, expandedComments.size());
-                                                    } else {
-                                                        notifyItemRangeInserted(placeholderPosition, expandedComments.size());
                                                     }
                                                 } else {
                                                     mVisibleComments.get(parentPosition).getChildren()
                                                             .remove(mVisibleComments.get(parentPosition).getChildren().size() - 1);
                                                     mVisibleComments.get(parentPosition).removeMoreChildrenIds();
 
-                                                    int placeholderPosition = commentPosition;
-                                                    if (!mVisibleComments.get(commentPosition).getFullName().equals(parentComment.getFullName())) {
-                                                        for (int i = parentPosition + 1; i < mVisibleComments.size(); i++) {
-                                                            if (mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
-                                                                placeholderPosition = i;
-                                                                break;
-                                                            }
+                                                    int placeholderPosition = findLoadMoreCommentsPlaceholderPosition(parentComment.getFullName(), commentPosition);
+                                                    if (placeholderPosition != -1) {
+                                                        mVisibleComments.remove(placeholderPosition);
+                                                        if (mIsSingleCommentThreadMode) {
+                                                            notifyItemRemoved(placeholderPosition + 1);
+                                                        } else {
+                                                            notifyItemRemoved(placeholderPosition);
                                                         }
-                                                    }
 
-                                                    mVisibleComments.remove(placeholderPosition);
-                                                    if (mIsSingleCommentThreadMode) {
-                                                        notifyItemRemoved(placeholderPosition + 1);
-                                                    } else {
-                                                        notifyItemRemoved(placeholderPosition);
-                                                    }
-
-                                                    mVisibleComments.addAll(placeholderPosition, expandedComments);
-                                                    if (mIsSingleCommentThreadMode) {
-                                                        notifyItemRangeInserted(placeholderPosition + 1, expandedComments.size());
-                                                    } else {
-                                                        notifyItemRangeInserted(placeholderPosition, expandedComments.size());
+                                                        mVisibleComments.addAll(placeholderPosition, expandedComments);
+                                                        if (mIsSingleCommentThreadMode) {
+                                                            notifyItemRangeInserted(placeholderPosition + 1, expandedComments.size());
+                                                        } else {
+                                                            notifyItemRangeInserted(placeholderPosition, expandedComments.size());
+                                                        }
                                                     }
                                                 }
                                             } else {
@@ -690,26 +676,20 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                                             for (int i = 0; i < mVisibleComments.size(); i++) {
                                                 if (mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
                                                     if (mVisibleComments.get(i).isExpanded()) {
-                                                        int placeholderPosition = i + mVisibleComments.get(i).getChildren().size();
+                                                        int placeholderPositionHint = i + mVisibleComments.get(i).getChildren().size();
+                                                        int placeholderPosition = findLoadMoreCommentsPlaceholderPosition(parentComment.getFullName(), placeholderPositionHint);
 
-                                                        if (!mVisibleComments.get(i).getFullName()
-                                                                .equals(mVisibleComments.get(placeholderPosition).getFullName())) {
-                                                            for (int j = i + 1; j < mVisibleComments.size(); j++) {
-                                                                if (mVisibleComments.get(j).getFullName().equals(mVisibleComments.get(i).getFullName())) {
-                                                                    placeholderPosition = j;
-                                                                }
+                                                        if (placeholderPosition != -1) {
+                                                            mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
+                                                            mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(false);
+                                                            ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.comment_load_more_comments);
+
+                                                            mVisibleComments.addAll(placeholderPosition, expandedComments);
+                                                            if (mIsSingleCommentThreadMode) {
+                                                                notifyItemRangeInserted(placeholderPosition + 1, expandedComments.size());
+                                                            } else {
+                                                                notifyItemRangeInserted(placeholderPosition, expandedComments.size());
                                                             }
-                                                        }
-
-                                                        mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
-                                                        mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(false);
-                                                        ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.comment_load_more_comments);
-
-                                                        mVisibleComments.addAll(placeholderPosition, expandedComments);
-                                                        if (mIsSingleCommentThreadMode) {
-                                                            notifyItemRangeInserted(placeholderPosition + 1, expandedComments.size());
-                                                        } else {
-                                                            notifyItemRangeInserted(placeholderPosition, expandedComments.size());
                                                         }
                                                     }
 
@@ -736,17 +716,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                                                 && parentComment.getFullName().equals(mVisibleComments.get(parentPosition).getFullName())) {
                                             if (mVisibleComments.get(parentPosition).isExpanded()) {
                                                 int commentPosition = mIsSingleCommentThreadMode ? holder.getBindingAdapterPosition() - 1 : holder.getBindingAdapterPosition();
-                                                int placeholderPosition = commentPosition;
-                                                if (commentPosition >= mVisibleComments.size() || commentPosition < 0 || !mVisibleComments.get(commentPosition).getFullName().equals(parentComment.getFullName())) {
-                                                    for (int i = parentPosition + 1; i < mVisibleComments.size(); i++) {
-                                                        if (mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
-                                                            placeholderPosition = i;
-                                                            break;
-                                                        }
-                                                    }
-                                                }
+                                                int placeholderPosition = findLoadMoreCommentsPlaceholderPosition(parentComment.getFullName(), commentPosition);
 
-                                                if (placeholderPosition >= mVisibleComments.size() || placeholderPosition < 0) {
+                                                if (placeholderPosition != -1) {
                                                     mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
                                                     mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(true);
                                                 }
@@ -761,18 +733,13 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                                             for (int i = 0; i < mVisibleComments.size(); i++) {
                                                 if (mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
                                                     if (mVisibleComments.get(i).isExpanded()) {
-                                                        int placeholderPosition = i + mVisibleComments.get(i).getChildren().size();
-                                                        if (!mVisibleComments.get(placeholderPosition).getFullName().equals(mVisibleComments.get(i).getFullName())) {
-                                                            for (int j = i + 1; j < mVisibleComments.size(); j++) {
-                                                                if (mVisibleComments.get(j).getFullName().equals(mVisibleComments.get(i).getFullName())) {
-                                                                    placeholderPosition = j;
-                                                                    break;
-                                                                }
-                                                            }
-                                                        }
+                                                        int placeholderPositionHint = i + mVisibleComments.get(i).getChildren().size();
+                                                        int placeholderPosition = findLoadMoreCommentsPlaceholderPosition(parentComment.getFullName(), placeholderPositionHint);
 
-                                                        mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
-                                                        mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(true);
+                                                        if (placeholderPosition != -1) {
+                                                            mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
+                                                            mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(true);
+                                                        }
                                                         ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.comment_load_more_comments_failed);
                                                     }
 
@@ -811,6 +778,28 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 }
             }
         }
+        return -1;
+    }
+
+    /**
+     * Find position of comment with given {@code fullName} and
+     * {@link Comment#PLACEHOLDER_LOAD_MORE_COMMENTS} placeholder type
+     * @return position of the placeholder or -1 if not found
+     */
+    private int findLoadMoreCommentsPlaceholderPosition(String fullName, int positionHint) {
+        if (0 <= positionHint && positionHint < mVisibleComments.size()
+                && mVisibleComments.get(positionHint).getFullName().equals(fullName)
+                && mVisibleComments.get(positionHint).getPlaceholderType() == Comment.PLACEHOLDER_LOAD_MORE_COMMENTS) {
+            return positionHint;
+        }
+
+        for (int i = 0; i < mVisibleComments.size(); i++) {
+            Comment comment = mVisibleComments.get(i);
+            if (comment.getFullName().equals(fullName) && comment.getPlaceholderType() == Comment.PLACEHOLDER_LOAD_MORE_COMMENTS) {
+                return i;
+            }
+        }
+
         return -1;
     }
 
