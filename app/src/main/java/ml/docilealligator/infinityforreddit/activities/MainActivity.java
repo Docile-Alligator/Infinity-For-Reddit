@@ -322,12 +322,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             mMessageFullname = savedInstanceState.getString(MESSAGE_FULLNAME_STATE);
             mNewAccountName = savedInstanceState.getString(NEW_ACCOUNT_NAME_STATE);
             inboxCount = savedInstanceState.getInt(INBOX_COUNT_STATE);
-            initializeNotificationAndBindView();
         } else {
             mMessageFullname = getIntent().getStringExtra(EXTRA_MESSSAGE_FULLNAME);
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
-            initializeNotificationAndBindView();
         }
+        initializeNotificationAndBindView();
     }
 
     @Override
@@ -754,11 +753,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                             intent = new Intent(MainActivity.this, ViewUserDetailActivity.class);
                             intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mAccountName);
                         } else if (stringId == R.string.subscriptions) {
-                            if (mAccessToken != null) {
-                                intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
-                            } else {
-                                intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
-                            }
+                            intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
                         } else if (stringId == R.string.multi_reddit) {
                             intent = new Intent(MainActivity.this, SubscribedThingListingActivity.class);
                             intent.putExtra(SubscribedThingListingActivity.EXTRA_SHOW_MULTIREDDITS, true);
@@ -1101,7 +1096,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     }
 
     @Override
-    public void onBackPressed() {;
+    public void onBackPressed() {
         if (drawer.isOpen()) {
             drawer.close();
         } else {

@@ -275,7 +275,7 @@ public interface RedditAPI {
 
     default Call<String> getWiki(@Path("subredditName") String subredditName) {
         return getWikiPage(subredditName, "index");
-    };
+    }
 
     @GET("/r/{subredditName}/wiki/{wikiPage}.json?raw_json=1")
     Call<String> getWikiPage(@Path("subredditName") String subredditName, @Path("wikiPage") String wikiPage);

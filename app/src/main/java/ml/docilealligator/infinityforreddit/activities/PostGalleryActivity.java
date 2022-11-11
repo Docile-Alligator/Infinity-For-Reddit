@@ -244,11 +244,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
                 int halfOffset = offset / 2;
 
                 if (nColumns == 2) {
-                    if (spanIndex == 0) {
-                        outRect.set(halfOffset, 0, halfOffset, offset);
-                    } else {
-                        outRect.set(halfOffset, 0, halfOffset, offset);
-                    }
+                    outRect.set(halfOffset, 0, halfOffset, offset);
                 } else if (nColumns == 3) {
                     if (spanIndex == 0) {
                         outRect.set(halfOffset, 0, halfOffset, offset);
