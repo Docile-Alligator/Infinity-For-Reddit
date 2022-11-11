@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.network.SortTypeConverterFactory;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import okhttp3.ConnectionPool;
@@ -197,5 +198,11 @@ abstract class NetworkModule {
         return retrofit.newBuilder()
                 .baseUrl(APIUtils.STREAMABLE_API_BASE_URI)
                 .build();
+    }
+
+    @Provides
+    @Singleton
+    static StreamableAPI provideStreamableApi(@Named("streamable") Retrofit streamableRetrofit) {
+        return streamableRetrofit.create(StreamableAPI.class);
     }
 }
