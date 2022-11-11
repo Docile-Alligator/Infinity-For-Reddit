@@ -46,9 +46,9 @@ public class FetchComment {
                             expandChildren, new ParseComment.ParseCommentListener() {
                                 @Override
                                 public void onParseCommentSuccess(ArrayList<Comment> expandedComments,
-                                                                  String parentId, ArrayList<String> moreChildrenFullnames) {
+                                                                  String parentId, ArrayList<String> moreChildrenIds) {
                                     fetchCommentListener.onFetchCommentSuccess(expandedComments, parentId,
-                                            moreChildrenFullnames);
+                                            moreChildrenIds);
                                 }
 
                                 @Override
@@ -70,33 +70,27 @@ public class FetchComment {
 
     public static void fetchMoreComment(Executor executor, Handler handler, Retrofit retrofit,
                                         @Nullable String accessToken,
-                                        ArrayList<String> allChildren, int startingIndex,
-                                        int depth, boolean expandChildren,
+                                        ArrayList<String> allChildren,
+                                        boolean expandChildren, String postFullName,
+                                        String sortType,
                                         FetchMoreCommentListener fetchMoreCommentListener) {
         if (allChildren == null) {
             return;
         }
 
-        StringBuilder stringBuilder = new StringBuilder();
-        for (int i = 0; i < 100; i++) {
-            if (allChildren.size() <= startingIndex + i) {
-                break;
-            }
-            stringBuilder.append(allChildren.get(startingIndex + i)).append(",");
-        }
+        String childrenIds = String.join(",", allChildren);
 
-        if (stringBuilder.length() == 0) {
+        if (childrenIds.isEmpty()) {
             return;
         }
-
-        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
 
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> moreComments;
         if (accessToken == null) {
-            moreComments = api.getInfo(stringBuilder.toString());
+            moreComments = api.moreChildren(postFullName, childrenIds, sortType);
         } else {
-            moreComments = api.getInfoOauth(stringBuilder.toString(), APIUtils.getOAuthHeader(accessToken));
+            moreComments = api.moreChildrenOauth(postFullName, childrenIds,
+                    sortType, APIUtils.getOAuthHeader(accessToken));
         }
 
         moreComments.enqueue(new Callback<String>() {
@@ -104,12 +98,11 @@ public class FetchComment {
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
                     ParseComment.parseMoreComment(executor, handler, response.body(), new ArrayList<>(),
-                            depth, expandChildren, new ParseComment.ParseCommentListener() {
+                            expandChildren, new ParseComment.ParseCommentListener() {
                                 @Override
                                 public void onParseCommentSuccess(ArrayList<Comment> expandedComments,
-                                                                  String parentId, ArrayList<String> moreChildrenFullnames) {
-                                    fetchMoreCommentListener.onFetchMoreCommentSuccess(expandedComments,
-                                            startingIndex + 100);
+                                                                  String parentId, ArrayList<String> moreChildrenIds) {
+                                    fetchMoreCommentListener.onFetchMoreCommentSuccess(expandedComments, moreChildrenIds);
                                 }
 
                                 @Override
@@ -136,7 +129,7 @@ public class FetchComment {
     }
 
     public interface FetchMoreCommentListener {
-        void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments, int childrenStartingIndex);
+        void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments,  ArrayList<String> moreChildrenIds);
 
         void onFetchMoreCommentFailed();
     }
