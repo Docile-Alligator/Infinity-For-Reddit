@@ -11,9 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -863,7 +861,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         ((PostGalleryTypeViewHolder) holder).binding.noPreviewImageViewItemPostGalleryType.setVisibility(View.VISIBLE);
                         ((PostGalleryTypeViewHolder) holder).binding.noPreviewImageViewItemPostGalleryType.setImageResource(R.drawable.ic_gallery_24dp);
                     } else {
-                        ((PostGalleryTypeViewHolder) holder).binding.galleryRecyclerViewItemPostGalleryType.setVisibility(View.VISIBLE);
+                        ((PostGalleryTypeViewHolder) holder).binding.galleryFrameLayoutItemPostGalleryType.setVisibility(View.VISIBLE);
+                        ((PostGalleryTypeViewHolder) holder).binding.imageIndexTextViewItemPostGalleryType.setText(mActivity.getString(R.string.image_index_in_gallery, 1, post.getGallery().size()));
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
                         if (preview != null) {
                             if (mFixedHeightPreviewInCard || (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0)) {
@@ -1890,7 +1889,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.GONE);
                 ((PostWithPreviewTypeViewHolder) holder).linkTextView.setVisibility(View.GONE);
             } else if (holder instanceof PostGalleryTypeViewHolder) {
-                ((PostGalleryTypeViewHolder) holder).binding.galleryRecyclerViewItemPostGalleryType.setVisibility(View.GONE);
+                ((PostGalleryTypeViewHolder) holder).binding.galleryFrameLayoutItemPostGalleryType.setVisibility(View.GONE);
                 ((PostGalleryTypeViewHolder) holder).binding.noPreviewImageViewItemPostGalleryType.setVisibility(View.GONE);
             } else if (holder instanceof PostTextTypeViewHolder) {
                 ((PostTextTypeViewHolder) holder).contentTextView.setText("");
@@ -3134,6 +3133,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     binding.saveButtonItemPostGalleryType,
                     binding.shareButtonItemPostGalleryType);
 
+            binding.imageIndexTextViewItemPostGalleryType.setTextColor(mMediaIndicatorIconTint);
+            binding.imageIndexTextViewItemPostGalleryType.setBackgroundColor(mMediaIndicatorBackgroundColor);
+            binding.imageIndexTextViewItemPostGalleryType.setBorderColor(mMediaIndicatorBackgroundColor);
+
             adapter = new PostGalleryTypeImageRecyclerViewAdapter(mGlide, mActivity.typeface,
                     mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale,
                     galleryItemIndex -> {
@@ -3149,7 +3152,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             binding.galleryRecyclerViewItemPostGalleryType.setAdapter(adapter);
             new PagerSnapHelper().attachToRecyclerView(binding.galleryRecyclerViewItemPostGalleryType);
             binding.galleryRecyclerViewItemPostGalleryType.setRecycledViewPool(mGalleryRecycledViewPool);
-            binding.galleryRecyclerViewItemPostGalleryType.setLayoutManager(new SwipeLockLinearLayoutManager(
+            SwipeLockLinearLayoutManager layoutManager = new SwipeLockLinearLayoutManager(
                     mActivity, RecyclerView.HORIZONTAL, false, new SwipeLockInterface() {
                 @Override
                 public void lockSwipe() {
@@ -3167,17 +3170,28 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 public void setSwipeLocked(boolean swipeLocked) {
                     PostGalleryTypeViewHolder.this.swipeLocked = swipeLocked;
                 }
-            }));
+            });
+            binding.galleryRecyclerViewItemPostGalleryType.setLayoutManager(layoutManager);
+            binding.galleryRecyclerViewItemPostGalleryType.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                }
+
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    binding.imageIndexTextViewItemPostGalleryType.setText(mActivity.getString(R.string.image_index_in_gallery, layoutManager.findFirstVisibleItemPosition() + 1, post.getGallery().size()));
+                }
+            });
+
             binding.getRoot().setOnTouchListener((view, motionEvent) -> {
                 swipeLocked = false;
                 return false;
             });
-            binding.bottomConstraintLayoutItemPostGalleryType.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    swipeLocked = false;
-                    return false;
-                }
+            binding.bottomConstraintLayoutItemPostGalleryType.setOnTouchListener((view, motionEvent) -> {
+                swipeLocked = false;
+                return false;
             });
 
             binding.noPreviewImageViewItemPostGalleryType.setOnClickListener(view -> {
