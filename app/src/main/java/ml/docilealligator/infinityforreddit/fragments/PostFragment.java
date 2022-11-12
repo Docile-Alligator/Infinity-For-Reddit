@@ -1057,6 +1057,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 if (!(viewHolder instanceof PostRecyclerViewAdapter.PostBaseViewHolder) &&
                         !(viewHolder instanceof PostRecyclerViewAdapter.PostCompactBaseViewHolder)) {
                     return makeMovementFlags(0, 0);
+                } else if (viewHolder instanceof PostRecyclerViewAdapter.PostGalleryTypeViewHolder) {
+                    if (((PostRecyclerViewAdapter.PostGalleryTypeViewHolder) viewHolder).isSwipeLocked()) {
+                        return makeMovementFlags(0, 0);
+                    }
+
                 }
                 int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
                 return makeMovementFlags(0, swipeFlags);
@@ -1139,13 +1144,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                         exceedThreshold = false;
                     }
                 }
-
-
             }
 
             @Override
             public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
-                return 100;
+                return 1;
             }
         });
 

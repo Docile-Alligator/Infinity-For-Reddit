@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ml.docilealligator.infinityforreddit.customviews.SwipeLockFrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
+        android:id="@+id/image_view_item_gallery_image_in_post_feed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:adjustViewBounds="true" />
+
+    <ProgressBar
+        android:id="@+id/progress_bar_item_gallery_image_in_post_feed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center" />
+
+    <TextView
+        android:id="@+id/error_text_view_item_gallery_image_in_post_feed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableTop="@drawable/ic_error_outline_black_24dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="@string/error_loading_image_tap_to_retry"
+        android:textSize="?attr/font_default"
+        android:fontFamily="?attr/font_family"
+        android:visibility="gone" />
+
+</ml.docilealligator.infinityforreddit.customviews.SwipeLockFrameLayout>

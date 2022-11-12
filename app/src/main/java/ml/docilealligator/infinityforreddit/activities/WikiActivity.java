@@ -50,8 +50,8 @@ import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
-import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
-import ml.docilealligator.infinityforreddit.customviews.SwipeLockScrollView;
+import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
+import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
@@ -178,7 +178,7 @@ public class WikiActivity extends BaseActivity {
                 miscPlugin, markdownColor, spoilerBackgroundColor, onLinkLongClickListener);
 
         markwonAdapter = MarkdownUtils.createTablesAdapter();
-        LinearLayoutManagerBugFixed linearLayoutManager = new MarkwonLinearLayoutManager(this, new SwipeLockScrollView.SwipeLockInterface() {
+        LinearLayoutManagerBugFixed linearLayoutManager = new SwipeLockLinearLayoutManager(this, new SwipeLockInterface() {
             @Override
             public void lockSwipe() {
                 if (mSlidrInterface != null) {
