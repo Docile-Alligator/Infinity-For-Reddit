@@ -2247,6 +2247,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             itemView.setOnClickListener(view -> {
                 int position = getBindingAdapterPosition();
                 if (position >= 0 && canStartActivity) {
+                    if (this instanceof PostVideoAutoplayViewHolder && ((PostVideoAutoplayViewHolder) this).isMutedByDefault()) {
+                        ((PostVideoAutoplayViewHolder) this).mute();
+                    }
                     Post post = getItem(position);
                     if (post != null) {
                         markPostRead(post, true);
@@ -2837,6 +2840,19 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
         void resetVolume() {
             volume = 0f;
+        }
+
+        void mute() {
+            if (helper != null) {
+                muteButton.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_mute_white_rounded_24dp));
+                helper.setVolume(0f);
+                volume = 0f;
+                mFragment.videoAutoplayChangeMutingOption(true);
+            }
+        }
+
+        boolean isMutedByDefault() {
+            return mMuteAutoplayingVideos || (mMuteNSFWVideo && post.isNSFW());
         }
 
         @NonNull
