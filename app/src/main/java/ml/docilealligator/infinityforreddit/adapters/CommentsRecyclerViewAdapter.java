@@ -612,7 +612,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                                 parentComment.getMoreChildrenIds(),
                                 mExpandChildren, mPost.getFullName(), sortType, new FetchComment.FetchMoreCommentListener() {
                                     @Override
-                                    public void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments, ArrayList<String> moreChildrenIds) {
+                                    public void onFetchMoreCommentSuccess(ArrayList<Comment> topLevelComments,
+                                                                          ArrayList<Comment> expandedComments,
+                                                                          ArrayList<String> moreChildrenIds) {
                                         if (mVisibleComments.size() > parentPosition
                                                 && parentComment.getFullName().equals(mVisibleComments.get(parentPosition).getFullName())) {
                                             if (mVisibleComments.get(parentPosition).isExpanded()) {
@@ -680,7 +682,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                                                 }
                                             }
 
-                                            mVisibleComments.get(parentPosition).addChildren(expandedComments);
+                                            mVisibleComments.get(parentPosition).addChildren(topLevelComments);
                                             if (mIsSingleCommentThreadMode) {
                                                 notifyItemChanged(parentPosition + 1);
                                             } else {
@@ -717,7 +719,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                                                             .setLoadingMoreChildren(false);
                                                     mVisibleComments.get(i).getChildren().get(mVisibleComments.get(i).getChildren().size() - 1)
                                                             .setLoadMoreChildrenFailed(false);
-                                                    mVisibleComments.get(i).addChildren(expandedComments);
+                                                    mVisibleComments.get(i).addChildren(topLevelComments);
                                                     if (mIsSingleCommentThreadMode) {
                                                         notifyItemChanged(i + 1);
                                                     } else {

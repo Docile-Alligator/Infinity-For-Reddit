@@ -48,7 +48,7 @@ public class ParseComment {
                     commentData = newComments;
                 }
 
-                handler.post(() -> parseCommentListener.onParseCommentSuccess(commentData, parentId, moreChildrenIds));
+                handler.post(() -> parseCommentListener.onParseCommentSuccess(newComments, commentData, parentId, moreChildrenIds));
             } catch (JSONException e) {
                 e.printStackTrace();
                 handler.post(parseCommentListener::onParseCommentFailed);
@@ -134,7 +134,7 @@ public class ParseComment {
                     commentData = newComments;
                 }
 
-                handler.post(() -> parseCommentListener.onParseCommentSuccess(commentData, null, moreChildrenIds));
+                handler.post(() -> parseCommentListener.onParseCommentSuccess(newComments, commentData, null, moreChildrenIds));
             } catch (JSONException e) {
                 e.printStackTrace();
                 handler.post(parseCommentListener::onParseCommentFailed);
@@ -367,7 +367,7 @@ public class ParseComment {
     }
 
     public interface ParseCommentListener {
-        void onParseCommentSuccess(ArrayList<Comment> expandedComments, String parentId,
+        void onParseCommentSuccess(ArrayList<Comment> topLevelComments, ArrayList<Comment> expandedComments, String parentId,
                                    ArrayList<String> moreChildrenIds);
 
         void onParseCommentFailed();
