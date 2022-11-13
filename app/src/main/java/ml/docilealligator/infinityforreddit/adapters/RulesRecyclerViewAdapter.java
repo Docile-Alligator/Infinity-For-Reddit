@@ -31,11 +31,9 @@ import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
-import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
-import ml.docilealligator.infinityforreddit.customviews.SwipeLockScrollView;
+import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
+import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
-import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecyclerViewAdapter.RuleViewHolder> {
     private BaseActivity activity;
@@ -140,8 +138,8 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
                 shortNameTextView.setTypeface(activity.typeface);
             }
             markwonAdapter = MarkdownUtils.createTablesAdapter();
-            LinearLayoutManagerBugFixed linearLayoutManager = new MarkwonLinearLayoutManager(activity,
-                    new SwipeLockScrollView.SwipeLockInterface() {
+            SwipeLockLinearLayoutManager swipeLockLinearLayoutManager = new SwipeLockLinearLayoutManager(activity,
+                    new SwipeLockInterface() {
                 @Override
                 public void lockSwipe() {
                     if (slidrInterface != null) {
@@ -156,7 +154,7 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
                     }
                 }
             });
-            descriptionMarkwonView.setLayoutManager(linearLayoutManager);
+            descriptionMarkwonView.setLayoutManager(swipeLockLinearLayoutManager);
             descriptionMarkwonView.setAdapter(markwonAdapter);
         }
     }

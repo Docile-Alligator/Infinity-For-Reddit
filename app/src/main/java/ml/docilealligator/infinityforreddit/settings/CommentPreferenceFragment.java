@@ -3,7 +3,6 @@ package ml.docilealligator.infinityforreddit.settings;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import androidx.preference.Preference;
 import androidx.preference.SeekBarPreference;
 
 import javax.inject.Inject;
@@ -31,7 +30,7 @@ public class CommentPreferenceFragment extends CustomFontPreferenceFragmentCompa
         if (showFewerToolbarOptionsThresholdSeekBarPreference != null) {
             showFewerToolbarOptionsThresholdSeekBarPreference.setSummary(getString(R.string.settings_show_fewer_toolbar_options_threshold_summary, sharedPreferences.getInt(SharedPreferencesUtils.SHOW_FEWER_TOOLBAR_OPTIONS_THRESHOLD, 5)));
 
-            showFewerToolbarOptionsThresholdSeekBarPreference.setOnPreferenceChangeListener((Preference.OnPreferenceChangeListener) (preference, newValue) -> {
+            showFewerToolbarOptionsThresholdSeekBarPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 showFewerToolbarOptionsThresholdSeekBarPreference.setSummary(
                         getString(R.string.settings_show_fewer_toolbar_options_threshold_summary, (Integer) newValue));
                 return true;

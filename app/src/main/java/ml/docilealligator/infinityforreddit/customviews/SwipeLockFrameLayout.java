@@ -4,29 +4,30 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.HorizontalScrollView;
+import android.widget.FrameLayout;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-/** {@link HorizontalScrollView} that listens for touch events and locks swipes
- * if it can be scrolled to the right. {@link SwipeLockInterface} must be set for
- * locking to work.
- */
-public class SwipeLockScrollView extends HorizontalScrollView implements SwipeLockView {
+public class SwipeLockFrameLayout extends FrameLayout implements SwipeLockView {
     @Nullable
     private SwipeLockInterface swipeLockInterface = null;
     private boolean locked = false;
 
-    public SwipeLockScrollView(Context context) {
+    public SwipeLockFrameLayout(@NonNull Context context) {
         super(context);
     }
 
-    public SwipeLockScrollView(Context context, AttributeSet attrs) {
+    public SwipeLockFrameLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public SwipeLockScrollView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SwipeLockFrameLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+    }
+
+    public SwipeLockFrameLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
     }
 
     @Override
@@ -37,7 +38,7 @@ public class SwipeLockScrollView extends HorizontalScrollView implements SwipeLo
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         updateSwipeLock(ev);
-        return super.onInterceptTouchEvent(ev);
+        return true;
     }
 
     @SuppressLint("ClickableViewAccessibility") // we are just listening to touch events
@@ -68,6 +69,8 @@ public class SwipeLockScrollView extends HorizontalScrollView implements SwipeLo
                     locked = true;
                 }
             }
+
+            swipeLockInterface.setSwipeLocked(locked);
         }
     }
 }

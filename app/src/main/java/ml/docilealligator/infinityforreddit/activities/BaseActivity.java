@@ -391,4 +391,13 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
         this.titleTypeface = titleTypeface;
         this.contentTypeface = contentTypeface;
     }
+
+
+    public void lockSwipeRightToGoBack() {
+
+    }
+
+    public void unlockSwipeRightToGoBack() {
+
+    }
 }
