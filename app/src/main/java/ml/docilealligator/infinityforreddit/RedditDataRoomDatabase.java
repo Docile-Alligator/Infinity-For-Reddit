@@ -40,25 +40,17 @@ import ml.docilealligator.infinityforreddit.user.UserData;
         SubscribedUserData.class, MultiReddit.class, CustomTheme.class, RecentSearchQuery.class,
         ReadPost.class, PostFilter.class, PostFilterUsage.class, AnonymousMultiredditSubreddit.class}, version = 23)
 public abstract class RedditDataRoomDatabase extends RoomDatabase {
-    private static volatile RedditDataRoomDatabase INSTANCE;
 
-    public static RedditDataRoomDatabase getDatabase(final Context context) {
-        if (INSTANCE == null) {
-            synchronized (RedditDataRoomDatabase.class) {
-                if (INSTANCE == null) {
-                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
-                            RedditDataRoomDatabase.class, "reddit_data")
-                            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
-                                    MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9,
-                                    MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13,
-                                    MIGRATION_13_14, MIGRATION_14_15, MIGRATION_15_16, MIGRATION_16_17,
-                                    MIGRATION_17_18, MIGRATION_18_19, MIGRATION_19_20, MIGRATION_20_21,
-                                    MIGRATION_21_22, MIGRATION_22_23)
-                            .build();
-                }
-            }
-        }
-        return INSTANCE;
+    public static RedditDataRoomDatabase create(final Context context) {
+        return Room.databaseBuilder(context.getApplicationContext(),
+                        RedditDataRoomDatabase.class, "reddit_data")
+                .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4, MIGRATION_4_5,
+                        MIGRATION_5_6, MIGRATION_6_7, MIGRATION_7_8, MIGRATION_8_9,
+                        MIGRATION_9_10, MIGRATION_10_11, MIGRATION_11_12, MIGRATION_12_13,
+                        MIGRATION_13_14, MIGRATION_14_15, MIGRATION_15_16, MIGRATION_16_17,
+                        MIGRATION_17_18, MIGRATION_18_19, MIGRATION_19_20, MIGRATION_20_21,
+                        MIGRATION_21_22, MIGRATION_22_23)
+                .build();
     }
 
     public abstract AccountDao accountDao();
