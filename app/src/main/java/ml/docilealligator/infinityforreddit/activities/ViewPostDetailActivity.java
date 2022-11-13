@@ -22,7 +22,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
-import androidx.core.view.inputmethod.EditorInfoCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
@@ -193,6 +192,48 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
         super.onCreate(savedInstanceState);
 
+        setupView(savedInstanceState);
+
+        initializeConfigurationSettings();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            setupWindow();
+        }
+
+        if (shouldSwipeBetweenPosts()) {
+            setupSwipeBetweenPosts();
+        } else {
+            setupSwipeRightOutOfPost();
+        }
+
+        fragmentManager = getSupportFragmentManager();
+
+        if (savedInstanceState == null) {
+            post = getPost();
+        }
+
+        orientation = getOrientation();
+
+        setupToolbar();
+
+        if (savedInstanceState == null) {
+            mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
+        }
+
+        setupFab();
+
+        if (!isSignedIn() && doesSupportPrivateKeyboard()) {
+            usePrivateKeyboard(searchTextInputEditText);
+        }
+
+        if (isLoadingMorePosts()) {
+            stopLoadingPosts();
+        }
+
+        checkNewAccountAndBindView(savedInstanceState);
+    }
+
+    private void setupView(Bundle savedInstanceState) {
         BigImageViewer.initialize(GlideImageLoader.with(this.getApplicationContext()));
 
         setContentView(R.layout.activity_view_post_detail);
@@ -204,72 +245,101 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         EventBus.getDefault().register(this);
 
         applyCustomTheme();
+    }
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            Window window = getWindow();
+    private Post getPost() {
+        return getIntent().getParcelableExtra(EXTRA_POST_DATA);
+    }
 
-            if (isChangeStatusBarIconColor()) {
-                addOnOffsetChangedListener(mAppBarLayout);
-            }
-
-            if (isImmersiveInterface()) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                    window.setDecorFitsSystemWindows(false);
-                } else {
-                    window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
-                }
-                adjustToolbar(mToolbar);
-
-                int navBarHeight = getNavBarHeight();
-                if (navBarHeight > 0) {
-                    CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
-                    params.bottomMargin += navBarHeight;
-                    fab.setLayoutParams(params);
-
-                    searchPanelMaterialCardView.setContentPadding(searchPanelMaterialCardView.getPaddingStart(),
-                            searchPanelMaterialCardView.getPaddingTop(),
-                            searchPanelMaterialCardView.getPaddingEnd(),
-                            searchPanelMaterialCardView.getPaddingBottom() + navBarHeight);
-                }
-            }
-        }
-
-        boolean swipeBetweenPosts = mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_BETWEEN_POSTS, false);
-        if (!swipeBetweenPosts) {
-            if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-                mSlidrInterface = Slidr.attach(this);
-            }
-            viewPager2.setUserInputEnabled(false);
-        }
-        postFragmentId = getIntent().getLongExtra(EXTRA_POST_FRAGMENT_ID, -1);
-        if (swipeBetweenPosts && posts == null && postFragmentId > 0) {
-            EventBus.getDefault().post(new NeedForPostListFromPostFragmentEvent(postFragmentId));
-        }
-
+    private void initializeConfigurationSettings() {
         postListPosition = getIntent().getIntExtra(EXTRA_POST_LIST_POSITION, -1);
         isNsfwSubreddit = getIntent().getBooleanExtra(EXTRA_IS_NSFW_SUBREDDIT, false);
+        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
+        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
+        mVolumeKeysNavigateComments = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOLUME_KEYS_NAVIGATE_COMMENTS, false);
+    }
 
-        fragmentManager = getSupportFragmentManager();
-
-        if (savedInstanceState == null) {
-            post = getIntent().getParcelableExtra(EXTRA_POST_DATA);
+    private void setupWindow() {
+        if (isChangeStatusBarIconColor()) {
+            addOnOffsetChangedListener(mAppBarLayout);
         }
 
-        orientation = getResources().getConfiguration().orientation;
+        if (isImmersiveInterface()) {
+            setupImmersiveInterface();
+        }
+    }
 
+    private void setupImmersiveInterface() {
+        Window window = getWindow();
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            window.setDecorFitsSystemWindows(false);
+        } else {
+            window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
+        }
+        adjustToolbar(mToolbar);
+
+        int navBarHeight = getNavBarHeight();
+        if (navBarHeight > 0) {
+            CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) fab.getLayoutParams();
+            params.bottomMargin += navBarHeight;
+            fab.setLayoutParams(params);
+
+            searchPanelMaterialCardView.setContentPadding(searchPanelMaterialCardView.getPaddingStart(),
+                    searchPanelMaterialCardView.getPaddingTop(),
+                    searchPanelMaterialCardView.getPaddingEnd(),
+                    searchPanelMaterialCardView.getPaddingBottom() + navBarHeight);
+        }
+    }
+
+    private void setupSwipeRightOutOfPost() {
+        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
+            mSlidrInterface = Slidr.attach(this);
+        }
+        viewPager2.setUserInputEnabled(false);
+    }
+
+    private void setupSwipeBetweenPosts() {
+        postFragmentId = getIntent().getLongExtra(EXTRA_POST_FRAGMENT_ID, -1);
+        if (posts == null && postFragmentId > 0) {
+            EventBus.getDefault().post(new NeedForPostListFromPostFragmentEvent(postFragmentId));
+        }
+    }
+
+    private boolean shouldSwipeBetweenPosts() {
+        return mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_BETWEEN_POSTS, false);
+    }
+
+    private int getOrientation() {
+        return getResources().getConfiguration().orientation;
+    }
+
+    private boolean isSignedIn() {
+        return mAccessToken != null;
+    }
+
+    private boolean isLoadingMorePosts() {
+        return loadingMorePostsStatus == LoadingMorePostsStatus.LOADING;
+    }
+
+    private void stopLoadingPosts() {
+        loadingMorePostsStatus = LoadingMorePostsStatus.NOT_LOADING;
+        fetchMorePosts(false);
+    }
+
+    private void setupToolbar() {
         mToolbar.setTitle("");
         setSupportActionBar(mToolbar);
         setToolbarGoToTop(mToolbar);
+    }
 
-        if (savedInstanceState == null) {
-            mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
+    public void setTitle(String title) {
+        if (mToolbar != null) {
+            mToolbar.setTitle(title);
         }
+    }
 
-        mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
-        mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
-
-        mVolumeKeysNavigateComments = mSharedPreferences.getBoolean(SharedPreferencesUtils.VOLUME_KEYS_NAVIGATE_COMMENTS, false);
-
+    private void setupFab() {
         fab.setOnClickListener(view -> {
             if (sectionsPagerAdapter != null) {
                 ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
@@ -289,23 +359,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             }
             return false;
         });
-
-        if (mAccessToken == null && Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            searchTextInputEditText.setImeOptions(searchTextInputEditText.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
-        }
-
-        if (loadingMorePostsStatus == LoadingMorePostsStatus.LOADING) {
-            loadingMorePostsStatus = LoadingMorePostsStatus.NOT_LOADING;
-            fetchMorePosts(false);
-        }
-
-        checkNewAccountAndBindView(savedInstanceState);
-    }
-
-    public void setTitle(String title) {
-        if (mToolbar != null) {
-            mToolbar.setTitle(title);
-        }
     }
 
     public void showFab() {
@@ -414,11 +467,11 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         return isNsfwSubreddit;
     }
 
-    private void editComment(String commentAuthor, String commentContentMarkdown, int position) {
+    private void editComment(String commentContentMarkdown, int position) {
         if (sectionsPagerAdapter != null) {
             ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
             if (fragment != null) {
-                fragment.editComment(commentAuthor, commentContentMarkdown, position);
+                fragment.editComment(null, commentContentMarkdown, position);
             }
         }
     }
@@ -452,48 +505,56 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
     public void saveComment(@NonNull Comment comment, int position) {
         if (comment.isSaved()) {
-            comment.setSaved(false);
-            SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
-                @Override
-                public void success() {
-                    ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
-                    if (fragment != null) {
-                        fragment.saveComment(position, false);
-                    }
-                    Toast.makeText(ViewPostDetailActivity.this, R.string.comment_unsaved_success, Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void failed() {
-                    ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
-                    if (fragment != null) {
-                        fragment.saveComment(position, true);
-                    }
-                    Toast.makeText(ViewPostDetailActivity.this, R.string.comment_unsaved_failed, Toast.LENGTH_SHORT).show();
-                }
-            });
+            unsaveSavedComment(comment, position);
         } else {
-            comment.setSaved(true);
-            SaveThing.saveThing(mOauthRetrofit, mAccessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
-                @Override
-                public void success() {
-                    ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
-                    if (fragment != null) {
-                        fragment.saveComment(position, true);
-                    }
-                    Toast.makeText(ViewPostDetailActivity.this, R.string.comment_saved_success, Toast.LENGTH_SHORT).show();
-                }
-
-                @Override
-                public void failed() {
-                    ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
-                    if (fragment != null) {
-                        fragment.saveComment(position, false);
-                    }
-                    Toast.makeText(ViewPostDetailActivity.this, R.string.comment_saved_failed, Toast.LENGTH_SHORT).show();
-                }
-            });
+            saveUnsavedComment(comment, position);
         }
+    }
+    
+    private void unsaveSavedComment(Comment comment, int position) {
+        comment.setSaved(false);
+        SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
+            @Override
+            public void success() {
+                ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
+                if (fragment != null) {
+                    fragment.saveComment(position, false);
+                }
+                Toast.makeText(ViewPostDetailActivity.this, R.string.comment_unsaved_success, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void failed() {
+                ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
+                if (fragment != null) {
+                    fragment.saveComment(position, true);
+                }
+                Toast.makeText(ViewPostDetailActivity.this, R.string.comment_unsaved_failed, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+    
+    private void saveUnsavedComment(Comment comment, int position) {
+        comment.setSaved(true);
+        SaveThing.saveThing(mOauthRetrofit, mAccessToken, comment.getFullName(), new SaveThing.SaveThingListener() {
+            @Override
+            public void success() {
+                ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
+                if (fragment != null) {
+                    fragment.saveComment(position, true);
+                }
+                Toast.makeText(ViewPostDetailActivity.this, R.string.comment_saved_success, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void failed() {
+                ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
+                if (fragment != null) {
+                    fragment.saveComment(position, false);
+                }
+                Toast.makeText(ViewPostDetailActivity.this, R.string.comment_saved_failed, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     public boolean toggleSearchPanelVisibility() {
@@ -829,41 +890,53 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        boolean isResultValid = data != null && resultCode == Activity.RESULT_OK;
+        if (!isResultValid) {
+            return;
+        }
+
         if (requestCode == EDIT_COMMENT_REQUEST_CODE) {
-            if (data != null && resultCode == Activity.RESULT_OK) {
-                editComment(null,
-                        data.getStringExtra(EditCommentActivity.EXTRA_EDITED_COMMENT_CONTENT),
-                        data.getExtras().getInt(EditCommentActivity.EXTRA_EDITED_COMMENT_POSITION));
-            }
+            editComment(
+                    data.getStringExtra(EditCommentActivity.EXTRA_EDITED_COMMENT_CONTENT),
+                    data.getExtras().getInt(EditCommentActivity.EXTRA_EDITED_COMMENT_POSITION));
         } else if (requestCode == GIVE_AWARD_REQUEST_CODE) {
-            if (data != null && resultCode == Activity.RESULT_OK) {
-                Toast.makeText(this, R.string.give_award_success, Toast.LENGTH_SHORT).show();
-                int position = data.getIntExtra(GiveAwardActivity.EXTRA_RETURN_ITEM_POSITION, 0);
-                String newAwardsHTML = data.getStringExtra(GiveAwardActivity.EXTRA_RETURN_NEW_AWARDS);
-                int newAwardsCount = data.getIntExtra(GiveAwardActivity.EXTRA_RETURN_NEW_AWARDS_COUNT, 0);
-                awardGiven(newAwardsHTML, newAwardsCount, position);
-            }
+            giveAward(data);
         } else if (requestCode == CommentActivity.WRITE_COMMENT_REQUEST_CODE) {
-            if (data != null && resultCode == Activity.RESULT_OK) {
-                if (data.hasExtra(RETURN_EXTRA_COMMENT_DATA_KEY)) {
-                    ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
-                    if (fragment != null) {
-                        Comment comment = data.getParcelableExtra(RETURN_EXTRA_COMMENT_DATA_KEY);
-                        if (comment != null && comment.getDepth() == 0) {
-                            fragment.addComment(comment);
-                        } else {
-                            String parentFullname = data.getStringExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY);
-                            int parentPosition = data.getIntExtra(CommentActivity.EXTRA_PARENT_POSITION_KEY, -1);
-                            if (parentFullname != null && parentPosition >= 0) {
-                                fragment.addChildComment(comment, parentFullname, parentPosition);
-                            }
-                        }
-                    }
-                } else {
-                    Toast.makeText(this, R.string.send_comment_failed, Toast.LENGTH_SHORT).show();
+            if (data.hasExtra(RETURN_EXTRA_COMMENT_DATA_KEY)) {
+                writeComment(data);
+            } else {
+                writeCommentFailed();
+            }
+        }
+    }
+
+    private void giveAward(Intent data) {
+        Toast.makeText(this, R.string.give_award_success, Toast.LENGTH_SHORT).show();
+        int position = data.getIntExtra(GiveAwardActivity.EXTRA_RETURN_ITEM_POSITION, 0);
+        String newAwardsHTML = data.getStringExtra(GiveAwardActivity.EXTRA_RETURN_NEW_AWARDS);
+        int newAwardsCount = data.getIntExtra(GiveAwardActivity.EXTRA_RETURN_NEW_AWARDS_COUNT, 0);
+        awardGiven(newAwardsHTML, newAwardsCount, position);
+    }
+
+    private void writeComment(Intent data) {
+        ViewPostDetailFragment fragment = sectionsPagerAdapter.getCurrentFragment();
+        if (fragment != null) {
+            Comment comment = data.getParcelableExtra(RETURN_EXTRA_COMMENT_DATA_KEY);
+            if (comment != null && comment.getDepth() == 0) {
+                fragment.addComment(comment);
+            } else {
+                String parentFullname = data.getStringExtra(CommentActivity.EXTRA_PARENT_FULLNAME_KEY);
+                int parentPosition = data.getIntExtra(CommentActivity.EXTRA_PARENT_POSITION_KEY, -1);
+                if (parentFullname != null && parentPosition >= 0) {
+                    fragment.addChildComment(comment, parentFullname, parentPosition);
                 }
             }
         }
+    }
+
+    private void writeCommentFailed() {
+        Toast.makeText(this, R.string.send_comment_failed, Toast.LENGTH_SHORT).show();
     }
 
     @Override

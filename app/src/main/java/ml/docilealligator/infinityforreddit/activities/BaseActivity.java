@@ -20,6 +20,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -28,6 +29,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.view.menu.MenuItemImpl;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
+import androidx.core.view.inputmethod.EditorInfoCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -390,5 +392,13 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
         this.typeface = typeface;
         this.titleTypeface = titleTypeface;
         this.contentTypeface = contentTypeface;
+    }
+
+    public boolean doesSupportPrivateKeyboard() {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
+    }
+
+    public void usePrivateKeyboard(EditText inputField) {
+        inputField.setImeOptions(inputField.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
     }
 }
