@@ -38,7 +38,7 @@ public class SwipeLockFrameLayout extends FrameLayout implements SwipeLockView {
     @Override
     public boolean onInterceptTouchEvent(MotionEvent ev) {
         updateSwipeLock(ev);
-        return false;
+        return locked;
     }
 
     @SuppressLint("ClickableViewAccessibility") // we are just listening to touch events

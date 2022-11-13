@@ -37,19 +37,16 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
     private ArrayList<Post.Gallery> galleryImages;
     private boolean blurImage;
     private float ratio;
-    private OnItemClickListener onItemClickListener;
 
     public PostGalleryTypeImageRecyclerViewAdapter(RequestManager glide, Typeface typeface,
                                                    SaveMemoryCenterInisdeDownsampleStrategy saveMemoryCenterInisdeDownsampleStrategy,
-                                                   int mColorAccent, int mPrimaryTextColor, float scale,
-                                                   OnItemClickListener onItemClickListener) {
+                                                   int mColorAccent, int mPrimaryTextColor, float scale) {
         this.glide = glide;
         this.typeface = typeface;
         this.saveMemoryCenterInisdeDownsampleStrategy = saveMemoryCenterInisdeDownsampleStrategy;
         this.mColorAccent = mColorAccent;
         this.mPrimaryTextColor = mPrimaryTextColor;
         this.mScale = scale;
-        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -137,19 +134,11 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
             binding.progressBarItemGalleryImageInPostFeed.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
             binding.errorTextViewItemGalleryImageInPostFeed.setTextColor(mPrimaryTextColor);
 
-            binding.imageViewItemGalleryImageInPostFeed.setOnClickListener(view -> {
-                onItemClickListener.onClick(getBindingAdapterPosition());
-            });
-
             binding.errorTextViewItemGalleryImageInPostFeed.setOnClickListener(view -> {
                 binding.progressBarItemGalleryImageInPostFeed.setVisibility(View.VISIBLE);
                 binding.errorTextViewItemGalleryImageInPostFeed.setVisibility(View.GONE);
                 loadImage(this);
             });
         }
-    }
-
-    public interface OnItemClickListener {
-        void onClick(int galleryItemIndex);
     }
 }

@@ -400,4 +400,8 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
     public void unlockSwipeRightToGoBack() {
 
     }
+
+    public void toggleViewPagerSwipeLock(boolean lock) {
+
+    }
 }
