@@ -1547,13 +1547,15 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId());
     }
 
-    private void lockSwipeRightToGoBack() {
+    @Override
+    public void lockSwipeRightToGoBack() {
         if (mSlidrInterface != null) {
             mSlidrInterface.lock();
         }
     }
 
-    private void unlockSwipeRightToGoBack() {
+    @Override
+    public void unlockSwipeRightToGoBack() {
         if (mSlidrInterface != null) {
             mSlidrInterface.unlock();
         }

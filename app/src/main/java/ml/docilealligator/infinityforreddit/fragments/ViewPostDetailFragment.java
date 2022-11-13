@@ -202,8 +202,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @State
     ArrayList<String> children;
     @State
-    int mChildrenStartingIndex = 0;
-    @State
     boolean loadMoreChildrenSuccess = true;
     @State
     boolean hasMoreChildren;
@@ -621,6 +619,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
                             fetchMoreComments();
                         }
+
+                        @Override
+                        public String getSortType() {
+                            return sortType;
+                        }
                     });
             if (mCommentsRecyclerView != null) {
                 mRecyclerView.setAdapter(mPostAdapter);
@@ -810,7 +813,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     public void changeSortType(SortType sortType) {
         mFetchPostInfoLinearLayout.setVisibility(View.GONE);
         mGlide.clear(mFetchPostInfoImageView);
-        mChildrenStartingIndex = 0;
         if (children != null) {
             children.clear();
         }
@@ -1328,6 +1330,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
                                             fetchMoreComments();
                                         }
+
+                                        @Override
+                                        public String getSortType() {
+                                            return sortType;
+                                        }
                                     });
                             if (mCommentsRecyclerView != null) {
                                 mRecyclerView.setAdapter(mPostAdapter);
@@ -1343,8 +1350,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                 ParseComment.parseComment(mExecutor, new Handler(), response.body(), new ArrayList<>(),
                                         mExpandChildren, new ParseComment.ParseCommentListener() {
                                             @Override
-                                            public void onParseCommentSuccess(ArrayList<Comment> expandedComments, String parentId, ArrayList<String> moreChildrenFullnames) {
-                                                ViewPostDetailFragment.this.children = moreChildrenFullnames;
+                                            public void onParseCommentSuccess(ArrayList<Comment> expandedComments, String parentId, ArrayList<String> moreChildrenIds) {
+                                                ViewPostDetailFragment.this.children = moreChildrenIds;
 
                                                 hasMoreChildren = children.size() != 0;
                                                 mCommentsAdapter.addComments(expandedComments, hasMoreChildren);
@@ -1567,13 +1574,13 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         isLoadingMoreChildren = true;
 
         Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
-        FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken, children, mChildrenStartingIndex,
-                0, mExpandChildren, new FetchComment.FetchMoreCommentListener() {
+        FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken, children,
+                mExpandChildren, mPost.getFullName(), sortType, new FetchComment.FetchMoreCommentListener() {
                     @Override
-                    public void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments, int childrenStartingIndex) {
-                        hasMoreChildren = childrenStartingIndex < children.size();
+                    public void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments, ArrayList<String> moreChildrenIds) {
+                        children = moreChildrenIds;
+                        hasMoreChildren = !children.isEmpty();
                         mCommentsAdapter.addComments(expandedComments, hasMoreChildren);
-                        mChildrenStartingIndex = childrenStartingIndex;
                         isLoadingMoreChildren = false;
                         loadMoreChildrenSuccess = true;
                     }
@@ -1590,7 +1597,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     public void refresh(boolean fetchPost, boolean fetchComments) {
         if (mPostAdapter != null && !isRefreshing) {
             isRefreshing = true;
-            mChildrenStartingIndex = 0;
 
             mFetchPostInfoLinearLayout.setVisibility(View.GONE);
             mGlide.clear(mFetchPostInfoImageView);

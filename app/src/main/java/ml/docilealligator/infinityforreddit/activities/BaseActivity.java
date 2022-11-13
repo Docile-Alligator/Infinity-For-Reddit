@@ -401,4 +401,12 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
     public void usePrivateKeyboard(EditText inputField) {
         inputField.setImeOptions(inputField.getImeOptions() | EditorInfoCompat.IME_FLAG_NO_PERSONALIZED_LEARNING);
     }
+
+    public void lockSwipeRightToGoBack() {
+
+    }
+
+    public void unlockSwipeRightToGoBack() {
+
+    }
 }

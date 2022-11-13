@@ -448,13 +448,15 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         }
     }
 
-    private void lockSwipeRightToGoBack() {
+    @Override
+    public void lockSwipeRightToGoBack() {
         if (mSlidrInterface != null) {
             mSlidrInterface.lock();
         }
     }
 
-    private void unlockSwipeRightToGoBack() {
+    @Override
+    public void unlockSwipeRightToGoBack() {
         if (mSlidrInterface != null) {
             mSlidrInterface.unlock();
         }

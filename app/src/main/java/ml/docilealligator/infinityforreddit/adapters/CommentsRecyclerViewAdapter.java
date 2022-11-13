@@ -62,9 +62,9 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.CommentIndentationView;
 import ml.docilealligator.infinityforreddit.customviews.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
-import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
-import ml.docilealligator.infinityforreddit.customviews.SwipeLockScrollView;
+import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
+import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.post.Post;
@@ -607,18 +607,17 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.loading);
 
                         Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
+                        String sortType = mCommentRecyclerViewAdapterCallback.getSortType();
                         FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken,
-                                parentComment.getMoreChildrenFullnames(),
-                                parentComment.getMoreChildrenStartingIndex(), parentComment.getDepth() + 1,
-                                mExpandChildren, new FetchComment.FetchMoreCommentListener() {
+                                parentComment.getMoreChildrenIds(),
+                                mExpandChildren, mPost.getFullName(), sortType, new FetchComment.FetchMoreCommentListener() {
                                     @Override
-                                    public void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments,
-                                                                          int childrenStartingIndex) {
+                                    public void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments, ArrayList<String> moreChildrenIds) {
                                         if (mVisibleComments.size() > parentPosition
                                                 && parentComment.getFullName().equals(mVisibleComments.get(parentPosition).getFullName())) {
                                             if (mVisibleComments.get(parentPosition).isExpanded()) {
-                                                if (mVisibleComments.get(parentPosition).getChildren().size() > childrenStartingIndex) {
-                                                    mVisibleComments.get(parentPosition).setMoreChildrenStartingIndex(childrenStartingIndex);
+                                                if (!moreChildrenIds.isEmpty()) {
+                                                    mVisibleComments.get(parentPosition).setMoreChildrenIds(moreChildrenIds);
                                                     mVisibleComments.get(parentPosition).getChildren().get(mVisibleComments.get(parentPosition).getChildren().size() - 1)
                                                             .setLoadingMoreChildren(false);
                                                     mVisibleComments.get(parentPosition).getChildren().get(mVisibleComments.get(parentPosition).getChildren().size() - 1)
@@ -647,7 +646,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                                                 } else {
                                                     mVisibleComments.get(parentPosition).getChildren()
                                                             .remove(mVisibleComments.get(parentPosition).getChildren().size() - 1);
-                                                    mVisibleComments.get(parentPosition).removeMoreChildrenFullnames();
+                                                    mVisibleComments.get(parentPosition).removeMoreChildrenIds();
 
                                                     int placeholderPosition = commentPosition;
                                                     if (mVisibleComments.get(commentPosition).getFullName().equals(parentComment.getFullName())) {
@@ -674,10 +673,10 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                                                     }
                                                 }
                                             } else {
-                                                if (mVisibleComments.get(parentPosition).hasReply() && mVisibleComments.get(parentPosition).getChildren().size() <= childrenStartingIndex) {
+                                                if (mVisibleComments.get(parentPosition).hasReply() && moreChildrenIds.isEmpty()) {
                                                     mVisibleComments.get(parentPosition).getChildren()
                                                             .remove(mVisibleComments.get(parentPosition).getChildren().size() - 1);
-                                                    mVisibleComments.get(parentPosition).removeMoreChildrenFullnames();
+                                                    mVisibleComments.get(parentPosition).removeMoreChildrenIds();
                                                 }
                                             }
 
@@ -1157,6 +1156,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         void retryFetchingComments();
 
         void retryFetchingMoreComments();
+
+        String getSortType();
     }
 
     public class CommentViewHolder extends RecyclerView.ViewHolder {
@@ -1267,7 +1268,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             }
 
             commentMarkdownView.setRecycledViewPool(recycledViewPool);
-            LinearLayoutManagerBugFixed linearLayoutManager = new MarkwonLinearLayoutManager(mActivity, new SwipeLockScrollView.SwipeLockInterface() {
+            LinearLayoutManagerBugFixed linearLayoutManager = new SwipeLockLinearLayoutManager(mActivity, new SwipeLockInterface() {
                 @Override
                 public void lockSwipe() {
                     ((ViewPostDetailActivity) mActivity).lockSwipeRightToGoBack();

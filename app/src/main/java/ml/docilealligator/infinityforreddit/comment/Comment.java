@@ -53,8 +53,7 @@ public class Comment implements Parcelable {
     private boolean isExpanded;
     private boolean hasExpandedBefore;
     private ArrayList<Comment> children;
-    private ArrayList<String> moreChildrenFullnames;
-    private int moreChildrenStartingIndex;
+    private ArrayList<String> moreChildrenIds;
     private int placeholderType;
     private boolean isLoadingMoreChildren;
     private boolean loadMoreChildrenFailed;
@@ -91,7 +90,6 @@ public class Comment implements Parcelable {
         this.saved = saved;
         this.isExpanded = false;
         this.hasExpandedBefore = false;
-        moreChildrenStartingIndex = 0;
         placeholderType = NOT_PLACEHOLDER;
     }
 
@@ -141,9 +139,8 @@ public class Comment implements Parcelable {
         hasExpandedBefore = in.readByte() != 0;
         children = new ArrayList<>();
         in.readTypedList(children, Comment.CREATOR);
-        moreChildrenFullnames = new ArrayList<>();
-        in.readStringList(moreChildrenFullnames);
-        moreChildrenStartingIndex = in.readInt();
+        moreChildrenIds = new ArrayList<>();
+        in.readStringList(moreChildrenIds);
         placeholderType = in.readInt();
         isLoadingMoreChildren = in.readByte() != 0;
         loadMoreChildrenFailed = in.readByte() != 0;
@@ -345,28 +342,20 @@ public class Comment implements Parcelable {
         children.add(position, comment);
     }
 
-    public ArrayList<String> getMoreChildrenFullnames() {
-        return moreChildrenFullnames;
+    public ArrayList<String> getMoreChildrenIds() {
+        return moreChildrenIds;
     }
 
-    public void setMoreChildrenFullnames(ArrayList<String> moreChildrenFullnames) {
-        this.moreChildrenFullnames = moreChildrenFullnames;
+    public void setMoreChildrenIds(ArrayList<String> moreChildrenIds) {
+        this.moreChildrenIds = moreChildrenIds;
     }
 
-    public boolean hasMoreChildrenFullnames() {
-        return moreChildrenFullnames != null;
+    public boolean hasMoreChildrenIds() {
+        return moreChildrenIds != null;
     }
 
-    public void removeMoreChildrenFullnames() {
-        moreChildrenFullnames.clear();
-    }
-
-    public int getMoreChildrenStartingIndex() {
-        return moreChildrenStartingIndex;
-    }
-
-    public void setMoreChildrenStartingIndex(int moreChildrenStartingIndex) {
-        this.moreChildrenStartingIndex = moreChildrenStartingIndex;
+    public void removeMoreChildrenIds() {
+        moreChildrenIds.clear();
     }
 
     public int getPlaceholderType() {
@@ -423,8 +412,7 @@ public class Comment implements Parcelable {
         parcel.writeByte((byte) (isExpanded ? 1 : 0));
         parcel.writeByte((byte) (hasExpandedBefore ? 1 : 0));
         parcel.writeTypedList(children);
-        parcel.writeStringList(moreChildrenFullnames);
-        parcel.writeInt(moreChildrenStartingIndex);
+        parcel.writeStringList(moreChildrenIds);
         parcel.writeInt(placeholderType);
         parcel.writeByte((byte) (isLoadingMoreChildren ? 1 : 0));
         parcel.writeByte((byte) (loadMoreChildrenFailed ? 1 : 0));

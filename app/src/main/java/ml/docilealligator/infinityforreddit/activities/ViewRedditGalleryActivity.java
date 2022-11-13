@@ -60,6 +60,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     public static final String EXTRA_REDDIT_GALLERY = "ERG";
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     public static final String EXTRA_IS_NSFW = "EIN";
+    public static final String EXTRA_GALLERY_ITEM_INDEX = "EGII";
 
     @BindView(R.id.hauler_view_view_reddit_gallery_activity)
     HaulerView haulerView;
