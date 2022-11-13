@@ -87,6 +87,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
+import ml.docilealligator.infinityforreddit.databinding.ItemPostCard2GalleryTypeBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostGalleryTypeBinding;
 import ml.docilealligator.infinityforreddit.events.PostUpdateEventToPostDetailFragment;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
@@ -120,7 +121,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private static final int VIEW_TYPE_POST_GALLERY = 6;
     private static final int VIEW_TYPE_POST_CARD_2_VIDEO_AUTOPLAY_TYPE = 7;
     private static final int VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE = 8;
-    private static final int VIEW_TYPE_POST_CARD_2_TEXT_TYPE = 9;
+    private static final int VIEW_TYPE_POST_CARD_2_GALLERY_TYPE = 9;
+    private static final int VIEW_TYPE_POST_CARD_2_TEXT_TYPE = 10;
 
     private static final DiffUtil.ItemCallback<Post> DIFF_CALLBACK = new DiffUtil.ItemCallback<Post>() {
         @Override
@@ -429,8 +431,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
                     case Post.GIF_TYPE:
                     case Post.IMAGE_TYPE:
-                    case Post.GALLERY_TYPE:
                         return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
+                    case Post.GALLERY_TYPE:
+                        return VIEW_TYPE_POST_CARD_2_GALLERY_TYPE;
                     case Post.LINK_TYPE:
                     case Post.NO_PREVIEW_LINK_TYPE:
                         switch (mDefaultLinkPostLayout) {
@@ -479,6 +482,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             return new PostCard2VideoAutoplayViewHolder(LayoutInflater.from(parent.getContext()).inflate(mLegacyAutoplayVideoControllerUI ? R.layout.item_post_card_2_video_autoplay_legacy_controller : R.layout.item_post_card_2_video_autoplay, parent, false));
         } else if (viewType == VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE) {
             return new PostCard2WithPreviewViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_card_2_with_preview, parent, false));
+        } else if (viewType == VIEW_TYPE_POST_CARD_2_GALLERY_TYPE) {
+            return new PostCard2GalleryTypeViewHolder(ItemPostCard2GalleryTypeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         } else {
             //VIEW_TYPE_POST_CARD_2_TEXT_TYPE
             return new PostCard2TextTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_card_2_text, parent, false));
@@ -858,25 +863,25 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             }
                         }
                     }
-                } else if (holder instanceof PostGalleryTypeViewHolder) {
+                } else if (holder instanceof PostBaseGalleryTypeViewHolder) {
                     if (mDataSavingMode && mDisableImagePreview) {
-                        ((PostGalleryTypeViewHolder) holder).binding.noPreviewImageViewItemPostGalleryType.setVisibility(View.VISIBLE);
-                        ((PostGalleryTypeViewHolder) holder).binding.noPreviewImageViewItemPostGalleryType.setImageResource(R.drawable.ic_gallery_24dp);
+                        ((PostBaseGalleryTypeViewHolder) holder).noPreviewImageView.setVisibility(View.VISIBLE);
+                        ((PostBaseGalleryTypeViewHolder) holder).noPreviewImageView.setImageResource(R.drawable.ic_gallery_24dp);
                     } else {
-                        ((PostGalleryTypeViewHolder) holder).binding.galleryFrameLayoutItemPostGalleryType.setVisibility(View.VISIBLE);
-                        ((PostGalleryTypeViewHolder) holder).binding.imageIndexTextViewItemPostGalleryType.setText(mActivity.getString(R.string.image_index_in_gallery, 1, post.getGallery().size()));
+                        ((PostBaseGalleryTypeViewHolder) holder).frameLayout.setVisibility(View.VISIBLE);
+                        ((PostBaseGalleryTypeViewHolder) holder).imageIndexTextView.setText(mActivity.getString(R.string.image_index_in_gallery, 1, post.getGallery().size()));
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
                         if (preview != null) {
                             if (mFixedHeightPreviewInCard || (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0)) {
-                                ((PostGalleryTypeViewHolder) holder).adapter.setRatio(-1);
+                                ((PostBaseGalleryTypeViewHolder) holder).adapter.setRatio(-1);
                             } else {
-                                ((PostGalleryTypeViewHolder) holder).adapter.setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
+                                ((PostBaseGalleryTypeViewHolder) holder).adapter.setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
                             }
                         } else {
-                            ((PostGalleryTypeViewHolder) holder).adapter.setRatio(-1);
+                            ((PostBaseGalleryTypeViewHolder) holder).adapter.setRatio(-1);
                         }
-                        ((PostGalleryTypeViewHolder) holder).adapter.setGalleryImages(post.getGallery());
-                        ((PostGalleryTypeViewHolder) holder).adapter.setBlurImage(
+                        ((PostBaseGalleryTypeViewHolder) holder).adapter.setGalleryImages(post.getGallery());
+                        ((PostBaseGalleryTypeViewHolder) holder).adapter.setBlurImage(
                                 (post.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit())) || (post.isSpoiler() && mNeedBlurSpoiler));
                     }
                 } else if (holder instanceof PostTextTypeViewHolder) {
@@ -1890,9 +1895,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 ((PostWithPreviewTypeViewHolder) holder).progressBar.setVisibility(View.GONE);
                 ((PostWithPreviewTypeViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.GONE);
                 ((PostWithPreviewTypeViewHolder) holder).linkTextView.setVisibility(View.GONE);
-            } else if (holder instanceof PostGalleryTypeViewHolder) {
-                ((PostGalleryTypeViewHolder) holder).binding.galleryFrameLayoutItemPostGalleryType.setVisibility(View.GONE);
-                ((PostGalleryTypeViewHolder) holder).binding.noPreviewImageViewItemPostGalleryType.setVisibility(View.GONE);
+            } else if (holder instanceof PostBaseGalleryTypeViewHolder) {
+                ((PostBaseGalleryTypeViewHolder) holder).frameLayout.setVisibility(View.GONE);
+                ((PostBaseGalleryTypeViewHolder) holder).noPreviewImageView.setVisibility(View.GONE);
             } else if (holder instanceof PostTextTypeViewHolder) {
                 ((PostTextTypeViewHolder) holder).contentTextView.setText("");
                 ((PostTextTypeViewHolder) holder).contentTextView.setTextColor(mPostContentColor);
@@ -3104,46 +3109,81 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
     }
 
-    public class PostGalleryTypeViewHolder extends PostBaseViewHolder {
-        ItemPostGalleryTypeBinding binding;
+    public class PostBaseGalleryTypeViewHolder extends PostBaseViewHolder {
+        FrameLayout frameLayout;
+        RecyclerView galleryRecyclerView;
+        CustomTextView imageIndexTextView;
+        ImageView noPreviewImageView;
+
         PostGalleryTypeImageRecyclerViewAdapter adapter;
         private boolean swipeLocked;
 
-        PostGalleryTypeViewHolder(ItemPostGalleryTypeBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
+        PostBaseGalleryTypeViewHolder(View rootView,
+                                      AspectRatioGifImageView iconGifImageView,
+                                      TextView subredditTextView,
+                                      TextView userTextView,
+                                      ImageView stickiedPostImageView,
+                                      TextView postTimeTextView,
+                                      TextView titleTextView,
+                                      CustomTextView typeTextView,
+                                      ImageView archivedImageView,
+                                      ImageView lockedImageView,
+                                      ImageView crosspostImageView,
+                                      CustomTextView nsfwTextView,
+                                      CustomTextView spoilerTextView,
+                                      CustomTextView flairTextView,
+                                      CustomTextView awardsTextView,
+                                      FrameLayout frameLayout,
+                                      RecyclerView galleryRecyclerView,
+                                      CustomTextView imageIndexTextView,
+                                      ImageView noPreviewImageView,
+                                      ConstraintLayout bottomConstraintLayout,
+                                      ImageView upvoteButton,
+                                      TextView scoreTextView,
+                                      ImageView downvoteButton,
+                                      TextView commentsCountTextView,
+                                      ImageView saveButton,
+                                      ImageView shareButton,
+                                      boolean itemViewIsNotCardView) {
+            super(rootView);
             setBaseView(
-                    binding.iconGifImageViewItemPostGalleryType,
-                    binding.subredditNameTextViewItemPostGalleryType,
-                    binding.userTextViewItemPostGalleryType,
-                    binding.stickiedPostImageViewItemPostGalleryType,
-                    binding.postTimeTextViewItemPostGalleryType,
-                    binding.titleTextViewItemPostGalleryType,
-                    binding.typeTextViewItemPostGalleryType,
-                    binding.archivedImageViewItemPostGalleryType,
-                    binding.lockedImageViewItemPostGalleryType,
-                    binding.crosspostImageViewItemPostGalleryType,
-                    binding.nsfwTextViewItemPostGalleryType,
-                    binding.spoilerTextViewItemPostGalleryType,
-                    binding.flairTextViewItemPostGalleryType,
-                    binding.awardsTextViewItemPostGalleryType,
-                    binding.bottomConstraintLayoutItemPostGalleryType,
-                    binding.upvoteButtonItemPostGalleryType,
-                    binding.scoreTextViewItemPostGalleryType,
-                    binding.downvoteButtonItemPostGalleryType,
-                    binding.commentsCountTextViewItemPostGalleryType,
-                    binding.saveButtonItemPostGalleryType,
-                    binding.shareButtonItemPostGalleryType);
+                    iconGifImageView,
+                    subredditTextView,
+                    userTextView,
+                    stickiedPostImageView,
+                    postTimeTextView,
+                    titleTextView,
+                    typeTextView,
+                    archivedImageView,
+                    lockedImageView,
+                    crosspostImageView,
+                    nsfwTextView,
+                    spoilerTextView,
+                    flairTextView,
+                    awardsTextView,
+                    bottomConstraintLayout,
+                    upvoteButton,
+                    scoreTextView,
+                    downvoteButton,
+                    commentsCountTextView,
+                    saveButton,
+                    shareButton,
+                    itemViewIsNotCardView);
 
-            binding.imageIndexTextViewItemPostGalleryType.setTextColor(mMediaIndicatorIconTint);
-            binding.imageIndexTextViewItemPostGalleryType.setBackgroundColor(mMediaIndicatorBackgroundColor);
-            binding.imageIndexTextViewItemPostGalleryType.setBorderColor(mMediaIndicatorBackgroundColor);
+            this.frameLayout = frameLayout;
+            this.galleryRecyclerView = galleryRecyclerView;
+            this.imageIndexTextView = imageIndexTextView;
+            this.noPreviewImageView = noPreviewImageView;
+
+            imageIndexTextView.setTextColor(mMediaIndicatorIconTint);
+            imageIndexTextView.setBackgroundColor(mMediaIndicatorBackgroundColor);
+            imageIndexTextView.setBorderColor(mMediaIndicatorBackgroundColor);
 
             adapter = new PostGalleryTypeImageRecyclerViewAdapter(mGlide, mActivity.typeface,
                     mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale);
-            binding.galleryRecyclerViewItemPostGalleryType.setAdapter(adapter);
-            new PagerSnapHelper().attachToRecyclerView(binding.galleryRecyclerViewItemPostGalleryType);
-            binding.galleryRecyclerViewItemPostGalleryType.setRecycledViewPool(mGalleryRecycledViewPool);
+            galleryRecyclerView.setAdapter(adapter);
+            new PagerSnapHelper().attachToRecyclerView(galleryRecyclerView);
+            galleryRecyclerView.setRecycledViewPool(mGalleryRecycledViewPool);
             SwipeLockLinearLayoutManager layoutManager = new SwipeLockLinearLayoutManager(
                     mActivity, RecyclerView.HORIZONTAL, false, new SwipeLockInterface() {
                 @Override
@@ -3160,12 +3200,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
                 @Override
                 public void setSwipeLocked(boolean swipeLocked) {
-                    PostGalleryTypeViewHolder.this.swipeLocked = swipeLocked;
-                    mActivity.toggleViewPagerSwipeLock(swipeLocked);
+                    PostBaseGalleryTypeViewHolder.this.swipeLocked = swipeLocked;
                 }
             });
-            binding.galleryRecyclerViewItemPostGalleryType.setLayoutManager(layoutManager);
-            binding.galleryRecyclerViewItemPostGalleryType.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            galleryRecyclerView.setLayoutManager(layoutManager);
+            galleryRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                     super.onScrollStateChanged(recyclerView, newState);
@@ -3174,10 +3213,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 @Override
                 public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
-                    binding.imageIndexTextViewItemPostGalleryType.setText(mActivity.getString(R.string.image_index_in_gallery, layoutManager.findFirstVisibleItemPosition() + 1, post.getGallery().size()));
+                    imageIndexTextView.setText(mActivity.getString(R.string.image_index_in_gallery, layoutManager.findFirstVisibleItemPosition() + 1, post.getGallery().size()));
                 }
             });
-            binding.galleryRecyclerViewItemPostGalleryType.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            galleryRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
                 private float downX;
                 private float downY;
                 private boolean dragged;
@@ -3197,7 +3236,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             }
                             break;
                         case MotionEvent.ACTION_UP:
-                        case MotionEvent.ACTION_CANCEL:
                             if (!dragged) {
                                 int index = layoutManager.findFirstVisibleItemPosition();
                                 int position = getBindingAdapterPosition();
@@ -3227,16 +3265,16 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
             });
 
-            binding.getRoot().setOnTouchListener((view, motionEvent) -> {
+            rootView.setOnTouchListener((view, motionEvent) -> {
                 swipeLocked = false;
                 return false;
             });
-            binding.bottomConstraintLayoutItemPostGalleryType.setOnTouchListener((view, motionEvent) -> {
+            bottomConstraintLayout.setOnTouchListener((view, motionEvent) -> {
                 swipeLocked = false;
                 return false;
             });
 
-            binding.noPreviewImageViewItemPostGalleryType.setOnClickListener(view -> {
+            noPreviewImageView.setOnClickListener(view -> {
                 int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
@@ -3250,6 +3288,39 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
         public boolean isSwipeLocked() {
             return swipeLocked;
+        }
+    }
+
+    public class PostGalleryTypeViewHolder extends PostBaseGalleryTypeViewHolder {
+
+        PostGalleryTypeViewHolder(ItemPostGalleryTypeBinding binding) {
+            super(binding.getRoot(),
+                    binding.iconGifImageViewItemPostGalleryType,
+                    binding.subredditNameTextViewItemPostGalleryType,
+                    binding.userTextViewItemPostGalleryType,
+                    binding.stickiedPostImageViewItemPostGalleryType,
+                    binding.postTimeTextViewItemPostGalleryType,
+                    binding.titleTextViewItemPostGalleryType,
+                    binding.typeTextViewItemPostGalleryType,
+                    binding.archivedImageViewItemPostGalleryType,
+                    binding.lockedImageViewItemPostGalleryType,
+                    binding.crosspostImageViewItemPostGalleryType,
+                    binding.nsfwTextViewItemPostGalleryType,
+                    binding.spoilerTextViewItemPostGalleryType,
+                    binding.flairTextViewItemPostGalleryType,
+                    binding.awardsTextViewItemPostGalleryType,
+                    binding.galleryFrameLayoutItemPostGalleryType,
+                    binding.galleryRecyclerViewItemPostGalleryType,
+                    binding.imageIndexTextViewItemPostGalleryType,
+                    binding.noPreviewImageViewItemPostGalleryType,
+                    binding.bottomConstraintLayoutItemPostGalleryType,
+                    binding.upvoteButtonItemPostGalleryType,
+                    binding.scoreTextViewItemPostGalleryType,
+                    binding.downvoteButtonItemPostGalleryType,
+                    binding.commentsCountTextViewItemPostGalleryType,
+                    binding.saveButtonItemPostGalleryType,
+                    binding.shareButtonItemPostGalleryType,
+                    false);
         }
     }
 
@@ -4568,6 +4639,41 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     return false;
                 }
             };
+        }
+    }
+
+    public class PostCard2GalleryTypeViewHolder extends PostBaseGalleryTypeViewHolder {
+
+        PostCard2GalleryTypeViewHolder(ItemPostCard2GalleryTypeBinding binding) {
+            super(binding.getRoot(),
+                    binding.iconGifImageViewItemPostCard2GalleryType,
+                    binding.subredditNameTextViewItemPostCard2GalleryType,
+                    binding.userTextViewItemPostCard2GalleryType,
+                    binding.stickiedPostImageViewItemPostCard2GalleryType,
+                    binding.postTimeTextViewItemPostCard2GalleryType,
+                    binding.titleTextViewItemPostCard2GalleryType,
+                    binding.typeTextViewItemPostCard2GalleryType,
+                    binding.archivedImageViewItemPostCard2GalleryType,
+                    binding.lockedImageViewItemPostCard2GalleryType,
+                    binding.crosspostImageViewItemPostCard2GalleryType,
+                    binding.nsfwTextViewItemPostCard2GalleryType,
+                    binding.spoilerCustomTextViewItemPostCard2GalleryType,
+                    binding.flairCustomTextViewItemPostCard2GalleryType,
+                    binding.awardsTextViewItemPostCard2GalleryType,
+                    binding.galleryFrameLayoutItemPostCard2GalleryType,
+                    binding.galleryRecyclerViewItemPostCard2GalleryType,
+                    binding.imageIndexTextViewItemPostCard2GalleryType,
+                    binding.noPreviewImageViewItemPostCard2GalleryType,
+                    binding.bottomConstraintLayoutItemPostCard2GalleryType,
+                    binding.upvoteButtonItemPostCard2GalleryType,
+                    binding.scoreTextViewItemPostCard2GalleryType,
+                    binding.downvoteButtonItemPostCard2GalleryType,
+                    binding.commentsCountTextViewItemPostCard2GalleryType,
+                    binding.saveButtonItemPostCard2GalleryType,
+                    binding.shareButtonItemPostCard2GalleryType,
+                    true);
+
+            binding.dividerItemPostCard2GalleryType.setBackgroundColor(mDividerColor);
         }
     }
 

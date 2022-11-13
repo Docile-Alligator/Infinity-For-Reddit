@@ -244,11 +244,6 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
     }
 
     @Override
-    public void toggleViewPagerSwipeLock(boolean lock) {
-        binding.accountSavedThingViewPager2.setUserInputEnabled(!lock);
-    }
-
-    @Override
     public void postLayoutSelected(int postLayout) {
         if (sectionsPagerAdapter != null) {
             mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + mAccountName, postLayout).apply();
