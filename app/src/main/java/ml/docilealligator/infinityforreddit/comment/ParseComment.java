@@ -11,6 +11,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import org.checkerframework.checker.units.qual.A;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -24,7 +25,7 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class ParseComment {
     public static void parseComment(Executor executor, Handler handler, String response,
-                                    ArrayList<Comment> commentData, boolean expandChildren,
+                                    boolean expandChildren,
                                     ParseCommentListener parseCommentListener) {
         executor.execute(() -> {
             try {
@@ -40,10 +41,11 @@ public class ParseComment {
                 parseCommentRecursion(childrenArray, newComments, moreChildrenIds, 0);
                 expandChildren(newComments, expandedNewComments, expandChildren);
 
+                ArrayList<Comment> commentData;
                 if (expandChildren) {
-                    commentData.addAll(expandedNewComments);
+                    commentData = expandedNewComments;
                 } else {
-                    commentData.addAll(newComments);
+                    commentData = newComments;
                 }
 
                 handler.post(() -> parseCommentListener.onParseCommentSuccess(commentData, parentId, moreChildrenIds));
@@ -54,8 +56,7 @@ public class ParseComment {
         });
     }
 
-    static void parseMoreComment(Executor executor, Handler handler, String response,
-                                 ArrayList<Comment> commentData, boolean expandChildren,
+    static void parseMoreComment(Executor executor, Handler handler, String response, boolean expandChildren,
                                  ParseCommentListener parseCommentListener) {
         executor.execute(() -> {
             try {
@@ -126,10 +127,11 @@ public class ParseComment {
                 updateChildrenCount(newComments);
                 expandChildren(newComments, expandedNewComments, expandChildren);
 
+                ArrayList<Comment> commentData;
                 if (expandChildren) {
-                    commentData.addAll(expandedNewComments);
+                    commentData = expandedNewComments;
                 } else {
-                    commentData.addAll(newComments);
+                    commentData = newComments;
                 }
 
                 handler.post(() -> parseCommentListener.onParseCommentSuccess(commentData, null, moreChildrenIds));
