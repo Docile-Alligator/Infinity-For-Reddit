@@ -1318,12 +1318,12 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
 
                 switch (post.getPostType()) {
                     case Post.IMAGE_TYPE: {
-                        ((PostGalleryViewHolder) holder).imageView.setVisibility(View.VISIBLE);
-                        ((PostGalleryViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
-
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
                         ((PostGalleryViewHolder) holder).preview = preview;
                         if (preview != null) {
+                            ((PostGalleryViewHolder) holder).imageView.setVisibility(View.VISIBLE);
+                            ((PostGalleryViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
+
                             if (mFixedHeightPreviewInCard || (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0)) {
                                 int height = (int) (400 * mScale);
                                 ((PostGalleryViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -1391,14 +1391,14 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                         break;
                     }
                     case Post.VIDEO_TYPE: {
-                        ((PostGalleryViewHolder) holder).imageView.setVisibility(View.VISIBLE);
-                        ((PostGalleryViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
-                        ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.VISIBLE);
-                        ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_play_circle_36dp));
-
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
                         ((PostGalleryViewHolder) holder).preview = preview;
                         if (preview != null) {
+                            ((PostGalleryViewHolder) holder).imageView.setVisibility(View.VISIBLE);
+                            ((PostGalleryViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
+                            ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.VISIBLE);
+                            ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_play_circle_36dp));
+
                             if (mFixedHeightPreviewInCard || (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0)) {
                                 int height = (int) (400 * mScale);
                                 ((PostGalleryViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -1421,14 +1421,14 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                         break;
                     }
                     case Post.LINK_TYPE: {
-                        ((PostGalleryViewHolder) holder).imageView.setVisibility(View.VISIBLE);
-                        ((PostGalleryViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
-                        ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.VISIBLE);
-                        ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_link_post_type_indicator));
-
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
                         ((PostGalleryViewHolder) holder).preview = preview;
                         if (preview != null) {
+                            ((PostGalleryViewHolder) holder).imageView.setVisibility(View.VISIBLE);
+                            ((PostGalleryViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
+                            ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.VISIBLE);
+                            ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_link_post_type_indicator));
+
                             if (mFixedHeightPreviewInCard || (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0)) {
                                 int height = (int) (400 * mScale);
                                 ((PostGalleryViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
@@ -1461,14 +1461,14 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                         break;
                     }
                     case Post.GALLERY_TYPE: {
-                        ((PostGalleryViewHolder) holder).imageView.setVisibility(View.VISIBLE);
-                        ((PostGalleryViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
-                        ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.VISIBLE);
-                        ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_gallery_24dp));
-
                         Post.Preview preview = getSuitablePreview(post.getPreviews());
                         ((PostGalleryViewHolder) holder).preview = preview;
                         if (preview != null) {
+                            ((PostGalleryViewHolder) holder).imageView.setVisibility(View.VISIBLE);
+                            ((PostGalleryViewHolder) holder).progressBar.setVisibility(View.VISIBLE);
+                            ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setVisibility(View.VISIBLE);
+                            ((PostGalleryViewHolder) holder).videoOrGifIndicatorImageView.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_gallery_24dp));
+
                             if (mFixedHeightPreviewInCard || (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0)) {
                                 int height = (int) (400 * mScale);
                                 ((PostGalleryViewHolder) holder).imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
