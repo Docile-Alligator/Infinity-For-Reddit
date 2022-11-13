@@ -272,7 +272,7 @@ public class DownloadMediaService extends Service {
                     contentValues.put(MediaStore.MediaColumns.DISPLAY_NAME, destinationFileName);
                     contentValues.put(MediaStore.MediaColumns.MIME_TYPE, mediaType == EXTRA_MEDIA_TYPE_VIDEO ? "video/*" : "image/*");
                     contentValues.put(MediaStore.MediaColumns.RELATIVE_PATH, destinationFileUriString);
-                    contentValues.put(MediaStore.Video.Media.IS_PENDING, 1);
+                    contentValues.put(MediaStore.MediaColumns.IS_PENDING, 1);
 
                     final Uri contentUri = mediaType == EXTRA_MEDIA_TYPE_VIDEO ? MediaStore.Video.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY) : MediaStore.Images.Media.getContentUri(MediaStore.VOLUME_EXTERNAL_PRIMARY);
                     Uri uri = contentResolver.insert(contentUri, contentValues);
@@ -294,7 +294,7 @@ public class DownloadMediaService extends Service {
                         stream.write(buf, 0, len);
                     }
                     contentValues.clear();
-                    contentValues.put(MediaStore.Video.Media.IS_PENDING, 0);
+                    contentValues.put(MediaStore.MediaColumns.IS_PENDING, 0);
                     contentResolver.update(uri, contentValues, null, null);
                     destinationFileUriString = uri.toString();
                 }
