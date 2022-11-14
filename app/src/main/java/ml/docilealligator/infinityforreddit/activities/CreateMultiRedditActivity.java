@@ -117,7 +117,7 @@ public class CreateMultiRedditActivity extends BaseActivity {
 
         if (mAccessToken == null) {
             visibilityLinearLayout.setVisibility(View.GONE);
-            if (doesSupportPrivateKeyboard()) {
+            if (isPrivateKeyboardSupported()) {
                 usePrivateKeyboard(nameEditText);
                 usePrivateKeyboard(descriptionEditText);
             }

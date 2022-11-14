@@ -222,7 +222,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
         setupFab();
 
-        if (!isSignedIn() && doesSupportPrivateKeyboard()) {
+        if (!isSignedIn() && isPrivateKeyboardSupported()) {
             usePrivateKeyboard(searchTextInputEditText);
         }
 
@@ -886,6 +886,8 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         }
         return false;
     }
+
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {

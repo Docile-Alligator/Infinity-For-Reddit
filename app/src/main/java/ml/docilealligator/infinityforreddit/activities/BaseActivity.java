@@ -394,7 +394,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
         this.contentTypeface = contentTypeface;
     }
 
-    public boolean doesSupportPrivateKeyboard() {
+    public boolean isPrivateKeyboardSupported() {
         return Build.VERSION.SDK_INT >= Build.VERSION_CODES.O;
     }
 

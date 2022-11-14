@@ -174,7 +174,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
             showMultiReddits = getIntent().getBooleanExtra(EXTRA_SHOW_MULTIREDDITS, false);
         }
 
-        if (mAccessToken == null && doesSupportPrivateKeyboard()) {
+        if (mAccessToken == null && isPrivateKeyboardSupported()) {
             usePrivateKeyboard(searchEditText);
         }
 

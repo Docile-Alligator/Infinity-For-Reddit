@@ -190,7 +190,7 @@ public class SearchActivity extends BaseActivity {
             finish();
         });
 
-        if (mAccessToken == null && doesSupportPrivateKeyboard()) {
+        if (mAccessToken == null && isPrivateKeyboardSupported()) {
             usePrivateKeyboard(searchEditText);
         }
 
