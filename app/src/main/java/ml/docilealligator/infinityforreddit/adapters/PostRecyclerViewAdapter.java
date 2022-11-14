@@ -3271,12 +3271,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             break;
                         case MotionEvent.ACTION_UP:
                             if (!dragged) {
-                                int index = layoutManager.findFirstVisibleItemPosition();
                                 int position = getBindingAdapterPosition();
                                 if (position >= 0) {
                                     if (post != null) {
                                         markPostRead(post, true);
-                                        openMedia(post, index);
+                                        openMedia(post, layoutManager.findFirstVisibleItemPosition());
                                     }
                                 }
                             }
@@ -4278,7 +4277,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         ImageView noPreviewImageView;
 
         PostGalleryTypeImageRecyclerViewAdapter adapter;
-        private boolean swipeLocked;
+        private SwipeLockLinearLayoutManager layoutManager;
 
         Post post;
         Post.Preview preview;
@@ -4314,23 +4313,16 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             recyclerView.setAdapter(adapter);
             new PagerSnapHelper().attachToRecyclerView(recyclerView);
             recyclerView.setRecycledViewPool(mGalleryRecycledViewPool);
-            SwipeLockLinearLayoutManager layoutManager = new SwipeLockLinearLayoutManager(
+            layoutManager = new SwipeLockLinearLayoutManager(
                     mActivity, RecyclerView.HORIZONTAL, false, new SwipeLockInterface() {
                 @Override
                 public void lockSwipe() {
                     mActivity.lockSwipeRightToGoBack();
-                    swipeLocked = true;
                 }
 
                 @Override
                 public void unlockSwipe() {
                     mActivity.unlockSwipeRightToGoBack();
-                    swipeLocked = false;
-                }
-
-                @Override
-                public void setSwipeLocked(boolean swipeLocked) {
-                    PostGalleryBaseGalleryTypeViewHolder.this.swipeLocked = swipeLocked;
                 }
             });
             recyclerView.setLayoutManager(layoutManager);
@@ -4416,7 +4408,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     if (post.getPostType() == Post.TEXT_TYPE || !mSharedPreferences.getBoolean(SharedPreferencesUtils.CLICK_TO_SHOW_MEDIA_IN_GALLERY_LAYOUT, false)) {
                         openViewPostDetailActivity(post, getBindingAdapterPosition());
                     } else {
-                        openMedia(post);
+                        openMedia(post, layoutManager.findFirstVisibleItemPosition());
                     }
                 }
             }
@@ -4432,7 +4424,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     if (post.getPostType() == Post.TEXT_TYPE || mSharedPreferences.getBoolean(SharedPreferencesUtils.CLICK_TO_SHOW_MEDIA_IN_GALLERY_LAYOUT, false)) {
                         openViewPostDetailActivity(post, getBindingAdapterPosition());
                     } else {
-                        openMedia(post);
+                        openMedia(post, layoutManager.findFirstVisibleItemPosition());
                     }
                 }
             }
