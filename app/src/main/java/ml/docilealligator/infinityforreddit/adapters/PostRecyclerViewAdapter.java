@@ -3209,6 +3209,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             imageIndexTextView.setTextColor(mMediaIndicatorIconTint);
             imageIndexTextView.setBackgroundColor(mMediaIndicatorBackgroundColor);
             imageIndexTextView.setBorderColor(mMediaIndicatorBackgroundColor);
+            if (mActivity.typeface != null) {
+                imageIndexTextView.setTypeface(mActivity.typeface);
+            }
 
             noPreviewImageView.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
             noPreviewImageView.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
