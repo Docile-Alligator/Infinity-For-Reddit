@@ -129,7 +129,6 @@ public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
     public void setCustomThemeSettingsItem(ArrayList<CustomThemeSettingsItem> customThemeSettingsItems) {
         this.customThemeSettingsItems.clear();
-        notifyDataSetChanged();
         this.customThemeSettingsItems.addAll(customThemeSettingsItems);
         notifyDataSetChanged();
     }

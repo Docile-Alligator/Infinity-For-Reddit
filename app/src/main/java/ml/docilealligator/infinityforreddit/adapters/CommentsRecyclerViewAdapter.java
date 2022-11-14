@@ -441,6 +441,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 }
 
                 ((CommentViewHolder) holder).mMarkwonAdapter.setMarkdown(mCommentMarkwon, comment.getCommentMarkdown());
+                // noinspection NotifyDataSetChanged
                 ((CommentViewHolder) holder).mMarkwonAdapter.notifyDataSetChanged();
 
                 if (!mHideTheNumberOfVotes) {

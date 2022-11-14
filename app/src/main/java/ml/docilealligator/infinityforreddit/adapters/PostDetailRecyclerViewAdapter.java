@@ -632,6 +632,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 ((PostDetailBaseViewHolder) holder).mContentMarkdownView.setVisibility(View.VISIBLE);
                 ((PostDetailBaseViewHolder) holder).mContentMarkdownView.setAdapter(mMarkwonAdapter);
                 mMarkwonAdapter.setMarkdown(mPostDetailMarkwon, mPost.getSelfText());
+                // noinspection NotifyDataSetChanged
                 mMarkwonAdapter.notifyDataSetChanged();
             }
 

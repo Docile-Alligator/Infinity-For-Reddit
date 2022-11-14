@@ -213,6 +213,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             binding.commentContentMarkdownView.setLayoutManager(new LinearLayoutManagerBugFixed(this));
             binding.commentContentMarkdownView.setAdapter(markwonAdapter);
             markwonAdapter.setMarkdown(postBodyMarkwon, parentBodyMarkdown);
+            // noinspection NotifyDataSetChanged
             markwonAdapter.notifyDataSetChanged();
         }
         parentFullname = intent.getStringExtra(EXTRA_PARENT_FULLNAME_KEY);

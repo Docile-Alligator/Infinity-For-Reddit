@@ -204,6 +204,7 @@ public class WikiActivity extends BaseActivity {
             loadWiki();
         } else {
             markwonAdapter.setMarkdown(markwon, wikiMarkdown);
+            // noinspection NotifyDataSetChanged
             markwonAdapter.notifyDataSetChanged();
         }
     }
@@ -227,6 +228,7 @@ public class WikiActivity extends BaseActivity {
                         String markdown = new JSONObject(response.body())
                                 .getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.CONTENT_MD_KEY);
                         markwonAdapter.setMarkdown(markwon, Utils.modifyMarkdown(markdown));
+                        // noinspection NotifyDataSetChanged
                         markwonAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();

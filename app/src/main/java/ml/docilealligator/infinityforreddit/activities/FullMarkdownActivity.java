@@ -162,6 +162,7 @@ public class FullMarkdownActivity extends BaseActivity {
         markdownRecyclerView.setLayoutManager(linearLayoutManager);
         markdownRecyclerView.setAdapter(markwonAdapter);
         markwonAdapter.setMarkdown(markwon, commentMarkdown);
+        // noinspection NotifyDataSetChanged
         markwonAdapter.notifyDataSetChanged();
     }
 
