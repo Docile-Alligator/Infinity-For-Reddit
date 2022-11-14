@@ -67,6 +67,17 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
             }
             ((ImageViewHolder) holder).binding.errorTextViewItemGalleryImageInPostFeed.setVisibility(View.GONE);
             ((ImageViewHolder) holder).binding.progressBarItemGalleryImageInPostFeed.setVisibility(View.VISIBLE);
+
+            ((ImageViewHolder) holder).binding.imageViewItemGalleryImageInPostFeed.setRatio(ratio);
+
+            ((ImageViewHolder) holder).binding.imageViewItemGalleryImageInPostFeed.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    ((ImageViewHolder) holder).binding.imageViewItemGalleryImageInPostFeed.removeOnLayoutChangeListener(this);
+                    loadImage(((ImageViewHolder) holder));
+                }
+            });
+
             loadImage((ImageViewHolder) holder);
         }
     }
@@ -82,7 +93,6 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
     }
 
     private void loadImage(ImageViewHolder holder) {
-        holder.binding.imageViewItemGalleryImageInPostFeed.setRatio(ratio);
         RequestBuilder<Drawable> imageRequestBuilder = glide.load(galleryImages.get(holder.getBindingAdapterPosition()).url).listener(new RequestListener<>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
