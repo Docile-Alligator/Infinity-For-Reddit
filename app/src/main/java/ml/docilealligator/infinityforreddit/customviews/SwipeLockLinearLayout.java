@@ -4,29 +4,29 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-public class SwipeLockFrameLayout extends FrameLayout implements SwipeLockView {
+public class SwipeLockLinearLayout extends LinearLayout implements SwipeLockView {
     @Nullable
     private SwipeLockInterface swipeLockInterface = null;
     private boolean locked = false;
 
-    public SwipeLockFrameLayout(@NonNull Context context) {
+    public SwipeLockLinearLayout(@NonNull Context context) {
         super(context);
     }
 
-    public SwipeLockFrameLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
+    public SwipeLockLinearLayout(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public SwipeLockFrameLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public SwipeLockLinearLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 
-    public SwipeLockFrameLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public SwipeLockLinearLayout(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
     }
 

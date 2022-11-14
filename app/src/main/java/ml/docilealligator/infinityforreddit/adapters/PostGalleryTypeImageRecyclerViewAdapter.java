@@ -3,6 +3,8 @@ package ml.docilealligator.infinityforreddit.adapters;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import com.bumptech.glide.request.target.Target;
 
 import java.util.ArrayList;
 
+import io.noties.markwon.Markwon;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy;
 import ml.docilealligator.infinityforreddit.databinding.ItemGalleryImageInPostFeedBinding;
@@ -30,13 +33,17 @@ import ml.docilealligator.infinityforreddit.post.Post;
 public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private RequestManager glide;
     private Typeface typeface;
+    private Markwon mPostDetailMarkwon;
     private SaveMemoryCenterInisdeDownsampleStrategy saveMemoryCenterInisdeDownsampleStrategy;
     private int mColorAccent;
     private int mPrimaryTextColor;
+    private int mCardViewColor;
+    private int mCommentColor;
     private float mScale;
     private ArrayList<Post.Gallery> galleryImages;
     private boolean blurImage;
     private float ratio;
+    private boolean showCaption;
 
     public PostGalleryTypeImageRecyclerViewAdapter(RequestManager glide, Typeface typeface,
                                                    SaveMemoryCenterInisdeDownsampleStrategy saveMemoryCenterInisdeDownsampleStrategy,
@@ -47,6 +54,23 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
         this.mColorAccent = mColorAccent;
         this.mPrimaryTextColor = mPrimaryTextColor;
         this.mScale = scale;
+        showCaption = false;
+    }
+
+    public PostGalleryTypeImageRecyclerViewAdapter(RequestManager glide, Typeface typeface, Markwon postDetailMarkwon,
+                                                   SaveMemoryCenterInisdeDownsampleStrategy saveMemoryCenterInisdeDownsampleStrategy,
+                                                   int mColorAccent, int mPrimaryTextColor, int mCardViewColor,
+                                                   int mCommentColor, float scale) {
+        this.glide = glide;
+        this.typeface = typeface;
+        this.mPostDetailMarkwon = postDetailMarkwon;
+        this.saveMemoryCenterInisdeDownsampleStrategy = saveMemoryCenterInisdeDownsampleStrategy;
+        this.mColorAccent = mColorAccent;
+        this.mPrimaryTextColor = mPrimaryTextColor;
+        this.mCardViewColor = mCardViewColor;
+        this.mCommentColor = mCommentColor;
+        this.mScale = scale;
+        showCaption = true;
     }
 
     @NonNull
@@ -78,6 +102,10 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
                 }
             });
 
+            if (showCaption) {
+                loadCaptionPreview((ImageViewHolder) holder);
+            }
+
             loadImage((ImageViewHolder) holder);
         }
     }
@@ -90,6 +118,11 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
+        if (holder instanceof ImageViewHolder) {
+            ((ImageViewHolder) holder).binding.captionConstraintLayoutItemGalleryImageInPostFeed.setVisibility(View.GONE);
+            ((ImageViewHolder) holder).binding.captionTextViewItemGalleryImageInPostFeed.setText("");
+            ((ImageViewHolder) holder).binding.captionUrlTextViewItemGalleryImageInPostFeed.setText("");
+        }
     }
 
     private void loadImage(ImageViewHolder holder) {
@@ -113,6 +146,27 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
                     .into(holder.binding.imageViewItemGalleryImageInPostFeed);
         } else {
             imageRequestBuilder.centerInside().downsample(saveMemoryCenterInisdeDownsampleStrategy).into(holder.binding.imageViewItemGalleryImageInPostFeed);
+        }
+    }
+
+    private void loadCaptionPreview(ImageViewHolder holder) {
+        String previewCaption = galleryImages.get(holder.getBindingAdapterPosition()).caption;
+        String previewCaptionUrl = galleryImages.get(holder.getBindingAdapterPosition()).captionUrl;
+        boolean previewCaptionIsEmpty = TextUtils.isEmpty(previewCaption);
+        boolean previewCaptionUrlIsEmpty = TextUtils.isEmpty(previewCaptionUrl);
+        if (!previewCaptionIsEmpty || !previewCaptionUrlIsEmpty) {
+            holder.binding.captionConstraintLayoutItemGalleryImageInPostFeed.setBackgroundColor(mCardViewColor & 0x0D000000); // Make 10% darker than CardViewColor
+            holder.binding.captionConstraintLayoutItemGalleryImageInPostFeed.setVisibility(View.VISIBLE);
+        }
+        if (!previewCaptionIsEmpty) {
+            holder.binding.captionTextViewItemGalleryImageInPostFeed.setTextColor(mCommentColor);
+            holder.binding.captionTextViewItemGalleryImageInPostFeed.setText(previewCaption);
+            holder.binding.captionTextViewItemGalleryImageInPostFeed.setSelected(true);
+        }
+        if (!previewCaptionUrlIsEmpty) {
+            String domain = Uri.parse(previewCaptionUrl).getHost();
+            domain = domain.startsWith("www.") ? domain.substring(4) : domain;
+            mPostDetailMarkwon.setMarkdown(holder.binding.captionUrlTextViewItemGalleryImageInPostFeed, String.format("[%s](%s)", domain, previewCaptionUrl));
         }
     }
 

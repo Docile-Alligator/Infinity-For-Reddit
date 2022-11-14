@@ -15,10 +15,12 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Spanned;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -31,6 +33,7 @@ import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.PagerSnapHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestBuilder;
@@ -130,7 +133,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
     private SharedPreferences mCurrentAccountSharedPreferences;
     private RequestManager mGlide;
-    private SaveMemoryCenterInisdeDownsampleStrategy mSaveMemoryCenterInsideDownSampleStrategy;
+    private SaveMemoryCenterInisdeDownsampleStrategy mSaveMemoryCenterInsideDownsampleStrategy;
     private Markwon mPostDetailMarkwon;
     private final MarkwonAdapter mMarkwonAdapter;
     private String mAccessToken;
@@ -225,7 +228,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mStreamableRetrofit = streamableRetrofit;
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mGlide = glide;
-        mSaveMemoryCenterInsideDownSampleStrategy = new SaveMemoryCenterInisdeDownsampleStrategy(Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.POST_FEED_MAX_RESOLUTION, "5000000")));
+        mSaveMemoryCenterInsideDownsampleStrategy = new SaveMemoryCenterInisdeDownsampleStrategy(Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.POST_FEED_MAX_RESOLUTION, "5000000")));
         mCurrentAccountSharedPreferences = currentAccountSharedPreferences;
         mSecondaryTextColor = customThemeWrapper.getSecondaryTextColor();
         int markdownColor = customThemeWrapper.getPostContentColor();
@@ -637,7 +640,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 Post.Preview preview = getSuitablePreview(mPost.getPreviews());
                 if (preview != null) {
                     ((PostDetailVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio((float) preview.getPreviewWidth() / preview.getPreviewHeight());
-                    mGlide.load(preview.getPreviewUrl()).centerInside().downsample(mSaveMemoryCenterInsideDownSampleStrategy).into(((PostDetailVideoAutoplayViewHolder) holder).previewImageView);
+                    mGlide.load(preview.getPreviewUrl()).centerInside().downsample(mSaveMemoryCenterInsideDownsampleStrategy).into(((PostDetailVideoAutoplayViewHolder) holder).previewImageView);
                 } else {
                     ((PostDetailVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio(1);
                 }
@@ -767,41 +770,26 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     }
                 }
             } else if (holder instanceof PostDetailGalleryViewHolder) {
-                Post.Preview preview = getSuitablePreview(mPost.getPreviews());
-                if (preview != null) {
-                    ((PostDetailGalleryViewHolder) holder).mRelativeLayout.setVisibility(View.VISIBLE);
-                    ((PostDetailGalleryViewHolder) holder).mImageView
-                            .setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
-
-                    loadImage((PostDetailGalleryViewHolder) holder, preview);
-
-                    loadCaptionPreview((PostDetailGalleryViewHolder) holder, preview);
-                } else {
+                if (mDataSavingMode && mDisableImagePreview) {
                     ((PostDetailGalleryViewHolder) holder).mNoPreviewPostTypeImageView.setVisibility(View.VISIBLE);
+                    ((PostDetailGalleryViewHolder) holder).mNoPreviewPostTypeImageView.setImageResource(R.drawable.ic_gallery_24dp);
+                } else {
+                    ((PostDetailGalleryViewHolder) holder).galleryFrameLayout.setVisibility(View.VISIBLE);
+                    ((PostDetailGalleryViewHolder) holder).imageIndexTextView.setText(mActivity.getString(R.string.image_index_in_gallery, 1, mPost.getGallery().size()));
+                    Post.Preview preview = getSuitablePreview(mPost.getPreviews());
+                    if (preview != null) {
+                        if (preview.getPreviewWidth() <= 0 || preview.getPreviewHeight() <= 0) {
+                            ((PostDetailGalleryViewHolder) holder).adapter.setRatio(-1);
+                        } else {
+                            ((PostDetailGalleryViewHolder) holder).adapter.setRatio((float) preview.getPreviewHeight() / preview.getPreviewWidth());
+                        }
+                    } else {
+                        ((PostDetailGalleryViewHolder) holder).adapter.setRatio(-1);
+                    }
+                    ((PostDetailGalleryViewHolder) holder).adapter.setGalleryImages(mPost.getGallery());
+                    ((PostDetailGalleryViewHolder) holder).adapter.setBlurImage(
+                            (mPost.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit())) || (mPost.isSpoiler() && mNeedBlurSpoiler));
                 }
-            }
-        }
-    }
-
-    private void loadCaptionPreview(PostDetailBaseViewHolder holder, Post.Preview preview) {
-        if (holder instanceof PostDetailGalleryViewHolder) {
-            String previewCaption = preview.getPreviewCaption();
-            String previewCaptionUrl = preview.getPreviewCaptionUrl();
-            boolean previewCaptionIsEmpty = TextUtils.isEmpty(previewCaption);
-            boolean previewCaptionUrlIsEmpty = TextUtils.isEmpty(previewCaptionUrl);
-            if (!previewCaptionIsEmpty || !previewCaptionUrlIsEmpty) {
-                ((PostDetailGalleryViewHolder) holder).mCaptionConstraintLayout.setBackgroundColor(mCardViewColor & 0x0D000000); // Make 10% darker than CardViewColor
-                ((PostDetailGalleryViewHolder) holder).mCaptionConstraintLayout.setVisibility(View.VISIBLE);
-            }
-            if (!previewCaptionIsEmpty) {
-                ((PostDetailGalleryViewHolder) holder).mCaptionTextView.setTextColor(mCommentColor);
-                ((PostDetailGalleryViewHolder) holder).mCaptionTextView.setText(previewCaption);
-                ((PostDetailGalleryViewHolder) holder).mCaptionTextView.setSelected(true);
-            }
-            if (!previewCaptionUrlIsEmpty) {
-                String domain = Uri.parse(previewCaptionUrl).getHost();
-                domain = domain.startsWith("www.") ? domain.substring(4) : domain;
-                mPostDetailMarkwon.setMarkdown(((PostDetailGalleryViewHolder) holder).mCaptionUrlTextView, String.format("[%s](%s)", domain, previewCaptionUrl));
             }
         }
     }
@@ -860,7 +848,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             if (blurImage) {
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10))).into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
             } else {
-                imageRequestBuilder.centerInside().downsample(mSaveMemoryCenterInsideDownSampleStrategy).into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
+                imageRequestBuilder.centerInside().downsample(mSaveMemoryCenterInsideDownsampleStrategy).into(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
             }
         } else if (holder instanceof PostDetailVideoAndGifPreviewHolder) {
             RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(preview.getPreviewUrl())
@@ -888,7 +876,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                         .into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
             } else {
-                imageRequestBuilder.centerInside().downsample(mSaveMemoryCenterInsideDownSampleStrategy).into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
+                imageRequestBuilder.centerInside().downsample(mSaveMemoryCenterInsideDownsampleStrategy).into(((PostDetailVideoAndGifPreviewHolder) holder).mImageView);
             }
         } else if (holder instanceof PostDetailLinkViewHolder) {
             RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(preview.getPreviewUrl())
@@ -916,34 +904,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
                         .into(((PostDetailLinkViewHolder) holder).mImageView);
             } else {
-                imageRequestBuilder.centerInside().downsample(mSaveMemoryCenterInsideDownSampleStrategy).into(((PostDetailLinkViewHolder) holder).mImageView);
-            }
-        } else if (holder instanceof PostDetailGalleryViewHolder) {
-            RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(preview.getPreviewUrl())
-                    .listener(new RequestListener<>() {
-                        @Override
-                        public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
-                            ((PostDetailGalleryViewHolder) holder).mLoadImageProgressBar.setVisibility(View.GONE);
-                            ((PostDetailGalleryViewHolder) holder).mLoadImageErrorTextView.setVisibility(View.VISIBLE);
-                            ((PostDetailGalleryViewHolder) holder).mLoadImageErrorTextView.setOnClickListener(view -> {
-                                ((PostDetailGalleryViewHolder) holder).mLoadImageProgressBar.setVisibility(View.VISIBLE);
-                                ((PostDetailGalleryViewHolder) holder).mLoadImageErrorTextView.setVisibility(View.GONE);
-                                loadImage(holder, preview);
-                            });
-                            return false;
-                        }
-
-                        @Override
-                        public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
-                            ((PostDetailGalleryViewHolder) holder).mLoadWrapper.setVisibility(View.GONE);
-                            return false;
-                        }
-                    });
-
-            if ((mPost.isNSFW() && mNeedBlurNsfw && !(mDoNotBlurNsfwInNsfwSubreddits && mFragment != null && mFragment.getIsNsfwSubreddit()) && !(mPost.getPostType() == Post.GIF_TYPE && mAutoplayNsfwVideos)) || (mPost.isSpoiler() && mNeedBlurSpoiler)) {
-                imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10))).into(((PostDetailGalleryViewHolder) holder).mImageView);
-            } else {
-                imageRequestBuilder.centerInside().downsample(mSaveMemoryCenterInsideDownSampleStrategy).into(((PostDetailGalleryViewHolder) holder).mImageView);
+                imageRequestBuilder.centerInside().downsample(mSaveMemoryCenterInsideDownsampleStrategy).into(((PostDetailLinkViewHolder) holder).mImageView);
             }
         }
     }
@@ -1030,6 +991,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 mGlide.clear(((PostDetailImageAndGifAutoplayViewHolder) holder).mImageView);
             } else if (holder instanceof PostDetailLinkViewHolder) {
                 mGlide.clear(((PostDetailLinkViewHolder) holder).mImageView);
+            } else if (holder instanceof PostDetailGalleryViewHolder) {
+                ((PostDetailGalleryViewHolder) holder).galleryFrameLayout.setVisibility(View.GONE);
+                ((PostDetailGalleryViewHolder) holder).mNoPreviewPostTypeImageView.setVisibility(View.GONE);
             }
         }
     }
@@ -2308,24 +2272,12 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         TextView mAwardsTextView;
         @BindView(R.id.upvote_ratio_text_view_item_post_detail_gallery)
         TextView mUpvoteRatioTextView;
-        @BindView(R.id.image_view_wrapper_item_post_detail_gallery)
-        RelativeLayout mRelativeLayout;
-        @BindView(R.id.load_wrapper_item_post_detail_gallery)
-        RelativeLayout mLoadWrapper;
-        @BindView(R.id.progress_bar_item_post_detail_gallery)
-        ProgressBar mLoadImageProgressBar;
-        @BindView(R.id.load_image_error_text_view_item_post_detail_gallery)
-        TextView mLoadImageErrorTextView;
-        @BindView(R.id.video_or_gif_indicator_image_view_item_post_detail)
-        ImageView videoOrGifIndicatorImageView;
-        @BindView(R.id.image_view_item_post_detail_gallery)
-        AspectRatioGifImageView mImageView;
-        @BindView(R.id.caption_constraint_layout_item_post_detail_gallery)
-        ConstraintLayout mCaptionConstraintLayout;
-        @BindView(R.id.caption_text_view_item_post_detail_gallery)
-        TextView mCaptionTextView;
-        @BindView(R.id.caption_url_text_view_item_post_detail_gallery)
-        TextView mCaptionUrlTextView;
+        @BindView(R.id.gallery_frame_layout_item_post_detail_gallery)
+        FrameLayout galleryFrameLayout;
+        @BindView(R.id.gallery_recycler_view_item_post_detail_gallery)
+        RecyclerView galleryRecyclerView;
+        @BindView(R.id.image_index_text_view_item_post_detail_gallery)
+        CustomTextView imageIndexTextView;
         @BindView(R.id.image_view_no_preview_link_item_post_detail_gallery)
         ImageView mNoPreviewPostTypeImageView;
         @BindView(R.id.content_markdown_view_item_post_detail_gallery)
@@ -2344,6 +2296,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         ImageView mSaveButton;
         @BindView(R.id.share_button_item_post_detail_gallery)
         ImageView mShareButton;
+        PostGalleryTypeImageRecyclerViewAdapter adapter;
 
         PostDetailGalleryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -2373,26 +2326,102 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mShareButton);
 
             if (mActivity.typeface != null) {
-                mLoadImageErrorTextView.setTypeface(mActivity.typeface);
-                mCaptionTextView.setTypeface(mActivity.typeface);
-                mCaptionUrlTextView.setTypeface(mActivity.typeface);
+                imageIndexTextView.setTypeface(mActivity.typeface);
             }
-            videoOrGifIndicatorImageView.setColorFilter(mMediaIndicatorIconTint, PorterDuff.Mode.SRC_IN);
-            videoOrGifIndicatorImageView.setBackgroundTintList(ColorStateList.valueOf(mMediaIndicatorBackgroundColor));
-            mLoadImageProgressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
-            mLoadImageErrorTextView.setTextColor(mPrimaryTextColor);
+
+            imageIndexTextView.setTextColor(mMediaIndicatorIconTint);
+            imageIndexTextView.setBackgroundColor(mMediaIndicatorBackgroundColor);
+            imageIndexTextView.setBorderColor(mMediaIndicatorBackgroundColor);
             mNoPreviewPostTypeImageView.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
             mNoPreviewPostTypeImageView.setColorFilter(mNoPreviewPostTypeIconTint, PorterDuff.Mode.SRC_IN);
 
-            mImageView.setOnClickListener(view -> {
-                Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
-                intent.putParcelableArrayListExtra(ViewRedditGalleryActivity.EXTRA_REDDIT_GALLERY, mPost.getGallery());
-                intent.putExtra(ViewRedditGalleryActivity.EXTRA_SUBREDDIT_NAME, mPost.getSubredditName());
-                mActivity.startActivity(intent);
+            adapter = new PostGalleryTypeImageRecyclerViewAdapter(mGlide, mActivity.typeface, mPostDetailMarkwon,
+                    mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor,
+                    mCardViewColor, mCommentColor, mScale);
+            galleryRecyclerView.setAdapter(adapter);
+            new PagerSnapHelper().attachToRecyclerView(galleryRecyclerView);
+            SwipeLockLinearLayoutManager layoutManager = new SwipeLockLinearLayoutManager(
+                    mActivity, RecyclerView.HORIZONTAL, false, new SwipeLockInterface() {
+                @Override
+                public void lockSwipe() {
+                    mActivity.lockSwipeRightToGoBack();
+                }
+
+                @Override
+                public void unlockSwipe() {
+                    mActivity.unlockSwipeRightToGoBack();
+                }
+            });
+            galleryRecyclerView.setLayoutManager(layoutManager);
+            galleryRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                }
+
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    imageIndexTextView.setText(mActivity.getString(R.string.image_index_in_gallery, layoutManager.findFirstVisibleItemPosition() + 1, mPost.getGallery().size()));
+                }
+            });
+            galleryRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+                private float downX;
+                private float downY;
+                private boolean dragged;
+                private final int minTouchSlop = ViewConfiguration.get(mActivity).getScaledTouchSlop();
+
+                @Override
+                public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                    int action = e.getAction();
+                    switch (action) {
+                        case MotionEvent.ACTION_DOWN:
+                            downX = e.getRawX();
+                            downY = e.getRawY();
+                            break;
+                        case MotionEvent.ACTION_MOVE:
+                            if(Math.abs(e.getRawX() - downX) > minTouchSlop || Math.abs(e.getRawY() - downY) > minTouchSlop) {
+                                dragged = true;
+                            }
+                            break;
+                        case MotionEvent.ACTION_UP:
+                            if (!dragged) {
+                                int position = getBindingAdapterPosition();
+                                if (position >= 0) {
+                                    if (mPost != null) {
+                                        Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
+                                        intent.putParcelableArrayListExtra(ViewRedditGalleryActivity.EXTRA_REDDIT_GALLERY, mPost.getGallery());
+                                        intent.putExtra(ViewRedditGalleryActivity.EXTRA_SUBREDDIT_NAME, mPost.getSubredditName());
+                                        intent.putExtra(ViewRedditGalleryActivity.EXTRA_GALLERY_ITEM_INDEX, layoutManager.findFirstVisibleItemPosition());
+                                        mActivity.startActivity(intent);
+                                    }
+                                }
+                            }
+
+                            downX = 0;
+                            downY = 0;
+                            dragged = false;
+                    }
+                    return false;
+                }
+
+                @Override
+                public void onTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+
+                }
+
+                @Override
+                public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+                }
             });
 
             mNoPreviewPostTypeImageView.setOnClickListener(view -> {
-                mImageView.performClick();
+                Intent intent = new Intent(mActivity, ViewRedditGalleryActivity.class);
+                intent.putParcelableArrayListExtra(ViewRedditGalleryActivity.EXTRA_REDDIT_GALLERY, mPost.getGallery());
+                intent.putExtra(ViewRedditGalleryActivity.EXTRA_SUBREDDIT_NAME, mPost.getSubredditName());
+                intent.putExtra(ViewRedditGalleryActivity.EXTRA_GALLERY_ITEM_INDEX, layoutManager.findFirstVisibleItemPosition());
+                mActivity.startActivity(intent);
             });
         }
     }
