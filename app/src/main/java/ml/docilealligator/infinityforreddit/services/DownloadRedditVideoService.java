@@ -25,14 +25,11 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.provider.MediaStore;
-import android.util.Log;
 
 import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.documentfile.provider.DocumentFile;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,7 +49,6 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.apis.DownloadFile;
 import ml.docilealligator.infinityforreddit.broadcastreceivers.DownloadedMediaDeleteActionBroadcastReceiver;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.events.DownloadRedditVideoEvent;
 import ml.docilealligator.infinityforreddit.utils.NotificationUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import okhttp3.OkHttpClient;
@@ -594,13 +590,11 @@ public class DownloadRedditVideoService extends Service {
                             randomNotificationIdOffset, null);
                     break;
             }
-            EventBus.getDefault().post(new DownloadRedditVideoEvent(false));
         } else {
             MediaScannerConnection.scanFile(
                     this, new String[]{destinationFileUri.toString()}, null,
                     (path, uri) -> {
                         updateNotification(R.string.downloading_reddit_video_finished, -1, randomNotificationIdOffset, destinationFileUri);
-                        EventBus.getDefault().post(new DownloadRedditVideoEvent(true));
                     }
             );
         }
