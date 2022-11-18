@@ -34,6 +34,7 @@ import ml.docilealligator.infinityforreddit.adapters.AccountChooserRecyclerViewA
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedBottomSheetDialogFragment;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class AccountChooserBottomSheetFragment extends LandscapeExpandedBottomSheetDialogFragment {
 
@@ -60,6 +61,8 @@ public class AccountChooserBottomSheetFragment extends LandscapeExpandedBottomSh
         View rootView = inflater.inflate(R.layout.fragment_account_chooser_bottom_sheet, container, false);
 
         ((Infinity) activity.getApplication()).getAppComponent().inject(this);
+
+        Utils.hideKeyboard(activity);
 
         recyclerView = rootView.findViewById(R.id.recycler_view_account_chooser_bottom_sheet_fragment);
         adapter = new AccountChooserRecyclerViewAdapter(activity, customThemeWrapper, Glide.with(this),
