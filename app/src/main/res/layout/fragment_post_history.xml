@@ -1,158 +1,210 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".settings.PostHistoryFragment">
+                                       xmlns:tools="http://schemas.android.com/tools"
+                                       android:layout_width="match_parent"
+                                       android:layout_height="match_parent"
+                                       xmlns:app="http://schemas.android.com/apk/res-auto"
+                                       tools:context=".settings.PostHistoryFragment">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
         <TextView
-            android:id="@+id/info_text_view_post_history_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="16dp"
-            android:drawablePadding="32dp"
-            android:text="@string/restart_app_see_changes"
-            android:gravity="center_vertical"
-            android:textSize="?attr/font_default"
-            android:fontFamily="?attr/font_family" />
+                android:id="@+id/info_text_view_post_history_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:drawablePadding="32dp"
+                android:text="@string/restart_app_see_changes"
+                android:gravity="center_vertical"
+                android:textSize="?attr/font_default"
+                android:fontFamily="?attr/font_family" />
 
         <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/dividerColor" />
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/dividerColor" />
 
         <LinearLayout
-            android:id="@+id/mark_posts_as_read_linear_layout_post_history_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:paddingStart="72dp"
-            android:paddingEnd="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground">
+                android:id="@+id/mark_posts_as_read_linear_layout_post_history_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:paddingStart="72dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
 
             <TextView
-                android:id="@+id/mark_posts_as_read_text_view_post_history_fragment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="16dp"
-                android:layout_gravity="center_vertical"
-                android:drawablePadding="32dp"
-                android:text="@string/settings_mark_posts_as_read_title"
-                android:textColor="?attr/primaryTextColor"
-                android:textSize="?attr/font_16"
-                android:fontFamily="?attr/font_family" />
+                    android:id="@+id/mark_posts_as_read_text_view_post_history_fragment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="16dp"
+                    android:layout_gravity="center_vertical"
+                    android:drawablePadding="32dp"
+                    android:text="@string/settings_mark_posts_as_read_title"
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="?attr/font_16"
+                    android:fontFamily="?attr/font_family" />
 
             <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/mark_posts_as_read_switch_post_history_fragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical" />
+                    android:id="@+id/mark_posts_as_read_switch_post_history_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" tools:ignore="DuplicateSpeakableTextCheck"/>
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/mark_posts_as_read_after_voting_linear_layout_post_history_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:paddingStart="72dp"
-            android:paddingEnd="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground">
+                android:id="@+id/limit_read_posts_linear_layout_post_history_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:paddingStart="72dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
 
             <TextView
-                android:id="@+id/mark_posts_as_read_after_voting_text_view_post_history_fragment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="16dp"
-                android:layout_gravity="center_vertical"
-                android:text="@string/settings_mark_posts_as_read_after_voting_title"
-                android:textColor="?attr/primaryTextColor"
-                android:textSize="?attr/font_16"
-                android:fontFamily="?attr/font_family" />
+                    android:id="@+id/limit_read_posts_text_view_post_history_fragment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="16dp"
+                    android:layout_gravity="center_vertical"
+                    android:drawablePadding="32dp"
+                    android:text="@string/settings_limit_read_posts_title"
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="?attr/font_16"
+                    android:fontFamily="?attr/font_family" />
 
             <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/mark_posts_as_read_after_voting_switch_post_history_fragment"
-                android:layout_width="wrap_content"
+                    android:id="@+id/limit_read_posts_switch_post_history_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" />
+
+        </LinearLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/read_posts_limit_text_input_layout_post_history_fragment"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical" />
+                android:hint="@string/settings_read_posts_limit_title"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:paddingStart="72dp"
+                android:paddingEnd="16dp">
+            <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/read_posts_limit_text_input_edit_text_post_history_fragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:minHeight="48dp"
+            />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <LinearLayout
+                android:id="@+id/mark_posts_as_read_after_voting_linear_layout_post_history_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:paddingStart="72dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+            <TextView
+                    android:id="@+id/mark_posts_as_read_after_voting_text_view_post_history_fragment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="16dp"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/settings_mark_posts_as_read_after_voting_title"
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="?attr/font_16"
+                    android:fontFamily="?attr/font_family" />
+
+            <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/mark_posts_as_read_after_voting_switch_post_history_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/mark_posts_as_read_on_scroll_linear_layout_post_history_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:paddingStart="72dp"
-            android:paddingEnd="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground">
+                android:id="@+id/mark_posts_as_read_on_scroll_linear_layout_post_history_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:paddingStart="72dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
 
             <TextView
-                android:id="@+id/mark_posts_as_read_on_scroll_text_view_post_history_fragment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="16dp"
-                android:layout_gravity="center_vertical"
-                android:text="@string/settings_mark_posts_as_read_on_scroll_title"
-                android:textColor="?attr/primaryTextColor"
-                android:textSize="?attr/font_16"
-                android:fontFamily="?attr/font_family" />
+                    android:id="@+id/mark_posts_as_read_on_scroll_text_view_post_history_fragment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="16dp"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/settings_mark_posts_as_read_on_scroll_title"
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="?attr/font_16"
+                    android:fontFamily="?attr/font_family" />
 
             <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/mark_posts_as_read_on_scroll_switch_post_history_fragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical" />
+                    android:id="@+id/mark_posts_as_read_on_scroll_switch_post_history_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" />
 
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/hide_read_posts_automatically_linear_layout_post_history_fragment"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
-            android:paddingStart="72dp"
-            android:paddingEnd="16dp"
-            android:clickable="true"
-            android:focusable="true"
-            android:background="?attr/selectableItemBackground">
+                android:id="@+id/hide_read_posts_automatically_linear_layout_post_history_fragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="4dp"
+                android:paddingBottom="4dp"
+                android:paddingStart="72dp"
+                android:paddingEnd="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
 
             <TextView
-                android:id="@+id/hide_read_posts_automatically_text_view_post_history_fragment"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="16dp"
-                android:layout_gravity="center_vertical"
-                android:text="@string/settings_hide_read_posts_automatically_title"
-                android:textColor="?attr/primaryTextColor"
-                android:textSize="?attr/font_16"
-                android:fontFamily="?attr/font_family" />
+                    android:id="@+id/hide_read_posts_automatically_text_view_post_history_fragment"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="16dp"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/settings_hide_read_posts_automatically_title"
+                    android:textColor="?attr/primaryTextColor"
+                    android:textSize="?attr/font_16"
+                    android:fontFamily="?attr/font_family" />
 
             <com.google.android.material.materialswitch.MaterialSwitch
-                android:id="@+id/hide_read_posts_automatically_switch_post_history_fragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical" />
+                    android:id="@+id/hide_read_posts_automatically_switch_post_history_fragment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical" />
 
         </LinearLayout>
 

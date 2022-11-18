@@ -2,8 +2,11 @@ package ml.docilealligator.infinityforreddit.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +15,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-
+import androidx.preference.EditTextPreference;
 import com.google.android.material.materialswitch.MaterialSwitch;
 
 import javax.inject.Inject;
@@ -20,8 +23,11 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -38,6 +44,16 @@ public class PostHistoryFragment extends Fragment {
     TextView markPostsAsReadTextView;
     @BindView(R.id.mark_posts_as_read_switch_post_history_fragment)
     MaterialSwitch markPostsAsReadSwitch;
+    @BindView(R.id.limit_read_posts_linear_layout_post_history_fragment)
+    LinearLayout limitReadPostsLinearLayout;
+    @BindView(R.id.limit_read_posts_text_view_post_history_fragment)
+    TextView limitReadPostsTextView;
+    @BindView(R.id.limit_read_posts_switch_post_history_fragment)
+    MaterialSwitch limitReadPostsSwitch;
+    @BindView(R.id.read_posts_limit_text_input_layout_post_history_fragment)
+    TextInputLayout readPostsLimitTextInputLayout;
+    @BindView(R.id.read_posts_limit_text_input_edit_text_post_history_fragment)
+    TextInputEditText readPostsLimitTextInputEditText;
     @BindView(R.id.mark_posts_as_read_after_voting_linear_layout_post_history_fragment)
     LinearLayout markPostsAsReadAfterVotingLinearLayout;
     @BindView(R.id.mark_posts_as_read_after_voting_text_view_post_history_fragment)
@@ -59,6 +75,9 @@ public class PostHistoryFragment extends Fragment {
     @Inject
     @Named("post_history")
     SharedPreferences postHistorySharedPreferences;
+
+    @Inject
+    RedditDataRoomDatabase mRedditDataRoomDatabase;
     private SettingsActivity activity;
 
     public PostHistoryFragment() {
@@ -86,6 +105,8 @@ public class PostHistoryFragment extends Fragment {
         if (accountName == null) {
             infoTextView.setText(R.string.only_for_logged_in_user);
             markPostsAsReadLinearLayout.setVisibility(View.GONE);
+            limitReadPostsLinearLayout.setVisibility(View.GONE);
+            readPostsLimitTextInputLayout.setVisibility(View.GONE);
             markPostsAsReadAfterVotingLinearLayout.setVisibility(View.GONE);
             markPostsAsReadOnScrollLinearLayout.setVisibility(View.GONE);
             hideReadPostsAutomaticallyLinearLayout.setVisibility(View.GONE);
@@ -94,6 +115,10 @@ public class PostHistoryFragment extends Fragment {
 
         markPostsAsReadSwitch.setChecked(postHistorySharedPreferences.getBoolean(
                 accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false));
+        limitReadPostsSwitch.setChecked(postHistorySharedPreferences.getBoolean(
+                accountName + SharedPreferencesUtils.LIMIT_READ_POSTS_BASE, true));
+        readPostsLimitTextInputEditText.setText(postHistorySharedPreferences.getString(
+                accountName + SharedPreferencesUtils.READ_POSTS_LIMIT_BASE, "500"));
         markPostsAsReadAfterVotingSwitch.setChecked(postHistorySharedPreferences.getBoolean(
                 accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, false));
         markPostsAsReadOnScrollSwitch.setChecked(postHistorySharedPreferences.getBoolean(
@@ -107,6 +132,43 @@ public class PostHistoryFragment extends Fragment {
 
         markPostsAsReadSwitch.setOnCheckedChangeListener((compoundButton, b) ->
                 postHistorySharedPreferences.edit().putBoolean(accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, b).apply());
+
+        limitReadPostsLinearLayout.setOnClickListener(view -> {
+            limitReadPostsSwitch.performClick();
+        });
+
+        limitReadPostsSwitch.setOnCheckedChangeListener((compoundButton, b) ->
+                postHistorySharedPreferences.edit().putBoolean(accountName + SharedPreferencesUtils.LIMIT_READ_POSTS_BASE, b).apply());
+        readPostsLimitTextInputEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String limit = s.toString();
+                String error = "* Limit has to be a whole number bigger than 99";
+                try {
+                    int intlimit = Integer.parseInt(limit);
+                    if (intlimit < 100) {
+                        readPostsLimitTextInputLayout.setHelperText(error);
+                    }
+                    else {
+                        readPostsLimitTextInputLayout.setHelperText("");
+                        postHistorySharedPreferences.edit().putString(accountName + SharedPreferencesUtils.READ_POSTS_LIMIT_BASE, limit).apply();
+                    }
+                }
+                catch (NumberFormatException e) {
+                    readPostsLimitTextInputLayout.setHelperText(error);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
         markPostsAsReadAfterVotingLinearLayout.setOnClickListener(view -> markPostsAsReadAfterVotingSwitch.performClick());
 
@@ -130,6 +192,8 @@ public class PostHistoryFragment extends Fragment {
         infoTextView.setCompoundDrawablesWithIntrinsicBounds(infoDrawable, null, null, null);
         int primaryTextColor = activity.customThemeWrapper.getPrimaryTextColor();
         markPostsAsReadTextView.setTextColor(primaryTextColor);
+        limitReadPostsTextView.setTextColor(primaryTextColor);
+        readPostsLimitTextInputEditText.setTextColor(primaryTextColor);
         markPostsAsReadAfterVotingTextView.setTextColor(primaryTextColor);
         markPostsAsReadOnScrollTextView.setTextColor(primaryTextColor);
         hideReadPostsAutomaticallyTextView.setTextColor(primaryTextColor);

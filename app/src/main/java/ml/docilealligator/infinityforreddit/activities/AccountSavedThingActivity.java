@@ -63,6 +63,9 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
     @Named("post_layout")
     SharedPreferences mPostLayoutSharedPreferences;
     @Inject
+    @Named("post_history")
+    SharedPreferences mPostHistorySharedPreferences;
+    @Inject
     @Named("current_account")
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
@@ -253,7 +256,7 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
 
     @Override
     public void markPostAsRead(Post post) {
-        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId());
+        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId(), mPostHistorySharedPreferences);
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {
