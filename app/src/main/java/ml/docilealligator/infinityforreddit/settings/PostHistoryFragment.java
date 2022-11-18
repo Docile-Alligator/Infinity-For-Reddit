@@ -113,6 +113,10 @@ public class PostHistoryFragment extends Fragment {
             return rootView;
         }
 
+        readPostsLimitTextInputLayout.setEnabled(
+                postHistorySharedPreferences.getBoolean(
+                        accountName + SharedPreferencesUtils.LIMIT_READ_POSTS_BASE, true));
+
         markPostsAsReadSwitch.setChecked(postHistorySharedPreferences.getBoolean(
                 accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false));
         limitReadPostsSwitch.setChecked(postHistorySharedPreferences.getBoolean(
@@ -137,8 +141,10 @@ public class PostHistoryFragment extends Fragment {
             limitReadPostsSwitch.performClick();
         });
 
-        limitReadPostsSwitch.setOnCheckedChangeListener((compoundButton, b) ->
-                postHistorySharedPreferences.edit().putBoolean(accountName + SharedPreferencesUtils.LIMIT_READ_POSTS_BASE, b).apply());
+        limitReadPostsSwitch.setOnCheckedChangeListener((compoundButton, b) -> {
+                postHistorySharedPreferences.edit().putBoolean(accountName + SharedPreferencesUtils.LIMIT_READ_POSTS_BASE, b).apply();
+                readPostsLimitTextInputLayout.setEnabled(b);
+        });
         readPostsLimitTextInputEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
