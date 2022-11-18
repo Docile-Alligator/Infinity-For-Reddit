@@ -189,6 +189,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     @Named("post_layout")
     SharedPreferences mPostLayoutSharedPreferences;
     @Inject
+    @Named("post_history")
+    SharedPreferences mPostHistorySharedPreferences;
+    @Inject
     @Named("bottom_app_bar")
     SharedPreferences mBottomAppBarSharedPreference;
     @Inject
@@ -1544,7 +1547,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     @Override
     public void markPostAsRead(Post post) {
-        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId());
+        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId(), mPostHistorySharedPreferences);
     }
 
     @Override
