@@ -117,6 +117,9 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
     @Named("post_layout")
     SharedPreferences mPostLayoutSharedPreferences;
     @Inject
+    @Named("post_history")
+    SharedPreferences mPostHistorySharedPreferences;
+    @Inject
     @Named("current_account")
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
@@ -885,7 +888,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
 
     @Override
     public void markPostAsRead(Post post) {
-        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId());
+        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId(), mPostHistorySharedPreferences);
     }
 
     @Override

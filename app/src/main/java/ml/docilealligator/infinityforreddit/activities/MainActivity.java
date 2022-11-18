@@ -182,6 +182,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Named("post_layout")
     SharedPreferences mPostLayoutSharedPreferences;
     @Inject
+    @Named("post_history")
+    SharedPreferences mPostHistorySharedPreferences;
+    @Inject
     @Named("main_activity_tabs")
     SharedPreferences mMainActivityTabsSharedPreferences;
     @Inject
@@ -1517,7 +1520,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
 
     @Override
     public void markPostAsRead(Post post) {
-        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId());
+        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId(), mPostHistorySharedPreferences);
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {

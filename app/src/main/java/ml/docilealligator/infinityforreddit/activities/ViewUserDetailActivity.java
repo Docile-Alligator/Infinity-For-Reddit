@@ -187,6 +187,9 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     @Named("post_layout")
     SharedPreferences mPostLayoutSharedPreferences;
     @Inject
+    @Named("post_history")
+    SharedPreferences mPostHistorySharedPreferences;
+    @Inject
     @Named("nsfw_and_spoiler")
     SharedPreferences mNsfwAndSpoilerSharedPreferences;
     @Inject
@@ -1537,7 +1540,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
     @Override
     public void markPostAsRead(Post post) {
-        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId());
+        InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId(), mPostHistorySharedPreferences);
     }
 
     @Override
