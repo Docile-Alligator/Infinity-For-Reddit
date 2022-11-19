@@ -49,7 +49,7 @@ public class HistoryPostViewModel extends ViewModel {
         postFilterLiveData = new MutableLiveData<>();
         postFilterLiveData.postValue(postFilter);
 
-        Pager<String, Post> pager = new Pager<>(new PagingConfig(25, 25, false), this::returnPagingSource);
+        Pager<String, Post> pager = new Pager<>(new PagingConfig(25, 25, false), this::returnPagingSoruce);
 
         posts = Transformations.switchMap(postFilterLiveData, postFilterValue -> PagingLiveData.cachedIn(PagingLiveData.getLiveData(pager), ViewModelKt.getViewModelScope(this)));
     }
@@ -58,9 +58,23 @@ public class HistoryPostViewModel extends ViewModel {
         return posts;
     }
 
-    private HistoryPostPagingSource returnPagingSource() {
-        return new HistoryPostPagingSource(retrofit, executor, redditDataRoomDatabase, accessToken, accountName,
-                sharedPreferences, accountName, postType, postFilter);
+    public HistoryPostPagingSource returnPagingSoruce() {
+        HistoryPostPagingSource paging3PagingSource;
+        switch (postType) {
+            case HistoryPostPagingSource.TYPE_READ_POSTS:
+                paging3PagingSource = new HistoryPostPagingSource(retrofit, executor, redditDataRoomDatabase, accessToken, accountName,
+                        sharedPreferences, accountName, postType, postFilter);
+                break;
+            default:
+                paging3PagingSource = new HistoryPostPagingSource(retrofit, executor, redditDataRoomDatabase, accessToken, accountName,
+                        sharedPreferences, accountName, postType, postFilter);
+                break;
+        }
+        return paging3PagingSource;
+    }
+
+    public void changePostFilter(PostFilter postFilter) {
+        postFilterLiveData.postValue(postFilter);
     }
 
     public static class Factory extends ViewModelProvider.NewInstanceFactory {
@@ -89,8 +103,13 @@ public class HistoryPostViewModel extends ViewModel {
         @NonNull
         @Override
         public <T extends ViewModel> T create(@NonNull Class<T> modelClass) {
-            return (T) new HistoryPostViewModel(executor, retrofit, redditDataRoomDatabase, accessToken, accountName, sharedPreferences,
-                    postType, postFilter);
+            if (postType == HistoryPostPagingSource.TYPE_READ_POSTS) {
+                return (T) new HistoryPostViewModel(executor, retrofit, redditDataRoomDatabase, accessToken, accountName, sharedPreferences,
+                        postType, postFilter);
+            } else {
+                return (T) new HistoryPostViewModel(executor, retrofit, redditDataRoomDatabase, accessToken, accountName, sharedPreferences,
+                        postType, postFilter);
+            }
         }
     }
 }
