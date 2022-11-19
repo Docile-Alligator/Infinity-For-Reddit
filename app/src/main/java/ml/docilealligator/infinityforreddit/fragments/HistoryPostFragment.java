@@ -467,9 +467,13 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
 
             @Override
             public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-                if (!(viewHolder instanceof PostRecyclerViewAdapter.PostBaseViewHolder) &&
-                        !(viewHolder instanceof PostRecyclerViewAdapter.PostCompactBaseViewHolder)) {
+                if (!(viewHolder instanceof HistoryPostRecyclerViewAdapter.PostBaseViewHolder) &&
+                        !(viewHolder instanceof HistoryPostRecyclerViewAdapter.PostCompactBaseViewHolder)) {
                     return makeMovementFlags(0, 0);
+                } else if (viewHolder instanceof HistoryPostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) {
+                    if (((HistoryPostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) viewHolder).isSwipeLocked()) {
+                        return makeMovementFlags(0, 0);
+                    }
                 }
                 int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
                 return makeMovementFlags(0, swipeFlags);
@@ -556,7 +560,7 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
 
             @Override
             public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
-                return 100;
+                return 1;
             }
         });
 

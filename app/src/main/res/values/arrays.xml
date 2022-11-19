@@ -669,4 +669,14 @@
         <item>144</item>
     </string-array>
 
+    <string-array name="settings_comment_divider_type">
+        <item>Normal</item>
+        <item>Only on top-level comments</item>
+    </string-array>
+
+    <string-array name="settings_comment_divider_type_values">
+        <item>0</item>
+        <item>1</item>
+    </string-array>
+
 </resources>

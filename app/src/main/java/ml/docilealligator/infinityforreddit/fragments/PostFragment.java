@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -1057,8 +1058,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 if (!(viewHolder instanceof PostRecyclerViewAdapter.PostBaseViewHolder) &&
                         !(viewHolder instanceof PostRecyclerViewAdapter.PostCompactBaseViewHolder)) {
                     return makeMovementFlags(0, 0);
-                } else if (viewHolder instanceof PostRecyclerViewAdapter.PostGalleryTypeViewHolder) {
-                    if (((PostRecyclerViewAdapter.PostGalleryTypeViewHolder) viewHolder).isSwipeLocked()) {
+                } else if (viewHolder instanceof PostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) {
+                    if (((PostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) viewHolder).isSwipeLocked()) {
                         return makeMovementFlags(0, 0);
                     }
 

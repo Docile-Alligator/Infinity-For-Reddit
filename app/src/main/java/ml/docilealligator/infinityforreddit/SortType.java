@@ -1,23 +1,30 @@
 package ml.docilealligator.infinityforreddit;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 public class SortType {
 
-    private Type type;
-    private Time time;
+    @NonNull
+    private final Type type;
+    @Nullable
+    private final Time time;
 
-    public SortType(Type type) {
-        this.type = type;
+    public SortType(@NonNull Type type) {
+        this(type, null);
     }
 
-    public SortType(Type type, Time time) {
+    public SortType(@NonNull Type type, @Nullable Time time) {
         this.type = type;
         this.time = time;
     }
 
+    @NonNull
     public Type getType() {
         return type;
     }
 
+    @Nullable
     public Time getTime() {
         return time;
     }

@@ -3,6 +3,8 @@ package ml.docilealligator.infinityforreddit.adapters;
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +24,7 @@ import com.bumptech.glide.request.target.Target;
 
 import java.util.ArrayList;
 
+import io.noties.markwon.Markwon;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy;
 import ml.docilealligator.infinityforreddit.databinding.ItemGalleryImageInPostFeedBinding;
@@ -30,26 +33,44 @@ import ml.docilealligator.infinityforreddit.post.Post;
 public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private RequestManager glide;
     private Typeface typeface;
+    private Markwon mPostDetailMarkwon;
     private SaveMemoryCenterInisdeDownsampleStrategy saveMemoryCenterInisdeDownsampleStrategy;
     private int mColorAccent;
     private int mPrimaryTextColor;
+    private int mCardViewColor;
+    private int mCommentColor;
     private float mScale;
     private ArrayList<Post.Gallery> galleryImages;
     private boolean blurImage;
     private float ratio;
-    private OnItemClickListener onItemClickListener;
+    private boolean showCaption;
 
     public PostGalleryTypeImageRecyclerViewAdapter(RequestManager glide, Typeface typeface,
                                                    SaveMemoryCenterInisdeDownsampleStrategy saveMemoryCenterInisdeDownsampleStrategy,
-                                                   int mColorAccent, int mPrimaryTextColor, float scale,
-                                                   OnItemClickListener onItemClickListener) {
+                                                   int mColorAccent, int mPrimaryTextColor, float scale) {
         this.glide = glide;
         this.typeface = typeface;
         this.saveMemoryCenterInisdeDownsampleStrategy = saveMemoryCenterInisdeDownsampleStrategy;
         this.mColorAccent = mColorAccent;
         this.mPrimaryTextColor = mPrimaryTextColor;
         this.mScale = scale;
-        this.onItemClickListener = onItemClickListener;
+        showCaption = false;
+    }
+
+    public PostGalleryTypeImageRecyclerViewAdapter(RequestManager glide, Typeface typeface, Markwon postDetailMarkwon,
+                                                   SaveMemoryCenterInisdeDownsampleStrategy saveMemoryCenterInisdeDownsampleStrategy,
+                                                   int mColorAccent, int mPrimaryTextColor, int mCardViewColor,
+                                                   int mCommentColor, float scale) {
+        this.glide = glide;
+        this.typeface = typeface;
+        this.mPostDetailMarkwon = postDetailMarkwon;
+        this.saveMemoryCenterInisdeDownsampleStrategy = saveMemoryCenterInisdeDownsampleStrategy;
+        this.mColorAccent = mColorAccent;
+        this.mPrimaryTextColor = mPrimaryTextColor;
+        this.mCardViewColor = mCardViewColor;
+        this.mCommentColor = mCommentColor;
+        this.mScale = scale;
+        showCaption = true;
     }
 
     @NonNull
@@ -70,6 +91,21 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
             }
             ((ImageViewHolder) holder).binding.errorTextViewItemGalleryImageInPostFeed.setVisibility(View.GONE);
             ((ImageViewHolder) holder).binding.progressBarItemGalleryImageInPostFeed.setVisibility(View.VISIBLE);
+
+            ((ImageViewHolder) holder).binding.imageViewItemGalleryImageInPostFeed.setRatio(ratio);
+
+            ((ImageViewHolder) holder).binding.imageViewItemGalleryImageInPostFeed.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+                @Override
+                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                    ((ImageViewHolder) holder).binding.imageViewItemGalleryImageInPostFeed.removeOnLayoutChangeListener(this);
+                    loadImage(((ImageViewHolder) holder));
+                }
+            });
+
+            if (showCaption) {
+                loadCaptionPreview((ImageViewHolder) holder);
+            }
+
             loadImage((ImageViewHolder) holder);
         }
     }
@@ -82,10 +118,14 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
     @Override
     public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
         super.onViewRecycled(holder);
+        if (holder instanceof ImageViewHolder) {
+            ((ImageViewHolder) holder).binding.captionConstraintLayoutItemGalleryImageInPostFeed.setVisibility(View.GONE);
+            ((ImageViewHolder) holder).binding.captionTextViewItemGalleryImageInPostFeed.setText("");
+            ((ImageViewHolder) holder).binding.captionUrlTextViewItemGalleryImageInPostFeed.setText("");
+        }
     }
 
     private void loadImage(ImageViewHolder holder) {
-        holder.binding.imageViewItemGalleryImageInPostFeed.setRatio(ratio);
         RequestBuilder<Drawable> imageRequestBuilder = glide.load(galleryImages.get(holder.getBindingAdapterPosition()).url).listener(new RequestListener<>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
@@ -106,6 +146,27 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
                     .into(holder.binding.imageViewItemGalleryImageInPostFeed);
         } else {
             imageRequestBuilder.centerInside().downsample(saveMemoryCenterInisdeDownsampleStrategy).into(holder.binding.imageViewItemGalleryImageInPostFeed);
+        }
+    }
+
+    private void loadCaptionPreview(ImageViewHolder holder) {
+        String previewCaption = galleryImages.get(holder.getBindingAdapterPosition()).caption;
+        String previewCaptionUrl = galleryImages.get(holder.getBindingAdapterPosition()).captionUrl;
+        boolean previewCaptionIsEmpty = TextUtils.isEmpty(previewCaption);
+        boolean previewCaptionUrlIsEmpty = TextUtils.isEmpty(previewCaptionUrl);
+        if (!previewCaptionIsEmpty || !previewCaptionUrlIsEmpty) {
+            holder.binding.captionConstraintLayoutItemGalleryImageInPostFeed.setBackgroundColor(mCardViewColor & 0x0D000000); // Make 10% darker than CardViewColor
+            holder.binding.captionConstraintLayoutItemGalleryImageInPostFeed.setVisibility(View.VISIBLE);
+        }
+        if (!previewCaptionIsEmpty) {
+            holder.binding.captionTextViewItemGalleryImageInPostFeed.setTextColor(mCommentColor);
+            holder.binding.captionTextViewItemGalleryImageInPostFeed.setText(previewCaption);
+            holder.binding.captionTextViewItemGalleryImageInPostFeed.setSelected(true);
+        }
+        if (!previewCaptionUrlIsEmpty) {
+            String domain = Uri.parse(previewCaptionUrl).getHost();
+            domain = domain.startsWith("www.") ? domain.substring(4) : domain;
+            mPostDetailMarkwon.setMarkdown(holder.binding.captionUrlTextViewItemGalleryImageInPostFeed, String.format("[%s](%s)", domain, previewCaptionUrl));
         }
     }
 
@@ -137,19 +198,11 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
             binding.progressBarItemGalleryImageInPostFeed.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
             binding.errorTextViewItemGalleryImageInPostFeed.setTextColor(mPrimaryTextColor);
 
-            binding.imageViewItemGalleryImageInPostFeed.setOnClickListener(view -> {
-                onItemClickListener.onClick(getBindingAdapterPosition());
-            });
-
             binding.errorTextViewItemGalleryImageInPostFeed.setOnClickListener(view -> {
                 binding.progressBarItemGalleryImageInPostFeed.setVisibility(View.VISIBLE);
                 binding.errorTextViewItemGalleryImageInPostFeed.setVisibility(View.GONE);
                 loadImage(this);
             });
         }
-    }
-
-    public interface OnItemClickListener {
-        void onClick(int galleryItemIndex);
     }
 }

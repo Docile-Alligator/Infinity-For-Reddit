@@ -74,6 +74,9 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public static final int DIVIDER_NORMAL = 0;
+    public static final int DIVIDER_PARENT = 1;
+
     private static final int VIEW_TYPE_FIRST_LOADING = 9;
     private static final int VIEW_TYPE_FIRST_LOADING_FAILED = 10;
     private static final int VIEW_TYPE_NO_COMMENT_PLACEHOLDER = 11;
@@ -107,6 +110,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private boolean mCommentToolbarHideOnClick;
     private boolean mSwapTapAndLong;
     private boolean mShowCommentDivider;
+    private int mDividerType;
     private boolean mShowAbsoluteNumberOfVotes;
     private boolean mFullyCollapseComment;
     private boolean mShowOnlyOneCommentLevelIndicator;
@@ -221,6 +225,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mCommentToolbarHideOnClick = sharedPreferences.getBoolean(SharedPreferencesUtils.COMMENT_TOOLBAR_HIDE_ON_CLICK, true);
         mSwapTapAndLong = sharedPreferences.getBoolean(SharedPreferencesUtils.SWAP_TAP_AND_LONG_COMMENTS, false);
         mShowCommentDivider = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_COMMENT_DIVIDER, false);
+        mDividerType = Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.COMMENT_DIVIDER_TYPE, "0"));
         mShowAbsoluteNumberOfVotes = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ABSOLUTE_NUMBER_OF_VOTES, true);
         mFullyCollapseComment = sharedPreferences.getBoolean(SharedPreferencesUtils.FULLY_COLLAPSE_COMMENT, false);
         mShowOnlyOneCommentLevelIndicator = sharedPreferences.getBoolean(SharedPreferencesUtils.SHOW_ONLY_ONE_COMMENT_LEVEL_INDICATOR, false);
@@ -525,6 +530,13 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 if (position == mSearchCommentIndex) {
                     holder.itemView.setBackgroundColor(Color.parseColor("#03A9F4"));
                 }
+
+                if (mShowCommentDivider) {
+                    if (mDividerType == DIVIDER_PARENT && comment.getDepth() == 0) {
+                        RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
+                        params.setMargins(0, (int) Utils.convertDpToPixel(16, mActivity), 0, 0);
+                    }
+                }
             }
         } else if (holder instanceof CommentFullyCollapsedViewHolder) {
             Comment comment = getCurrentComment(position);
@@ -574,6 +586,13 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 }
                 ((CommentFullyCollapsedViewHolder) holder).commentIndentationView.setShowOnlyOneDivider(mShowOnlyOneCommentLevelIndicator);
                 ((CommentFullyCollapsedViewHolder) holder).commentIndentationView.setLevelAndColors(comment.getDepth(), verticalBlockColors);
+
+                if (mShowCommentDivider) {
+                    if (mDividerType == DIVIDER_PARENT && comment.getDepth() == 0) {
+                        RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
+                        params.setMargins(0, (int) Utils.convertDpToPixel(16, mActivity), 0, 0);
+                    }
+                }
             }
         } else if (holder instanceof LoadMoreChildCommentsViewHolder) {
             Comment placeholder;
@@ -1128,6 +1147,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             ((CommentViewHolder) holder).downvoteButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
             ((CommentViewHolder) holder).expandButton.setText("");
             ((CommentViewHolder) holder).replyButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
+            RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
+            params.setMargins(0, 0, 0, 0);
         }
     }
 
@@ -1246,8 +1267,10 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             }
 
             if (mShowCommentDivider) {
-                commentDivider.setBackgroundColor(mDividerColor);
-                commentDivider.setVisibility(View.VISIBLE);
+                if (mDividerType == DIVIDER_NORMAL) {
+                    commentDivider.setBackgroundColor(mDividerColor);
+                    commentDivider.setVisibility(View.VISIBLE);
+                }
             }
 
             if (mActivity.typeface != null) {
@@ -1749,8 +1772,10 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             commentTimeTextView.setTextColor(mSecondaryTextColor);
 
             if (mShowCommentDivider) {
-                commentDivider.setBackgroundColor(mDividerColor);
-                commentDivider.setVisibility(View.VISIBLE);
+                if (mDividerType == DIVIDER_NORMAL) {
+                    commentDivider.setBackgroundColor(mDividerColor);
+                    commentDivider.setVisibility(View.VISIBLE);
+                }
             }
 
             if (mShowAuthorAvatar) {
@@ -1801,7 +1826,10 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             ButterKnife.bind(this, itemView);
 
             if (mShowCommentDivider) {
-                commentDivider.setVisibility(View.VISIBLE);
+                if (mDividerType == DIVIDER_NORMAL) {
+                    commentDivider.setBackgroundColor(mDividerColor);
+                    commentDivider.setVisibility(View.VISIBLE);
+                }
             }
 
             if (mActivity.typeface != null) {
@@ -1809,7 +1837,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             }
             itemView.setBackgroundColor(mCommentBackgroundColor);
             placeholderTextView.setTextColor(mPrimaryTextColor);
-            commentDivider.setBackgroundColor(mDividerColor);
         }
     }
 

@@ -1,0 +1,309 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:paddingTop="16dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="?attr/selectableItemBackground"
+    android:orientation="vertical">
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:cardElevation="2dp"
+        app:cardCornerRadius="8dp"
+        style="?attr/materialCardViewElevatedStyle">
+
+        <FrameLayout
+            android:id="@+id/gallery_frame_layout_item_post_card_2_gallery_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:visibility="gone">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/gallery_recycler_view_item_post_card_2_gallery_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal" />
+
+            <com.libRG.CustomTextView
+                android:id="@+id/image_index_text_view_item_post_card_2_gallery_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="16dp"
+                android:textSize="?attr/font_12"
+                android:fontFamily="?attr/font_family"
+                android:padding="4dp"
+                app:lib_setRadius="6dp"
+                app:lib_setRoundedView="true"
+                app:lib_setShape="rectangle" />
+
+        </FrameLayout>
+
+        <ImageView
+            android:id="@+id/no_preview_image_view_item_post_card_2_gallery_type"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            android:scaleType="center"
+            android:visibility="gone" />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <TextView
+        android:id="@+id/title_text_view_item_post_card_2_gallery_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:textSize="?attr/title_font_18"
+        android:fontFamily="?attr/title_font_family" />
+
+    <com.nex3z.flowlayout.FlowLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        app:flRowVerticalGravity="center"
+        app:flChildSpacing="16dp"
+        app:flChildSpacingForLastRow="align"
+        app:flRowSpacing="8dp">
+
+        <com.libRG.CustomTextView
+            android:id="@+id/type_text_view_item_post_card_2_gallery_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="@string/gallery"
+            android:textSize="?attr/font_12"
+            android:fontFamily="?attr/font_family"
+            app:lib_setRadius="6dp"
+            app:lib_setRoundedView="true"
+            app:lib_setShape="rectangle" />
+
+        <com.libRG.CustomTextView
+            android:id="@+id/spoiler_custom_text_view_item_post_card_2_gallery_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="@string/spoiler"
+            android:textSize="?attr/font_12"
+            android:fontFamily="?attr/font_family"
+            android:padding="4dp"
+            android:visibility="gone"
+            app:lib_setRadius="6dp"
+            app:lib_setRoundedView="true"
+            app:lib_setShape="rectangle" />
+
+        <com.libRG.CustomTextView
+            android:id="@+id/nsfw_text_view_item_post_card_2_gallery_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:text="@string/nsfw"
+            android:textSize="?attr/font_12"
+            android:fontFamily="?attr/font_family"
+            android:visibility="gone"
+            app:lib_setRadius="6dp"
+            app:lib_setRoundedView="true"
+            app:lib_setShape="rectangle" />
+
+        <com.libRG.CustomTextView
+            android:id="@+id/flair_custom_text_view_item_post_card_2_gallery_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="?attr/font_12"
+            android:fontFamily="?attr/font_family"
+            android:padding="4dp"
+            android:visibility="gone"
+            app:lib_setRadius="6dp"
+            app:lib_setRoundedView="true"
+            app:lib_setShape="rectangle" />
+
+        <com.libRG.CustomTextView
+            android:id="@+id/awards_text_view_item_post_card_2_gallery_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="4dp"
+            android:textSize="?attr/font_12"
+            android:fontFamily="?attr/font_family"
+            android:visibility="gone"
+            app:lib_setRadius="6dp"
+            app:lib_setRoundedView="true"
+            app:lib_setShape="rectangle" />
+
+        <ImageView
+            android:id="@+id/archived_image_view_item_post_card_2_gallery_type"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_archive_outline"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/locked_image_view_item_post_card_2_gallery_type"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/ic_outline_lock_24dp"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/crosspost_image_view_item_post_card_2_gallery_type"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/crosspost"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/stickied_post_image_view_item_post_card_2_gallery_type"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:visibility="gone"
+            tools:visibility="visible" />
+
+        <TextView
+            android:id="@+id/link_text_view_item_post_card_2_gallery_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="?attr/font_12"
+            android:fontFamily="?attr/font_family"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/post_time_text_view_item_post_card_2_gallery_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
+
+    </com.nex3z.flowlayout.FlowLayout>
+
+    <com.nex3z.flowlayout.FlowLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        app:flRowVerticalGravity="center"
+        app:flChildSpacing="16dp"
+        app:flChildSpacingForLastRow="align"
+        app:flRowSpacing="8dp">
+
+        <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
+            android:id="@+id/icon_gif_image_view_item_post_card_2_gallery_type"
+            android:layout_width="24dp"
+            android:layout_height="24dp" />
+
+        <TextView
+            android:id="@+id/subreddit_name_text_view_item_post_card_2_gallery_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
+
+        <TextView
+            android:id="@+id/user_text_view_item_post_card_2_gallery_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family" />
+
+    </com.nex3z.flowlayout.FlowLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottom_constraint_layout_item_post_card_2_gallery_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/upvote_button_item_post_card_2_gallery_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:src="@drawable/ic_arrow_upward_grey_24dp"
+            android:background="?actionBarItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/score_text_view_item_post_card_2_gallery_type"
+            android:layout_width="64dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="?attr/font_12"
+            android:textStyle="bold"
+            android:fontFamily="?attr/font_family"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/upvote_button_item_post_card_2_gallery_type" />
+
+        <ImageView
+            android:id="@+id/downvote_button_item_post_card_2_gallery_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:src="@drawable/ic_arrow_downward_grey_24dp"
+            android:background="?actionBarItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/score_text_view_item_post_card_2_gallery_type" />
+
+        <TextView
+            android:id="@+id/comments_count_text_view_item_post_card_2_gallery_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:gravity="center_vertical"
+            android:textSize="?attr/font_12"
+            android:textStyle="bold"
+            android:fontFamily="?attr/font_family"
+            android:drawableStart="@drawable/ic_comment_grey_24dp"
+            android:drawablePadding="12dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/downvote_button_item_post_card_2_gallery_type" />
+
+        <ImageView
+            android:id="@+id/save_button_item_post_card_2_gallery_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:background="?actionBarItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/comments_count_text_view_item_post_card_2_gallery_type"
+            app:layout_constraintEnd_toStartOf="@id/share_button_item_post_card_2_gallery_type" />
+
+        <ImageView
+            android:id="@+id/share_button_item_post_card_2_gallery_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
+            android:src="@drawable/ic_share_grey_24dp"
+            android:background="?actionBarItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View
+        android:id="@+id/divider_item_post_card_2_gallery_type"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:paddingBottom="8dp" />
+
+</LinearLayout>
