@@ -27,8 +27,6 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.documentfile.provider.DocumentFile;
 
-import org.greenrobot.eventbus.EventBus;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -45,7 +43,6 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.apis.DownloadFile;
 import ml.docilealligator.infinityforreddit.broadcastreceivers.DownloadedMediaDeleteActionBroadcastReceiver;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.events.DownloadMediaEvent;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.NotificationUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -337,14 +334,12 @@ public class DownloadMediaService extends Service {
                                 -1, randomNotificationIdOffset, null, null);
                         break;
                 }
-                EventBus.getDefault().post(new DownloadMediaEvent(false));
             } else {
                 MediaScannerConnection.scanFile(
                         DownloadMediaService.this, new String[]{destinationFileUri.toString()}, null,
                         (path, uri) -> {
                             updateNotification(mediaType, R.string.downloading_media_finished, -1,
                                     randomNotificationIdOffset, destinationFileUri, mimeType);
-                            EventBus.getDefault().post(new DownloadMediaEvent(true));
                         }
                 );
             }
