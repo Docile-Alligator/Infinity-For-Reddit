@@ -63,7 +63,11 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
     @NonNull
     @Override
     public ListenableFuture<LoadResult<String, Post>> loadFuture(@NonNull LoadParams<String> loadParams) {
-        return loadHomePosts(loadParams, redditDataRoomDatabase);
+        if (postType == TYPE_READ_POSTS) {
+            return loadHomePosts(loadParams, redditDataRoomDatabase);
+        } else {
+            return loadHomePosts(loadParams, redditDataRoomDatabase);
+        }
     }
 
     public LoadResult<String, Post> transformData(List<ReadPost> readPosts) {

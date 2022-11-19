@@ -654,9 +654,15 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
     }
 
     private void initializeAndBindPostViewModel(String accessToken) {
-        mHistoryPostViewModel = new ViewModelProvider(HistoryPostFragment.this, new HistoryPostViewModel.Factory(mExecutor,
-                accessToken == null ? mRetrofit : mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
-                accountName, mSharedPreferences, HistoryPostPagingSource.TYPE_READ_POSTS, postFilter)).get(HistoryPostViewModel.class);
+        if (postType == HistoryPostPagingSource.TYPE_READ_POSTS) {
+            mHistoryPostViewModel = new ViewModelProvider(HistoryPostFragment.this, new HistoryPostViewModel.Factory(mExecutor,
+                    accessToken == null ? mRetrofit : mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
+                    accountName, mSharedPreferences, HistoryPostPagingSource.TYPE_READ_POSTS, postFilter)).get(HistoryPostViewModel.class);
+        } else {
+            mHistoryPostViewModel = new ViewModelProvider(HistoryPostFragment.this, new HistoryPostViewModel.Factory(mExecutor,
+                    accessToken == null ? mRetrofit : mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
+                    accountName, mSharedPreferences, HistoryPostPagingSource.TYPE_READ_POSTS, postFilter)).get(HistoryPostViewModel.class);
+        }
 
         bindPostViewModel();
     }
