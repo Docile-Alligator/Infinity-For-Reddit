@@ -58,11 +58,7 @@ public class SubredditMultiselectionRecyclerViewAdapter extends RecyclerView.Ada
                     .error(glide.load(R.drawable.subreddit_default_icon)
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(72, 0))))
                     .into(((SubscribedSubredditViewHolder) holder).iconImageView);
-            if (subscribedSubreddits.get(position).isSelected()) {
-                ((SubscribedSubredditViewHolder) holder).checkBox.setChecked(true);
-            } else {
-                ((SubscribedSubredditViewHolder) holder).checkBox.setChecked(false);
-            }
+            ((SubscribedSubredditViewHolder) holder).checkBox.setChecked(subscribedSubreddits.get(position).isSelected());
             ((SubscribedSubredditViewHolder) holder).checkBox.setOnClickListener(view -> {
                 if (subscribedSubreddits.get(position).isSelected()) {
                     ((SubscribedSubredditViewHolder) holder).checkBox.setChecked(false);

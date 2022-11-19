@@ -24,20 +24,12 @@ public class ImmersiveInterfacePreferenceFragment extends CustomFontPreferenceFr
         if (immersiveInterfaceSwitch != null && immersiveInterfaceIgnoreNavBarSwitch != null
                 && disableImmersiveInterfaceInLandscapeModeSwitch != null) {
             immersiveInterfaceSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
-                if ((Boolean) newValue) {
-                    immersiveInterfaceIgnoreNavBarSwitch.setVisible(true);
-                } else {
-                    immersiveInterfaceIgnoreNavBarSwitch.setVisible(false);
-                }
+                immersiveInterfaceIgnoreNavBarSwitch.setVisible((Boolean) newValue);
                 EventBus.getDefault().post(new RecreateActivityEvent());
                 return true;
             });
 
-            if (immersiveInterfaceSwitch.isChecked()) {
-                immersiveInterfaceIgnoreNavBarSwitch.setVisible(true);
-            } else {
-                immersiveInterfaceIgnoreNavBarSwitch.setVisible(false);
-            }
+            immersiveInterfaceIgnoreNavBarSwitch.setVisible(immersiveInterfaceSwitch.isChecked());
 
             immersiveInterfaceIgnoreNavBarSwitch.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new RecreateActivityEvent());

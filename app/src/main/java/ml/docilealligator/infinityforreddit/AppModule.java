@@ -234,7 +234,7 @@ class AppModule {
     @Provides
     @Singleton
     RedditDataRoomDatabase provideRedditDataRoomDatabase() {
-        return RedditDataRoomDatabase.getDatabase(mApplication);
+        return RedditDataRoomDatabase.create(mApplication);
     }
 
     @Provides

@@ -236,28 +236,9 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
         imagesRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                GridLayoutManager.LayoutParams layoutParams = (GridLayoutManager.LayoutParams) view.getLayoutParams();
-
-                int spanIndex = layoutParams.getSpanIndex();
-
                 int offset = (int) (Utils.convertDpToPixel(16, PostGalleryActivity.this));
                 int halfOffset = offset / 2;
-
-                if (nColumns == 2) {
-                    if (spanIndex == 0) {
-                        outRect.set(halfOffset, 0, halfOffset, offset);
-                    } else {
-                        outRect.set(halfOffset, 0, halfOffset, offset);
-                    }
-                } else if (nColumns == 3) {
-                    if (spanIndex == 0) {
-                        outRect.set(halfOffset, 0, halfOffset, offset);
-                    } else if (spanIndex == 1) {
-                        outRect.set(halfOffset, 0, halfOffset, offset);
-                    } else {
-                        outRect.set(halfOffset, 0, halfOffset, offset);
-                    }
-                }
+                outRect.set(halfOffset, 0, halfOffset, offset);
             }
         });
 

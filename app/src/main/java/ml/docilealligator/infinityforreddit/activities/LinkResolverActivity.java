@@ -106,7 +106,6 @@ public class LinkResolverActivity extends AppCompatActivity {
     private void handleUri(Uri uri) {
         if (uri == null) {
             Toast.makeText(this, R.string.no_link_available, Toast.LENGTH_SHORT).show();
-            finish();
         } else {
             String path = uri.getPath();
             if (path == null) {
@@ -339,8 +338,8 @@ public class LinkResolverActivity extends AppCompatActivity {
                 }
             }
 
-            finish();
         }
+        finish();
     }
 
     private void deepLinkError(Uri uri) {
