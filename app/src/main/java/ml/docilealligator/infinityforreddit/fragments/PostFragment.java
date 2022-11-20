@@ -37,9 +37,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.content.res.ResourcesCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.ItemSnapshotList;
 import androidx.paging.LoadState;
+import androidx.paging.PagingData;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
@@ -1666,6 +1668,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Override
     public void hideReadPosts() {
         mPostViewModel.hideReadPosts();
+        ItemSnapshotList<Post> posts = mAdapter.snapshot();
+        for (Post post: posts) {
+            if (!post.isRead()) return;
+        }
+        refresh();
     }
 
     @Override
