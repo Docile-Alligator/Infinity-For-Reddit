@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import retrofit2.Call;
@@ -54,7 +55,7 @@ public class FetchSubredditData {
         });
     }
 
-    static void fetchSubredditListingData(Retrofit retrofit, String query, String after, String sortType, String accessToken,
+    static void fetchSubredditListingData(Retrofit retrofit, String query, String after, SortType.Type sortType, String accessToken,
                                           boolean nsfw, final FetchSubredditListingDataListener fetchSubredditListingDataListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
 

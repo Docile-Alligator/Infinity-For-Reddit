@@ -52,7 +52,7 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
     public void loadInitial(@NonNull LoadInitialParams<String> params, @NonNull LoadInitialCallback<String, SubredditData> callback) {
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
-        FetchSubredditData.fetchSubredditListingData(retrofit, query, null, sortType.getType().value, accessToken, nsfw,
+        FetchSubredditData.fetchSubredditListingData(retrofit, query, null, sortType.getType(), accessToken, nsfw,
                 new FetchSubredditData.FetchSubredditListingDataListener() {
                     @Override
                     public void onFetchSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
@@ -87,7 +87,7 @@ public class SubredditListingDataSource extends PageKeyedDataSource<String, Subr
             return;
         }
 
-        FetchSubredditData.fetchSubredditListingData(retrofit, query, params.key, sortType.getType().value, accessToken, nsfw,
+        FetchSubredditData.fetchSubredditListingData(retrofit, query, params.key, sortType.getType(), accessToken, nsfw,
                 new FetchSubredditData.FetchSubredditListingDataListener() {
                     @Override
                     public void onFetchSubredditListingDataSuccess(ArrayList<SubredditData> subredditData, String after) {
