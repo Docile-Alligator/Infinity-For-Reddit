@@ -59,25 +59,12 @@ public interface RedditAPI {
 
     @GET("user/{username}/comments.json?raw_json=1")
     Call<String> getUserComments(@Path("username") String username, @Query("after") String after,
-                                 @Query("sort") SortType.Type sortType);
-
-    @GET("user/{username}/comments.json?raw_json=1")
-    Call<String> getUserComments(@Path("username") String username, @Query("after") String after,
                                  @Query("sort") SortType.Type sortType, @Query("t") SortType.Time sortTime);
-
-    @GET("user/{username}/comments.json?raw_json=1")
-    Call<String> getUserCommentsOauth(@HeaderMap Map<String, String> headers, @Path("username") String username,
-                                      @Query("after") String after, @Query("sort") SortType.Type sortType);
 
     @GET("user/{username}/comments.json?raw_json=1")
     Call<String> getUserCommentsOauth(@HeaderMap Map<String, String> headers, @Path("username") String username,
                                       @Query("after") String after, @Query("sort") SortType.Type sortType,
                                       @Query("t") SortType.Time sortTime);
-
-    @GET("user/{username}/{where}.json?&type=comments&raw_json=1&limit=25")
-    Call<String> getUserSavedCommentsOauth(@Path("username") String username, @Path("where") String where,
-                                           @Query("after") String lastItem, @Query("sort") SortType.Type sortType,
-                                           @HeaderMap Map<String, String> headers);
 
     @GET("user/{username}/{where}.json?&type=comments&raw_json=1&limit=25")
     Call<String> getUserSavedCommentsOauth(@Path("username") String username, @Path("where") String where,
