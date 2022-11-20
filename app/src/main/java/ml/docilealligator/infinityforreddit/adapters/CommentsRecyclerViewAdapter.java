@@ -48,6 +48,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveThing;
+import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.VoteThing;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.CommentActivity;
@@ -626,7 +627,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.loading);
 
                         Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
-                        String sortType = mCommentRecyclerViewAdapterCallback.getSortType();
+                        SortType.Type sortType = mCommentRecyclerViewAdapterCallback.getSortType();
                         FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken,
                                 parentComment.getMoreChildrenIds(),
                                 mExpandChildren, mPost.getFullName(), sortType, new FetchComment.FetchMoreCommentListener() {
@@ -1178,7 +1179,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
         void retryFetchingMoreComments();
 
-        String getSortType();
+        SortType.Type getSortType();
     }
 
     public class CommentViewHolder extends RecyclerView.ViewHolder {

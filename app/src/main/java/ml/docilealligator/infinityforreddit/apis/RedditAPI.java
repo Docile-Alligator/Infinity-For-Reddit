@@ -130,19 +130,19 @@ public interface RedditAPI {
 
     @GET("/comments/{id}/placeholder/{singleCommentId}.json?raw_json=1")
     Call<String> getPostAndCommentsSingleThreadByIdOauth(@Path("id") String id, @Path("singleCommentId") String singleCommentId,
-                                                         @Query("sort") String sortType, @Query("context") String contextNumber,
+                                                         @Query("sort") SortType.Type sortType, @Query("context") String contextNumber,
                                                          @HeaderMap Map<String, String> headers);
 
     @GET("/comments/{id}.json?raw_json=1")
-    Call<String> getPostAndCommentsByIdOauth(@Path("id") String id, @Query("sort") String sortType,
+    Call<String> getPostAndCommentsByIdOauth(@Path("id") String id, @Query("sort") SortType.Type sortType,
                                              @HeaderMap Map<String, String> headers);
 
     @GET("/comments/{id}/placeholder/{singleCommentId}.json?raw_json=1")
     Call<String> getPostAndCommentsSingleThreadById(@Path("id") String id, @Path("singleCommentId") String singleCommentId,
-                                                    @Query("sort") String sortType, @Query("context") String contextNumber);
+                                                    @Query("sort") SortType.Type sortType, @Query("context") String contextNumber);
 
     @GET("/comments/{id}.json?raw_json=1")
-    Call<String> getPostAndCommentsById(@Path("id") String id, @Query("sort") String sortType);
+    Call<String> getPostAndCommentsById(@Path("id") String id, @Query("sort") SortType.Type sortType);
 
     @Multipart
     @POST(".")
@@ -458,9 +458,9 @@ public interface RedditAPI {
 
     @FormUrlEncoded
     @POST("/api/morechildren.json?raw_json=1&api_type=json")
-    Call<String> moreChildren(@Field("link_id") String linkId, @Field("children") String children, @Field("sort") String sort);
+    Call<String> moreChildren(@Field("link_id") String linkId, @Field("children") String children, @Field("sort") SortType.Type sort);
 
     @FormUrlEncoded
     @POST("/api/morechildren.json?raw_json=1&api_type=json")
-    Call<String> moreChildrenOauth(@Field("link_id") String linkId, @Field("children") String children, @Field("sort") String sort, @HeaderMap Map<String, String> headers);
+    Call<String> moreChildrenOauth(@Field("link_id") String linkId, @Field("children") String children, @Field("sort") SortType.Type sort, @HeaderMap Map<String, String> headers);
 }
