@@ -1665,12 +1665,16 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Override
     public void hideReadPosts() {
-        mPostViewModel.hideReadPosts();
+        boolean refresh = true;
+
         ItemSnapshotList<Post> posts = mAdapter.snapshot();
         for (Post post: posts) {
-            if (!post.isRead()) return;
+            if (!post.isRead()) refresh = false;
         }
-        refresh();
+
+        mPostViewModel.hideReadPosts();
+
+        if (refresh) refresh();
     }
 
     @Override
