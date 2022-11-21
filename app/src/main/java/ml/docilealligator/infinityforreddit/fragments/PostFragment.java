@@ -1674,6 +1674,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void hideReadPosts() {
         boolean refresh = true;
 
+        //check if all rendered posts are read
         ItemSnapshotList<Post> posts = mAdapter.snapshot();
         for (Post post: posts) {
             if (!post.isRead()) refresh = false;
@@ -1681,6 +1682,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         mPostViewModel.hideReadPosts();
 
+        // if all rendered posts are read, reload them
         if (refresh){
             //reload posts
             if(isInLazyMode) pauseLazyMode(false);
