@@ -1681,7 +1681,12 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         mPostViewModel.hideReadPosts();
 
-        if (refresh) refresh();
+        if (refresh){
+            //reload posts
+            if(isInLazyMode) pauseLazyMode(false);
+            mAdapter.refresh();
+            if (isInLazyMode) resumeLazyMode(true);
+        }
     }
 
     @Override
