@@ -129,21 +129,18 @@ public class PostHistoryFragment extends Fragment {
 
         ReadPostDao readPostDao = mRedditDataRoomDatabase.readPostDao();
 
-        var wrapper = new Object(){ int readPostsCount; };
-        mExecutor.execute(() -> {
-            wrapper.readPostsCount = readPostDao.getReadPostsCount();
-        });
-        int readPostsCount = wrapper.readPostsCount;
-        double readPostsTableSizeMB = readPostsCount*38 / 1024.0 / 1024.0; // 38 is the size of a row
-        readPostsTableSizeMB =  Math.round(readPostsTableSizeMB * 100.0) / 100.0;
-
         markPostsAsReadSwitch.setChecked(postHistorySharedPreferences.getBoolean(
                 accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false));
         limitReadPostsSwitch.setChecked(postHistorySharedPreferences.getBoolean(
                 accountName + SharedPreferencesUtils.LIMIT_READ_POSTS_BASE, true));
         readPostsLimitTextInputEditText.setText(postHistorySharedPreferences.getString(
                 accountName + SharedPreferencesUtils.READ_POSTS_LIMIT_BASE, "500"));
-        readPostsInDBTextView.setText("Read Post DataBase\nSize (MB): " + readPostsTableSizeMB + "\nCount: " + readPostsCount);
+        mExecutor.execute(() -> {
+            int readPostsCount = readPostDao.getReadPostsCount();
+            double readPostsTableSizeMB = readPostsCount*38 / 1024.0 / 1024.0;
+            readPostsTableSizeMB = Math.round(readPostsTableSizeMB * 100.0) / 100.0;
+            readPostsInDBTextView.setText("Read Post DataBase\nSize (MB): " + readPostsTableSizeMB + "\nCount: " + readPostsCount);
+        });
         markPostsAsReadAfterVotingSwitch.setChecked(postHistorySharedPreferences.getBoolean(
                 accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, false));
         markPostsAsReadOnScrollSwitch.setChecked(postHistorySharedPreferences.getBoolean(
