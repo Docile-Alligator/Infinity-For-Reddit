@@ -29,8 +29,12 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
+import ml.docilealligator.infinityforreddit.readpost.ReadPostDao;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
+
+import java.text.DecimalFormat;
+import java.util.concurrent.Executor;
 
 public class PostHistoryFragment extends Fragment {
 
@@ -54,6 +58,10 @@ public class PostHistoryFragment extends Fragment {
     TextInputLayout readPostsLimitTextInputLayout;
     @BindView(R.id.read_posts_limit_text_input_edit_text_post_history_fragment)
     TextInputEditText readPostsLimitTextInputEditText;
+    @BindView(R.id.read_posts_in_db_linear_layout_post_history_fragment)
+    LinearLayout readPostsInDBLinearLayout;
+    @BindView(R.id.read_posts_in_db_text_view_post_history_fragment)
+    TextView readPostsInDBTextView;
     @BindView(R.id.mark_posts_as_read_after_voting_linear_layout_post_history_fragment)
     LinearLayout markPostsAsReadAfterVotingLinearLayout;
     @BindView(R.id.mark_posts_as_read_after_voting_text_view_post_history_fragment)
@@ -75,9 +83,10 @@ public class PostHistoryFragment extends Fragment {
     @Inject
     @Named("post_history")
     SharedPreferences postHistorySharedPreferences;
-
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
+    @Inject
+    Executor mExecutor;
     private SettingsActivity activity;
 
     public PostHistoryFragment() {
@@ -107,6 +116,7 @@ public class PostHistoryFragment extends Fragment {
             markPostsAsReadLinearLayout.setVisibility(View.GONE);
             limitReadPostsLinearLayout.setVisibility(View.GONE);
             readPostsLimitTextInputLayout.setVisibility(View.GONE);
+            readPostsInDBLinearLayout.setVisibility(View.GONE);
             markPostsAsReadAfterVotingLinearLayout.setVisibility(View.GONE);
             markPostsAsReadOnScrollLinearLayout.setVisibility(View.GONE);
             hideReadPostsAutomaticallyLinearLayout.setVisibility(View.GONE);
@@ -117,12 +127,23 @@ public class PostHistoryFragment extends Fragment {
                 postHistorySharedPreferences.getBoolean(
                         accountName + SharedPreferencesUtils.LIMIT_READ_POSTS_BASE, true));
 
+        ReadPostDao readPostDao = mRedditDataRoomDatabase.readPostDao();
+
+        var wrapper = new Object(){ int readPostsCount; };
+        mExecutor.execute(() -> {
+            wrapper.readPostsCount = readPostDao.getReadPostsCount();
+        });
+        int readPostsCount = wrapper.readPostsCount;
+        double readPostsTableSizeMB = readPostsCount*38 / 1024.0 / 1024.0; // 38 is the size of a row
+        readPostsTableSizeMB =  Math.round(readPostsTableSizeMB * 100.0) / 100.0;
+
         markPostsAsReadSwitch.setChecked(postHistorySharedPreferences.getBoolean(
                 accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false));
         limitReadPostsSwitch.setChecked(postHistorySharedPreferences.getBoolean(
                 accountName + SharedPreferencesUtils.LIMIT_READ_POSTS_BASE, true));
         readPostsLimitTextInputEditText.setText(postHistorySharedPreferences.getString(
                 accountName + SharedPreferencesUtils.READ_POSTS_LIMIT_BASE, "500"));
+        readPostsInDBTextView.setText("Read Post DataBase\nSize (MB): " + readPostsTableSizeMB + "\nCount: " + readPostsCount);
         markPostsAsReadAfterVotingSwitch.setChecked(postHistorySharedPreferences.getBoolean(
                 accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_AFTER_VOTING_BASE, false));
         markPostsAsReadOnScrollSwitch.setChecked(postHistorySharedPreferences.getBoolean(
@@ -200,6 +221,7 @@ public class PostHistoryFragment extends Fragment {
         markPostsAsReadTextView.setTextColor(primaryTextColor);
         limitReadPostsTextView.setTextColor(primaryTextColor);
         readPostsLimitTextInputEditText.setTextColor(primaryTextColor);
+        readPostsInDBTextView.setTextColor(primaryTextColor);
         markPostsAsReadAfterVotingTextView.setTextColor(primaryTextColor);
         markPostsAsReadOnScrollTextView.setTextColor(primaryTextColor);
         hideReadPostsAutomaticallyTextView.setTextColor(primaryTextColor);
