@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
+import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 
 public class Comment implements Parcelable {
@@ -313,13 +314,9 @@ public class Comment implements Parcelable {
         return children;
     }
 
-    public void setChildren(ArrayList<Comment> children) {
-        this.children = children;
-    }
-
     public void addChildren(ArrayList<Comment> moreChildren) {
         if (children == null || children.size() == 0) {
-            setChildren(moreChildren);
+            children = moreChildren;
         } else {
             if (children.size() > 1 && children.get(children.size() - 1).placeholderType == PLACEHOLDER_LOAD_MORE_COMMENTS) {
                 children.addAll(children.size() - 2, moreChildren);
@@ -328,11 +325,13 @@ public class Comment implements Parcelable {
             }
         }
         childCount += moreChildren == null ? 0 : moreChildren.size();
+        assertChildrenDepth();
     }
 
     public void addChild(Comment comment) {
         addChild(comment, 0);
         childCount++;
+        assertChildrenDepth();
     }
 
     public void addChild(Comment comment, int position) {
@@ -340,6 +339,17 @@ public class Comment implements Parcelable {
             children = new ArrayList<>();
         }
         children.add(position, comment);
+        assertChildrenDepth();
+    }
+
+    private void assertChildrenDepth() {
+        if (BuildConfig.DEBUG) {
+            for (Comment child: children) {
+                if (child.depth != depth + 1) {
+                    throw new IllegalStateException("Child depth is not one more than parent depth");
+                }
+            }
+        }
     }
 
     public ArrayList<String> getMoreChildrenIds() {

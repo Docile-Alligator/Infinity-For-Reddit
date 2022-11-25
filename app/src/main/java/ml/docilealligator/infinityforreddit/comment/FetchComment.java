@@ -42,10 +42,11 @@ public class FetchComment {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParseComment.parseComment(executor, handler, response.body(), new ArrayList<>(),
+                    ParseComment.parseComment(executor, handler, response.body(),
                             expandChildren, new ParseComment.ParseCommentListener() {
                                 @Override
-                                public void onParseCommentSuccess(ArrayList<Comment> expandedComments,
+                                public void onParseCommentSuccess(ArrayList<Comment> topLevelComments,
+                                                                  ArrayList<Comment> expandedComments,
                                                                   String parentId, ArrayList<String> moreChildrenIds) {
                                     fetchCommentListener.onFetchCommentSuccess(expandedComments, parentId,
                                             moreChildrenIds);
@@ -97,12 +98,14 @@ public class FetchComment {
             @Override
             public void onResponse(@NonNull Call<String> call, @NonNull Response<String> response) {
                 if (response.isSuccessful()) {
-                    ParseComment.parseMoreComment(executor, handler, response.body(), new ArrayList<>(),
+                    ParseComment.parseMoreComment(executor, handler, response.body(),
                             expandChildren, new ParseComment.ParseCommentListener() {
                                 @Override
-                                public void onParseCommentSuccess(ArrayList<Comment> expandedComments,
+                                public void onParseCommentSuccess(ArrayList<Comment> topLevelComments,
+                                                                  ArrayList<Comment> expandedComments,
                                                                   String parentId, ArrayList<String> moreChildrenIds) {
-                                    fetchMoreCommentListener.onFetchMoreCommentSuccess(expandedComments, moreChildrenIds);
+                                    fetchMoreCommentListener.onFetchMoreCommentSuccess(
+                                            topLevelComments,expandedComments, moreChildrenIds);
                                 }
 
                                 @Override
@@ -129,7 +132,9 @@ public class FetchComment {
     }
 
     public interface FetchMoreCommentListener {
-        void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments,  ArrayList<String> moreChildrenIds);
+        void onFetchMoreCommentSuccess(ArrayList<Comment> topLevelComments,
+                                       ArrayList<Comment> expandedComments,
+                                       ArrayList<String> moreChildrenIds);
 
         void onFetchMoreCommentFailed();
     }

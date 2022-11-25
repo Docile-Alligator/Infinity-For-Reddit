@@ -1346,10 +1346,10 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             if (mRespectSubredditRecommendedSortType) {
                                 fetchCommentsRespectRecommendedSort(false);
                             } else {
-                                ParseComment.parseComment(mExecutor, new Handler(), response.body(), new ArrayList<>(),
+                                ParseComment.parseComment(mExecutor, new Handler(), response.body(),
                                         mExpandChildren, new ParseComment.ParseCommentListener() {
                                             @Override
-                                            public void onParseCommentSuccess(ArrayList<Comment> expandedComments, String parentId, ArrayList<String> moreChildrenIds) {
+                                            public void onParseCommentSuccess(ArrayList<Comment> topLevelComments, ArrayList<Comment> expandedComments, String parentId, ArrayList<String> moreChildrenIds) {
                                                 ViewPostDetailFragment.this.children = moreChildrenIds;
 
                                                 hasMoreChildren = children.size() != 0;
@@ -1576,7 +1576,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken, children,
                 mExpandChildren, mPost.getFullName(), sortType, new FetchComment.FetchMoreCommentListener() {
                     @Override
-                    public void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments, ArrayList<String> moreChildrenIds) {
+                    public void onFetchMoreCommentSuccess(ArrayList<Comment> topLevelComments,
+                                                          ArrayList<Comment> expandedComments,
+                                                          ArrayList<String> moreChildrenIds) {
                         children = moreChildrenIds;
                         hasMoreChildren = !children.isEmpty();
                         mCommentsAdapter.addComments(expandedComments, hasMoreChildren);
