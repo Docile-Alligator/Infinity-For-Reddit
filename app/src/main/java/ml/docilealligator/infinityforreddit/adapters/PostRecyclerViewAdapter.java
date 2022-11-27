@@ -4423,7 +4423,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
         void markPostRead(Post post, boolean changePostItemColor) {
             if (mAccessToken != null && !post.isRead() && mMarkPostsAsRead) {
-                post.markAsRead(true);
+                post.markAsRead();
                 if (changePostItemColor) {
                     itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
                 }
