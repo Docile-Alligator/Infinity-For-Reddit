@@ -210,7 +210,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @State
     String mMessageFullname;
     @State
-    String sortType;
+    SortType.Type sortType;
     @State
     boolean mRespectSubredditRecommendedSortType;
     @State
@@ -553,13 +553,12 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             mMessageFullname = getArguments().getString(EXTRA_MESSAGE_FULLNAME);
 
             if (!mRespectSubredditRecommendedSortType || isSingleCommentThreadMode) {
-                SortType.Type sortTypeType = loadSortType();
-                activity.setTitle(sortTypeType.fullName);
-                sortType = sortTypeType.value;
+                sortType = loadSortType();
+                activity.setTitle(sortType.fullName);
             }
         } else {
             if (sortType != null) {
-                activity.setTitle(SortType.Type.valueOf(sortType.toUpperCase()).fullName);
+                activity.setTitle(sortType.fullName);
             }
         }
 
@@ -621,7 +620,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                         }
 
                         @Override
-                        public String getSortType() {
+                        public SortType.Type getSortType() {
                             return sortType;
                         }
                     });
@@ -816,12 +815,12 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (children != null) {
             children.clear();
         }
-        this.sortType = sortType.getType().value;
+        this.sortType = sortType.getType();
         if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false)
                 && mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_SORT_TYPE, true)) {
             mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, sortType.getType().name()).apply();
         }
-        fetchCommentsRespectRecommendedSort(false, false, sortType.getType().value);
+        fetchCommentsRespectRecommendedSort(false, false, sortType.getType());
     }
 
     @NonNull
@@ -1331,7 +1330,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                         }
 
                                         @Override
-                                        public String getSortType() {
+                                        public SortType.Type getSortType() {
                                             return sortType;
                                         }
                                     });
@@ -1429,7 +1428,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         });
     }
 
-    private void fetchCommentsRespectRecommendedSort(boolean changeRefreshState, boolean checkSortState, String sortType) {
+    private void fetchCommentsRespectRecommendedSort(boolean changeRefreshState, boolean checkSortState, SortType.Type sortType) {
         if (mRespectSubredditRecommendedSortType && mPost != null) {
             FetchSubredditData.fetchSubredditData(mOauthRetrofit, mRetrofit, mPost.getSubredditName(), mAccessToken,
                     new FetchSubredditData.FetchSubredditDataListener() {
@@ -1444,7 +1443,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                 sortTypeType = SortType.Type.valueOf(suggestedCommentSort.toUpperCase(Locale.US));
                             }
                             activity.setTitle(sortTypeType.fullName);
-                            ViewPostDetailFragment.this.sortType = sortTypeType.value;
+                            ViewPostDetailFragment.this.sortType = sortTypeType;
                             fetchComments(changeRefreshState, checkSortState, ViewPostDetailFragment.this.sortType);
                         }
 
@@ -1453,7 +1452,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             mRespectSubredditRecommendedSortType = false;
                             SortType.Type sortTypeType = loadSortType();
                             activity.setTitle(sortTypeType.fullName);
-                            ViewPostDetailFragment.this.sortType = sortTypeType.value;
+                            ViewPostDetailFragment.this.sortType = sortTypeType;
                         }
                     });
         } else {
@@ -1461,7 +1460,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         }
     }
 
-    private void fetchComments(boolean changeRefreshState, boolean checkSortState, String sortType) {
+    private void fetchComments(boolean changeRefreshState, boolean checkSortState, SortType.Type sortType) {
         isFetchingComments = true;
         mCommentsAdapter.setSingleComment(mSingleCommentId, isSingleCommentThreadMode);
         mCommentsAdapter.initiallyLoading();

@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.Executor;
 
+import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import retrofit2.Call;
@@ -19,7 +20,7 @@ import retrofit2.Retrofit;
 public class FetchComment {
     public static void fetchComments(Executor executor, Handler handler, Retrofit retrofit,
                                      @Nullable String accessToken, String article,
-                                     String commentId, String sortType, String contextNumber, boolean expandChildren,
+                                     String commentId, SortType.Type sortType, String contextNumber, boolean expandChildren,
                                      Locale locale, FetchCommentListener fetchCommentListener) {
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> comments;
@@ -73,7 +74,7 @@ public class FetchComment {
                                         @Nullable String accessToken,
                                         ArrayList<String> allChildren,
                                         boolean expandChildren, String postFullName,
-                                        String sortType,
+                                        SortType.Type sortType,
                                         FetchMoreCommentListener fetchMoreCommentListener) {
         if (allChildren == null) {
             return;

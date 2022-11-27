@@ -164,9 +164,9 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     @State
     PostFilter postFilter;
     @State
-    String sortType;
+    SortType.Type sortType;
     @State
-    String sortTime;
+    SortType.Time sortTime;
     @State
     ArrayList<String> readPostList;
     @State
@@ -535,111 +535,55 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                 switch (postType) {
                     case PostPagingSource.TYPE_SUBREDDIT:
                         if (mAccessToken == null) {
-                            if (sortTime != null) {
-                                call = api.getSubredditBestPosts(subredditName, sortType, sortTime, afterKey);
-                            } else {
-                                call = api.getSubredditBestPosts(subredditName, sortType, afterKey);
-                            }
+                            call = api.getSubredditBestPosts(subredditName, sortType, sortTime, afterKey);
                         } else {
-                            if (sortTime != null) {
-                                call = api.getSubredditBestPostsOauth(subredditName, sortType,
-                                        sortTime, afterKey, APIUtils.getOAuthHeader(mAccessToken));
-                            } else {
-                                call = api.getSubredditBestPostsOauth(subredditName, sortType,
-                                        afterKey, APIUtils.getOAuthHeader(mAccessToken));
-                            }
+                            call = api.getSubredditBestPostsOauth(subredditName, sortType,
+                                   sortTime, afterKey, APIUtils.getOAuthHeader(mAccessToken));
                         }
                         break;
                     case PostPagingSource.TYPE_USER:
                         if (mAccessToken == null) {
-                            if (sortTime != null) {
-                                call = api.getUserPosts(username, afterKey, sortType,
-                                        sortTime);
-                            } else {
-                                call = api.getUserPosts(username, afterKey, sortType);
-                            }
+                            call = api.getUserPosts(username, afterKey, sortType, sortTime);
                         } else {
-                            if (sortTime != null) {
-                                call = api.getUserPostsOauth(username, userWhere, afterKey, sortType,
-                                        sortTime, APIUtils.getOAuthHeader(mAccessToken));
-                            } else {
-                                call = api.getUserPostsOauth(username, userWhere, afterKey, sortType,
-                                        APIUtils.getOAuthHeader(mAccessToken));
-                            }
+                            call = api.getUserPostsOauth(username, userWhere, afterKey, sortType,
+                                    sortTime, APIUtils.getOAuthHeader(mAccessToken));
                         }
                         break;
                     case PostPagingSource.TYPE_SEARCH:
                         if (subredditName == null) {
                             if (mAccessToken == null) {
-                                if (sortTime != null) {
-                                    call = api.searchPosts(query, afterKey, sortType, sortTime,
-                                            trendingSource);
-                                } else {
-                                    call = api.searchPosts(query, afterKey, sortType, trendingSource);
-                                }
+                                call = api.searchPosts(query, afterKey, sortType, sortTime,
+                                        trendingSource);
                             } else {
-                                if (sortTime != null) {
-                                    call = api.searchPostsOauth(query, afterKey, sortType,
-                                            sortTime, trendingSource, APIUtils.getOAuthHeader(mAccessToken));
-                                } else {
-                                    call = api.searchPostsOauth(query, afterKey, sortType, trendingSource,
-                                            APIUtils.getOAuthHeader(mAccessToken));
-                                }
+                                call = api.searchPostsOauth(query, afterKey, sortType,
+                                        sortTime, trendingSource, APIUtils.getOAuthHeader(mAccessToken));
                             }
                         } else {
                             if (mAccessToken == null) {
-                                if (sortTime != null) {
-                                    call = api.searchPostsInSpecificSubreddit(subredditName, query,
-                                            sortType, sortTime, afterKey);
-                                } else {
-                                    call = api.searchPostsInSpecificSubreddit(subredditName, query,
-                                            sortType, afterKey);
-                                }
+                                call = api.searchPostsInSpecificSubreddit(subredditName, query,
+                                        sortType, sortTime, afterKey);
                             } else {
-                                if (sortTime != null) {
-                                    call = api.searchPostsInSpecificSubredditOauth(subredditName, query,
-                                            sortType, sortTime, afterKey,
-                                            APIUtils.getOAuthHeader(mAccessToken));
-                                } else {
-                                    call = api.searchPostsInSpecificSubredditOauth(subredditName, query,
-                                            sortType, afterKey,
-                                            APIUtils.getOAuthHeader(mAccessToken));
-                                }
+                                call = api.searchPostsInSpecificSubredditOauth(subredditName, query,
+                                        sortType, sortTime, afterKey,
+                                        APIUtils.getOAuthHeader(mAccessToken));
                             }
                         }
                         break;
                     case PostPagingSource.TYPE_MULTI_REDDIT:
                         if (mAccessToken == null) {
-                            if (sortTime != null) {
-                                call = api.getMultiRedditPosts(multiPath, afterKey, sortTime);
-                            } else {
-                                call = api.getMultiRedditPosts(multiPath, afterKey);
-                            }
+                            call = api.getMultiRedditPosts(multiPath, afterKey, sortTime);
                         } else {
-                            if (sortTime != null) {
-                                call = api.getMultiRedditPostsOauth(multiPath, afterKey,
-                                        sortTime, APIUtils.getOAuthHeader(mAccessToken));
-                            } else {
-                                call = api.getMultiRedditPostsOauth(multiPath, afterKey,
-                                        APIUtils.getOAuthHeader(mAccessToken));
-                            }
+                            call = api.getMultiRedditPostsOauth(multiPath, afterKey,
+                                    sortTime, APIUtils.getOAuthHeader(mAccessToken));
                         }
                         break;
                     case PostPagingSource.TYPE_ANONYMOUS_FRONT_PAGE:
                         //case PostPagingSource.TYPE_ANONYMOUS_MULTIREDDIT
-                        if (sortTime != null) {
-                            call = api.getSubredditBestPosts(subredditName, sortType, sortTime, afterKey);
-                        } else {
-                            call = api.getSubredditBestPosts(subredditName, sortType, afterKey);
-                        }
+                        call = api.getSubredditBestPosts(subredditName, sortType, sortTime, afterKey);
                         break;
                     default:
-                        if (sortTime != null) {
-                            call = api.getBestPosts(sortType, sortTime, afterKey,
-                                    APIUtils.getOAuthHeader(mAccessToken));
-                        } else {
-                            call = api.getBestPosts(sortType, afterKey, APIUtils.getOAuthHeader(mAccessToken));
-                        }
+                        call = api.getBestPosts(sortType, sortTime, afterKey,
+                                APIUtils.getOAuthHeader(mAccessToken));
                 }
 
                 try {
@@ -806,8 +750,8 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
             this.query = event.query;
             this.trendingSource = event.trendingSource;
             this.postFilter = event.postFilter;
-            this.sortType = event.sortType.getType().value;
-            this.sortTime = event.sortType.getTime() == null ? null : event.sortType.getTime().value;
+            this.sortType = event.sortType.getType();
+            this.sortTime = event.sortType.getTime();
             this.readPostList = event.readPostList;
 
             if (sectionsPagerAdapter != null) {
