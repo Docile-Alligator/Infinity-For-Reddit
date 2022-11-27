@@ -299,11 +299,13 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_TYPE, ViewImgurMediaActivity.IMGUR_TYPE_IMAGE);
                                 intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_ID, path.substring(1));
                                 startActivity(intent);
-                            } else if (path.endsWith("gifv")) {
+                            } else if (path.endsWith("gifv") || path.endsWith("mp4")) {
                                 String url = uri.toString();
                                 // Insecure imgur links won't load
                                 url = url.replaceFirst("http://" , "https://");
-                                url = url.substring(0, url.length() - 5) + ".mp4";
+                                if (path.endsWith("gifv")) {
+                                    url = url.substring(0, url.length() - 5) + ".mp4";
+                                }
                                 Intent intent = new Intent(this, ViewVideoActivity.class);
                                 intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_IMGUR);
                                 intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, getIntent().getBooleanExtra(EXTRA_IS_NSFW, false));
