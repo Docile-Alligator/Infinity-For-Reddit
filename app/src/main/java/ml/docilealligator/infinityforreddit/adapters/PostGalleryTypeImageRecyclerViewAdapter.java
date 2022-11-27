@@ -30,7 +30,7 @@ import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStra
 import ml.docilealligator.infinityforreddit.databinding.ItemGalleryImageInPostFeedBinding;
 import ml.docilealligator.infinityforreddit.post.Post;
 
-public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapter<PostGalleryTypeImageRecyclerViewAdapter.ImageViewHolder> {
     private RequestManager glide;
     private Typeface typeface;
     private Markwon mPostDetailMarkwon;
@@ -75,39 +75,37 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public ImageViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         return new ImageViewHolder(ItemGalleryImageInPostFeedBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-        if (holder instanceof ImageViewHolder) {
-            if (ratio < 0) {
-                int height = (int) (400 * mScale);
-                ((ImageViewHolder) holder).binding.imageViewItemGalleryImageInPostFeed.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                ((ImageViewHolder) holder).binding.imageViewItemGalleryImageInPostFeed.getLayoutParams().height = height;
-            } else {
-                ((ImageViewHolder) holder).binding.imageViewItemGalleryImageInPostFeed.setRatio(ratio);
-            }
-            ((ImageViewHolder) holder).binding.errorTextViewItemGalleryImageInPostFeed.setVisibility(View.GONE);
-            ((ImageViewHolder) holder).binding.progressBarItemGalleryImageInPostFeed.setVisibility(View.VISIBLE);
-
-            ((ImageViewHolder) holder).binding.imageViewItemGalleryImageInPostFeed.setRatio(ratio);
-
-            ((ImageViewHolder) holder).binding.imageViewItemGalleryImageInPostFeed.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-                @Override
-                public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                    ((ImageViewHolder) holder).binding.imageViewItemGalleryImageInPostFeed.removeOnLayoutChangeListener(this);
-                    loadImage(((ImageViewHolder) holder));
-                }
-            });
-
-            if (showCaption) {
-                loadCaptionPreview((ImageViewHolder) holder);
-            }
-
-            loadImage((ImageViewHolder) holder);
+    public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
+        if (ratio < 0) {
+            int height = (int) (400 * mScale);
+            holder.binding.imageViewItemGalleryImageInPostFeed.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            holder.binding.imageViewItemGalleryImageInPostFeed.getLayoutParams().height = height;
+        } else {
+            holder.binding.imageViewItemGalleryImageInPostFeed.setRatio(ratio);
         }
+        holder.binding.errorTextViewItemGalleryImageInPostFeed.setVisibility(View.GONE);
+        holder.binding.progressBarItemGalleryImageInPostFeed.setVisibility(View.VISIBLE);
+
+        holder.binding.imageViewItemGalleryImageInPostFeed.setRatio(ratio);
+
+        holder.binding.imageViewItemGalleryImageInPostFeed.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                holder.binding.imageViewItemGalleryImageInPostFeed.removeOnLayoutChangeListener(this);
+                loadImage(holder);
+            }
+        });
+
+        if (showCaption) {
+            loadCaptionPreview(holder);
+        }
+
+        loadImage(holder);
     }
 
     @Override
@@ -116,13 +114,11 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
     }
 
     @Override
-    public void onViewRecycled(@NonNull RecyclerView.ViewHolder holder) {
+    public void onViewRecycled(@NonNull ImageViewHolder holder) {
         super.onViewRecycled(holder);
-        if (holder instanceof ImageViewHolder) {
-            ((ImageViewHolder) holder).binding.captionConstraintLayoutItemGalleryImageInPostFeed.setVisibility(View.GONE);
-            ((ImageViewHolder) holder).binding.captionTextViewItemGalleryImageInPostFeed.setText("");
-            ((ImageViewHolder) holder).binding.captionUrlTextViewItemGalleryImageInPostFeed.setText("");
-        }
+        holder.binding.captionConstraintLayoutItemGalleryImageInPostFeed.setVisibility(View.GONE);
+        holder.binding.captionTextViewItemGalleryImageInPostFeed.setText("");
+        holder.binding.captionUrlTextViewItemGalleryImageInPostFeed.setText("");
     }
 
     private void loadImage(ImageViewHolder holder) {
