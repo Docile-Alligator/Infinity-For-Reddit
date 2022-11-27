@@ -1769,20 +1769,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         mShowAbsoluteNumberOfVotes = showAbsoluteNumberOfVotes;
     }
 
-    public int getNextItemPositionWithoutBeingHidden(int fromPosition) {
-        int temp = fromPosition;
-        while (temp >= 0 && temp < super.getItemCount()) {
-            Post post = getItem(temp);
-            if (post != null && post.isHiddenInRecyclerView()) {
-                temp++;
-            } else {
-                break;
-            }
-        }
-
-        return temp;
-    }
-
     public void setAutoplay(boolean autoplay) {
         mAutoplay = autoplay;
     }
@@ -2718,7 +2704,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
         void markPostRead(Post post, boolean changePostItemColor) {
             if (mAccessToken != null && !post.isRead() && mMarkPostsAsRead) {
-                post.markAsRead(true);
+                post.markAsRead();
                 if (changePostItemColor) {
                     if (itemViewIsNotCardView) {
                         itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
@@ -3993,7 +3979,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
         void markPostRead(Post post, boolean changePostItemColor) {
             if (mAccessToken != null && !post.isRead() && mMarkPostsAsRead) {
-                post.markAsRead(true);
+                post.markAsRead();
                 if (changePostItemColor) {
                     itemView.setBackgroundColor(mReadPostCardViewBackgroundColor);
                     titleTextView.setTextColor(mReadPostTitleColor);
@@ -4259,7 +4245,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
         void markPostRead(Post post, boolean changePostItemColor) {
             if (mAccessToken != null && !post.isRead() && mMarkPostsAsRead) {
-                post.markAsRead(true);
+                post.markAsRead();
                 if (changePostItemColor) {
                     itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
                     titleTextView.setTextColor(mReadPostTitleColor);

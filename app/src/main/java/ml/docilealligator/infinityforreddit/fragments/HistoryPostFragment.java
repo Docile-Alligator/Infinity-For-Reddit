@@ -299,16 +299,16 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
                     int nPosts = mAdapter.getItemCount();
                     if (getCurrentPosition() == -1) {
                         if (mLinearLayoutManager != null) {
-                            setCurrentPosition(mAdapter.getNextItemPositionWithoutBeingHidden(mLinearLayoutManager.findFirstVisibleItemPosition()));
+                            setCurrentPosition(mLinearLayoutManager.findFirstVisibleItemPosition());
                         } else {
                             int[] into = new int[2];
-                            setCurrentPosition(mAdapter.getNextItemPositionWithoutBeingHidden(mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[1]));
+                            setCurrentPosition(mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[1]);
                         }
                     }
 
                     if (getCurrentPosition() != RecyclerView.NO_POSITION && nPosts > getCurrentPosition()) {
                         incrementCurrentPosition();
-                        smoothScroller.setTargetPosition(mAdapter.getNextItemPositionWithoutBeingHidden(getCurrentPosition()));
+                        smoothScroller.setTargetPosition(getCurrentPosition());
                         if (mLinearLayoutManager != null) {
                             mLinearLayoutManager.startSmoothScroll(smoothScroller);
                         } else {
@@ -1029,7 +1029,7 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
                 post.setFlair(event.post.getFlair());
                 post.setSaved(event.post.isSaved());
                 if (event.post.isRead()) {
-                    post.markAsRead(true);
+                    post.markAsRead();
                 }
                 mAdapter.notifyItemChanged(event.positionInList);
             }
