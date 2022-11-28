@@ -312,10 +312,9 @@ public interface AppComponent {
     void inject(HistoryActivity historyActivity);
 
     void inject(MorePostsInfoFragment morePostsInfoFragment);
-    
+
     @Component.Factory
     interface Factory {
-        
         AppComponent create(@BindsInstance Application application);
     }
 }

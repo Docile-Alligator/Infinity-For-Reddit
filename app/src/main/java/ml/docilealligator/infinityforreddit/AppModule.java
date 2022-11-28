@@ -4,6 +4,8 @@ import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import androidx.preference.PreferenceManager;
+
 import com.google.android.exoplayer2.database.StandaloneDatabaseProvider;
 import com.google.android.exoplayer2.upstream.cache.LeastRecentlyUsedCacheEvictor;
 import com.google.android.exoplayer2.upstream.cache.SimpleCache;
@@ -15,14 +17,11 @@ import java.util.concurrent.Executors;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import androidx.preference.PreferenceManager;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LoopAvailableExoCreator;
-import ml.docilealligator.infinityforreddit.network.SortTypeConverterFactory;
-import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.videoautoplay.Config;
@@ -39,7 +38,7 @@ abstract class AppModule {
     @Provides
     @Singleton
     static RedditDataRoomDatabase provideRedditDataRoomDatabase(Application application) {
-        return RedditDataRoomDatabase.getDatabase(application);
+        return RedditDataRoomDatabase.create(application);
     }
 
     @Provides
