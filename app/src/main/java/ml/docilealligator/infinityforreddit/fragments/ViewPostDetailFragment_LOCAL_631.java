@@ -1188,13 +1188,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
     private void tryMarkingPostAsRead() {
         if (mMarkPostsAsRead && mPost != null && !mPost.isRead()) {
-<<<<<<< HEAD
             mPost.markAsRead();
             InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, mPost.getId());
-=======
-            mPost.markAsRead(true);
-            InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, mPost.getId(), mPostHistorySharedPreferences);
->>>>>>> ab05a54f078af66171436393b7c422b1cbcc8861
             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
         }
     }

@@ -1194,7 +1194,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 =======
             mPost.markAsRead(true);
             InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, mPost.getId(), mPostHistorySharedPreferences);
->>>>>>> ab05a54f078af66171436393b7c422b1cbcc8861
+>>>>>>> 3991d4b6 (made it possible to customize the read post limit)
             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
         }
     }
