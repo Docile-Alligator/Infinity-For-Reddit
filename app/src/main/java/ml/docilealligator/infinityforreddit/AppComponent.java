@@ -1,7 +1,10 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.app.Application;
+
 import javax.inject.Singleton;
 
+import dagger.BindsInstance;
 import dagger.Component;
 import ml.docilealligator.infinityforreddit.activities.AccountPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.AccountSavedThingActivity;
@@ -104,7 +107,7 @@ import ml.docilealligator.infinityforreddit.settings.TranslationFragment;
 import ml.docilealligator.infinityforreddit.settings.VideoPreferenceFragment;
 
 @Singleton
-@Component(modules = AppModule.class)
+@Component(modules = {AppModule.class, NetworkModule.class})
 public interface AppComponent {
     void inject(MainActivity mainActivity);
 
@@ -309,4 +312,10 @@ public interface AppComponent {
     void inject(HistoryActivity historyActivity);
 
     void inject(MorePostsInfoFragment morePostsInfoFragment);
+    
+    @Component.Factory
+    interface Factory {
+        
+        AppComponent create(@BindsInstance Application application);
+    }
 }
