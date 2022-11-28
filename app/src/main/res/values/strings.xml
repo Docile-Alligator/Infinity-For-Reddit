@@ -525,6 +525,7 @@
     <string name="settings_gif_download_location_title">Gif Download Location</string>
     <string name="settings_video_download_location_title">Video Download Location</string>
     <string name="settings_separate_folder_for_each_subreddit">Separate Folder for Each Subreddit</string>
+    <string name="settings_download_with_sensible_file_name">Download with Sensible File Name</string>
     <string name="settings_save_nsfw_media_in_different_folder_title">Save NSFW Media in Different Location</string>
     <string name="settings_nsfw_download_location_title">NSFW Download Location</string>
     <string name="settings_swipe_action_title">Swipe Action</string>
