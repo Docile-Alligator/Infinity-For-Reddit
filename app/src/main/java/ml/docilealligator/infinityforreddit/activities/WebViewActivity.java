@@ -157,7 +157,9 @@ public class WebViewActivity extends BaseActivity {
             if (clipboard != null) {
                 ClipData clip = ClipData.newPlainText("simple text", url);
                 clipboard.setPrimaryClip(clip);
-                Toast.makeText(this, R.string.copy_success, Toast.LENGTH_SHORT).show();
+                if (android.os.Build.VERSION.SDK_INT < 33) {
+                    Toast.makeText(this, R.string.copy_success, Toast.LENGTH_SHORT).show();
+                }
             } else {
                 Toast.makeText(this, R.string.copy_link_failed, Toast.LENGTH_SHORT).show();
             }

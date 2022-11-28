@@ -135,6 +135,10 @@ public class NavigationDrawerRecyclerViewMergedAdapter {
         subscribedSubredditsRecyclerViewAdapter.setSubscribedSubreddits(subscribedSubreddits);
     }
 
+    public void setHideKarma(boolean hideKarma) {
+        headerSectionRecyclerViewAdapter.setHideKarma(hideKarma);
+    }
+
     public interface ItemClickListener {
         void onMenuClick(int stringId);
         void onSubscribedSubredditClick(String subredditName);

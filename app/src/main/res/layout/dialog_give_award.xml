@@ -15,7 +15,7 @@
         android:text="@string/anonymous"
         android:textColor="?attr/primaryTextColor" />
 
-    <com.google.android.material.switchmaterial.SwitchMaterial
+    <com.google.android.material.materialswitch.MaterialSwitch
         android:id="@+id/switch_material_give_award_dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

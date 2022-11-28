@@ -36,8 +36,8 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.divider.MaterialDivider;
+import com.google.android.material.materialswitch.MaterialSwitch;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.gson.Gson;
 import com.libRG.CustomTextView;
 
@@ -133,7 +133,7 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
     @BindView(R.id.receive_post_reply_notifications_text_view_post_gallery_activity)
     TextView receivePostReplyNotificationsTextView;
     @BindView(R.id.receive_post_reply_notifications_switch_material_post_gallery_activity)
-    SwitchMaterial receivePostReplyNotificationsSwitchMaterial;
+    MaterialSwitch receivePostReplyNotificationsSwitchMaterial;
     @BindView(R.id.divider_2_post_gallery_activity)
     MaterialDivider divider2;
     @BindView(R.id.post_title_edit_text_post_gallery_activity)
@@ -236,28 +236,9 @@ public class PostGalleryActivity extends BaseActivity implements FlairBottomShee
         imagesRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
-                GridLayoutManager.LayoutParams layoutParams = (GridLayoutManager.LayoutParams) view.getLayoutParams();
-
-                int spanIndex = layoutParams.getSpanIndex();
-
                 int offset = (int) (Utils.convertDpToPixel(16, PostGalleryActivity.this));
                 int halfOffset = offset / 2;
-
-                if (nColumns == 2) {
-                    if (spanIndex == 0) {
-                        outRect.set(halfOffset, 0, halfOffset, offset);
-                    } else {
-                        outRect.set(halfOffset, 0, halfOffset, offset);
-                    }
-                } else if (nColumns == 3) {
-                    if (spanIndex == 0) {
-                        outRect.set(halfOffset, 0, halfOffset, offset);
-                    } else if (spanIndex == 1) {
-                        outRect.set(halfOffset, 0, halfOffset, offset);
-                    } else {
-                        outRect.set(halfOffset, 0, halfOffset, offset);
-                    }
-                }
+                outRect.set(halfOffset, 0, halfOffset, offset);
             }
         });
 

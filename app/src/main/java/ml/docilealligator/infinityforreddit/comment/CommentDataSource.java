@@ -78,30 +78,16 @@ public class CommentDataSource extends PageKeyedDataSource<String, Comment> {
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> commentsCall;
         if (areSavedComments) {
-            if (sortType.getTime() != null) {
-                commentsCall = api.getUserSavedCommentsOauth(username, PostPagingSource.USER_WHERE_SAVED,
-                        null, sortType.getType().value, sortType.getTime().value,
-                        APIUtils.getOAuthHeader(accessToken));
-            } else {
-                commentsCall = api.getUserSavedCommentsOauth(username, PostPagingSource.USER_WHERE_SAVED,
-                        null, sortType.getType().value, APIUtils.getOAuthHeader(accessToken));
-            }
+            commentsCall = api.getUserSavedCommentsOauth(username, PostPagingSource.USER_WHERE_SAVED,
+                    null, sortType.getType(), sortType.getTime(),
+                    APIUtils.getOAuthHeader(accessToken));
         } else {
             if (accessToken == null) {
-                if (sortType.getTime() != null) {
-                    commentsCall = api.getUserComments(username, null, sortType.getType().value,
-                            sortType.getTime().value);
-                } else {
-                    commentsCall = api.getUserComments(username, null, sortType.getType().value);
-                }
+                commentsCall = api.getUserComments(username, null, sortType.getType(),
+                        sortType.getTime());
             } else {
-                if (sortType.getTime() != null) {
-                    commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken), username,
-                            null, sortType.getType().value, sortType.getTime().value);
-                } else {
-                    commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken), username,
-                            null, sortType.getType().value);
-                }
+                commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken), username,
+                        null, sortType.getType(), sortType.getTime());
             }
         }
         commentsCall.enqueue(new Callback<String>() {
@@ -157,29 +143,15 @@ public class CommentDataSource extends PageKeyedDataSource<String, Comment> {
         RedditAPI api = retrofit.create(RedditAPI.class);
         Call<String> commentsCall;
         if (areSavedComments) {
-            if (sortType.getTime() != null) {
-                commentsCall = api.getUserSavedCommentsOauth(username, PostPagingSource.USER_WHERE_SAVED, params.key,
-                        sortType.getType().value, sortType.getTime().value, APIUtils.getOAuthHeader(accessToken));
-            } else {
-                commentsCall = api.getUserSavedCommentsOauth(username, PostPagingSource.USER_WHERE_SAVED, params.key,
-                        sortType.getType().value, APIUtils.getOAuthHeader(accessToken));
-            }
+            commentsCall = api.getUserSavedCommentsOauth(username, PostPagingSource.USER_WHERE_SAVED, params.key,
+                    sortType.getType(), sortType.getTime(), APIUtils.getOAuthHeader(accessToken));
         } else {
             if (accessToken == null) {
-                if (sortType.getTime() != null) {
-                    commentsCall = api.getUserComments(username, params.key, sortType.getType().value,
-                            sortType.getTime().value);
-                } else {
-                    commentsCall = api.getUserComments(username, params.key, sortType.getType().value);
-                }
+                commentsCall = api.getUserComments(username, params.key, sortType.getType(),
+                        sortType.getTime());
             } else {
-                if (sortType.getTime() != null) {
-                    commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken),
-                            username, params.key, sortType.getType().value, sortType.getTime().value);
-                } else {
-                    commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken),
-                            username, params.key, sortType.getType().value);
-                }
+                commentsCall = api.getUserCommentsOauth(APIUtils.getOAuthHeader(accessToken),
+                        username, params.key, sortType.getType(), sortType.getTime());
             }
         }
         commentsCall.enqueue(new Callback<String>() {

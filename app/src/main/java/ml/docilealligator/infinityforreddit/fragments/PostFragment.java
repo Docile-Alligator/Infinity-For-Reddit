@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -81,6 +82,7 @@ import ml.docilealligator.infinityforreddit.adapters.Paging3LoadingStateAdapter;
 import ml.docilealligator.infinityforreddit.adapters.PostRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.CustomToroContainer;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
@@ -359,16 +361,16 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     int nPosts = mAdapter.getItemCount();
                     if (getCurrentPosition() == -1) {
                         if (mLinearLayoutManager != null) {
-                            setCurrentPosition(mAdapter.getNextItemPositionWithoutBeingHidden(mLinearLayoutManager.findFirstVisibleItemPosition()));
+                            setCurrentPosition(mLinearLayoutManager.findFirstVisibleItemPosition());
                         } else {
                             int[] into = new int[2];
-                            setCurrentPosition(mAdapter.getNextItemPositionWithoutBeingHidden(mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[1]));
+                            setCurrentPosition(mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[1]);
                         }
                     }
 
                     if (getCurrentPosition() != RecyclerView.NO_POSITION && nPosts > getCurrentPosition()) {
                         incrementCurrentPosition();
-                        smoothScroller.setTargetPosition(mAdapter.getNextItemPositionWithoutBeingHidden(getCurrentPosition()));
+                        smoothScroller.setTargetPosition(getCurrentPosition());
                         if (mLinearLayoutManager != null) {
                             mLinearLayoutManager.startSmoothScroll(smoothScroller);
                         } else {
@@ -1056,6 +1058,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 if (!(viewHolder instanceof PostRecyclerViewAdapter.PostBaseViewHolder) &&
                         !(viewHolder instanceof PostRecyclerViewAdapter.PostCompactBaseViewHolder)) {
                     return makeMovementFlags(0, 0);
+                } else if (viewHolder instanceof PostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) {
+                    if (((PostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) viewHolder).isSwipeLocked()) {
+                        return makeMovementFlags(0, 0);
+                    }
+
                 }
                 int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
                 return makeMovementFlags(0, swipeFlags);
@@ -1074,6 +1081,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 if (touchHelper != null) {
+                    exceedThreshold = false;
                     touchHelper.attachToRecyclerView(null);
                     touchHelper.attachToRecyclerView(mPostRecyclerView);
                     if (mAdapter != null) {
@@ -1086,55 +1094,62 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
 
-                View itemView = viewHolder.itemView;
-                int horizontalOffset = (int) Utils.convertDpToPixel(16, activity);
-                if (dX > 0) {
-                    if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
-                        if (!exceedThreshold) {
-                            exceedThreshold = true;
-                            if (vibrateWhenActionTriggered) {
-                                viewHolder.itemView.setHapticFeedbackEnabled(true);
-                                viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                if (isCurrentlyActive) {
+                    View itemView = viewHolder.itemView;
+                    int horizontalOffset = (int) Utils.convertDpToPixel(16, activity);
+                    if (dX > 0) {
+                        if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
+                            if (!exceedThreshold) {
+                                exceedThreshold = true;
+                                if (vibrateWhenActionTriggered) {
+                                    viewHolder.itemView.setHapticFeedbackEnabled(true);
+                                    viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                }
                             }
+                            backgroundSwipeRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                        } else {
+                            exceedThreshold = false;
+                            backgroundSwipeRight.setBounds(0, 0, 0, 0);
                         }
-                        backgroundSwipeRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                    } else {
-                        exceedThreshold = false;
-                        backgroundSwipeRight.setBounds(0, 0, 0, 0);
-                    }
 
-                    drawableSwipeRight.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableSwipeRight.getIntrinsicWidth(),
-                            (itemView.getBottom() + itemView.getTop() - drawableSwipeRight.getIntrinsicHeight()) / 2,
-                            itemView.getLeft() + ((int) dX) - horizontalOffset,
-                            (itemView.getBottom() + itemView.getTop() + drawableSwipeRight.getIntrinsicHeight()) / 2);
-                    backgroundSwipeRight.draw(c);
-                    drawableSwipeRight.draw(c);
-                } else if (dX < 0) {
-                    if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
-                        if (!exceedThreshold) {
-                            exceedThreshold = true;
-                            if (vibrateWhenActionTriggered) {
-                                viewHolder.itemView.setHapticFeedbackEnabled(true);
-                                viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                        drawableSwipeRight.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableSwipeRight.getIntrinsicWidth(),
+                                (itemView.getBottom() + itemView.getTop() - drawableSwipeRight.getIntrinsicHeight()) / 2,
+                                itemView.getLeft() + ((int) dX) - horizontalOffset,
+                                (itemView.getBottom() + itemView.getTop() + drawableSwipeRight.getIntrinsicHeight()) / 2);
+                        backgroundSwipeRight.draw(c);
+                        drawableSwipeRight.draw(c);
+                    } else if (dX < 0) {
+                        if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
+                            if (!exceedThreshold) {
+                                exceedThreshold = true;
+                                if (vibrateWhenActionTriggered) {
+                                    viewHolder.itemView.setHapticFeedbackEnabled(true);
+                                    viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                }
                             }
+                            backgroundSwipeLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                        } else {
+                            exceedThreshold = false;
+                            backgroundSwipeLeft.setBounds(0, 0, 0, 0);
                         }
-                        backgroundSwipeLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                    } else {
-                        exceedThreshold = false;
-                        backgroundSwipeLeft.setBounds(0, 0, 0, 0);
+                        drawableSwipeLeft.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
+                                (itemView.getBottom() + itemView.getTop() - drawableSwipeLeft.getIntrinsicHeight()) / 2,
+                                itemView.getRight() + ((int) dX) + horizontalOffset + drawableSwipeLeft.getIntrinsicWidth(),
+                                (itemView.getBottom() + itemView.getTop() + drawableSwipeLeft.getIntrinsicHeight()) / 2);
+                        backgroundSwipeLeft.draw(c);
+                        drawableSwipeLeft.draw(c);
                     }
-                    drawableSwipeLeft.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
-                            (itemView.getBottom() + itemView.getTop() - drawableSwipeLeft.getIntrinsicHeight()) / 2,
-                            itemView.getRight() + ((int) dX) + horizontalOffset + drawableSwipeLeft.getIntrinsicWidth(),
-                            (itemView.getBottom() + itemView.getTop() + drawableSwipeLeft.getIntrinsicHeight()) / 2);
-                    backgroundSwipeLeft.draw(c);
-                    drawableSwipeLeft.draw(c);
+                } else {
+                    if (exceedThreshold) {
+                        mAdapter.onItemSwipe(viewHolder, dX > 0 ? ItemTouchHelper.END : ItemTouchHelper.START, swipeLeftAction, swipeRightAction);
+                        exceedThreshold = false;
+                    }
                 }
             }
 
             @Override
             public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
-                return swipeActionThreshold;
+                return 1;
             }
         });
 
@@ -1315,6 +1330,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             return true;
         } else if (item.getItemId() == R.id.action_filter_posts_post_fragment) {
             filterPosts();
+            return true;
+        } else if (item.getItemId() == R.id.action_more_options_post_fragment) {
+            FABMoreOptionsBottomSheetFragment fabMoreOptionsBottomSheetFragment= new FABMoreOptionsBottomSheetFragment();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(FABMoreOptionsBottomSheetFragment.EXTRA_ANONYMOUS_MODE, accessToken == null);
+            fabMoreOptionsBottomSheetFragment.setArguments(bundle);
+            fabMoreOptionsBottomSheetFragment.show(activity.getSupportFragmentManager(), fabMoreOptionsBottomSheetFragment.getTag());
             return true;
         }
         return false;
@@ -1755,7 +1777,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 post.setFlair(event.post.getFlair());
                 post.setSaved(event.post.isSaved());
                 if (event.post.isRead()) {
-                    post.markAsRead(true);
+                    post.markAsRead();
                 }
                 mAdapter.notifyItemChanged(event.positionInList);
             }
@@ -2027,7 +2049,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Subscribe
     public void onNeedForPostListFromPostRecyclerViewAdapterEvent(NeedForPostListFromPostFragmentEvent event) {
         if (postFragmentId == event.postFragmentTimeId && mAdapter != null) {
-            EventBus.getDefault().post(new ProvidePostListToViewPostDetailActivityEvent(postFragmentId, new ArrayList<>(mAdapter.snapshot())));
+            EventBus.getDefault().post(new ProvidePostListToViewPostDetailActivityEvent(postFragmentId,
+                    new ArrayList<>(mAdapter.snapshot()), postType, subredditName, username, where,
+                    multiRedditPath, query, trendingSource, postFilter, sortType, readPosts));
         }
     }
 

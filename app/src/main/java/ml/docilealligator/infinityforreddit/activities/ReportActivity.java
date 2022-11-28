@@ -119,7 +119,7 @@ public class ReportActivity extends BaseActivity {
         recyclerView.setAdapter(mAdapter);
 
         if (rulesReasons == null) {
-            FetchRules.fetchRules(mExecutor, new Handler(), mRetrofit, mSubredditName, new FetchRules.FetchRulesListener() {
+            FetchRules.fetchRules(mExecutor, new Handler(), mAccessToken == null ? mRetrofit : mOauthRetrofit, mAccessToken, mSubredditName, new FetchRules.FetchRulesListener() {
                 @Override
                 public void success(ArrayList<Rule> rules) {
                     mAdapter.setRules(ReportReason.convertRulesToReasons(rules));

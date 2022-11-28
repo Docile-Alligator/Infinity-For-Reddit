@@ -12,6 +12,15 @@
         app:key="show_comment_divider"
         app:title="@string/settings_show_comment_divider_title" />
 
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
+        app:defaultValue="0"
+        app:key="comment_divider_type"
+        android:title="@string/settings_comment_divider_type"
+        app:entries="@array/settings_comment_divider_type"
+        app:entryValues="@array/settings_comment_divider_type_values"
+        app:useSimpleSummaryProvider="true"
+        app:isPreferenceVisible="false" />
+
     <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="show_only_one_comment_level_indicator"
@@ -46,6 +55,11 @@
         app:defaultValue="false"
         app:key="always_show_child_comment_count"
         android:title="@string/settings_always_show_child_comment_count_title" />
+
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
+        app:defaultValue="false"
+        app:key="hide_the_number_of_votes_in_comments"
+        app:title="@string/settings_hide_the_number_of_votes" />
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontSeekBarPreference
         app:defaultValue="5"

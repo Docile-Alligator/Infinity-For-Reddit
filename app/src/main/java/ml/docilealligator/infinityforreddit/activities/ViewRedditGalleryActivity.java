@@ -60,6 +60,7 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
     public static final String EXTRA_REDDIT_GALLERY = "ERG";
     public static final String EXTRA_SUBREDDIT_NAME = "ESN";
     public static final String EXTRA_IS_NSFW = "EIN";
+    public static final String EXTRA_GALLERY_ITEM_INDEX = "EGII";
 
     @BindView(R.id.hauler_view_view_reddit_gallery_activity)
     HaulerView haulerView;
@@ -168,14 +169,14 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
             haulerView.setDragEnabled(false);
         }
 
-        setupViewPager();
+        setupViewPager(savedInstanceState);
     }
 
     public boolean isUseBottomAppBar() {
         return useBottomAppBar;
     }
 
-    private void setupViewPager() {
+    private void setupViewPager(Bundle savedInstanceState) {
         if (!useBottomAppBar) {
             setToolbarTitle(0);
             viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
@@ -188,6 +189,9 @@ public class ViewRedditGalleryActivity extends AppCompatActivity implements SetA
         sectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         viewPager.setAdapter(sectionsPagerAdapter);
         viewPager.setOffscreenPageLimit(3);
+        if (savedInstanceState == null) {
+            viewPager.setCurrentItem(getIntent().getIntExtra(EXTRA_GALLERY_ITEM_INDEX, 0), false);
+        }
     }
 
     private void setToolbarTitle(int position) {

@@ -13,7 +13,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.google.android.material.materialswitch.MaterialSwitch;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -37,25 +37,25 @@ public class PostHistoryFragment extends Fragment {
     @BindView(R.id.mark_posts_as_read_text_view_post_history_fragment)
     TextView markPostsAsReadTextView;
     @BindView(R.id.mark_posts_as_read_switch_post_history_fragment)
-    SwitchMaterial markPostsAsReadSwitch;
+    MaterialSwitch markPostsAsReadSwitch;
     @BindView(R.id.mark_posts_as_read_after_voting_linear_layout_post_history_fragment)
     LinearLayout markPostsAsReadAfterVotingLinearLayout;
     @BindView(R.id.mark_posts_as_read_after_voting_text_view_post_history_fragment)
     TextView markPostsAsReadAfterVotingTextView;
     @BindView(R.id.mark_posts_as_read_after_voting_switch_post_history_fragment)
-    SwitchMaterial markPostsAsReadAfterVotingSwitch;
+    MaterialSwitch markPostsAsReadAfterVotingSwitch;
     @BindView(R.id.mark_posts_as_read_on_scroll_linear_layout_post_history_fragment)
     LinearLayout markPostsAsReadOnScrollLinearLayout;
     @BindView(R.id.mark_posts_as_read_on_scroll_text_view_post_history_fragment)
     TextView markPostsAsReadOnScrollTextView;
     @BindView(R.id.mark_posts_as_read_on_scroll_switch_post_history_fragment)
-    SwitchMaterial markPostsAsReadOnScrollSwitch;
+    MaterialSwitch markPostsAsReadOnScrollSwitch;
     @BindView(R.id.hide_read_posts_automatically_linear_layout_post_history_fragment)
     LinearLayout hideReadPostsAutomaticallyLinearLayout;
     @BindView(R.id.hide_read_posts_automatically_text_view_post_history_fragment)
     TextView hideReadPostsAutomaticallyTextView;
     @BindView(R.id.hide_read_posts_automatically_switch_post_history_fragment)
-    SwitchMaterial hideReadPostsAutomaticallySwitch;
+    MaterialSwitch hideReadPostsAutomaticallySwitch;
     @Inject
     @Named("post_history")
     SharedPreferences postHistorySharedPreferences;

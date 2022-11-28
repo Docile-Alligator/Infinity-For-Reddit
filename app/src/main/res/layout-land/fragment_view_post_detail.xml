@@ -25,7 +25,7 @@
                 android:layout_weight="1"
                 android:paddingBottom="144dp"
                 android:clipToPadding="false"
-                app:layoutManager=".customviews.LinearLayoutManagerBugFixed"  />
+                app:layoutManager="ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed"  />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/comments_recycler_view_view_post_detail_fragment"
@@ -34,7 +34,7 @@
                 android:layout_weight="1"
                 android:paddingBottom="144dp"
                 android:clipToPadding="false"
-                app:layoutManager=".customviews.LinearLayoutManagerBugFixed" />
+                app:layoutManager="ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed" />
 
         </LinearLayout>
 

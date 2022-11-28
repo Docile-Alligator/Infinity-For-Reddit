@@ -3,13 +3,13 @@ plugins {
 }
 
 android {
-    compileSdk 32
+    compileSdk 33
     defaultConfig {
         applicationId "ml.docilealligator.infinityforreddit"
         minSdk 21
-        targetSdk 32
-        versionCode 105
-        versionName "5.3.3"
+        targetSdk 33
+        versionCode 106
+        versionName "5.3.4"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -56,19 +56,20 @@ android {
 
 dependencies {
 /** AndroidX **/
-    implementation 'androidx.appcompat:appcompat:1.4.2'
-    implementation 'androidx.biometric:biometric:1.2.0-alpha04'
+    implementation 'androidx.appcompat:appcompat:1.7.0-alpha01'
+    implementation 'androidx.biometric:biometric:1.2.0-alpha05'
     implementation 'androidx.browser:browser:1.4.0'
     implementation 'androidx.cardview:cardview:1.0.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    def lifecycleVersion = "2.3.1"
+    def lifecycleVersion = "2.5.1"
     implementation "androidx.lifecycle:lifecycle-common-java8:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-livedata:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-process:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-runtime:$lifecycleVersion"
     implementation "androidx.lifecycle:lifecycle-viewmodel:$lifecycleVersion"
-    def pagingVersion = '3.1.1'
+
+    def pagingVersion = '3.2.0-alpha03'
     implementation "androidx.paging:paging-runtime:$pagingVersion"
     implementation "androidx.paging:paging-guava:$pagingVersion"
     implementation 'androidx.preference:preference:1.2.0'
@@ -79,7 +80,7 @@ dependencies {
     implementation "androidx.room:room-guava:$roomVersion"
     implementation 'androidx.viewpager2:viewpager2:1.1.0-beta01'
     implementation 'androidx.work:work-runtime:2.7.1'
-    implementation 'com.google.android.material:material:1.5.0-alpha05'
+    implementation 'com.google.android.material:material:1.8.0-alpha02'
 
 /** ExoPlayer **/
     def exoplayerVersion = "2.18.1"
@@ -110,7 +111,7 @@ dependencies {
     def butterknifeVersion = "10.2.3"
     implementation "com.jakewharton:butterknife:$butterknifeVersion"
     annotationProcessor "com.jakewharton:butterknife-compiler:$butterknifeVersion"
-    compileOnly 'com.android.databinding:viewbinding:7.3.0'
+    compileOnly 'com.android.databinding:viewbinding:7.3.1'
 
     // Events
     def eventbusVersion = "3.3.1"
@@ -161,7 +162,6 @@ dependencies {
     implementation "io.noties.markwon:linkify:$markwonVersion"
     implementation "io.noties.markwon:recycler-table:$markwonVersion"
     implementation "io.noties.markwon:simple-ext:$markwonVersion"
-    implementation "io.noties.markwon:html:$markwonVersion"
     implementation "io.noties.markwon:inline-parser:$markwonVersion"
     implementation 'com.atlassian.commonmark:commonmark-ext-gfm-tables:0.14.0'
     implementation 'me.saket:better-link-movement-method:2.2.0'

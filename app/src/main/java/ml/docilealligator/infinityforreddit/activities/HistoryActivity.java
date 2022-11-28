@@ -227,12 +227,14 @@ public class HistoryActivity extends BaseActivity implements ActivityToolbarInte
         }
     }
 
+    @Override
     public void lockSwipeRightToGoBack() {
         if (mSlidrInterface != null) {
             mSlidrInterface.lock();
         }
     }
 
+    @Override
     public void unlockSwipeRightToGoBack() {
         if (mSlidrInterface != null) {
             mSlidrInterface.unlock();

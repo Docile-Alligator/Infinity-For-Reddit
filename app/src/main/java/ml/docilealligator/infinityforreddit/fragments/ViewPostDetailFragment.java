@@ -38,6 +38,7 @@ import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.ConcatAdapter;
 import androidx.recyclerview.widget.ItemTouchHelper;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.LinearSmoothScroller;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -128,6 +129,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     public static final String EXTRA_MESSAGE_FULLNAME = "EMF";
     public static final String EXTRA_POST_LIST_POSITION = "EPLP";
     private static final int EDIT_POST_REQUEST_CODE = 2;
+    private static final String SCROLL_POSITION_STATE = "SPS";
 
     @BindView(R.id.swipe_refresh_layout_view_post_detail_fragment)
     SwipeRefreshLayout mSwipeRefreshLayout;
@@ -200,8 +202,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @State
     ArrayList<String> children;
     @State
-    int mChildrenStartingIndex = 0;
-    @State
     boolean loadMoreChildrenSuccess = true;
     @State
     boolean hasMoreChildren;
@@ -210,7 +210,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @State
     String mMessageFullname;
     @State
-    String sortType;
+    SortType.Type sortType;
     @State
     boolean mRespectSubredditRecommendedSortType;
     @State
@@ -246,6 +246,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private int swipeRightAction;
     private float swipeActionThreshold;
     private ItemTouchHelper touchHelper;
+    private int scrollPosition;
 
     public ViewPostDetailFragment() {
         // Required empty public constructor
@@ -283,7 +284,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (!((mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_LANDSCAPE_MODE, true)
                 && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE)
                 || (mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_PORTRAIT_MODE, false)
-                && getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE))) {
+                && getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT))) {
             if (mCommentsRecyclerView != null) {
                 mCommentsRecyclerView.setVisibility(View.GONE);
                 mCommentsRecyclerView = null;
@@ -307,6 +308,40 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         if (savedInstanceState == null) {
             mRespectSubredditRecommendedSortType = mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false);
             viewPostDetailFragmentId = System.currentTimeMillis();
+        } else {
+            scrollPosition = savedInstanceState.getInt(SCROLL_POSITION_STATE);
+            // if the scrollPosition < 0 do nothing
+            if (scrollPosition >= 0) {
+                if (getResources().getBoolean(R.bool.isTablet)) {
+                    boolean separatePortrait = mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_PORTRAIT_MODE, true);
+                    boolean separateLandscape = mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_LANDSCAPE_MODE, true);
+                    if (separatePortrait != separateLandscape) {
+                        if (mCommentsRecyclerView != null) {
+                            //restore the position for commentsadapter
+                            scrollPosition--;
+                            mCommentsRecyclerView.scrollToPosition(scrollPosition);
+                        } else {
+                            // restore the position for mrecyclerview
+                            scrollPosition++;
+                            mRecyclerView.scrollToPosition(scrollPosition);
+                        }
+                    }
+                } else {
+                    if (mSeparatePostAndComments) {
+                        if (mCommentsRecyclerView != null) {
+                            scrollPosition--;
+                            mCommentsRecyclerView.scrollToPosition(scrollPosition);
+                        }
+                    } else {
+                        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                            if (mPostDetailsSharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_POST_AND_COMMENTS_IN_LANDSCAPE_MODE, true)) {
+                                scrollPosition++;
+                                mRecyclerView.scrollToPosition(scrollPosition);
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         mGlide = Glide.with(this);
@@ -421,6 +456,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 if (touchHelper != null) {
+                    exceedThreshold = false;
                     touchHelper.attachToRecyclerView(null);
                     touchHelper.attachToRecyclerView((mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView));
                     if (mCommentsAdapter != null) {
@@ -433,55 +469,64 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
 
-                View itemView = viewHolder.itemView;
-                int horizontalOffset = (int) Utils.convertDpToPixel(16, activity);
-                if (dX > 0) {
-                    if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
-                        if (!exceedThreshold) {
-                            exceedThreshold = true;
-                            if (vibrateWhenActionTriggered) {
-                                viewHolder.itemView.setHapticFeedbackEnabled(true);
-                                viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                if (isCurrentlyActive) {
+                    View itemView = viewHolder.itemView;
+                    int horizontalOffset = (int) Utils.convertDpToPixel(16, activity);
+                    if (dX > 0) {
+                        if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
+                            if (!exceedThreshold) {
+                                exceedThreshold = true;
+                                if (vibrateWhenActionTriggered) {
+                                    viewHolder.itemView.setHapticFeedbackEnabled(true);
+                                    viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                }
                             }
+                            backgroundSwipeRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                        } else {
+                            exceedThreshold = false;
+                            backgroundSwipeRight.setBounds(0, 0, 0, 0);
                         }
-                        backgroundSwipeRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                    } else {
-                        exceedThreshold = false;
-                        backgroundSwipeRight.setBounds(0, 0, 0, 0);
-                    }
 
-                    drawableSwipeRight.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableSwipeRight.getIntrinsicWidth(),
-                            (itemView.getBottom() + itemView.getTop() - drawableSwipeRight.getIntrinsicHeight()) / 2,
-                            itemView.getLeft() + ((int) dX) - horizontalOffset,
-                            (itemView.getBottom() + itemView.getTop() + drawableSwipeRight.getIntrinsicHeight()) / 2);
-                    backgroundSwipeRight.draw(c);
-                    drawableSwipeRight.draw(c);
-                } else if (dX < 0) {
-                    if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
-                        if (!exceedThreshold) {
-                            exceedThreshold = true;
-                            if (vibrateWhenActionTriggered) {
-                                viewHolder.itemView.setHapticFeedbackEnabled(true);
-                                viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                        drawableSwipeRight.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableSwipeRight.getIntrinsicWidth(),
+                                (itemView.getBottom() + itemView.getTop() - drawableSwipeRight.getIntrinsicHeight()) / 2,
+                                itemView.getLeft() + ((int) dX) - horizontalOffset,
+                                (itemView.getBottom() + itemView.getTop() + drawableSwipeRight.getIntrinsicHeight()) / 2);
+                        backgroundSwipeRight.draw(c);
+                        drawableSwipeRight.draw(c);
+                    } else if (dX < 0) {
+                        if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
+                            if (!exceedThreshold) {
+                                exceedThreshold = true;
+                                if (vibrateWhenActionTriggered) {
+                                    viewHolder.itemView.setHapticFeedbackEnabled(true);
+                                    viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                }
                             }
+                            backgroundSwipeLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                        } else {
+                            exceedThreshold = false;
+                            backgroundSwipeLeft.setBounds(0, 0, 0, 0);
                         }
-                        backgroundSwipeLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                    } else {
-                        exceedThreshold = false;
-                        backgroundSwipeLeft.setBounds(0, 0, 0, 0);
+                        drawableSwipeLeft.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
+                                (itemView.getBottom() + itemView.getTop() - drawableSwipeLeft.getIntrinsicHeight()) / 2,
+                                itemView.getRight() + ((int) dX) + horizontalOffset + drawableSwipeLeft.getIntrinsicWidth(),
+                                (itemView.getBottom() + itemView.getTop() + drawableSwipeLeft.getIntrinsicHeight()) / 2);
+                        backgroundSwipeLeft.draw(c);
+                        drawableSwipeLeft.draw(c);
                     }
-                    drawableSwipeLeft.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
-                            (itemView.getBottom() + itemView.getTop() - drawableSwipeLeft.getIntrinsicHeight()) / 2,
-                            itemView.getRight() + ((int) dX) + horizontalOffset + drawableSwipeLeft.getIntrinsicWidth(),
-                            (itemView.getBottom() + itemView.getTop() + drawableSwipeLeft.getIntrinsicHeight()) / 2);
-                    backgroundSwipeLeft.draw(c);
-                    drawableSwipeLeft.draw(c);
+                } else {
+                    if (exceedThreshold) {
+                        if (mCommentsAdapter != null) {
+                            mCommentsAdapter.onItemSwipe(viewHolder, dX > 0 ? ItemTouchHelper.END : ItemTouchHelper.START, swipeLeftAction, swipeRightAction);
+                        }
+                        exceedThreshold = false;
+                    }
                 }
             }
 
             @Override
             public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
-                return swipeActionThreshold;
+                return 100;
             }
         });
 
@@ -508,15 +553,12 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             mMessageFullname = getArguments().getString(EXTRA_MESSAGE_FULLNAME);
 
             if (!mRespectSubredditRecommendedSortType || isSingleCommentThreadMode) {
-                sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value.toUpperCase());
-                if (sortType != null) {
-                    activity.setTitle(new SortType(SortType.Type.valueOf(sortType)).getType().fullName);
-                    sortType = sortType.toLowerCase();
-                }
+                sortType = loadSortType();
+                activity.setTitle(sortType.fullName);
             }
         } else {
             if (sortType != null) {
-                activity.setTitle(new SortType(SortType.Type.valueOf(sortType.toUpperCase())).getType().fullName);
+                activity.setTitle(sortType.fullName);
             }
         }
 
@@ -575,6 +617,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             loadMoreChildrenSuccess = true;
 
                             fetchMoreComments();
+                        }
+
+                        @Override
+                        public SortType.Type getSortType() {
+                            return sortType;
                         }
                     });
             if (mCommentsRecyclerView != null) {
@@ -765,16 +812,29 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     public void changeSortType(SortType sortType) {
         mFetchPostInfoLinearLayout.setVisibility(View.GONE);
         mGlide.clear(mFetchPostInfoImageView);
-        mChildrenStartingIndex = 0;
         if (children != null) {
             children.clear();
         }
-        this.sortType = sortType.getType().value;
+        this.sortType = sortType.getType();
         if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false)
                 && mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_SORT_TYPE, true)) {
             mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, sortType.getType().name()).apply();
         }
-        fetchCommentsRespectRecommendedSort(false, false, sortType.getType().value);
+        fetchCommentsRespectRecommendedSort(false, false, sortType.getType());
+    }
+
+    @NonNull
+    private SortType.Type loadSortType() {
+        String sortTypeName = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.CONFIDENCE.name());
+        if (SortType.Type.BEST.name().equals(sortTypeName)) {
+            // migrate from BEST to CONFIDENCE
+            // key guaranteed to exist because got non-default value
+            mSortTypeSharedPreferences.edit()
+                    .putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.CONFIDENCE.name())
+                    .apply();
+            return SortType.Type.CONFIDENCE;
+        }
+        return SortType.Type.valueOf(sortTypeName);
     }
 
     public void goToTop() {
@@ -815,7 +875,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                         }
                     }
 
-                    return;
                 } else {
                     for (int i = currentSearchIndex - 1; i >= 0; i--) {
                         if (visibleComments.get(i).getCommentRawText() != null &&
@@ -833,8 +892,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                         }
                     }
 
-                    return;
                 }
+                return;
             }
         }
     }
@@ -1129,7 +1188,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
     private void tryMarkingPostAsRead() {
         if (mMarkPostsAsRead && mPost != null && !mPost.isRead()) {
-            mPost.markAsRead(true);
+            mPost.markAsRead();
             InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, mPost.getId());
             EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
         }
@@ -1159,6 +1218,17 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         comments = mCommentsAdapter == null ? null : mCommentsAdapter.getVisibleComments();
+        if (mCommentsRecyclerView != null) {
+            //scrollpositionn = mcommentsadapter.getPosition()
+            LinearLayoutManager myLayoutManager = (LinearLayoutManager) mCommentsRecyclerView.getLayoutManager();
+            scrollPosition = myLayoutManager != null ? myLayoutManager.findFirstVisibleItemPosition() : 0;
+            
+        } else {
+            //scrollposition = mrecyclerviewadapter.getposition()
+            LinearLayoutManager myLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
+            scrollPosition = myLayoutManager != null ? myLayoutManager.findFirstVisibleItemPosition() : 0;
+        }
+        outState.putInt(SCROLL_POSITION_STATE, scrollPosition);
         Bridge.saveInstanceState(this, outState);
     }
 
@@ -1258,6 +1328,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
                                             fetchMoreComments();
                                         }
+
+                                        @Override
+                                        public SortType.Type getSortType() {
+                                            return sortType;
+                                        }
                                     });
                             if (mCommentsRecyclerView != null) {
                                 mRecyclerView.setAdapter(mPostAdapter);
@@ -1270,11 +1345,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             if (mRespectSubredditRecommendedSortType) {
                                 fetchCommentsRespectRecommendedSort(false);
                             } else {
-                                ParseComment.parseComment(mExecutor, new Handler(), response.body(), new ArrayList<>(),
+                                ParseComment.parseComment(mExecutor, new Handler(), response.body(),
                                         mExpandChildren, new ParseComment.ParseCommentListener() {
                                             @Override
-                                            public void onParseCommentSuccess(ArrayList<Comment> expandedComments, String parentId, ArrayList<String> moreChildrenFullnames) {
-                                                ViewPostDetailFragment.this.children = moreChildrenFullnames;
+                                            public void onParseCommentSuccess(ArrayList<Comment> topLevelComments, ArrayList<Comment> expandedComments, String parentId, ArrayList<String> moreChildrenIds) {
+                                                ViewPostDetailFragment.this.children = moreChildrenIds;
 
                                                 hasMoreChildren = children.size() != 0;
                                                 mCommentsAdapter.addComments(expandedComments, hasMoreChildren);
@@ -1353,36 +1428,31 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         });
     }
 
-    private void fetchCommentsRespectRecommendedSort(boolean changeRefreshState, boolean checkSortState, String sortType) {
+    private void fetchCommentsRespectRecommendedSort(boolean changeRefreshState, boolean checkSortState, SortType.Type sortType) {
         if (mRespectSubredditRecommendedSortType && mPost != null) {
             FetchSubredditData.fetchSubredditData(mOauthRetrofit, mRetrofit, mPost.getSubredditName(), mAccessToken,
                     new FetchSubredditData.FetchSubredditDataListener() {
                         @Override
                         public void onFetchSubredditDataSuccess(SubredditData subredditData, int nCurrentOnlineSubscribers) {
-                            if (subredditData.getSuggestedCommentSort() == null || subredditData.getSuggestedCommentSort().equals("null") || subredditData.getSuggestedCommentSort().equals("")) {
+                            String suggestedCommentSort = subredditData.getSuggestedCommentSort();
+                            SortType.Type sortTypeType;
+                            if (suggestedCommentSort == null || suggestedCommentSort.equals("null") || suggestedCommentSort.equals("")) {
                                 mRespectSubredditRecommendedSortType = false;
-                                ViewPostDetailFragment.this.sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value.toUpperCase());
-                                if (ViewPostDetailFragment.this.sortType != null) {
-                                    activity.setTitle(new SortType(SortType.Type.valueOf(ViewPostDetailFragment.this.sortType)).getType().fullName);
-                                    ViewPostDetailFragment.this.sortType = ViewPostDetailFragment.this.sortType.toLowerCase();
-                                }
-                                fetchComments(changeRefreshState, checkSortState, ViewPostDetailFragment.this.sortType);
+                                sortTypeType = loadSortType();
                             } else {
-                                ViewPostDetailFragment.this.sortType = subredditData.getSuggestedCommentSort();
-                                String sortTypeTemp = ViewPostDetailFragment.this.sortType.toLowerCase().substring(0, 1).toUpperCase() + ViewPostDetailFragment.this.sortType.substring(1);
-                                activity.setTitle(sortTypeTemp);
-                                fetchComments(changeRefreshState, checkSortState, subredditData.getSuggestedCommentSort());
+                                sortTypeType = SortType.Type.valueOf(suggestedCommentSort.toUpperCase(Locale.US));
                             }
+                            activity.setTitle(sortTypeType.fullName);
+                            ViewPostDetailFragment.this.sortType = sortTypeType;
+                            fetchComments(changeRefreshState, checkSortState, ViewPostDetailFragment.this.sortType);
                         }
 
                         @Override
                         public void onFetchSubredditDataFail(boolean isQuarantined) {
                             mRespectSubredditRecommendedSortType = false;
-                            ViewPostDetailFragment.this.sortType = mSortTypeSharedPreferences.getString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, SortType.Type.BEST.value.toUpperCase());
-                            if (ViewPostDetailFragment.this.sortType != null) {
-                                activity.setTitle(new SortType(SortType.Type.valueOf(ViewPostDetailFragment.this.sortType)).getType().fullName);
-                                ViewPostDetailFragment.this.sortType = ViewPostDetailFragment.this.sortType.toLowerCase();
-                            }
+                            SortType.Type sortTypeType = loadSortType();
+                            activity.setTitle(sortTypeType.fullName);
+                            ViewPostDetailFragment.this.sortType = sortTypeType;
                         }
                     });
         } else {
@@ -1390,7 +1460,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         }
     }
 
-    private void fetchComments(boolean changeRefreshState, boolean checkSortState, String sortType) {
+    private void fetchComments(boolean changeRefreshState, boolean checkSortState, SortType.Type sortType) {
         isFetchingComments = true;
         mCommentsAdapter.setSingleComment(mSingleCommentId, isSingleCommentThreadMode);
         mCommentsAdapter.initiallyLoading();
@@ -1502,13 +1572,15 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         isLoadingMoreChildren = true;
 
         Retrofit retrofit = mAccessToken == null ? mRetrofit : mOauthRetrofit;
-        FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken, children, mChildrenStartingIndex,
-                0, mExpandChildren, new FetchComment.FetchMoreCommentListener() {
+        FetchComment.fetchMoreComment(mExecutor, new Handler(), retrofit, mAccessToken, children,
+                mExpandChildren, mPost.getFullName(), sortType, new FetchComment.FetchMoreCommentListener() {
                     @Override
-                    public void onFetchMoreCommentSuccess(ArrayList<Comment> expandedComments, int childrenStartingIndex) {
-                        hasMoreChildren = childrenStartingIndex < children.size();
+                    public void onFetchMoreCommentSuccess(ArrayList<Comment> topLevelComments,
+                                                          ArrayList<Comment> expandedComments,
+                                                          ArrayList<String> moreChildrenIds) {
+                        children = moreChildrenIds;
+                        hasMoreChildren = !children.isEmpty();
                         mCommentsAdapter.addComments(expandedComments, hasMoreChildren);
-                        mChildrenStartingIndex = childrenStartingIndex;
                         isLoadingMoreChildren = false;
                         loadMoreChildrenSuccess = true;
                     }
@@ -1525,7 +1597,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     public void refresh(boolean fetchPost, boolean fetchComments) {
         if (mPostAdapter != null && !isRefreshing) {
             isRefreshing = true;
-            mChildrenStartingIndex = 0;
 
             mFetchPostInfoLinearLayout.setVisibility(View.GONE);
             mGlide.clear(mFetchPostInfoImageView);
@@ -1762,8 +1833,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 mExecutor, new Handler(), pushshiftRetrofit, comment,
                 new FetchRemovedComment.FetchRemovedCommentListener() {
                     @Override
-                    public void fetchSuccess(Comment comment) {
-                        mCommentsAdapter.editComment(comment.getAuthor(), comment.getCommentMarkdown(), position);
+                    public void fetchSuccess(Comment fetchedComment, Comment originalComment) {
+                        mCommentsAdapter.editComment(fetchedComment, originalComment, position);
                     }
 
                     @Override
@@ -1773,8 +1844,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                 comment, mPost.getPostTimeMillis(), mPost.getNComments(),
                                 new FetchRemovedCommentReveddit.FetchRemovedCommentListener() {
                                     @Override
-                                    public void fetchSuccess(Comment comment) {
-                                        mCommentsAdapter.editComment(comment.getAuthor(), comment.getCommentMarkdown(), position);
+                                    public void fetchSuccess(Comment fetchedComment, Comment originalComment) {
+                                        mCommentsAdapter.editComment(fetchedComment, originalComment, position);
                                     }
 
                                     @Override

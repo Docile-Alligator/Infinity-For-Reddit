@@ -8,7 +8,6 @@ import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spanned;
-import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +26,6 @@ import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.commonmark.ext.gfm.tables.TableBlock;
-
 import java.util.Locale;
 
 import butterknife.BindView;
@@ -36,18 +33,8 @@ import butterknife.ButterKnife;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
-import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
-import io.noties.markwon.html.HtmlPlugin;
-import io.noties.markwon.html.tag.SuperScriptHandler;
-import io.noties.markwon.inlineparser.AutolinkInlineProcessor;
-import io.noties.markwon.inlineparser.BangInlineProcessor;
-import io.noties.markwon.inlineparser.HtmlInlineProcessor;
-import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
-import io.noties.markwon.linkify.LinkifyPlugin;
-import io.noties.markwon.movement.MovementMethodPlugin;
-import io.noties.markwon.recycler.table.TableEntry;
-import io.noties.markwon.recycler.table.TableEntryPlugin;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
@@ -66,11 +53,10 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.CommentIndentationView;
 import ml.docilealligator.infinityforreddit.customviews.CustomMarkwonAdapter;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
-import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
-import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
-import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
-import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
+import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
+import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
+import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -151,63 +137,40 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         mColorAccent = customThemeWrapper.getColorAccent();
         mCommentIconAndInfoColor = customThemeWrapper.getCommentIconAndInfoColor();
         int linkColor = customThemeWrapper.getLinkColor();
-        mMarkwon = Markwon.builder(mActivity)
-                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
-                    plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
-                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
-                    plugin.excludeInlineProcessor(BangInlineProcessor.class);
-                    plugin.addInlineProcessor(new SuperscriptInlineProcessor());
-                }))
-                .usePlugin(HtmlPlugin.create(plugin -> {
-                    plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
-                }))
-                .usePlugin(new AbstractMarkwonPlugin() {
-                    @NonNull
-                    @Override
-                    public String processMarkdown(@NonNull String markdown) {
-                        return Utils.fixSuperScript(markdown);
-                    }
+        MarkwonPlugin miscPlugin = new AbstractMarkwonPlugin() {
+            @Override
+            public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
+                if (mActivity.contentTypeface != null) {
+                    textView.setTypeface(mActivity.contentTypeface);
+                }
+                textView.setTextColor(mCommentColor);
+                textView.setHighlightColor(Color.TRANSPARENT);
+            }
 
-                    @Override
-                    public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
-                        if (mActivity.contentTypeface != null) {
-                            textView.setTypeface(mActivity.contentTypeface);
-                        }
-                        textView.setTextColor(mCommentColor);
-                        textView.setHighlightColor(Color.TRANSPARENT);
-                    }
+            @Override
+            public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                builder.linkResolver((view, link) -> {
+                    Intent intent = new Intent(mActivity, LinkResolverActivity.class);
+                    Uri uri = Uri.parse(link);
+                    intent.setData(uri);
+                    mActivity.startActivity(intent);
+                });
+            }
 
-                    @Override
-                    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
-                        builder.linkResolver((view, link) -> {
-                            Intent intent = new Intent(mActivity, LinkResolverActivity.class);
-                            Uri uri = Uri.parse(link);
-                            intent.setData(uri);
-                            mActivity.startActivity(intent);
-                        });
-                    }
-
-                    @Override
-                    public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
-                        builder.linkColor(linkColor);
-                    }
-                })
-                .usePlugin(SpoilerParserPlugin.create(mCommentColor, commentSpoilerBackgroundColor))
-                .usePlugin(RedditHeadingPlugin.create())
-                .usePlugin(StrikethroughPlugin.create())
-                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS).setOnLinkLongClickListener((textView, url) -> {
-                    if (!activity.isDestroyed() && !activity.isFinishing()) {
-                        UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
-                        urlMenuBottomSheetFragment.setArguments(bundle);
-                        urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
-                    }
-                    return true;
-                })))
-                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
-                .usePlugin(TableEntryPlugin.create(mActivity))
-                .build();
+            @Override
+            public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                builder.linkColor(linkColor);
+            }
+        };
+        BetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener = (textView, url) -> {
+            if (!activity.isDestroyed() && !activity.isFinishing()) {
+                UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = UrlMenuBottomSheetFragment.newInstance(url);
+                urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), null);
+            }
+            return true;
+        };
+        mMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
+                miscPlugin, mCommentColor, commentSpoilerBackgroundColor, onLinkLongClickListener);
         recycledViewPool = new RecyclerView.RecycledViewPool();
     }
 
@@ -255,8 +218,14 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 ((CommentViewHolder) holder).markwonAdapter.setMarkdown(mMarkwon, comment.getCommentMarkdown());
                 ((CommentViewHolder) holder).markwonAdapter.notifyDataSetChanged();
 
-                ((CommentViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                        comment.getScore() + comment.getVoteType()));
+                String commentText = "";
+                if (comment.isScoreHidden()) {
+                    commentText = mActivity.getString(R.string.hidden);
+                } else {
+                    commentText = Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                            comment.getScore() + comment.getVoteType());
+                }
+                ((CommentViewHolder) holder).scoreTextView.setText(commentText);
 
                 switch (comment.getVoteType()) {
                     case Comment.VOTE_TYPE_UPVOTE:
@@ -533,9 +502,9 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             });
 
             commentMarkdownView.setRecycledViewPool(recycledViewPool);
-            LinearLayoutManagerBugFixed linearLayoutManager = new MarkwonLinearLayoutManager(mActivity, new MarkwonLinearLayoutManager.HorizontalScrollViewScrolledListener() {
+            LinearLayoutManagerBugFixed linearLayoutManager = new SwipeLockLinearLayoutManager(mActivity, new SwipeLockInterface() {
                 @Override
-                public void onScrolledLeft() {
+                public void lockSwipe() {
                     if (mActivity instanceof AccountSavedThingActivity) {
                         ((AccountSavedThingActivity) mActivity).lockSwipeRightToGoBack();
                     } else {
@@ -544,7 +513,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 }
 
                 @Override
-                public void onScrolledRight() {
+                public void unlockSwipe() {
                     if (mActivity instanceof AccountSavedThingActivity) {
                         ((AccountSavedThingActivity) mActivity).unlockSwipeRightToGoBack();
                     } else {
@@ -553,11 +522,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 }
             });
             commentMarkdownView.setLayoutManager(linearLayoutManager);
-            markwonAdapter = CustomMarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
-                    .include(TableBlock.class, TableEntry.create(builder -> builder
-                            .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
-                            .textLayoutIsRoot(R.layout.view_table_entry_cell)))
-                    .build();
+            markwonAdapter = MarkdownUtils.createCustomTablesAdapter();
             markwonAdapter.setOnClickListener(view -> {
                 if (view instanceof SpoilerOnClickTextView) {
                     if (((SpoilerOnClickTextView) view).isSpoilerOnClick()) {
@@ -601,8 +566,10 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         scoreTextView.setTextColor(mCommentIconAndInfoColor);
                     }
 
-                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                            comment.getScore() + comment.getVoteType()));
+                    if (!comment.isScoreHidden()) {
+                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                comment.getScore() + comment.getVoteType()));
+                    }
 
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
@@ -624,8 +591,10 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
                             if (currentPosition == position) {
                                 downvoteButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                        comment.getScore() + comment.getVoteType()));
+                                if (!comment.isScoreHidden()) {
+                                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                            comment.getScore() + comment.getVoteType()));
+                                }
                             }
                         }
 
@@ -667,8 +636,10 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                         scoreTextView.setTextColor(mCommentIconAndInfoColor);
                     }
 
-                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                            comment.getScore() + comment.getVoteType()));
+                    if (!comment.isScoreHidden()) {
+                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                comment.getScore() + comment.getVoteType()));
+                    }
 
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
                         @Override
@@ -690,8 +661,10 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
 
                             if (currentPosition == position) {
                                 upvoteButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
-                                scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
-                                        comment.getScore() + comment.getVoteType()));
+                                if (!comment.isScoreHidden()) {
+                                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes,
+                                            comment.getScore() + comment.getVoteType()));
+                                }
                             }
                         }
 

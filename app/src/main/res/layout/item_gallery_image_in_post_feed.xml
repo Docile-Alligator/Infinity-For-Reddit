@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
+            android:id="@+id/image_view_item_gallery_image_in_post_feed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:adjustViewBounds="true" />
+
+        <ProgressBar
+            android:id="@+id/progress_bar_item_gallery_image_in_post_feed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center" />
+
+        <TextView
+            android:id="@+id/error_text_view_item_gallery_image_in_post_feed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:drawableTop="@drawable/ic_error_outline_black_24dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/error_loading_image_tap_to_retry"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family"
+            android:visibility="gone" />
+
+    </FrameLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/caption_constraint_layout_item_gallery_image_in_post_feed"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorBackgroundFloating"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/caption_text_view_item_gallery_image_in_post_feed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:fontFamily="?attr/content_font_family"
+            android:gravity="start"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:paddingHorizontal="8dp"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/content_font_default"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/caption_url_text_view_item_gallery_image_in_post_feed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/caption_url_text_view_item_gallery_image_in_post_feed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="?attr/content_font_family"
+            android:gravity="end"
+            android:maxLines="1"
+            android:paddingHorizontal="8dp"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/content_font_default"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintLeft_toRightOf="@id/guideline4"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline4"
+            android:layout_width="1dp"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.50" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayout>

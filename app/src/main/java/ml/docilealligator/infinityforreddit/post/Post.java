@@ -76,8 +76,6 @@ public class Post implements Parcelable {
     private boolean saved;
     private boolean isCrosspost;
     private boolean isRead;
-    private boolean isHiddenInRecyclerView = false;
-    private boolean isHiddenManuallyByUser = false;
     private String crosspostParentId;
     private ArrayList<Preview> previews = new ArrayList<>();
     private ArrayList<Gallery> gallery = new ArrayList<>();
@@ -199,8 +197,6 @@ public class Post implements Parcelable {
         saved = in.readByte() != 0;
         isCrosspost = in.readByte() != 0;
         isRead = in.readByte() != 0;
-        isHiddenInRecyclerView = in.readByte() != 0;
-        isHiddenManuallyByUser = in.readByte() != 0;
         crosspostParentId = in.readString();
         in.readTypedList(previews, Preview.CREATOR);
         in.readTypedList(gallery, Gallery.CREATOR);
@@ -496,25 +492,12 @@ public class Post implements Parcelable {
         return isCrosspost;
     }
 
-    public void markAsRead(boolean isHiddenManuallyByUser) {
+    public void markAsRead() {
         isRead = true;
-        this.isHiddenManuallyByUser = isHiddenManuallyByUser;
     }
 
     public boolean isRead() {
         return isRead;
-    }
-
-    public boolean isHiddenInRecyclerView() {
-        return isHiddenInRecyclerView;
-    }
-
-    public void hidePostInRecyclerView() {
-        isHiddenInRecyclerView = true;
-    }
-
-    public boolean isHiddenManuallyByUser() {
-        return isHiddenManuallyByUser;
     }
 
     public String getCrosspostParentId() {
@@ -586,8 +569,6 @@ public class Post implements Parcelable {
         parcel.writeByte((byte) (saved ? 1 : 0));
         parcel.writeByte((byte) (isCrosspost ? 1 : 0));
         parcel.writeByte((byte) (isRead ? 1 : 0));
-        parcel.writeByte((byte) (isHiddenInRecyclerView ? 1 : 0));
-        parcel.writeByte((byte) (isHiddenManuallyByUser ? 1 : 0));
         parcel.writeString(crosspostParentId);
         parcel.writeTypedList(previews);
         parcel.writeTypedList(gallery);

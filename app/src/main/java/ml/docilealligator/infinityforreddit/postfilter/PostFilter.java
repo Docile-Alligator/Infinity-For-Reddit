@@ -12,6 +12,7 @@ import androidx.room.PrimaryKey;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import ml.docilealligator.infinityforreddit.post.Post;
 
@@ -173,17 +174,23 @@ public class PostFilter implements Parcelable {
             return false;
         }
         if (postFilter.postTitleExcludesRegex != null && !postFilter.postTitleExcludesRegex.equals("")) {
-            Pattern pattern = Pattern.compile(postFilter.postTitleExcludesRegex);
-            Matcher matcher = pattern.matcher(post.getTitle());
-            if (matcher.find()) {
-                return false;
-            }
+            try {
+                Pattern pattern = Pattern.compile(postFilter.postTitleExcludesRegex);
+                Matcher matcher = pattern.matcher(post.getTitle());
+                if (matcher.find()) {
+                    return false;
+                }
+            } catch (PatternSyntaxException ignore) {}
         }
         if (postFilter.postTitleContainsRegex != null && !postFilter.postTitleContainsRegex.equals("")) {
-            Pattern pattern = Pattern.compile(postFilter.postTitleContainsRegex);
-            Matcher matcher = pattern.matcher(post.getTitle());
-            if (!matcher.find()) {
-                return false;
+            try {
+                Pattern pattern = Pattern.compile(postFilter.postTitleContainsRegex);
+                Matcher matcher = pattern.matcher(post.getTitle());
+                if (!matcher.find()) {
+                    return false;
+                }
+            } catch (PatternSyntaxException e) {
+                e.printStackTrace();
             }
         }
         if (postFilter.postTitleExcludesStrings != null && !postFilter.postTitleExcludesStrings.equals("")) {
@@ -350,12 +357,12 @@ public class PostFilter implements Parcelable {
                 postFilter.containDomains = stringBuilder.toString();
             }
 
-            postFilter.containTextType = p.containTextType || postFilter.containTextType;
-            postFilter.containLinkType = p.containLinkType || postFilter.containLinkType;
-            postFilter.containImageType = p.containImageType || postFilter.containImageType;
-            postFilter.containGifType = p.containGifType || postFilter.containGifType;
-            postFilter.containVideoType = p.containVideoType || postFilter.containVideoType;
-            postFilter.containGalleryType = p.containGalleryType || postFilter.containGalleryType;
+            postFilter.containTextType = p.containTextType && postFilter.containTextType;
+            postFilter.containLinkType = p.containLinkType && postFilter.containLinkType;
+            postFilter.containImageType = p.containImageType && postFilter.containImageType;
+            postFilter.containGifType = p.containGifType && postFilter.containGifType;
+            postFilter.containVideoType = p.containVideoType && postFilter.containVideoType;
+            postFilter.containGalleryType = p.containGalleryType && postFilter.containGalleryType;
         }
 
         return postFilter;

@@ -50,7 +50,6 @@ public class DownloadLocationPreferenceFragment extends CustomFontPreferenceFrag
 
             nsfwDownloadLocationPreference.setOnPreferenceClickListener(preference -> {
                 Intent intent = new Intent(ACTION_OPEN_DOCUMENT_TREE);
-                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 startActivityForResult(intent, NSFW_DOWNLOAD_LOCATION_REQUEST_CODE);
                 return true;
             });
@@ -63,7 +62,6 @@ public class DownloadLocationPreferenceFragment extends CustomFontPreferenceFrag
 
             imageDownloadLocationPreference.setOnPreferenceClickListener(preference -> {
                 Intent intent = new Intent(ACTION_OPEN_DOCUMENT_TREE);
-                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 startActivityForResult(intent, IMAGE_DOWNLOAD_LOCATION_REQUEST_CODE);
                 return true;
             });
@@ -77,7 +75,6 @@ public class DownloadLocationPreferenceFragment extends CustomFontPreferenceFrag
 
             gifDownloadLocationPreference.setOnPreferenceClickListener(preference -> {
                 Intent intent = new Intent(ACTION_OPEN_DOCUMENT_TREE);
-                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 startActivityForResult(intent, GIF_DOWNLOAD_LOCATION_REQUEST_CODE);
                 return true;
             });
@@ -91,7 +88,6 @@ public class DownloadLocationPreferenceFragment extends CustomFontPreferenceFrag
 
             videoDownloadLocationPreference.setOnPreferenceClickListener(preference -> {
                 Intent intent = new Intent(ACTION_OPEN_DOCUMENT_TREE);
-                intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
                 startActivityForResult(intent, VIDEO_DOWNLOAD_LOCATION_REQUEST_CODE);
                 return true;
             });
@@ -103,25 +99,29 @@ public class DownloadLocationPreferenceFragment extends CustomFontPreferenceFrag
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK && data != null && data.getData() != null) {
             if (requestCode == IMAGE_DOWNLOAD_LOCATION_REQUEST_CODE) {
-                activity.getContentResolver().takePersistableUriPermission(data.getData(), Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                activity.getContentResolver().takePersistableUriPermission(data.getData(),
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 sharedPreferences.edit().putString(SharedPreferencesUtils.IMAGE_DOWNLOAD_LOCATION, data.getDataString()).apply();
                 if (imageDownloadLocationPreference != null) {
                     imageDownloadLocationPreference.setSummary(data.getDataString());
                 }
             } else if (requestCode == GIF_DOWNLOAD_LOCATION_REQUEST_CODE) {
-                activity.getContentResolver().takePersistableUriPermission(data.getData(), Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                activity.getContentResolver().takePersistableUriPermission(data.getData(),
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 sharedPreferences.edit().putString(SharedPreferencesUtils.GIF_DOWNLOAD_LOCATION, data.getDataString()).apply();
                 if (gifDownloadLocationPreference != null) {
                     gifDownloadLocationPreference.setSummary(data.getDataString());
                 }
             } else if (requestCode == VIDEO_DOWNLOAD_LOCATION_REQUEST_CODE) {
-                activity.getContentResolver().takePersistableUriPermission(data.getData(), Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                activity.getContentResolver().takePersistableUriPermission(data.getData(),
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 sharedPreferences.edit().putString(SharedPreferencesUtils.VIDEO_DOWNLOAD_LOCATION, data.getDataString()).apply();
                 if (videoDownloadLocationPreference != null) {
                     videoDownloadLocationPreference.setSummary(data.getDataString());
                 }
             } else if (requestCode == NSFW_DOWNLOAD_LOCATION_REQUEST_CODE) {
-                activity.getContentResolver().takePersistableUriPermission(data.getData(), Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+                activity.getContentResolver().takePersistableUriPermission(data.getData(),
+                        Intent.FLAG_GRANT_WRITE_URI_PERMISSION | Intent.FLAG_GRANT_READ_URI_PERMISSION);
                 sharedPreferences.edit().putString(SharedPreferencesUtils.NSFW_DOWNLOAD_LOCATION, data.getDataString()).apply();
                 if (nsfwDownloadLocationPreference != null) {
                     nsfwDownloadLocationPreference.setSummary(data.getDataString());

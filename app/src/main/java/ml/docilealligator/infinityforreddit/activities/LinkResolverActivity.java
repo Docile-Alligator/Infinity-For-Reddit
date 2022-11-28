@@ -50,7 +50,7 @@ public class LinkResolverActivity extends AppCompatActivity {
     private static final String IMGUR_ALBUM_PATTERN = "/(album|a)/\\w+/?";
     private static final String IMGUR_IMAGE_PATTERN = "/\\w+/?";
     private static final String RPAN_BROADCAST_PATTERN = "/rpan/r/[\\w-]+/\\w+/?\\w+/?";
-    private static final String WIKI_PATTERN = "/[rR]/[\\w-]+/(wiki|w)?(?:/\\w+)+";
+    private static final String WIKI_PATTERN = "/[rR]/[\\w-]+/(wiki|w)(?:/[\\w-]+)*";
     private static final String GOOGLE_AMP_PATTERN = "/amp/s/amp.reddit.com/.*";
     private static final String STREAMABLE_PATTERN = "/\\w+/?";
 
@@ -106,7 +106,6 @@ public class LinkResolverActivity extends AppCompatActivity {
     private void handleUri(Uri uri) {
         if (uri == null) {
             Toast.makeText(this, R.string.no_link_available, Toast.LENGTH_SHORT).show();
-            finish();
         } else {
             String path = uri.getPath();
             if (path == null) {
@@ -174,6 +173,8 @@ public class LinkResolverActivity extends AppCompatActivity {
                             } else if (path.isEmpty()) {
                                 Intent intent = new Intent(this, MainActivity.class);
                                 startActivity(intent);
+                            } else if (path.equals("/report")) {
+                                openInWebView(uri);
                             } else if (path.matches(POST_PATTERN) || path.matches(POST_PATTERN_2)) {
                                 int commentsIndex = segments.lastIndexOf("comments");
                                 if (commentsIndex >= 0 && commentsIndex < segments.size() - 1) {
@@ -204,7 +205,17 @@ public class LinkResolverActivity extends AppCompatActivity {
                                     deepLinkError(uri);
                                 }
                             } else if (path.matches(WIKI_PATTERN)) {
-                                final String wikiPage = path.substring(path.lastIndexOf("/wiki/") + 6);
+                                String[] pathSegments = path.split("/");
+                                String wikiPage;
+                                if (pathSegments.length == 4) {
+                                    wikiPage = "index";
+                                } else {
+                                    int lengthThroughWiki = 0;
+                                    for (int i = 1; i <= 3; ++i) {
+                                        lengthThroughWiki += pathSegments[i].length() + 1;
+                                    }
+                                    wikiPage = path.substring(lengthThroughWiki);
+                                }
                                 Intent intent = new Intent(this, WikiActivity.class);
                                 intent.putExtra(WikiActivity.EXTRA_SUBREDDIT_NAME, segments.get(1));
                                 intent.putExtra(WikiActivity.EXTRA_WIKI_PATH, wikiPage);
@@ -288,11 +299,13 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_TYPE, ViewImgurMediaActivity.IMGUR_TYPE_IMAGE);
                                 intent.putExtra(ViewImgurMediaActivity.EXTRA_IMGUR_ID, path.substring(1));
                                 startActivity(intent);
-                            } else if (path.endsWith("gifv")) {
+                            } else if (path.endsWith("gifv") || path.endsWith("mp4")) {
                                 String url = uri.toString();
                                 // Insecure imgur links won't load
                                 url = url.replaceFirst("http://" , "https://");
-                                url = url.substring(0, url.length() - 5) + ".mp4";
+                                if (path.endsWith("gifv")) {
+                                    url = url.substring(0, url.length() - 5) + ".mp4";
+                                }
                                 Intent intent = new Intent(this, ViewVideoActivity.class);
                                 intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_IMGUR);
                                 intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, getIntent().getBooleanExtra(EXTRA_IS_NSFW, false));
@@ -327,8 +340,8 @@ public class LinkResolverActivity extends AppCompatActivity {
                 }
             }
 
-            finish();
         }
+        finish();
     }
 
     private void deepLinkError(Uri uri) {

@@ -129,7 +129,7 @@ public class MaterialYouUtils {
             darkTheme.navBarColor = darkTheme.colorPrimary;
             darkTheme.primaryTextColor = context.getColor(android.R.color.system_neutral1_10);
             darkTheme.secondaryTextColor = context.getColor(android.R.color.system_neutral1_10);
-            darkTheme.bottomAppBarIconColor = context.getColor(android.R.color.system_accent1_100);;
+            darkTheme.bottomAppBarIconColor = context.getColor(android.R.color.system_accent1_100);
             darkTheme.primaryIconColor = context.getColor(android.R.color.system_accent1_100);
             darkTheme.fabIconColor = context.getColor(android.R.color.system_neutral1_900);
             darkTheme.toolbarPrimaryTextAndIconColor = context.getColor(android.R.color.system_accent2_100);

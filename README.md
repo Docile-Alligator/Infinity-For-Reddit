@@ -139,6 +139,7 @@ Key features of **Infinity For Reddit**:
 First off, thanks for taking the time to contribute! Contributions are what makes the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
 If you have a suggestion that would make this better, please fork the repo and create a pull request.
+It's better to also open an issue describing the issue you want to fix. But it is not required.
 
 Don't forget to give the project a star! Thanks again!
 

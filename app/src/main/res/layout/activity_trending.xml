@@ -43,7 +43,7 @@
             android:id="@+id/recycler_view_trending_activity"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:layoutManager=".customviews.LinearLayoutManagerBugFixed" />
+            app:layoutManager="ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

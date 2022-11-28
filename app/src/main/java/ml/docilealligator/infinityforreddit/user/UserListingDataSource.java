@@ -50,7 +50,7 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
     public void loadInitial(@NonNull PageKeyedDataSource.LoadInitialParams<String> params, @NonNull PageKeyedDataSource.LoadInitialCallback<String, UserData> callback) {
         initialLoadStateLiveData.postValue(NetworkState.LOADING);
 
-        FetchUserData.fetchUserListingData(retrofit, query, null, sortType.getType().value, nsfw,
+        FetchUserData.fetchUserListingData(retrofit, query, null, sortType.getType(), nsfw,
                 new FetchUserData.FetchUserListingDataListener() {
                     @Override
                     public void onFetchUserListingDataSuccess(ArrayList<UserData> UserData, String after) {
@@ -81,7 +81,7 @@ public class UserListingDataSource extends PageKeyedDataSource<String, UserData>
             return;
         }
 
-        FetchUserData.fetchUserListingData(retrofit, query, params.key, sortType.getType().value, nsfw,
+        FetchUserData.fetchUserListingData(retrofit, query, params.key, sortType.getType(), nsfw,
                 new FetchUserData.FetchUserListingDataListener() {
                     @Override
                     public void onFetchUserListingDataSuccess(ArrayList<UserData> UserData, String after) {

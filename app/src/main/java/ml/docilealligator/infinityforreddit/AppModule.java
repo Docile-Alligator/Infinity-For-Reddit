@@ -21,6 +21,8 @@ import dagger.Module;
 import dagger.Provides;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LoopAvailableExoCreator;
+import ml.docilealligator.infinityforreddit.network.SortTypeConverterFactory;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.videoautoplay.Config;

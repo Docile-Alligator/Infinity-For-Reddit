@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.util.Linkify;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -67,13 +66,8 @@ import butterknife.ButterKnife;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
-import io.noties.markwon.inlineparser.AutolinkInlineProcessor;
-import io.noties.markwon.inlineparser.BangInlineProcessor;
-import io.noties.markwon.inlineparser.HtmlInlineProcessor;
-import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
-import io.noties.markwon.linkify.LinkifyPlugin;
-import io.noties.markwon.movement.MovementMethodPlugin;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
@@ -106,6 +100,7 @@ import ml.docilealligator.infinityforreddit.events.GoBackToMainPageEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.fragments.SidebarFragment;
+import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.post.Post;
@@ -216,6 +211,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private boolean isNsfwSubreddit = false;
     private boolean subscriptionReady = false;
     private boolean showToast = false;
+    private boolean hideFab;
     private boolean showBottomAppBar;
     private boolean lockBottomAppBar;
     private String mMessageFullname;
@@ -243,6 +239,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
         ButterKnife.bind(this);
 
+        hideFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_FAB_IN_POST_FEED, false);
         showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false);
         navigationWrapper = new NavigationWrapper(findViewById(R.id.bottom_app_bar_bottom_app_bar), findViewById(R.id.linear_layout_bottom_app_bar),
                 findViewById(R.id.option_1_bottom_app_bar), findViewById(R.id.option_2_bottom_app_bar),
@@ -370,37 +367,29 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         glide = Glide.with(this);
         Locale locale = getResources().getConfiguration().locale;
 
-        Markwon markwon = Markwon.builder(this)
-                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
-                    plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
-                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
-                    plugin.excludeInlineProcessor(BangInlineProcessor.class);
-                }))
-                .usePlugin(new AbstractMarkwonPlugin() {
-                    @Override
-                    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
-                        builder.linkResolver((view, link) -> {
-                            Intent intent = new Intent(ViewSubredditDetailActivity.this, LinkResolverActivity.class);
-                            Uri uri = Uri.parse(link);
-                            intent.setData(uri);
-                            startActivity(intent);
-                        });
-                    }
+        MarkwonPlugin miscPlugin = new AbstractMarkwonPlugin() {
+            @Override
+            public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                builder.linkResolver((view, link) -> {
+                    Intent intent = new Intent(ViewSubredditDetailActivity.this, LinkResolverActivity.class);
+                    Uri uri = Uri.parse(link);
+                    intent.setData(uri);
+                    startActivity(intent);
+                });
+            }
 
-                    @Override
-                    public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
-                        builder.linkColor(mCustomThemeWrapper.getLinkColor());
-                    }
-                })
-                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS).setOnLinkLongClickListener((textView, url) -> {
-                    UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
-                    urlMenuBottomSheetFragment.setArguments(bundle);
-                    urlMenuBottomSheetFragment.show(getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
-                    return true;
-                })))
-                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS)).build();
+            @Override
+            public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                builder.linkColor(mCustomThemeWrapper.getLinkColor());
+            }
+        };
+        BetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener = (textView, url) -> {
+            UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = UrlMenuBottomSheetFragment.newInstance(url);
+            urlMenuBottomSheetFragment.show(getSupportFragmentManager(), null);
+            return true;
+        };
+        Markwon markwon = MarkdownUtils.createLinksOnlyMarkwon(this,
+                miscPlugin, onLinkLongClickListener);
 
         descriptionTextView.setOnLongClickListener(view -> {
             if (description != null && !description.equals("") && descriptionTextView.getSelectionStart() == -1 && descriptionTextView.getSelectionEnd() == -1) {
@@ -943,7 +932,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             fabMoreOptionsBottomSheetFragment.show(getSupportFragmentManager(), fabMoreOptionsBottomSheetFragment.getTag());
             return true;
         });
-        navigationWrapper.floatingActionButton.setVisibility(View.VISIBLE);
+        navigationWrapper.floatingActionButton.setVisibility(hideFab ? View.GONE : View.VISIBLE);
 
         subscribeSubredditChip.setOnClickListener(view -> {
             if (mAccessToken == null) {
@@ -1062,7 +1051,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 if (showBottomAppBar) {
                     navigationWrapper.showNavigation();
                 }
-                navigationWrapper.showFab();
+                if (!hideFab) {
+                    navigationWrapper.showFab();
+                }
                 sectionsPagerAdapter.displaySortTypeInToolbar();
             }
         });
@@ -1293,14 +1284,14 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         if (showBottomAppBar && !lockBottomAppBar) {
             navigationWrapper.showNavigation();
         }
-        if (!(showBottomAppBar && lockBottomAppBar)) {
+        if (!(showBottomAppBar && lockBottomAppBar) && !hideFab) {
             navigationWrapper.showFab();
         }
     }
 
     @Override
     public void contentScrollDown() {
-        if (!(showBottomAppBar && lockBottomAppBar)) {
+        if (!(showBottomAppBar && lockBottomAppBar) && !hideFab) {
             navigationWrapper.hideFab();
         }
         if (showBottomAppBar && !lockBottomAppBar) {
@@ -1556,13 +1547,15 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId());
     }
 
-    private void lockSwipeRightToGoBack() {
+    @Override
+    public void lockSwipeRightToGoBack() {
         if (mSlidrInterface != null) {
             mSlidrInterface.lock();
         }
     }
 
-    private void unlockSwipeRightToGoBack() {
+    @Override
+    public void unlockSwipeRightToGoBack() {
         if (mSlidrInterface != null) {
             mSlidrInterface.unlock();
         }

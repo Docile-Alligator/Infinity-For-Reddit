@@ -51,7 +51,7 @@ public class ParsePost {
                         JSONObject data = allData.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
                         Post post = parseBasicData(data);
                         if (readPostHashSet != null && readPostHashSet.contains(post.getId())) {
-                            post.markAsRead(false);
+                            post.markAsRead();
                         }
                         if (PostFilter.isPostAllowed(post, postFilter)) {
                             newPosts.add(post);
@@ -378,9 +378,13 @@ public class ParsePost {
                     Uri uri = Uri.parse(url);
                     String authority = uri.getAuthority();
                     // The hls stream inside REDDIT_VIDEO_PREVIEW_KEY can sometimes lack an audio track
-                    // This happens with imgur gifv that are actually mp4, even the official Reddit app has this bug
-                    if (authority.contains("imgur.com") && url.endsWith(".gifv")) {
-                        url = url.substring(0, url.length() - 5) + ".mp4";
+                    if (authority.contains("imgur.com") && (url.endsWith(".gifv") || url.endsWith(".mp4"))) {
+                        // Insecure imgur links won't load
+                        url = url.replaceFirst("http://" , "https://");
+
+                        if (url.endsWith("gifv")) {
+                            url = url.substring(0, url.length() - 5) + ".mp4";
+                        }
 
                         post = new Post(id, fullName, subredditName, subredditNamePrefixed, author, authorFlair,
                                 authorFlairHTML, postTimeMillis, title, permalink, score, postType, voteType,
@@ -430,6 +434,24 @@ public class ParsePost {
 
                         post.setPreviews(previews);
                         post.setVideoUrl(url);
+                    } else if (Uri.parse(url).getAuthority().contains("imgur.com") && (url.endsWith("gifv") || url.endsWith("mp4"))) {
+                        // Imgur gifv/mp4
+                        int postType = Post.VIDEO_TYPE;
+
+                        // Insecure imgur links won't load
+                        url = url.replaceFirst("http://" , "https://");
+                        if (url.endsWith("gifv")) {
+                            url = url.substring(0, url.length() - 5) + ".mp4";
+                        }
+
+                        post = new Post(id, fullName, subredditName, subredditNamePrefixed, author,
+                                authorFlair, authorFlairHTML, postTimeMillis, title, url, permalink, score,
+                                postType, voteType, nComments, upvoteRatio, flair, awards, nAwards,
+                                hidden, spoiler, nsfw, stickied, archived, locked, saved, isCrosspost);
+                        post.setPreviews(previews);
+                        post.setVideoUrl(url);
+                        post.setVideoDownloadUrl(url);
+                        post.setIsImgur(true);
                     } else if (url.endsWith("mp4")) {
                         //Video post
                         int postType = Post.VIDEO_TYPE;
@@ -441,22 +463,6 @@ public class ParsePost {
                         post.setPreviews(previews);
                         post.setVideoUrl(url);
                         post.setVideoDownloadUrl(url);
-                    } else if (url.endsWith("gifv") && Objects.equals(Uri.parse(url).getAuthority(), "i.imgur.com")) {
-                        // Imgur gifv/mp4
-                        int postType = Post.VIDEO_TYPE;
-
-                        // Insecure imgur links won't load
-                        url = url.replaceFirst("http://" , "https://");
-                        url = url.substring(0, url.length() - 5) + ".mp4";
-
-                        post = new Post(id, fullName, subredditName, subredditNamePrefixed, author,
-                                authorFlair, authorFlairHTML, postTimeMillis, title, url, permalink, score,
-                                postType, voteType, nComments, upvoteRatio, flair, awards, nAwards,
-                                hidden, spoiler, nsfw, stickied, archived, locked, saved, isCrosspost);
-                        post.setPreviews(previews);
-                        post.setVideoUrl(url);
-                        post.setVideoDownloadUrl(url);
-                        post.setIsImgur(true);
                     } else {
                         if (url.contains(permalink)) {
                             //Text post but with a preview
