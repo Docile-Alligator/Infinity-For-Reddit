@@ -2020,6 +2020,8 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                 intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, post.getUrl());
                 intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, post.getSubredditName()
                         + "-" + post.getId() + ".jpg");
+                intent.putExtra(ViewImageOrGifActivity.EXTRA_SENSIBLE_FILE_NAME_KEY, post.getSubredditName()
+                        + "-" + post.getTitle() + ".jpg");
                 intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, post.getTitle());
                 intent.putExtra(ViewImageOrGifActivity.EXTRA_SUBREDDIT_OR_USERNAME_KEY, post.getSubredditName());
                 intent.putExtra(ViewImageOrGifActivity.EXTRA_IS_NSFW, post.isNSFW());
