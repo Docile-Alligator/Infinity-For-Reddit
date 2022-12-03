@@ -86,16 +86,16 @@ abstract class NetworkModule {
     @Provides
     @Named("no_oauth")
     static Retrofit provideRetrofit(@Named(NAMED_BASE_RETROFIT) Retrofit retrofit) {
-        return retrofit.newBuilder()
-                .baseUrl(APIUtils.OAUTH_API_BASE_URI)
-                .build();
+        return retrofit;
     }
 
     @Provides
+    @Singleton
     @Named("oauth")
     static Retrofit provideOAuthRetrofit(@Named(NAMED_DEFAULT_OKHTTP) OkHttpClient okHttpClient,
                                          @Named(NAMED_BASE_RETROFIT) Retrofit retrofit) {
         return retrofit.newBuilder()
+                .baseUrl(APIUtils.OAUTH_API_BASE_URI)
                 .client(okHttpClient)
                 .build();
     }
