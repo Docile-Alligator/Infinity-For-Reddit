@@ -37,7 +37,6 @@ import ml.docilealligator.infinityforreddit.activities.PostLinkActivity;
 import ml.docilealligator.infinityforreddit.activities.PostPollActivity;
 import ml.docilealligator.infinityforreddit.activities.PostTextActivity;
 import ml.docilealligator.infinityforreddit.activities.PostVideoActivity;
-import ml.docilealligator.infinityforreddit.activities.RPANActivity;
 import ml.docilealligator.infinityforreddit.activities.ReportActivity;
 import ml.docilealligator.infinityforreddit.activities.RulesActivity;
 import ml.docilealligator.infinityforreddit.activities.SearchActivity;
@@ -81,7 +80,6 @@ import ml.docilealligator.infinityforreddit.fragments.UserListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewImgurImageFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewImgurVideoFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
-import ml.docilealligator.infinityforreddit.fragments.ViewRPANBroadcastFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryImageOrGifFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryVideoFragment;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
@@ -280,10 +278,6 @@ public interface AppComponent {
     void inject(CrashReportsFragment crashReportsFragment);
 
     void inject(LockScreenActivity lockScreenActivity);
-
-    void inject(RPANActivity rpanActivity);
-
-    void inject(ViewRPANBroadcastFragment viewRPANBroadcastFragment);
 
     void inject(PostGalleryActivity postGalleryActivity);
 

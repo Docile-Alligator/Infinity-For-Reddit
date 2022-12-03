@@ -39,7 +39,6 @@
     <string name="post_filter_preference_activity_label">Post Filter</string>
     <string name="search_users_result_activity_label">Users</string>
     <string name="multireddit_selection_activity_label">Select a Multireddit</string>
-    <string name="rpan_activity_label">RPAN</string>
     <string name="post_gallery_activity_label">Gallery Post</string>
     <string name="trending_activity_label">Trending</string>
     <string name="wiki_activity_label">Wiki</string>
@@ -91,7 +90,6 @@
     <string name="action_add_to_post_filter">Add to Post Filter</string>
     <string name="action_delete_logs">Delete Logs</string>
     <string name="action_create_github_issue">Create GitHub Issue</string>
-    <string name="action_share_rpan_link">Share RPAN Link</string>
     <string name="action_share_post_link">Share Post Link</string>
     <string name="action_go_to_wiki">Go to Wiki</string>
     <string name="action_playback_speed">Playback Speed</string>
@@ -139,7 +137,6 @@
     <string name="history">History</string>
     <string name="inbox">Inbox</string>
     <string name="inbox_with_count">Inbox (%1$,d)</string>
-    <string name="rpan">RPAN</string>
     <string name="trending">Trending</string>
     <string name="upvoted">Upvoted</string>
     <string name="downvoted">Downvoted</string>
@@ -1210,10 +1207,6 @@
     <string name="upload_image_success">Upload image successfully. Click the image button again to see the uploaded images.</string>
     <string name="get_image_bitmap_failed">Unable to get the bitmap of the image</string>
     <string name="upload_image_failed">Unable to upload the image</string>
-
-    <string name="load_rpan_broadcasts_failed">Cannot load RPAN broadcasts</string>
-    <string name="parse_rpan_broadcasts_failed">Cannot parse RPAN broadcasts</string>
-    <string name="parse_rpan_broadcast_failed">Cannot parse RPAN broadcast</string>
 
     <string name="search_comments">Search Comments</string>
 

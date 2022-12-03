@@ -1063,12 +1063,9 @@ Yine de etkinleştirmek istiyor musunuz?"</string>
     <string name="reply">"Yanıtla"</string>
 
     <!-- What is RPAN? -->
-    <string name="rpan_activity_label">"Canlı Yayın"</string>
     <string name="post_gallery_activity_label">"Galeri Gönderisi"</string>
     <string name="trending_activity_label">"Trendler"</string>
-    <string name="action_share_rpan_link">"Canlı Yayın Bağlantısını Paylaş"</string>
     <string name="action_share_post_link">"Gönderi Bağlantısını Paylaş"</string>
-    <string name="rpan">"Canlı Yayın"</string>
     <string name="trending">"Trendler"</string>
     <string name="receive_post_reply_notifications">"Gönderi yanıtlanınca bildirimlerini al"</string>
     <string name="bottom_sheet_post_gallery">"Galeri"</string>
@@ -1098,9 +1095,6 @@ Yoksa, Material You'u etkinleştirmeden önce bunları yeniden adlandırın."</s
     <string name="upload_image_success">"Fotoğraf başarıyla yüklendi. Yüklenen fotoğrafları görmek için fotoğraf düğmesine tekrar tıklayın."</string>
     <string name="get_image_bitmap_failed">"Fotoğrafın bitmap'i alınamıyor"</string>
     <string name="upload_image_failed">"Fotoğraf yüklenemiyor"</string>
-    <string name="load_rpan_broadcasts_failed">"Canlı Yayınlar yüklenemiyor"</string>
-    <string name="parse_rpan_broadcasts_failed">"Canlı Yayınlar ayrıştırılamıyor"</string>
-    <string name="parse_rpan_broadcast_failed">"Canlı Yayın ayrıştırılamıyor"</string>
     <string name="search_comments">"Yorumları Ara"</string>
     <string name="please_wait_image_is_uploading">"Hâlâ bir fotoğraf yükleniyor. Lütfen bekleyin."</string>
     <string name="error_fetch_trending_search">"Trend aramalar getirilemedi.

@@ -1034,12 +1034,9 @@ Thông báo: %2$s"</string>
 
 Bạn có vẫn muốn bật tuỳ chọn này không?"</string>
     <string name="reply">"Trả lời"</string>
-    <string name="rpan_activity_label">"RPAN"</string>
     <string name="post_gallery_activity_label">"Bài đăng bộ sưu tập"</string>
     <string name="trending_activity_label">"Trending"</string>
-    <string name="action_share_rpan_link">"Chia sẻ đường link RPAN"</string>
     <string name="action_share_post_link">"Chia sẻ đường link bài đăng"</string>
-    <string name="rpan">"RPAN"</string>
     <string name="trending">"Trending"</string>
     <string name="receive_post_reply_notifications">"Nhận thông báo trả lời trong bài đăng"</string>
     <string name="bottom_sheet_post_gallery">"Bộ sưu tập"</string>
@@ -1069,9 +1066,6 @@ Nếu không thì thay tên chúng trước khi Bật Material You."</string>
     <string name="upload_image_success">"Tải hình ảnh thành công. Ấn vào nút hình ảnh lần nữa để thấy hình ảnh vửa tải lên."</string>
     <string name="get_image_bitmap_failed">"Không thể lấy bitmap của hình ảnh"</string>
     <string name="upload_image_failed">"Không thể tải hình ảnh lên"</string>
-    <string name="load_rpan_broadcasts_failed">"Không thể tải broadcast RPAN"</string>
-    <string name="parse_rpan_broadcasts_failed">"Không thể xử lý broadcast RPAN"</string>
-    <string name="parse_rpan_broadcast_failed">"Không thể xử lý broadcast RPAN"</string>
     <string name="search_comments">"Tìm kiếm bình luận"</string>
     <string name="please_wait_image_is_uploading">"Hình ảnh vẫn đang tải. Vui lòng đợi."</string>
     <string name="error_fetch_trending_search">"Lấy mục tìm kiếm thịnh hành thất bại.

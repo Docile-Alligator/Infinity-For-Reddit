@@ -22,7 +22,7 @@ public class RedditSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
     private static final int VIEW_TYPE_MENU_GROUP_TITLE = 1;
     private static final int VIEW_TYPE_MENU_ITEM = 2;
-    private static final int REDDIT_SECTION_ITEMS = 2;
+    private static final int REDDIT_SECTION_ITEMS = 1;
 
     private BaseActivity baseActivity;
     private int primaryTextColor;
@@ -85,10 +85,6 @@ public class RedditSectionRecyclerViewAdapter extends RecyclerView.Adapter<Recyc
 
             switch (position) {
                 case 1:
-                    stringId = R.string.rpan;
-                    drawableId = R.drawable.ic_rpan_24dp;
-                    break;
-                case 2:
                     stringId = R.string.trending;
                     drawableId = R.drawable.ic_trending_24dp;
                     break;

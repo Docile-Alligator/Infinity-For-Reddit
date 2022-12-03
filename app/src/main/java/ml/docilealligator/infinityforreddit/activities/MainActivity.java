@@ -779,8 +779,6 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                             intent.putExtra(SubscribedThingListingActivity.EXTRA_SHOW_MULTIREDDITS, true);
                         } else if (stringId == R.string.history) {
                             intent = new Intent(MainActivity.this, HistoryActivity.class);
-                        } else if (stringId == R.string.rpan) {
-                            intent = new Intent(MainActivity.this, RPANActivity.class);
                         } else if (stringId == R.string.trending) {
                             intent = new Intent(MainActivity.this, TrendingActivity.class);
                         } else if (stringId == R.string.upvoted) {

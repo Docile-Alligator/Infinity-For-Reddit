@@ -1009,12 +1009,9 @@ Bericht: %2$s"</string>
 
 Wil je het nog steeds activeren?"</string>
     <string name="reply">"Antwoord"</string>
-    <string name="rpan_activity_label">"RPAN"</string>
     <string name="post_gallery_activity_label">"Gallerijpost"</string>
     <string name="trending_activity_label">"Trending"</string>
-    <string name="action_share_rpan_link">"Deel RPAN Link"</string>
     <string name="action_share_post_link">"Deel Post Link"</string>
-    <string name="rpan">"RPAN"</string>
     <string name="trending">"Trending"</string>
     <string name="receive_post_reply_notifications">"Ontvang Post Reactie Notificaties"</string>
     <string name="bottom_sheet_post_gallery">"Gallerij"</string>
@@ -1039,7 +1036,6 @@ Zo wel, hernoem ze voordat je Material You aanzet."</string>
     <string name="uploading_image">"Uploaden"</string>
     <string name="upload_image_success">"Afbeelding succesvol geüpload. Klik de afbeelding knop nogmaals om de geüploade afbeeldingen te zien."</string>
     <string name="upload_image_failed">"Niet in staat de afbeelding te uploaden"</string>
-    <string name="load_rpan_broadcasts_failed">"Kan RPAN uitzending Niet laden"</string>
     <string name="search_comments">"Zoek reacties"</string>
     <string name="please_wait_image_is_uploading">"Een afbeelding is nog aan het uploaden. Even geduld aub."</string>
     <string name="no_trending_search">"Geen trending zoekopdrachten gevonden. Tik om het opnieuw te proberen."</string>
