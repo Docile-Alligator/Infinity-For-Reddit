@@ -364,6 +364,9 @@ public class SharedPreferencesUtils {
     public static final String APP_LOCK_TIMEOUT = "app_lock_timeout";
     public static final String LAST_FOREGROUND_TIME = "last_foreground_time";
 
+    public static final String INTERNAL_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.internal";
+    public static final String HAS_REQUESTED_NOTIFICATION_PERMISSION = "has_requested_notification_permission";
+
     //Legacy Settings
     public static final String MAIN_PAGE_TAB_1_TITLE_LEGACY = "main_page_tab_1_title";
     public static final String MAIN_PAGE_TAB_2_TITLE_LEGACY = "main_page_tab_2_title";

@@ -1,9 +1,19 @@
 package ml.docilealligator.infinityforreddit.settings;
 
 
+import android.Manifest;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.view.View;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.ListPreference;
 import androidx.preference.SwitchPreference;
@@ -32,6 +42,9 @@ public class NotificationPreferenceFragment extends CustomFontPreferenceFragment
     @Inject
     @Named("default")
     SharedPreferences sharedPreferences;
+    @Inject
+    @Named("internal")
+    SharedPreferences mInternalSharedPreferences;
     private boolean enableNotification;
     private long notificationInterval;
     private WorkManager workManager;
@@ -112,6 +125,28 @@ public class NotificationPreferenceFragment extends CustomFontPreferenceFragment
 
                 return true;
             });
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityResultLauncher<String> requestNotificationPermissionLauncher = registerForActivityResult(new ActivityResultContracts.RequestPermission(), result -> {
+                mInternalSharedPreferences.edit().putBoolean(SharedPreferencesUtils.HAS_REQUESTED_NOTIFICATION_PERMISSION, true).apply();
+                if (!result) {
+                    activity.showSnackbar(R.string.denied_notification_permission, R.string.go_to_settings, new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            Uri uri = Uri.fromParts("package", activity.getPackageName(), null);
+                            intent.setData(uri);
+                            startActivity(intent);
+                        }
+                    });
+                }
+            });
+            
+            if (ContextCompat.checkSelfPermission(activity, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                requestNotificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+            }
         }
     }
 }

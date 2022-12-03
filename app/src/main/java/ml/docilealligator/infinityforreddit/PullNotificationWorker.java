@@ -72,6 +72,12 @@ public class PullNotificationWorker extends Worker {
     @NonNull
     @Override
     public Result doWork() {
+        NotificationManagerCompat notificationManager = NotificationUtils.getNotificationManager(context);
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU && !notificationManager.areNotificationsEnabled()) {
+            return Result.success();
+        }
+
         try {
             List<Account> accounts = mRedditDataRoomDatabase.accountDao().getAllAccounts();
             int color = mCustomThemeWrapper.getColorPrimaryLightTheme();
@@ -89,8 +95,6 @@ public class PullNotificationWorker extends Worker {
                             context.getResources().getConfiguration().locale, FetchMessage.MESSAGE_TYPE_NOTIFICATION);
 
                     if (!messages.isEmpty()) {
-                        NotificationManagerCompat notificationManager = NotificationUtils.getNotificationManager(context);
-
                         NotificationCompat.Builder summaryBuilder = NotificationUtils.buildSummaryNotification(context,
                                 notificationManager, accountName,
                                 context.getString(R.string.notification_new_messages, messages.size()),

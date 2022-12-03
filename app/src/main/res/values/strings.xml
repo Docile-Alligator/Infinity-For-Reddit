@@ -1318,4 +1318,7 @@
 
     <string name="image_index_in_gallery">%1$d/%2$d</string>
 
+    <string name="denied_notification_permission">Notification permission is not granted</string>
+    <string name="go_to_settings">Settings</string>
+
 </resources>
