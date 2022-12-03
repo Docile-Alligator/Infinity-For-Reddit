@@ -93,7 +93,7 @@
 
             <LinearLayout
                 android:id="@+id/bottom_app_bar_menu_view_reddit_gallery_image_or_gif_fragment"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone">
 
