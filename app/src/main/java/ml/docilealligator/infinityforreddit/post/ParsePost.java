@@ -379,9 +379,6 @@ public class ParsePost {
                     String authority = uri.getAuthority();
                     // The hls stream inside REDDIT_VIDEO_PREVIEW_KEY can sometimes lack an audio track
                     if (authority.contains("imgur.com") && (url.endsWith(".gifv") || url.endsWith(".mp4"))) {
-                        // Insecure imgur links won't load
-                        url = url.replaceFirst("http://" , "https://");
-
                         if (url.endsWith("gifv")) {
                             url = url.substring(0, url.length() - 5) + ".mp4";
                         }
@@ -438,8 +435,6 @@ public class ParsePost {
                         // Imgur gifv/mp4
                         int postType = Post.VIDEO_TYPE;
 
-                        // Insecure imgur links won't load
-                        url = url.replaceFirst("http://" , "https://");
                         if (url.endsWith("gifv")) {
                             url = url.substring(0, url.length() - 5) + ".mp4";
                         }

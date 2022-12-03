@@ -296,8 +296,6 @@ public class LinkResolverActivity extends AppCompatActivity {
                                 startActivity(intent);
                             } else if (path.endsWith("gifv") || path.endsWith("mp4")) {
                                 String url = uri.toString();
-                                // Insecure imgur links won't load
-                                url = url.replaceFirst("http://" , "https://");
                                 if (path.endsWith("gifv")) {
                                     url = url.substring(0, url.length() - 5) + ".mp4";
                                 }
