@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import ml.docilealligator.infinityforreddit.network.SortTypeConverterFactory;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import okhttp3.ConnectionPool;
 import okhttp3.Interceptor;
@@ -37,6 +38,7 @@ abstract class NetworkModule {
                 .baseUrl(APIUtils.API_BASE_URI)
                 .client(okHttpClient)
                 .addConverterFactory(ScalarsConverterFactory.create())
+                .addConverterFactory(SortTypeConverterFactory.create())
                 .addCallAdapterFactory(GuavaCallAdapterFactory.create())
                 .build();
     }
@@ -49,15 +51,15 @@ abstract class NetworkModule {
     @Provides
     @Named("no_oauth")
     static Retrofit provideRetrofit(Retrofit retrofit) {
-        return retrofit.newBuilder()
-                .baseUrl(APIUtils.OAUTH_API_BASE_URI)
-                .build();
+        return retrofit;
     }
 
     @Provides
     @Named("oauth")
-    static Retrofit providesOAuthetrofit(Retrofit retrofit) {
-        return retrofit;
+    static Retrofit providesOAuthRetrofit(Retrofit retrofit) {
+        return retrofit.newBuilder()
+                .baseUrl(APIUtils.OAUTH_API_BASE_URI)
+                .build();
     }
 
     @Provides
