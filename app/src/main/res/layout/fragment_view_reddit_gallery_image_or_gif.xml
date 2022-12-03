@@ -45,6 +45,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:minHeight="0dp"
         app:paddingBottomSystemWindowInsets="false"
         android:backgroundTint="#80000000">
 

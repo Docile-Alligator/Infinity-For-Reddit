@@ -228,8 +228,8 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                 if (activity.isUseBottomAppBar()) {
                     bottomAppBarMenu.setVisibility(View.VISIBLE);
                 }
-                if (captionTextOrUrlIsNotEmpty){
-                    bottomAppBar.setVisibility(View.VISIBLE);
+                if (captionTextOrUrlIsNotEmpty) {
+                    captionLayout.setVisibility(View.VISIBLE);
                 }
             } else {
                 hideAppBar();
@@ -317,7 +317,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                 captionUrlTextView.setHighlightColor(Color.TRANSPARENT);
             }
         } else {
-            bottomAppBar.setVisibility(View.GONE);
+            captionLayout.setVisibility(View.GONE);
         }
 
         return rootView;
@@ -335,7 +335,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
         if (activity.isUseBottomAppBar()) {
             bottomAppBarMenu.setVisibility(View.GONE);
         }
-        bottomAppBar.setVisibility(View.GONE);
+        captionLayout.setVisibility(View.GONE);
     }
 
     private void loadImage() {
