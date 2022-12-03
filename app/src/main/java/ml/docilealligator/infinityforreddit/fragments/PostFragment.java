@@ -75,6 +75,8 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.activities.AccountPostsActivity;
+import ml.docilealligator.infinityforreddit.activities.AccountSavedThingActivity;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
@@ -1316,6 +1318,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
         if (activity instanceof FilteredPostsActivity) {
             menu.findItem(R.id.action_filter_posts_post_fragment).setVisible(false);
+        }
+
+        if (activity instanceof FilteredPostsActivity || activity instanceof AccountPostsActivity
+                || activity instanceof AccountSavedThingActivity) {
+            menu.findItem(R.id.action_more_options_post_fragment).setVisible(false);
         }
     }
 
