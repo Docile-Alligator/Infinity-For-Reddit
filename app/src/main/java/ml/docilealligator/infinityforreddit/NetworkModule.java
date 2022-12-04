@@ -56,9 +56,10 @@ abstract class NetworkModule {
 
     @Provides
     @Named("oauth")
-    static Retrofit providesOAuthRetrofit(Retrofit retrofit) {
+    static Retrofit providesOAuthRetrofit(Retrofit retrofit, @Named("default") OkHttpClient okHttpClient) {
         return retrofit.newBuilder()
                 .baseUrl(APIUtils.OAUTH_API_BASE_URI)
+                .client(okHttpClient)
                 .build();
     }
 
@@ -189,17 +190,6 @@ abstract class NetworkModule {
     static Retrofit provideVReddItRetrofit(Retrofit retrofit) {
         return retrofit.newBuilder()
                 .baseUrl("http://localhost/")
-                .build();
-    }
-
-    @Provides
-    @Named("strapi")
-    @Singleton
-    static Retrofit providestrapiRetrofit(@Named("default") OkHttpClient okHttpClient,
-                                          Retrofit retrofit) {
-        return retrofit.newBuilder()
-                .baseUrl(APIUtils.STRAPI_BASE_URI)
-                .client(okHttpClient)
                 .build();
     }
 
