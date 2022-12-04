@@ -50,6 +50,7 @@ class ParseSubscribedThing {
                                            ArrayList<SubscribedUserData> subscribedUserData,
                                            ArrayList<SubredditData> subredditData,
                                            ParseSubscribedSubredditsListener parseSubscribedSubredditsListener) {
+            this.parseSubscribedSubredditsListener = parseSubscribedSubredditsListener;
             try {
                 jsonResponse = new JSONObject(response);
                 this.accountName = accountName;
@@ -60,16 +61,18 @@ class ParseSubscribedThing {
                 newSubscribedSubredditData = new ArrayList<>();
                 newSubscribedUserData = new ArrayList<>();
                 newSubredditData = new ArrayList<>();
-                this.parseSubscribedSubredditsListener = parseSubscribedSubredditsListener;
             } catch (JSONException e) {
                 e.printStackTrace();
-                parseSubscribedSubredditsListener.onParseSubscribedSubredditsFail();
             }
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
             try {
+                if (jsonResponse == null) {
+                    parseFailed = true;
+                    return null;
+                }
                 JSONArray children = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
                 for (int i = 0; i < children.length(); i++) {
                     JSONObject data = children.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
