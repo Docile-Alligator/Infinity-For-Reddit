@@ -78,12 +78,6 @@ abstract class NetworkModule {
     }
 
     @Provides
-    @Named("rpan")
-    static OkHttpClient provideRPANOkHttpClient(OkHttpClient httpClient) {
-        return httpClient;
-    }
-
-    @Provides
     @Named("oauth_without_authenticator")
     @Singleton
     static Retrofit provideOauthWithoutAuthenticatorRetrofit(Retrofit retrofit) {

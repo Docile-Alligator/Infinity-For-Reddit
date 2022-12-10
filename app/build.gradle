@@ -80,10 +80,10 @@ dependencies {
     implementation "androidx.room:room-guava:$roomVersion"
     implementation 'androidx.viewpager2:viewpager2:1.1.0-beta01'
     implementation 'androidx.work:work-runtime:2.7.1'
-    implementation 'com.google.android.material:material:1.8.0-alpha02'
+    implementation 'com.google.android.material:material:1.8.0-alpha03'
 
 /** ExoPlayer **/
-    def exoplayerVersion = "2.18.1"
+    def exoplayerVersion = "2.18.2"
     implementation "com.google.android.exoplayer:exoplayer-core:$exoplayerVersion"
     implementation "com.google.android.exoplayer:exoplayer-dash:$exoplayerVersion"
     implementation "com.google.android.exoplayer:exoplayer-hls:$exoplayerVersion"
@@ -132,7 +132,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.9'
 
     // Java library for zip files and streams
-    implementation 'net.lingala.zip4j:zip4j:2.9.0'
+    implementation 'net.lingala.zip4j:zip4j:2.11.2'
 
     // IO functionality
     implementation 'commons-io:commons-io:2.5'
