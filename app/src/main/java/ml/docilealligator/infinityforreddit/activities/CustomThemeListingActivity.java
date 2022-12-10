@@ -269,8 +269,8 @@ public class CustomThemeListingActivity extends BaseActivity implements
             if (!clipboard.hasPrimaryClip()) {
                 Snackbar.make(coordinatorLayout, R.string.no_data_in_clipboard, Snackbar.LENGTH_SHORT).show();
             } else if (clipboard.getPrimaryClipDescription() != null &&
-                    !clipboard.getPrimaryClipDescription().hasMimeType(MIMETYPE_TEXT_PLAIN)) {
-                // since the clipboard has data but it is not plain text
+                    !clipboard.getPrimaryClipDescription().hasMimeType("text/*")) {
+                // since the clipboard has data but it is not text
                 Snackbar.make(coordinatorLayout, R.string.no_data_in_clipboard, Snackbar.LENGTH_SHORT).show();
             } else if (clipboard.getPrimaryClip() != null) {
                 ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
