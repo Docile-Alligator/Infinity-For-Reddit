@@ -448,7 +448,7 @@
 
     <string-array name="settings_language">
         <item>Auto</item>
-        <item>汉语/漢語</item>
+        <item>汉语</item>
         <item>Hrvatski</item>
         <item>Čeština</item>
         <item>Nederlands</item>

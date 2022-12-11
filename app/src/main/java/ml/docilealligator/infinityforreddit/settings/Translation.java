@@ -19,7 +19,7 @@ public class Translation {
         ArrayList<Translation> translationContributors = new ArrayList<>();
         translationContributors.add(new Translation("български", "Ana patriciaaguayogomez, Iliqiliev373, Nane, zerw, Кристиян", R.drawable.flag_bulgaria));
         translationContributors.add(new Translation("简体中文", "1, 3273676671, AaronFeng, Angela Thayer, Bitlabwzh, cdggqa, deluxghost, Dwhite, Gloria, gzwoyikythba, History_exe, hyl, Initial_Reading_197, Justin, Kai yuan, Ray, Steps, Tunicar, wert, WhiCCX5, 王昱程", R.drawable.flag_china));
-        translationContributors.add(new Translation("繁體中文", "1, Angela Thayer, Hbhuh, Ray, shlp, Wolfy.coding", R.drawable.flag_china));
+        translationContributors.add(new Translation("汉语", "1, Angela Thayer, Hbhuh, Ray, shlp, Wolfy.coding", R.drawable.flag_china));
         translationContributors.add(new Translation("Hrvatski", "Andrej Ivanusec, Branimir, Josip Biondić", R.drawable.flag_croatia));
         translationContributors.add(new Translation("Čeština", "Fjuro, Jeniktelefon, sidvic88", R.drawable.flag_czech));
         translationContributors.add(new Translation("Nederlands", "a, Anthony, Heimen Stoffels, KevinHF, Knnf, Khawkfist, Losms67, Mert, Viktor", R.drawable.flag_netherlands));
@@ -30,13 +30,13 @@ public class Translation {
         translationContributors.add(new Translation("עִברִית", "Ofek Bortz, Yuval", R.drawable.flag_israel));
         translationContributors.add(new Translation("हिंदी", "a, Anonymous, Arya, charu, EnArvy, Harshit S Lawaniya, Mrigendra Bhandari, Nikhilcaddilac, Niranjan, prat, raghav, raj, Roshan, Sachin, saqib, Ved", R.drawable.flag_india));
         translationContributors.add(new Translation("Magyar", "Balázs, Bro momento, ekaktusz, Gilgames32, mdvhimself, Szmanndani, trebron, Zoltan", R.drawable.flag_hungary));
-        translationContributors.add(new Translation("Italiana", "Daniele Basso, DanOlivaw, Enri.braga, Gianni00palmieri, Gillauino, Gio.gavio01, Giovanni, Giovanni Donisi, Lorenzo, Marco, Marco, Matisse, Simoneg.work, ztiaa", R.drawable.flag_italy));
+        translationContributors.add(new Translation("Italiano", "Daniele Basso, DanOlivaw, Enri.braga, Gianni00palmieri, Gillauino, Gio.gavio01, Giovanni, Giovanni Donisi, Lorenzo, Marco, Marco, Matisse, Simoneg.work, ztiaa", R.drawable.flag_italy));
         translationContributors.add(new Translation("日本語", "Hira, Issa, Mrigendra Bhandari, nazo6, Ryan", R.drawable.flag_japan));
         translationContributors.add(new Translation("한국어", "Jcxmt125, Me, noname", R.drawable.flag_south_korea));
         translationContributors.add(new Translation("Norsk", "", R.drawable.flag_norway));
-        translationContributors.add(new Translation("Polskie", "Adam, bbaster, Chupacabra, crash, Erax, Exp, Indexerrowaty, Kajetan, Maks, needless, quark, ultrakox, XioR112, xmsc", R.drawable.flag_poland));
+        translationContributors.add(new Translation("Polski", "Adam, bbaster, Chupacabra, crash, Erax, Exp, Indexerrowaty, Kajetan, Maks, needless, quark, ultrakox, XioR112, xmsc", R.drawable.flag_poland));
         translationContributors.add(new Translation("Português", "Bruno Guerreiro, Francisco, Gabriel, Henry, Henry, Lucas, Miguel, Ricardo Fontão, Ricky", R.drawable.flag_portugal));
-        translationContributors.add(new Translation("Português (BR)", "Andreaugustoqueiroz999, Asfuri, Davy, Júlia Angst Coelho, João Vieira, John Seila, Kauã Azevedo, Laura Vasconcellos Pereira Felippe, luccipriano, menosmenos, Murilogs7002, Raul S., Ricardo, Ricky, Sousa, Super_Iguanna, T.tony.br01, vsc, Ryan Marcelo", R.drawable.flag_brazil));
+        translationContributors.add(new Translation("Português (Brasil)", "Andreaugustoqueiroz999, Asfuri, Davy, Júlia Angst Coelho, João Vieira, John Seila, Kauã Azevedo, Laura Vasconcellos Pereira Felippe, luccipriano, menosmenos, Murilogs7002, Raul S., Ricardo, Ricky, Sousa, Super_Iguanna, T.tony.br01, vsc, Ryan Marcelo", R.drawable.flag_brazil));
         translationContributors.add(new Translation("Română", "Arminandrey, BitterJames, Cosmin, Edward, Loading Official, Malinatranslates, RabdăInimăȘiTace", R.drawable.flag_romania));
         translationContributors.add(new Translation("Русский", "Angela Thayer, Anon, Arseniy Tsekh, aveblazer, CaZzzer, Coolant, Craysy, Draer, elena, flexagoon, Georgiy, InvisibleRain, Overseen, solokot, Stambro, Tysontl2007, Vova", R.drawable.flag_russia));
         translationContributors.add(new Translation("Soomaali", "Nadir Nour", R.drawable.flag_somalia));
