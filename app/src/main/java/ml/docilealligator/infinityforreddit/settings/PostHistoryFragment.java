@@ -83,14 +83,6 @@ public class PostHistoryFragment extends Fragment {
         }
 
         String accountName = getArguments().getString(EXTRA_ACCOUNT_NAME);
-        if (accountName == null) {
-            infoTextView.setText(R.string.only_for_logged_in_user);
-            markPostsAsReadLinearLayout.setVisibility(View.GONE);
-            markPostsAsReadAfterVotingLinearLayout.setVisibility(View.GONE);
-            markPostsAsReadOnScrollLinearLayout.setVisibility(View.GONE);
-            hideReadPostsAutomaticallyLinearLayout.setVisibility(View.GONE);
-            return rootView;
-        }
 
         markPostsAsReadSwitch.setChecked(postHistorySharedPreferences.getBoolean(
                 accountName + SharedPreferencesUtils.MARK_POSTS_AS_READ_BASE, false));
