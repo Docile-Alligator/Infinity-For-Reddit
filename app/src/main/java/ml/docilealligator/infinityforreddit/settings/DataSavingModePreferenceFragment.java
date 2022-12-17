@@ -10,6 +10,7 @@ import org.greenrobot.eventbus.EventBus;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
 import ml.docilealligator.infinityforreddit.events.ChangeDataSavingModeEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeDisableCommentLoadingEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDisableImagePreviewEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeOnlyDisablePreviewInVideoAndGifPostsEvent;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -23,6 +24,7 @@ public class DataSavingModePreferenceFragment extends CustomFontPreferenceFragme
         ListPreference dataSavingModeListPreference = findPreference(SharedPreferencesUtils.DATA_SAVING_MODE);
         SwitchPreference disableImagePreviewPreference = findPreference(SharedPreferencesUtils.DISABLE_IMAGE_PREVIEW);
         SwitchPreference onlyDisablePreviewInVideoAndGifPostsPreference = findPreference(SharedPreferencesUtils.ONLY_DISABLE_PREVIEW_IN_VIDEO_AND_GIF_POSTS);
+        SwitchPreference disableCommentLoadingPreference = findPreference(SharedPreferencesUtils.DISABLE_COMMENT_LOADING);
         ListPreference redditVideoDefaultResolutionListPreference = findPreference(SharedPreferencesUtils.REDDIT_VIDEO_DEFAULT_RESOLUTION);
 
         if (dataSavingModeListPreference != null) {
@@ -88,6 +90,13 @@ public class DataSavingModePreferenceFragment extends CustomFontPreferenceFragme
                 }
                 return true;
             });
+        }
+
+        if (disableCommentLoadingPreference != null) {
+            disableCommentLoadingPreference.setOnPreferenceChangeListener(((preference, newValue) -> {
+                EventBus.getDefault().post(new ChangeDisableCommentLoadingEvent((Boolean) newValue));
+                return true;
+            }));
         }
     }
 }
