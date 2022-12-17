@@ -230,6 +230,10 @@ public class Post implements Parcelable {
         return author;
     }
 
+    public boolean isAuthorDeleted() {
+        return author != null && author.equals("[deleted]");
+    }
+
     public void setAuthor(String author) {
         this.author = author;
         this.authorNamePrefixed = "u/" + author;

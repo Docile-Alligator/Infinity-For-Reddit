@@ -1584,11 +1584,12 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
             authorTextView.setOnClickListener(view -> {
                 Comment comment = getCurrentComment(this);
-                if (comment != null) {
-                    Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, comment.getAuthor());
-                    mActivity.startActivity(intent);
+                if (comment == null || comment.isAuthorDeleted()) {
+                    return;
                 }
+                Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
+                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, comment.getAuthor());
+                mActivity.startActivity(intent);
             });
 
             authorIconImageView.setOnClickListener(view -> {

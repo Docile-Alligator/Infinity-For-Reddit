@@ -195,6 +195,9 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
             if (privateMessage.getAuthor().equals(mAccountName)) {
                 setTitle(privateMessage.getDestination());
                 mToolbar.setOnClickListener(view -> {
+                    if (privateMessage.isDestinationDeleted()) {
+                        return;
+                    }
                     Intent intent = new Intent(this, ViewUserDetailActivity.class);
                     intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, privateMessage.getDestination());
                     startActivity(intent);
@@ -202,6 +205,9 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
             } else {
                 setTitle(privateMessage.getAuthor());
                 mToolbar.setOnClickListener(view -> {
+                    if (privateMessage.isAuthorDeleted()) {
+                        return;
+                    }
                     Intent intent = new Intent(this, ViewUserDetailActivity.class);
                     intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, privateMessage.getAuthor());
                     startActivity(intent);
