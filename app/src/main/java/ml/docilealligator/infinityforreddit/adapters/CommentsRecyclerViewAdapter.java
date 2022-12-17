@@ -125,6 +125,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private boolean isInitiallyLoadingFailed;
     private boolean mHasMoreComments;
     private boolean loadMoreCommentsFailed;
+    private boolean mDisableCommentLoading;
     private Drawable expandDrawable;
     private Drawable collapseDrawable;
 
@@ -235,6 +236,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         mAlwaysShowChildCommentCount = sharedPreferences.getBoolean(SharedPreferencesUtils.ALWAYS_SHOW_CHILD_COMMENT_COUNT, false);
         mHideTheNumberOfVotes = sharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_THE_NUMBER_OF_VOTES_IN_COMMENTS, false);
         mDepthThreshold = sharedPreferences.getInt(SharedPreferencesUtils.SHOW_FEWER_TOOLBAR_OPTIONS_THRESHOLD, 5);
+        mDisableCommentLoading = sharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_COMMENT_LOADING, false);
 
         mCommentRecyclerViewAdapterCallback = commentRecyclerViewAdapterCallback;
         isInitiallyLoading = true;
@@ -1839,6 +1841,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             ButterKnife.bind(this, itemView);
             circleProgressBar.setBackgroundTintList(ColorStateList.valueOf(mCircularProgressBarBackgroundColor));
             circleProgressBar.setColorSchemeColors(mColorAccent);
+            if (mDisableCommentLoading) {
+                circleProgressBar.setVisibility(View.GONE);
+            }
         }
     }
 

@@ -1444,7 +1444,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             }
                             activity.setTitle(sortTypeType.fullName);
                             ViewPostDetailFragment.this.sortType = sortTypeType;
-                            fetchComments(changeRefreshState, checkSortState, ViewPostDetailFragment.this.sortType);
+                            if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_COMMENT_LOADING, false)) {
+                                fetchComments(changeRefreshState, checkSortState, ViewPostDetailFragment.this.sortType);
+                            }
                         }
 
                         @Override
@@ -1456,7 +1458,9 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                         }
                     });
         } else {
-            fetchComments(changeRefreshState, checkSortState, sortType);
+            if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_COMMENT_LOADING, false)) {
+                fetchComments(changeRefreshState, checkSortState, sortType);
+            }
         }
     }
 

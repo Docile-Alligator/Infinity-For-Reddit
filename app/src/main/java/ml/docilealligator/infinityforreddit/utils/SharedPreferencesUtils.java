@@ -170,6 +170,7 @@ public class SharedPreferencesUtils {
     public static final String ENABLE_SEARCH_HISTORY = "enable_search_history";
     public static final String POST_FILTER = "post_filter";
     public static final String ONLY_DISABLE_PREVIEW_IN_VIDEO_AND_GIF_POSTS = "only_disable_preview_in_video_and_gif_posts";
+    public static final String DISABLE_COMMENT_LOADING = "disable_comment_loading";
     public static final String SAVE_SORT_TYPE = "save_sort_type";
     public static final String SUBREDDIT_DEFAULT_SORT_TYPE = "subreddit_default_sort_type";
     public static final String SUBREDDIT_DEFAULT_SORT_TIME = "subreddit_default_sort_time";
