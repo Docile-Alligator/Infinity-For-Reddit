@@ -738,44 +738,28 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
                                     @Override
                                     public void onFetchMoreCommentFailed() {
-                                        if (parentPosition < mVisibleComments.size()
-                                                && parentComment.getFullName().equals(mVisibleComments.get(parentPosition).getFullName())) {
-                                            if (mVisibleComments.get(parentPosition).isExpanded()) {
-                                                int commentPosition = mIsSingleCommentThreadMode ? holder.getBindingAdapterPosition() - 1 : holder.getBindingAdapterPosition();
-                                                int placeholderPosition = findLoadMoreCommentsPlaceholderPosition(parentComment.getFullName(), commentPosition);
-
-                                                if (placeholderPosition != -1) {
-                                                    mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
-                                                    mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(true);
-                                                }
-                                                ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.comment_load_more_comments_failed);
-                                            }
-
-                                            mVisibleComments.get(parentPosition).getChildren().get(mVisibleComments.get(parentPosition).getChildren().size() - 1)
-                                                    .setLoadingMoreChildren(false);
-                                            mVisibleComments.get(parentPosition).getChildren().get(mVisibleComments.get(parentPosition).getChildren().size() - 1)
-                                                    .setLoadMoreChildrenFailed(true);
-                                        } else {
-                                            for (int i = 0; i < mVisibleComments.size(); i++) {
-                                                if (mVisibleComments.get(i).getFullName().equals(parentComment.getFullName())) {
-                                                    if (mVisibleComments.get(i).isExpanded()) {
-                                                        int placeholderPositionHint = i + mVisibleComments.get(i).getChildren().size();
-                                                        int placeholderPosition = findLoadMoreCommentsPlaceholderPosition(parentComment.getFullName(), placeholderPositionHint);
-
-                                                        if (placeholderPosition != -1) {
-                                                            mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
-                                                            mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(true);
-                                                        }
-                                                        ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.comment_load_more_comments_failed);
-                                                    }
-
-                                                    mVisibleComments.get(i).getChildren().get(mVisibleComments.get(i).getChildren().size() - 1).setLoadingMoreChildren(false);
-                                                    mVisibleComments.get(i).getChildren().get(mVisibleComments.get(i).getChildren().size() - 1).setLoadMoreChildrenFailed(true);
-
-                                                    break;
-                                                }
-                                            }
+                                        int currentParentPosition = findCommentPosition(parentComment.getFullName(), parentPosition);
+                                        if (currentParentPosition == -1) {
+                                            // note: returning here is probably a mistake, because
+                                            // parent is just not visible, but it can still exist in the comments tree.
+                                            return;
                                         }
+                                        Comment currentParentComment = mVisibleComments.get(currentParentPosition);
+
+                                        if (currentParentComment.isExpanded()) {
+                                            int placeholderPositionHint = currentParentPosition + currentParentComment.getChildren().size();
+                                            int placeholderPosition = findLoadMoreCommentsPlaceholderPosition(parentComment.getFullName(), placeholderPositionHint);
+
+                                            if (placeholderPosition != -1) {
+                                                mVisibleComments.get(placeholderPosition).setLoadingMoreChildren(false);
+                                                mVisibleComments.get(placeholderPosition).setLoadMoreChildrenFailed(true);
+                                            }
+                                            ((LoadMoreChildCommentsViewHolder) holder).placeholderTextView.setText(R.string.comment_load_more_comments_failed);
+                                        }
+                                        currentParentComment.getChildren().get(currentParentComment.getChildren().size() - 1)
+                                                .setLoadingMoreChildren(false);
+                                        currentParentComment.getChildren().get(currentParentComment.getChildren().size() - 1)
+                                                .setLoadMoreChildrenFailed(true);
                                     }
                                 });
                     }
@@ -809,23 +793,35 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
     /**
      * Find position of comment with given {@code fullName} and
+     * {@link Comment#NOT_PLACEHOLDER} placeholder type
+     * @return position of the placeholder or -1 if not found
+     */
+    private int findCommentPosition(String fullName, int positionHint) {
+        return findCommentPosition(fullName, positionHint, Comment.NOT_PLACEHOLDER);
+    }
+
+    /**
+     * Find position of comment with given {@code fullName} and
      * {@link Comment#PLACEHOLDER_LOAD_MORE_COMMENTS} placeholder type
      * @return position of the placeholder or -1 if not found
      */
     private int findLoadMoreCommentsPlaceholderPosition(String fullName, int positionHint) {
+        return findCommentPosition(fullName, positionHint, Comment.PLACEHOLDER_LOAD_MORE_COMMENTS);
+    }
+
+    private int findCommentPosition(String fullName, int positionHint, int placeholderType) {
         if (0 <= positionHint && positionHint < mVisibleComments.size()
                 && mVisibleComments.get(positionHint).getFullName().equals(fullName)
-                && mVisibleComments.get(positionHint).getPlaceholderType() == Comment.PLACEHOLDER_LOAD_MORE_COMMENTS) {
+                && mVisibleComments.get(positionHint).getPlaceholderType() == placeholderType) {
             return positionHint;
         }
 
         for (int i = 0; i < mVisibleComments.size(); i++) {
             Comment comment = mVisibleComments.get(i);
-            if (comment.getFullName().equals(fullName) && comment.getPlaceholderType() == Comment.PLACEHOLDER_LOAD_MORE_COMMENTS) {
+            if (comment.getFullName().equals(fullName) && comment.getPlaceholderType() == placeholderType) {
                 return i;
             }
         }
-
         return -1;
     }
 
