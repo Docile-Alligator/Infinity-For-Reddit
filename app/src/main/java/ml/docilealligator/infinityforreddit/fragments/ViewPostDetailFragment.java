@@ -225,7 +225,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private String mSingleCommentId;
     private String mContextNumber;
     private boolean showToast = false;
-    private boolean isSortingComments = false;
     private boolean mIsSmoothScrolling = false;
     private boolean mLockFab;
     private boolean mSwipeUpToHideFab;
@@ -820,7 +819,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 && mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_SORT_TYPE, true)) {
             mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, sortType.getType().name()).apply();
         }
-        fetchCommentsRespectRecommendedSort(false, false, sortType.getType());
+        fetchCommentsRespectRecommendedSort(false, sortType.getType());
     }
 
     @NonNull
@@ -1428,7 +1427,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         });
     }
 
-    private void fetchCommentsRespectRecommendedSort(boolean changeRefreshState, boolean checkSortState, SortType.Type sortType) {
+    private void fetchCommentsRespectRecommendedSort(boolean changeRefreshState, SortType.Type sortType) {
         if (mRespectSubredditRecommendedSortType && mPost != null) {
             FetchSubredditData.fetchSubredditData(mOauthRetrofit, mRetrofit, mPost.getSubredditName(), mAccessToken,
                     new FetchSubredditData.FetchSubredditDataListener() {
@@ -1444,7 +1443,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             }
                             activity.setTitle(sortTypeType.fullName);
                             ViewPostDetailFragment.this.sortType = sortTypeType;
-                            fetchComments(changeRefreshState, checkSortState, ViewPostDetailFragment.this.sortType);
+                            fetchComments(changeRefreshState, ViewPostDetailFragment.this.sortType);
                         }
 
                         @Override
@@ -1456,11 +1455,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                         }
                     });
         } else {
-            fetchComments(changeRefreshState, checkSortState, sortType);
+            fetchComments(changeRefreshState, sortType);
         }
     }
 
-    private void fetchComments(boolean changeRefreshState, boolean checkSortState, SortType.Type sortType) {
+    private void fetchComments(boolean changeRefreshState, SortType.Type sortType) {
         isFetchingComments = true;
         mCommentsAdapter.setSingleComment(mSingleCommentId, isSingleCommentThreadMode);
         mCommentsAdapter.initiallyLoading();
@@ -1475,14 +1474,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     @Override
                     public void onFetchCommentSuccess(ArrayList<Comment> expandedComments,
                                                       String parentId, ArrayList<String> children) {
-                        if (checkSortState && isSortingComments) {
-                            if (changeRefreshState) {
-                                isRefreshing = false;
-                            }
-
-                            return;
-                        }
-
                         ViewPostDetailFragment.this.children = children;
 
                         comments = expandedComments;
@@ -1544,13 +1535,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     @Override
                     public void onFetchCommentFailed() {
                         isFetchingComments = false;
-                        if (checkSortState && isSortingComments) {
-                            if (changeRefreshState) {
-                                isRefreshing = false;
-                            }
-
-                            return;
-                        }
 
                         mCommentsAdapter.initiallyLoadCommentsFailed();
                         if (changeRefreshState) {
@@ -1561,7 +1545,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     }
 
     private void fetchCommentsRespectRecommendedSort(boolean changeRefreshState) {
-        fetchCommentsRespectRecommendedSort(changeRefreshState, true, sortType);
+        fetchCommentsRespectRecommendedSort(changeRefreshState, sortType);
     }
 
     void fetchMoreComments() {
