@@ -169,6 +169,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private int mPostTypeTextColor;
     private int mSubredditColor;
     private int mUsernameColor;
+    private int mModeratorColor;
     private int mSpoilerBackgroundColor;
     private int mSpoilerTextColor;
     private int mFlairBackgroundColor;
@@ -324,6 +325,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mPostTypeTextColor = customThemeWrapper.getPostTypeTextColor();
             mSubredditColor = customThemeWrapper.getSubreddit();
             mUsernameColor = customThemeWrapper.getUsername();
+            mModeratorColor = customThemeWrapper.getModerator();
             mSpoilerBackgroundColor = customThemeWrapper.getSpoilerBackgroundColor();
             mSpoilerTextColor = customThemeWrapper.getSpoilerTextColor();
             mFlairBackgroundColor = customThemeWrapper.getFlairBackgroundColor();
@@ -527,6 +529,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     ((PostBaseViewHolder) holder).subredditTextView.setText("r/" + post.getSubredditName());
                     ((PostBaseViewHolder) holder).userTextView.setText(authorPrefixed);
                 }
+
+                ((PostBaseViewHolder) holder).userTextView.setTextColor(
+                        post.isModerator() ? mModeratorColor : mUsernameColor);
 
                 if (mDisplaySubredditName) {
                     if (authorPrefixed.equals(post.getSubredditNamePrefixed())) {
@@ -1203,7 +1208,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 .into(((PostCompactBaseViewHolder) holder).iconGifImageView);
                     }
 
-                    ((PostCompactBaseViewHolder) holder).nameTextView.setTextColor(mUsernameColor);
+                    ((PostCompactBaseViewHolder) holder).nameTextView.setTextColor(
+                            post.isModerator() ? mModeratorColor : mUsernameColor);
+
                     if (mHideSubredditAndUserPrefix) {
                         ((PostCompactBaseViewHolder) holder).nameTextView.setText(post.getAuthor());
                     } else {

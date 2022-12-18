@@ -178,6 +178,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private int mPostTypeTextColor;
     private int mSubredditColor;
     private int mUsernameColor;
+    private int mModeratorColor;
     private int mAuthorFlairTextColor;
     private int mSpoilerBackgroundColor;
     private int mSpoilerTextColor;
@@ -361,6 +362,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mFlairTextColor = customThemeWrapper.getFlairTextColor();
         mSubredditColor = customThemeWrapper.getSubreddit();
         mUsernameColor = customThemeWrapper.getUsername();
+        mModeratorColor = customThemeWrapper.getModerator();
         mUpvotedColor = customThemeWrapper.getUpvoted();
         mDownvotedColor = customThemeWrapper.getDownvoted();
         mVoteAndReplyUnavailableVoteButtonColor = customThemeWrapper.getVoteAndReplyUnavailableButtonColor();
@@ -571,6 +573,13 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             } else {
                 ((PostDetailBaseViewHolder) holder).mSubredditTextView.setText(mPost.getSubredditName());
                 ((PostDetailBaseViewHolder) holder).mUserTextView.setText(mPost.getAuthor());
+            }
+
+            if (mPost.isModerator()) {
+                ((PostDetailBaseViewHolder) holder).mUserTextView.setTextColor(mModeratorColor);
+                Drawable moderatorDrawable = Utils.getTintedDrawable(mActivity, R.drawable.ic_verified_user_14dp, mModeratorColor);
+                ((PostDetailBaseViewHolder) holder).mUserTextView.setCompoundDrawablesWithIntrinsicBounds(
+                        moderatorDrawable, null, null, null);
             }
 
             if (mShowElapsedTime) {
