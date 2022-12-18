@@ -2316,7 +2316,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             });
 
             userTextView.setOnClickListener(view -> {
-                if (canStartActivity) {
+                if (!canStartActivity) {
                     return;
                 }
                 int position = getBindingAdapterPosition();
