@@ -76,6 +76,7 @@ import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import app.futured.hauler.DragDirection;
 import app.futured.hauler.HaulerView;
@@ -88,6 +89,7 @@ import ml.docilealligator.infinityforreddit.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.StreamableVideo;
+import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.apis.VReddIt;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PlaybackSpeedBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -211,8 +213,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
     Retrofit vReddItRetrofit;
 
     @Inject
-    @Named("streamable")
-    Retrofit streamableRetrofit;
+    Provider<StreamableAPI> streamableApiProvider;
 
     @Inject
     @Named("default")
@@ -835,7 +836,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
 
     private void loadStreamableVideo(String shortCode, Bundle savedInstanceState) {
         progressBar.setVisibility(View.VISIBLE);
-        FetchStreamableVideo.fetchStreamableVideo(mExecutor, new Handler(), streamableRetrofit, shortCode,
+        FetchStreamableVideo.fetchStreamableVideo(mExecutor, new Handler(), streamableApiProvider, shortCode,
                 new FetchStreamableVideo.FetchStreamableVideoListener() {
                     @Override
                     public void success(StreamableVideo streamableVideo) {
