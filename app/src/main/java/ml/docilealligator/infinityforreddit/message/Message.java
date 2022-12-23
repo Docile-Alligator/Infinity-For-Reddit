@@ -123,8 +123,17 @@ public class Message implements Parcelable {
         return author;
     }
 
+    public boolean isAuthorDeleted() {
+        return author != null && author.equals("[deleted]");
+    }
+
     public String getDestination() {
         return destination;
+    }
+
+    public boolean isDestinationDeleted()
+    {
+        return destination != null && destination.equals("[deleted]");
     }
 
     public String getParentFullName() {

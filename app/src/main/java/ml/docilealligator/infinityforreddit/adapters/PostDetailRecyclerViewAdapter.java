@@ -466,7 +466,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             ((PostDetailBaseViewHolder) holder).mTitleTextView.setText(mPost.getTitle());
             if (mPost.getSubredditNamePrefixed().startsWith("u/")) {
                 if (mPost.getAuthorIconUrl() == null) {
-                    String authorName = mPost.getAuthor().equals("[deleted]") ? mPost.getSubredditNamePrefixed().substring(2) : mPost.getAuthor();
+                    String authorName = mPost.isAuthorDeleted() ? mPost.getSubredditNamePrefixed().substring(2) : mPost.getAuthor();
                     LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, authorName, mOauthRetrofit, iconImageUrl -> {
                         if (mActivity != null && getItemCount() > 0) {
                             if (iconImageUrl == null || iconImageUrl.equals("")) {
@@ -1110,6 +1110,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             });
 
             mUserTextView.setOnClickListener(view -> {
+                if (mPost.isAuthorDeleted()) {
+                    return;
+                }
                 Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
                 intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mPost.getAuthor());
                 mActivity.startActivity(intent);

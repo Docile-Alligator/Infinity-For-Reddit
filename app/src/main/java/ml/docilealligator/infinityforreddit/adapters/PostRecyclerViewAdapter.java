@@ -596,8 +596,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     }
                 } else {
                     if (post.getAuthorIconUrl() == null) {
-                        String authorName = post.getAuthor().equals("[deleted]") ? post.getSubredditName() : post.getAuthor();
-                        mFragment.loadIcon(authorName, post.getAuthor().equals("[deleted]"), (subredditOrUserName, iconUrl) -> {
+                        String authorName = post.isAuthorDeleted() ? post.getSubredditName() : post.getAuthor();
+                        mFragment.loadIcon(authorName, post.isAuthorDeleted(), (subredditOrUserName, iconUrl) -> {
                             if (mActivity != null && getItemCount() > 0) {
                                 if (iconUrl == null || iconUrl.equals("") && authorName.equals(subredditOrUserName)) {
                                     mGlide.load(R.drawable.subreddit_default_icon)
@@ -1171,8 +1171,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     }
                 } else {
                     if (post.getAuthorIconUrl() == null) {
-                        String authorName = post.getAuthor().equals("[deleted]") ? post.getSubredditName() : post.getAuthor();
-                        mFragment.loadIcon(authorName, post.getAuthor().equals("[deleted]"), (subredditOrUserName, iconUrl) -> {
+                        String authorName = post.isAuthorDeleted() ? post.getSubredditName() : post.getAuthor();
+                        mFragment.loadIcon(authorName, post.isAuthorDeleted(), (subredditOrUserName, iconUrl) -> {
                             if (mActivity != null && getItemCount() > 0 && authorName.equals(subredditOrUserName)) {
                                 if (iconUrl == null || iconUrl.equals("")) {
                                     mGlide.load(R.drawable.subreddit_default_icon)
@@ -2316,19 +2316,21 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             });
 
             userTextView.setOnClickListener(view -> {
-                if (canStartActivity) {
-                    int position = getBindingAdapterPosition();
-                    if (position < 0) {
-                        return;
-                    }
-                    Post post = getItem(position);
-                    if (post != null) {
-                        canStartActivity = false;
-                        Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
-                        intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, post.getAuthor());
-                        mActivity.startActivity(intent);
-                    }
+                if (!canStartActivity) {
+                    return;
                 }
+                int position = getBindingAdapterPosition();
+                if (position < 0) {
+                    return;
+                }
+                Post post = getItem(position);
+                if (post == null || post.isAuthorDeleted()) {
+                    return;
+                }
+                canStartActivity = false;
+                Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
+                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, post.getAuthor());
+                mActivity.startActivity(intent);
             });
 
             if (mDisplaySubredditName) {
@@ -3635,7 +3637,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY,
                                 post.getSubredditName());
                         mActivity.startActivity(intent);
-                    } else {
+                    } else if (!post.isAuthorDeleted()) {
                         Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
                         intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, post.getAuthor());
                         mActivity.startActivity(intent);
