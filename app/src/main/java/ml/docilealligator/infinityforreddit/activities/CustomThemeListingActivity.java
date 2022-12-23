@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -269,16 +270,20 @@ public class CustomThemeListingActivity extends BaseActivity implements
             if (!clipboard.hasPrimaryClip()) {
                 Snackbar.make(coordinatorLayout, R.string.no_data_in_clipboard, Snackbar.LENGTH_SHORT).show();
             } else if (clipboard.getPrimaryClipDescription() != null &&
-                    !clipboard.getPrimaryClipDescription().hasMimeType(MIMETYPE_TEXT_PLAIN)) {
-                // since the clipboard has data but it is not plain text
+                    !clipboard.getPrimaryClipDescription().hasMimeType("text/*")) {
+                // since the clipboard has data but it is not text
                 Snackbar.make(coordinatorLayout, R.string.no_data_in_clipboard, Snackbar.LENGTH_SHORT).show();
             } else if (clipboard.getPrimaryClip() != null) {
                 ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
-                String json = item.getText().toString();
-                try {
-                    CustomTheme customTheme = new Gson().fromJson(json, CustomTheme.class);
-                    checkDuplicateAndImportTheme(customTheme, true);
-                } catch (JsonSyntaxException e) {
+                String json = item.coerceToText(this.getApplicationContext()).toString();
+                if (!TextUtils.isEmpty(json)) {
+                    try {
+                        CustomTheme customTheme = new Gson().fromJson(json, CustomTheme.class);
+                        checkDuplicateAndImportTheme(customTheme, true);
+                    } catch (JsonSyntaxException e) {
+                        Snackbar.make(coordinatorLayout, R.string.parse_theme_failed, Snackbar.LENGTH_SHORT).show();
+                    }
+                } else {
                     Snackbar.make(coordinatorLayout, R.string.parse_theme_failed, Snackbar.LENGTH_SHORT).show();
                 }
             }
