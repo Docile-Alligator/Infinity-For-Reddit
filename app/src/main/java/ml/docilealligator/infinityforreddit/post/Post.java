@@ -77,6 +77,7 @@ public class Post implements Parcelable {
     private boolean isCrosspost;
     private boolean isRead;
     private String crosspostParentId;
+    private String distinguished;
     private ArrayList<Preview> previews = new ArrayList<>();
     private ArrayList<Gallery> gallery = new ArrayList<>();
 
@@ -85,7 +86,7 @@ public class Post implements Parcelable {
                 String title, String permalink, int score, int postType, int voteType, int nComments,
                 int upvoteRatio, String flair, String awards, int nAwards, boolean hidden, boolean spoiler,
                 boolean nsfw, boolean stickied, boolean archived, boolean locked, boolean saved,
-                boolean isCrosspost) {
+                boolean isCrosspost, String distinguished) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -113,6 +114,7 @@ public class Post implements Parcelable {
         this.locked = locked;
         this.saved = saved;
         this.isCrosspost = isCrosspost;
+        this.distinguished = distinguished;
         isRead = false;
     }
 
@@ -121,7 +123,7 @@ public class Post implements Parcelable {
                 String url, String permalink, int score, int postType, int voteType, int nComments,
                 int upvoteRatio, String flair, String awards, int nAwards, boolean hidden, boolean spoiler,
                 boolean nsfw, boolean stickied, boolean archived, boolean locked, boolean saved,
-                boolean isCrosspost) {
+                boolean isCrosspost, String distinguished) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -150,6 +152,7 @@ public class Post implements Parcelable {
         this.locked = locked;
         this.saved = saved;
         this.isCrosspost = isCrosspost;
+        this.distinguished = distinguished;
         isRead = false;
     }
 
@@ -198,6 +201,7 @@ public class Post implements Parcelable {
         isCrosspost = in.readByte() != 0;
         isRead = in.readByte() != 0;
         crosspostParentId = in.readString();
+        distinguished = in.readString();
         in.readTypedList(previews, Preview.CREATOR);
         in.readTypedList(gallery, Gallery.CREATOR);
     }
@@ -387,6 +391,14 @@ public class Post implements Parcelable {
         this.flair = flair;
     }
 
+    public boolean isModerator() {
+        return distinguished != null && distinguished.equals("moderator");
+    }
+
+    public boolean isAdmin() {
+        return distinguished != null && distinguished.equals("admin");
+    }
+
     public String getAwards() {
         return awards;
     }
@@ -574,6 +586,7 @@ public class Post implements Parcelable {
         parcel.writeByte((byte) (isCrosspost ? 1 : 0));
         parcel.writeByte((byte) (isRead ? 1 : 0));
         parcel.writeString(crosspostParentId);
+        parcel.writeString(distinguished);
         parcel.writeTypedList(previews);
         parcel.writeTypedList(gallery);
     }

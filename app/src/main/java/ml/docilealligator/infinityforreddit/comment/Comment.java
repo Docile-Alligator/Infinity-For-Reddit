@@ -243,6 +243,10 @@ public class Comment implements Parcelable {
         return distinguished != null && distinguished.equals("moderator");
     }
 
+    public boolean isAdmin() {
+        return distinguished != null && distinguished.equals("admin");
+    }
+
     public String getPermalink() {
         return permalink;
     }
