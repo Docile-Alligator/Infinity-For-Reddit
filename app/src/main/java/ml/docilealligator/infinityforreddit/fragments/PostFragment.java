@@ -16,7 +16,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -1087,9 +1086,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     exceedThreshold = false;
                     touchHelper.attachToRecyclerView(null);
                     touchHelper.attachToRecyclerView(mPostRecyclerView);
-                    if (mAdapter != null) {
-                        mAdapter.onItemSwipe(viewHolder, direction, swipeLeftAction, swipeRightAction);
-                    }
                 }
             }
 

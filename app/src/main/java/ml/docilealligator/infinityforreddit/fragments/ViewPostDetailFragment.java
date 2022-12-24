@@ -459,9 +459,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     exceedThreshold = false;
                     touchHelper.attachToRecyclerView(null);
                     touchHelper.attachToRecyclerView((mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView));
-                    if (mCommentsAdapter != null) {
-                        mCommentsAdapter.onItemSwipe(viewHolder, direction, swipeLeftAction, swipeRightAction);
-                    }
                 }
             }
 

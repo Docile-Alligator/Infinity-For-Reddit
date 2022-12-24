@@ -180,9 +180,6 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
                     exceedThreshold = false;
                     touchHelper.attachToRecyclerView(null);
                     touchHelper.attachToRecyclerView(mCommentRecyclerView);
-                    if (mAdapter != null) {
-                        mAdapter.onItemSwipe(viewHolder, direction, swipeLeftAction, swipeRightAction);
-                    }
                 }
             }
 

@@ -496,9 +496,6 @@ public class HistoryPostFragment extends Fragment implements FragmentCommunicato
                     exceedThreshold = false;
                     touchHelper.attachToRecyclerView(null);
                     touchHelper.attachToRecyclerView(mPostRecyclerView);
-                    if (mAdapter != null) {
-                        mAdapter.onItemSwipe(viewHolder, direction, swipeLeftAction, swipeRightAction);
-                    }
                 }
             }
 
