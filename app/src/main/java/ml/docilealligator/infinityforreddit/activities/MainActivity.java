@@ -697,6 +697,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
                 navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_filter_24dp);
                 break;
+            case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_GO_TO_TOP:
+                navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_keyboard_double_arrow_up_24);
+                break;
             default:
                 if (mAccessToken == null) {
                     navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_filter_24dp);
@@ -745,6 +748,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
                     if (sectionsPagerAdapter != null) {
                         sectionsPagerAdapter.filterPosts();
+                    }
+                    break;
+                case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_GO_TO_TOP:
+                    if (sectionsPagerAdapter != null) {
+                        sectionsPagerAdapter.goBackToTop();
                     }
                     break;
                 default:
@@ -1365,6 +1373,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             case FABMoreOptionsBottomSheetFragment.FAB_FILTER_POSTS: {
                 if (sectionsPagerAdapter != null) {
                     sectionsPagerAdapter.filterPosts();
+                }
+                break;
+            }
+            case FABMoreOptionsBottomSheetFragment.FAB_GO_TO_TOP: {
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.goBackToTop();
                 }
                 break;
             }

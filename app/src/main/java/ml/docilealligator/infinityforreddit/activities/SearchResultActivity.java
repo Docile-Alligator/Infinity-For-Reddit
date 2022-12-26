@@ -298,7 +298,7 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS:
                 if (mAccessToken == null) {
                     fab.setImageResource(R.drawable.ic_filter_24dp);
-                    fabOption = SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_FILTER_POSTS;
+                    fabOption = SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS;
                 } else {
                     fab.setImageResource(R.drawable.ic_hide_read_posts_24dp);
                 }
@@ -306,10 +306,13 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
                 fab.setImageResource(R.drawable.ic_filter_24dp);
                 break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_TOP:
+                fab.setImageResource(R.drawable.ic_keyboard_double_arrow_up_24);
+                break;
             default:
                 if (mAccessToken == null) {
                     fab.setImageResource(R.drawable.ic_filter_24dp);
-                    fabOption = SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_FILTER_POSTS;
+                    fabOption = SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS;
                 } else {
                     fab.setImageResource(R.drawable.ic_add_day_night_24dp);
                 }
@@ -361,6 +364,11 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
                     if (sectionsPagerAdapter != null) {
                         sectionsPagerAdapter.filterPosts();
+                    }
+                    break;
+                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_TOP:
+                    if (sectionsPagerAdapter != null) {
+                        sectionsPagerAdapter.goBackToTop();
                     }
                     break;
                 default:
@@ -558,6 +566,12 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
             case FABMoreOptionsBottomSheetFragment.FAB_FILTER_POSTS: {
                 if (sectionsPagerAdapter != null) {
                     sectionsPagerAdapter.filterPosts();
+                }
+                break;
+            }
+            case FABMoreOptionsBottomSheetFragment.FAB_GO_TO_TOP: {
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.goBackToTop();
                 }
                 break;
             }
