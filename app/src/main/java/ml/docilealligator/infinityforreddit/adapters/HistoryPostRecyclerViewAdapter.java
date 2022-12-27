@@ -1834,6 +1834,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
             } else if (holder instanceof PostBaseGalleryTypeViewHolder) {
                 ((PostBaseGalleryTypeViewHolder) holder).frameLayout.setVisibility(View.GONE);
                 ((PostBaseGalleryTypeViewHolder) holder).noPreviewImageView.setVisibility(View.GONE);
+                ((PostBaseGalleryTypeViewHolder) holder).adapter.setGalleryImages(null);
             } else if (holder instanceof PostTextTypeViewHolder) {
                 ((PostTextTypeViewHolder) holder).contentTextView.setText("");
                 ((PostTextTypeViewHolder) holder).contentTextView.setTextColor(mPostContentColor);
