@@ -272,7 +272,7 @@ public class ParsePost {
                         voteType, nComments, upvoteRatio, flair, awards, nAwards, hidden, spoiler, nsfw,
                         stickied, archived, locked, saved, isCrosspost, distinguished);
             } else {
-                if (url.endsWith("jpg") || url.endsWith("png") || url.endsWith("jpeg")) {
+                if (url.matches("\\.(jpg|jpeg|png)(\\?.*)?$")) {
                     //Image post
                     int postType = Post.IMAGE_TYPE;
 
