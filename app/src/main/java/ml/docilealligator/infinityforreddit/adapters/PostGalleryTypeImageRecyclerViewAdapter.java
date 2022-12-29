@@ -5,6 +5,7 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,6 +84,7 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
         if (ratio < 0) {
             int height = (int) (400 * mScale);
+            Log.i("asdfasdf", "asdfadsf");
             holder.binding.imageViewItemGalleryImageInPostFeed.setScaleType(ImageView.ScaleType.CENTER_CROP);
             holder.binding.imageViewItemGalleryImageInPostFeed.getLayoutParams().height = height;
         } else {
@@ -90,8 +92,6 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
         }
         holder.binding.errorTextViewItemGalleryImageInPostFeed.setVisibility(View.GONE);
         holder.binding.progressBarItemGalleryImageInPostFeed.setVisibility(View.VISIBLE);
-
-        holder.binding.imageViewItemGalleryImageInPostFeed.setRatio(ratio);
 
         holder.binding.imageViewItemGalleryImageInPostFeed.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
