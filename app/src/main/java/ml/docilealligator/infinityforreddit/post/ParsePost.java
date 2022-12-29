@@ -262,6 +262,8 @@ public class ParsePost {
 
         boolean isVideo = data.getBoolean(JSONUtils.IS_VIDEO_KEY);
         String url = Html.fromHtml(data.getString(JSONUtils.URL_KEY)).toString();
+        Uri uri = Uri.parse(url);
+        String path = uri.getPath();
 
         if (!data.has(JSONUtils.PREVIEW_KEY) && previews.isEmpty()) {
             if (url.contains(permalink)) {
@@ -272,7 +274,7 @@ public class ParsePost {
                         voteType, nComments, upvoteRatio, flair, awards, nAwards, hidden, spoiler, nsfw,
                         stickied, archived, locked, saved, isCrosspost, distinguished);
             } else {
-                if (url.matches("\\.(jpg|jpeg|png)(\\?.*)?$")) {
+                if (path.endsWith(".jpg") || path.endsWith(".png") || path.endsWith(".jpeg")) {
                     //Image post
                     int postType = Post.IMAGE_TYPE;
 
@@ -313,7 +315,6 @@ public class ParsePost {
                             post.setSelfText(Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY))));
                         }
 
-                        Uri uri = Uri.parse(url);
                         String authority = uri.getAuthority();
 
                         if (authority != null) {
@@ -379,11 +380,10 @@ public class ParsePost {
             } else if (data.has(JSONUtils.PREVIEW_KEY)) {
                 if (data.getJSONObject(JSONUtils.PREVIEW_KEY).has(JSONUtils.REDDIT_VIDEO_PREVIEW_KEY)) {
                     int postType = Post.VIDEO_TYPE;
-                    Uri uri = Uri.parse(url);
                     String authority = uri.getAuthority();
                     // The hls stream inside REDDIT_VIDEO_PREVIEW_KEY can sometimes lack an audio track
-                    if (authority.contains("imgur.com") && (url.endsWith(".gifv") || url.endsWith(".mp4"))) {
-                        if (url.endsWith("gifv")) {
+                    if (authority.contains("imgur.com") && (path.endsWith(".gifv") || path.endsWith(".mp4"))) {
+                        if (path.endsWith(".gifv")) {
                             url = url.substring(0, url.length() - 5) + ".mp4";
                         }
 
@@ -412,7 +412,7 @@ public class ParsePost {
                         post.setVideoDownloadUrl(videoDownloadUrl);
                     }
                 } else {
-                    if (url.endsWith("jpg") || url.endsWith("png")) {
+                    if (path.endsWith(".jpg") || path.endsWith(".png") || path.endsWith(".jpeg")) {
                         //Image post
                         int postType = Post.IMAGE_TYPE;
 
@@ -426,7 +426,7 @@ public class ParsePost {
                             previews.add(new Post.Preview(url, 0, 0, "", ""));
                         }
                         post.setPreviews(previews);
-                    } else if (url.endsWith("gif")) {
+                    } else if (path.endsWith(".gif")) {
                         //Gif post
                         int postType = Post.GIF_TYPE;
                         post = new Post(id, fullName, subredditName, subredditNamePrefixed, author,
@@ -437,7 +437,7 @@ public class ParsePost {
 
                         post.setPreviews(previews);
                         post.setVideoUrl(url);
-                    } else if (Uri.parse(url).getAuthority().contains("imgur.com") && (url.endsWith("gifv") || url.endsWith("mp4"))) {
+                    } else if (uri.getAuthority().contains("imgur.com") && (path.endsWith(".gifv") || path.endsWith(".mp4"))) {
                         // Imgur gifv/mp4
                         int postType = Post.VIDEO_TYPE;
 
@@ -454,7 +454,7 @@ public class ParsePost {
                         post.setVideoUrl(url);
                         post.setVideoDownloadUrl(url);
                         post.setIsImgur(true);
-                    } else if (url.endsWith("mp4")) {
+                    } else if (path.endsWith(".mp4")) {
                         //Video post
                         int postType = Post.VIDEO_TYPE;
 
@@ -496,7 +496,6 @@ public class ParsePost {
 
                             post.setPreviews(previews);
 
-                            Uri uri = Uri.parse(url);
                             String authority = uri.getAuthority();
 
                             if (authority != null) {
@@ -524,7 +523,7 @@ public class ParsePost {
                     }
                 }
             } else {
-                if (url.endsWith("jpg") || url.endsWith("png")) {
+                if (path.endsWith(".jpg") || path.endsWith(".png") || path.endsWith(".jpeg")) {
                     //Image post
                     int postType = Post.IMAGE_TYPE;
 
@@ -537,7 +536,7 @@ public class ParsePost {
                         previews.add(new Post.Preview(url, 0, 0, "", ""));
                     }
                     post.setPreviews(previews);
-                } else if (url.endsWith("mp4")) {
+                } else if (path.endsWith(".mp4")) {
                     //Video post
                     int postType = Post.VIDEO_TYPE;
 
@@ -563,7 +562,6 @@ public class ParsePost {
                         post.setSelfText(Utils.modifyMarkdown(Utils.trimTrailingWhitespace(data.getString(JSONUtils.SELFTEXT_KEY))));
                     }
 
-                    Uri uri = Uri.parse(url);
                     String authority = uri.getAuthority();
 
                     if (authority != null) {
@@ -593,7 +591,6 @@ public class ParsePost {
 
         if (post.getPostType() == Post.VIDEO_TYPE) {
             try {
-                Uri uri = Uri.parse(url);
                 String authority = uri.getAuthority();
                 if (authority != null) {
                     if (authority.contains("gfycat.com")) {
@@ -676,7 +673,6 @@ public class ParsePost {
                     post.setPreviews(previews);
                 }
             } else if (post.getPostType() == Post.LINK_TYPE) {
-                Uri uri = Uri.parse(url);
                 String authority = uri.getAuthority();
 
                 if (authority != null) {
