@@ -363,7 +363,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
     }
 
     protected void applyFABTheme(FloatingActionButton fab) {
-        fab.setBackgroundTintList(ColorStateList.valueOf(customThemeWrapper.getColorPrimaryLightTheme()));
+        fab.setBackgroundTintList(ColorStateList.valueOf(customThemeWrapper.getColorAccent()));
         fab.setImageTintList(ColorStateList.valueOf(customThemeWrapper.getFABIconColor()));
     }
 

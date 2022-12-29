@@ -163,9 +163,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
         hideFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_FAB_IN_POST_FEED, false);
         showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false);
 
-        navigationWrapper = new NavigationWrapper(findViewById(R.id.bottom_app_bar_bottom_app_bar), findViewById(R.id.linear_layout_bottom_app_bar),
-                findViewById(R.id.option_1_bottom_app_bar), findViewById(R.id.option_2_bottom_app_bar),
-                findViewById(R.id.option_3_bottom_app_bar), findViewById(R.id.option_4_bottom_app_bar),
+        navigationWrapper = new NavigationWrapper(findViewById(R.id.bottom_app_bar_bottom_app_bar),
                 findViewById(R.id.fab_view_multi_reddit_detail_activity),
                 findViewById(R.id.navigation_rail), showBottomAppBar);
 
@@ -194,7 +192,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                 if (navBarHeight > 0) {
                     if (navigationWrapper.navigationRailView == null) {
                         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) navigationWrapper.floatingActionButton.getLayoutParams();
-                        params.bottomMargin += navBarHeight;
+                        params.bottomMargin += (int) (navBarHeight - Utils.convertDpToPixel(4, this));
                         navigationWrapper.floatingActionButton.setLayoutParams(params);
                     }
                 }
@@ -242,12 +240,16 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                 navigationWrapper.bindOptionDrawableResource(getBottomAppBarOptionDrawableResource(option1), getBottomAppBarOptionDrawableResource(option2));
 
                 if (navigationWrapper.navigationRailView == null) {
-                    navigationWrapper.option2BottomAppBar.setOnClickListener(view -> {
-                        bottomAppBarOptionAction(option1);
-                    });
-
-                    navigationWrapper.option4BottomAppBar.setOnClickListener(view -> {
-                        bottomAppBarOptionAction(option2);
+                    navigationWrapper.bottomAppBar.setOnMenuItemClickListener(item -> {
+                        int itemId = item.getItemId();
+                        if (itemId == R.id.bottom_app_bar_option_1) {
+                            bottomAppBarOptionAction(option1);
+                            return true;
+                        } else if (itemId == R.id.bottom_app_bar_option_2) {
+                            bottomAppBarOptionAction(option2);
+                            return true;
+                        }
+                        return false;
                     });
                 } else {
                     navigationWrapper.navigationRailView.setOnItemSelectedListener(item -> {
@@ -271,20 +273,22 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
                         getBottomAppBarOptionDrawableResource(option4));
 
                 if (navigationWrapper.navigationRailView == null) {
-                    navigationWrapper.option1BottomAppBar.setOnClickListener(view -> {
-                        bottomAppBarOptionAction(option1);
-                    });
-
-                    navigationWrapper.option2BottomAppBar.setOnClickListener(view -> {
-                        bottomAppBarOptionAction(option2);
-                    });
-
-                    navigationWrapper.option3BottomAppBar.setOnClickListener(view -> {
-                        bottomAppBarOptionAction(option3);
-                    });
-
-                    navigationWrapper.option4BottomAppBar.setOnClickListener(view -> {
-                        bottomAppBarOptionAction(option4);
+                    navigationWrapper.bottomAppBar.setOnMenuItemClickListener(item -> {
+                        int itemId = item.getItemId();
+                        if (itemId == R.id.bottom_app_bar_option_1) {
+                            bottomAppBarOptionAction(option1);
+                            return true;
+                        } else if (itemId == R.id.bottom_app_bar_option_2) {
+                            bottomAppBarOptionAction(option2);
+                            return true;
+                        } else if (itemId == R.id.bottom_app_bar_option_3) {
+                            bottomAppBarOptionAction(option3);
+                            return true;
+                        } else if (itemId == R.id.bottom_app_bar_option_4) {
+                            bottomAppBarOptionAction(option4);
+                            return true;
+                        }
+                        return false;
                     });
                 } else {
                     navigationWrapper.navigationRailView.setOnItemSelectedListener(item -> {

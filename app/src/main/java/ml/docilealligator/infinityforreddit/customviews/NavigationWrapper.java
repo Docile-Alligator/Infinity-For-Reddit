@@ -5,8 +5,6 @@ import android.content.res.ColorStateList;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import androidx.appcompat.view.menu.MenuItemImpl;
 import androidx.core.view.MenuItemCompat;
@@ -19,26 +17,13 @@ import ml.docilealligator.infinityforreddit.R;
 
 public class NavigationWrapper {
     public BottomAppBar bottomAppBar;
-    public LinearLayout linearLayoutBottomAppBar;
-    public ImageView option1BottomAppBar;
-    public ImageView option2BottomAppBar;
-    public ImageView option3BottomAppBar;
-    public ImageView option4BottomAppBar;
 
     public NavigationRailView navigationRailView;
     public FloatingActionButton floatingActionButton;
 
-    public NavigationWrapper(BottomAppBar bottomAppBar, LinearLayout linearLayoutBottomAppBar,
-                             ImageView option1BottomAppBar, ImageView option2BottomAppBar,
-                             ImageView option3BottomAppBar, ImageView option4BottomAppBar,
-                             FloatingActionButton floatingActionButton, NavigationRailView navigationRailView,
-                             boolean showBottomAppBar) {
+    public NavigationWrapper(BottomAppBar bottomAppBar, FloatingActionButton floatingActionButton,
+                             NavigationRailView navigationRailView, boolean showBottomAppBar) {
         this.bottomAppBar = bottomAppBar;
-        this.linearLayoutBottomAppBar = linearLayoutBottomAppBar;
-        this.option1BottomAppBar = option1BottomAppBar;
-        this.option2BottomAppBar = option2BottomAppBar;
-        this.option3BottomAppBar = option3BottomAppBar;
-        this.option4BottomAppBar = option4BottomAppBar;
         this.navigationRailView = navigationRailView;
         if (navigationRailView != null) {
             if (showBottomAppBar) {
@@ -54,11 +39,8 @@ public class NavigationWrapper {
 
     public void applyCustomTheme(int bottomAppBarIconColor, int bottomAppBarBackgroundColor) {
         if (navigationRailView == null) {
-            option1BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-            option2BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-            option3BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-            option4BottomAppBar.setColorFilter(bottomAppBarIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
             bottomAppBar.setBackgroundTint(ColorStateList.valueOf(bottomAppBarBackgroundColor));
+            applyMenuItemTheme(bottomAppBar.getMenu(), bottomAppBarIconColor);
         } else {
             navigationRailView.setBackgroundColor(bottomAppBarBackgroundColor);
             applyMenuItemTheme(navigationRailView.getMenu(), bottomAppBarIconColor);
@@ -84,12 +66,11 @@ public class NavigationWrapper {
 
         if (imageResources.length == 2) {
             if (navigationRailView == null) {
-                linearLayoutBottomAppBar.setWeightSum(3);
-                option1BottomAppBar.setVisibility(View.GONE);
-                option3BottomAppBar.setVisibility(View.GONE);
-
-                option2BottomAppBar.setImageResource(imageResources[0]);
-                option4BottomAppBar.setImageResource(imageResources[1]);
+                Menu menu = bottomAppBar.getMenu();
+                menu.findItem(R.id.bottom_app_bar_option_1).setIcon(imageResources[0]);
+                menu.findItem(R.id.bottom_app_bar_option_2).setIcon(imageResources[1]);
+                menu.findItem(R.id.bottom_app_bar_option_3).setVisible(false);
+                menu.findItem(R.id.bottom_app_bar_option_4).setVisible(false);
             } else {
                 Menu menu = navigationRailView.getMenu();
                 menu.findItem(R.id.navigation_rail_option_1).setIcon(imageResources[0]);
@@ -99,10 +80,11 @@ public class NavigationWrapper {
             }
         } else {
             if (navigationRailView == null) {
-                option1BottomAppBar.setImageResource(imageResources[0]);
-                option2BottomAppBar.setImageResource(imageResources[1]);
-                option3BottomAppBar.setImageResource(imageResources[2]);
-                option4BottomAppBar.setImageResource(imageResources[3]);
+                Menu menu = bottomAppBar.getMenu();
+                menu.findItem(R.id.bottom_app_bar_option_1).setIcon(imageResources[0]);
+                menu.findItem(R.id.bottom_app_bar_option_2).setIcon(imageResources[1]);
+                menu.findItem(R.id.bottom_app_bar_option_3).setIcon(imageResources[2]);
+                menu.findItem(R.id.bottom_app_bar_option_4).setIcon(imageResources[3]);
             } else {
                 Menu menu = navigationRailView.getMenu();
                 menu.findItem(R.id.navigation_rail_option_1).setIcon(imageResources[0]);
