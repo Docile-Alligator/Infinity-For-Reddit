@@ -897,10 +897,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         mShowFavoriteSubscribedSubreddits || mShowSubscribedSubreddits)
                         && sectionsPagerAdapter != null) {
                     if (position - tabCount < sectionsPagerAdapter.favoriteMultiReddits.size()) {
-                        Utils.setTitleWithCustomFontToTab(typeface, tab, sectionsPagerAdapter.favoriteMultiReddits.get(position - tabCount).getName());
+                        Utils.setTitleWithCustomFontToTab(typeface, tab, sectionsPagerAdapter.favoriteMultiReddits.get(position - tabCount).getDisplayName());
                     } else if (position - tabCount - sectionsPagerAdapter.favoriteMultiReddits.size() < sectionsPagerAdapter.multiReddits.size()) {
                         Utils.setTitleWithCustomFontToTab(typeface, tab, sectionsPagerAdapter.multiReddits.get(position - tabCount
-                                - sectionsPagerAdapter.favoriteMultiReddits.size()).getName());
+                                - sectionsPagerAdapter.favoriteMultiReddits.size()).getDisplayName());
                     } else if (position - tabCount - sectionsPagerAdapter.favoriteMultiReddits.size()
                             - sectionsPagerAdapter.multiReddits.size() < sectionsPagerAdapter.favoriteSubscribedSubreddits.size()) {
                         Utils.setTitleWithCustomFontToTab(typeface, tab, sectionsPagerAdapter.favoriteSubscribedSubreddits.get(position - tabCount

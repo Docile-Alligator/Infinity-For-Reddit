@@ -88,7 +88,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:backgroundTint="#80000000"
+        android:backgroundTint="#00000000"
+        app:elevation="0dp"
         android:visibility="gone"
         style="@style/Widget.MaterialComponents.BottomAppBar">
 

@@ -47,7 +47,8 @@
         android:layout_gravity="bottom"
         android:minHeight="0dp"
         app:paddingBottomSystemWindowInsets="false"
-        android:backgroundTint="#80000000">
+        android:backgroundTint="#80000000"
+        app:elevation="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
