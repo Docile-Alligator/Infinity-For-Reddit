@@ -211,7 +211,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private boolean mDataSavingMode = false;
     private boolean mDisableImagePreview;
     private boolean mOnlyDisablePreviewInVideoAndGifPosts;
-    private boolean mDisableCommentLoading;
     private boolean mMarkPostsAsRead;
     private boolean mMarkPostsAsReadAfterVoting;
     private boolean mMarkPostsAsReadOnScroll;
@@ -1816,10 +1815,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
     public void setOnlyDisablePreviewInVideoPosts(boolean onlyDisablePreviewInVideoAndGifPosts) {
         mOnlyDisablePreviewInVideoAndGifPosts = onlyDisablePreviewInVideoAndGifPosts;
-    }
-
-    public void setDisableCommentLoading(boolean disableCommentLoading) {
-        mDisableCommentLoading = disableCommentLoading;
     }
 
     public void setHidePostType(boolean hidePostType) {

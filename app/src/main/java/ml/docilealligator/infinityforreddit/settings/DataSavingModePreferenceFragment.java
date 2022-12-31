@@ -10,7 +10,6 @@ import org.greenrobot.eventbus.EventBus;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
 import ml.docilealligator.infinityforreddit.events.ChangeDataSavingModeEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeDisableCommentLoadingEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDisableImagePreviewEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeOnlyDisablePreviewInVideoAndGifPostsEvent;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
@@ -38,6 +37,9 @@ public class DataSavingModePreferenceFragment extends CustomFontPreferenceFragme
                 if (redditVideoDefaultResolutionListPreference != null) {
                     redditVideoDefaultResolutionListPreference.setVisible(false);
                 }
+                if (disableCommentLoadingPreference != null) {
+                    disableCommentLoadingPreference.setVisible(false);
+                }
             }
             dataSavingModeListPreference.setOnPreferenceChangeListener((preference, newValue) -> {
                 EventBus.getDefault().post(new ChangeDataSavingModeEvent((String) newValue));
@@ -51,6 +53,9 @@ public class DataSavingModePreferenceFragment extends CustomFontPreferenceFragme
                     if (redditVideoDefaultResolutionListPreference != null) {
                         redditVideoDefaultResolutionListPreference.setVisible(false);
                     }
+                    if (disableCommentLoadingPreference != null) {
+                        disableCommentLoadingPreference.setVisible(false);
+                    }
                 } else {
                     if (onlyDisablePreviewInVideoAndGifPostsPreference != null) {
                         onlyDisablePreviewInVideoAndGifPostsPreference.setVisible(true);
@@ -60,6 +65,9 @@ public class DataSavingModePreferenceFragment extends CustomFontPreferenceFragme
                     }
                     if (redditVideoDefaultResolutionListPreference != null) {
                         redditVideoDefaultResolutionListPreference.setVisible(true);
+                    }
+                    if (disableCommentLoadingPreference != null) {
+                        disableCommentLoadingPreference.setVisible(true);
                     }
                 }
                 return true;
@@ -90,13 +98,6 @@ public class DataSavingModePreferenceFragment extends CustomFontPreferenceFragme
                 }
                 return true;
             });
-        }
-
-        if (disableCommentLoadingPreference != null) {
-            disableCommentLoadingPreference.setOnPreferenceChangeListener(((preference, newValue) -> {
-                EventBus.getDefault().post(new ChangeDisableCommentLoadingEvent((Boolean) newValue));
-                return true;
-            }));
         }
     }
 }

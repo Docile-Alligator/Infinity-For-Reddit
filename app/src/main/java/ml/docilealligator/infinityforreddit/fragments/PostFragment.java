@@ -16,7 +16,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
-import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -93,7 +92,6 @@ import ml.docilealligator.infinityforreddit.events.ChangeCompactLayoutToolbarHid
 import ml.docilealligator.infinityforreddit.events.ChangeDataSavingModeEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDefaultLinkPostLayoutEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDefaultPostLayoutEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeDisableCommentLoadingEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeDisableImagePreviewEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeEasierToWatchInFullScreenEvent;
 import ml.docilealligator.infinityforreddit.events.ChangeEnableSwipeActionSwitchEvent;
@@ -2043,14 +2041,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public void onChangeOnlyDisablePreviewInVideoAndGifPostsEvent(ChangeOnlyDisablePreviewInVideoAndGifPostsEvent changeOnlyDisablePreviewInVideoAndGifPostsEvent) {
         if (mAdapter != null) {
             mAdapter.setOnlyDisablePreviewInVideoPosts(changeOnlyDisablePreviewInVideoAndGifPostsEvent.onlyDisablePreviewInVideoAndGifPosts);
-            refreshAdapter();
-        }
-    }
-
-    @Subscribe
-    public void onChangeDisableCommentLoadingEvent(ChangeDisableCommentLoadingEvent changeDisableCommentLoadingEvent) {
-        if (mAdapter != null) {
-            mAdapter.setDisableCommentLoading(changeDisableCommentLoadingEvent.disableCommentLoading);
             refreshAdapter();
         }
     }
