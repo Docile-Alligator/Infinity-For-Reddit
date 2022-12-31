@@ -1,7 +1,5 @@
 package ml.docilealligator.infinityforreddit.activities;
 
-import static android.content.ClipDescription.MIMETYPE_TEXT_PLAIN;
-
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -27,8 +25,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.JsonParseException;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -278,9 +275,9 @@ public class CustomThemeListingActivity extends BaseActivity implements
                 String json = item.coerceToText(this.getApplicationContext()).toString();
                 if (!TextUtils.isEmpty(json)) {
                     try {
-                        CustomTheme customTheme = new Gson().fromJson(json, CustomTheme.class);
+                        CustomTheme customTheme = CustomTheme.fromJson(json);
                         checkDuplicateAndImportTheme(customTheme, true);
-                    } catch (JsonSyntaxException e) {
+                    } catch (JsonParseException e) {
                         Snackbar.make(coordinatorLayout, R.string.parse_theme_failed, Snackbar.LENGTH_SHORT).show();
                     }
                 } else {
