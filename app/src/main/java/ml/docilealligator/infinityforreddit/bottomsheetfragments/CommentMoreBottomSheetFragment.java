@@ -179,6 +179,12 @@ public class CommentMoreBottomSheetFragment extends LandscapeExpandedRoundedBott
             }
         });
 
+        shareTextView.setOnLongClickListener(view -> {
+            dismiss();
+            activity.copyLink(comment.getPermalink());
+            return true;
+        });
+
         copyTextView.setOnClickListener(view -> {
             dismiss();
             CopyTextBottomSheetFragment.show(activity.getSupportFragmentManager(),

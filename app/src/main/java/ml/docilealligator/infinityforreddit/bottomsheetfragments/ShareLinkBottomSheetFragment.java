@@ -2,8 +2,6 @@ package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 
 import android.content.ActivityNotFoundException;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -136,16 +134,7 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
     }
 
     private void copyLink(String link) {
-        ClipboardManager clipboard = (ClipboardManager) activity.getSystemService(Context.CLIPBOARD_SERVICE);
-        if (clipboard != null) {
-            ClipData clip = ClipData.newPlainText("simple text", link);
-            clipboard.setPrimaryClip(clip);
-            if (android.os.Build.VERSION.SDK_INT < 33) {
-                Toast.makeText(activity, R.string.copy_success, Toast.LENGTH_SHORT).show();
-            }
-        } else {
-            Toast.makeText(activity, R.string.copy_link_failed, Toast.LENGTH_SHORT).show();
-        }
+        activity.copyLink(link);
     }
 
     @Override

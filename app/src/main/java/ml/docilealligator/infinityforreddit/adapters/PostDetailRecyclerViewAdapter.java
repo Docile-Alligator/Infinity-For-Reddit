@@ -1442,6 +1442,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 shareLinkBottomSheetFragment.show(mActivity.getSupportFragmentManager(), shareLinkBottomSheetFragment.getTag());
             });
 
+            mShareButton.setOnLongClickListener(view -> {
+                mActivity.copyLink(mPost.getPermalink());
+                return true;
+            });
+
             if (mVoteButtonsOnTheRight) {
                 ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone(mBottomConstraintLayout);
