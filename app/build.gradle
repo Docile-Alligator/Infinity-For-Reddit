@@ -129,7 +129,7 @@ dependencies {
 
     // Object to JSON
     // NOTE: Replace with Squareup's Moshi?
-    implementation 'com.google.code.gson:gson:2.8.9'
+    implementation 'com.google.code.gson:gson:2.10.1'
 
     // Java library for zip files and streams
     implementation 'net.lingala.zip4j:zip4j:2.11.2'
