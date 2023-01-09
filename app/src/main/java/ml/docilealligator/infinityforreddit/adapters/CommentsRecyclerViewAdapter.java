@@ -471,8 +471,11 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 }
 
                 if (comment.hasReply()) {
-                    if (comment.getChildCount() > 0 && (mAlwaysShowChildCommentCount || !comment.isExpanded())) {
-                        ((CommentViewHolder) holder).expandButton.setText("+" + comment.getChildCount());
+                    if (comment.getChildCount() > 0) {
+                        if (mAlwaysShowChildCommentCount || !comment.isExpanded()) {
+                            ((CommentViewHolder) holder).expandButton.setText("+" + comment.getChildCount());
+                        }
+                        ((CommentViewHolder) holder).topChildCommentCount.setText("+" + comment.getChildCount());
                     }
                     if (comment.isExpanded()) {
                         ((CommentViewHolder) holder).expandButton.setCompoundDrawablesWithIntrinsicBounds(collapseDrawable, null, null, null);
@@ -481,6 +484,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     }
                     ((CommentViewHolder) holder).expandButton.setVisibility(View.VISIBLE);
                 }
+
+                ((CommentViewHolder) holder).updateTopChildCommentCountVisibility();
 
                 switch (comment.getVoteType()) {
                     case Comment.VOTE_TYPE_UPVOTE:
@@ -1125,10 +1130,12 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             ((CommentViewHolder) holder).awardsTextView.setText("");
             ((CommentViewHolder) holder).awardsTextView.setVisibility(View.GONE);
             ((CommentViewHolder) holder).expandButton.setVisibility(View.GONE);
+            ((CommentViewHolder) holder).topChildCommentCount.setVisibility(View.GONE);
             ((CommentViewHolder) holder).upvoteButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
             ((CommentViewHolder) holder).scoreTextView.setTextColor(mCommentIconAndInfoColor);
             ((CommentViewHolder) holder).downvoteButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
             ((CommentViewHolder) holder).expandButton.setText("");
+            ((CommentViewHolder) holder).topChildCommentCount.setText("");
             ((CommentViewHolder) holder).replyButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
             RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) holder.itemView.getLayoutParams();
             params.setMargins(0, 0, 0, 0);
@@ -1177,6 +1184,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         TextView commentTimeTextView;
         @BindView(R.id.top_score_text_view_item_post_comment)
         TextView topScoreTextView;
+        @BindView(R.id.top_child_comment_count_text_view_item_post_comment)
+        TextView topChildCommentCount;
         @BindView(R.id.awards_text_view_item_comment)
         TextView awardsTextView;
         @BindView(R.id.comment_markdown_view_item_post_comment)
@@ -1261,6 +1270,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 commentTimeTextView.setTypeface(mActivity.typeface);
                 authorFlairTextView.setTypeface(mActivity.typeface);
                 topScoreTextView.setTypeface(mActivity.typeface);
+                topChildCommentCount.setTypeface(mActivity.typeface);
                 awardsTextView.setTypeface(mActivity.typeface);
                 scoreTextView.setTypeface(mActivity.typeface);
                 expandButton.setTypeface(mActivity.typeface);
@@ -1294,6 +1304,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             commentTimeTextView.setTextColor(mSecondaryTextColor);
             authorFlairTextView.setTextColor(mAuthorFlairTextColor);
             topScoreTextView.setTextColor(mSecondaryTextColor);
+            topChildCommentCount.setTextColor(mSecondaryTextColor);
             awardsTextView.setTextColor(mSecondaryTextColor);
             commentDivider.setBackgroundColor(mDividerColor);
             upvoteButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
@@ -1619,6 +1630,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                             }
                             expandButton.setCompoundDrawablesWithIntrinsicBounds(collapseDrawable, null, null, null);
                         }
+                        updateTopChildCommentCountVisibility();
                     }
                 } else if (mFullyCollapseComment) {
                     int commentPosition = mIsSingleCommentThreadMode ? getBindingAdapterPosition() - 1 : getBindingAdapterPosition();
@@ -1630,13 +1642,13 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
             if (mSwapTapAndLong) {
                 if (mCommentToolbarHideOnClick) {
-                    View.OnLongClickListener hideToolbarOnLongClickListener = view -> hideToolbar();
+                    View.OnLongClickListener hideToolbarOnLongClickListener = view -> toggleToolbarVisibility();
                     itemView.setOnLongClickListener(hideToolbarOnLongClickListener);
                     commentTimeTextView.setOnLongClickListener(hideToolbarOnLongClickListener);
                     mMarkwonAdapter.setOnLongClickListener(v -> {
                         if (v instanceof TextView) {
                             if (((TextView) v).getSelectionStart() == -1 && ((TextView) v).getSelectionEnd() == -1) {
-                                hideToolbar();
+                                toggleToolbarVisibility();
                             }
                         }
                         return true;
@@ -1661,9 +1673,9 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                                 return;
                             }
                         }
-                        hideToolbar();
+                        toggleToolbarVisibility();
                     });
-                    View.OnClickListener hideToolbarOnClickListener = view -> hideToolbar();
+                    View.OnClickListener hideToolbarOnClickListener = view -> toggleToolbarVisibility();
                     itemView.setOnClickListener(hideToolbarOnClickListener);
                     commentTimeTextView.setOnClickListener(hideToolbarOnClickListener);
                 }
@@ -1687,19 +1699,46 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             return true;
         }
 
-        private boolean hideToolbar() {
-            if (bottomConstraintLayout.getLayoutParams().height == 0) {
-                bottomConstraintLayout.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
-                topScoreTextView.setVisibility(View.GONE);
-                mFragment.delayTransition();
-            } else {
+        private boolean toggleToolbarVisibility() {
+            if (toolbarVisible()) {
                 mFragment.delayTransition();
                 bottomConstraintLayout.getLayoutParams().height = 0;
                 if (!mHideTheNumberOfVotes) {
                     topScoreTextView.setVisibility(View.VISIBLE);
                 }
+                updateTopChildCommentCountVisibility();
+            } else {
+                bottomConstraintLayout.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
+                topScoreTextView.setVisibility(View.GONE);
+                updateTopChildCommentCountVisibility();
+                mFragment.delayTransition();
             }
             return true;
+        }
+
+        private boolean toolbarVisible() {
+            return bottomConstraintLayout.getLayoutParams().height != 0;
+        }
+
+        /**
+         * Updates the visibility of the top child comment count from the current state.
+         */
+        private void updateTopChildCommentCountVisibility() {
+            topChildCommentCount.setVisibility(showTopChildCommentCount() ? View.VISIBLE : View.GONE);
+        }
+
+        /**
+         * Only show the top comment count when the toolbar is not visible
+         * and the comment is collapsed and has children.
+         *
+         * @return Whether the top child comment count should be shown.
+         */
+        private boolean showTopChildCommentCount() {
+            Comment comment = getCurrentComment(this);
+            if (comment == null) {
+                return false;
+            }
+            return !toolbarVisible() && !comment.isExpanded() && comment.getChildCount() > 0;
         }
     }
 
