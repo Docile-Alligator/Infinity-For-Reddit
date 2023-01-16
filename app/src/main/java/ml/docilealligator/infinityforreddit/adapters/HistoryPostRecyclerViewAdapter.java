@@ -221,6 +221,8 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
     private Callback mCallback;
     private boolean canPlayVideo = true;
     private RecyclerView.RecycledViewPool mGalleryRecycledViewPool;
+    private boolean isManuallyPaused;
+    private PlaybackInfo latestPlaybackInfo;
 
     public HistoryPostRecyclerViewAdapter(BaseActivity activity, HistoryPostFragment fragment, Executor executor, Retrofit oauthRetrofit,
                                           Retrofit gfycatRetrofit, Retrofit redgifsRetrofit, Provider<StreamableAPI> streambleApiProvider,
@@ -708,10 +710,12 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                     } else {
                         ((PostVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio(1);
                     }
-                    if (mFragment.getMasterMutingOption() == null) {
-                        ((PostVideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (post.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
-                    } else {
-                        ((PostVideoAutoplayViewHolder) holder).setVolume(mFragment.getMasterMutingOption() ? 0f : 1f);
+                    if (!((PostVideoAutoplayViewHolder) holder).isManuallyPaused) {
+                        if (mFragment.getMasterMutingOption() == null) {
+                            ((PostVideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (post.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
+                        } else {
+                            ((PostVideoAutoplayViewHolder) holder).setVolume(mFragment.getMasterMutingOption() ? 0f : 1f);
+                        }
                     }
 
                     if ((post.isGfycat() || post.isRedgifs()) && !post.isLoadGfycatOrStreamableVideoSuccess()) {
@@ -883,10 +887,12 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                     } else {
                         ((PostCard2VideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio(1);
                     }
-                    if (mFragment.getMasterMutingOption() == null) {
-                        ((PostCard2VideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (post.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
-                    } else {
-                        ((PostCard2VideoAutoplayViewHolder) holder).setVolume(mFragment.getMasterMutingOption() ? 0f : 1f);
+                    if (!((PostCard2VideoAutoplayViewHolder) holder).isManuallyPaused) {
+                        if (mFragment.getMasterMutingOption() == null) {
+                            ((PostCard2VideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (post.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
+                        } else {
+                            ((PostCard2VideoAutoplayViewHolder) holder).setVolume(mFragment.getMasterMutingOption() ? 0f : 1f);
+                        }
                     }
 
                     if ((post.isGfycat() || post.isRedgifs()) && !post.isLoadGfycatOrStreamableVideoSuccess()) {
@@ -1820,7 +1826,9 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                 }
                 ((PostVideoAutoplayViewHolder) holder).errorLoadingGfycatImageView.setVisibility(View.GONE);
                 ((PostVideoAutoplayViewHolder) holder).muteButton.setVisibility(View.GONE);
-                ((PostVideoAutoplayViewHolder) holder).resetVolume();
+                if (!((PostVideoAutoplayViewHolder) holder).isManuallyPaused) {
+                    ((PostVideoAutoplayViewHolder) holder).resetVolume();
+                }
                 mGlide.clear(((PostVideoAutoplayViewHolder) holder).previewImageView);
                 ((PostVideoAutoplayViewHolder) holder).previewImageView.setVisibility(View.GONE);
             } else if (holder instanceof PostWithPreviewTypeViewHolder) {
@@ -2643,6 +2651,10 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         ImageView muteButton;
         @BindView(R.id.fullscreen_exo_playback_control_view)
         ImageView fullscreenButton;
+        @BindView(R.id.exo_pause)
+        ImageView pauseButton;
+        @BindView(R.id.exo_play)
+        ImageView playButton;
         @BindView(R.id.bottom_constraint_layout_item_post_video_type_autoplay)
         ConstraintLayout bottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_video_type_autoplay)
@@ -2663,6 +2675,8 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         private Uri mediaUri;
         private float volume;
         public Call<String> fetchGfycatOrStreamableVideoCall;
+        private boolean isManuallyPaused;
+        private PlaybackInfo latestPlaybackInfo;
 
         PostVideoAutoplayViewHolder(View itemView) {
             super(itemView);
@@ -2754,6 +2768,17 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                 }
             });
 
+            pauseButton.setOnClickListener(view -> {
+                pause();
+                isManuallyPaused = true;
+                latestPlaybackInfo = getCurrentPlaybackInfo();
+            });
+
+            playButton.setOnClickListener(view -> {
+                isManuallyPaused = false;
+                play();
+            });
+
             previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
 
             videoPlayer.setOnClickListener(view -> {
@@ -2824,6 +2849,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                     public void onRenderedFirstFrame() {
                         mGlide.clear(previewImageView);
                         previewImageView.setVisibility(View.GONE);
+                        latestPlaybackInfo = getCurrentPlaybackInfo();
                     }
                 });
             }
@@ -2852,12 +2878,30 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
             if (helper != null) {
                 helper.release();
                 helper = null;
+                isManuallyPaused = false;
+                latestPlaybackInfo = null;
             }
         }
 
         @Override
         public boolean wantsToPlay() {
-            return canPlayVideo && mediaUri != null && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
+            if (canPlayVideo) {
+                if (ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset) {
+                    if (isManuallyPaused) {
+                        play();
+                        pause();
+                        helper.setPlaybackInfo(latestPlaybackInfo);
+                        helper.setVolume(volume);
+                    } else {
+                        return true;
+                    }
+                }
+                else {
+                    isManuallyPaused = false;
+                    latestPlaybackInfo = null;
+                }
+            }
+            return false;
         }
 
         @Override
@@ -4296,6 +4340,10 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         ImageView muteButton;
         @BindView(R.id.fullscreen_exo_playback_control_view)
         ImageView fullscreenButton;
+        @BindView(R.id.exo_pause)
+        ImageView pauseButton;
+        @BindView(R.id.exo_play)
+        ImageView playButton;
         @BindView(R.id.bottom_constraint_layout_item_post_card_2_video_autoplay)
         ConstraintLayout bottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_card_2_video_autoplay)
@@ -4318,6 +4366,8 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         private Uri mediaUri;
         private float volume;
         public Call<String> fetchGfycatOrStreamableVideoCall;
+        private boolean isManuallyPaused;
+        private PlaybackInfo latestPlaybackInfo;
 
         PostCard2VideoAutoplayViewHolder(View itemView) {
             super(itemView);
@@ -4366,6 +4416,17 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                 }
             });
 
+            pauseButton.setOnClickListener(view -> {
+                pause();
+                isManuallyPaused = true;
+                latestPlaybackInfo = getCurrentPlaybackInfo();
+            });
+
+            playButton.setOnClickListener(view -> {
+                isManuallyPaused = false;
+                play();
+            });
+
             fullscreenButton.setOnClickListener(view -> {
                 int position = getBindingAdapterPosition();
                 if (position < 0) {
@@ -4407,6 +4468,17 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                     intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, post.isNSFW());
                     mActivity.startActivity(intent);
                 }
+            });
+
+            pauseButton.setOnClickListener(view -> {
+                pause();
+                isManuallyPaused = true;
+                latestPlaybackInfo = getCurrentPlaybackInfo();
+            });
+
+            playButton.setOnClickListener(view -> {
+                isManuallyPaused = false;
+                play();
             });
 
             previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
@@ -4479,6 +4551,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                     public void onRenderedFirstFrame() {
                         mGlide.clear(previewImageView);
                         previewImageView.setVisibility(View.GONE);
+                        latestPlaybackInfo = getCurrentPlaybackInfo();
                     }
                 });
             }
@@ -4507,12 +4580,30 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
             if (helper != null) {
                 helper.release();
                 helper = null;
+                isManuallyPaused = false;
+                latestPlaybackInfo = null;
             }
         }
 
         @Override
         public boolean wantsToPlay() {
-            return canPlayVideo && mediaUri != null && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
+            if (canPlayVideo) {
+                if (ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset) {
+                    if (isManuallyPaused) {
+                        play();
+                        pause();
+                        helper.setPlaybackInfo(latestPlaybackInfo);
+                        helper.setVolume(volume);
+                    } else {
+                        return true;
+                    }
+                }
+                else {
+                    isManuallyPaused = false;
+                    latestPlaybackInfo = null;
+                }
+            }
+            return false;
         }
 
         @Override

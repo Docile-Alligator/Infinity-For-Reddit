@@ -655,7 +655,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 } else {
                     ((PostDetailVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio(1);
                 }
-                ((PostDetailVideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (mPost.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
+                if (!((PostDetailVideoAutoplayViewHolder) holder).isManuallyPaused) {
+                    ((PostDetailVideoAutoplayViewHolder) holder).setVolume((mMuteAutoplayingVideos || (mPost.isNSFW() && mMuteNSFWVideo)) ? 0f : 1f);
+                }
 
                 if (mPost.isGfycat() || mPost.isRedgifs() && !mPost.isLoadGfycatOrStreamableVideoSuccess()) {
                     ((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall =
@@ -993,7 +995,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 }
                 ((PostDetailVideoAutoplayViewHolder) holder).mErrorLoadingGfycatImageView.setVisibility(View.GONE);
                 ((PostDetailVideoAutoplayViewHolder) holder).muteButton.setVisibility(View.GONE);
-                ((PostDetailVideoAutoplayViewHolder) holder).resetVolume();
+                if (!((PostDetailVideoAutoplayViewHolder) holder).isManuallyPaused) {
+                    ((PostDetailVideoAutoplayViewHolder) holder).resetVolume();
+                }
                 mGlide.clear(((PostDetailVideoAutoplayViewHolder) holder).previewImageView);
                 ((PostDetailVideoAutoplayViewHolder) holder).previewImageView.setVisibility(View.GONE);
             } else if (holder instanceof PostDetailVideoAndGifPreviewHolder) {
@@ -1558,6 +1562,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         ImageView muteButton;
         @BindView(R.id.fullscreen_exo_playback_control_view)
         ImageView fullscreenButton;
+        @BindView(R.id.exo_pause)
+        ImageView pauseButton;
+        @BindView(R.id.exo_play)
+        ImageView playButton;
         @BindView(R.id.content_markdown_view_item_post_detail_video_autoplay)
         RecyclerView mContentMarkdownView;
         @BindView(R.id.bottom_constraint_layout_item_post_detail_video_autoplay)
@@ -1578,6 +1586,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         ExoPlayerViewHelper helper;
         private Uri mediaUri;
         private float volume;
+        private boolean isManuallyPaused;
+        private PlaybackInfo latestPlaybackInfo;
 
         public PostDetailVideoAutoplayViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -1661,6 +1671,17 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 }
             });
 
+            pauseButton.setOnClickListener(view -> {
+                pause();
+                isManuallyPaused = true;
+                latestPlaybackInfo = getCurrentPlaybackInfo();
+            });
+
+            playButton.setOnClickListener(view -> {
+                isManuallyPaused = false;
+                play();
+            });
+
             previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
             playerView.setOnClickListener(view -> {
                 if (mEasierToWatchInFullScreen && playerView.isControllerVisible()) {
@@ -1727,6 +1748,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     public void onRenderedFirstFrame() {
                         mGlide.clear(previewImageView);
                         previewImageView.setVisibility(View.GONE);
+                        latestPlaybackInfo = getCurrentPlaybackInfo();
                     }
                 });
             }
@@ -1758,7 +1780,19 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
         @Override
         public boolean wantsToPlay() {
-            return canPlayVideo && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
+            if (canPlayVideo) {
+                if (ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset) {
+                    if (isManuallyPaused) {
+                        play();
+                        pause();
+                        helper.setPlaybackInfo(latestPlaybackInfo);
+                        helper.setVolume(volume);
+                    } else {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
 
         @Override
