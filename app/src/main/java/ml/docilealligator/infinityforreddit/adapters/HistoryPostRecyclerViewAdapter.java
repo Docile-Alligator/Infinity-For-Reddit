@@ -2918,7 +2918,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                     if (isManuallyPaused) {
                         play();
                         pause();
-                        helper.setVolume(volume);
+                        if (helper != null) helper.setVolume(volume);
                     } else {
                         return true;
                     }
@@ -4632,7 +4632,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                     if (isManuallyPaused) {
                         play();
                         pause();
-                        helper.setVolume(volume);
+                        if (helper != null) helper.setVolume(volume);
                     } else {
                         return true;
                     }

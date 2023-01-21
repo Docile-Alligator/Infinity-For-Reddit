@@ -1816,7 +1816,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     if (isManuallyPaused) {
                         play();
                         pause();
-                        helper.setVolume(volume);
+                        if (helper != null) helper.setVolume(volume);
                     } else {
                         return true;
                     }

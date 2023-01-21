@@ -3053,7 +3053,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     if (isManuallyPaused) {
                         play();
                         pause();
-                        helper.setVolume(volume);
+                        if (helper != null) helper.setVolume(volume);
                     } else {
                         return true;
                     }
@@ -4834,7 +4834,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     if (isManuallyPaused) {
                         play();
                         pause();
-                        helper.setVolume(volume);
+                        if (helper != null) helper.setVolume(volume);
                     } else {
                         return true;
                     }
