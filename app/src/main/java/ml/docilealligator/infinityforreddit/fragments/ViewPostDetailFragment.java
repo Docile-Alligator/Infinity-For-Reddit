@@ -1811,7 +1811,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
     public void showRemovedComment(Comment comment, int position) {
         Toast.makeText(activity, R.string.fetching_removed_comment, Toast.LENGTH_SHORT).show();
-        FetchRemovedComment.searchRemovedComment(
+        FetchRemovedComment.fetchRemovedComment(
                 mExecutor, new Handler(), pushshiftRetrofit, comment,
                 new FetchRemovedComment.FetchRemovedCommentListener() {
                     @Override
