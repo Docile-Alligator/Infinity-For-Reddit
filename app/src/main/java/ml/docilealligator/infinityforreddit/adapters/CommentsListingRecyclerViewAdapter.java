@@ -216,6 +216,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 }
 
                 ((CommentViewHolder) holder).markwonAdapter.setMarkdown(mMarkwon, comment.getCommentMarkdown());
+                // noinspection NotifyDataSetChanged
                 ((CommentViewHolder) holder).markwonAdapter.notifyDataSetChanged();
 
                 String commentText = "";
