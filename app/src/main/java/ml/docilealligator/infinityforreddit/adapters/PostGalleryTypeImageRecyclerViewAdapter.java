@@ -5,7 +5,6 @@ import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -84,7 +83,6 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
     public void onBindViewHolder(@NonNull ImageViewHolder holder, int position) {
         if (ratio < 0) {
             int height = (int) (400 * mScale);
-            Log.i("asdfasdf", "asdfadsf");
             holder.binding.imageViewItemGalleryImageInPostFeed.setScaleType(ImageView.ScaleType.CENTER_CROP);
             holder.binding.imageViewItemGalleryImageInPostFeed.getLayoutParams().height = height;
         } else {
@@ -104,8 +102,6 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
         if (showCaption) {
             loadCaptionPreview(holder);
         }
-
-        loadImage(holder);
     }
 
     @Override
@@ -122,6 +118,10 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
     }
 
     private void loadImage(ImageViewHolder holder) {
+        if (galleryImages == null) {
+            return;
+        }
+
         RequestBuilder<Drawable> imageRequestBuilder = glide.load(galleryImages.get(holder.getBindingAdapterPosition()).url).listener(new RequestListener<>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {

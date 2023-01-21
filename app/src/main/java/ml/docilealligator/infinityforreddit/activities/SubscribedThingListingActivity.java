@@ -275,11 +275,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
             return true;
         } else if (item.getItemId() == android.R.id.home) {
             if (searchEditText.getVisibility() == View.VISIBLE) {
-                View view = this.getCurrentFocus();
-                if (view != null) {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                }
+                Utils.hideKeyboard(this);
                 searchEditText.setVisibility(View.GONE);
                 searchEditText.setText("");
                 mMenu.findItem(R.id.action_search_subscribed_thing_listing_activity).setVisible(true);
@@ -296,11 +292,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     @Override
     public void onBackPressed() {
         if (searchEditText.getVisibility() == View.VISIBLE) {
-            View view = this.getCurrentFocus();
-            if (view != null) {
-                InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-            }
+            Utils.hideKeyboard(this);
             searchEditText.setVisibility(View.GONE);
             searchEditText.setText("");
             mMenu.findItem(R.id.action_search_subscribed_thing_listing_activity).setVisible(true);

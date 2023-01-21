@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -40,6 +41,7 @@ import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsageViewModel;
 import ml.docilealligator.infinityforreddit.postfilter.SavePostFilterUsage;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class PostFilterUsageListingActivity extends BaseActivity {
 
@@ -151,18 +153,13 @@ public class PostFilterUsageListingActivity extends BaseActivity {
                 break;
         }
 
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        }
+        Utils.showKeyboard(this, new Handler(), textInputEditText);
         new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                 .setTitle(titleStringId)
                 .setView(dialogView)
                 .setPositiveButton(R.string.ok, (editTextDialogInterface, i1)
                         -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(textInputEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
 
                     PostFilterUsage postFilterUsage;
                     if (textInputEditText.getText().toString().equals("")) {
@@ -175,9 +172,7 @@ public class PostFilterUsageListingActivity extends BaseActivity {
                 })
                 .setNegativeButton(R.string.cancel, null)
                 .setOnDismissListener(editTextDialogInterface -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(textInputEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                 })
                 .show();
     }

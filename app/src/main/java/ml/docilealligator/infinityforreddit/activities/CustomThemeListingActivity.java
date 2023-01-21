@@ -55,6 +55,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeViewModel;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class CustomThemeListingActivity extends BaseActivity implements
         CustomThemeOptionsBottomSheetFragment.CustomThemeOptionsBottomSheetFragmentListener,
@@ -166,26 +167,19 @@ public class CustomThemeListingActivity extends BaseActivity implements
         EditText themeNameEditText = dialogView.findViewById(R.id.name_edit_text_edit_name_dialog);
         themeNameEditText.setText(oldThemeName);
         themeNameEditText.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        }
+        Utils.showKeyboard(this, new Handler(), themeNameEditText);
         new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                 .setTitle(R.string.edit_theme_name)
                 .setView(dialogView)
                 .setPositiveButton(R.string.ok, (dialogInterface, i)
                         -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(themeNameEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                     ChangeThemeName.changeThemeName(executor, redditDataRoomDatabase, oldThemeName,
                             themeNameEditText.getText().toString());
                 })
                 .setNegativeButton(R.string.cancel, null)
                 .setOnDismissListener(dialogInterface -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(themeNameEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                 })
                 .show();
     }
@@ -311,18 +305,13 @@ public class CustomThemeListingActivity extends BaseActivity implements
                                     EditText themeNameEditText = dialogView.findViewById(R.id.name_edit_text_edit_name_dialog);
                                     themeNameEditText.setText(customTheme.name);
                                     themeNameEditText.requestFocus();
-                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    if (imm != null) {
-                                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                                    }
+                                    Utils.showKeyboard(CustomThemeListingActivity.this, new Handler(), themeNameEditText);
                                     new MaterialAlertDialogBuilder(CustomThemeListingActivity.this, R.style.MaterialAlertDialogTheme)
                                             .setTitle(R.string.edit_theme_name)
                                             .setView(dialogView)
                                             .setPositiveButton(R.string.ok, (editTextDialogInterface, i1)
                                                     -> {
-                                                if (imm != null) {
-                                                    imm.hideSoftInputFromWindow(themeNameEditText.getWindowToken(), 0);
-                                                }
+                                                Utils.hideKeyboard(CustomThemeListingActivity.this);
                                                 if (!themeNameEditText.getText().toString().equals("")) {
                                                     customTheme.name = themeNameEditText.getText().toString();
                                                 }
@@ -330,9 +319,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
                                             })
                                             .setNegativeButton(R.string.cancel, null)
                                             .setOnDismissListener(editTextDialogInterface -> {
-                                                if (imm != null) {
-                                                    imm.hideSoftInputFromWindow(themeNameEditText.getWindowToken(), 0);
-                                                }
+                                                Utils.hideKeyboard(CustomThemeListingActivity.this);
                                             })
                                             .show();
                                 })

@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -181,15 +179,10 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
             View rootView = getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, mCoordinatorLayout, false);
             TextInputEditText thingEditText = rootView.findViewById(R.id.text_input_edit_text_go_to_thing_edit_text);
             thingEditText.requestFocus();
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-            }
+            Utils.showKeyboard(this, new Handler(), thingEditText);
             thingEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
                 if (i == EditorInfo.IME_ACTION_DONE) {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                     Intent pmIntent = new Intent(this, SendPrivateMessageActivity.class);
                     pmIntent.putExtra(SendPrivateMessageActivity.EXTRA_RECIPIENT_USERNAME, thingEditText.getText().toString());
                     startActivity(pmIntent);
@@ -202,27 +195,20 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
                     .setView(rootView)
                     .setPositiveButton(R.string.ok, (dialogInterface, i)
                             -> {
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                        }
+                        Utils.hideKeyboard(this);
                         Intent pmIntent = new Intent(this, SendPrivateMessageActivity.class);
                         pmIntent.putExtra(SendPrivateMessageActivity.EXTRA_RECIPIENT_USERNAME, thingEditText.getText().toString());
                         startActivity(pmIntent);
                     })
                     .setNegativeButton(R.string.cancel, null)
                     .setNeutralButton(R.string.search, (dialogInterface, i) -> {
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                        }
-
+                        Utils.hideKeyboard(this);
                         Intent intent = new Intent(this, SearchActivity.class);
                         intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_USERS, true);
                         startActivityForResult(intent, SEARCH_USER_REQUEST_CODE);
                     })
                     .setOnDismissListener(dialogInterface -> {
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                        }
+                        Utils.hideKeyboard(this);
                     })
                     .show();
         });

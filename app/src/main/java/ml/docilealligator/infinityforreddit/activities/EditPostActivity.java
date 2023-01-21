@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -173,10 +174,7 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
         markdownBottomBarRecyclerView.setAdapter(adapter);
 
         contentEditText.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        }
+        Utils.showKeyboard(this, new Handler(), contentEditText);
     }
 
     @Override
@@ -208,10 +206,7 @@ public class EditPostActivity extends BaseActivity implements UploadImageEnabled
     @Override
     protected void onPause() {
         super.onPause();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.hideSoftInputFromWindow(contentEditText.getWindowToken(), 0);
-        }
+        Utils.hideKeyboard(this);
     }
 
     @Override
