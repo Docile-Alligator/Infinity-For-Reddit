@@ -45,7 +45,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
+import com.google.android.exoplayer2.ui.DefaultTimeBar;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.TimeBar;
 import com.google.common.collect.ImmutableList;
 import com.libRG.CustomTextView;
 
@@ -1566,6 +1568,8 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         ImageView pauseButton;
         @BindView(R.id.exo_play)
         ImageView playButton;
+        @BindView(R.id.exo_progress)
+        DefaultTimeBar progressBar;
         @BindView(R.id.content_markdown_view_item_post_detail_video_autoplay)
         RecyclerView mContentMarkdownView;
         @BindView(R.id.bottom_constraint_layout_item_post_detail_video_autoplay)
@@ -1583,11 +1587,12 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         @BindView(R.id.share_button_item_post_detail_video_autoplay)
         ImageView mShareButton;
         @Nullable
+        Container container;
+        @Nullable
         ExoPlayerViewHelper helper;
         private Uri mediaUri;
         private float volume;
         private boolean isManuallyPaused;
-        private PlaybackInfo latestPlaybackInfo;
 
         public PostDetailVideoAutoplayViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -1674,12 +1679,31 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             pauseButton.setOnClickListener(view -> {
                 pause();
                 isManuallyPaused = true;
-                latestPlaybackInfo = getCurrentPlaybackInfo();
+                savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
             });
 
             playButton.setOnClickListener(view -> {
                 isManuallyPaused = false;
                 play();
+            });
+
+            progressBar.addListener(new TimeBar.OnScrubListener() {
+                @Override
+                public void onScrubStart(TimeBar timeBar, long position) {
+
+                }
+
+                @Override
+                public void onScrubMove(TimeBar timeBar, long position) {
+
+                }
+
+                @Override
+                public void onScrubStop(TimeBar timeBar, long position, boolean canceled) {
+                    if (!canceled) {
+                        savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
+                    }
+                }
             });
 
             previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
@@ -1702,6 +1726,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             volume = 0f;
         }
 
+        private void savePlaybackInfo(int order, @Nullable PlaybackInfo playbackInfo) {
+            if (container != null) container.savePlaybackInfo(order, playbackInfo);
+        }
+
         @NonNull
         @Override
         public View getPlayerView() {
@@ -1718,6 +1746,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         public void initialize(@NonNull Container container, @NonNull PlaybackInfo playbackInfo) {
             if (mediaUri == null) {
                 return;
+            }
+            if (this.container == null) {
+                this.container = container;
             }
             if (helper == null) {
                 helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
@@ -1748,7 +1779,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     public void onRenderedFirstFrame() {
                         mGlide.clear(previewImageView);
                         previewImageView.setVisibility(View.GONE);
-                        latestPlaybackInfo = getCurrentPlaybackInfo();
                     }
                 });
             }
@@ -1776,6 +1806,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 helper.release();
                 helper = null;
             }
+            container = null;
         }
 
         @Override
@@ -1785,7 +1816,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     if (isManuallyPaused) {
                         play();
                         pause();
-                        helper.setPlaybackInfo(latestPlaybackInfo);
                         helper.setVolume(volume);
                     } else {
                         return true;

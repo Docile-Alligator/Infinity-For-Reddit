@@ -47,7 +47,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
+import com.google.android.exoplayer2.ui.DefaultTimeBar;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.TimeBar;
 import com.google.common.collect.ImmutableList;
 import com.libRG.CustomTextView;
 
@@ -221,8 +223,6 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
     private Callback mCallback;
     private boolean canPlayVideo = true;
     private RecyclerView.RecycledViewPool mGalleryRecycledViewPool;
-    private boolean isManuallyPaused;
-    private PlaybackInfo latestPlaybackInfo;
 
     public HistoryPostRecyclerViewAdapter(BaseActivity activity, HistoryPostFragment fragment, Executor executor, Retrofit oauthRetrofit,
                                           Retrofit gfycatRetrofit, Retrofit redgifsRetrofit, Provider<StreamableAPI> streambleApiProvider,
@@ -2655,6 +2655,8 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         ImageView pauseButton;
         @BindView(R.id.exo_play)
         ImageView playButton;
+        @BindView(R.id.exo_progress)
+        DefaultTimeBar progressBar;
         @BindView(R.id.bottom_constraint_layout_item_post_video_type_autoplay)
         ConstraintLayout bottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_video_type_autoplay)
@@ -2671,12 +2673,13 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         ImageView shareButton;
 
         @Nullable
+        Container container;
+        @Nullable
         ExoPlayerViewHelper helper;
         private Uri mediaUri;
         private float volume;
         public Call<String> fetchGfycatOrStreamableVideoCall;
         private boolean isManuallyPaused;
-        private PlaybackInfo latestPlaybackInfo;
 
         PostVideoAutoplayViewHolder(View itemView) {
             super(itemView);
@@ -2771,12 +2774,31 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
             pauseButton.setOnClickListener(view -> {
                 pause();
                 isManuallyPaused = true;
-                latestPlaybackInfo = getCurrentPlaybackInfo();
+                savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
             });
 
             playButton.setOnClickListener(view -> {
                 isManuallyPaused = false;
                 play();
+            });
+
+            progressBar.addListener(new TimeBar.OnScrubListener() {
+                @Override
+                public void onScrubStart(TimeBar timeBar, long position) {
+
+                }
+
+                @Override
+                public void onScrubMove(TimeBar timeBar, long position) {
+
+                }
+
+                @Override
+                public void onScrubStop(TimeBar timeBar, long position, boolean canceled) {
+                    if (!canceled) {
+                        savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
+                    }
+                }
             });
 
             previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
@@ -2800,6 +2822,10 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
             volume = 0f;
         }
 
+        private void savePlaybackInfo(int order, @Nullable PlaybackInfo playbackInfo) {
+            if (container != null) container.savePlaybackInfo(order, playbackInfo);
+        }
+
         @NonNull
         @Override
         public View getPlayerView() {
@@ -2816,6 +2842,9 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         public void initialize(@NonNull Container container, @NonNull PlaybackInfo playbackInfo) {
             if (mediaUri == null) {
                 return;
+            }
+            if (this.container == null) {
+                this.container = container;
             }
             if (helper == null) {
                 helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
@@ -2849,7 +2878,6 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                     public void onRenderedFirstFrame() {
                         mGlide.clear(previewImageView);
                         previewImageView.setVisibility(View.GONE);
-                        latestPlaybackInfo = getCurrentPlaybackInfo();
                     }
                 });
             }
@@ -2878,9 +2906,9 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
             if (helper != null) {
                 helper.release();
                 helper = null;
-                isManuallyPaused = false;
-                latestPlaybackInfo = null;
             }
+            isManuallyPaused = false;
+            container = null;
         }
 
         @Override
@@ -2890,15 +2918,10 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                     if (isManuallyPaused) {
                         play();
                         pause();
-                        helper.setPlaybackInfo(latestPlaybackInfo);
                         helper.setVolume(volume);
                     } else {
                         return true;
                     }
-                }
-                else {
-                    isManuallyPaused = false;
-                    latestPlaybackInfo = null;
                 }
             }
             return false;
@@ -4344,6 +4367,8 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         ImageView pauseButton;
         @BindView(R.id.exo_play)
         ImageView playButton;
+        @BindView(R.id.exo_progress)
+        DefaultTimeBar progressBar;
         @BindView(R.id.bottom_constraint_layout_item_post_card_2_video_autoplay)
         ConstraintLayout bottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_card_2_video_autoplay)
@@ -4362,12 +4387,13 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         View divider;
 
         @Nullable
+        Container container;
+        @Nullable
         ExoPlayerViewHelper helper;
         private Uri mediaUri;
         private float volume;
         public Call<String> fetchGfycatOrStreamableVideoCall;
         private boolean isManuallyPaused;
-        private PlaybackInfo latestPlaybackInfo;
 
         PostCard2VideoAutoplayViewHolder(View itemView) {
             super(itemView);
@@ -4419,12 +4445,31 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
             pauseButton.setOnClickListener(view -> {
                 pause();
                 isManuallyPaused = true;
-                latestPlaybackInfo = getCurrentPlaybackInfo();
+                savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
             });
 
             playButton.setOnClickListener(view -> {
                 isManuallyPaused = false;
                 play();
+            });
+
+            progressBar.addListener(new TimeBar.OnScrubListener() {
+                @Override
+                public void onScrubStart(TimeBar timeBar, long position) {
+
+                }
+
+                @Override
+                public void onScrubMove(TimeBar timeBar, long position) {
+
+                }
+
+                @Override
+                public void onScrubStop(TimeBar timeBar, long position, boolean canceled) {
+                    if (!canceled) {
+                        savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
+                    }
+                }
             });
 
             fullscreenButton.setOnClickListener(view -> {
@@ -4470,17 +4515,6 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                 }
             });
 
-            pauseButton.setOnClickListener(view -> {
-                pause();
-                isManuallyPaused = true;
-                latestPlaybackInfo = getCurrentPlaybackInfo();
-            });
-
-            playButton.setOnClickListener(view -> {
-                isManuallyPaused = false;
-                play();
-            });
-
             previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
 
             videoPlayer.setOnClickListener(view -> {
@@ -4502,6 +4536,10 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
             volume = 0f;
         }
 
+        private void savePlaybackInfo(int order, @Nullable PlaybackInfo playbackInfo) {
+            if (container != null) container.savePlaybackInfo(order, playbackInfo);
+        }
+
         @NonNull
         @Override
         public View getPlayerView() {
@@ -4518,6 +4556,9 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         public void initialize(@NonNull Container container, @NonNull PlaybackInfo playbackInfo) {
             if (mediaUri == null) {
                 return;
+            }
+            if (this.container == null) {
+                this.container = container;
             }
             if (helper == null) {
                 helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
@@ -4551,7 +4592,6 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                     public void onRenderedFirstFrame() {
                         mGlide.clear(previewImageView);
                         previewImageView.setVisibility(View.GONE);
-                        latestPlaybackInfo = getCurrentPlaybackInfo();
                     }
                 });
             }
@@ -4580,9 +4620,9 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
             if (helper != null) {
                 helper.release();
                 helper = null;
-                isManuallyPaused = false;
-                latestPlaybackInfo = null;
             }
+            isManuallyPaused = false;
+            container = null;
         }
 
         @Override
@@ -4592,15 +4632,10 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                     if (isManuallyPaused) {
                         play();
                         pause();
-                        helper.setPlaybackInfo(latestPlaybackInfo);
                         helper.setVolume(volume);
                     } else {
                         return true;
                     }
-                }
-                else {
-                    isManuallyPaused = false;
-                    latestPlaybackInfo = null;
                 }
             }
             return false;
