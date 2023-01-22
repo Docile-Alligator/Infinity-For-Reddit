@@ -118,7 +118,7 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
     }
 
     private void loadImage(ImageViewHolder holder) {
-        if (galleryImages == null) {
+        if (galleryImages == null || galleryImages.isEmpty()) {
             return;
         }
 
@@ -146,6 +146,10 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
     }
 
     private void loadCaptionPreview(ImageViewHolder holder) {
+        if (galleryImages == null || galleryImages.isEmpty()) {
+            return;
+        }
+
         String previewCaption = galleryImages.get(holder.getBindingAdapterPosition()).caption;
         String previewCaptionUrl = galleryImages.get(holder.getBindingAdapterPosition()).captionUrl;
         boolean previewCaptionIsEmpty = TextUtils.isEmpty(previewCaption);
