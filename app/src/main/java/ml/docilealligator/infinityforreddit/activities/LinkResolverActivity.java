@@ -114,7 +114,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                     path = path.substring(0, path.length() - 1);
                 }
 
-                if (path.endsWith("jpg") || path.endsWith("png") || path.endsWith("jpeg")) {
+                if (path.endsWith(".jpg") || path.endsWith(".png") || path.endsWith(".jpeg")) {
                     Intent intent = new Intent(this, ViewImageOrGifActivity.class);
                     String url = uri.toString();
                     String fileName = FilenameUtils.getName(path);
@@ -122,7 +122,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                     intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, fileName);
                     intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, fileName);
                     startActivity(intent);
-                } else if (path.endsWith("gif")) {
+                } else if (path.endsWith(".gif")) {
                     Intent intent = new Intent(this, ViewImageOrGifActivity.class);
                     String url = uri.toString();
                     String fileName = FilenameUtils.getName(path);
@@ -130,7 +130,7 @@ public class LinkResolverActivity extends AppCompatActivity {
                     intent.putExtra(ViewImageOrGifActivity.EXTRA_FILE_NAME_KEY, fileName);
                     intent.putExtra(ViewImageOrGifActivity.EXTRA_POST_TITLE_KEY, fileName);
                     startActivity(intent);
-                } else if (path.endsWith("mp4")) {
+                } else if (path.endsWith(".mp4")) {
                     Intent intent = new Intent(this, ViewVideoActivity.class);
                     intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_DIRECT);
                     intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, getIntent().getBooleanExtra(EXTRA_IS_NSFW, false));
