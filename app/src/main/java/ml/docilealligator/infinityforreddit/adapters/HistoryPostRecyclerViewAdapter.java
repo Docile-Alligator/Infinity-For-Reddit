@@ -2887,7 +2887,13 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         @Override
         public void play() {
             if (helper != null && mediaUri != null) {
-                helper.play();
+                if (!isPlaying() && isManuallyPaused) {
+                    helper.play();
+                    pause();
+                    helper.setVolume(volume);
+                } else {
+                    helper.play();
+                }
             }
         }
 
@@ -2913,18 +2919,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
 
         @Override
         public boolean wantsToPlay() {
-            if (canPlayVideo) {
-                if (ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset) {
-                    if (isManuallyPaused) {
-                        play();
-                        pause();
-                        if (helper != null) helper.setVolume(volume);
-                    } else {
-                        return true;
-                    }
-                }
-            }
-            return false;
+            return canPlayVideo && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
         }
 
         @Override
@@ -4601,7 +4596,13 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
         @Override
         public void play() {
             if (helper != null && mediaUri != null) {
-                helper.play();
+                if (!isPlaying() && isManuallyPaused) {
+                    helper.play();
+                    pause();
+                    helper.setVolume(volume);
+                } else {
+                    helper.play();
+                }
             }
         }
 
@@ -4627,18 +4628,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
 
         @Override
         public boolean wantsToPlay() {
-            if (canPlayVideo) {
-                if (ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset) {
-                    if (isManuallyPaused) {
-                        play();
-                        pause();
-                        if (helper != null) helper.setVolume(volume);
-                    } else {
-                        return true;
-                    }
-                }
-            }
-            return false;
+            return canPlayVideo && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
         }
 
         @Override
