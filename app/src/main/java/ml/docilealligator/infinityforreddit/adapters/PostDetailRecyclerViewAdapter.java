@@ -1820,7 +1820,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
         @Override
         public boolean wantsToPlay() {
-            return canPlayVideo && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
+            return canPlayVideo && mediaUri != null && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
         }
 
         @Override

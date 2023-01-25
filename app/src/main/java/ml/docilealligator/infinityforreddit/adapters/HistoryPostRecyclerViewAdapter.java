@@ -2919,7 +2919,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
 
         @Override
         public boolean wantsToPlay() {
-            return canPlayVideo && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
+            return canPlayVideo && mediaUri != null && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
         }
 
         @Override
@@ -4628,7 +4628,7 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
 
         @Override
         public boolean wantsToPlay() {
-            return canPlayVideo && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
+            return canPlayVideo && mediaUri != null && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
         }
 
         @Override
