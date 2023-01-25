@@ -47,7 +47,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
+import com.google.android.exoplayer2.ui.DefaultTimeBar;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.TimeBar;
 import com.google.common.collect.ImmutableList;
 import com.libRG.CustomTextView;
 
@@ -739,10 +741,12 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     } else {
                         ((PostVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio(1);
                     }
-                    if (mFragment.getMasterMutingOption() == null) {
-                        ((PostVideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (post.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
-                    } else {
-                        ((PostVideoAutoplayViewHolder) holder).setVolume(mFragment.getMasterMutingOption() ? 0f : 1f);
+                    if (!((PostVideoAutoplayViewHolder) holder).isManuallyPaused) {
+                        if (mFragment.getMasterMutingOption() == null) {
+                            ((PostVideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (post.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
+                        } else {
+                            ((PostVideoAutoplayViewHolder) holder).setVolume(mFragment.getMasterMutingOption() ? 0f : 1f);
+                        }
                     }
 
                     if ((post.isGfycat() || post.isRedgifs()) && !post.isLoadGfycatOrStreamableVideoSuccess()) {
@@ -920,10 +924,12 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     } else {
                         ((PostCard2VideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio(1);
                     }
-                    if (mFragment.getMasterMutingOption() == null) {
-                        ((PostCard2VideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (post.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
-                    } else {
-                        ((PostCard2VideoAutoplayViewHolder) holder).setVolume(mFragment.getMasterMutingOption() ? 0f : 1f);
+                    if (!((PostCard2VideoAutoplayViewHolder) holder).isManuallyPaused) {
+                        if (mFragment.getMasterMutingOption() == null) {
+                            ((PostCard2VideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (post.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
+                        } else {
+                            ((PostCard2VideoAutoplayViewHolder) holder).setVolume(mFragment.getMasterMutingOption() ? 0f : 1f);
+                        }
                     }
 
                     if ((post.isGfycat() || post.isRedgifs()) && !post.isLoadGfycatOrStreamableVideoSuccess()) {
@@ -1898,7 +1904,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
                 ((PostVideoAutoplayViewHolder) holder).errorLoadingGfycatImageView.setVisibility(View.GONE);
                 ((PostVideoAutoplayViewHolder) holder).muteButton.setVisibility(View.GONE);
-                ((PostVideoAutoplayViewHolder) holder).resetVolume();
+                if (!((PostVideoAutoplayViewHolder) holder).isManuallyPaused) {
+                    ((PostVideoAutoplayViewHolder) holder).resetVolume();
+                }
                 mGlide.clear(((PostVideoAutoplayViewHolder) holder).previewImageView);
                 ((PostVideoAutoplayViewHolder) holder).previewImageView.setVisibility(View.GONE);
             } else if (holder instanceof PostWithPreviewTypeViewHolder) {
@@ -2777,6 +2785,12 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         ImageView muteButton;
         @BindView(R.id.fullscreen_exo_playback_control_view)
         ImageView fullscreenButton;
+        @BindView(R.id.exo_pause)
+        ImageView pauseButton;
+        @BindView(R.id.exo_play)
+        ImageView playButton;
+        @BindView(R.id.exo_progress)
+        DefaultTimeBar progressBar;
         @BindView(R.id.bottom_constraint_layout_item_post_video_type_autoplay)
         ConstraintLayout bottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_video_type_autoplay)
@@ -2793,10 +2807,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         ImageView shareButton;
 
         @Nullable
+        Container container;
+        @Nullable
         ExoPlayerViewHelper helper;
         private Uri mediaUri;
         private float volume;
         public Call<String> fetchGfycatOrStreamableVideoCall;
+        private boolean isManuallyPaused;
 
         PostVideoAutoplayViewHolder(View itemView) {
             super(itemView);
@@ -2889,6 +2906,36 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
             });
 
+            pauseButton.setOnClickListener(view -> {
+                pause();
+                isManuallyPaused = true;
+                savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
+            });
+
+            playButton.setOnClickListener(view -> {
+                isManuallyPaused = false;
+                play();
+            });
+
+            progressBar.addListener(new TimeBar.OnScrubListener() {
+                @Override
+                public void onScrubStart(TimeBar timeBar, long position) {
+
+                }
+
+                @Override
+                public void onScrubMove(TimeBar timeBar, long position) {
+
+                }
+
+                @Override
+                public void onScrubStop(TimeBar timeBar, long position, boolean canceled) {
+                    if (!canceled) {
+                        savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
+                    }
+                }
+            });
+
             previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
 
             videoPlayer.setOnClickListener(view -> {
@@ -2910,6 +2957,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             volume = 0f;
         }
 
+        private void savePlaybackInfo(int order, @Nullable PlaybackInfo playbackInfo) {
+            if (container != null) container.savePlaybackInfo(order, playbackInfo);
+        }
+
         @NonNull
         @Override
         public View getPlayerView() {
@@ -2926,6 +2977,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         public void initialize(@NonNull Container container, @NonNull PlaybackInfo playbackInfo) {
             if (mediaUri == null) {
                 return;
+            }
+            if (this.container == null) {
+                this.container = container;
             }
             if (helper == null) {
                 helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
@@ -2968,7 +3022,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         @Override
         public void play() {
             if (helper != null && mediaUri != null) {
-                helper.play();
+                if (!isPlaying() && isManuallyPaused) {
+                    helper.play();
+                    pause();
+                    helper.setVolume(volume);
+                } else {
+                    helper.play();
+                }
             }
         }
 
@@ -2988,11 +3048,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 helper.release();
                 helper = null;
             }
+            isManuallyPaused = false;
+            container = null;
         }
 
         @Override
         public boolean wantsToPlay() {
-            return canPlayVideo && mediaUri != null && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
+            return canPlayVideo && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
         }
 
         @Override
@@ -4497,6 +4559,12 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         ImageView muteButton;
         @BindView(R.id.fullscreen_exo_playback_control_view)
         ImageView fullscreenButton;
+        @BindView(R.id.exo_pause)
+        ImageView pauseButton;
+        @BindView(R.id.exo_play)
+        ImageView playButton;
+        @BindView(R.id.exo_progress)
+        DefaultTimeBar progressBar;
         @BindView(R.id.bottom_constraint_layout_item_post_card_2_video_autoplay)
         ConstraintLayout bottomConstraintLayout;
         @BindView(R.id.plus_button_item_post_card_2_video_autoplay)
@@ -4515,10 +4583,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         View divider;
 
         @Nullable
+        Container container;
+        @Nullable
         ExoPlayerViewHelper helper;
         private Uri mediaUri;
         private float volume;
         public Call<String> fetchGfycatOrStreamableVideoCall;
+        private boolean isManuallyPaused;
 
         PostCard2VideoAutoplayViewHolder(View itemView) {
             super(itemView);
@@ -4611,6 +4682,36 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
             });
 
+            pauseButton.setOnClickListener(view -> {
+                pause();
+                isManuallyPaused = true;
+                savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
+            });
+
+            playButton.setOnClickListener(view -> {
+                isManuallyPaused = false;
+                play();
+            });
+
+            progressBar.addListener(new TimeBar.OnScrubListener() {
+                @Override
+                public void onScrubStart(TimeBar timeBar, long position) {
+
+                }
+
+                @Override
+                public void onScrubMove(TimeBar timeBar, long position) {
+
+                }
+
+                @Override
+                public void onScrubStop(TimeBar timeBar, long position, boolean canceled) {
+                    if (!canceled) {
+                        savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
+                    }
+                }
+            });
+
             previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
 
             videoPlayer.setOnClickListener(view -> {
@@ -4632,6 +4733,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             volume = 0f;
         }
 
+        private void savePlaybackInfo(int order, @Nullable PlaybackInfo playbackInfo) {
+            if (container != null) container.savePlaybackInfo(order, playbackInfo);
+        }
+
         @NonNull
         @Override
         public View getPlayerView() {
@@ -4648,6 +4753,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         public void initialize(@NonNull Container container, @NonNull PlaybackInfo playbackInfo) {
             if (mediaUri == null) {
                 return;
+            }
+            if (this.container == null) {
+                this.container = container;
             }
             if (helper == null) {
                 helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
@@ -4690,7 +4798,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         @Override
         public void play() {
             if (helper != null && mediaUri != null) {
-                helper.play();
+                if (!isPlaying() && isManuallyPaused) {
+                    helper.play();
+                    pause();
+                    helper.setVolume(volume);
+                } else {
+                    helper.play();
+                }
             }
         }
 
@@ -4710,11 +4824,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 helper.release();
                 helper = null;
             }
+            isManuallyPaused = false;
+            container = null;
         }
 
         @Override
         public boolean wantsToPlay() {
-            return canPlayVideo && mediaUri != null && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
+            return canPlayVideo && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
         }
 
         @Override
