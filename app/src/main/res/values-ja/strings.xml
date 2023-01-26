@@ -808,7 +808,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 
     <!-- Shouldn't the english translation be
 "Mixing Video and Audio"? -->
-    <string name="downloading_reddit_video_muxing">"動画と音声をミックス中です"</string>
+    <string name="downloading_reddit_video_mixing">"動画と音声をミックス中です"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"動画を保存中です"</string>
     <string name="downloading_reddit_video_finished">"ダウンロードしました"</string>
 

@@ -735,7 +735,7 @@ Cô ta không ốm hay gì cả, nhưng cô ấy chắc chắn có thể khá h�
     <string name="error_fetching_imgur_media">"Không thể tải hình ảnh"</string>
     <string name="downloading_reddit_video">"Đang tải xuống bài video"</string>
     <string name="downloading_reddit_video_audio_track">"Đang tải xuống bài âm thanh"</string>
-    <string name="downloading_reddit_video_muxing">"Đang pha trộn video và âm thanh"</string>
+    <string name="downloading_reddit_video_mixing">"Đang pha trộn video và âm thanh"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"Đang lưu video"</string>
     <string name="downloading_reddit_video_finished">"Đã tải xuống"</string>
     <string name="downloading_reddit_video_failed_cannot_get_cache_directory">"Tải xuống thất bại: không thể truy cập thư mục bộ nhớ đệm"</string>

@@ -726,7 +726,7 @@ Chodí popředu."</string>
     <string name="error_fetching_imgur_media">"Nelze načíst obrázky"</string>
     <string name="downloading_reddit_video">"Stahování videa"</string>
     <string name="downloading_reddit_video_audio_track">"Stahování zvuku"</string>
-    <string name="downloading_reddit_video_muxing">"Slučování videa a zvuku"</string>
+    <string name="downloading_reddit_video_mixing">"Slučování videa a zvuku"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"Ukládání videa"</string>
     <string name="downloading_reddit_video_finished">"Staženo"</string>
     <string name="downloading_reddit_video_failed_cannot_get_cache_directory">"Stahování selhalo: nelze přistupovat k adresáři mezipaměti"</string>

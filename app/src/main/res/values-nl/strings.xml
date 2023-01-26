@@ -735,7 +735,7 @@ Ze is niet ziek of zo, maar ze kan zeker beter worden."</string>
     <string name="error_fetching_imgur_media">"Kan afbeeldingen niet laden"</string>
     <string name="downloading_reddit_video">"Videotrack downloaden"</string>
     <string name="downloading_reddit_video_audio_track">"Audiotrack downloaden"</string>
-    <string name="downloading_reddit_video_muxing">"Muxing Video en Audio"</string>
+    <string name="downloading_reddit_video_mixing">"Muxing Video en Audio"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"Video Opslaan"</string>
     <string name="downloading_reddit_video_finished">"Gedownload"</string>
 

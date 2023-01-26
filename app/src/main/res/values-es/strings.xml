@@ -767,7 +767,7 @@ No está enferma ni nada, pero definitivamente podría mejorar."</string>
     <string name="error_fetching_imgur_media">"No fue posible cargar las imágenes"</string>
     <string name="downloading_reddit_video">"Descargando pista de vídeo"</string>
     <string name="downloading_reddit_video_audio_track">"Descargando pista de audio"</string>
-    <string name="downloading_reddit_video_muxing">"Muxtiplexar vídeo y audio"</string>
+    <string name="downloading_reddit_video_mixing">"Muxtiplexar vídeo y audio"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"Guardando vídeo"</string>
     <string name="downloading_reddit_video_finished">"Descargado"</string>
     <string name="downloading_reddit_video_failed_cannot_get_cache_directory">"Error: Falló el acceso al directorio de cache"</string>

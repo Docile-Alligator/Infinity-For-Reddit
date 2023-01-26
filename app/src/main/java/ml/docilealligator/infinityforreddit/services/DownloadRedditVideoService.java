@@ -230,7 +230,7 @@ public class DownloadRedditVideoService extends Service {
                                     return;
                                 }
 
-                                updateNotification(R.string.downloading_reddit_video_muxing, -1,
+                                updateNotification(R.string.downloading_reddit_video_mixing, -1,
                                         randomNotificationIdOffset, null);
                                 if (!muxVideoAndAudio(videoFilePath, audioFilePath, outputFilePath)) {
                                     downloadFinished(null, ERROR_MUX_FAILED, randomNotificationIdOffset);
@@ -252,7 +252,7 @@ public class DownloadRedditVideoService extends Service {
                                     downloadFinished(null, ERROR_MUXED_VIDEO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
                                 }
                             } else {
-                                updateNotification(R.string.downloading_reddit_video_muxing, -1,
+                                updateNotification(R.string.downloading_reddit_video_mixing, -1,
                                         randomNotificationIdOffset, null);
                                 if (!muxVideoAndAudio(videoFilePath, null, outputFilePath)) {
                                     downloadFinished(null, ERROR_MUX_FAILED, randomNotificationIdOffset);

@@ -779,7 +779,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="error_fetching_imgur_media">"无法加载图像"</string>
     <string name="downloading_reddit_video">"下载视频轨"</string>
     <string name="downloading_reddit_video_audio_track">"下载音频轨"</string>
-    <string name="downloading_reddit_video_muxing">"合并视频轨与音频轨"</string>
+    <string name="downloading_reddit_video_mixing">"合并视频轨与音频轨"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"正在保存视频"</string>
     <string name="downloading_reddit_video_finished">"已下载"</string>
 

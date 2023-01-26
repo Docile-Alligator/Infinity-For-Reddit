@@ -1023,7 +1023,7 @@
 
     <string name="downloading_reddit_video">Downloading Video Track</string>
     <string name="downloading_reddit_video_audio_track">Downloading Audio Track</string>
-    <string name="downloading_reddit_video_muxing">Muxing Video and Audio</string>
+    <string name="downloading_reddit_video_mixing">Muxing Video and Audio</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">Saving Video</string>
     <string name="downloading_reddit_video_finished">Downloaded</string>
     <string name="downloading_reddit_video_failed_cannot_get_cache_directory">Download failed: cannot access cache directory </string>

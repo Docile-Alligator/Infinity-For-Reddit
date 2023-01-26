@@ -733,7 +733,7 @@ Az alap az indigó amoled téma"</string>
     <string name="error_fetching_imgur_media">"Nem lehet betölteni a képeket"</string>
     <string name="downloading_reddit_video">"Videósáv letöltése"</string>
     <string name="downloading_reddit_video_audio_track">"Audósáv letöltése"</string>
-    <string name="downloading_reddit_video_muxing">"Videó és audió keverése"</string>
+    <string name="downloading_reddit_video_mixing">"Videó és audió keverése"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"Videó mentése"</string>
     <string name="downloading_reddit_video_finished">"Letöltve"</string>
     <string name="downloading_reddit_video_failed_cannot_get_cache_directory">"Letöltés sikertelen: nem lehet hozzáférni a gyorsítótár könvtárához"</string>

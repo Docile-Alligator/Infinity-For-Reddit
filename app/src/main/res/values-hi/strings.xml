@@ -793,7 +793,7 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="error_fetching_imgur_media">"चित्र लोड नहीं हो सका "</string>
     <string name="downloading_reddit_video">"वीडियो ट्रैक डाउनलोड हो रहा है "</string>
     <string name="downloading_reddit_video_audio_track">"ऑडियो ट्रैक डाउनलोड हो रहा है "</string>
-    <string name="downloading_reddit_video_muxing">"वीडियो एवं ऑडियो का एकीकरण किया जा रहा है "</string>
+    <string name="downloading_reddit_video_mixing">"वीडियो एवं ऑडियो का एकीकरण किया जा रहा है "</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"वीडियो सहेजी जा रही है "</string>
     <string name="downloading_reddit_video_finished">"वीडियो सेब हो गया"</string>
 

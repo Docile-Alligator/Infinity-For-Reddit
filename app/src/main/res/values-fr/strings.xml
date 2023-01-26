@@ -817,7 +817,7 @@ Basé sur le thème sombre Indigo"</string>
     <string name="error_fetching_imgur_media">"Impossible de charger les images"</string>
     <string name="downloading_reddit_video">"Téléchargement de la piste vidéo"</string>
     <string name="downloading_reddit_video_audio_track">"Téléchargement de la piste audio"</string>
-    <string name="downloading_reddit_video_muxing">"Multiplexage vidéo et audio"</string>
+    <string name="downloading_reddit_video_mixing">"Multiplexage vidéo et audio"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"Enregistrement de la vidéo"</string>
     <string name="downloading_reddit_video_finished">"Téléchargé"</string>
 

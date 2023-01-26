@@ -726,7 +726,7 @@ Ela não está doente nem nada, mas definitivamente poderia melhorar."</string>
     <string name="error_fetching_imgur_media">"Não foi possível carregar as imagens"</string>
     <string name="downloading_reddit_video">"Baixando faixa de vídeo"</string>
     <string name="downloading_reddit_video_audio_track">"Baixando faixa de áudio"</string>
-    <string name="downloading_reddit_video_muxing">"Sincronizando vídeo e áudio"</string>
+    <string name="downloading_reddit_video_mixing">"Sincronizando vídeo e áudio"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"Salvando vídeo"</string>
     <string name="downloading_reddit_video_finished">"Baixado"</string>
     <string name="downloading_reddit_video_failed_cannot_get_cache_directory">"Transferência falhou: não pode acessar o diretório de cache"</string>

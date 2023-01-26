@@ -724,7 +724,7 @@ Nie jest chora ani nic, ale na pewno może stać się lepsza."</string>
     <string name="error_fetching_imgur_media">"Nie można załadować obrazów"</string>
     <string name="downloading_reddit_video">"Pobieranie ścieżki wideo"</string>
     <string name="downloading_reddit_video_audio_track">"Pobieranie ścieżki audio"</string>
-    <string name="downloading_reddit_video_muxing">"Łączenie wideo i audio"</string>
+    <string name="downloading_reddit_video_mixing">"Łączenie wideo i audio"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"Zapisywanie wideo"</string>
     <string name="downloading_reddit_video_finished">"Pobrano"</string>
 

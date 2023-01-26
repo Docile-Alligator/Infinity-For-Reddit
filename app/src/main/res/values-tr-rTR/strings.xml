@@ -742,7 +742,7 @@ Amoled Tema Şablonu Oluştur"</string>
     <string name="error_fetching_imgur_media">"Görüntüler yüklenemedi"</string>
     <string name="downloading_reddit_video">"Video Parçası İndiriliyor"</string>
     <string name="downloading_reddit_video_audio_track">"Ses Parçası İndiriliyor"</string>
-    <string name="downloading_reddit_video_muxing">"Ses ve Video Birleştiriliyor"</string>
+    <string name="downloading_reddit_video_mixing">"Ses ve Video Birleştiriliyor"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"Video Kaydediliyor"</string>
     <string name="downloading_reddit_video_finished">"İndirme Tamamlandı"</string>
 

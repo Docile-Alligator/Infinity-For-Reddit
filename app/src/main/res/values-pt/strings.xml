@@ -723,7 +723,7 @@ Ela não está doente nem nada, mas certamente poderá melhorar."</string>
     <string name="error_fetching_imgur_media">"Impossível carregar imagens"</string>
     <string name="downloading_reddit_video">"A transferir faixa de vídeo"</string>
     <string name="downloading_reddit_video_audio_track">"A transferir faixa de aúdio"</string>
-    <string name="downloading_reddit_video_muxing">"A multiplexar Vídeo e Aúdio"</string>
+    <string name="downloading_reddit_video_mixing">"A multiplexar Vídeo e Aúdio"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"A guardar vídeo"</string>
     <string name="downloading_reddit_video_finished">"Transferido"</string>
     <string name="downloading_reddit_video_failed_cannot_get_cache_directory">"A transferência falhou: não é possível aceder à diretoria cache"</string>

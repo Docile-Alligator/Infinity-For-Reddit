@@ -762,7 +762,7 @@ Nu e bolnavă sau ceva de genul, dar cu siguranță ar putea să se facă bine."
     <string name="error_fetching_imgur_media">"Nu s-au putut încărca imaginile"</string>
     <string name="downloading_reddit_video">"Se descarcă pista video"</string>
     <string name="downloading_reddit_video_audio_track">"Se descarcă pista audio"</string>
-    <string name="downloading_reddit_video_muxing">"Se combină video și audio"</string>
+    <string name="downloading_reddit_video_mixing">"Se combină video și audio"</string>
     <string name="downloading_reddit_video_save_file_to_public_dir">"Se salvează videoclipul"</string>
     <string name="downloading_reddit_video_finished">"Descărcat"</string>
     <string name="downloading_reddit_video_failed_cannot_get_cache_directory">"Descărcarea a eșuat: nu s-a putut accesa directorul cache"</string>
