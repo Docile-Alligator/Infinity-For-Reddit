@@ -80,6 +80,7 @@
     <string name="action_crosspost">Crosspost</string>
     <string name="action_set_wallpaper">Set as Wallpaper</string>
     <string name="action_send_private_message">Send Private Message</string>
+    <string name="action_block_user">Block User</string>
     <string name="action_select_user_flair">Select User Flair</string>
     <string name="action_give_award">Give Award</string>
     <string name="action_save_to_database">Save to Database</string>
@@ -1052,6 +1053,10 @@
     <string name="top_score">%1$s pts</string>
 
     <string name="login_activity_2fa_prompt">If you have 2-factor authentication enabled, kindly type your password like the following: &lt;password&gt;:&lt;2FA code&gt;.\nExample: yourpass:123456</string>
+
+    <string name="block_user">Block User</string>
+    <string name="block_user_success">Blocked</string>
+    <string name="block_user_failed">Failed to block user</string>
 
     <string name="select_user_flair_success">User flair selected</string>
     <string name="select_this_user_flair">Select this user flair?</string>

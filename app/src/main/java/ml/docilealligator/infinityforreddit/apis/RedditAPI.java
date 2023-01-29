@@ -254,6 +254,10 @@ public interface RedditAPI {
     @POST("/api/compose")
     Call<String> composePrivateMessage(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
 
+    @FormUrlEncoded
+    @POST("api/block_user")
+    Call<String> blockUser(@HeaderMap Map<String, String> headers, @FieldMap Map<String, String> params);
+
     @GET("r/{subredditName}/api/user_flair_v2.json?raw_json=1")
     Call<String> getUserFlairs(@HeaderMap Map<String, String> headers, @Path("subredditName") String subredditName);
 
