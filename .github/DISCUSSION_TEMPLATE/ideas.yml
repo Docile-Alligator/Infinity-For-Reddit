@@ -41,7 +41,7 @@ body:
     id: additional
     attributes:
       label: Additional context
-      description: Please add any other context, screenshots or mockups about the feature request here.
+      description: Add your use-case, screenshots, mock-up, or anything else you think might be helpful.
       placeholder: I think this would be a great addition because...
     validations:
       required: true
