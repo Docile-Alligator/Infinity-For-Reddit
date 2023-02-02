@@ -1,5 +1,4 @@
-name: Announcements
-description: Announcements about new releases, updates, etc.
+title: "[Ideas]"  
 
 body:
   - type: markdown

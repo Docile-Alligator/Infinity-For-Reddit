@@ -1,7 +1,11 @@
-name: Ideas
-description: Have an idea for a new feature or an improvement? Let us know here!
+title: "[Ideas]"  
 
 body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea for a new feature or an improvement? Let us know here!
+
   - type: checkboxes
     id: checklist
     attributes:
@@ -53,16 +57,14 @@ body:
         - Critical
         - Important
         - Nice to have
-      validations:
-        required: true
 
   - type: textarea
     id: other
     attributes:
-    label: Anything else?
-    description: Is there anything else you'd like to add?
-    validations:
-      required: false
+      label: Anything else?
+      description: Is there anything else you'd like to add?
+      validations:
+        required: false
 
   - type: textarea
     id: solution
