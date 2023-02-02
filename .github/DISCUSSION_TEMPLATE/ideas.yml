@@ -1,5 +1,3 @@
-title: "[Ideas]"  
-
 body:
   - type: markdown
     attributes:
@@ -63,8 +61,8 @@ body:
     attributes:
       label: Anything else?
       description: Is there anything else you'd like to add?
-      validations:
-        required: false
+    validations:
+      required: false
 
   - type: textarea
     id: solution
