@@ -115,6 +115,8 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
         holder.binding.captionConstraintLayoutItemGalleryImageInPostFeed.setVisibility(View.GONE);
         holder.binding.captionTextViewItemGalleryImageInPostFeed.setText("");
         holder.binding.captionUrlTextViewItemGalleryImageInPostFeed.setText("");
+        holder.binding.progressBarItemGalleryImageInPostFeed.setVisibility(View.GONE);
+        glide.clear(holder.binding.imageViewItemGalleryImageInPostFeed);
     }
 
     private void loadImage(ImageViewHolder holder) {
