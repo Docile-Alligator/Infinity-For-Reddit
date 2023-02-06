@@ -5,7 +5,6 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -15,6 +14,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -23,8 +23,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -33,10 +31,12 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -54,7 +54,6 @@ import androidx.work.WorkManager;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabLayout;
@@ -255,7 +254,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         hideFab = mSharedPreferences.getBoolean(SharedPreferencesUtils.HIDE_FAB_IN_POST_FEED, false);
         showBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.BOTTOM_APP_BAR_KEY, false);
 
-        navigationWrapper = new NavigationWrapper(findViewById(R.id.bottom_app_bar_bottom_app_bar),
+        navigationWrapper = new NavigationWrapper(findViewById(R.id.bottom_app_bar_bottom_app_bar), findViewById(R.id.linear_layout_bottom_app_bar),
+                findViewById(R.id.option_1_bottom_app_bar), findViewById(R.id.option_2_bottom_app_bar),
+                findViewById(R.id.option_3_bottom_app_bar), findViewById(R.id.option_4_bottom_app_bar),
                 findViewById(R.id.fab_main_activity),
                 findViewById(R.id.navigation_rail), showBottomAppBar);
 
@@ -284,13 +285,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 if (navBarHeight > 0) {
                     if (navigationWrapper.navigationRailView == null) {
                         CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) navigationWrapper.floatingActionButton.getLayoutParams();
-                        params.bottomMargin += (int) (navBarHeight - Utils.convertDpToPixel(4, this));
+                        params.bottomMargin += navBarHeight;
                         navigationWrapper.floatingActionButton.setLayoutParams(params);
                     }
                     if (navigationWrapper.bottomAppBar != null) {
-                        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) navigationWrapper.bottomAppBar.getLayoutParams();
-                        params.bottomMargin += navBarHeight;
-                        navigationWrapper.bottomAppBar.setLayoutParams(params);
+                        navigationWrapper.linearLayoutBottomAppBar.setPadding(navigationWrapper.linearLayoutBottomAppBar.getPaddingLeft(),
+                                navigationWrapper.linearLayoutBottomAppBar.getPaddingTop(), navigationWrapper.linearLayoutBottomAppBar.getPaddingRight(), navBarHeight);
                     }
                     navDrawerRecyclerView.setPadding(0, 0, 0, navBarHeight);
                 }
@@ -591,16 +591,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 navigationWrapper.bindOptionDrawableResource(getBottomAppBarOptionDrawableResource(option1), getBottomAppBarOptionDrawableResource(option2));
 
                 if (navigationWrapper.navigationRailView == null) {
-                    navigationWrapper.bottomAppBar.setOnMenuItemClickListener(item -> {
-                        int itemId = item.getItemId();
-                        if (itemId == R.id.bottom_app_bar_option_1) {
-                            bottomAppBarOptionAction(option1);
-                            return true;
-                        } else if (itemId == R.id.bottom_app_bar_option_2) {
-                            bottomAppBarOptionAction(option2);
-                            return true;
-                        }
-                        return false;
+                    navigationWrapper.option2BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option1);
+                    });
+
+                    navigationWrapper.option4BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option2);
                     });
                 } else {
                     navigationWrapper.navigationRailView.setOnItemSelectedListener(item -> {
@@ -624,22 +620,20 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         getBottomAppBarOptionDrawableResource(option4));
 
                 if (navigationWrapper.navigationRailView == null) {
-                    navigationWrapper.bottomAppBar.setOnMenuItemClickListener(item -> {
-                        int itemId = item.getItemId();
-                        if (itemId == R.id.bottom_app_bar_option_1) {
-                            bottomAppBarOptionAction(option1);
-                            return true;
-                        } else if (itemId == R.id.bottom_app_bar_option_2) {
-                            bottomAppBarOptionAction(option2);
-                            return true;
-                        } else if (itemId == R.id.bottom_app_bar_option_3) {
-                            bottomAppBarOptionAction(option3);
-                            return true;
-                        } else if (itemId == R.id.bottom_app_bar_option_4) {
-                            bottomAppBarOptionAction(option4);
-                            return true;
-                        }
-                        return false;
+                    navigationWrapper.option1BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option1);
+                    });
+
+                    navigationWrapper.option2BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option2);
+                    });
+
+                    navigationWrapper.option3BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option3);
+                    });
+
+                    navigationWrapper.option4BottomAppBar.setOnClickListener(view -> {
+                        bottomAppBarOptionAction(option4);
                     });
                 } else {
                     navigationWrapper.navigationRailView.setOnItemSelectedListener(item -> {
