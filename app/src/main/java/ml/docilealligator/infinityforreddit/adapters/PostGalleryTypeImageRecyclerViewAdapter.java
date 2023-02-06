@@ -123,8 +123,12 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
         if (galleryImages == null || galleryImages.isEmpty()) {
             return;
         }
+        int index = holder.getBindingAdapterPosition();
+        if (index < 0 || index >= galleryImages.size()) {
+            return;
+        }
 
-        RequestBuilder<Drawable> imageRequestBuilder = glide.load(galleryImages.get(holder.getBindingAdapterPosition()).url).listener(new RequestListener<>() {
+        RequestBuilder<Drawable> imageRequestBuilder = glide.load(galleryImages.get(index).url).listener(new RequestListener<>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 holder.binding.progressBarItemGalleryImageInPostFeed.setVisibility(View.GONE);
@@ -152,8 +156,13 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
             return;
         }
 
-        String previewCaption = galleryImages.get(holder.getBindingAdapterPosition()).caption;
-        String previewCaptionUrl = galleryImages.get(holder.getBindingAdapterPosition()).captionUrl;
+        int index = holder.getBindingAdapterPosition();
+        if (index < 0 || index >= galleryImages.size()) {
+            return;
+        }
+
+        String previewCaption = galleryImages.get(index).caption;
+        String previewCaptionUrl = galleryImages.get(index).captionUrl;
         boolean previewCaptionIsEmpty = TextUtils.isEmpty(previewCaption);
         boolean previewCaptionUrlIsEmpty = TextUtils.isEmpty(previewCaptionUrl);
         if (!previewCaptionIsEmpty || !previewCaptionUrlIsEmpty) {
