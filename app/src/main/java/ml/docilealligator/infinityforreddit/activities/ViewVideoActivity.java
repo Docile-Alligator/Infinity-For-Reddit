@@ -55,6 +55,7 @@ import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelectionOverride;
 import com.google.android.exoplayer2.ui.PlayerControlView;
 import com.google.android.exoplayer2.ui.TrackSelectionDialogBuilder;
 import com.google.android.exoplayer2.upstream.DataSource;
@@ -637,22 +638,35 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                         });
                     }
 
-                    for (int i = 0; i < trackGroups.size(); i++) {
-                        String mimeType = trackGroups.get(i).getTrackFormat(0).sampleMimeType;
-                        if (mimeType != null && mimeType.contains("audio")) {
-                            muteButton.setVisibility(View.VISIBLE);
-                            muteButton.setOnClickListener(view -> {
-                                if (isMute) {
-                                    isMute = false;
-                                    player.setVolume(1f);
-                                    muteButton.setImageResource(R.drawable.ic_unmute_24dp);
-                                } else {
-                                    isMute = true;
-                                    player.setVolume(0f);
-                                    muteButton.setImageResource(R.drawable.ic_mute_24dp);
-                                }
-                            });
-                            break;
+                    for (Tracks.Group trackGroup : tracks.getGroups()) {
+                        if (trackGroup.getType() == C.TRACK_TYPE_AUDIO) {
+                            if (videoType == VIDEO_TYPE_NORMAL && trackGroup.length > 1) {
+                                // Reddit video HLS usually has two audio tracks. The first is mono.
+                                // The second (index 1) is stereo.
+                                // Select the stereo audio track if possible.
+                                trackSelector.setParameters(
+                                        trackSelector.buildUponParameters()
+                                                .setOverrideForType(new TrackSelectionOverride(
+                                                                trackGroup.getMediaTrackGroup(),
+                                                                1
+                                                        )
+                                                )
+                                );
+                            }
+                            if (muteButton.getVisibility() != View.VISIBLE) {
+                                muteButton.setVisibility(View.VISIBLE);
+                                muteButton.setOnClickListener(view -> {
+                                    if (isMute) {
+                                        isMute = false;
+                                        player.setVolume(1f);
+                                        muteButton.setImageResource(R.drawable.ic_unmute_24dp);
+                                    } else {
+                                        isMute = true;
+                                        player.setVolume(0f);
+                                        muteButton.setImageResource(R.drawable.ic_mute_24dp);
+                                    }
+                                });
+                            }
                         }
                     }
                 } else {
