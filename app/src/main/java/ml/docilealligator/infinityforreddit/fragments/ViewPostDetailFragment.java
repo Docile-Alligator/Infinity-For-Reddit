@@ -1437,7 +1437,12 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                 mRespectSubredditRecommendedSortType = false;
                                 sortTypeType = loadSortType();
                             } else {
-                                sortTypeType = SortType.Type.valueOf(suggestedCommentSort.toUpperCase(Locale.US));
+                                try {
+                                    sortTypeType = SortType.Type.valueOf(suggestedCommentSort.toUpperCase(Locale.US));
+                                } catch (IllegalArgumentException e) {
+                                    e.printStackTrace();
+                                    sortTypeType = loadSortType();
+                                }
                             }
                             activity.setTitle(sortTypeType.fullName);
                             ViewPostDetailFragment.this.sortType = sortTypeType;
