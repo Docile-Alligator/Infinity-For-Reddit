@@ -24,8 +24,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
+import com.evernote.android.state.State;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
+import com.livefront.bridge.Bridge;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -61,7 +63,6 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     public static final String EXTRA_PRIVATE_MESSAGE_INDEX = "EPM";
     public static final String EXTRA_MESSAGE_POSITION = "EMP";
     private static final String USER_AVATAR_STATE = "UAS";
-    private static final String PRIVATE_MESSAGES_STATE = "PMS";
     @BindView(R.id.coordinator_layout_view_private_messages_activity)
     CoordinatorLayout mCoordinatorLayout;
     @BindView(R.id.appbar_layout_view_private_messages_activity)
@@ -98,7 +99,10 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     Executor mExecutor;
     private LinearLayoutManagerBugFixed mLinearLayoutManager;
     private PrivateMessagesDetailRecyclerViewAdapter mAdapter;
-    private Message privateMessage;
+    @State
+    Message privateMessage;
+    @State
+    Message replyTo;
     private String mAccessToken;
     private String mAccountName;
     private String mUserAvatar;
@@ -117,6 +121,8 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_view_private_messages);
+
+        Bridge.restoreInstanceState(this, savedInstanceState);
 
         ButterKnife.bind(this);
 
@@ -162,7 +168,6 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
 
         if (savedInstanceState != null) {
             mUserAvatar = savedInstanceState.getString(USER_AVATAR_STATE);
-            privateMessage = savedInstanceState.getParcelable(PRIVATE_MESSAGES_STATE);
             if (privateMessage == null) {
                 EventBus.getDefault().post(new PassPrivateMessageIndexEvent(getIntent().getIntExtra(EXTRA_PRIVATE_MESSAGE_INDEX, -1)));
             } else {
@@ -226,67 +231,59 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
                 if (!mEditText.getText().toString().equals("")) {
                     //Send Message
                     if (privateMessage != null) {
-                        Message replyTo;
                         ArrayList<Message> replies = privateMessage.getReplies();
-                        if (replies != null && !replies.isEmpty()) {
-                            replyTo = replies.get(replies.size() - 1);
-                        } else {
+                        if (replyTo == null) {
                             replyTo = privateMessage;
                         }
-                        if (replyTo != null) {
-                            isSendingMessage = true;
-                            mSendImageView.setColorFilter(mSecondaryTextColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                            ReplyMessage.replyMessage(mEditText.getText().toString(), replyTo.getFullname(),
-                                    getResources().getConfiguration().locale, mOauthRetrofit, mAccessToken,
-                                    new ReplyMessage.ReplyMessageListener() {
-                                        @Override
-                                        public void replyMessageSuccess(Message message) {
-                                            if (mAdapter != null) {
-                                                mAdapter.addReply(message);
-                                            }
-                                            goToBottom();
-                                            mEditText.setText("");
-                                            mSendImageView.setColorFilter(mSendMessageIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                            isSendingMessage = false;
-                                            EventBus.getDefault().post(new RepliedToPrivateMessageEvent(message, getIntent().getIntExtra(EXTRA_MESSAGE_POSITION, -1)));
+                        isSendingMessage = true;
+                        mSendImageView.setColorFilter(mSecondaryTextColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                        ReplyMessage.replyMessage(mEditText.getText().toString(), replyTo.getFullname(),
+                                getResources().getConfiguration().locale, mOauthRetrofit, mAccessToken,
+                                new ReplyMessage.ReplyMessageListener() {
+                                    @Override
+                                    public void replyMessageSuccess(Message message) {
+                                        if (mAdapter != null) {
+                                            mAdapter.addReply(message);
                                         }
-
-                                        @Override
-                                        public void replyMessageFailed(String errorMessage) {
-                                            if (errorMessage != null && !errorMessage.equals("")) {
-                                                Snackbar.make(mCoordinatorLayout, errorMessage, Snackbar.LENGTH_LONG).show();
-                                            } else {
-                                                Snackbar.make(mCoordinatorLayout, R.string.reply_message_failed, Snackbar.LENGTH_LONG).show();
-                                            }
-                                            mSendImageView.setColorFilter(mSendMessageIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                            isSendingMessage = false;
-                                        }
-                                    });
-                            StringBuilder fullnames = new StringBuilder();
-                            if (privateMessage.isNew()) {
-                                fullnames.append(privateMessage.getFullname()).append(",");
-                            }
-                            if (replies != null && !replies.isEmpty()) {
-                                for (Message m : replies) {
-                                    if (m.isNew()) {
-                                        fullnames.append(m).append(",");
+                                        goToBottom();
+                                        mEditText.setText("");
+                                        mSendImageView.setColorFilter(mSendMessageIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                        isSendingMessage = false;
+                                        EventBus.getDefault().post(new RepliedToPrivateMessageEvent(message, getIntent().getIntExtra(EXTRA_MESSAGE_POSITION, -1)));
                                     }
+
+                                    @Override
+                                    public void replyMessageFailed(String errorMessage) {
+                                        if (errorMessage != null && !errorMessage.equals("")) {
+                                            Snackbar.make(mCoordinatorLayout, errorMessage, Snackbar.LENGTH_LONG).show();
+                                        } else {
+                                            Snackbar.make(mCoordinatorLayout, R.string.reply_message_failed, Snackbar.LENGTH_LONG).show();
+                                        }
+                                        mSendImageView.setColorFilter(mSendMessageIconColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                        isSendingMessage = false;
+                                    }
+                                });
+                        StringBuilder fullnames = new StringBuilder();
+                        if (privateMessage.isNew()) {
+                            fullnames.append(privateMessage.getFullname()).append(",");
+                        }
+                        if (replies != null && !replies.isEmpty()) {
+                            for (Message m : replies) {
+                                if (m.isNew()) {
+                                    fullnames.append(m).append(",");
                                 }
                             }
-                            if (fullnames.length() > 0) {
-                                fullnames.deleteCharAt(fullnames.length() - 1);
-                                ReadMessage.readMessage(mOauthRetrofit, mAccessToken, fullnames.toString(),
-                                        new ReadMessage.ReadMessageListener() {
-                                            @Override
-                                            public void readSuccess() {}
+                        }
+                        if (fullnames.length() > 0) {
+                            fullnames.deleteCharAt(fullnames.length() - 1);
+                            ReadMessage.readMessage(mOauthRetrofit, mAccessToken, fullnames.toString(),
+                                    new ReadMessage.ReadMessageListener() {
+                                        @Override
+                                        public void readSuccess() {}
 
-                                            @Override
-                                            public void readFailed() {}
-                                        });
-                            }
-                        } else {
-                            isSendingMessage = false;
-                            Snackbar.make(mCoordinatorLayout, R.string.error_getting_message, Snackbar.LENGTH_LONG).show();
+                                        @Override
+                                        public void readFailed() {}
+                                    });
                         }
                     }
                 }
@@ -337,13 +334,14 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(USER_AVATAR_STATE, mUserAvatar);
-        outState.putParcelable(PRIVATE_MESSAGES_STATE, privateMessage);
+        Bridge.saveInstanceState(this, outState);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+        Bridge.clear(this);
     }
 
     @Override
@@ -383,6 +381,20 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
     public void onPassPrivateMessageEvent(PassPrivateMessageEvent passPrivateMessageEvent) {
         privateMessage = passPrivateMessageEvent.message;
         if (privateMessage != null) {
+            if (privateMessage.getAuthor().equals(mAccountName)) {
+                for (int i = privateMessage.getReplies().size() - 1; i >= 0; i--) {
+                    if (!privateMessage.getReplies().get(i).getAuthor().equals(mAccountName)) {
+                        replyTo = privateMessage.getReplies().get(i);
+                        break;
+                    }
+                }
+                if (replyTo == null) {
+                    replyTo = privateMessage;
+                }
+            } else {
+                replyTo = privateMessage;
+            }
+
             bindView();
         }
     }

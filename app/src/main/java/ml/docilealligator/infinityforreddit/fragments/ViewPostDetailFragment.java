@@ -1216,12 +1216,10 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         super.onSaveInstanceState(outState);
         comments = mCommentsAdapter == null ? null : mCommentsAdapter.getVisibleComments();
         if (mCommentsRecyclerView != null) {
-            //scrollpositionn = mcommentsadapter.getPosition()
             LinearLayoutManager myLayoutManager = (LinearLayoutManager) mCommentsRecyclerView.getLayoutManager();
             scrollPosition = myLayoutManager != null ? myLayoutManager.findFirstVisibleItemPosition() : 0;
             
         } else {
-            //scrollposition = mrecyclerviewadapter.getposition()
             LinearLayoutManager myLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
             scrollPosition = myLayoutManager != null ? myLayoutManager.findFirstVisibleItemPosition() : 0;
         }
