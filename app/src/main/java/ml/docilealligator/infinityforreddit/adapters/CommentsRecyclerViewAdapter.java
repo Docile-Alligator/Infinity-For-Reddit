@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -1908,7 +1907,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     mIsSingleCommentThreadMode = false;
                     mSingleCommentId = null;
                     notifyItemRemoved(0);
-                    mFragment.changeToNomalThreadMode();
+                    mFragment.changeToNormalThreadMode();
                 }
             });
 

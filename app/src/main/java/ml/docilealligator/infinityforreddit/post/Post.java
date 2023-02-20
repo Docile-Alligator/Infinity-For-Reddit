@@ -78,6 +78,7 @@ public class Post implements Parcelable {
     private boolean isRead;
     private String crosspostParentId;
     private String distinguished;
+    private String suggestedSort;
     private ArrayList<Preview> previews = new ArrayList<>();
     private ArrayList<Gallery> gallery = new ArrayList<>();
 
@@ -86,7 +87,7 @@ public class Post implements Parcelable {
                 String title, String permalink, int score, int postType, int voteType, int nComments,
                 int upvoteRatio, String flair, String awards, int nAwards, boolean hidden, boolean spoiler,
                 boolean nsfw, boolean stickied, boolean archived, boolean locked, boolean saved,
-                boolean isCrosspost, String distinguished) {
+                boolean isCrosspost, String distinguished, String suggestedSort) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -115,6 +116,7 @@ public class Post implements Parcelable {
         this.saved = saved;
         this.isCrosspost = isCrosspost;
         this.distinguished = distinguished;
+        this.suggestedSort = suggestedSort;
         isRead = false;
     }
 
@@ -123,7 +125,7 @@ public class Post implements Parcelable {
                 String url, String permalink, int score, int postType, int voteType, int nComments,
                 int upvoteRatio, String flair, String awards, int nAwards, boolean hidden, boolean spoiler,
                 boolean nsfw, boolean stickied, boolean archived, boolean locked, boolean saved,
-                boolean isCrosspost, String distinguished) {
+                boolean isCrosspost, String distinguished, String suggestedSort) {
         this.id = id;
         this.fullName = fullName;
         this.subredditName = subredditName;
@@ -153,6 +155,7 @@ public class Post implements Parcelable {
         this.saved = saved;
         this.isCrosspost = isCrosspost;
         this.distinguished = distinguished;
+        this.suggestedSort = suggestedSort;
         isRead = false;
     }
 
@@ -202,6 +205,7 @@ public class Post implements Parcelable {
         isRead = in.readByte() != 0;
         crosspostParentId = in.readString();
         distinguished = in.readString();
+        suggestedSort = in.readString();
         in.readTypedList(previews, Preview.CREATOR);
         in.readTypedList(gallery, Gallery.CREATOR);
     }
@@ -399,6 +403,10 @@ public class Post implements Parcelable {
         return distinguished != null && distinguished.equals("admin");
     }
 
+    public String getSuggestedSort() {
+        return suggestedSort;
+    }
+
     public String getAwards() {
         return awards;
     }
@@ -587,6 +595,7 @@ public class Post implements Parcelable {
         parcel.writeByte((byte) (isRead ? 1 : 0));
         parcel.writeString(crosspostParentId);
         parcel.writeString(distinguished);
+        parcel.writeString(suggestedSort);
         parcel.writeTypedList(previews);
         parcel.writeTypedList(gallery);
     }

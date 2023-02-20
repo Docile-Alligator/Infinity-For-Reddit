@@ -813,10 +813,10 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             children.clear();
         }
         this.sortType = sortType.getType();
-        if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false)
-                && mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_SORT_TYPE, true)) {
+        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_SORT_TYPE, true)) {
             mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, sortType.getType().name()).apply();
         }
+        mRespectSubredditRecommendedSortType = false;
         fetchCommentsRespectRecommendedSort(false, sortType.getType());
     }
 
@@ -1425,6 +1425,17 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
     private void fetchCommentsRespectRecommendedSort(boolean changeRefreshState, SortType.Type sortType) {
         if (mRespectSubredditRecommendedSortType && mPost != null) {
+            if (mPost.getSuggestedSort() != null && !mPost.getSuggestedSort().equals("null") && !mPost.getSuggestedSort().equals("")) {
+                try {
+                    SortType.Type sortTypeType = SortType.Type.valueOf(mPost.getSuggestedSort().toUpperCase(Locale.US));
+                    activity.setTitle(sortTypeType.fullName);
+                    ViewPostDetailFragment.this.sortType = sortTypeType;
+                    fetchComments(changeRefreshState, ViewPostDetailFragment.this.sortType);
+                    return;
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                }
+            }
             FetchSubredditData.fetchSubredditData(mOauthRetrofit, mRetrofit, mPost.getSubredditName(), mAccessToken,
                     new FetchSubredditData.FetchSubredditDataListener() {
                         @Override
@@ -1586,8 +1597,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             mFetchPostInfoLinearLayout.setVisibility(View.GONE);
             mGlide.clear(mFetchPostInfoImageView);
 
-            if (fetchComments) {
-                fetchCommentsRespectRecommendedSort(!fetchPost);
+            if (!fetchPost && fetchComments) {
+                fetchCommentsRespectRecommendedSort(true);
             }
 
             if (fetchPost) {
@@ -1605,9 +1616,14 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                     mPost = post;
                                     mPostAdapter.updatePost(mPost);
                                     EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                                    isRefreshing = false;
                                     setupMenu();
                                     mSwipeRefreshLayout.setRefreshing(false);
+
+                                    if (fetchComments) {
+                                        fetchCommentsRespectRecommendedSort(true);
+                                    } else {
+                                        isRefreshing = false;
+                                    }
                                 }
                             }
 
@@ -1842,7 +1858,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 });
     }
 
-    public void changeToNomalThreadMode() {
+    public void changeToNormalThreadMode() {
         isSingleCommentThreadMode = false;
         mSingleCommentId = null;
         mRespectSubredditRecommendedSortType = mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false);
