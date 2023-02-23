@@ -203,7 +203,7 @@
     <string name="sort_qa">"QA"</string>
     <string name="sort_live">"Élő"</string>
     <string name="sort_time_hour">"Óra"</string>
-    <string name="sort_time_day">"Nem"</string>
+    <string name="sort_time_day">"Nap"</string>
     <string name="sort_time_week">"Hét"</string>
     <string name="sort_time_month">"Hónap"</string>
     <string name="sort_time_year">"Év"</string>
