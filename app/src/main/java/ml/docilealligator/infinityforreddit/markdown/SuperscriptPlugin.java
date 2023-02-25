@@ -142,6 +142,36 @@ public class SuperscriptPlugin extends AbstractMarkwonPlugin {
                 if (notEmptyLink((Link) next)) {
                     return true;
                 }
+            } else if (next instanceof SpoilerNode) {
+                if (notEmptySpoilerNode((SpoilerNode) next)) {
+                    return true;
+                }
+            } else {
+                return true;
+            }
+            next = next.getNext();
+        }
+
+        return false;
+    }
+
+    private boolean notEmptySpoilerNode(SpoilerNode spoilerNode) {
+        Node next = spoilerNode.getFirstChild();
+        while (next != null) {
+            if (next instanceof Text) {
+                return true;
+            } else if (next instanceof Superscript) {
+                if (notEmptySuperscript((Superscript) next)) {
+                    return true;
+                }
+            } else if (next instanceof Link) {
+                if (notEmptyLink((Link) next)) {
+                    return true;
+                }
+            } else if (next instanceof SpoilerNode) {
+                if (notEmptySpoilerNode((SpoilerNode) next)) {
+                    return true;
+                }
             } else {
                 return true;
             }
@@ -154,7 +184,7 @@ public class SuperscriptPlugin extends AbstractMarkwonPlugin {
     private boolean notEmptySuperscript(Superscript superscript) {
         Node next;
         if (superscript.isBracketed()) {
-            next =  superscript.getFirstChild();
+            next = superscript.getFirstChild();
         } else {
             next = superscript.getNext();
         }
@@ -162,6 +192,10 @@ public class SuperscriptPlugin extends AbstractMarkwonPlugin {
         while (next != null) {
             if (next instanceof Link) {
                 if (notEmptyLink((Link) next)) {
+                    return true;
+                }
+            } else if (next instanceof SpoilerNode) {
+                if (notEmptySpoilerNode((SpoilerNode) next)) {
                     return true;
                 }
             } else if (!(next instanceof Superscript)) {
