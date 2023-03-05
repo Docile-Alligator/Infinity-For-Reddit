@@ -435,7 +435,7 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
     }
 
     protected void applyFABTheme(FloatingActionButton fab) {
-        fab.setBackgroundTintList(ColorStateList.valueOf(customTheme.colorPrimaryLightTheme));
+        fab.setBackgroundTintList(ColorStateList.valueOf(customTheme.colorAccent));
         fab.setImageTintList(ColorStateList.valueOf(customTheme.fabIconColor));
     }
 
