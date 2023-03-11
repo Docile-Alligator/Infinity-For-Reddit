@@ -2578,6 +2578,19 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                     shareLink(post);
                 }
             });
+
+            shareButton.setOnLongClickListener(view -> {
+                int position = getBindingAdapterPosition();
+                if (position < 0) {
+                    return false;
+                }
+                Post post = getItem(position);
+                if (post != null) {
+                    mActivity.copyLink(post.getPermalink());
+                    return true;
+                }
+                return false;
+            });
         }
 
         void setBaseView(AspectRatioGifImageView iconGifImageView,
@@ -3884,6 +3897,19 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                 if (post != null) {
                     shareLink(post);
                 }
+            });
+
+            shareButton.setOnLongClickListener(view -> {
+                int position = getBindingAdapterPosition();
+                if (position < 0) {
+                    return false;
+                }
+                Post post = getItem(position);
+                if (post != null) {
+                    mActivity.copyLink(post.getPermalink());
+                    return true;
+                }
+                return false;
             });
 
             requestListener = new RequestListener<>() {
