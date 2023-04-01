@@ -1,42 +1,27 @@
-package ml.docilealligator.infinityforreddit;
+package ml.docilealligator.infinityforreddit
 
-import android.os.Parcel;
-import android.os.Parcelable;
+import android.os.Parcel
+import android.os.Parcelable
 
-public class UploadedImage implements Parcelable {
-    public String imageName;
-    public String imageUrl;
+open class UploadedImage(
+    var imageName: String?,
+    var imageUrl: String?
+    ) : Parcelable {
+    protected constructor(parcel: Parcel) : this(
+        parcel.readString(), parcel.readString()
+    )
 
-    public UploadedImage(String imageName, String imageUrl) {
-        this.imageName = imageName;
-        this.imageUrl = imageUrl;
+    override fun describeContents() = 0
+
+    override fun writeToParcel(parcel: Parcel, i: Int) {
+        parcel.writeString(imageName)
+        parcel.writeString(imageUrl)
     }
 
-    protected UploadedImage(Parcel in) {
-        imageName = in.readString();
-        imageUrl = in.readString();
-    }
-
-    public static final Creator<UploadedImage> CREATOR = new Creator<UploadedImage>() {
-        @Override
-        public UploadedImage createFromParcel(Parcel in) {
-            return new UploadedImage(in);
-        }
-
-        @Override
-        public UploadedImage[] newArray(int size) {
-            return new UploadedImage[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        parcel.writeString(imageName);
-        parcel.writeString(imageUrl);
+    companion object CREATOR: Parcelable.Creator<UploadedImage?> {
+        override fun createFromParcel(parcel: Parcel) =
+            UploadedImage(parcel)
+        override fun newArray(size: Int) =
+            arrayOfNulls<UploadedImage?>(size)
     }
 }
