@@ -19,6 +19,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -89,6 +90,8 @@ public class SelectedSubredditsAndUsersActivity extends BaseActivity implements 
         } else {
             subreddits = getIntent().getStringArrayListExtra(EXTRA_SELECTED_SUBREDDITS);
         }
+
+        Collections.sort(subreddits);
 
         adapter = new SelectedSubredditsRecyclerViewAdapter(this, mCustomThemeWrapper, subreddits);
         linearLayoutManager = new LinearLayoutManagerBugFixed(this);
