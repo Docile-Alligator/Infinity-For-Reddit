@@ -99,7 +99,7 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofitVersion"
     implementation "com.squareup.retrofit2:converter-scalars:$retrofitVersion"
     implementation "com.squareup.retrofit2:adapter-guava:$retrofitVersion"
-    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
+    implementation 'com.squareup.okhttp3:okhttp:4.11.0'
 
     // Dependency injection
     def daggerVersion = '2.40.5'
