@@ -459,6 +459,16 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 } else {
                     ((CommentViewHolder) holder).scoreTextView.setText(mActivity.getString(R.string.vote));
                 }
+                
+                if(comment.isEdited()){
+                    ((CommentViewHolder) holder).editedView.setText(R.string.edited);
+                    ((CommentViewHolder) holder).editedView.setOnClickListener(view -> {
+                        Toast.makeText(view.getContext(), view.getContext().getString(R.string.edited_time, mShowElapsedTime ?
+                                Utils.getElapsedTime(mActivity, comment.getEditedTimeMillis()) :
+                                Utils.getFormattedTime(mLocale, comment.getEditedTimeMillis(), mTimeFormatPattern)
+                        ), Toast.LENGTH_SHORT).show();
+                    });
+                }
 
                 ((CommentViewHolder) holder).commentIndentationView.setShowOnlyOneDivider(mShowOnlyOneCommentLevelIndicator);
                 ((CommentViewHolder) holder).commentIndentationView.setLevelAndColors(comment.getDepth(), verticalBlockColors);
@@ -1181,6 +1191,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         TextView awardsTextView;
         @BindView(R.id.comment_markdown_view_item_post_comment)
         RecyclerView commentMarkdownView;
+        @BindView(R.id.edited_text_view_item_post_comment)
+        TextView editedView;
         @BindView(R.id.bottom_constraint_layout_item_post_comment)
         ConstraintLayout bottomConstraintLayout;
         @BindView(R.id.up_vote_button_item_post_comment)

@@ -92,6 +92,7 @@ public class JSONUtils {
     public static final String TEXT_EDITABLE_KEY = "text_editable";
     public static final String SUBJECT_KEY = "subject";
     public static final String CONTEXT_KEY = "context";
+    public static final String EDITED_KEY = "edited";
     public static final String DISTINGUISHED_KEY = "distinguished";
     public static final String WAS_COMMENT_KEY = "was_comment";
     public static final String NEW_KEY = "new";
