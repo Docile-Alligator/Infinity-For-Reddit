@@ -176,7 +176,6 @@ dependencies {
     implementation 'com.libRG:customtextview:2.4'
 
     // Dismiss gesturing
-    implementation 'com.r0adkll:slidableactivity:2.1.0'
     implementation 'app.futured.hauler:hauler:5.0.0'
 
     // Bottom sheet with rounded corners

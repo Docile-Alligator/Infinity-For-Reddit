@@ -40,8 +40,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.livefront.bridge.Bridge;
-import com.r0adkll.slidr.Slidr;
-import com.r0adkll.slidr.model.SlidrInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -71,6 +69,9 @@ import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
+import ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrInterface;
+import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
 import ml.docilealligator.infinityforreddit.events.NeedForPostListFromPostFragmentEvent;
 import ml.docilealligator.infinityforreddit.events.ProvidePostListToViewPostDetailActivityEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -176,7 +177,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     int loadingMorePostsStatus = LoadingMorePostsStatus.NOT_LOADING;
     public Map<String, String> authorIcons = new HashMap<>();
     private FragmentManager fragmentManager;
-    private SlidrInterface mSlidrInterface;
+    private SliderPanel mSliderPanel;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private String mAccessToken;
     private String mAccountName;
@@ -237,7 +238,7 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         boolean swipeBetweenPosts = mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_BETWEEN_POSTS, false);
         if (!swipeBetweenPosts) {
             if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-                mSlidrInterface = Slidr.attach(this);
+                mSliderPanel = Slidr.attach(this);
             }
             viewPager2.setUserInputEnabled(false);
         }
@@ -862,15 +863,15 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
 
     @Override
     public void lockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.lock();
+        if (mSliderPanel != null) {
+            mSliderPanel.lock();
         }
     }
 
     @Override
     public void unlockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.unlock();
+        if (mSliderPanel != null) {
+            mSliderPanel.unlock();
         }
     }
 
