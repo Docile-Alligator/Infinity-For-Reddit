@@ -3292,6 +3292,16 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             adapter = new PostGalleryTypeImageRecyclerViewAdapter(mGlide, mActivity.typeface,
                     mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale);
             galleryRecyclerView.setAdapter(adapter);
+            galleryRecyclerView.setOnTouchListener((v, motionEvent) -> {
+                mActivity.sliderPanel.requestDisallowInterceptTouchEvent(true);
+
+                switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_UP:
+                        mActivity.sliderPanel.requestDisallowInterceptTouchEvent(false);
+                }
+
+                return false;
+            });
             new PagerSnapHelper().attachToRecyclerView(galleryRecyclerView);
             galleryRecyclerView.setRecycledViewPool(mGalleryRecycledViewPool);
             SwipeLockLinearLayoutManager layoutManager = new SwipeLockLinearLayoutManager(
