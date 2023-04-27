@@ -103,7 +103,6 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private SliderPanel mSliderPanel;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private FragmentManager fragmentManager;
     private String mAccessToken;

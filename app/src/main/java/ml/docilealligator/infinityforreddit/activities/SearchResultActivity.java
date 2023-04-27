@@ -138,7 +138,6 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     private boolean mInsertSearchQuerySuccess;
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
-    private SliderPanel mSliderPanel;
     private int fabOption;
 
     @Override

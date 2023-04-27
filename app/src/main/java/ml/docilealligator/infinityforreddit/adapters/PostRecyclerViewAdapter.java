@@ -3293,11 +3293,12 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale);
             galleryRecyclerView.setAdapter(adapter);
             galleryRecyclerView.setOnTouchListener((v, motionEvent) -> {
-                mActivity.sliderPanel.requestDisallowInterceptTouchEvent(true);
-
-                switch (motionEvent.getAction() & MotionEvent.ACTION_MASK) {
-                    case MotionEvent.ACTION_UP:
-                        mActivity.sliderPanel.requestDisallowInterceptTouchEvent(false);
+                if (mActivity.mSliderPanel != null) {
+                    if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP) {
+                        mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(false);
+                    } else {
+                        mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(true);
+                    }
                 }
 
                 return false;
@@ -4409,6 +4410,17 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
             adapter = new PostGalleryTypeImageRecyclerViewAdapter(mGlide, mActivity.typeface,
                     mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale);
+            recyclerView.setOnTouchListener((v, motionEvent) -> {
+                if (mActivity.mSliderPanel != null) {
+                    if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP) {
+                        mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(false);
+                    } else {
+                        mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(true);
+                    }
+                }
+
+                return false;
+            });
             recyclerView.setAdapter(adapter);
             new PagerSnapHelper().attachToRecyclerView(recyclerView);
             recyclerView.setRecycledViewPool(mGalleryRecycledViewPool);

@@ -224,7 +224,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private int unsubscribedColor;
     private int subscribedColor;
     private int fabOption;
-    private SliderPanel mSliderPanel;
     private MaterialAlertDialogBuilder nsfwWarningBuilder;
 
     @Override

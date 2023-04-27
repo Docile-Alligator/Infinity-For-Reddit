@@ -226,7 +226,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     private boolean lockBottomAppBar;
     private String mMessageFullname;
     private String mNewAccountName;
-    private SliderPanel mSliderPanel;
     //private MaterialAlertDialogBuilder nsfwWarningBuilder;
 
     @Override

@@ -177,7 +177,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     int loadingMorePostsStatus = LoadingMorePostsStatus.NOT_LOADING;
     public Map<String, String> authorIcons = new HashMap<>();
     private FragmentManager fragmentManager;
-    private SliderPanel mSliderPanel;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private String mAccessToken;
     private String mAccountName;

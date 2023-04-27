@@ -112,7 +112,6 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private SliderPanel mSliderPanel;
     private String mAccessToken;
     private String mAccountName;
     private boolean mInsertSuccess = false;

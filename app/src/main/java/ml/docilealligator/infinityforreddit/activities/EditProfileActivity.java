@@ -124,8 +124,7 @@ public class EditProfileActivity extends BaseActivity {
         setSupportActionBar(toolbar);
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            SliderPanel sliderPanel = Slidr.attach(this);
-            sliderPanel.unlock();
+            Slidr.attach(this);
         }
 
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);

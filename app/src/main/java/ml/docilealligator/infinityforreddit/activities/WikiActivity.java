@@ -95,7 +95,6 @@ public class WikiActivity extends BaseActivity {
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
-    private SliderPanel mSliderPanel;
     private String wikiMarkdown;
     private Markwon markwon;
     private MarkwonAdapter markwonAdapter;

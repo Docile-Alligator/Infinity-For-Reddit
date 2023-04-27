@@ -67,7 +67,6 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.FetchGfycatOrRedgifsVideoLinks;
 import ml.docilealligator.infinityforreddit.FetchStreamableVideo;
-import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy;
 import ml.docilealligator.infinityforreddit.SaveThing;
@@ -3155,6 +3154,17 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
 
             adapter = new PostGalleryTypeImageRecyclerViewAdapter(mGlide, mActivity.typeface,
                     mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale);
+            galleryRecyclerView.setOnTouchListener((v, motionEvent) -> {
+                if (mActivity.mSliderPanel != null) {
+                    if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP) {
+                        mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(false);
+                    } else {
+                        mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(true);
+                    }
+                }
+
+                return false;
+            });
             galleryRecyclerView.setAdapter(adapter);
             new PagerSnapHelper().attachToRecyclerView(galleryRecyclerView);
             galleryRecyclerView.setRecycledViewPool(mGalleryRecycledViewPool);
@@ -4215,6 +4225,17 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
 
             adapter = new PostGalleryTypeImageRecyclerViewAdapter(mGlide, mActivity.typeface,
                     mSaveMemoryCenterInsideDownsampleStrategy, mColorAccent, mPrimaryTextColor, mScale);
+            recyclerView.setOnTouchListener((v, motionEvent) -> {
+                if (mActivity.mSliderPanel != null) {
+                    if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP) {
+                        mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(false);
+                    } else {
+                        mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(true);
+                    }
+                }
+
+                return false;
+            });
             recyclerView.setAdapter(adapter);
             new PagerSnapHelper().attachToRecyclerView(recyclerView);
             recyclerView.setRecycledViewPool(mGalleryRecycledViewPool);
