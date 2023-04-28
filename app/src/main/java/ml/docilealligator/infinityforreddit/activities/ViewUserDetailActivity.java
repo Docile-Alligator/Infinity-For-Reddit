@@ -256,6 +256,8 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             mSliderPanel = Slidr.attach(this);
         }
 
+        mViewPager2 = viewPager2;
+
         username = getIntent().getStringExtra(EXTRA_USER_NAME_KEY);
 
         fragmentManager = getSupportFragmentManager();

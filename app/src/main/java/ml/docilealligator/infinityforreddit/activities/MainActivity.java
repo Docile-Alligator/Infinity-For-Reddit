@@ -316,6 +316,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         });
         toggle.syncState();
 
+        mViewPager2 = viewPager2;
+
         mBackButtonAction = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_BACK_BUTTON_ACTION, "0"));
         mLockBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_BOTTOM_APP_BAR, false);
         mDisableSwipingBetweenTabs = mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false);

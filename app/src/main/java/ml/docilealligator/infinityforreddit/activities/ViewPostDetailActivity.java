@@ -70,8 +70,6 @@ import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
-import ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrInterface;
-import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
 import ml.docilealligator.infinityforreddit.events.NeedForPostListFromPostFragmentEvent;
 import ml.docilealligator.infinityforreddit.events.ProvidePostListToViewPostDetailActivityEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -186,7 +184,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     private boolean mVolumeKeysNavigateComments;
     private boolean isNsfwSubreddit;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         ((Infinity) getApplication()).getAppComponent().inject(this);
@@ -240,6 +237,8 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
                 mSliderPanel = Slidr.attach(this);
             }
             viewPager2.setUserInputEnabled(false);
+        } else {
+            super.mViewPager2 = viewPager2;
         }
         postFragmentId = getIntent().getLongExtra(EXTRA_POST_FRAGMENT_ID, -1);
         if (swipeBetweenPosts && posts == null && postFragmentId > 0) {
@@ -857,20 +856,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         if (fragment != null) {
             fragment.changeSortType(sortType);
             mToolbar.setTitle(sortType.getType().fullName);
-        }
-    }
-
-    @Override
-    public void lockSwipeRightToGoBack() {
-        if (mSliderPanel != null) {
-            mSliderPanel.lock();
-        }
-    }
-
-    @Override
-    public void unlockSwipeRightToGoBack() {
-        if (mSliderPanel != null) {
-            mSliderPanel.unlock();
         }
     }
 

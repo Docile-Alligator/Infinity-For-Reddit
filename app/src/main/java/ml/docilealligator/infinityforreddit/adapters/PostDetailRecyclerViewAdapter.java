@@ -96,6 +96,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.ShareLinkBottom
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
+import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
@@ -2421,18 +2422,28 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mCardViewColor, mCommentColor, mScale);
             galleryRecyclerView.setAdapter(adapter);
             new PagerSnapHelper().attachToRecyclerView(galleryRecyclerView);
-            SwipeLockLinearLayoutManager layoutManager = new SwipeLockLinearLayoutManager(
-                    mActivity, RecyclerView.HORIZONTAL, false, new SwipeLockInterface() {
-                @Override
-                public void lockSwipe() {
+            galleryRecyclerView.setOnTouchListener((v, motionEvent) -> {
+                if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP || motionEvent.getActionMasked() == MotionEvent.ACTION_CANCEL) {
+                    if (mActivity.mSliderPanel != null) {
+                        mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(false);
+                    }
+                    if (mActivity.mViewPager2 != null) {
+                        mActivity.mViewPager2.setUserInputEnabled(true);
+                    }
+                    mActivity.unlockSwipeRightToGoBack();
+                } else {
+                    if (mActivity.mSliderPanel != null) {
+                        mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(true);
+                    }
+                    if (mActivity.mViewPager2 != null) {
+                        mActivity.mViewPager2.setUserInputEnabled(false);
+                    }
                     mActivity.lockSwipeRightToGoBack();
                 }
 
-                @Override
-                public void unlockSwipe() {
-                    mActivity.unlockSwipeRightToGoBack();
-                }
+                return false;
             });
+            LinearLayoutManagerBugFixed layoutManager = new LinearLayoutManagerBugFixed(mActivity, RecyclerView.HORIZONTAL, false);
             galleryRecyclerView.setLayoutManager(layoutManager);
             galleryRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override

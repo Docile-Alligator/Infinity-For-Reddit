@@ -73,6 +73,8 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
     public Typeface contentTypeface;
     @Nullable
     public SliderPanel mSliderPanel;
+    @Nullable
+    public ViewPager2 mViewPager2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

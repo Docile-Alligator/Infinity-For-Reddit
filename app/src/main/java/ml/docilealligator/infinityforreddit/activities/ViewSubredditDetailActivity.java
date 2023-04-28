@@ -252,6 +252,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             mSliderPanel = Slidr.attach(this);
         }
 
+        mViewPager2 = viewPager2;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
             if (isImmersiveInterface()) {

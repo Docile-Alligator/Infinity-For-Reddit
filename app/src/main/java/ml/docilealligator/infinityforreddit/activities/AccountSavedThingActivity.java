@@ -91,6 +91,8 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
             mSliderPanel = Slidr.attach(this);
         }
 
+        mViewPager2 = binding.accountSavedThingViewPager2;
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
 
