@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -233,6 +234,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private boolean hasPost = false;
     private boolean savePostFeedScrolledPosition;
     private boolean rememberMutingOptionInPostFeed;
+    private boolean swipeActionEnabled;
     private Boolean masterMutingOption;
     private PostRecyclerViewAdapter mAdapter;
     private RecyclerView.SmoothScroller smoothScroller;
@@ -1064,7 +1066,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     if (((PostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) viewHolder).isSwipeLocked()) {
                         return makeMovementFlags(0, 0);
                     }
-
                 }
                 int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
                 return makeMovementFlags(0, swipeFlags);
@@ -1153,6 +1154,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         });
 
         if (nColumns == 1 && mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SWIPE_ACTION, false)) {
+            swipeActionEnabled = true;
             touchHelper.attachToRecyclerView(mPostRecyclerView);
         }
         mPostRecyclerView.setAdapter(mAdapter);
@@ -1978,7 +1980,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Subscribe
     public void onChangeEnableSwipeActionSwitchEvent(ChangeEnableSwipeActionSwitchEvent changeEnableSwipeActionSwitchEvent) {
-        if (touchHelper != null) {
+        if (getNColumns(getResources()) == 1 && touchHelper != null) {
+            swipeActionEnabled = changeEnableSwipeActionSwitchEvent.enableSwipeAction;
             if (changeEnableSwipeActionSwitchEvent.enableSwipeAction) {
                 touchHelper.attachToRecyclerView(mPostRecyclerView);
             } else {
@@ -2217,6 +2220,18 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if (mAdapter != null) {
             mAdapter.setCanPlayVideo(hasWindowsFocus);
         }
+    }
+
+    public boolean isRecyclerViewItemSwipeable(RecyclerView.ViewHolder viewHolder) {
+        if (swipeActionEnabled) {
+            if (viewHolder instanceof PostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) {
+                return !((PostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) viewHolder).isSwipeLocked();
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     private static abstract class LazyModeRunnable implements Runnable {
