@@ -44,6 +44,10 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -343,19 +347,18 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         dataSavingModeDefaultResolution = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.REDDIT_VIDEO_DEFAULT_RESOLUTION, "360"));
 
         if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.VIDEO_PLAYER_IGNORE_NAV_BAR, false)) {
-            if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
-                //Set player controller bottom margin in order to display it above the navbar
-                int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-                LinearLayout controllerLinearLayout = findViewById(R.id.linear_layout_exo_playback_control_view);
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
-                params.bottomMargin = resources.getDimensionPixelSize(resourceId);
-            } else {
-                //Set player controller right margin in order to display it above the navbar
-                int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-                LinearLayout controllerLinearLayout = findViewById(R.id.linear_layout_exo_playback_control_view);
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
-                params.rightMargin = resources.getDimensionPixelSize(resourceId);
-            }
+            LinearLayout controllerLinearLayout = findViewById(R.id.linear_layout_exo_playback_control_view);
+            ViewCompat.setOnApplyWindowInsetsListener(controllerLinearLayout, new OnApplyWindowInsetsListener() {
+                @NonNull
+                @Override
+                public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                    Insets systemBar = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                    ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
+                    params.bottomMargin = systemBar.bottom;
+                    params.rightMargin = systemBar.right;
+                    return WindowInsetsCompat.CONSUMED;
+                }
+            });
         }
 
         haulerView.setOnDragDismissedListener(dragDirection -> {
