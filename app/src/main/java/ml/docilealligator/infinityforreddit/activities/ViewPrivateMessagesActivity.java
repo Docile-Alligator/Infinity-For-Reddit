@@ -334,10 +334,12 @@ public class ViewPrivateMessagesActivity extends BaseActivity implements Activit
         privateMessage = passPrivateMessageEvent.message;
         if (privateMessage != null) {
             if (privateMessage.getAuthor().equals(mAccountName)) {
-                for (int i = privateMessage.getReplies().size() - 1; i >= 0; i--) {
-                    if (!privateMessage.getReplies().get(i).getAuthor().equals(mAccountName)) {
-                        replyTo = privateMessage.getReplies().get(i);
-                        break;
+                if (privateMessage.getReplies() != null) {
+                    for (int i = privateMessage.getReplies().size() - 1; i >= 0; i--) {
+                        if (!privateMessage.getReplies().get(i).getAuthor().equals(mAccountName)) {
+                            replyTo = privateMessage.getReplies().get(i);
+                            break;
+                        }
                     }
                 }
                 if (replyTo == null) {
