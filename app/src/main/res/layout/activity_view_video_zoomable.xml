@@ -22,11 +22,21 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <com.google.android.exoplayer2.ui.PlayerView
-                android:id="@+id/player_view_view_video_activity"
+            <com.otaliastudios.zoom.ZoomSurfaceView
+                android:id="@+id/zoom_surface_view_view_video_activity"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:controller_layout_id="@layout/exo_playback_control_view"/>
+                app:horizontalPanEnabled="true"
+                app:verticalPanEnabled="true"
+                app:zoomEnabled="true" />
+
+            <com.google.android.exoplayer2.ui.PlayerControlView
+                android:id="@+id/player_control_view_view_video_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                app:controller_layout_id="@layout/exo_playback_control_view"
+                app:show_timeout="1500" />
 
             <ProgressBar
                 android:id="@+id/progress_bar_view_video_activity"
