@@ -51,6 +51,25 @@ public class MarkdownUtils {
                 .build();
     }
 
+    @NonNull
+    public static Markwon createDescriptionMarkwon(Context context, MarkwonPlugin miscPlugin,
+                                                   BetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener) {
+        return Markwon.builder(context)
+                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
+                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
+                    plugin.excludeInlineProcessor(BangInlineProcessor.class);
+                }))
+                .usePlugin(miscPlugin)
+                .usePlugin(SuperscriptPlugin.create())
+                .usePlugin(RedditHeadingPlugin.create())
+                .usePlugin(StrikethroughPlugin.create())
+                .usePlugin(MovementMethodPlugin.create(new SpoilerAwareMovementMethod()
+                        .setOnLinkLongClickListener(onLinkLongClickListener)))
+                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
+                .usePlugin(TableEntryPlugin.create(context))
+                .build();
+    }
+
     /**
      * Creates a Markwon instance that processes only the links.
      * @return configured Markwon instance
