@@ -51,7 +51,6 @@ import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFi
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
-import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
@@ -150,6 +149,9 @@ public class WikiActivity extends BaseActivity {
         MarkwonPlugin miscPlugin = new AbstractMarkwonPlugin() {
             @Override
             public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
+                if (contentTypeface != null) {
+                    textView.setTypeface(contentTypeface);
+                }
                 textView.setTextColor(markdownColor);
             }
 
