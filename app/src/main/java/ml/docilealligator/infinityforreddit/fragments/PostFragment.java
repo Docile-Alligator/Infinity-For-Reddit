@@ -1723,6 +1723,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public boolean getIsNsfwSubreddit() {
         if (activity instanceof ViewSubredditDetailActivity) {
             return ((ViewSubredditDetailActivity) activity).isNsfwSubreddit();
+        } else if (activity instanceof FilteredPostsActivity) {
+            return ((FilteredPostsActivity) activity).isNsfwSubreddit();
         } else {
             return false;
         }

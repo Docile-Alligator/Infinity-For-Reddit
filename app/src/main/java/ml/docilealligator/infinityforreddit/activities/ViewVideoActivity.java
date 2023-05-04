@@ -354,10 +354,10 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                 @NonNull
                 @Override
                 public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
-                    Insets systemBar = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+                    Insets navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars());
                     ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
-                    params.bottomMargin = systemBar.bottom;
-                    params.rightMargin = systemBar.right;
+                    params.bottomMargin = navigationBars.bottom;
+                    params.rightMargin = navigationBars.right;
                     return WindowInsetsCompat.CONSUMED;
                 }
             });
