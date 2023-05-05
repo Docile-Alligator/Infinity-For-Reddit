@@ -1205,5 +1205,5 @@ Toque para volver a intentarlo."</string>
     <string name="message_change_banner_success">"Banner cambiado correctamente"</string>
     <string name="message_change_banner_failed">"Error al cambiar banner %s"</string>
     <string name="message_save_profile_success">"Perfil guardado correctamente"</string>
-    <string name="message_save_profile_failed">"Error al guardar perfil"</string>
+    <string name="message_save_profile_failed">Error al guardar perfil %s</string>
 </resources>

@@ -27,7 +27,6 @@ import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.textfield.TextInputEditText;
-import com.r0adkll.slidr.Slidr;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -60,6 +59,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTimeBottomS
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.NavigationWrapper;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.events.GoBackToMainPageEvent;
 import ml.docilealligator.infinityforreddit.events.RefreshMultiRedditsEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -170,7 +170,7 @@ public class ViewMultiRedditDetailActivity extends BaseActivity implements SortT
         applyCustomTheme();
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            Slidr.attach(this);
+            mSliderPanel = Slidr.attach(this);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

@@ -32,8 +32,6 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-import com.r0adkll.slidr.Slidr;
-import com.r0adkll.slidr.model.SlidrInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -57,6 +55,8 @@ import ml.docilealligator.infinityforreddit.asynctasks.InsertMultireddit;
 import ml.docilealligator.infinityforreddit.asynctasks.InsertSubscribedThings;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.ViewPagerBugFixed;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
+import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
 import ml.docilealligator.infinityforreddit.events.GoBackToMainPageEvent;
 import ml.docilealligator.infinityforreddit.events.RefreshMultiRedditsEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -72,6 +72,8 @@ import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
+
+;
 
 public class SubscribedThingListingActivity extends BaseActivity implements ActivityToolbarInterface {
 
@@ -110,7 +112,6 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private SlidrInterface mSlidrInterface;
     private String mAccessToken;
     private String mAccountName;
     private boolean mInsertSuccess = false;
@@ -134,7 +135,7 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
         applyCustomTheme();
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSlidrInterface = Slidr.attach(this);
+            mSliderPanel = Slidr.attach(this);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -443,15 +444,15 @@ public class SubscribedThingListingActivity extends BaseActivity implements Acti
 
     @Override
     public void lockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.lock();
+        if (mSliderPanel != null) {
+            mSliderPanel.lock();
         }
     }
 
     @Override
     public void unlockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.unlock();
+        if (mSliderPanel != null) {
+            mSliderPanel.unlock();
         }
     }
 

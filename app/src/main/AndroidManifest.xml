@@ -387,6 +387,7 @@
         </activity>
         <activity
             android:name=".activities.LoginActivity"
+            android:configChanges="orientation|screenLayout|screenSize|layoutDirection"
             android:label="@string/login_activity_label"
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />

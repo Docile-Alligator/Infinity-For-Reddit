@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
-import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
@@ -34,6 +33,7 @@ import ml.docilealligator.infinityforreddit.ReportThing;
 import ml.docilealligator.infinityforreddit.Rule;
 import ml.docilealligator.infinityforreddit.adapters.ReportReasonRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 

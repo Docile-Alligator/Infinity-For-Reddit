@@ -11,7 +11,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.Toolbar;
@@ -20,8 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.r0adkll.slidr.Slidr;
-import com.r0adkll.slidr.model.SlidrInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -34,13 +31,16 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.adapters.RulesRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.FetchRules;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Rule;
+import ml.docilealligator.infinityforreddit.adapters.RulesRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
+import ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrInterface;
+import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
+import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
@@ -98,9 +98,9 @@ public class RulesActivity extends BaseActivity {
 
         applyCustomTheme();
 
-        SlidrInterface slidrInterface = null;
+        SliderPanel sliderPanel = null;
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            slidrInterface = Slidr.attach(this);
+            sliderPanel = Slidr.attach(this);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -132,7 +132,7 @@ public class RulesActivity extends BaseActivity {
 
         mSubredditName = getIntent().getExtras().getString(EXTRA_SUBREDDIT_NAME);
 
-        mAdapter = new RulesRecyclerViewAdapter(this, mCustomThemeWrapper, slidrInterface);
+        mAdapter = new RulesRecyclerViewAdapter(this, mCustomThemeWrapper, sliderPanel);
         recyclerView.setAdapter(mAdapter);
 
         FetchRules.fetchRules(mExecutor, new Handler(), mAccessToken == null ? mRetrofit : mOauthRetrofit, mAccessToken, mSubredditName, new FetchRules.FetchRulesListener() {

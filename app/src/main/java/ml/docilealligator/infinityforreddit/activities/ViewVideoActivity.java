@@ -44,6 +44,10 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -57,6 +61,7 @@ import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionOverride;
 import com.google.android.exoplayer2.ui.PlayerControlView;
+import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.ui.TrackSelectionDialogBuilder;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
@@ -155,10 +160,6 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.progress_bar_view_video_activity)
     ProgressBar progressBar;
-    @BindView(R.id.zoom_surface_view_view_video_activity)
-    ZoomSurfaceView zoomSurfaceView;
-    @BindView(R.id.player_control_view_view_video_activity)
-    PlayerControlView playerControlView;
     @BindView(R.id.mute_exo_playback_control_view)
     ImageButton muteButton;
     @BindView(R.id.hd_exo_playback_control_view)
@@ -289,7 +290,12 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         getTheme().applyStyle(ContentFontFamily.valueOf(mSharedPreferences
                 .getString(SharedPreferencesUtils.CONTENT_FONT_FAMILY_KEY, ContentFontFamily.Default.name())).getResId(), true);
 
-        setContentView(R.layout.activity_view_video);
+        boolean zoomable = mSharedPreferences.getBoolean(SharedPreferencesUtils.PINCH_TO_ZOOM_VIDEO, false);
+        if (zoomable) {
+            setContentView(R.layout.activity_view_video_zoomable);
+        } else {
+            setContentView(R.layout.activity_view_video);
+        }
 
         ButterKnife.bind(this);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -343,19 +349,18 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         dataSavingModeDefaultResolution = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.REDDIT_VIDEO_DEFAULT_RESOLUTION, "360"));
 
         if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.VIDEO_PLAYER_IGNORE_NAV_BAR, false)) {
-            if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
-                //Set player controller bottom margin in order to display it above the navbar
-                int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-                LinearLayout controllerLinearLayout = findViewById(R.id.linear_layout_exo_playback_control_view);
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
-                params.bottomMargin = resources.getDimensionPixelSize(resourceId);
-            } else {
-                //Set player controller right margin in order to display it above the navbar
-                int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-                LinearLayout controllerLinearLayout = findViewById(R.id.linear_layout_exo_playback_control_view);
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
-                params.rightMargin = resources.getDimensionPixelSize(resourceId);
-            }
+            LinearLayout controllerLinearLayout = findViewById(R.id.linear_layout_exo_playback_control_view);
+            ViewCompat.setOnApplyWindowInsetsListener(controllerLinearLayout, new OnApplyWindowInsetsListener() {
+                @NonNull
+                @Override
+                public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                    Insets navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars());
+                    ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
+                    params.bottomMargin = navigationBars.bottom;
+                    params.rightMargin = navigationBars.right;
+                    return WindowInsetsCompat.CONSUMED;
+                }
+            });
         }
 
         haulerView.setOnDragDismissedListener(dragDirection -> {
@@ -403,25 +408,6 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         String postTitle = intent.getStringExtra(EXTRA_POST_TITLE);
         setSmallTitle(postTitle);
 
-        playerControlView.addVisibilityListener(visibility -> {
-            switch (visibility) {
-                case View.GONE:
-                    getWindow().getDecorView().setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                                    | View.SYSTEM_UI_FLAG_IMMERSIVE);
-                    break;
-                case View.VISIBLE:
-                    getWindow().getDecorView().setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            }
-        });
-
         trackSelector = new DefaultTrackSelector(this);
         if (videoType == VIDEO_TYPE_NORMAL && isDataSavingMode && dataSavingModeDefaultResolution > 0) {
             trackSelector.setParameters(
@@ -430,26 +416,46 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         }
         player = new ExoPlayer.Builder(this).setTrackSelector(trackSelector).build();
 
-        playerControlView.setPlayer(player);
+        if (zoomable) {
+            PlayerControlView playerControlView = findViewById(R.id.player_control_view_view_video_activity);
+            playerControlView.addVisibilityListener(visibility -> {
+                switch (visibility) {
+                    case View.GONE:
+                        getWindow().getDecorView().setSystemUiVisibility(
+                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+                        break;
+                    case View.VISIBLE:
+                        getWindow().getDecorView().setSystemUiVisibility(
+                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                }
+            });
+            playerControlView.setPlayer(player);
 
-        player.addListener(new Player.Listener() {
-            @Override
-            public void onVideoSizeChanged(VideoSize videoSize) {
-                zoomSurfaceView.setContentSize(videoSize.width, videoSize.height);
-            }
-        });
-        zoomSurfaceView.addCallback(new ZoomSurfaceView.Callback() {
-            @Override
-            public void onZoomSurfaceCreated(@NonNull ZoomSurfaceView zoomSurfaceView) {
-                player.setVideoSurface(zoomSurfaceView.getSurface());
-            }
+            ZoomSurfaceView zoomSurfaceView = findViewById(R.id.zoom_surface_view_view_video_activity);
+            player.addListener(new Player.Listener() {
+                @Override
+                public void onVideoSizeChanged(VideoSize videoSize) {
+                    zoomSurfaceView.setContentSize(videoSize.width, videoSize.height);
+                }
+            });
+            zoomSurfaceView.addCallback(new ZoomSurfaceView.Callback() {
+                @Override
+                public void onZoomSurfaceCreated(@NonNull ZoomSurfaceView zoomSurfaceView) {
+                    player.setVideoSurface(zoomSurfaceView.getSurface());
+                }
 
-            @Override
-            public void onZoomSurfaceDestroyed(@NonNull ZoomSurfaceView zoomSurfaceView) {
+                @Override
+                public void onZoomSurfaceDestroyed(@NonNull ZoomSurfaceView zoomSurfaceView) {
 
-            }
-        });
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.PINCH_TO_ZOOM_VIDEO, false)) {
+                }
+            });
             zoomSurfaceView.getEngine().addListener(new ZoomEngine.Listener() {
                 @Override
                 public void onUpdate(@NonNull ZoomEngine zoomEngine, @NonNull Matrix matrix) {
@@ -467,16 +473,35 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
 
                 }
             });
+            zoomSurfaceView.setOnClickListener(view -> {
+                if (playerControlView.isVisible()) {
+                    playerControlView.hide();
+                } else {
+                    playerControlView.show();
+                }
+            });
         } else {
-            zoomSurfaceView.setZoomEnabled(false);
+            PlayerView videoPlayerView = findViewById(R.id.player_view_view_video_activity);
+            videoPlayerView.setPlayer(player);
+            videoPlayerView.setControllerVisibilityListener(visibility -> {
+                switch (visibility) {
+                    case View.GONE:
+                        getWindow().getDecorView().setSystemUiVisibility(
+                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+                        break;
+                    case View.VISIBLE:
+                        getWindow().getDecorView().setSystemUiVisibility(
+                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                }
+            });
         }
-        zoomSurfaceView.setOnClickListener(view -> {
-            if (playerControlView.isVisible()) {
-                playerControlView.hide();
-            } else {
-                playerControlView.show();
-            }
-        });
 
         if (savedInstanceState == null) {
             mVideoUri = intent.getData();

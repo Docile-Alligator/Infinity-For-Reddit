@@ -305,10 +305,13 @@ public class ParseComment {
         boolean collapsed = singleCommentData.getBoolean(JSONUtils.COLLAPSED_KEY);
         boolean hasReply = !(singleCommentData.get(JSONUtils.REPLIES_KEY) instanceof String);
 
+        // this key can either be a bool (false) or a long (edited timestamp)
+        long edited = singleCommentData.optLong(JSONUtils.EDITED_KEY) * 1000;
+
         return new Comment(id, fullName, author, authorFlair, authorFlairHTMLBuilder.toString(),
                 linkAuthor, submitTime, commentMarkdown, commentRawText,
                 linkId, subredditName, parentId, score, voteType, isSubmitter, distinguished,
-                permalink, awardingsBuilder.toString(), depth, collapsed, hasReply, scoreHidden, saved);
+                permalink, awardingsBuilder.toString(), depth, collapsed, hasReply, scoreHidden, saved, edited);
     }
 
     @Nullable

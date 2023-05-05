@@ -30,8 +30,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.android.material.textfield.TextInputEditText;
-import com.r0adkll.slidr.Slidr;
-import com.r0adkll.slidr.model.SlidrInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -51,6 +49,8 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
+import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
 import ml.docilealligator.infinityforreddit.events.ChangeInboxCountEvent;
 import ml.docilealligator.infinityforreddit.events.PassPrivateMessageEvent;
 import ml.docilealligator.infinityforreddit.events.PassPrivateMessageIndexEvent;
@@ -103,7 +103,6 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private SlidrInterface mSlidrInterface;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private FragmentManager fragmentManager;
     private String mAccessToken;
@@ -125,7 +124,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         applyCustomTheme();
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSlidrInterface = Slidr.attach(this);
+            mSliderPanel = Slidr.attach(this);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -381,15 +380,15 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
 
     @Override
     public void lockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.lock();
+        if (mSliderPanel != null) {
+            mSliderPanel.lock();
         }
     }
 
     @Override
     public void unlockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.unlock();
+        if (mSliderPanel != null) {
+            mSliderPanel.unlock();
         }
     }
 

@@ -1084,6 +1084,9 @@
     <string name="give_award_success">Award given</string>
     <string name="give_award_failed">Failed</string>
 
+    <string name="edited">Edited</string>
+    <string name="edited_time">Edited on %s</string>
+
     <string name="warning">Warning</string>
     <string name="this_is_a_nsfw_subreddit">This is a NSFW subreddit.</string>
     <string name="this_user_has_nsfw_content">This user has NSFW content</string>

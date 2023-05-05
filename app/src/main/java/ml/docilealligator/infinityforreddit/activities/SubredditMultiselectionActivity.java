@@ -25,7 +25,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
 
@@ -41,6 +40,7 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.adapters.SubredditMultiselectionRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditViewModel;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;

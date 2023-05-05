@@ -16,9 +16,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -26,12 +26,13 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.adapters.SelectedSubredditsRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SelectSubredditsOrUsersOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class SelectedSubredditsAndUsersActivity extends BaseActivity implements ActivityToolbarInterface {
@@ -89,6 +90,8 @@ public class SelectedSubredditsAndUsersActivity extends BaseActivity implements 
         } else {
             subreddits = getIntent().getStringArrayListExtra(EXTRA_SELECTED_SUBREDDITS);
         }
+
+        Collections.sort(subreddits);
 
         adapter = new SelectedSubredditsRecyclerViewAdapter(this, mCustomThemeWrapper, subreddits);
         linearLayoutManager = new LinearLayoutManagerBugFixed(this);

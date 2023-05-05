@@ -18,8 +18,6 @@ import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.r0adkll.slidr.Slidr;
-import com.r0adkll.slidr.model.SlidrInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -36,6 +34,7 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivityAccountSavedThingBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -71,7 +70,6 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
     Executor mExecutor;
     private FragmentManager fragmentManager;
     private SectionsPagerAdapter sectionsPagerAdapter;
-    private SlidrInterface mSlidrInterface;
     private String mAccessToken;
     private String mAccountName;
     private PostLayoutBottomSheetFragment postLayoutBottomSheetFragment;
@@ -90,8 +88,10 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
         applyCustomTheme();
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSlidrInterface = Slidr.attach(this);
+            mSliderPanel = Slidr.attach(this);
         }
+
+        mViewPager2 = binding.accountSavedThingViewPager2;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -231,15 +231,15 @@ public class AccountSavedThingActivity extends BaseActivity implements ActivityT
 
     @Override
     public void lockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.lock();
+        if (mSliderPanel != null) {
+            mSliderPanel.lock();
         }
     }
 
     @Override
     public void unlockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.unlock();
+        if (mSliderPanel != null) {
+            mSliderPanel.unlock();
         }
     }
 

@@ -12,8 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.r0adkll.slidr.model.SlidrInterface;
-
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -33,21 +31,22 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSh
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
+import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 
 public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecyclerViewAdapter.RuleViewHolder> {
     private BaseActivity activity;
     private Markwon markwon;
     @Nullable
-    private final SlidrInterface slidrInterface;
+    private final SliderPanel sliderPanel;
     private ArrayList<Rule> rules;
     private int mPrimaryTextColor;
 
     public RulesRecyclerViewAdapter(@NonNull BaseActivity activity,
                                     @NonNull CustomThemeWrapper customThemeWrapper,
-                                    @Nullable SlidrInterface slidrInterface) {
+                                    @Nullable SliderPanel sliderPanel) {
         this.activity = activity;
-        this.slidrInterface = slidrInterface;
+        this.sliderPanel = sliderPanel;
         mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
         int spoilerBackgroundColor = mPrimaryTextColor | 0xFF000000;
         MarkwonPlugin miscPlugin = new AbstractMarkwonPlugin() {
@@ -142,15 +141,15 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
                     new SwipeLockInterface() {
                 @Override
                 public void lockSwipe() {
-                    if (slidrInterface != null) {
-                        slidrInterface.lock();
+                    if (sliderPanel != null) {
+                        sliderPanel.lock();
                     }
                 }
 
                 @Override
                 public void unlockSwipe() {
-                    if (slidrInterface != null) {
-                        slidrInterface.unlock();
+                    if (sliderPanel != null) {
+                        sliderPanel.unlock();
                     }
                 }
             });

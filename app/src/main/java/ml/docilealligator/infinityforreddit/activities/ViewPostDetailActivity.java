@@ -40,8 +40,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.livefront.bridge.Bridge;
-import com.r0adkll.slidr.Slidr;
-import com.r0adkll.slidr.model.SlidrInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -71,6 +69,7 @@ import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.comment.Comment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.events.NeedForPostListFromPostFragmentEvent;
 import ml.docilealligator.infinityforreddit.events.ProvidePostListToViewPostDetailActivityEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -176,7 +175,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     int loadingMorePostsStatus = LoadingMorePostsStatus.NOT_LOADING;
     public Map<String, String> authorIcons = new HashMap<>();
     private FragmentManager fragmentManager;
-    private SlidrInterface mSlidrInterface;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private String mAccessToken;
     private String mAccountName;
@@ -185,7 +183,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
     private int orientation;
     private boolean mVolumeKeysNavigateComments;
     private boolean isNsfwSubreddit;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -237,9 +234,11 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         boolean swipeBetweenPosts = mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_BETWEEN_POSTS, false);
         if (!swipeBetweenPosts) {
             if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-                mSlidrInterface = Slidr.attach(this);
+                mSliderPanel = Slidr.attach(this);
             }
             viewPager2.setUserInputEnabled(false);
+        } else {
+            super.mViewPager2 = viewPager2;
         }
         postFragmentId = getIntent().getLongExtra(EXTRA_POST_FRAGMENT_ID, -1);
         if (swipeBetweenPosts && posts == null && postFragmentId > 0) {
@@ -857,20 +856,6 @@ public class ViewPostDetailActivity extends BaseActivity implements SortTypeSele
         if (fragment != null) {
             fragment.changeSortType(sortType);
             mToolbar.setTitle(sortType.getType().fullName);
-        }
-    }
-
-    @Override
-    public void lockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.lock();
-        }
-    }
-
-    @Override
-    public void unlockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.unlock();
         }
     }
 

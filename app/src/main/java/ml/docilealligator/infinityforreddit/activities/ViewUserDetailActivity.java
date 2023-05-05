@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -21,7 +20,6 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,8 +47,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.android.material.textfield.TextInputEditText;
-import com.r0adkll.slidr.Slidr;
-import com.r0adkll.slidr.model.SlidrInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -98,6 +94,9 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSh
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UserThingSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.NavigationWrapper;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
+import ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrInterface;
+import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.GoBackToMainPageEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -227,7 +226,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     private boolean lockBottomAppBar;
     private String mMessageFullname;
     private String mNewAccountName;
-    private SlidrInterface mSlidrInterface;
     //private MaterialAlertDialogBuilder nsfwWarningBuilder;
 
     @Override
@@ -255,8 +253,10 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         applyCustomTheme();
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSlidrInterface = Slidr.attach(this);
+            mSliderPanel = Slidr.attach(this);
         }
+
+        mViewPager2 = viewPager2;
 
         username = getIntent().getStringExtra(EXTRA_USER_NAME_KEY);
 
@@ -389,8 +389,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             urlMenuBottomSheetFragment.show(getSupportFragmentManager(), null);
             return true;
         };
-        Markwon markwon = MarkdownUtils.createLinksOnlyMarkwon(this,
-                miscPlugin, onLinkLongClickListener);
+        Markwon markwon = MarkdownUtils.createDescriptionMarkwon(this, miscPlugin, onLinkLongClickListener);
 
         descriptionTextView.setOnLongClickListener(view -> {
             if (description != null && !description.equals("") && descriptionTextView.getSelectionStart() == -1 && descriptionTextView.getSelectionEnd() == -1) {
@@ -1766,15 +1765,15 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
     @Override
     public void lockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.lock();
+        if (mSliderPanel != null) {
+            mSliderPanel.lock();
         }
     }
 
     @Override
     public void unlockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.unlock();
+        if (mSliderPanel != null) {
+            mSliderPanel.unlock();
         }
     }
 }

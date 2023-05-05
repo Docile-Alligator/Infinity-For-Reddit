@@ -8,8 +8,8 @@ android {
         applicationId "ml.docilealligator.infinityforreddit"
         minSdk 21
         targetSdk 33
-        versionCode 115
-        versionName "5.4.1"
+        versionCode 116
+        versionName "5.4.2-beta1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -176,7 +176,6 @@ dependencies {
     implementation 'com.libRG:customtextview:2.4'
 
     // Dismiss gesturing
-    implementation 'com.r0adkll:slidableactivity:2.1.0'
     implementation 'app.futured.hauler:hauler:5.0.0'
 
     // Bottom sheet with rounded corners

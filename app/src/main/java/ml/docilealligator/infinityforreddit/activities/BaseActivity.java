@@ -48,6 +48,7 @@ import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.CustomFontReceiver;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
 import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.font.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.font.FontFamily;
@@ -70,6 +71,10 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
     public Typeface typeface;
     public Typeface titleTypeface;
     public Typeface contentTypeface;
+    @Nullable
+    public SliderPanel mSliderPanel;
+    @Nullable
+    public ViewPager2 mViewPager2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

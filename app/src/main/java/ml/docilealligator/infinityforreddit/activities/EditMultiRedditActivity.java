@@ -24,7 +24,6 @@ import androidx.core.view.inputmethod.EditorInfoCompat;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.snackbar.Snackbar;
-import com.r0adkll.slidr.Slidr;
 
 import java.util.concurrent.Executor;
 
@@ -37,6 +36,7 @@ import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.multireddit.EditMultiReddit;
 import ml.docilealligator.infinityforreddit.multireddit.FetchMultiRedditInfo;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;

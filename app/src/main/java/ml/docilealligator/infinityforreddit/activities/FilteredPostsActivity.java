@@ -14,11 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.Toolbar;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.r0adkll.slidr.Slidr;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -46,12 +46,14 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTimeBottomS
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UserThingSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.post.Post;
 import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
+import ml.docilealligator.infinityforreddit.subreddit.SubredditViewModel;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class FilteredPostsActivity extends BaseActivity implements SortTypeSelectionCallback,
@@ -98,6 +100,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
+    public SubredditViewModel mSubredditViewModel;
     private String mAccessToken;
     private String mAccountName;
     private String name;
@@ -105,6 +108,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     private int postType;
     private PostFragment mFragment;
     private Menu mMenu;
+    private boolean isNsfwSubreddit = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +125,7 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
         applyCustomTheme();
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            Slidr.attach(this);
+            mSliderPanel = Slidr.attach(this);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -276,6 +280,15 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
                 } else {
                     String subredditNamePrefixed = "r/" + name;
                     getSupportActionBar().setTitle(subredditNamePrefixed);
+
+                    mSubredditViewModel = new ViewModelProvider(this,
+                            new SubredditViewModel.Factory(getApplication(), mRedditDataRoomDatabase, name))
+                            .get(SubredditViewModel.class);
+                    mSubredditViewModel.getSubredditLiveData().observe(this, subredditData -> {
+                        if (subredditData != null) {
+                            isNsfwSubreddit = subredditData.isNSFW();
+                        }
+                    });
                 }
                 break;
             case PostPagingSource.TYPE_MULTI_REDDIT:
@@ -483,5 +496,9 @@ public class FilteredPostsActivity extends BaseActivity implements SortTypeSelec
     @Override
     public void contentScrollDown() {
         fab.hide();
+    }
+
+    public boolean isNsfwSubreddit() {
+        return isNsfwSubreddit;
     }
 }
