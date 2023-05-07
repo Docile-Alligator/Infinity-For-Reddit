@@ -75,7 +75,9 @@
                 android:layout_marginEnd="8dp"
                 android:fontFamily="?attr/font_family"
                 android:gravity="end"
+                android:text="@string/edited"
                 android:textSize="?attr/font_default"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/top_score_text_view_item_post_comment"
                 app:layout_constraintTop_toTopOf="parent" />
