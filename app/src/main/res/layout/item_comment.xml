@@ -44,6 +44,7 @@
                 android:drawablePadding="4dp"
                 android:fontFamily="?attr/font_family"
                 android:textSize="?attr/font_default"
+                android:maxLines="1"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toTopOf="@id/author_flair_text_view_item_post_comment"
                 app:layout_constraintStart_toEndOf="@id/author_icon_image_view_item_post_comment"
@@ -60,6 +61,7 @@
                 android:fontFamily="?attr/font_family"
                 android:textSize="?attr/font_12"
                 android:visibility="gone"
+                android:maxLines="2"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/author_icon_image_view_item_post_comment"
@@ -110,7 +112,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:barrierDirection="start"
-                app:constraint_referenced_ids="top_score_text_view_item_post_comment" />
+                app:constraint_referenced_ids="top_score_text_view_item_post_comment,edited_text_view_item_post_comment" />
 
             <androidx.constraintlayout.widget.Barrier
                 android:id="@+id/barrier4"

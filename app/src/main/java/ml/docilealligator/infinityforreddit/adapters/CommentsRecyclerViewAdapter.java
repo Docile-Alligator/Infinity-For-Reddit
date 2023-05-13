@@ -1269,6 +1269,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 commentTimeTextView.setTypeface(mActivity.typeface);
                 authorFlairTextView.setTypeface(mActivity.typeface);
                 topScoreTextView.setTypeface(mActivity.typeface);
+                editedTextView.setTypeface(mActivity.typeface);
                 awardsTextView.setTypeface(mActivity.typeface);
                 scoreTextView.setTypeface(mActivity.typeface);
                 expandButton.setTypeface(mActivity.typeface);
@@ -1302,6 +1303,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             commentTimeTextView.setTextColor(mSecondaryTextColor);
             authorFlairTextView.setTextColor(mAuthorFlairTextColor);
             topScoreTextView.setTextColor(mSecondaryTextColor);
+            editedTextView.setTextColor(mSecondaryTextColor);
             awardsTextView.setTextColor(mSecondaryTextColor);
             commentDivider.setBackgroundColor(mDividerColor);
             upvoteButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
