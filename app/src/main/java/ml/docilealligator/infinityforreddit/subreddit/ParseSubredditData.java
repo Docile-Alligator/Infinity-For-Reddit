@@ -41,7 +41,7 @@ public class ParseSubredditData {
         } else {
             bannerImageUrl = subredditDataJsonObject.getString(JSONUtils.BANNER_BACKGROUND_IMAGE_KEY);
         }
-        if (bannerImageUrl.equals("") && !subredditDataJsonObject.isNull(JSONUtils.BANNER_IMG_KEY)) {
+        if (bannerImageUrl.isEmpty() && !subredditDataJsonObject.isNull(JSONUtils.BANNER_IMG_KEY)) {
             bannerImageUrl = subredditDataJsonObject.getString(JSONUtils.BANNER_IMG_KEY);
         }
 
@@ -51,7 +51,7 @@ public class ParseSubredditData {
         } else {
             iconUrl = subredditDataJsonObject.getString(JSONUtils.COMMUNITY_ICON_KEY);
         }
-        if (iconUrl.equals("") && !subredditDataJsonObject.isNull(JSONUtils.ICON_IMG_KEY)) {
+        if (iconUrl.isEmpty() && !subredditDataJsonObject.isNull(JSONUtils.ICON_IMG_KEY)) {
             iconUrl = subredditDataJsonObject.getString(JSONUtils.ICON_IMG_KEY);
         }
 

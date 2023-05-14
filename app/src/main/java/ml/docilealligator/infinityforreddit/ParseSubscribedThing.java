@@ -71,14 +71,14 @@ class ParseSubscribedThing {
                     JSONObject data = children.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
                     String name = data.getString(JSONUtils.DISPLAY_NAME_KEY);
                     String bannerImageUrl = data.getString(JSONUtils.BANNER_BACKGROUND_IMAGE_KEY);
-                    if (bannerImageUrl.equals("") || bannerImageUrl.equals("null")) {
+                    if (bannerImageUrl.isEmpty() || bannerImageUrl.equals("null")) {
                         bannerImageUrl = data.getString(JSONUtils.BANNER_IMG_KEY);
                         if (bannerImageUrl.equals("null")) {
                             bannerImageUrl = "";
                         }
                     }
                     String iconUrl = data.getString(JSONUtils.COMMUNITY_ICON_KEY);
-                    if (iconUrl.equals("") || iconUrl.equals("null")) {
+                    if (iconUrl.isEmpty() || iconUrl.equals("null")) {
                         iconUrl = data.getString(JSONUtils.ICON_IMG_KEY);
                         if (iconUrl.equals("null")) {
                             iconUrl = "";

@@ -31,7 +31,7 @@ public class ParseUserData {
         String iconImageUrl = userDataJson.getString(JSONUtils.ICON_IMG_KEY);
         String bannerImageUrl = "";
         boolean canBeFollowed;
-        if (userDataJson.has(JSONUtils.SUBREDDIT_KEY) && !userDataJson.isNull(JSONUtils.SUBREDDIT_KEY)) {
+        if (!userDataJson.isNull(JSONUtils.SUBREDDIT_KEY)) {
             bannerImageUrl = userDataJson.getJSONObject(JSONUtils.SUBREDDIT_KEY).getString(JSONUtils.BANNER_IMG_KEY);
             canBeFollowed = true;
         } else {
