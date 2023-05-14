@@ -34,45 +34,38 @@ class ParseSubscribedThing {
     }
 
     private static class ParseSubscribedSubredditsAsyncTask extends AsyncTask<Void, Void, Void> {
-        private JSONObject jsonResponse;
-        private String accountName;
+        private final String response;
+        private final String accountName;
         private boolean parseFailed;
         private String lastItem;
-        private ArrayList<SubscribedSubredditData> subscribedSubredditData;
-        private ArrayList<SubscribedUserData> subscribedUserData;
-        private ArrayList<SubredditData> subredditData;
-        private ArrayList<SubscribedSubredditData> newSubscribedSubredditData;
-        private ArrayList<SubscribedUserData> newSubscribedUserData;
-        private ArrayList<SubredditData> newSubredditData;
-        private ParseSubscribedSubredditsListener parseSubscribedSubredditsListener;
+        private final ArrayList<SubscribedSubredditData> subscribedSubredditData;
+        private final ArrayList<SubscribedUserData> subscribedUserData;
+        private final ArrayList<SubredditData> subredditData;
+        private final ArrayList<SubscribedSubredditData> newSubscribedSubredditData;
+        private final ArrayList<SubscribedUserData> newSubscribedUserData;
+        private final ArrayList<SubredditData> newSubredditData;
+        private final ParseSubscribedSubredditsListener parseSubscribedSubredditsListener;
 
         ParseSubscribedSubredditsAsyncTask(String response, String accountName, ArrayList<SubscribedSubredditData> subscribedSubredditData,
                                            ArrayList<SubscribedUserData> subscribedUserData,
                                            ArrayList<SubredditData> subredditData,
                                            ParseSubscribedSubredditsListener parseSubscribedSubredditsListener) {
             this.parseSubscribedSubredditsListener = parseSubscribedSubredditsListener;
-            try {
-                jsonResponse = new JSONObject(response);
-                this.accountName = accountName;
-                parseFailed = false;
-                this.subscribedSubredditData = subscribedSubredditData;
-                this.subscribedUserData = subscribedUserData;
-                this.subredditData = subredditData;
-                newSubscribedSubredditData = new ArrayList<>();
-                newSubscribedUserData = new ArrayList<>();
-                newSubredditData = new ArrayList<>();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            this.response = response;
+            this.accountName = accountName;
+            parseFailed = false;
+            this.subscribedSubredditData = subscribedSubredditData;
+            this.subscribedUserData = subscribedUserData;
+            this.subredditData = subredditData;
+            newSubscribedSubredditData = new ArrayList<>();
+            newSubscribedUserData = new ArrayList<>();
+            newSubredditData = new ArrayList<>();
         }
 
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                if (jsonResponse == null) {
-                    parseFailed = true;
-                    return null;
-                }
+                JSONObject jsonResponse = new JSONObject(response);
                 JSONArray children = jsonResponse.getJSONObject(JSONUtils.DATA_KEY).getJSONArray(JSONUtils.CHILDREN_KEY);
                 for (int i = 0; i < children.length(); i++) {
                     JSONObject data = children.getJSONObject(i).getJSONObject(JSONUtils.DATA_KEY);
