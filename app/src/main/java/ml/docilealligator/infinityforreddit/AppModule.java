@@ -112,6 +112,12 @@ abstract class AppModule {
     }
 
     @Provides
+    @Named("post_local")
+    static SharedPreferences providePostLocalSharedPreferences(Application application) {
+        return application.getSharedPreferences(SharedPreferencesUtils.POST_LOCAL_POSTS_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);
+    }
+
+    @Provides
     @Named("current_account")
     static SharedPreferences provideCurrentAccountSharedPreferences(Application application) {
         return application.getSharedPreferences(SharedPreferencesUtils.CURRENT_ACCOUNT_SHARED_PREFERENCES_FILE, Context.MODE_PRIVATE);

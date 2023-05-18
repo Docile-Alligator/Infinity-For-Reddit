@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <CheckBox
+            android:id="@+id/cache_saved_checkbox"
+            android:text="Cache Saved Posts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <CheckBox
+            android:id="@+id/cache_history_checkbox"
+            android:text="Cache History Posts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+        <Button
+            android:id="@+id/save_cached_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save Cached Posts"/>
+
+        <Button
+            android:id="@+id/clear_cached_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Clear Cached Posts"/>
+
+        <Button
+            android:id="@+id/remove_all_saved_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Remove All Saved Posts"/>
+
+    </LinearLayout>
+
+</RelativeLayout>

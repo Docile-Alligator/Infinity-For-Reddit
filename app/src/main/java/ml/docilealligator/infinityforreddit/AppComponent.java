@@ -25,6 +25,7 @@ import ml.docilealligator.infinityforreddit.activities.GiveAwardActivity;
 import ml.docilealligator.infinityforreddit.activities.HistoryActivity;
 import ml.docilealligator.infinityforreddit.activities.InboxActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.activities.LocalPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.LockScreenActivity;
 import ml.docilealligator.infinityforreddit.activities.LoginActivity;
 import ml.docilealligator.infinityforreddit.activities.MainActivity;
@@ -70,6 +71,7 @@ import ml.docilealligator.infinityforreddit.fragments.CommentsListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.FollowedUsersListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.HistoryPostFragment;
 import ml.docilealligator.infinityforreddit.fragments.InboxFragment;
+import ml.docilealligator.infinityforreddit.fragments.LocalPostFragment;
 import ml.docilealligator.infinityforreddit.fragments.MorePostsInfoFragment;
 import ml.docilealligator.infinityforreddit.fragments.MultiRedditListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
@@ -99,6 +101,7 @@ import ml.docilealligator.infinityforreddit.settings.MiscellaneousPreferenceFrag
 import ml.docilealligator.infinityforreddit.settings.NotificationPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.NsfwAndSpoilerFragment;
 import ml.docilealligator.infinityforreddit.settings.PostHistoryFragment;
+import ml.docilealligator.infinityforreddit.settings.PostLocalFragment;
 import ml.docilealligator.infinityforreddit.settings.SecurityPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.ThemePreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.TranslationFragment;
@@ -306,6 +309,10 @@ public interface AppComponent {
     void inject(HistoryActivity historyActivity);
 
     void inject(MorePostsInfoFragment morePostsInfoFragment);
+
+    void inject(LocalPostsActivity localPostsActivity);
+    void inject(LocalPostFragment localPostFragment);
+    void inject(PostLocalFragment postLocalFragment);
 
     @Component.Factory
     interface Factory {

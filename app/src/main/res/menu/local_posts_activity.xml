@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_refresh_local_posts_activity"
+        android:orderInCategory="1"
+        android:title="@string/action_refresh"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_change_post_layout_local_posts_activity"
+        android:orderInCategory="2"
+        android:title="@string/action_change_post_layout"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/change_sort_type"
+        android:orderInCategory="3"
+        android:title="@string/action_sort"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/local_settings"
+        android:orderInCategory="4"
+        android:title="Settings"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/manual_save"
+        android:orderInCategory="5"
+        android:title="Manually Save Posts"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/backup_save"
+        android:orderInCategory="6"
+        android:title="Save Backup"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/backup_load"
+        android:orderInCategory="7"
+        android:title="Load Backup"
+        app:showAsAction="never" />
+</menu>

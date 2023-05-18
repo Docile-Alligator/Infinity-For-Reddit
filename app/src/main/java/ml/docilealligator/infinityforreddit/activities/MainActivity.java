@@ -77,6 +77,7 @@ import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
 import ml.docilealligator.infinityforreddit.FetchSubscribedThing;
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.LocalSave;
 import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.PullNotificationWorker;
 import ml.docilealligator.infinityforreddit.R;
@@ -327,6 +328,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         mAccessToken = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCESS_TOKEN, null);
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
 
+        LocalSave.globalCtx = getApplication().getApplicationContext();
+
         if (savedInstanceState != null) {
             mFetchUserInfoSuccess = savedInstanceState.getBoolean(FETCH_USER_INFO_STATE);
             mFetchSubscriptionsSuccess = savedInstanceState.getBoolean(FETCH_SUBSCRIPTIONS_STATE);
@@ -337,6 +340,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         } else {
             mMessageFullname = getIntent().getStringExtra(EXTRA_MESSSAGE_FULLNAME);
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
+
+            LocalSave.LoadLocalPosts();
         }
         initializeNotificationAndBindView();
     }
@@ -789,6 +794,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                             intent.putExtra(SubscribedThingListingActivity.EXTRA_SHOW_MULTIREDDITS, true);
                         } else if (stringId == R.string.history) {
                             intent = new Intent(MainActivity.this, HistoryActivity.class);
+                        } else if (stringId == R.string.local_posts) {
+                            intent = new Intent(MainActivity.this, LocalPostsActivity.class);
                         } else if (stringId == R.string.trending) {
                             intent = new Intent(MainActivity.this, TrendingActivity.class);
                         } else if (stringId == R.string.upvoted) {
