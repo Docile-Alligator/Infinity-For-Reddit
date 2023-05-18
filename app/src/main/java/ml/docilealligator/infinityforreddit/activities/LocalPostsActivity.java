@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -88,6 +87,9 @@ public class LocalPostsActivity extends BaseActivity implements ActivityToolbarI
     private String mAccessToken;
     private String mAccountName;
 
+    public static final int CREATE_BACKUP = 1;
+    public static final int LOAD_BACKUP = 2;
+
     private void ChangeSort()
     {
         MaterialAlertDialogBuilder alert = new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme).setTitle("Sort");
@@ -138,7 +140,6 @@ public class LocalPostsActivity extends BaseActivity implements ActivityToolbarI
         saveCachedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Save Cache
                 LocalSave.GetAllSaved();
                 sectionsPagerAdapter.refresh();
             }
@@ -158,8 +159,13 @@ public class LocalPostsActivity extends BaseActivity implements ActivityToolbarI
                 new MaterialAlertDialogBuilder(v.getContext(), R.style.MaterialAlertDialogTheme)
                         .setTitle("Clear?")
                         .setMessage("Clear Saved Posts")
-                        .setPositiveButton(R.string.yes, (dialogInterface, i)
-                                -> LocalSave.ClearSavedPosts())
+                        .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                LocalSave.ClearSavedPosts();
+                                sectionsPagerAdapter.refresh();
+                            }
+                        })
                         .setNegativeButton(R.string.no, null)
                         .show();
             }
@@ -193,8 +199,6 @@ public class LocalPostsActivity extends BaseActivity implements ActivityToolbarI
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
             mSliderPanel = Slidr.attach(this);
         }
-
-        //mViewPager2 = viewPager2;
 
         searchView.clearFocus();
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -278,15 +282,7 @@ public class LocalPostsActivity extends BaseActivity implements ActivityToolbarI
         tabLayout.setVisibility(View.GONE);
         viewPager2.setAdapter(sectionsPagerAdapter);
         viewPager2.setOffscreenPageLimit(2);
-        //viewPager2.setUserInputEnabled(!mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false));
         viewPager2.setUserInputEnabled(false);
-        /*new TabLayoutMediator(tabLayout, viewPager2, (tab, position) -> {
-            switch (position) {
-                case 0:
-                    Utils.setTitleWithCustomFontToTab(typeface, tab, getString(R.string.posts));
-                    break;
-            }
-        }).attach();*/
 
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -338,7 +334,7 @@ public class LocalPostsActivity extends BaseActivity implements ActivityToolbarI
             intent.setType("text/plain");
             intent.putExtra(Intent.EXTRA_TITLE, "backup.txt");
 
-            startActivityForResult(intent, LocalSave.CREATE_BACKUP);
+            startActivityForResult(intent, CREATE_BACKUP);
 
             return true;
         } else if (itemId == R.id.backup_load) {
@@ -347,7 +343,7 @@ public class LocalPostsActivity extends BaseActivity implements ActivityToolbarI
             intent.addCategory(Intent.CATEGORY_OPENABLE);
             intent.setType("text/plain");
 
-            startActivityForResult(intent, LocalSave.LOAD_BACKUP);
+            startActivityForResult(intent, LOAD_BACKUP);
 
             return true;
         }
@@ -362,13 +358,11 @@ public class LocalPostsActivity extends BaseActivity implements ActivityToolbarI
             return;
         }
 
-        if (requestCode == LocalSave.CREATE_BACKUP) {
-            Uri uri = null;
+        if (requestCode == CREATE_BACKUP) {
             if (resultData != null) {
                 LocalSave.SaveBackup(resultData.getData());
             }
-        } else if(requestCode == LocalSave.LOAD_BACKUP) {
-            Uri uri = null;
+        } else if(requestCode == LOAD_BACKUP) {
             if (resultData != null) {
                 LocalSave.LoadBackup(resultData.getData());
                 sectionsPagerAdapter.refresh();

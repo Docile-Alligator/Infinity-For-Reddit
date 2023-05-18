@@ -68,6 +68,7 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import ml.docilealligator.infinityforreddit.FetchGfycatOrRedgifsVideoLinks;
 import ml.docilealligator.infinityforreddit.FetchStreamableVideo;
+import ml.docilealligator.infinityforreddit.LocalSave;
 import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy;
@@ -1723,6 +1724,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private void shareLink(Post post) {
         Bundle bundle = new Bundle();
         bundle.putString(ShareLinkBottomSheetFragment.EXTRA_POST_LINK, post.getPermalink());
+        bundle.putString(ShareLinkBottomSheetFragment.EXTRA_POST_ID, post.getId());
+        bundle.putString(ShareLinkBottomSheetFragment.EXTRA_POST_TITLE, post.getTitle());
+        bundle.putString(ShareLinkBottomSheetFragment.EXTRA_POST_SUBREDDIT, post.getSubredditName());
+        bundle.putString(ShareLinkBottomSheetFragment.EXTRA_POST_FLAIR, post.getFlair());
+        bundle.putLong(ShareLinkBottomSheetFragment.EXTRA_POST_TIME, post.getPostTimeMillis());
         if (post.getPostType() != Post.TEXT_TYPE) {
             bundle.putInt(ShareLinkBottomSheetFragment.EXTRA_MEDIA_TYPE, post.getPostType());
             switch (post.getPostType()) {
@@ -2692,6 +2698,20 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 });
                     }
                 }
+            });
+
+            saveButton.setOnLongClickListener(view ->
+            {
+                int position = getBindingAdapterPosition();
+                if (position < 0) {
+                    return false;
+                }
+                Post post = getItem(position);
+                if (post != null) {
+                    LocalSave.AddPost(post.getId(), post.getTitle(), post.getSubredditName(), post.getFlair(), post.getPostTimeMillis());
+                    return true;
+                }
+                return false;
             });
 
             shareButton.setOnClickListener(view -> {
@@ -4059,6 +4079,20 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 });
                     }
                 }
+            });
+
+            saveButton.setOnLongClickListener(view ->
+            {
+                int position = getBindingAdapterPosition();
+                if (position < 0) {
+                    return false;
+                }
+                Post post = getItem(position);
+                if (post != null) {
+                    LocalSave.AddPost(post.getId(), post.getTitle(), post.getSubredditName(), post.getFlair(), post.getPostTimeMillis());
+                    return true;
+                }
+                return false;
             });
 
             shareButton.setOnClickListener(view -> {

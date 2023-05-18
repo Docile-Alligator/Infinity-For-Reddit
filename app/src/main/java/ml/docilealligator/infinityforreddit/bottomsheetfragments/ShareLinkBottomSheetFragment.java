@@ -35,6 +35,7 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
     public static final String EXTRA_POST_ID = "EPID";
     public static final String EXTRA_POST_SUBREDDIT = "EPS";
     public static final String EXTRA_POST_TITLE = "EPT";
+    public static final String EXTRA_POST_TIME = "EPTI";
     public static final String EXTRA_POST_FLAIR = "EPF";
     public static final String EXTRA_POST_LINK = "EPL";
     public static final String EXTRA_MEDIA_LINK = "EML";
@@ -107,6 +108,7 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
         String postTitle = getArguments().getString(EXTRA_POST_TITLE);
         String postSubName = getArguments().getString(EXTRA_POST_SUBREDDIT);
         String postFlair = getArguments().getString(EXTRA_POST_FLAIR);
+        long postTime = getArguments().getLong(EXTRA_POST_TIME);
 
         postLinkTextView.setText(postLink);
 
@@ -158,7 +160,7 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
             ShowTags(postID);
         });
         addLocalTextView.setOnClickListener(view -> {
-            LocalSave.AddPost(postID, postTitle, postSubName, postFlair, 0);
+            LocalSave.AddPost(postID, postTitle, postSubName, postFlair, postTime);
             dismiss();
         });
         removeLocalTextView.setOnClickListener(view -> {

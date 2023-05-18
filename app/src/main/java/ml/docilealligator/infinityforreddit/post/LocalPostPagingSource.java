@@ -33,7 +33,6 @@ import retrofit2.Retrofit;
 
 public class LocalPostPagingSource extends ListenableFuturePagingSource<String, Post> {
     public static final int TYPE_READ_POSTS = 100;
-
     private Retrofit retrofit;
     private Executor executor;
     private RedditDataRoomDatabase redditDataRoomDatabase;
@@ -70,11 +69,7 @@ public class LocalPostPagingSource extends ListenableFuturePagingSource<String, 
     @NonNull
     @Override
     public ListenableFuture<LoadResult<String, Post>> loadFuture(@NonNull LoadParams<String> loadParams) {
-        if (postType == TYPE_READ_POSTS) {
-            return loadHomePosts(loadParams, redditDataRoomDatabase);
-        } else {
-            return loadHomePosts(loadParams, redditDataRoomDatabase);
-        }
+        return loadHomePosts(loadParams, redditDataRoomDatabase);
     }
 
     public LoadResult<String, Post> transformData(List<ReadPost> readPosts) {
@@ -90,15 +85,15 @@ public class LocalPostPagingSource extends ListenableFuturePagingSource<String, 
             ids.deleteCharAt(ids.length() - 1);
         }
 
-        Call<String> historyPosts;
+        Call<String> localPosts;
         if (accessToken != null && !accessToken.isEmpty()) {
-            historyPosts = retrofit.create(RedditAPI.class).getInfoOauth(ids.toString(), APIUtils.getOAuthHeader(accessToken));
+            localPosts = retrofit.create(RedditAPI.class).getInfoOauth(ids.toString(), APIUtils.getOAuthHeader(accessToken));
         } else {
-            historyPosts = retrofit.create(RedditAPI.class).getInfo(ids.toString());
+            localPosts = retrofit.create(RedditAPI.class).getInfo(ids.toString());
         }
 
         try {
-            Response<String> response = historyPosts.execute();
+            Response<String> response = localPosts.execute();
             if (response.isSuccessful()) {
                 String responseString = response.body();
                 LinkedHashSet<Post> newPosts = ParsePost.parsePostsSync(responseString, -1, postFilter, null);

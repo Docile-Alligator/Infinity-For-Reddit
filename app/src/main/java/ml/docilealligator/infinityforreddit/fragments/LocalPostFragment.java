@@ -379,7 +379,7 @@ public class LocalPostFragment extends Fragment implements FragmentCommunicator 
 
         if (localType == LOCALPOST_TYPE_READ_POSTS) {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.LOCAL_POST_LAYOUT, defaultPostLayout);
-            LocalSave.sortType = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.LOCAL_POST_SORTING, LocalSave.SORT_NEWEST);
+            LocalSave.sortType = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.LOCAL_POST_SORTING, LocalSave.SORT_NEWEST_ADDED);
             LocalSave.cacheSaved = mPostLayoutSharedPreferences.getBoolean(SharedPreferencesUtils.LOCAL_POST_CACHE_SAVED, true);
             LocalSave.cacheHistory = mPostLayoutSharedPreferences.getBoolean(SharedPreferencesUtils.LOCAL_POST_CACHE_HISTORY, false);
 
@@ -657,15 +657,9 @@ public class LocalPostFragment extends Fragment implements FragmentCommunicator 
     }
 
     private void initializeAndBindPostViewModel(String accessToken) {
-        if (postType == LocalPostPagingSource.TYPE_READ_POSTS) {
-            mLocalPostViewModel = new ViewModelProvider(LocalPostFragment.this, new LocalPostViewModel.Factory(mExecutor,
-                    accessToken == null ? mRetrofit : mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
-                    accountName, mSharedPreferences, LocalPostPagingSource.TYPE_READ_POSTS, postFilter)).get(LocalPostViewModel.class);
-        } else {
-            mLocalPostViewModel = new ViewModelProvider(LocalPostFragment.this, new LocalPostViewModel.Factory(mExecutor,
-                    accessToken == null ? mRetrofit : mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
-                    accountName, mSharedPreferences, LocalPostPagingSource.TYPE_READ_POSTS, postFilter)).get(LocalPostViewModel.class);
-        }
+        mLocalPostViewModel = new ViewModelProvider(LocalPostFragment.this, new LocalPostViewModel.Factory(mExecutor,
+                accessToken == null ? mRetrofit : mOauthRetrofit, mRedditDataRoomDatabase, accessToken,
+                accountName, mSharedPreferences, LocalPostPagingSource.TYPE_READ_POSTS, postFilter)).get(LocalPostViewModel.class);
 
         bindPostViewModel();
     }

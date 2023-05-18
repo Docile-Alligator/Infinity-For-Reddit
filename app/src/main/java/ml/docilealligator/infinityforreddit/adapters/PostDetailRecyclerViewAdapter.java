@@ -70,6 +70,7 @@ import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.FetchGfycatOrRedgifsVideoLinks;
 import ml.docilealligator.infinityforreddit.FetchStreamableVideo;
+import ml.docilealligator.infinityforreddit.LocalSave;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy;
@@ -1428,9 +1429,20 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 }
             });
 
+            mSaveButton.setOnLongClickListener(view ->
+            {
+                LocalSave.AddPost(mPost.getId(), mPost.getTitle(), mPost.getSubredditName(), mPost.getFlair(), mPost.getPostTimeMillis());
+                return true;
+            });
+
             mShareButton.setOnClickListener(view -> {
                 Bundle bundle = new Bundle();
                 bundle.putString(ShareLinkBottomSheetFragment.EXTRA_POST_LINK, mPost.getPermalink());
+                bundle.putString(ShareLinkBottomSheetFragment.EXTRA_POST_ID, mPost.getId());
+                bundle.putString(ShareLinkBottomSheetFragment.EXTRA_POST_TITLE, mPost.getTitle());
+                bundle.putString(ShareLinkBottomSheetFragment.EXTRA_POST_SUBREDDIT, mPost.getSubredditName());
+                bundle.putString(ShareLinkBottomSheetFragment.EXTRA_POST_FLAIR, mPost.getFlair());
+                bundle.putLong(ShareLinkBottomSheetFragment.EXTRA_POST_TIME, mPost.getPostTimeMillis());
                 if (mPost.getPostType() != Post.TEXT_TYPE) {
                     bundle.putInt(ShareLinkBottomSheetFragment.EXTRA_MEDIA_TYPE, mPost.getPostType());
                     switch (mPost.getPostType()) {

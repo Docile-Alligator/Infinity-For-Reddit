@@ -1656,6 +1656,7 @@ public class LocalPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recycl
         bundle.putString(ShareLinkBottomSheetFragment.EXTRA_POST_TITLE, post.getTitle());
         bundle.putString(ShareLinkBottomSheetFragment.EXTRA_POST_SUBREDDIT, post.getSubredditName());
         bundle.putString(ShareLinkBottomSheetFragment.EXTRA_POST_FLAIR, post.getFlair());
+        bundle.putLong(ShareLinkBottomSheetFragment.EXTRA_POST_TIME, post.getPostTimeMillis());
         if (post.getPostType() != Post.TEXT_TYPE) {
             bundle.putInt(ShareLinkBottomSheetFragment.EXTRA_MEDIA_TYPE, post.getPostType());
             switch (post.getPostType()) {

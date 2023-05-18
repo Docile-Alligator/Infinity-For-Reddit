@@ -1,5 +1,6 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.content.ComponentCallbacks;
 import android.content.Context;
 import android.net.Uri;
 import android.os.ParcelFileDescriptor;
@@ -31,10 +32,7 @@ import ml.docilealligator.infinityforreddit.post.Post;
 
 public class LocalSave
 {
-    public static final int CREATE_BACKUP = 1;
-    public static final int LOAD_BACKUP = 2;
-
-    public static class SavedPost implements Serializable
+    public static class SavedPost implements Serializable, Comparable<SavedPost>
     {
         String id;
         String title;
@@ -59,10 +57,7 @@ public class LocalSave
             return id;
         }
 
-        public long getTime()
-        {
-            return time;
-        }
+        public long getTime() { return time; }
 
         public String getTags() { return tags; }
         public void setTags(String newTags) { tags = newTags; }
@@ -92,13 +87,20 @@ public class LocalSave
 
             return false;
         }
+
+        @Override
+        public int compareTo(SavedPost o) {
+            return Long.compare(time, o.getTime());
+        }
     }
 
-    public static final int SORT_NEWEST = 0;
-    public static final int SORT_OLDEST = 1;
-    public static final int SORT_RANDOM = 2;
-    public static final CharSequence[] SortTypes = new CharSequence[] { "Newest", "Oldest", "Random" };
-    public static int sortType = SORT_NEWEST;
+    public static final int SORT_RANDOM = 0;
+    public static final int SORT_NEWEST_ADDED = 1;
+    public static final int SORT_OLDEST_ADDED = 2;
+    public static final int SORT_NEWEST_UPLOAD= 3;
+    public static final int SORT_OLDEST_UPLOAD= 4;
+    public static final CharSequence[] SortTypes = new CharSequence[] { "Random", "Newest Added", "Oldest Added", "Newest Upload", "Oldest Upload" };
+    public static int sortType = SORT_NEWEST_ADDED;
 
     public static Context globalCtx;
 
@@ -138,12 +140,20 @@ public class LocalSave
         switch(sortType)
         {
             default:
+            case SORT_OLDEST_ADDED:
                 break;
-            case SORT_NEWEST:
+            case SORT_NEWEST_ADDED:
                 Collections.reverse(posts);
                 break;
             case SORT_RANDOM:
                 Collections.shuffle(posts, new SecureRandom());
+                break;
+            case SORT_OLDEST_UPLOAD:
+                Collections.sort(posts);
+                break;
+            case SORT_NEWEST_UPLOAD:
+                Collections.sort(posts);
+                Collections.reverse(posts);
                 break;
         }
 

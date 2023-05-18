@@ -22,7 +22,7 @@
     <item
         android:id="@+id/local_settings"
         android:orderInCategory="4"
-        android:title="Settings"
+        android:title="@string/settings"
         app:showAsAction="never" />
 
     <item
