@@ -116,7 +116,13 @@ public class LocalSave
     public static boolean cacheHistory = false;
     public static boolean cacheSaved = true;
 
-    public static void AddPosts(LinkedHashSet<Post> posts)
+
+    public static int GetCachedPostsCount()
+    {
+        return cachedPosts.size();
+    }
+
+    public static void CachePosts(LinkedHashSet<Post> posts)
     {
         for(Post post : posts)
         {
@@ -133,7 +139,7 @@ public class LocalSave
         {
             default:
                 break;
-            case SORT_OLDEST:
+            case SORT_NEWEST:
                 Collections.reverse(posts);
                 break;
             case SORT_RANDOM:
@@ -157,7 +163,7 @@ public class LocalSave
         ObjectInputStream input = null;
         try
         {
-            File directory = new File(globalCtx.getFilesDir()+java.io.File.separator +"localPosts.txt");
+            File directory = new File(globalCtx.getFilesDir(), "localPosts.txt");
             if(!directory.exists()) { return; }
 
             input = new ObjectInputStream(new FileInputStream(directory));
@@ -174,7 +180,7 @@ public class LocalSave
     public static void SaveLocalPosts()
     {
         ObjectOutputStream output = null;
-        File f = new File(globalCtx.getFilesDir(), "localPost.txt");
+        File f = new File(globalCtx.getFilesDir(), "localPosts.txt");
         try {
             f.createNewFile();
         } catch (IOException e) {
@@ -229,7 +235,6 @@ public class LocalSave
     public static void ClearSavedPosts()
     {
         savedPosts.clear();
-        cachedPosts.clear();
 
         Toast.makeText(globalCtx, "Removed All Local Posts", Toast.LENGTH_SHORT).show();
     }

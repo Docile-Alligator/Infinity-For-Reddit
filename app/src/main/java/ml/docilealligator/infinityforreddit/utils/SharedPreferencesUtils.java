@@ -76,6 +76,9 @@ public class SharedPreferencesUtils {
     public static final int POST_LAYOUT_CARD_2 = 3;
 
     public static final String LOCAL_POST_LAYOUT = "local_post_layout";
+    public static final String LOCAL_POST_SORTING= "local_post_sorting";
+    public static final String LOCAL_POST_CACHE_SAVED = "local_post_cache_saved";
+    public static final String LOCAL_POST_CACHE_HISTORY = "local_post_cache_history";
 
     public static final String FRONT_PAGE_SCROLLED_POSITION_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.front_page_scrolled_position";
     public static final String FRONT_PAGE_SCROLLED_POSITION_FRONT_PAGE_BASE = "_front_page";

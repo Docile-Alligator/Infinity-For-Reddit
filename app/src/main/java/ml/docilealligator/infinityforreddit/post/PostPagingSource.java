@@ -17,6 +17,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+import ml.docilealligator.infinityforreddit.LocalSave;
 import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
@@ -189,6 +190,12 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
             } else {
                 int currentPostsSize = postLinkedHashSet.size();
                 postLinkedHashSet.addAll(newPosts);
+
+                if(LocalSave.cacheSaved && postType == TYPE_USER && userWhere == USER_WHERE_SAVED)
+                {
+                    LocalSave.CachePosts(newPosts);
+                }
+
                 if (currentPostsSize == postLinkedHashSet.size()) {
                     return new LoadResult.Page<>(new ArrayList<>(), null, lastItem);
                 } else {

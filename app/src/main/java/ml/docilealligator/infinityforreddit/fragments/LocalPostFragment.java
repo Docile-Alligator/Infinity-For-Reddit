@@ -67,6 +67,7 @@ import butterknife.Unbinder;
 import ml.docilealligator.infinityforreddit.FetchPostFilterReadPostsAndConcatenatedSubredditNames;
 import ml.docilealligator.infinityforreddit.FragmentCommunicator;
 import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.LocalSave;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
@@ -378,6 +379,9 @@ public class LocalPostFragment extends Fragment implements FragmentCommunicator 
 
         if (localType == LOCALPOST_TYPE_READ_POSTS) {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.LOCAL_POST_LAYOUT, defaultPostLayout);
+            LocalSave.sortType = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.LOCAL_POST_SORTING, LocalSave.SORT_NEWEST);
+            LocalSave.cacheSaved = mPostLayoutSharedPreferences.getBoolean(SharedPreferencesUtils.LOCAL_POST_CACHE_SAVED, true);
+            LocalSave.cacheHistory = mPostLayoutSharedPreferences.getBoolean(SharedPreferencesUtils.LOCAL_POST_CACHE_HISTORY, false);
 
             mAdapter = new LocalPostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
                     mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,

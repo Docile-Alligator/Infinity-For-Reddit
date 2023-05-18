@@ -97,6 +97,7 @@ public class LocalPostsActivity extends BaseActivity implements ActivityToolbarI
             public void onClick(DialogInterface dialog, int sortType) {
                 LocalSave.sortType = sortType;
                 sectionsPagerAdapter.refresh();
+                mPostLayoutSharedPreferences.edit().putInt(SharedPreferencesUtils.LOCAL_POST_SORTING, sortType).apply();
                 dialog.dismiss();
             }
         });
@@ -120,6 +121,7 @@ public class LocalPostsActivity extends BaseActivity implements ActivityToolbarI
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 LocalSave.cacheSaved = isChecked;
+                mPostLayoutSharedPreferences.edit().putBoolean(SharedPreferencesUtils.LOCAL_POST_CACHE_SAVED, isChecked).apply();
             }
         });
 
@@ -128,15 +130,17 @@ public class LocalPostsActivity extends BaseActivity implements ActivityToolbarI
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 LocalSave.cacheHistory = isChecked;
+                mPostLayoutSharedPreferences.edit().putBoolean(SharedPreferencesUtils.LOCAL_POST_CACHE_HISTORY, isChecked).apply();
             }
         });
 
-
+        saveCachedBtn.setText(String.format("Save Cached Posts (%s)", LocalSave.GetCachedPostsCount()));
         saveCachedBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Save Cache
                 LocalSave.GetAllSaved();
+                sectionsPagerAdapter.refresh();
             }
         });
 
@@ -144,6 +148,7 @@ public class LocalPostsActivity extends BaseActivity implements ActivityToolbarI
             @Override
             public void onClick(View v) {
                 LocalSave.ClearCachedPosts();
+                saveCachedBtn.setText(String.format("Save Cached Posts (%s)", LocalSave.GetCachedPostsCount()));
             }
         });
 
@@ -161,6 +166,12 @@ public class LocalPostsActivity extends BaseActivity implements ActivityToolbarI
         });
 
         alert.setView(view);
+
+        alert.setPositiveButton("Done", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
 
         alert.show();
     }
@@ -360,6 +371,7 @@ public class LocalPostsActivity extends BaseActivity implements ActivityToolbarI
             Uri uri = null;
             if (resultData != null) {
                 LocalSave.LoadBackup(resultData.getData());
+                sectionsPagerAdapter.refresh();
             }
         }
     }

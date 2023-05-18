@@ -17,6 +17,7 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.concurrent.Executor;
 
+import ml.docilealligator.infinityforreddit.LocalSave;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
@@ -96,6 +97,12 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
                 if (newPosts == null) {
                     return new LoadResult.Error<>(new Exception("Error parsing posts"));
                 } else {
+
+                    if(LocalSave.cacheHistory)
+                    {
+                        LocalSave.CachePosts(newPosts);
+                    }
+
                     if (newPosts.size() < 25) {
                         return new LoadResult.Page<>(new ArrayList<>(newPosts), null, null);
                     }

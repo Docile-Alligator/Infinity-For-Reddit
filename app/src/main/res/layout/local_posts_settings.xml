@@ -23,8 +23,7 @@
         <Button
             android:id="@+id/save_cached_btn"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Save Cached Posts"/>
+            android:layout_height="wrap_content"/>
 
         <Button
             android:id="@+id/clear_cached_btn"
