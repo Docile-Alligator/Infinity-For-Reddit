@@ -264,11 +264,7 @@ public class LocalSave
         int i = 0;
         for(SavedPost post : savedPosts.values())
         {
-            i++;
-            if(i == 900)
-            {
-                useFilter = true;
-            }
+            useFilter = true;
 
             if(post.GetFilters(filters))
             {
