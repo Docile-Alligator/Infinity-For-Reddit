@@ -35,6 +35,7 @@ import com.lsjwzh.widget.materialloadingprogressbar.CircleProgressBar;
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.Executor;
+import java.util.regex.Pattern;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -93,6 +94,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private Retrofit mRetrofit;
     private Retrofit mOauthRetrofit;
     private Markwon mCommentMarkwon;
+    private Markwon mCommentMarkwon2;
     private String mAccessToken;
     private String mAccountName;
     private Post mPost;
@@ -205,6 +207,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             return true;
         };
         mCommentMarkwon = MarkdownUtils.createFullRedditMarkwon(mActivity,
+                miscPlugin, mCommentTextColor, commentSpoilerBackgroundColor, onLinkLongClickListener);
+        mCommentMarkwon2 = MarkdownUtils.createFullRedditMarkwon(mActivity,
                 miscPlugin, mCommentTextColor, commentSpoilerBackgroundColor, onLinkLongClickListener);
         recycledViewPool = new RecyclerView.RecycledViewPool();
         mAccessToken = accessToken;
@@ -438,9 +442,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     Utils.setHTMLWithImageToTextView(((CommentViewHolder) holder).awardsTextView, comment.getAwards(), true);
                 }
 
-                ((CommentViewHolder) holder).mMarkwonAdapter.setMarkdown(mCommentMarkwon, comment.getCommentMarkdown());
-                // noinspection NotifyDataSetChanged
-                ((CommentViewHolder) holder).mMarkwonAdapter.notifyDataSetChanged();
+                setupCommentContent(comment.getCommentMarkdown(), (CommentViewHolder) holder);
 
                 if (!mHideTheNumberOfVotes) {
                     String commentText = "";
@@ -773,6 +775,92 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     }
                 });
             }
+        }
+    }
+
+    private void setupCommentContent(String commentMarkdown, CommentViewHolder holder) {
+        String gifTag = "[gif](";
+        String[] splitCommentAroundGifTag = commentMarkdown.split(Pattern.quote(gifTag));
+        int gifTagStartIndex = commentMarkdown.indexOf(gifTag);
+
+        if (splitCommentAroundGifTag.length != 2) {
+            // Either no gif was found in the comment or more than one was found.
+            justShowNormalMarkdownContent(commentMarkdown, holder);
+            return;
+        }
+
+        String[] gifPartAndCommentAfterSplit = splitCommentAroundGifTag[1].split(Pattern.quote(")"), 2);
+        String gifLink = gifPartAndCommentAfterSplit[0];
+
+        if (!gifLink.startsWith("https://i.giphy.com/")) {
+            // Should only show giphy gifs for safety.
+            justShowNormalMarkdownContent(commentMarkdown, holder);
+            return;
+        }
+
+        String commentBeforeTheGif = splitCommentAroundGifTag[0];
+        String commentAfterTheGif = gifPartAndCommentAfterSplit[1].trim();
+
+        int backtickCount = 0;
+        boolean insideCodeBlock = false;
+        char[] commentBeforeTheGifCharArray = commentBeforeTheGif.toCharArray();
+        for (int i=0; i < commentBeforeTheGifCharArray.length; i++) {
+            if (commentBeforeTheGifCharArray[i] == '`') {
+                backtickCount++;
+            }
+
+            if (commentBeforeTheGifCharArray[i] == '\n' && i + 4 < commentBeforeTheGifCharArray.length) {
+                insideCodeBlock = commentBeforeTheGif.substring(i + 1, i + 6).equals("    ");
+            }
+        }
+
+        if (backtickCount % 2 == 1 || insideCodeBlock) {
+            // The gif part is inside a code block so do not do anything.
+            justShowNormalMarkdownContent(commentMarkdown, holder);
+            return;
+        }
+
+        setTopCommentMarkdownContent(commentBeforeTheGif, holder);
+        setGifComment(gifLink.replace(".mp4", ".gif"), holder);
+        setBottomCommentMarkdownContent(commentAfterTheGif, holder);
+        // noinspection NotifyDataSetChanged
+        holder.mMarkwonAdapterTop.notifyDataSetChanged();
+    }
+
+    private void justShowNormalMarkdownContent(String content, CommentViewHolder holder) {
+        setTopCommentMarkdownContent(content, holder);
+        setGifComment(null, holder);
+        setBottomCommentMarkdownContent(null, holder);
+        // noinspection NotifyDataSetChanged
+        holder.mMarkwonAdapterTop.notifyDataSetChanged();
+    }
+
+    private void setTopCommentMarkdownContent(@Nullable String content, CommentViewHolder holder) {
+        if (content == null || content.isEmpty()) {
+            holder.commentMarkdownViewTop.setVisibility(View.GONE);
+        } else {
+            holder.commentMarkdownViewTop.setVisibility(View.VISIBLE);
+            holder.mMarkwonAdapterTop.setMarkdown(mCommentMarkwon, content);
+        }
+    }
+
+    private void setBottomCommentMarkdownContent(@Nullable String content, CommentViewHolder holder) {
+        if (content == null || content.isEmpty()) {
+            holder.commentMarkdownViewBottom.setVisibility(View.GONE);
+        } else {
+            holder.commentMarkdownViewBottom.setVisibility(View.VISIBLE);
+            holder.mMarkwonAdapterBottom.setMarkdown(mCommentMarkwon2, content);
+        }
+    }
+
+    private void setGifComment(@Nullable String url, CommentViewHolder holder) {
+        if (url == null || url.isEmpty()) {
+            holder.commentGif.setVisibility(View.GONE);
+        } else {
+            holder.commentGif.setVisibility(View.VISIBLE);
+            mGlide.load(url)
+                    .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(8, 0)))
+                    .into(holder.commentGif);
         }
     }
 
@@ -1186,7 +1274,11 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         @BindView(R.id.awards_text_view_item_comment)
         TextView awardsTextView;
         @BindView(R.id.comment_markdown_view_item_post_comment)
-        RecyclerView commentMarkdownView;
+        RecyclerView commentMarkdownViewTop;
+        @BindView(R.id.comment_gif)
+        ImageView commentGif;
+        @BindView(R.id.comment_markdown_view_item_post_comment2)
+        RecyclerView commentMarkdownViewBottom;
         @BindView(R.id.edited_text_view_item_post_comment)
         TextView editedTextView;
         @BindView(R.id.bottom_constraint_layout_item_post_comment)
@@ -1211,7 +1303,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         CommentIndentationView commentIndentationView;
         @BindView(R.id.divider_item_comment)
         View commentDivider;
-        CustomMarkwonAdapter mMarkwonAdapter;
+        CustomMarkwonAdapter mMarkwonAdapterTop;
+        CustomMarkwonAdapter mMarkwonAdapterBottom;
 
         CommentViewHolder(View itemView) {
             super(itemView);
@@ -1282,7 +1375,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 ((ConstraintLayout.LayoutParams) authorFlairTextView.getLayoutParams()).leftMargin = 0;
             }
 
-            commentMarkdownView.setRecycledViewPool(recycledViewPool);
+            commentMarkdownViewTop.setRecycledViewPool(recycledViewPool);
             LinearLayoutManagerBugFixed linearLayoutManager = new SwipeLockLinearLayoutManager(mActivity, new SwipeLockInterface() {
                 @Override
                 public void lockSwipe() {
@@ -1294,9 +1387,25 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     ((ViewPostDetailActivity) mActivity).unlockSwipeRightToGoBack();
                 }
             });
-            commentMarkdownView.setLayoutManager(linearLayoutManager);
-            mMarkwonAdapter = MarkdownUtils.createCustomTablesAdapter();
-            commentMarkdownView.setAdapter(mMarkwonAdapter);
+            commentMarkdownViewTop.setLayoutManager(linearLayoutManager);
+            mMarkwonAdapterTop = MarkdownUtils.createCustomTablesAdapter();
+            commentMarkdownViewTop.setAdapter(mMarkwonAdapterTop);
+
+            commentMarkdownViewBottom.setRecycledViewPool(recycledViewPool);
+            LinearLayoutManagerBugFixed linearLayoutManagerBottom = new SwipeLockLinearLayoutManager(mActivity, new SwipeLockInterface() {
+                @Override
+                public void lockSwipe() {
+                    ((ViewPostDetailActivity) mActivity).lockSwipeRightToGoBack();
+                }
+
+                @Override
+                public void unlockSwipe() {
+                    ((ViewPostDetailActivity) mActivity).unlockSwipeRightToGoBack();
+                }
+            });
+            commentMarkdownViewBottom.setLayoutManager(linearLayoutManagerBottom);
+            mMarkwonAdapterBottom = MarkdownUtils.createCustomTablesAdapter();
+            commentMarkdownViewBottom.setAdapter(mMarkwonAdapterBottom);
 
             itemView.setBackgroundColor(mCommentBackgroundColor);
             authorTextView.setTextColor(mUsernameColor);
@@ -1653,7 +1762,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     View.OnLongClickListener hideToolbarOnLongClickListener = view -> hideToolbar();
                     itemView.setOnLongClickListener(hideToolbarOnLongClickListener);
                     commentTimeTextView.setOnLongClickListener(hideToolbarOnLongClickListener);
-                    mMarkwonAdapter.setOnLongClickListener(v -> {
+                    mMarkwonAdapterTop.setOnLongClickListener(v -> {
                         if (v instanceof TextView) {
                             if (((TextView) v).getSelectionStart() == -1 && ((TextView) v).getSelectionEnd() == -1) {
                                 hideToolbar();
@@ -1662,7 +1771,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                         return true;
                     });
                 }
-                mMarkwonAdapter.setOnClickListener(v -> {
+                mMarkwonAdapterTop.setOnClickListener(v -> {
                     if (v instanceof SpoilerOnClickTextView) {
                         if (((SpoilerOnClickTextView) v).isSpoilerOnClick()) {
                             ((SpoilerOnClickTextView) v).setSpoilerOnClick(false);
@@ -1674,7 +1783,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 itemView.setOnClickListener(view -> expandComments());
             } else {
                 if (mCommentToolbarHideOnClick) {
-                    mMarkwonAdapter.setOnClickListener(view -> {
+                    mMarkwonAdapterTop.setOnClickListener(view -> {
                         if (view instanceof SpoilerOnClickTextView) {
                             if (((SpoilerOnClickTextView) view).isSpoilerOnClick()) {
                                 ((SpoilerOnClickTextView) view).setSpoilerOnClick(false);
@@ -1687,7 +1796,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     itemView.setOnClickListener(hideToolbarOnClickListener);
                     commentTimeTextView.setOnClickListener(hideToolbarOnClickListener);
                 }
-                mMarkwonAdapter.setOnLongClickListener(view -> {
+                mMarkwonAdapterTop.setOnLongClickListener(view -> {
                     if (view instanceof TextView) {
                         if (((TextView) view).getSelectionStart() == -1 && ((TextView) view).getSelectionEnd() == -1) {
                             expandComments();

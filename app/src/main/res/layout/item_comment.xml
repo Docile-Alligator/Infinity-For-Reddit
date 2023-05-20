@@ -144,6 +144,29 @@
             android:layout_marginEnd="8dp"
             android:nestedScrollingEnabled="false" />
 
+        <ImageView
+            android:id="@+id/comment_gif"
+            android:layout_width="match_parent"
+            android:layout_height="175dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:scaleType="fitStart"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/comment_markdown_view_item_post_comment2"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:visibility="gone"
+            android:nestedScrollingEnabled="false" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bottom_constraint_layout_item_post_comment"
             android:layout_width="match_parent"
