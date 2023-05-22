@@ -45,6 +45,7 @@
                 android:fontFamily="?attr/font_family"
                 android:textSize="?attr/font_default"
                 android:maxLines="1"
+                android:ellipsize="end"
                 app:layout_constrainedWidth="true"
                 app:layout_constraintBottom_toTopOf="@id/author_flair_text_view_item_post_comment"
                 app:layout_constraintStart_toEndOf="@id/author_icon_image_view_item_post_comment"
