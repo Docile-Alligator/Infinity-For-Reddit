@@ -36,32 +36,38 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/action_add_to_multireddit_view_subreddit_detail_activity"
+        android:id="@+id/action_add_to_home_screen_view_subreddit_detail_activity"
         android:orderInCategory="6"
+        android:title="@string/action_add_to_home_screen"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_add_to_multireddit_view_subreddit_detail_activity"
+        android:orderInCategory="7"
         android:title="@string/action_add_to_multireddit"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_add_to_post_filter_view_subreddit_detail_activity"
-        android:orderInCategory="7"
+        android:orderInCategory="8"
         android:title="@string/action_add_to_post_filter"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_share_view_subreddit_detail_activity"
-        android:orderInCategory="8"
+        android:orderInCategory="9"
         android:title="@string/action_share"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_go_to_wiki_view_subreddit_detail_activity"
-        android:orderInCategory="9"
+        android:orderInCategory="10"
         android:title="@string/action_go_to_wiki"
         app:showAsAction="never" />
 
     <item
         android:id="@+id/action_contact_mods_view_subreddit_detail_activity"
-        android:orderInCategory="10"
+        android:orderInCategory="11"
         android:title="@string/action_contact_mods"
         app:showAsAction="never" />
 </menu>
