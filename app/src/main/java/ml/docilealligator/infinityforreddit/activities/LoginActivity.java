@@ -271,7 +271,7 @@ public class LoginActivity extends BaseActivity {
             TextView messageTextView = new TextView(this);
             int padding = (int) Utils.convertDpToPixel(24, this);
             messageTextView.setPaddingRelative(padding, padding, padding, padding);
-            SpannableString message = new SpannableString(getString(R.string.user_agreement_message, "https://www.redditinc.com/policies/user-agreement-september-12-2021", "https://docile-alligator.github.io"));
+            SpannableString message = new SpannableString(getString(R.string.user_agreement_message, "https://www.redditinc.com/policies/user-agreement", "https://docile-alligator.github.io"));
             Linkify.addLinks(message, Linkify.WEB_URLS);
             messageTextView.setMovementMethod(BetterLinkMovementMethod.newInstance().setOnLinkClickListener(new BetterLinkMovementMethod.OnLinkClickListener() {
                 @Override
