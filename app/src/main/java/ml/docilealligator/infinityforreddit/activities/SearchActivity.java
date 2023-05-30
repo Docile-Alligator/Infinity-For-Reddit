@@ -274,7 +274,7 @@ public class SearchActivity extends BaseActivity {
         });
 
         deleteAllSearchesImageView.setOnClickListener(view -> {
-            DeleteAllRecentSearchQueries.deleteAllRecentSearchQueriesListener(mRedditDataRoomDatabase,mAccountName, () -> {});
+            DeleteAllRecentSearchQueries.deleteAllRecentSearchQueriesListener(this,mRedditDataRoomDatabase,mAccountName, () -> {});
         });
 
         if (savedInstanceState != null) {
