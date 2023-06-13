@@ -1,5 +1,7 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import static android.graphics.BitmapFactory.decodeResource;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -1194,7 +1196,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             startActivity(intent);
             return true;
         } else if (itemId == R.id.action_add_to_home_screen_view_subreddit_detail_activity) {
-            return ShortcutManager.requestPinShortcut(this, subredditName, subredditIconBitmap);
+            Bitmap icon = subredditIconBitmap == null ? decodeResource(getResources(), R.drawable.subreddit_default_icon) : subredditIconBitmap;
+            return ShortcutManager.requestPinShortcut(this, subredditName, icon);
         }
         return false;
     }

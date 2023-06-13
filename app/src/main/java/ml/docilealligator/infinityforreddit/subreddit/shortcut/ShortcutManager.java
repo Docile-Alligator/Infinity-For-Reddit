@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
@@ -12,7 +13,7 @@ import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
 
 public class ShortcutManager {
-    private static ShortcutInfoCompat getInfo(Context context, String subreddit, Bitmap icon) {
+    private static ShortcutInfoCompat getInfo(Context context, @NonNull String subreddit, @NonNull Bitmap icon) {
         final Intent shortcut = new Intent(context, ViewSubredditDetailActivity.class);
         shortcut.setPackage(context.getPackageName());
         shortcut.setAction(Intent.ACTION_MAIN);
@@ -29,7 +30,7 @@ public class ShortcutManager {
                 .build();
     }
 
-    public static boolean requestPinShortcut(Context context, String subreddit, Bitmap icon) {
+    public static boolean requestPinShortcut(Context context, @NonNull String subreddit, @NonNull Bitmap icon) {
         return ShortcutManagerCompat.requestPinShortcut(context, getInfo(context, subreddit, icon), null);
     }
 }
