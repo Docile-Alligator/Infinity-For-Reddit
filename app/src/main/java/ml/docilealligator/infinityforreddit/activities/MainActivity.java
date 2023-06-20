@@ -14,7 +14,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -34,9 +33,6 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.core.view.OnApplyWindowInsetsListener;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -95,6 +91,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsB
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.RandomBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.RedditAPIInfoBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -338,6 +335,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             mMessageFullname = getIntent().getStringExtra(EXTRA_MESSSAGE_FULLNAME);
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
         }
+
+        if (!mInternalSharedPreferences.getBoolean(SharedPreferencesUtils.DO_NOT_SHOW_REDDIT_API_INFO_AGAIN, false)) {
+            RedditAPIInfoBottomSheetFragment fragment = new RedditAPIInfoBottomSheetFragment();
+            fragment.setCancelable(false);
+            fragment.show(getSupportFragmentManager(), fragment.getTag());
+        }
+
         initializeNotificationAndBindView();
     }
 
@@ -1528,6 +1532,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Override
     public void markPostAsRead(Post post) {
         InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId());
+    }
+
+    public void doNotShowRedditAPIInfoAgain() {
+        mInternalSharedPreferences.edit().putBoolean(SharedPreferencesUtils.DO_NOT_SHOW_REDDIT_API_INFO_AGAIN, true).apply();
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {

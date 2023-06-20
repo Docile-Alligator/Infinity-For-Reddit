@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".bottomsheetfragments.RedditAPIInfoBottomSheetFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="16dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:text="@string/reddit_api_info_title"
+        android:fontFamily="?attr/font_family"
+        android:textSize="?attr/font_20"
+        android:textColor="?attr/primaryTextColor"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/message_text_view_reddit_api_info_bottom_sheet_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp"
+        android:text="@string/reddit_api_info"
+        android:fontFamily="?attr/font_family"
+        android:textSize="?attr/font_16"
+        android:textColor="?attr/primaryTextColor" />
+
+    <LinearLayout
+        android:id="@+id/linear_layout_check_box_wrapper_reddit_api_info_bottom_sheet_fragment"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp">
+
+        <com.google.android.material.checkbox.MaterialCheckBox
+            android:id="@+id/do_not_show_this_again_check_box"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical" />
+
+        <TextView
+            android:id="@+id/do_not_show_this_again_text_view"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/do_not_show_this_again"
+            android:gravity="center_vertical"
+            android:fontFamily="?attr/font_family"
+            android:textSize="?attr/font_default"
+            android:textColor="?attr/primaryTextColor" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/continue_button_reddit_api_info_bottom_sheet_fragment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:backgroundTint="@color/colorPrimary"
+            android:text="@string/i_understand" />
+
+    </LinearLayout>
+
+</LinearLayout>

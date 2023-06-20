@@ -1322,4 +1322,8 @@
     <string name="denied_notification_permission">Notification permission is not granted</string>
     <string name="go_to_settings">Settings</string>
 
+    <string name="reddit_api_info_title">Important Notice Regarding Reddit API Changes</string>
+    <string name="reddit_api_info">Starting from July 1st, 2023, Reddit API will be pay-per-use for 3rd-party clients, which include Infinity for Reddit. The announcement from Reddit can be found here: %1$s\n\nIn order to survive this change, Infinity will become a subscription-only app after July 1st. You can learn more about the changes in this post: %2$s\n\nIt\'s required for you to update Infinity after July 1st so that you will get the new version with subscription options. None of the previous versions (including this one) will work after July 1st. But due to a tight timeline Reddit gave, the update may not be available immediately on July 1st since it requires proper testing. Thank you for your understanding!</string>
+    <string name="i_understand">I understand</string>
+
 </resources>
