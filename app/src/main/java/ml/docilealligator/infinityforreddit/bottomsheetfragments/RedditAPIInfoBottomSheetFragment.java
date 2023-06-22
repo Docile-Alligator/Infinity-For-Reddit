@@ -38,6 +38,8 @@ public class RedditAPIInfoBottomSheetFragment extends LandscapeExpandedRoundedBo
             Utils.setFontToAllTextViews(binding.getRoot(), mainActivity.typeface);
         }
 
+        binding.getRoot().setNestedScrollingEnabled(true);
+
         SpannableString message = new SpannableString(getString(R.string.reddit_api_info, "https://www.reddit.com/r/reddit/comments/145bram/addressing_the_community_about_changes_to_our_api", "https://www.reddit.com/r/Infinity_For_Reddit/comments/147bhsg/the_future_of_infinity"));
         Linkify.addLinks(message, Linkify.WEB_URLS);
         binding.messageTextViewRedditApiInfoBottomSheetFragment.setText(message);
