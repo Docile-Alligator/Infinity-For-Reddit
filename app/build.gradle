@@ -173,7 +173,7 @@ dependencies {
     implementation 'com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE'
 
     // Customizable TextView
-    implementation 'com.libRG:customtextview:2.4'
+    implementation files("Modules/customtextview-2.1.aar")
 
     // Dismiss gesturing
     implementation 'app.futured.hauler:hauler:5.0.0'
