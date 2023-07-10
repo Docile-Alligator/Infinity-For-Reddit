@@ -91,15 +91,15 @@ public class MaterialYouUtils {
             lightTheme.colorPrimaryDark = lightTheme.colorPrimary;
             lightTheme.colorAccent = context.getColor(android.R.color.system_accent3_300);
             lightTheme.colorPrimaryLightTheme = lightTheme.colorPrimary;
-            lightTheme.backgroundColor = context.getColor(android.R.color.system_neutral1_100);
-            lightTheme.cardViewBackgroundColor = context.getColor(android.R.color.system_neutral2_50);
-            lightTheme.commentBackgroundColor = context.getColor(android.R.color.system_neutral2_50);
-            lightTheme.awardedCommentBackgroundColor = context.getColor(android.R.color.system_neutral2_50);
+            lightTheme.backgroundColor = context.getColor(android.R.color.system_neutral1_50);
+            lightTheme.cardViewBackgroundColor = context.getColor(android.R.color.system_neutral2_10);
+            lightTheme.commentBackgroundColor = context.getColor(android.R.color.system_neutral2_10);
+            lightTheme.awardedCommentBackgroundColor = context.getColor(android.R.color.system_neutral2_10);
             lightTheme.bottomAppBarBackgroundColor = lightTheme.colorPrimary;
             lightTheme.navBarColor = lightTheme.colorPrimary;
             lightTheme.primaryTextColor = context.getColor(android.R.color.system_neutral1_900);
             lightTheme.secondaryTextColor = context.getColor(android.R.color.system_neutral1_700);
-            lightTheme.buttonTextColor = context.getColor(android.R.color.system_accent1_800);
+            lightTheme.buttonTextColor = lightTheme.primaryTextColor;
             lightTheme.bottomAppBarIconColor = lightTheme.buttonTextColor;
             lightTheme.primaryIconColor = context.getColor(android.R.color.system_accent1_400);
             lightTheme.fabIconColor = lightTheme.buttonTextColor;
@@ -120,15 +120,16 @@ public class MaterialYouUtils {
             darkTheme.colorPrimary = context.getColor(android.R.color.system_accent2_800);
             darkTheme.colorPrimaryDark = darkTheme.colorPrimary;
             darkTheme.colorAccent = context.getColor(android.R.color.system_accent3_100);
-            darkTheme.colorPrimaryLightTheme = context.getColor(android.R.color.system_accent1_300);
+            darkTheme.colorPrimaryLightTheme = lightTheme.colorPrimary;
             darkTheme.backgroundColor = context.getColor(android.R.color.system_neutral1_900);
             darkTheme.cardViewBackgroundColor = context.getColor(android.R.color.system_neutral2_800);
-            darkTheme.commentBackgroundColor = context.getColor(android.R.color.system_neutral2_800);
-            darkTheme.awardedCommentBackgroundColor = context.getColor(android.R.color.system_neutral2_800);
-            darkTheme.bottomAppBarBackgroundColor = context.getColor(android.R.color.system_accent2_800);
+            darkTheme.commentBackgroundColor = darkTheme.cardViewBackgroundColor;
+            darkTheme.awardedCommentBackgroundColor = darkTheme.cardViewBackgroundColor;
+            darkTheme.bottomAppBarBackgroundColor = darkTheme.colorPrimary;
             darkTheme.navBarColor = darkTheme.colorPrimary;
             darkTheme.primaryTextColor = context.getColor(android.R.color.system_neutral1_10);
             darkTheme.secondaryTextColor = context.getColor(android.R.color.system_neutral1_10);
+            darkTheme.buttonTextColor = context.getColor(android.R.color.system_neutral1_900);
             darkTheme.bottomAppBarIconColor = context.getColor(android.R.color.system_accent1_100);
             darkTheme.primaryIconColor = context.getColor(android.R.color.system_accent1_100);
             darkTheme.fabIconColor = context.getColor(android.R.color.system_neutral1_900);
@@ -146,7 +147,7 @@ public class MaterialYouUtils {
             darkTheme.name = "Material You Dark";
 
             amoledTheme.colorAccent = context.getColor(android.R.color.system_accent1_100);
-            amoledTheme.colorPrimaryLightTheme = context.getColor(android.R.color.system_accent1_300);
+            amoledTheme.colorPrimaryLightTheme = lightTheme.colorPrimary;
             amoledTheme.fabIconColor = context.getColor(android.R.color.system_neutral1_900);
             amoledTheme.name = "Material You Amoled";
 

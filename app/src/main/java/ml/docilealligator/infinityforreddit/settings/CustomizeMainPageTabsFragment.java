@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -238,10 +239,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             editText.setHint(R.string.settings_tab_title);
             editText.setText(tab1CurrentTitle);
             editText.requestFocus();
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-            }
+            Utils.showKeyboard(activity, new Handler(), editText);
             if (dialogView.getParent() != null) {
                 ((ViewGroup) dialogView.getParent()).removeView(dialogView);
             }
@@ -253,14 +251,10 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                         tab1CurrentTitle = editText.getText().toString();
                         mainActivityTabsSharedPreferences.edit().putString((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_TITLE, tab1CurrentTitle).apply();
                         tab1TitleSummaryTextView.setText(tab1CurrentTitle);
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                        }
+                        Utils.hideKeyboard(activity);
                     })
                     .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                        }
+                        Utils.hideKeyboard(activity);
                     })
                     .show();
         });
@@ -297,10 +291,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             editText.setText(tab1CurrentName);
             editText.setHint(titleId);
             editText.requestFocus();
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-            }
+            Utils.showKeyboard(activity, new Handler(), editText);
             if (dialogView.getParent() != null) {
                 ((ViewGroup) dialogView.getParent()).removeView(dialogView);
             }
@@ -312,14 +303,10 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                         tab1CurrentName = editText.getText().toString();
                         mainActivityTabsSharedPreferences.edit().putString((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_1_NAME, tab1CurrentName).apply();
                         tab1NameSummaryTextView.setText(tab1CurrentName);
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                        }
+                        Utils.hideKeyboard(activity);
                     })
                     .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                        }
+                        Utils.hideKeyboard(activity);
                     })
                     .show();
         });
@@ -338,10 +325,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             editText.setHint(R.string.settings_tab_title);
             editText.setText(tab2CurrentTitle);
             editText.requestFocus();
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-            }
+            Utils.showKeyboard(activity, new Handler(), editText);
             if (dialogView.getParent() != null) {
                 ((ViewGroup) dialogView.getParent()).removeView(dialogView);
             }
@@ -353,14 +337,10 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                         tab2CurrentTitle = editText.getText().toString();
                         mainActivityTabsSharedPreferences.edit().putString((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_TITLE, tab2CurrentTitle).apply();
                         tab2TitleSummaryTextView.setText(tab2CurrentTitle);
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                        }
+                        Utils.hideKeyboard(activity);
                     })
                     .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                        }
+                        Utils.hideKeyboard(activity);
                     })
                     .show();
         });
@@ -397,10 +377,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             editText.setText(tab2CurrentName);
             editText.setHint(titleId);
             editText.requestFocus();
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-            }
+            Utils.showKeyboard(activity, new Handler(), editText);
             if (dialogView.getParent() != null) {
                 ((ViewGroup) dialogView.getParent()).removeView(dialogView);
             }
@@ -412,14 +389,10 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                         tab2CurrentName = editText.getText().toString();
                         mainActivityTabsSharedPreferences.edit().putString((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_2_NAME, tab2CurrentName).apply();
                         tab2NameSummaryTextView.setText(tab2CurrentName);
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                        }
+                        Utils.hideKeyboard(activity);
                     })
                     .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                        }
+                        Utils.hideKeyboard(activity);
                     })
                     .show();
         });
@@ -438,10 +411,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             editText.setHint(R.string.settings_tab_title);
             editText.setText(tab3CurrentTitle);
             editText.requestFocus();
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-            }
+            Utils.showKeyboard(activity, new Handler(), editText);
             if (dialogView.getParent() != null) {
                 ((ViewGroup) dialogView.getParent()).removeView(dialogView);
             }
@@ -453,14 +423,10 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                         tab3CurrentTitle = editText.getText().toString();
                         mainActivityTabsSharedPreferences.edit().putString((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_TITLE, tab3CurrentTitle).apply();
                         tab3TitleSummaryTextView.setText(tab3CurrentTitle);
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                        }
+                        Utils.hideKeyboard(activity);
                     })
                     .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                        }
+                        Utils.hideKeyboard(activity);
                     })
                     .show();
         });
@@ -497,10 +463,7 @@ public class CustomizeMainPageTabsFragment extends Fragment {
             editText.setText(tab3CurrentName);
             editText.setHint(titleId);
             editText.requestFocus();
-            InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-            }
+            Utils.showKeyboard(activity, new Handler(), editText);
             if (dialogView.getParent() != null) {
                 ((ViewGroup) dialogView.getParent()).removeView(dialogView);
             }
@@ -512,14 +475,10 @@ public class CustomizeMainPageTabsFragment extends Fragment {
                         tab3CurrentName = editText.getText().toString();
                         mainActivityTabsSharedPreferences.edit().putString((accountName == null ? "" : accountName) + SharedPreferencesUtils.MAIN_PAGE_TAB_3_NAME, tab3CurrentName).apply();
                         tab3NameSummaryTextView.setText(tab3CurrentName);
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                        }
+                        Utils.hideKeyboard(activity);
                     })
                     .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-                        }
+                        Utils.hideKeyboard(activity);
                     })
                     .show();
         });

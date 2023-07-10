@@ -213,6 +213,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
             binding.commentContentMarkdownView.setLayoutManager(new LinearLayoutManagerBugFixed(this));
             binding.commentContentMarkdownView.setAdapter(markwonAdapter);
             markwonAdapter.setMarkdown(postBodyMarkwon, parentBodyMarkdown);
+            // noinspection NotifyDataSetChanged
             markwonAdapter.notifyDataSetChanged();
         }
         parentFullname = intent.getStringExtra(EXTRA_PARENT_FULLNAME_KEY);
@@ -275,10 +276,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
         });
 
         binding.commentCommentEditText.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        }
+        Utils.showKeyboard(this, new Handler(), binding.commentCommentEditText);
     }
 
     private void loadCurrentAccount() {
@@ -345,10 +343,7 @@ public class CommentActivity extends BaseActivity implements UploadImageEnabledA
     @Override
     protected void onPause() {
         super.onPause();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.hideSoftInputFromWindow(binding.commentCommentEditText.getWindowToken(), 0);
-        }
+        Utils.hideKeyboard(this);
     }
 
     @Override

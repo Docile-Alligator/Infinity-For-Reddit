@@ -1,11 +1,10 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
-import android.content.Context;
 import android.content.res.ColorStateList;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -24,6 +23,7 @@ import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeSettingsItem;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.ColorPickerDialog;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_COLOR = 1;
@@ -92,30 +92,21 @@ public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<Recy
                 EditText themeNameEditText = dialogView.findViewById(R.id.name_edit_text_edit_name_dialog);
                 themeNameEditText.setText(themeName);
                 themeNameEditText.requestFocus();
-                InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                }
+                Utils.showKeyboard(activity, new Handler(), themeNameEditText);
                 new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                         .setTitle(R.string.edit_theme_name)
                         .setView(dialogView)
                         .setPositiveButton(R.string.ok, (dialogInterface, i)
                                 -> {
-                            if (imm != null) {
-                                imm.hideSoftInputFromWindow(themeNameEditText.getWindowToken(), 0);
-                            }
+                            Utils.hideKeyboard(activity);
                             themeName = themeNameEditText.getText().toString();
                             ((ThemeNameItemViewHolder) holder).themeNameTextView.setText(themeName);
                         })
                         .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                            if (imm != null) {
-                                imm.hideSoftInputFromWindow(themeNameEditText.getWindowToken(), 0);
-                            }
+                            Utils.hideKeyboard(activity);
                         })
                         .setOnDismissListener(dialogInterface -> {
-                            if (imm != null) {
-                                imm.hideSoftInputFromWindow(themeNameEditText.getWindowToken(), 0);
-                            }
+                            Utils.hideKeyboard(activity);
                         })
                         .show();
             });
@@ -129,7 +120,6 @@ public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<Recy
 
     public void setCustomThemeSettingsItem(ArrayList<CustomThemeSettingsItem> customThemeSettingsItems) {
         this.customThemeSettingsItems.clear();
-        notifyDataSetChanged();
         this.customThemeSettingsItems.addAll(customThemeSettingsItems);
         notifyDataSetChanged();
     }

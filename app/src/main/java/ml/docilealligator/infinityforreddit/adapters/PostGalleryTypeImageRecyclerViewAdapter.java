@@ -91,8 +91,6 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
         holder.binding.errorTextViewItemGalleryImageInPostFeed.setVisibility(View.GONE);
         holder.binding.progressBarItemGalleryImageInPostFeed.setVisibility(View.VISIBLE);
 
-        holder.binding.imageViewItemGalleryImageInPostFeed.setRatio(ratio);
-
         holder.binding.imageViewItemGalleryImageInPostFeed.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
@@ -104,8 +102,6 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
         if (showCaption) {
             loadCaptionPreview(holder);
         }
-
-        loadImage(holder);
     }
 
     @Override
@@ -119,10 +115,20 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
         holder.binding.captionConstraintLayoutItemGalleryImageInPostFeed.setVisibility(View.GONE);
         holder.binding.captionTextViewItemGalleryImageInPostFeed.setText("");
         holder.binding.captionUrlTextViewItemGalleryImageInPostFeed.setText("");
+        holder.binding.progressBarItemGalleryImageInPostFeed.setVisibility(View.GONE);
+        glide.clear(holder.binding.imageViewItemGalleryImageInPostFeed);
     }
 
     private void loadImage(ImageViewHolder holder) {
-        RequestBuilder<Drawable> imageRequestBuilder = glide.load(galleryImages.get(holder.getBindingAdapterPosition()).url).listener(new RequestListener<>() {
+        if (galleryImages == null || galleryImages.isEmpty()) {
+            return;
+        }
+        int index = holder.getBindingAdapterPosition();
+        if (index < 0 || index >= galleryImages.size()) {
+            return;
+        }
+
+        RequestBuilder<Drawable> imageRequestBuilder = glide.load(galleryImages.get(index).url).listener(new RequestListener<>() {
             @Override
             public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
                 holder.binding.progressBarItemGalleryImageInPostFeed.setVisibility(View.GONE);
@@ -146,8 +152,17 @@ public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapte
     }
 
     private void loadCaptionPreview(ImageViewHolder holder) {
-        String previewCaption = galleryImages.get(holder.getBindingAdapterPosition()).caption;
-        String previewCaptionUrl = galleryImages.get(holder.getBindingAdapterPosition()).captionUrl;
+        if (galleryImages == null || galleryImages.isEmpty()) {
+            return;
+        }
+
+        int index = holder.getBindingAdapterPosition();
+        if (index < 0 || index >= galleryImages.size()) {
+            return;
+        }
+
+        String previewCaption = galleryImages.get(index).caption;
+        String previewCaptionUrl = galleryImages.get(index).captionUrl;
         boolean previewCaptionIsEmpty = TextUtils.isEmpty(previewCaption);
         boolean previewCaptionUrlIsEmpty = TextUtils.isEmpty(previewCaptionUrl);
         if (!previewCaptionIsEmpty || !previewCaptionUrlIsEmpty) {

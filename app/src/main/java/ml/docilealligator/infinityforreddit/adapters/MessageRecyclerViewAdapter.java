@@ -219,6 +219,9 @@ public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, Recycl
                 });
 
                 ((DataViewHolder) holder).authorTextView.setOnClickListener(view -> {
+                    if (message.isAuthorDeleted()) {
+                        return;
+                    }
                     Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
                     intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, message.getAuthor());
                     mActivity.startActivity(intent);

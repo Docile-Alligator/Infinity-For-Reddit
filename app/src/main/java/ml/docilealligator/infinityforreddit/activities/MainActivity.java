@@ -5,7 +5,6 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -15,7 +14,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -24,10 +22,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
-import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
@@ -95,6 +91,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsB
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.RandomBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.RedditAPIInfoBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTimeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -288,9 +285,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         params.bottomMargin += navBarHeight;
                         navigationWrapper.floatingActionButton.setLayoutParams(params);
                     }
-                    if (navigationWrapper.linearLayoutBottomAppBar != null) {
-                        navigationWrapper.linearLayoutBottomAppBar.setPadding(0,
-                                navigationWrapper.linearLayoutBottomAppBar.getPaddingTop(), 0, navBarHeight);
+                    if (navigationWrapper.bottomAppBar != null) {
+                        navigationWrapper.linearLayoutBottomAppBar.setPadding(navigationWrapper.linearLayoutBottomAppBar.getPaddingLeft(),
+                                navigationWrapper.linearLayoutBottomAppBar.getPaddingTop(), navigationWrapper.linearLayoutBottomAppBar.getPaddingRight(), navBarHeight);
                     }
                     navDrawerRecyclerView.setPadding(0, 0, 0, navBarHeight);
                 }
@@ -316,6 +313,8 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         });
         toggle.syncState();
 
+        mViewPager2 = viewPager2;
+
         mBackButtonAction = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.MAIN_PAGE_BACK_BUTTON_ACTION, "0"));
         mLockBottomAppBar = mSharedPreferences.getBoolean(SharedPreferencesUtils.LOCK_BOTTOM_APP_BAR, false);
         mDisableSwipingBetweenTabs = mSharedPreferences.getBoolean(SharedPreferencesUtils.DISABLE_SWIPING_BETWEEN_TABS, false);
@@ -336,6 +335,13 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             mMessageFullname = getIntent().getStringExtra(EXTRA_MESSSAGE_FULLNAME);
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
         }
+
+        if (!mInternalSharedPreferences.getBoolean(SharedPreferencesUtils.DO_NOT_SHOW_REDDIT_API_INFO_AGAIN, false)) {
+            RedditAPIInfoBottomSheetFragment fragment = new RedditAPIInfoBottomSheetFragment();
+            fragment.setCancelable(false);
+            fragment.show(getSupportFragmentManager(), fragment.getTag());
+        }
+
         initializeNotificationAndBindView();
     }
 
@@ -697,6 +703,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
                 navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_filter_24dp);
                 break;
+            case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_GO_TO_TOP:
+                navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_keyboard_double_arrow_up_24);
+                break;
             default:
                 if (mAccessToken == null) {
                     navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_filter_24dp);
@@ -745,6 +754,11 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
                     if (sectionsPagerAdapter != null) {
                         sectionsPagerAdapter.filterPosts();
+                    }
+                    break;
+                case SharedPreferencesUtils.MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_GO_TO_TOP:
+                    if (sectionsPagerAdapter != null) {
+                        sectionsPagerAdapter.goBackToTop();
                     }
                     break;
                 default:
@@ -897,10 +911,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                         mShowFavoriteSubscribedSubreddits || mShowSubscribedSubreddits)
                         && sectionsPagerAdapter != null) {
                     if (position - tabCount < sectionsPagerAdapter.favoriteMultiReddits.size()) {
-                        Utils.setTitleWithCustomFontToTab(typeface, tab, sectionsPagerAdapter.favoriteMultiReddits.get(position - tabCount).getName());
+                        Utils.setTitleWithCustomFontToTab(typeface, tab, sectionsPagerAdapter.favoriteMultiReddits.get(position - tabCount).getDisplayName());
                     } else if (position - tabCount - sectionsPagerAdapter.favoriteMultiReddits.size() < sectionsPagerAdapter.multiReddits.size()) {
                         Utils.setTitleWithCustomFontToTab(typeface, tab, sectionsPagerAdapter.multiReddits.get(position - tabCount
-                                - sectionsPagerAdapter.favoriteMultiReddits.size()).getName());
+                                - sectionsPagerAdapter.favoriteMultiReddits.size()).getDisplayName());
                     } else if (position - tabCount - sectionsPagerAdapter.favoriteMultiReddits.size()
                             - sectionsPagerAdapter.multiReddits.size() < sectionsPagerAdapter.favoriteSubscribedSubreddits.size()) {
                         Utils.setTitleWithCustomFontToTab(typeface, tab, sectionsPagerAdapter.favoriteSubscribedSubreddits.get(position - tabCount
@@ -1368,6 +1382,12 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 }
                 break;
             }
+            case FABMoreOptionsBottomSheetFragment.FAB_GO_TO_TOP: {
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.goBackToTop();
+                }
+                break;
+            }
         }
     }
 
@@ -1375,12 +1395,9 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         View rootView = getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, coordinatorLayout, false);
         TextInputEditText thingEditText = rootView.findViewById(R.id.text_input_edit_text_go_to_thing_edit_text);
         RecyclerView recyclerView = rootView.findViewById(R.id.recycler_view_go_to_thing_edit_text);
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         SubredditAutocompleteRecyclerViewAdapter adapter = new SubredditAutocompleteRecyclerViewAdapter(
                 this, mCustomThemeWrapper, subredditData -> {
-            if (imm != null) {
-                imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-            }
+            Utils.hideKeyboard(this);
             Intent intent = new Intent(MainActivity.this, ViewSubredditDetailActivity.class);
             intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditData.getName());
             startActivity(intent);
@@ -1388,14 +1405,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         recyclerView.setAdapter(adapter);
 
         thingEditText.requestFocus();
-        if (imm != null) {
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        }
+        Utils.showKeyboard(this, new Handler(), thingEditText);
         thingEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_DONE) {
-                if (imm != null) {
-                    imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                }
+                Utils.hideKeyboard(this);
                 Intent subredditIntent = new Intent(this, ViewSubredditDetailActivity.class);
                 subredditIntent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, thingEditText.getText().toString());
                 startActivity(subredditIntent);
@@ -1453,22 +1466,16 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 .setView(rootView)
                 .setPositiveButton(R.string.ok, (dialogInterface, i)
                         -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                     Intent subredditIntent = new Intent(this, ViewSubredditDetailActivity.class);
                     subredditIntent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, thingEditText.getText().toString());
                     startActivity(subredditIntent);
                 })
                 .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                 })
                 .setOnDismissListener(dialogInterface -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                 })
                 .show();
     }
@@ -1477,15 +1484,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
         View rootView = getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, coordinatorLayout, false);
         TextInputEditText thingEditText = rootView.findViewById(R.id.text_input_edit_text_go_to_thing_edit_text);
         thingEditText.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        }
+        Utils.showKeyboard(this, new Handler(), thingEditText);
         thingEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_DONE) {
-                if (imm != null) {
-                    imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                }
+                Utils.hideKeyboard(this);
                 Intent userIntent = new Intent(this, ViewUserDetailActivity.class);
                 userIntent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, thingEditText.getText().toString());
                 startActivity(userIntent);
@@ -1498,22 +1500,16 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
                 .setView(rootView)
                 .setPositiveButton(R.string.ok, (dialogInterface, i)
                         -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                     Intent userIntent = new Intent(this, ViewUserDetailActivity.class);
                     userIntent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, thingEditText.getText().toString());
                     startActivity(userIntent);
                 })
                 .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                 })
                 .setOnDismissListener(dialogInterface -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                 })
                 .show();
     }
@@ -1536,6 +1532,10 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     @Override
     public void markPostAsRead(Post post) {
         InsertReadPost.insertReadPost(mRedditDataRoomDatabase, mExecutor, mAccountName, post.getId());
+    }
+
+    public void doNotShowRedditAPIInfoAgain() {
+        mInternalSharedPreferences.edit().putBoolean(SharedPreferencesUtils.DO_NOT_SHOW_REDDIT_API_INFO_AGAIN, true).apply();
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {

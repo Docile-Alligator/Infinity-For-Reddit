@@ -6,6 +6,10 @@ import com.google.gson.annotations.SerializedName;
 import java.util.Objects;
 
 public class SubredditSettingData {
+    public static final String WIKIMODE_ANYONE = "anyone";
+    public static final String WIKIMODE_DISABLED = "disabled";
+    public static final String WIKIMODE_MODONLY = "modonly";
+
     //  Content visibility || Posts to this profile can appear in r/all and your profile can be discovered in /users
     @SerializedName("default_set")
     private boolean defaultSet;
@@ -246,6 +250,10 @@ public class SubredditSettingData {
     }
 
     public String getWikiMode() {
+        if (wikiMode == null) {
+            // Default to disabled, since occasionally the API returns null.
+            return WIKIMODE_DISABLED;
+        }
         return wikiMode;
     }
 

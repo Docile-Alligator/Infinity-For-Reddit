@@ -44,16 +44,18 @@ public class AspectRatioGifImageView extends GifImageView {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        int width = this.getMeasuredWidth();
-        int height = this.getMeasuredHeight();
-        if (width != 0 || height != 0) {
-            if (width > 0) {
-                height = (int) ((float) width * this.ratio);
-            } else {
-                width = (int) ((float) height / this.ratio);
-            }
+        if (this.ratio > 0) {
+            int width = this.getMeasuredWidth();
+            int height = this.getMeasuredHeight();
+            if (width != 0 || height != 0) {
+                if (width > 0) {
+                    height = (int) ((float) width * this.ratio);
+                } else {
+                    width = (int) ((float) height / this.ratio);
+                }
 
-            this.setMeasuredDimension(width, height);
+                this.setMeasuredDimension(width, height);
+            }
         }
     }
 

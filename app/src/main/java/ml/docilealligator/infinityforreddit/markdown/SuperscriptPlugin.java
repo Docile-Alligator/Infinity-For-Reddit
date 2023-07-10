@@ -7,8 +7,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import org.commonmark.ext.gfm.tables.TableCell;
+import org.commonmark.node.Link;
 import org.commonmark.node.Node;
 import org.commonmark.node.Paragraph;
+import org.commonmark.node.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +97,10 @@ public class SuperscriptPlugin extends AbstractMarkwonPlugin {
             public void visit(@NonNull MarkwonVisitor visitor, @NonNull Superscript superscript) {
                 int start = visitor.length();
 
+                if (!notEmptySuperscript(superscript)) {
+                    return;
+                }
+
                 if (!superscript.isBracketed()) {
                     visitor.builder().setSpan(new SuperscriptSpan(false), start, start + 1); // Workaround for Table Plugin
                     superscriptOpeningList.add(new SuperscriptOpening(superscript, start));
@@ -121,6 +127,88 @@ public class SuperscriptPlugin extends AbstractMarkwonPlugin {
                 }
             }
         });
+    }
+
+    private boolean notEmptyLink(Link link) {
+        Node next = link.getFirstChild();
+        while (next != null) {
+            if (next instanceof Text) {
+                return true;
+            } else if (next instanceof Superscript) {
+                if (notEmptySuperscript((Superscript) next)) {
+                    return true;
+                }
+            } else if (next instanceof Link) {
+                if (notEmptyLink((Link) next)) {
+                    return true;
+                }
+            } else if (next instanceof SpoilerNode) {
+                if (notEmptySpoilerNode((SpoilerNode) next)) {
+                    return true;
+                }
+            } else {
+                return true;
+            }
+            next = next.getNext();
+        }
+
+        return false;
+    }
+
+    private boolean notEmptySpoilerNode(SpoilerNode spoilerNode) {
+        Node next = spoilerNode.getFirstChild();
+        while (next != null) {
+            if (next instanceof Text) {
+                return true;
+            } else if (next instanceof Superscript) {
+                if (notEmptySuperscript((Superscript) next)) {
+                    return true;
+                }
+            } else if (next instanceof Link) {
+                if (notEmptyLink((Link) next)) {
+                    return true;
+                }
+            } else if (next instanceof SpoilerNode) {
+                if (notEmptySpoilerNode((SpoilerNode) next)) {
+                    return true;
+                }
+            } else {
+                return true;
+            }
+            next = next.getNext();
+        }
+
+        return false;
+    }
+
+    private boolean notEmptySuperscript(Superscript superscript) {
+        Node next;
+        if (superscript.isBracketed()) {
+            next = superscript.getFirstChild();
+        } else {
+            next = superscript.getNext();
+        }
+
+        while (next != null) {
+            if (next instanceof Link) {
+                if (notEmptyLink((Link) next)) {
+                    return true;
+                }
+            } else if (next instanceof SpoilerNode) {
+                if (notEmptySpoilerNode((SpoilerNode) next)) {
+                    return true;
+                }
+            } else if (!(next instanceof Superscript)) {
+                return true;
+            } else {
+                if (notEmptySuperscript((Superscript) next)) {
+                    return true;
+                }
+            }
+            next = next.getNext();
+        }
+
+        return false;
     }
 
     @Override

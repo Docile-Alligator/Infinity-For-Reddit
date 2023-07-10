@@ -868,7 +868,7 @@ public class CustomThemeWrapper {
         customTheme.commentVerticalBarColor5 = Color.parseColor("#EE0220");
         customTheme.commentVerticalBarColor6 = Color.parseColor("#02EE6E");
         customTheme.commentVerticalBarColor7 = Color.parseColor("#EE4602");
-        customTheme.fabIconColor = Color.parseColor("#000000");
+        customTheme.fabIconColor = Color.parseColor("#FFFFFF");
         customTheme.chipTextColor = Color.parseColor("#FFFFFF");
         customTheme.linkColor = Color.parseColor("#FF1868");
         customTheme.receivedMessageTextColor = Color.parseColor("#FFFFFF");
@@ -961,7 +961,7 @@ public class CustomThemeWrapper {
         customTheme.commentVerticalBarColor5 = Color.parseColor("#EE0219");
         customTheme.commentVerticalBarColor6 = Color.parseColor("#00B925");
         customTheme.commentVerticalBarColor7 = Color.parseColor("#EE4602");
-        customTheme.fabIconColor = Color.parseColor("#FFFFFF");
+        customTheme.fabIconColor = Color.parseColor("#000000");
         customTheme.chipTextColor = Color.parseColor("#FFFFFF");
         customTheme.linkColor = Color.parseColor("#FF1868");
         customTheme.receivedMessageTextColor = Color.parseColor("#FFFFFF");
@@ -1054,7 +1054,7 @@ public class CustomThemeWrapper {
         customTheme.commentVerticalBarColor5 = Color.parseColor("#EE0219");
         customTheme.commentVerticalBarColor6 = Color.parseColor("#00B925");
         customTheme.commentVerticalBarColor7 = Color.parseColor("#EE4602");
-        customTheme.fabIconColor = Color.parseColor("#FFFFFF");
+        customTheme.fabIconColor = Color.parseColor("#000000");
         customTheme.chipTextColor = Color.parseColor("#FFFFFF");
         customTheme.linkColor = Color.parseColor("#FF1868");
         customTheme.receivedMessageTextColor = Color.parseColor("#FFFFFF");
@@ -1426,7 +1426,7 @@ public class CustomThemeWrapper {
         customTheme.commentVerticalBarColor5 = Color.parseColor("#BD93F9");
         customTheme.commentVerticalBarColor6 = Color.parseColor("#FF5555");
         customTheme.commentVerticalBarColor7 = Color.parseColor("#F1FA8C");
-        customTheme.fabIconColor = Color.parseColor("#FFFFFF");
+        customTheme.fabIconColor = Color.parseColor("#000000");
         customTheme.chipTextColor = Color.parseColor("#FFFFFF");
         customTheme.linkColor = Color.parseColor("#FF1868");
         customTheme.receivedMessageTextColor = Color.parseColor("#FFFFFF");

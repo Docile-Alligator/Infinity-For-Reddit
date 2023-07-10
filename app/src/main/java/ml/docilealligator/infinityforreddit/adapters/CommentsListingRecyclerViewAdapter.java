@@ -40,12 +40,10 @@ import ml.docilealligator.infinityforreddit.NetworkState;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.SaveThing;
 import ml.docilealligator.infinityforreddit.VoteThing;
-import ml.docilealligator.infinityforreddit.activities.AccountSavedThingActivity;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
-import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.CommentMoreBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.comment.Comment;
@@ -216,6 +214,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 }
 
                 ((CommentViewHolder) holder).markwonAdapter.setMarkdown(mMarkwon, comment.getCommentMarkdown());
+                // noinspection NotifyDataSetChanged
                 ((CommentViewHolder) holder).markwonAdapter.notifyDataSetChanged();
 
                 String commentText = "";
@@ -505,20 +504,12 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             LinearLayoutManagerBugFixed linearLayoutManager = new SwipeLockLinearLayoutManager(mActivity, new SwipeLockInterface() {
                 @Override
                 public void lockSwipe() {
-                    if (mActivity instanceof AccountSavedThingActivity) {
-                        ((AccountSavedThingActivity) mActivity).lockSwipeRightToGoBack();
-                    } else {
-                        ((ViewUserDetailActivity) mActivity).lockSwipeRightToGoBack();
-                    }
+                    mActivity.lockSwipeRightToGoBack();
                 }
 
                 @Override
                 public void unlockSwipe() {
-                    if (mActivity instanceof AccountSavedThingActivity) {
-                        ((AccountSavedThingActivity) mActivity).unlockSwipeRightToGoBack();
-                    } else {
-                        ((ViewUserDetailActivity) mActivity).unlockSwipeRightToGoBack();
-                    }
+                    mActivity.unlockSwipeRightToGoBack();
                 }
             });
             commentMarkdownView.setLayoutManager(linearLayoutManager);

@@ -45,13 +45,17 @@ import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
 import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
+import com.google.android.exoplayer2.ui.DefaultTimeBar;
 import com.google.android.exoplayer2.ui.PlayerView;
+import com.google.android.exoplayer2.ui.TimeBar;
 import com.google.common.collect.ImmutableList;
 import com.libRG.CustomTextView;
 
 import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.Executor;
+
+import javax.inject.Provider;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -92,6 +96,7 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.ShareLinkBottom
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
+import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
@@ -129,7 +134,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private Retrofit mOauthRetrofit;
     private Retrofit mGfycatRetrofit;
     private Retrofit mRedgifsRetrofit;
-    private Retrofit mStreamableRetrofit;
+    private final Provider<StreamableAPI> mStreamableApiProvider;
     private RedditDataRoomDatabase mRedditDataRoomDatabase;
     private SharedPreferences mCurrentAccountSharedPreferences;
     private RequestManager mGlide;
@@ -178,6 +183,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     private int mPostTypeTextColor;
     private int mSubredditColor;
     private int mUsernameColor;
+    private int mModeratorColor;
     private int mAuthorFlairTextColor;
     private int mSpoilerBackgroundColor;
     private int mSpoilerTextColor;
@@ -208,7 +214,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
     public PostDetailRecyclerViewAdapter(BaseActivity activity, ViewPostDetailFragment fragment,
                                          Executor executor, CustomThemeWrapper customThemeWrapper,
                                          Retrofit retrofit, Retrofit oauthRetrofit, Retrofit gfycatRetrofit,
-                                         Retrofit redgifsRetrofit, Retrofit streamableRetrofit,
+                                         Retrofit redgifsRetrofit, Provider<StreamableAPI> streamableApiProvider,
                                          RedditDataRoomDatabase redditDataRoomDatabase, RequestManager glide,
                                          boolean separatePostAndComments, String accessToken,
                                          String accountName, Post post, Locale locale,
@@ -225,7 +231,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mOauthRetrofit = oauthRetrofit;
         mGfycatRetrofit = gfycatRetrofit;
         mRedgifsRetrofit = redgifsRetrofit;
-        mStreamableRetrofit = streamableRetrofit;
+        mStreamableApiProvider = streamableApiProvider;
         mRedditDataRoomDatabase = redditDataRoomDatabase;
         mGlide = glide;
         mSaveMemoryCenterInsideDownsampleStrategy = new SaveMemoryCenterInisdeDownsampleStrategy(Integer.parseInt(sharedPreferences.getString(SharedPreferencesUtils.POST_FEED_MAX_RESOLUTION, "5000000")));
@@ -361,6 +367,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         mFlairTextColor = customThemeWrapper.getFlairTextColor();
         mSubredditColor = customThemeWrapper.getSubreddit();
         mUsernameColor = customThemeWrapper.getUsername();
+        mModeratorColor = customThemeWrapper.getModerator();
         mUpvotedColor = customThemeWrapper.getUpvoted();
         mDownvotedColor = customThemeWrapper.getDownvoted();
         mVoteAndReplyUnavailableVoteButtonColor = customThemeWrapper.getVoteAndReplyUnavailableButtonColor();
@@ -466,7 +473,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             ((PostDetailBaseViewHolder) holder).mTitleTextView.setText(mPost.getTitle());
             if (mPost.getSubredditNamePrefixed().startsWith("u/")) {
                 if (mPost.getAuthorIconUrl() == null) {
-                    String authorName = mPost.getAuthor().equals("[deleted]") ? mPost.getSubredditNamePrefixed().substring(2) : mPost.getAuthor();
+                    String authorName = mPost.isAuthorDeleted() ? mPost.getSubredditNamePrefixed().substring(2) : mPost.getAuthor();
                     LoadUserData.loadUserData(mExecutor, new Handler(), mRedditDataRoomDatabase, authorName, mOauthRetrofit, iconImageUrl -> {
                         if (mActivity != null && getItemCount() > 0) {
                             if (iconImageUrl == null || iconImageUrl.equals("")) {
@@ -573,6 +580,13 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 ((PostDetailBaseViewHolder) holder).mUserTextView.setText(mPost.getAuthor());
             }
 
+            if (mPost.isModerator()) {
+                ((PostDetailBaseViewHolder) holder).mUserTextView.setTextColor(mModeratorColor);
+                Drawable moderatorDrawable = Utils.getTintedDrawable(mActivity, R.drawable.ic_verified_user_14dp, mModeratorColor);
+                ((PostDetailBaseViewHolder) holder).mUserTextView.setCompoundDrawablesWithIntrinsicBounds(
+                        moderatorDrawable, null, null, null);
+            }
+
             if (mShowElapsedTime) {
                 ((PostDetailBaseViewHolder) holder).mPostTimeTextView.setText(
                         Utils.getElapsedTime(mActivity, mPost.getPostTimeMillis()));
@@ -632,6 +646,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 ((PostDetailBaseViewHolder) holder).mContentMarkdownView.setVisibility(View.VISIBLE);
                 ((PostDetailBaseViewHolder) holder).mContentMarkdownView.setAdapter(mMarkwonAdapter);
                 mMarkwonAdapter.setMarkdown(mPostDetailMarkwon, mPost.getSelfText());
+                // noinspection NotifyDataSetChanged
                 mMarkwonAdapter.notifyDataSetChanged();
             }
 
@@ -644,7 +659,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 } else {
                     ((PostDetailVideoAutoplayViewHolder) holder).aspectRatioFrameLayout.setAspectRatio(1);
                 }
-                ((PostDetailVideoAutoplayViewHolder) holder).setVolume(mMuteAutoplayingVideos || (mPost.isNSFW() && mMuteNSFWVideo) ? 0f : 1f);
+                if (!((PostDetailVideoAutoplayViewHolder) holder).isManuallyPaused) {
+                    ((PostDetailVideoAutoplayViewHolder) holder).setVolume((mMuteAutoplayingVideos || (mPost.isNSFW() && mMuteNSFWVideo)) ? 0f : 1f);
+                }
 
                 if (mPost.isGfycat() || mPost.isRedgifs() && !mPost.isLoadGfycatOrStreamableVideoSuccess()) {
                     ((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall =
@@ -669,7 +686,7 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                             });
                 } else if(mPost.isStreamable() && !mPost.isLoadGfycatOrStreamableVideoSuccess()) {
                     ((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall =
-                            mStreamableRetrofit.create(StreamableAPI.class).getStreamableData(mPost.getStreamableShortCode());
+                            mStreamableApiProvider.get().getStreamableData(mPost.getStreamableShortCode());
                     FetchStreamableVideo.fetchStreamableVideoInRecyclerViewAdapter(mExecutor, new Handler(),
                             ((PostDetailVideoAutoplayViewHolder) holder).fetchGfycatOrStreamableVideoCall,
                             new FetchStreamableVideo.FetchStreamableVideoListener() {
@@ -982,7 +999,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 }
                 ((PostDetailVideoAutoplayViewHolder) holder).mErrorLoadingGfycatImageView.setVisibility(View.GONE);
                 ((PostDetailVideoAutoplayViewHolder) holder).muteButton.setVisibility(View.GONE);
-                ((PostDetailVideoAutoplayViewHolder) holder).resetVolume();
+                if (!((PostDetailVideoAutoplayViewHolder) holder).isManuallyPaused) {
+                    ((PostDetailVideoAutoplayViewHolder) holder).resetVolume();
+                }
                 mGlide.clear(((PostDetailVideoAutoplayViewHolder) holder).previewImageView);
                 ((PostDetailVideoAutoplayViewHolder) holder).previewImageView.setVisibility(View.GONE);
             } else if (holder instanceof PostDetailVideoAndGifPreviewHolder) {
@@ -1110,6 +1129,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             });
 
             mUserTextView.setOnClickListener(view -> {
+                if (mPost.isAuthorDeleted()) {
+                    return;
+                }
                 Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
                 intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, mPost.getAuthor());
                 mActivity.startActivity(intent);
@@ -1428,6 +1450,11 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 shareLinkBottomSheetFragment.show(mActivity.getSupportFragmentManager(), shareLinkBottomSheetFragment.getTag());
             });
 
+            mShareButton.setOnLongClickListener(view -> {
+                mActivity.copyLink(mPost.getPermalink());
+                return true;
+            });
+
             if (mVoteButtonsOnTheRight) {
                 ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone(mBottomConstraintLayout);
@@ -1544,6 +1571,12 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         ImageView muteButton;
         @BindView(R.id.fullscreen_exo_playback_control_view)
         ImageView fullscreenButton;
+        @BindView(R.id.exo_pause)
+        ImageView pauseButton;
+        @BindView(R.id.exo_play)
+        ImageView playButton;
+        @BindView(R.id.exo_progress)
+        DefaultTimeBar progressBar;
         @BindView(R.id.content_markdown_view_item_post_detail_video_autoplay)
         RecyclerView mContentMarkdownView;
         @BindView(R.id.bottom_constraint_layout_item_post_detail_video_autoplay)
@@ -1561,9 +1594,12 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         @BindView(R.id.share_button_item_post_detail_video_autoplay)
         ImageView mShareButton;
         @Nullable
+        Container container;
+        @Nullable
         ExoPlayerViewHelper helper;
         private Uri mediaUri;
         private float volume;
+        private boolean isManuallyPaused;
 
         public PostDetailVideoAutoplayViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -1647,6 +1683,36 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 }
             });
 
+            pauseButton.setOnClickListener(view -> {
+                pause();
+                isManuallyPaused = true;
+                savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
+            });
+
+            playButton.setOnClickListener(view -> {
+                isManuallyPaused = false;
+                play();
+            });
+
+            progressBar.addListener(new TimeBar.OnScrubListener() {
+                @Override
+                public void onScrubStart(TimeBar timeBar, long position) {
+
+                }
+
+                @Override
+                public void onScrubMove(TimeBar timeBar, long position) {
+
+                }
+
+                @Override
+                public void onScrubStop(TimeBar timeBar, long position, boolean canceled) {
+                    if (!canceled) {
+                        savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
+                    }
+                }
+            });
+
             previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
             playerView.setOnClickListener(view -> {
                 if (mEasierToWatchInFullScreen && playerView.isControllerVisible()) {
@@ -1667,6 +1733,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             volume = 0f;
         }
 
+        private void savePlaybackInfo(int order, @Nullable PlaybackInfo playbackInfo) {
+            if (container != null) container.savePlaybackInfo(order, playbackInfo);
+        }
+
         @NonNull
         @Override
         public View getPlayerView() {
@@ -1683,6 +1753,9 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
         public void initialize(@NonNull Container container, @NonNull PlaybackInfo playbackInfo) {
             if (mediaUri == null) {
                 return;
+            }
+            if (this.container == null) {
+                this.container = container;
             }
             if (helper == null) {
                 helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
@@ -1721,7 +1794,15 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
 
         @Override
         public void play() {
-            if (helper != null && mediaUri != null) helper.play();
+            if (helper != null && mediaUri != null) {
+                if (!isPlaying() && isManuallyPaused) {
+                    helper.play();
+                    pause();
+                    helper.setVolume(volume);
+                } else {
+                    helper.play();
+                }
+            }
         }
 
         @Override
@@ -1740,11 +1821,12 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                 helper.release();
                 helper = null;
             }
+            container = null;
         }
 
         @Override
         public boolean wantsToPlay() {
-            return canPlayVideo && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
+            return canPlayVideo && mediaUri != null && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
         }
 
         @Override
@@ -2340,18 +2422,28 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                     mCardViewColor, mCommentColor, mScale);
             galleryRecyclerView.setAdapter(adapter);
             new PagerSnapHelper().attachToRecyclerView(galleryRecyclerView);
-            SwipeLockLinearLayoutManager layoutManager = new SwipeLockLinearLayoutManager(
-                    mActivity, RecyclerView.HORIZONTAL, false, new SwipeLockInterface() {
-                @Override
-                public void lockSwipe() {
+            galleryRecyclerView.setOnTouchListener((v, motionEvent) -> {
+                if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP || motionEvent.getActionMasked() == MotionEvent.ACTION_CANCEL) {
+                    if (mActivity.mSliderPanel != null) {
+                        mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(false);
+                    }
+                    if (mActivity.mViewPager2 != null) {
+                        mActivity.mViewPager2.setUserInputEnabled(true);
+                    }
+                    mActivity.unlockSwipeRightToGoBack();
+                } else {
+                    if (mActivity.mSliderPanel != null) {
+                        mActivity.mSliderPanel.requestDisallowInterceptTouchEvent(true);
+                    }
+                    if (mActivity.mViewPager2 != null) {
+                        mActivity.mViewPager2.setUserInputEnabled(false);
+                    }
                     mActivity.lockSwipeRightToGoBack();
                 }
 
-                @Override
-                public void unlockSwipe() {
-                    mActivity.unlockSwipeRightToGoBack();
-                }
+                return false;
             });
+            LinearLayoutManagerBugFixed layoutManager = new LinearLayoutManagerBugFixed(mActivity, RecyclerView.HORIZONTAL, false);
             galleryRecyclerView.setLayoutManager(layoutManager);
             galleryRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override

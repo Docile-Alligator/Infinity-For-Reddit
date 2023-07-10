@@ -182,6 +182,9 @@ public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapt
                 });
 
                 ((ReceivedMessageViewHolder) holder).userAvatarImageView.setOnClickListener(view -> {
+                    if (message.isAuthorDeleted()) {
+                        return;
+                    }
                     Intent intent = new Intent(mViewPrivateMessagesActivity, ViewUserDetailActivity.class);
                     intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, message.getAuthor());
                     mViewPrivateMessagesActivity.startActivity(intent);

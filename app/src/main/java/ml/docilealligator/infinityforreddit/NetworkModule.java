@@ -9,6 +9,7 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.network.SortTypeConverterFactory;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import okhttp3.ConnectionPool;
@@ -22,8 +23,9 @@ import retrofit2.converter.scalars.ScalarsConverterFactory;
 abstract class NetworkModule {
 
     @Provides
+    @Named("base")
     @Singleton
-    static OkHttpClient providesBaseOkhttp() {
+    static OkHttpClient provideBaseOkhttp() {
         return new OkHttpClient.Builder()
                 .connectTimeout(30, TimeUnit.SECONDS)
                 .readTimeout(30, TimeUnit.SECONDS)
@@ -32,8 +34,9 @@ abstract class NetworkModule {
     }
 
     @Provides
+    @Named("base")
     @Singleton
-    static Retrofit providesBaseRetrofit(OkHttpClient okHttpClient) {
+    static Retrofit provideBaseRetrofit(@Named("base") OkHttpClient okHttpClient) {
         return new Retrofit.Builder()
                 .baseUrl(APIUtils.API_BASE_URI)
                 .client(okHttpClient)
@@ -44,19 +47,20 @@ abstract class NetworkModule {
     }
 
     @Provides
-    static ConnectionPool providesConnectionPool() {
+    static ConnectionPool provideConnectionPool() {
         return new ConnectionPool(0, 1, TimeUnit.NANOSECONDS);
     }
 
     @Provides
     @Named("no_oauth")
-    static Retrofit provideRetrofit(Retrofit retrofit) {
+    static Retrofit provideRetrofit(@Named("base") Retrofit retrofit) {
         return retrofit;
     }
 
     @Provides
     @Named("oauth")
-    static Retrofit providesOAuthRetrofit(Retrofit retrofit, @Named("default") OkHttpClient okHttpClient) {
+    static Retrofit provideOAuthRetrofit(@Named("base") Retrofit retrofit,
+                                         @Named("default") OkHttpClient okHttpClient) {
         return retrofit.newBuilder()
                 .baseUrl(APIUtils.OAUTH_API_BASE_URI)
                 .client(okHttpClient)
@@ -66,8 +70,8 @@ abstract class NetworkModule {
     @Provides
     @Named("default")
     @Singleton
-    static OkHttpClient provideOkHttpClient(OkHttpClient httpClient,
-                                            Retrofit retrofit,
+    static OkHttpClient provideOkHttpClient(@Named("base") OkHttpClient httpClient,
+                                            @Named("base") Retrofit retrofit,
                                             RedditDataRoomDatabase accountRoomDatabase,
                                             @Named("current_account") SharedPreferences currentAccountSharedPreferences,
                                             ConnectionPool connectionPool) {
@@ -80,7 +84,7 @@ abstract class NetworkModule {
     @Provides
     @Named("oauth_without_authenticator")
     @Singleton
-    static Retrofit provideOauthWithoutAuthenticatorRetrofit(Retrofit retrofit) {
+    static Retrofit provideOauthWithoutAuthenticatorRetrofit(@Named("base") Retrofit retrofit) {
         return retrofit.newBuilder()
                 .baseUrl(APIUtils.OAUTH_API_BASE_URI)
                 .build();
@@ -89,7 +93,7 @@ abstract class NetworkModule {
     @Provides
     @Named("upload_media")
     @Singleton
-    static Retrofit provideUploadMediaRetrofit(Retrofit retrofit) {
+    static Retrofit provideUploadMediaRetrofit(@Named("base") Retrofit retrofit) {
         return retrofit.newBuilder()
                 .baseUrl(APIUtils.API_UPLOAD_MEDIA_URI)
                 .build();
@@ -98,7 +102,7 @@ abstract class NetworkModule {
     @Provides
     @Named("upload_video")
     @Singleton
-    static Retrofit provideUploadVideoRetrofit(Retrofit retrofit) {
+    static Retrofit provideUploadVideoRetrofit(@Named("base") Retrofit retrofit) {
         return retrofit.newBuilder()
                 .baseUrl(APIUtils.API_UPLOAD_VIDEO_URI)
                 .build();
@@ -107,7 +111,7 @@ abstract class NetworkModule {
     @Provides
     @Named("download_media")
     @Singleton
-    static Retrofit provideDownloadRedditVideoRetrofit(Retrofit retrofit) {
+    static Retrofit provideDownloadRedditVideoRetrofit(@Named("base") Retrofit retrofit) {
         return retrofit.newBuilder()
                 .baseUrl("http://localhost/")
                 .build();
@@ -116,7 +120,7 @@ abstract class NetworkModule {
     @Provides
     @Named("gfycat")
     @Singleton
-    static Retrofit provideGfycatRetrofit(Retrofit retrofit) {
+    static Retrofit provideGfycatRetrofit(@Named("base") Retrofit retrofit) {
         return retrofit.newBuilder()
                 .baseUrl(APIUtils.GFYCAT_API_BASE_URI)
                 .build();
@@ -132,8 +136,8 @@ abstract class NetworkModule {
     @Named("redgifs")
     @Singleton
     static Retrofit provideRedgifsRetrofit(@Named("RedgifsAccessTokenAuthenticator") Interceptor accessTokenAuthenticator,
-                                           OkHttpClient httpClient,
-                                           Retrofit retrofit,
+                                           @Named("base") OkHttpClient httpClient,
+                                           @Named("base") Retrofit retrofit,
                                            ConnectionPool connectionPool) {
         OkHttpClient.Builder okHttpClientBuilder = httpClient.newBuilder()
                 .addInterceptor(chain -> chain.proceed(
@@ -154,7 +158,7 @@ abstract class NetworkModule {
     @Provides
     @Named("imgur")
     @Singleton
-    static Retrofit provideImgurRetrofit(Retrofit retrofit) {
+    static Retrofit provideImgurRetrofit(@Named("base") Retrofit retrofit) {
         return retrofit.newBuilder()
                 .baseUrl(APIUtils.IMGUR_API_BASE_URI)
                 .build();
@@ -163,7 +167,7 @@ abstract class NetworkModule {
     @Provides
     @Named("pushshift")
     @Singleton
-    static Retrofit providePushshiftRetrofit(Retrofit retrofit) {
+    static Retrofit providePushshiftRetrofit(@Named("base") Retrofit retrofit) {
         return retrofit.newBuilder()
                 .baseUrl(APIUtils.PUSHSHIFT_API_BASE_URI)
                 .build();
@@ -172,7 +176,7 @@ abstract class NetworkModule {
     @Provides
     @Named("reveddit")
     @Singleton
-    static Retrofit provideRevedditRetrofit(Retrofit retrofit) {
+    static Retrofit provideRevedditRetrofit(@Named("base") Retrofit retrofit) {
         return retrofit.newBuilder()
                 .baseUrl(APIUtils.REVEDDIT_API_BASE_URI)
                 .build();
@@ -181,7 +185,7 @@ abstract class NetworkModule {
     @Provides
     @Named("vReddIt")
     @Singleton
-    static Retrofit provideVReddItRetrofit(Retrofit retrofit) {
+    static Retrofit provideVReddItRetrofit(@Named("base") Retrofit retrofit) {
         return retrofit.newBuilder()
                 .baseUrl("http://localhost/")
                 .build();
@@ -190,9 +194,15 @@ abstract class NetworkModule {
     @Provides
     @Named("streamable")
     @Singleton
-    static Retrofit provideStreamableRetrofit(Retrofit retrofit) {
+    static Retrofit provideStreamableRetrofit(@Named("base") Retrofit retrofit) {
         return retrofit.newBuilder()
                 .baseUrl(APIUtils.STREAMABLE_API_BASE_URI)
                 .build();
+    }
+
+    @Provides
+    @Singleton
+    static StreamableAPI provideStreamableApi(@Named("streamable") Retrofit streamableRetrofit) {
+        return streamableRetrofit.create(StreamableAPI.class);
     }
 }

@@ -1,17 +1,16 @@
 package ml.docilealligator.infinityforreddit.activities;
 
 import android.content.ActivityNotFoundException;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.MediaStore;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -164,10 +163,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
         markdownBottomBarRecyclerView.setAdapter(adapter);
 
         contentEditText.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        }
+        Utils.showKeyboard(this, new Handler(), contentEditText);
     }
 
     @Override
@@ -194,10 +190,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
     @Override
     protected void onPause() {
         super.onPause();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.hideSoftInputFromWindow(contentEditText.getWindowToken(), 0);
-        }
+        Utils.hideKeyboard(this);
     }
 
     @Override

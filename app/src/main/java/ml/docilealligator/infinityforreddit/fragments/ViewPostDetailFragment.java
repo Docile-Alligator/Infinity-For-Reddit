@@ -62,6 +62,7 @@ import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -83,6 +84,7 @@ import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
 import ml.docilealligator.infinityforreddit.adapters.CommentsRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.adapters.PostDetailRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostCommentSortTypeBottomSheetFragment;
@@ -161,8 +163,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     @Named("redgifs")
     Retrofit mRedgifsRetrofit;
     @Inject
-    @Named("streamable")
-    Retrofit mStreamableRetrofit;
+    Provider<StreamableAPI> mStreamableApiProvider;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -225,7 +226,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     private String mSingleCommentId;
     private String mContextNumber;
     private boolean showToast = false;
-    private boolean isSortingComments = false;
     private boolean mIsSmoothScrolling = false;
     private boolean mLockFab;
     private boolean mSwipeUpToHideFab;
@@ -459,9 +459,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     exceedThreshold = false;
                     touchHelper.attachToRecyclerView(null);
                     touchHelper.attachToRecyclerView((mCommentsRecyclerView == null ? mRecyclerView : mCommentsRecyclerView));
-                    if (mCommentsAdapter != null) {
-                        mCommentsAdapter.onItemSwipe(viewHolder, direction, swipeLeftAction, swipeRightAction);
-                    }
                 }
             }
 
@@ -597,7 +594,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
             mPostAdapter = new PostDetailRecyclerViewAdapter(activity,
                     this, mExecutor, mCustomThemeWrapper, mRetrofit, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mStreamableRetrofit, mRedditDataRoomDatabase, mGlide,
+                    mRedgifsRetrofit, mStreamableApiProvider, mRedditDataRoomDatabase, mGlide,
                     mSeparatePostAndComments, mAccessToken, mAccountName, mPost, mLocale,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostDetailsSharedPreferences,
                     mExoCreator, post -> EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition)));
@@ -816,11 +813,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             children.clear();
         }
         this.sortType = sortType.getType();
-        if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false)
-                && mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_SORT_TYPE, true)) {
+        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SAVE_SORT_TYPE, true)) {
             mSortTypeSharedPreferences.edit().putString(SharedPreferencesUtils.SORT_TYPE_POST_COMMENT, sortType.getType().name()).apply();
         }
-        fetchCommentsRespectRecommendedSort(false, false, sortType.getType());
+        mRespectSubredditRecommendedSortType = false;
+        fetchCommentsRespectRecommendedSort(false, sortType.getType());
     }
 
     @NonNull
@@ -1219,12 +1216,10 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         super.onSaveInstanceState(outState);
         comments = mCommentsAdapter == null ? null : mCommentsAdapter.getVisibleComments();
         if (mCommentsRecyclerView != null) {
-            //scrollpositionn = mcommentsadapter.getPosition()
             LinearLayoutManager myLayoutManager = (LinearLayoutManager) mCommentsRecyclerView.getLayoutManager();
             scrollPosition = myLayoutManager != null ? myLayoutManager.findFirstVisibleItemPosition() : 0;
             
         } else {
-            //scrollposition = mrecyclerviewadapter.getposition()
             LinearLayoutManager myLayoutManager = (LinearLayoutManager) mRecyclerView.getLayoutManager();
             scrollPosition = myLayoutManager != null ? myLayoutManager.findFirstVisibleItemPosition() : 0;
         }
@@ -1305,7 +1300,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                             mPostAdapter = new PostDetailRecyclerViewAdapter(activity,
                                     ViewPostDetailFragment.this, mExecutor, mCustomThemeWrapper,
                                     mRetrofit, mOauthRetrofit, mGfycatRetrofit, mRedgifsRetrofit,
-                                    mStreamableRetrofit, mRedditDataRoomDatabase, mGlide, mSeparatePostAndComments,
+                                    mStreamableApiProvider, mRedditDataRoomDatabase, mGlide, mSeparatePostAndComments,
                                     mAccessToken, mAccountName, mPost, mLocale, mSharedPreferences,
                                     mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences,
                                     mPostDetailsSharedPreferences, mExoCreator,
@@ -1428,8 +1423,19 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
         });
     }
 
-    private void fetchCommentsRespectRecommendedSort(boolean changeRefreshState, boolean checkSortState, SortType.Type sortType) {
+    private void fetchCommentsRespectRecommendedSort(boolean changeRefreshState, SortType.Type sortType) {
         if (mRespectSubredditRecommendedSortType && mPost != null) {
+            if (mPost.getSuggestedSort() != null && !mPost.getSuggestedSort().equals("null") && !mPost.getSuggestedSort().equals("")) {
+                try {
+                    SortType.Type sortTypeType = SortType.Type.valueOf(mPost.getSuggestedSort().toUpperCase(Locale.US));
+                    activity.setTitle(sortTypeType.fullName);
+                    ViewPostDetailFragment.this.sortType = sortTypeType;
+                    fetchComments(changeRefreshState, ViewPostDetailFragment.this.sortType);
+                    return;
+                } catch (IllegalArgumentException e) {
+                    e.printStackTrace();
+                }
+            }
             FetchSubredditData.fetchSubredditData(mOauthRetrofit, mRetrofit, mPost.getSubredditName(), mAccessToken,
                     new FetchSubredditData.FetchSubredditDataListener() {
                         @Override
@@ -1440,11 +1446,16 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                 mRespectSubredditRecommendedSortType = false;
                                 sortTypeType = loadSortType();
                             } else {
-                                sortTypeType = SortType.Type.valueOf(suggestedCommentSort.toUpperCase(Locale.US));
+                                try {
+                                    sortTypeType = SortType.Type.valueOf(suggestedCommentSort.toUpperCase(Locale.US));
+                                } catch (IllegalArgumentException e) {
+                                    e.printStackTrace();
+                                    sortTypeType = loadSortType();
+                                }
                             }
                             activity.setTitle(sortTypeType.fullName);
                             ViewPostDetailFragment.this.sortType = sortTypeType;
-                            fetchComments(changeRefreshState, checkSortState, ViewPostDetailFragment.this.sortType);
+                            fetchComments(changeRefreshState, ViewPostDetailFragment.this.sortType);
                         }
 
                         @Override
@@ -1456,11 +1467,11 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                         }
                     });
         } else {
-            fetchComments(changeRefreshState, checkSortState, sortType);
+            fetchComments(changeRefreshState, sortType);
         }
     }
 
-    private void fetchComments(boolean changeRefreshState, boolean checkSortState, SortType.Type sortType) {
+    private void fetchComments(boolean changeRefreshState, SortType.Type sortType) {
         isFetchingComments = true;
         mCommentsAdapter.setSingleComment(mSingleCommentId, isSingleCommentThreadMode);
         mCommentsAdapter.initiallyLoading();
@@ -1475,14 +1486,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     @Override
                     public void onFetchCommentSuccess(ArrayList<Comment> expandedComments,
                                                       String parentId, ArrayList<String> children) {
-                        if (checkSortState && isSortingComments) {
-                            if (changeRefreshState) {
-                                isRefreshing = false;
-                            }
-
-                            return;
-                        }
-
                         ViewPostDetailFragment.this.children = children;
 
                         comments = expandedComments;
@@ -1544,13 +1547,6 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                     @Override
                     public void onFetchCommentFailed() {
                         isFetchingComments = false;
-                        if (checkSortState && isSortingComments) {
-                            if (changeRefreshState) {
-                                isRefreshing = false;
-                            }
-
-                            return;
-                        }
 
                         mCommentsAdapter.initiallyLoadCommentsFailed();
                         if (changeRefreshState) {
@@ -1561,7 +1557,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
     }
 
     private void fetchCommentsRespectRecommendedSort(boolean changeRefreshState) {
-        fetchCommentsRespectRecommendedSort(changeRefreshState, true, sortType);
+        fetchCommentsRespectRecommendedSort(changeRefreshState, sortType);
     }
 
     void fetchMoreComments() {
@@ -1601,8 +1597,8 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
             mFetchPostInfoLinearLayout.setVisibility(View.GONE);
             mGlide.clear(mFetchPostInfoImageView);
 
-            if (fetchComments) {
-                fetchCommentsRespectRecommendedSort(!fetchPost);
+            if (!fetchPost && fetchComments) {
+                fetchCommentsRespectRecommendedSort(true);
             }
 
             if (fetchPost) {
@@ -1620,9 +1616,14 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                                     mPost = post;
                                     mPostAdapter.updatePost(mPost);
                                     EventBus.getDefault().post(new PostUpdateEventToPostList(mPost, postListPosition));
-                                    isRefreshing = false;
                                     setupMenu();
                                     mSwipeRefreshLayout.setRefreshing(false);
+
+                                    if (fetchComments) {
+                                        fetchCommentsRespectRecommendedSort(true);
+                                    } else {
+                                        isRefreshing = false;
+                                    }
                                 }
                             }
 
@@ -1829,7 +1830,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
 
     public void showRemovedComment(Comment comment, int position) {
         Toast.makeText(activity, R.string.fetching_removed_comment, Toast.LENGTH_SHORT).show();
-        FetchRemovedComment.searchRemovedComment(
+        FetchRemovedComment.fetchRemovedComment(
                 mExecutor, new Handler(), pushshiftRetrofit, comment,
                 new FetchRemovedComment.FetchRemovedCommentListener() {
                     @Override
@@ -1857,7 +1858,7 @@ public class ViewPostDetailFragment extends Fragment implements FragmentCommunic
                 });
     }
 
-    public void changeToNomalThreadMode() {
+    public void changeToNormalThreadMode() {
         isSingleCommentThreadMode = false;
         mSingleCommentId = null;
         mRespectSubredditRecommendedSortType = mSharedPreferences.getBoolean(SharedPreferencesUtils.RESPECT_SUBREDDIT_RECOMMENDED_COMMENT_SORT_TYPE, false);

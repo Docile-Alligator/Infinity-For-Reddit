@@ -22,7 +22,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.recyclerview.widget.ItemTouchHelper;
@@ -152,8 +151,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
     private int mAwardedCommentBackgroundColor;
     private int[] verticalBlockColors;
 
-    private Drawable mCommentIcon;
-
     private int mSearchCommentIndex = -1;
 
     public CommentsRecyclerViewAdapter(BaseActivity activity, ViewPostDetailFragment fragment,
@@ -275,11 +272,6 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 customThemeWrapper.getCommentVerticalBarColor6(),
                 customThemeWrapper.getCommentVerticalBarColor7(),
         };
-
-        mCommentIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_comment_grey_24dp);
-        if (mCommentIcon != null) {
-            mCommentIcon.setTint(mPostIconAndInfoColor);
-        }
     }
 
     @Override
@@ -447,6 +439,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 }
 
                 ((CommentViewHolder) holder).mMarkwonAdapter.setMarkdown(mCommentMarkwon, comment.getCommentMarkdown());
+                // noinspection NotifyDataSetChanged
                 ((CommentViewHolder) holder).mMarkwonAdapter.notifyDataSetChanged();
 
                 if (!mHideTheNumberOfVotes) {
@@ -465,6 +458,12 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     ((CommentViewHolder) holder).topScoreTextView.setText(topScoreText);
                 } else {
                     ((CommentViewHolder) holder).scoreTextView.setText(mActivity.getString(R.string.vote));
+                }
+
+                if (comment.isEdited()) {
+                    ((CommentViewHolder) holder).editedTextView.setVisibility(View.VISIBLE);
+                } else {
+                    ((CommentViewHolder) holder).editedTextView.setVisibility(View.GONE);
                 }
 
                 ((CommentViewHolder) holder).commentIndentationView.setShowOnlyOneDivider(mShowOnlyOneCommentLevelIndicator);
@@ -1188,6 +1187,8 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
         TextView awardsTextView;
         @BindView(R.id.comment_markdown_view_item_post_comment)
         RecyclerView commentMarkdownView;
+        @BindView(R.id.edited_text_view_item_post_comment)
+        TextView editedTextView;
         @BindView(R.id.bottom_constraint_layout_item_post_comment)
         ConstraintLayout bottomConstraintLayout;
         @BindView(R.id.up_vote_button_item_post_comment)
@@ -1268,6 +1269,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                 commentTimeTextView.setTypeface(mActivity.typeface);
                 authorFlairTextView.setTypeface(mActivity.typeface);
                 topScoreTextView.setTypeface(mActivity.typeface);
+                editedTextView.setTypeface(mActivity.typeface);
                 awardsTextView.setTypeface(mActivity.typeface);
                 scoreTextView.setTypeface(mActivity.typeface);
                 expandButton.setTypeface(mActivity.typeface);
@@ -1301,6 +1303,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             commentTimeTextView.setTextColor(mSecondaryTextColor);
             authorFlairTextView.setTextColor(mAuthorFlairTextColor);
             topScoreTextView.setTextColor(mSecondaryTextColor);
+            editedTextView.setTextColor(mSecondaryTextColor);
             awardsTextView.setTextColor(mSecondaryTextColor);
             commentDivider.setBackgroundColor(mDividerColor);
             upvoteButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
@@ -1312,6 +1315,16 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
             replyButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
 
             authorFlairTextView.setOnClickListener(view -> authorTextView.performClick());
+
+            editedTextView.setOnClickListener(view -> {
+                Comment comment = getCurrentComment(this);
+                if (comment != null) {
+                    Toast.makeText(view.getContext(), view.getContext().getString(R.string.edited_time, mShowElapsedTime ?
+                            Utils.getElapsedTime(mActivity, comment.getEditedTimeMillis()) :
+                            Utils.getFormattedTime(mLocale, comment.getEditedTimeMillis(), mTimeFormatPattern)
+                    ), Toast.LENGTH_SHORT).show();
+                }
+            });
 
             moreButton.setOnClickListener(view -> {
                 getItemCount();
@@ -1584,11 +1597,12 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
 
             authorTextView.setOnClickListener(view -> {
                 Comment comment = getCurrentComment(this);
-                if (comment != null) {
-                    Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
-                    intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, comment.getAuthor());
-                    mActivity.startActivity(intent);
+                if (comment == null || comment.isAuthorDeleted()) {
+                    return;
                 }
+                Intent intent = new Intent(mActivity, ViewUserDetailActivity.class);
+                intent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, comment.getAuthor());
+                mActivity.startActivity(intent);
             });
 
             authorIconImageView.setOnClickListener(view -> {
@@ -1913,7 +1927,7 @@ public class CommentsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerVi
                     mIsSingleCommentThreadMode = false;
                     mSingleCommentId = null;
                     notifyItemRemoved(0);
-                    mFragment.changeToNomalThreadMode();
+                    mFragment.changeToNormalThreadMode();
                 }
             });
 

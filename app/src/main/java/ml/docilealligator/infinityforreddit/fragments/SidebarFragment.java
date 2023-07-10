@@ -169,6 +169,7 @@ public class SidebarFragment extends Fragment {
                 sidebarDescription = subredditData.getSidebarDescription();
                 if (sidebarDescription != null && !sidebarDescription.equals("")) {
                     markwonAdapter.setMarkdown(markwon, sidebarDescription);
+                    // noinspection NotifyDataSetChanged
                     markwonAdapter.notifyDataSetChanged();
                 }
             } else {

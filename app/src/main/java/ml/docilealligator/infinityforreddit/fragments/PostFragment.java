@@ -63,6 +63,7 @@ import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -82,6 +83,7 @@ import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.adapters.Paging3LoadingStateAdapter;
 import ml.docilealligator.infinityforreddit.adapters.PostRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
@@ -190,8 +192,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Named("redgifs")
     Retrofit mRedgifsRetrofit;
     @Inject
-    @Named("streamable")
-    Retrofit mStreamableRetrofit;
+    Provider<StreamableAPI> mStreamableApiProvider;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -233,6 +234,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private boolean hasPost = false;
     private boolean savePostFeedScrolledPosition;
     private boolean rememberMutingOptionInPostFeed;
+    private boolean swipeActionEnabled;
     private Boolean masterMutingOption;
     private PostRecyclerViewAdapter mAdapter;
     private RecyclerView.SmoothScroller smoothScroller;
@@ -462,7 +464,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
+                    mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -539,7 +541,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
+                    mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, displaySubredditName,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -610,7 +612,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
+                    mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -675,7 +677,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
+                    mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -736,7 +738,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
+                    mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -796,7 +798,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + multiRedditPath, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
+                    mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -853,7 +855,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
+                    mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -1064,7 +1066,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     if (((PostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) viewHolder).isSwipeLocked()) {
                         return makeMovementFlags(0, 0);
                     }
-
                 }
                 int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
                 return makeMovementFlags(0, swipeFlags);
@@ -1086,9 +1087,6 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     exceedThreshold = false;
                     touchHelper.attachToRecyclerView(null);
                     touchHelper.attachToRecyclerView(mPostRecyclerView);
-                    if (mAdapter != null) {
-                        mAdapter.onItemSwipe(viewHolder, direction, swipeLeftAction, swipeRightAction);
-                    }
                 }
             }
 
@@ -1156,6 +1154,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         });
 
         if (nColumns == 1 && mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SWIPE_ACTION, false)) {
+            swipeActionEnabled = true;
             touchHelper.attachToRecyclerView(mPostRecyclerView);
         }
         mPostRecyclerView.setAdapter(mAdapter);
@@ -1724,6 +1723,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public boolean getIsNsfwSubreddit() {
         if (activity instanceof ViewSubredditDetailActivity) {
             return ((ViewSubredditDetailActivity) activity).isNsfwSubreddit();
+        } else if (activity instanceof FilteredPostsActivity) {
+            return ((FilteredPostsActivity) activity).isNsfwSubreddit();
         } else {
             return false;
         }
@@ -1981,7 +1982,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Subscribe
     public void onChangeEnableSwipeActionSwitchEvent(ChangeEnableSwipeActionSwitchEvent changeEnableSwipeActionSwitchEvent) {
-        if (touchHelper != null) {
+        if (getNColumns(getResources()) == 1 && touchHelper != null) {
+            swipeActionEnabled = changeEnableSwipeActionSwitchEvent.enableSwipeAction;
             if (changeEnableSwipeActionSwitchEvent.enableSwipeAction) {
                 touchHelper.attachToRecyclerView(mPostRecyclerView);
             } else {
@@ -2220,6 +2222,18 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if (mAdapter != null) {
             mAdapter.setCanPlayVideo(hasWindowsFocus);
         }
+    }
+
+    public boolean isRecyclerViewItemSwipeable(RecyclerView.ViewHolder viewHolder) {
+        if (swipeActionEnabled) {
+            if (viewHolder instanceof PostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) {
+                return !((PostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) viewHolder).isSwipeLocked();
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     private static abstract class LazyModeRunnable implements Runnable {

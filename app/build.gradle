@@ -8,8 +8,8 @@ android {
         applicationId "ml.docilealligator.infinityforreddit"
         minSdk 21
         targetSdk 33
-        versionCode 109
-        versionName "5.4.0-beta1"
+        versionCode 121
+        versionName "6.0.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -80,7 +80,7 @@ dependencies {
     implementation "androidx.room:room-guava:$roomVersion"
     implementation 'androidx.viewpager2:viewpager2:1.1.0-beta01'
     implementation 'androidx.work:work-runtime:2.7.1'
-    implementation 'com.google.android.material:material:1.8.0-alpha03'
+    implementation 'com.google.android.material:material:1.8.0'
 
 /** ExoPlayer **/
     def exoplayerVersion = "2.18.2"
@@ -173,10 +173,9 @@ dependencies {
     implementation 'com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE'
 
     // Customizable TextView
-    implementation 'com.libRG:customtextview:2.4'
+    implementation files("Modules/customtextview-2.1.aar")
 
     // Dismiss gesturing
-    implementation 'com.r0adkll:slidableactivity:2.1.0'
     implementation 'app.futured.hauler:hauler:5.0.0'
 
     // Bottom sheet with rounded corners

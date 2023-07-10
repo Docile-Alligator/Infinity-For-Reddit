@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -21,7 +20,6 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -49,8 +47,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.android.material.textfield.TextInputEditText;
-import com.r0adkll.slidr.Slidr;
-import com.r0adkll.slidr.model.SlidrInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -98,6 +94,9 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSh
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UserThingSortTypeBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.NavigationWrapper;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
+import ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrInterface;
+import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.GoBackToMainPageEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -111,6 +110,7 @@ import ml.docilealligator.infinityforreddit.post.PostPagingSource;
 import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
 import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
+import ml.docilealligator.infinityforreddit.user.BlockUser;
 import ml.docilealligator.infinityforreddit.user.FetchUserData;
 import ml.docilealligator.infinityforreddit.user.UserDao;
 import ml.docilealligator.infinityforreddit.user.UserData;
@@ -226,7 +226,6 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
     private boolean lockBottomAppBar;
     private String mMessageFullname;
     private String mNewAccountName;
-    private SlidrInterface mSlidrInterface;
     //private MaterialAlertDialogBuilder nsfwWarningBuilder;
 
     @Override
@@ -254,8 +253,10 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         applyCustomTheme();
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSlidrInterface = Slidr.attach(this);
+            mSliderPanel = Slidr.attach(this);
         }
+
+        mViewPager2 = viewPager2;
 
         username = getIntent().getStringExtra(EXTRA_USER_NAME_KEY);
 
@@ -388,8 +389,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             urlMenuBottomSheetFragment.show(getSupportFragmentManager(), null);
             return true;
         };
-        Markwon markwon = MarkdownUtils.createLinksOnlyMarkwon(this,
-                miscPlugin, onLinkLongClickListener);
+        Markwon markwon = MarkdownUtils.createDescriptionMarkwon(this, miscPlugin, onLinkLongClickListener);
 
         descriptionTextView.setOnLongClickListener(view -> {
             if (description != null && !description.equals("") && descriptionTextView.getSelectionStart() == -1 && descriptionTextView.getSelectionEnd() == -1) {
@@ -830,6 +830,9 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
                 navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_filter_24dp);
                 break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_TOP:
+                navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_keyboard_double_arrow_up_24);
+                break;
             default:
                 if (mAccessToken == null) {
                     navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_filter_24dp);
@@ -878,6 +881,11 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
                     if (sectionsPagerAdapter != null) {
                         sectionsPagerAdapter.filterPosts();
+                    }
+                    break;
+                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_TOP:
+                    if (sectionsPagerAdapter != null) {
+                        sectionsPagerAdapter.goBackToTop();
                     }
                     break;
                 default:
@@ -1107,6 +1115,7 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         if (username.equals(mAccountName)) {
             menu.findItem(R.id.action_send_private_message_view_user_detail_activity).setVisible(false);
             menu.findItem(R.id.action_report_view_user_detail_activity).setVisible(false);
+            menu.findItem(R.id.action_block_user_view_user_detail_activity).setVisible(false);
         } else {
             menu.findItem(R.id.action_edit_profile_view_user_detail_activity).setVisible(false);
         }
@@ -1174,6 +1183,30 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
             Intent reportIntent = new Intent(this, LinkResolverActivity.class);
             reportIntent.setData(Uri.parse("https://www.reddithelp.com/en/categories/rules-reporting/account-and-community-restrictions/what-should-i-do-if-i-see-something-i"));
             startActivity(reportIntent);
+            return true;
+        } else if (itemId == R.id.action_block_user_view_user_detail_activity) {
+            if (mAccessToken == null) {
+                Toast.makeText(this, R.string.login_first, Toast.LENGTH_SHORT).show();
+                return true;
+            }
+
+            new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                    .setTitle(R.string.block_user)
+                    .setMessage(R.string.are_you_sure)
+                    .setPositiveButton(R.string.yes, (dialogInterface, i)
+                            -> BlockUser.blockUser(mOauthRetrofit, mAccessToken, username, new BlockUser.BlockUserListener() {
+                        @Override
+                        public void success() {
+                            Toast.makeText(ViewUserDetailActivity.this, R.string.block_user_success, Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void failed() {
+                            Toast.makeText(ViewUserDetailActivity.this, R.string.block_user_failed, Toast.LENGTH_SHORT).show();
+                        }
+                    }))
+                    .setNegativeButton(R.string.no, null)
+                    .show();
             return true;
         } else if (itemId == R.id.action_edit_profile_view_user_detail_activity) {
             startActivity(new Intent(this, EditProfileActivity.class));
@@ -1320,6 +1353,12 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 }
                 break;
             }
+            case FABMoreOptionsBottomSheetFragment.FAB_GO_TO_TOP: {
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.goBackToTop();
+                }
+                break;
+            }
         }
     }
 
@@ -1328,25 +1367,18 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         TextInputEditText thingEditText = rootView.findViewById(R.id.text_input_edit_text_go_to_thing_edit_text);
         RecyclerView recyclerView = rootView.findViewById(R.id.recycler_view_go_to_thing_edit_text);
         thingEditText.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         SubredditAutocompleteRecyclerViewAdapter adapter = new SubredditAutocompleteRecyclerViewAdapter(
                 this, mCustomThemeWrapper, subredditData -> {
-            if (imm != null) {
-                imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-            }
+            Utils.hideKeyboard(this);
             Intent intent = new Intent(ViewUserDetailActivity.this, ViewSubredditDetailActivity.class);
             intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditData.getName());
             startActivity(intent);
         });
         recyclerView.setAdapter(adapter);
-        if (imm != null) {
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        }
+        Utils.showKeyboard(this, new Handler(), thingEditText);
         thingEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_DONE) {
-                if (imm != null) {
-                    imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                }
+                Utils.hideKeyboard(this);
                 Intent subredditIntent = new Intent(this, ViewSubredditDetailActivity.class);
                 subredditIntent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, thingEditText.getText().toString());
                 startActivity(subredditIntent);
@@ -1404,22 +1436,16 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 .setView(rootView)
                 .setPositiveButton(R.string.ok, (dialogInterface, i)
                         -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                     Intent subredditIntent = new Intent(this, ViewSubredditDetailActivity.class);
                     subredditIntent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, thingEditText.getText().toString());
                     startActivity(subredditIntent);
                 })
                 .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                 })
                 .setOnDismissListener(dialogInterface -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                 })
                 .show();
     }
@@ -1428,15 +1454,10 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
         View rootView = getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, coordinatorLayout, false);
         TextInputEditText thingEditText = rootView.findViewById(R.id.text_input_edit_text_go_to_thing_edit_text);
         thingEditText.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        }
+        Utils.showKeyboard(this, new Handler(), thingEditText);
         thingEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_DONE) {
-                if (imm != null) {
-                    imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                }
+                Utils.hideKeyboard(this);
                 Intent userIntent = new Intent(this, ViewUserDetailActivity.class);
                 userIntent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, thingEditText.getText().toString());
                 startActivity(userIntent);
@@ -1449,22 +1470,16 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
                 .setView(rootView)
                 .setPositiveButton(R.string.ok, (dialogInterface, i)
                         -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                     Intent userIntent = new Intent(this, ViewUserDetailActivity.class);
                     userIntent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, thingEditText.getText().toString());
                     startActivity(userIntent);
                 })
                 .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                 })
                 .setOnDismissListener(dialogInterface -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                 })
                 .show();
     }
@@ -1750,15 +1765,15 @@ public class ViewUserDetailActivity extends BaseActivity implements SortTypeSele
 
     @Override
     public void lockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.lock();
+        if (mSliderPanel != null) {
+            mSliderPanel.lock();
         }
     }
 
     @Override
     public void unlockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.unlock();
+        if (mSliderPanel != null) {
+            mSliderPanel.unlock();
         }
     }
 }

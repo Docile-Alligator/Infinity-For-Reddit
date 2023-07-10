@@ -1,13 +1,26 @@
 package ml.docilealligator.infinityforreddit.customtheme;
 
+import android.graphics.Color;
+
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonDeserializationContext;
+import com.google.gson.JsonDeserializer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonSerializationContext;
+import com.google.gson.JsonSerializer;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
+import java.util.Map;
 
 @Entity(tableName = "custom_themes")
 public class CustomTheme {
@@ -197,8 +210,20 @@ public class CustomTheme {
     }
 
     public String getJSONModel() {
-        Gson gson = new Gson();
+        Gson gson = getGsonBuilder().create();
         return gson.toJson(this);
+    }
+
+    private static GsonBuilder getGsonBuilder() {
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(CustomTheme.class, new CustomThemeSerializer());
+        builder.registerTypeAdapter(CustomTheme.class, new CustomThemeDeserializer());
+        return builder;
+    }
+
+    public static CustomTheme fromJson(String json) throws JsonParseException {
+        Gson gson = getGsonBuilder().create();
+        return gson.fromJson(json, CustomTheme.class);
     }
 
     public static CustomTheme convertSettingsItemsToCustomTheme(ArrayList<CustomThemeSettingsItem> customThemeSettingsItems, String themeName) {
@@ -297,5 +322,70 @@ public class CustomTheme {
         customTheme.isChangeStatusBarIconColorAfterToolbarCollapsedInImmersiveInterface = customThemeSettingsItems.get(86).isEnabled;
 
         return customTheme;
+    }
+
+    private static class CustomThemeSerializer implements JsonSerializer<CustomTheme> {
+        @Override
+        public JsonElement serialize(CustomTheme src, Type typeofSrc, JsonSerializationContext context) {
+            JsonObject obj = new JsonObject();
+
+            for (Field field : src.getClass().getDeclaredFields()) {
+                try {
+                    if (field.getType() == int.class) {
+                        obj.addProperty(field.getName(), String.format("#%08X", field.getInt(src)));
+                    } else {
+                        obj.add(field.getName(), context.serialize(field.get(src)));
+                    }
+                } catch (IllegalAccessException ignored) {
+                }
+            }
+            return obj;
+        }
+    }
+
+    private static class CustomThemeDeserializer implements JsonDeserializer<CustomTheme> {
+        @Override
+        public CustomTheme deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+            CustomTheme customTheme = new CustomTheme();
+
+            JsonObject obj = json.getAsJsonObject();
+
+            for (Map.Entry<String, JsonElement> entry : obj.entrySet()) {
+
+                Field field;
+                try {
+                    field = customTheme.getClass().getDeclaredField(entry.getKey());
+                } catch (NoSuchFieldException e) {
+                    // Field not found, skip
+                    continue;
+                }
+
+                JsonElement value = entry.getValue();
+
+                try {
+                    Class<?> type = field.getType();
+                    if (int.class.equals(type)) {
+                        if (value.getAsJsonPrimitive().isString()) {
+                            // Hex or text color string
+                            field.set(customTheme, Color.parseColor(value.getAsString()));
+                        } else {
+                            // Int color
+                            field.set(customTheme, value.getAsInt());
+                        }
+                    } else if (String.class.equals(type)) {
+                        field.set(customTheme, value.getAsString());
+                    } else if (boolean.class.equals(type)) {
+                        field.set(customTheme, value.getAsBoolean());
+                    }
+
+                } catch (IllegalAccessException e) {
+                    throw new JsonParseException("Failed to access theme field.");
+                } catch (IllegalArgumentException e) {
+                    throw new JsonParseException("Invalid color string.");
+                }
+
+            }
+            return customTheme;
+        }
     }
 }

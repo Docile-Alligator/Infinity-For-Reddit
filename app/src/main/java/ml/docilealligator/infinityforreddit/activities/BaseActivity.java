@@ -6,6 +6,9 @@ import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES;
 
 import android.annotation.SuppressLint;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.content.res.Configuration;
@@ -21,6 +24,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -44,6 +48,7 @@ import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
 import ml.docilealligator.infinityforreddit.CustomFontReceiver;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
 import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
 import ml.docilealligator.infinityforreddit.font.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.font.FontFamily;
@@ -66,6 +71,10 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
     public Typeface typeface;
     public Typeface titleTypeface;
     public Typeface contentTypeface;
+    @Nullable
+    public SliderPanel mSliderPanel;
+    @Nullable
+    public ViewPager2 mViewPager2;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -363,7 +372,7 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
     }
 
     protected void applyFABTheme(FloatingActionButton fab) {
-        fab.setBackgroundTintList(ColorStateList.valueOf(customThemeWrapper.getColorPrimaryLightTheme()));
+        fab.setBackgroundTintList(ColorStateList.valueOf(customThemeWrapper.getColorAccent()));
         fab.setImageTintList(ColorStateList.valueOf(customThemeWrapper.getFABIconColor()));
     }
 
@@ -399,5 +408,18 @@ public abstract class BaseActivity extends AppCompatActivity implements CustomFo
 
     public void unlockSwipeRightToGoBack() {
 
+    }
+
+    public void copyLink(String link) {
+        ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+        if (clipboard != null) {
+            ClipData clip = ClipData.newPlainText("simple text", link);
+            clipboard.setPrimaryClip(clip);
+            if (android.os.Build.VERSION.SDK_INT < 33) {
+                Toast.makeText(this, R.string.copy_success, Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, R.string.copy_link_failed, Toast.LENGTH_SHORT).show();
+        }
     }
 }

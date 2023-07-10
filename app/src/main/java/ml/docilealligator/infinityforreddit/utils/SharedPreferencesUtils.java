@@ -291,6 +291,7 @@ public class SharedPreferencesUtils {
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_RANDOM = 7;
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS = 8;
     public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_FILTER_POSTS = 9;
+    public static final int MAIN_ACTIVITY_BOTTOM_APP_BAR_FAB_GO_TO_TOP = 10;
 
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_HOME = 0;
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_OPTION_SUBSCRIPTIONS = 1;
@@ -324,6 +325,7 @@ public class SharedPreferencesUtils {
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_RANDOM = 7;
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_HIDE_READ_POSTS = 8;
     public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS = 9;
+    public static final int OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_TOP = 10;
 
     public static final String NSFW_AND_SPOILER_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.nsfw_and_spoiler";
     public static final String NSFW_BASE = "_nsfw";
@@ -366,6 +368,7 @@ public class SharedPreferencesUtils {
 
     public static final String INTERNAL_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.internal";
     public static final String HAS_REQUESTED_NOTIFICATION_PERMISSION = "has_requested_notification_permission";
+    public static final String DO_NOT_SHOW_REDDIT_API_INFO_AGAIN = "do_not_show_reddit_api_info_again";
 
     //Legacy Settings
     public static final String MAIN_PAGE_TAB_1_TITLE_LEGACY = "main_page_tab_1_title";

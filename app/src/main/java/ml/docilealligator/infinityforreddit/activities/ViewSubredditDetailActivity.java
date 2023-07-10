@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -10,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.util.Linkify;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -19,7 +19,6 @@ import android.view.ViewTreeObserver;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -47,8 +46,6 @@ import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.android.material.textfield.TextInputEditText;
-import com.r0adkll.slidr.Slidr;
-import com.r0adkll.slidr.model.SlidrInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -68,6 +65,13 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
+import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
+import io.noties.markwon.inlineparser.BangInlineProcessor;
+import io.noties.markwon.inlineparser.HtmlInlineProcessor;
+import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
+import io.noties.markwon.linkify.LinkifyPlugin;
+import io.noties.markwon.movement.MovementMethodPlugin;
+import io.noties.markwon.recycler.table.TableEntryPlugin;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
@@ -95,12 +99,18 @@ import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTypeBottomS
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.NavigationWrapper;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
+import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.GoBackToMainPageEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.fragments.SidebarFragment;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
+import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SpoilerAwareMovementMethod;
+import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SuperscriptPlugin;
 import ml.docilealligator.infinityforreddit.message.ReadMessage;
 import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
 import ml.docilealligator.infinityforreddit.post.Post;
@@ -226,7 +236,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private int unsubscribedColor;
     private int subscribedColor;
     private int fabOption;
-    private SlidrInterface mSlidrInterface;
     private MaterialAlertDialogBuilder nsfwWarningBuilder;
 
     @Override
@@ -252,8 +261,10 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         applyCustomTheme();
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSlidrInterface = Slidr.attach(this);
+            mSliderPanel = Slidr.attach(this);
         }
+
+        mViewPager2 = viewPager2;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             Window window = getWindow();
@@ -388,8 +399,8 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             urlMenuBottomSheetFragment.show(getSupportFragmentManager(), null);
             return true;
         };
-        Markwon markwon = MarkdownUtils.createLinksOnlyMarkwon(this,
-                miscPlugin, onLinkLongClickListener);
+
+        Markwon markwon = MarkdownUtils.createDescriptionMarkwon(this, miscPlugin, onLinkLongClickListener);
 
         descriptionTextView.setOnLongClickListener(view -> {
             if (description != null && !description.equals("") && descriptionTextView.getSelectionStart() == -1 && descriptionTextView.getSelectionEnd() == -1) {
@@ -792,7 +803,6 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 if (navigationWrapper.navigationRailView == null) {
                     navigationWrapper.option1BottomAppBar.setOnClickListener(view -> {
                         bottomAppBarOptionAction(option1);
-                        //Toast.makeText(this, "s " + collapsingToolbarLayout.getScrimVisibleHeightTrigger(), Toast.LENGTH_SHORT).show();
                     });
 
                     navigationWrapper.option2BottomAppBar.setOnClickListener(view -> {
@@ -867,6 +877,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
                 navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_filter_24dp);
                 break;
+            case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_TOP:
+                navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_keyboard_double_arrow_up_24);
+                break;
             default:
                 if (mAccessToken == null) {
                     navigationWrapper.floatingActionButton.setImageResource(R.drawable.ic_filter_24dp);
@@ -916,6 +929,11 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_FILTER_POSTS:
                     if (sectionsPagerAdapter != null) {
                         sectionsPagerAdapter.filterPosts();
+                    }
+                    break;
+                case SharedPreferencesUtils.OTHER_ACTIVITIES_BOTTOM_APP_BAR_FAB_GO_TO_TOP:
+                    if (sectionsPagerAdapter != null) {
+                        sectionsPagerAdapter.goBackToTop();
                     }
                     break;
                 default:
@@ -1378,6 +1396,12 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 }
                 break;
             }
+            case FABMoreOptionsBottomSheetFragment.FAB_GO_TO_TOP: {
+                if (sectionsPagerAdapter != null) {
+                    sectionsPagerAdapter.goBackToTop();
+                }
+                break;
+            }
         }
     }
 
@@ -1386,25 +1410,18 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         TextInputEditText thingEditText = rootView.findViewById(R.id.text_input_edit_text_go_to_thing_edit_text);
         RecyclerView recyclerView = rootView.findViewById(R.id.recycler_view_go_to_thing_edit_text);
         thingEditText.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         SubredditAutocompleteRecyclerViewAdapter adapter = new SubredditAutocompleteRecyclerViewAdapter(
                 this, mCustomThemeWrapper, subredditData -> {
-            if (imm != null) {
-                imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-            }
+            Utils.hideKeyboard(this);
             Intent intent = new Intent(ViewSubredditDetailActivity.this, ViewSubredditDetailActivity.class);
             intent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, subredditData.getName());
             startActivity(intent);
         });
         recyclerView.setAdapter(adapter);
-        if (imm != null) {
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        }
+        Utils.showKeyboard(this, new Handler(), thingEditText);
         thingEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_DONE) {
-                if (imm != null) {
-                    imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                }
+                Utils.hideKeyboard(this);
                 Intent subredditIntent = new Intent(this, ViewSubredditDetailActivity.class);
                 subredditIntent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, thingEditText.getText().toString());
                 startActivity(subredditIntent);
@@ -1462,22 +1479,16 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 .setView(rootView)
                 .setPositiveButton(R.string.ok, (dialogInterface, i)
                         -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                     Intent subredditIntent = new Intent(this, ViewSubredditDetailActivity.class);
                     subredditIntent.putExtra(ViewSubredditDetailActivity.EXTRA_SUBREDDIT_NAME_KEY, thingEditText.getText().toString());
                     startActivity(subredditIntent);
                 })
                 .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                 })
                 .setOnDismissListener(dialogInterface -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                 })
                 .show();
     }
@@ -1486,15 +1497,10 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
         View rootView = getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, coordinatorLayout, false);
         TextInputEditText thingEditText = rootView.findViewById(R.id.text_input_edit_text_go_to_thing_edit_text);
         thingEditText.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        }
+        Utils.showKeyboard(this, new Handler(), thingEditText);
         thingEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
             if (i == EditorInfo.IME_ACTION_DONE) {
-                if (imm != null) {
-                    imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                }
+                Utils.hideKeyboard(this);
                 Intent userIntent = new Intent(this, ViewUserDetailActivity.class);
                 userIntent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, thingEditText.getText().toString());
                 startActivity(userIntent);
@@ -1507,22 +1513,16 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                 .setView(rootView)
                 .setPositiveButton(R.string.ok, (dialogInterface, i)
                         -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                     Intent userIntent = new Intent(this, ViewUserDetailActivity.class);
                     userIntent.putExtra(ViewUserDetailActivity.EXTRA_USER_NAME_KEY, thingEditText.getText().toString());
                     startActivity(userIntent);
                 })
                 .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                 })
                 .setOnDismissListener(dialogInterface -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                 })
                 .show();
     }
@@ -1549,15 +1549,15 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
 
     @Override
     public void lockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.lock();
+        if (mSliderPanel != null) {
+            mSliderPanel.lock();
         }
     }
 
     @Override
     public void unlockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.unlock();
+        if (mSliderPanel != null) {
+            mSliderPanel.unlock();
         }
     }
 

@@ -24,8 +24,6 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
-import com.r0adkll.slidr.Slidr;
-import com.r0adkll.slidr.model.SlidrInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -52,6 +50,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
 import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
 import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
@@ -95,7 +94,6 @@ public class WikiActivity extends BaseActivity {
     SharedPreferences mSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
-    private SlidrInterface mSlidrInterface;
     private String wikiMarkdown;
     private Markwon markwon;
     private MarkwonAdapter markwonAdapter;
@@ -119,7 +117,7 @@ public class WikiActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSlidrInterface = Slidr.attach(this);
+            mSliderPanel = Slidr.attach(this);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -151,6 +149,9 @@ public class WikiActivity extends BaseActivity {
         MarkwonPlugin miscPlugin = new AbstractMarkwonPlugin() {
             @Override
             public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
+                if (contentTypeface != null) {
+                    textView.setTypeface(contentTypeface);
+                }
                 textView.setTextColor(markdownColor);
             }
 
@@ -181,15 +182,15 @@ public class WikiActivity extends BaseActivity {
         LinearLayoutManagerBugFixed linearLayoutManager = new SwipeLockLinearLayoutManager(this, new SwipeLockInterface() {
             @Override
             public void lockSwipe() {
-                if (mSlidrInterface != null) {
-                    mSlidrInterface.lock();
+                if (mSliderPanel != null) {
+                    mSliderPanel.lock();
                 }
             }
 
             @Override
             public void unlockSwipe() {
-                if (mSlidrInterface != null) {
-                    mSlidrInterface.unlock();
+                if (mSliderPanel != null) {
+                    mSliderPanel.unlock();
                 }
             }
         });
@@ -204,6 +205,7 @@ public class WikiActivity extends BaseActivity {
             loadWiki();
         } else {
             markwonAdapter.setMarkdown(markwon, wikiMarkdown);
+            // noinspection NotifyDataSetChanged
             markwonAdapter.notifyDataSetChanged();
         }
     }
@@ -227,6 +229,7 @@ public class WikiActivity extends BaseActivity {
                         String markdown = new JSONObject(response.body())
                                 .getJSONObject(JSONUtils.DATA_KEY).getString(JSONUtils.CONTENT_MD_KEY);
                         markwonAdapter.setMarkdown(markwon, Utils.modifyMarkdown(markdown));
+                        // noinspection NotifyDataSetChanged
                         markwonAdapter.notifyDataSetChanged();
                     } catch (JSONException e) {
                         e.printStackTrace();

@@ -1,11 +1,9 @@
 package ml.docilealligator.infinityforreddit.adapters;
 
-import android.app.Activity;
-import android.content.Context;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,6 +21,7 @@ import ml.docilealligator.infinityforreddit.Flair;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class FlairBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter<FlairBottomSheetRecyclerViewAdapter.FlairViewHolder> {
     private BaseActivity activity;
@@ -48,13 +47,10 @@ public class FlairBottomSheetRecyclerViewAdapter extends RecyclerView.Adapter<Fl
         if (flairs.get(holder.getBindingAdapterPosition()).isEditable()) {
             holder.editFlairImageView.setVisibility(View.VISIBLE);
             holder.editFlairImageView.setOnClickListener(view -> {
-                View dialogView = ((Activity) activity).getLayoutInflater().inflate(R.layout.dialog_edit_flair, null);
+                View dialogView = activity.getLayoutInflater().inflate(R.layout.dialog_edit_flair, null);
                 EditText flairEditText = dialogView.findViewById(R.id.flair_edit_text_edit_flair_dialog);
                 flairEditText.requestFocus();
-                InputMethodManager imm = (InputMethodManager) activity.getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                }
+                Utils.showKeyboard(activity, new Handler(), flairEditText);
                 new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme)
                         .setTitle(R.string.edit_flair)
                         .setView(dialogView)
