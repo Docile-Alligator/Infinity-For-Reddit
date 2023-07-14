@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package ml.ino6962.postinfinityforreddit.videoautoplay;
+package ml.docilealligator.infinityforreddit.videoautoplay;
 
 import static com.google.android.exoplayer2.trackselection.MappingTrackSelector.MappedTrackInfo.RENDERER_SUPPORT_UNSUPPORTED_TRACKS;
-import static ml.ino6962.postinfinityforreddit.videoautoplay.ToroExo.toro;
+import static ml.docilealligator.infinityforreddit.videoautoplay.ToroExo.toro;
 
 import android.net.Uri;
 import android.widget.Toast;
@@ -38,7 +38,7 @@ import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.common.collect.ImmutableList;
 
-import ml.ino6962.postinfinityforreddit.R;
+import ml.docilealligator.infinityforreddit.R;
 
 /**
  * Making {@link Playable} extensible. This can be used with custom {@link ExoCreator}. Extending

@@ -1,8 +1,8 @@
-package ml.ino6962.postinfinityforreddit.postfilter;
+package ml.docilealligator.infinityforreddit.postfilter;
 
 import java.util.concurrent.Executor;
 
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class DeletePostFilterUsage {
     public static void deletePostFilterUsage(RedditDataRoomDatabase redditDataRoomDatabase, Executor executor,

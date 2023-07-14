@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ml.ino6962.postinfinityforreddit.videoautoplay.widget;
+package ml.docilealligator.infinityforreddit.videoautoplay.widget;
 
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -29,7 +29,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import ml.ino6962.postinfinityforreddit.videoautoplay.ToroPlayer;
+import ml.docilealligator.infinityforreddit.videoautoplay.ToroPlayer;
 
 /**
  * @author eneim | 6/2/17.

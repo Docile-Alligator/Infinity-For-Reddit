@@ -1,11 +1,11 @@
-package ml.ino6962.postinfinityforreddit.postfilter;
+package ml.docilealligator.infinityforreddit.postfilter;
 
 import android.os.Handler;
 
 import java.util.List;
 import java.util.concurrent.Executor;
 
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class SavePostFilter {
     public interface SavePostFilterListener {

@@ -18,14 +18,14 @@
             android:clickable="true"
             android:focusable="true">
 
-            <ml.ino6962.postinfinityforreddit.customviews.CustomToroContainer
+            <ml.docilealligator.infinityforreddit.customviews.CustomToroContainer
                 android:id="@+id/post_detail_recycler_view_view_post_detail_fragment"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:paddingBottom="144dp"
                 android:clipToPadding="false"
-                app:layoutManager="ml.ino6962.postinfinityforreddit.customviews.LinearLayoutManagerBugFixed" />
+                app:layoutManager="ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/comments_recycler_view_view_post_detail_fragment"
@@ -34,7 +34,7 @@
                 android:layout_weight="1"
                 android:paddingBottom="144dp"
                 android:clipToPadding="false"
-                app:layoutManager="ml.ino6962.postinfinityforreddit.customviews.LinearLayoutManagerBugFixed" />
+                app:layoutManager="ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed" />
 
         </LinearLayout>
 

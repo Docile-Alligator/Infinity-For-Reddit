@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.settings;
+package ml.docilealligator.infinityforreddit.settings;
 
 
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
@@ -15,12 +15,12 @@ import androidx.preference.Preference;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.ino6962.postinfinityforreddit.Infinity;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.activities.LinkResolverActivity;
-import ml.ino6962.postinfinityforreddit.activities.PostFilterPreferenceActivity;
-import ml.ino6962.postinfinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.activities.PostFilterPreferenceActivity;
+import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class MainPreferenceFragment extends CustomFontPreferenceFragmentCompat {
 

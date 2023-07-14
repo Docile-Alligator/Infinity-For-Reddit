@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.multireddit;
+package ml.docilealligator.infinityforreddit.multireddit;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -11,7 +11,7 @@ import androidx.room.Ignore;
 
 import java.util.ArrayList;
 
-import ml.ino6962.postinfinityforreddit.account.Account;
+import ml.docilealligator.infinityforreddit.account.Account;
 
 @Entity(tableName = "multi_reddits", primaryKeys = {"path", "username"},
         foreignKeys = @ForeignKey(entity = Account.class, parentColumns = "username",

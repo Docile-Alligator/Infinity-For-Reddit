@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.adapters;
+package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
@@ -26,12 +26,12 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.TrendingSearch;
-import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
-import ml.ino6962.postinfinityforreddit.customviews.AspectRatioGifImageView;
-import ml.ino6962.postinfinityforreddit.post.Post;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.TrendingSearch;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
+import ml.docilealligator.infinityforreddit.post.Post;
 
 public class TrendingSearchRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private BaseActivity activity;

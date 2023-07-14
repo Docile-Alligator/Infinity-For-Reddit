@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.bottomsheetfragments;
+package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -13,12 +13,12 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.activities.LinkResolverActivity;
-import ml.ino6962.postinfinityforreddit.activities.MainActivity;
-import ml.ino6962.postinfinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
-import ml.ino6962.postinfinityforreddit.databinding.FragmentRedditApiInfoBottomSheetBinding;
-import ml.ino6962.postinfinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.activities.MainActivity;
+import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.databinding.FragmentRedditApiInfoBottomSheetBinding;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class RedditAPIInfoBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 

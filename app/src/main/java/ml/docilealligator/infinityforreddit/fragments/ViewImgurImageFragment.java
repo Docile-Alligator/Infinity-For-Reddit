@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.fragments;
+package ml.docilealligator.infinityforreddit.fragments;
 
 import android.Manifest;
 import android.content.Context;
@@ -47,16 +47,16 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.ino6962.postinfinityforreddit.BuildConfig;
-import ml.ino6962.postinfinityforreddit.ImgurMedia;
-import ml.ino6962.postinfinityforreddit.Infinity;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.SetAsWallpaperCallback;
-import ml.ino6962.postinfinityforreddit.activities.ViewImgurMediaActivity;
-import ml.ino6962.postinfinityforreddit.asynctasks.SaveBitmapImageToFile;
-import ml.ino6962.postinfinityforreddit.bottomsheetfragments.SetAsWallpaperBottomSheetFragment;
-import ml.ino6962.postinfinityforreddit.services.DownloadMediaService;
-import ml.ino6962.postinfinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.BuildConfig;
+import ml.docilealligator.infinityforreddit.ImgurMedia;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
+import ml.docilealligator.infinityforreddit.activities.ViewImgurMediaActivity;
+import ml.docilealligator.infinityforreddit.asynctasks.SaveBitmapImageToFile;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.SetAsWallpaperBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class ViewImgurImageFragment extends Fragment {
 

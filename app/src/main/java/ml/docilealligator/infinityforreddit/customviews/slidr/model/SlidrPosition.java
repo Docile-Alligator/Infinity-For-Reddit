@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.customviews.slidr.model;
+package ml.docilealligator.infinityforreddit.customviews.slidr.model;
 
 
 public enum SlidrPosition {

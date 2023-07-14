@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.services;
+package ml.docilealligator.infinityforreddit.services;
 
 import static android.os.Environment.getExternalStoragePublicDirectory;
 
@@ -43,14 +43,14 @@ import java.util.Random;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.ino6962.postinfinityforreddit.DownloadProgressResponseBody;
-import ml.ino6962.postinfinityforreddit.Infinity;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.apis.DownloadFile;
-import ml.ino6962.postinfinityforreddit.broadcastreceivers.DownloadedMediaDeleteActionBroadcastReceiver;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
-import ml.ino6962.postinfinityforreddit.utils.NotificationUtils;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.DownloadProgressResponseBody;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.apis.DownloadFile;
+import ml.docilealligator.infinityforreddit.broadcastreceivers.DownloadedMediaDeleteActionBroadcastReceiver;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.utils.NotificationUtils;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import okhttp3.OkHttpClient;
 import okhttp3.ResponseBody;
 import retrofit2.Response;

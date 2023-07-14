@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.postfilter;
+package ml.docilealligator.infinityforreddit.postfilter;
 
 import android.os.Parcel;
 import android.os.Parcelable;

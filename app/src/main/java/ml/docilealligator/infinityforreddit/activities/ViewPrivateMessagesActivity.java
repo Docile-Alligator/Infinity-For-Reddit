@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.activities;
+package ml.docilealligator.infinityforreddit.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -34,21 +34,21 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.ino6962.postinfinityforreddit.ActivityToolbarInterface;
-import ml.ino6962.postinfinityforreddit.Infinity;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
-import ml.ino6962.postinfinityforreddit.adapters.PrivateMessagesDetailRecyclerViewAdapter;
-import ml.ino6962.postinfinityforreddit.asynctasks.LoadUserData;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
-import ml.ino6962.postinfinityforreddit.customviews.LinearLayoutManagerBugFixed;
-import ml.ino6962.postinfinityforreddit.events.PassPrivateMessageEvent;
-import ml.ino6962.postinfinityforreddit.events.PassPrivateMessageIndexEvent;
-import ml.ino6962.postinfinityforreddit.events.RepliedToPrivateMessageEvent;
-import ml.ino6962.postinfinityforreddit.message.Message;
-import ml.ino6962.postinfinityforreddit.message.ReadMessage;
-import ml.ino6962.postinfinityforreddit.message.ReplyMessage;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.adapters.PrivateMessagesDetailRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.events.PassPrivateMessageEvent;
+import ml.docilealligator.infinityforreddit.events.PassPrivateMessageIndexEvent;
+import ml.docilealligator.infinityforreddit.events.RepliedToPrivateMessageEvent;
+import ml.docilealligator.infinityforreddit.message.Message;
+import ml.docilealligator.infinityforreddit.message.ReadMessage;
+import ml.docilealligator.infinityforreddit.message.ReplyMessage;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
 public class ViewPrivateMessagesActivity extends BaseActivity implements ActivityToolbarInterface {

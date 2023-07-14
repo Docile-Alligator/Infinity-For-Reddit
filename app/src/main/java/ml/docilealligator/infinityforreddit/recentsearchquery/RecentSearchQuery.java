@@ -1,11 +1,11 @@
-package ml.ino6962.postinfinityforreddit.recentsearchquery;
+package ml.docilealligator.infinityforreddit.recentsearchquery;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 
-import ml.ino6962.postinfinityforreddit.account.Account;
+import ml.docilealligator.infinityforreddit.account.Account;
 
 @Entity(tableName = "recent_search_queries", primaryKeys = {"username", "search_query"},
         foreignKeys = @ForeignKey(entity = Account.class, parentColumns = "username",

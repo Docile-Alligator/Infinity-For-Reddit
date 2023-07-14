@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ml.ino6962.postinfinityforreddit.videoautoplay;
+package ml.docilealligator.infinityforreddit.videoautoplay;
 
 import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
@@ -38,9 +38,9 @@ import com.google.android.exoplayer2.video.VideoSize;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import ml.ino6962.postinfinityforreddit.videoautoplay.annotations.RemoveIn;
-import ml.ino6962.postinfinityforreddit.videoautoplay.media.PlaybackInfo;
-import ml.ino6962.postinfinityforreddit.videoautoplay.media.VolumeInfo;
+import ml.docilealligator.infinityforreddit.videoautoplay.annotations.RemoveIn;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
 
 /**
  * Define an interface to control a playback, specific for {@link SimpleExoPlayer} and {@link PlayerView}.

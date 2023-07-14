@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.apis;
+package ml.docilealligator.infinityforreddit.apis;
 
 import java.util.Map;
 

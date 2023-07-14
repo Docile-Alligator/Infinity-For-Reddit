@@ -2,13 +2,13 @@
 <androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="true"
         app:key="enable_notification"
         app:icon="@drawable/ic_outline_notifications_24dp"
         app:title="@string/settings_notification_enable_notification_title"/>
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
         app:defaultValue="1"
         app:entries="@array/settings_notification_interval"
         app:entryValues="@array/settings_notification_interval_values"

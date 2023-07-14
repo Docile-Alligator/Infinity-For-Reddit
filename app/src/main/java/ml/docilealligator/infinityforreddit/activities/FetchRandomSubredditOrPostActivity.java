@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.activities;
+package ml.docilealligator.infinityforreddit.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,11 +14,11 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.ino6962.postinfinityforreddit.Infinity;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.bottomsheetfragments.RandomBottomSheetFragment;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
-import ml.ino6962.postinfinityforreddit.post.FetchPost;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.RandomBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.post.FetchPost;
 import retrofit2.Retrofit;
 
 public class FetchRandomSubredditOrPostActivity extends BaseActivity {

@@ -2,12 +2,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="true"
         app:key="save_sort_type"
         app:title="@string/settings_save_sort_type_title" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
         app:defaultValue="HOT"
         app:entries="@array/settings_subreddit_default_sort_type"
         app:entryValues="@array/settings_subreddit_default_sort_type_values"
@@ -15,7 +15,7 @@
         app:title="@string/settings_subreddit_default_sort_type_title"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
         app:defaultValue="ALL"
         app:entries="@array/settings_default_sort_time"
         app:entryValues="@array/settings_default_sort_time_values"
@@ -23,7 +23,7 @@
         app:title="@string/settings_subreddit_default_sort_time_title"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
         app:defaultValue="NEW"
         app:entries="@array/settings_user_default_sort_type"
         app:entryValues="@array/settings_user_default_sort_type_values"
@@ -31,7 +31,7 @@
         app:title="@string/settings_user_default_sort_type_title"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
         app:defaultValue="ALL"
         app:entries="@array/settings_default_sort_time"
         app:entryValues="@array/settings_default_sort_time_values"
@@ -39,7 +39,7 @@
         app:title="@string/settings_user_default_sort_time_title"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="respect_subreddit_recommended_comment_sort_type"
         app:title="@string/settings_respect_subreddit_recommended_comment_sort_type_title"

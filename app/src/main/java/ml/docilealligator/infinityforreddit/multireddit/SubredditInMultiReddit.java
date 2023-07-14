@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.multireddit;
+package ml.docilealligator.infinityforreddit.multireddit;
 
 public class SubredditInMultiReddit {
     String name;

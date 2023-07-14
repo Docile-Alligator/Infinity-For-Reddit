@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.adapters;
+package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.res.ColorStateList;
 import android.view.LayoutInflater;
@@ -14,10 +14,10 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.ReportReason;
-import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.ReportReason;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 
 public class ReportReasonRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

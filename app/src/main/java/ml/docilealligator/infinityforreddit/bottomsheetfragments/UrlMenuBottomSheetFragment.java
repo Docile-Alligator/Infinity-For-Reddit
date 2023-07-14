@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.bottomsheetfragments;
+package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
@@ -19,12 +19,12 @@ import androidx.fragment.app.FragmentManager;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
-import ml.ino6962.postinfinityforreddit.activities.LinkResolverActivity;
-import ml.ino6962.postinfinityforreddit.activities.ViewRedditGalleryActivity;
-import ml.ino6962.postinfinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
-import ml.ino6962.postinfinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewRedditGalleryActivity;
+import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class UrlMenuBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 

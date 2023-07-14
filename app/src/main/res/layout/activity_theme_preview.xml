@@ -7,7 +7,7 @@
     android:id="@+id/coordinator_layout_theme_preview_activity"
     tools:context=".activities.CustomThemePreviewActivity">
 
-    <ml.ino6962.postinfinityforreddit.customviews.ViewPagerBugFixed
+    <ml.docilealligator.infinityforreddit.customviews.ViewPagerBugFixed
         android:id="@+id/view_pager_theme_preview_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

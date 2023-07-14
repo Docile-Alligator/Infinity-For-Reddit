@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.customviews;
+package ml.docilealligator.infinityforreddit.customviews;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -13,10 +13,10 @@ import androidx.preference.SwitchPreference;
 
 import com.google.android.material.materialswitch.MaterialSwitch;
 
-import ml.ino6962.postinfinityforreddit.CustomFontReceiver;
-import ml.ino6962.postinfinityforreddit.CustomThemeWrapperReceiver;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.CustomFontReceiver;
+import ml.docilealligator.infinityforreddit.CustomThemeWrapperReceiver;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 
 public class CustomFontSwitchPreference extends SwitchPreference implements CustomFontReceiver, CustomThemeWrapperReceiver {
     private CustomThemeWrapper customThemeWrapper;

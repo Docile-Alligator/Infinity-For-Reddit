@@ -1,14 +1,14 @@
-package ml.ino6962.postinfinityforreddit.asynctasks;
+package ml.docilealligator.infinityforreddit.asynctasks;
 
 import android.os.Handler;
 
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
 
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
-import ml.ino6962.postinfinityforreddit.subreddit.FetchSubredditData;
-import ml.ino6962.postinfinityforreddit.subreddit.SubredditDao;
-import ml.ino6962.postinfinityforreddit.subreddit.SubredditData;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.subreddit.FetchSubredditData;
+import ml.docilealligator.infinityforreddit.subreddit.SubredditDao;
+import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import retrofit2.Retrofit;
 
 public class LoadSubredditIcon {

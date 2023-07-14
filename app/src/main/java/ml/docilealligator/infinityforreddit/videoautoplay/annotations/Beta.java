@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ml.ino6962.postinfinityforreddit.videoautoplay.annotations;
+package ml.docilealligator.infinityforreddit.videoautoplay.annotations;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;

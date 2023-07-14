@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit;
+package ml.docilealligator.infinityforreddit;
 
 import android.content.SharedPreferences;
 
@@ -9,9 +9,9 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
-import ml.ino6962.postinfinityforreddit.apis.StreamableAPI;
-import ml.ino6962.postinfinityforreddit.network.SortTypeConverterFactory;
-import ml.ino6962.postinfinityforreddit.utils.APIUtils;
+import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
+import ml.docilealligator.infinityforreddit.network.SortTypeConverterFactory;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import okhttp3.ConnectionPool;
 import okhttp3.Interceptor;
 import okhttp3.OkHttpClient;

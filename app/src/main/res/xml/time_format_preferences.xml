@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="show_elapsed_time"
         app:title="@string/settings_show_elapsed_time" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
         app:defaultValue="MMM d, yyyy, HH:mm"
         app:entries="@array/settings_time_format"
         app:entryValues="@array/settings_time_format_values"

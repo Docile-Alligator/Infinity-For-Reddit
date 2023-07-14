@@ -1,8 +1,8 @@
-package ml.ino6962.postinfinityforreddit.recentsearchquery;
+package ml.docilealligator.infinityforreddit.recentsearchquery;
 
 import android.os.AsyncTask;
 
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class DeleteRecentSearchQuery {
     public interface DeleteRecentSearchQueryListener {

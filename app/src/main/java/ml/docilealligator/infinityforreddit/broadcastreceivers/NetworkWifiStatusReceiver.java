@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.broadcastreceivers;
+package ml.docilealligator.infinityforreddit.broadcastreceivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

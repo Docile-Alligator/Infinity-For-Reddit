@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.subreddit;
+package ml.docilealligator.infinityforreddit.subreddit;
 
 import android.app.Application;
 
@@ -8,7 +8,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class SubredditViewModel extends AndroidViewModel {
     private SubredditRepository mSubredditRepository;

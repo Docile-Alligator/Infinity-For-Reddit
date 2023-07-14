@@ -1,10 +1,10 @@
-package ml.ino6962.postinfinityforreddit.user;
+package ml.docilealligator.infinityforreddit.user;
 
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class UserRepository {
     private UserDao mUserDao;

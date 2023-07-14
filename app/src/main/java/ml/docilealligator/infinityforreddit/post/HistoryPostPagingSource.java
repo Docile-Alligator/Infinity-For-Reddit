@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.post;
+package ml.docilealligator.infinityforreddit.post;
 
 import android.content.SharedPreferences;
 
@@ -17,11 +17,11 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
-import ml.ino6962.postinfinityforreddit.apis.RedditAPI;
-import ml.ino6962.postinfinityforreddit.postfilter.PostFilter;
-import ml.ino6962.postinfinityforreddit.readpost.ReadPost;
-import ml.ino6962.postinfinityforreddit.utils.APIUtils;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
+import ml.docilealligator.infinityforreddit.readpost.ReadPost;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.HttpException;
 import retrofit2.Response;

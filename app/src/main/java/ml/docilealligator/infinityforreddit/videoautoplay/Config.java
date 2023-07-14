@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package ml.ino6962.postinfinityforreddit.videoautoplay;
+package ml.docilealligator.infinityforreddit.videoautoplay;
 
 import static com.google.android.exoplayer2.DefaultRenderersFactory.EXTENSION_RENDERER_MODE_OFF;
-import static ml.ino6962.postinfinityforreddit.videoautoplay.ToroUtil.checkNotNull;
+import static ml.docilealligator.infinityforreddit.videoautoplay.ToroUtil.checkNotNull;
 
 import android.content.Context;
 

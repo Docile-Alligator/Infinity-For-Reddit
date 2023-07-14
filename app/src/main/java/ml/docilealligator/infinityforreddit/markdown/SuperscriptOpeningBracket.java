@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.markdown;
+package ml.docilealligator.infinityforreddit.markdown;
 
 import org.commonmark.internal.Delimiter;
 import org.commonmark.node.Node;

@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.settings;
+package ml.docilealligator.infinityforreddit.settings;
 
 import android.os.Bundle;
 
@@ -7,11 +7,11 @@ import androidx.preference.SwitchPreference;
 
 import org.greenrobot.eventbus.EventBus;
 
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
-import ml.ino6962.postinfinityforreddit.events.ChangeHideKarmaEvent;
-import ml.ino6962.postinfinityforreddit.events.ChangeShowAvatarOnTheRightInTheNavigationDrawerEvent;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
+import ml.docilealligator.infinityforreddit.events.ChangeHideKarmaEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeShowAvatarOnTheRightInTheNavigationDrawerEvent;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class NavigationDrawerPreferenceFragment extends CustomFontPreferenceFragmentCompat {
 

@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package ml.ino6962.postinfinityforreddit.videoautoplay.widget;
+package ml.docilealligator.infinityforreddit.videoautoplay.widget;
 
 import static android.content.Context.POWER_SERVICE;
-import static ml.ino6962.postinfinityforreddit.videoautoplay.ToroUtil.checkNotNull;
-import static ml.ino6962.postinfinityforreddit.videoautoplay.widget.Common.max;
+import static ml.docilealligator.infinityforreddit.videoautoplay.ToroUtil.checkNotNull;
+import static ml.docilealligator.infinityforreddit.videoautoplay.widget.Common.max;
 
 import android.app.Activity;
 import android.content.Context;
@@ -53,12 +53,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import ml.ino6962.postinfinityforreddit.videoautoplay.CacheManager;
-import ml.ino6962.postinfinityforreddit.videoautoplay.PlayerDispatcher;
-import ml.ino6962.postinfinityforreddit.videoautoplay.PlayerSelector;
-import ml.ino6962.postinfinityforreddit.videoautoplay.ToroPlayer;
-import ml.ino6962.postinfinityforreddit.videoautoplay.annotations.RemoveIn;
-import ml.ino6962.postinfinityforreddit.videoautoplay.media.PlaybackInfo;
+import ml.docilealligator.infinityforreddit.videoautoplay.CacheManager;
+import ml.docilealligator.infinityforreddit.videoautoplay.PlayerDispatcher;
+import ml.docilealligator.infinityforreddit.videoautoplay.PlayerSelector;
+import ml.docilealligator.infinityforreddit.videoautoplay.ToroPlayer;
+import ml.docilealligator.infinityforreddit.videoautoplay.annotations.RemoveIn;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
 
 /**
  * A custom {@link RecyclerView} that is capable of managing and controlling the {@link ToroPlayer}s'

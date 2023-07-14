@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.adapters;
+package ml.docilealligator.infinityforreddit.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,10 +10,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
-import ml.ino6962.postinfinityforreddit.postfilter.PostFilterUsage;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
 
 public class PostFilterUsageRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private List<PostFilterUsage> postFilterUsages;

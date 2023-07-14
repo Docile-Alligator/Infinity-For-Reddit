@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.multireddit;
+package ml.docilealligator.infinityforreddit.multireddit;
 
 import com.google.gson.Gson;
 

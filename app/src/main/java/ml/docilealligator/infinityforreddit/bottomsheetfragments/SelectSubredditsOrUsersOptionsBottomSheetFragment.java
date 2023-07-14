@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.bottomsheetfragments;
+package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,10 +11,10 @@ import androidx.annotation.NonNull;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.activities.SelectedSubredditsAndUsersActivity;
-import ml.ino6962.postinfinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
-import ml.ino6962.postinfinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.SelectedSubredditsAndUsersActivity;
+import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class SelectSubredditsOrUsersOptionsBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 

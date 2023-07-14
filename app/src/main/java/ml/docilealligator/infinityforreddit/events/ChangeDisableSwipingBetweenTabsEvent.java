@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.events;
+package ml.docilealligator.infinityforreddit.events;
 
 public class ChangeDisableSwipingBetweenTabsEvent {
     public boolean disableSwipingBetweenTabs;

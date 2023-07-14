@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ml.ino6962.postinfinityforreddit.videoautoplay;
+package ml.docilealligator.infinityforreddit.videoautoplay;
 
 import android.content.Context;
 import android.net.Uri;

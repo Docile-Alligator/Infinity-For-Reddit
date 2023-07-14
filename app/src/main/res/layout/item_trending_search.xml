@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:visibility="gone">
 
-        <ml.ino6962.postinfinityforreddit.customviews.AspectRatioGifImageView
+        <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
             android:id="@+id/image_view_item_trending_search"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

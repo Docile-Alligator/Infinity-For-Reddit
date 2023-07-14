@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.user;
+package ml.docilealligator.infinityforreddit.user;
 
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -9,12 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
-import ml.ino6962.postinfinityforreddit.account.Account;
-import ml.ino6962.postinfinityforreddit.apis.RedditAPI;
-import ml.ino6962.postinfinityforreddit.subscribeduser.SubscribedUserDao;
-import ml.ino6962.postinfinityforreddit.subscribeduser.SubscribedUserData;
-import ml.ino6962.postinfinityforreddit.utils.APIUtils;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.account.Account;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserDao;
+import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Retrofit;

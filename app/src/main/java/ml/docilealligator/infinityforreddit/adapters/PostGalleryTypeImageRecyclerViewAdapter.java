@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.adapters;
+package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.res.ColorStateList;
 import android.graphics.Typeface;
@@ -26,9 +26,9 @@ import java.util.ArrayList;
 
 import io.noties.markwon.Markwon;
 import jp.wasabeef.glide.transformations.BlurTransformation;
-import ml.ino6962.postinfinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy;
-import ml.ino6962.postinfinityforreddit.databinding.ItemGalleryImageInPostFeedBinding;
-import ml.ino6962.postinfinityforreddit.post.Post;
+import ml.docilealligator.infinityforreddit.SaveMemoryCenterInisdeDownsampleStrategy;
+import ml.docilealligator.infinityforreddit.databinding.ItemGalleryImageInPostFeedBinding;
+import ml.docilealligator.infinityforreddit.post.Post;
 
 public class PostGalleryTypeImageRecyclerViewAdapter extends RecyclerView.Adapter<PostGalleryTypeImageRecyclerViewAdapter.ImageViewHolder> {
     private RequestManager glide;

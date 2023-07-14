@@ -1,6 +1,6 @@
-package ml.ino6962.postinfinityforreddit.events;
+package ml.docilealligator.infinityforreddit.events;
 
-import ml.ino6962.postinfinityforreddit.Flair;
+import ml.docilealligator.infinityforreddit.Flair;
 
 public class FlairSelectedEvent {
     public long viewPostDetailFragmentId;

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/coordinator_layout_login_activity"
-    tools:application="ml.ino6962.postinfinityforreddit.activities.LoginActivity">
+    tools:application="ml.docilealligator.infinityforreddit.activities.LoginActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_login_activity"
@@ -39,7 +39,7 @@
             android:textSize="?attr/font_default"
             android:fontFamily="?attr/font_family" />
 
-        <ml.ino6962.postinfinityforreddit.customviews.LollipopBugFixedWebView
+        <ml.docilealligator.infinityforreddit.customviews.LollipopBugFixedWebView
             android:id="@+id/webview_login_activity"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

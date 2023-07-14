@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package ml.ino6962.postinfinityforreddit.videoautoplay.widget;
+package ml.docilealligator.infinityforreddit.videoautoplay.widget;
 
-import static ml.ino6962.postinfinityforreddit.videoautoplay.media.PlaybackInfo.SCRAP;
-import static ml.ino6962.postinfinityforreddit.videoautoplay.widget.Common.ORDER_COMPARATOR_INT;
+import static ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo.SCRAP;
+import static ml.docilealligator.infinityforreddit.videoautoplay.widget.Common.ORDER_COMPARATOR_INT;
 
 import android.annotation.SuppressLint;
 import android.util.SparseArray;
@@ -32,9 +32,9 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-import ml.ino6962.postinfinityforreddit.videoautoplay.ToroPlayer;
-import ml.ino6962.postinfinityforreddit.videoautoplay.ToroUtil;
-import ml.ino6962.postinfinityforreddit.videoautoplay.media.PlaybackInfo;
+import ml.docilealligator.infinityforreddit.videoautoplay.ToroPlayer;
+import ml.docilealligator.infinityforreddit.videoautoplay.ToroUtil;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
 
 /**
  * @author eneim (2018/04/24).

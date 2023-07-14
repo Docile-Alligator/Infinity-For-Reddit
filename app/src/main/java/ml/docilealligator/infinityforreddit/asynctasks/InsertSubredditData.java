@@ -1,11 +1,11 @@
-package ml.ino6962.postinfinityforreddit.asynctasks;
+package ml.docilealligator.infinityforreddit.asynctasks;
 
 import android.os.Handler;
 
 import java.util.concurrent.Executor;
 
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
-import ml.ino6962.postinfinityforreddit.subreddit.SubredditData;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 
 public class InsertSubredditData {
 

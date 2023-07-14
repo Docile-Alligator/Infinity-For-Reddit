@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ml.ino6962.postinfinityforreddit.customviews.CommentIndentationView
+    <ml.docilealligator.infinityforreddit.customviews.CommentIndentationView
         android:id="@+id/vertical_block_indentation_item_comment_fully_collapsed"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />

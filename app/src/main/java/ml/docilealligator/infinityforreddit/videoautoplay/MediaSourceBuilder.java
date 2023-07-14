@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ml.ino6962.postinfinityforreddit.videoautoplay;
+package ml.docilealligator.infinityforreddit.videoautoplay;
 
 import static android.text.TextUtils.isEmpty;
 import static com.google.android.exoplayer2.util.Util.inferContentType;

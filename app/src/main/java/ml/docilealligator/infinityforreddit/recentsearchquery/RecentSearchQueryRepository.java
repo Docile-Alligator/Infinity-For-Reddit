@@ -1,10 +1,10 @@
-package ml.ino6962.postinfinityforreddit.recentsearchquery;
+package ml.docilealligator.infinityforreddit.recentsearchquery;
 
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class RecentSearchQueryRepository {
     private LiveData<List<RecentSearchQuery>> mAllRecentSearchQueries;

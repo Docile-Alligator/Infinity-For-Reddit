@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.adapters;
+package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.Intent;
 import android.os.Handler;
@@ -23,13 +23,13 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
 import me.zhanghai.android.fastscroll.PopupTextProvider;
-import ml.ino6962.postinfinityforreddit.FavoriteThing;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
-import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
-import ml.ino6962.postinfinityforreddit.activities.ViewUserDetailActivity;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
-import ml.ino6962.postinfinityforreddit.subscribeduser.SubscribedUserData;
+import ml.docilealligator.infinityforreddit.FavoriteThing;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 

@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.customviews;
+package ml.docilealligator.infinityforreddit.customviews;
 
 import android.content.Context;
 import android.content.res.Configuration;

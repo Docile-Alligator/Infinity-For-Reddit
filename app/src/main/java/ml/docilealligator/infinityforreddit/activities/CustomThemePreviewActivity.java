@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.activities;
+package ml.docilealligator.infinityforreddit.activities;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
@@ -47,22 +47,22 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.ino6962.postinfinityforreddit.AppBarStateChangeListener;
-import ml.ino6962.postinfinityforreddit.CustomFontReceiver;
-import ml.ino6962.postinfinityforreddit.Infinity;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomTheme;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeSettingsItem;
-import ml.ino6962.postinfinityforreddit.customviews.ViewPagerBugFixed;
-import ml.ino6962.postinfinityforreddit.customviews.slidr.Slidr;
-import ml.ino6962.postinfinityforreddit.customviews.slidr.widget.SliderPanel;
-import ml.ino6962.postinfinityforreddit.font.ContentFontStyle;
-import ml.ino6962.postinfinityforreddit.font.FontStyle;
-import ml.ino6962.postinfinityforreddit.font.TitleFontStyle;
-import ml.ino6962.postinfinityforreddit.fragments.ThemePreviewCommentsFragment;
-import ml.ino6962.postinfinityforreddit.fragments.ThemePreviewPostsFragment;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
-import ml.ino6962.postinfinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
+import ml.docilealligator.infinityforreddit.CustomFontReceiver;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeSettingsItem;
+import ml.docilealligator.infinityforreddit.customviews.ViewPagerBugFixed;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
+import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
+import ml.docilealligator.infinityforreddit.font.ContentFontStyle;
+import ml.docilealligator.infinityforreddit.font.FontStyle;
+import ml.docilealligator.infinityforreddit.font.TitleFontStyle;
+import ml.docilealligator.infinityforreddit.fragments.ThemePreviewCommentsFragment;
+import ml.docilealligator.infinityforreddit.fragments.ThemePreviewPostsFragment;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class CustomThemePreviewActivity extends AppCompatActivity implements CustomFontReceiver {
 

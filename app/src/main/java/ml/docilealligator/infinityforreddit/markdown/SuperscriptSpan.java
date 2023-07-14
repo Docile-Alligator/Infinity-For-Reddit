@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.markdown;
+package ml.docilealligator.infinityforreddit.markdown;
 
 import android.text.TextPaint;
 import android.text.style.MetricAffectingSpan;

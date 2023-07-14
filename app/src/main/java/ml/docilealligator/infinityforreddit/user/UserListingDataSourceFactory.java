@@ -1,10 +1,10 @@
-package ml.ino6962.postinfinityforreddit.user;
+package ml.docilealligator.infinityforreddit.user;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
 
-import ml.ino6962.postinfinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.SortType;
 import retrofit2.Retrofit;
 
 public class UserListingDataSourceFactory extends DataSource.Factory {

@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.customviews.slidr;
+package ml.docilealligator.infinityforreddit.customviews.slidr;
 
 import android.animation.ArgbEvaluator;
 import android.app.Activity;
@@ -6,7 +6,7 @@ import android.os.Build;
 
 import androidx.annotation.ColorInt;
 
-import ml.ino6962.postinfinityforreddit.customviews.slidr.widget.SliderPanel;
+import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
 
 
 class ColorPanelSlideListener implements SliderPanel.OnPanelSlideListener {

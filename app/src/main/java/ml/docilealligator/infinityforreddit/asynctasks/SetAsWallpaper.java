@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.asynctasks;
+package ml.docilealligator.infinityforreddit.asynctasks;
 
 import android.app.WallpaperManager;
 import android.graphics.Bitmap;
@@ -12,7 +12,7 @@ import android.view.WindowManager;
 import java.io.IOException;
 import java.util.concurrent.Executor;
 
-import ml.ino6962.postinfinityforreddit.WallpaperSetter;
+import ml.docilealligator.infinityforreddit.WallpaperSetter;
 
 public class SetAsWallpaper {
 

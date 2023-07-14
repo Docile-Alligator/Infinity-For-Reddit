@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit;
+package ml.docilealligator.infinityforreddit;
 
 import android.content.SharedPreferences;
 
@@ -11,9 +11,9 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-import ml.ino6962.postinfinityforreddit.apis.RedgifsAPI;
-import ml.ino6962.postinfinityforreddit.utils.APIUtils;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.apis.RedgifsAPI;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
 import okhttp3.Response;

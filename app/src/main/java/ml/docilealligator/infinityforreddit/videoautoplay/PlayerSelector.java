@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package ml.ino6962.postinfinityforreddit.videoautoplay;
+package ml.docilealligator.infinityforreddit.videoautoplay;
 
 import static java.util.Collections.emptyList;
 import static java.util.Collections.singletonList;
-import static ml.ino6962.postinfinityforreddit.videoautoplay.ToroUtil.visibleAreaOffset;
-import static ml.ino6962.postinfinityforreddit.videoautoplay.annotations.Sorted.Order.ASCENDING;
+import static ml.docilealligator.infinityforreddit.videoautoplay.ToroUtil.visibleAreaOffset;
+import static ml.docilealligator.infinityforreddit.videoautoplay.annotations.Sorted.Order.ASCENDING;
 
 import androidx.annotation.NonNull;
 
@@ -30,8 +30,8 @@ import java.util.List;
 import java.util.NavigableMap;
 import java.util.TreeMap;
 
-import ml.ino6962.postinfinityforreddit.videoautoplay.annotations.Sorted;
-import ml.ino6962.postinfinityforreddit.videoautoplay.widget.Container;
+import ml.docilealligator.infinityforreddit.videoautoplay.annotations.Sorted;
+import ml.docilealligator.infinityforreddit.videoautoplay.widget.Container;
 
 /**
  * @author eneim | 6/2/17.

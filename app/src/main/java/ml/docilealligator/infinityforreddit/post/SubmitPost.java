@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.post;
+package ml.docilealligator.infinityforreddit.post;
 
 import android.graphics.Bitmap;
 import android.os.Handler;
@@ -16,11 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
-import ml.ino6962.postinfinityforreddit.Flair;
-import ml.ino6962.postinfinityforreddit.apis.RedditAPI;
-import ml.ino6962.postinfinityforreddit.utils.APIUtils;
-import ml.ino6962.postinfinityforreddit.utils.JSONUtils;
-import ml.ino6962.postinfinityforreddit.utils.UploadImageUtils;
+import ml.docilealligator.infinityforreddit.Flair;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
+import ml.docilealligator.infinityforreddit.utils.JSONUtils;
+import ml.docilealligator.infinityforreddit.utils.UploadImageUtils;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;

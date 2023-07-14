@@ -456,7 +456,7 @@ Toque para tentar novamente."</string>
     <string name="error_loading_multi_reddit_list">"Não foi possível sincronizar multireddits"</string>
     <string name="error_loading_subscriptions">"Não foi possível sincronizar as subscrições"</string>
     <string name="share_this_app">"Check out Infinity for Reddit, an awesome Reddit client!
-https://play.google.com/store/apps/details?id=ml.ino6962.postinfinityforreddit"</string>
+https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit"</string>
     <string name="error_getting_subreddit_name">"Erro ao obter o nome da comunidade"</string>
     <string name="share_post_link">"Partilhar Endereço da Publicação"</string>
     <string name="share_image_link">"Partilhar Endereço da Imagem"</string>

@@ -2,41 +2,41 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="mute_video"
         app:icon="@drawable/ic_mute_preferences_24dp"
         app:title="@string/settings_mute_video_title" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="mute_nsfw_video"
         app:icon="@drawable/ic_mute_preferences_24dp"
         app:title="@string/settings_mute_nsfw_video_title" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="true"
         app:key="automatically_try_redgifs"
         app:title="@string/settings_automatically_try_redgifs_title" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="video_player_ignore_nav_bar"
         app:title="@string/settings_video_player_ignore_nav_bar_title"
         app:summary="@string/settings_video_player_ignore_nav_bar_summary" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="video_player_automatic_landscape_orientation"
         app:title="@string/settings_video_player_automatic_landscape_orientation" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="true"
         app:key="loop_video"
         app:title="@string/settings_loop_video_title"
         app:summary="@string/settings_loop_video_summary" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
         app:defaultValue="100"
         android:entries="@array/default_playback_speed"
         app:entryValues="@array/default_playback_speed_values"
@@ -44,10 +44,10 @@
         app:title="@string/settings_default_playback_speed_title"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontPreferenceCategory
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceCategory
         app:title="@string/settings_video_autoplay_title" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
         app:defaultValue="0"
         android:entries="@array/settings_video_autoplay"
         app:entryValues="@array/settings_video_autoplay_values"
@@ -55,41 +55,41 @@
         app:title="@string/settings_video_autoplay_title"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="legacy_autoplay_video_controller_ui"
         app:title="@string/settings_legacy_autoplay_video_controller_ui_title"
         app:summary="@string/restart_app_see_changes" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="true"
         app:key="mute_autoplaying_videos"
         app:icon="@drawable/ic_mute_preferences_24dp"
         app:title="@string/settings_mute_autoplaying_videos_title" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="remember_muting_option_in_post_feed"
         app:title="@string/settings_remember_muting_option_in_post_feed" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="true"
         app:key="autoplay_nsfw_videos"
         app:title="@string/settings_autoplay_nsfw_videos_title" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="easier_to_watch_in_full_screen"
         app:title="@string/settings_easier_to_watch_in_full_screen_title" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSeekBarPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSeekBarPreference
         app:defaultValue="75"
         android:max="100"
         app:key="start_autoplay_visible_area_offset_portrait"
         app:title="@string/settings_start_autoplay_visible_area_offset_portrait_title"
         app:singleLineTitle="false" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSeekBarPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSeekBarPreference
         app:defaultValue="50"
         android:max="100"
         app:key="start_autoplay_visible_area_offset_landscape"

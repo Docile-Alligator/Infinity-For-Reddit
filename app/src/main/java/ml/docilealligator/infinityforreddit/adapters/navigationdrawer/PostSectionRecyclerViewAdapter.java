@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.adapters.navigationdrawer;
+package ml.docilealligator.infinityforreddit.adapters.navigationdrawer;
 
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
@@ -13,10 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class PostSectionRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package ml.ino6962.postinfinityforreddit.videoautoplay;
+package ml.docilealligator.infinityforreddit.videoautoplay;
 
-import static ml.ino6962.postinfinityforreddit.videoautoplay.ToroExo.with;
-import static ml.ino6962.postinfinityforreddit.videoautoplay.ToroUtil.checkNotNull;
-import static ml.ino6962.postinfinityforreddit.videoautoplay.media.PlaybackInfo.INDEX_UNSET;
-import static ml.ino6962.postinfinityforreddit.videoautoplay.media.PlaybackInfo.TIME_UNSET;
+import static ml.docilealligator.infinityforreddit.videoautoplay.ToroExo.with;
+import static ml.docilealligator.infinityforreddit.videoautoplay.ToroUtil.checkNotNull;
+import static ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo.INDEX_UNSET;
+import static ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo.TIME_UNSET;
 
 import android.net.Uri;
 
@@ -33,8 +33,8 @@ import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.ui.PlayerView;
 
-import ml.ino6962.postinfinityforreddit.videoautoplay.media.PlaybackInfo;
-import ml.ino6962.postinfinityforreddit.videoautoplay.media.VolumeInfo;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
 
 /**
  * [20180225]

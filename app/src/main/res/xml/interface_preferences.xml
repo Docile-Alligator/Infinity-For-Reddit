@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         app:title="@string/settings_font_title"
         app:icon="@drawable/ic_font_size_24dp"
-        app:fragment="ml.ino6962.postinfinityforreddit.settings.FontPreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.FontPreferenceFragment" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         app:key="immersive_interface_entry"
         app:title="@string/settings_immersive_interface_title"
-        app:fragment="ml.ino6962.postinfinityforreddit.settings.ImmersiveInterfacePreferenceFragment"
+        app:fragment="ml.docilealligator.infinityforreddit.settings.ImmersiveInterfacePreferenceFragment"
         app:isPreferenceVisible="false" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         app:title="@string/settings_navigation_drawer_title"
-        app:fragment="ml.ino6962.postinfinityforreddit.settings.NavigationDrawerPreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.NavigationDrawerPreferenceFragment" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         app:title="@string/settings_customize_tabs_in_main_page_title"
-        app:fragment="ml.ino6962.postinfinityforreddit.settings.CustomizeMainPageTabsFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.CustomizeMainPageTabsFragment" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         app:title="@string/settings_customize_bottom_app_bar_title"
-        app:fragment="ml.ino6962.postinfinityforreddit.settings.CustomizeBottomAppBarFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.CustomizeBottomAppBarFragment" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="hide_fab_in_post_feed"
         app:title="@string/settings_hide_fab_in_post_feed" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="bottom_app_bar"
         app:title="@string/settings_enable_bottom_app_bar_title" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="hide_subreddit_description"
         app:title="@string/settings_hide_subreddit_description_title" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="use_bottom_toolbar_in_media_viewer"
         app:title="@string/settings_use_bottom_toolbar_in_media_viewer_title" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
         app:defaultValue="0"
         app:entries="@array/settings_default_search_result_tab"
         app:entryValues="@array/settings_default_search_result_tab_values"
@@ -52,31 +52,31 @@
         app:title="@string/settings_default_search_result_tab"
         app:useSimpleSummaryProvider="true" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         app:title="@string/settings_time_format_title"
-        app:fragment="ml.ino6962.postinfinityforreddit.settings.TimeFormatPreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.TimeFormatPreferenceFragment" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         app:title="@string/settings_category_post_title"
-        app:fragment="ml.ino6962.postinfinityforreddit.settings.PostPreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.PostPreferenceFragment" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         app:title="@string/settings_post_details_title"
-        app:fragment="ml.ino6962.postinfinityforreddit.settings.PostDetailsPreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.PostDetailsPreferenceFragment" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         app:title="@string/settings_category_comment_title"
-        app:fragment="ml.ino6962.postinfinityforreddit.settings.CommentPreferenceFragment" />
+        app:fragment="ml.docilealligator.infinityforreddit.settings.CommentPreferenceFragment" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontPreferenceCategory
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceCategory
         app:title="@string/settings_category_post_and_comment_title" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="vote_buttons_on_the_right"
         app:title="@string/settings_vote_buttons_on_the_right_title" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="true"
         app:key="show_absolute_number_of_votes"
         app:title="@string/settings_show_absolute_number_of_votes_title" />

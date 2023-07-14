@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.multireddit;
+package ml.docilealligator.infinityforreddit.multireddit;
 
 import android.os.Handler;
 
@@ -8,10 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
-import ml.ino6962.postinfinityforreddit.apis.RedditAPI;
-import ml.ino6962.postinfinityforreddit.asynctasks.InsertMultireddit;
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
-import ml.ino6962.postinfinityforreddit.utils.APIUtils;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.asynctasks.InsertMultireddit;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

@@ -17,10 +17,10 @@ A Reddit client on Android written in Java. It does not have any ads and it feat
 
 Infinity for Reddit is available on Google Play and F-Droid
 
-  <a href="https://play.google.com/store/apps/details?id=ml.ino6962.postinfinityforreddit">
+  <a href="https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit">
       <img alt="Get it on Google Play" height="80" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
       </a>  
-      <a href="https://f-droid.org/packages/ml.ino6962.postinfinityforreddit/">
+      <a href="https://f-droid.org/packages/ml.docilealligator.infinityforreddit/">
           <img alt="Get it on F-Droid" height="80" src="https://f-droid.org/badge/get-it-on.png" />
   </a>
 
@@ -57,7 +57,7 @@ You can send me an email at docilealligator.app@gmail.com or message [u/Hostilen
 
 ## Donation
 <p>Infinity for Reddit+:</p>
-<a href="https://play.google.com/store/apps/details?id=ml.ino6962.postinfinityforreddit.plus">
+<a href="https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit.plus">
     <img alt="Get it on Google Play" height="80" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
 </a> 
 

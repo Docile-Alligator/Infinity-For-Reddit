@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package ml.ino6962.postinfinityforreddit.videoautoplay.widget;
+package ml.docilealligator.infinityforreddit.videoautoplay.widget;
 
 import static androidx.recyclerview.widget.RecyclerView.NO_POSITION;
 import static java.util.Collections.singletonList;
 
-import static ml.ino6962.postinfinityforreddit.videoautoplay.widget.Common.allowsToPlay;
-import static ml.ino6962.postinfinityforreddit.videoautoplay.widget.Common.findFirst;
+import static ml.docilealligator.infinityforreddit.videoautoplay.widget.Common.allowsToPlay;
+import static ml.docilealligator.infinityforreddit.videoautoplay.widget.Common.findFirst;
 
 import android.view.View;
 import android.view.View.OnLongClickListener;
@@ -34,10 +34,10 @@ import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import ml.ino6962.postinfinityforreddit.videoautoplay.PlayerSelector;
-import ml.ino6962.postinfinityforreddit.videoautoplay.ToroPlayer;
-import ml.ino6962.postinfinityforreddit.videoautoplay.ToroUtil;
-import ml.ino6962.postinfinityforreddit.videoautoplay.annotations.Beta;
+import ml.docilealligator.infinityforreddit.videoautoplay.PlayerSelector;
+import ml.docilealligator.infinityforreddit.videoautoplay.ToroPlayer;
+import ml.docilealligator.infinityforreddit.videoautoplay.ToroUtil;
+import ml.docilealligator.infinityforreddit.videoautoplay.annotations.Beta;
 
 /**
  * @author eneim (2018/08/17).

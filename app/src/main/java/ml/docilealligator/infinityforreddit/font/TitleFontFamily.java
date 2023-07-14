@@ -1,6 +1,6 @@
-package ml.ino6962.postinfinityforreddit.font;
+package ml.docilealligator.infinityforreddit.font;
 
-import ml.ino6962.postinfinityforreddit.R;
+import ml.docilealligator.infinityforreddit.R;
 
 public enum TitleFontFamily {
     Default(R.style.TitleFontFamily, "Default"),

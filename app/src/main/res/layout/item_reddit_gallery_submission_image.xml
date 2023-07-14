@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ml.ino6962.postinfinityforreddit.customviews.AspectRatioGifImageView
+    <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
         android:id="@+id/aspect_ratio_gif_image_view_item_reddit_gallery_submission_image"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.comment;
+package ml.docilealligator.infinityforreddit.comment;
 
 import android.os.AsyncTask;
 
@@ -14,12 +14,12 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import ml.ino6962.postinfinityforreddit.NetworkState;
-import ml.ino6962.postinfinityforreddit.SortType;
-import ml.ino6962.postinfinityforreddit.apis.RedditAPI;
-import ml.ino6962.postinfinityforreddit.post.PostPagingSource;
-import ml.ino6962.postinfinityforreddit.utils.APIUtils;
-import ml.ino6962.postinfinityforreddit.utils.JSONUtils;
+import ml.docilealligator.infinityforreddit.NetworkState;
+import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.post.PostPagingSource;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
+import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

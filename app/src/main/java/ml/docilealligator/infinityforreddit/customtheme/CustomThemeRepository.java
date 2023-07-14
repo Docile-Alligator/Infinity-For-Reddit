@@ -1,10 +1,10 @@
-package ml.ino6962.postinfinityforreddit.customtheme;
+package ml.docilealligator.infinityforreddit.customtheme;
 
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class CustomThemeRepository {
     private LiveData<List<CustomTheme>> mAllCustomThemes;

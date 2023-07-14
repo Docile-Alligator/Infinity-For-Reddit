@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.markdown;
+package ml.docilealligator.infinityforreddit.markdown;
 
 import android.text.Layout;
 import android.text.Spannable;
@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 
-import ml.ino6962.postinfinityforreddit.customviews.SpoilerOnClickTextView;
+import ml.docilealligator.infinityforreddit.customviews.SpoilerOnClickTextView;
 
 public class SpoilerSpan extends ClickableSpan {
     final int textColor;

@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.settings;
+package ml.docilealligator.infinityforreddit.settings;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,13 +13,13 @@ import org.greenrobot.eventbus.EventBus;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.ino6962.postinfinityforreddit.Infinity;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
-import ml.ino6962.postinfinityforreddit.events.ChangePostFeedMaxResolutionEvent;
-import ml.ino6962.postinfinityforreddit.events.ChangeSavePostFeedScrolledPositionEvent;
-import ml.ino6962.postinfinityforreddit.events.RecreateActivityEvent;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
+import ml.docilealligator.infinityforreddit.events.ChangePostFeedMaxResolutionEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeSavePostFeedScrolledPositionEvent;
+import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class MiscellaneousPreferenceFragment extends CustomFontPreferenceFragmentCompat {
 

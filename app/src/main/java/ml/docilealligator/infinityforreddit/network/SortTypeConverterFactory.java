@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.network;
+package ml.docilealligator.infinityforreddit.network;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -6,7 +6,7 @@ import androidx.annotation.Nullable;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
-import ml.ino6962.postinfinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.SortType;
 import retrofit2.Converter;
 import retrofit2.Retrofit;
 

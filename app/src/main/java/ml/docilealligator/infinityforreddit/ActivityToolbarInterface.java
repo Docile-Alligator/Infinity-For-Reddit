@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit;
+package ml.docilealligator.infinityforreddit;
 
 public interface ActivityToolbarInterface {
     void onLongPress();

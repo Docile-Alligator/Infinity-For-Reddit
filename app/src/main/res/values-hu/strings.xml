@@ -454,7 +454,7 @@
     <string name="error_loading_multi_reddit_list">"Nem lehet szinkronizálni a multiredditeket"</string>
     <string name="error_loading_subscriptions">"Nem lehet szinkronizálni a feliratkozásokat"</string>
     <string name="share_this_app">"Nézz rá az Infinityre, ami egy remek Reddit kliens!
-https://play.google.com/store/apps/details?id=ml.ino6962.postinfinityforreddit"</string>
+https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit"</string>
     <string name="error_getting_subreddit_name">"Hiba subreddit nevének megszerzésekor"</string>
     <string name="share_post_link">"Poszt link megosztása"</string>
     <string name="share_image_link">"Kép link megosztása"</string>

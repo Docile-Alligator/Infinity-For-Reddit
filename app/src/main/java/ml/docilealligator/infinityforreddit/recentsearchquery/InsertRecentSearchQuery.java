@@ -1,10 +1,10 @@
-package ml.ino6962.postinfinityforreddit.recentsearchquery;
+package ml.docilealligator.infinityforreddit.recentsearchquery;
 
 import android.os.AsyncTask;
 
 import java.util.List;
 
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class InsertRecentSearchQuery {
     public interface InsertRecentSearchQueryListener {

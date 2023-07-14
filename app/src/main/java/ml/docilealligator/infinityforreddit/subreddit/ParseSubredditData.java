@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.subreddit;
+package ml.docilealligator.infinityforreddit.subreddit;
 
 import android.os.AsyncTask;
 
@@ -10,8 +10,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import ml.ino6962.postinfinityforreddit.utils.JSONUtils;
-import ml.ino6962.postinfinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.utils.JSONUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class ParseSubredditData {
     public static void parseSubredditData(String response, ParseSubredditDataListener parseSubredditDataListener) {

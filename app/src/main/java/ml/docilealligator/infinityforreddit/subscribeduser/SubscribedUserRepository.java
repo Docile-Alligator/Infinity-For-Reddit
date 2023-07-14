@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.subscribeduser;
+package ml.docilealligator.infinityforreddit.subscribeduser;
 
 import android.os.AsyncTask;
 
@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class SubscribedUserRepository {
     private SubscribedUserDao mSubscribedUserDao;

@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.fragments;
+package ml.docilealligator.infinityforreddit.fragments;
 
 import android.Manifest;
 import android.content.Context;
@@ -46,15 +46,15 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.ino6962.postinfinityforreddit.Infinity;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.activities.ViewRedditGalleryActivity;
-import ml.ino6962.postinfinityforreddit.bottomsheetfragments.PlaybackSpeedBottomSheetFragment;
-import ml.ino6962.postinfinityforreddit.post.Post;
-import ml.ino6962.postinfinityforreddit.services.DownloadMediaService;
-import ml.ino6962.postinfinityforreddit.utils.APIUtils;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
-import ml.ino6962.postinfinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.ViewRedditGalleryActivity;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.PlaybackSpeedBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.post.Post;
+import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class ViewRedditGalleryVideoFragment extends Fragment {
 

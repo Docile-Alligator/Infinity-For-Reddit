@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.fragments;
+package ml.docilealligator.infinityforreddit.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,12 +11,12 @@ import androidx.fragment.app.Fragment;
 
 import javax.inject.Inject;
 
-import ml.ino6962.postinfinityforreddit.Infinity;
-import ml.ino6962.postinfinityforreddit.LoadingMorePostsStatus;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.activities.ViewPostDetailActivity;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
-import ml.ino6962.postinfinityforreddit.databinding.FragmentMorePostsInfoBinding;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.LoadingMorePostsStatus;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.databinding.FragmentMorePostsInfoBinding;
 
 public class MorePostsInfoFragment extends Fragment {
 

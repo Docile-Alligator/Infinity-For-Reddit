@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ml.ino6962.postinfinityforreddit.videoautoplay.media;
+package ml.docilealligator.infinityforreddit.videoautoplay.media;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;

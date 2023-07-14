@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.activities;
+package ml.docilealligator.infinityforreddit.activities;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import ml.ino6962.postinfinityforreddit.R;
+import ml.docilealligator.infinityforreddit.R;
 
 public class ShareDataResolverActivity extends AppCompatActivity {
 

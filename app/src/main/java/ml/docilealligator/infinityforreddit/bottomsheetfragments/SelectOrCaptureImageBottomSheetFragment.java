@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.bottomsheetfragments;
+package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,10 +9,10 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.activities.PostGalleryActivity;
-import ml.ino6962.postinfinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
-import ml.ino6962.postinfinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.PostGalleryActivity;
+import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class SelectOrCaptureImageBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 

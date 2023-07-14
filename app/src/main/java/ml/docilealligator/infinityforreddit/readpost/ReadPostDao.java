@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.readpost;
+package ml.docilealligator.infinityforreddit.readpost;
 
 import androidx.room.Dao;
 import androidx.room.Insert;

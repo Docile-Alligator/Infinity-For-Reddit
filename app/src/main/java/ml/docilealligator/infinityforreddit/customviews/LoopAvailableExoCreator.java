@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.customviews;
+package ml.docilealligator.infinityforreddit.customviews;
 
 import android.content.SharedPreferences;
 
@@ -7,10 +7,10 @@ import androidx.annotation.NonNull;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.Player;
 
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
-import ml.ino6962.postinfinityforreddit.videoautoplay.Config;
-import ml.ino6962.postinfinityforreddit.videoautoplay.DefaultExoCreator;
-import ml.ino6962.postinfinityforreddit.videoautoplay.ToroExo;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.videoautoplay.Config;
+import ml.docilealligator.infinityforreddit.videoautoplay.DefaultExoCreator;
+import ml.docilealligator.infinityforreddit.videoautoplay.ToroExo;
 
 public class LoopAvailableExoCreator extends DefaultExoCreator {
     private final SharedPreferences sharedPreferences;

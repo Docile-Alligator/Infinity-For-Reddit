@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.message;
+package ml.docilealligator.infinityforreddit.message;
 
 import android.os.AsyncTask;
 
@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Locale;
 
-import ml.ino6962.postinfinityforreddit.utils.JSONUtils;
-import ml.ino6962.postinfinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.utils.JSONUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class ParseMessage {
     public static void parseMessage(String response, Locale locale, int messageType,

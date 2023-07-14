@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.events;
+package ml.docilealligator.infinityforreddit.events;
 
 public class ChangePostLayoutEvent {
     public int postLayout;

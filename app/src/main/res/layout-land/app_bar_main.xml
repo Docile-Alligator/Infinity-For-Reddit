@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/coordinator_layout_main_activity"
-    tools:application="ml.ino6962.postinfinityforreddit.activities.MainActivity">
+    tools:application="ml.docilealligator.infinityforreddit.activities.MainActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appbar_layout_main_activity"

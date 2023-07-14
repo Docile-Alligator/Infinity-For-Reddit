@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.adapters;
+package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -39,18 +39,18 @@ import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.movement.MovementMethodPlugin;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.activities.LinkResolverActivity;
-import ml.ino6962.postinfinityforreddit.activities.ViewPrivateMessagesActivity;
-import ml.ino6962.postinfinityforreddit.activities.ViewUserDetailActivity;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
-import ml.ino6962.postinfinityforreddit.markdown.RedditHeadingPlugin;
-import ml.ino6962.postinfinityforreddit.markdown.SpoilerAwareMovementMethod;
-import ml.ino6962.postinfinityforreddit.markdown.SpoilerParserPlugin;
-import ml.ino6962.postinfinityforreddit.markdown.SuperscriptPlugin;
-import ml.ino6962.postinfinityforreddit.message.Message;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
-import ml.ino6962.postinfinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewPrivateMessagesActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SpoilerAwareMovementMethod;
+import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SuperscriptPlugin;
+import ml.docilealligator.infinityforreddit.message.Message;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class PrivateMessagesDetailRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_MESSAGE_SENT = 0;

@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.fragments;
+package ml.docilealligator.infinityforreddit.fragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -14,9 +14,9 @@ import androidx.fragment.app.Fragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.ino6962.postinfinityforreddit.activities.CustomThemePreviewActivity;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomTheme;
-import ml.ino6962.postinfinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.CustomThemePreviewActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
+import ml.docilealligator.infinityforreddit.R;
 
 /**
  * A simple {@link Fragment} subclass.

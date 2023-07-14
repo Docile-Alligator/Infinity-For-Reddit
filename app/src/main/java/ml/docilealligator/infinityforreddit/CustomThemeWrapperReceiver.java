@@ -1,6 +1,6 @@
-package ml.ino6962.postinfinityforreddit;
+package ml.docilealligator.infinityforreddit;
 
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 
 public interface CustomThemeWrapperReceiver {
     void setCustomThemeWrapper(CustomThemeWrapper customThemeWrapper);

@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.fragments;
+package ml.docilealligator.infinityforreddit.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -30,21 +30,21 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
-import ml.ino6962.postinfinityforreddit.FragmentCommunicator;
-import ml.ino6962.postinfinityforreddit.Infinity;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
-import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
-import ml.ino6962.postinfinityforreddit.activities.MultiredditSelectionActivity;
-import ml.ino6962.postinfinityforreddit.activities.SubscribedThingListingActivity;
-import ml.ino6962.postinfinityforreddit.activities.ViewMultiRedditDetailActivity;
-import ml.ino6962.postinfinityforreddit.adapters.MultiRedditListingRecyclerViewAdapter;
-import ml.ino6962.postinfinityforreddit.bottomsheetfragments.MultiRedditOptionsBottomSheetFragment;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
-import ml.ino6962.postinfinityforreddit.customviews.LinearLayoutManagerBugFixed;
-import ml.ino6962.postinfinityforreddit.multireddit.MultiReddit;
-import ml.ino6962.postinfinityforreddit.multireddit.MultiRedditViewModel;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.FragmentCommunicator;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.activities.MultiredditSelectionActivity;
+import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewMultiRedditDetailActivity;
+import ml.docilealligator.infinityforreddit.adapters.MultiRedditListingRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.MultiRedditOptionsBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
+import ml.docilealligator.infinityforreddit.multireddit.MultiRedditViewModel;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
 public class MultiRedditListingFragment extends Fragment implements FragmentCommunicator {

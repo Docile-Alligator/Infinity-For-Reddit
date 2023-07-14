@@ -1,6 +1,6 @@
-package ml.ino6962.postinfinityforreddit.font;
+package ml.docilealligator.infinityforreddit.font;
 
-import ml.ino6962.postinfinityforreddit.R;
+import ml.docilealligator.infinityforreddit.R;
 
 public enum TitleFontStyle {
     XSmall(R.style.TitleFontStyle_XSmall, "XSmall"),

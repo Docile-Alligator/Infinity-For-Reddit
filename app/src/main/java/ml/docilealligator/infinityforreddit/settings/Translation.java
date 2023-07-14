@@ -1,8 +1,8 @@
-package ml.ino6962.postinfinityforreddit.settings;
+package ml.docilealligator.infinityforreddit.settings;
 
 import java.util.ArrayList;
 
-import ml.ino6962.postinfinityforreddit.R;
+import ml.docilealligator.infinityforreddit.R;
 
 public class Translation {
     public String language;

@@ -1,7 +1,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:application="ml.ino6962.postinfinityforreddit.activities.EditProfileActivity">
+    tools:application="ml.docilealligator.infinityforreddit.activities.EditProfileActivity">
     <item
         android:id="@+id/action_save_edit_profile_activity"
         android:orderInCategory="1"

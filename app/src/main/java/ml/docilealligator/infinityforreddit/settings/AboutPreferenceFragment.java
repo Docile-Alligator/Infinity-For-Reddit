@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.settings;
+package ml.docilealligator.infinityforreddit.settings;
 
 
 import android.content.ActivityNotFoundException;
@@ -10,11 +10,11 @@ import android.widget.Toast;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
-import ml.ino6962.postinfinityforreddit.BuildConfig;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.activities.LinkResolverActivity;
-import ml.ino6962.postinfinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.BuildConfig;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 /**
  * A simple {@link PreferenceFragmentCompat} subclass.
@@ -45,12 +45,12 @@ public class AboutPreferenceFragment extends CustomFontPreferenceFragmentCompat 
         if (ratePreference != null) {
             ratePreference.setOnPreferenceClickListener(preference -> {
                 Intent playStoreIntent = new Intent(Intent.ACTION_VIEW);
-                playStoreIntent.setData(Uri.parse("market://details?id=ml.ino6962.postinfinityforreddit"));
+                playStoreIntent.setData(Uri.parse("market://details?id=ml.docilealligator.infinityforreddit"));
                 if (playStoreIntent.resolveActivity(activity.getPackageManager()) != null) {
                     activity.startActivity(playStoreIntent);
                 } else {
                     Intent intent = new Intent(activity, LinkResolverActivity.class);
-                    intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=ml.ino6962.postinfinityforreddit"));
+                    intent.setData(Uri.parse("https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit"));
                     activity.startActivity(intent);
                 }
                 return true;

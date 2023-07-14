@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.bottomsheetfragments;
+package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 
 import android.content.Context;
@@ -24,16 +24,16 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.ino6962.postinfinityforreddit.FetchFlairs;
-import ml.ino6962.postinfinityforreddit.Flair;
-import ml.ino6962.postinfinityforreddit.Infinity;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
-import ml.ino6962.postinfinityforreddit.adapters.FlairBottomSheetRecyclerViewAdapter;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
-import ml.ino6962.postinfinityforreddit.customviews.LandscapeExpandedBottomSheetDialogFragment;
-import ml.ino6962.postinfinityforreddit.events.FlairSelectedEvent;
-import ml.ino6962.postinfinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.FetchFlairs;
+import ml.docilealligator.infinityforreddit.Flair;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.adapters.FlairBottomSheetRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.events.FlairSelectedEvent;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 

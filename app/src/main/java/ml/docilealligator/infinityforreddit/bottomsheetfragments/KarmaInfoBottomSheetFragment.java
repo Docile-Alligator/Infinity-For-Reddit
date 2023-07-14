@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.bottomsheetfragments;
+package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,7 +8,7 @@ import android.widget.TextView;
 
 import com.deishelon.roundedbottomsheet.RoundedBottomSheetDialogFragment;
 
-import ml.ino6962.postinfinityforreddit.R;
+import ml.docilealligator.infinityforreddit.R;
 
 public class KarmaInfoBottomSheetFragment extends RoundedBottomSheetDialogFragment {
     public static final String EXTRA_POST_KARMA = "EPK";

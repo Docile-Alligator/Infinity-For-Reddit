@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.activities;
+package ml.docilealligator.infinityforreddit.activities;
 
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -32,18 +32,18 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.ino6962.postinfinityforreddit.ActivityToolbarInterface;
-import ml.ino6962.postinfinityforreddit.Infinity;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
-import ml.ino6962.postinfinityforreddit.customviews.slidr.Slidr;
-import ml.ino6962.postinfinityforreddit.events.ChangeNSFWEvent;
-import ml.ino6962.postinfinityforreddit.events.SwitchAccountEvent;
-import ml.ino6962.postinfinityforreddit.fragments.CommentsListingFragment;
-import ml.ino6962.postinfinityforreddit.fragments.HistoryPostFragment;
-import ml.ino6962.postinfinityforreddit.fragments.PostFragment;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
+import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
+import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.fragments.CommentsListingFragment;
+import ml.docilealligator.infinityforreddit.fragments.HistoryPostFragment;
+import ml.docilealligator.infinityforreddit.fragments.PostFragment;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class HistoryActivity extends BaseActivity implements ActivityToolbarInterface,
         PostLayoutBottomSheetFragment.PostLayoutSelectionCallback {

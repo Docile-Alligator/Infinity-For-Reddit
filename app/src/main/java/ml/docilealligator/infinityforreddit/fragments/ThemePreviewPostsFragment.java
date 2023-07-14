@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.fragments;
+package ml.docilealligator.infinityforreddit.fragments;
 
 import android.content.Context;
 import android.content.res.ColorStateList;
@@ -24,10 +24,10 @@ import com.libRG.CustomTextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.activities.CustomThemePreviewActivity;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomTheme;
-import ml.ino6962.postinfinityforreddit.customviews.AspectRatioGifImageView;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.CustomThemePreviewActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
+import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
 
 /**
  * A simple {@link Fragment} subclass.

@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.message;
+package ml.docilealligator.infinityforreddit.message;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;

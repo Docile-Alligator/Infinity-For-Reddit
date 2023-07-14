@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.post;
+package ml.docilealligator.infinityforreddit.post;
 
 import android.content.SharedPreferences;
 
@@ -16,8 +16,8 @@ import androidx.paging.PagingLiveData;
 
 import java.util.concurrent.Executor;
 
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
-import ml.ino6962.postinfinityforreddit.postfilter.PostFilter;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 import retrofit2.Retrofit;
 
 public class HistoryPostViewModel extends ViewModel {

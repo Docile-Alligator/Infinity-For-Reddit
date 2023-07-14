@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit;
+package ml.docilealligator.infinityforreddit;
 
 import android.app.Application;
 import android.content.Context;
@@ -20,14 +20,14 @@ import javax.inject.Singleton;
 import dagger.Binds;
 import dagger.Module;
 import dagger.Provides;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
-import ml.ino6962.postinfinityforreddit.customviews.LoopAvailableExoCreator;
-import ml.ino6962.postinfinityforreddit.utils.CustomThemeSharedPreferencesUtils;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
-import ml.ino6962.postinfinityforreddit.videoautoplay.Config;
-import ml.ino6962.postinfinityforreddit.videoautoplay.ExoCreator;
-import ml.ino6962.postinfinityforreddit.videoautoplay.MediaSourceBuilder;
-import ml.ino6962.postinfinityforreddit.videoautoplay.ToroExo;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.LoopAvailableExoCreator;
+import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.videoautoplay.Config;
+import ml.docilealligator.infinityforreddit.videoautoplay.ExoCreator;
+import ml.docilealligator.infinityforreddit.videoautoplay.MediaSourceBuilder;
+import ml.docilealligator.infinityforreddit.videoautoplay.ToroExo;
 
 @Module
 abstract class AppModule {

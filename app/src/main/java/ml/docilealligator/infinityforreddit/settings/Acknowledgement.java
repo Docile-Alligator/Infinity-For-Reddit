@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.settings;
+package ml.docilealligator.infinityforreddit.settings;
 
 import android.net.Uri;
 

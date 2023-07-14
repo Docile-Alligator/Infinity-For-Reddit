@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ml.ino6962.postinfinityforreddit.videoautoplay;
+package ml.docilealligator.infinityforreddit.videoautoplay;
 
 import android.view.View;
 
@@ -25,9 +25,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import ml.ino6962.postinfinityforreddit.videoautoplay.media.PlaybackInfo;
-import ml.ino6962.postinfinityforreddit.videoautoplay.media.VolumeInfo;
-import ml.ino6962.postinfinityforreddit.videoautoplay.widget.Container;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
+import ml.docilealligator.infinityforreddit.videoautoplay.widget.Container;
 
 /**
  * Definition of a Player used in Toro. Besides common playback command ({@link #play()}, {@link

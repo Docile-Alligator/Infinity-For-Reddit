@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit;
+package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
 import android.text.Html;
@@ -11,9 +11,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import ml.ino6962.postinfinityforreddit.apis.RedditAPI;
-import ml.ino6962.postinfinityforreddit.utils.APIUtils;
-import ml.ino6962.postinfinityforreddit.utils.JSONUtils;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
+import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

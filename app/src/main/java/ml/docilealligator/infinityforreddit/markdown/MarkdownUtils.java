@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.markdown;
+package ml.docilealligator.infinityforreddit.markdown;
 
 import android.content.Context;
 import android.text.util.Linkify;
@@ -20,8 +20,8 @@ import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.recycler.table.TableEntry;
 import io.noties.markwon.recycler.table.TableEntryPlugin;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.customviews.CustomMarkwonAdapter;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.customviews.CustomMarkwonAdapter;
 
 public class MarkdownUtils {
     /**

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package ml.ino6962.postinfinityforreddit.videoautoplay;
+package ml.docilealligator.infinityforreddit.videoautoplay;
 
-import static ml.ino6962.postinfinityforreddit.videoautoplay.ToroExo.with;
-import static ml.ino6962.postinfinityforreddit.videoautoplay.ToroUtil.checkNotNull;
+import static ml.docilealligator.infinityforreddit.videoautoplay.ToroExo.with;
+import static ml.docilealligator.infinityforreddit.videoautoplay.ToroUtil.checkNotNull;
 
 import android.net.Uri;
 
@@ -27,11 +27,11 @@ import androidx.annotation.Nullable;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ui.PlayerView;
 
-import ml.ino6962.postinfinityforreddit.videoautoplay.annotations.RemoveIn;
-import ml.ino6962.postinfinityforreddit.videoautoplay.helper.ToroPlayerHelper;
-import ml.ino6962.postinfinityforreddit.videoautoplay.media.PlaybackInfo;
-import ml.ino6962.postinfinityforreddit.videoautoplay.media.VolumeInfo;
-import ml.ino6962.postinfinityforreddit.videoautoplay.widget.Container;
+import ml.docilealligator.infinityforreddit.videoautoplay.annotations.RemoveIn;
+import ml.docilealligator.infinityforreddit.videoautoplay.helper.ToroPlayerHelper;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
+import ml.docilealligator.infinityforreddit.videoautoplay.widget.Container;
 
 /**
  * An implementation of {@link ToroPlayerHelper} where the actual Player is an {@link ExoPlayer}

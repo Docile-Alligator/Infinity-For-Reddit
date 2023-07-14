@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.fragments;
+package ml.docilealligator.infinityforreddit.fragments;
 
 
 import android.content.Context;
@@ -30,18 +30,18 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.zhanghai.android.fastscroll.FastScrollerBuilder;
-import ml.ino6962.postinfinityforreddit.FragmentCommunicator;
-import ml.ino6962.postinfinityforreddit.Infinity;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
-import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
-import ml.ino6962.postinfinityforreddit.activities.SubredditSelectionActivity;
-import ml.ino6962.postinfinityforreddit.activities.SubscribedThingListingActivity;
-import ml.ino6962.postinfinityforreddit.adapters.SubscribedSubredditsRecyclerViewAdapter;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
-import ml.ino6962.postinfinityforreddit.customviews.LinearLayoutManagerBugFixed;
-import ml.ino6962.postinfinityforreddit.subscribedsubreddit.SubscribedSubredditViewModel;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.FragmentCommunicator;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.activities.SubredditSelectionActivity;
+import ml.docilealligator.infinityforreddit.activities.SubscribedThingListingActivity;
+import ml.docilealligator.infinityforreddit.adapters.SubscribedSubredditsRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditViewModel;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
 

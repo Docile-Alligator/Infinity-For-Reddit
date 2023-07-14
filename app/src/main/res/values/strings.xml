@@ -701,7 +701,7 @@
     <string name="error_loading_multi_reddit_list">Cannot sync multireddits</string>
     <string name="error_loading_subscriptions">Cannot sync subscriptions</string>
 
-    <string name="share_this_app">Check out Infinity for Reddit, an awesome Reddit client!\nhttps://play.google.com/store/apps/details?id=ml.ino6962.postinfinityforreddit</string>
+    <string name="share_this_app">Check out Infinity for Reddit, an awesome Reddit client!\nhttps://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit</string>
 
     <string name="error_getting_subreddit_name">Error getting subreddit name</string>
 

@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.settings;
+package ml.docilealligator.infinityforreddit.settings;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
@@ -27,18 +27,18 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.ino6962.postinfinityforreddit.Infinity;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
-import ml.ino6962.postinfinityforreddit.activities.CustomThemeListingActivity;
-import ml.ino6962.postinfinityforreddit.activities.CustomizeThemeActivity;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeViewModel;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
-import ml.ino6962.postinfinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
-import ml.ino6962.postinfinityforreddit.events.RecreateActivityEvent;
-import ml.ino6962.postinfinityforreddit.utils.CustomThemeSharedPreferencesUtils;
-import ml.ino6962.postinfinityforreddit.utils.MaterialYouUtils;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.activities.CustomThemeListingActivity;
+import ml.docilealligator.infinityforreddit.activities.CustomizeThemeActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeViewModel;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
+import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
+import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.MaterialYouUtils;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 /**
  * A simple {@link Fragment} subclass.

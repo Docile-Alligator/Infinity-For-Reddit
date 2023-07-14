@@ -458,7 +458,7 @@ Nhấn để thử lại."</string>
     <string name="error_loading_multi_reddit_list">"Không thể đồng bộ các multireddit"</string>
     <string name="error_loading_subscriptions">"Không thể đồng bộ mục đăng ký"</string>
     <string name="share_this_app">"Hãy thử Infinity cho Reddit, một ứng dụng tuyệt vời cho Reddit!
-https://play.google.com/store/apps/details?id=ml.ino6962.postinfinityforreddit"</string>
+https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit"</string>
     <string name="error_getting_subreddit_name">"Lỗi khi lấy tên subreddit"</string>
     <string name="share_post_link">"Chia sẻ liên kết bài đăng"</string>
     <string name="share_image_link">"Chia sẻ liên kết hình ảnh"</string>

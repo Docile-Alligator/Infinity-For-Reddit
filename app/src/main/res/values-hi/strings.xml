@@ -498,7 +498,7 @@ Behavior -->
     <string name="error_loading_multi_reddit_list">"मल्टीरैडिट्स सिंक नहीं कर सकता "</string>
     <string name="error_loading_subscriptions">"सब्सक्रिप्शन सिंक नहीं कर सकता "</string>
     <string name="share_this_app">"इनफिनिटी फॉर रैडिट का प्रयोग करके देखिए, एक लाजवाब रैडिट एप्लीकेशन!
-https://play.google.com/store/apps/details?id=ml.ino6962.postinfinityforreddit"</string>
+https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit"</string>
     <string name="error_getting_subreddit_name">"सबरैडिट का नाम प्राप्त करने  में त्रुटि "</string>
     <string name="share_post_link">"पोस्ट का लिंक साझा करें "</string>
     <string name="share_image_link">"चित्र का लिंक साझा करें "</string>

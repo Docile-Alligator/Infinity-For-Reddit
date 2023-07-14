@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.adapters;
+package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -23,16 +23,16 @@ import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.Rule;
-import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
-import ml.ino6962.postinfinityforreddit.activities.LinkResolverActivity;
-import ml.ino6962.postinfinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
-import ml.ino6962.postinfinityforreddit.customviews.SwipeLockInterface;
-import ml.ino6962.postinfinityforreddit.customviews.SwipeLockLinearLayoutManager;
-import ml.ino6962.postinfinityforreddit.customviews.slidr.widget.SliderPanel;
-import ml.ino6962.postinfinityforreddit.markdown.MarkdownUtils;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.Rule;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
+import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
+import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
+import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 
 public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecyclerViewAdapter.RuleViewHolder> {
     private BaseActivity activity;

@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.post;
+package ml.docilealligator.infinityforreddit.post;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -7,7 +7,7 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-import ml.ino6962.postinfinityforreddit.utils.APIUtils;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 
 /**
  * Created by alex on 3/1/18.

@@ -152,7 +152,7 @@
         app:flChildSpacingForLastRow="align"
         app:flRowSpacing="8dp">
 
-        <ml.ino6962.postinfinityforreddit.customviews.AspectRatioGifImageView
+        <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
             android:id="@+id/icon_gif_image_view_item_post_card_2_text"
             android:layout_width="24dp"
             android:layout_height="24dp" />

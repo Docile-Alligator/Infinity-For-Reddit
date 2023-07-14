@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.settings;
+package ml.docilealligator.infinityforreddit.settings;
 
 import android.os.Bundle;
 
@@ -7,14 +7,14 @@ import androidx.preference.SwitchPreference;
 
 import org.greenrobot.eventbus.EventBus;
 
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
-import ml.ino6962.postinfinityforreddit.events.ChangeDisableSwipingBetweenTabsEvent;
-import ml.ino6962.postinfinityforreddit.events.ChangeEnableSwipeActionSwitchEvent;
-import ml.ino6962.postinfinityforreddit.events.ChangeSwipeActionEvent;
-import ml.ino6962.postinfinityforreddit.events.ChangeSwipeActionThresholdEvent;
-import ml.ino6962.postinfinityforreddit.events.ChangeVibrateWhenActionTriggeredEvent;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
+import ml.docilealligator.infinityforreddit.events.ChangeDisableSwipingBetweenTabsEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeEnableSwipeActionSwitchEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeSwipeActionEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeSwipeActionThresholdEvent;
+import ml.docilealligator.infinityforreddit.events.ChangeVibrateWhenActionTriggeredEvent;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class SwipeActionPreferenceFragment extends CustomFontPreferenceFragmentCompat {
 

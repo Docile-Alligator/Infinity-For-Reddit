@@ -39,7 +39,7 @@
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.MovableFloatingActionButton
+    <ml.docilealligator.infinityforreddit.customviews.MovableFloatingActionButton
         android:id="@+id/fab_view_post_detail_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

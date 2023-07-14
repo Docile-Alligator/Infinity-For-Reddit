@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.utils;
+package ml.docilealligator.infinityforreddit.utils;
 
 import android.app.Activity;
 import android.content.ContentResolver;
@@ -54,9 +54,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.noties.markwon.core.spans.CustomTypefaceSpan;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.SortType;
-import ml.ino6962.postinfinityforreddit.UploadedImage;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.UploadedImage;
 import retrofit2.Retrofit;
 
 public final class Utils {

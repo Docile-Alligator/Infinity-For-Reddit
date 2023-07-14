@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.activities;
+package ml.docilealligator.infinityforreddit.activities;
 
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -27,24 +27,24 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.ino6962.postinfinityforreddit.ActivityToolbarInterface;
-import ml.ino6962.postinfinityforreddit.Infinity;
-import ml.ino6962.postinfinityforreddit.MarkPostAsReadInterface;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
-import ml.ino6962.postinfinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
-import ml.ino6962.postinfinityforreddit.customviews.slidr.Slidr;
-import ml.ino6962.postinfinityforreddit.databinding.ActivityAccountSavedThingBinding;
-import ml.ino6962.postinfinityforreddit.events.ChangeNSFWEvent;
-import ml.ino6962.postinfinityforreddit.events.SwitchAccountEvent;
-import ml.ino6962.postinfinityforreddit.fragments.CommentsListingFragment;
-import ml.ino6962.postinfinityforreddit.fragments.PostFragment;
-import ml.ino6962.postinfinityforreddit.post.Post;
-import ml.ino6962.postinfinityforreddit.post.PostPagingSource;
-import ml.ino6962.postinfinityforreddit.readpost.InsertReadPost;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
-import ml.ino6962.postinfinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
+import ml.docilealligator.infinityforreddit.databinding.ActivityAccountSavedThingBinding;
+import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
+import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.fragments.CommentsListingFragment;
+import ml.docilealligator.infinityforreddit.fragments.PostFragment;
+import ml.docilealligator.infinityforreddit.post.Post;
+import ml.docilealligator.infinityforreddit.post.PostPagingSource;
+import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 public class AccountSavedThingActivity extends BaseActivity implements ActivityToolbarInterface,

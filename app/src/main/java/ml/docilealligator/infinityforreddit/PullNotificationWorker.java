@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit;
+package ml.docilealligator.infinityforreddit;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -27,18 +27,18 @@ import java.util.Map;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.ino6962.postinfinityforreddit.account.Account;
-import ml.ino6962.postinfinityforreddit.activities.InboxActivity;
-import ml.ino6962.postinfinityforreddit.activities.LinkResolverActivity;
-import ml.ino6962.postinfinityforreddit.apis.RedditAPI;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
-import ml.ino6962.postinfinityforreddit.message.FetchMessage;
-import ml.ino6962.postinfinityforreddit.message.Message;
-import ml.ino6962.postinfinityforreddit.message.ParseMessage;
-import ml.ino6962.postinfinityforreddit.utils.APIUtils;
-import ml.ino6962.postinfinityforreddit.utils.JSONUtils;
-import ml.ino6962.postinfinityforreddit.utils.NotificationUtils;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.account.Account;
+import ml.docilealligator.infinityforreddit.activities.InboxActivity;
+import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.message.FetchMessage;
+import ml.docilealligator.infinityforreddit.message.Message;
+import ml.docilealligator.infinityforreddit.message.ParseMessage;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
+import ml.docilealligator.infinityforreddit.utils.JSONUtils;
+import ml.docilealligator.infinityforreddit.utils.NotificationUtils;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;

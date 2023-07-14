@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package ml.ino6962.postinfinityforreddit.videoautoplay;
+package ml.docilealligator.infinityforreddit.videoautoplay;
 
 import static java.lang.Runtime.getRuntime;
-import static ml.ino6962.postinfinityforreddit.videoautoplay.ToroUtil.checkNotNull;
+import static ml.docilealligator.infinityforreddit.videoautoplay.ToroUtil.checkNotNull;
 
 import android.annotation.SuppressLint;
 import android.app.Application;
@@ -40,8 +40,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import ml.ino6962.postinfinityforreddit.utils.APIUtils;
-import ml.ino6962.postinfinityforreddit.videoautoplay.media.VolumeInfo;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
 
 /**
  * Global helper class to manage {@link ExoCreator} and {@link SimpleExoPlayer} instances.

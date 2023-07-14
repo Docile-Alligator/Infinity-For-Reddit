@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.bottomsheetfragments;
+package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,14 +13,14 @@ import androidx.fragment.app.Fragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.activities.ViewImgurMediaActivity;
-import ml.ino6962.postinfinityforreddit.activities.ViewRedditGalleryActivity;
-import ml.ino6962.postinfinityforreddit.activities.ViewVideoActivity;
-import ml.ino6962.postinfinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
-import ml.ino6962.postinfinityforreddit.fragments.ViewImgurVideoFragment;
-import ml.ino6962.postinfinityforreddit.fragments.ViewRedditGalleryVideoFragment;
-import ml.ino6962.postinfinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.ViewImgurMediaActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewRedditGalleryActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewVideoActivity;
+import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.docilealligator.infinityforreddit.fragments.ViewImgurVideoFragment;
+import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryVideoFragment;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class PlaybackSpeedBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 

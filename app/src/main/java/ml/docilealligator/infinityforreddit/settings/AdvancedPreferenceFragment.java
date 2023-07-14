@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.settings;
+package ml.docilealligator.infinityforreddit.settings;
 
 import static android.app.Activity.RESULT_OK;
 import static android.content.Intent.ACTION_OPEN_DOCUMENT_TREE;
@@ -23,20 +23,20 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.ino6962.postinfinityforreddit.Infinity;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
-import ml.ino6962.postinfinityforreddit.asynctasks.BackupSettings;
-import ml.ino6962.postinfinityforreddit.asynctasks.DeleteAllPostLayouts;
-import ml.ino6962.postinfinityforreddit.asynctasks.DeleteAllReadPosts;
-import ml.ino6962.postinfinityforreddit.asynctasks.DeleteAllSortTypes;
-import ml.ino6962.postinfinityforreddit.asynctasks.DeleteAllSubreddits;
-import ml.ino6962.postinfinityforreddit.asynctasks.DeleteAllThemes;
-import ml.ino6962.postinfinityforreddit.asynctasks.DeleteAllUsers;
-import ml.ino6962.postinfinityforreddit.asynctasks.RestoreSettings;
-import ml.ino6962.postinfinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
-import ml.ino6962.postinfinityforreddit.events.RecreateActivityEvent;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.asynctasks.BackupSettings;
+import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllPostLayouts;
+import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllReadPosts;
+import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllSortTypes;
+import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllSubreddits;
+import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllThemes;
+import ml.docilealligator.infinityforreddit.asynctasks.DeleteAllUsers;
+import ml.docilealligator.infinityforreddit.asynctasks.RestoreSettings;
+import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
+import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 /**
  * A simple {@link Fragment} subclass.

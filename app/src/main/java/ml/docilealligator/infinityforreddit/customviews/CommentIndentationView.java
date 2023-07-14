@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.customviews;
+package ml.docilealligator.infinityforreddit.customviews;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -12,7 +12,7 @@ import androidx.annotation.Nullable;
 
 import java.util.ArrayList;
 
-import ml.ino6962.postinfinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class CommentIndentationView extends LinearLayout {
 

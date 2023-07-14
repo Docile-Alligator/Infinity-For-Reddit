@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.customviews;
+package ml.docilealligator.infinityforreddit.customviews;
 
 import android.util.SparseArray;
 import android.view.LayoutInflater;
@@ -22,7 +22,7 @@ import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonReducer;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import io.noties.markwon.recycler.SimpleEntry;
-import ml.ino6962.postinfinityforreddit.R;
+import ml.docilealligator.infinityforreddit.R;
 
 public class CustomMarkwonAdapter extends MarkwonAdapter {
     private final SparseArray<Entry<Node, Holder>> entries;

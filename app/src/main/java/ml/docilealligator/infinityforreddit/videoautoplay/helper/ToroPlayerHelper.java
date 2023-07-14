@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package ml.ino6962.postinfinityforreddit.videoautoplay.helper;
+package ml.docilealligator.infinityforreddit.videoautoplay.helper;
 
-import static ml.ino6962.postinfinityforreddit.videoautoplay.ToroUtil.checkNotNull;
+import static ml.docilealligator.infinityforreddit.videoautoplay.ToroUtil.checkNotNull;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -27,11 +27,11 @@ import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
 import androidx.annotation.RestrictTo;
 
-import ml.ino6962.postinfinityforreddit.videoautoplay.ToroPlayer;
-import ml.ino6962.postinfinityforreddit.videoautoplay.annotations.RemoveIn;
-import ml.ino6962.postinfinityforreddit.videoautoplay.media.PlaybackInfo;
-import ml.ino6962.postinfinityforreddit.videoautoplay.media.VolumeInfo;
-import ml.ino6962.postinfinityforreddit.videoautoplay.widget.Container;
+import ml.docilealligator.infinityforreddit.videoautoplay.ToroPlayer;
+import ml.docilealligator.infinityforreddit.videoautoplay.annotations.RemoveIn;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.PlaybackInfo;
+import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
+import ml.docilealligator.infinityforreddit.videoautoplay.widget.Container;
 
 /**
  * General definition of a helper class for a specific {@link ToroPlayer}. This class helps

@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.asynctasks;
+package ml.docilealligator.infinityforreddit.asynctasks;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -28,18 +28,18 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-import ml.ino6962.postinfinityforreddit.BuildConfig;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomTheme;
-import ml.ino6962.postinfinityforreddit.multireddit.AnonymousMultiredditSubreddit;
-import ml.ino6962.postinfinityforreddit.multireddit.MultiReddit;
-import ml.ino6962.postinfinityforreddit.postfilter.PostFilter;
-import ml.ino6962.postinfinityforreddit.postfilter.PostFilterUsage;
-import ml.ino6962.postinfinityforreddit.subscribedsubreddit.SubscribedSubredditData;
-import ml.ino6962.postinfinityforreddit.subscribeduser.SubscribedUserData;
-import ml.ino6962.postinfinityforreddit.utils.CustomThemeSharedPreferencesUtils;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.BuildConfig;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
+import ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubreddit;
+import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
+import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
+import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
+import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 
 public class BackupSettings {
     public static void backupSettings(Context context, Executor executor, Handler handler,

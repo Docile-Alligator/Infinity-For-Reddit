@@ -1,14 +1,14 @@
-package ml.ino6962.postinfinityforreddit;
+package ml.docilealligator.infinityforreddit;
 
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
-import ml.ino6962.postinfinityforreddit.apis.RedditAPI;
-import ml.ino6962.postinfinityforreddit.subreddit.SubredditData;
-import ml.ino6962.postinfinityforreddit.subscribedsubreddit.SubscribedSubredditData;
-import ml.ino6962.postinfinityforreddit.subscribeduser.SubscribedUserData;
-import ml.ino6962.postinfinityforreddit.utils.APIUtils;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
+import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
+import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

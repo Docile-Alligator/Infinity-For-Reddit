@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.activities;
+package ml.docilealligator.infinityforreddit.activities;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
@@ -43,21 +43,21 @@ import com.google.android.material.tabs.TabLayout;
 import java.lang.reflect.Field;
 import java.util.Locale;
 
-import ml.ino6962.postinfinityforreddit.ActivityToolbarInterface;
-import ml.ino6962.postinfinityforreddit.AppBarStateChangeListener;
-import ml.ino6962.postinfinityforreddit.CustomFontReceiver;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
-import ml.ino6962.postinfinityforreddit.customviews.slidr.widget.SliderPanel;
-import ml.ino6962.postinfinityforreddit.font.ContentFontFamily;
-import ml.ino6962.postinfinityforreddit.font.ContentFontStyle;
-import ml.ino6962.postinfinityforreddit.font.FontFamily;
-import ml.ino6962.postinfinityforreddit.font.FontStyle;
-import ml.ino6962.postinfinityforreddit.font.TitleFontFamily;
-import ml.ino6962.postinfinityforreddit.font.TitleFontStyle;
-import ml.ino6962.postinfinityforreddit.utils.CustomThemeSharedPreferencesUtils;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
-import ml.ino6962.postinfinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
+import ml.docilealligator.infinityforreddit.AppBarStateChangeListener;
+import ml.docilealligator.infinityforreddit.CustomFontReceiver;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
+import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
+import ml.docilealligator.infinityforreddit.font.ContentFontStyle;
+import ml.docilealligator.infinityforreddit.font.FontFamily;
+import ml.docilealligator.infinityforreddit.font.FontStyle;
+import ml.docilealligator.infinityforreddit.font.TitleFontFamily;
+import ml.docilealligator.infinityforreddit.font.TitleFontStyle;
+import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public abstract class BaseActivity extends AppCompatActivity implements CustomFontReceiver {
     private boolean immersiveInterface;

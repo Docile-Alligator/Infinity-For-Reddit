@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.activities;
+package ml.docilealligator.infinityforreddit.activities;
 
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_AUTO_BATTERY;
 import static androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM;
@@ -37,23 +37,23 @@ import app.futured.hauler.DragDirection;
 import app.futured.hauler.HaulerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.ino6962.postinfinityforreddit.CustomFontReceiver;
-import ml.ino6962.postinfinityforreddit.Infinity;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.SetAsWallpaperCallback;
-import ml.ino6962.postinfinityforreddit.WallpaperSetter;
-import ml.ino6962.postinfinityforreddit.customviews.ViewPagerBugFixed;
-import ml.ino6962.postinfinityforreddit.font.ContentFontFamily;
-import ml.ino6962.postinfinityforreddit.font.ContentFontStyle;
-import ml.ino6962.postinfinityforreddit.font.FontFamily;
-import ml.ino6962.postinfinityforreddit.font.FontStyle;
-import ml.ino6962.postinfinityforreddit.font.TitleFontFamily;
-import ml.ino6962.postinfinityforreddit.font.TitleFontStyle;
-import ml.ino6962.postinfinityforreddit.fragments.ViewRedditGalleryImageOrGifFragment;
-import ml.ino6962.postinfinityforreddit.fragments.ViewRedditGalleryVideoFragment;
-import ml.ino6962.postinfinityforreddit.post.Post;
-import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
-import ml.ino6962.postinfinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.CustomFontReceiver;
+import ml.docilealligator.infinityforreddit.Infinity;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
+import ml.docilealligator.infinityforreddit.WallpaperSetter;
+import ml.docilealligator.infinityforreddit.customviews.ViewPagerBugFixed;
+import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
+import ml.docilealligator.infinityforreddit.font.ContentFontStyle;
+import ml.docilealligator.infinityforreddit.font.FontFamily;
+import ml.docilealligator.infinityforreddit.font.FontStyle;
+import ml.docilealligator.infinityforreddit.font.TitleFontFamily;
+import ml.docilealligator.infinityforreddit.font.TitleFontStyle;
+import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryImageOrGifFragment;
+import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryVideoFragment;
+import ml.docilealligator.infinityforreddit.post.Post;
+import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class ViewRedditGalleryActivity extends AppCompatActivity implements SetAsWallpaperCallback, CustomFontReceiver {
 

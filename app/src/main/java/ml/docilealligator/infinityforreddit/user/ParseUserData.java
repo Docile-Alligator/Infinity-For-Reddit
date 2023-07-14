@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.user;
+package ml.docilealligator.infinityforreddit.user;
 
 import android.os.AsyncTask;
 
@@ -8,8 +8,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
-import ml.ino6962.postinfinityforreddit.utils.JSONUtils;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 
 public class ParseUserData {
     static void parseUserData(RedditDataRoomDatabase redditDataRoomDatabase, String response,

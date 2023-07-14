@@ -1,6 +1,6 @@
-package ml.ino6962.postinfinityforreddit.events;
+package ml.docilealligator.infinityforreddit.events;
 
-import ml.ino6962.postinfinityforreddit.post.Post;
+import ml.docilealligator.infinityforreddit.post.Post;
 
 public class PostUpdateEventToPostDetailFragment {
     public final Post post;

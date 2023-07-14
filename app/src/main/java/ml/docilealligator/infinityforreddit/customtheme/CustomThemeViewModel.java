@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.customtheme;
+package ml.docilealligator.infinityforreddit.customtheme;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -7,7 +7,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import java.util.List;
 
-import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 
 public class CustomThemeViewModel extends ViewModel {
     private LiveData<List<CustomTheme>> mAllCustomThemes;

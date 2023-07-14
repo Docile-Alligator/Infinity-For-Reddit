@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.comment;
+package ml.docilealligator.infinityforreddit.comment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -7,7 +7,7 @@ import androidx.paging.DataSource;
 
 import java.util.Locale;
 
-import ml.ino6962.postinfinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.SortType;
 import retrofit2.Retrofit;
 
 class CommentDataSourceFactory extends DataSource.Factory {

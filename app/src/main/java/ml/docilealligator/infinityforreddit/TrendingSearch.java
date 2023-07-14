@@ -1,11 +1,11 @@
-package ml.ino6962.postinfinityforreddit;
+package ml.docilealligator.infinityforreddit;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
 
-import ml.ino6962.postinfinityforreddit.post.Post;
+import ml.docilealligator.infinityforreddit.post.Post;
 
 public class TrendingSearch implements Parcelable {
     public String queryString;

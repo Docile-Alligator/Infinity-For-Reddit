@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.subreddit;
+package ml.docilealligator.infinityforreddit.subreddit;
 
 import androidx.annotation.Nullable;
 import com.google.gson.annotations.SerializedName;

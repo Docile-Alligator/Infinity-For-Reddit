@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.adapters;
+package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -34,21 +34,21 @@ import io.noties.markwon.inlineparser.HtmlInlineProcessor;
 import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
 import io.noties.markwon.linkify.LinkifyPlugin;
 import io.noties.markwon.movement.MovementMethodPlugin;
-import ml.ino6962.postinfinityforreddit.NetworkState;
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
-import ml.ino6962.postinfinityforreddit.activities.LinkResolverActivity;
-import ml.ino6962.postinfinityforreddit.activities.ViewPrivateMessagesActivity;
-import ml.ino6962.postinfinityforreddit.activities.ViewUserDetailActivity;
-import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
-import ml.ino6962.postinfinityforreddit.events.ChangeInboxCountEvent;
-import ml.ino6962.postinfinityforreddit.markdown.RedditHeadingPlugin;
-import ml.ino6962.postinfinityforreddit.markdown.SpoilerAwareMovementMethod;
-import ml.ino6962.postinfinityforreddit.markdown.SpoilerParserPlugin;
-import ml.ino6962.postinfinityforreddit.markdown.SuperscriptPlugin;
-import ml.ino6962.postinfinityforreddit.message.FetchMessage;
-import ml.ino6962.postinfinityforreddit.message.Message;
-import ml.ino6962.postinfinityforreddit.message.ReadMessage;
+import ml.docilealligator.infinityforreddit.NetworkState;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewPrivateMessagesActivity;
+import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
+import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.events.ChangeInboxCountEvent;
+import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SpoilerAwareMovementMethod;
+import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
+import ml.docilealligator.infinityforreddit.markdown.SuperscriptPlugin;
+import ml.docilealligator.infinityforreddit.message.FetchMessage;
+import ml.docilealligator.infinityforreddit.message.Message;
+import ml.docilealligator.infinityforreddit.message.ReadMessage;
 import retrofit2.Retrofit;
 
 public class MessageRecyclerViewAdapter extends PagedListAdapter<Message, RecyclerView.ViewHolder> {

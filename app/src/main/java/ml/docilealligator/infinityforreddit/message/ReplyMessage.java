@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.message;
+package ml.docilealligator.infinityforreddit.message;
 
 import androidx.annotation.NonNull;
 
@@ -6,8 +6,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import ml.ino6962.postinfinityforreddit.apis.RedditAPI;
-import ml.ino6962.postinfinityforreddit.utils.APIUtils;
+import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

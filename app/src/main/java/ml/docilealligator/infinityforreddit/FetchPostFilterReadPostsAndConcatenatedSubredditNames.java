@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit;
+package ml.docilealligator.infinityforreddit;
 
 import android.os.Handler;
 
@@ -6,10 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-import ml.ino6962.postinfinityforreddit.multireddit.AnonymousMultiredditSubreddit;
-import ml.ino6962.postinfinityforreddit.postfilter.PostFilter;
-import ml.ino6962.postinfinityforreddit.readpost.ReadPost;
-import ml.ino6962.postinfinityforreddit.subscribedsubreddit.SubscribedSubredditData;
+import ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubreddit;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
+import ml.docilealligator.infinityforreddit.readpost.ReadPost;
+import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 
 public class FetchPostFilterReadPostsAndConcatenatedSubredditNames {
     public interface FetchPostFilterAndReadPostsListener {

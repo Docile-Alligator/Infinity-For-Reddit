@@ -1,6 +1,6 @@
-package ml.ino6962.postinfinityforreddit;
+package ml.docilealligator.infinityforreddit;
 
-import ml.ino6962.postinfinityforreddit.postfilter.PostFilter;
+import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
 
 public interface FragmentCommunicator {
     default void refresh() {

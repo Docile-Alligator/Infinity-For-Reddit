@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.asynctasks;
+package ml.docilealligator.infinityforreddit.asynctasks;
 
 import android.graphics.Bitmap;
 import android.os.Handler;

@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit;
+package ml.docilealligator.infinityforreddit;
 
 import android.os.AsyncTask;
 
@@ -8,11 +8,11 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import ml.ino6962.postinfinityforreddit.subreddit.SubredditData;
-import ml.ino6962.postinfinityforreddit.subscribedsubreddit.SubscribedSubredditData;
-import ml.ino6962.postinfinityforreddit.subscribeduser.SubscribedUserData;
-import ml.ino6962.postinfinityforreddit.utils.JSONUtils;
-import ml.ino6962.postinfinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
+import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
+import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
+import ml.docilealligator.infinityforreddit.utils.JSONUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 class ParseSubscribedThing {
     static void parseSubscribedSubreddits(String response, String accountName,

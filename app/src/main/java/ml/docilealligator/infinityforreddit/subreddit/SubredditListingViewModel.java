@@ -1,4 +1,4 @@
-package ml.ino6962.postinfinityforreddit.subreddit;
+package ml.docilealligator.infinityforreddit.subreddit;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -9,8 +9,8 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 
-import ml.ino6962.postinfinityforreddit.NetworkState;
-import ml.ino6962.postinfinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.NetworkState;
+import ml.docilealligator.infinityforreddit.SortType;
 import retrofit2.Retrofit;
 
 public class SubredditListingViewModel extends ViewModel {

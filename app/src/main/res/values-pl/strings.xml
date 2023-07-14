@@ -445,7 +445,7 @@
     <string name="error_loading_multi_reddit_list">"Nie można zsynchronizować multiredditów"</string>
     <string name="error_loading_subscriptions">"
 Nie można zsynchronizować subskrypcji"</string>
-    <string name="share_this_app">"Sprawdź Infinity for Reddit, niesamowitego klienta dla Reddita! https://play.google.com/store/apps/details?id=ml.ino6962.postinfinityforreddit"</string>
+    <string name="share_this_app">"Sprawdź Infinity for Reddit, niesamowitego klienta dla Reddita! https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit"</string>
     <string name="error_getting_subreddit_name">"Błąd podczas uzyskiwania nazwy subreddita"</string>
     <string name="share_post_link">"Udostępnij link do posta"</string>
     <string name="share_image_link">"Udostępnij link do obrazu"</string>

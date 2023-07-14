@@ -1,7 +1,7 @@
-package ml.ino6962.postinfinityforreddit.customtheme;
+package ml.docilealligator.infinityforreddit.customtheme;
 
-import static ml.ino6962.postinfinityforreddit.utils.CustomThemeSharedPreferencesUtils.AMOLED;
-import static ml.ino6962.postinfinityforreddit.utils.CustomThemeSharedPreferencesUtils.DARK;
+import static ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils.AMOLED;
+import static ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils.DARK;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -9,8 +9,8 @@ import android.graphics.Color;
 
 import java.util.ArrayList;
 
-import ml.ino6962.postinfinityforreddit.R;
-import ml.ino6962.postinfinityforreddit.utils.CustomThemeSharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.R;
+import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 
 public class CustomThemeWrapper {
     private SharedPreferences lightThemeSharedPreferences;

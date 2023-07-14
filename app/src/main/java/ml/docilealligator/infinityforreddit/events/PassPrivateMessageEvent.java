@@ -1,6 +1,6 @@
-package ml.ino6962.postinfinityforreddit.events;
+package ml.docilealligator.infinityforreddit.events;
 
-import ml.ino6962.postinfinityforreddit.message.Message;
+import ml.docilealligator.infinityforreddit.message.Message;
 
 public class PassPrivateMessageEvent {
     public Message message;

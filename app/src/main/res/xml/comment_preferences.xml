@@ -2,17 +2,17 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="show_top_level_comments_first"
         app:title="@string/settings_show_top_level_comments_first_title" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="show_comment_divider"
         app:title="@string/settings_show_comment_divider_title" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontListPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontListPreference
         app:defaultValue="0"
         app:key="comment_divider_type"
         android:title="@string/settings_comment_divider_type"
@@ -21,47 +21,47 @@
         app:useSimpleSummaryProvider="true"
         app:isPreferenceVisible="false" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="show_only_one_comment_level_indicator"
         app:title="@string/settings_show_only_one_comment_level_indicator" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="comment_toolbar_hidden"
         app:title="@string/settings_comment_toolbar_hidden" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="true"
         app:key="comment_toolbar_hide_on_click"
         app:title="@string/settings_comment_toolbar_hide_on_click" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="fully_collapse_comment"
         android:title="@string/settings_fully_collapse_comment_title" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="show_author_avatar"
         android:title="@string/settings_show_author_avatar_title" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="hide_comment_awards"
         android:title="@string/settings_hide_comment_awards_title" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="always_show_child_comment_count"
         android:title="@string/settings_always_show_child_comment_count_title" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSwitchPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSwitchPreference
         app:defaultValue="false"
         app:key="hide_the_number_of_votes_in_comments"
         app:title="@string/settings_hide_the_number_of_votes" />
 
-    <ml.ino6962.postinfinityforreddit.customviews.CustomFontSeekBarPreference
+    <ml.docilealligator.infinityforreddit.customviews.CustomFontSeekBarPreference
         app:defaultValue="5"
         android:max="10"
         app:key="show_fewer_toolbar_options_threshold"
