@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.activities;
+package ml.ino6962.postinfinityforreddit.activities;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -53,26 +53,26 @@ import javax.inject.Named;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import ml.docilealligator.infinityforreddit.Flair;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.UploadImageEnabledActivity;
-import ml.docilealligator.infinityforreddit.UploadedImage;
-import ml.docilealligator.infinityforreddit.account.Account;
-import ml.docilealligator.infinityforreddit.adapters.MarkdownBottomBarRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.AccountChooserBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.UploadedImagesBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
-import ml.docilealligator.infinityforreddit.events.SubmitTextOrLinkPostEvent;
-import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.services.SubmitPostService;
-import ml.docilealligator.infinityforreddit.utils.APIUtils;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.Flair;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.UploadImageEnabledActivity;
+import ml.ino6962.postinfinityforreddit.UploadedImage;
+import ml.ino6962.postinfinityforreddit.account.Account;
+import ml.ino6962.postinfinityforreddit.adapters.MarkdownBottomBarRecyclerViewAdapter;
+import ml.ino6962.postinfinityforreddit.asynctasks.LoadSubredditIcon;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.AccountChooserBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.FlairBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.UploadedImagesBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.ino6962.postinfinityforreddit.events.SubmitTextOrLinkPostEvent;
+import ml.ino6962.postinfinityforreddit.events.SwitchAccountEvent;
+import ml.ino6962.postinfinityforreddit.services.SubmitPostService;
+import ml.ino6962.postinfinityforreddit.utils.APIUtils;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 
@@ -703,7 +703,7 @@ public class PostTextActivity extends BaseActivity implements FlairBottomSheetFr
     public void captureImage() {
         Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try {
-            capturedImageUri = FileProvider.getUriForFile(this, "ml.docilealligator.infinityforreddit.provider",
+            capturedImageUri = FileProvider.getUriForFile(this, "ml.ino6962.postinfinityforreddit.provider",
                     File.createTempFile("captured_image", ".jpg", getExternalFilesDir(Environment.DIRECTORY_PICTURES)));
             pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri);
             startActivityForResult(pictureIntent, CAPTURE_IMAGE_REQUEST_CODE);

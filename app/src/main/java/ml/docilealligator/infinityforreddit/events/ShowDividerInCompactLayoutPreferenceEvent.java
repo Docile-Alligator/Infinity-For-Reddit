@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.events;
+package ml.ino6962.postinfinityforreddit.events;
 
 public class ShowDividerInCompactLayoutPreferenceEvent {
     public boolean showDividerInCompactLayout;

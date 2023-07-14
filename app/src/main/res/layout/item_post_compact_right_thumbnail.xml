@@ -14,7 +14,7 @@
         android:paddingEnd="16dp"
         android:paddingBottom="8dp">
 
-        <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
+        <ml.ino6962.postinfinityforreddit.customviews.AspectRatioGifImageView
             android:id="@+id/icon_gif_image_view_item_post_compact_right_thumbnail"
             android:layout_width="24dp"
             android:layout_height="24dp"

@@ -1,11 +1,11 @@
-package ml.docilealligator.infinityforreddit.network;
+package ml.ino6962.postinfinityforreddit.network;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import java.io.IOException;
 
-import ml.docilealligator.infinityforreddit.SortType;
+import ml.ino6962.postinfinityforreddit.SortType;
 import retrofit2.Converter;
 
 /**

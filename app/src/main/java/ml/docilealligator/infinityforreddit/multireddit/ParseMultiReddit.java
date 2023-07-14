@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.multireddit;
+package ml.ino6962.postinfinityforreddit.multireddit;
 
 import android.os.AsyncTask;
 
@@ -8,8 +8,8 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.utils.JSONUtils;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.utils.JSONUtils;
 
 public class ParseMultiReddit {
     interface ParseMultiRedditsListListener {

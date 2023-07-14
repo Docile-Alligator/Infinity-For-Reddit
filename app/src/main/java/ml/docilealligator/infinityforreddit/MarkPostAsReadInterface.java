@@ -1,6 +1,6 @@
-package ml.docilealligator.infinityforreddit;
+package ml.ino6962.postinfinityforreddit;
 
-import ml.docilealligator.infinityforreddit.post.Post;
+import ml.ino6962.postinfinityforreddit.post.Post;
 
 public interface MarkPostAsReadInterface {
     void markPostAsRead(Post post);

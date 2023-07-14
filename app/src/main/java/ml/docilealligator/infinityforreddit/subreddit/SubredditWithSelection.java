@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.subreddit;
+package ml.ino6962.postinfinityforreddit.subreddit;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -8,7 +8,7 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
+import ml.ino6962.postinfinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 
 public class SubredditWithSelection implements Parcelable {
     private String name;

@@ -503,7 +503,7 @@
     <string name="error_loading_multi_reddit_list">"カスタムフィードの同期ができませんでした"</string>
     <string name="error_loading_subscriptions">"登録済み情報を同期できませんでした"</string>
     <string name="share_this_app">"便利なRedditアプリを見つけました。Infinity for Redditを試してみて！
-https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit"</string>
+https://play.google.com/store/apps/details?id=ml.ino6962.postinfinityforreddit"</string>
     <string name="error_getting_subreddit_name">"Subreddit名を取得中にエラーが発生しました"</string>
     <string name="share_post_link">"投稿リンクを共有"</string>
     <string name="share_image_link">"画像リンクを共有"</string>

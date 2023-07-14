@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:fillViewport="true">
 
-        <ml.docilealligator.infinityforreddit.customviews.ViewPagerBugFixed
+        <ml.ino6962.postinfinityforreddit.customviews.ViewPagerBugFixed
             android:id="@+id/view_pager_view_reddit_gallery_activity"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

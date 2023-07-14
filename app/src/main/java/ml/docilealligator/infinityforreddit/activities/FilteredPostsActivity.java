@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.activities;
+package ml.ino6962.postinfinityforreddit.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -30,31 +30,31 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
-import ml.docilealligator.infinityforreddit.FragmentCommunicator;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.MarkPostAsReadInterface;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.SortType;
-import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.FilteredThingFABMoreOptionsBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.SearchPostSortTypeBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTimeBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.SortTypeBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.UserThingSortTypeBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
-import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.fragments.PostFragment;
-import ml.docilealligator.infinityforreddit.post.Post;
-import ml.docilealligator.infinityforreddit.post.PostPagingSource;
-import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
-import ml.docilealligator.infinityforreddit.readpost.InsertReadPost;
-import ml.docilealligator.infinityforreddit.subreddit.SubredditViewModel;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.ActivityToolbarInterface;
+import ml.ino6962.postinfinityforreddit.FragmentCommunicator;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.MarkPostAsReadInterface;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.RecyclerViewContentScrollingInterface;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.SortType;
+import ml.ino6962.postinfinityforreddit.SortTypeSelectionCallback;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.FilteredThingFABMoreOptionsBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.SearchPostSortTypeBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.SortTimeBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.SortTypeBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.UserThingSortTypeBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.customviews.slidr.Slidr;
+import ml.ino6962.postinfinityforreddit.events.SwitchAccountEvent;
+import ml.ino6962.postinfinityforreddit.fragments.PostFragment;
+import ml.ino6962.postinfinityforreddit.post.Post;
+import ml.ino6962.postinfinityforreddit.post.PostPagingSource;
+import ml.ino6962.postinfinityforreddit.postfilter.PostFilter;
+import ml.ino6962.postinfinityforreddit.readpost.InsertReadPost;
+import ml.ino6962.postinfinityforreddit.subreddit.SubredditViewModel;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
 
 public class FilteredPostsActivity extends BaseActivity implements SortTypeSelectionCallback,
         PostLayoutBottomSheetFragment.PostLayoutSelectionCallback, ActivityToolbarInterface,

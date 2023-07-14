@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.activities;
+package ml.ino6962.postinfinityforreddit.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -32,17 +32,17 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
-import ml.docilealligator.infinityforreddit.multireddit.EditMultiReddit;
-import ml.docilealligator.infinityforreddit.multireddit.FetchMultiRedditInfo;
-import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
-import ml.docilealligator.infinityforreddit.multireddit.MultiRedditJSONModel;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.customviews.slidr.Slidr;
+import ml.ino6962.postinfinityforreddit.multireddit.EditMultiReddit;
+import ml.ino6962.postinfinityforreddit.multireddit.FetchMultiRedditInfo;
+import ml.ino6962.postinfinityforreddit.multireddit.MultiReddit;
+import ml.ino6962.postinfinityforreddit.multireddit.MultiRedditJSONModel;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 public class EditMultiRedditActivity extends BaseActivity {

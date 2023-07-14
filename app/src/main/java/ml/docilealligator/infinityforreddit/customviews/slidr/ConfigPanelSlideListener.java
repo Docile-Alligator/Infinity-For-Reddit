@@ -1,11 +1,11 @@
-package ml.docilealligator.infinityforreddit.customviews.slidr;
+package ml.ino6962.postinfinityforreddit.customviews.slidr;
 
 
 import android.app.Activity;
 
 import androidx.annotation.NonNull;
 
-import ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrConfig;
+import ml.ino6962.postinfinityforreddit.customviews.slidr.model.SlidrConfig;
 
 
 class ConfigPanelSlideListener extends ColorPanelSlideListener {

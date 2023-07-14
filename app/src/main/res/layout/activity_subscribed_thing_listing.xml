@@ -62,7 +62,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ml.docilealligator.infinityforreddit.customviews.ViewPagerBugFixed
+    <ml.ino6962.postinfinityforreddit.customviews.ViewPagerBugFixed
         android:id="@+id/view_pager_subscribed_thing_listing_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

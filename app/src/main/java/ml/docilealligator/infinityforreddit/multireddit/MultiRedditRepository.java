@@ -1,10 +1,10 @@
-package ml.docilealligator.infinityforreddit.multireddit;
+package ml.ino6962.postinfinityforreddit.multireddit;
 
 import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
 
 public class MultiRedditRepository {
     private MultiRedditDao mMultiRedditDao;

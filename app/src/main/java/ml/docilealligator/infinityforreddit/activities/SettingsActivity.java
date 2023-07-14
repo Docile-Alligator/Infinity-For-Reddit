@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.activities;
+package ml.ino6962.postinfinityforreddit.activities;
 
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -23,23 +23,23 @@ import javax.inject.Inject;
 import javax.inject.Named;
 
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.databinding.ActivitySettingsBinding;
-import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
-import ml.docilealligator.infinityforreddit.settings.AboutPreferenceFragment;
-import ml.docilealligator.infinityforreddit.settings.AdvancedPreferenceFragment;
-import ml.docilealligator.infinityforreddit.settings.CustomizeBottomAppBarFragment;
-import ml.docilealligator.infinityforreddit.settings.CustomizeMainPageTabsFragment;
-import ml.docilealligator.infinityforreddit.settings.FontPreferenceFragment;
-import ml.docilealligator.infinityforreddit.settings.GesturesAndButtonsPreferenceFragment;
-import ml.docilealligator.infinityforreddit.settings.InterfacePreferenceFragment;
-import ml.docilealligator.infinityforreddit.settings.MainPreferenceFragment;
-import ml.docilealligator.infinityforreddit.settings.NsfwAndSpoilerFragment;
-import ml.docilealligator.infinityforreddit.settings.PostHistoryFragment;
-import ml.docilealligator.infinityforreddit.settings.PostPreferenceFragment;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.databinding.ActivitySettingsBinding;
+import ml.ino6962.postinfinityforreddit.events.RecreateActivityEvent;
+import ml.ino6962.postinfinityforreddit.settings.AboutPreferenceFragment;
+import ml.ino6962.postinfinityforreddit.settings.AdvancedPreferenceFragment;
+import ml.ino6962.postinfinityforreddit.settings.CustomizeBottomAppBarFragment;
+import ml.ino6962.postinfinityforreddit.settings.CustomizeMainPageTabsFragment;
+import ml.ino6962.postinfinityforreddit.settings.FontPreferenceFragment;
+import ml.ino6962.postinfinityforreddit.settings.GesturesAndButtonsPreferenceFragment;
+import ml.ino6962.postinfinityforreddit.settings.InterfacePreferenceFragment;
+import ml.ino6962.postinfinityforreddit.settings.MainPreferenceFragment;
+import ml.ino6962.postinfinityforreddit.settings.NsfwAndSpoilerFragment;
+import ml.ino6962.postinfinityforreddit.settings.PostHistoryFragment;
+import ml.ino6962.postinfinityforreddit.settings.PostPreferenceFragment;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
 
 public class SettingsActivity extends BaseActivity implements
         PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {

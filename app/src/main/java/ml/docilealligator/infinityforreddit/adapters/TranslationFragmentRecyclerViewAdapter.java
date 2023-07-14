@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.adapters;
+package ml.ino6962.postinfinityforreddit.adapters;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -15,11 +15,11 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.settings.Translation;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
+import ml.ino6962.postinfinityforreddit.activities.LinkResolverActivity;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.settings.Translation;
 
 public class TranslationFragmentRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private BaseActivity activity;

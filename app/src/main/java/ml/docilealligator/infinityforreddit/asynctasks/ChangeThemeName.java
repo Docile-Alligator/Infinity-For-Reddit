@@ -1,8 +1,8 @@
-package ml.docilealligator.infinityforreddit.asynctasks;
+package ml.ino6962.postinfinityforreddit.asynctasks;
 
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
 
 public class ChangeThemeName {
     public static void changeThemeName(Executor executor, RedditDataRoomDatabase redditDataRoomDatabase,

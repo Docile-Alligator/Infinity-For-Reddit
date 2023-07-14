@@ -1,11 +1,11 @@
-package ml.docilealligator.infinityforreddit.customviews;
+package ml.ino6962.postinfinityforreddit.customviews;
 
 import android.content.Context;
 import android.util.AttributeSet;
 
 import androidx.annotation.Nullable;
 
-import ml.docilealligator.infinityforreddit.videoautoplay.widget.Container;
+import ml.ino6962.postinfinityforreddit.videoautoplay.widget.Container;
 
 public class CustomToroContainer extends Container {
     private OnWindowFocusChangedListener listener;

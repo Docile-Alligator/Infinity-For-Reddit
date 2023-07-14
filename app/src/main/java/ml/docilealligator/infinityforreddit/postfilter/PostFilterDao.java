@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.postfilter;
+package ml.ino6962.postinfinityforreddit.postfilter;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

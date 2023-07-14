@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ml.docilealligator.infinityforreddit.videoautoplay.widget;
+package ml.ino6962.postinfinityforreddit.videoautoplay.widget;
 
 import android.os.Handler;
 import android.os.Looper;
@@ -27,8 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import ml.docilealligator.infinityforreddit.videoautoplay.PlayerDispatcher;
-import ml.docilealligator.infinityforreddit.videoautoplay.ToroPlayer;
+import ml.ino6962.postinfinityforreddit.videoautoplay.PlayerDispatcher;
+import ml.ino6962.postinfinityforreddit.videoautoplay.ToroPlayer;
 
 /**
  * Manage the collection of {@link ToroPlayer}s for a specific {@link Container}.

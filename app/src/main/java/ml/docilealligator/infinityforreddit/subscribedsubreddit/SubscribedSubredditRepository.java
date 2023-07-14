@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.subscribedsubreddit;
+package ml.ino6962.postinfinityforreddit.subscribedsubreddit;
 
 import android.os.AsyncTask;
 
@@ -6,7 +6,7 @@ import androidx.lifecycle.LiveData;
 
 import java.util.List;
 
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
 
 public class SubscribedSubredditRepository {
     private SubscribedSubredditDao mSubscribedSubredditDao;

@@ -1,10 +1,10 @@
-package ml.docilealligator.infinityforreddit.subreddit;
+package ml.ino6962.postinfinityforreddit.subreddit;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.MutableLiveData;
 import androidx.paging.DataSource;
 
-import ml.docilealligator.infinityforreddit.SortType;
+import ml.ino6962.postinfinityforreddit.SortType;
 import retrofit2.Retrofit;
 
 public class SubredditListingDataSourceFactory extends DataSource.Factory {

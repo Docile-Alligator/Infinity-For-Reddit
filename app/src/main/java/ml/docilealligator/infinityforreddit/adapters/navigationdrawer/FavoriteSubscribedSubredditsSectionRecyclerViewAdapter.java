@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.adapters.navigationdrawer;
+package ml.ino6962.postinfinityforreddit.adapters.navigationdrawer;
 
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
@@ -19,11 +19,11 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.subscribedsubreddit.SubscribedSubredditData;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
 import pl.droidsonroids.gif.GifImageView;
 
 public class FavoriteSubscribedSubredditsSectionRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

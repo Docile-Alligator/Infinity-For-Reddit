@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.activities;
+package ml.ino6962.postinfinityforreddit.activities;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -41,19 +41,19 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.UploadImageEnabledActivity;
-import ml.docilealligator.infinityforreddit.UploadedImage;
-import ml.docilealligator.infinityforreddit.adapters.MarkdownBottomBarRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.apis.RedditAPI;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.UploadedImagesBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
-import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.utils.APIUtils;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.UploadImageEnabledActivity;
+import ml.ino6962.postinfinityforreddit.UploadedImage;
+import ml.ino6962.postinfinityforreddit.adapters.MarkdownBottomBarRecyclerViewAdapter;
+import ml.ino6962.postinfinityforreddit.apis.RedditAPI;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.UploadedImagesBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.ino6962.postinfinityforreddit.events.SwitchAccountEvent;
+import ml.ino6962.postinfinityforreddit.utils.APIUtils;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -332,7 +332,7 @@ public class EditCommentActivity extends BaseActivity implements UploadImageEnab
     public void captureImage() {
         Intent pictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         try {
-            capturedImageUri = FileProvider.getUriForFile(this, "ml.docilealligator.infinityforreddit.provider",
+            capturedImageUri = FileProvider.getUriForFile(this, "ml.ino6962.postinfinityforreddit.provider",
                     File.createTempFile("captured_image", ".jpg", getExternalFilesDir(Environment.DIRECTORY_PICTURES)));
             pictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, capturedImageUri);
             startActivityForResult(pictureIntent, CAPTURE_IMAGE_REQUEST_CODE);

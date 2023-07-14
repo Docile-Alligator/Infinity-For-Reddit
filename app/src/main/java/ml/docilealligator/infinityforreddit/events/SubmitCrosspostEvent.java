@@ -1,6 +1,6 @@
-package ml.docilealligator.infinityforreddit.events;
+package ml.ino6962.postinfinityforreddit.events;
 
-import ml.docilealligator.infinityforreddit.post.Post;
+import ml.ino6962.postinfinityforreddit.post.Post;
 
 public class SubmitCrosspostEvent {
     public boolean postSuccess;

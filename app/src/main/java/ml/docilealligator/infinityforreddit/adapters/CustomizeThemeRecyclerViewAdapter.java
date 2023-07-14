@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.adapters;
+package ml.ino6962.postinfinityforreddit.adapters;
 
 import android.content.res.ColorStateList;
 import android.os.Handler;
@@ -18,12 +18,12 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeSettingsItem;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.ColorPickerDialog;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeSettingsItem;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.customviews.ColorPickerDialog;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 
 public class CustomizeThemeRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_COLOR = 1;

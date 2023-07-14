@@ -1,8 +1,8 @@
-package ml.docilealligator.infinityforreddit.comment;
+package ml.ino6962.postinfinityforreddit.comment;
 
-import static ml.docilealligator.infinityforreddit.comment.Comment.VOTE_TYPE_DOWNVOTE;
-import static ml.docilealligator.infinityforreddit.comment.Comment.VOTE_TYPE_NO_VOTE;
-import static ml.docilealligator.infinityforreddit.comment.Comment.VOTE_TYPE_UPVOTE;
+import static ml.ino6962.postinfinityforreddit.comment.Comment.VOTE_TYPE_DOWNVOTE;
+import static ml.ino6962.postinfinityforreddit.comment.Comment.VOTE_TYPE_NO_VOTE;
+import static ml.ino6962.postinfinityforreddit.comment.Comment.VOTE_TYPE_UPVOTE;
 
 import android.os.Handler;
 import android.text.Html;
@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.utils.JSONUtils;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.utils.JSONUtils;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 
 public class ParseComment {
     public static void parseComment(Executor executor, Handler handler, String response,

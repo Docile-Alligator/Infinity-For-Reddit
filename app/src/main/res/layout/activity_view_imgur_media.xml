@@ -23,7 +23,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true" />
 
-            <ml.docilealligator.infinityforreddit.customviews.ViewPagerBugFixed
+            <ml.ino6962.postinfinityforreddit.customviews.ViewPagerBugFixed
                 android:id="@+id/view_pager_view_imgur_media_activity"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />

@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.activities;
+package ml.ino6962.postinfinityforreddit.activities;
 
 import android.content.ActivityNotFoundException;
 import android.content.ClipData;
@@ -31,12 +31,12 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.LollipopBugFixedWebView;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.customviews.LollipopBugFixedWebView;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 
 public class WebViewActivity extends BaseActivity {
 

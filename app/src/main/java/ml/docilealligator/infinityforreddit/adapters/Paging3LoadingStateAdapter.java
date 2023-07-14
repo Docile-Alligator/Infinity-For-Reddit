@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.adapters;
+package ml.ino6962.postinfinityforreddit.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,9 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.button.MaterialButton;
 
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
 
 public class Paging3LoadingStateAdapter extends LoadStateAdapter<Paging3LoadingStateAdapter.LoadStateViewHolder> {
     private BaseActivity activity;

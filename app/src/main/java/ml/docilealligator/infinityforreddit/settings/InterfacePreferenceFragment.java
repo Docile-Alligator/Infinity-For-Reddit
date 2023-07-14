@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.settings;
+package ml.ino6962.postinfinityforreddit.settings;
 
 
 import android.os.Build;
@@ -9,12 +9,12 @@ import androidx.preference.SwitchPreference;
 
 import org.greenrobot.eventbus.EventBus;
 
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
-import ml.docilealligator.infinityforreddit.events.ChangeHideFabInPostFeedEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeVoteButtonsPositionEvent;
-import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
+import ml.ino6962.postinfinityforreddit.events.ChangeHideFabInPostFeedEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeVoteButtonsPositionEvent;
+import ml.ino6962.postinfinityforreddit.events.RecreateActivityEvent;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
 
 public class InterfacePreferenceFragment extends CustomFontPreferenceFragmentCompat {
     @Override

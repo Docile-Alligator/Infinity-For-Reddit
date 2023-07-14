@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.customviews.slidr;
+package ml.ino6962.postinfinityforreddit.customviews.slidr;
 
 
 import android.app.Activity;
@@ -8,10 +8,10 @@ import android.view.ViewGroup;
 import androidx.annotation.ColorInt;
 import androidx.annotation.NonNull;
 
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrConfig;
-import ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrInterface;
-import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.customviews.slidr.model.SlidrConfig;
+import ml.ino6962.postinfinityforreddit.customviews.slidr.model.SlidrInterface;
+import ml.ino6962.postinfinityforreddit.customviews.slidr.widget.SliderPanel;
 
 /**
  * This attacher class is used to attach the sliding mechanism to any {@link android.app.Activity}
@@ -24,7 +24,7 @@ public final class Slidr {
      * Attach a slideable mechanism to an activity that adds the slide to dismiss functionality
      *
      * @param activity the activity to attach the slider to
-     * @return a {@link ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrInterface} that allows
+     * @return a {@link ml.ino6962.postinfinityforreddit.customviews.slidr.model.SlidrInterface} that allows
      * the user to lock/unlock the sliding mechanism for whatever purpose.
      */
     @NonNull
@@ -41,7 +41,7 @@ public final class Slidr {
      * @param statusBarColor1 the primaryDark status bar color of the interface that this will slide back to
      * @param statusBarColor2 the primaryDark status bar color of the activity this is attaching to that will transition
      *                        back to the statusBarColor1 color
-     * @return a {@link ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrInterface} that allows
+     * @return a {@link ml.ino6962.postinfinityforreddit.customviews.slidr.model.SlidrInterface} that allows
      * the user to lock/unlock the sliding mechanism for whatever purpose.
      */
     @NonNull
@@ -60,11 +60,11 @@ public final class Slidr {
 
 
     /**
-     * Attach a slider mechanism to an activity based on the passed {@link ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrConfig}
+     * Attach a slider mechanism to an activity based on the passed {@link ml.ino6962.postinfinityforreddit.customviews.slidr.model.SlidrConfig}
      *
      * @param activity the activity to attach the slider to
      * @param config   the slider configuration to make
-     * @return a {@link ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrInterface} that allows
+     * @return a {@link ml.ino6962.postinfinityforreddit.customviews.slidr.model.SlidrInterface} that allows
      * the user to lock/unlock the sliding mechanism for whatever purpose.
      */
     @NonNull
@@ -106,7 +106,7 @@ public final class Slidr {
      *
      * @param oldScreen the view within a fragment to replace
      * @param config the slider configuration to attach with
-     * @return a {@link ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrInterface} that allows
+     * @return a {@link ml.ino6962.postinfinityforreddit.customviews.slidr.model.SlidrInterface} that allows
      * the user to lock/unlock the sliding mechanism for whatever purpose.
      */
     @NonNull

@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.subscribeduser;
+package ml.ino6962.postinfinityforreddit.subscribeduser;
 
 import android.app.Application;
 
@@ -12,7 +12,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import java.util.List;
 
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
 
 public class SubscribedUserViewModel extends AndroidViewModel {
     private SubscribedUserRepository mSubscribedUserRepository;

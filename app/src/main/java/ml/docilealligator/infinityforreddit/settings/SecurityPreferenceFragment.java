@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.settings;
+package ml.ino6962.postinfinityforreddit.settings;
 
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
@@ -20,13 +20,13 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
-import ml.docilealligator.infinityforreddit.events.ChangeAppLockEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeRequireAuthToAccountSectionEvent;
-import ml.docilealligator.infinityforreddit.events.ToggleSecureModeEvent;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
+import ml.ino6962.postinfinityforreddit.events.ChangeAppLockEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeRequireAuthToAccountSectionEvent;
+import ml.ino6962.postinfinityforreddit.events.ToggleSecureModeEvent;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
 
 public class SecurityPreferenceFragment extends CustomFontPreferenceFragmentCompat {
 

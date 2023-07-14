@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.markdown;
+package ml.ino6962.postinfinityforreddit.markdown;
 
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;

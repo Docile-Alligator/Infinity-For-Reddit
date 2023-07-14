@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.asynctasks;
+package ml.ino6962.postinfinityforreddit.asynctasks;
 
 import android.os.Handler;
 
@@ -7,10 +7,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubreddit;
-import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
-import ml.docilealligator.infinityforreddit.multireddit.MultiRedditDao;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.multireddit.AnonymousMultiredditSubreddit;
+import ml.ino6962.postinfinityforreddit.multireddit.MultiReddit;
+import ml.ino6962.postinfinityforreddit.multireddit.MultiRedditDao;
 
 public class InsertMultireddit {
 

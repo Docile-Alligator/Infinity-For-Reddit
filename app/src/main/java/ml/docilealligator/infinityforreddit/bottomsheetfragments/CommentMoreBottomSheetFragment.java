@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.bottomsheetfragments;
+package ml.ino6962.postinfinityforreddit.bottomsheetfragments;
 
 
 import android.content.ActivityNotFoundException;
@@ -19,17 +19,17 @@ import androidx.fragment.app.Fragment;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.activities.CommentActivity;
-import ml.docilealligator.infinityforreddit.activities.EditCommentActivity;
-import ml.docilealligator.infinityforreddit.activities.GiveAwardActivity;
-import ml.docilealligator.infinityforreddit.activities.ReportActivity;
-import ml.docilealligator.infinityforreddit.activities.ViewPostDetailActivity;
-import ml.docilealligator.infinityforreddit.activities.ViewUserDetailActivity;
-import ml.docilealligator.infinityforreddit.comment.Comment;
-import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
+import ml.ino6962.postinfinityforreddit.activities.CommentActivity;
+import ml.ino6962.postinfinityforreddit.activities.EditCommentActivity;
+import ml.ino6962.postinfinityforreddit.activities.GiveAwardActivity;
+import ml.ino6962.postinfinityforreddit.activities.ReportActivity;
+import ml.ino6962.postinfinityforreddit.activities.ViewPostDetailActivity;
+import ml.ino6962.postinfinityforreddit.activities.ViewUserDetailActivity;
+import ml.ino6962.postinfinityforreddit.comment.Comment;
+import ml.ino6962.postinfinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 
 
 /**

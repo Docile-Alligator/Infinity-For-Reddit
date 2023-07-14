@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.bottomsheetfragments;
+package ml.ino6962.postinfinityforreddit.bottomsheetfragments;
 
 import static androidx.biometric.BiometricManager.Authenticators.BIOMETRIC_STRONG;
 import static androidx.biometric.BiometricManager.Authenticators.DEVICE_CREDENTIAL;
@@ -24,17 +24,17 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.account.Account;
-import ml.docilealligator.infinityforreddit.account.AccountViewModel;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.adapters.AccountChooserRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedBottomSheetDialogFragment;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.account.Account;
+import ml.ino6962.postinfinityforreddit.account.AccountViewModel;
+import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
+import ml.ino6962.postinfinityforreddit.adapters.AccountChooserRecyclerViewAdapter;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.customviews.LandscapeExpandedBottomSheetDialogFragment;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 
 public class AccountChooserBottomSheetFragment extends LandscapeExpandedBottomSheetDialogFragment {
 

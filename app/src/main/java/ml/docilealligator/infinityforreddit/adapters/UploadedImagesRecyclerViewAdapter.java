@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.adapters;
+package ml.ino6962.postinfinityforreddit.adapters;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -11,9 +11,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.UploadedImage;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.UploadedImage;
+import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
 
 public class UploadedImagesRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private BaseActivity activity;

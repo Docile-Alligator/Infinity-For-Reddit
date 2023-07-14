@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package ml.docilealligator.infinityforreddit.videoautoplay;
+package ml.ino6962.postinfinityforreddit.videoautoplay;
 
-import static ml.docilealligator.infinityforreddit.videoautoplay.ToroExo.with;
-import static ml.docilealligator.infinityforreddit.videoautoplay.ToroUtil.checkNotNull;
+import static ml.ino6962.postinfinityforreddit.videoautoplay.ToroExo.with;
+import static ml.ino6962.postinfinityforreddit.videoautoplay.ToroUtil.checkNotNull;
 
 import android.content.Context;
 import android.net.Uri;
@@ -45,7 +45,7 @@ import com.google.android.exoplayer2.util.Util;
 
 import java.io.IOException;
 
-import ml.docilealligator.infinityforreddit.utils.APIUtils;
+import ml.ino6962.postinfinityforreddit.utils.APIUtils;
 
 /**
  * Usage: use this as-it or inheritance.

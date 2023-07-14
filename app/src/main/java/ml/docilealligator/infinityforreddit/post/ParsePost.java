@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.post;
+package ml.ino6962.postinfinityforreddit.post;
 
 import android.net.Uri;
 import android.os.Handler;
@@ -17,9 +17,9 @@ import java.util.concurrent.Executor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
-import ml.docilealligator.infinityforreddit.utils.JSONUtils;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.postfilter.PostFilter;
+import ml.ino6962.postinfinityforreddit.utils.JSONUtils;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 
 /**
  * Created by alex on 3/21/18.

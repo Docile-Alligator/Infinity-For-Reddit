@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.broadcastreceivers;
+package ml.ino6962.postinfinityforreddit.broadcastreceivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -9,8 +9,8 @@ import androidx.work.ExistingWorkPolicy;
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 
-import ml.docilealligator.infinityforreddit.MaterialYouWorker;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.MaterialYouWorker;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
 
 public class WallpaperChangeReceiver extends BroadcastReceiver {
     private SharedPreferences sharedPreferences;

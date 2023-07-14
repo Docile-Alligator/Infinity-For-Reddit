@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.customviews;
+package ml.ino6962.postinfinityforreddit.customviews;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -9,9 +9,9 @@ import android.widget.TextView;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceViewHolder;
 
-import ml.docilealligator.infinityforreddit.CustomFontReceiver;
-import ml.docilealligator.infinityforreddit.CustomThemeWrapperReceiver;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.CustomFontReceiver;
+import ml.ino6962.postinfinityforreddit.CustomThemeWrapperReceiver;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
 
 public class CustomFontPreferenceCategory extends PreferenceCategory implements CustomFontReceiver, CustomThemeWrapperReceiver {
     private CustomThemeWrapper customThemeWrapper;

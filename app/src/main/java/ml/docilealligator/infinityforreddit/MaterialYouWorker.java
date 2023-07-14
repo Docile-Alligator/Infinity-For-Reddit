@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.ino6962.postinfinityforreddit;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -10,9 +10,9 @@ import androidx.work.WorkerParameters;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.utils.MaterialYouUtils;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.utils.MaterialYouUtils;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
 
 public class MaterialYouWorker extends Worker {
     public static final String UNIQUE_WORKER_NAME = "MYWT";

@@ -1,11 +1,11 @@
-package ml.docilealligator.infinityforreddit.asynctasks;
+package ml.ino6962.postinfinityforreddit.asynctasks;
 
 import android.os.Handler;
 
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.account.Account;
-import ml.docilealligator.infinityforreddit.account.AccountDao;
+import ml.ino6962.postinfinityforreddit.account.Account;
+import ml.ino6962.postinfinityforreddit.account.AccountDao;
 
 public class ParseAndInsertNewAccount {
 

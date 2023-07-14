@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.settings;
+package ml.ino6962.postinfinityforreddit.settings;
 
 
 import android.content.SharedPreferences;
@@ -13,12 +13,12 @@ import org.greenrobot.eventbus.EventBus;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
-import ml.docilealligator.infinityforreddit.events.ChangeLockBottomAppBarEvent;
-import ml.docilealligator.infinityforreddit.events.ChangePullToRefreshEvent;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
+import ml.ino6962.postinfinityforreddit.events.ChangeLockBottomAppBarEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangePullToRefreshEvent;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
 
 /**
  * A simple {@link Fragment} subclass.

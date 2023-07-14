@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.bottomsheetfragments;
+package ml.ino6962.postinfinityforreddit.bottomsheetfragments;
 
 import android.app.Activity;
 import android.content.Context;
@@ -12,10 +12,10 @@ import androidx.annotation.NonNull;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
+import ml.ino6962.postinfinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 
 public class RandomBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 

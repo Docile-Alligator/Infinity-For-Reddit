@@ -1,11 +1,11 @@
-package ml.docilealligator.infinityforreddit.subscribedsubreddit;
+package ml.ino6962.postinfinityforreddit.subscribedsubreddit;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 
-import ml.docilealligator.infinityforreddit.account.Account;
+import ml.ino6962.postinfinityforreddit.account.Account;
 
 @Entity(tableName = "subscribed_subreddits", primaryKeys = {"id", "username"},
         foreignKeys = @ForeignKey(entity = Account.class, parentColumns = "username",

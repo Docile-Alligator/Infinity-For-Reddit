@@ -23,7 +23,7 @@
 
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ml.docilealligator.infinityforreddit.customviews.LollipopBugFixedWebView
+    <ml.ino6962.postinfinityforreddit.customviews.LollipopBugFixedWebView
         android:id="@+id/web_view_web_view_activity"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

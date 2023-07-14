@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.apis;
+package ml.ino6962.postinfinityforreddit.apis;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;

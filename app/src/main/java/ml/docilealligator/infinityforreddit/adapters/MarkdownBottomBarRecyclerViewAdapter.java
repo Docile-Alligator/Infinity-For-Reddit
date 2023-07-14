@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.adapters;
+package ml.ino6962.postinfinityforreddit.adapters;
 
 import android.app.Activity;
 import android.view.LayoutInflater;
@@ -14,8 +14,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.slider.Slider;
 import com.google.android.material.textfield.TextInputEditText;
 
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
 
 public class MarkdownBottomBarRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

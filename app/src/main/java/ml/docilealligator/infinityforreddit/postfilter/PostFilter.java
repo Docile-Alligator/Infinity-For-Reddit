@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.postfilter;
+package ml.ino6962.postinfinityforreddit.postfilter;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -14,7 +14,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
-import ml.docilealligator.infinityforreddit.post.Post;
+import ml.ino6962.postinfinityforreddit.post.Post;
 
 @Entity(tableName = "post_filter")
 public class PostFilter implements Parcelable {

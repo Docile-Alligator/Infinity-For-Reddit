@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.settings;
+package ml.ino6962.postinfinityforreddit.settings;
 
 
 import android.content.Context;
@@ -16,10 +16,10 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
-import ml.docilealligator.infinityforreddit.adapters.AcknowledgementRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.activities.SettingsActivity;
+import ml.ino6962.postinfinityforreddit.adapters.AcknowledgementRecyclerViewAdapter;
+import ml.ino6962.postinfinityforreddit.customviews.LinearLayoutManagerBugFixed;
 
 /**
  * A simple {@link Fragment} subclass.

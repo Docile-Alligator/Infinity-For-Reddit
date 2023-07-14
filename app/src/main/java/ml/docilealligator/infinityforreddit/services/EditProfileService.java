@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.services;
+package ml.ino6962.postinfinityforreddit.services;
 
 import android.app.Notification;
 import android.app.Service;
@@ -20,14 +20,14 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import com.bumptech.glide.Glide;
 import jp.wasabeef.glide.transformations.CropTransformation;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.events.SubmitChangeAvatarEvent;
-import ml.docilealligator.infinityforreddit.events.SubmitChangeBannerEvent;
-import ml.docilealligator.infinityforreddit.events.SubmitSaveProfileEvent;
-import ml.docilealligator.infinityforreddit.utils.EditProfileUtils;
-import ml.docilealligator.infinityforreddit.utils.NotificationUtils;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.events.SubmitChangeAvatarEvent;
+import ml.ino6962.postinfinityforreddit.events.SubmitChangeBannerEvent;
+import ml.ino6962.postinfinityforreddit.events.SubmitSaveProfileEvent;
+import ml.ino6962.postinfinityforreddit.utils.EditProfileUtils;
+import ml.ino6962.postinfinityforreddit.utils.NotificationUtils;
 import org.greenrobot.eventbus.EventBus;
 import retrofit2.Retrofit;
 

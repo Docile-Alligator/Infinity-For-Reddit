@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.ino6962.postinfinityforreddit;
 
 import android.content.Context;
 import android.database.Cursor;
@@ -11,30 +11,30 @@ import androidx.room.RoomDatabase;
 import androidx.room.migration.Migration;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import ml.docilealligator.infinityforreddit.account.Account;
-import ml.docilealligator.infinityforreddit.account.AccountDao;
-import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeDao;
-import ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubreddit;
-import ml.docilealligator.infinityforreddit.multireddit.AnonymousMultiredditSubredditDao;
-import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
-import ml.docilealligator.infinityforreddit.multireddit.MultiRedditDao;
-import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
-import ml.docilealligator.infinityforreddit.postfilter.PostFilterDao;
-import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
-import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsageDao;
-import ml.docilealligator.infinityforreddit.readpost.ReadPost;
-import ml.docilealligator.infinityforreddit.readpost.ReadPostDao;
-import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQuery;
-import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQueryDao;
-import ml.docilealligator.infinityforreddit.subreddit.SubredditDao;
-import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
-import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditDao;
-import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
-import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserDao;
-import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
-import ml.docilealligator.infinityforreddit.user.UserDao;
-import ml.docilealligator.infinityforreddit.user.UserData;
+import ml.ino6962.postinfinityforreddit.account.Account;
+import ml.ino6962.postinfinityforreddit.account.AccountDao;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomTheme;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeDao;
+import ml.ino6962.postinfinityforreddit.multireddit.AnonymousMultiredditSubreddit;
+import ml.ino6962.postinfinityforreddit.multireddit.AnonymousMultiredditSubredditDao;
+import ml.ino6962.postinfinityforreddit.multireddit.MultiReddit;
+import ml.ino6962.postinfinityforreddit.multireddit.MultiRedditDao;
+import ml.ino6962.postinfinityforreddit.postfilter.PostFilter;
+import ml.ino6962.postinfinityforreddit.postfilter.PostFilterDao;
+import ml.ino6962.postinfinityforreddit.postfilter.PostFilterUsage;
+import ml.ino6962.postinfinityforreddit.postfilter.PostFilterUsageDao;
+import ml.ino6962.postinfinityforreddit.readpost.ReadPost;
+import ml.ino6962.postinfinityforreddit.readpost.ReadPostDao;
+import ml.ino6962.postinfinityforreddit.recentsearchquery.RecentSearchQuery;
+import ml.ino6962.postinfinityforreddit.recentsearchquery.RecentSearchQueryDao;
+import ml.ino6962.postinfinityforreddit.subreddit.SubredditDao;
+import ml.ino6962.postinfinityforreddit.subreddit.SubredditData;
+import ml.ino6962.postinfinityforreddit.subscribedsubreddit.SubscribedSubredditDao;
+import ml.ino6962.postinfinityforreddit.subscribedsubreddit.SubscribedSubredditData;
+import ml.ino6962.postinfinityforreddit.subscribeduser.SubscribedUserDao;
+import ml.ino6962.postinfinityforreddit.subscribeduser.SubscribedUserData;
+import ml.ino6962.postinfinityforreddit.user.UserDao;
+import ml.ino6962.postinfinityforreddit.user.UserData;
 
 @Database(entities = {Account.class, SubredditData.class, SubscribedSubredditData.class, UserData.class,
         SubscribedUserData.class, MultiReddit.class, CustomTheme.class, RecentSearchQuery.class,

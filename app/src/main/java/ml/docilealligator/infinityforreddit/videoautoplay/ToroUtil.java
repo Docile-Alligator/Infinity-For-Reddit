@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ml.docilealligator.infinityforreddit.videoautoplay;
+package ml.ino6962.postinfinityforreddit.videoautoplay;
 
 import android.graphics.Point;
 import android.graphics.Rect;
@@ -26,7 +26,7 @@ import androidx.annotation.FloatRange;
 import androidx.annotation.NonNull;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 
-import ml.docilealligator.infinityforreddit.videoautoplay.widget.Container;
+import ml.ino6962.postinfinityforreddit.videoautoplay.widget.Container;
 
 /**
  * @author eneim | 5/31/17.

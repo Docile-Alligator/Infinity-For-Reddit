@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.activities;
+package ml.ino6962.postinfinityforreddit.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,17 +29,17 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.adapters.CustomizeThemeRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCustomTheme;
-import ml.docilealligator.infinityforreddit.asynctasks.InsertCustomTheme;
-import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeSettingsItem;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
-import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.adapters.CustomizeThemeRecyclerViewAdapter;
+import ml.ino6962.postinfinityforreddit.asynctasks.GetCustomTheme;
+import ml.ino6962.postinfinityforreddit.asynctasks.InsertCustomTheme;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomTheme;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeSettingsItem;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.events.RecreateActivityEvent;
+import ml.ino6962.postinfinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 
 public class CustomizeThemeActivity extends BaseActivity {
 

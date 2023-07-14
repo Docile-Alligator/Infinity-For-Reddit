@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.activities;
+package ml.ino6962.postinfinityforreddit.activities;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -37,22 +37,22 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.adapters.CustomThemeListingRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.asynctasks.ChangeThemeName;
-import ml.docilealligator.infinityforreddit.asynctasks.DeleteTheme;
-import ml.docilealligator.infinityforreddit.asynctasks.GetCustomTheme;
-import ml.docilealligator.infinityforreddit.asynctasks.InsertCustomTheme;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.CreateThemeBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.CustomThemeOptionsBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeViewModel;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
-import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.adapters.CustomThemeListingRecyclerViewAdapter;
+import ml.ino6962.postinfinityforreddit.asynctasks.ChangeThemeName;
+import ml.ino6962.postinfinityforreddit.asynctasks.DeleteTheme;
+import ml.ino6962.postinfinityforreddit.asynctasks.GetCustomTheme;
+import ml.ino6962.postinfinityforreddit.asynctasks.InsertCustomTheme;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.CreateThemeBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.CustomThemeOptionsBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomTheme;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeViewModel;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.events.RecreateActivityEvent;
+import ml.ino6962.postinfinityforreddit.utils.CustomThemeSharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 
 public class CustomThemeListingActivity extends BaseActivity implements
         CustomThemeOptionsBottomSheetFragment.CustomThemeOptionsBottomSheetFragmentListener,

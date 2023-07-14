@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.comment;
+package ml.ino6962.postinfinityforreddit.comment;
 
 import android.os.Handler;
 
@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.SortType;
-import ml.docilealligator.infinityforreddit.apis.RedditAPI;
-import ml.docilealligator.infinityforreddit.utils.APIUtils;
+import ml.ino6962.postinfinityforreddit.SortType;
+import ml.ino6962.postinfinityforreddit.apis.RedditAPI;
+import ml.ino6962.postinfinityforreddit.utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

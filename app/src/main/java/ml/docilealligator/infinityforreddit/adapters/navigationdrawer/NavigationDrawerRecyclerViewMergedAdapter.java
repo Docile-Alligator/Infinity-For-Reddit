@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.adapters.navigationdrawer;
+package ml.ino6962.postinfinityforreddit.adapters.navigationdrawer;
 
 import android.content.SharedPreferences;
 
@@ -9,10 +9,10 @@ import com.bumptech.glide.RequestManager;
 
 import java.util.List;
 
-import ml.docilealligator.infinityforreddit.account.Account;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
+import ml.ino6962.postinfinityforreddit.account.Account;
+import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.subscribedsubreddit.SubscribedSubredditData;
 
 public class NavigationDrawerRecyclerViewMergedAdapter {
     private HeaderSectionRecyclerViewAdapter headerSectionRecyclerViewAdapter;

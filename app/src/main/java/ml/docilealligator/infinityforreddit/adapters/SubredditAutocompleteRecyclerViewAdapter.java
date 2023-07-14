@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.adapters;
+package ml.ino6962.postinfinityforreddit.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,10 +17,10 @@ import com.google.android.material.checkbox.MaterialCheckBox;
 import java.util.List;
 
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.subreddit.SubredditData;
 import pl.droidsonroids.gif.GifImageView;
 
 public class SubredditAutocompleteRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {

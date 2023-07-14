@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.utils;
+package ml.ino6962.postinfinityforreddit.utils;
 
 import android.app.Activity;
 import android.content.Context;

@@ -1,12 +1,12 @@
-package ml.docilealligator.infinityforreddit.asynctasks;
+package ml.ino6962.postinfinityforreddit.asynctasks;
 
 import android.os.Handler;
 
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
-import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomTheme;
+import ml.ino6962.postinfinityforreddit.utils.CustomThemeSharedPreferencesUtils;
 
 public class GetCustomTheme {
     public static void getCustomTheme(Executor executor, Handler handler,

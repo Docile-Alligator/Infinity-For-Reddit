@@ -1,11 +1,11 @@
-package ml.docilealligator.infinityforreddit.asynctasks;
+package ml.ino6962.postinfinityforreddit.asynctasks;
 
 import android.os.Handler;
 
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.subscribeduser.SubscribedUserData;
 
 public class CheckIsFollowingUser {
     public static void checkIsFollowingUser(Executor executor, Handler handler,

@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.utils;
+package ml.ino6962.postinfinityforreddit.utils;
 
 import android.graphics.Bitmap;
 
@@ -17,7 +17,7 @@ import java.io.StringReader;
 import java.util.HashMap;
 import java.util.Map;
 
-import ml.docilealligator.infinityforreddit.apis.RedditAPI;
+import ml.ino6962.postinfinityforreddit.apis.RedditAPI;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;

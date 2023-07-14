@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.activities;
+package ml.ino6962.postinfinityforreddit.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -23,16 +23,16 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.adapters.PostFilterRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostFilterOptionsBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.post.Post;
-import ml.docilealligator.infinityforreddit.postfilter.DeletePostFilter;
-import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
-import ml.docilealligator.infinityforreddit.postfilter.PostFilterViewModel;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.adapters.PostFilterRecyclerViewAdapter;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.PostFilterOptionsBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.post.Post;
+import ml.ino6962.postinfinityforreddit.postfilter.DeletePostFilter;
+import ml.ino6962.postinfinityforreddit.postfilter.PostFilter;
+import ml.ino6962.postinfinityforreddit.postfilter.PostFilterViewModel;
 
 public class PostFilterPreferenceActivity extends BaseActivity {
 

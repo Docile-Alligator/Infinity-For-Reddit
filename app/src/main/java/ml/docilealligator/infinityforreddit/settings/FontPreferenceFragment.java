@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.settings;
+package ml.ino6962.postinfinityforreddit.settings;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -26,14 +26,14 @@ import java.util.concurrent.Executor;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
-import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
-import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
-import ml.docilealligator.infinityforreddit.font.FontFamily;
-import ml.docilealligator.infinityforreddit.font.TitleFontFamily;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
+import ml.ino6962.postinfinityforreddit.events.RecreateActivityEvent;
+import ml.ino6962.postinfinityforreddit.font.ContentFontFamily;
+import ml.ino6962.postinfinityforreddit.font.FontFamily;
+import ml.ino6962.postinfinityforreddit.font.TitleFontFamily;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
 
 public class FontPreferenceFragment extends CustomFontPreferenceFragmentCompat {
 

@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.message;
+package ml.ino6962.postinfinityforreddit.message;
 
 import android.os.Parcel;
 import android.os.Parcelable;

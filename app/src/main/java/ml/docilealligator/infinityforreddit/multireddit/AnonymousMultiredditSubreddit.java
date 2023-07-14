@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.multireddit;
+package ml.ino6962.postinfinityforreddit.multireddit;
 
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;

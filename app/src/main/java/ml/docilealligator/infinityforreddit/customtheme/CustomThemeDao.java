@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.customtheme;
+package ml.ino6962.postinfinityforreddit.customtheme;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

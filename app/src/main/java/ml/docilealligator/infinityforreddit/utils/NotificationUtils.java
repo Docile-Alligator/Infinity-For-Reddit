@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.utils;
+package ml.ino6962.postinfinityforreddit.utils;
 
 import android.content.Context;
 
@@ -6,7 +6,7 @@ import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
-import ml.docilealligator.infinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.R;
 
 public class NotificationUtils {
     public static final String CHANNEL_SUBMIT_POST = "Submit Post";
@@ -32,7 +32,7 @@ public class NotificationUtils {
     private static final int SUMMARY_BASE_ID_UNREAD_MESSAGE = 0;
     private static final int NOTIFICATION_BASE_ID_UNREAD_MESSAGE = 1;
 
-    private static final String GROUP_USER_BASE = "ml.docilealligator.infinityforreddit.";
+    private static final String GROUP_USER_BASE = "ml.ino6962.postinfinityforreddit.";
 
     public static NotificationCompat.Builder buildNotification(NotificationManagerCompat notificationManager,
                                                                Context context, String title, String content,

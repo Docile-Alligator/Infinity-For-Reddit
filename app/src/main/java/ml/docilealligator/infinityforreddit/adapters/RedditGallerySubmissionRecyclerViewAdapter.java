@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.adapters;
+package ml.ino6962.postinfinityforreddit.adapters;
 
 import android.content.res.ColorStateList;
 import android.graphics.drawable.Drawable;
@@ -31,12 +31,12 @@ import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditGalleryPayload;
-import ml.docilealligator.infinityforreddit.activities.PostGalleryActivity;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.SetRedditGalleryItemCaptionAndUrlBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.RedditGalleryPayload;
+import ml.ino6962.postinfinityforreddit.activities.PostGalleryActivity;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.SetRedditGalleryItemCaptionAndUrlBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.customviews.AspectRatioGifImageView;
 
 public class RedditGallerySubmissionRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

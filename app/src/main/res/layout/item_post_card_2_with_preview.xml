@@ -19,7 +19,7 @@
         app:cardCornerRadius="8dp"
         style="?attr/materialCardViewElevatedStyle">
 
-        <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
+        <ml.ino6962.postinfinityforreddit.customviews.AspectRatioGifImageView
             android:id="@+id/image_view_item_post_card_2_with_preview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -204,7 +204,7 @@
         app:flChildSpacingForLastRow="align"
         app:flRowSpacing="8dp">
 
-        <ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView
+        <ml.ino6962.postinfinityforreddit.customviews.AspectRatioGifImageView
             android:id="@+id/icon_gif_image_view_item_post_card_2_with_preview"
             android:layout_width="24dp"
             android:layout_height="24dp" />

@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.ino6962.postinfinityforreddit;
 
 import android.app.Activity;
 import android.app.Application;
@@ -27,17 +27,17 @@ import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.lifecycle.ProcessLifecycleOwner;
-import ml.docilealligator.infinityforreddit.activities.LockScreenActivity;
-import ml.docilealligator.infinityforreddit.broadcastreceivers.NetworkWifiStatusReceiver;
-import ml.docilealligator.infinityforreddit.broadcastreceivers.WallpaperChangeReceiver;
-import ml.docilealligator.infinityforreddit.events.ChangeAppLockEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeNetworkStatusEvent;
-import ml.docilealligator.infinityforreddit.events.ToggleSecureModeEvent;
-import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
-import ml.docilealligator.infinityforreddit.font.FontFamily;
-import ml.docilealligator.infinityforreddit.font.TitleFontFamily;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.activities.LockScreenActivity;
+import ml.ino6962.postinfinityforreddit.broadcastreceivers.NetworkWifiStatusReceiver;
+import ml.ino6962.postinfinityforreddit.broadcastreceivers.WallpaperChangeReceiver;
+import ml.ino6962.postinfinityforreddit.events.ChangeAppLockEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeNetworkStatusEvent;
+import ml.ino6962.postinfinityforreddit.events.ToggleSecureModeEvent;
+import ml.ino6962.postinfinityforreddit.font.ContentFontFamily;
+import ml.ino6962.postinfinityforreddit.font.FontFamily;
+import ml.ino6962.postinfinityforreddit.font.TitleFontFamily;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 
 public class Infinity extends Application implements LifecycleObserver {
     public Typeface typeface;

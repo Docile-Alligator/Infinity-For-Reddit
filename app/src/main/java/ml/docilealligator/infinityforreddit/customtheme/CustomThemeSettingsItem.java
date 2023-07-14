@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.customtheme;
+package ml.ino6962.postinfinityforreddit.customtheme;
 
 import android.content.Context;
 import android.os.Build;
@@ -7,7 +7,7 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
-import ml.docilealligator.infinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.R;
 
 public class CustomThemeSettingsItem implements Parcelable {
     public String itemName;

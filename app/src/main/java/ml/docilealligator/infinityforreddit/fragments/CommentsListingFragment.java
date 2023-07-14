@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.fragments;
+package ml.ino6962.postinfinityforreddit.fragments;
 
 
 import android.content.Context;
@@ -37,20 +37,20 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.FragmentCommunicator;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.NetworkState;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.SortType;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.adapters.CommentsListingRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.comment.CommentViewModel;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.FragmentCommunicator;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.NetworkState;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.RecyclerViewContentScrollingInterface;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.SortType;
+import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
+import ml.ino6962.postinfinityforreddit.adapters.CommentsListingRecyclerViewAdapter;
+import ml.ino6962.postinfinityforreddit.comment.CommentViewModel;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 

@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.ino6962.postinfinityforreddit;
 
 import android.app.WallpaperManager;
 import android.content.Context;
@@ -17,7 +17,7 @@ import com.bumptech.glide.request.transition.Transition;
 
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.asynctasks.SetAsWallpaper;
+import ml.ino6962.postinfinityforreddit.asynctasks.SetAsWallpaper;
 
 public class WallpaperSetter {
     public static final int HOME_SCREEN = 0;

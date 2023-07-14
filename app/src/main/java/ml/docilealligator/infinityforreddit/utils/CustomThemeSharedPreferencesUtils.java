@@ -1,16 +1,16 @@
-package ml.docilealligator.infinityforreddit.utils;
+package ml.ino6962.postinfinityforreddit.utils;
 
 import android.content.SharedPreferences;
 
-import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomTheme;
 
 public class CustomThemeSharedPreferencesUtils {
     public static final int LIGHT = 0;
     public static final int DARK = 1;
     public static final int AMOLED = 2;
-    public static final String LIGHT_THEME_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.light_theme";
-    public static final String DARK_THEME_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.dark_theme";
-    public static final String AMOLED_THEME_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.amoled_theme";
+    public static final String LIGHT_THEME_SHARED_PREFERENCES_FILE = "ml.ino6962.postinfinityforreddit.light_theme";
+    public static final String DARK_THEME_SHARED_PREFERENCES_FILE = "ml.ino6962.postinfinityforreddit.dark_theme";
+    public static final String AMOLED_THEME_SHARED_PREFERENCES_FILE = "ml.ino6962.postinfinityforreddit.amoled_theme";
     public static final String LIGHT_STATUS_BAR = "lightStatusBar";
     public static final String LIGHT_NAV_BAR = "lightNavBar";
     public static final String CHANGE_STATUS_BAR_ICON_COLOR_AFTER_TOOLBAR_COLLAPSED_IN_IMMERSIVE_INTERFACE = "changeStatusBarIconColorImmersive";

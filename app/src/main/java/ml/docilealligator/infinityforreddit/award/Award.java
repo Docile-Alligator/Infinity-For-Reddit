@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.award;
+package ml.ino6962.postinfinityforreddit.award;
 
 import java.util.ArrayList;
 

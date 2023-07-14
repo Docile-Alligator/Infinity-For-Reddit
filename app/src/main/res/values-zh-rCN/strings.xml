@@ -463,7 +463,7 @@
     <string name="error_loading_multi_reddit_list">"无法同步聚合版块"</string>
     <string name="error_loading_subscriptions">"无法同步订阅"</string>
     <string name="share_this_app">"快来试试 Infinity for Reddit，一个很棒的 Reddit 客户端！
-https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit"</string>
+https://play.google.com/store/apps/details?id=ml.ino6962.postinfinityforreddit"</string>
     <string name="error_getting_subreddit_name">"获取版块名称错误"</string>
     <string name="share_post_link">"分享帖子链接"</string>
     <string name="share_image_link">"分享图片链接"</string>

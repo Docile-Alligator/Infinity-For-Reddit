@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.settings;
+package ml.ino6962.postinfinityforreddit.settings;
 
 import android.app.Activity;
 import android.content.Context;
@@ -29,15 +29,15 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.MultiredditSelectionActivity;
-import ml.docilealligator.infinityforreddit.activities.SearchActivity;
-import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
-import ml.docilealligator.infinityforreddit.activities.SubredditSelectionActivity;
-import ml.docilealligator.infinityforreddit.multireddit.MultiReddit;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.activities.MultiredditSelectionActivity;
+import ml.ino6962.postinfinityforreddit.activities.SearchActivity;
+import ml.ino6962.postinfinityforreddit.activities.SettingsActivity;
+import ml.ino6962.postinfinityforreddit.activities.SubredditSelectionActivity;
+import ml.ino6962.postinfinityforreddit.multireddit.MultiReddit;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 
 public class CustomizeMainPageTabsFragment extends Fragment {
 

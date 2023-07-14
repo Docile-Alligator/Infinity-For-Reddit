@@ -1,7 +1,7 @@
 /**
  * Created by Gabriele Guerrisi on 24/11/2017.
  */
-package ml.docilealligator.infinityforreddit.customviews.slidr.util;
+package ml.ino6962.postinfinityforreddit.customviews.slidr.util;
 
 import android.content.Context;
 import android.util.Log;

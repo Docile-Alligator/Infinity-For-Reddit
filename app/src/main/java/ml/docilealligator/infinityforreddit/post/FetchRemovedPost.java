@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.post;
+package ml.ino6962.postinfinityforreddit.post;
 
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -11,9 +11,9 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-import ml.docilealligator.infinityforreddit.apis.PushshiftAPI;
-import ml.docilealligator.infinityforreddit.utils.JSONUtils;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.apis.PushshiftAPI;
+import ml.ino6962.postinfinityforreddit.utils.JSONUtils;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

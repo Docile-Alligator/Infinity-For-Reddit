@@ -1,10 +1,10 @@
-package ml.docilealligator.infinityforreddit.subreddit;
+package ml.ino6962.postinfinityforreddit.subreddit;
 
 import android.os.AsyncTask;
 
 import androidx.lifecycle.LiveData;
 
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
 
 public class SubredditRepository {
     private SubredditDao mSubredditDao;

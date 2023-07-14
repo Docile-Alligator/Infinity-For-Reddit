@@ -1,6 +1,6 @@
-package ml.docilealligator.infinityforreddit.apis;
+package ml.ino6962.postinfinityforreddit.apis;
 
-import ml.docilealligator.infinityforreddit.utils.APIUtils;
+import ml.ino6962.postinfinityforreddit.utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;

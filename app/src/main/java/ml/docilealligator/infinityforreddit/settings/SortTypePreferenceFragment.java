@@ -1,9 +1,9 @@
-package ml.docilealligator.infinityforreddit.settings;
+package ml.ino6962.postinfinityforreddit.settings;
 
 import android.os.Bundle;
 
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
 
 public class SortTypePreferenceFragment extends CustomFontPreferenceFragmentCompat {
 

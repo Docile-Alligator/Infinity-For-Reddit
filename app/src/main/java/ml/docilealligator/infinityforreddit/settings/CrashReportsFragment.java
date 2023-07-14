@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.settings;
+package ml.ino6962.postinfinityforreddit.settings;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
@@ -29,14 +29,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import ml.docilealligator.infinityforreddit.BuildConfig;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
-import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
-import ml.docilealligator.infinityforreddit.adapters.CrashReportsRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.BuildConfig;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.activities.LinkResolverActivity;
+import ml.ino6962.postinfinityforreddit.activities.SettingsActivity;
+import ml.ino6962.postinfinityforreddit.adapters.CrashReportsRecyclerViewAdapter;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 
 public class CrashReportsFragment extends Fragment {
 

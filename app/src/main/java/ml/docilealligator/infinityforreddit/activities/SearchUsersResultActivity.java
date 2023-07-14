@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.activities;
+package ml.ino6962.postinfinityforreddit.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -27,14 +27,14 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.ActivityToolbarInterface;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
-import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.fragments.UserListingFragment;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.ActivityToolbarInterface;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.customviews.slidr.Slidr;
+import ml.ino6962.postinfinityforreddit.events.SwitchAccountEvent;
+import ml.ino6962.postinfinityforreddit.fragments.UserListingFragment;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
 
 public class SearchUsersResultActivity extends BaseActivity implements ActivityToolbarInterface {
 

@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.ino6962.postinfinityforreddit;
 
 import android.os.Handler;
 
@@ -12,8 +12,8 @@ import java.util.concurrent.Executor;
 
 import javax.inject.Provider;
 
-import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
-import ml.docilealligator.infinityforreddit.utils.JSONUtils;
+import ml.ino6962.postinfinityforreddit.apis.StreamableAPI;
+import ml.ino6962.postinfinityforreddit.utils.JSONUtils;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;

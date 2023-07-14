@@ -1,10 +1,10 @@
-package ml.docilealligator.infinityforreddit.events;
+package ml.ino6962.postinfinityforreddit.events;
 
 import java.util.ArrayList;
 
-import ml.docilealligator.infinityforreddit.SortType;
-import ml.docilealligator.infinityforreddit.post.Post;
-import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
+import ml.ino6962.postinfinityforreddit.SortType;
+import ml.ino6962.postinfinityforreddit.post.Post;
+import ml.ino6962.postinfinityforreddit.postfilter.PostFilter;
 
 public class ProvidePostListToViewPostDetailActivityEvent {
     public long postFragmentId;

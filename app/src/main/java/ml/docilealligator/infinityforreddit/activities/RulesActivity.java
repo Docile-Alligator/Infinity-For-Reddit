@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.activities;
+package ml.ino6962.postinfinityforreddit.activities;
 
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
@@ -31,17 +31,17 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.FetchRules;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.Rule;
-import ml.docilealligator.infinityforreddit.adapters.RulesRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
-import ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrInterface;
-import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
-import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.FetchRules;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.Rule;
+import ml.ino6962.postinfinityforreddit.adapters.RulesRecyclerViewAdapter;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.customviews.slidr.Slidr;
+import ml.ino6962.postinfinityforreddit.customviews.slidr.model.SlidrInterface;
+import ml.ino6962.postinfinityforreddit.customviews.slidr.widget.SliderPanel;
+import ml.ino6962.postinfinityforreddit.events.SwitchAccountEvent;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
 public class RulesActivity extends BaseActivity {

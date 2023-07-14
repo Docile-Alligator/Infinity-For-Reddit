@@ -1,13 +1,13 @@
-package ml.docilealligator.infinityforreddit.asynctasks;
+package ml.ino6962.postinfinityforreddit.asynctasks;
 
 import android.content.SharedPreferences;
 import android.os.Handler;
 
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.account.Account;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.account.Account;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
 
 public class SwitchAccount {
     public static void switchAccount(RedditDataRoomDatabase redditDataRoomDatabase,

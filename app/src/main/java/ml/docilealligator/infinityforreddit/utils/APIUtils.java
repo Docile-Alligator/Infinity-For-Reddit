@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.utils;
+package ml.ino6962.postinfinityforreddit.utils;
 
 import android.util.Base64;
 
@@ -47,7 +47,7 @@ public class APIUtils {
     public static final String AUTHORIZATION_KEY = "Authorization";
     public static final String AUTHORIZATION_BASE = "bearer ";
     public static final String USER_AGENT_KEY = "User-Agent";
-    public static final String USER_AGENT = "android:ml.docilealligator.infinityforreddit:v5.3.0 (by /u/Hostilenemy)";
+    public static final String USER_AGENT = "android:ml.ino6962.postinfinityforreddit:v5.3.0 (by /u/Hostilenemy)";
 
     public static final String GRANT_TYPE_KEY = "grant_type";
     public static final String GRANT_TYPE_REFRESH_TOKEN = "refresh_token";

@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.customviews.slidr.widget;
+package ml.ino6962.postinfinityforreddit.customviews.slidr.widget;
 
 
 import android.graphics.Canvas;
@@ -8,7 +8,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 
-import ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrPosition;
+import ml.ino6962.postinfinityforreddit.customviews.slidr.model.SlidrPosition;
 
 
 final class ScrimRenderer {

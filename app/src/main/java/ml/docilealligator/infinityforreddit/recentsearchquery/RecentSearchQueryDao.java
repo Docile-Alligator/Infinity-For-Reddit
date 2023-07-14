@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.recentsearchquery;
+package ml.ino6962.postinfinityforreddit.recentsearchquery;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;

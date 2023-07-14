@@ -1,11 +1,11 @@
-package ml.docilealligator.infinityforreddit.multireddit;
+package ml.ino6962.postinfinityforreddit.multireddit;
 
 import androidx.annotation.NonNull;
 
 import java.util.ArrayList;
 
-import ml.docilealligator.infinityforreddit.apis.RedditAPI;
-import ml.docilealligator.infinityforreddit.utils.APIUtils;
+import ml.ino6962.postinfinityforreddit.apis.RedditAPI;
+import ml.ino6962.postinfinityforreddit.utils.APIUtils;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

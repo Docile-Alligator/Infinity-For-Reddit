@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.adapters;
+package ml.ino6962.postinfinityforreddit.adapters;
 
 import android.content.res.ColorStateList;
 import android.os.Handler;
@@ -28,14 +28,14 @@ import java.util.concurrent.Executor;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import jp.wasabeef.glide.transformations.RoundedCornersTransformation;
-import ml.docilealligator.infinityforreddit.NetworkState;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.asynctasks.CheckIsSubscribedToSubreddit;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
-import ml.docilealligator.infinityforreddit.subreddit.SubredditSubscription;
+import ml.ino6962.postinfinityforreddit.NetworkState;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
+import ml.ino6962.postinfinityforreddit.asynctasks.CheckIsSubscribedToSubreddit;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.subreddit.SubredditData;
+import ml.ino6962.postinfinityforreddit.subreddit.SubredditSubscription;
 import pl.droidsonroids.gif.GifImageView;
 import retrofit2.Retrofit;
 

@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.adapters.navigationdrawer;
+package ml.ino6962.postinfinityforreddit.adapters.navigationdrawer;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,11 +15,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.activities.InboxActivity;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
+import ml.ino6962.postinfinityforreddit.activities.InboxActivity;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
 
 public class AccountSectionRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 

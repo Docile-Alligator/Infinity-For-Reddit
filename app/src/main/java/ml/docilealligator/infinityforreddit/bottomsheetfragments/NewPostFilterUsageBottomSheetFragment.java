@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.bottomsheetfragments;
+package ml.ino6962.postinfinityforreddit.bottomsheetfragments;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -11,11 +11,11 @@ import androidx.annotation.NonNull;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.PostFilterUsageListingActivity;
-import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
-import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.activities.PostFilterUsageListingActivity;
+import ml.ino6962.postinfinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
+import ml.ino6962.postinfinityforreddit.postfilter.PostFilterUsage;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 
 public class NewPostFilterUsageBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
 

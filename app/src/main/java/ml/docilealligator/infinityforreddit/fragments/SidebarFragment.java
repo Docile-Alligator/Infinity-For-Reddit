@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.fragments;
+package ml.ino6962.postinfinityforreddit.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -32,21 +32,21 @@ import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.recycler.MarkwonAdapter;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
-import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
-import ml.docilealligator.infinityforreddit.asynctasks.InsertSubredditData;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
-import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
-import ml.docilealligator.infinityforreddit.subreddit.FetchSubredditData;
-import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
-import ml.docilealligator.infinityforreddit.subreddit.SubredditViewModel;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.activities.LinkResolverActivity;
+import ml.ino6962.postinfinityforreddit.activities.ViewSubredditDetailActivity;
+import ml.ino6962.postinfinityforreddit.asynctasks.InsertSubredditData;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.CopyTextBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.ino6962.postinfinityforreddit.markdown.MarkdownUtils;
+import ml.ino6962.postinfinityforreddit.subreddit.FetchSubredditData;
+import ml.ino6962.postinfinityforreddit.subreddit.SubredditData;
+import ml.ino6962.postinfinityforreddit.subreddit.SubredditViewModel;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 public class SidebarFragment extends Fragment {

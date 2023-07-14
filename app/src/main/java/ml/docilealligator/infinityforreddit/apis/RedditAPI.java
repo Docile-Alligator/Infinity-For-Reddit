@@ -1,10 +1,10 @@
-package ml.docilealligator.infinityforreddit.apis;
+package ml.ino6962.postinfinityforreddit.apis;
 
 import com.google.common.util.concurrent.ListenableFuture;
 
 import java.util.Map;
 
-import ml.docilealligator.infinityforreddit.SortType;
+import ml.ino6962.postinfinityforreddit.SortType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.Call;

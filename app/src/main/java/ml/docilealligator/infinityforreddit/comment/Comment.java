@@ -1,12 +1,12 @@
-package ml.docilealligator.infinityforreddit.comment;
+package ml.ino6962.postinfinityforreddit.comment;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import java.util.ArrayList;
 
-import ml.docilealligator.infinityforreddit.BuildConfig;
-import ml.docilealligator.infinityforreddit.utils.APIUtils;
+import ml.ino6962.postinfinityforreddit.BuildConfig;
+import ml.ino6962.postinfinityforreddit.utils.APIUtils;
 
 public class Comment implements Parcelable {
     public static final int VOTE_TYPE_NO_VOTE = 0;

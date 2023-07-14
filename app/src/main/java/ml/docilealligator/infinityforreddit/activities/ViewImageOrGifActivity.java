@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.activities;
+package ml.ino6962.postinfinityforreddit.activities;
 
 import android.Manifest;
 import android.content.Intent;
@@ -57,27 +57,27 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.BuildConfig;
-import ml.docilealligator.infinityforreddit.CustomFontReceiver;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
-import ml.docilealligator.infinityforreddit.WallpaperSetter;
-import ml.docilealligator.infinityforreddit.asynctasks.SaveBitmapImageToFile;
-import ml.docilealligator.infinityforreddit.asynctasks.SaveGIFToFile;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.SetAsWallpaperBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
-import ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrConfig;
-import ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrPosition;
-import ml.docilealligator.infinityforreddit.font.ContentFontFamily;
-import ml.docilealligator.infinityforreddit.font.ContentFontStyle;
-import ml.docilealligator.infinityforreddit.font.FontFamily;
-import ml.docilealligator.infinityforreddit.font.FontStyle;
-import ml.docilealligator.infinityforreddit.font.TitleFontFamily;
-import ml.docilealligator.infinityforreddit.font.TitleFontStyle;
-import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.BuildConfig;
+import ml.ino6962.postinfinityforreddit.CustomFontReceiver;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.SetAsWallpaperCallback;
+import ml.ino6962.postinfinityforreddit.WallpaperSetter;
+import ml.ino6962.postinfinityforreddit.asynctasks.SaveBitmapImageToFile;
+import ml.ino6962.postinfinityforreddit.asynctasks.SaveGIFToFile;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.SetAsWallpaperBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.customviews.slidr.Slidr;
+import ml.ino6962.postinfinityforreddit.customviews.slidr.model.SlidrConfig;
+import ml.ino6962.postinfinityforreddit.customviews.slidr.model.SlidrPosition;
+import ml.ino6962.postinfinityforreddit.font.ContentFontFamily;
+import ml.ino6962.postinfinityforreddit.font.ContentFontStyle;
+import ml.ino6962.postinfinityforreddit.font.FontFamily;
+import ml.ino6962.postinfinityforreddit.font.FontStyle;
+import ml.ino6962.postinfinityforreddit.font.TitleFontFamily;
+import ml.ino6962.postinfinityforreddit.font.TitleFontStyle;
+import ml.ino6962.postinfinityforreddit.services.DownloadMediaService;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 
 public class ViewImageOrGifActivity extends AppCompatActivity implements SetAsWallpaperCallback, CustomFontReceiver {
 

@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.customviews.slidr.widget;
+package ml.ino6962.postinfinityforreddit.customviews.slidr.widget;
 
 
 import android.content.Context;
@@ -11,9 +11,9 @@ import android.widget.FrameLayout;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.ViewGroupCompat;
 
-import ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrConfig;
-import ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrInterface;
-import ml.docilealligator.infinityforreddit.customviews.slidr.util.ViewDragHelper;
+import ml.ino6962.postinfinityforreddit.customviews.slidr.model.SlidrConfig;
+import ml.ino6962.postinfinityforreddit.customviews.slidr.model.SlidrInterface;
+import ml.ino6962.postinfinityforreddit.customviews.slidr.util.ViewDragHelper;
 
 
 public class SliderPanel extends FrameLayout {

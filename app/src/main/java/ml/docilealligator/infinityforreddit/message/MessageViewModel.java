@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.message;
+package ml.ino6962.postinfinityforreddit.message;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -11,7 +11,7 @@ import androidx.paging.PagedList;
 
 import java.util.Locale;
 
-import ml.docilealligator.infinityforreddit.NetworkState;
+import ml.ino6962.postinfinityforreddit.NetworkState;
 import retrofit2.Retrofit;
 
 public class MessageViewModel extends ViewModel {

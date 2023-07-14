@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.markdown;
+package ml.ino6962.postinfinityforreddit.markdown;
 
 import static io.noties.markwon.inlineparser.InlineParserUtils.mergeChildTextNodes;
 

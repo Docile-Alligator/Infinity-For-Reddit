@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.customviews;
+package ml.ino6962.postinfinityforreddit.customviews;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,9 +10,9 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceScreen;
 
-import ml.docilealligator.infinityforreddit.CustomFontReceiver;
-import ml.docilealligator.infinityforreddit.CustomThemeWrapperReceiver;
-import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
+import ml.ino6962.postinfinityforreddit.CustomFontReceiver;
+import ml.ino6962.postinfinityforreddit.CustomThemeWrapperReceiver;
+import ml.ino6962.postinfinityforreddit.activities.SettingsActivity;
 
 public abstract class CustomFontPreferenceFragmentCompat extends PreferenceFragmentCompat {
     protected SettingsActivity activity;

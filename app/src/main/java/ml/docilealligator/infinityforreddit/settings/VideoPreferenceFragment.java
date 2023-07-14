@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.settings;
+package ml.ino6962.postinfinityforreddit.settings;
 
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -14,17 +14,17 @@ import org.greenrobot.eventbus.EventBus;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
-import ml.docilealligator.infinityforreddit.events.ChangeAutoplayNsfwVideosEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeEasierToWatchInFullScreenEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeMuteAutoplayingVideosEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeMuteNSFWVideoEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeRememberMutingOptionInPostFeedEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeStartAutoplayVisibleAreaOffsetEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeVideoAutoplayEvent;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
+import ml.ino6962.postinfinityforreddit.events.ChangeAutoplayNsfwVideosEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeEasierToWatchInFullScreenEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeMuteAutoplayingVideosEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeMuteNSFWVideoEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeRememberMutingOptionInPostFeedEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeStartAutoplayVisibleAreaOffsetEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeVideoAutoplayEvent;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
 
 public class VideoPreferenceFragment extends CustomFontPreferenceFragmentCompat {
 

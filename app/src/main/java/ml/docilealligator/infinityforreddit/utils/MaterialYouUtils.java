@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.utils;
+package ml.ino6962.postinfinityforreddit.utils;
 
 import android.app.WallpaperColors;
 import android.app.WallpaperManager;
@@ -15,10 +15,10 @@ import org.greenrobot.eventbus.EventBus;
 
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomTheme;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.events.RecreateActivityEvent;
 
 public class MaterialYouUtils {
     public interface CheckThemeNameListener {

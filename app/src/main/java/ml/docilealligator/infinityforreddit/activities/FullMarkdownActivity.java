@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.activities;
+package ml.ino6962.postinfinityforreddit.activities;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -35,16 +35,16 @@ import io.noties.markwon.MarkwonConfiguration;
 import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
 import io.noties.markwon.recycler.MarkwonAdapter;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
-import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
-import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
-import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.ino6962.postinfinityforreddit.customviews.SwipeLockInterface;
+import ml.ino6962.postinfinityforreddit.customviews.SwipeLockLinearLayoutManager;
+import ml.ino6962.postinfinityforreddit.customviews.slidr.Slidr;
+import ml.ino6962.postinfinityforreddit.events.SwitchAccountEvent;
+import ml.ino6962.postinfinityforreddit.markdown.MarkdownUtils;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
 
 public class FullMarkdownActivity extends BaseActivity {
 

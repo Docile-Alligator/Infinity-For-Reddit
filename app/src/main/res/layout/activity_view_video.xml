@@ -9,7 +9,7 @@
     android:background="#000000"
     android:keepScreenOn="true"
     app:dragUpEnabled="true"
-    tools:application="ml.docilealligator.infinityforreddit.activities.ViewVideoActivity">
+    tools:application="ml.ino6962.postinfinityforreddit.activities.ViewVideoActivity">
 
     <app.futured.hauler.LockableNestedScrollView
         android:id="@+id/lockable_nested_scroll_view_view_video_activity"

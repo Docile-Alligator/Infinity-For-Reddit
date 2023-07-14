@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.adapters;
+package ml.ino6962.postinfinityforreddit.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,8 +10,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
 
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.activities.SettingsActivity;
 
 public class CrashReportsRecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private SettingsActivity activity;

@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.ino6962.postinfinityforreddit;
 
 public interface RecyclerViewContentScrollingInterface {
     void contentScrollUp();

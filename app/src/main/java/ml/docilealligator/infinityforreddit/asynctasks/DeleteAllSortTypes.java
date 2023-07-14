@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.asynctasks;
+package ml.ino6962.postinfinityforreddit.asynctasks;
 
 import android.content.SharedPreferences;
 import android.os.Handler;
@@ -6,7 +6,7 @@ import android.os.Handler;
 import java.util.Map;
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
 
 public class DeleteAllSortTypes {
 

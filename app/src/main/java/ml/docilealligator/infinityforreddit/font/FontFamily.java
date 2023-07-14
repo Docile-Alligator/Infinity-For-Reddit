@@ -1,6 +1,6 @@
-package ml.docilealligator.infinityforreddit.font;
+package ml.ino6962.postinfinityforreddit.font;
 
-import ml.docilealligator.infinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.R;
 
 public enum FontFamily {
     Default(R.style.FontFamily, "Default"),

@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit;
+package ml.ino6962.postinfinityforreddit;
 
 import com.bumptech.glide.load.resource.bitmap.DownsampleStrategy;
 

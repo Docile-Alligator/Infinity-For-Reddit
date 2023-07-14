@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.postfilter;
+package ml.ino6962.postinfinityforreddit.postfilter;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import java.util.List;
 
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
 
 public class PostFilterViewModel extends ViewModel {
     private LiveData<List<PostFilter>> mPostFilterListLiveData;

@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.settings;
+package ml.ino6962.postinfinityforreddit.settings;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -22,14 +22,14 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.SettingsActivity;
-import ml.docilealligator.infinityforreddit.events.ChangeNSFWBlurEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeSpoilerBlurEvent;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.activities.SettingsActivity;
+import ml.ino6962.postinfinityforreddit.events.ChangeNSFWBlurEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeNSFWEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeSpoilerBlurEvent;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 
 public class NsfwAndSpoilerFragment extends Fragment {
 

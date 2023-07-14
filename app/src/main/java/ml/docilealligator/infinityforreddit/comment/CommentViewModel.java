@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.comment;
+package ml.ino6962.postinfinityforreddit.comment;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
@@ -11,8 +11,8 @@ import androidx.paging.PagedList;
 
 import java.util.Locale;
 
-import ml.docilealligator.infinityforreddit.NetworkState;
-import ml.docilealligator.infinityforreddit.SortType;
+import ml.ino6962.postinfinityforreddit.NetworkState;
+import ml.ino6962.postinfinityforreddit.SortType;
 import retrofit2.Retrofit;
 
 public class CommentViewModel extends ViewModel {

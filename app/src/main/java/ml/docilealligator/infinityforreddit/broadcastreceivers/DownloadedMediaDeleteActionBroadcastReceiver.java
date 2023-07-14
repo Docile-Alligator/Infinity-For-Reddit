@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.broadcastreceivers;
+package ml.ino6962.postinfinityforreddit.broadcastreceivers;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 

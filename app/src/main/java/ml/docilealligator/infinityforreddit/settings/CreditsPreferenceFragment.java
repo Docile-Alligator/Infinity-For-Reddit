@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.settings;
+package ml.ino6962.postinfinityforreddit.settings;
 
 
 import android.content.Intent;
@@ -8,10 +8,10 @@ import android.os.Bundle;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
-import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.activities.LinkResolverActivity;
+import ml.ino6962.postinfinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
 
 /**
  * A simple {@link PreferenceFragmentCompat} subclass.

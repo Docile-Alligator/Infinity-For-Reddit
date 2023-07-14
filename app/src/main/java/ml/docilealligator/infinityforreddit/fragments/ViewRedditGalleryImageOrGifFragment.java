@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.fragments;
+package ml.ino6962.postinfinityforreddit.fragments;
 
 import android.Manifest;
 import android.content.Context;
@@ -56,19 +56,19 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
-import ml.docilealligator.infinityforreddit.BuildConfig;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.SetAsWallpaperCallback;
-import ml.docilealligator.infinityforreddit.activities.ViewRedditGalleryActivity;
-import ml.docilealligator.infinityforreddit.asynctasks.SaveBitmapImageToFile;
-import ml.docilealligator.infinityforreddit.asynctasks.SaveGIFToFile;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.CopyTextBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.SetAsWallpaperBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.post.Post;
-import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.BuildConfig;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.SetAsWallpaperCallback;
+import ml.ino6962.postinfinityforreddit.activities.ViewRedditGalleryActivity;
+import ml.ino6962.postinfinityforreddit.asynctasks.SaveBitmapImageToFile;
+import ml.ino6962.postinfinityforreddit.asynctasks.SaveGIFToFile;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.CopyTextBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.SetAsWallpaperBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.post.Post;
+import ml.ino6962.postinfinityforreddit.services.DownloadMediaService;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 
 public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 

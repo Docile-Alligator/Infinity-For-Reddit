@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.readpost;
+package ml.ino6962.postinfinityforreddit.readpost;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -9,7 +9,7 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.ForeignKey;
 
-import ml.docilealligator.infinityforreddit.account.Account;
+import ml.ino6962.postinfinityforreddit.account.Account;
 
 @Entity(tableName = "read_posts", primaryKeys = {"username", "id"},
         foreignKeys = @ForeignKey(entity = Account.class, parentColumns = "username",

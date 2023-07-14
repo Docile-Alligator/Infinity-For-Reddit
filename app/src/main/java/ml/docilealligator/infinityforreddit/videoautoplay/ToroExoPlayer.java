@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package ml.docilealligator.infinityforreddit.videoautoplay;
+package ml.ino6962.postinfinityforreddit.videoautoplay;
 
-import static ml.docilealligator.infinityforreddit.videoautoplay.ToroUtil.checkNotNull;
+import static ml.ino6962.postinfinityforreddit.videoautoplay.ToroUtil.checkNotNull;
 
 import android.content.Context;
 import android.os.Looper;
@@ -31,7 +31,7 @@ import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.upstream.BandwidthMeter;
 
-import ml.docilealligator.infinityforreddit.videoautoplay.media.VolumeInfo;
+import ml.ino6962.postinfinityforreddit.videoautoplay.media.VolumeInfo;
 
 /**
  * A custom {@link SimpleExoPlayer} that also notify the change of Volume.

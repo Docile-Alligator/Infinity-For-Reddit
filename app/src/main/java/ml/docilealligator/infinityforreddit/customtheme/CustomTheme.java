@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.customtheme;
+package ml.ino6962.postinfinityforreddit.customtheme;
 
 import android.graphics.Color;
 

@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.post;
+package ml.ino6962.postinfinityforreddit.post;
 
 import android.content.SharedPreferences;
 
@@ -21,9 +21,9 @@ import androidx.paging.PagingLiveData;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.SortType;
-import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.SortType;
+import ml.ino6962.postinfinityforreddit.postfilter.PostFilter;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
 public class PostViewModel extends ViewModel {

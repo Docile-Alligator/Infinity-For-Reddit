@@ -4,7 +4,7 @@
     android:layout_height="wrap_content"
     android:background="?attr/cardViewBackgroundColor">
 
-    <ml.docilealligator.infinityforreddit.customviews.CommentIndentationView
+    <ml.ino6962.postinfinityforreddit.customviews.CommentIndentationView
         android:id="@+id/vertical_block_indentation_item_load_more_comments_placeholder"
         android:layout_width="wrap_content"
         android:layout_height="match_parent" />

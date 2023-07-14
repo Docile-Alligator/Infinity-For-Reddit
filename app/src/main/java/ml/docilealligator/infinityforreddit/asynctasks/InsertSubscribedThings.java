@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.asynctasks;
+package ml.ino6962.postinfinityforreddit.asynctasks;
 
 import android.os.Handler;
 
@@ -9,13 +9,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Executor;
 
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.subreddit.SubredditDao;
-import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
-import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditDao;
-import ml.docilealligator.infinityforreddit.subscribedsubreddit.SubscribedSubredditData;
-import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserDao;
-import ml.docilealligator.infinityforreddit.subscribeduser.SubscribedUserData;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.subreddit.SubredditDao;
+import ml.ino6962.postinfinityforreddit.subreddit.SubredditData;
+import ml.ino6962.postinfinityforreddit.subscribedsubreddit.SubscribedSubredditDao;
+import ml.ino6962.postinfinityforreddit.subscribedsubreddit.SubscribedSubredditData;
+import ml.ino6962.postinfinityforreddit.subscribeduser.SubscribedUserDao;
+import ml.ino6962.postinfinityforreddit.subscribeduser.SubscribedUserData;
 
 public class InsertSubscribedThings {
 

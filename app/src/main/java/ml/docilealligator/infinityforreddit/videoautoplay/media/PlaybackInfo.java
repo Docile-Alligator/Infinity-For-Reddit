@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ml.docilealligator.infinityforreddit.videoautoplay.media;
+package ml.ino6962.postinfinityforreddit.videoautoplay.media;
 
 import android.os.Parcel;
 import android.os.Parcelable;

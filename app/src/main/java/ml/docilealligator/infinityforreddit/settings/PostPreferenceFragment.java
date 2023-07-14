@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.settings;
+package ml.ino6962.postinfinityforreddit.settings;
 
 import android.os.Bundle;
 
@@ -7,24 +7,24 @@ import androidx.preference.SwitchPreference;
 
 import org.greenrobot.eventbus.EventBus;
 
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
-import ml.docilealligator.infinityforreddit.events.ChangeCompactLayoutToolbarHiddenByDefaultEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeDefaultLinkPostLayoutEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeDefaultPostLayoutEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeFixedHeightPreviewInCardEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeHidePostFlairEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeHidePostTypeEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeHideSubredditAndUserPrefixEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeHideTextPostContent;
-import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfAwardsEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfCommentsEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeHideTheNumberOfVotesEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeLongPressToHideToolbarInCompactLayoutEvent;
-import ml.docilealligator.infinityforreddit.events.ChangeShowAbsoluteNumberOfVotesEvent;
-import ml.docilealligator.infinityforreddit.events.ShowDividerInCompactLayoutPreferenceEvent;
-import ml.docilealligator.infinityforreddit.events.ShowThumbnailOnTheRightInCompactLayoutEvent;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.customviews.CustomFontPreferenceFragmentCompat;
+import ml.ino6962.postinfinityforreddit.events.ChangeCompactLayoutToolbarHiddenByDefaultEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeDefaultLinkPostLayoutEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeDefaultPostLayoutEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeFixedHeightPreviewInCardEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeHidePostFlairEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeHidePostTypeEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeHideSubredditAndUserPrefixEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeHideTextPostContent;
+import ml.ino6962.postinfinityforreddit.events.ChangeHideTheNumberOfAwardsEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeHideTheNumberOfCommentsEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeHideTheNumberOfVotesEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeLongPressToHideToolbarInCompactLayoutEvent;
+import ml.ino6962.postinfinityforreddit.events.ChangeShowAbsoluteNumberOfVotesEvent;
+import ml.ino6962.postinfinityforreddit.events.ShowDividerInCompactLayoutPreferenceEvent;
+import ml.ino6962.postinfinityforreddit.events.ShowThumbnailOnTheRightInCompactLayoutEvent;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
 
 public class PostPreferenceFragment extends CustomFontPreferenceFragmentCompat {
 

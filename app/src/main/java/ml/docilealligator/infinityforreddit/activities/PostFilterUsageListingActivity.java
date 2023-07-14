@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.activities;
+package ml.ino6962.postinfinityforreddit.activities;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -29,19 +29,19 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.adapters.PostFilterUsageRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.NewPostFilterUsageBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostFilterUsageOptionsBottomSheetFragment;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.postfilter.DeletePostFilterUsage;
-import ml.docilealligator.infinityforreddit.postfilter.PostFilter;
-import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsage;
-import ml.docilealligator.infinityforreddit.postfilter.PostFilterUsageViewModel;
-import ml.docilealligator.infinityforreddit.postfilter.SavePostFilterUsage;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.adapters.PostFilterUsageRecyclerViewAdapter;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.NewPostFilterUsageBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.bottomsheetfragments.PostFilterUsageOptionsBottomSheetFragment;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.postfilter.DeletePostFilterUsage;
+import ml.ino6962.postinfinityforreddit.postfilter.PostFilter;
+import ml.ino6962.postinfinityforreddit.postfilter.PostFilterUsage;
+import ml.ino6962.postinfinityforreddit.postfilter.PostFilterUsageViewModel;
+import ml.ino6962.postinfinityforreddit.postfilter.SavePostFilterUsage;
+import ml.ino6962.postinfinityforreddit.utils.Utils;
 
 public class PostFilterUsageListingActivity extends BaseActivity {
 

@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.fragments;
+package ml.ino6962.postinfinityforreddit.fragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -29,20 +29,20 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.FragmentCommunicator;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.NetworkState;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.activities.BaseActivity;
-import ml.docilealligator.infinityforreddit.adapters.MessageRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
-import ml.docilealligator.infinityforreddit.events.RepliedToPrivateMessageEvent;
-import ml.docilealligator.infinityforreddit.message.FetchMessage;
-import ml.docilealligator.infinityforreddit.message.Message;
-import ml.docilealligator.infinityforreddit.message.MessageViewModel;
+import ml.ino6962.postinfinityforreddit.FragmentCommunicator;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.NetworkState;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.RecyclerViewContentScrollingInterface;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.activities.BaseActivity;
+import ml.ino6962.postinfinityforreddit.adapters.MessageRecyclerViewAdapter;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.ino6962.postinfinityforreddit.events.RepliedToPrivateMessageEvent;
+import ml.ino6962.postinfinityforreddit.message.FetchMessage;
+import ml.ino6962.postinfinityforreddit.message.Message;
+import ml.ino6962.postinfinityforreddit.message.MessageViewModel;
 import retrofit2.Retrofit;
 
 public class InboxFragment extends Fragment implements FragmentCommunicator {

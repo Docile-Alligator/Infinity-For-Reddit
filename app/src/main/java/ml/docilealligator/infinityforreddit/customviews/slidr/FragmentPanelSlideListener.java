@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.customviews.slidr;
+package ml.ino6962.postinfinityforreddit.customviews.slidr;
 
 
 import android.view.View;
@@ -6,8 +6,8 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
 
-import ml.docilealligator.infinityforreddit.customviews.slidr.model.SlidrConfig;
-import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
+import ml.ino6962.postinfinityforreddit.customviews.slidr.model.SlidrConfig;
+import ml.ino6962.postinfinityforreddit.customviews.slidr.widget.SliderPanel;
 
 
 class FragmentPanelSlideListener implements SliderPanel.OnPanelSlideListener {

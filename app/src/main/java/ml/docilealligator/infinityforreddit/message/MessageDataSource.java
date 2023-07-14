@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.message;
+package ml.ino6962.postinfinityforreddit.message;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -8,7 +8,7 @@ import androidx.paging.PageKeyedDataSource;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import ml.docilealligator.infinityforreddit.NetworkState;
+import ml.ino6962.postinfinityforreddit.NetworkState;
 import retrofit2.Retrofit;
 
 class MessageDataSource extends PageKeyedDataSource<String, Message> {

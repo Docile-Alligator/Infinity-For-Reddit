@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.customviews;
+package ml.ino6962.postinfinityforreddit.customviews;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -12,7 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
-import ml.docilealligator.infinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.R;
 
 public class ColorPickerDialog extends AlertDialog {
     private View colorView;

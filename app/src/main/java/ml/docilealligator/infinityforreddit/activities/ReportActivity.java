@@ -1,4 +1,4 @@
-package ml.docilealligator.infinityforreddit.activities;
+package ml.ino6962.postinfinityforreddit.activities;
 
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -24,17 +24,17 @@ import javax.inject.Named;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import ml.docilealligator.infinityforreddit.FetchRules;
-import ml.docilealligator.infinityforreddit.Infinity;
-import ml.docilealligator.infinityforreddit.R;
-import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
-import ml.docilealligator.infinityforreddit.ReportReason;
-import ml.docilealligator.infinityforreddit.ReportThing;
-import ml.docilealligator.infinityforreddit.Rule;
-import ml.docilealligator.infinityforreddit.adapters.ReportReasonRecyclerViewAdapter;
-import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
-import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.ino6962.postinfinityforreddit.FetchRules;
+import ml.ino6962.postinfinityforreddit.Infinity;
+import ml.ino6962.postinfinityforreddit.R;
+import ml.ino6962.postinfinityforreddit.RedditDataRoomDatabase;
+import ml.ino6962.postinfinityforreddit.ReportReason;
+import ml.ino6962.postinfinityforreddit.ReportThing;
+import ml.ino6962.postinfinityforreddit.Rule;
+import ml.ino6962.postinfinityforreddit.adapters.ReportReasonRecyclerViewAdapter;
+import ml.ino6962.postinfinityforreddit.customtheme.CustomThemeWrapper;
+import ml.ino6962.postinfinityforreddit.customviews.slidr.Slidr;
+import ml.ino6962.postinfinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
 public class ReportActivity extends BaseActivity {
