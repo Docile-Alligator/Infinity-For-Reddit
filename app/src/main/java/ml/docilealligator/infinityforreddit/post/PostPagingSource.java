@@ -58,6 +58,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     private String userWhere;
     private String multiRedditPath;
     private LinkedHashSet<Post> postLinkedHashSet;
+    private String previousLastItem;
 
     PostPagingSource(Executor executor, Retrofit retrofit, String accessToken, String accountName,
                      SharedPreferences sharedPreferences,
@@ -188,6 +189,11 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
                 return new LoadResult.Error<>(new Exception("Error parsing posts"));
             } else {
                 int currentPostsSize = postLinkedHashSet.size();
+                if (lastItem != null && lastItem.equals(previousLastItem)) {
+                    lastItem = null;
+                }
+                previousLastItem = lastItem;
+
                 postLinkedHashSet.addAll(newPosts);
                 if (currentPostsSize == postLinkedHashSet.size()) {
                     return new LoadResult.Page<>(new ArrayList<>(), null, lastItem);
