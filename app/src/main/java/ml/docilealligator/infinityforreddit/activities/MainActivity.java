@@ -336,7 +336,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
             mNewAccountName = getIntent().getStringExtra(EXTRA_NEW_ACCOUNT_NAME);
         }
 
-        if (!mInternalSharedPreferences.getBoolean(SharedPreferencesUtils.DO_NOT_SHOW_REDDIT_API_INFO_AGAIN, false)) {
+        if (!mInternalSharedPreferences.getBoolean(SharedPreferencesUtils.DO_NOT_SHOW_REDDIT_API_INFO_V2_AGAIN, false)) {
             RedditAPIInfoBottomSheetFragment fragment = new RedditAPIInfoBottomSheetFragment();
             fragment.setCancelable(false);
             fragment.show(getSupportFragmentManager(), fragment.getTag());
@@ -1535,7 +1535,7 @@ public class MainActivity extends BaseActivity implements SortTypeSelectionCallb
     }
 
     public void doNotShowRedditAPIInfoAgain() {
-        mInternalSharedPreferences.edit().putBoolean(SharedPreferencesUtils.DO_NOT_SHOW_REDDIT_API_INFO_AGAIN, true).apply();
+        mInternalSharedPreferences.edit().putBoolean(SharedPreferencesUtils.DO_NOT_SHOW_REDDIT_API_INFO_V2_AGAIN, true).apply();
     }
 
     private class SectionsPagerAdapter extends FragmentStateAdapter {
