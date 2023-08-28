@@ -26,6 +26,8 @@ import android.os.Message;
 import android.os.Process;
 import android.provider.MediaStore;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -83,6 +85,7 @@ public class DownloadRedditVideoService extends Service {
     private ServiceHandler serviceHandler;
     private NotificationManagerCompat notificationManager;
     private NotificationCompat.Builder builder;
+    private final String[] possibleAudioUrlSuffices = new String[]{"/DASH_AUDIO_128.mp4", "/DASH_audio.mp4", "/DASH_audio", "/audio.mp4", "/audio"};
 
     public DownloadRedditVideoService() {
     }
@@ -95,7 +98,9 @@ public class DownloadRedditVideoService extends Service {
         public void handleMessage(Message msg) {
             Bundle intent = msg.getData();
             String videoUrl = intent.getString(EXTRA_VIDEO_URL);
-            String audioUrl = Build.VERSION.SDK_INT > Build.VERSION_CODES.N ? videoUrl.substring(0, videoUrl.lastIndexOf('/')) + "/DASH_audio.mp4" : null;
+
+            String audioUrlPrefix = Build.VERSION.SDK_INT > Build.VERSION_CODES.N ? videoUrl.substring(0, videoUrl.lastIndexOf('/')) : null;
+
             String subredditName = intent.getString(EXTRA_SUBREDDIT);
             String fileNameWithoutExtension = subredditName + "-" + intent.getString(EXTRA_POST_ID);
             boolean isNsfw = intent.getBoolean(EXTRA_IS_NSFW, false);
@@ -129,7 +134,7 @@ public class DownloadRedditVideoService extends Service {
 
             retrofit = retrofit.newBuilder().client(client).build();
 
-            DownloadFile downloadFile = retrofit.create(DownloadFile.class);
+            DownloadFile downloadFileRetrofit = retrofit.create(DownloadFile.class);
 
             boolean separateDownloadFolder = sharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_FOLDER_FOR_EACH_SUBREDDIT, false);
 
@@ -138,7 +143,7 @@ public class DownloadRedditVideoService extends Service {
                 String destinationFileName = fileNameWithoutExtension + ".mp4";
 
                 try {
-                    Response<ResponseBody> videoResponse = downloadFile.downloadFile(videoUrl).execute();
+                    Response<ResponseBody> videoResponse = downloadFileRetrofit.downloadFile(videoUrl).execute();
                     if (videoResponse.isSuccessful() && videoResponse.body() != null) {
                         String externalCacheDirectoryPath = externalCacheDirectory.getAbsolutePath() + "/";
                         String destinationFileDirectory;
@@ -218,13 +223,13 @@ public class DownloadRedditVideoService extends Service {
                             return;
                         }
 
-                        if (audioUrl != null) {
-                            Response<ResponseBody> audioResponse = downloadFile.downloadFile(audioUrl).execute();
+                        if (audioUrlPrefix != null) {
+                            ResponseBody audioResponse = getAudioResponse(downloadFileRetrofit, audioUrlPrefix, 0);
                             String outputFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + ".mp4";
-                            if (audioResponse.isSuccessful() && audioResponse.body() != null) {
+                            if (audioResponse != null) {
                                 String audioFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + "-cache.mp3";
 
-                                String savedAudioFilePath = writeResponseBodyToDisk(audioResponse.body(), audioFilePath);
+                                String savedAudioFilePath = writeResponseBodyToDisk(audioResponse, audioFilePath);
                                 if (savedAudioFilePath == null) {
                                     downloadFinished(null, ERROR_AUDIO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
                                     return;
@@ -296,6 +301,22 @@ public class DownloadRedditVideoService extends Service {
             } else {
                 downloadFinished(null, ERROR_CANNOT_GET_CACHE_DIRECTORY, randomNotificationIdOffset);
             }
+        }
+
+        @Nullable
+        private ResponseBody getAudioResponse(DownloadFile downloadFileRetrofit, @NonNull String audioUrlPrefix, int audioSuffixIndex) throws IOException {
+            if (audioSuffixIndex >= possibleAudioUrlSuffices.length) {
+                return null;
+            }
+
+            String audioUrl = audioUrlPrefix + possibleAudioUrlSuffices[audioSuffixIndex];
+            Response<ResponseBody> audioResponse = downloadFileRetrofit.downloadFile(audioUrl).execute();
+            ResponseBody responseBody = audioResponse.body();
+            if (audioResponse.isSuccessful() && responseBody != null) {
+                return responseBody;
+            }
+
+            return getAudioResponse(downloadFileRetrofit, audioUrlPrefix, audioSuffixIndex + 1);
         }
 
         private String writeResponseBodyToDisk(ResponseBody body, String filePath) {

@@ -1322,4 +1322,8 @@
     <string name="denied_notification_permission">Notification permission is not granted</string>
     <string name="go_to_settings">Settings</string>
 
+    <string name="reddit_api_info_title">Please update Infinity after August 30th</string>
+    <string name="reddit_api_info">Starting from August 31st, 2023, Infinity will be a subscription-only app due to Reddit API changes enforced since July 1st. The announcement from Reddit can be found here: %1$s\n\nYou can learn more about the changes in this post: %2$s\n\nIt\'s required for you to update Infinity after August 30th so that you will get the new version with subscription options. None of the previous versions (including this one) will work after August 31st. Thank you for your understanding!</string>
+    <string name="i_understand">I understand</string>
+
 </resources>

@@ -50,6 +50,11 @@ Infinity for Reddit is available on Google Play and F-Droid
 
 </div>
 
+## Seeking Job Referrals!
+<h3>I am looking for entry-level/new grad software engineer (or related) jobs in both Canada and Australia and will be so grateful if you are willing to refer me to your company. Thank you!</h3>
+
+You can send me an email at docilealligator.app@gmail.com or message [u/Hostilenemy](https://www.reddit.com/user/Hostilenemy) on Reddit.
+
 ## Donation
 <p>Infinity for Reddit+:</p>
 <a href="https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforreddit.plus">
