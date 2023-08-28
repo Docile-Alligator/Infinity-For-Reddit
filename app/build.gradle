@@ -8,8 +8,8 @@ android {
         applicationId "ml.docilealligator.infinityforreddit"
         minSdk 21
         targetSdk 33
-        versionCode 117
-        versionName "5.4.2"
+        versionCode 125
+        versionName "6.0.6"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         javaCompileOptions {
             annotationProcessorOptions {
@@ -173,7 +173,7 @@ dependencies {
     implementation 'com.lsjwzh:materialloadingprogressbar:0.5.8-RELEASE'
 
     // Customizable TextView
-    implementation 'com.libRG:customtextview:2.4'
+    implementation files("Modules/customtextview-2.1.aar")
 
     // Dismiss gesturing
     implementation 'app.futured.hauler:hauler:5.0.0'

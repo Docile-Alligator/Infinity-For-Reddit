@@ -368,6 +368,7 @@ public class SharedPreferencesUtils {
 
     public static final String INTERNAL_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.internal";
     public static final String HAS_REQUESTED_NOTIFICATION_PERMISSION = "has_requested_notification_permission";
+    public static final String DO_NOT_SHOW_REDDIT_API_INFO_V2_AGAIN = "do_not_show_reddit_api_info_v2_again";
 
     //Legacy Settings
     public static final String MAIN_PAGE_TAB_1_TITLE_LEGACY = "main_page_tab_1_title";
@@ -393,4 +394,6 @@ public class SharedPreferencesUtils {
     public static final String BLUR_SPOILER_KEY_LEGACY = "blur_spoiler";
     public static final String CONFIRM_TO_EXIT_LEGACY = "confirm_to_exit";
     public static final String OPEN_LINK_IN_APP_LEGACY = "open_link_in_app";
+
+    public static final String DO_NOT_SHOW_REDDIT_API_INFO_AGAIN_LEGACY = "do_not_show_reddit_api_info_again";
 }
