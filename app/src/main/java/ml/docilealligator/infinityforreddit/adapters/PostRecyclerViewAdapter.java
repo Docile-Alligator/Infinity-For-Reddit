@@ -1635,8 +1635,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     ((PostMaterial3CardBaseViewHolder) holder).userTextView.setText(authorPrefixed);
                 }
 
-                ((PostMaterial3CardBaseViewHolder) holder).userTextView.setTextColor(
-                        post.isModerator() ? mModeratorColor : mUsernameColor);
+                //TODO change color
+                /*((PostMaterial3CardBaseViewHolder) holder).userTextView.setTextColor(
+                        post.isModerator() ? mModeratorColor : mUsernameColor);*/
 
                 if (mDisplaySubredditName) {
                     if (authorPrefixed.equals(post.getSubredditNamePrefixed())) {
@@ -5938,8 +5939,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 titleTextView.setTypeface(mActivity.titleTypeface);
             }
 
-            subredditTextView.setTextColor(mSubredditColor);
-            userTextView.setTextColor(mUsernameColor);
+            /*subredditTextView.setTextColor(mSubredditColor);
+            userTextView.setTextColor(mUsernameColor);*/
+            subredditTextView.setTextColor(mPrimaryTextColor);
+            userTextView.setTextColor(mPrimaryTextColor);
             postTimeTextView.setTextColor(mSecondaryTextColor);
             titleTextView.setTextColor(mPostTitleColor);
             stickiedPostImageView.setColorFilter(mStickiedPostIconTint, PorterDuff.Mode.SRC_IN);
