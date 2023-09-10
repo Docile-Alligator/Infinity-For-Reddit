@@ -256,7 +256,9 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bottom_constraint_layout_item_post_with_preview"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp">
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/vote_button_toggle_item_post_card_3_with_preview"
@@ -270,7 +272,7 @@
                     style="?attr/materialButtonOutlinedStyle"
                     android:id="@+id/upvote_button_item_post_with_preview"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
                     android:minWidth="0dp"
@@ -283,7 +285,7 @@
                     style="?attr/materialButtonOutlinedStyle"
                     android:id="@+id/downvote_button_item_post_with_preview"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:paddingStart="8dp"
                     android:paddingEnd="8dp"
                     android:minWidth="0dp"
@@ -303,6 +305,7 @@
                 android:textSize="?attr/font_12"
                 android:textStyle="bold"
                 android:fontFamily="?attr/font_family"
+                app:iconTint="@null"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/vote_button_toggle_item_post_card_3_with_preview" />
