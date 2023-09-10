@@ -1,6 +1,5 @@
 package ml.docilealligator.infinityforreddit.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -12,7 +11,6 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.EditorInfo;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -32,8 +30,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.google.android.material.tabs.TabLayoutMediator;
 import com.google.android.material.textfield.TextInputEditText;
-import com.r0adkll.slidr.Slidr;
-import com.r0adkll.slidr.model.SlidrInterface;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -53,6 +49,8 @@ import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.SwitchAccount;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
+import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
 import ml.docilealligator.infinityforreddit.events.ChangeInboxCountEvent;
 import ml.docilealligator.infinityforreddit.events.PassPrivateMessageEvent;
 import ml.docilealligator.infinityforreddit.events.PassPrivateMessageIndexEvent;
@@ -105,7 +103,6 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
     CustomThemeWrapper mCustomThemeWrapper;
     @Inject
     Executor mExecutor;
-    private SlidrInterface mSlidrInterface;
     private SectionsPagerAdapter sectionsPagerAdapter;
     private FragmentManager fragmentManager;
     private String mAccessToken;
@@ -127,7 +124,7 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         applyCustomTheme();
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSlidrInterface = Slidr.attach(this);
+            mSliderPanel = Slidr.attach(this);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -181,15 +178,10 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
             View rootView = getLayoutInflater().inflate(R.layout.dialog_go_to_thing_edit_text, mCoordinatorLayout, false);
             TextInputEditText thingEditText = rootView.findViewById(R.id.text_input_edit_text_go_to_thing_edit_text);
             thingEditText.requestFocus();
-            InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-            if (imm != null) {
-                imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-            }
+            Utils.showKeyboard(this, new Handler(), thingEditText);
             thingEditText.setOnEditorActionListener((textView, i, keyEvent) -> {
                 if (i == EditorInfo.IME_ACTION_DONE) {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                     Intent pmIntent = new Intent(this, SendPrivateMessageActivity.class);
                     pmIntent.putExtra(SendPrivateMessageActivity.EXTRA_RECIPIENT_USERNAME, thingEditText.getText().toString());
                     startActivity(pmIntent);
@@ -202,27 +194,20 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
                     .setView(rootView)
                     .setPositiveButton(R.string.ok, (dialogInterface, i)
                             -> {
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                        }
+                        Utils.hideKeyboard(this);
                         Intent pmIntent = new Intent(this, SendPrivateMessageActivity.class);
                         pmIntent.putExtra(SendPrivateMessageActivity.EXTRA_RECIPIENT_USERNAME, thingEditText.getText().toString());
                         startActivity(pmIntent);
                     })
                     .setNegativeButton(R.string.cancel, null)
                     .setNeutralButton(R.string.search, (dialogInterface, i) -> {
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                        }
-
+                        Utils.hideKeyboard(this);
                         Intent intent = new Intent(this, SearchActivity.class);
                         intent.putExtra(SearchActivity.EXTRA_SEARCH_ONLY_USERS, true);
                         startActivityForResult(intent, SEARCH_USER_REQUEST_CODE);
                     })
                     .setOnDismissListener(dialogInterface -> {
-                        if (imm != null) {
-                            imm.hideSoftInputFromWindow(thingEditText.getWindowToken(), 0);
-                        }
+                        Utils.hideKeyboard(this);
                     })
                     .show();
         });
@@ -393,15 +378,17 @@ public class InboxActivity extends BaseActivity implements ActivityToolbarInterf
         }
     }
 
-    private void lockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.lock();
+    @Override
+    public void lockSwipeRightToGoBack() {
+        if (mSliderPanel != null) {
+            mSliderPanel.lock();
         }
     }
 
-    private void unlockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.unlock();
+    @Override
+    public void unlockSwipeRightToGoBack() {
+        if (mSliderPanel != null) {
+            mSliderPanel.unlock();
         }
     }
 

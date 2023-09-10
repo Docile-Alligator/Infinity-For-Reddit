@@ -201,6 +201,25 @@
             android:focusable="true"
             android:background="?attr/selectableItemBackground" />
 
+        <TextView
+            android:id="@+id/go_to_top_text_view_fab_more_options_bottom_sheet_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingTop="16dp"
+            android:paddingBottom="16dp"
+            android:paddingStart="32dp"
+            android:paddingEnd="32dp"
+            android:text="@string/go_to_top"
+            android:textColor="?attr/primaryTextColor"
+            android:textSize="?attr/font_default"
+            android:fontFamily="?attr/font_family"
+            app:drawableStartCompat="@drawable/ic_keyboard_double_arrow_up_24"
+            android:drawablePadding="48dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground" />
+
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

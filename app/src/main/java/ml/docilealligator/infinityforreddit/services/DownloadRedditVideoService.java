@@ -25,14 +25,13 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.provider.MediaStore;
-import android.util.Log;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.NotificationChannelCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.documentfile.provider.DocumentFile;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,7 +51,6 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.apis.DownloadFile;
 import ml.docilealligator.infinityforreddit.broadcastreceivers.DownloadedMediaDeleteActionBroadcastReceiver;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.events.DownloadRedditVideoEvent;
 import ml.docilealligator.infinityforreddit.utils.NotificationUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import okhttp3.OkHttpClient;
@@ -87,6 +85,7 @@ public class DownloadRedditVideoService extends Service {
     private ServiceHandler serviceHandler;
     private NotificationManagerCompat notificationManager;
     private NotificationCompat.Builder builder;
+    private final String[] possibleAudioUrlSuffices = new String[]{"/DASH_AUDIO_128.mp4", "/DASH_audio.mp4", "/DASH_audio", "/audio.mp4", "/audio"};
 
     public DownloadRedditVideoService() {
     }
@@ -99,7 +98,9 @@ public class DownloadRedditVideoService extends Service {
         public void handleMessage(Message msg) {
             Bundle intent = msg.getData();
             String videoUrl = intent.getString(EXTRA_VIDEO_URL);
-            String audioUrl = Build.VERSION.SDK_INT > Build.VERSION_CODES.N ? videoUrl.substring(0, videoUrl.lastIndexOf('/')) + "/DASH_audio.mp4" : null;
+
+            String audioUrlPrefix = Build.VERSION.SDK_INT > Build.VERSION_CODES.N ? videoUrl.substring(0, videoUrl.lastIndexOf('/')) : null;
+
             String subredditName = intent.getString(EXTRA_SUBREDDIT);
             String fileNameWithoutExtension = subredditName + "-" + intent.getString(EXTRA_POST_ID);
             boolean isNsfw = intent.getBoolean(EXTRA_IS_NSFW, false);
@@ -133,7 +134,7 @@ public class DownloadRedditVideoService extends Service {
 
             retrofit = retrofit.newBuilder().client(client).build();
 
-            DownloadFile downloadFile = retrofit.create(DownloadFile.class);
+            DownloadFile downloadFileRetrofit = retrofit.create(DownloadFile.class);
 
             boolean separateDownloadFolder = sharedPreferences.getBoolean(SharedPreferencesUtils.SEPARATE_FOLDER_FOR_EACH_SUBREDDIT, false);
 
@@ -142,7 +143,7 @@ public class DownloadRedditVideoService extends Service {
                 String destinationFileName = fileNameWithoutExtension + ".mp4";
 
                 try {
-                    Response<ResponseBody> videoResponse = downloadFile.downloadFile(videoUrl).execute();
+                    Response<ResponseBody> videoResponse = downloadFileRetrofit.downloadFile(videoUrl).execute();
                     if (videoResponse.isSuccessful() && videoResponse.body() != null) {
                         String externalCacheDirectoryPath = externalCacheDirectory.getAbsolutePath() + "/";
                         String destinationFileDirectory;
@@ -222,13 +223,13 @@ public class DownloadRedditVideoService extends Service {
                             return;
                         }
 
-                        if (audioUrl != null) {
-                            Response<ResponseBody> audioResponse = downloadFile.downloadFile(audioUrl).execute();
-                            if (audioResponse.isSuccessful() && audioResponse.body() != null) {
+                        if (audioUrlPrefix != null) {
+                            ResponseBody audioResponse = getAudioResponse(downloadFileRetrofit, audioUrlPrefix, 0);
+                            String outputFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + ".mp4";
+                            if (audioResponse != null) {
                                 String audioFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + "-cache.mp3";
-                                String outputFilePath = externalCacheDirectoryPath + fileNameWithoutExtension + ".mp4";
 
-                                String savedAudioFilePath = writeResponseBodyToDisk(audioResponse.body(), audioFilePath);
+                                String savedAudioFilePath = writeResponseBodyToDisk(audioResponse, audioFilePath);
                                 if (savedAudioFilePath == null) {
                                     downloadFinished(null, ERROR_AUDIO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
                                     return;
@@ -256,11 +257,21 @@ public class DownloadRedditVideoService extends Service {
                                     downloadFinished(null, ERROR_MUXED_VIDEO_FILE_CANNOT_SAVE, randomNotificationIdOffset);
                                 }
                             } else {
+                                updateNotification(R.string.downloading_reddit_video_muxing, -1,
+                                        randomNotificationIdOffset, null);
+                                if (!muxVideoAndAudio(videoFilePath, null, outputFilePath)) {
+                                    downloadFinished(null, ERROR_MUX_FAILED, randomNotificationIdOffset);
+                                    return;
+                                }
+
                                 updateNotification(R.string.downloading_reddit_video_save_file_to_public_dir, -1,
                                         randomNotificationIdOffset, null);
                                 try {
-                                    Uri destinationFileUri = copyToDestination(videoFilePath, destinationFileUriString, destinationFileName, isDefaultDestination);
+                                    Uri destinationFileUri = copyToDestination(outputFilePath, destinationFileUriString, destinationFileName, isDefaultDestination);
+
                                     new File(videoFilePath).delete();
+                                    new File(outputFilePath).delete();
+
                                     downloadFinished(destinationFileUri, NO_ERROR, randomNotificationIdOffset);
                                 } catch (IOException e) {
                                     e.printStackTrace();
@@ -268,6 +279,7 @@ public class DownloadRedditVideoService extends Service {
                                 }
                             }
                         } else {
+                            // do not remux video on <= Android N, just save video
                             updateNotification(R.string.downloading_reddit_video_save_file_to_public_dir, -1,
                                     randomNotificationIdOffset, null);
                             try {
@@ -289,6 +301,22 @@ public class DownloadRedditVideoService extends Service {
             } else {
                 downloadFinished(null, ERROR_CANNOT_GET_CACHE_DIRECTORY, randomNotificationIdOffset);
             }
+        }
+
+        @Nullable
+        private ResponseBody getAudioResponse(DownloadFile downloadFileRetrofit, @NonNull String audioUrlPrefix, int audioSuffixIndex) throws IOException {
+            if (audioSuffixIndex >= possibleAudioUrlSuffices.length) {
+                return null;
+            }
+
+            String audioUrl = audioUrlPrefix + possibleAudioUrlSuffices[audioSuffixIndex];
+            Response<ResponseBody> audioResponse = downloadFileRetrofit.downloadFile(audioUrl).execute();
+            ResponseBody responseBody = audioResponse.body();
+            if (audioResponse.isSuccessful() && responseBody != null) {
+                return responseBody;
+            }
+
+            return getAudioResponse(downloadFileRetrofit, audioUrlPrefix, audioSuffixIndex + 1);
         }
 
         private String writeResponseBodyToDisk(ResponseBody body, String filePath) {
@@ -344,66 +372,72 @@ public class DownloadRedditVideoService extends Service {
                 file.createNewFile();
                 MediaExtractor videoExtractor = new MediaExtractor();
                 videoExtractor.setDataSource(videoFilePath);
-                MediaExtractor audioExtractor = new MediaExtractor();
-                audioExtractor.setDataSource(audioFilePath);
                 MediaMuxer muxer = new MediaMuxer(outputFilePath, MediaMuxer.OutputFormat.MUXER_OUTPUT_MPEG_4);
 
                 videoExtractor.selectTrack(0);
                 MediaFormat videoFormat = videoExtractor.getTrackFormat(0);
                 int videoTrack = muxer.addTrack(videoFormat);
 
-                audioExtractor.selectTrack(0);
-                MediaFormat audioFormat = audioExtractor.getTrackFormat(0);
-                int audioTrack = muxer.addTrack(audioFormat);
                 boolean sawEOS = false;
                 int offset = 100;
                 int sampleSize = 4096 * 1024;
                 ByteBuffer videoBuf = ByteBuffer.allocate(sampleSize);
                 ByteBuffer audioBuf = ByteBuffer.allocate(sampleSize);
                 MediaCodec.BufferInfo videoBufferInfo = new MediaCodec.BufferInfo();
-                MediaCodec.BufferInfo audioBufferInfo = new MediaCodec.BufferInfo();
 
                 videoExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
-                audioExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
+
+                // audio not present for all videos
+                MediaExtractor audioExtractor = new MediaExtractor();
+                MediaCodec.BufferInfo audioBufferInfo = new MediaCodec.BufferInfo();
+                int audioTrack = -1;
+                if (audioFilePath != null) {
+                    audioExtractor.setDataSource(audioFilePath);
+                    audioExtractor.selectTrack(0);
+                    MediaFormat audioFormat = audioExtractor.getTrackFormat(0);
+                    audioExtractor.seekTo(0, MediaExtractor.SEEK_TO_CLOSEST_SYNC);
+                    audioTrack = muxer.addTrack(audioFormat);
+                }
 
                 muxer.start();
 
-                int muxedSize = 0;
                 while (!sawEOS) {
                     videoBufferInfo.offset = offset;
                     videoBufferInfo.size = videoExtractor.readSampleData(videoBuf, offset);
 
-                    if (videoBufferInfo.size < 0 || audioBufferInfo.size < 0) {
+                    if (videoBufferInfo.size < 0) {
                         sawEOS = true;
                         videoBufferInfo.size = 0;
                     } else {
                         videoBufferInfo.presentationTimeUs = videoExtractor.getSampleTime();
                         videoBufferInfo.flags = videoExtractor.getSampleFlags();
                         muxer.writeSampleData(videoTrack, videoBuf, videoBufferInfo);
-                        muxedSize += videoTrack;
                         videoExtractor.advance();
                     }
                 }
 
-                boolean sawEOS2 = false;
-                while (!sawEOS2) {
-                    audioBufferInfo.offset = offset;
-                    audioBufferInfo.size = audioExtractor.readSampleData(audioBuf, offset);
+                if (audioFilePath != null) {
+                    boolean sawEOS2 = false;
+                    while (!sawEOS2) {
+                        audioBufferInfo.offset = offset;
+                        audioBufferInfo.size = audioExtractor.readSampleData(audioBuf, offset);
 
-                    if (videoBufferInfo.size < 0 || audioBufferInfo.size < 0) {
-                        sawEOS2 = true;
-                        audioBufferInfo.size = 0;
-                    } else {
-                        audioBufferInfo.presentationTimeUs = audioExtractor.getSampleTime();
-                        audioBufferInfo.flags = audioExtractor.getSampleFlags();
-                        muxer.writeSampleData(audioTrack, audioBuf, audioBufferInfo);
-                        audioExtractor.advance();
+                        if (audioBufferInfo.size < 0) {
+                            sawEOS2 = true;
+                            audioBufferInfo.size = 0;
+                        } else {
+                            audioBufferInfo.presentationTimeUs = audioExtractor.getSampleTime();
+                            audioBufferInfo.flags = audioExtractor.getSampleFlags();
+                            muxer.writeSampleData(audioTrack, audioBuf, audioBufferInfo);
+                            audioExtractor.advance();
+                        }
                     }
                 }
 
                 muxer.stop();
                 muxer.release();
-            } catch (IllegalArgumentException | IllegalStateException ignore) {
+            } catch (IllegalArgumentException | IllegalStateException e) {
+                e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
                 return false;
@@ -577,13 +611,11 @@ public class DownloadRedditVideoService extends Service {
                             randomNotificationIdOffset, null);
                     break;
             }
-            EventBus.getDefault().post(new DownloadRedditVideoEvent(false));
         } else {
             MediaScannerConnection.scanFile(
                     this, new String[]{destinationFileUri.toString()}, null,
                     (path, uri) -> {
                         updateNotification(R.string.downloading_reddit_video_finished, -1, randomNotificationIdOffset, destinationFileUri);
-                        EventBus.getDefault().post(new DownloadRedditVideoEvent(true));
                     }
             );
         }

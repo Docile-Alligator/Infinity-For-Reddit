@@ -1010,12 +1010,9 @@ La riproduzione automatica video è disabilitata"</string>
 
 Vuoi comunque abilitare l'opzione?"</string>
     <string name="reply">"Rispondi"</string>
-    <string name="rpan_activity_label">"RPAN"</string>
     <string name="post_gallery_activity_label">"Galleria post"</string>
     <string name="trending_activity_label">"Popolari"</string>
-    <string name="action_share_rpan_link">"Condividi link RPAN"</string>
     <string name="action_share_post_link">"Condividi post link"</string>
-    <string name="rpan">"RPAN"</string>
     <string name="trending">"Popolari"</string>
     <string name="receive_post_reply_notifications">"Ricevi notifiche per le risposte"</string>
     <string name="bottom_sheet_post_gallery">"Galleria"</string>
@@ -1045,9 +1042,6 @@ Se hai dei temi con questi nomi devi cambiarli prima di attivare la Personalizza
     <string name="upload_image_success">"Immagine caricata. Clicca sul pulsante delle immagini per vedere le altre immagini caricate"</string>
     <string name="get_image_bitmap_failed">"Impossibile prendere il bitmap dell'immagine"</string>
     <string name="upload_image_failed">"Impossibile caricare l'immagine"</string>
-    <string name="load_rpan_broadcasts_failed">"Impossibile caricare RPAN"</string>
-    <string name="parse_rpan_broadcasts_failed">"Impossibile analizzare i broadcast RPAN"</string>
-    <string name="parse_rpan_broadcast_failed">"Impossibile analizzare il broadcast RPAN"</string>
     <string name="search_comments">"Cerca tra i commenti"</string>
     <string name="please_wait_image_is_uploading">"Attendere prego. Immagine in caricamento"</string>
     <string name="error_fetch_trending_search">"Pagina non caricata. Tocca per riprovare"</string>

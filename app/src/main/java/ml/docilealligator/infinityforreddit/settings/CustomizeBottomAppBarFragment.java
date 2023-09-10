@@ -181,6 +181,8 @@ public class CustomizeBottomAppBarFragment extends Fragment {
             mainActivityOption2 = mainActivityOptionAnonymousValuesList.indexOf(Integer.toString(mainActivityOption2));
             mainActivityOption3 = mainActivityOptionAnonymousValuesList.indexOf(Integer.toString(mainActivityOption3));
             mainActivityOption4 = mainActivityOptionAnonymousValuesList.indexOf(Integer.toString(mainActivityOption4));
+
+            mainActivityFAB = mainActivityFAB >= 9 ? mainActivityFAB - 2 : mainActivityFAB - 1;
         } else {
             fabOptions = resources.getStringArray(R.array.settings_bottom_app_bar_fab_options);
         }
@@ -258,8 +260,8 @@ public class CustomizeBottomAppBarFragment extends Fragment {
                         mainActivityFAB = i;
                         int optionToSaveToPreference;
                         if (accountName == null) {
-                            if (i == 7) {
-                                optionToSaveToPreference = 9;
+                            if (i >= 7) {
+                                optionToSaveToPreference = i + 2;
                             } else {
                                 optionToSaveToPreference = i + 1;
                             }
@@ -295,6 +297,7 @@ public class CustomizeBottomAppBarFragment extends Fragment {
             otherActivitiesOption2 = otherActivitiesOptionAnonymousValuesList.indexOf(Integer.toString(otherActivitiesOption2));
             otherActivitiesOption3 = otherActivitiesOptionAnonymousValuesList.indexOf(Integer.toString(otherActivitiesOption3));
             otherActivitiesOption4 = otherActivitiesOptionAnonymousValuesList.indexOf(Integer.toString(otherActivitiesOption4));
+            otherActivitiesFAB = otherActivitiesFAB >= 9 ? otherActivitiesFAB - 2 : otherActivitiesFAB - 1;
         }
 
         otherActivitiesFABTextView.setText(fabOptions[otherActivitiesFAB]);
@@ -370,8 +373,8 @@ public class CustomizeBottomAppBarFragment extends Fragment {
                         otherActivitiesFAB = i;
                         int optionToSaveToPreference;
                         if (accountName == null) {
-                            if (i == 7) {
-                                optionToSaveToPreference = 9;
+                            if (i >= 7) {
+                                optionToSaveToPreference = i + 2;
                             } else {
                                 optionToSaveToPreference = i + 1;
                             }

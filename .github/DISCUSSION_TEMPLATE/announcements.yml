@@ -1,0 +1,14 @@
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to read this announcement!
+
+  - type: textarea
+    id: description
+    attributes:
+      label: description
+      description: Please describe the announcement in as much detail as possible.
+      placeholder: Make an announcement here...
+    validations:
+      required: true

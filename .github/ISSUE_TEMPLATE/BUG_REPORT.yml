@@ -1,11 +1,13 @@
 name: Bug Report
 description: Create a report to help us improve existing features
 labels: ['type: possible bug']
+
 body:
   - type: markdown
     attributes:
       value: |
         Thanks for taking the time to fill out this bug report!
+
   - type: checkboxes
     id: checklist
     attributes:
@@ -17,6 +19,7 @@ body:
           required: true
         - label: If the bug only occurs with a certain link, post, image..., I will include the URL.
           required: true
+
   - type: input
     id: version
     attributes:
@@ -25,6 +28,7 @@ body:
       placeholder: x.y.z
     validations:
       required: true
+
   - type: dropdown
     id: source
     attributes:
@@ -36,6 +40,7 @@ body:
         - Other
     validations:
       required: true
+
   - type: input
     id: android_version
     attributes:
@@ -43,35 +48,45 @@ body:
       description: Please mention if you are using a custom rom!
     validations:
       required: true
+
   - type: input
     id: device
     attributes:
       label: Device model
+
   - type: input
     id: first
     attributes:
       label: First occurred
       placeholder: about x days/weeks ago
+
   - type: textarea
     id: steps
     attributes:
       label: Steps to reproduce
-      description: Do not forget to always add example posts, links, markdown...
       placeholder: |
         1. This
         2. Then that
         3. Then this
         4. Etc.
+
+  - type: textarea
+    id: links
+    attributes:
+      label: Example post, link, markdown...
+
   - type: textarea
     id: expected
     attributes:
       label: Expected behaviour
       description: After following the steps, what did you think Infinity would do?
+
   - type: textarea
     id: current
     attributes:
       label: Current behaviour
       description: What did Infinity do instead? Screenshots might help. Usually, you can take a screenshot of your smartphone by pressing *Power* + *Volume down* for a few seconds.
+
   - type: textarea
     id: logs
     attributes:

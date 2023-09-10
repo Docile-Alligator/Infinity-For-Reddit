@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<app.futured.hauler.HaulerView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/hauler_view_view_video_activity"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000"
+    android:keepScreenOn="true"
+    app:dragUpEnabled="true"
+    tools:application="ml.docilealligator.infinityforreddit.activities.ViewVideoActivity">
+
+    <app.futured.hauler.LockableNestedScrollView
+        android:id="@+id/lockable_nested_scroll_view_view_video_activity"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/coordinator_layout_view_video_activity"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.otaliastudios.zoom.ZoomSurfaceView
+                android:id="@+id/zoom_surface_view_view_video_activity"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:horizontalPanEnabled="true"
+                app:verticalPanEnabled="true"
+                app:zoomEnabled="true" />
+
+            <com.google.android.exoplayer2.ui.PlayerControlView
+                android:id="@+id/player_control_view_view_video_activity"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                app:controller_layout_id="@layout/exo_playback_control_view"
+                app:show_timeout="1500" />
+
+            <ProgressBar
+                android:id="@+id/progress_bar_view_video_activity"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </app.futured.hauler.LockableNestedScrollView>
+
+</app.futured.hauler.HaulerView>

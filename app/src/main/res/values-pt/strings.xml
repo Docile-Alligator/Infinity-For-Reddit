@@ -1020,12 +1020,9 @@ Mensagem: %2$s"</string>
 
 Ainda deseja ativar esta opção?"</string>
     <string name="reply">"Responder"</string>
-    <string name="rpan_activity_label">"RPAN"</string>
     <string name="post_gallery_activity_label">"Publicação de Galeria"</string>
     <string name="trending_activity_label">"Tendências"</string>
-    <string name="action_share_rpan_link">"Partilhar Endereço RPAN"</string>
     <string name="action_share_post_link">"Partilhar Endereço da Publicação"</string>
-    <string name="rpan">"RPAN"</string>
     <string name="trending">"Tendências"</string>
     <string name="receive_post_reply_notifications">"Receber notificações de respostas de publicações"</string>
     <string name="bottom_sheet_post_gallery">"Galeria"</string>
@@ -1055,9 +1052,6 @@ Caso contrário, altere o nome antes de ativar Material You"</string>
     <string name="upload_image_success">"Imagem enviada com sucesso. Clicar no botão da imagem para ver as imagens enviadas."</string>
     <string name="get_image_bitmap_failed">"Incapaz de obter o bitmap da imagem"</string>
     <string name="upload_image_failed">"Incapaz de enviar a imagem"</string>
-    <string name="load_rpan_broadcasts_failed">"Não é possível carregar as emissões RPAN"</string>
-    <string name="parse_rpan_broadcasts_failed">"Não é possível analisar as emissões de RPAN"</string>
-    <string name="parse_rpan_broadcast_failed">"Não é possível analisar a emissão de RPAN"</string>
     <string name="search_comments">"Pesquisar Comentários"</string>
     <string name="please_wait_image_is_uploading">"Uma imagem ainda a ser enviada. Por favor aguarde."</string>
     <string name="error_fetch_trending_search">"A obtenção de tendências falharam.

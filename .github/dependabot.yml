@@ -1,11 +1,23 @@
 version: 2
 updates:
+  # Updates for Gradle dependencies used in the app
   - package-ecosystem: gradle
-    directory: /
+    directory: "/"
     schedule:
-      interval: daily
+      interval: "daily"
+    commit-message:
+      prefix: "⬆[Gradle]"
+    reviewers:
+      - "Wladefant"
+      - "Docile-Alligator"
 
+  # Updates for GitHub Actions used in the repository
   - package-ecosystem: github-actions
-    directory: /
+    directory: "/"
     schedule:
-      interval: daily
+      interval: "weekly"
+    commit-message:
+      prefix: "⬆[GitHub Actions]"
+    reviewers:
+      - "Wladefant"
+      - "Docile-Alligator"

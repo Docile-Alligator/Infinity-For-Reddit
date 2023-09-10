@@ -92,6 +92,7 @@ public class JSONUtils {
     public static final String TEXT_EDITABLE_KEY = "text_editable";
     public static final String SUBJECT_KEY = "subject";
     public static final String CONTEXT_KEY = "context";
+    public static final String EDITED_KEY = "edited";
     public static final String DISTINGUISHED_KEY = "distinguished";
     public static final String WAS_COMMENT_KEY = "was_comment";
     public static final String NEW_KEY = "new";
@@ -132,7 +133,7 @@ public class JSONUtils {
     public static final String TOTAL_KARMA_KEY = "total_karma";
     public static final String AWARDER_KARMA_KEY = "awarder_karma";
     public static final String AWARDEE_KARMA_KEY = "awardee_karma";
-    public static final String CONTENT_URLS_KEY = "content_urls";;
+    public static final String CONTENT_URLS_KEY = "content_urls";
     public static final String WEBM_KEY = "webm";
     public static final String WEBM_URL_KEY = "webmUrl";
     public static final String UPVOTE_RATIO_KEY = "upvote_ratio";
@@ -180,4 +181,5 @@ public class JSONUtils {
     public static final String STATUS_KEY = "status";
     public static final String URLS_KEY = "urls";
     public static final String HD_KEY = "hd";
+    public static final String SUGGESTED_SORT_KEY = "suggested_sort";
 }

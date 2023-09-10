@@ -1019,12 +1019,9 @@ Mensagem: %2$s"</string>
 
 Ainda deseja ativá-lo?"</string>
     <string name="reply">"Responder"</string>
-    <string name="rpan_activity_label">"RPAN"</string>
     <string name="post_gallery_activity_label">"Postar Galeria"</string>
     <string name="trending_activity_label">"Tendências"</string>
-    <string name="action_share_rpan_link">"Compartilhar Link de RPAN"</string>
     <string name="action_share_post_link">"Compartilhar Link do Post"</string>
-    <string name="rpan">"RPAN"</string>
     <string name="trending">"Em Alta"</string>
     <string name="receive_post_reply_notifications">"Receber Notificações de Respostas às Postagens"</string>
     <string name="bottom_sheet_post_gallery">"Galeria"</string>
@@ -1054,9 +1051,6 @@ Se você tiver, os renomeie antes de ativar o Material You."</string>
     <string name="upload_image_success">"Imagem enviada com sucesso. Clique novamente no botão de imagem para ver as imagem enviadas."</string>
     <string name="get_image_bitmap_failed">"Erro ao receber o bitmap da imagem"</string>
     <string name="upload_image_failed">"Erro ao enviar a imagem"</string>
-    <string name="load_rpan_broadcasts_failed">"Não foi possível carregar transmissões RPAN"</string>
-    <string name="parse_rpan_broadcasts_failed">"Não foi possível analisar transmissões RPAN"</string>
-    <string name="parse_rpan_broadcast_failed">"Não foi possível analisar transmissão RPAN"</string>
     <string name="search_comments">"Procurar Comentários"</string>
     <string name="please_wait_image_is_uploading">"Uma imagem ainda está sendo enviada. Por favor, aguarde."</string>
     <string name="error_fetch_trending_search">"Busca de pesquisas em alta falhou.

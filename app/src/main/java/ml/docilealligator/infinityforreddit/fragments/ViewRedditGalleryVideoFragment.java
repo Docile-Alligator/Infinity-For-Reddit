@@ -158,7 +158,7 @@ public class ViewRedditGalleryVideoFragment extends Fragment {
         player = new ExoPlayer.Builder(activity).setTrackSelector(trackSelector).build();
         videoPlayerView.setPlayer(player);
         dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
+                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
         player.prepare();
         player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(galleryVideo.url)));
 

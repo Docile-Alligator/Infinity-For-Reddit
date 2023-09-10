@@ -2,9 +2,7 @@ package ml.docilealligator.infinityforreddit.adapters;
 
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
 import android.text.Spanned;
-import android.text.util.Linkify;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,10 +12,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.r0adkll.slidr.model.SlidrInterface;
-
-import org.commonmark.ext.gfm.tables.TableBlock;
-
 import java.util.ArrayList;
 
 import butterknife.BindView;
@@ -25,19 +19,9 @@ import butterknife.ButterKnife;
 import io.noties.markwon.AbstractMarkwonPlugin;
 import io.noties.markwon.Markwon;
 import io.noties.markwon.MarkwonConfiguration;
+import io.noties.markwon.MarkwonPlugin;
 import io.noties.markwon.core.MarkwonTheme;
-import io.noties.markwon.ext.strikethrough.StrikethroughPlugin;
-import io.noties.markwon.html.HtmlPlugin;
-import io.noties.markwon.html.tag.SuperScriptHandler;
-import io.noties.markwon.inlineparser.AutolinkInlineProcessor;
-import io.noties.markwon.inlineparser.BangInlineProcessor;
-import io.noties.markwon.inlineparser.HtmlInlineProcessor;
-import io.noties.markwon.inlineparser.MarkwonInlineParserPlugin;
-import io.noties.markwon.linkify.LinkifyPlugin;
-import io.noties.markwon.movement.MovementMethodPlugin;
 import io.noties.markwon.recycler.MarkwonAdapter;
-import io.noties.markwon.recycler.table.TableEntry;
-import io.noties.markwon.recycler.table.TableEntryPlugin;
 import me.saket.bettermovementmethod.BetterLinkMovementMethod;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.Rule;
@@ -45,85 +29,60 @@ import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.LinkResolverActivity;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.UrlMenuBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
-import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
-import ml.docilealligator.infinityforreddit.customviews.MarkwonLinearLayoutManager;
-import ml.docilealligator.infinityforreddit.markdown.RedditHeadingPlugin;
-import ml.docilealligator.infinityforreddit.markdown.SpoilerParserPlugin;
-import ml.docilealligator.infinityforreddit.markdown.SuperscriptInlineProcessor;
-import ml.docilealligator.infinityforreddit.utils.Utils;
+import ml.docilealligator.infinityforreddit.customviews.SwipeLockInterface;
+import ml.docilealligator.infinityforreddit.customviews.SwipeLockLinearLayoutManager;
+import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
+import ml.docilealligator.infinityforreddit.markdown.MarkdownUtils;
 
 public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecyclerViewAdapter.RuleViewHolder> {
     private BaseActivity activity;
     private Markwon markwon;
     @Nullable
-    private final SlidrInterface slidrInterface;
+    private final SliderPanel sliderPanel;
     private ArrayList<Rule> rules;
     private int mPrimaryTextColor;
 
     public RulesRecyclerViewAdapter(@NonNull BaseActivity activity,
                                     @NonNull CustomThemeWrapper customThemeWrapper,
-                                    @Nullable SlidrInterface slidrInterface) {
+                                    @Nullable SliderPanel sliderPanel) {
         this.activity = activity;
-        this.slidrInterface = slidrInterface;
+        this.sliderPanel = sliderPanel;
         mPrimaryTextColor = customThemeWrapper.getPrimaryTextColor();
         int spoilerBackgroundColor = mPrimaryTextColor | 0xFF000000;
-        markwon = Markwon.builder(activity)
-                .usePlugin(MarkwonInlineParserPlugin.create(plugin -> {
-                    plugin.excludeInlineProcessor(AutolinkInlineProcessor.class);
-                    plugin.excludeInlineProcessor(HtmlInlineProcessor.class);
-                    plugin.excludeInlineProcessor(BangInlineProcessor.class);
-                    plugin.addInlineProcessor(new SuperscriptInlineProcessor());
-                }))
-                .usePlugin(HtmlPlugin.create(plugin -> {
-                    plugin.excludeDefaults(true).addHandler(new SuperScriptHandler());
-                }))
-                .usePlugin(new AbstractMarkwonPlugin() {
-                    @NonNull
-                    @Override
-                    public String processMarkdown(@NonNull String markdown) {
-                        return Utils.fixSuperScript(markdown);
-                    }
+        MarkwonPlugin miscPlugin = new AbstractMarkwonPlugin() {
+            @Override
+            public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
+                if (activity.typeface != null) {
+                    textView.setTypeface(activity.typeface);
+                }
 
-                    @Override
-                    public void beforeSetText(@NonNull TextView textView, @NonNull Spanned markdown) {
-                        if (activity.typeface != null) {
-                            textView.setTypeface(activity.typeface);
-                        }
+                textView.setTextColor(mPrimaryTextColor);
+            }
 
-                        textView.setTextColor(mPrimaryTextColor);
-                    }
+            @Override
+            public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
+                builder.linkResolver((view, link) -> {
+                    Intent intent = new Intent(activity, LinkResolverActivity.class);
+                    Uri uri = Uri.parse(link);
+                    intent.setData(uri);
+                    activity.startActivity(intent);
+                });
+            }
 
-                    @Override
-                    public void configureConfiguration(@NonNull MarkwonConfiguration.Builder builder) {
-                        builder.linkResolver((view, link) -> {
-                            Intent intent = new Intent(activity, LinkResolverActivity.class);
-                            Uri uri = Uri.parse(link);
-                            intent.setData(uri);
-                            activity.startActivity(intent);
-                        });
-                    }
-
-                    @Override
-                    public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
-                        builder.linkColor(customThemeWrapper.getLinkColor());
-                    }
-                })
-                .usePlugin(MovementMethodPlugin.create(BetterLinkMovementMethod.linkify(Linkify.WEB_URLS).setOnLinkLongClickListener((textView, url) -> {
-                    if (activity != null && !activity.isDestroyed() && !activity.isFinishing()) {
-                        UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, url);
-                        urlMenuBottomSheetFragment.setArguments(bundle);
-                        urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
-                    }
-                    return true;
-                })))
-                .usePlugin(LinkifyPlugin.create(Linkify.WEB_URLS))
-                .usePlugin(SpoilerParserPlugin.create(mPrimaryTextColor, spoilerBackgroundColor))
-                .usePlugin(RedditHeadingPlugin.create())
-                .usePlugin(StrikethroughPlugin.create())
-                .usePlugin(TableEntryPlugin.create(activity))
-                .build();
+            @Override
+            public void configureTheme(@NonNull MarkwonTheme.Builder builder) {
+                builder.linkColor(customThemeWrapper.getLinkColor());
+            }
+        };
+        BetterLinkMovementMethod.OnLinkLongClickListener onLinkLongClickListener = (textView, url) -> {
+            if (activity != null && !activity.isDestroyed() && !activity.isFinishing()) {
+                UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = UrlMenuBottomSheetFragment.newInstance(url);
+                urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), null);
+            }
+            return true;
+        };
+        markwon = MarkdownUtils.createFullRedditMarkwon(activity,
+                miscPlugin, mPrimaryTextColor, spoilerBackgroundColor, onLinkLongClickListener);
     }
 
     @NonNull
@@ -177,28 +136,24 @@ public class RulesRecyclerViewAdapter extends RecyclerView.Adapter<RulesRecycler
             if (activity.typeface != null) {
                 shortNameTextView.setTypeface(activity.typeface);
             }
-            markwonAdapter = MarkwonAdapter.builder(R.layout.adapter_default_entry, R.id.text)
-                    .include(TableBlock.class, TableEntry.create(builder -> builder
-                            .tableLayout(R.layout.adapter_table_block, R.id.table_layout)
-                            .textLayoutIsRoot(R.layout.view_table_entry_cell)))
-                    .build();
-            LinearLayoutManagerBugFixed linearLayoutManager = new MarkwonLinearLayoutManager(activity,
-                    new MarkwonLinearLayoutManager.HorizontalScrollViewScrolledListener() {
+            markwonAdapter = MarkdownUtils.createTablesAdapter();
+            SwipeLockLinearLayoutManager swipeLockLinearLayoutManager = new SwipeLockLinearLayoutManager(activity,
+                    new SwipeLockInterface() {
                 @Override
-                public void onScrolledLeft() {
-                    if (slidrInterface != null) {
-                        slidrInterface.lock();
+                public void lockSwipe() {
+                    if (sliderPanel != null) {
+                        sliderPanel.lock();
                     }
                 }
 
                 @Override
-                public void onScrolledRight() {
-                    if (slidrInterface != null) {
-                        slidrInterface.unlock();
+                public void unlockSwipe() {
+                    if (sliderPanel != null) {
+                        sliderPanel.unlock();
                     }
                 }
             });
-            descriptionMarkwonView.setLayoutManager(linearLayoutManager);
+            descriptionMarkwonView.setLayoutManager(swipeLockLinearLayoutManager);
             descriptionMarkwonView.setAdapter(markwonAdapter);
         }
     }

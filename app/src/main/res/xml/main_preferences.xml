@@ -89,10 +89,12 @@
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         android:key="privacy_policy"
+        app:icon="@drawable/ic_outline_privacy_policy_24dp"
         app:title="@string/settings_privacy_policy_title" />
 
     <ml.docilealligator.infinityforreddit.customviews.CustomFontPreference
         android:key="reddit_user_agreement"
+        app:icon="@drawable/ic_outline_user_agreement_24dp"
         app:title="@string/settings_reddit_user_agreement_title" />
 
 </androidx.preference.PreferenceScreen>

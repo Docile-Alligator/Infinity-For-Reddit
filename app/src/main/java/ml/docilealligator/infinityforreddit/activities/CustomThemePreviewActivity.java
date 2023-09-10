@@ -39,8 +39,6 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
-import com.r0adkll.slidr.Slidr;
-import com.r0adkll.slidr.model.SlidrInterface;
 
 import java.util.ArrayList;
 
@@ -56,6 +54,8 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomTheme;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeSettingsItem;
 import ml.docilealligator.infinityforreddit.customviews.ViewPagerBugFixed;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
+import ml.docilealligator.infinityforreddit.customviews.slidr.widget.SliderPanel;
 import ml.docilealligator.infinityforreddit.font.ContentFontStyle;
 import ml.docilealligator.infinityforreddit.font.FontStyle;
 import ml.docilealligator.infinityforreddit.font.TitleFontStyle;
@@ -126,7 +126,7 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
     private int subscribedColor;
     private int systemVisibilityToolbarExpanded = 0;
     private int systemVisibilityToolbarCollapsed = 0;
-    private SlidrInterface mSlidrInterface;
+    private SliderPanel mSliderPanel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -232,7 +232,7 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
         applyCustomTheme();
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            mSlidrInterface = Slidr.attach(this);
+            mSliderPanel = Slidr.attach(this);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -435,7 +435,7 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
     }
 
     protected void applyFABTheme(FloatingActionButton fab) {
-        fab.setBackgroundTintList(ColorStateList.valueOf(customTheme.colorPrimaryLightTheme));
+        fab.setBackgroundTintList(ColorStateList.valueOf(customTheme.colorAccent));
         fab.setImageTintList(ColorStateList.valueOf(customTheme.fabIconColor));
     }
 
@@ -453,14 +453,14 @@ public class CustomThemePreviewActivity extends AppCompatActivity implements Cus
     }
 
     private void lockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.lock();
+        if (mSliderPanel != null) {
+            mSliderPanel.lock();
         }
     }
 
     private void unlockSwipeRightToGoBack() {
-        if (mSlidrInterface != null) {
-            mSlidrInterface.unlock();
+        if (mSliderPanel != null) {
+            mSliderPanel.unlock();
         }
     }
 

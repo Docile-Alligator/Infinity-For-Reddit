@@ -44,6 +44,10 @@ import androidx.appcompat.app.AppCompatDelegate;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.graphics.Insets;
+import androidx.core.view.OnApplyWindowInsetsListener;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
 import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.ExoPlayer;
@@ -55,7 +59,9 @@ import com.google.android.exoplayer2.Tracks;
 import com.google.android.exoplayer2.source.ProgressiveMediaSource;
 import com.google.android.exoplayer2.source.hls.HlsMediaSource;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
+import com.google.android.exoplayer2.trackselection.TrackSelectionOverride;
 import com.google.android.exoplayer2.ui.PlayerControlView;
+import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.ui.TrackSelectionDialogBuilder;
 import com.google.android.exoplayer2.upstream.DataSource;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSource;
@@ -76,6 +82,7 @@ import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import app.futured.hauler.DragDirection;
 import app.futured.hauler.HaulerView;
@@ -88,6 +95,7 @@ import ml.docilealligator.infinityforreddit.FetchStreamableVideo;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.StreamableVideo;
+import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.apis.VReddIt;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PlaybackSpeedBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
@@ -152,10 +160,6 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
     CoordinatorLayout coordinatorLayout;
     @BindView(R.id.progress_bar_view_video_activity)
     ProgressBar progressBar;
-    @BindView(R.id.zoom_surface_view_view_video_activity)
-    ZoomSurfaceView zoomSurfaceView;
-    @BindView(R.id.player_control_view_view_video_activity)
-    PlayerControlView playerControlView;
     @BindView(R.id.mute_exo_playback_control_view)
     ImageButton muteButton;
     @BindView(R.id.hd_exo_playback_control_view)
@@ -211,8 +215,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
     Retrofit vReddItRetrofit;
 
     @Inject
-    @Named("streamable")
-    Retrofit streamableRetrofit;
+    Provider<StreamableAPI> streamableApiProvider;
 
     @Inject
     @Named("default")
@@ -287,7 +290,12 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         getTheme().applyStyle(ContentFontFamily.valueOf(mSharedPreferences
                 .getString(SharedPreferencesUtils.CONTENT_FONT_FAMILY_KEY, ContentFontFamily.Default.name())).getResId(), true);
 
-        setContentView(R.layout.activity_view_video);
+        boolean zoomable = mSharedPreferences.getBoolean(SharedPreferencesUtils.PINCH_TO_ZOOM_VIDEO, false);
+        if (zoomable) {
+            setContentView(R.layout.activity_view_video_zoomable);
+        } else {
+            setContentView(R.layout.activity_view_video);
+        }
 
         ButterKnife.bind(this);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
@@ -341,19 +349,18 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         dataSavingModeDefaultResolution = Integer.parseInt(mSharedPreferences.getString(SharedPreferencesUtils.REDDIT_VIDEO_DEFAULT_RESOLUTION, "360"));
 
         if (!mSharedPreferences.getBoolean(SharedPreferencesUtils.VIDEO_PLAYER_IGNORE_NAV_BAR, false)) {
-            if (resources.getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT || resources.getBoolean(R.bool.isTablet)) {
-                //Set player controller bottom margin in order to display it above the navbar
-                int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-                LinearLayout controllerLinearLayout = findViewById(R.id.linear_layout_exo_playback_control_view);
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
-                params.bottomMargin = resources.getDimensionPixelSize(resourceId);
-            } else {
-                //Set player controller right margin in order to display it above the navbar
-                int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-                LinearLayout controllerLinearLayout = findViewById(R.id.linear_layout_exo_playback_control_view);
-                ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
-                params.rightMargin = resources.getDimensionPixelSize(resourceId);
-            }
+            LinearLayout controllerLinearLayout = findViewById(R.id.linear_layout_exo_playback_control_view);
+            ViewCompat.setOnApplyWindowInsetsListener(controllerLinearLayout, new OnApplyWindowInsetsListener() {
+                @NonNull
+                @Override
+                public WindowInsetsCompat onApplyWindowInsets(@NonNull View v, @NonNull WindowInsetsCompat insets) {
+                    Insets navigationBars = insets.getInsets(WindowInsetsCompat.Type.navigationBars());
+                    ViewGroup.MarginLayoutParams params = (ViewGroup.MarginLayoutParams) controllerLinearLayout.getLayoutParams();
+                    params.bottomMargin = navigationBars.bottom;
+                    params.rightMargin = navigationBars.right;
+                    return WindowInsetsCompat.CONSUMED;
+                }
+            });
         }
 
         haulerView.setOnDragDismissedListener(dragDirection -> {
@@ -401,25 +408,6 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         String postTitle = intent.getStringExtra(EXTRA_POST_TITLE);
         setSmallTitle(postTitle);
 
-        playerControlView.addVisibilityListener(visibility -> {
-            switch (visibility) {
-                case View.GONE:
-                    getWindow().getDecorView().setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_FULLSCREEN
-                                    | View.SYSTEM_UI_FLAG_IMMERSIVE);
-                    break;
-                case View.VISIBLE:
-                    getWindow().getDecorView().setSystemUiVisibility(
-                            View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-            }
-        });
-
         trackSelector = new DefaultTrackSelector(this);
         if (videoType == VIDEO_TYPE_NORMAL && isDataSavingMode && dataSavingModeDefaultResolution > 0) {
             trackSelector.setParameters(
@@ -428,26 +416,46 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
         }
         player = new ExoPlayer.Builder(this).setTrackSelector(trackSelector).build();
 
-        playerControlView.setPlayer(player);
+        if (zoomable) {
+            PlayerControlView playerControlView = findViewById(R.id.player_control_view_view_video_activity);
+            playerControlView.addVisibilityListener(visibility -> {
+                switch (visibility) {
+                    case View.GONE:
+                        getWindow().getDecorView().setSystemUiVisibility(
+                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+                        break;
+                    case View.VISIBLE:
+                        getWindow().getDecorView().setSystemUiVisibility(
+                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                }
+            });
+            playerControlView.setPlayer(player);
 
-        player.addListener(new Player.Listener() {
-            @Override
-            public void onVideoSizeChanged(VideoSize videoSize) {
-                zoomSurfaceView.setContentSize(videoSize.width, videoSize.height);
-            }
-        });
-        zoomSurfaceView.addCallback(new ZoomSurfaceView.Callback() {
-            @Override
-            public void onZoomSurfaceCreated(@NonNull ZoomSurfaceView zoomSurfaceView) {
-                player.setVideoSurface(zoomSurfaceView.getSurface());
-            }
+            ZoomSurfaceView zoomSurfaceView = findViewById(R.id.zoom_surface_view_view_video_activity);
+            player.addListener(new Player.Listener() {
+                @Override
+                public void onVideoSizeChanged(VideoSize videoSize) {
+                    zoomSurfaceView.setContentSize(videoSize.width, videoSize.height);
+                }
+            });
+            zoomSurfaceView.addCallback(new ZoomSurfaceView.Callback() {
+                @Override
+                public void onZoomSurfaceCreated(@NonNull ZoomSurfaceView zoomSurfaceView) {
+                    player.setVideoSurface(zoomSurfaceView.getSurface());
+                }
 
-            @Override
-            public void onZoomSurfaceDestroyed(@NonNull ZoomSurfaceView zoomSurfaceView) {
+                @Override
+                public void onZoomSurfaceDestroyed(@NonNull ZoomSurfaceView zoomSurfaceView) {
 
-            }
-        });
-        if (mSharedPreferences.getBoolean(SharedPreferencesUtils.PINCH_TO_ZOOM_VIDEO, false)) {
+                }
+            });
             zoomSurfaceView.getEngine().addListener(new ZoomEngine.Listener() {
                 @Override
                 public void onUpdate(@NonNull ZoomEngine zoomEngine, @NonNull Matrix matrix) {
@@ -465,16 +473,35 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
 
                 }
             });
+            zoomSurfaceView.setOnClickListener(view -> {
+                if (playerControlView.isVisible()) {
+                    playerControlView.hide();
+                } else {
+                    playerControlView.show();
+                }
+            });
         } else {
-            zoomSurfaceView.setZoomEnabled(false);
+            PlayerView videoPlayerView = findViewById(R.id.player_view_view_video_activity);
+            videoPlayerView.setPlayer(player);
+            videoPlayerView.setControllerVisibilityListener(visibility -> {
+                switch (visibility) {
+                    case View.GONE:
+                        getWindow().getDecorView().setSystemUiVisibility(
+                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                                        | View.SYSTEM_UI_FLAG_IMMERSIVE);
+                        break;
+                    case View.VISIBLE:
+                        getWindow().getDecorView().setSystemUiVisibility(
+                                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+                }
+            });
         }
-        zoomSurfaceView.setOnClickListener(view -> {
-            if (playerControlView.isVisible()) {
-                playerControlView.hide();
-            } else {
-                playerControlView.show();
-            }
-        });
 
         if (savedInstanceState == null) {
             mVideoUri = intent.getData();
@@ -504,7 +531,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                 loadStreamableVideo(shortCode, savedInstanceState);
             } else {
                 dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                        .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
+                        .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
                 player.prepare();
                 player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
                 preparePlayer(savedInstanceState);
@@ -536,7 +563,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                 }
             } else {
                 dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                        .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
+                        .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
                 player.prepare();
                 player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
                 preparePlayer(savedInstanceState);
@@ -550,7 +577,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             }
             // Produces DataSource instances through which media data is loaded.
             dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
+                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
             // Prepare the player with the source.
             player.prepare();
             player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
@@ -562,7 +589,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
             videoFileName = subredditName + "-" + id + ".mp4";
             // Produces DataSource instances through which media data is loaded.
             dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
+                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
             // Prepare the player with the source.
             player.prepare();
             player.setMediaSource(new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
@@ -636,22 +663,35 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                         });
                     }
 
-                    for (int i = 0; i < trackGroups.size(); i++) {
-                        String mimeType = trackGroups.get(i).getTrackFormat(0).sampleMimeType;
-                        if (mimeType != null && mimeType.contains("audio")) {
-                            muteButton.setVisibility(View.VISIBLE);
-                            muteButton.setOnClickListener(view -> {
-                                if (isMute) {
-                                    isMute = false;
-                                    player.setVolume(1f);
-                                    muteButton.setImageResource(R.drawable.ic_unmute_24dp);
-                                } else {
-                                    isMute = true;
-                                    player.setVolume(0f);
-                                    muteButton.setImageResource(R.drawable.ic_mute_24dp);
-                                }
-                            });
-                            break;
+                    for (Tracks.Group trackGroup : tracks.getGroups()) {
+                        if (trackGroup.getType() == C.TRACK_TYPE_AUDIO) {
+                            if (videoType == VIDEO_TYPE_NORMAL && trackGroup.length > 1) {
+                                // Reddit video HLS usually has two audio tracks. The first is mono.
+                                // The second (index 1) is stereo.
+                                // Select the stereo audio track if possible.
+                                trackSelector.setParameters(
+                                        trackSelector.buildUponParameters()
+                                                .setOverrideForType(new TrackSelectionOverride(
+                                                                trackGroup.getMediaTrackGroup(),
+                                                                1
+                                                        )
+                                                )
+                                );
+                            }
+                            if (muteButton.getVisibility() != View.VISIBLE) {
+                                muteButton.setVisibility(View.VISIBLE);
+                                muteButton.setOnClickListener(view -> {
+                                    if (isMute) {
+                                        isMute = false;
+                                        player.setVolume(1f);
+                                        muteButton.setImageResource(R.drawable.ic_unmute_24dp);
+                                    } else {
+                                        isMute = true;
+                                        player.setVolume(0f);
+                                        muteButton.setImageResource(R.drawable.ic_mute_24dp);
+                                    }
+                                });
+                            }
                         }
                     }
                 } else {
@@ -693,7 +733,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                             mVideoUri = Uri.parse(webm);
                             videoDownloadUrl = mp4;
                             dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
+                                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
                             preparePlayer(savedInstanceState);
                             player.prepare();
                             player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
@@ -723,7 +763,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                             mVideoUri = Uri.parse(webm);
                             videoDownloadUrl = mp4;
                             dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
+                                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
                             preparePlayer(savedInstanceState);
                             player.prepare();
                             player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
@@ -789,7 +829,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                                         videoFileName = "imgur-" + FilenameUtils.getName(videoDownloadUrl);
                                         // Produces DataSource instances through which media data is loaded.
                                         dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                                                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
+                                                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
                                         // Prepare the player with the source.
                                         player.prepare();
                                         player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));
@@ -805,7 +845,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                                             videoFileName = subredditName + "-" + id + ".mp4";
                                             // Produces DataSource instances through which media data is loaded.
                                             dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                                                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
+                                                    .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
                                             // Prepare the player with the source.
                                             preparePlayer(savedInstanceState);
                                             player.prepare();
@@ -835,7 +875,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
 
     private void loadStreamableVideo(String shortCode, Bundle savedInstanceState) {
         progressBar.setVisibility(View.VISIBLE);
-        FetchStreamableVideo.fetchStreamableVideo(mExecutor, new Handler(), streamableRetrofit, shortCode,
+        FetchStreamableVideo.fetchStreamableVideo(mExecutor, new Handler(), streamableApiProvider, shortCode,
                 new FetchStreamableVideo.FetchStreamableVideoListener() {
                     @Override
                     public void success(StreamableVideo streamableVideo) {
@@ -848,7 +888,7 @@ public class ViewVideoActivity extends AppCompatActivity implements CustomFontRe
                         videoDownloadUrl = streamableVideo.mp4 == null ? streamableVideo.mp4Mobile.url : streamableVideo.mp4.url;
                         mVideoUri = Uri.parse(videoDownloadUrl);
                         dataSourceFactory = new CacheDataSource.Factory().setCache(mSimpleCache)
-                                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setUserAgent(APIUtils.USER_AGENT));
+                                .setUpstreamDataSourceFactory(new DefaultHttpDataSource.Factory().setAllowCrossProtocolRedirects(true).setUserAgent(APIUtils.USER_AGENT));
                         preparePlayer(savedInstanceState);
                         player.prepare();
                         player.setMediaSource(new ProgressiveMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(mVideoUri)));

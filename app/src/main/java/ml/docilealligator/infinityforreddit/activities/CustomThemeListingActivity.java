@@ -1,13 +1,12 @@
 package ml.docilealligator.infinityforreddit.activities;
 
-import static android.content.ClipDescription.MIMETYPE_TEXT_PLAIN;
-
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -26,8 +25,7 @@ import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.JsonParseException;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -54,6 +52,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeViewModel;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.utils.CustomThemeSharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 
 public class CustomThemeListingActivity extends BaseActivity implements
         CustomThemeOptionsBottomSheetFragment.CustomThemeOptionsBottomSheetFragmentListener,
@@ -165,26 +164,19 @@ public class CustomThemeListingActivity extends BaseActivity implements
         EditText themeNameEditText = dialogView.findViewById(R.id.name_edit_text_edit_name_dialog);
         themeNameEditText.setText(oldThemeName);
         themeNameEditText.requestFocus();
-        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        }
+        Utils.showKeyboard(this, new Handler(), themeNameEditText);
         new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                 .setTitle(R.string.edit_theme_name)
                 .setView(dialogView)
                 .setPositiveButton(R.string.ok, (dialogInterface, i)
                         -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(themeNameEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                     ChangeThemeName.changeThemeName(executor, redditDataRoomDatabase, oldThemeName,
                             themeNameEditText.getText().toString());
                 })
                 .setNegativeButton(R.string.cancel, null)
                 .setOnDismissListener(dialogInterface -> {
-                    if (imm != null) {
-                        imm.hideSoftInputFromWindow(themeNameEditText.getWindowToken(), 0);
-                    }
+                    Utils.hideKeyboard(this);
                 })
                 .show();
     }
@@ -269,16 +261,20 @@ public class CustomThemeListingActivity extends BaseActivity implements
             if (!clipboard.hasPrimaryClip()) {
                 Snackbar.make(coordinatorLayout, R.string.no_data_in_clipboard, Snackbar.LENGTH_SHORT).show();
             } else if (clipboard.getPrimaryClipDescription() != null &&
-                    !clipboard.getPrimaryClipDescription().hasMimeType(MIMETYPE_TEXT_PLAIN)) {
-                // since the clipboard has data but it is not plain text
+                    !clipboard.getPrimaryClipDescription().hasMimeType("text/*")) {
+                // since the clipboard has data but it is not text
                 Snackbar.make(coordinatorLayout, R.string.no_data_in_clipboard, Snackbar.LENGTH_SHORT).show();
             } else if (clipboard.getPrimaryClip() != null) {
                 ClipData.Item item = clipboard.getPrimaryClip().getItemAt(0);
-                String json = item.getText().toString();
-                try {
-                    CustomTheme customTheme = new Gson().fromJson(json, CustomTheme.class);
-                    checkDuplicateAndImportTheme(customTheme, true);
-                } catch (JsonSyntaxException e) {
+                String json = item.coerceToText(this.getApplicationContext()).toString();
+                if (!TextUtils.isEmpty(json)) {
+                    try {
+                        CustomTheme customTheme = CustomTheme.fromJson(json);
+                        checkDuplicateAndImportTheme(customTheme, true);
+                    } catch (JsonParseException e) {
+                        Snackbar.make(coordinatorLayout, R.string.parse_theme_failed, Snackbar.LENGTH_SHORT).show();
+                    }
+                } else {
                     Snackbar.make(coordinatorLayout, R.string.parse_theme_failed, Snackbar.LENGTH_SHORT).show();
                 }
             }
@@ -306,18 +302,13 @@ public class CustomThemeListingActivity extends BaseActivity implements
                                     EditText themeNameEditText = dialogView.findViewById(R.id.name_edit_text_edit_name_dialog);
                                     themeNameEditText.setText(customTheme.name);
                                     themeNameEditText.requestFocus();
-                                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    if (imm != null) {
-                                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                                    }
+                                    Utils.showKeyboard(CustomThemeListingActivity.this, new Handler(), themeNameEditText);
                                     new MaterialAlertDialogBuilder(CustomThemeListingActivity.this, R.style.MaterialAlertDialogTheme)
                                             .setTitle(R.string.edit_theme_name)
                                             .setView(dialogView)
                                             .setPositiveButton(R.string.ok, (editTextDialogInterface, i1)
                                                     -> {
-                                                if (imm != null) {
-                                                    imm.hideSoftInputFromWindow(themeNameEditText.getWindowToken(), 0);
-                                                }
+                                                Utils.hideKeyboard(CustomThemeListingActivity.this);
                                                 if (!themeNameEditText.getText().toString().equals("")) {
                                                     customTheme.name = themeNameEditText.getText().toString();
                                                 }
@@ -325,9 +316,7 @@ public class CustomThemeListingActivity extends BaseActivity implements
                                             })
                                             .setNegativeButton(R.string.cancel, null)
                                             .setOnDismissListener(editTextDialogInterface -> {
-                                                if (imm != null) {
-                                                    imm.hideSoftInputFromWindow(themeNameEditText.getWindowToken(), 0);
-                                                }
+                                                Utils.hideKeyboard(CustomThemeListingActivity.this);
                                             })
                                             .show();
                                 })

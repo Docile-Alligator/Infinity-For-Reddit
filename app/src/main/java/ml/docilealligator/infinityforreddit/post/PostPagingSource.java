@@ -58,6 +58,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     private String userWhere;
     private String multiRedditPath;
     private LinkedHashSet<Post> postLinkedHashSet;
+    private String previousLastItem;
 
     PostPagingSource(Executor executor, Retrofit retrofit, String accessToken, String accountName,
                      SharedPreferences sharedPreferences,
@@ -188,6 +189,11 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
                 return new LoadResult.Error<>(new Exception("Error parsing posts"));
             } else {
                 int currentPostsSize = postLinkedHashSet.size();
+                if (lastItem != null && lastItem.equals(previousLastItem)) {
+                    lastItem = null;
+                }
+                previousLastItem = lastItem;
+
                 postLinkedHashSet.addAll(newPosts);
                 if (currentPostsSize == postLinkedHashSet.size()) {
                     return new LoadResult.Page<>(new ArrayList<>(), null, lastItem);
@@ -214,12 +220,8 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         } else {
             afterKey = loadParams.getKey();
         }
-        if (sortType.getTime() != null) {
-            bestPost = api.getBestPostsListenableFuture(sortType.getType().value, sortType.getTime().value, afterKey,
-                    APIUtils.getOAuthHeader(accessToken));
-        } else {
-            bestPost = api.getBestPostsListenableFuture(sortType.getType().value, afterKey, APIUtils.getOAuthHeader(accessToken));
-        }
+        bestPost = api.getBestPostsListenableFuture(sortType.getType(), sortType.getTime(), afterKey,
+                APIUtils.getOAuthHeader(accessToken));
 
         ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.transform(bestPost, this::transformData, executor);
 
@@ -234,19 +236,10 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     private ListenableFuture<LoadResult<String, Post>> loadSubredditPosts(@NonNull LoadParams<String> loadParams, RedditAPI api) {
         ListenableFuture<Response<String>> subredditPost;
         if (accessToken == null) {
-            if (sortType.getTime() != null) {
-                subredditPost = api.getSubredditBestPostsListenableFuture(subredditOrUserName, sortType.getType().value, sortType.getTime().value, loadParams.getKey());
-            } else {
-                subredditPost = api.getSubredditBestPostsListenableFuture(subredditOrUserName, sortType.getType().value, loadParams.getKey());
-            }
+            subredditPost = api.getSubredditBestPostsListenableFuture(subredditOrUserName, sortType.getType(), sortType.getTime(), loadParams.getKey());
         } else {
-            if (sortType.getTime() != null) {
-                subredditPost = api.getSubredditBestPostsOauthListenableFuture(subredditOrUserName, sortType.getType().value,
-                        sortType.getTime().value, loadParams.getKey(), APIUtils.getOAuthHeader(accessToken));
-            } else {
-                subredditPost = api.getSubredditBestPostsOauthListenableFuture(subredditOrUserName, sortType.getType().value,
-                        loadParams.getKey(), APIUtils.getOAuthHeader(accessToken));
-            }
+            subredditPost = api.getSubredditBestPostsOauthListenableFuture(subredditOrUserName, sortType.getType(),
+                    sortType.getTime(), loadParams.getKey(), APIUtils.getOAuthHeader(accessToken));
         }
 
         ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.transform(subredditPost, this::transformData, executor);
@@ -262,20 +255,11 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     private ListenableFuture<LoadResult<String, Post>> loadUserPosts(@NonNull LoadParams<String> loadParams, RedditAPI api) {
         ListenableFuture<Response<String>> userPosts;
         if (accessToken == null) {
-            if (sortType.getTime() != null) {
-                userPosts = api.getUserPostsListenableFuture(subredditOrUserName, loadParams.getKey(), sortType.getType().value,
-                        sortType.getTime().value);
-            } else {
-                userPosts = api.getUserPostsListenableFuture(subredditOrUserName, loadParams.getKey(), sortType.getType().value);
-            }
+            userPosts = api.getUserPostsListenableFuture(subredditOrUserName, loadParams.getKey(), sortType.getType(),
+                    sortType.getTime());
         } else {
-            if (sortType.getTime() != null) {
-                userPosts = api.getUserPostsOauthListenableFuture(subredditOrUserName, userWhere, loadParams.getKey(), sortType.getType().value,
-                        sortType.getTime().value, APIUtils.getOAuthHeader(accessToken));
-            } else {
-                userPosts = api.getUserPostsOauthListenableFuture(subredditOrUserName, userWhere, loadParams.getKey(), sortType.getType().value,
-                        APIUtils.getOAuthHeader(accessToken));
-            }
+            userPosts = api.getUserPostsOauthListenableFuture(subredditOrUserName, userWhere, loadParams.getKey(), sortType.getType(),
+                    sortType.getTime(), APIUtils.getOAuthHeader(accessToken));
         }
 
         ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.transform(userPosts, this::transformData, executor);
@@ -292,40 +276,20 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
         ListenableFuture<Response<String>> searchPosts;
         if (subredditOrUserName == null) {
             if (accessToken == null) {
-                if (sortType.getTime() != null) {
-                    searchPosts = api.searchPostsListenableFuture(query, loadParams.getKey(), sortType.getType().value, sortType.getTime().value,
-                            trendingSource);
-                } else {
-                    searchPosts = api.searchPostsListenableFuture(query, loadParams.getKey(), sortType.getType().value, trendingSource);
-                }
+                searchPosts = api.searchPostsListenableFuture(query, loadParams.getKey(), sortType.getType(), sortType.getTime(),
+                        trendingSource);
             } else {
-                if (sortType.getTime() != null) {
-                    searchPosts = api.searchPostsOauthListenableFuture(query, loadParams.getKey(), sortType.getType().value,
-                            sortType.getTime().value, trendingSource, APIUtils.getOAuthHeader(accessToken));
-                } else {
-                    searchPosts = api.searchPostsOauthListenableFuture(query, loadParams.getKey(), sortType.getType().value, trendingSource,
-                            APIUtils.getOAuthHeader(accessToken));
-                }
+                searchPosts = api.searchPostsOauthListenableFuture(query, loadParams.getKey(), sortType.getType(),
+                        sortType.getTime(), trendingSource, APIUtils.getOAuthHeader(accessToken));
             }
         } else {
             if (accessToken == null) {
-                if (sortType.getTime() != null) {
-                    searchPosts = api.searchPostsInSpecificSubredditListenableFuture(subredditOrUserName, query,
-                            sortType.getType().value, sortType.getTime().value, loadParams.getKey());
-                } else {
-                    searchPosts = api.searchPostsInSpecificSubredditListenableFuture(subredditOrUserName, query,
-                            sortType.getType().value, loadParams.getKey());
-                }
+                searchPosts = api.searchPostsInSpecificSubredditListenableFuture(subredditOrUserName, query,
+                        sortType.getType(), sortType.getTime(), loadParams.getKey());
             } else {
-                if (sortType.getTime() != null) {
-                    searchPosts = api.searchPostsInSpecificSubredditOauthListenableFuture(subredditOrUserName, query,
-                            sortType.getType().value, sortType.getTime().value, loadParams.getKey(),
-                            APIUtils.getOAuthHeader(accessToken));
-                } else {
-                    searchPosts = api.searchPostsInSpecificSubredditOauthListenableFuture(subredditOrUserName, query,
-                            sortType.getType().value, loadParams.getKey(),
-                            APIUtils.getOAuthHeader(accessToken));
-                }
+                searchPosts = api.searchPostsInSpecificSubredditOauthListenableFuture(subredditOrUserName, query,
+                        sortType.getType(), sortType.getTime(), loadParams.getKey(),
+                        APIUtils.getOAuthHeader(accessToken));
             }
         }
 
@@ -342,19 +306,10 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
     private ListenableFuture<LoadResult<String, Post>> loadMultiRedditPosts(@NonNull LoadParams<String> loadParams, RedditAPI api) {
         ListenableFuture<Response<String>> multiRedditPosts;
         if (accessToken == null) {
-            if (sortType.getTime() != null) {
-                multiRedditPosts = api.getMultiRedditPostsListenableFuture(multiRedditPath, loadParams.getKey(), sortType.getTime().value);
-            } else {
-                multiRedditPosts = api.getMultiRedditPostsListenableFuture(multiRedditPath, loadParams.getKey());
-            }
+            multiRedditPosts = api.getMultiRedditPostsListenableFuture(multiRedditPath, loadParams.getKey(), sortType.getTime());
         } else {
-            if (sortType.getTime() != null) {
-                multiRedditPosts = api.getMultiRedditPostsOauthListenableFuture(multiRedditPath, loadParams.getKey(),
-                        sortType.getTime().value, APIUtils.getOAuthHeader(accessToken));
-            } else {
-                multiRedditPosts = api.getMultiRedditPostsOauthListenableFuture(multiRedditPath, loadParams.getKey(),
-                        APIUtils.getOAuthHeader(accessToken));
-            }
+            multiRedditPosts = api.getMultiRedditPostsOauthListenableFuture(multiRedditPath, loadParams.getKey(),
+                    sortType.getTime(), APIUtils.getOAuthHeader(accessToken));
         }
 
         ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.transform(multiRedditPosts, this::transformData, executor);
@@ -369,11 +324,7 @@ public class PostPagingSource extends ListenableFuturePagingSource<String, Post>
 
     private ListenableFuture<LoadResult<String, Post>> loadAnonymousHomePosts(@NonNull LoadParams<String> loadParams, RedditAPI api) {
         ListenableFuture<Response<String>> anonymousHomePosts;
-        if (sortType.getTime() != null) {
-            anonymousHomePosts = api.getSubredditBestPostsListenableFuture(subredditOrUserName, sortType.getType().value, sortType.getTime().value, loadParams.getKey());
-        } else {
-            anonymousHomePosts = api.getSubredditBestPostsListenableFuture(subredditOrUserName, sortType.getType().value, loadParams.getKey());
-        }
+        anonymousHomePosts = api.getSubredditBestPostsListenableFuture(subredditOrUserName, sortType.getType(), sortType.getTime(), loadParams.getKey());
 
         ListenableFuture<LoadResult<String, Post>> pageFuture = Futures.transform(anonymousHomePosts, this::transformData, executor);
 

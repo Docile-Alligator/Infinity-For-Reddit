@@ -56,6 +56,11 @@
         android:title="@string/action_report" />
 
     <item
+        android:id="@+id/action_block_user_view_user_detail_activity"
+        android:orderInCategory="10"
+        android:title="@string/action_block_user" />
+
+    <item
         android:id="@+id/action_edit_profile_view_user_detail_activity"
         android:orderInCategory="11"
         android:title="@string/action_edit_profile" />

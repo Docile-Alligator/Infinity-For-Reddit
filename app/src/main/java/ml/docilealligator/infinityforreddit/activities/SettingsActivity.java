@@ -4,16 +4,16 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.CollapsingToolbarLayout;
+import com.google.android.material.snackbar.BaseTransientBottomBar;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -22,11 +22,11 @@ import org.greenrobot.eventbus.ThreadMode;
 import javax.inject.Inject;
 import javax.inject.Named;
 
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import ml.docilealligator.infinityforreddit.Infinity;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.databinding.ActivitySettingsBinding;
 import ml.docilealligator.infinityforreddit.events.RecreateActivityEvent;
 import ml.docilealligator.infinityforreddit.settings.AboutPreferenceFragment;
 import ml.docilealligator.infinityforreddit.settings.AdvancedPreferenceFragment;
@@ -46,12 +46,7 @@ public class SettingsActivity extends BaseActivity implements
 
     private static final String TITLE_STATE = "TS";
 
-    @BindView(R.id.appbar_layout_settings_activity)
-    AppBarLayout appBarLayout;
-    @BindView(R.id.collapsing_toolbar_layout_settings_activity)
-    CollapsingToolbarLayout collapsingToolbarLayout;
-    @BindView(R.id.toolbar_settings_activity)
-    Toolbar toolbar;
+    private ActivitySettingsBinding binding;
     private String mAccountName;
 
     @Inject
@@ -71,7 +66,8 @@ public class SettingsActivity extends BaseActivity implements
 
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_settings);
+        binding = ActivitySettingsBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         ButterKnife.bind(this);
 
@@ -80,10 +76,10 @@ public class SettingsActivity extends BaseActivity implements
         applyCustomTheme();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && isChangeStatusBarIconColor()) {
-            addOnOffsetChangedListener(appBarLayout);
+            addOnOffsetChangedListener(binding.appbarLayoutSettingsActivity);
         }
 
-        setSupportActionBar(toolbar);
+        setSupportActionBar(binding.toolbarSettingsActivity);
 
         mAccountName = mCurrentAccountSharedPreferences.getString(SharedPreferencesUtils.ACCOUNT_NAME, null);
 
@@ -130,7 +126,8 @@ public class SettingsActivity extends BaseActivity implements
 
     @Override
     protected void applyCustomTheme() {
-        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(appBarLayout, collapsingToolbarLayout, toolbar);
+        applyAppBarLayoutAndCollapsingToolbarLayoutAndToolbarTheme(binding.appbarLayoutSettingsActivity,
+                binding.collapsingToolbarLayoutSettingsActivity, binding.toolbarSettingsActivity);
     }
 
     @Override
@@ -188,6 +185,10 @@ public class SettingsActivity extends BaseActivity implements
     protected void onDestroy() {
         super.onDestroy();
         EventBus.getDefault().unregister(this);
+    }
+
+    public void showSnackbar(int stringId, int actionStringId, View.OnClickListener onClickListener) {
+        Snackbar.make(binding.getRoot(), stringId, BaseTransientBottomBar.LENGTH_SHORT).setAction(actionStringId, onClickListener).show();
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)

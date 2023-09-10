@@ -12,8 +12,6 @@ import android.view.WindowManager;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.r0adkll.slidr.Slidr;
-
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
@@ -28,6 +26,7 @@ import ml.docilealligator.infinityforreddit.SortType;
 import ml.docilealligator.infinityforreddit.SortTypeSelectionCallback;
 import ml.docilealligator.infinityforreddit.bottomsheetfragments.PostLayoutBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.databinding.ActivityAccountPostsBinding;
 import ml.docilealligator.infinityforreddit.events.ChangeNSFWEvent;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
@@ -74,7 +73,7 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
         applyCustomTheme();
 
         if (mSharedPreferences.getBoolean(SharedPreferencesUtils.SWIPE_RIGHT_TO_GO_BACK, true)) {
-            Slidr.attach(this);
+            mSliderPanel = Slidr.attach(this);
         }
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -237,6 +236,20 @@ public class AccountPostsActivity extends BaseActivity implements SortTypeSelect
     public void onLongPress() {
         if (mFragment != null) {
             ((PostFragment) mFragment).goBackToTop();
+        }
+    }
+
+    @Override
+    public void lockSwipeRightToGoBack() {
+        if (mSliderPanel != null) {
+            mSliderPanel.lock();
+        }
+    }
+
+    @Override
+    public void unlockSwipeRightToGoBack() {
+        if (mSliderPanel != null) {
+            mSliderPanel.unlock();
         }
     }
 }

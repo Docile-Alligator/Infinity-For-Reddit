@@ -1102,12 +1102,9 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 
 仍然要继续吗？"</string>
     <string name="reply">"回复"</string>
-    <string name="rpan_activity_label">"直播"</string>
     <string name="post_gallery_activity_label">"相册帖"</string>
     <string name="trending_activity_label">"热门"</string>
-    <string name="action_share_rpan_link">"分享直播链接"</string>
     <string name="action_share_post_link">"分享帖子链接"</string>
-    <string name="rpan">"直播"</string>
     <string name="trending">"热门"</string>
     <string name="receive_post_reply_notifications">"接收帖子回复提醒"</string>
     <string name="bottom_sheet_post_gallery">"相册"</string>
@@ -1137,9 +1134,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="upload_image_success">"上传图片成功。再次点击图片按钮查看已上传的图片。"</string>
     <string name="get_image_bitmap_failed">"无法获取图片位图"</string>
     <string name="upload_image_failed">"无法上传图片"</string>
-    <string name="load_rpan_broadcasts_failed">"无法加载 RPAN 直播"</string>
-    <string name="parse_rpan_broadcasts_failed">"无法解析 RPAN 直播"</string>
-    <string name="parse_rpan_broadcast_failed">"无法解析 RPAN 直播"</string>
     <string name="search_comments">"搜索评论"</string>
     <string name="please_wait_image_is_uploading">"仍有图片正在上传，请稍候。"</string>
     <string name="error_fetch_trending_search">"获取热搜失败。

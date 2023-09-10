@@ -1013,12 +1013,9 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
 
 Усе ще бажаєте ввімкнути це?"</string>
     <string name="reply">"Відповісти"</string>
-    <string name="rpan_activity_label">"RPAN"</string>
     <string name="post_gallery_activity_label">"Допис галереї"</string>
     <string name="trending_activity_label">"Тенденції"</string>
-    <string name="action_share_rpan_link">"Поширити ланку RPAN"</string>
     <string name="action_share_post_link">"Поширити ланку допису"</string>
-    <string name="rpan">"RPAN"</string>
     <string name="trending">"Тенденції"</string>
     <string name="receive_post_reply_notifications">"Отримувати сповіщення про відповіді на дописи"</string>
     <string name="bottom_sheet_post_gallery">"Галерея"</string>
@@ -1048,9 +1045,6 @@ https://play.google.com/store/apps/details?id=ml.docilealligator.infinityforredd
     <string name="upload_image_success">"Зображення успішно відвантажене. Клацніть кнопку зображення ще раз, щоб переглянути відвантажені зображення."</string>
     <string name="get_image_bitmap_failed">"Неможливо отримати bitmap зображення"</string>
     <string name="upload_image_failed">"Неможливо відвантажити зображення"</string>
-    <string name="load_rpan_broadcasts_failed">"Не вдалося завантажити трансляції RPAN"</string>
-    <string name="parse_rpan_broadcasts_failed">"Не вдалося проаналізувати трансляції RPAN"</string>
-    <string name="parse_rpan_broadcast_failed">"Не вдалося проаналізувати трансляцію RPAN"</string>
     <string name="search_comments">"Пошук коментарів"</string>
     <string name="please_wait_image_is_uploading">"Зображення все ще завантажується. Будь ласка, зачекайте."</string>
     <string name="error_fetch_trending_search">"Не вдалося отримати тенденції пошуку.

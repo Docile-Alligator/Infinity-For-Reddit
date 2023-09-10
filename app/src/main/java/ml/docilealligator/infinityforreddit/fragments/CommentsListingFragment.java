@@ -177,11 +177,9 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 if (touchHelper != null) {
+                    exceedThreshold = false;
                     touchHelper.attachToRecyclerView(null);
                     touchHelper.attachToRecyclerView(mCommentRecyclerView);
-                    if (mAdapter != null) {
-                        mAdapter.onItemSwipe(viewHolder, direction, swipeLeftAction, swipeRightAction);
-                    }
                 }
             }
 
@@ -189,55 +187,62 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
             public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
 
-                View itemView = viewHolder.itemView;
-                int horizontalOffset = (int) Utils.convertDpToPixel(16, mActivity);
-                if (dX > 0) {
-                    if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
-                        if (!exceedThreshold) {
-                            exceedThreshold = true;
-                            if (vibrateWhenActionTriggered) {
-                                viewHolder.itemView.setHapticFeedbackEnabled(true);
-                                viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                if (isCurrentlyActive) {
+                    View itemView = viewHolder.itemView;
+                    int horizontalOffset = (int) Utils.convertDpToPixel(16, mActivity);
+                    if (dX > 0) {
+                        if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
+                            if (!exceedThreshold) {
+                                exceedThreshold = true;
+                                if (vibrateWhenActionTriggered) {
+                                    viewHolder.itemView.setHapticFeedbackEnabled(true);
+                                    viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                }
                             }
+                            backgroundSwipeRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                        } else {
+                            exceedThreshold = false;
+                            backgroundSwipeRight.setBounds(0, 0, 0, 0);
                         }
-                        backgroundSwipeRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                    } else {
-                        exceedThreshold = false;
-                        backgroundSwipeRight.setBounds(0, 0, 0, 0);
-                    }
 
-                    drawableSwipeRight.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableSwipeRight.getIntrinsicWidth(),
-                            (itemView.getBottom() + itemView.getTop() - drawableSwipeRight.getIntrinsicHeight()) / 2,
-                            itemView.getLeft() + ((int) dX) - horizontalOffset,
-                            (itemView.getBottom() + itemView.getTop() + drawableSwipeRight.getIntrinsicHeight()) / 2);
-                    backgroundSwipeRight.draw(c);
-                    drawableSwipeRight.draw(c);
-                } else if (dX < 0) {
-                    if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
-                        if (!exceedThreshold) {
-                            exceedThreshold = true;
-                            if (vibrateWhenActionTriggered) {
-                                viewHolder.itemView.setHapticFeedbackEnabled(true);
-                                viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                        drawableSwipeRight.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableSwipeRight.getIntrinsicWidth(),
+                                (itemView.getBottom() + itemView.getTop() - drawableSwipeRight.getIntrinsicHeight()) / 2,
+                                itemView.getLeft() + ((int) dX) - horizontalOffset,
+                                (itemView.getBottom() + itemView.getTop() + drawableSwipeRight.getIntrinsicHeight()) / 2);
+                        backgroundSwipeRight.draw(c);
+                        drawableSwipeRight.draw(c);
+                    } else if (dX < 0) {
+                        if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
+                            if (!exceedThreshold) {
+                                exceedThreshold = true;
+                                if (vibrateWhenActionTriggered) {
+                                    viewHolder.itemView.setHapticFeedbackEnabled(true);
+                                    viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                }
                             }
+                            backgroundSwipeLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                        } else {
+                            exceedThreshold = false;
+                            backgroundSwipeLeft.setBounds(0, 0, 0, 0);
                         }
-                        backgroundSwipeLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                    } else {
-                        exceedThreshold = false;
-                        backgroundSwipeLeft.setBounds(0, 0, 0, 0);
+                        drawableSwipeLeft.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
+                                (itemView.getBottom() + itemView.getTop() - drawableSwipeLeft.getIntrinsicHeight()) / 2,
+                                itemView.getRight() + ((int) dX) + horizontalOffset + drawableSwipeLeft.getIntrinsicWidth(),
+                                (itemView.getBottom() + itemView.getTop() + drawableSwipeLeft.getIntrinsicHeight()) / 2);
+                        backgroundSwipeLeft.draw(c);
+                        drawableSwipeLeft.draw(c);
                     }
-                    drawableSwipeLeft.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
-                            (itemView.getBottom() + itemView.getTop() - drawableSwipeLeft.getIntrinsicHeight()) / 2,
-                            itemView.getRight() + ((int) dX) + horizontalOffset + drawableSwipeLeft.getIntrinsicWidth(),
-                            (itemView.getBottom() + itemView.getTop() + drawableSwipeLeft.getIntrinsicHeight()) / 2);
-                    backgroundSwipeLeft.draw(c);
-                    drawableSwipeLeft.draw(c);
+                } else {
+                    if (exceedThreshold) {
+                        mAdapter.onItemSwipe(viewHolder, dX > 0 ? ItemTouchHelper.END : ItemTouchHelper.START, swipeLeftAction, swipeRightAction);
+                        exceedThreshold = false;
+                    }
                 }
             }
 
             @Override
             public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
-                return swipeActionThreshold;
+                return 100;
             }
         });
 

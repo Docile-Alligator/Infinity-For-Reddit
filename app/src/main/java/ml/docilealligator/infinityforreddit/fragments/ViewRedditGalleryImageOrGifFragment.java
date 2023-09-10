@@ -228,8 +228,8 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                 if (activity.isUseBottomAppBar()) {
                     bottomAppBarMenu.setVisibility(View.VISIBLE);
                 }
-                if (captionTextOrUrlIsNotEmpty){
-                    bottomAppBar.setVisibility(View.VISIBLE);
+                if (captionTextOrUrlIsNotEmpty) {
+                    captionLayout.setVisibility(View.VISIBLE);
                 }
             } else {
                 hideAppBar();
@@ -308,11 +308,8 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
 
                 BetterLinkMovementMethod.linkify(Linkify.WEB_URLS, captionUrlTextView).setOnLinkLongClickListener((textView, url) -> {
                     if (activity != null && !activity.isDestroyed() && !activity.isFinishing()) {
-                        UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = new UrlMenuBottomSheetFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString(UrlMenuBottomSheetFragment.EXTRA_URL, captionUrl);
-                        urlMenuBottomSheetFragment.setArguments(bundle);
-                        urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), urlMenuBottomSheetFragment.getTag());
+                        UrlMenuBottomSheetFragment urlMenuBottomSheetFragment = UrlMenuBottomSheetFragment.newInstance(captionUrl);
+                        urlMenuBottomSheetFragment.show(activity.getSupportFragmentManager(), null);
                     }
                     return true;
                 });
@@ -320,7 +317,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
                 captionUrlTextView.setHighlightColor(Color.TRANSPARENT);
             }
         } else {
-            bottomAppBar.setVisibility(View.GONE);
+            captionLayout.setVisibility(View.GONE);
         }
 
         return rootView;
@@ -338,7 +335,7 @@ public class ViewRedditGalleryImageOrGifFragment extends Fragment {
         if (activity.isUseBottomAppBar()) {
             bottomAppBarMenu.setVisibility(View.GONE);
         }
-        bottomAppBar.setVisibility(View.GONE);
+        captionLayout.setVisibility(View.GONE);
     }
 
     private void loadImage() {

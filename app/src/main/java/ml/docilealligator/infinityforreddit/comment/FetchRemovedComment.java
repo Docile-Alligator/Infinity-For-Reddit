@@ -29,7 +29,7 @@ public class FetchRemovedComment {
                     Comment removedComment = parseComment(response.body(), comment);
                     handler.post(() -> {
                         if (removedComment != null) {
-                            listener.fetchSuccess(removedComment);
+                            listener.fetchSuccess(removedComment, comment);
                         } else {
                             listener.fetchFailed();
                         }
@@ -54,8 +54,8 @@ public class FetchRemovedComment {
             try {
                 Response<String> response = retrofit.create(PushshiftAPI.class).searchComments(
                         comment.getLinkId(),
-                        3000,
-                        "asc",
+                        1000,
+                        "id",
                         "id,author,body,is_submitter",
                         after,
                         after + 43200, // 12 Hours later
@@ -64,7 +64,7 @@ public class FetchRemovedComment {
                     Comment removedComment = parseComment(response.body(), comment);
                     handler.post(() -> {
                         if (removedComment != null) {
-                            listener.fetchSuccess(removedComment);
+                            listener.fetchSuccess(removedComment, comment);
                         } else {
                             listener.fetchFailed();
                         }
@@ -124,7 +124,7 @@ public class FetchRemovedComment {
     }
 
     public interface FetchRemovedCommentListener {
-        void fetchSuccess(Comment comment);
+        void fetchSuccess(Comment fetchedComment, Comment originalComment);
 
         void fetchFailed();
     }

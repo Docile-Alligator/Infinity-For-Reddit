@@ -5,6 +5,7 @@ import android.os.Parcelable;
 
 import java.util.ArrayList;
 
+import ml.docilealligator.infinityforreddit.BuildConfig;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 
 public class Comment implements Parcelable {
@@ -53,11 +54,11 @@ public class Comment implements Parcelable {
     private boolean isExpanded;
     private boolean hasExpandedBefore;
     private ArrayList<Comment> children;
-    private ArrayList<String> moreChildrenFullnames;
-    private int moreChildrenStartingIndex;
+    private ArrayList<String> moreChildrenIds;
     private int placeholderType;
     private boolean isLoadingMoreChildren;
     private boolean loadMoreChildrenFailed;
+    private long editedTimeMillis;
 
     public Comment(String id, String fullName, String author, String authorFlair,
                    String authorFlairHTML, String linkAuthor,
@@ -65,7 +66,7 @@ public class Comment implements Parcelable {
                    String linkId, String subredditName, String parentId, int score,
                    int voteType, boolean isSubmitter, String distinguished, String permalink,
                    String awards, int depth, boolean collapsed, boolean hasReply,
-                   boolean scoreHidden, boolean saved) {
+                   boolean scoreHidden, boolean saved, long edited) {
         this.id = id;
         this.fullName = fullName;
         this.author = author;
@@ -91,7 +92,7 @@ public class Comment implements Parcelable {
         this.saved = saved;
         this.isExpanded = false;
         this.hasExpandedBefore = false;
-        moreChildrenStartingIndex = 0;
+        this.editedTimeMillis = edited;
         placeholderType = NOT_PLACEHOLDER;
     }
 
@@ -141,9 +142,8 @@ public class Comment implements Parcelable {
         hasExpandedBefore = in.readByte() != 0;
         children = new ArrayList<>();
         in.readTypedList(children, Comment.CREATOR);
-        moreChildrenFullnames = new ArrayList<>();
-        in.readStringList(moreChildrenFullnames);
-        moreChildrenStartingIndex = in.readInt();
+        moreChildrenIds = new ArrayList<>();
+        in.readStringList(moreChildrenIds);
         placeholderType = in.readInt();
         isLoadingMoreChildren = in.readByte() != 0;
         loadMoreChildrenFailed = in.readByte() != 0;
@@ -159,6 +159,10 @@ public class Comment implements Parcelable {
 
     public String getAuthor() {
         return author;
+    }
+
+    public boolean isAuthorDeleted() {
+        return author != null && author.equals("[deleted]");
     }
 
     public void setAuthor(String author) {
@@ -241,6 +245,10 @@ public class Comment implements Parcelable {
         return distinguished != null && distinguished.equals("moderator");
     }
 
+    public boolean isAdmin() {
+        return distinguished != null && distinguished.equals("admin");
+    }
+
     public String getPermalink() {
         return permalink;
     }
@@ -316,13 +324,9 @@ public class Comment implements Parcelable {
         return children;
     }
 
-    public void setChildren(ArrayList<Comment> children) {
-        this.children = children;
-    }
-
     public void addChildren(ArrayList<Comment> moreChildren) {
         if (children == null || children.size() == 0) {
-            setChildren(moreChildren);
+            children = moreChildren;
         } else {
             if (children.size() > 1 && children.get(children.size() - 1).placeholderType == PLACEHOLDER_LOAD_MORE_COMMENTS) {
                 children.addAll(children.size() - 2, moreChildren);
@@ -331,11 +335,13 @@ public class Comment implements Parcelable {
             }
         }
         childCount += moreChildren == null ? 0 : moreChildren.size();
+        assertChildrenDepth();
     }
 
     public void addChild(Comment comment) {
         addChild(comment, 0);
         childCount++;
+        assertChildrenDepth();
     }
 
     public void addChild(Comment comment, int position) {
@@ -343,30 +349,33 @@ public class Comment implements Parcelable {
             children = new ArrayList<>();
         }
         children.add(position, comment);
+        assertChildrenDepth();
     }
 
-    public ArrayList<String> getMoreChildrenFullnames() {
-        return moreChildrenFullnames;
+    private void assertChildrenDepth() {
+        if (BuildConfig.DEBUG) {
+            for (Comment child: children) {
+                if (child.depth != depth + 1) {
+                    throw new IllegalStateException("Child depth is not one more than parent depth");
+                }
+            }
+        }
     }
 
-    public void setMoreChildrenFullnames(ArrayList<String> moreChildrenFullnames) {
-        this.moreChildrenFullnames = moreChildrenFullnames;
+    public ArrayList<String> getMoreChildrenIds() {
+        return moreChildrenIds;
     }
 
-    public boolean hasMoreChildrenFullnames() {
-        return moreChildrenFullnames != null;
+    public void setMoreChildrenIds(ArrayList<String> moreChildrenIds) {
+        this.moreChildrenIds = moreChildrenIds;
     }
 
-    public void removeMoreChildrenFullnames() {
-        moreChildrenFullnames.clear();
+    public boolean hasMoreChildrenIds() {
+        return moreChildrenIds != null;
     }
 
-    public int getMoreChildrenStartingIndex() {
-        return moreChildrenStartingIndex;
-    }
-
-    public void setMoreChildrenStartingIndex(int moreChildrenStartingIndex) {
-        this.moreChildrenStartingIndex = moreChildrenStartingIndex;
+    public void removeMoreChildrenIds() {
+        moreChildrenIds.clear();
     }
 
     public int getPlaceholderType() {
@@ -423,10 +432,16 @@ public class Comment implements Parcelable {
         parcel.writeByte((byte) (isExpanded ? 1 : 0));
         parcel.writeByte((byte) (hasExpandedBefore ? 1 : 0));
         parcel.writeTypedList(children);
-        parcel.writeStringList(moreChildrenFullnames);
-        parcel.writeInt(moreChildrenStartingIndex);
+        parcel.writeStringList(moreChildrenIds);
         parcel.writeInt(placeholderType);
         parcel.writeByte((byte) (isLoadingMoreChildren ? 1 : 0));
         parcel.writeByte((byte) (loadMoreChildrenFailed ? 1 : 0));
+    }
+
+    public boolean isEdited() {
+        return editedTimeMillis != 0;
+    }
+    public long getEditedTimeMillis() {
+        return editedTimeMillis;
     }
 }

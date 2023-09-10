@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.snackbar.Snackbar;
-import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
 import java.util.concurrent.Executor;
@@ -34,6 +33,7 @@ import ml.docilealligator.infinityforreddit.ReportThing;
 import ml.docilealligator.infinityforreddit.Rule;
 import ml.docilealligator.infinityforreddit.adapters.ReportReasonRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
@@ -119,7 +119,7 @@ public class ReportActivity extends BaseActivity {
         recyclerView.setAdapter(mAdapter);
 
         if (rulesReasons == null) {
-            FetchRules.fetchRules(mExecutor, new Handler(), mRetrofit, mSubredditName, new FetchRules.FetchRulesListener() {
+            FetchRules.fetchRules(mExecutor, new Handler(), mAccessToken == null ? mRetrofit : mOauthRetrofit, mAccessToken, mSubredditName, new FetchRules.FetchRulesListener() {
                 @Override
                 public void success(ArrayList<Rule> rules) {
                     mAdapter.setRules(ReportReason.convertRulesToReasons(rules));

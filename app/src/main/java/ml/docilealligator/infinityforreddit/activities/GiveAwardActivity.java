@@ -21,8 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
-import com.google.android.material.switchmaterial.SwitchMaterial;
-import com.r0adkll.slidr.Slidr;
+import com.google.android.material.materialswitch.MaterialSwitch;
 
 import java.util.concurrent.Executor;
 
@@ -38,6 +37,7 @@ import ml.docilealligator.infinityforreddit.adapters.AwardRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.award.GiveAward;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import retrofit2.Retrofit;
 
@@ -115,12 +115,12 @@ public class GiveAwardActivity extends BaseActivity {
         adapter = new AwardRecyclerViewAdapter(this, mCustomThemeWrapper, award -> {
             LayoutInflater inflater = getLayoutInflater();
             View layout = inflater.inflate(R.layout.dialog_give_award, null);
-            SwitchMaterial switchMaterial = layout.findViewById(R.id.switch_material_give_award_dialog);
+            MaterialSwitch materialSwitch = layout.findViewById(R.id.switch_material_give_award_dialog);
             new MaterialAlertDialogBuilder(this)
                     .setTitle(R.string.give_award_dialog_title)
                     .setView(layout)
                     .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
-                        boolean isAnonymous = switchMaterial.isChecked();
+                        boolean isAnonymous = materialSwitch.isChecked();
 
                         GiveAward.giveAwardV2(mExecutor, new Handler(), mOauthRetrofit, mAccessToken,
                                 thingFullname, award.getId(), isAnonymous, new GiveAward.GiveAwardListener() {
@@ -148,7 +148,9 @@ public class GiveAwardActivity extends BaseActivity {
                                                     if (clipboard != null) {
                                                         ClipData clip = ClipData.newPlainText("simple text", text);
                                                         clipboard.setPrimaryClip(clip);
-                                                        Toast.makeText(GiveAwardActivity.this, R.string.copy_success, Toast.LENGTH_SHORT).show();
+                                                        if (android.os.Build.VERSION.SDK_INT < 33) {
+                                                            Toast.makeText(GiveAwardActivity.this, R.string.copy_success, Toast.LENGTH_SHORT).show();
+                                                        }
                                                     } else {
                                                         Toast.makeText(GiveAwardActivity.this, R.string.copy_failed, Toast.LENGTH_SHORT).show();
                                                     }

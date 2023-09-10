@@ -1104,12 +1104,9 @@ Nachricht: %2$s"</string>
 
 Möchtest du trotzdem fortfahren?"</string>
     <string name="reply">"Antworten"</string>
-    <string name="rpan_activity_label">"RPAN"</string>
     <string name="post_gallery_activity_label">"Galeriebeitrag"</string>
     <string name="trending_activity_label">"Trending"</string>
-    <string name="action_share_rpan_link">"Teile RPAN-Link"</string>
     <string name="action_share_post_link">"Teile Beitragslink"</string>
-    <string name="rpan">"RPAN"</string>
     <string name="trending">"Trending"</string>
     <string name="receive_post_reply_notifications">"Benachrichtigungen für Antworten auf Beiträge empfangen"</string>
     <string name="bottom_sheet_post_gallery">"Galerie"</string>
@@ -1141,9 +1138,6 @@ Benenne diese Themen sonst neu."</string>
     <string name="upload_image_success">"Bild erfolgreich hochgeladen. Klicken Sie nochmal auf Bilder um hochgeladene Bilder zu sehen."</string>
     <string name="get_image_bitmap_failed">"Konnte das Bitmap des Bildes nicht herunterladen"</string>
     <string name="upload_image_failed">"Das Bild konnte nicht hochgeladen werden"</string>
-    <string name="load_rpan_broadcasts_failed">"RPAN Broadcasts konnten nicht geladen werden"</string>
-    <string name="parse_rpan_broadcasts_failed">"RPAN Broadcasts konnten nicht gelesen werden"</string>
-    <string name="parse_rpan_broadcast_failed">"RPAN Broadcast konnte nicht gelesen werden"</string>
     <string name="search_comments">"Kommentare durchsuchen"</string>
     <string name="please_wait_image_is_uploading">"Ein Bild wird noch hochgeladen. Bitte warten Sie."</string>
 

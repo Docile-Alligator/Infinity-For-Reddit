@@ -1,7 +1,10 @@
 package ml.docilealligator.infinityforreddit;
 
+import android.app.Application;
+
 import javax.inject.Singleton;
 
+import dagger.BindsInstance;
 import dagger.Component;
 import ml.docilealligator.infinityforreddit.activities.AccountPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.AccountSavedThingActivity;
@@ -34,7 +37,6 @@ import ml.docilealligator.infinityforreddit.activities.PostLinkActivity;
 import ml.docilealligator.infinityforreddit.activities.PostPollActivity;
 import ml.docilealligator.infinityforreddit.activities.PostTextActivity;
 import ml.docilealligator.infinityforreddit.activities.PostVideoActivity;
-import ml.docilealligator.infinityforreddit.activities.RPANActivity;
 import ml.docilealligator.infinityforreddit.activities.ReportActivity;
 import ml.docilealligator.infinityforreddit.activities.RulesActivity;
 import ml.docilealligator.infinityforreddit.activities.SearchActivity;
@@ -68,6 +70,7 @@ import ml.docilealligator.infinityforreddit.fragments.CommentsListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.FollowedUsersListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.HistoryPostFragment;
 import ml.docilealligator.infinityforreddit.fragments.InboxFragment;
+import ml.docilealligator.infinityforreddit.fragments.MorePostsInfoFragment;
 import ml.docilealligator.infinityforreddit.fragments.MultiRedditListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.PostFragment;
 import ml.docilealligator.infinityforreddit.fragments.SidebarFragment;
@@ -77,7 +80,6 @@ import ml.docilealligator.infinityforreddit.fragments.UserListingFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewImgurImageFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewImgurVideoFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewPostDetailFragment;
-import ml.docilealligator.infinityforreddit.fragments.ViewRPANBroadcastFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryImageOrGifFragment;
 import ml.docilealligator.infinityforreddit.fragments.ViewRedditGalleryVideoFragment;
 import ml.docilealligator.infinityforreddit.services.DownloadMediaService;
@@ -103,7 +105,7 @@ import ml.docilealligator.infinityforreddit.settings.TranslationFragment;
 import ml.docilealligator.infinityforreddit.settings.VideoPreferenceFragment;
 
 @Singleton
-@Component(modules = AppModule.class)
+@Component(modules = {AppModule.class, NetworkModule.class})
 public interface AppComponent {
     void inject(MainActivity mainActivity);
 
@@ -277,10 +279,6 @@ public interface AppComponent {
 
     void inject(LockScreenActivity lockScreenActivity);
 
-    void inject(RPANActivity rpanActivity);
-
-    void inject(ViewRPANBroadcastFragment viewRPANBroadcastFragment);
-
     void inject(PostGalleryActivity postGalleryActivity);
 
     void inject(TrendingActivity trendingActivity);
@@ -306,4 +304,11 @@ public interface AppComponent {
     void inject(HistoryPostFragment historyPostFragment);
 
     void inject(HistoryActivity historyActivity);
+
+    void inject(MorePostsInfoFragment morePostsInfoFragment);
+
+    @Component.Factory
+    interface Factory {
+        AppComponent create(@BindsInstance Application application);
+    }
 }

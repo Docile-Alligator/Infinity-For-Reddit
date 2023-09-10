@@ -25,12 +25,12 @@
     <string name="edit_multi_reddit_activity_label">Edit Multireddit</string>
     <string name="selected_subeddits_activity_label">Selected Subreddits</string>
     <string name="report_activity_label">Report</string>
-    <string name="view_imgur_media_activity_image_label">Image %1$,d/%2$d</string>
-    <string name="view_imgur_media_activity_video_label">Video %1$,d/%2$d</string>
+    <string name="view_imgur_media_activity_image_label">Image %1$d/%2$d</string>
+    <string name="view_imgur_media_activity_video_label">Video %1$d/%2$d</string>
     <string name="send_private_message_activity_label">Send PM</string>
-    <string name="view_reddit_gallery_activity_image_label">Image %1$,d/%2$d</string>
-    <string name="view_reddit_gallery_activity_gif_label">Gif %1$,d/%2$d</string>
-    <string name="view_reddit_gallery_activity_video_label">Video %1$,d/%2$d</string>
+    <string name="view_reddit_gallery_activity_image_label">Image %1$d/%2$d</string>
+    <string name="view_reddit_gallery_activity_gif_label">Gif %1$d/%2$d</string>
+    <string name="view_reddit_gallery_activity_video_label">Video %1$d/%2$d</string>
     <string name="submit_crosspost_activity_label">Crosspost</string>
     <string name="give_award_activity_label">Give Award</string>
     <string name="subreddit_filter_popular_and_all_activity_label">r/all and r/popular</string>
@@ -39,7 +39,6 @@
     <string name="post_filter_preference_activity_label">Post Filter</string>
     <string name="search_users_result_activity_label">Users</string>
     <string name="multireddit_selection_activity_label">Select a Multireddit</string>
-    <string name="rpan_activity_label">RPAN</string>
     <string name="post_gallery_activity_label">Gallery Post</string>
     <string name="trending_activity_label">Trending</string>
     <string name="wiki_activity_label">Wiki</string>
@@ -80,6 +79,7 @@
     <string name="action_crosspost">Crosspost</string>
     <string name="action_set_wallpaper">Set as Wallpaper</string>
     <string name="action_send_private_message">Send Private Message</string>
+    <string name="action_block_user">Block User</string>
     <string name="action_select_user_flair">Select User Flair</string>
     <string name="action_give_award">Give Award</string>
     <string name="action_save_to_database">Save to Database</string>
@@ -90,11 +90,12 @@
     <string name="action_open_external_browser">Open in browser</string>
     <string name="action_add_to_post_filter">Add to Post Filter</string>
     <string name="action_delete_logs">Delete Logs</string>
-    <string name="action_share_rpan_link">Share RPAN Link</string>
+    <string name="action_create_github_issue">Create GitHub Issue</string>
     <string name="action_share_post_link">Share Post Link</string>
     <string name="action_go_to_wiki">Go to Wiki</string>
     <string name="action_playback_speed">Playback Speed</string>
     <string name="action_contact_mods">Contact Mods</string>
+    <string name="action_more_options">More Options</string>
 
     <string name="parse_json_response_error">Error occurred when parsing the JSON response</string>
     <string name="retrieve_token_error">Error Retrieving the token</string>
@@ -137,7 +138,6 @@
     <string name="history">History</string>
     <string name="inbox">Inbox</string>
     <string name="inbox_with_count">Inbox (%1$,d)</string>
-    <string name="rpan">RPAN</string>
     <string name="trending">Trending</string>
     <string name="upvoted">Upvoted</string>
     <string name="downvoted">Downvoted</string>
@@ -199,7 +199,7 @@
     <string name="title_required">The post needs a good title</string>
     <string name="link_required">Hey where is the link?</string>
     <string name="select_an_image">Please select an image first</string>
-    <string name="voting_length">Voting length: %1$,d days</string>
+    <string name="voting_length">Voting length: %1$d days</string>
     <string name="posting">Posting</string>
     <string name="post_failed">Could not post it</string>
     <string name="error_processing_image">Error processing image</string>
@@ -356,7 +356,7 @@
     <string name="notification_summary_message">New Message</string>
     <string name="notification_summary_subreddit">Subreddit</string>
     <string name="notification_summary_award">Award</string>
-    <string name="notification_new_messages">%1$,d New Messages</string>
+    <string name="notification_new_messages">%1$d New Messages</string>
 
     <string name="label_account">Account</string>
     <string name="label_reddit">Reddit</string>
@@ -380,9 +380,9 @@
     <string name="settings_mute_autoplaying_videos_title">Mute Autoplaying Videos</string>
     <string name="settings_autoplay_nsfw_videos_title">Autoplay NSFW Videos</string>
     <string name="settings_start_autoplay_visible_area_offset_portrait_title">Autoplay Videos Visible Area Offset (Portrait)</string>
-    <string name="settings_start_autoplay_visible_area_offset_portrait_summary">Start autoplaying videos when %1$,d%% of them are visible</string>
+    <string name="settings_start_autoplay_visible_area_offset_portrait_summary">Start autoplaying videos when %1$d%% of them are visible</string>
     <string name="settings_start_autoplay_visible_area_offset_landscape_title">Autoplay Videos Visible Area Offset (Landscape)</string>
-    <string name="settings_start_autoplay_visible_area_offset_landscape_summary">Start autoplaying videos when %1$,d%% of them are visible</string>
+    <string name="settings_start_autoplay_visible_area_offset_landscape_summary">Start autoplaying videos when %1$d%% of them are visible</string>
     <string name="settings_immersive_interface_title">Immersive Interface</string>
     <string name="settings_immersive_interface_summary">Does Not Apply to All Pages</string>
     <string name="settings_immersive_interface_ignore_nav_bar_title">Ignore Navigation Bar in Immersive Interface</string>
@@ -585,6 +585,7 @@
     <string name="settings_hide_the_number_of_comments">Hide the Number of Comments</string>
     <string name="settings_show_avatar_on_the_right">Show Avatar on the Right</string>
     <string name="settings_backup_settings_title">Backup Settings</string>
+    <string name="settings_backup_settings_summary">The backup file password is \"123321\".</string>
     <string name="settings_restore_settings_title">Restore Settings</string>
     <string name="settings_credits_love_animation_title">Love Animation</string>
     <string name="settings_swipe_between_posts_title">Swipe Between Posts</string>
@@ -611,6 +612,7 @@
     <string name="settings_separate_post_and_comments_in_landscape_mode_title">Separate Post And Comments in Landscape Mode</string>
     <string name="settings_separate_post_and_comments_summary">Video autoplay will be disabled in the post detail page</string>
     <string name="settings_use_bottom_toolbar_in_media_viewer_title">Use Bottom Toolbar in Media Viewer</string>
+    <string name="settings_navigation_drawer_enable_hide_karma_title">Hide Account Karma</string>
     <string name="settings_secure_mode_title">Secure Mode</string>
     <string name="settings_secure_mode_summary">Screenshot and video recording are not allowed. No preview in recent app screen.</string>
     <string name="settings_credits_lock_screen_animation_title">Lock Screen Animation</string>
@@ -632,7 +634,7 @@
     <string name="settings_hide_text_post_content">Hide Text Post Content</string>
     <string name="settings_hide_comment_awards_title">Hide Comment Awards</string>
     <string name="settings_show_fewer_toolbar_options_threshold_title">Show Fewer Toolbar Options Starting From</string>
-    <string name="settings_show_fewer_toolbar_options_threshold_summary">Level %1$,d</string>
+    <string name="settings_show_fewer_toolbar_options_threshold_summary">Level %1$d</string>
     <string name="settings_show_author_avatar_title">Show Author Avatar</string>
     <string name="settings_reddit_user_agreement_title">Reddit User Agreement</string>
     <string name="settings_always_show_child_comment_count_title">Always Show the Number of Child Comments</string>
@@ -642,6 +644,8 @@
     <string name="settings_post_feed_max_resolution_title">Post Feed Preview Max Resolution (Width * Height)</string>
     <string name="settings_reddit_video_default_resolution">Reddit Video Default Resolution</string>
     <string name="settings_easier_to_watch_in_full_screen_title">Easier to Watch in Full Screen</string>
+    <string name="settings_hide_fab_in_post_feed">Hide FAB in Post Feed</string>
+    <string name="settings_comment_divider_type">Comment Divider Type</string>
 
     <string name="no_link_available">Cannot get the link</string>
 
@@ -683,15 +687,15 @@
 
     <string name="elapsed_time_just_now">Just Now</string>
     <string name="elapsed_time_a_minute_ago">1 Minute</string>
-    <string name="elapsed_time_minutes_ago">%1$,d Minutes</string>
+    <string name="elapsed_time_minutes_ago">%1$d Minutes</string>
     <string name="elapsed_time_an_hour_ago">1 Hour</string>
-    <string name="elapsed_time_hours_ago">%1$,d Hours</string>
+    <string name="elapsed_time_hours_ago">%1$d Hours</string>
     <string name="elapsed_time_yesterday">Yesterday</string>
-    <string name="elapsed_time_days_ago">%1$,d Days</string>
+    <string name="elapsed_time_days_ago">%1$d Days</string>
     <string name="elapsed_time_a_month_ago">1 Month</string>
-    <string name="elapsed_time_months_ago">%1$,d Months</string>
+    <string name="elapsed_time_months_ago">%1$d Months</string>
     <string name="elapsed_time_a_year_ago">1 Year</string>
-    <string name="elapsed_time_years_ago">%1$,d Years</string>
+    <string name="elapsed_time_years_ago">%1$d Years</string>
 
     <string name="error_getting_multi_reddit_data">Error getting multireddit data</string>
     <string name="error_loading_multi_reddit_list">Cannot sync multireddits</string>
@@ -1050,6 +1054,10 @@
 
     <string name="login_activity_2fa_prompt">If you have 2-factor authentication enabled, kindly type your password like the following: &lt;password&gt;:&lt;2FA code&gt;.\nExample: yourpass:123456</string>
 
+    <string name="block_user">Block User</string>
+    <string name="block_user_success">Blocked</string>
+    <string name="block_user_failed">Failed to block user</string>
+
     <string name="select_user_flair_success">User flair selected</string>
     <string name="select_this_user_flair">Select this user flair?</string>
     <string name="clear_user_flair">Clear Flair</string>
@@ -1072,9 +1080,12 @@
 
     <string name="give_award_dialog_title">Give Award?</string>
     <string name="anonymous">Anonymous</string>
-    <string name="give_award_error_message">Code: %1$,d/\n Message: %2$s</string>
+    <string name="give_award_error_message">Code: %1$d/\n Message: %2$s</string>
     <string name="give_award_success">Award given</string>
     <string name="give_award_failed">Failed</string>
+
+    <string name="edited">Edited</string>
+    <string name="edited_time">Edited on %s</string>
 
     <string name="warning">Warning</string>
     <string name="this_is_a_nsfw_subreddit">This is a NSFW subreddit.</string>
@@ -1205,10 +1216,6 @@
     <string name="get_image_bitmap_failed">Unable to get the bitmap of the image</string>
     <string name="upload_image_failed">Unable to upload the image</string>
 
-    <string name="load_rpan_broadcasts_failed">Cannot load RPAN broadcasts</string>
-    <string name="parse_rpan_broadcasts_failed">Cannot parse RPAN broadcasts</string>
-    <string name="parse_rpan_broadcast_failed">Cannot parse RPAN broadcast</string>
-
     <string name="search_comments">Search Comments</string>
 
     <string name="please_wait_image_is_uploading">An image is still being uploaded. Please wait.</string>
@@ -1304,5 +1311,19 @@
 
     <string name="exo_controls_volume_up_description">Volume Up</string>
     <string name="exo_controls_volume_off_description">Volume Off</string>
+
+    <string name="invalid_regex">Invalid regex pattern</string>
+
+    <string name="load_more_posts_failed">Failed to load more posts.\nTap to retry.</string>
+    <string name="no_more_posts">No more posts</string>
+
+    <string name="image_index_in_gallery">%1$d/%2$d</string>
+
+    <string name="denied_notification_permission">Notification permission is not granted</string>
+    <string name="go_to_settings">Settings</string>
+
+    <string name="reddit_api_info_title">Please update Infinity after August 30th</string>
+    <string name="reddit_api_info">Starting from August 31st, 2023, Infinity will be a subscription-only app due to Reddit API changes enforced since July 1st. The announcement from Reddit can be found here: %1$s\n\nYou can learn more about the changes in this post: %2$s\n\nIt\'s required for you to update Infinity after August 30th so that you will get the new version with subscription options. None of the previous versions (including this one) will work after August 31st. Thank you for your understanding!</string>
+    <string name="i_understand">I understand</string>
 
 </resources>

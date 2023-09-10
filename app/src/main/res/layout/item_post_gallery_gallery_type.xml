@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_marginTop="8dp"
+    android:layout_marginBottom="8dp"
+    app:cardElevation="2dp"
+    app:cardCornerRadius="8dp"
+    style="?attr/materialCardViewElevatedStyle">
+
+    <FrameLayout
+        android:id="@+id/gallery_frame_layout_item_post_gallery_gallery_type"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/gallery_recycler_view_item_post_gallery_gallery_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" />
+
+        <com.libRG.CustomTextView
+            android:id="@+id/image_index_text_view_item_post_gallery_gallery_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textSize="?attr/font_12"
+            android:fontFamily="?attr/font_family"
+            android:padding="4dp"
+            app:lib_setRadius="6dp"
+            app:lib_setRoundedView="true"
+            app:lib_setShape="rectangle" />
+
+    </FrameLayout>
+
+    <ImageView
+        android:id="@+id/image_view_no_preview_item_post_gallery_gallery_type"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:scaleType="center"
+        android:background="@drawable/thumbnail_compact_layout_rounded_edge"
+        android:visibility="gone" />
+
+</com.google.android.material.card.MaterialCardView>

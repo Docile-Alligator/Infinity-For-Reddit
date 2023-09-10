@@ -400,6 +400,7 @@
         <item>@string/random</item>
         <item>@string/hide_read_posts</item>
         <item>@string/filter_posts</item>
+        <item>@string/go_to_top</item>
     </string-array>
 
     <string-array name="settings_bottom_app_bar_fab_options_anonymous">
@@ -411,6 +412,7 @@
         <item>@string/go_to_user</item>
         <item>@string/random</item>
         <item>@string/filter_posts</item>
+        <item>@string/go_to_top</item>
     </string-array>
 
     <string-array name="settings_swipe_action_threshold">
@@ -667,6 +669,16 @@
         <item>360</item>
         <item>240</item>
         <item>144</item>
+    </string-array>
+
+    <string-array name="settings_comment_divider_type">
+        <item>Normal</item>
+        <item>Only on top-level comments</item>
+    </string-array>
+
+    <string-array name="settings_comment_divider_type_values">
+        <item>0</item>
+        <item>1</item>
     </string-array>
 
 </resources>

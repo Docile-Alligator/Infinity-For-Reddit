@@ -1,0 +1,74 @@
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Have an idea for a new feature or an improvement? Let us know here!
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have used the search function for [open](https://github.com/Docile-Alligator/Infinity-For-Reddit/discussions/categories/ideas) **and** [closed](https://github.com/Docile-Alligator/Infinity-For-Reddit/discussions/categories/completed-ideas) ideas to see if someone else has already submitted the same request.
+          required: true
+        - label: I will describe the feature with as much detail as possible.
+          required: true
+
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to share your idea!
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Description
+      description: Please describe your idea in as much detail as possible.
+      placeholder: I think it would be great if...
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+      description: Please describe any alternative solutions or features you've considered.
+      placeholder: I've considered...
+    validations:
+      required: false
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional context
+      description: Add your use-case, screenshots, mock-up, or anything else you think might be helpful.
+      placeholder: I think this would be a great addition because...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: importance
+    attributes:
+      label: How important is this feature?
+      multiple: false
+      options:
+        - Critical
+        - Important
+        - Nice to have
+
+  - type: textarea
+    id: other
+    attributes:
+      label: Anything else?
+      description: Is there anything else you'd like to add?
+    validations:
+      required: false
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Solution
+      description: If you have an idea of how this can be implemented, please share it here.
+      placeholder: I think this could be done by...
+    validations:
+      required: false

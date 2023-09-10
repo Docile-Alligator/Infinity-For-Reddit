@@ -1091,11 +1091,8 @@ Les onglets pourraient perdre tout leur contenu quand vous passez d'un onglet à
 
 Vous voulez toujours l'activer ?"</string>
     <string name="reply">"Répondre"</string>
-    <string name="rpan_activity_label">"RPAN"</string>
     <string name="trending_activity_label">"Tendance"</string>
-    <string name="action_share_rpan_link">"Partager le lien RPAN"</string>
     <string name="action_share_post_link">"Partager le lien du Post"</string>
-    <string name="rpan">"RPAN"</string>
     <string name="trending">"Tendance"</string>
     <string name="receive_post_reply_notifications">"Recevoir des notifications de réponse de publication"</string>
     <string name="bottom_sheet_post_gallery">"Gallerie"</string>
@@ -1124,9 +1121,6 @@ Sinon, renommez-les avant d'activer Material You."</string>
     <string name="upload_image_success">"Image uploadée avec succès. Clique sur le bouton image de nouveau pour voir les images uploadées."</string>
     <string name="get_image_bitmap_failed">"Impossible d'obtenir le bitmap de l'image"</string>
     <string name="upload_image_failed">"Impossible d'uploader l'image"</string>
-    <string name="load_rpan_broadcasts_failed">"Impossible de charger les diffusions RPAN"</string>
-    <string name="parse_rpan_broadcasts_failed">"Impossible d'analyser les diffusions RPAN"</string>
-    <string name="parse_rpan_broadcast_failed">"Impossible d'analyser la diffusion RPAN"</string>
     <string name="search_comments">"Chercher des commentaires"</string>
     <string name="please_wait_image_is_uploading">"Une image est toujours sn train d'être uploadée. Merci d'attendre"</string>
     <string name="error_fetch_trending_search">"Échec de la récupération des recherches de tendance.

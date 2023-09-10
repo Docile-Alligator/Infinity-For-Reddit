@@ -14,11 +14,17 @@ public interface ReadPostDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(ReadPost readPost);
 
-    @Query("SELECT * FROM read_posts WHERE username = :username AND time < :before ORDER BY :before LIMIT 25")
-    ListenableFuture<List<ReadPost>> getAllReadPostsListenableFuture(String username, long before);
+    @Query("SELECT * FROM read_posts WHERE username = :username AND time > :after ORDER BY time LIMIT 25")
+    ListenableFuture<List<ReadPost>> getAllReadPostsListenableFuture(String username, long after);
+
+    @Query("SELECT * FROM read_posts WHERE username = :username AND time > :after ORDER BY time LIMIT 25")
+    List<ReadPost> getAllReadPosts(String username, long after);
 
     @Query("SELECT * FROM read_posts WHERE username = :username")
     List<ReadPost> getAllReadPosts(String username);
+
+    @Query("SELECT * FROM read_posts WHERE id = :id LIMIT 1")
+    ReadPost getReadPost(String id);
 
     @Query("SELECT COUNT(id) FROM read_posts")
     int getReadPostsCount();

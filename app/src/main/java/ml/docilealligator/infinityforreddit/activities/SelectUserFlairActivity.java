@@ -1,12 +1,11 @@
 package ml.docilealligator.infinityforreddit.activities;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -19,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
-import com.r0adkll.slidr.Slidr;
 
 import java.util.ArrayList;
 
@@ -37,7 +35,9 @@ import ml.docilealligator.infinityforreddit.UserFlair;
 import ml.docilealligator.infinityforreddit.adapters.UserFlairRecyclerViewAdapter;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
+import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
+import ml.docilealligator.infinityforreddit.utils.Utils;
 import retrofit2.Retrofit;
 
 public class SelectUserFlairActivity extends BaseActivity implements ActivityToolbarInterface {
@@ -136,30 +136,21 @@ public class SelectUserFlairActivity extends BaseActivity implements ActivityToo
                 EditText flairEditText = dialogView.findViewById(R.id.flair_edit_text_edit_flair_dialog);
                 flairEditText.setText(userFlair.getText());
                 flairEditText.requestFocus();
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                if (imm != null) {
-                    imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-                }
+                Utils.showKeyboard(this, new Handler(), flairEditText);
                 new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
                         .setTitle(R.string.edit_flair)
                         .setView(dialogView)
                         .setPositiveButton(R.string.ok, (dialogInterface, i)
                                 -> {
-                            if (imm != null) {
-                                imm.hideSoftInputFromWindow(flairEditText.getWindowToken(), 0);
-                            }
+                            Utils.hideKeyboard(this);
                             userFlair.setText(flairEditText.getText().toString());
                             selectUserFlair(userFlair);
                         })
                         .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
-                            if (imm != null) {
-                                imm.hideSoftInputFromWindow(flairEditText.getWindowToken(), 0);
-                            }
+                            Utils.hideKeyboard(this);
                         })
                         .setOnDismissListener(dialogInterface -> {
-                            if (imm != null) {
-                                imm.hideSoftInputFromWindow(flairEditText.getWindowToken(), 0);
-                            }
+                            Utils.hideKeyboard(this);
                         })
                         .show();
             } else {

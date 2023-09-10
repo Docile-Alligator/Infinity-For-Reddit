@@ -10,6 +10,8 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.util.concurrent.Executor;
 
+import javax.inject.Provider;
+
 import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.utils.JSONUtils;
 import retrofit2.Call;
@@ -22,11 +24,11 @@ public class FetchStreamableVideo {
         void failed();
     }
 
-    public static void fetchStreamableVideo(Executor executor, Handler handler, Retrofit streamableRetrofit,
+    public static void fetchStreamableVideo(Executor executor, Handler handler, Provider<StreamableAPI> streamableApiProvider,
                                             String videoUrl, FetchStreamableVideoListener fetchStreamableVideoListener) {
         executor.execute(() -> {
             try {
-                Response<String> response = streamableRetrofit.create(StreamableAPI.class).getStreamableData(videoUrl).execute();
+                Response<String> response = streamableApiProvider.get().getStreamableData(videoUrl).execute();
                 if (response.isSuccessful()) {
                     JSONObject jsonObject = new JSONObject(response.body());
                     String title = jsonObject.getString(JSONUtils.TITLE_KEY);

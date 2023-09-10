@@ -16,6 +16,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.util.Log;
 import android.view.HapticFeedbackConstants;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -62,6 +63,7 @@ import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
+import javax.inject.Provider;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -74,13 +76,17 @@ import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.RecyclerViewContentScrollingInterface;
 import ml.docilealligator.infinityforreddit.RedditDataRoomDatabase;
 import ml.docilealligator.infinityforreddit.SortType;
+import ml.docilealligator.infinityforreddit.activities.AccountPostsActivity;
+import ml.docilealligator.infinityforreddit.activities.AccountSavedThingActivity;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.activities.FilteredPostsActivity;
 import ml.docilealligator.infinityforreddit.activities.ViewSubredditDetailActivity;
 import ml.docilealligator.infinityforreddit.adapters.Paging3LoadingStateAdapter;
 import ml.docilealligator.infinityforreddit.adapters.PostRecyclerViewAdapter;
+import ml.docilealligator.infinityforreddit.apis.StreamableAPI;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadSubredditIcon;
 import ml.docilealligator.infinityforreddit.asynctasks.LoadUserData;
+import ml.docilealligator.infinityforreddit.bottomsheetfragments.FABMoreOptionsBottomSheetFragment;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.CustomToroContainer;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
@@ -186,8 +192,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Named("redgifs")
     Retrofit mRedgifsRetrofit;
     @Inject
-    @Named("streamable")
-    Retrofit mStreamableRetrofit;
+    Provider<StreamableAPI> mStreamableApiProvider;
     @Inject
     RedditDataRoomDatabase mRedditDataRoomDatabase;
     @Inject
@@ -229,6 +234,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     private boolean hasPost = false;
     private boolean savePostFeedScrolledPosition;
     private boolean rememberMutingOptionInPostFeed;
+    private boolean swipeActionEnabled;
     private Boolean masterMutingOption;
     private PostRecyclerViewAdapter mAdapter;
     private RecyclerView.SmoothScroller smoothScroller;
@@ -359,16 +365,16 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                     int nPosts = mAdapter.getItemCount();
                     if (getCurrentPosition() == -1) {
                         if (mLinearLayoutManager != null) {
-                            setCurrentPosition(mAdapter.getNextItemPositionWithoutBeingHidden(mLinearLayoutManager.findFirstVisibleItemPosition()));
+                            setCurrentPosition(mLinearLayoutManager.findFirstVisibleItemPosition());
                         } else {
                             int[] into = new int[2];
-                            setCurrentPosition(mAdapter.getNextItemPositionWithoutBeingHidden(mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[1]));
+                            setCurrentPosition(mStaggeredGridLayoutManager.findFirstVisibleItemPositions(into)[1]);
                         }
                     }
 
                     if (getCurrentPosition() != RecyclerView.NO_POSITION && nPosts > getCurrentPosition()) {
                         incrementCurrentPosition();
-                        smoothScroller.setTargetPosition(mAdapter.getNextItemPositionWithoutBeingHidden(getCurrentPosition()));
+                        smoothScroller.setTargetPosition(getCurrentPosition());
                         if (mLinearLayoutManager != null) {
                             mLinearLayoutManager.startSmoothScroll(smoothScroller);
                         } else {
@@ -458,7 +464,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_SEARCH_POST, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
+                    mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -535,7 +541,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
+                    mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, displaySubredditName,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -606,7 +612,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             }
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
+                    mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -671,7 +677,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_USER_POST_BASE + username, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
+                    mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -732,7 +738,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
+                    mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -792,7 +798,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_MULTI_REDDIT_POST_BASE + multiRedditPath, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
+                    mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -849,7 +855,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             postLayout = mPostLayoutSharedPreferences.getInt(SharedPreferencesUtils.POST_LAYOUT_FRONT_PAGE_POST, defaultPostLayout);
 
             mAdapter = new PostRecyclerViewAdapter(activity, this, mExecutor, mOauthRetrofit, mGfycatRetrofit,
-                    mRedgifsRetrofit, mStreamableRetrofit, mCustomThemeWrapper, locale,
+                    mRedgifsRetrofit, mStreamableApiProvider, mCustomThemeWrapper, locale,
                     accessToken, accountName, postType, postLayout, true,
                     mSharedPreferences, mCurrentAccountSharedPreferences, mNsfwAndSpoilerSharedPreferences, mPostHistorySharedPreferences,
                     mExoCreator, new PostRecyclerViewAdapter.Callback() {
@@ -1056,6 +1062,10 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 if (!(viewHolder instanceof PostRecyclerViewAdapter.PostBaseViewHolder) &&
                         !(viewHolder instanceof PostRecyclerViewAdapter.PostCompactBaseViewHolder)) {
                     return makeMovementFlags(0, 0);
+                } else if (viewHolder instanceof PostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) {
+                    if (((PostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) viewHolder).isSwipeLocked()) {
+                        return makeMovementFlags(0, 0);
+                    }
                 }
                 int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;
                 return makeMovementFlags(0, swipeFlags);
@@ -1074,11 +1084,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             @Override
             public void onSwiped(@NonNull RecyclerView.ViewHolder viewHolder, int direction) {
                 if (touchHelper != null) {
+                    exceedThreshold = false;
                     touchHelper.attachToRecyclerView(null);
                     touchHelper.attachToRecyclerView(mPostRecyclerView);
-                    if (mAdapter != null) {
-                        mAdapter.onItemSwipe(viewHolder, direction, swipeLeftAction, swipeRightAction);
-                    }
                 }
             }
 
@@ -1086,59 +1094,67 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             public void onChildDraw(@NonNull Canvas c, @NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, float dX, float dY, int actionState, boolean isCurrentlyActive) {
                 super.onChildDraw(c, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive);
 
-                View itemView = viewHolder.itemView;
-                int horizontalOffset = (int) Utils.convertDpToPixel(16, activity);
-                if (dX > 0) {
-                    if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
-                        if (!exceedThreshold) {
-                            exceedThreshold = true;
-                            if (vibrateWhenActionTriggered) {
-                                viewHolder.itemView.setHapticFeedbackEnabled(true);
-                                viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                if (isCurrentlyActive) {
+                    View itemView = viewHolder.itemView;
+                    int horizontalOffset = (int) Utils.convertDpToPixel(16, activity);
+                    if (dX > 0) {
+                        if (dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
+                            if (!exceedThreshold) {
+                                exceedThreshold = true;
+                                if (vibrateWhenActionTriggered) {
+                                    viewHolder.itemView.setHapticFeedbackEnabled(true);
+                                    viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                }
                             }
+                            backgroundSwipeRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                        } else {
+                            exceedThreshold = false;
+                            backgroundSwipeRight.setBounds(0, 0, 0, 0);
                         }
-                        backgroundSwipeRight.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                    } else {
-                        exceedThreshold = false;
-                        backgroundSwipeRight.setBounds(0, 0, 0, 0);
-                    }
 
-                    drawableSwipeRight.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableSwipeRight.getIntrinsicWidth(),
-                            (itemView.getBottom() + itemView.getTop() - drawableSwipeRight.getIntrinsicHeight()) / 2,
-                            itemView.getLeft() + ((int) dX) - horizontalOffset,
-                            (itemView.getBottom() + itemView.getTop() + drawableSwipeRight.getIntrinsicHeight()) / 2);
-                    backgroundSwipeRight.draw(c);
-                    drawableSwipeRight.draw(c);
-                } else if (dX < 0) {
-                    if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
-                        if (!exceedThreshold) {
-                            exceedThreshold = true;
-                            if (vibrateWhenActionTriggered) {
-                                viewHolder.itemView.setHapticFeedbackEnabled(true);
-                                viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                        drawableSwipeRight.setBounds(itemView.getLeft() + ((int) dX) - horizontalOffset - drawableSwipeRight.getIntrinsicWidth(),
+                                (itemView.getBottom() + itemView.getTop() - drawableSwipeRight.getIntrinsicHeight()) / 2,
+                                itemView.getLeft() + ((int) dX) - horizontalOffset,
+                                (itemView.getBottom() + itemView.getTop() + drawableSwipeRight.getIntrinsicHeight()) / 2);
+                        backgroundSwipeRight.draw(c);
+                        drawableSwipeRight.draw(c);
+                    } else if (dX < 0) {
+                        if (-dX > (itemView.getRight() - itemView.getLeft()) * swipeActionThreshold) {
+                            if (!exceedThreshold) {
+                                exceedThreshold = true;
+                                if (vibrateWhenActionTriggered) {
+                                    viewHolder.itemView.setHapticFeedbackEnabled(true);
+                                    viewHolder.itemView.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY, HapticFeedbackConstants.FLAG_IGNORE_GLOBAL_SETTING);
+                                }
                             }
+                            backgroundSwipeLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
+                        } else {
+                            exceedThreshold = false;
+                            backgroundSwipeLeft.setBounds(0, 0, 0, 0);
                         }
-                        backgroundSwipeLeft.setBounds(0, itemView.getTop(), itemView.getRight(), itemView.getBottom());
-                    } else {
-                        exceedThreshold = false;
-                        backgroundSwipeLeft.setBounds(0, 0, 0, 0);
+                        drawableSwipeLeft.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
+                                (itemView.getBottom() + itemView.getTop() - drawableSwipeLeft.getIntrinsicHeight()) / 2,
+                                itemView.getRight() + ((int) dX) + horizontalOffset + drawableSwipeLeft.getIntrinsicWidth(),
+                                (itemView.getBottom() + itemView.getTop() + drawableSwipeLeft.getIntrinsicHeight()) / 2);
+                        backgroundSwipeLeft.draw(c);
+                        drawableSwipeLeft.draw(c);
                     }
-                    drawableSwipeLeft.setBounds(itemView.getRight() + ((int) dX) + horizontalOffset,
-                            (itemView.getBottom() + itemView.getTop() - drawableSwipeLeft.getIntrinsicHeight()) / 2,
-                            itemView.getRight() + ((int) dX) + horizontalOffset + drawableSwipeLeft.getIntrinsicWidth(),
-                            (itemView.getBottom() + itemView.getTop() + drawableSwipeLeft.getIntrinsicHeight()) / 2);
-                    backgroundSwipeLeft.draw(c);
-                    drawableSwipeLeft.draw(c);
+                } else {
+                    if (exceedThreshold) {
+                        mAdapter.onItemSwipe(viewHolder, dX > 0 ? ItemTouchHelper.END : ItemTouchHelper.START, swipeLeftAction, swipeRightAction);
+                        exceedThreshold = false;
+                    }
                 }
             }
 
             @Override
             public float getSwipeThreshold(@NonNull RecyclerView.ViewHolder viewHolder) {
-                return swipeActionThreshold;
+                return 1;
             }
         });
 
         if (nColumns == 1 && mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SWIPE_ACTION, false)) {
+            swipeActionEnabled = true;
             touchHelper.attachToRecyclerView(mPostRecyclerView);
         }
         mPostRecyclerView.setAdapter(mAdapter);
@@ -1302,6 +1318,11 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if (activity instanceof FilteredPostsActivity) {
             menu.findItem(R.id.action_filter_posts_post_fragment).setVisible(false);
         }
+
+        if (activity instanceof FilteredPostsActivity || activity instanceof AccountPostsActivity
+                || activity instanceof AccountSavedThingActivity) {
+            menu.findItem(R.id.action_more_options_post_fragment).setVisible(false);
+        }
     }
 
     @Override
@@ -1315,6 +1336,13 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
             return true;
         } else if (item.getItemId() == R.id.action_filter_posts_post_fragment) {
             filterPosts();
+            return true;
+        } else if (item.getItemId() == R.id.action_more_options_post_fragment) {
+            FABMoreOptionsBottomSheetFragment fabMoreOptionsBottomSheetFragment= new FABMoreOptionsBottomSheetFragment();
+            Bundle bundle = new Bundle();
+            bundle.putBoolean(FABMoreOptionsBottomSheetFragment.EXTRA_ANONYMOUS_MODE, accessToken == null);
+            fabMoreOptionsBottomSheetFragment.setArguments(bundle);
+            fabMoreOptionsBottomSheetFragment.show(activity.getSupportFragmentManager(), fabMoreOptionsBottomSheetFragment.getTag());
             return true;
         }
         return false;
@@ -1695,6 +1723,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     public boolean getIsNsfwSubreddit() {
         if (activity instanceof ViewSubredditDetailActivity) {
             return ((ViewSubredditDetailActivity) activity).isNsfwSubreddit();
+        } else if (activity instanceof FilteredPostsActivity) {
+            return ((FilteredPostsActivity) activity).isNsfwSubreddit();
         } else {
             return false;
         }
@@ -1755,7 +1785,7 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
                 post.setFlair(event.post.getFlair());
                 post.setSaved(event.post.isSaved());
                 if (event.post.isRead()) {
-                    post.markAsRead(true);
+                    post.markAsRead();
                 }
                 mAdapter.notifyItemChanged(event.positionInList);
             }
@@ -1952,7 +1982,8 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
 
     @Subscribe
     public void onChangeEnableSwipeActionSwitchEvent(ChangeEnableSwipeActionSwitchEvent changeEnableSwipeActionSwitchEvent) {
-        if (touchHelper != null) {
+        if (getNColumns(getResources()) == 1 && touchHelper != null) {
+            swipeActionEnabled = changeEnableSwipeActionSwitchEvent.enableSwipeAction;
             if (changeEnableSwipeActionSwitchEvent.enableSwipeAction) {
                 touchHelper.attachToRecyclerView(mPostRecyclerView);
             } else {
@@ -2027,7 +2058,9 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
     @Subscribe
     public void onNeedForPostListFromPostRecyclerViewAdapterEvent(NeedForPostListFromPostFragmentEvent event) {
         if (postFragmentId == event.postFragmentTimeId && mAdapter != null) {
-            EventBus.getDefault().post(new ProvidePostListToViewPostDetailActivityEvent(postFragmentId, new ArrayList<>(mAdapter.snapshot())));
+            EventBus.getDefault().post(new ProvidePostListToViewPostDetailActivityEvent(postFragmentId,
+                    new ArrayList<>(mAdapter.snapshot()), postType, subredditName, username, where,
+                    multiRedditPath, query, trendingSource, postFilter, sortType, readPosts));
         }
     }
 
@@ -2189,6 +2222,18 @@ public class PostFragment extends Fragment implements FragmentCommunicator {
         if (mAdapter != null) {
             mAdapter.setCanPlayVideo(hasWindowsFocus);
         }
+    }
+
+    public boolean isRecyclerViewItemSwipeable(RecyclerView.ViewHolder viewHolder) {
+        if (swipeActionEnabled) {
+            if (viewHolder instanceof PostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) {
+                return !((PostRecyclerViewAdapter.PostBaseGalleryTypeViewHolder) viewHolder).isSwipeLocked();
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     private static abstract class LazyModeRunnable implements Runnable {
