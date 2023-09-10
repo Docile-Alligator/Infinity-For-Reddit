@@ -143,6 +143,16 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
+            android:id="@+id/link_text_view_item_post_with_preview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:textSize="?attr/font_12"
+            android:fontFamily="?attr/font_family"
+            android:visibility="gone" />
+
+        <TextView
             android:id="@+id/title_text_view_item_post_with_preview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -246,17 +256,6 @@
 
         </com.nex3z.flowlayout.FlowLayout>
 
-        <TextView
-            android:id="@+id/link_text_view_item_post_with_preview"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:textSize="?attr/font_12"
-            android:fontFamily="?attr/font_family"
-            android:visibility="gone" />
-
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/bottom_constraint_layout_item_post_with_preview"
             android:layout_width="match_parent"
@@ -267,6 +266,7 @@
                 android:id="@+id/vote_button_toggle_item_post_card_3_with_preview"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                app:singleSelection="true"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent">
@@ -283,7 +283,7 @@
                     android:textStyle="bold"
                     android:fontFamily="?attr/font_family"
                     app:strokeWidth="0dp"
-                    app:icon="@drawable/ic_arrow_upward_grey_24dp" />
+                    app:icon="@drawable/ic_upvote_24dp" />
 
                 <com.google.android.material.button.MaterialButton
                     style="?attr/materialButtonOutlinedStyle"
@@ -294,7 +294,7 @@
                     android:paddingEnd="8dp"
                     android:minWidth="0dp"
                     app:strokeWidth="0dp"
-                    app:icon="@drawable/ic_arrow_downward_grey_24dp" />
+                    app:icon="@drawable/ic_downvote_24dp" />
 
             </com.google.android.material.button.MaterialButtonToggleGroup>
 

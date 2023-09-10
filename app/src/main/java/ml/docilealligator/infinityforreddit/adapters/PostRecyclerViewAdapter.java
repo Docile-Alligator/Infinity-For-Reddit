@@ -197,7 +197,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private int mVoteAndReplyUnavailableVoteButtonColor;
     private int mPostIconAndInfoColor;
     private int mDividerColor;
-    private int mButtonBackgroundColor;
     private float mScale;
     private boolean mDisplaySubredditName;
     private boolean mVoteButtonsOnTheRight;
@@ -355,7 +354,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             mVoteAndReplyUnavailableVoteButtonColor = customThemeWrapper.getVoteAndReplyUnavailableButtonColor();
             mPostIconAndInfoColor = customThemeWrapper.getPostIconAndInfoColor();
             mDividerColor = customThemeWrapper.getDividerColor();
-            mButtonBackgroundColor = Color.parseColor("#FFFFFF");
 
             mCommentIcon = AppCompatResources.getDrawable(activity, R.drawable.ic_comment_grey_24dp);
             if (mCommentIcon != null) {
@@ -1635,9 +1633,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     ((PostMaterial3CardBaseViewHolder) holder).userTextView.setText(authorPrefixed);
                 }
 
-                //TODO change color
-                /*((PostMaterial3CardBaseViewHolder) holder).userTextView.setTextColor(
-                        post.isModerator() ? mModeratorColor : mUsernameColor);*/
+                ((PostMaterial3CardBaseViewHolder) holder).userTextView.setTextColor(
+                        post.isModerator() ? mModeratorColor : mUsernameColor);
 
                 if (mDisplaySubredditName) {
                     if (authorPrefixed.equals(post.getSubredditNamePrefixed())) {
@@ -5939,10 +5936,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 titleTextView.setTypeface(mActivity.titleTypeface);
             }
 
-            /*subredditTextView.setTextColor(mSubredditColor);
-            userTextView.setTextColor(mUsernameColor);*/
-            subredditTextView.setTextColor(mPrimaryTextColor);
-            userTextView.setTextColor(mPrimaryTextColor);
+            subredditTextView.setTextColor(mSubredditColor);
+            userTextView.setTextColor(mUsernameColor);
             postTimeTextView.setTextColor(mSecondaryTextColor);
             titleTextView.setTextColor(mPostTitleColor);
             stickiedPostImageView.setColorFilter(mStickiedPostIconTint, PorterDuff.Mode.SRC_IN);
@@ -5964,9 +5959,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             archivedImageView.setColorFilter(mArchivedIconTint, PorterDuff.Mode.SRC_IN);
             lockedImageView.setColorFilter(mLockedIconTint, PorterDuff.Mode.SRC_IN);
             crosspostImageView.setColorFilter(mCrosspostIconTint, PorterDuff.Mode.SRC_IN);
-            upvoteButton.setBackgroundTintList(ColorStateList.valueOf(mButtonBackgroundColor));
             upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
-            downvoteButton.setBackgroundTintList(ColorStateList.valueOf(mButtonBackgroundColor));
             downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             //commentsCountButton.setBackgroundTintList(ColorStateList.valueOf(mButtonBackgroundColor));
             commentsCountButton.setTextColor(mPostIconAndInfoColor);
