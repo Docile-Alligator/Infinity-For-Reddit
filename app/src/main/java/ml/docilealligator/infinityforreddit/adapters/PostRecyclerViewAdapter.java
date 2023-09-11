@@ -6108,29 +6108,32 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         return;
                     }
 
-                    ColorStateList previousUpvoteButtonColorTintList = upvoteButton.getBackgroundTintList();
-                    ColorStateList previousDownvoteButtonColorTintList = downvoteButton.getBackgroundTintList();
+                    int previousUpvoteButtonTextColor = upvoteButton.getCurrentTextColor();
+                    int previousDownvoteButtonTextColor = downvoteButton.getCurrentTextColor();
                     Drawable previousUpvoteButtonDrawable = upvoteButton.getIcon();
                     Drawable previousDownvoteButtonDrawable = downvoteButton.getIcon();
 
                     int previousVoteType = post.getVoteType();
                     String newVoteType;
 
-                    downvoteButton.setBackgroundTintList(ColorStateList.valueOf(mPostIconAndInfoColor));
+                    downvoteButton.setTextColor(mPostIconAndInfoColor);
                     downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
+                    downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
 
                     if (previousVoteType != 1) {
                         //Not upvoted before
                         post.setVoteType(1);
                         newVoteType = APIUtils.DIR_UPVOTE;
-                        upvoteButton.setBackgroundTintList(ColorStateList.valueOf(mUpvotedColor));
+                        upvoteButton.setTextColor(mUpvotedColor);
                         upvoteButton.setIconResource(R.drawable.ic_upvote_filled_24dp);
+                        upvoteButton.setIconTint(ColorStateList.valueOf(mUpvotedColor));
                     } else {
                         //Upvoted before
                         post.setVoteType(0);
                         newVoteType = APIUtils.DIR_UNVOTE;
-                        upvoteButton.setBackgroundTintList(ColorStateList.valueOf(mPostIconAndInfoColor));
+                        upvoteButton.setTextColor(mPostIconAndInfoColor);
                         upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
+                        upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
                     }
 
                     if (!mHideTheNumberOfVotes) {
@@ -6144,20 +6147,23 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             if (newVoteType.equals(APIUtils.DIR_UPVOTE)) {
                                 post.setVoteType(1);
                                 if (currentPosition == position) {
-                                    upvoteButton.setBackgroundTintList(ColorStateList.valueOf(mUpvotedColor));
+                                    upvoteButton.setTextColor(mUpvotedColor);
                                     upvoteButton.setIconResource(R.drawable.ic_upvote_filled_24dp);
+                                    upvoteButton.setIconTint(ColorStateList.valueOf(mUpvotedColor));
                                 }
                             } else {
                                 post.setVoteType(0);
                                 if (currentPosition == position) {
-                                    upvoteButton.setBackgroundTintList(ColorStateList.valueOf(mPostIconAndInfoColor));
+                                    upvoteButton.setTextColor(mPostIconAndInfoColor);
                                     upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
+                                    upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
                                 }
                             }
 
                             if (currentPosition == position) {
-                                downvoteButton.setBackgroundTintList(ColorStateList.valueOf(mPostIconAndInfoColor));
+                                downvoteButton.setTextColor(mPostIconAndInfoColor);
                                 downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
+                                downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
                                 if (!mHideTheNumberOfVotes) {
                                     upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
                                 }
@@ -6174,10 +6180,12 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 if (!mHideTheNumberOfVotes) {
                                     upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
                                 }
-                                upvoteButton.setBackgroundTintList(previousUpvoteButtonColorTintList);
+                                upvoteButton.setTextColor(previousUpvoteButtonTextColor);
                                 upvoteButton.setIcon(previousUpvoteButtonDrawable);
-                                downvoteButton.setBackgroundTintList(previousDownvoteButtonColorTintList);
+                                upvoteButton.setIconTint(ColorStateList.valueOf(previousUpvoteButtonTextColor));
+                                downvoteButton.setTextColor(previousDownvoteButtonTextColor);
                                 downvoteButton.setIcon(previousDownvoteButtonDrawable);
+                                downvoteButton.setIconTint(ColorStateList.valueOf(previousDownvoteButtonTextColor));
                             }
 
                             EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
@@ -6207,29 +6215,32 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         return;
                     }
 
-                    ColorStateList previousUpvoteButtonColorFilter = upvoteButton.getBackgroundTintList();
-                    ColorStateList previousDownvoteButtonColorFilter = downvoteButton.getBackgroundTintList();
+                    int previousUpvoteButtonTextColor = upvoteButton.getTextColors().getDefaultColor();
+                    int previousDownvoteButtonTextColor = downvoteButton.getTextColors().getDefaultColor();
                     Drawable previousUpvoteButtonDrawable = upvoteButton.getIcon();
                     Drawable previousDownvoteButtonDrawable = downvoteButton.getIcon();
 
                     int previousVoteType = post.getVoteType();
                     String newVoteType;
 
-                    upvoteButton.setBackgroundTintList(ColorStateList.valueOf(mPostIconAndInfoColor));
+                    upvoteButton.setTextColor(mPostIconAndInfoColor);
                     upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
+                    upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
 
                     if (previousVoteType != -1) {
                         //Not downvoted before
                         post.setVoteType(-1);
                         newVoteType = APIUtils.DIR_DOWNVOTE;
-                        downvoteButton.setBackgroundTintList(ColorStateList.valueOf(mDownvotedColor));
+                        downvoteButton.setTextColor(mDownvotedColor);
                         downvoteButton.setIconResource(R.drawable.ic_downvote_filled_24dp);
+                        downvoteButton.setIconTint(ColorStateList.valueOf(mDownvotedColor));
                     } else {
                         //Downvoted before
                         post.setVoteType(0);
                         newVoteType = APIUtils.DIR_UNVOTE;
-                        downvoteButton.setBackgroundTintList(ColorStateList.valueOf(mPostIconAndInfoColor));
+                        downvoteButton.setTextColor(mPostIconAndInfoColor);
                         downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
+                        downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
                     }
 
                     if (!mHideTheNumberOfVotes) {
@@ -6243,20 +6254,23 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             if (newVoteType.equals(APIUtils.DIR_DOWNVOTE)) {
                                 post.setVoteType(-1);
                                 if (currentPosition == position) {
-                                    downvoteButton.setBackgroundTintList(ColorStateList.valueOf(mDownvotedColor));
+                                    downvoteButton.setTextColor(mDownvotedColor);
                                     downvoteButton.setIconResource(R.drawable.ic_downvote_filled_24dp);
+                                    downvoteButton.setIconTint(ColorStateList.valueOf(mDownvotedColor));
                                 }
                             } else {
                                 post.setVoteType(0);
                                 if (currentPosition == position) {
-                                    downvoteButton.setBackgroundTintList(ColorStateList.valueOf(mPostIconAndInfoColor));
+                                    downvoteButton.setTextColor(mPostIconAndInfoColor);
                                     downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
+                                    downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
                                 }
                             }
 
                             if (currentPosition == position) {
-                                upvoteButton.setBackgroundTintList(ColorStateList.valueOf(mPostIconAndInfoColor));
+                                upvoteButton.setTextColor(mPostIconAndInfoColor);
                                 upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
+                                upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
                                 if (!mHideTheNumberOfVotes) {
                                     upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
                                 }
@@ -6273,10 +6287,12 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 if (!mHideTheNumberOfVotes) {
                                     upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
                                 }
-                                upvoteButton.setBackgroundTintList(previousUpvoteButtonColorFilter);
+                                upvoteButton.setTextColor(previousUpvoteButtonTextColor);
                                 upvoteButton.setIcon(previousUpvoteButtonDrawable);
-                                downvoteButton.setBackgroundTintList(previousDownvoteButtonColorFilter);
+                                upvoteButton.setIconTint(ColorStateList.valueOf(previousUpvoteButtonTextColor));
+                                downvoteButton.setTextColor(previousDownvoteButtonTextColor);
                                 downvoteButton.setIcon(previousDownvoteButtonDrawable);
+                                downvoteButton.setIconTint(ColorStateList.valueOf(previousDownvoteButtonTextColor));
                             }
 
                             EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
