@@ -283,7 +283,8 @@
                     android:textStyle="bold"
                     android:fontFamily="?attr/font_family"
                     app:strokeWidth="0dp"
-                    app:icon="@drawable/ic_upvote_24dp" />
+                    app:icon="@drawable/ic_upvote_24dp"
+                    android:backgroundTint="#00000000" />
 
                 <com.google.android.material.button.MaterialButton
                     style="?attr/materialButtonOutlinedStyle"
@@ -294,7 +295,8 @@
                     android:paddingEnd="8dp"
                     android:minWidth="0dp"
                     app:strokeWidth="0dp"
-                    app:icon="@drawable/ic_downvote_24dp" />
+                    app:icon="@drawable/ic_downvote_24dp"
+                    android:backgroundTint="#00000000" />
 
             </com.google.android.material.button.MaterialButtonToggleGroup>
 
