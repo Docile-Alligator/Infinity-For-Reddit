@@ -93,6 +93,7 @@ import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.AspectRatioGifImageView;
 import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFixed;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostCard2GalleryTypeBinding;
+import ml.docilealligator.infinityforreddit.databinding.ItemPostCard3TextBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostCard3WithPreviewBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostGalleryGalleryTypeBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostGalleryTypeBinding;
@@ -487,7 +488,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         } else if (viewType == VIEW_TYPE_POST_CARD_GALLERY_TYPE) {
             return new PostGalleryTypeViewHolder(ItemPostGalleryTypeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         } else if (viewType == VIEW_TYPE_POST_CARD_TEXT_TYPE) {
-            return new PostTextTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_text, parent, false));
+            //return new PostTextTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_text, parent, false));
+            return new PostMaterial3CardTextTypeViewHolder(ItemPostCard3TextBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         } else if (viewType == VIEW_TYPE_POST_COMPACT) {
             if (mShowThumbnailOnTheRightInCompactLayout) {
                 return new PostCompactRightThumbnailViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_compact_right_thumbnail, parent, false));
@@ -6348,6 +6350,35 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     return false;
                 }
             };
+        }
+    }
+
+    class PostMaterial3CardTextTypeViewHolder extends PostMaterial3CardBaseViewHolder {
+
+        ItemPostCard3TextBinding binding;
+
+        PostMaterial3CardTextTypeViewHolder(@NonNull ItemPostCard3TextBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            setBaseView(
+                    binding.iconGifImageViewItemPostCard3TextType,
+                    binding.subredditNameTextViewItemPostCard3TextType,
+                    binding.userTextViewItemPostCard3TextType,
+                    binding.stickiedPostImageViewItemPostCard3TextType,
+                    binding.postTimeTextViewItemPostCard3TextType,
+                    binding.titleTextViewItemPostCard3TextType,
+                    binding.bottomConstraintLayoutItemPostCard3TextType,
+                    binding.voteButtonToggleItemPostCard3TextType,
+                    binding.upvoteButtonItemPostCard3TextType,
+                    binding.downvoteButtonItemPostCard3TextType,
+                    binding.commentsCountButtonItemPostCard3TextType,
+                    binding.saveButtonItemPostCard3TextType,
+                    binding.shareButtonItemPostCard3TextType);
+
+            if (mActivity.contentTypeface != null) {
+                binding.contentTextViewItemPostCard3TextType.setTypeface(mActivity.titleTypeface);
+            }
+            binding.contentTextViewItemPostCard3TextType.setTextColor(mPostContentColor);
         }
     }
 }
