@@ -6110,22 +6110,27 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
                     ColorStateList previousUpvoteButtonColorTintList = upvoteButton.getBackgroundTintList();
                     ColorStateList previousDownvoteButtonColorTintList = downvoteButton.getBackgroundTintList();
+                    Drawable previousUpvoteButtonDrawable = upvoteButton.getIcon();
+                    Drawable previousDownvoteButtonDrawable = downvoteButton.getIcon();
 
                     int previousVoteType = post.getVoteType();
                     String newVoteType;
 
                     downvoteButton.setBackgroundTintList(ColorStateList.valueOf(mPostIconAndInfoColor));
+                    downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
 
                     if (previousVoteType != 1) {
                         //Not upvoted before
                         post.setVoteType(1);
                         newVoteType = APIUtils.DIR_UPVOTE;
                         upvoteButton.setBackgroundTintList(ColorStateList.valueOf(mUpvotedColor));
+                        upvoteButton.setIconResource(R.drawable.ic_upvote_filled_24dp);
                     } else {
                         //Upvoted before
                         post.setVoteType(0);
                         newVoteType = APIUtils.DIR_UNVOTE;
                         upvoteButton.setBackgroundTintList(ColorStateList.valueOf(mPostIconAndInfoColor));
+                        upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
                     }
 
                     if (!mHideTheNumberOfVotes) {
@@ -6140,16 +6145,19 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 post.setVoteType(1);
                                 if (currentPosition == position) {
                                     upvoteButton.setBackgroundTintList(ColorStateList.valueOf(mUpvotedColor));
+                                    upvoteButton.setIconResource(R.drawable.ic_upvote_filled_24dp);
                                 }
                             } else {
                                 post.setVoteType(0);
                                 if (currentPosition == position) {
                                     upvoteButton.setBackgroundTintList(ColorStateList.valueOf(mPostIconAndInfoColor));
+                                    upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
                                 }
                             }
 
                             if (currentPosition == position) {
                                 downvoteButton.setBackgroundTintList(ColorStateList.valueOf(mPostIconAndInfoColor));
+                                downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
                                 if (!mHideTheNumberOfVotes) {
                                     upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
                                 }
@@ -6167,7 +6175,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                     upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
                                 }
                                 upvoteButton.setBackgroundTintList(previousUpvoteButtonColorTintList);
+                                upvoteButton.setIcon(previousUpvoteButtonDrawable);
                                 downvoteButton.setBackgroundTintList(previousDownvoteButtonColorTintList);
+                                downvoteButton.setIcon(previousDownvoteButtonDrawable);
                             }
 
                             EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
@@ -6199,22 +6209,27 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
                     ColorStateList previousUpvoteButtonColorFilter = upvoteButton.getBackgroundTintList();
                     ColorStateList previousDownvoteButtonColorFilter = downvoteButton.getBackgroundTintList();
+                    Drawable previousUpvoteButtonDrawable = upvoteButton.getIcon();
+                    Drawable previousDownvoteButtonDrawable = downvoteButton.getIcon();
 
                     int previousVoteType = post.getVoteType();
                     String newVoteType;
 
                     upvoteButton.setBackgroundTintList(ColorStateList.valueOf(mPostIconAndInfoColor));
+                    upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
 
                     if (previousVoteType != -1) {
                         //Not downvoted before
                         post.setVoteType(-1);
                         newVoteType = APIUtils.DIR_DOWNVOTE;
                         downvoteButton.setBackgroundTintList(ColorStateList.valueOf(mDownvotedColor));
+                        downvoteButton.setIconResource(R.drawable.ic_downvote_filled_24dp);
                     } else {
                         //Downvoted before
                         post.setVoteType(0);
                         newVoteType = APIUtils.DIR_UNVOTE;
                         downvoteButton.setBackgroundTintList(ColorStateList.valueOf(mPostIconAndInfoColor));
+                        downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
                     }
 
                     if (!mHideTheNumberOfVotes) {
@@ -6229,16 +6244,19 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                 post.setVoteType(-1);
                                 if (currentPosition == position) {
                                     downvoteButton.setBackgroundTintList(ColorStateList.valueOf(mDownvotedColor));
+                                    downvoteButton.setIconResource(R.drawable.ic_downvote_filled_24dp);
                                 }
                             } else {
                                 post.setVoteType(0);
                                 if (currentPosition == position) {
                                     downvoteButton.setBackgroundTintList(ColorStateList.valueOf(mPostIconAndInfoColor));
+                                    downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
                                 }
                             }
 
                             if (currentPosition == position) {
                                 upvoteButton.setBackgroundTintList(ColorStateList.valueOf(mPostIconAndInfoColor));
+                                upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
                                 if (!mHideTheNumberOfVotes) {
                                     upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
                                 }
@@ -6256,7 +6274,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                     upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
                                 }
                                 upvoteButton.setBackgroundTintList(previousUpvoteButtonColorFilter);
+                                upvoteButton.setIcon(previousUpvoteButtonDrawable);
                                 downvoteButton.setBackgroundTintList(previousDownvoteButtonColorFilter);
+                                downvoteButton.setIcon(previousDownvoteButtonDrawable);
                             }
 
                             EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
