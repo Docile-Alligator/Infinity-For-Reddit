@@ -43,6 +43,12 @@
             android:parentActivityName=".activities.MainActivity"
             android:theme="@style/AppTheme.Slidable" />
         <activity
+            android:name=".activities.LocalPostsActivity"
+            android:exported="false"
+            android:label="@string/local_post_activity_label"
+            android:parentActivityName=".activities.MainActivity"
+            android:theme="@style/AppTheme.Slidable" />
+        <activity
             android:name=".activities.PostPollActivity"
             android:label="@string/post_poll_activity_label"
             android:parentActivityName=".activities.MainActivity"

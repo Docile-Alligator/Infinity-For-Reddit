@@ -1,8 +1,10 @@
 package ml.docilealligator.infinityforreddit.post;
 
 import android.content.SharedPreferences;
+import android.os.Build;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.paging.ListenableFuturePagingSource;
 import androidx.paging.PagingState;
 
@@ -13,6 +15,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.concurrent.Executor;
@@ -28,9 +31,8 @@ import retrofit2.HttpException;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class HistoryPostPagingSource extends ListenableFuturePagingSource<String, Post> {
+public class LocalPostPagingSource extends ListenableFuturePagingSource<String, Post> {
     public static final int TYPE_READ_POSTS = 100;
-
     private Retrofit retrofit;
     private Executor executor;
     private RedditDataRoomDatabase redditDataRoomDatabase;
@@ -41,9 +43,9 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
     private int postType;
     private PostFilter postFilter;
 
-    public HistoryPostPagingSource(Retrofit retrofit, Executor executor, RedditDataRoomDatabase redditDataRoomDatabase,
-                                   String accessToken, String accountName, SharedPreferences sharedPreferences,
-                                   String username, int postType, PostFilter postFilter) {
+    public LocalPostPagingSource(Retrofit retrofit, Executor executor, RedditDataRoomDatabase redditDataRoomDatabase,
+                                 String accessToken, String accountName, SharedPreferences sharedPreferences,
+                                 String username, int postType, PostFilter postFilter) {
         this.retrofit = retrofit;
         this.executor = executor;
         this.redditDataRoomDatabase = redditDataRoomDatabase;
@@ -61,36 +63,37 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
         return null;
     }
 
+    @Override
+    public boolean getKeyReuseSupported() { return true; }
+
     @NonNull
     @Override
     public ListenableFuture<LoadResult<String, Post>> loadFuture(@NonNull LoadParams<String> loadParams) {
-        if (postType == TYPE_READ_POSTS) {
-            return loadHomePosts(loadParams, redditDataRoomDatabase);
-        } else {
-            return loadHomePosts(loadParams, redditDataRoomDatabase);
-        }
+        return loadHomePosts(loadParams, redditDataRoomDatabase);
     }
 
     public LoadResult<String, Post> transformData(List<ReadPost> readPosts) {
         StringBuilder ids = new StringBuilder();
         long lastItem = 0;
-        for (ReadPost readPost : readPosts) {
-            ids.append("t3_").append(readPost.getId()).append(",");
-            lastItem = readPost.getTime();
+
+        for(LocalSave.SavedPost post : LocalSave.GetPosts())
+        {
+            ids.append("t3_").append(post.getId()).append(",");
+            lastItem = post.getTime();
         }
         if (ids.length() > 0) {
             ids.deleteCharAt(ids.length() - 1);
         }
 
-        Call<String> historyPosts;
+        Call<String> localPosts;
         if (accessToken != null && !accessToken.isEmpty()) {
-            historyPosts = retrofit.create(RedditAPI.class).getInfoOauth(ids.toString(), APIUtils.getOAuthHeader(accessToken));
+            localPosts = retrofit.create(RedditAPI.class).getInfoOauth(ids.toString(), APIUtils.getOAuthHeader(accessToken));
         } else {
-            historyPosts = retrofit.create(RedditAPI.class).getInfo(ids.toString());
+            localPosts = retrofit.create(RedditAPI.class).getInfo(ids.toString());
         }
 
         try {
-            Response<String> response = historyPosts.execute();
+            Response<String> response = localPosts.execute();
             if (response.isSuccessful()) {
                 String responseString = response.body();
                 LinkedHashSet<Post> newPosts = ParsePost.parsePostsSync(responseString, -1, postFilter, null);
@@ -98,12 +101,8 @@ public class HistoryPostPagingSource extends ListenableFuturePagingSource<String
                     return new LoadResult.Error<>(new Exception("Error parsing posts"));
                 } else {
 
-                    if(LocalSave.cacheHistory)
+                    if (newPosts.size() < 25)
                     {
-                        LocalSave.CachePosts(newPosts);
-                    }
-
-                    if (newPosts.size() < 25) {
                         return new LoadResult.Page<>(new ArrayList<>(newPosts), null, null);
                     }
                     return new LoadResult.Page<>(new ArrayList<>(newPosts), null, Long.toString(lastItem));

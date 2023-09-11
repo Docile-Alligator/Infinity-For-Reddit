@@ -75,6 +75,11 @@ public class SharedPreferencesUtils {
     public static final int POST_LAYOUT_GALLERY = 2;
     public static final int POST_LAYOUT_CARD_2 = 3;
 
+    public static final String LOCAL_POST_LAYOUT = "local_post_layout";
+    public static final String LOCAL_POST_SORTING= "local_post_sorting";
+    public static final String LOCAL_POST_CACHE_SAVED = "local_post_cache_saved";
+    public static final String LOCAL_POST_CACHE_HISTORY = "local_post_cache_history";
+
     public static final String FRONT_PAGE_SCROLLED_POSITION_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.front_page_scrolled_position";
     public static final String FRONT_PAGE_SCROLLED_POSITION_FRONT_PAGE_BASE = "_front_page";
     public static final String FRONT_PAGE_SCROLLED_POSITION_ANONYMOUS = ".anonymous";
@@ -334,6 +339,7 @@ public class SharedPreferencesUtils {
     public static final String BLUR_SPOILER_BASE = "_blur_spoiler";
 
     public static final String POST_HISTORY_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.post_history";
+    public static final String POST_LOCAL_POSTS_SHARED_PREFERENCES_FILE = "ml.docilealligator.infinityforreddit.post_local_posts";
     public static final String MARK_POSTS_AS_READ_BASE = "_mark_posts_as_read";
     public static final String MARK_POSTS_AS_READ_AFTER_VOTING_BASE = "_mark_posts_as_read_after_voting";
     public static final String MARK_POSTS_AS_READ_ON_SCROLL_BASE = "_mark_posts_as_read_on_scroll";

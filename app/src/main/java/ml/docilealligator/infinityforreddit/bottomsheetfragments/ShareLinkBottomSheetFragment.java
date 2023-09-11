@@ -1,21 +1,27 @@
 package ml.docilealligator.infinityforreddit.bottomsheetfragments;
 
 
+import android.app.AlertDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import ml.docilealligator.infinityforreddit.LocalSave;
 import ml.docilealligator.infinityforreddit.R;
 import ml.docilealligator.infinityforreddit.activities.BaseActivity;
 import ml.docilealligator.infinityforreddit.customviews.LandscapeExpandedRoundedBottomSheetDialogFragment;
@@ -26,9 +32,24 @@ import ml.docilealligator.infinityforreddit.utils.Utils;
  * A simple {@link Fragment} subclass.
  */
 public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottomSheetDialogFragment {
+    public static final String EXTRA_POST_ID = "EPID";
+    public static final String EXTRA_POST_SUBREDDIT = "EPS";
+    public static final String EXTRA_POST_TITLE = "EPT";
+    public static final String EXTRA_POST_TIME = "EPTI";
+    public static final String EXTRA_POST_FLAIR = "EPF";
     public static final String EXTRA_POST_LINK = "EPL";
     public static final String EXTRA_MEDIA_LINK = "EML";
     public static final String EXTRA_MEDIA_TYPE = "EMT";
+
+
+    @BindView(R.id.manage_tags)
+    TextView manageTagsTextView;
+
+    @BindView(R.id.remove_local_post)
+    TextView removeLocalTextView;
+    @BindView(R.id.add_local_post)
+    TextView addLocalTextView;
+
 
     @BindView(R.id.post_link_text_view_share_link_bottom_sheet_fragment)
     TextView postLinkTextView;
@@ -49,6 +70,29 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
         // Required empty public constructor
     }
 
+    private void ShowTags(String postID)
+    {
+        MaterialAlertDialogBuilder alert = new MaterialAlertDialogBuilder(activity, R.style.MaterialAlertDialogTheme).setTitle("Tags");
+
+        LocalSave.SavedPost post = LocalSave.GetPost(postID);
+        if(post == null)
+        {
+            alert.setMessage("Post is not saved");
+            alert.setPositiveButton("OK", (dialogInterface, i) -> dialogInterface.dismiss());
+            alert.show();
+            return;
+        }
+
+        final EditText input = new EditText(activity);
+        input.setText(post.getTags());
+
+        alert.setView(input);
+
+        alert.setPositiveButton("Save", (dialogInterface, i) -> post.setTags(input.getText().toString()));
+        alert.setNegativeButton("Cancel", (dialogInterface, i) -> dialogInterface.dismiss());
+
+        alert.show();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -60,6 +104,11 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
 
         String postLink = getArguments().getString(EXTRA_POST_LINK);
         String mediaLink = getArguments().containsKey(EXTRA_MEDIA_LINK) ? getArguments().getString(EXTRA_MEDIA_LINK) : null;
+        String postID = getArguments().getString(EXTRA_POST_ID);
+        String postTitle = getArguments().getString(EXTRA_POST_TITLE);
+        String postSubName = getArguments().getString(EXTRA_POST_SUBREDDIT);
+        String postFlair = getArguments().getString(EXTRA_POST_FLAIR);
+        long postTime = getArguments().getLong(EXTRA_POST_TIME);
 
         postLinkTextView.setText(postLink);
 
@@ -106,6 +155,18 @@ public class ShareLinkBottomSheetFragment extends LandscapeExpandedRoundedBottom
                 dismiss();
             });
         }
+
+        manageTagsTextView.setOnClickListener(view -> {
+            ShowTags(postID);
+        });
+        addLocalTextView.setOnClickListener(view -> {
+            LocalSave.AddPost(postID, postTitle, postSubName, postFlair, postTime);
+            dismiss();
+        });
+        removeLocalTextView.setOnClickListener(view -> {
+            LocalSave.RemovePost(postID);
+            dismiss();
+        });
 
         sharePostLinkTextView.setOnClickListener(view -> {
             shareLink(postLink);

@@ -45,6 +45,7 @@
     <string name="edit_profile_activity_label">Edit Profile</string>
     <string name="post_poll_activity_label">Poll Post</string>
     <string name="history_activity_label">History</string>
+    <string name="local_post_activity_label">Local Posts</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -136,6 +137,7 @@
     <string name="subscriptions">Subscriptions</string>
     <string name="multi_reddit">Multireddit</string>
     <string name="history">History</string>
+    <string name="local_posts">Local Posts</string>
     <string name="inbox">Inbox</string>
     <string name="inbox_with_count">Inbox (%1$,d)</string>
     <string name="trending">Trending</string>
