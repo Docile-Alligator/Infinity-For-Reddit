@@ -1784,11 +1784,15 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 switch (post.getVoteType()) {
                     case 1:
                         //Upvoted
-                        ((PostMaterial3CardBaseViewHolder) holder).upvoteButton.setBackgroundTintList(ColorStateList.valueOf(mUpvotedColor));
+                        ((PostMaterial3CardBaseViewHolder) holder).upvoteButton.setTextColor(mUpvotedColor);
+                        ((PostMaterial3CardBaseViewHolder) holder).upvoteButton.setIconResource(R.drawable.ic_upvote_filled_24dp);
+                        ((PostMaterial3CardBaseViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mUpvotedColor));
                         break;
                     case -1:
                         //Downvoted
-                        ((PostMaterial3CardBaseViewHolder) holder).downvoteButton.setBackgroundTintList(ColorStateList.valueOf(mDownvotedColor));
+                        ((PostMaterial3CardBaseViewHolder) holder).downvoteButton.setTextColor(mDownvotedColor);
+                        ((PostMaterial3CardBaseViewHolder) holder).downvoteButton.setIconResource(R.drawable.ic_downvote_filled_24dp);
+                        ((PostMaterial3CardBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mDownvotedColor));
                         break;
                 }
 
@@ -2697,9 +2701,12 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             ((PostMaterial3CardBaseViewHolder) holder).flairTextView.setVisibility(View.GONE);
             ((PostMaterial3CardBaseViewHolder) holder).awardsTextView.setText("");
             ((PostMaterial3CardBaseViewHolder) holder).awardsTextView.setVisibility(View.GONE);
-            ((PostMaterial3CardBaseViewHolder) holder).upvoteButton.setBackgroundTintList(ColorStateList.valueOf(mPostIconAndInfoColor));
             ((PostMaterial3CardBaseViewHolder) holder).upvoteButton.setTextColor(mPostIconAndInfoColor);
-            ((PostMaterial3CardBaseViewHolder) holder).downvoteButton.setBackgroundTintList(ColorStateList.valueOf(mPostIconAndInfoColor));
+            ((PostMaterial3CardBaseViewHolder) holder).upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
+            ((PostMaterial3CardBaseViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
+            ((PostMaterial3CardBaseViewHolder) holder).downvoteButton.setTextColor(mPostIconAndInfoColor);
+            ((PostMaterial3CardBaseViewHolder) holder).downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
+            ((PostMaterial3CardBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
         }
     }
 
