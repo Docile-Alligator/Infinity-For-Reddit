@@ -5913,14 +5913,14 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             if (mVoteButtonsOnTheRight) {
                 ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone(bottomConstraintLayout);
-                constraintSet.clear(upvoteButton.getId(), ConstraintSet.START);
-                constraintSet.clear(downvoteButton.getId(), ConstraintSet.START);
-                constraintSet.clear(saveButton.getId(), ConstraintSet.END);
-                constraintSet.clear(shareButton.getId(), ConstraintSet.END);
-                constraintSet.connect(commentsCountButton.getId(), ConstraintSet.START, saveButton.getId(), ConstraintSet.END);
-                constraintSet.connect(commentsCountButton.getId(), ConstraintSet.END, voteButtonToggleGroup.getId(), ConstraintSet.START);
-                constraintSet.connect(saveButton.getId(), ConstraintSet.START, shareButton.getId(), ConstraintSet.END);
-                constraintSet.connect(shareButton.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+                constraintSet.clear(voteButtonToggleGroup.getId(), ConstraintSet.START);
+                constraintSet.clear(saveButton.getId(), ConstraintSet.START);
+                constraintSet.clear(shareButton.getId(), ConstraintSet.START);
+                constraintSet.connect(voteButtonToggleGroup.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+                constraintSet.connect(commentsCountButton.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
+                constraintSet.connect(commentsCountButton.getId(), ConstraintSet.END, shareButton.getId(), ConstraintSet.START);
+                constraintSet.connect(saveButton.getId(), ConstraintSet.END, voteButtonToggleGroup.getId(), ConstraintSet.START);
+                constraintSet.connect(shareButton.getId(), ConstraintSet.END, saveButton.getId(), ConstraintSet.START);
                 constraintSet.setHorizontalBias(commentsCountButton.getId(), 0);
                 constraintSet.applyTo(bottomConstraintLayout);
             }
