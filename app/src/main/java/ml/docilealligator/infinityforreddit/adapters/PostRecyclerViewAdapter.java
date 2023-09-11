@@ -5960,14 +5960,12 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             lockedImageView.setColorFilter(mLockedIconTint, PorterDuff.Mode.SRC_IN);
             crosspostImageView.setColorFilter(mCrosspostIconTint, PorterDuff.Mode.SRC_IN);
             upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
+            upvoteButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#00000000")));
             downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
-            //commentsCountButton.setBackgroundTintList(ColorStateList.valueOf(mButtonBackgroundColor));
+            downvoteButton.setBackgroundTintList(ColorStateList.valueOf(Color.parseColor("#00000000")));
             commentsCountButton.setTextColor(mPostIconAndInfoColor);
             commentsCountButton.setIcon(mCommentIcon);
-            //commentsCountButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
-            //saveButton.setBackgroundTintList(ColorStateList.valueOf(mButtonBackgroundColor));
             saveButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
-            //shareButton.setBackgroundTintList(ColorStateList.valueOf(mButtonBackgroundColor));
             shareButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
 
             itemView.setOnClickListener(view -> {
