@@ -95,6 +95,8 @@ import ml.docilealligator.infinityforreddit.customviews.LinearLayoutManagerBugFi
 import ml.docilealligator.infinityforreddit.databinding.ItemPostCard2GalleryTypeBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostCard3GalleryTypeBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostCard3TextBinding;
+import ml.docilealligator.infinityforreddit.databinding.ItemPostCard3VideoTypeAutoplayBinding;
+import ml.docilealligator.infinityforreddit.databinding.ItemPostCard3VideoTypeAutoplayLegacyControllerBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostCard3WithPreviewBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostGalleryGalleryTypeBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostGalleryTypeBinding;
@@ -480,9 +482,15 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_POST_CARD_VIDEO_AUTOPLAY_TYPE) {
             if (mDataSavingMode) {
-                return new PostWithPreviewTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_with_preview, parent, false));
+                return new PostMaterial3CardWithPreviewViewHolder(ItemPostCard3WithPreviewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+                //return new PostWithPreviewTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_with_preview, parent, false));
             }
-            return new PostVideoAutoplayViewHolder(LayoutInflater.from(parent.getContext()).inflate(mLegacyAutoplayVideoControllerUI ? R.layout.item_post_video_type_autoplay_legacy_controller : R.layout.item_post_video_type_autoplay, parent, false));
+            //return new PostVideoAutoplayViewHolder(LayoutInflater.from(parent.getContext()).inflate(mLegacyAutoplayVideoControllerUI ? R.layout.item_post_video_type_autoplay_legacy_controller : R.layout.item_post_video_type_autoplay, parent, false));
+            if (mLegacyAutoplayVideoControllerUI) {
+                return new PostMaterial3CardVideoAutoplayLegacyControllerViewHolder(ItemPostCard3VideoTypeAutoplayLegacyControllerBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+            } else {
+                return new PostMaterial3CardVideoAutoplayViewHolder(ItemPostCard3VideoTypeAutoplayBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+            }
         } else if (viewType == VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE) {
             //return new PostWithPreviewTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_with_preview, parent, false));
             return new PostMaterial3CardWithPreviewViewHolder(ItemPostCard3WithPreviewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
@@ -6074,16 +6082,361 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 if (changePostItemColor) {
                     itemView.setBackgroundTintList(ColorStateList.valueOf(mReadPostCardViewBackgroundColor));
                     titleTextView.setTextColor(mReadPostTitleColor);
-                    //TODO fix this
-                    /*if (this instanceof PostTextTypeViewHolder) {
-                        ((PostTextTypeViewHolder) this).contentTextView.setTextColor(mReadPostContentColor);
-                    }*/
+                    if (this instanceof PostMaterial3CardTextTypeViewHolder) {
+                        ((PostMaterial3CardTextTypeViewHolder) this).binding.contentTextViewItemPostCard3TextType.setTextColor(mReadPostContentColor);
+                    }
                 }
                 if (mActivity != null && mActivity instanceof MarkPostAsReadInterface) {
                     ((MarkPostAsReadInterface) mActivity).markPostAsRead(post);
                     mFragment.markPostAsRead(post);
                 }
             }
+        }
+    }
+
+    class PostMaterial3CardBaseVideoAutoplayViewHolder extends PostMaterial3CardBaseViewHolder implements ToroPlayer {
+        AspectRatioFrameLayout aspectRatioFrameLayout;
+        GifImageView previewImageView;
+        ImageView errorLoadingGfycatImageView;
+        PlayerView videoPlayer;
+        ImageView muteButton;
+        ImageView fullscreenButton;
+        ImageView pauseButton;
+        ImageView playButton;
+        DefaultTimeBar progressBar;
+        @Nullable
+        Container container;
+        @Nullable
+        ExoPlayerViewHelper helper;
+        private Uri mediaUri;
+        private float volume;
+        public Call<String> fetchGfycatOrStreamableVideoCall;
+        private boolean isManuallyPaused;
+
+        PostMaterial3CardBaseVideoAutoplayViewHolder(View rootView,
+                                                     AspectRatioGifImageView iconGifImageView,
+                                                     TextView subredditTextView,
+                                                     TextView userTextView,
+                                                     ImageView stickiedPostImageView,
+                                                     TextView postTimeTextView,
+                                                     TextView titleTextView,
+                                                     AspectRatioFrameLayout aspectRatioFrameLayout,
+                                                     GifImageView previewImageView,
+                                                     ImageView errorLoadingGfycatImageView,
+                                                     PlayerView videoPlayer,
+                                                     ImageView muteButton,
+                                                     ImageView fullscreenButton,
+                                                     ImageView pauseButton,
+                                                     ImageView playButton,
+                                                     DefaultTimeBar progressBar,
+                                                     ConstraintLayout bottomConstraintLayout,
+                                                     MaterialButtonToggleGroup voteButtonToggleGroup,
+                                                     MaterialButton upvoteButton,
+                                                     MaterialButton downvoteButton,
+                                                     MaterialButton commentsCountButton,
+                                                     MaterialButton saveButton,
+                                                     MaterialButton shareButton) {
+            super(rootView);
+            setBaseView(
+                    iconGifImageView,
+                    subredditTextView,
+                    userTextView,
+                    stickiedPostImageView,
+                    postTimeTextView,
+                    titleTextView,
+                    bottomConstraintLayout,
+                    voteButtonToggleGroup,
+                    upvoteButton,
+                    downvoteButton,
+                    commentsCountButton,
+                    saveButton,
+                    shareButton);
+
+            this.aspectRatioFrameLayout = aspectRatioFrameLayout;
+            this.previewImageView = previewImageView;
+            this.errorLoadingGfycatImageView = errorLoadingGfycatImageView;
+            this.videoPlayer = videoPlayer;
+            this.muteButton = muteButton;
+            this.fullscreenButton = fullscreenButton;
+            this.pauseButton = pauseButton;
+            this.playButton = playButton;
+            this.progressBar = progressBar;
+
+            aspectRatioFrameLayout.setOnClickListener(null);
+
+            muteButton.setOnClickListener(view -> {
+                if (helper != null) {
+                    if (helper.getVolume() != 0) {
+                        muteButton.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_mute_white_rounded_24dp));
+                        helper.setVolume(0f);
+                        volume = 0f;
+                        mFragment.videoAutoplayChangeMutingOption(true);
+                    } else {
+                        muteButton.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_unmute_white_rounded_24dp));
+                        helper.setVolume(1f);
+                        volume = 1f;
+                        mFragment.videoAutoplayChangeMutingOption(false);
+                    }
+                }
+            });
+
+            fullscreenButton.setOnClickListener(view -> {
+                if (canStartActivity) {
+                    canStartActivity = false;
+                    int position = getBindingAdapterPosition();
+                    if (position < 0) {
+                        return;
+                    }
+                    Post post = getItem(position);
+                    if (post != null) {
+                        markPostRead(post, true);
+                        Intent intent = new Intent(mActivity, ViewVideoActivity.class);
+                        if (post.isImgur()) {
+                            intent.setData(Uri.parse(post.getVideoUrl()));
+                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_IMGUR);
+                        } else if (post.isGfycat()) {
+                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_GFYCAT);
+                            intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, post.getGfycatId());
+                            if (post.isLoadGfycatOrStreamableVideoSuccess()) {
+                                intent.setData(Uri.parse(post.getVideoUrl()));
+                                intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
+                            }
+                        } else if (post.isRedgifs()) {
+                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_REDGIFS);
+                            intent.putExtra(ViewVideoActivity.EXTRA_GFYCAT_ID, post.getGfycatId());
+                            if (post.isLoadGfycatOrStreamableVideoSuccess()) {
+                                intent.setData(Uri.parse(post.getVideoUrl()));
+                                intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
+                            }
+                        } else if (post.isStreamable()) {
+                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_TYPE, ViewVideoActivity.VIDEO_TYPE_STREAMABLE);
+                            intent.putExtra(ViewVideoActivity.EXTRA_STREAMABLE_SHORT_CODE, post.getStreamableShortCode());
+                        } else {
+                            intent.setData(Uri.parse(post.getVideoUrl()));
+                            intent.putExtra(ViewVideoActivity.EXTRA_VIDEO_DOWNLOAD_URL, post.getVideoDownloadUrl());
+                            intent.putExtra(ViewVideoActivity.EXTRA_SUBREDDIT, post.getSubredditName());
+                            intent.putExtra(ViewVideoActivity.EXTRA_ID, post.getId());
+                        }
+                        intent.putExtra(ViewVideoActivity.EXTRA_POST_TITLE, post.getTitle());
+                        if (helper != null) {
+                            intent.putExtra(ViewVideoActivity.EXTRA_PROGRESS_SECONDS, helper.getLatestPlaybackInfo().getResumePosition());
+                        }
+                        intent.putExtra(ViewVideoActivity.EXTRA_IS_NSFW, post.isNSFW());
+                        mActivity.startActivity(intent);
+                    }
+                }
+            });
+
+            pauseButton.setOnClickListener(view -> {
+                pause();
+                isManuallyPaused = true;
+                savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
+            });
+
+            playButton.setOnClickListener(view -> {
+                isManuallyPaused = false;
+                play();
+            });
+
+            progressBar.addListener(new TimeBar.OnScrubListener() {
+                @Override
+                public void onScrubStart(TimeBar timeBar, long position) {
+
+                }
+
+                @Override
+                public void onScrubMove(TimeBar timeBar, long position) {
+
+                }
+
+                @Override
+                public void onScrubStop(TimeBar timeBar, long position, boolean canceled) {
+                    if (!canceled) {
+                        savePlaybackInfo(getPlayerOrder(), getCurrentPlaybackInfo());
+                    }
+                }
+            });
+
+            previewImageView.setOnClickListener(view -> fullscreenButton.performClick());
+
+            videoPlayer.setOnClickListener(view -> {
+                if (mEasierToWatchInFullScreen && videoPlayer.isControllerVisible()) {
+                    fullscreenButton.performClick();
+                }
+            });
+        }
+
+        void bindVideoUri(Uri videoUri) {
+            mediaUri = videoUri;
+        }
+
+        void setVolume(float volume) {
+            this.volume = volume;
+        }
+
+        void resetVolume() {
+            volume = 0f;
+        }
+
+        private void savePlaybackInfo(int order, @Nullable PlaybackInfo playbackInfo) {
+            if (container != null) container.savePlaybackInfo(order, playbackInfo);
+        }
+
+        @NonNull
+        @Override
+        public View getPlayerView() {
+            return videoPlayer;
+        }
+
+        @NonNull
+        @Override
+        public PlaybackInfo getCurrentPlaybackInfo() {
+            return helper != null && mediaUri != null ? helper.getLatestPlaybackInfo() : new PlaybackInfo();
+        }
+
+        @Override
+        public void initialize(@NonNull Container container, @NonNull PlaybackInfo playbackInfo) {
+            if (mediaUri == null) {
+                return;
+            }
+            if (this.container == null) {
+                this.container = container;
+            }
+            if (helper == null) {
+                helper = new ExoPlayerViewHelper(this, mediaUri, null, mExoCreator);
+                helper.addEventListener(new Playable.DefaultEventListener() {
+                    @Override
+                    public void onTracksChanged(@NonNull Tracks tracks) {
+                        ImmutableList<Tracks.Group> trackGroups = tracks.getGroups();
+                        if (!trackGroups.isEmpty()) {
+                            for (int i = 0; i < trackGroups.size(); i++) {
+                                String mimeType = trackGroups.get(i).getTrackFormat(0).sampleMimeType;
+                                if (mimeType != null && mimeType.contains("audio")) {
+                                    if (mFragment.getMasterMutingOption() != null) {
+                                        volume = mFragment.getMasterMutingOption() ? 0f : 1f;
+                                    }
+                                    helper.setVolume(volume);
+                                    muteButton.setVisibility(View.VISIBLE);
+                                    if (volume != 0f) {
+                                        muteButton.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_unmute_white_rounded_24dp));
+                                    } else {
+                                        muteButton.setImageDrawable(ContextCompat.getDrawable(mActivity, R.drawable.ic_mute_white_rounded_24dp));
+                                    }
+                                    break;
+                                }
+                            }
+                        } else {
+                            muteButton.setVisibility(View.GONE);
+                        }
+                    }
+
+                    @Override
+                    public void onRenderedFirstFrame() {
+                        mGlide.clear(previewImageView);
+                        previewImageView.setVisibility(View.GONE);
+                    }
+                });
+            }
+            helper.initialize(container, playbackInfo);
+        }
+
+        @Override
+        public void play() {
+            if (helper != null && mediaUri != null) {
+                if (!isPlaying() && isManuallyPaused) {
+                    helper.play();
+                    pause();
+                    helper.setVolume(volume);
+                } else {
+                    helper.play();
+                }
+            }
+        }
+
+        @Override
+        public void pause() {
+            if (helper != null) helper.pause();
+        }
+
+        @Override
+        public boolean isPlaying() {
+            return helper != null && helper.isPlaying();
+        }
+
+        @Override
+        public void release() {
+            if (helper != null) {
+                helper.release();
+                helper = null;
+            }
+            isManuallyPaused = false;
+            container = null;
+        }
+
+        @Override
+        public boolean wantsToPlay() {
+            return canPlayVideo && mediaUri != null && ToroUtil.visibleAreaOffset(this, itemView.getParent()) >= mStartAutoplayVisibleAreaOffset;
+        }
+
+        @Override
+        public int getPlayerOrder() {
+            return getBindingAdapterPosition();
+        }
+    }
+
+    class PostMaterial3CardVideoAutoplayViewHolder extends PostMaterial3CardBaseVideoAutoplayViewHolder {
+        PostMaterial3CardVideoAutoplayViewHolder(ItemPostCard3VideoTypeAutoplayBinding binding) {
+            super(binding.getRoot(),
+                    binding.iconGifImageViewItemPostCard3VideoTypeAutoplay,
+                    binding.subredditNameTextViewItemPostCard3VideoTypeAutoplay,
+                    binding.userTextViewItemPostCard3VideoTypeAutoplay,
+                    binding.stickiedPostImageViewItemPostCard3VideoTypeAutoplay,
+                    binding.postTimeTextViewItemPostCard3VideoTypeAutoplay,
+                    binding.titleTextViewItemPostCard3VideoTypeAutoplay,
+                    binding.aspectRatioFrameLayoutItemPostCard3VideoTypeAutoplay,
+                    binding.previewImageViewItemPostCard3VideoTypeAutoplay,
+                    binding.errorLoadingGfycatImageViewItemPostCard3VideoTypeAutoplay,
+                    binding.playerViewItemPostCard3VideoTypeAutoplay,
+                    binding.getRoot().findViewById(R.id.mute_exo_playback_control_view),
+                    binding.getRoot().findViewById(R.id.fullscreen_exo_playback_control_view),
+                    binding.getRoot().findViewById(R.id.exo_pause),
+                    binding.getRoot().findViewById(R.id.exo_play),
+                    binding.getRoot().findViewById(R.id.exo_progress),
+                    binding.bottomConstraintLayoutItemPostCard3VideoTypeAutoplay,
+                    binding.voteButtonToggleItemPostCard3VideoTypeAutoplay,
+                    binding.upvoteButtonItemPostCard3VideoTypeAutoplay,
+                    binding.downvoteButtonItemPostCard3VideoTypeAutoplay,
+                    binding.commentsCountButtonItemPostCard3VideoTypeAutoplay,
+                    binding.saveButtonItemPostCard3VideoTypeAutoplay,
+                    binding.shareButtonItemPostCard3VideoTypeAutoplay);
+        }
+    }
+
+    class PostMaterial3CardVideoAutoplayLegacyControllerViewHolder extends PostMaterial3CardBaseVideoAutoplayViewHolder {
+        PostMaterial3CardVideoAutoplayLegacyControllerViewHolder(ItemPostCard3VideoTypeAutoplayLegacyControllerBinding binding) {
+            super(binding.getRoot(),
+                    binding.iconGifImageViewItemPostCard3VideoTypeAutoplay,
+                    binding.subredditNameTextViewItemPostCard3VideoTypeAutoplay,
+                    binding.userTextViewItemPostCard3VideoTypeAutoplay,
+                    binding.stickiedPostImageViewItemPostCard3VideoTypeAutoplay,
+                    binding.postTimeTextViewItemPostCard3VideoTypeAutoplay,
+                    binding.titleTextViewItemPostCard3VideoTypeAutoplay,
+                    binding.aspectRatioFrameLayoutItemPostCard3VideoTypeAutoplay,
+                    binding.previewImageViewItemPostCard3VideoTypeAutoplay,
+                    binding.errorLoadingGfycatImageViewItemPostCard3VideoTypeAutoplay,
+                    binding.playerViewItemPostCard3VideoTypeAutoplay,
+                    binding.getRoot().findViewById(R.id.mute_exo_playback_control_view),
+                    binding.getRoot().findViewById(R.id.fullscreen_exo_playback_control_view),
+                    binding.getRoot().findViewById(R.id.exo_pause),
+                    binding.getRoot().findViewById(R.id.exo_play),
+                    binding.getRoot().findViewById(R.id.exo_progress),
+                    binding.bottomConstraintLayoutItemPostCard3VideoTypeAutoplay,
+                    binding.voteButtonToggleItemPostCard3VideoTypeAutoplay,
+                    binding.upvoteButtonItemPostCard3VideoTypeAutoplay,
+                    binding.downvoteButtonItemPostCard3VideoTypeAutoplay,
+                    binding.commentsCountButtonItemPostCard3VideoTypeAutoplay,
+                    binding.saveButtonItemPostCard3VideoTypeAutoplay,
+                    binding.shareButtonItemPostCard3VideoTypeAutoplay);
         }
     }
 
