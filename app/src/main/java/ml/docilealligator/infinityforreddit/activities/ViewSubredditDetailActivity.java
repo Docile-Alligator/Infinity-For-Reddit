@@ -1,8 +1,12 @@
 package ml.docilealligator.infinityforreddit.activities;
 
+import static android.graphics.BitmapFactory.decodeResource;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -37,6 +41,8 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.CustomTarget;
+import com.bumptech.glide.request.transition.Transition;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -121,6 +127,7 @@ import ml.docilealligator.infinityforreddit.subreddit.ParseSubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditData;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditSubscription;
 import ml.docilealligator.infinityforreddit.subreddit.SubredditViewModel;
+import ml.docilealligator.infinityforreddit.subreddit.shortcut.ShortcutManager;
 import ml.docilealligator.infinityforreddit.utils.APIUtils;
 import ml.docilealligator.infinityforreddit.utils.SharedPreferencesUtils;
 import ml.docilealligator.infinityforreddit.utils.Utils;
@@ -237,6 +244,7 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
     private int subscribedColor;
     private int fabOption;
     private MaterialAlertDialogBuilder nsfwWarningBuilder;
+    private Bitmap subredditIconBitmap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -437,11 +445,23 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
                             .into(iconGifImageView);
                     iconGifImageView.setOnClickListener(null);
                 } else {
-                    glide.load(subredditData.getIconUrl())
+                    glide.asBitmap()
+                            .load(subredditData.getIconUrl())
                             .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0)))
                             .error(glide.load(R.drawable.subreddit_default_icon)
                                     .apply(RequestOptions.bitmapTransform(new RoundedCornersTransformation(216, 0))))
-                            .into(iconGifImageView);
+                            .into(new CustomTarget<Bitmap>() {
+                                @Override
+                                public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
+                                    subredditIconBitmap = resource;
+                                    iconGifImageView.setImageBitmap(resource);
+                                }
+
+                                @Override
+                                public void onLoadCleared(@Nullable Drawable placeholder) {
+                                    subredditIconBitmap = null;
+                                }
+                            });
                     iconGifImageView.setOnClickListener(view -> {
                         Intent intent = new Intent(ViewSubredditDetailActivity.this, ViewImageOrGifActivity.class);
                         intent.putExtra(ViewImageOrGifActivity.EXTRA_IMAGE_URL_KEY, subredditData.getIconUrl());
@@ -1175,6 +1195,9 @@ public class ViewSubredditDetailActivity extends BaseActivity implements SortTyp
             intent.putExtra(SendPrivateMessageActivity.EXTRA_RECIPIENT_USERNAME, "r/" + subredditName);
             startActivity(intent);
             return true;
+        } else if (itemId == R.id.action_add_to_home_screen_view_subreddit_detail_activity) {
+            Bitmap icon = subredditIconBitmap == null ? decodeResource(getResources(), R.drawable.subreddit_default_icon) : subredditIconBitmap;
+            return ShortcutManager.requestPinShortcut(this, subredditName, icon);
         }
         return false;
     }
