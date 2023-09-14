@@ -20,6 +20,9 @@ public interface RecentSearchQueryDao {
     @Query("SELECT * FROM recent_search_queries WHERE username = :username ORDER BY time DESC")
     List<RecentSearchQuery> getAllRecentSearchQueries(String username);
 
+    @Query("DELETE FROM recent_search_queries WHERE username = :username")
+    void deleteAllRecentSearchQueries(String username);
+
     @Delete
     void deleteRecentSearchQueries(RecentSearchQuery recentSearchQuery);
 }

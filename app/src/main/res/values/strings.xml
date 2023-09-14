@@ -261,6 +261,9 @@
     <string name="search_in">Search in</string>
     <string name="all_subreddits">All subreddits</string>
 
+    <string name="confirm">Confirm</string>
+    <string name="confirm_delete_all_recent_searches">Are you sure you want to delete all recent search queries?</string>
+
     <string name="sort_best">Best</string>
     <string name="sort_hot">Hot</string>
     <string name="sort_new">New</string>

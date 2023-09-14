@@ -47,6 +47,7 @@ import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
+import ml.docilealligator.infinityforreddit.recentsearchquery.DeleteAllRecentSearchQueries;
 import ml.docilealligator.infinityforreddit.recentsearchquery.DeleteRecentSearchQuery;
 import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQuery;
 import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQueryViewModel;
@@ -95,6 +96,8 @@ public class SearchActivity extends BaseActivity {
     ImageView clearSearchTextImageView;
     @BindView(R.id.link_handler_image_view_search_activity)
     ImageView linkHandlerImageView;
+    @BindView(R.id.delete_all_recent_searches_image_view_search_activity)
+    ImageView deleteAllSearchesImageView;
     @BindView(R.id.subreddit_name_relative_layout_search_activity)
     RelativeLayout subredditNameRelativeLayout;
     @BindView(R.id.search_in_text_view_search_activity)
@@ -156,6 +159,7 @@ public class SearchActivity extends BaseActivity {
         setSupportActionBar(toolbar);
 
         clearSearchTextImageView.setVisibility(View.GONE);
+        deleteAllSearchesImageView.setVisibility(View.GONE);
 
         searchOnlySubreddits = getIntent().getBooleanExtra(EXTRA_SEARCH_ONLY_SUBREDDITS, false);
         searchOnlyUsers = getIntent().getBooleanExtra(EXTRA_SEARCH_ONLY_USERS, false);
@@ -269,6 +273,10 @@ public class SearchActivity extends BaseActivity {
             }
         });
 
+        deleteAllSearchesImageView.setOnClickListener(view -> {
+            DeleteAllRecentSearchQueries.deleteAllRecentSearchQueriesListener(this,mRedditDataRoomDatabase,mAccountName, () -> {});
+        });
+
         if (savedInstanceState != null) {
             subredditName = savedInstanceState.getString(SUBREDDIT_NAME_STATE);
             subredditIsUser = savedInstanceState.getBoolean(SUBREDDIT_IS_USER_STATE);
@@ -326,8 +334,10 @@ public class SearchActivity extends BaseActivity {
                 mRecentSearchQueryViewModel.getAllRecentSearchQueries().observe(this, recentSearchQueries -> {
                     if (recentSearchQueries != null && !recentSearchQueries.isEmpty()) {
                         divider.setVisibility(View.VISIBLE);
+                        deleteAllSearchesImageView.setVisibility(View.VISIBLE);
                     } else {
                         divider.setVisibility(View.GONE);
+                        deleteAllSearchesImageView.setVisibility(View.GONE);
                     }
                     adapter.setRecentSearchQueries(recentSearchQueries);
                 });
