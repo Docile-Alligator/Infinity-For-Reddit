@@ -68,7 +68,7 @@ public class MainPreferenceFragment extends CustomFontPreferenceFragmentCompat {
         if (redditUserAgreementPreference != null) {
             redditUserAgreementPreference.setOnPreferenceClickListener(preference -> {
                 Intent intent = new Intent(activity, LinkResolverActivity.class);
-                intent.setData(Uri.parse("https://www.redditinc.com/policies/user-agreement-september-12-2021"));
+                intent.setData(Uri.parse("https://www.redditinc.com/policies/user-agreement"));
                 activity.startActivity(intent);
                 return true;
             });
