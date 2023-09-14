@@ -2055,6 +2055,26 @@ public class HistoryPostRecyclerViewAdapter extends PagingDataAdapter<Post, Recy
                     imageRequestBuilder.centerInside().downsample(mSaveMemoryCenterInsideDownsampleStrategy).into(((PostCard2WithPreviewViewHolder) holder).imageView);
                 }
             }
+        } else if (holder instanceof PostMaterial3CardWithPreviewViewHolder) {
+            Post post = ((PostMaterial3CardWithPreviewViewHolder) holder).post;
+            Post.Preview preview = ((PostMaterial3CardWithPreviewViewHolder) holder).preview;
+            if (preview != null) {
+                String url;
+                boolean blurImage = (post.isNSFW() && mNeedBlurNsfw && !(post.getPostType() == Post.GIF_TYPE && mAutoplay && mAutoplayNsfwVideos)) || (post.isSpoiler() && mNeedBlurSpoiler);
+                if (post.getPostType() == Post.GIF_TYPE && mAutoplay && !blurImage) {
+                    url = post.getUrl();
+                } else {
+                    url = preview.getPreviewUrl();
+                }
+                RequestBuilder<Drawable> imageRequestBuilder = mGlide.load(url).listener(((PostMaterial3CardWithPreviewViewHolder) holder).glideRequestListener);
+
+                if (blurImage) {
+                    imageRequestBuilder.apply(RequestOptions.bitmapTransform(new BlurTransformation(50, 10)))
+                            .into(((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewItemPostCard3WithPreview);
+                } else {
+                    imageRequestBuilder.centerInside().downsample(mSaveMemoryCenterInsideDownsampleStrategy).into(((PostMaterial3CardWithPreviewViewHolder) holder).binding.imageViewItemPostCard3WithPreview);
+                }
+            }
         }
     }
 
