@@ -135,6 +135,10 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     private static final int VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE = 9;
     private static final int VIEW_TYPE_POST_CARD_2_GALLERY_TYPE = 10;
     private static final int VIEW_TYPE_POST_CARD_2_TEXT_TYPE = 11;
+    private static final int VIEW_TYPE_POST_CARD_3_VIDEO_AUTOPLAY_TYPE = 12;
+    private static final int VIEW_TYPE_POST_CARD_3_WITH_PREVIEW_TYPE = 13;
+    private static final int VIEW_TYPE_POST_CARD_3_GALLERY_TYPE = 14;
+    private static final int VIEW_TYPE_POST_CARD_3_TEXT_TYPE = 15;
 
     private static final DiffUtil.ItemCallback<Post> DIFF_CALLBACK = new DiffUtil.ItemCallback<Post>() {
         @Override
@@ -404,6 +408,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         switch (mDefaultLinkPostLayout) {
                             case SharedPreferencesUtils.POST_LAYOUT_CARD_2:
                                 return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
+                            case SharedPreferencesUtils.POST_LAYOUT_CARD_3:
+                                return VIEW_TYPE_POST_CARD_3_WITH_PREVIEW_TYPE;
                             case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
                                 return VIEW_TYPE_POST_GALLERY;
                             case SharedPreferencesUtils.POST_LAYOUT_COMPACT:
@@ -422,10 +428,12 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     switch (mDefaultLinkPostLayout) {
                         case SharedPreferencesUtils.POST_LAYOUT_CARD:
                             return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
-                        case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
-                            return VIEW_TYPE_POST_GALLERY;
                         case SharedPreferencesUtils.POST_LAYOUT_CARD_2:
                             return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
+                        case SharedPreferencesUtils.POST_LAYOUT_CARD_3:
+                            return VIEW_TYPE_POST_CARD_3_WITH_PREVIEW_TYPE;
+                        case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
+                            return VIEW_TYPE_POST_GALLERY;
                     }
                 }
             }
@@ -441,7 +449,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             } else {
                 return VIEW_TYPE_POST_GALLERY;
             }
-        } else {
+        } else if (mPostLayout == SharedPreferencesUtils.POST_LAYOUT_CARD_2) {
             Post post = getItem(position);
             if (post != null) {
                 switch (post.getPostType()) {
@@ -463,6 +471,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         switch (mDefaultLinkPostLayout) {
                             case SharedPreferencesUtils.POST_LAYOUT_CARD:
                                 return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
+                            case SharedPreferencesUtils.POST_LAYOUT_CARD_3:
+                                return VIEW_TYPE_POST_CARD_3_WITH_PREVIEW_TYPE;
                             case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
                                 return VIEW_TYPE_POST_GALLERY;
                             case SharedPreferencesUtils.POST_LAYOUT_COMPACT:
@@ -474,6 +484,41 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
             }
             return VIEW_TYPE_POST_CARD_2_TEXT_TYPE;
+        } else {
+            Post post = getItem(position);
+            if (post != null) {
+                switch (post.getPostType()) {
+                    case Post.VIDEO_TYPE:
+                        if (mAutoplay) {
+                            if ((!mAutoplayNsfwVideos && post.isNSFW()) || post.isSpoiler()) {
+                                return VIEW_TYPE_POST_CARD_3_WITH_PREVIEW_TYPE;
+                            }
+                            return VIEW_TYPE_POST_CARD_3_VIDEO_AUTOPLAY_TYPE;
+                        }
+                        return VIEW_TYPE_POST_CARD_3_WITH_PREVIEW_TYPE;
+                    case Post.GIF_TYPE:
+                    case Post.IMAGE_TYPE:
+                        return VIEW_TYPE_POST_CARD_3_WITH_PREVIEW_TYPE;
+                    case Post.GALLERY_TYPE:
+                        return VIEW_TYPE_POST_CARD_3_GALLERY_TYPE;
+                    case Post.LINK_TYPE:
+                    case Post.NO_PREVIEW_LINK_TYPE:
+                        switch (mDefaultLinkPostLayout) {
+                            case SharedPreferencesUtils.POST_LAYOUT_CARD:
+                                return VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE;
+                            case SharedPreferencesUtils.POST_LAYOUT_CARD_2:
+                                return VIEW_TYPE_POST_CARD_2_WITH_PREVIEW_TYPE;
+                            case SharedPreferencesUtils.POST_LAYOUT_GALLERY:
+                                return VIEW_TYPE_POST_GALLERY;
+                            case SharedPreferencesUtils.POST_LAYOUT_COMPACT:
+                                return VIEW_TYPE_POST_COMPACT;
+                        }
+                        return VIEW_TYPE_POST_CARD_3_WITH_PREVIEW_TYPE;
+                    default:
+                        return VIEW_TYPE_POST_CARD_3_TEXT_TYPE;
+                }
+            }
+            return VIEW_TYPE_POST_CARD_3_TEXT_TYPE;
         }
     }
 
@@ -482,24 +527,15 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_POST_CARD_VIDEO_AUTOPLAY_TYPE) {
             if (mDataSavingMode) {
-                return new PostMaterial3CardWithPreviewViewHolder(ItemPostCard3WithPreviewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-                //return new PostWithPreviewTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_with_preview, parent, false));
+                return new PostWithPreviewTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_with_preview, parent, false));
             }
-            //return new PostVideoAutoplayViewHolder(LayoutInflater.from(parent.getContext()).inflate(mLegacyAutoplayVideoControllerUI ? R.layout.item_post_video_type_autoplay_legacy_controller : R.layout.item_post_video_type_autoplay, parent, false));
-            if (mLegacyAutoplayVideoControllerUI) {
-                return new PostMaterial3CardVideoAutoplayLegacyControllerViewHolder(ItemPostCard3VideoTypeAutoplayLegacyControllerBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-            } else {
-                return new PostMaterial3CardVideoAutoplayViewHolder(ItemPostCard3VideoTypeAutoplayBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-            }
+            return new PostVideoAutoplayViewHolder(LayoutInflater.from(parent.getContext()).inflate(mLegacyAutoplayVideoControllerUI ? R.layout.item_post_video_type_autoplay_legacy_controller : R.layout.item_post_video_type_autoplay, parent, false));
         } else if (viewType == VIEW_TYPE_POST_CARD_WITH_PREVIEW_TYPE) {
-            //return new PostWithPreviewTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_with_preview, parent, false));
-            return new PostMaterial3CardWithPreviewViewHolder(ItemPostCard3WithPreviewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+            return new PostWithPreviewTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_with_preview, parent, false));
         } else if (viewType == VIEW_TYPE_POST_CARD_GALLERY_TYPE) {
-            //return new PostGalleryTypeViewHolder(ItemPostGalleryTypeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-            return new PostMaterial3CardGalleryTypeViewHolder(ItemPostCard3GalleryTypeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+            return new PostGalleryTypeViewHolder(ItemPostGalleryTypeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         } else if (viewType == VIEW_TYPE_POST_CARD_TEXT_TYPE) {
-            //return new PostTextTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_text, parent, false));
-            return new PostMaterial3CardTextTypeViewHolder(ItemPostCard3TextBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+            return new PostTextTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_text, parent, false));
         } else if (viewType == VIEW_TYPE_POST_COMPACT) {
             if (mShowThumbnailOnTheRightInCompactLayout) {
                 return new PostCompactRightThumbnailViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_compact_right_thumbnail, parent, false));
@@ -519,9 +555,24 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             return new PostCard2WithPreviewViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_card_2_with_preview, parent, false));
         } else if (viewType == VIEW_TYPE_POST_CARD_2_GALLERY_TYPE) {
             return new PostCard2GalleryTypeViewHolder(ItemPostCard2GalleryTypeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
-        } else {
-            //VIEW_TYPE_POST_CARD_2_TEXT_TYPE
+        } else if (viewType == VIEW_TYPE_POST_CARD_2_TEXT_TYPE) {
             return new PostCard2TextTypeViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_card_2_text, parent, false));
+        } else if (viewType == VIEW_TYPE_POST_CARD_3_VIDEO_AUTOPLAY_TYPE) {
+            if (mDataSavingMode) {
+                return new PostMaterial3CardWithPreviewViewHolder(ItemPostCard3WithPreviewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+            }
+            if (mLegacyAutoplayVideoControllerUI) {
+                return new PostMaterial3CardVideoAutoplayLegacyControllerViewHolder(ItemPostCard3VideoTypeAutoplayLegacyControllerBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+            } else {
+                return new PostMaterial3CardVideoAutoplayViewHolder(ItemPostCard3VideoTypeAutoplayBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+            }
+        } else if (viewType == VIEW_TYPE_POST_CARD_3_WITH_PREVIEW_TYPE) {
+            return new PostMaterial3CardWithPreviewViewHolder(ItemPostCard3WithPreviewBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        } else if (viewType == VIEW_TYPE_POST_CARD_3_GALLERY_TYPE) {
+            return new PostMaterial3CardGalleryTypeViewHolder(ItemPostCard3GalleryTypeBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        } else {
+            //VIEW_TYPE_POST_CARD_3_TEXT_TYPE
+            return new PostMaterial3CardTextTypeViewHolder(ItemPostCard3TextBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         }
     }
 
