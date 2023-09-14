@@ -38,6 +38,7 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -129,6 +130,8 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
     SharedPreferences mCurrentAccountSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor executor;
     private Call<String> subredditAutocompleteCall;
     private String mAccessToken;
     private String mAccountName;
@@ -386,8 +389,8 @@ public class SearchResultActivity extends BaseActivity implements SortTypeSelect
         });
 
         if (mAccountName != null && mSharedPreferences.getBoolean(SharedPreferencesUtils.ENABLE_SEARCH_HISTORY, true) && !mInsertSearchQuerySuccess && mQuery != null) {
-            InsertRecentSearchQuery.insertRecentSearchQueryListener(mRedditDataRoomDatabase, mAccountName,
-                    mQuery, () -> mInsertSearchQuerySuccess = true);
+            InsertRecentSearchQuery.insertRecentSearchQueryListener(executor, new Handler(getMainLooper()),
+                    mRedditDataRoomDatabase, mAccountName, mQuery, () -> mInsertSearchQuerySuccess = true);
         }
     }
 
