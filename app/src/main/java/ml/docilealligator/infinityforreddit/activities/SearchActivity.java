@@ -27,11 +27,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.appbar.AppBarLayout;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.util.ArrayList;
+import java.util.concurrent.Executor;
 
 import javax.inject.Inject;
 import javax.inject.Named;
@@ -47,7 +49,6 @@ import ml.docilealligator.infinityforreddit.apis.RedditAPI;
 import ml.docilealligator.infinityforreddit.customtheme.CustomThemeWrapper;
 import ml.docilealligator.infinityforreddit.customviews.slidr.Slidr;
 import ml.docilealligator.infinityforreddit.events.SwitchAccountEvent;
-import ml.docilealligator.infinityforreddit.recentsearchquery.DeleteAllRecentSearchQueries;
 import ml.docilealligator.infinityforreddit.recentsearchquery.DeleteRecentSearchQuery;
 import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQuery;
 import ml.docilealligator.infinityforreddit.recentsearchquery.RecentSearchQueryViewModel;
@@ -124,6 +125,8 @@ public class SearchActivity extends BaseActivity {
     SharedPreferences mNsfwAndSpoilerSharedPreferences;
     @Inject
     CustomThemeWrapper mCustomThemeWrapper;
+    @Inject
+    Executor executor;
     private String mAccountName;
     private String mAccessToken;
     private String query;
@@ -274,7 +277,14 @@ public class SearchActivity extends BaseActivity {
         });
 
         deleteAllSearchesImageView.setOnClickListener(view -> {
-            DeleteAllRecentSearchQueries.deleteAllRecentSearchQueriesListener(this,mRedditDataRoomDatabase,mAccountName, () -> {});
+            new MaterialAlertDialogBuilder(this, R.style.MaterialAlertDialogTheme)
+                    .setTitle(R.string.confirm)
+                    .setMessage(R.string.confirm_delete_all_recent_searches)
+                    .setPositiveButton(R.string.yes, (dialogInterface, i) -> {
+                        executor.execute(() -> mRedditDataRoomDatabase.recentSearchQueryDao().deleteAllRecentSearchQueries(mAccountName));
+                    })
+                    .setNegativeButton(R.string.no, null)
+                    .show();
         });
 
         if (savedInstanceState != null) {
