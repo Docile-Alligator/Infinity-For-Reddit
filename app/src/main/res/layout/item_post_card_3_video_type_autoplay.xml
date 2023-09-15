@@ -219,6 +219,7 @@
                 app:strokeWidth="0dp"
                 app:iconTint="@null"
                 app:iconSize="24dp"
+                app:iconPadding="12dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/share_button_item_post_card_3_video_type_autoplay"

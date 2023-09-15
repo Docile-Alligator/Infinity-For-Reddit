@@ -315,6 +315,7 @@
                 app:icon="@drawable/ic_comment_grey_24dp"
                 app:iconTint="@null"
                 app:iconSize="24dp"
+                app:iconPadding="12dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/vote_button_toggle_item_post_with_preview"
