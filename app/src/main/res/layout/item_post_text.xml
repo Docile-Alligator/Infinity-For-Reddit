@@ -213,7 +213,8 @@
             android:id="@+id/bottom_constraint_layout_item_post_text_type"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="8dp">
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp">
 
             <com.google.android.material.button.MaterialButtonToggleGroup
                 android:id="@+id/vote_button_toggle_item_post_text_type"
