@@ -6,7 +6,6 @@ import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -3651,6 +3650,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
         PostWithPreviewTypeViewHolder(@NonNull ItemPostWithPreviewBinding binding) {
             super(binding.getRoot());
+            this.binding = binding;
             setBaseView(
                     binding.iconGifImageViewItemPostWithPreview,
                     binding.subredditNameTextViewItemPostWithPreview,
@@ -4047,7 +4047,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                          MaterialButton downvoteButton,
                          MaterialButton commentsCountButton,
                          MaterialButton saveButton,
-                         MaterialButton shareButton, View divider) {
+                         MaterialButton shareButton,
+                         View divider) {
             this.iconGifImageView = iconGifImageView;
             this.nameTextView = nameTextView;
             this.stickiedPostImageView = stickiedPostImageView;
