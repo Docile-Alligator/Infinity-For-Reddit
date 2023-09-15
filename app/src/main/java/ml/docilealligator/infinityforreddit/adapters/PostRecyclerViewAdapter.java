@@ -102,6 +102,8 @@ import ml.docilealligator.infinityforreddit.databinding.ItemPostCard3TextBinding
 import ml.docilealligator.infinityforreddit.databinding.ItemPostCard3VideoTypeAutoplayBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostCard3VideoTypeAutoplayLegacyControllerBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostCard3WithPreviewBinding;
+import ml.docilealligator.infinityforreddit.databinding.ItemPostCompactBinding;
+import ml.docilealligator.infinityforreddit.databinding.ItemPostCompactRightThumbnailBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostGalleryGalleryTypeBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostGalleryTypeBinding;
 import ml.docilealligator.infinityforreddit.databinding.ItemPostTextBinding;
@@ -551,9 +553,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             return new PostTextTypeViewHolder(ItemPostTextBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
         } else if (viewType == VIEW_TYPE_POST_COMPACT) {
             if (mShowThumbnailOnTheRightInCompactLayout) {
-                return new PostCompactRightThumbnailViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_compact_right_thumbnail, parent, false));
+                return new PostCompactRightThumbnailViewHolder(ItemPostCompactRightThumbnailBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
             } else {
-                return new PostCompactLeftThumbnailViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_compact, parent, false));
+                return new PostCompactLeftThumbnailViewHolder(ItemPostCompactBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
             }
         } else if (viewType == VIEW_TYPE_POST_GALLERY) {
             return new PostGalleryViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_post_gallery, parent, false));
@@ -1336,9 +1338,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
 
                 ((PostCompactBaseViewHolder) holder).titleTextView.setText(title);
                 if (!mHideTheNumberOfVotes) {
-                    ((PostCompactBaseViewHolder) holder).scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                    ((PostCompactBaseViewHolder) holder).upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
                 } else {
-                    ((PostCompactBaseViewHolder) holder).scoreTextView.setText(mActivity.getString(R.string.vote));
+                    ((PostCompactBaseViewHolder) holder).upvoteButton.setText(mActivity.getString(R.string.vote));
                 }
 
                 if (post.isLocked()) {
@@ -1371,16 +1373,17 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     }
                 }
 
-                switch (voteType) {
+                switch (post.getVoteType()) {
                     case 1:
                         //Upvoted
-                        ((PostCompactBaseViewHolder) holder).upvoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                        ((PostCompactBaseViewHolder) holder).scoreTextView.setTextColor(mUpvotedColor);
+                        ((PostCompactBaseViewHolder) holder).upvoteButton.setTextColor(mUpvotedColor);
+                        ((PostCompactBaseViewHolder) holder).upvoteButton.setIconResource(R.drawable.ic_upvote_filled_24dp);
+                        ((PostCompactBaseViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mUpvotedColor));
                         break;
                     case -1:
                         //Downvoted
-                        ((PostCompactBaseViewHolder) holder).downvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                        ((PostCompactBaseViewHolder) holder).scoreTextView.setTextColor(mDownvotedColor);
+                        ((PostCompactBaseViewHolder) holder).downvoteButton.setIconResource(R.drawable.ic_downvote_filled_24dp);
+                        ((PostCompactBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mDownvotedColor));
                         break;
                 }
 
@@ -1405,10 +1408,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 if (isArchived) {
                     ((PostCompactBaseViewHolder) holder).archivedImageView.setVisibility(View.VISIBLE);
 
-                    ((PostCompactBaseViewHolder) holder).upvoteButton
-                            .setColorFilter(mVoteAndReplyUnavailableVoteButtonColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                    ((PostCompactBaseViewHolder) holder).downvoteButton
-                            .setColorFilter(mVoteAndReplyUnavailableVoteButtonColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                    ((PostCompactBaseViewHolder) holder).upvoteButton.setBackgroundTintList(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
+                    ((PostCompactBaseViewHolder) holder).downvoteButton.setBackgroundTintList(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
                 }
 
                 if (post.isCrosspost()) {
@@ -1486,16 +1487,16 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
 
                 if (!mHideTheNumberOfComments) {
-                    ((PostCompactBaseViewHolder) holder).commentsCountTextView.setVisibility(View.VISIBLE);
-                    ((PostCompactBaseViewHolder) holder).commentsCountTextView.setText(Integer.toString(post.getNComments()));
+                    ((PostCompactBaseViewHolder) holder).commentsCountButton.setVisibility(View.VISIBLE);
+                    ((PostCompactBaseViewHolder) holder).commentsCountButton.setText(Integer.toString(post.getNComments()));
                 } else {
-                    ((PostCompactBaseViewHolder) holder).commentsCountTextView.setVisibility(View.GONE);
+                    ((PostCompactBaseViewHolder) holder).commentsCountButton.setVisibility(View.GONE);
                 }
 
                 if (post.isSaved()) {
-                    ((PostCompactBaseViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                    ((PostCompactBaseViewHolder) holder).saveButton.setIconResource(R.drawable.ic_bookmark_grey_24dp);
                 } else {
-                    ((PostCompactBaseViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                    ((PostCompactBaseViewHolder) holder).saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
                 }
 
                 mCallback.currentlyBindItem(holder.getBindingAdapterPosition());
@@ -2455,9 +2456,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             ((PostCompactBaseViewHolder) holder).imageView.setVisibility(View.GONE);
             ((PostCompactBaseViewHolder) holder).playButtonImageView.setVisibility(View.GONE);
             ((PostCompactBaseViewHolder) holder).noPreviewPostImageFrameLayout.setVisibility(View.GONE);
-            ((PostCompactBaseViewHolder) holder).upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-            ((PostCompactBaseViewHolder) holder).scoreTextView.setTextColor(mPostIconAndInfoColor);
-            ((PostCompactBaseViewHolder) holder).downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            ((PostCompactBaseViewHolder) holder).upvoteButton.setTextColor(mPostIconAndInfoColor);
+            ((PostCompactBaseViewHolder) holder).upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
+            ((PostCompactBaseViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
+            ((PostCompactBaseViewHolder) holder).downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
+            ((PostCompactBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
         } else if (holder instanceof PostGalleryViewHolder) {
             if (mMarkPostsAsReadOnScroll) {
                 int position = ((PostGalleryViewHolder) holder).currentPosition;
@@ -2700,7 +2703,6 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         CustomTextView flairTextView;
         CustomTextView awardsTextView;
         ConstraintLayout bottomConstraintLayout;
-        MaterialButtonToggleGroup voteButtonToggleGroup;
         MaterialButton upvoteButton;
         MaterialButton downvoteButton;
         MaterialButton commentsCountButton;
@@ -2788,6 +2790,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 nsfwTextView.setTypeface(mActivity.typeface);
                 flairTextView.setTypeface(mActivity.typeface);
                 awardsTextView.setTypeface(mActivity.typeface);
+                upvoteButton.setTypeface(mActivity.typeface);
                 commentsCountButton.setTypeface(mActivity.typeface);
             }
             if (mActivity.titleTypeface != null) {
@@ -2818,6 +2821,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             lockedImageView.setColorFilter(mLockedIconTint, PorterDuff.Mode.SRC_IN);
             crosspostImageView.setColorFilter(mCrosspostIconTint, PorterDuff.Mode.SRC_IN);
             upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
+            upvoteButton.setTextColor(mPostIconAndInfoColor);
             downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             commentsCountButton.setTextColor(mPostIconAndInfoColor);
             commentsCountButton.setIcon(mCommentIcon);
@@ -4000,12 +4004,11 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         ImageView noPreviewPostImageView;
         Barrier imageBarrier;
         ConstraintLayout bottomConstraintLayout;
-        ImageView upvoteButton;
-        TextView scoreTextView;
-        ImageView downvoteButton;
-        TextView commentsCountTextView;
-        ImageView saveButton;
-        ImageView shareButton;
+        MaterialButton upvoteButton;
+        MaterialButton downvoteButton;
+        MaterialButton commentsCountButton;
+        MaterialButton saveButton;
+        MaterialButton shareButton;
         View divider;
         RequestListener<Drawable> requestListener;
         Post post;
@@ -4017,21 +4020,34 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
         }
 
         void setBaseView(AspectRatioGifImageView iconGifImageView,
-                                         TextView nameTextView, ImageView stickiedPostImageView,
-                                         TextView postTimeTextView, ConstraintLayout titleAndImageConstraintLayout,
-                                         TextView titleTextView, CustomTextView typeTextView,
-                                         ImageView archivedImageView, ImageView lockedImageView,
-                                         ImageView crosspostImageView, CustomTextView nsfwTextView,
-                                         CustomTextView spoilerTextView, CustomTextView flairTextView,
-                                         CustomTextView awardsTextView, TextView linkTextView,
-                                         RelativeLayout relativeLayout, ProgressBar progressBar,
-                                         ImageView imageView, ImageView playButtonImageView,
-                                         FrameLayout noPreviewLinkImageFrameLayout,
-                                         ImageView noPreviewLinkImageView, Barrier imageBarrier,
-                                         ConstraintLayout bottomConstraintLayout, ImageView upvoteButton,
-                                         TextView scoreTextView, ImageView downvoteButton,
-                                         TextView commentsCountTextView, ImageView saveButton,
-                                         ImageView shareButton, View divider) {
+                         TextView nameTextView,
+                         ImageView stickiedPostImageView,
+                         TextView postTimeTextView,
+                         ConstraintLayout titleAndImageConstraintLayout,
+                         TextView titleTextView,
+                         CustomTextView typeTextView,
+                         ImageView archivedImageView,
+                         ImageView lockedImageView,
+                         ImageView crosspostImageView,
+                         CustomTextView nsfwTextView,
+                         CustomTextView spoilerTextView,
+                         CustomTextView flairTextView,
+                         CustomTextView awardsTextView,
+                         TextView linkTextView,
+                         RelativeLayout relativeLayout,
+                         ProgressBar progressBar,
+                         ImageView imageView,
+                         ImageView playButtonImageView,
+                         FrameLayout noPreviewLinkImageFrameLayout,
+                         ImageView noPreviewLinkImageView,
+                         Barrier imageBarrier,
+                         ConstraintLayout bottomConstraintLayout,
+                         MaterialButtonToggleGroup voteButtonToggleGroup,
+                         MaterialButton upvoteButton,
+                         MaterialButton downvoteButton,
+                         MaterialButton commentsCountButton,
+                         MaterialButton saveButton,
+                         MaterialButton shareButton, View divider) {
             this.iconGifImageView = iconGifImageView;
             this.nameTextView = nameTextView;
             this.stickiedPostImageView = stickiedPostImageView;
@@ -4056,31 +4072,24 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             this.imageBarrier = imageBarrier;
             this.bottomConstraintLayout = bottomConstraintLayout;
             this.upvoteButton = upvoteButton;
-            this.scoreTextView = scoreTextView;
             this.downvoteButton = downvoteButton;
-            this.commentsCountTextView = commentsCountTextView;
+            this.commentsCountButton = commentsCountButton;
             this.saveButton = saveButton;
             this.shareButton = shareButton;
             this.divider = divider;
 
-            scoreTextView.setOnClickListener(null);
-
             if (mVoteButtonsOnTheRight) {
                 ConstraintSet constraintSet = new ConstraintSet();
                 constraintSet.clone(bottomConstraintLayout);
-                constraintSet.clear(upvoteButton.getId(), ConstraintSet.START);
-                constraintSet.clear(scoreTextView.getId(), ConstraintSet.START);
-                constraintSet.clear(downvoteButton.getId(), ConstraintSet.START);
+                constraintSet.clear(voteButtonToggleGroup.getId(), ConstraintSet.START);
                 constraintSet.clear(saveButton.getId(), ConstraintSet.END);
                 constraintSet.clear(shareButton.getId(), ConstraintSet.END);
-                constraintSet.connect(upvoteButton.getId(), ConstraintSet.END, scoreTextView.getId(), ConstraintSet.START);
-                constraintSet.connect(scoreTextView.getId(), ConstraintSet.END, downvoteButton.getId(), ConstraintSet.START);
-                constraintSet.connect(downvoteButton.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
-                constraintSet.connect(commentsCountTextView.getId(), ConstraintSet.START, saveButton.getId(), ConstraintSet.END);
-                constraintSet.connect(commentsCountTextView.getId(), ConstraintSet.END, upvoteButton.getId(), ConstraintSet.START);
+                constraintSet.connect(voteButtonToggleGroup.getId(), ConstraintSet.END, ConstraintSet.PARENT_ID, ConstraintSet.END);
+                constraintSet.connect(commentsCountButton.getId(), ConstraintSet.START, saveButton.getId(), ConstraintSet.END);
+                constraintSet.connect(commentsCountButton.getId(), ConstraintSet.END, upvoteButton.getId(), ConstraintSet.START);
                 constraintSet.connect(saveButton.getId(), ConstraintSet.START, shareButton.getId(), ConstraintSet.END);
                 constraintSet.connect(shareButton.getId(), ConstraintSet.START, ConstraintSet.PARENT_ID, ConstraintSet.START);
-                constraintSet.setHorizontalBias(commentsCountTextView.getId(), 0);
+                constraintSet.setHorizontalBias(commentsCountButton.getId(), 0);
                 constraintSet.applyTo(bottomConstraintLayout);
             }
 
@@ -4097,8 +4106,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 flairTextView.setTypeface(mActivity.typeface);
                 awardsTextView.setTypeface(mActivity.typeface);
                 linkTextView.setTypeface(mActivity.typeface);
-                scoreTextView.setTypeface(mActivity.typeface);
-                commentsCountTextView.setTypeface(mActivity.typeface);
+                upvoteButton.setTypeface(mActivity.typeface);
+                commentsCountButton.setTypeface(mActivity.typeface);
             }
             if (mActivity.titleTypeface != null) {
                 titleTextView.setTypeface(mActivity.titleTypeface);
@@ -4132,13 +4141,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             progressBar.setIndeterminateTintList(ColorStateList.valueOf(mColorAccent));
             noPreviewLinkImageView.setBackgroundColor(mNoPreviewPostTypeBackgroundColor);
             noPreviewLinkImageView.setColorFilter(mNoPreviewPostTypeIconTint, android.graphics.PorterDuff.Mode.SRC_IN);
-            upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-            scoreTextView.setTextColor(mPostIconAndInfoColor);
-            downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-            commentsCountTextView.setTextColor(mPostIconAndInfoColor);
-            commentsCountTextView.setCompoundDrawablesWithIntrinsicBounds(mCommentIcon, null, null, null);
-            saveButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-            shareButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+            upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
+            upvoteButton.setTextColor(mPostIconAndInfoColor);
+            downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
+            commentsCountButton.setTextColor(mPostIconAndInfoColor);
+            commentsCountButton.setIcon(mCommentIcon);
+            saveButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
+            shareButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
             divider.setBackgroundColor(mDividerColor);
 
             imageView.setClipToOutline(true);
@@ -4259,17 +4268,17 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             });
 
             upvoteButton.setOnClickListener(view -> {
-                if (mAccessToken == null) {
-                    Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
                 int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
                 Post post = getItem(position);
                 if (post != null) {
+                    if (mAccessToken == null) {
+                        Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     if (mMarkPostsAsReadAfterVoting) {
                         markPostRead(post, true);
                     }
@@ -4279,32 +4288,35 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         return;
                     }
 
-                    ColorFilter previousUpvoteButtonColorFilter = upvoteButton.getColorFilter();
-                    ColorFilter previousDownvoteButtonColorFilter = downvoteButton.getColorFilter();
-                    int previousScoreTextViewColor = scoreTextView.getCurrentTextColor();
+                    int previousUpvoteButtonTextColor = upvoteButton.getCurrentTextColor();
+                    int previousDownvoteButtonTextColor = downvoteButton.getCurrentTextColor();
+                    Drawable previousUpvoteButtonDrawable = upvoteButton.getIcon();
+                    Drawable previousDownvoteButtonDrawable = downvoteButton.getIcon();
 
                     int previousVoteType = post.getVoteType();
                     String newVoteType;
 
-                    downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                    downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
+                    downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
 
                     if (previousVoteType != 1) {
                         //Not upvoted before
                         post.setVoteType(1);
                         newVoteType = APIUtils.DIR_UPVOTE;
-                        upvoteButton
-                                .setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                        scoreTextView.setTextColor(mUpvotedColor);
+                        upvoteButton.setTextColor(mUpvotedColor);
+                        upvoteButton.setIconResource(R.drawable.ic_upvote_filled_24dp);
+                        upvoteButton.setIconTint(ColorStateList.valueOf(mUpvotedColor));
                     } else {
                         //Upvoted before
                         post.setVoteType(0);
                         newVoteType = APIUtils.DIR_UNVOTE;
-                        upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                        scoreTextView.setTextColor(mPostIconAndInfoColor);
+                        upvoteButton.setTextColor(mPostIconAndInfoColor);
+                        upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
+                        upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
                     }
 
                     if (!mHideTheNumberOfVotes) {
-                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                        upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
                     }
 
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
@@ -4314,21 +4326,24 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             if (newVoteType.equals(APIUtils.DIR_UPVOTE)) {
                                 post.setVoteType(1);
                                 if (currentPosition == position) {
-                                    upvoteButton.setColorFilter(mUpvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                    scoreTextView.setTextColor(mUpvotedColor);
+                                    upvoteButton.setTextColor(mUpvotedColor);
+                                    upvoteButton.setIconResource(R.drawable.ic_upvote_filled_24dp);
+                                    upvoteButton.setIconTint(ColorStateList.valueOf(mUpvotedColor));
                                 }
                             } else {
                                 post.setVoteType(0);
                                 if (currentPosition == position) {
-                                    upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                    scoreTextView.setTextColor(mPostIconAndInfoColor);
+                                    upvoteButton.setTextColor(mPostIconAndInfoColor);
+                                    upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
+                                    upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
                                 }
                             }
 
                             if (currentPosition == position) {
-                                downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
+                                downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
                                 if (!mHideTheNumberOfVotes) {
-                                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                                    upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
                                 }
                             }
 
@@ -4341,11 +4356,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             post.setVoteType(previousVoteType);
                             if (getBindingAdapterPosition() == position) {
                                 if (!mHideTheNumberOfVotes) {
-                                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
+                                    upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
                                 }
-                                upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
-                                downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
-                                scoreTextView.setTextColor(previousScoreTextViewColor);
+                                upvoteButton.setTextColor(previousUpvoteButtonTextColor);
+                                upvoteButton.setIcon(previousUpvoteButtonDrawable);
+                                upvoteButton.setIconTint(ColorStateList.valueOf(previousUpvoteButtonTextColor));
+                                downvoteButton.setIcon(previousDownvoteButtonDrawable);
+                                downvoteButton.setIconTint(ColorStateList.valueOf(previousDownvoteButtonTextColor));
                             }
 
                             EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
@@ -4355,17 +4372,17 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
             });
 
             downvoteButton.setOnClickListener(view -> {
-                if (mAccessToken == null) {
-                    Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
-                    return;
-                }
-
                 int position = getBindingAdapterPosition();
                 if (position < 0) {
                     return;
                 }
                 Post post = getItem(position);
                 if (post != null) {
+                    if (mAccessToken == null) {
+                        Toast.makeText(mActivity, R.string.login_first, Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+
                     if (mMarkPostsAsReadAfterVoting) {
                         markPostRead(post, true);
                     }
@@ -4375,32 +4392,34 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                         return;
                     }
 
-                    ColorFilter previousUpvoteButtonColorFilter = upvoteButton.getColorFilter();
-                    ColorFilter previousDownvoteButtonColorFilter = downvoteButton.getColorFilter();
-                    int previousScoreTextViewColor = scoreTextView.getCurrentTextColor();
+                    int previousUpvoteButtonTextColor = upvoteButton.getTextColors().getDefaultColor();
+                    int previousDownvoteButtonTextColor = downvoteButton.getTextColors().getDefaultColor();
+                    Drawable previousUpvoteButtonDrawable = upvoteButton.getIcon();
+                    Drawable previousDownvoteButtonDrawable = downvoteButton.getIcon();
 
                     int previousVoteType = post.getVoteType();
                     String newVoteType;
 
-                    upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                    upvoteButton.setTextColor(mPostIconAndInfoColor);
+                    upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
+                    upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
 
                     if (previousVoteType != -1) {
                         //Not downvoted before
                         post.setVoteType(-1);
                         newVoteType = APIUtils.DIR_DOWNVOTE;
-                        downvoteButton
-                                .setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                        scoreTextView.setTextColor(mDownvotedColor);
+                        downvoteButton.setIconResource(R.drawable.ic_downvote_filled_24dp);
+                        downvoteButton.setIconTint(ColorStateList.valueOf(mDownvotedColor));
                     } else {
                         //Downvoted before
                         post.setVoteType(0);
                         newVoteType = APIUtils.DIR_UNVOTE;
-                        downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                        scoreTextView.setTextColor(mPostIconAndInfoColor);
+                        downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
+                        downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
                     }
 
                     if (!mHideTheNumberOfVotes) {
-                        scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                        upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
                     }
 
                     VoteThing.voteThing(mActivity, mOauthRetrofit, mAccessToken, new VoteThing.VoteThingListener() {
@@ -4410,22 +4429,23 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             if (newVoteType.equals(APIUtils.DIR_DOWNVOTE)) {
                                 post.setVoteType(-1);
                                 if (currentPosition == position) {
-                                    downvoteButton.setColorFilter(mDownvotedColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                    scoreTextView.setTextColor(mDownvotedColor);
+                                    downvoteButton.setIconResource(R.drawable.ic_downvote_filled_24dp);
+                                    downvoteButton.setIconTint(ColorStateList.valueOf(mDownvotedColor));
                                 }
-
                             } else {
                                 post.setVoteType(0);
                                 if (currentPosition == position) {
-                                    downvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
-                                    scoreTextView.setTextColor(mPostIconAndInfoColor);
+                                    downvoteButton.setIconResource(R.drawable.ic_downvote_24dp);
+                                    downvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
                                 }
                             }
 
                             if (currentPosition == position) {
-                                upvoteButton.setColorFilter(mPostIconAndInfoColor, android.graphics.PorterDuff.Mode.SRC_IN);
+                                upvoteButton.setTextColor(mPostIconAndInfoColor);
+                                upvoteButton.setIconResource(R.drawable.ic_upvote_24dp);
+                                upvoteButton.setIconTint(ColorStateList.valueOf(mPostIconAndInfoColor));
                                 if (!mHideTheNumberOfVotes) {
-                                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
+                                    upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + post.getVoteType()));
                                 }
                             }
 
@@ -4438,11 +4458,13 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                             post.setVoteType(previousVoteType);
                             if (getBindingAdapterPosition() == position) {
                                 if (!mHideTheNumberOfVotes) {
-                                    scoreTextView.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
+                                    upvoteButton.setText(Utils.getNVotes(mShowAbsoluteNumberOfVotes, post.getScore() + previousVoteType));
                                 }
-                                upvoteButton.setColorFilter(previousUpvoteButtonColorFilter);
-                                downvoteButton.setColorFilter(previousDownvoteButtonColorFilter);
-                                scoreTextView.setTextColor(previousScoreTextViewColor);
+                                upvoteButton.setTextColor(previousUpvoteButtonTextColor);
+                                upvoteButton.setIcon(previousUpvoteButtonDrawable);
+                                upvoteButton.setIconTint(ColorStateList.valueOf(previousUpvoteButtonTextColor));
+                                downvoteButton.setIcon(previousDownvoteButtonDrawable);
+                                downvoteButton.setIconTint(ColorStateList.valueOf(previousDownvoteButtonTextColor));
                             }
 
                             EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
@@ -4464,14 +4486,14 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 Post post = getItem(position);
                 if (post != null) {
                     if (post.isSaved()) {
-                        saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                        saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
                         SaveThing.unsaveThing(mOauthRetrofit, mAccessToken, post.getFullName(),
                                 new SaveThing.SaveThingListener() {
                                     @Override
                                     public void success() {
                                         post.setSaved(false);
                                         if (getBindingAdapterPosition() == position) {
-                                            saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                            saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
                                         }
                                         Toast.makeText(mActivity, R.string.post_unsaved_success, Toast.LENGTH_SHORT).show();
                                         EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
@@ -4481,21 +4503,21 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                     public void failed() {
                                         post.setSaved(true);
                                         if (getBindingAdapterPosition() == position) {
-                                            saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                            saveButton.setIconResource(R.drawable.ic_bookmark_grey_24dp);
                                         }
                                         Toast.makeText(mActivity, R.string.post_unsaved_failed, Toast.LENGTH_SHORT).show();
                                         EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
                                     }
                                 });
                     } else {
-                        saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                        saveButton.setIconResource(R.drawable.ic_bookmark_grey_24dp);
                         SaveThing.saveThing(mOauthRetrofit, mAccessToken, post.getFullName(),
                                 new SaveThing.SaveThingListener() {
                                     @Override
                                     public void success() {
                                         post.setSaved(true);
                                         if (getBindingAdapterPosition() == position) {
-                                            saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                            saveButton.setIconResource(R.drawable.ic_bookmark_grey_24dp);
                                         }
                                         Toast.makeText(mActivity, R.string.post_saved_success, Toast.LENGTH_SHORT).show();
                                         EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
@@ -4505,7 +4527,7 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                                     public void failed() {
                                         post.setSaved(false);
                                         if (getBindingAdapterPosition() == position) {
-                                            saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                            saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
                                         }
                                         Toast.makeText(mActivity, R.string.post_saved_failed, Toast.LENGTH_SHORT).show();
                                         EventBus.getDefault().post(new PostUpdateEventToPostDetailFragment(post));
@@ -4570,154 +4592,76 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
     }
 
     class PostCompactLeftThumbnailViewHolder extends PostCompactBaseViewHolder {
-        @BindView(R.id.icon_gif_image_view_item_post_compact)
-        AspectRatioGifImageView iconGifImageView;
-        @BindView(R.id.name_text_view_item_post_compact)
-        TextView nameTextView;
-        @BindView(R.id.stickied_post_image_view_item_post_compact)
-        ImageView stickiedPostImageView;
-        @BindView(R.id.post_time_text_view_item_post_compact)
-        TextView postTimeTextView;
-        @BindView(R.id.title_and_image_constraint_layout)
-        ConstraintLayout titleAndImageConstraintLayout;
-        @BindView(R.id.title_text_view_item_post_compact)
-        TextView titleTextView;
-        @BindView(R.id.type_text_view_item_post_compact)
-        CustomTextView typeTextView;
-        @BindView(R.id.archived_image_view_item_post_compact)
-        ImageView archivedImageView;
-        @BindView(R.id.locked_image_view_item_post_compact)
-        ImageView lockedImageView;
-        @BindView(R.id.crosspost_image_view_item_post_compact)
-        ImageView crosspostImageView;
-        @BindView(R.id.nsfw_text_view_item_post_compact)
-        CustomTextView nsfwTextView;
-        @BindView(R.id.spoiler_custom_text_view_item_post_compact)
-        CustomTextView spoilerTextView;
-        @BindView(R.id.flair_custom_text_view_item_post_compact)
-        CustomTextView flairTextView;
-        @BindView(R.id.awards_text_view_item_post_compact)
-        CustomTextView awardsTextView;
-        @BindView(R.id.link_text_view_item_post_compact)
-        TextView linkTextView;
-        @BindView(R.id.image_view_wrapper_item_post_compact)
-        RelativeLayout relativeLayout;
-        @BindView(R.id.progress_bar_item_post_compact)
-        ProgressBar progressBar;
-        @BindView(R.id.image_view_item_post_compact)
-        ImageView imageView;
-        @BindView(R.id.play_button_image_view_item_post_compact)
-        ImageView playButtonImageView;
-        @BindView(R.id.frame_layout_image_view_no_preview_link_item_post_compact)
-        FrameLayout noPreviewLinkImageFrameLayout;
-        @BindView(R.id.image_view_no_preview_link_item_post_compact)
-        ImageView noPreviewLinkImageView;
-        @BindView(R.id.barrier2)
-        Barrier imageBarrier;
-        @BindView(R.id.bottom_constraint_layout_item_post_compact)
-        ConstraintLayout bottomConstraintLayout;
-        @BindView(R.id.plus_button_item_post_compact)
-        ImageView upvoteButton;
-        @BindView(R.id.score_text_view_item_post_compact)
-        TextView scoreTextView;
-        @BindView(R.id.minus_button_item_post_compact)
-        ImageView downvoteButton;
-        @BindView(R.id.comments_count_item_post_compact)
-        TextView commentsCountTextView;
-        @BindView(R.id.save_button_item_post_compact)
-        ImageView saveButton;
-        @BindView(R.id.share_button_item_post_compact)
-        ImageView shareButton;
-        @BindView(R.id.divider_item_post_compact)
-        View divider;
+        PostCompactLeftThumbnailViewHolder(@NonNull ItemPostCompactBinding binding) {
+            super(binding.getRoot());
 
-        PostCompactLeftThumbnailViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-
-            setBaseView(iconGifImageView, nameTextView, stickiedPostImageView, postTimeTextView,
-                    titleAndImageConstraintLayout, titleTextView, typeTextView, archivedImageView,
-                    lockedImageView, crosspostImageView, nsfwTextView, spoilerTextView,
-                    flairTextView, awardsTextView, linkTextView, relativeLayout, progressBar, imageView,
-                    playButtonImageView, noPreviewLinkImageFrameLayout, noPreviewLinkImageView,
-                    imageBarrier, bottomConstraintLayout, upvoteButton, scoreTextView, downvoteButton,
-                    commentsCountTextView, saveButton, shareButton, divider);
+            setBaseView(binding.iconGifImageViewItemPostCompact,
+                    binding.nameTextViewItemPostCompact,
+                    binding.stickiedPostImageViewItemPostCompact,
+                    binding.postTimeTextViewItemPostCompact,
+                    binding.titleAndImageConstraintLayout,
+                    binding.titleTextViewItemPostCompact,
+                    binding.typeTextViewItemPostCompact,
+                    binding.archivedImageViewItemPostCompact,
+                    binding.lockedImageViewItemPostCompact,
+                    binding.crosspostImageViewItemPostCompact,
+                    binding.nsfwTextViewItemPostCompact,
+                    binding.spoilerCustomTextViewItemPostCompact,
+                    binding.flairCustomTextViewItemPostCompact,
+                    binding.awardsTextViewItemPostCompact,
+                    binding.linkTextViewItemPostCompact,
+                    binding.imageViewWrapperItemPostCompact,
+                    binding.progressBarItemPostCompact,
+                    binding.imageViewItemPostCompact,
+                    binding.playButtonImageViewItemPostCompact,
+                    binding.frameLayoutImageViewNoPreviewLinkItemPostCompact,
+                    binding.imageViewNoPreviewLinkItemPostCompact,
+                    binding.barrier2,
+                    binding.bottomConstraintLayoutItemPostCompact,
+                    binding.voteButtonToggleItemPostCompact,
+                    binding.upvoteButtonItemPostCompact,
+                    binding.downvoteButtonItemPostCompact,
+                    binding.commentsCountButtonItemPostCompact,
+                    binding.saveButtonItemPostCompact,
+                    binding.shareButtonItemPostCompact,
+                    binding.dividerItemPostCompact);
         }
     }
 
     class PostCompactRightThumbnailViewHolder extends PostCompactBaseViewHolder {
-        @BindView(R.id.icon_gif_image_view_item_post_compact_right_thumbnail)
-        AspectRatioGifImageView iconGifImageView;
-        @BindView(R.id.name_text_view_item_post_compact_right_thumbnail)
-        TextView nameTextView;
-        @BindView(R.id.stickied_post_image_view_item_post_compact_right_thumbnail)
-        ImageView stickiedPostImageView;
-        @BindView(R.id.post_time_text_view_item_post_compact_right_thumbnail)
-        TextView postTimeTextView;
-        @BindView(R.id.title_and_image_constraint_layout)
-        ConstraintLayout titleAndImageConstraintLayout;
-        @BindView(R.id.title_text_view_item_post_compact_right_thumbnail)
-        TextView titleTextView;
-        @BindView(R.id.type_text_view_item_post_compact_right_thumbnail)
-        CustomTextView typeTextView;
-        @BindView(R.id.archived_image_view_item_post_compact_right_thumbnail)
-        ImageView archivedImageView;
-        @BindView(R.id.locked_image_view_item_post_compact_right_thumbnail)
-        ImageView lockedImageView;
-        @BindView(R.id.crosspost_image_view_item_post_compact_right_thumbnail)
-        ImageView crosspostImageView;
-        @BindView(R.id.nsfw_text_view_item_post_compact_right_thumbnail)
-        CustomTextView nsfwTextView;
-        @BindView(R.id.spoiler_custom_text_view_item_post_compact_right_thumbnail)
-        CustomTextView spoilerTextView;
-        @BindView(R.id.flair_custom_text_view_item_post_compact_right_thumbnail)
-        CustomTextView flairTextView;
-        @BindView(R.id.awards_text_view_item_post_compact_right_thumbnail)
-        CustomTextView awardsTextView;
-        @BindView(R.id.link_text_view_item_post_compact_right_thumbnail)
-        TextView linkTextView;
-        @BindView(R.id.image_view_wrapper_item_post_compact_right_thumbnail)
-        RelativeLayout relativeLayout;
-        @BindView(R.id.progress_bar_item_post_compact_right_thumbnail)
-        ProgressBar progressBar;
-        @BindView(R.id.image_view_item_post_compact_right_thumbnail)
-        ImageView imageView;
-        @BindView(R.id.play_button_image_view_item_post_compact_right_thumbnail)
-        ImageView playButtonImageView;
-        @BindView(R.id.frame_layout_image_view_no_preview_link_item_post_compact_right_thumbnail)
-        FrameLayout noPreviewLinkImageFrameLayout;
-        @BindView(R.id.image_view_no_preview_link_item_post_compact_right_thumbnail)
-        ImageView noPreviewLinkImageView;
-        @BindView(R.id.barrier2)
-        Barrier imageBarrier;
-        @BindView(R.id.bottom_constraint_layout_item_post_compact_right_thumbnail)
-        ConstraintLayout bottomConstraintLayout;
-        @BindView(R.id.plus_button_item_post_compact_right_thumbnail)
-        ImageView upvoteButton;
-        @BindView(R.id.score_text_view_item_post_compact_right_thumbnail)
-        TextView scoreTextView;
-        @BindView(R.id.minus_button_item_post_compact_right_thumbnail)
-        ImageView downvoteButton;
-        @BindView(R.id.comments_count_item_post_compact_right_thumbnail)
-        TextView commentsCountTextView;
-        @BindView(R.id.save_button_item_post_compact_right_thumbnail)
-        ImageView saveButton;
-        @BindView(R.id.share_button_item_post_compact_right_thumbnail)
-        ImageView shareButton;
-        @BindView(R.id.divider_item_post_compact_right_thumbnail)
-        View divider;
+        PostCompactRightThumbnailViewHolder(@NonNull ItemPostCompactRightThumbnailBinding binding) {
+            super(binding.getRoot());
 
-        PostCompactRightThumbnailViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this, itemView);
-
-            setBaseView(iconGifImageView, nameTextView, stickiedPostImageView, postTimeTextView,
-                    titleAndImageConstraintLayout, titleTextView, typeTextView, archivedImageView,
-                    lockedImageView, crosspostImageView, nsfwTextView, spoilerTextView,
-                    flairTextView, awardsTextView, linkTextView, relativeLayout, progressBar, imageView,
-                    playButtonImageView, noPreviewLinkImageFrameLayout, noPreviewLinkImageView,
-                    imageBarrier, bottomConstraintLayout, upvoteButton, scoreTextView, downvoteButton,
-                    commentsCountTextView, saveButton, shareButton, divider);
+            setBaseView(binding.iconGifImageViewItemPostCompactRightThumbnail,
+                    binding.nameTextViewItemPostCompactRightThumbnail,
+                    binding.stickiedPostImageViewItemPostCompactRightThumbnail,
+                    binding.postTimeTextViewItemPostCompactRightThumbnail,
+                    binding.titleAndImageConstraintLayout,
+                    binding.titleTextViewItemPostCompactRightThumbnail,
+                    binding.typeTextViewItemPostCompactRightThumbnail,
+                    binding.archivedImageViewItemPostCompactRightThumbnail,
+                    binding.lockedImageViewItemPostCompactRightThumbnail,
+                    binding.crosspostImageViewItemPostCompactRightThumbnail,
+                    binding.nsfwTextViewItemPostCompactRightThumbnail,
+                    binding.spoilerCustomTextViewItemPostCompactRightThumbnail,
+                    binding.flairCustomTextViewItemPostCompactRightThumbnail,
+                    binding.awardsTextViewItemPostCompactRightThumbnail,
+                    binding.linkTextViewItemPostCompactRightThumbnail,
+                    binding.imageViewWrapperItemPostCompactRightThumbnail,
+                    binding.progressBarItemPostCompactRightThumbnail,
+                    binding.imageViewItemPostCompactRightThumbnail,
+                    binding.playButtonImageViewItemPostCompactRightThumbnail,
+                    binding.frameLayoutImageViewNoPreviewLinkItemPostCompactRightThumbnail,
+                    binding.imageViewNoPreviewLinkItemPostCompactRightThumbnail,
+                    binding.barrier2,
+                    binding.bottomConstraintLayoutItemPostCompactRightThumbnail,
+                    binding.voteButtonToggleItemPostCompactRightThumbnail,
+                    binding.upvoteButtonItemPostCompactRightThumbnail,
+                    binding.downvoteButtonItemPostCompactRightThumbnail,
+                    binding.commentsCountButtonItemPostCompactRightThumbnail,
+                    binding.saveButtonItemPostCompactRightThumbnail,
+                    binding.shareButtonItemPostCompactRightThumbnail,
+                    binding.dividerItemPostCompactRightThumbnail);
         }
     }
 
