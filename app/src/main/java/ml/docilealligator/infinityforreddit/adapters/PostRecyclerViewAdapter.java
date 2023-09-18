@@ -3153,6 +3153,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
             });
 
+            commentsCountButton.setOnClickListener(view -> itemView.performClick());
+
             saveButton.setOnClickListener(view -> {
                 int position = getBindingAdapterPosition();
                 if (position < 0) {
@@ -4500,6 +4502,8 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                     }, post.getFullName(), newVoteType, getBindingAdapterPosition());
                 }
             });
+
+            commentsCountButton.setOnClickListener(view -> itemView.performClick());
 
             saveButton.setOnClickListener(view -> {
                 if (mAccessToken == null) {
