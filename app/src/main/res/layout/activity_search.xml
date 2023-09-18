@@ -87,11 +87,15 @@
                     android:id="@+id/search_in_text_view_search_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="16dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:layout_centerVertical="true"
+                    android:fontFamily="?attr/font_family"
                     android:text="@string/search_in"
                     android:textColor="?attr/colorAccent"
-                    android:textSize="?attr/font_default"
-                    android:fontFamily="?attr/font_family" />
+                    android:textSize="?attr/font_default" />
 
                 <TextView
                     android:id="@+id/subreddit_name_text_view_search_activity"
@@ -105,16 +109,17 @@
                     android:textColor="?attr/primaryTextColor"
                     android:textSize="?attr/font_default"
                     android:fontFamily="?attr/font_family" />
-                <ImageView
-                    android:id="@+id/delete_all_recent_searches_image_view_search_activity"
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/delete_all_recent_searches_button_search_activity"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
-                    android:padding="16dp"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:src="@drawable/ic_delete_all_24"
-                    app:tint="@color/primaryTextColor" />
+                    android:layout_centerVertical="true"
+                    app:strokeWidth="0dp"
+                    app:icon="@drawable/ic_delete_all_24"
+                    app:iconSize="24dp"
+                    style="?attr/materialIconButtonOutlinedStyle" />
 
             </RelativeLayout>
 

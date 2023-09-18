@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clickable="true"
     android:focusable="true"
     android:background="?attr/selectableItemBackground">
@@ -13,19 +13,21 @@
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:layout_gravity="center_vertical"
+        android:gravity="center_vertical"
         android:fontFamily="?attr/font_family"
         android:textSize="?attr/font_default"
         android:padding="16dp"
         android:drawablePadding="16dp" />
 
-    <ImageView
-        android:id="@+id/delete_image_view_item_recent_search_query"
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/delete_button_item_recent_search_query"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
         android:padding="16dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:background="?attr/selectableItemBackground" />
+        app:strokeWidth="0dp"
+        app:iconSize="24dp"
+        app:iconTint="@null"
+        style="?attr/materialIconButtonOutlinedStyle" />
 
 </LinearLayout>
