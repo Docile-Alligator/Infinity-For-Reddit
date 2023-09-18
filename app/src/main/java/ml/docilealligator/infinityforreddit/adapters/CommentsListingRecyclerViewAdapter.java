@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Spanned;
@@ -12,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -243,9 +241,9 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                 }
 
                 if (comment.isSaved()) {
-                    ((CommentBaseViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                    ((CommentBaseViewHolder) holder).saveButton.setIconResource(R.drawable.ic_bookmark_grey_24dp);
                 } else {
-                    ((CommentBaseViewHolder) holder).saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                    ((CommentBaseViewHolder) holder).saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
                 }
             }
         }
@@ -360,10 +358,9 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
         MaterialButton upvoteButton;
         MaterialButton downvoteButton;
         View placeholder;
-        ImageView moreButton;
-        ImageView saveButton;
-        TextView expandButton;
-        ImageView replyButton;
+        MaterialButton moreButton;
+        MaterialButton saveButton;
+        MaterialButton replyButton;
         View commentDivider;
         CustomMarkwonAdapter markwonAdapter;
 
@@ -382,10 +379,10 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                          MaterialButton upvoteButton,
                          MaterialButton downvoteButton,
                          View placeholder,
-                         ImageView moreButton,
-                         ImageView saveButton,
+                         MaterialButton moreButton,
+                         MaterialButton saveButton,
                          TextView expandButton,
-                         ImageView replyButton,
+                         MaterialButton replyButton,
                          CommentIndentationView commentIndentationView,
                          View commentDivider) {
             this.linearLayout = linearLayout;
@@ -401,7 +398,6 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             this.placeholder = placeholder;
             this.moreButton = moreButton;
             this.saveButton = saveButton;
-            this.expandButton = expandButton;
             this.replyButton = replyButton;
             this.commentDivider = commentDivider;
 
@@ -460,9 +456,9 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
             upvoteButton.setIconTint(ColorStateList.valueOf(mCommentIconAndInfoColor));
             upvoteButton.setTextColor(mCommentIconAndInfoColor);
             downvoteButton.setIconTint(ColorStateList.valueOf(mCommentIconAndInfoColor));
-            moreButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
-            saveButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
-            replyButton.setColorFilter(mCommentIconAndInfoColor, PorterDuff.Mode.SRC_IN);
+            moreButton.setIconTint(ColorStateList.valueOf(mCommentIconAndInfoColor));
+            saveButton.setIconTint(ColorStateList.valueOf(mCommentIconAndInfoColor));
+            replyButton.setIconTint(ColorStateList.valueOf(mCommentIconAndInfoColor));
             commentDivider.setBackgroundColor(mDividerColor);
 
             authorTextView.setOnClickListener(view -> {
@@ -701,7 +697,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                             public void success() {
                                 comment.setSaved(false);
                                 if (getBindingAdapterPosition() == position) {
-                                    saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                    saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
                                 }
                                 Toast.makeText(mActivity, R.string.comment_unsaved_success, Toast.LENGTH_SHORT).show();
                             }
@@ -710,7 +706,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                             public void failed() {
                                 comment.setSaved(true);
                                 if (getBindingAdapterPosition() == position) {
-                                    saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                    saveButton.setIconResource(R.drawable.ic_bookmark_grey_24dp);
                                 }
                                 Toast.makeText(mActivity, R.string.comment_unsaved_failed, Toast.LENGTH_SHORT).show();
                             }
@@ -722,7 +718,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                             public void success() {
                                 comment.setSaved(true);
                                 if (getBindingAdapterPosition() == position) {
-                                    saveButton.setImageResource(R.drawable.ic_bookmark_grey_24dp);
+                                    saveButton.setIconResource(R.drawable.ic_bookmark_grey_24dp);
                                 }
                                 Toast.makeText(mActivity, R.string.comment_saved_success, Toast.LENGTH_SHORT).show();
                             }
@@ -731,7 +727,7 @@ public class CommentsListingRecyclerViewAdapter extends PagedListAdapter<Comment
                             public void failed() {
                                 comment.setSaved(false);
                                 if (getBindingAdapterPosition() == position) {
-                                    saveButton.setImageResource(R.drawable.ic_bookmark_border_grey_24dp);
+                                    saveButton.setIconResource(R.drawable.ic_bookmark_border_grey_24dp);
                                 }
                                 Toast.makeText(mActivity, R.string.comment_saved_failed, Toast.LENGTH_SHORT).show();
                             }

@@ -204,20 +204,19 @@
                 app:layout_constraintStart_toEndOf="@+id/vote_button_toggle_item_post_comment"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/more_button_item_post_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="8dp"
-                android:src="@drawable/ic_more_vert_grey_24dp"
+                app:strokeWidth="0dp"
+                app:icon="@drawable/ic_more_vert_grey_24dp"
+                app:iconSize="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/expand_button_item_post_comment"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/placeholder_item_post_comment"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                style="?attr/materialIconButtonOutlinedStyle" />
 
             <TextView
                 android:id="@+id/expand_button_item_post_comment"
@@ -238,34 +237,32 @@
                 app:layout_constraintStart_toEndOf="@+id/more_button_item_post_comment"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/save_button_item_post_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="8dp"
+                app:strokeWidth="0dp"
+                app:iconSize="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/reply_button_item_post_comment"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/expand_button_item_post_comment"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                style="?attr/materialIconButtonOutlinedStyle" />
 
-            <ImageView
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/reply_button_item_post_comment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="?actionBarItemBackground"
-                android:clickable="true"
-                android:focusable="true"
-                android:padding="8dp"
-                android:src="@drawable/ic_reply_grey_24dp"
+                app:strokeWidth="0dp"
+                app:icon="@drawable/ic_reply_grey_24dp"
+                app:iconSize="24dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toEndOf="@+id/save_button_item_post_comment"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                style="?attr/materialIconButtonOutlinedStyle" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
