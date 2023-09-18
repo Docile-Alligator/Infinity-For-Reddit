@@ -157,7 +157,7 @@ public class CommentsListingFragment extends Fragment implements FragmentCommuni
 
             @Override
             public int getMovementFlags(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-                if (!(viewHolder instanceof CommentsListingRecyclerViewAdapter.CommentViewHolder)) {
+                if (!(viewHolder instanceof CommentsListingRecyclerViewAdapter.CommentBaseViewHolder)) {
                     return makeMovementFlags(0, 0);
                 }
                 int swipeFlags = ItemTouchHelper.START | ItemTouchHelper.END;

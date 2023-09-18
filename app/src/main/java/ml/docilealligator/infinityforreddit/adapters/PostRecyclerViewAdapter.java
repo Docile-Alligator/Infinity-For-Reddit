@@ -791,8 +791,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 if (post.isArchived()) {
                     ((PostBaseViewHolder) holder).archivedImageView.setVisibility(View.VISIBLE);
 
-                    ((PostBaseViewHolder) holder).upvoteButton.setBackgroundTintList(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
-                    ((PostBaseViewHolder) holder).downvoteButton.setBackgroundTintList(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
+                    ((PostBaseViewHolder) holder).upvoteButton.setTextColor(mVoteAndReplyUnavailableVoteButtonColor);
+                    ((PostBaseViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
+                    ((PostBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
                 }
 
                 if (post.isCrosspost()) {
@@ -1407,8 +1408,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 if (isArchived) {
                     ((PostCompactBaseViewHolder) holder).archivedImageView.setVisibility(View.VISIBLE);
 
-                    ((PostCompactBaseViewHolder) holder).upvoteButton.setBackgroundTintList(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
-                    ((PostCompactBaseViewHolder) holder).downvoteButton.setBackgroundTintList(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
+                    ((PostCompactBaseViewHolder) holder).upvoteButton.setTextColor(mVoteAndReplyUnavailableVoteButtonColor);
+                    ((PostCompactBaseViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
+                    ((PostCompactBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
                 }
 
                 if (post.isCrosspost()) {
@@ -1851,8 +1853,9 @@ public class PostRecyclerViewAdapter extends PagingDataAdapter<Post, RecyclerVie
                 }
 
                 if (post.isArchived()) {
-                    ((PostMaterial3CardBaseViewHolder) holder).upvoteButton.setBackgroundTintList(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
-                    ((PostMaterial3CardBaseViewHolder) holder).downvoteButton.setBackgroundTintList(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
+                    ((PostMaterial3CardBaseViewHolder) holder).upvoteButton.setTextColor(mVoteAndReplyUnavailableVoteButtonColor);
+                    ((PostMaterial3CardBaseViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
+                    ((PostMaterial3CardBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
                 }
 
                 if (!mHideTheNumberOfComments) {

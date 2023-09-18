@@ -574,8 +574,10 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
             }
 
             if (mPost.isArchived()) {
-                ((PostDetailBaseViewHolder) holder).upvoteButton.setBackgroundTintList(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
-                ((PostDetailBaseViewHolder) holder).downvoteButton.setBackgroundTintList(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
+                ((PostDetailBaseViewHolder) holder).archivedImageView.setVisibility(View.VISIBLE);
+                ((PostDetailBaseViewHolder) holder).upvoteButton.setTextColor(mVoteAndReplyUnavailableVoteButtonColor);
+                ((PostDetailBaseViewHolder) holder).upvoteButton.setIconTint(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
+                ((PostDetailBaseViewHolder) holder).downvoteButton.setIconTint(ColorStateList.valueOf(mVoteAndReplyUnavailableVoteButtonColor));
             }
 
             if (mPost.isCrosspost()) {
@@ -602,10 +604,6 @@ public class PostDetailRecyclerViewAdapter extends RecyclerView.Adapter<Recycler
                         Utils.getElapsedTime(mActivity, mPost.getPostTimeMillis()));
             } else {
                 ((PostDetailBaseViewHolder) holder).postTimeTextView.setText(Utils.getFormattedTime(mLocale, mPost.getPostTimeMillis(), mTimeFormatPattern));
-            }
-
-            if (mPost.isArchived()) {
-                ((PostDetailBaseViewHolder) holder).archivedImageView.setVisibility(View.VISIBLE);
             }
 
             if (mPost.isLocked()) {
